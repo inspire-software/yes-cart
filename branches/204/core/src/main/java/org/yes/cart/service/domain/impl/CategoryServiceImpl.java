@@ -114,7 +114,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-categoryTemplateVariation"/*, key="category.getCategoryId()"*/)
+    @Cacheable(value = "categoryService-categoryTemplateVariation", key="category.сategoryId")
     public String getCategoryTemplateVariation(final Category category) {
         String variation = null;
         if (StringUtils.isBlank(category.getUitemplate())) {

@@ -53,7 +53,7 @@ import java.util.List;
         serviceName = "BackdoorService")
 public class BackdoorServiceImpl implements BackdoorService, ApplicationContextAware, ServletContextAware {
 
-    private static final long serialVersionUID = 20120129L;
+    private static final long serialVersionUID = 20130820L;
 
     private ProductService productService;
 

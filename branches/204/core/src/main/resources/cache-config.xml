@@ -19,15 +19,18 @@
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/cache
-	   http://www.springframework.org/schema/cache/spring-cache.xsd">
+	   http://www.springframework.org/schema/cache/spring-cache.xsd
+	   http://www.springframework.org/schema/util
+	   http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
     <cache:annotation-driven/>
 
 
-    <!-- ###################### Cache  ################################################ -->
+
 
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager"
           p:cacheManager-ref="ehcache"/>
@@ -36,58 +39,88 @@
           p:configLocation="ehcache.xml"
           p:shared="true"/>
 
-        <!--<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-            <property name="configLocation" value="classpath:ehcache.xml"/>
-            <property name="shared" value="true"/>
-        </bean>-->
-        <!--
+    <!-- ###################### Attributes  ################################################ -->
 
-            <bean id="categoryServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-                <property name="cacheManager" ref="cacheManager"/>
-                <property name="cacheName" value="org.yes.cart.service.domain.impl.CategoryServiceImpl.cache"/>
-            </bean>
+    <util:set id="AttributeCreate">
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-availableAttributesByProductTypeId"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-availableImageAttributesByGroupCode"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-allAttributeCodes"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-allNavigatableAttributeCodes"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-attributeNamesByCodes"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+    </util:set>
 
-            <bean id="contentServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-                <property name="cacheManager" ref="cacheManager"/>
-                <property name="cacheName" value="org.yes.cart.service.domain.impl.ContentServiceImpl.cache"/>
-            </bean>
+    <util:set id="AttributeUpdate">
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-availableAttributesByProductTypeId"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-availableImageAttributesByGroupCode"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-allAttributeCodes"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-allNavigatableAttributeCodes"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-attributeNamesByCodes"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+    </util:set>
 
-            <bean id="shopServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-                <property name="cacheManager" ref="cacheManager"/>
-                <property name="cacheName" value="org.yes.cart.service.domain.impl.ShopServiceImpl.cache"/>
-            </bean>
+    <util:set id="AttributeDelete">
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-availableAttributesByProductTypeId"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-availableImageAttributesByGroupCode"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-allAttributeCodes"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-allNavigatableAttributeCodes"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-attributeNamesByCodes"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+    </util:set>
 
-            <bean id="priceServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-                <property name="cacheManager" ref="cacheManager"/>
-                <property name="cacheName" value="org.yes.cart.service.domain.impl.PriceServiceImpl.cache"/>
-            </bean>
-
-            <bean id="attributeServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-                <property name="cacheManager" ref="cacheManager"/>
-                <property name="cacheName" value="org.yes.cart.service.domain.impl.AttributeServiceImpl.cache"/>
-            </bean>
-
-            <bean id="systemServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-                <property name="cacheManager" ref="cacheManager"/>
-                <property name="cacheName" value="org.yes.cart.service.domain.impl.SystemServiceImpl.cache"/>
-            </bean>
-
-            <bean id="productServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-                <property name="cacheManager" ref="cacheManager"/>
-                <property name="cacheName" value="org.yes.cart.service.domain.impl.ProductServiceImpl.cache"/>
-            </bean>
-
-            <bean id="productTypeAttrServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-                <property name="cacheManager" ref="cacheManager"/>
-                <property name="cacheName" value="org.yes.cart.service.domain.impl.ProductTypeAttrServiceImpl.cache"/>
-            </bean>
-
-            <bean id="imageServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-                <property name="cacheManager" ref="cacheManager"/>
-                <property name="cacheName" value="org.yes.cart.service.domain.impl.ImageServiceImpl.cache"/>
-            </bean>
-
-        -->
+    <util:map id="AttributeCUD">
+        <entry key="Create" value-ref="AttributeCreate"/>
+        <entry key="Update" value-ref="AttributeUpdate"/>
+        <entry key="Delete" value-ref="AttributeDelete"/>
+    </util:map>
 
 
-        </beans>
+
+    <util:map id="evictionConfig">
+        <entry key="Attribute" value-ref="AttributeCUD"/>
+    </util:map>
+
+
+</beans>

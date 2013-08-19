@@ -23,13 +23,12 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.service.ws.CacheDirector;
 
 import javax.jws.WebService;
 import javax.servlet.ServletContext;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Service responsible  to evict particular cache(s) depending on entity and operation.
@@ -41,6 +40,8 @@ import java.util.List;
 @WebService(endpointInterface = "org.yes.cart.web.service.ws.CacheDirector",
         serviceName = "CacheDirector")
 public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware, ServletContextAware {
+
+    private Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache;
 
     private ApplicationContext applicationContext;
 
@@ -72,11 +73,16 @@ public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware
         return rez;
     }
 
+
+    private CacheManager getCacheManager() {
+        return applicationContext.getBean("cacheManager", CacheManager.class);
+    }
+
     /**
      * {@inheritDoc}
      */
     public void evictCache() {
-        final CacheManager cm = applicationContext.getBean("cacheManager", CacheManager.class);
+        final CacheManager cm = getCacheManager();
         for (String cacheName : cm.getCacheNames()) {
             final Cache cache = cm.getCache(cacheName);
             cache.clear();
@@ -87,11 +93,68 @@ public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware
      * {@inheritDoc}
      */
     public int onCacheableChange(final String entityOperation, final String entityName, final Long pkValue) {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+
+        int cnt = 0;
+
+        final Set<Pair<String, String>> cacheNames = resolveCacheNames(entityOperation, entityName);
+
+        if (cacheNames != null) {
+
+            final CacheManager cm = getCacheManager();
+
+            for (Pair<String, String> cacheStrategy : cacheNames) {
+
+                final Cache cache = cm.getCache(cacheStrategy.getFirst());
+
+                if (cache != null) {
+
+                    if("all".equals(cacheStrategy.getSecond())) {
+
+                        cache.clear();
+
+                        cnt ++;
+
+                    } else if("key".equals(cacheStrategy.getSecond())) {
+
+                        cache.evict(pkValue);
+
+                    } else {
+
+                        //treat strategy as SPeL expression over object to get key from entity
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return cnt;
     }
 
-   // GenericDAO resolveDao(final String entityName )
+    /**
+     * Resolve caches names for invalidation for given entity and operation.
+     * @param entityOperation given operation
+     * @param entityName given entity name
+     * @return set of cache names
+     */
+    Set<Pair<String, String>> resolveCacheNames(final String entityOperation, final String entityName) {
 
+        final Map<String, Set<Pair<String, String>>> entOperations = this.entityOperationCache.get(entityName);
+
+        if (entOperations != null) {
+            return entOperations.get(entityOperation);
+        }
+
+        return null;
+
+    }
+
+    /** IoC. Set configuration. */
+    public void setEntityOperationCache(final Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache) {
+        this.entityOperationCache = entityOperationCache;
+    }
 
     /**
      * {@inheritDoc}
