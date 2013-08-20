@@ -82,7 +82,7 @@ public class BaseFilterView extends BaseComponent {
                     new Comparator<Pair<Pair<String, Integer>, PageParameters>>() {
                         public int compare(final Pair<Pair<String, Integer>, PageParameters> o1,
                                            final Pair<Pair<String, Integer>, PageParameters> o2) {
-                            return o1.getFirst().getSecond() < o2.getFirst().getSecond() ? 1 : (o1.getFirst().getSecond() == o2.getFirst().getSecond() ? 0 : -1);
+                            return o1.getFirst().getSecond() < o2.getFirst().getSecond() ? 1 : (o1.getFirst().getSecond().equals(o2.getFirst().getSecond()) ? 0 : -1);
                         }
                     }
             );
