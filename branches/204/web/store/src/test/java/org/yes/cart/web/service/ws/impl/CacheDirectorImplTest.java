@@ -19,6 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -29,11 +30,13 @@ import java.util.Map;
 import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
+
 
 /**
  * Created with IntelliJ IDEA.
- * User: igora
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 8/19/13
  * Time: 4:16 PM
  * To change this template use File | Settings | File Templates.
@@ -50,6 +53,8 @@ public class CacheDirectorImplTest {
     public void setUp() {
         cacheDirector = new CacheDirectorImpl();
         cacheDirector.setEntityOperationCache((Map<String, Map<String, Set<Pair<String,String>>>>) context.getBean("evictionConfig"));
+        cacheDirector.setCacheManager((CacheManager) context.getBean("cacheManager"));
+
     }
 
     @Test
@@ -57,15 +62,24 @@ public class CacheDirectorImplTest {
 
         Set<Pair<String,String>> caches = cacheDirector.resolveCacheNames(CacheDirector.EntityOperation.CREATE, CacheDirector.EntityName.ATTRIBUTE);
 
-        assertEquals(5, caches.size());
-
-
+        assertEquals(7, caches.size());
 
         assertTrue(caches.contains(new Pair("attributeService-availableAttributesByProductTypeId", "all")));
         assertTrue(caches.contains(new Pair("attributeService-availableImageAttributesByGroupCode", "all")));
         assertTrue(caches.contains(new Pair("attributeService-allAttributeCodes", "all")));
         assertTrue(caches.contains(new Pair("attributeService-allNavigatableAttributeCodes", "all")));
         assertTrue(caches.contains(new Pair("attributeService-attributeNamesByCodes", "all")));
+        assertTrue(caches.contains(new Pair("breadCrumbBuilder-breadCrumbs", "all")));
+        assertTrue(caches.contains(new Pair("attributeProductFlter-filteredNavigationRecords", "all")));
+
+
+        caches = cacheDirector.resolveCacheNames(CacheDirector.EntityOperation.CREATE, "unknownEntity");
+        assertNull(caches);
+
+        caches = cacheDirector.resolveCacheNames("unkbnownOperation", CacheDirector.EntityName.PRODUCT);
+        assertNull(caches);
+
+
 
     }
 

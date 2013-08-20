@@ -63,7 +63,7 @@ public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl 
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productService-productCode")
+    @Cacheable(value = "productImageNameStrategyService-productCode")
     public String getCode(final String url) {
 
         if (StringUtils.isNotBlank(url)) {

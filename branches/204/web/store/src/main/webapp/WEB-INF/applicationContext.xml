@@ -508,6 +508,16 @@
     </bean>
 
 
+    <bean id="cacheDirectorBean" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.web.service.ws.impl.CacheDirectorImpl">
+                <property name="entityOperationCache" ref="evictionConfig"/>
+                <property name="cacheManager" ref="cacheManager"/>
+            </bean>
+        </property>
+    </bean>
+
+
 
 
     <jaxws:endpoint id="backDoor" implementor="#backDoorBean" address="/backdoor">

@@ -227,7 +227,7 @@
 
 
 
-    <cache name="productService-productCode"      maxElementsInMemory="2000" overflowToDisk="false"
+    <cache name="productImageNameStrategyService-productCode"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
 

@@ -51,16 +51,17 @@ public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware
 
     private ServletContext servletContext;
 
+    private CacheManager cacheManager;
+
 
     /**
      * {@inheritDoc}
      */
     public List<CacheInfoDTOImpl> getCacheInfo() {
-        final CacheManager cm = applicationContext.getBean("cacheManager", CacheManager.class);
-        final Collection<String> cacheNames = cm.getCacheNames();
+        final Collection<String> cacheNames = cacheManager.getCacheNames();
         final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>(cacheNames.size());
         for (String cacheName : cacheNames) {
-            final Cache cache = cm.getCache(cacheName);
+            final Cache cache = cacheManager.getCache(cacheName);
             final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) cache.getNativeCache();
             rez.add(
                     new CacheInfoDTOImpl(
@@ -160,6 +161,11 @@ public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware
     /** IoC. Set configuration. */
     public void setEntityOperationCache(final Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache) {
         this.entityOperationCache = entityOperationCache;
+    }
+
+    /** IoC. Set cache manager.  */
+    public void setCacheManager(final CacheManager cacheManager) {
+        this.cacheManager = cacheManager;
     }
 
     /**

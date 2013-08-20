@@ -893,6 +893,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     /** {@inheritDoc} */
     @CacheEvict(value ={
+            "productService-byId",
             "productService-skuById",
             "productService-skuById2",
             "productService-defaultImage",
