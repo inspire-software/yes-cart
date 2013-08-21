@@ -531,6 +531,17 @@
         </jaxws:inInterceptors>
     </jaxws:endpoint>
 
+    <jaxws:endpoint id="cacheDirector" implementor="#cacheDirectorBean" address="/cachedirector">
+        <jaxws:properties>
+            <entry key="ws-security.validate.token">
+                <value>false</value>
+            </entry>
+        </jaxws:properties>
+        <jaxws:inInterceptors>
+            <ref bean="wsAuthenticationInterceptor"/>
+        </jaxws:inInterceptors>
+    </jaxws:endpoint>
+
     <bean id="wsAuthenticationInterceptor" class="org.yes.cart.web.service.ws.impl.BackdoorAuthenticationInInterceptor">
         <constructor-arg>
             <map>
