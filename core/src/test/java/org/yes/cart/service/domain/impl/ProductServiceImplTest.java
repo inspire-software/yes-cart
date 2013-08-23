@@ -354,6 +354,9 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetProductSearchResultDTOByQuery() {
+
+
+
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 

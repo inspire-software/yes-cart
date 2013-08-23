@@ -34,6 +34,7 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.System;
 import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -471,6 +472,13 @@ public class ProductDAOTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
+                productDao.fullTextSearchReindex(false);
+                java.lang.System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                try {
+                Thread.sleep(3000);
+                } catch (Exception e) {
+
+                }
                 productDao.fullTextSearchReindex(false);
 
                 AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();

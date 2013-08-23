@@ -103,6 +103,8 @@ public class ProductCategoryBridge implements FieldBridge {
 
                             }
 
+                            //status.setRollbackOnly();
+
 
                         }
                     }
@@ -139,7 +141,7 @@ public class ProductCategoryBridge implements FieldBridge {
 
         result.add(categoryDao.findById(categoryId));
 
-        final List<Category> categories = categoryDao.findByNamedQuery(
+        final List<Category> categories = categoryDao.findByNamedQueryCached(
                 "CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING",
                 categoryId
         );
