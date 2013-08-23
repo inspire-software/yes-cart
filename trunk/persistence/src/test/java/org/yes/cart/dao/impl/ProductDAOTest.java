@@ -221,7 +221,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 // search by Sku code
                 query = queryBuilder.createQuerySearchInShop("CC_TEST4", 10L);
                 products = productDao.fullTextSearch(query);
-                assertEquals(1, products.size());
+                assertEquals(query.toString(), 1, products.size());
 
                 //test fuzzy search
                 query = queryBuilder.createQuerySearchInShop("blender", 10L);
@@ -243,10 +243,10 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 // search on brand
                 // product with code "PRODUCT1" also future robotics, but not assigned to any category,
-                // //and can be found via shop, because it has qty on warehouse
+                // and can not be found via shop, because it has qty on warehouse, but category not assigned to 20 shop
                 query = queryBuilder.createQuerySearchInShop("FutureRobots", 20L);
                 products = productDao.fullTextSearch(query);
-                assertEquals(3, products.size());
+                assertEquals(query.toString(), 2, products.size());
 
                 status.setRollbackOnly();
             }
@@ -391,16 +391,15 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
 
-                Map<String, String> attributeMap = new HashMap<String, String>();
+
                 // Test that we able to find Beder by his material in category where he exists
-                attributeMap.put("MATERIAL", "metal");
-                Query query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);
+
+                Query query = queryBuilder.createQuery(Arrays.asList(101L), "MATERIAL", "metal");
                 List<Product> products = productDao.fullTextSearch(query);
                 assertEquals("Query [" + query.toString() + "] failed", 1, products.size());
                 // Test that we able to find Beder by his material in  list of categories where he exists
 
-                attributeMap.put("MATERIAL", "metal");
-                query = queryBuilder.createQuery(Arrays.asList(101L, 200L), attributeMap);
+                query = queryBuilder.createQuery(Arrays.asList(101L, 200L), "MATERIAL", "metal");
                 products = productDao.fullTextSearch(query);
                 assertEquals(1, products.size());
 
@@ -409,41 +408,33 @@ public class ProductDAOTest extends AbstractTestDAO {
 
 
                 // Test that we able to find Sobot by his material in category where he exists
-                attributeMap.put("MATERIAL", "Plastik");
-                query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);
+                query = queryBuilder.createQuery(Arrays.asList(101L), "MATERIAL", "Plastik");
                 products = productDao.fullTextSearch(query);
                 assertEquals(1, products.size());
                 //We are unable to getByKey products mafactured from bananas
-                attributeMap.put("MATERIAL", "banana");
-                query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);
+                query = queryBuilder.createQuery(Arrays.asList(101L), "MATERIAL", "banana");
                 products = productDao.fullTextSearch(query);
                 assertEquals(0, products.size());
                 //We are unable to getByKey products mafactured from bananas
-                attributeMap.put("MATERIAL", "banana");
-                query = queryBuilder.createQuery(Collections.EMPTY_LIST, attributeMap);
+                query = queryBuilder.createQuery(Collections.EMPTY_LIST, "MATERIAL", "banana");
                 products = productDao.fullTextSearch(query);
                 assertEquals(0, products.size());
                 //No category limitation, so we expect all plastic robots
-                attributeMap.put("MATERIAL", "Plastik");
-                query = queryBuilder.createQuery(Collections.EMPTY_LIST, attributeMap);
+                query = queryBuilder.createQuery(Collections.EMPTY_LIST, "MATERIAL", "Plastik");
                 products = productDao.fullTextSearch(query);
-                assertEquals(1, products.size());
+                assertEquals(query.toString(), 1, products.size());
                 // Robot from plastic not in 104 category
-                attributeMap.put("MATERIAL", "Plastik");
-                query = queryBuilder.createQuery(Arrays.asList(104L), attributeMap);
+                query = queryBuilder.createQuery(Arrays.asList(104L), "MATERIAL", "Plastik");
                 products = productDao.fullTextSearch(query);
                 assertEquals(0, products.size());
                 // Robot from plastic not in 104 category
-                attributeMap.put("MATERIAL", "Plastik");
-                query = queryBuilder.createQuery(Arrays.asList(105L), attributeMap);
+                query = queryBuilder.createQuery(Arrays.asList(105L), "MATERIAL", "Plastik");
                 products = productDao.fullTextSearch(query);
                 assertEquals(0, products.size());
 
 
                 // search by sku attribute value
-                attributeMap.clear();
-                attributeMap.put("SMELL", "apple");
-                query = queryBuilder.createQuery(null, attributeMap);
+                query = queryBuilder.createQuery((List<Long>)null, "SMELL", "apple");
                 products = productDao.fullTextSearch(query);
                 assertEquals("Failed [" + query + "]", 1, products.size());
 

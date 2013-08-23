@@ -112,19 +112,14 @@ public class AttributeProductFilter extends AbstractProductFilter {
 
     private BooleanQuery getQueryCandidate(final AttributiveSearchQueryBuilderImpl queryBuilder, final FilteredNavigationRecord record) {
 
-        final Map map;
         final BooleanQuery booleanQuery;
 
         if ("S".equals(record.getType())) {
-            map = Collections.singletonMap(record.getCode(), record.getValue());
-            booleanQuery = queryBuilder.createQuery(getCategories(), map);
+            booleanQuery = queryBuilder.createQuery(getCategories(), record.getCode(), record.getValue());
         } else { // range navigarion
             String[] range = record.getValue().split("-");
-            map = Collections.singletonMap(
-                    record.getCode(),
-                    new Pair<String, String>(range[0], range[1])
-            );
-            booleanQuery = queryBuilder.createQueryWithRangeValues(getCategories(), map);
+            booleanQuery = queryBuilder.createQueryWithRangeValues(getCategories(), record.getCode(),
+                    new Pair<String, String>(range[0], range[1]));
         }
 
         return getLuceneQueryFactory().getSnowBallQuery(

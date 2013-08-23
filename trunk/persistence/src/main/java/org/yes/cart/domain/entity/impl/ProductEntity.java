@@ -155,33 +155,10 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return builder.toString();
     }
 
-    /** {@inheritDoc} */
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductShopBridge.class)
-    @Transient
-    public List<Long> getShopId() {
-        //this.getSku().iterator().next().getQuantityOnWarehouse().iterator().next().getWarehouse().getWarehouseShop()
-        final List<Long> rez =  new ArrayList<Long>(5);
-
-        for (ProductSku productSku : getSku()) {
-            for (SkuWarehouse skuWarehouse : productSku.getQuantityOnWarehouse()) {
-                if (MoneyUtils.isFirstBiggerThanSecond(skuWarehouse.getQuantity(), BigDecimal.ZERO) ) {
-                    for(ShopWarehouse shopWarehouse : skuWarehouse.getWarehouse().getWarehouseShop()) {
-                        rez.add(shopWarehouse.getShop().getShopId());
-                    }
-                }
-            }
-        }
-
-        return rez;
-
-    }
-
     @Transient
     String getLocale(final String attrCode) {
         return attrCode.substring(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX.length() );
     }
-
 
     /** {@inheritDoc} */
     @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
