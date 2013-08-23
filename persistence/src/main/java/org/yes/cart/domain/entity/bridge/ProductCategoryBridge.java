@@ -20,6 +20,9 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductCategory;
@@ -78,23 +81,35 @@ public class ProductCategoryBridge implements FieldBridge {
             }
 
 
-            final List<Shop> allShop = HibernateSearchBridgeStaticLocator.getShopDao().findAll();
+            new TransactionTemplate(HibernateSearchBridgeStaticLocator.getTransactionManager()).execute(
+                    new TransactionCallbackWithoutResult() {
+                        public void doInTransactionWithoutResult(final TransactionStatus status) {
 
-            for (Shop shop : allShop) {
+                            final List<Shop> allShop = HibernateSearchBridgeStaticLocator.getShopDao().findAll();
 
-                if (isIntersected(getShopCategories(shop), (Set<ProductCategory>) value)) {
+                            for (Shop shop : allShop) {
 
-                    document.add(new Field(
-                            ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD,
-                            String.valueOf(shop.getShopId()),
-                            luceneOptions.getStore(),
-                            Field.Index.NOT_ANALYZED,
-                            luceneOptions.getTermVector()
-                    ));
+                                if (isIntersected(getShopCategories(shop), (Set<ProductCategory>) value)) {
 
-                }
+                                    document.add(new Field(
+                                            ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD,
+                                            String.valueOf(shop.getShopId()),
+                                            luceneOptions.getStore(),
+                                            Field.Index.NOT_ANALYZED,
+                                            luceneOptions.getTermVector()
+                                    ));
 
-            }
+                                }
+
+                            }
+
+
+                        }
+                    }
+
+            );
+
+
 
         }
 

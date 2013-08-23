@@ -18,10 +18,10 @@ package org.yes.cart.domain.entity.bridge;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.service.domain.ShopService;
 
 /**
  * User: denispavlov
@@ -39,6 +39,12 @@ public class HibernateSearchBridgeStaticLocator implements ApplicationContextAwa
     public static GenericDAO<Category, Long> getCategoryDao() {
         return applicationContext.getBean("categoryDao", GenericDAO.class);
     }
+
+    public static PlatformTransactionManager getTransactionManager() {
+        return  applicationContext.getBean("transactionManager", PlatformTransactionManager.class);
+    }
+
+    //
 
     /** {@inheritDoc} */
     @Override
