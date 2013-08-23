@@ -258,6 +258,25 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         return query.list();
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public List<T> findByNamedQueryCached(final String namedQueryName, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
+        query.setCacheable(true);
+        query.setCacheMode(CacheMode.NORMAL);
+        if (parameters != null) {
+            int idx = 1;
+            for (Object param : parameters) {
+                query.setParameter(String.valueOf(idx), param);
+                idx++;
+            }
+        }
+        return query.list();
+    }
+
     /**
      * {@inheritDoc}
      */

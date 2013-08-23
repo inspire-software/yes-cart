@@ -130,6 +130,15 @@ public interface GenericDAO<T, PK extends Serializable> {
     List<T> findByNamedQuery(String namedQueryName, Object... parameters);
 
     /**
+     * Find entities within named query .
+     *
+     * @param namedQueryName name of query
+     * @param parameters     optional parameters for named query
+     * @return list of found entities
+     */
+    List<T> findByNamedQueryCached(String namedQueryName, Object... parameters);
+
+    /**
      * Find "query objects" within named query .
      *
      * @param namedQueryName name of query

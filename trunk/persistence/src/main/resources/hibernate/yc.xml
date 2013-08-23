@@ -4611,7 +4611,7 @@ public void setRangeList(final RangeList rangeList) {
        ]]>
     </query>
 
-    <query name="CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING">
+    <query cacheable="true" name="CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING">
         <![CDATA[
        select c from CategoryEntity c where c.parentId = ?1
        and c.categoryId <> c.parentId
