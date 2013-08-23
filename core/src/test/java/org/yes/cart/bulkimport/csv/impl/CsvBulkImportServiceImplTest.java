@@ -340,7 +340,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.next();
             long cntShop10Cats = rs.getLong("cnt");
             rs.close();
-            assertEquals(23L, cntShop10Cats);  // 12 categories + 11 from initialdata.xml
+            assertEquals(24L, cntShop10Cats);  // 12 categories + 11 from initialdata.xml
 
 
             dt = System.currentTimeMillis();

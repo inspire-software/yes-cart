@@ -423,9 +423,7 @@
         </property>
     </bean>
 
-
-
-
+    <bean id="hibernateSearchBridgeStaticLocator" class="org.yes.cart.domain.entity.bridge.HibernateSearchBridgeStaticLocator"/>
 
 </beans>
 

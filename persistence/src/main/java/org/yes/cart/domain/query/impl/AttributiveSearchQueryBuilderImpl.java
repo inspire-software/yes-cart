@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
-  User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 16:13:01
  * <p/>
@@ -52,9 +52,10 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
             final String attributeName,
             final String attributeValue) {
 
-        BooleanQuery query = super.createQuery(categories);
-        addKeyValue(query, attributeName, attributeValue);
-        return query;
+        return addKeyValue(
+                super.createQuery(categories),
+                attributeName,
+                attributeValue);
 
     }
 
@@ -72,7 +73,16 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
             final String attributeName,
             final Pair<String, String> attributeValueRange) {
 
-        final BooleanQuery query = new BooleanQuery();
+        final BooleanQuery query = super.createQuery(categories);
+
+        return addKeyRangeValues(
+                query,
+                attributeName,
+                attributeValueRange.getFirst(),
+                attributeValueRange.getSecond());
+
+
+        /*final BooleanQuery query = new BooleanQuery();
         for (Long category : categories) {
             BooleanQuery booleanQuery = new BooleanQuery();
             booleanQuery.add(
@@ -87,39 +97,52 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
             query.add(booleanQuery, BooleanClause.Occur.SHOULD);
 
         }
-        return query;
+        return query; */
     }
 
     /**
      * Creates a range query to getByKey the products with specified attribute name and range value
      * in particular categories
      *
-     * @param categories        given set of category ids.
-     * @param attributeRangeMap map of attribute name and range values
+     * @param categories          given set of category ids.
+     * @param attributeName       attribute name
+     * @param attributeValueRange value range for given attribute
      * @return boolean query
      */
     public BooleanQuery createQueryWithRangeValues(
             final List<Long> categories,
-            final Map<String, Pair<String, String>> attributeRangeMap) {
-        final BooleanQuery query = new BooleanQuery();
-        for (Long category : categories) {
-            BooleanQuery booleanQuery = new BooleanQuery();
-            booleanQuery.add(
-                    new TermQuery(new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
-                    BooleanClause.Occur.MUST
-            );
-            for (Map.Entry<String, Pair<String, String>> entry : attributeRangeMap.entrySet()) {
-                addKeyRangeValues(
-                        booleanQuery,
-                        entry.getKey(),
-                        entry.getValue().getFirst(),
-                        entry.getValue().getSecond());
-            }
-            query.add(booleanQuery, BooleanClause.Occur.SHOULD);
+            final String attributeName,
+            final Pair<String, String> attributeValueRange
+            /*final Map<String, Pair<String, String>> attributeRangeMap*/) {
 
-        }
+        final BooleanQuery categoriesQueries = super.createQuery(categories);
 
-        return query;
+        return addKeyRangeValues(
+                categoriesQueries,
+                attributeName,
+                attributeValueRange.getFirst(),
+                attributeValueRange.getSecond());
+
+
+        /*final BooleanQuery query = new BooleanQuery();
+      for (Long category : categories) {
+          BooleanQuery booleanQuery = new BooleanQuery();
+          booleanQuery.add(
+                  new TermQuery(new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
+                  BooleanClause.Occur.MUST
+          );
+          for (Map.Entry<String, Pair<String, String>> entry : attributeRangeMap.entrySet()) {
+              addKeyRangeValues(
+                      booleanQuery,
+                      entry.getKey(),
+                      entry.getValue().getFirst(),
+                      entry.getValue().getSecond());
+          }
+          query.add(booleanQuery, BooleanClause.Occur.SHOULD);
+
+      }
+
+      return query; */
     }
 
 
@@ -131,7 +154,7 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
      * @param attribute  map of attribute name and value
      * @return boolean query
      */
-    public BooleanQuery createQuery(
+    /*public BooleanQuery createQuery(
             final List<Long> categories,
             final Map<String, String> attribute) {
         BooleanQuery query = super.createQuery(categories);
@@ -139,7 +162,7 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
             addKeyValue(query, entry.getKey(), entry.getValue());
         }
         return query;
-    }
+    }   */
 
 
     /**
@@ -155,9 +178,9 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
             final Long categoryId,
             final String attributeName,
             final String attributeValue) {
-        BooleanQuery query = super.createQuery(categoryId);
-        addKeyValue(query, attributeName, attributeValue);
-        return query;
+
+        return addKeyValue(super.createQuery(categoryId), attributeName, attributeValue);
+
     }
 
     /**
@@ -182,7 +205,9 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
     }
 
 
-    private void addKeyValue(final BooleanQuery query, final String attributeName, final String attributeValue) {
+    private BooleanQuery addKeyValue(final BooleanQuery query, final String attributeName, final String attributeValue) {
+
+        final BooleanQuery aggregatedQuery = new BooleanQuery();
 
 
         final BooleanQuery productAttrNames = new BooleanQuery();
@@ -194,28 +219,36 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
                 new TermQuery(new Term(SKU_ATTRIBUTE_CODE_FIELD, attributeName)),
                 BooleanClause.Occur.SHOULD
         );
-        query.add(productAttrNames, BooleanClause.Occur.MUST);
 
 
         final BooleanQuery productAttrVal = new BooleanQuery();
         productAttrVal.add(
-                new TermQuery(new Term(ATTRIBUTE_VALUE_FIELD, attributeName + attributeValue )),
+                new TermQuery(new Term(ATTRIBUTE_VALUE_FIELD, attributeName + attributeValue)),
                 BooleanClause.Occur.SHOULD
         );
         productAttrVal.add(
-                new TermQuery(new Term(SKU_ATTRIBUTE_VALUE_FIELD, attributeName + attributeValue )),
+                new TermQuery(new Term(SKU_ATTRIBUTE_VALUE_FIELD, attributeName + attributeValue)),
                 BooleanClause.Occur.SHOULD
         );
-        query.add(productAttrVal, BooleanClause.Occur.MUST);
 
+        if (!query.clauses().isEmpty()) {
+            aggregatedQuery.add(query, BooleanClause.Occur.MUST);
+        }
+
+        aggregatedQuery.add(productAttrNames, BooleanClause.Occur.MUST);
+        aggregatedQuery.add(productAttrVal, BooleanClause.Occur.MUST);
+
+        return aggregatedQuery;
 
 
     }
 
-    private void addKeyRangeValues(final BooleanQuery query,
-                                   final String attributeName,
-                                   final String attributeValueLo,
-                                   final String attributeValueHi) {
+    private BooleanQuery addKeyRangeValues(final BooleanQuery query,
+                                           final String attributeName,
+                                           final String attributeValueLo,
+                                           final String attributeValueHi) {
+
+        final BooleanQuery rez = new BooleanQuery();
 
         final BooleanQuery productAttrNames = new BooleanQuery();
         productAttrNames.add(
@@ -226,9 +259,9 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
                 new TermQuery(new Term(SKU_ATTRIBUTE_CODE_FIELD, attributeName)),
                 BooleanClause.Occur.SHOULD
         );
-        query.add(productAttrNames, BooleanClause.Occur.MUST);
 
-        final BooleanQuery productAttrValueRange  = new BooleanQuery();
+
+        final BooleanQuery productAttrValueRange = new BooleanQuery();
         productAttrValueRange.add(
                 new TermRangeQuery(
                         ATTRIBUTE_VALUE_FIELD,
@@ -240,25 +273,20 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
         productAttrValueRange.add(
                 new TermRangeQuery(
                         SKU_ATTRIBUTE_VALUE_FIELD,
-                        attributeName + attributeValueLo ,
-                        attributeName + attributeValueHi ,
+                        attributeName + attributeValueLo,
+                        attributeName + attributeValueHi,
                         true, true), // inclusive search
                 BooleanClause.Occur.SHOULD
         );
-        query.add(productAttrValueRange, BooleanClause.Occur.MUST);
 
-        
-        /*query.add(
-                new TermQuery(new Term(ATTRIBUTE_CODE_FIELD, attributeName)),
-                BooleanClause.Occur.MUST
-        );
-        query.add(
-                new RangeQuery(
-                        new Term(ATTRIBUTE_VALUE_FIELD, attributeValueLo),
-                        new Term(ATTRIBUTE_VALUE_FIELD, attributeValueHi),
-                        true), // inclusive search
-                BooleanClause.Occur.MUST
-        );*/
+
+        rez.add(query, BooleanClause.Occur.MUST);
+        rez.add(productAttrNames, BooleanClause.Occur.MUST);
+        rez.add(productAttrValueRange, BooleanClause.Occur.MUST);
+
+        return rez;
+
+
     }
 
 
