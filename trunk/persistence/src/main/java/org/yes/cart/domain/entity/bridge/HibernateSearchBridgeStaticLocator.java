@@ -30,25 +30,32 @@ import org.yes.cart.domain.entity.Shop;
  */
 public class HibernateSearchBridgeStaticLocator implements ApplicationContextAware {
 
-    private static ApplicationContext applicationContext;
+    private static PlatformTransactionManager transactionManager;
+
+    private static GenericDAO<Shop, Long> shopDao;
+
+    private static GenericDAO<Category, Long> categoryDao;
+
+
+    public static PlatformTransactionManager getTransactionManager() {
+        return transactionManager;
+    }
 
     public static GenericDAO<Shop, Long> getShopDao() {
-        return applicationContext.getBean("shopDao", GenericDAO.class);
+        return shopDao;
     }
 
     public static GenericDAO<Category, Long> getCategoryDao() {
-        return applicationContext.getBean("categoryDao", GenericDAO.class);
+        return categoryDao;
     }
 
-    public static PlatformTransactionManager getTransactionManager() {
-        return  applicationContext.getBean("transactionManager", PlatformTransactionManager.class);
-    }
 
-    //
 
     /** {@inheritDoc} */
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+        shopDao = applicationContext.getBean("shopDao", GenericDAO.class);
+        categoryDao = applicationContext.getBean("categoryDao", GenericDAO.class);
+        transactionManager = applicationContext.getBean("transactionManager", PlatformTransactionManager.class);
     }
 }
