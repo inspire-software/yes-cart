@@ -23,6 +23,16 @@
             timeToIdleSeconds="120" timeToLiveSeconds="600"
             />
 
+    <cache
+            name="org.hibernate.cache.StandardQueryCache"
+            maxEntriesLocalHeap="5000"
+            eternal="false"
+            timeToLiveSeconds="120"
+
+            />
+
+    <!-- ############################################# service cache #######################################-->
+
     <cache name="org.yes.cart.service.domain.impl.CategoryServiceImpl.cache"
            maxElementsInMemory="100"
            overflowToDisk="false"
@@ -138,9 +148,6 @@
 
 
 
-    <cache name="org.hibernate.cache.StandardQueryCache"
-           maxElementsInMemory="1000" eternal="false" timeToLiveSeconds="600"
-           overflowToDisk="false" />
 
 
     <cache name="categoryDecodeCache"   maxElementsInMemory="300"   overflowToDisk="true"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
@@ -149,6 +156,8 @@
     <cache name="skuEncodeCache"        maxElementsInMemory="300"   overflowToDisk="true"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
     <cache name="productDecodeCache"    maxElementsInMemory="3000"   overflowToDisk="true"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
     <cache name="productEncodeCache"    maxElementsInMemory="3000"   overflowToDisk="true"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
+
+    <!-- ############################################# seo cache #######################################-->
 
     <cache name="decoratedProductCache" maxElementsInMemory="3000"   overflowToDisk="true"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
     <cache name="urlShopCache" maxElementsInMemory="100"   overflowToDisk="false"  eternal="false"   timeToLiveSeconds="180"   timeToIdleSeconds="60"/>
