@@ -42,6 +42,7 @@ public interface ProductSearchQueryBuilder {
 
 
     public final static String PRODUCT_CATEGORY_FIELD = "productCategory.category";
+    public final static String PRODUCT_SHOP_FIELD = "productShopId";
     public final static String PRODUCT_ID_FIELD = "productId";
     public final static String SKU_ID_FIELD = "sku.skuId"; //////////////////////////////////////////////
 

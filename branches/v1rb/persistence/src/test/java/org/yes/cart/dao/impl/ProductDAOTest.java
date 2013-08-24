@@ -20,15 +20,11 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
-import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.api.Invocation;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.*;
@@ -37,10 +33,12 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.*;
 import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.ProductService;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -165,7 +163,8 @@ public class ProductDAOTest extends AbstractTestDAO {
         assertEquals(2, products.size());
     }
 
-    
+
+
 
 
     /**
@@ -276,16 +275,15 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
 
-                Map<String, String> attributeMap = new HashMap<String, String>();
+
                 // Test that we able to find Beder by his material in category where he exists
-                attributeMap.put("MATERIAL", "metal");
-                Query query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);
+
+                Query query = queryBuilder.createQuery(Arrays.asList(101L), "MATERIAL", "metal");
                 List<Product> products = productDao.fullTextSearch(query);
                 assertEquals("Query [" + query.toString() + "] failed", 1, products.size());
                 // Test that we able to find Beder by his material in  list of categories where he exists
 
-                attributeMap.put("MATERIAL", "metal");
-                query = queryBuilder.createQuery(Arrays.asList(101L, 200L), attributeMap);
+                query = queryBuilder.createQuery(Arrays.asList(101L, 200L), "MATERIAL", "metal");
                 products = productDao.fullTextSearch(query);
                 assertEquals(1, products.size());
 
@@ -294,41 +292,33 @@ public class ProductDAOTest extends AbstractTestDAO {
 
 
                 // Test that we able to find Sobot by his material in category where he exists
-                attributeMap.put("MATERIAL", "Plastik");
-                query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);
+                query = queryBuilder.createQuery(Arrays.asList(101L), "MATERIAL", "Plastik");
                 products = productDao.fullTextSearch(query);
                 assertEquals(1, products.size());
                 //We are unable to getByKey products mafactured from bananas
-                attributeMap.put("MATERIAL", "banana");
-                query = queryBuilder.createQuery(Arrays.asList(101L), attributeMap);
+                query = queryBuilder.createQuery(Arrays.asList(101L), "MATERIAL", "banana");
                 products = productDao.fullTextSearch(query);
                 assertEquals(0, products.size());
                 //We are unable to getByKey products mafactured from bananas
-                attributeMap.put("MATERIAL", "banana");
-                query = queryBuilder.createQuery(Collections.EMPTY_LIST, attributeMap);
+                query = queryBuilder.createQuery(Collections.EMPTY_LIST, "MATERIAL", "banana");
                 products = productDao.fullTextSearch(query);
                 assertEquals(0, products.size());
                 //No category limitation, so we expect all plastic robots
-                attributeMap.put("MATERIAL", "Plastik");
-                query = queryBuilder.createQuery(Collections.EMPTY_LIST, attributeMap);
+                query = queryBuilder.createQuery(Collections.EMPTY_LIST, "MATERIAL", "Plastik");
                 products = productDao.fullTextSearch(query);
-                assertEquals(1, products.size());
+                assertEquals(query.toString(), 1, products.size());
                 // Robot from plastic not in 104 category
-                attributeMap.put("MATERIAL", "Plastik");
-                query = queryBuilder.createQuery(Arrays.asList(104L), attributeMap);
+                query = queryBuilder.createQuery(Arrays.asList(104L), "MATERIAL", "Plastik");
                 products = productDao.fullTextSearch(query);
                 assertEquals(0, products.size());
                 // Robot from plastic not in 104 category
-                attributeMap.put("MATERIAL", "Plastik");
-                query = queryBuilder.createQuery(Arrays.asList(105L), attributeMap);
+                query = queryBuilder.createQuery(Arrays.asList(105L), "MATERIAL", "Plastik");
                 products = productDao.fullTextSearch(query);
                 assertEquals(0, products.size());
 
 
                 // search by sku attribute value
-                attributeMap.clear();
-                attributeMap.put("SMELL", "apple");
-                query = queryBuilder.createQuery(null, attributeMap);
+                query = queryBuilder.createQuery((List<Long>)null, "SMELL", "apple");
                 products = productDao.fullTextSearch(query);
                 assertEquals("Failed [" + query + "]", 1, products.size());
 
@@ -353,7 +343,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     @Test
     public void getSearchByAttributeAndValuesRangeTest() throws InterruptedException {
         productDao.fullTextSearchReindex();
-        
+
         AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
         Query query = queryBuilder.createQuery(
                 Arrays.asList(130L, 131L, 132L),

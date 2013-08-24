@@ -53,6 +53,15 @@
                 <prop key="hibernate.search.worker.thread_pool.size">2</prop>
                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
 
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop>
+
+                <prop key="net.sf.ehcache.configurationResourceName">test-hibernate-ehcache.xml</prop>
+                <!--http://www.ehcache.org/documentation/integrations/hibernate-->
+
+
+
             </props>
         </property>
         <property name="entityInterceptor">

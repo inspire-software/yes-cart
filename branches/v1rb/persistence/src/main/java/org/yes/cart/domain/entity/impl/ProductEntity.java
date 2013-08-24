@@ -18,6 +18,7 @@ package org.yes.cart.domain.entity.impl;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.search.annotations.*;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 
 import javax.persistence.*;
@@ -171,6 +172,13 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     /*
     */
 
+    @Transient
+    String getLocale(final String attrCode) {
+        return attrCode.substring(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX.length() );
+    }
+
+    /** {@inheritDoc} */
+    @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
     @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;

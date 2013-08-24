@@ -612,6 +612,7 @@
         </property>
     </bean>
 
+    <bean id="hibernateSearchBridgeStaticLocator" class="org.yes.cart.domain.entity.bridge.HibernateSearchBridgeStaticLocator"/>
 
     <bean id="customerDao" parent="txProxyTemplate">
         <property name="target">
@@ -622,8 +623,6 @@
             </bean>
         </property>
     </bean>
-
-
 
 </beans>
 
