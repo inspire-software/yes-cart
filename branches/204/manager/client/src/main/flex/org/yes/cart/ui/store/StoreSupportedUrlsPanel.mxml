@@ -126,13 +126,11 @@
         }
 
 
-        /*  <mx:Boolean id="backdoorUrlsChanged">false</mx:Boolean>
-         <mx:Boolean id="allowDeleteBackdoorUrl">false</mx:Boolean>*/
         private function onDeleteBackdoorUrlClick(event:MouseEvent):void {
 
             if (this.allowDeleteBackdoorUrl && this.backdoorUrlGrid.selectedItem != null) {
                 Alert.show(
-                        resourceManager.getString('StoreSupportedUrlsPanel', 'deleteUrlConfirm', [ this.urlGrid.selectedItem.url ]),
+                        resourceManager.getString('StoreSupportedUrlsPanel', 'deleteUrlConfirm', [ this.backdoorUrlGrid.selectedItem.url ]),
                         resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteBackdoorUrlConfirm, null, Alert.OK);
             }

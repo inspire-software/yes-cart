@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.dto.ShopBackdoorUrlDTO;
 import org.yes.cart.domain.dto.ShopUrlDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -72,9 +73,9 @@ public class DtoShopBackdoorUrlServiceImpl
 
     /** {@inheritDoc} */
     public List<ShopBackdoorUrlDTO> getAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Shop shop = shopService.getById(shopId);
-        final List<ShopBackdoorUrlDTO> shopUrlDTOs = new ArrayList<ShopBackdoorUrlDTO>(shop.getShopBackdoorUrl().size());
-        fillDTOs(shop.getShopBackdoorUrl(), shopUrlDTOs);
+        final List<ShopBackdoorUrl> urls = getService().getGenericDao().findByCriteria(Restrictions.eq("shop.shopId", shopId));
+        final List<ShopBackdoorUrlDTO> shopUrlDTOs = new ArrayList<ShopBackdoorUrlDTO>(urls.size());
+        fillDTOs(urls, shopUrlDTOs);
         return shopUrlDTOs;
     }
 
