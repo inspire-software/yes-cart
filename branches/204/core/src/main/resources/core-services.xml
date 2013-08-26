@@ -72,6 +72,14 @@
         </property>
     </bean>
 
+    <bean id="shopBackdoorUrlService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ShopBackdoorUrlServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopBackdoorUrlDao"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="shopExchangeRateService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.ShopExchangeRateServiceImpl">
@@ -588,6 +596,17 @@
         </property>
     </bean>
 
+    <bean id="dtoShopBackdoorUrlService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoShopBackdoorUrlServiceImpl">
+                <constructor-arg index="0" ref="shopBackdoorUrlService"/>
+                <constructor-arg index="1" ref="shopService"/>
+                <constructor-arg index="2" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="3" ref="dtoAssemblerAdaptersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="dtoShopExchangeRateService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoShopExchangeRateServiceImpl">
@@ -840,6 +859,7 @@
                 <entry key="org.yes.cart.domain.dto.EtypeDTO" value="org.yes.cart.domain.dto.impl.EtypeDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ShopDTO" value="org.yes.cart.domain.dto.impl.ShopDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ShopUrlDTO" value="org.yes.cart.domain.dto.impl.ShopUrlDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ShopBackdoorUrlDTO" value="org.yes.cart.domain.dto.impl.ShopBackdoorUrlDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ShopExchangeRateDTO" value="org.yes.cart.domain.dto.impl.ShopExchangeRateDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CategoryDTO" value="org.yes.cart.domain.dto.impl.CategoryDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.BrandDTO" value="org.yes.cart.domain.dto.impl.BrandDTOImpl"/>

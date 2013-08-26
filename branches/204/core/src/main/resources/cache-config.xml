@@ -36,7 +36,7 @@
           p:cacheManager-ref="ehcache"/>
 
     <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"
-          p:configLocation="ehcache.xml"
+          p:configLocation="classpath:ehcache.xml"
           p:shared="true"/>
 
     <!-- ###################### Attributes  ################################################################################################################## -->

@@ -16,22 +16,24 @@
 package org.yes.cart.web.service.ws.impl;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.service.ws.CacheDirector;
 
+import javax.naming.NamingException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
+import org.springframework.test.web.client.MockMvcClientHttpRequestFactory;
 
 
 /**
@@ -41,16 +43,36 @@ import static junit.framework.Assert.assertTrue;
  * Time: 4:16 PM
  * To change this template use File | Settings | File Templates.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath*:cache-config.xml"})
 public class CacheDirectorImplTest {
 
-    @Autowired
-    ApplicationContext context;
+    private GenericXmlApplicationContext context;
+    private CacheDirectorImpl cacheDirector;
 
-    CacheDirectorImpl cacheDirector;
+    @BeforeClass
+    public static void initInitialContext() {
+
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("test-ds.xml");
+        SimpleNamingContextBuilder builder = new SimpleNamingContextBuilder();
+        builder.bind("java:comp/env/jdbc/yesjndi", applicationContext.getBean("dataSource"));
+        builder.bind("java:comp/env/jdbc/yespayjndi", applicationContext.getBean("payDataSource"));
+        try {
+            builder.activate();
+        } catch (NamingException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+    }
+
+
+
     @Before
-    public void setUp() {
+    public void setUp() throws NamingException {
+
+        context = new GenericXmlApplicationContext();
+        context.load("file:src/test/resources/testApplicationContext.xml");
+        context.refresh();
+
+
         cacheDirector = new CacheDirectorImpl();
         cacheDirector.setEntityOperationCache((Map<String, Map<String, Set<Pair<String,String>>>>) context.getBean("evictionConfig"));
         cacheDirector.setCacheManager((CacheManager) context.getBean("cacheManager"));
@@ -80,7 +102,43 @@ public class CacheDirectorImplTest {
         assertNull(caches);
 
 
+    }
+
+    @Test
+    public void testGetCacheInfo() {
+        cacheDirector.getCacheManager().getCache("attributeService-availableAttributesByProductTypeId").put("hi", "there");
+        List<CacheInfoDTOImpl> rez = cacheDirector.getCacheInfo();
+        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+            if (cacheInfoDTO.getCacheName().equals("attributeService-availableAttributesByProductTypeId")){
+                assertEquals(1, cacheInfoDTO.getInMemorySize());
+            }
+        }
+        cacheDirector.getCacheManager().getCache("attributeService-availableAttributesByProductTypeId").clear();
+    }
+
+
+    @Test
+    public void testEvictCache() {
+
+        List<CacheInfoDTOImpl> rez = cacheDirector.getCacheInfo();
+        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+            cacheDirector.getCacheManager().getCache(cacheInfoDTO.getCacheName()).put("hi", "there");
+        }
+        cacheDirector.evictCache();
+        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+            assertEquals(0, cacheInfoDTO.getCacheSize());
+        }
 
     }
+
+    @Test
+    public void testOnCacheableChange() {
+        cacheDirector.getCacheManager().getCache("attributeService-availableAttributesByProductTypeId").put("hi", "there");
+        cacheDirector.getCacheManager().getCache("categoryService-categoryHasSubcategory").put("hi", "there");
+        cacheDirector.onCacheableChange(CacheDirector.EntityOperation.UPDATE, CacheDirector.EntityName.ATTRIBUTE, 123L);
+        assertNull(cacheDirector.getCacheManager().getCache("attributeService-availableAttributesByProductTypeId").get("hi"));
+        assertNotNull(cacheDirector.getCacheManager().getCache("categoryService-categoryHasSubcategory").get("hi"));
+    }
+
 
 }

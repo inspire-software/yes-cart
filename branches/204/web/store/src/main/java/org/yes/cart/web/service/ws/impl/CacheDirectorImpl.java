@@ -79,8 +79,8 @@ public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware
     }
 
 
-    private CacheManager getCacheManager() {
-        return applicationContext.getBean("cacheManager", CacheManager.class);
+    CacheManager getCacheManager() {
+        return cacheManager;
     }
 
     /**

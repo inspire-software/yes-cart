@@ -161,9 +161,6 @@
     <import resource="classpath*:core-module-payment-gswm.xml"/>
 
 
-    <bean id="methodCacheAdvice" class="org.yes.cart.cache.MethodCacheAdvice">
-        <property name="cacheEnabled" value="false"/>
-    </bean>
 
 
 

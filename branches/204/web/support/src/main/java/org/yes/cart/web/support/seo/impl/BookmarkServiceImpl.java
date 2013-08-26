@@ -16,10 +16,10 @@
 
 package org.yes.cart.web.support.seo.impl;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
+
 import org.apache.commons.lang.math.NumberUtils;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
@@ -78,9 +78,9 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     }
 
-    private String getStringFromValueWrapper(final Element wrapper) {
+    private String getStringFromValueWrapper(final Cache.ValueWrapper wrapper) {
         if (wrapper != null) {
-            return (String) wrapper.getObjectValue();
+            return (String) wrapper.get();
         }
         return null;
     }
@@ -103,8 +103,8 @@ public class BookmarkServiceImpl implements BookmarkService {
 
             }
             if (seoData != null) {
-                CATEGORY_ENCODE_CACHE.put(new Element(bookmark, seoData));
-                CATEGORY_DECODE_CACHE.put(new Element(seoData, bookmark));
+                CATEGORY_ENCODE_CACHE.put(bookmark, seoData);
+                CATEGORY_DECODE_CACHE.put(seoData, bookmark);
             }
         }
 
@@ -146,8 +146,8 @@ public class BookmarkServiceImpl implements BookmarkService {
 
             }
             if (seoData != null) {
-                CONTENT_ENCODE_CACHE.put(new Element(bookmark, seoData));
-                CONTENT_DECODE_CACHE.put(new Element(seoData, bookmark));
+                CONTENT_ENCODE_CACHE.put(bookmark, seoData);
+                CONTENT_DECODE_CACHE.put(seoData, bookmark);
             }
         }
 
@@ -187,8 +187,8 @@ public class BookmarkServiceImpl implements BookmarkService {
                 );
             }
             if (seoData != null) {
-                PRODUCT_ENCODE_CACHE.put(new Element(bookmark, seoData));
-                PRODUCT_DECODE_CACHE.put(new Element(seoData, bookmark));
+                PRODUCT_ENCODE_CACHE.put(bookmark, seoData);
+                PRODUCT_DECODE_CACHE.put(seoData, bookmark);
             }
         }
 
@@ -211,8 +211,8 @@ public class BookmarkServiceImpl implements BookmarkService {
                 );
             }
             if (seoData != null) {
-                PRODUCT_ENCODE_CACHE.put(new Element(bookmark, seoData));
-                PRODUCT_DECODE_CACHE.put(new Element(seoData, bookmark));
+                PRODUCT_ENCODE_CACHE.put(bookmark, seoData);
+                PRODUCT_DECODE_CACHE.put(seoData, bookmark);
             }
         }
 
@@ -254,8 +254,8 @@ public class BookmarkServiceImpl implements BookmarkService {
                 );
             }
             if (seoData != null) {
-                SKU_ENCODE_CACHE.put(new Element(bookmark, seoData));
-                SKU_DECODE_CACHE.put(new Element(seoData, bookmark));
+                SKU_ENCODE_CACHE.put(bookmark, seoData);
+                SKU_DECODE_CACHE.put(seoData, bookmark);
             }
         }
 
