@@ -29,6 +29,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 import org.springframework.web.context.ServletContextAware;
 import org.xml.sax.SAXException;
@@ -74,6 +78,10 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
 
     private ApplicationContext applicationContext;
 
+    private PlatformTransactionManager transactionManager;
+
+    private TransactionTemplate tx;
+
     /**
      * Consstruct report service.
      *
@@ -99,7 +107,19 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
      * {@inheritDoc}
      */
     public List<ReportPair> getParameterValues(final String hsql) {
-        List<Object> queryRez = genericDAO.executeHsqlQuery(hsql);
+
+        final List<Object> queryRez = new ArrayList<Object>();
+
+
+
+        getTransactionTemplate().execute( new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+                queryRez.addAll(genericDAO.executeHsqlQuery(hsql));
+
+            }
+        });
+
+
         if (queryRez != null && !queryRez.isEmpty()) {
             final List<ReportPair> rez = new ArrayList<ReportPair>(queryRez.size());
             for (Object obj : queryRez) {
@@ -113,6 +133,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
         } else {
             return Collections.emptyList();
         }
+
 
     }
 
@@ -353,10 +374,18 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
     List<Object> getQueryResult(final String query, final Object... params) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
         if (query.toLowerCase().trim().contains("select ")) {
-            return genericDAO.findByQuery(
-                    query,
-                    params
-            );
+
+            final List<Object> rez = new ArrayList<Object>();
+            getTransactionTemplate().execute(new TransactionCallbackWithoutResult() {
+                public void doInTransactionWithoutResult(TransactionStatus status) {
+                    rez.addAll(genericDAO.findByQuery(
+                            query,
+                            params
+                    ));
+
+                }
+            } );
+            return rez;
 
         } else {
             //this is bean name, which should be taken to via service locator (because may be remote)
@@ -390,5 +419,18 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
      */
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+        transactionManager =   applicationContext.getBean("transactionManager", PlatformTransactionManager.class);
+        tx = new TransactionTemplate(transactionManager);
     }
+
+
+    /**
+     * Get transaction template.
+     * @return  TransactionTemplate
+     */
+    public TransactionTemplate getTransactionTemplate() {
+        return tx;
+    }
+
+
 }
