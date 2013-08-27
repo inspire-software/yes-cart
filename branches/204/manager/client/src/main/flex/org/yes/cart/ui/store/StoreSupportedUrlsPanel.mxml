@@ -153,12 +153,12 @@
 
         private function onDeleteBackdoorUrlConfirm(event:CloseEvent):void {
             if (event.detail == Alert.OK) {
-                if (this.allowDeleteUrl && this.urlGrid.selectedItem != null) {
+                if (this.allowDeleteBackdoorUrl && this.backdoorUrlGrid.selectedItem != null) {
 
                     if (DomainUtils.isNew(this.backdoorUrlGrid.selectedItem, 'shopBackdoorUrlId')) {
                         this.backdoorUrlGrid.dataProvider.removeItemAt(this.backdoorUrlGrid.selectedIndex);
                         this.allowDeleteBackdoorUrl = false;
-                        validateUrlsBeforeSave();
+                        //validateUrlsBeforeSave();
                     } else {
                         remoteShopBackdoorUrlService.remove(this.backdoorUrlGrid.selectedItem.shopBackdoorUrlId);
                     }
@@ -315,7 +315,7 @@
     </mx:DataGrid>
 
     <mx:HBox paddingTop="5" width="100%">
-        <mx:Label text="@Resource(bundle='StoreSupportedUrlsPanel',key='supportedUrl')"/>
+        <mx:Label toolTip="@Resource(bundle='StoreSupportedUrlsPanel',key='backdoorUrlHint')" text="@Resource(bundle='StoreSupportedUrlsPanel',key='backdoorUrl')"/>
         <mx:Button
                 id="addBackdoorUrlBtn"
                 enabled="{!backdoorUrlsChanged}"

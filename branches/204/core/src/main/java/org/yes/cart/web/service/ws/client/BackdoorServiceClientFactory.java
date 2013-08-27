@@ -27,6 +27,7 @@ import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSPasswordCallback;
 import org.apache.ws.security.handler.WSHandlerConstants;
 import org.yes.cart.web.service.ws.BackdoorService;
+import org.yes.cart.web.service.ws.CacheDirector;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -64,22 +65,54 @@ public class BackdoorServiceClientFactory implements CallbackHandler {
      * @param url      url
      * @return {@link BackdoorService}
      */
-    public BackdoorService getBackdoorService(final String userName, final String password, final String url,
+    public BackdoorService getBackdoorService(final String userName,
+                                              final String password,
+                                              final String url,
                                               final long timeout) {
 
         final BackdoorService backdoorService;
 
         synchronized (factory) {
             factory.setAddress(url);
-            //factory.setAddress("http://localhost:8080/yes-shop/services/backdoor");
             backdoorService = (BackdoorService) factory.create();
-
             concurrentHashMap.put(userName, password);
         }
 
         final Client client = ClientProxy.getClient(backdoorService);
+        configureClient(userName, timeout, client);
+        return backdoorService;
 
-        HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
+    }
+
+    /**
+     * Get back door service.
+     *
+     * @param userName user name
+     * @param password password
+     * @param url      url
+     * @return {@link BackdoorService}
+     */
+    public CacheDirector getCacheDirector(final String userName,
+                                              final String password,
+                                              final String url,
+                                              final long timeout) {
+
+        final CacheDirector cacheDirector;
+
+        synchronized (factory) {
+            factory.setAddress(url);
+            cacheDirector = (CacheDirector) factory.create();
+            concurrentHashMap.put(userName, password);
+        }
+
+        final Client client = ClientProxy.getClient(cacheDirector);
+        configureClient(userName, timeout, client);
+        return cacheDirector;
+
+    }
+
+    private void configureClient(final String userName, final long timeout, final Client client) {
+        final HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
         httpClientPolicy.setConnectionTimeout(timeout);
         httpClientPolicy.setAllowChunking(false);
         httpClientPolicy.setReceiveTimeout(timeout);
@@ -102,9 +135,6 @@ public class BackdoorServiceClientFactory implements CallbackHandler {
             }
         });
         endpoint.getOutInterceptors().add(wssOut);
-
-        return backdoorService;
-
     }
 
     /**

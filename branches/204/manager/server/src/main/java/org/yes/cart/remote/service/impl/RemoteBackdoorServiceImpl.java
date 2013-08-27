@@ -20,6 +20,7 @@ import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.web.service.ws.BackdoorService;
+import org.yes.cart.web.service.ws.CacheDirector;
 import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
 
 import java.io.IOException;
@@ -32,6 +33,8 @@ import java.util.List;
  */
 public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
+    private final static  int defaultTimeout = 60000;
+
 
     /** {@inheritDoc} */
     public int reindexAllProducts(final AsyncContext context) {
@@ -40,52 +43,52 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
     /** {@inheritDoc} */
     public int reindexProduct(final AsyncContext context, final long productPk) {
-        return getBackdoorService(context, 60000).reindexProduct(productPk);
+        return getBackdoorService(context, defaultTimeout).reindexProduct(productPk);
     }
 
     /** {@inheritDoc} */
     public int reindexProductSku(final AsyncContext context, final long productPk) {
-        return getBackdoorService(context, 60000).reindexProductSku(productPk);
+        return getBackdoorService(context, defaultTimeout).reindexProductSku(productPk);
     }
 
     /** {@inheritDoc} */
     public int reindexProductSkuCode(final AsyncContext context, final String productSkuCode) {
-        return getBackdoorService(context, 60000).reindexProductSkuCode(productSkuCode);
+        return getBackdoorService(context, defaultTimeout).reindexProductSkuCode(productSkuCode);
     }
 
     /** {@inheritDoc} */
     public int reindexProducts(final AsyncContext context, final long[] productPks) {
-        return getBackdoorService(context, 60000).reindexProducts(productPks);
+        return getBackdoorService(context, defaultTimeout).reindexProducts(productPks);
     }
 
     /** {@inheritDoc} */
     public List<Object[]> sqlQuery(final AsyncContext context, final String query) {
-        return getBackdoorService(context, 60000).sqlQuery(query);
+        return getBackdoorService(context, defaultTimeout).sqlQuery(query);
     }
 
     /** {@inheritDoc} */
     public List<Object[]> hsqlQuery(final AsyncContext context, final String query) {
-        return getBackdoorService(context, 60000).hsqlQuery(query);
+        return getBackdoorService(context, defaultTimeout).hsqlQuery(query);
     }
 
     /** {@inheritDoc} */
     public List<Object[]> luceneQuery(final AsyncContext context, final String query) {
-        return getBackdoorService(context, 60000).luceneQuery(query);
+        return getBackdoorService(context, defaultTimeout).luceneQuery(query);
     }
 
     /** {@inheritDoc} */
     public List<CacheInfoDTOImpl> getCacheInfo(final AsyncContext context) {
-        return getBackdoorService(context, 60000).getCacheInfo();
+        return getCacheDirector(context, defaultTimeout).getCacheInfo();
 }
 
     /** {@inheritDoc} */
     public void evictCache(final AsyncContext context) {
-         getBackdoorService(context, 60000).evictCache();
+        getCacheDirector(context, defaultTimeout).evictCache();
     }
 
     /** {@inheritDoc} */
     public String getImageVaultPath(final AsyncContext context) throws IOException {
-        return getBackdoorService(context, 60000).getImageVaultPath();
+        return getBackdoorService(context, defaultTimeout).getImageVaultPath();
     }
 
     private BackdoorServiceClientFactory backdoorServiceClientFactory = null;
@@ -115,6 +118,28 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         String uri = context.getAttribute(AsyncContext.WEB_SERVICE_URI);
 
         return getBackdoorServiceClientFactory().getBackdoorService(
+                userName,
+                password,
+                uri, timeout);  //TODO: YC-149 move timeouts to config
+
+    }
+
+
+    /**
+     * Get actual remote service.
+     *
+     * @param context web service context.
+     * @param timeout  timeout for operation.
+     * @return  {@BackdoorService}
+     */
+    private CacheDirector getCacheDirector(final AsyncContext context, final long timeout) {
+
+
+        String userName = context.getAttribute(AsyncContext.USERNAME);
+        String password = context.getAttribute(AsyncContext.CREDENTIALS);
+        String uri = context.getAttribute(AsyncContext.WEB_SERVICE_URI);
+
+        return getBackdoorServiceClientFactory().getCacheDirector(
                 userName,
                 password,
                 uri, timeout);  //TODO: YC-149 move timeouts to config

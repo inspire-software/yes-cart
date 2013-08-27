@@ -229,8 +229,7 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdateEntityAttributeValue() throws Exception {
-
-
+        clearCache();
         final List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
         for (AttrValueDTO dto : list) {
             if (dto.getAttributeDTO().getCode().equals("CATEGORY_ITEMS_PER_PAGE")) {
