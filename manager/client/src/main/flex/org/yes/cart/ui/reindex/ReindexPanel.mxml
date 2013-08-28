@@ -81,6 +81,8 @@
                     + '\n' + status.report;
             if (status.state == 'INPROGRESS' || status.state == 'STARTED') {
                 indexStatusTimer.start(); // do another timed status update
+            } else {
+                reindexBtn.enabled = true;
             }
         }
         ]]>

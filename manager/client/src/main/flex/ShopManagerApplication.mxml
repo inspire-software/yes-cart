@@ -33,6 +33,7 @@
         import mx.controls.Alert;
         import mx.controls.Text;
         import mx.core.Container;
+        import mx.core.IVisualElement;
         import mx.events.IndexChangedEvent;
         import mx.messaging.channels.SecureAMFChannel;
         import mx.rpc.AsyncResponder;
@@ -113,6 +114,8 @@
 
         private var currentIndex:Number;
         private var shops:Object;
+
+        private var panelCache:Object = {};
 
         public function init():void {
             currentState = "loginState";
@@ -227,22 +230,41 @@
 
         }
 
+        private function showMainPanelSection(section:IVisualElement):void {
+            for each (var child:IVisualElement in mainPanel.getChildren()) {
+                child.visible = false;
+                child.includeInLayout = false;
+            }
+            section.includeInLayout = true;
+            section.visible = true;
+        }
+
         private function onReindexClick(event:MouseEvent):void {
             setFontWeight(reindexBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new ReindexPanel());
+            if (!panelCache.hasOwnProperty('ReindexPanel')) {
+                panelCache['ReindexPanel'] = new ReindexPanel();
+                mainPanel.addChild(panelCache['ReindexPanel']);
+            }
+            showMainPanelSection(panelCache['ReindexPanel']);
+
         }
 
         private function onConfigurePaymentGatewayClick(event:MouseEvent):void {
             setFontWeight(paymengwBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new PaymentGateConfigManagementPanel());
+            if (!panelCache.hasOwnProperty('PaymentGateConfigManagementPanel')) {
+                panelCache['PaymentGateConfigManagementPanel'] = new PaymentGateConfigManagementPanel();
+                mainPanel.addChild(panelCache['PaymentGateConfigManagementPanel']);
+            }
+            showMainPanelSection(panelCache['PaymentGateConfigManagementPanel']);
         }
 
         private function onReportClick(event:MouseEvent):void {
             setFontWeight(reportBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new ReportPanel());
+            if (!panelCache.hasOwnProperty('ReportPanel')) {
+                panelCache['ReportPanel'] = new ReportPanel();
+                mainPanel.addChild(panelCache['ReportPanel']);
+            }
+            showMainPanelSection(panelCache['ReportPanel']);
         }
 
         private function onHelpClick(event:MouseEvent):void {
@@ -255,140 +277,202 @@
         }
 
         private function onHelpURLClick(event:MouseEvent):void {
-            navigateToURL(new URLRequest("http://www.inspire-software.com/confluence/display/YC"), "_help");
+            navigateToURL(new URLRequest("http://www.yes-cart.org"), "_help");
         }
 
         private function onImportClick(event:MouseEvent):void {
             setFontWeight(importBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new BulkImportPanel());
+            if (!panelCache.hasOwnProperty('BulkImportPanel')) {
+                panelCache['BulkImportPanel'] = new BulkImportPanel();
+                mainPanel.addChild(panelCache['BulkImportPanel']);
+            }
+            showMainPanelSection(panelCache['BulkImportPanel']);
         }
 
         private function onLocationManagementClick(event:MouseEvent):void {
             setFontWeight(locationsBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new LocationManagementPanel());
+            if (!panelCache.hasOwnProperty('LocationManagementPanel')) {
+                panelCache['LocationManagementPanel'] = new LocationManagementPanel();
+                mainPanel.addChild(panelCache['LocationManagementPanel']);
+            }
+            showMainPanelSection(panelCache['LocationManagementPanel']);
         }
 
         private function onCarriersManagementClick(event:MouseEvent):void {
             setFontWeight(carriersBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new CarrierManagementPanel());
+            if (!panelCache.hasOwnProperty('CarrierManagementPanel')) {
+                panelCache['CarrierManagementPanel'] = new CarrierManagementPanel();
+                mainPanel.addChild(panelCache['CarrierManagementPanel']);
+            }
+            showMainPanelSection(panelCache['CarrierManagementPanel']);
         }
 
         private function onAttributesManagementClick(event:MouseEvent):void {
             setFontWeight(attributesBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new AttributesManagementPanel());
+            if (!panelCache.hasOwnProperty('AttributesManagementPanel')) {
+                panelCache['AttributesManagementPanel'] = new AttributesManagementPanel();
+                mainPanel.addChild(panelCache['AttributesManagementPanel']);
+            }
+            showMainPanelSection(panelCache['AttributesManagementPanel']);
         }
 
         private function onUserManagementClick(event:MouseEvent):void {
             setFontWeight(userBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new UserManagementPanel());
+            if (!panelCache.hasOwnProperty('UserManagementPanel')) {
+                panelCache['UserManagementPanel'] = new UserManagementPanel();
+                mainPanel.addChild(panelCache['UserManagementPanel']);
+            }
+            showMainPanelSection(panelCache['UserManagementPanel']);
         }
 
         private function onRoleManagementClick(event:MouseEvent):void {
             setFontWeight(rolesBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new RoleManagementPanel());
+            if (!panelCache.hasOwnProperty('RoleManagementPanel')) {
+                panelCache['RoleManagementPanel'] = new RoleManagementPanel();
+                mainPanel.addChild(panelCache['RoleManagementPanel']);
+            }
+            showMainPanelSection(panelCache['RoleManagementPanel']);
         }
 
         private function onStoreManagementClick(event:MouseEvent):void {
             setFontWeight(event.target as LinkButton);
-            mainPanel.removeAllChildren();
-            var panel:StoresManagementPanel = new StoresManagementPanel();
+
             var shop:ShopDTOImpl = this.shops[(event.target as LinkButton).id];
-            panel.shopDTOImpl = shop;
-            panel.title = shop.name;
-            mainPanel.addChild(panel);
+            var key:String = 'StoresManagementPanel' + shop.code;
+            if (!panelCache.hasOwnProperty(key)) {
+                var panel:StoresManagementPanel = new StoresManagementPanel();
+                panel.shopDTOImpl = shop;
+                panel.title = shop.name;
+                panelCache[key] = panel;
+                mainPanel.addChild(panelCache[key]);
+            }
+            showMainPanelSection(panelCache[key]);
         }
 
         private function onContentManagementClick(event:MouseEvent):void {
             setFontWeight(event.target as LinkButton);
-            mainPanel.removeAllChildren();
-            var panel:ContentManagementPanel = new ContentManagementPanel();
+
             var shop:ShopDTOImpl = this.shops[(event.target as LinkButton).id];
-            panel.shopDTOImpl = shop;
-            mainPanel.addChild(panel);
+            var key:String = 'ContentManagementPanel' + shop.code;
+            if (!panelCache.hasOwnProperty(key)) {
+                var panel:ContentManagementPanel = new ContentManagementPanel();
+                panel.shopDTOImpl = shop;
+                panelCache[key] = panel;
+                mainPanel.addChild(panelCache[key]);
+            }
+            showMainPanelSection(panelCache[key]);
         }
 
         private function onNewStoreClick(event:MouseEvent):void {
             setFontWeight(event.target as LinkButton);
-            mainPanel.removeAllChildren();
+            if (panelCache.hasOwnProperty('StoresManagementPanel')) {
+                mainPanel.removeChild(panelCache['StoresManagementPanel']);
+            }
             var newShop:ShopDTOImpl = new ShopDTOImpl();
             var panel:StoresManagementPanel = new StoresManagementPanel();
             panel.shopDTOImpl = newShop;
-            mainPanel.addChild(panel);
+            panelCache['StoresManagementPanel'] = panel;
+            mainPanel.addChild(panelCache['StoresManagementPanel']);
+            showMainPanelSection(panelCache['StoresManagementPanel']);
         }
 
         private function onWarehouseManagementClick(event:MouseEvent):void {
             setFontWeight(warehouseBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new WarehouseManagementPanel());
+            if (!panelCache.hasOwnProperty('WarehouseManagementPanel')) {
+                panelCache['WarehouseManagementPanel'] = new WarehouseManagementPanel();
+                mainPanel.addChild(panelCache['WarehouseManagementPanel']);
+            }
+            showMainPanelSection(panelCache['WarehouseManagementPanel']);
         }
 
         private function onCategoryManagementClick(event:MouseEvent):void {
             setFontWeight(categoryBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new CategoryManagementPanel());
+            if (!panelCache.hasOwnProperty('CategoryManagementPanel')) {
+                panelCache['CategoryManagementPanel'] = new CategoryManagementPanel();
+                mainPanel.addChild(panelCache['CategoryManagementPanel']);
+            }
+            showMainPanelSection(panelCache['CategoryManagementPanel']);
         }
 
         private function onBrandManagementClick(event:MouseEvent):void {
             setFontWeight(brandBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new BrandManagementPanel());
+            if (!panelCache.hasOwnProperty('BrandManagementPanel')) {
+                panelCache['BrandManagementPanel'] = new BrandManagementPanel();
+                mainPanel.addChild(panelCache['BrandManagementPanel']);
+            }
+            showMainPanelSection(panelCache['BrandManagementPanel']);
         }
 
         private function onPreferencesClick(event:MouseEvent):void {
             setFontWeight(prefsBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new SystemAttributesPanel());
-
+            if (!panelCache.hasOwnProperty('SystemAttributesPanel')) {
+                panelCache['SystemAttributesPanel'] = new SystemAttributesPanel();
+                mainPanel.addChild(panelCache['SystemAttributesPanel']);
+            }
+            showMainPanelSection(panelCache['SystemAttributesPanel']);
         }
 
         private function onQueryDataClick(event:MouseEvent):void {
             setFontWeight(sqlBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new QueryPanel());
-
+            if (!panelCache.hasOwnProperty('QueryPanel')) {
+                panelCache['QueryPanel'] = new QueryPanel();
+                mainPanel.addChild(panelCache['QueryPanel']);
+            }
+            showMainPanelSection(panelCache['QueryPanel']);
         }
 
         private function onMonitoringClick(event:MouseEvent):void {
             setFontWeight(monitoringBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new MonitoringPanel());
-
+            if (!panelCache.hasOwnProperty('MonitoringPanel')) {
+                panelCache['MonitoringPanel'] = new MonitoringPanel();
+                mainPanel.addChild(panelCache['MonitoringPanel']);
+            }
+            showMainPanelSection(panelCache['MonitoringPanel']);
         }
 
         private function onProductTypesManagementClick(event:MouseEvent):void {
             setFontWeight(productTypesBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new ProductTypeManagementPanel());
+            if (!panelCache.hasOwnProperty('ProductTypeManagementPanel')) {
+                panelCache['ProductTypeManagementPanel'] = new ProductTypeManagementPanel();
+                mainPanel.addChild(panelCache['ProductTypeManagementPanel']);
+            }
+            showMainPanelSection(panelCache['ProductTypeManagementPanel']);
         }
 
         private function onProductManagementClick(event:MouseEvent):void {
             setFontWeight(productsBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new ProductManagementPanel());
+            if (!panelCache.hasOwnProperty('ProductManagementPanel')) {
+                panelCache['ProductManagementPanel'] = new ProductManagementPanel();
+                mainPanel.addChild(panelCache['ProductManagementPanel']);
+            }
+            showMainPanelSection(panelCache['ProductManagementPanel']);
         }
 
         private function onPriceManagementClick(event:MouseEvent):void {
             setFontWeight(pricesBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new PriceListManagementPanel());
+            if (!panelCache.hasOwnProperty('PriceListManagementPanel')) {
+                panelCache['PriceListManagementPanel'] = new PriceListManagementPanel();
+                mainPanel.addChild(panelCache['PriceListManagementPanel']);
+            }
+            showMainPanelSection(panelCache['PriceListManagementPanel']);
         }
 
         private function onCustomerManagementClick(event:MouseEvent):void {
             setFontWeight(customersBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new CustomerManagementPanel());
+            if (!panelCache.hasOwnProperty('CustomerManagementPanel')) {
+                panelCache['CustomerManagementPanel'] = new CustomerManagementPanel();
+                mainPanel.addChild(panelCache['CustomerManagementPanel']);
+            }
+            showMainPanelSection(panelCache['CustomerManagementPanel']);
         }
 
         private function onOrderManagementClick(event:MouseEvent):void {
             setFontWeight(ordersBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new OrdersManagementPanel());
+            if (!panelCache.hasOwnProperty('OrdersManagementPanel')) {
+                panelCache['OrdersManagementPanel'] = new OrdersManagementPanel();
+                mainPanel.addChild(panelCache['OrdersManagementPanel']);
+            }
+            showMainPanelSection(panelCache['OrdersManagementPanel']);
         }
 
         private function userNameOrPasswordChanged(event:Event):void {
@@ -423,14 +507,20 @@
 
         private function onInventoryManagementClick(event:MouseEvent):void {
             setFontWeight(inventoryBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new InventoryManagementPanel());
+            if (!panelCache.hasOwnProperty('InventoryManagementPanel')) {
+                panelCache['InventoryManagementPanel'] = new InventoryManagementPanel();
+                mainPanel.addChild(panelCache['InventoryManagementPanel']);
+            }
+            showMainPanelSection(panelCache['InventoryManagementPanel']);
         }
 
         private function onPaymentsManagementClick(event:MouseEvent):void {
             setFontWeight(paymentsBtn);
-            mainPanel.removeAllChildren();
-            mainPanel.addChild(new PaymentManagementPanel());
+            if (!panelCache.hasOwnProperty('PaymentManagementPanel')) {
+                panelCache['PaymentManagementPanel'] = new PaymentManagementPanel();
+                mainPanel.addChild(panelCache['PaymentManagementPanel']);
+            }
+            showMainPanelSection(panelCache['PaymentManagementPanel']);
         }
 
         private function onRpcMethodFault(event:FaultEvent):void {
