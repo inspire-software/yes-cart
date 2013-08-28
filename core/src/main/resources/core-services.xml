@@ -1297,6 +1297,24 @@
                 <entry key="ru" value="&#x0420;&#x0443;&#x0441;&#x0441;&#x043a;&#x0438;&#x0439;"/>
             </map>
         </constructor-arg>
+        <constructor-arg index="1">
+            <map>
+                <entry key="DEFAULT">
+                    <list>
+                        <!-- by convention the 0th element is the default language -->
+                        <value>en</value>
+                        <value>ru</value>
+                    </list>
+                </entry>
+                <entry key="SHOP10">
+                    <list>
+                        <!-- by convention the 0th element is the default language -->
+                        <value>en</value>
+                        <value>ru</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
     </bean>
 
 
