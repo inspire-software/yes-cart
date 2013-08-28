@@ -33,6 +33,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.shoppingcart.impl.LogoutCommandImpl;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -100,7 +101,7 @@ public class AbstractWebPage extends WebPage {
         final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
 
         if (getSession().getLocale() == null) {
-            getSession().setLocale(new Locale(languageService.getSupportedLanguages().get(0)));
+            getSession().setLocale(new Locale(languageService.getSupportedLanguages(ShopCodeContext.getShopCode()).get(0)));
         }
 
         if(StringUtils.isBlank(shoppingCart.getCurrentLocale())) {

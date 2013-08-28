@@ -108,4 +108,27 @@
         </constructor-arg>
     </bean>
 
+    <bean id="wicketResourceMounter" class="org.yes.cart.web.theme.impl.WicketResourceMounterImpl">
+        <property name="enabledPatterns">
+            <list>
+                <!-- Custom fonts support -->
+                <!--<value>+*.eot</value>-->
+                <!--<value>+*.svg</value>-->
+                <!--<value>+*.ttf</value>-->
+                <!--<value>+*.woff</value>-->
+
+                <!-- PDF streams -->
+                <!--<value>+*.pdf</value>-->
+
+                <!-- Google sitemap generation -->
+                <value>+*sitemap.xml</value>
+            </list>
+        </property>
+        <property name="sitemapXml" ref="sitemapXmlResource"/>
+    </bean>
+
+    <bean id="sitemapXmlResource" class="org.yes.cart.web.resource.SitemapXmlResource">
+        <constructor-arg ref="sitemapXmlService"/>
+    </bean>
+
 </beans>

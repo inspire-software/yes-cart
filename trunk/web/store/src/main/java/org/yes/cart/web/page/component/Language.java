@@ -17,10 +17,8 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -29,6 +27,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.util.WicketUtil;
@@ -87,7 +86,7 @@ public class Language extends BaseComponent {
 
             final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
 
-            add(new ListView<String>(LANGUAGE_LIST, languageService.getSupportedLanguages()) {
+            add(new ListView<String>(LANGUAGE_LIST, languageService.getSupportedLanguages(ShopCodeContext.getShopCode())) {
 
                 @Override
                 protected void populateItem(final ListItem<String> stringListItem) {

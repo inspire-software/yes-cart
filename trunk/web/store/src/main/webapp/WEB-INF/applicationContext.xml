@@ -350,6 +350,14 @@
         <constructor-arg index="3" ref="cacheManager"/>
     </bean>
 
+    <bean id="sitemapXmlService" class="org.yes.cart.web.support.seo.impl.SitemapXmlServiceImpl">
+        <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1" ref="categoryService"/>
+        <constructor-arg index="2" ref="contentService"/>
+        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="4" ref="languageService"/>
+    </bean>
+
     <bean id="i18nSupport" class="org.yes.cart.web.support.i18n.impl.I18NWebSupportImpl"/>
 
     <bean id="decoratorFacade" class="org.yes.cart.web.support.entity.decorator.impl.DecoratorFacadeImpl">

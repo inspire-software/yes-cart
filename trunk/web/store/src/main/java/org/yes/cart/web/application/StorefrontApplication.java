@@ -37,6 +37,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.theme.WicketPagesMounter;
+import org.yes.cart.web.theme.WicketResourceMounter;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -100,6 +101,8 @@ public class StorefrontApplication
      */
     protected void init() {
 
+        enableResourceAccess();
+
         super.init();
 
         // dynamic shop markup support via specific refource finder
@@ -123,6 +126,7 @@ public class StorefrontApplication
         getRequestCycleListeners().add(new StorefrontRequestCycleListener());
 
         mountPages();
+        mountResources();
 
         if ("true".equalsIgnoreCase(getInitParameter("secureMode"))) {
 
@@ -159,8 +163,34 @@ public class StorefrontApplication
     }
 
     /**
-     * Mount pages to particular paths.
+     * Enable resources for application.
      */
+    private void enableResourceAccess() {
+        final ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
+        final WicketResourceMounter mounter = ctx.getBean(
+                "wicketResourceMounter",
+                WicketResourceMounter.class);
+
+        mounter.enableResourceAccess(this);
+
+    }
+
+    /**
+     * Mount resources to particular paths.
+     */
+    private void mountResources() {
+        final ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
+        final WicketResourceMounter mounter = ctx.getBean(
+                "wicketResourceMounter",
+                WicketResourceMounter.class);
+
+        mounter.mountResources(this);
+
+    }
+
+        /**
+        * Mount pages to particular paths.
+        */
     private void mountPages() {
         final ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
         final WicketPagesMounter mounter = ctx.getBean(

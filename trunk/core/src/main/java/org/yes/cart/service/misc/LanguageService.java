@@ -30,20 +30,33 @@ public interface  LanguageService {
      * Get most appropriate  full language name.
      *
      * @param language to char language code.
+      *
      * @return language name
      */
     String resolveLanguageName(String language);
 
     /**
      * Get supported languages.
+     *
      * @return  supported languages.
      */
     Map<String, String> getLanguageName();
 
-     /**
+    /**
      * Get supported languages list.
+     *
      * @return  supported languages list.
      */
     List<String> getSupportedLanguages();
+
+    /**
+     * Get shop specific supported languages list. By convention the 0th
+     * element is the default language
+     *
+     * @param shopCode languages supported by shop instance
+     *
+     * @return  supported languages list.
+     */
+    List<String> getSupportedLanguages(String shopCode);
 
 }

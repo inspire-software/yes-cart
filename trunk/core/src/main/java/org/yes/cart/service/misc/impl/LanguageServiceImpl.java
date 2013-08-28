@@ -31,44 +31,48 @@ public class LanguageServiceImpl implements LanguageService {
 
     private final List<String> supportedLanguages;
 
+    private final Map<String, List<String>> shopToLanguageMap;
 
     /**
      * Construct language service.
      * @param languageName  map lang code - lang name
      */
-    public LanguageServiceImpl(final Map<String, String> languageName) {
+    public LanguageServiceImpl(final Map<String, String> languageName,
+                               final Map<String, List<String>> shopToLanguageMap) {
         this.languageName = new TreeMap<String, String>(new Comparator<String>() {
             public int compare(String o1, String o2) {
                 return o1.compareTo(o2);
             }
         });
         this.languageName.putAll(languageName);
-        this.supportedLanguages = new ArrayList<String>(this.languageName.keySet());
+        this.supportedLanguages = shopToLanguageMap.get("DEFAULT");
+        this.shopToLanguageMap = shopToLanguageMap;
     }
 
-    /**
-     * Get most appropriate  full language name.
-     *
-     * @param language to char language code.
-     * @return language name
-     */
+    /** {@inheritDoc} */
+    @Override
     public String resolveLanguageName(final String language) {
         return languageName.get(language);
     }
 
-    /**
-     * Get supported languages.
-     * @return  supported languages.
-     */
+    /** {@inheritDoc} */
+    @Override
     public Map<String, String> getLanguageName() {
         return languageName;
     }
 
-    /**
-     * Get supported languages list.
-     * @return  supported languages list.
-     */
+    /** {@inheritDoc} */
+    @Override
     public List<String> getSupportedLanguages() {
         return supportedLanguages;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<String> getSupportedLanguages(final String shopCode) {
+        if (shopToLanguageMap.containsKey(shopCode)) {
+            return shopToLanguageMap.get(shopCode);
+        }
+        return getSupportedLanguages();
     }
 }
