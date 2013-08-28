@@ -371,6 +371,10 @@
             var newShop:ShopDTOImpl = new ShopDTOImpl();
             var panel:StoresManagementPanel = new StoresManagementPanel();
             panel.shopDTOImpl = newShop;
+            panel.newShopCallBack = function(shop:ShopDTOImpl):void {
+                shops['shop_' + shop.shopId] = shop;
+                onInitStoresButtons(storesButtons, 'storesBtn', onStoreManagementClick);
+            };
             panelCache['StoresManagementPanel'] = panel;
             mainPanel.addChild(panelCache['StoresManagementPanel']);
             showMainPanelSection(panelCache['StoresManagementPanel']);

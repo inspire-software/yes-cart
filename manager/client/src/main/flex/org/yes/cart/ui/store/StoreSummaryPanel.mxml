@@ -38,6 +38,8 @@
 
         private var changeWatchers:ArrayList = new ArrayList();
 
+        private var _saveCallBack:Function;
+
         /**
          * Bind values and start looking for changes.
          * @return nothing
@@ -114,14 +116,25 @@
         private function onCreateResult(event:ResultEvent):void {
             this._shopDTOImpl = event.result as ShopDTOImpl;
             init();
+            if (_saveCallBack != null) {
+                _saveCallBack(this._shopDTOImpl);
+            }
             dtoChangedFlag = false;
         }
 
         private function onUpdateResult(event:ResultEvent):void {
             this._shopDTOImpl = event.result as ShopDTOImpl;
             init();
+            if (_saveCallBack != null) {
+                _saveCallBack(this._shopDTOImpl);
+            }
             dtoChangedFlag = false;
         }
+
+        public function set saveCallBack(value:Function):void {
+            _saveCallBack = value;
+        }
+
         ]]>
     </mx:Script>
     <mx:Boolean id="dtoChangedFlag">false</mx:Boolean>

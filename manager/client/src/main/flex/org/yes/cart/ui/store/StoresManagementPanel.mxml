@@ -37,19 +37,29 @@
 
         private var _shopDTOImpl:ShopDTOImpl;
 
+        private var _newShopCallBack:Function;
+
         private function init():void {
             editShop();
         }
 
 
         public function set shopDTOImpl(value:ShopDTOImpl):void {
+            var oldEditMode:Boolean = editingMode;
             _shopDTOImpl = value;
+            editingMode = !isNaN(value.shopId) && value.shopId > 0;
+            if (!oldEditMode && editingMode && _newShopCallBack != null) {
+                _newShopCallBack(_shopDTOImpl);
+            }
         }
 
         private function editShop():void {
             summaryTab.removeAllChildren();
             var storeSummaryPanel:StoreSummaryPanel = new StoreSummaryPanel();
             storeSummaryPanel.shopDTOImpl = _shopDTOImpl;
+            storeSummaryPanel.saveCallBack = function (shop:ShopDTOImpl):void {
+                shopDTOImpl = shop;
+            };
             summaryTab.addChild(storeSummaryPanel);
             initTab(shopTabNavigator.selectedIndex);
         }
@@ -133,22 +143,28 @@
             }
 
         }
+
+        public function set newShopCallBack(value:Function):void {
+            _newShopCallBack = value;
+        }
         ]]>
     </mx:Script>
+
+    <mx:Boolean id="editingMode">false</mx:Boolean>
 
     <mx:TabNavigator width="100%" height="100%" id="shopTabNavigator" change="onTabClick(event);">
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='summary')" width="100%" height="100%"
                    id="summaryTab"/>
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='urls')" width="100%" height="100%"
-                   id="urlTab"/>
+                   id="urlTab" enabled="{editingMode}"/>
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='currency')" width="100%" height="100%"
-                   id="currencyTab"/>
+                   id="currencyTab" enabled="{editingMode}"/>
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='currencyExcRate')" width="100%" height="100%"
-                   id="currencyExcangeTab"/>
+                   id="currencyExcangeTab" enabled="{editingMode}"/>
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='catalog')" width="100%" height="100%"
-                   id="categoryTab"/>
+                   id="categoryTab" enabled="{editingMode}"/>
         <mx:Canvas id="warehouseTab" label="@Resource(bundle='StoresManagementPanel',key='warehouses')"
-                   width="100%" height="100%"/>
+                   width="100%" height="100%" enabled="{editingMode}"/>
         <!--<mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='payments')" width="100%"
                    height="100%"/>
         <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='customers')" width="100%"
@@ -157,7 +173,7 @@
                    height="100%"/>
         <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='taxes')" width="100%"
                    height="100%"/>-->
-        <attr:StoreNonImageAttributesPanel id="storeNonImagesPanel"/>
+        <attr:StoreNonImageAttributesPanel id="storeNonImagesPanel" enabled="{editingMode}"/>
     </mx:TabNavigator>
 
 
