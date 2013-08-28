@@ -105,7 +105,7 @@
             var index:int = -1;
             for each (var old:AttrValueCategoryDTOImpl in this.attrValues) {
                 index++;
-                if (old.attributeDTO.attributeId == catAttr.attributeDTO.attributeId) {
+                if (old.attributeDTO.code == catAttr.attributeDTO.code) {
                     break;
                 }
             }
@@ -122,7 +122,7 @@
             var index:int = -1;
             for each (var old:AttrValueCategoryDTOImpl in this.attrValues) {
                 index++;
-                if (old.attrvalueId == catAttr.attrvalueId) {
+                if (old.attributeDTO.code == catAttr.attributeDTO.code) {
                     break;
                 }
             }
