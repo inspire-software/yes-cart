@@ -16,15 +16,22 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.service.async.model.AsyncContext;
+import org.yes.cart.service.dto.DtoShopBackdoorUrlService;
+import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.CacheDirector;
 import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: iazarny@yahoo.com Igor Azarny
@@ -33,60 +40,107 @@ import java.util.List;
  */
 public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
-    private final static  int defaultTimeout = 60000;
+    private final static int defaultTimeout = 60000;
+
+    private final DtoShopService dtoShopService;
+
+    private final DtoShopBackdoorUrlService dtoShopBackdoorUrlService;
+
+    /**
+     * Construct remote service to manage shop.
+     *
+     * @param dtoShopService            dto shop service
+     * @param dtoShopBackdoorUrlService to get web service urls
+     */
+    public RemoteBackdoorServiceImpl(final DtoShopService dtoShopService,
+                                     final DtoShopBackdoorUrlService dtoShopBackdoorUrlService) {
+        this.dtoShopService = dtoShopService;
+        this.dtoShopBackdoorUrlService = dtoShopBackdoorUrlService;
+    }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int reindexAllProducts(final AsyncContext context) {
         return getBackdoorService(context, 300000).reindexAllProducts();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int reindexProduct(final AsyncContext context, final long productPk) {
         return getBackdoorService(context, defaultTimeout).reindexProduct(productPk);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int reindexProductSku(final AsyncContext context, final long productPk) {
         return getBackdoorService(context, defaultTimeout).reindexProductSku(productPk);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int reindexProductSkuCode(final AsyncContext context, final String productSkuCode) {
         return getBackdoorService(context, defaultTimeout).reindexProductSkuCode(productSkuCode);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public int reindexProducts(final AsyncContext context, final long[] productPks) {
         return getBackdoorService(context, defaultTimeout).reindexProducts(productPks);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public List<Object[]> sqlQuery(final AsyncContext context, final String query) {
         return getBackdoorService(context, defaultTimeout).sqlQuery(query);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public List<Object[]> hsqlQuery(final AsyncContext context, final String query) {
         return getBackdoorService(context, defaultTimeout).hsqlQuery(query);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public List<Object[]> luceneQuery(final AsyncContext context, final String query) {
         return getBackdoorService(context, defaultTimeout).luceneQuery(query);
     }
 
-    /** {@inheritDoc} */
-    public List<CacheInfoDTOImpl> getCacheInfo(final AsyncContext context) {
-        return getCacheDirector(context, defaultTimeout).getCacheInfo();
-}
+    /**
+     * {@inheritDoc}
+     */
+    public Map<Pair<String, String>, List<CacheInfoDTOImpl>> getCacheInfo(final AsyncContext context)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-    /** {@inheritDoc} */
+        final List<ShopDTO> allShops = dtoShopService.getAll();
+        for (ShopDTO shop : allShops) {
+
+        }
+
+
+        //return getCacheDirector(context, defaultTimeout).getCacheInfo();
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void evictCache(final AsyncContext context) {
         getCacheDirector(context, defaultTimeout).evictCache();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String getImageVaultPath(final AsyncContext context) throws IOException {
         return getBackdoorService(context, defaultTimeout).getImageVaultPath();
     }
@@ -107,10 +161,10 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      * Get actual remote service.
      *
      * @param context web service context.
-     * @param timeout  timeout for operation.
-     * @return  {@BackdoorService}
+     * @param timeout timeout for operation.
+     * @return {@BackdoorService}
      */
-    private  BackdoorService getBackdoorService(final AsyncContext context, final long timeout) {
+    private BackdoorService getBackdoorService(final AsyncContext context, final long timeout) {
 
 
         String userName = context.getAttribute(AsyncContext.USERNAME);
@@ -129,8 +183,8 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      * Get actual remote service.
      *
      * @param context web service context.
-     * @param timeout  timeout for operation.
-     * @return  {@BackdoorService}
+     * @param timeout timeout for operation.
+     * @return {@BackdoorService}
      */
     private CacheDirector getCacheDirector(final AsyncContext context, final long timeout) {
 
