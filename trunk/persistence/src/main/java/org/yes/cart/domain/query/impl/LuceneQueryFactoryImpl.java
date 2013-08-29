@@ -49,7 +49,7 @@ import java.util.Map;
 public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     /**
-     * Only this indexes allowed for attributive filtered navigaion.
+     * Only this indexes allowed for attributive filtered navigation.
      */
     private final static String[] fields = {
             ProductSearchQueryBuilder.PRODUCT_NAME_FIELD,
@@ -243,9 +243,9 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         BooleanQuery query;
         final GlobalSearchQueryBuilderImpl globalSearchQueryBuilder = new GlobalSearchQueryBuilderImpl();
         if (categories.size() == 1 && categories.get(0) == 0) {
-            query = globalSearchQueryBuilder.createQuerySearchInShop(String.valueOf(val), shopId);
+            query = globalSearchQueryBuilder.createQuerySearchInShop(String.valueOf(val), shopId, abatement);
         } else {
-            query = globalSearchQueryBuilder.createQuerySearchInCategories(String.valueOf(val), categories);
+            query = globalSearchQueryBuilder.createQuerySearchInCategories(String.valueOf(val), categories, abatement);
         }
 
         if (abatement) {

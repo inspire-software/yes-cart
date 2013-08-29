@@ -55,6 +55,14 @@ public class ProductSkuBridge implements FieldBridge {
                 ));
 
                 document.add(new Field(
+                        "sku.code_stem",
+                        sku.getCode(),
+                        Field.Store.NO,
+                        Field.Index.ANALYZED,
+                        luceneOptions.getTermVector()
+                ));
+
+                document.add(new Field(
                         "sku.skuId",
                         String.valueOf(sku.getSkuId()),
                         luceneOptions.getStore(),
