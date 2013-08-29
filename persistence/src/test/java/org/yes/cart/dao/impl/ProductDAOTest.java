@@ -34,18 +34,17 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.entity.System;
 import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.*;
 import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.ProductService;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -153,37 +152,44 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false);
 
                 final GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
-                Query query = queryBuilder.createQuerySearchInCategories("bender", Arrays.asList(101L, 104L));
+                Query query = queryBuilder.createQuerySearchInCategories("bender", Arrays.asList(101L, 104L), false);
                 List<Product> products = productDao.fullTextSearch(query);
                 assertTrue("Failed [" + query.toString() +"]", !products.isEmpty());
                 // search by Sku code
-                query = queryBuilder.createQuerySearchInCategory("CC_TEST4", (Long) null);
+                query = queryBuilder.createQuerySearchInCategory("CC_TEST4", (Long) null, false);
                 products = productDao.fullTextSearch(query);
-                assertEquals(1, products.size());
+                assertEquals("This is fuzzy so we see all CC_TESTX", 9, products.size());
+                // search by Sku code with stems
+                query = queryBuilder.createQuerySearchInCategory("cc_test4", (Long) null, true);
+                products = productDao.fullTextSearch(query);
+                assertEquals("Relaxed search should give all cc_test skus", 12, products.size());
                 // search by sku id
                 query = new SkuQueryBuilderImpl().createQuery("11004");
                 products = productDao.fullTextSearch(query);
                 assertEquals(1, products.size());
                 assertEquals("PRODUCT5", products.get(0).getSku().iterator().next().getCode());
                 //test fuzzy search
-                query = queryBuilder.createQuerySearchInCategories("blender", Arrays.asList(101L, 104L));
+                query = queryBuilder.createQuerySearchInCategories("blender", Arrays.asList(101L, 104L), false);
                 products = productDao.fullTextSearch(query);
                 assertTrue(!products.isEmpty());
                 //test search by description
-                query = queryBuilder.createQuerySearchInCategories("Rodriguez Bending", Arrays.asList(101L, 104L));
+                query = queryBuilder.createQuerySearchInCategories("Rodriguez Bending", Arrays.asList(101L, 104L), false);
                 products = productDao.fullTextSearch(query);
                 assertTrue(!products.isEmpty());
-                query = queryBuilder.createQuerySearchInCategories("DiMaggio", Arrays.asList(101L, 104L));
+                query = queryBuilder.createQuerySearchInCategories("DiMaggio", Arrays.asList(101L, 104L), false);
+                products = productDao.fullTextSearch(query);
+                assertTrue("Description is damaging by introducing a lot of garbage", products.isEmpty());
+                query = queryBuilder.createQuerySearchInCategories("dimaggio", Arrays.asList(101L, 104L), true);
                 products = productDao.fullTextSearch(query);
                 assertTrue(!products.isEmpty());
                 // search on empty string
-                query = queryBuilder.createQuerySearchInCategories("", Arrays.asList(101L, 104L));
+                query = queryBuilder.createQuerySearchInCategories("", Arrays.asList(101L, 104L), false);
                 products = productDao.fullTextSearch(query);
                 assertTrue(!products.isEmpty()); //return all product in described categories
 
                 // search on brand
                 // product with code "PRODUCT1" also future robotics, but not assigned to any category
-                query = queryBuilder.createQuerySearchInCategories("FutureRobots", Arrays.asList(101L, 104L));
+                query = queryBuilder.createQuerySearchInCategories("FutureRobots", Arrays.asList(101L, 104L), false);
                 products = productDao.fullTextSearch(query);
                 assertEquals(2, products.size());
 
@@ -194,7 +200,7 @@ public class ProductDAOTest extends AbstractTestDAO {
 
 
     /**
-     * Global search test in shop, instead of caterories
+     * Global search test in shop, instead of categories
      * @throws InterruptedException
      */
     @Test
@@ -207,45 +213,48 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 final GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
 
-                Query query = queryBuilder.createQuerySearchInShop("bender", 10L);
+                Query query = queryBuilder.createQuerySearchInShop("bender", 10L, false);
                 List<Product> products = productDao.fullTextSearch(query);
                 assertTrue("Product must be found in 10 shop. Failed [" + query.toString() +"]", !products.isEmpty());
 
-                query = queryBuilder.createQuerySearchInShop("bender", 20L);
+                query = queryBuilder.createQuerySearchInShop("bender", 20L, false);
                 products = productDao.fullTextSearch(query);
                 assertTrue("The same warehouses assigned to 20 shop. Failed [" + query.toString() +"]", !products.isEmpty());
 
-                query = queryBuilder.createQuerySearchInShop("bender", 30L);
+                query = queryBuilder.createQuerySearchInShop("bender", 30L, false);
                 products = productDao.fullTextSearch(query);
                 assertTrue("Product not present on 30 shop. Failed [" + query.toString() +"]", products.isEmpty());
 
                 // search by Sku code
-                query = queryBuilder.createQuerySearchInShop("CC_TEST4", 10L);
+                query = queryBuilder.createQuerySearchInShop("CC_TEST4", 10L, false);
                 products = productDao.fullTextSearch(query);
-                assertEquals(query.toString(), 1, products.size());
+                assertEquals("CC_TEST4 and CC_TEST9 are in this category " + query.toString(), 2, products.size());
 
                 //test fuzzy search
-                query = queryBuilder.createQuerySearchInShop("blender", 10L);
+                query = queryBuilder.createQuerySearchInShop("blender", 10L, false);
                 products = productDao.fullTextSearch(query);
                 assertTrue(!products.isEmpty());
 
                 //test search by description
-                query = queryBuilder.createQuerySearchInShop("Rodriguez Bending", 10L);
+                query = queryBuilder.createQuerySearchInShop("Rodriguez Bending", 10L, false);
                 products = productDao.fullTextSearch(query);
                 assertTrue(!products.isEmpty());
-                query = queryBuilder.createQuerySearchInShop("DiMaggio", 10L);
+                query = queryBuilder.createQuerySearchInShop("DiMaggio", 10L, false);
+                products = productDao.fullTextSearch(query);
+                assertTrue("Description is damaging by introducing a lot of garbage", products.isEmpty());
+                query = queryBuilder.createQuerySearchInShop("dimaggio", 10L, true);
                 products = productDao.fullTextSearch(query);
                 assertTrue(!products.isEmpty());
 
                 // search on empty string
-                query = queryBuilder.createQuerySearchInShop("", 10L);
+                query = queryBuilder.createQuerySearchInShop("", 10L, false);
                 products = productDao.fullTextSearch(query);
                 assertTrue(!products.isEmpty()); //return all product in described categories
 
                 // search on brand
                 // product with code "PRODUCT1" also future robotics, but not assigned to any category,
                 // and can not be found via shop, because it has qty on warehouse, but category not assigned to 20 shop
-                query = queryBuilder.createQuerySearchInShop("FutureRobots", 20L);
+                query = queryBuilder.createQuerySearchInShop("FutureRobots", 20L, false);
                 products = productDao.fullTextSearch(query);
                 assertEquals(query.toString(), 2, products.size());
 
@@ -271,15 +280,18 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false);
 
                 final GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
-                Query query = queryBuilder.createQuerySearchInCategories("bender", Arrays.asList(101L, 104L));
+                Query query = queryBuilder.createQuerySearchInCategories("bender", Arrays.asList(101L, 104L), true);
                 List<Product> products = productDao.fullTextSearch(query);
                 assertTrue("Failed [" + query.toString() +"]", !products.isEmpty());
                 // search by Sku code
-                query = queryBuilder.createQuerySearchInCategory("CC_TEST99", (Long) null);
+                query = queryBuilder.createQuerySearchInCategory("CC_TEST99", (Long) null, false);
                 products = productDao.fullTextSearch(query);
-                assertEquals(0, products.size());
+                assertEquals(1, products.size());
+                query = queryBuilder.createQuerySearchInCategory("CC_TEZT9", (Long) null, false);
+                products = productDao.fullTextSearch(query);
+                assertEquals("Misspelling does not increase the score and should find a match", 1, products.size());
                 // search by Sku code
-                query = queryBuilder.createQuerySearchInCategory("cc_test99", (Long) null);
+                query = queryBuilder.createQuerySearchInCategory("cc_test99", (Long) null, true);
                 okToFind = query.toString();
                 products = productDao.fullTextSearch(query);
                 assertFalse(products.isEmpty());
@@ -579,7 +591,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 List<Product> products = null;
 
                 GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
-                Query query = queryBuilder.createQuerySearchInCategories("sony", Arrays.asList(128L));
+                Query query = queryBuilder.createQuerySearchInCategories("sony", Arrays.asList(128L), false);
                 products = productDao.fullTextSearch(query);
                 assertTrue("Product must be found in category with id = 128 . Failed query [" + query + "]", !products.isEmpty());
 
@@ -598,7 +610,7 @@ public class ProductDAOTest extends AbstractTestDAO {
 
 
                 //search in particular category
-                query = queryBuilder.createQuerySearchInCategories("sony", Arrays.asList(128L));
+                query = queryBuilder.createQuerySearchInCategories("sony", Arrays.asList(128L), false);
                 products = productDao.fullTextSearch(query);
                 assertTrue("Failed search in particular category [" + query + "]", products.isEmpty());
 
@@ -660,12 +672,12 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 //productDao.fullTextSearchReindex(false);
                 GlobalSearchQueryBuilderImpl queryBuilder = new GlobalSearchQueryBuilderImpl();
-                Query query = queryBuilder.createQuerySearchInCategories("sony", Arrays.asList(128L));
+                Query query = queryBuilder.createQuerySearchInCategories("sony", Arrays.asList(128L), false);
                 products = productDao.fullTextSearch(query);
                 assertTrue("Product must be found in category with id = 128 . Failed query [" + query + "]", !products.isEmpty());
 
 
-                query = queryBuilder.createQuerySearchInCategory("sony", (Long) null);
+                query = queryBuilder.createQuerySearchInCategory("sony", (Long) null, false);
                 products = productDao.fullTextSearch(query);
                 assertTrue("Failed global search [" + query + "]", !products.isEmpty());
                 products.clear();
@@ -674,7 +686,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 skuWareHouseDao.delete(skuWarehouse);
                 //------productDao.fullTextSearchReindex(productCategory.getProduct().getProductId());
                 //on site global. must be empty, because quantity is 0
-                query = queryBuilder.createQuerySearchInCategories("sony", (List<Long>) null);
+                query = queryBuilder.createQuerySearchInCategories("sony", (List<Long>) null, false);
                 products = productDao.fullTextSearch(query);
                 assertTrue("Failed global search [" + query + "]", products.isEmpty());
 

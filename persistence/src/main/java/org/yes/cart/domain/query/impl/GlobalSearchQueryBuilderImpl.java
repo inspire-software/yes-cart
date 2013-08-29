@@ -35,7 +35,8 @@ public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
 
     public BooleanQuery createQuerySearchInShop(
             final String searchPhraze,
-            final Long shopId) throws IllegalArgumentException {
+            final Long shopId,
+            final boolean abatement) throws IllegalArgumentException {
 
         final BooleanQuery currentQuery = new BooleanQuery();
 
@@ -44,7 +45,7 @@ public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
 
         final List<String> words = SearchPhrazeUtil.splitForSearch(searchPhraze);
 
-        enrichQueryWithSearchWords(words, currentQuery);
+        enrichQueryWithSearchWords(words, currentQuery, abatement);
 
         return currentQuery;
 
@@ -52,7 +53,8 @@ public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
 
     public BooleanQuery createQuerySearchInCategories(
             final String searchPhraze,
-            final List<Long> categories) throws IllegalArgumentException {
+            final List<Long> categories,
+            final boolean abatement) throws IllegalArgumentException {
 
         final BooleanQuery query = new BooleanQuery();
 
@@ -64,7 +66,7 @@ public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
 
                 for (Long category : categories) {
 
-                    final BooleanQuery currentQuery = createQuery(words, category);
+                    final BooleanQuery currentQuery = createQuery(words, category, abatement);
 
                     query.add(currentQuery, BooleanClause.Occur.SHOULD);
 
@@ -77,11 +79,11 @@ public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
         return query;
     }
 
-    public BooleanQuery createQuerySearchInCategory(final String searchPhraze, final Long category) {
-        return createQuery(SearchPhrazeUtil.splitForSearch(searchPhraze), category);
+    public BooleanQuery createQuerySearchInCategory(final String searchPhraze, final Long category, final boolean abatement) {
+        return createQuery(SearchPhrazeUtil.splitForSearch(searchPhraze), category, abatement);
     }
 
-    private BooleanQuery createQuery(final List<String> words, final Long category) {
+    private BooleanQuery createQuery(final List<String> words, final Long category, final boolean stem) {
         BooleanQuery currentQuery = new BooleanQuery();
 
         if (category != null) {
@@ -89,22 +91,53 @@ public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
                     BooleanClause.Occur.MUST);
         }
 
-        enrichQueryWithSearchWords(words, currentQuery);
+        enrichQueryWithSearchWords(words, currentQuery, stem);
 
         return currentQuery;
     }
 
-    private void enrichQueryWithSearchWords(final List<String> words, final BooleanQuery currentQuery) {
+    private void enrichQueryWithSearchWords(final List<String> words, final BooleanQuery currentQuery, final boolean abatement) {
         for (String word : words) {
             BooleanQuery termQuery = new BooleanQuery();
-            termQuery.add(new FuzzyQuery(new Term(PRODUCT_NAME_FIELD, word)), BooleanClause.Occur.SHOULD);
-            termQuery.add(new FuzzyQuery(new Term(PRODUCT_DISPLAYNAME_FIELD, word)), BooleanClause.Occur.SHOULD);
-            termQuery.add(new FuzzyQuery(new Term(PRODUCT_DESCIPTION_FIELD, word)), BooleanClause.Occur.SHOULD);
-            termQuery.add(new FuzzyQuery(new Term(BRAND_FIELD, word)), BooleanClause.Occur.SHOULD);
-            termQuery.add(new FuzzyQuery(new Term(ATTRIBUTE_VALUE_SEARCH_FIELD, word)), BooleanClause.Occur.SHOULD);
-            termQuery.add(new FuzzyQuery(new Term(SKU_ATTRIBUTE_VALUE_SEARCH_FIELD, word)), BooleanClause.Occur.SHOULD);
-            termQuery.add(new FuzzyQuery(new Term(PRODUCT_CODE_FIELD, word), 0.9f), BooleanClause.Occur.SHOULD);
-            termQuery.add(new FuzzyQuery(new Term(SKU_PRODUCT_CODE_FIELD, word), 0.9f), BooleanClause.Occur.SHOULD);
+            /*
+               Analysed terms are all lower case - there is no point in using fuzzy to search against them
+               as it is case sensitive. Make sure that analysed field are "word.toLowerCase()" matches.
+
+               Default lucene fuzzy is 0.5 - i.e. 50% match. Below settings are very project specific
+               and have to be fine-tuned.
+
+               For attributes 0.65 - i.e. up to 3.5 letters wrong in a 10 letter word, more than this could be
+                                     damaging to search especially in Russian language. The worst example would
+                                     be fuzzy 0.5 on color, which is Russian has common ending for adjectives
+                                     in all colors
+             */
+
+            if (abatement) {
+
+                termQuery.add(new FuzzyQuery(new Term(PRODUCT_NAME_FIELD, word)), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(PRODUCT_DISPLAYNAME_FIELD, word)), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(BRAND_FIELD, word.toLowerCase()), 0.7f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(ATTRIBUTE_VALUE_SEARCH_FIELD, word), 0.65f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(SKU_ATTRIBUTE_VALUE_SEARCH_FIELD, word), 0.65f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(PRODUCT_CODE_FIELD, word), 0.7f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(SKU_PRODUCT_CODE_FIELD, word), 0.7f), BooleanClause.Occur.SHOULD);
+
+                termQuery.add(new FuzzyQuery(new Term(PRODUCT_DESCIPTION_FIELD, word.toLowerCase()), 0.85f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(PRODUCT_CODE_STEM_FIELD, word.toLowerCase()), 0.75f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(SKU_PRODUCT_CODE_STEM_FIELD, word.toLowerCase()), 0.75f), BooleanClause.Occur.SHOULD);
+
+            } else {
+
+                termQuery.add(new FuzzyQuery(new Term(PRODUCT_NAME_FIELD, word), 0.6f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(PRODUCT_DISPLAYNAME_FIELD, word), 0.6f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(BRAND_FIELD, word.toLowerCase()), 0.8f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(ATTRIBUTE_VALUE_SEARCH_FIELD, word), 0.65f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(SKU_ATTRIBUTE_VALUE_SEARCH_FIELD, word), 0.65f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(PRODUCT_CODE_FIELD, word), 0.8f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(SKU_PRODUCT_CODE_FIELD, word), 0.8f), BooleanClause.Occur.SHOULD);
+
+            }
+
             currentQuery.add(termQuery, BooleanClause.Occur.MUST);
         }
     }

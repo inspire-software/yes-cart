@@ -72,7 +72,10 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
 
 
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    @Fields({
+        @Field(name = "code", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES),
+        @Field(name = "code_stem", index = Index.YES, analyze = Analyze.YES, norms = Norms.NO, store = Store.NO)
+    })
     @Column(name = "CODE", nullable = false)
     public String getCode() {
         return this.code;
