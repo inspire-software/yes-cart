@@ -203,7 +203,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
 
     private String seoUrl(final Seo seo, final long pk, final String urlBase, final String namespace) {
-        if (seo != null && seo.getUri() != null) {
+        if (seo != null && seo.getUri() != null && seo.getUri().length() > 0) {
             return urlBase + namespace + "/" + seo.getUri();
         }
         return urlBase + namespace + "/" + pk;
