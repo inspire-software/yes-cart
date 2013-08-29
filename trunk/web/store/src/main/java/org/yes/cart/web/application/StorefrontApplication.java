@@ -34,6 +34,7 @@ import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.theme.WicketPagesMounter;
@@ -143,17 +144,27 @@ public class StorefrontApplication
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public Session newSession(Request request, Response response) {
-        return super.newSession(request, response);    //To change body of overridden methods use File | Settings | File Templates.
+
+        final ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
+        final LanguageService languageService = ctx.getBean(
+                "languageService",
+                LanguageService.class);
+
+        return super.newSession(
+                new StorefrontRequestDecorator(request, languageService.getSupportedLanguages(ShopCodeContext.getShopCode())),
+                response);
+
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
+    @Override
     protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
         return StorefrontWebSession.class;
     }
+
 
     /**
      * {@inheritDoc}

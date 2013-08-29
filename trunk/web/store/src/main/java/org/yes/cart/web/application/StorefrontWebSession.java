@@ -23,12 +23,16 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.LoginCommandImpl;
 import org.yes.cart.shoppingcart.impl.LogoutCommandImpl;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -43,6 +47,8 @@ public class StorefrontWebSession extends AuthenticatedWebSession {
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
+    @SpringBean(name = "languageService")
+    private LanguageService languageService;
 
     /**
      * Construct.
@@ -97,4 +103,24 @@ public class StorefrontWebSession extends AuthenticatedWebSession {
         return null;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Locale getLocale() {
+        final Locale locale = super.getLocale();
+        if (locale == null) {
+            return new Locale(languageService.getSupportedLanguages(ShopCodeContext.getShopCode()).get(0));
+        }
+        return locale;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setLocale(final Locale locale) {
+        final List<String> supported = languageService.getSupportedLanguages(ShopCodeContext.getShopCode());
+        if (supported.contains(locale.getLanguage())) {
+            super.setLocale(locale);
+        } else {
+            super.setLocale(new Locale(supported.get(0)));
+        }
+    }
 }
