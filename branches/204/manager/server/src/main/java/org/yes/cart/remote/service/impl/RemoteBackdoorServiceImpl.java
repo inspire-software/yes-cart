@@ -16,8 +16,12 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yes.cart.domain.dto.ShopBackdoorUrlDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.entity.ShopBackdoorUrl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -27,9 +31,11 @@ import org.yes.cart.service.dto.DtoShopBackdoorUrlService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.CacheDirector;
+import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +45,8 @@ import java.util.Map;
  * Time: 5:44 PM
  */
 public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RemoteBackdoorServiceImpl.class);
 
     private final static int defaultTimeout = 60000;
 
@@ -121,14 +129,47 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
     public Map<Pair<String, String>, List<CacheInfoDTOImpl>> getCacheInfo(final AsyncContext context)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
+
         final List<ShopDTO> allShops = dtoShopService.getAll();
+
+        final Map<Pair<String, String>, List<CacheInfoDTOImpl>> rez =
+                new HashMap<Pair<String, String>, List<CacheInfoDTOImpl>>(allShops.size());
+
         for (ShopDTO shop : allShops) {
+
+            final List<ShopBackdoorUrlDTO> urls = this.dtoShopBackdoorUrlService.getAllByShopId(
+                    shop.getShopId(), ShopBackdoorUrl.URL_TYPE_CACHE_DIRECTOR);
+
+            for (ShopBackdoorUrlDTO url : urls) {
+
+                final AsyncContext newCtx = new AsyncFlexContextImpl(context.getAttributes());
+
+                newCtx.getAttributes().put(AsyncContext.WEB_SERVICE_URI, url.getUrl());
+
+                try {
+                    rez.put(
+                            new Pair<String, String>(shop.getCode(), shop.getName()),
+                            getCacheDirector(
+                                    context,
+                                    defaultTimeout).getCacheInfo()
+                    );
+                    break;
+
+                } catch (Exception e) {
+
+                    if (LOG.isWarnEnabled()) {
+
+                        LOG.warn("Cannot get cache info for shop [" + shop.getCode() + "] from url [" + url.getUrl() + "] . Will try next one, if exists");
+
+                    }
+
+                }
+
+            }
 
         }
 
-
-        //return getCacheDirector(context, defaultTimeout).getCacheInfo();
-        return null;
+        return rez;
     }
 
     /**

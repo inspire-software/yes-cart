@@ -72,8 +72,11 @@ public class DtoShopBackdoorUrlServiceImpl
 
 
     /** {@inheritDoc} */
-    public List<ShopBackdoorUrlDTO> getAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<ShopBackdoorUrl> urls = getService().getGenericDao().findByCriteria(Restrictions.eq("shop.shopId", shopId));
+    public List<ShopBackdoorUrlDTO> getAllByShopId(final long shopId, final String urlType) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<ShopBackdoorUrl> urls = getService().getGenericDao().findByCriteria(
+                Restrictions.eq("shop.shopId", shopId),
+                Restrictions.eq("urlType", urlType)
+        );
         final List<ShopBackdoorUrlDTO> shopUrlDTOs = new ArrayList<ShopBackdoorUrlDTO>(urls.size());
         fillDTOs(urls, shopUrlDTOs);
         return shopUrlDTOs;

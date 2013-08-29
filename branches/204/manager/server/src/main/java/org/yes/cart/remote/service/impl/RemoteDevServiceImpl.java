@@ -17,6 +17,9 @@
 package org.yes.cart.remote.service.impl;
 
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.remote.service.RemoteDevService;
 import org.yes.cart.service.async.model.AsyncContext;
@@ -61,7 +64,7 @@ public class RemoteDevServiceImpl implements RemoteDevService {
     }
 
     /** {@inheritDoc} */
-    public List<CacheInfoDTOImpl> getCacheInfo() {
+    public Map<Pair<String, String>, List<CacheInfoDTOImpl>> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return remoteBackdoorService.getCacheInfo(createCtx());
     }
 

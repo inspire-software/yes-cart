@@ -33,13 +33,14 @@ public interface DtoShopBackdoorUrlService extends GenericDTOService<ShopBackdoo
      * Get all urls, that belongs to given shop id
      *
      * @param shopId pk value of shop
+     * @param urlType type type of ws url
      * @return list of shop's urls
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case of reflection problem
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration problem
      */
-    List<ShopBackdoorUrlDTO> getAllByShopId(long shopId)
+    List<ShopBackdoorUrlDTO> getAllByShopId(long shopId, String urlType)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 

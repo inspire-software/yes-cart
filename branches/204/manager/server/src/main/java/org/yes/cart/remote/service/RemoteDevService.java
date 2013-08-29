@@ -17,8 +17,12 @@
 package org.yes.cart.remote.service;
 
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -58,7 +62,7 @@ public interface RemoteDevService {
      *
      * @return list of information per each cache.
      */
-    List<CacheInfoDTOImpl> getCacheInfo();
+    Map<Pair<String, String>, List<CacheInfoDTOImpl>> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Evict all caches , which are represent in getCacheInfo list.

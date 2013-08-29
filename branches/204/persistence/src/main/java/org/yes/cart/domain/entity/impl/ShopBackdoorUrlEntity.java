@@ -34,6 +34,7 @@ public class ShopBackdoorUrlEntity implements ShopBackdoorUrl, java.io.Serializa
 
 
     private String url;
+    private String urlType;
     private Shop shop;
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -41,6 +42,14 @@ public class ShopBackdoorUrlEntity implements ShopBackdoorUrl, java.io.Serializa
     private String updatedBy;
     private String guid;
 
+    @Column(name = "URLTYPE", nullable = false, length = 32)
+    public String getUrlType() {
+        return urlType;
+    }
+
+    public void setUrlType(final String urlType) {
+        this.urlType = urlType;
+    }
 
     @Column(name = "URL", nullable = false, length = 512)
     public String getUrl() {
