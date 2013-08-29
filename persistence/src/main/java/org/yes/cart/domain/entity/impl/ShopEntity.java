@@ -340,7 +340,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     @Transient
     public String getDefaultShopUrl() {
         for (ShopUrl shopUrl : getShopUrl()) {
-            if (shopUrl.getUrl().contains("localhost") || shopUrl.getUrl().contains("127.0.0.1")) {
+            if (shopUrl.getUrl().endsWith("localhost") || shopUrl.getUrl().contains("127.0.0.1")) {
                 continue;
             }
             return "http://" + shopUrl.getUrl();
