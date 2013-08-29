@@ -472,7 +472,6 @@ public class ProductDAOTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productDao.fullTextSearchReindex(false);
-
                 AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
                 Query query = queryBuilder.createQuery(
                         Arrays.asList(130L, 131L, 132L),
