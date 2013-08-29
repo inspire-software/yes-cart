@@ -158,7 +158,7 @@
         </security:intercept-methods>
     </bean>
 
-    <bean id="remoteShopBackdoorUrlService" class="org.yes.cart.remote.service.impl.RemoteShopBackdoorUrlServiceImpl">
+    <!--bean id="remoteShopBackdoorUrlService" class="org.yes.cart.remote.service.impl.RemoteShopBackdoorUrlServiceImpl">
         <constructor-arg index="0" ref="dtoShopBackdoorUrlService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
@@ -170,7 +170,7 @@
             <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="getAllByShopId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
         </security:intercept-methods>
-    </bean>
+    </bean-->
 
     <!--seoGenericService-->
 
