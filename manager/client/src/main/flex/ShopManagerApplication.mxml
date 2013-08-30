@@ -283,7 +283,13 @@
         private function onImportClick(event:MouseEvent):void {
             setFontWeight(importBtn);
             if (!panelCache.hasOwnProperty('BulkImportPanel')) {
-                panelCache['BulkImportPanel'] = new BulkImportPanel();
+                var panel:BulkImportPanel = new BulkImportPanel();
+                panel.importCompletedListener = function():void {
+                    // Need to clear all panels to prevent "old" data in panels
+                    panelCache = {};
+                    panelCache['BulkImportPanel'] = panel;
+                };
+                panelCache['BulkImportPanel'] = panel;
                 mainPanel.addChild(panelCache['BulkImportPanel']);
             }
             showMainPanelSection(panelCache['BulkImportPanel']);
