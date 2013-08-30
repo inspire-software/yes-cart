@@ -229,7 +229,7 @@
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='actions')">
                         <mx:itemRenderer>
                             <mx:Component>
-                                <mx:VBox horizontalAlign="right">
+                                <mx:VBox horizontalAlign="right" horizontalScrollPolicy="off">
                                     <mx:Script><![CDATA[
                                         import mx.controls.Alert;
                                         import mx.events.CloseEvent;
@@ -480,7 +480,7 @@
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='actions')">
                                 <mx:itemRenderer>
                                     <mx:Component>
-                                            <mx:VBox horizontalAlign="right">
+                                            <mx:VBox horizontalAlign="right" horizontalScrollPolicy="off">
                                                 <mx:Script>
                                                     <![CDATA[
                                                     import mx.collections.ArrayCollection;

@@ -40,6 +40,8 @@
 
         private var importStatusTimer:Timer = new Timer(15000, 1); // 15 sec timer
 
+        private var _importCompletedListener:Function;
+
         private function onSelectFileClick(event:MouseEvent):void {
 
             if (importGroups.selectedItem == null) {
@@ -69,6 +71,7 @@
         }
 
         private function onFileLoadingCompleted(e:Event):void {
+            selectFileBtn.enabled = false;
             remoteUploadService.upload(loadFileRef.data, loadFileRef.name);
             Debug.trace("INFO current state is inProgressState");
         }
@@ -115,6 +118,7 @@
 
             Alert.show(msg, resourceManager.getString('ShopManagerApplication', 'error'));
             resultDetails.text += msg;
+            selectFileBtn.enabled = true;
         }
 
         private function onWatchClick(event:MouseEvent):void {
@@ -143,8 +147,20 @@
             resultDetails.text = reportHeaderText + '\n' + status.report;
             if (status.state == 'INPROGRESS' || status.state == 'STARTED') {
                 importStatusTimer.start(); // do another timed status update
+            } else if (_importCompletedListener != null) {
+                selectFileBtn.enabled = true;
+                _importCompletedListener();
+                Alert.show(resourceManager.getString('BulkImportPanel', 'checkStatusSuccess', [ importJobToken ]),
+                        resourceManager.getString('ShopManagerApplication', 'info'),
+                        Alert.YES | Alert.CANCEL, this, onGetImportStatusResultSuccess, null, Alert.YES);
             }
 
+        }
+
+        private function onGetImportStatusResultSuccess(event:CloseEvent):void {
+            if (event.detail == Alert.YES) {
+                remoteDevService.evictCache();
+            }
         }
 
         private function onGetImportStatusFault(event:FaultEvent):void {
@@ -155,7 +171,8 @@
         }
 
         private function onGetImportStatusFaultTryAgain(event:CloseEvent):void {
-            if (event.detail == Alert.OK) {
+            if (event.detail == Alert.YES) {
+                selectFileBtn.enabled = true;
                 importStatusTimer.start();
             }
         }
@@ -167,6 +184,19 @@
         private function onGetImportGroupsFault(event:FaultEvent):void {
             // do nothing
         }
+
+        public function get importCompletedListener():Function {
+            return _importCompletedListener;
+        }
+
+        public function set importCompletedListener(value:Function):void {
+            _importCompletedListener = value;
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
         ]]>
 	</mx:Script>
 
@@ -197,7 +227,17 @@
 
     </mx:RemoteObject>
 
-    <mx:Panel id="reindexPanel" height="100%" width="100%" title="@Resource(bundle='BulkImportPanel',key='title')"
+    <mx:RemoteObject showBusyCursor="true" id="remoteDevService"
+                     destination="remoteDevService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="evictCache" name="evictCache"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+
+    <mx:Panel id="bulkImportPanel" height="100%" width="100%" title="@Resource(bundle='BulkImportPanel',key='title')"
               paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
         <mx:VBox width="100%" height="100%">
 

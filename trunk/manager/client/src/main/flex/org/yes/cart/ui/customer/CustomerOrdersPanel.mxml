@@ -106,6 +106,7 @@
 
 
     <mx:Script><![CDATA[
+        import mx.controls.dataGridClasses.DataGridColumn;
         import mx.events.ListEvent;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;

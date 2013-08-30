@@ -22,6 +22,9 @@
 
 	<mx:Script>
 		<![CDATA[
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+
         import org.yes.cart.impl.JobStatusImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
@@ -83,8 +86,22 @@
                 indexStatusTimer.start(); // do another timed status update
             } else {
                 reindexBtn.enabled = true;
+                Alert.show(resourceManager.getString('ReindexPanel', 'reindexStatusSuccess'),
+                        resourceManager.getString('ShopManagerApplication', 'info'),
+                        Alert.YES | Alert.CANCEL, this, onGetReindexStatusResultSuccess, null, Alert.YES);
             }
         }
+
+        private function onGetReindexStatusResultSuccess(event:CloseEvent):void {
+            if (event.detail == Alert.YES) {
+                remoteDevService.evictCache();
+            }
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
         ]]>
 	</mx:Script>
 
@@ -103,7 +120,16 @@
 
     </mx:RemoteObject>
 
-	<mx:Panel height="100%" width="100%" title="@Resource(bundle='ReindexPanel',key='reindexProducts')"
+    <mx:RemoteObject showBusyCursor="true" id="remoteDevService"
+                     destination="remoteDevService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="evictCache" name="evictCache"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:Panel height="100%" width="100%" title="@Resource(bundle='ReindexPanel',key='reindexProducts')"
               paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
 
         <mx:VBox width="100%" height="100%">
