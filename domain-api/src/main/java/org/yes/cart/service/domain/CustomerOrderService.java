@@ -70,7 +70,8 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @param fromDate    optional order created from
      * @param toDate    optional order created to
      * @param orderNum    optional to perform search using like by order number
-     * @return
+     *
+     * @return list of orders
      */
     List<CustomerOrder> findCustomerOrdersByCriteria(
             long customerId,
@@ -91,7 +92,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @param orderStatus    order status
      * @return awaiting orders
      */
-    List<CustomerOrderDelivery> findAwaitingDeliveries(Long skuId, String deliveryStatus, String orderStatus);
+    List<CustomerOrderDelivery> findAwaitingDeliveries(List<Long> skuId, String deliveryStatus, List<String> orderStatus);
 
 
     /**

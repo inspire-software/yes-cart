@@ -92,19 +92,27 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
-    public List<CustomerOrderDelivery> findAwaitingDeliveries(final Long skuId, final String deliveryStatus, final String orderStatus) {
+    public List<CustomerOrderDelivery> findAwaitingDeliveries(final List<Long> skuId, final String deliveryStatus, final List<String> orderStatus) {
 
-        List<CustomerOrderDelivery> rez =  customerOrderDeliveryDao.findByNamedQuery("DELIVERIES.WAITING.FOR.INVENTORY",
+        final List<CustomerOrderDelivery> waitingDeliveries;
+
+        if (skuId != null) {
+            waitingDeliveries = customerOrderDeliveryDao.findByNamedQuery("DELIVERIES.WAITING.FOR.INVENTORY.BY.SKU",
                 deliveryStatus,
                 orderStatus,
                 skuId);
+        } else {
+            waitingDeliveries = customerOrderDeliveryDao.findByNamedQuery("DELIVERIES.WAITING.FOR.INVENTORY",
+                deliveryStatus,
+                orderStatus);
+        }
 
-        if (rez.iterator().hasNext()) {
-            rez.iterator().next().getCustomerOrder().getShop();
+        for (final CustomerOrderDelivery delivery : waitingDeliveries) {
+            delivery.getCustomerOrder().getShop().getAttributes();
         }
 
 
-        return rez;
+        return waitingDeliveries;
 
     }
 
