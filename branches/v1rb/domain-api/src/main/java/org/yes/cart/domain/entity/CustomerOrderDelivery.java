@@ -34,7 +34,7 @@ public interface CustomerOrderDelivery extends Auditable {
 
 
     /**
-     * On fillfillment center.
+     * On full fillment center.
      */
     String DELIVERY_STATUS_ON_FULLFILMENT = "ds.fullfillment";
 
@@ -59,9 +59,13 @@ public interface CustomerOrderDelivery extends Auditable {
      */
     String DELIVERY_STATUS_INVENTORY_VOID_RESERVATION = "ds.inventory.void.reserv";
 
-
     /**
-     * Inventory allocated
+     * Void preorder
+     */
+    String DELIVERY_STATUS_INVENTORY_VOID_WAIT = "ds.inventory.void.wait";
+
+
+    /**     * Inventory allocated
      */
     String DELIVERY_STATUS_INVENTORY_ALLOCATED = "ds.inventory.allocated";
 

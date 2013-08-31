@@ -35,6 +35,8 @@ import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,13 +46,13 @@ import java.util.List;
  */
 public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse> implements SkuWarehouseService, ApplicationContextAware {
 
-    private  ProductService productService;
+    private ProductService productService;
 
-    private ApplicationContext applicationContext   ;
+    private ApplicationContext applicationContext;
 
-    private  OrderStateManager orderStateManager;
+    private OrderStateManager orderStateManager;
 
-    private  CustomerOrderService customerOrderService;
+    private CustomerOrderService customerOrderService;
 
 
     /**
@@ -195,18 +197,18 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public SkuWarehouse create(SkuWarehouse instance) {
-        final SkuWarehouse rez = super.create(instance);
-
-        return rez;
+        return super.create(instance);
     }
 
-    /** {@inheritDoc}*/
+    /**
+     * {@inheritDoc}
+     */
     public SkuWarehouse update(SkuWarehouse instance) {
-        final SkuWarehouse rez = super.update(instance);
-
-        return rez;
+        return  super.update(instance);
     }
 
     /**
@@ -252,20 +254,29 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public List<Long> findProductSkuForWhichInventoryChangedAfter(final Date lastUpdate) {
+        return (List) getGenericDao().findQueryObjectByNamedQuery("SKUID.FOR.SKUWAREHOUSE.CHANGED.SINCE", lastUpdate);
+    }
 
     /**
-     * Push orders , that are awaiting for inventory
-     *
-     * @param productSkuId
+     * {@inheritDoc}
      */
     public void updateOrdersAwaitingForInventory(final long productSkuId) {
         /**
          * WARNING . Potential issue  delivery may be not allowed by time. Need to solve it
          */
-        if (isSkuAvilabilityPreorder(productSkuId)) {
 
-            List<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findAwaitingDeliveries(productSkuId, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                    CustomerOrder.ORDER_STATUS_IN_PROGRESS);
+        if (isSkuAvailabilityPreorderOrBackorder(productSkuId, true)) {
+
+            List<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findAwaitingDeliveries(
+                    Arrays.asList(productSkuId),
+                    CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                    Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED)
+            );
 
             for (CustomerOrderDelivery delivery : waitForInventory) {
 
@@ -295,17 +306,31 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
 
     /**
-     * Check is sku has preorder availablilty.
-     *
-     * @param productSkuId sku warehouse entity
-     * @return true, if sku has preorder availability.
+     * {@inheritDoc}
      */
-    public boolean isSkuAvilabilityPreorder(final long productSkuId) {
+    public boolean isSkuAvailabilityPreorderOrBackorder(final long productSkuId, final boolean checkAvailabilityDates) {
         ProductSku sku = productService.getSkuById(productSkuId);
-        return Product.AVAILABILITY_PREORDER == sku.getProduct().getAvailability();
+        if (sku != null) {
+            Product product = sku.getProduct();
+            if (Product.AVAILABILITY_PREORDER == product.getAvailability() || Product.AVAILABILITY_BACKORDER == product.getAvailability()) {
+                if (product.getAvailablefrom() != null || product.getAvailableto() != null) {
+                    final Date now = new Date();
+                    if (product.getAvailablefrom() != null) {
+                        return now.after(product.getAvailablefrom());
+                    }
+                    if (product.getAvailableto() != null) {
+                        return now.before(product.getAvailableto());
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
-    /** IoC.*/
+    /**
+     * IoC.
+     */
     public void setProductService(ProductService productService) {
         this.productService = productService;
     }
@@ -319,7 +344,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
     private CustomerOrderService getCustomerOrderService() {
         if (customerOrderService == null) {
-            customerOrderService =  applicationContext.getBean("customerOrderService", CustomerOrderService.class);
+            customerOrderService = applicationContext.getBean("customerOrderService", CustomerOrderService.class);
         }
         return customerOrderService;
     }

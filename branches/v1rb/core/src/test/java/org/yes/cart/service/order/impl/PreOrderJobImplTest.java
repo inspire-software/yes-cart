@@ -21,11 +21,11 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
-import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -98,7 +98,7 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
         PreOrderJobImpl preOrderJob = new PreOrderJobImpl();
 
         preOrderJob.processAwaitingOrders(
-                CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
+                Arrays.asList(15350L, 15360L), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                 OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT,
                 customerOrderService,
                 orderStateManager);
@@ -113,7 +113,7 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
         Thread.sleep(5000);
 
         preOrderJob.processAwaitingOrders(
-                CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
+                Arrays.asList(15350L, 15360L), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                 OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT,
                 customerOrderService,
                 orderStateManager);
@@ -139,7 +139,7 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
         skuWarehouseService.create(skuWarehouse);
 
         preOrderJob.processAwaitingOrders(
-                CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                Arrays.asList(15350L, 15360L), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                 OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY,
                 customerOrderService,
                 orderStateManager);

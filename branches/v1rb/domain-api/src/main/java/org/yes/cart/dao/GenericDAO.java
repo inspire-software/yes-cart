@@ -163,7 +163,10 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param namedQueryName name of query
      * @param parameter      list parameter for named query
      * @return list of found objects
+     *
+     * @deprecated use generic object query instead
      */
+    @Deprecated
     List<Object[]> findQueryObjectsByNamedQueryWithList(String namedQueryName, List parameter);
 
     /**
@@ -173,7 +176,10 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param listParameter  list parameter for named query
      * @param parameters     optional parameters for named query
      * @return list of found objects
+     *
+     * @deprecated use generic object query instead
      */
+    @Deprecated
     List<T> findQueryObjectsByNamedQueryWithList(String namedQueryName, Collection<Object> listParameter, Object... parameters);
 
 

@@ -22,6 +22,7 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.util.ShopCodeContext;
@@ -73,7 +74,7 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
      * {@inheritDoc}
      */
     @Override
-    public boolean handle(final OrderEvent orderEvent) {
+    public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
             final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(orderEvent.getCustomerOrder().getPgLabel());
             final CustomerOrder order = orderEvent.getCustomerOrder();

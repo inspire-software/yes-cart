@@ -278,10 +278,14 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testIsSkuAvilabilityPreorder () {
-        assertFalse(skuWarehouseService.isSkuAvilabilityPreorder(15300));
-        assertFalse(skuWarehouseService.isSkuAvilabilityPreorder(15301));
-        assertTrue(skuWarehouseService.isSkuAvilabilityPreorder(15310));
-        assertTrue(skuWarehouseService.isSkuAvilabilityPreorder(15320));
+        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15300, true));
+        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15301, true));
+        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15310, true));
+        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15320, true));
+        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15300, false));
+        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15301, false));
+        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15310, false));
+        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15320, false));
     }
 
 

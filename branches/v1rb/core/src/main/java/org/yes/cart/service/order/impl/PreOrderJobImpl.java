@@ -23,10 +23,12 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.util.ShopCodeContext;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -39,36 +41,58 @@ public class PreOrderJobImpl extends QuartzJobBean implements StatefulJob {
 
     protected void executeInternal(final JobExecutionContext context) throws JobExecutionException {
 
-        CustomerOrderService customerOrderService = (CustomerOrderService) context.getMergedJobDataMap().get("customerOrderService");
-        OrderStateManager orderStateManager = (OrderStateManager) context.get("orderStateManager");
+        final CustomerOrderService customerOrderService = (CustomerOrderService) context.getMergedJobDataMap().get("customerOrderService");
+        final OrderStateManager orderStateManager = (OrderStateManager) context.getMergedJobDataMap().get("orderStateManager");
+        final SkuWarehouseService skuWarehouseService = (SkuWarehouseService)  context.getMergedJobDataMap().get("skuWarehouseService");
 
-        log.info("Check for awaiting orders");
+        final Date now = new Date();
+        final Date lastRun = (Date) context.getJobDetail().getJobDataMap().get("lastRun");
 
-        processAwaitingOrders(
+
+        log.info("Check orders awaiting preorder start date");
+
+        final int dateWaiting = processAwaitingOrders(
+                null,
                 CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                 OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT,
                 customerOrderService,
                 orderStateManager);
 
-        processAwaitingOrders(
-                CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY,
-                customerOrderService,
-                orderStateManager);
+        log.info("Transitioned {} deliveries awaiting preorder start date", dateWaiting);
 
+        final List<Long> productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
+
+        if (productSkus != null && !productSkus.isEmpty()) {
+            log.info("Check for awaiting orders for SKUs {}", productSkus);
+
+            final int inventoryWaiting = processAwaitingOrders(
+                    productSkus,
+                    CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                    OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY,
+                    customerOrderService,
+                    orderStateManager);
+
+            log.info("Transitioned {} deliveries awaiting inventory", inventoryWaiting);
+
+        }
+
+        context.getJobDetail().getJobDataMap().put("lastRun", now);
 
     }
 
     /**
-     * Get deliveries for given order and delivery state and try to push into porcessing.
+     * Get deliveries for given order and delivery state and try to push into processing.
      *
+     *
+     * @param productSkus          SKU's for which inventory changes since the last run
      * @param status               status of delivery
      * @param event                what event to fore
      * @param customerOrderService customer order service
      * @param orderStateManager    order state manager
      * @return quantity of processed deliveries
      */
-    int processAwaitingOrders(final String status,
+    int processAwaitingOrders(final List<Long> productSkus,
+                              final String status,
                               final String event,
                               final CustomerOrderService customerOrderService,
                               final OrderStateManager orderStateManager) {
@@ -76,9 +100,9 @@ public class PreOrderJobImpl extends QuartzJobBean implements StatefulJob {
         int cnt = 0;
 
         final List<CustomerOrderDelivery> waitForDate = customerOrderService.findAwaitingDeliveries(
-                null,
+                productSkus,
                 status,
-                CustomerOrder.ORDER_STATUS_IN_PROGRESS);
+                Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED));
 
 
         for (CustomerOrderDelivery delivery : waitForDate) {
@@ -88,6 +112,7 @@ public class PreOrderJobImpl extends QuartzJobBean implements StatefulJob {
                 )) {
 
                     customerOrderService.update(delivery.getCustomerOrder());
+                    log.info("Updated customer order {} delivery {}", delivery.getCustomerOrder().getOrdernum(), delivery.getDeliveryNum());
                     cnt++;
 
                 }
