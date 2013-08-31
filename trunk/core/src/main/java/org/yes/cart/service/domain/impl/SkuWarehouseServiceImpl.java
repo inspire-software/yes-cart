@@ -35,6 +35,8 @@ import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -252,20 +254,21 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         );
     }
 
+    /** {@inheritDoc} */
+    public List<Long> findProductSkuForWhichInventoryChangedAfter(final Date lastUpdate) {
+        return (List) getGenericDao().findQueryObjectByNamedQuery("SKUID.FOR.SKUWAREHOUSE.CHANGED.SINCE", lastUpdate);
+    }
 
-    /**
-     * Push orders , that are awaiting for inventory
-     *
-     * @param productSkuId
-     */
+    /** {@inheritDoc} */
     public void updateOrdersAwaitingForInventory(final long productSkuId) {
-        /**
-         * WARNING . Potential issue  delivery may be not allowed by time. Need to solve it
-         */
-        if (isSkuAvailabilityPreorder(productSkuId)) {
 
-            List<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findAwaitingDeliveries(productSkuId, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                    CustomerOrder.ORDER_STATUS_IN_PROGRESS);
+        if (isSkuAvailabilityPreorderOrBackorder(productSkuId, true)) {
+
+            List<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findAwaitingDeliveries(
+                    Arrays.asList(productSkuId),
+                    CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                    Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED)
+            );
 
             for (CustomerOrderDelivery delivery : waitForInventory) {
 
@@ -295,9 +298,24 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
 
     /** {@inheritDoc} */
-    public boolean isSkuAvailabilityPreorder(final long productSkuId) {
+    public boolean isSkuAvailabilityPreorderOrBackorder(final long productSkuId, final boolean checkAvailabilityDates) {
         ProductSku sku = productService.getSkuById(productSkuId);
-        return Product.AVAILABILITY_PREORDER == sku.getProduct().getAvailability();
+        if (sku != null) {
+            Product product = sku.getProduct();
+            if (Product.AVAILABILITY_PREORDER == product.getAvailability() || Product.AVAILABILITY_BACKORDER == product.getAvailability()) {
+                if (product.getAvailablefrom() != null || product.getAvailableto() != null) {
+                    final Date now = new Date();
+                    if (product.getAvailablefrom() != null) {
+                        return now.after(product.getAvailablefrom());
+                    }
+                    if (product.getAvailableto() != null) {
+                        return now.before(product.getAvailableto());
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     /** IoC.*/

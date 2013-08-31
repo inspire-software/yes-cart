@@ -173,11 +173,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     public Object getScalarResultByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
-        int idx = 1;
-        for (Object param : parameters) {
-            query.setParameter(String.valueOf(idx), param);
-            idx++;
-        }
+        setQueryParameters(query, parameters);
         return query.uniqueResult();
     }
 
@@ -186,11 +182,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     public Object getScalarResultByNamedQueryWithInit(final String namedQueryName,  final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
-        int idx = 1;
-        for (Object param : parameters) {
-            query.setParameter(String.valueOf(idx), param);
-            idx++;
-        }
+        setQueryParameters(query, parameters);
         final Object obj = query.uniqueResult();
         if (obj instanceof Product) {
             Hibernate.initialize(((Product) obj).getAttributes());
@@ -204,13 +196,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     public List<Object> findByQuery(final String hsqlQuery, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
-        int idx = 1;
-        if (parameters != null) {
-            for (Object param : parameters) {
-                query.setParameter(String.valueOf(idx), param);
-                idx++;
-            }
-        }
+        setQueryParameters(query, parameters);
         return query.list();
     }
 
@@ -220,11 +206,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     public Object findSingleByQuery(final String hsqlQuery, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
-        int idx = 1;
-        for (Object param : parameters) {
-            query.setParameter(String.valueOf(idx), param);
-            idx++;
-        }
+        setQueryParameters(query, parameters);
         final List rez = query.list();
         int size = rez.size();
         switch (size) {
@@ -249,11 +231,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     public List<T> findByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         if (parameters != null) {
-            int idx = 1;
-            for (Object param : parameters) {
-                query.setParameter(String.valueOf(idx), param);
-                idx++;
-            }
+            setQueryParameters(query, parameters);
         }
         return query.list();
     }
@@ -267,13 +245,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         query.setCacheable(true);
         query.setCacheMode(CacheMode.NORMAL);
-        if (parameters != null) {
-            int idx = 1;
-            for (Object param : parameters) {
-                query.setParameter(String.valueOf(idx), param);
-                idx++;
-            }
-        }
+        setQueryParameters(query, parameters);
         return query.list();
     }
 
@@ -283,13 +255,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     @SuppressWarnings("unchecked")
     public List<Object> findQueryObjectByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
-        int idx = 1;
-        if (parameters != null) {
-            for (Object param : parameters) {
-                query.setParameter(String.valueOf(idx), param);
-                idx++;
-            }
-        }
+        setQueryParameters(query, parameters);
         return query.list();
     }
 
@@ -299,13 +265,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     @SuppressWarnings("unchecked")
     public List<Object[]> findQueryObjectsByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
-        int idx = 1;
-        if (parameters != null) {
-            for (Object param : parameters) {
-                query.setParameter(String.valueOf(idx), param);
-                idx++;
-            }
-        }
+        setQueryParameters(query, parameters);
         return query.list();
     }
 
@@ -328,13 +288,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         query.setParameterList("list", listParameter);
-        int idx = 1;
-        if (parameters != null) {
-            for (Object param : parameters) {
-                query.setParameter(String.valueOf(idx), param);
-                idx++;
-            }
-        }
+        setQueryParameters(query, parameters);
         return query.list();
     }
 
@@ -350,11 +304,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         query.setFirstResult(firtsResult);
         query.setMaxResults(maxResults);
-        int idx = 1;
-        for (Object param : parameters) {
-            query.setParameter(String.valueOf(idx), param);
-            idx++;
-        }
+        setQueryParameters(query, parameters);
         return query.list();
     }
 
@@ -776,13 +726,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     public int executeHsqlUpdate(final String hsql, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(hsql);
-        int idx = 1;
-        if (parameters != null) {
-            for (Object param : parameters) {
-                query.setParameter(String.valueOf(idx), param);
-                idx++;
-            }
-        }
+        setQueryParameters(query, parameters);
         return query.executeUpdate();
     }
 
@@ -792,11 +736,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     public int executeNativeUpdate(final String nativeQuery, final Object... parameters) {
         SQLQuery sqlQuery = sessionFactory.getCurrentSession().createSQLQuery(nativeQuery);
-        int idx = 1;
-        for (Object param : parameters) {
-            sqlQuery.setParameter(String.valueOf(idx), param);
-            idx++;
-        }
+        setQueryParameters(sqlQuery, parameters);
         return sqlQuery.executeUpdate();
     }
 
@@ -806,14 +746,22 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     public int executeUpdate(final String namedQueryName, final Object... parameters) {
         final Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
-        int idx = 1;
+        setQueryParameters(query, parameters);
+        return query.executeUpdate();
+    }
+
+    private void setQueryParameters(final Query query, final Object[] parameters) {
         if (parameters != null) {
+            int idx = 1;
             for (Object param : parameters) {
-                query.setParameter(String.valueOf(idx), param);
+                if (param instanceof Collection) {
+                    query.setParameterList(String.valueOf(idx), (Collection) param);
+                } else {
+                    query.setParameter(String.valueOf(idx), param);
+                }
                 idx++;
             }
         }
-        return query.executeUpdate();
     }
 
     /**

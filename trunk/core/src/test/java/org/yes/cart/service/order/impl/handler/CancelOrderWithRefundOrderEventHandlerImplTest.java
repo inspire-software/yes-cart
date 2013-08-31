@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
@@ -108,13 +109,18 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
         skuWarehouse.setReserved(new BigDecimal("0.00"));
         skuWarehouse.setQuantity(new BigDecimal("7.00"));
         skuWarehouseService.update(skuWarehouse);
-        assertTrue(handler.handle(new OrderEventImpl("", customerOrder, null, null)));
+        try {
+            handler.handle(new OrderEventImpl("", customerOrder, null, null));
+            fail("Unable to handle cancellation for delivery 130830233414-2-0 with status ds.shipped");
+        } catch (OrderException oe) {
+            // ok
+        }
         skuWarehouse = skuWarehouseService.getById(31);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(new BigDecimal("1.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
+        assertEquals(new BigDecimal("0.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
         skuWarehouse = skuWarehouseService.getById(30);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(new BigDecimal("9.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
+        assertEquals(new BigDecimal("7.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
     }
 }

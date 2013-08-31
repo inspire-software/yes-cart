@@ -22,6 +22,7 @@ import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -112,15 +113,27 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
     /**
      * Check if sku has pre-order availability.
      *
+     *
      * @param productSkuId sku warehouse entity
-     * @return true, if sku has pre-order availability.
+     * @param checkAvailabilityDates check availability date
+     *
+     * @return true, if sku has pre-order availability (and optionally within availability dates).
      */
-    boolean isSkuAvailabilityPreorder(long productSkuId);
+    boolean isSkuAvailabilityPreorderOrBackorder(long productSkuId, final boolean checkAvailabilityDates);
+
+    /**
+     * Find PK of product sku's inventory of which had changed since given date (i.e. updateDate >= lastUpdate)
+     *
+     * @param lastUpdate last modification of sku warehouse (inclusive)
+     *
+     * @return list of PKs
+     */
+    List<Long> findProductSkuForWhichInventoryChangedAfter(Date lastUpdate);
 
     /**
      * Push orders , that are awaiting for inventory
      *
-     * @param productSkuId
+     * @param productSkuId product SKU PK
      */
     void updateOrdersAwaitingForInventory(long productSkuId);
 

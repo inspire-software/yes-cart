@@ -22,6 +22,7 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -54,7 +55,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
     /**
      * {@inheritDoc}
      */
-    public boolean handle(final OrderEvent orderEvent) {
+    public boolean handle(final OrderEvent orderEvent) throws OrderException  {
         synchronized (OrderEventHandler.syncMonitor) {
             creditQuantity(orderEvent.getCustomerOrder());
             handleInternal(orderEvent);
@@ -70,14 +71,14 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
     }
 
 
-    protected void creditQuantity(final CustomerOrder order) {
+    protected void creditQuantity(final CustomerOrder order) throws OrderException  {
         final Collection<CustomerOrderDelivery> deliveries = order.getDelivery();
         for (CustomerOrderDelivery delivery : deliveries) {
             creditQuantity(delivery);
         }
     }
 
-    private void creditQuantity(final CustomerOrderDelivery delivery) {
+    private void creditQuantity(final CustomerOrderDelivery delivery) throws OrderException {
 
         final List<Warehouse> warehouses = warehouseService.findByShopId(
                 delivery.getCustomerOrder().getShop().getShopId());
@@ -87,7 +88,12 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
             newStatus = CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_RESERVATION;
         } else if (isNeedCredit(delivery.getDeliveryStatus())) {
             newStatus = CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_DEALLOCATED;
-
+        } else if (isWaitPreorder(delivery.getDeliveryStatus())) {
+            newStatus = CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_WAIT;
+        } else if (isFulfillment(delivery.getDeliveryStatus())) {
+            newStatus = CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_WAIT;
+        } else {
+            throw new OrderException("Unable to handle cancellation for delivery " + delivery.getDeliveryNum() + " with status " + delivery.getDeliveryStatus());
         }
 
         for (CustomerOrderDeliveryDet det : delivery.getDetail()) {
@@ -111,6 +117,17 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
         delivery.setDeliveryStatus(newStatus);
     }
 
+    private boolean isFulfillment(final String deliveryStatus) {
+        return
+                CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT.equals(deliveryStatus);
+    }
+
+    private boolean isWaitPreorder(final String deliveryStatus) {
+        return
+                CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT.equals(deliveryStatus)
+                        || CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT.equals(deliveryStatus);
+    }
+
     private boolean isNeedVoidReservation(final String deliveryStatus) {
         return CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED.equals(deliveryStatus);
     }
@@ -120,9 +137,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                 CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED.equals(deliveryStatus)
                         || CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED.equals(deliveryStatus)
                         || CustomerOrderDelivery.DELIVERY_STATUS_PACKING.equals(deliveryStatus)
-                        || CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY.equals(deliveryStatus)
-                        || CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS.equals(deliveryStatus)
-                        || CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(deliveryStatus);
+                        || CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY.equals(deliveryStatus);
 
     }
 

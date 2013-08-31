@@ -826,6 +826,7 @@
             <map>
                 <entry key="customerOrderService" value-ref="customerOrderService" />
                 <entry key="orderStateManager" value-ref="orderStateManager" />
+                <entry key="skuWarehouseService" value-ref="skuWarehouseService" />
             </map>
         </property>
     </bean>
