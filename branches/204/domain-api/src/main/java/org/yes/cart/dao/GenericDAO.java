@@ -130,6 +130,15 @@ public interface GenericDAO<T, PK extends Serializable> {
     List<T> findByNamedQuery(String namedQueryName, Object... parameters);
 
     /**
+     * Find entities within named query .
+     *
+     * @param namedQueryName name of query
+     * @param parameters     optional parameters for named query
+     * @return list of found entities
+     */
+    List<T> findByNamedQueryCached(String namedQueryName, Object... parameters);
+
+    /**
      * Find "query objects" within named query .
      *
      * @param namedQueryName name of query
@@ -153,8 +162,11 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param namedQueryName name of query
      * @param parameter      list parameter for named query
      * @return list of found objects
+     *
+     * @deprecated use generic object query instead
      */
-    List<Object[]> findQueryObjectsByNamedQueryWithList(String namedQueryName, Collection parameter);
+    @Deprecated
+    List<Object[]> findQueryObjectsByNamedQueryWithList(String namedQueryName, List parameter);
 
     /**
      * Find "query objects" within named query that use IN clause.
@@ -163,7 +175,10 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param listParameter  list parameter for named query
      * @param parameters     optional parameters for named query
      * @return list of found objects
+     *
+     * @deprecated use generic object query instead
      */
+    @Deprecated
     List<T> findQueryObjectsByNamedQueryWithList(String namedQueryName, Collection<Object> listParameter, Object... parameters);
 
 
@@ -337,11 +352,11 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @return list of found entities
      */
     List<Object[]> fullTextSearch(final org.apache.lucene.search.Query query,
-                           int firtsResult,
-                           int maxResults,
-                           String sortFieldName,
-                           boolean reverse,
-                           String ... fields);
+                                  int firtsResult,
+                                  int maxResults,
+                                  String sortFieldName,
+                                  boolean reverse,
+                                  String ... fields);
 
     /**
      * Get the full text search result.

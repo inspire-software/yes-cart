@@ -145,7 +145,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     @Cacheable(value = "attributeService-attributeNamesByCodes")
     public Map<String, String> getAttributeNamesByCodes(final Set<String> codes) {
         Map<String, String> result = new HashMap<String, String>();
-        List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQueryWithList(
+        List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQuery(
                 "ATTRIBUTE.CODE.NAMES",
                 codes);
         if (codeNameList != null) {

@@ -4940,7 +4940,7 @@ public void setRangeList(final RangeList rangeList) {
         <![CDATA[
        select distinct a.code, a.name
        from AttributeEntity a
-       where a.code in (:list)
+       where a.code in (?1)
        ]]>
     </query>
 
