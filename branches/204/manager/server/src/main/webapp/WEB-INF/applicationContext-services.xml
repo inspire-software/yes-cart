@@ -580,7 +580,8 @@
     <bean id="remoteDevService"
           class="org.yes.cart.remote.service.impl.RemoteDevServiceImpl">
         <constructor-arg index="0" ref="remoteBackdoorService"/>
-        <constructor-arg index="1" ref="systemService"/>
+        <constructor-arg index="1" ref="dtoShopService"/>
+        <constructor-arg index="2" ref="dtoShopBackdoorUrlService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="sqlQuery" access="ROLE_SMADMIN"/>

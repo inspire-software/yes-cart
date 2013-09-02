@@ -34,24 +34,11 @@ public class ShopBackdoorUrlDTOImpl implements ShopBackdoorUrlDTO {
     @DtoField(value = "url")
     private String url;
 
-    @DtoField(value = "urlType")
-    private String urlType;
-
     @DtoField(value = "shopBackdoorUrlId", readOnly = true)
     private long shopBackdoorUrlId;
 
     @DtoField(value = "shop.shopId", readOnly = true)
     private long shopId;
-
-    /** {@inheritDoc}  */
-    public String getUrlType() {
-        return urlType;
-    }
-
-    /** {@inheritDoc}  */
-    public void setUrlType(final String urlType) {
-        this.urlType = urlType;
-    }
 
     /** {@inheritDoc}  */
     public String getUrl() {

@@ -32,6 +32,12 @@ import java.util.Map;
 public interface RemoteDevService {
 
 
+    String URL_TYPE_CACHE_DIRECTOR = "cacheDirector";
+
+    String URL_TYPE_REINDEX_DOOR = "reindexDoor";
+
+
+
     /**
      * Execute sql and return result.
      * DML operatin also allowed, in this case result has quantity of affected rows.

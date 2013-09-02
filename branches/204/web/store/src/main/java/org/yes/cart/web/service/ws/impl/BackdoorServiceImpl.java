@@ -252,41 +252,6 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
         return productService.getGenericDao();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<CacheInfoDTOImpl> getCacheInfo() {
-        final CacheManager cm = applicationContext.getBean("cacheManager", CacheManager.class);
-        final Collection<String> cacheNames = cm.getCacheNames();
-        final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>(cacheNames.size());
-        for (String cacheName : cacheNames) {
-            final Cache cache = cm.getCache(cacheName);
-            final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) cache.getNativeCache();
-            rez.add(
-                    new CacheInfoDTOImpl(
-                            nativeCache.getName(),
-                            nativeCache.getSize(),
-                            nativeCache.getMemoryStoreSize(),
-                            nativeCache.getDiskStoreSize(),
-                            0,0/*nativeCache.calculateInMemorySize(),
-                            nativeCache.calculateOnDiskSize()*/   /*heavy operation*/
-                    )
-            );
-
-        }
-        return rez;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void evictCache() {
-        final CacheManager cm = applicationContext.getBean("cacheManager", CacheManager.class);
-        for (String cacheName : cm.getCacheNames()) {
-            final Cache cache = cm.getCache(cacheName);
-            cache.clear();
-        }
-    }
 
     /**
      * {@inheritDoc}

@@ -49,9 +49,9 @@ public class RemoteShopBackdoorUrlServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<ShopBackdoorUrlDTO> getAllByShopId(final long shopId, final String urlType)
+    public List<ShopBackdoorUrlDTO> getAllByShopId(final long shopId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return ((DtoShopBackdoorUrlService) getGenericDTOService()).getAllByShopId(shopId, urlType);
+        return ((DtoShopBackdoorUrlService) getGenericDTOService()).getAllByShopId(shopId);
     }
 
 }

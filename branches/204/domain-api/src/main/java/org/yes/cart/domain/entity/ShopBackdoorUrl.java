@@ -25,23 +25,6 @@ package org.yes.cart.domain.entity;
  */
 public interface ShopBackdoorUrl extends Auditable {
 
-    public final static String URL_TYPE_CACHE_DIRECTOR = "cacheDirector";
-
-    public final static String URL_TYPE_REINDEX_DOOR = "reindexDoor";
-
-
-    /**
-     * Get url type.
-     * @return url type.
-     */
-    String getUrlType();
-
-    /**
-     * Set url type.
-     * @param urlType
-     */
-    void setUrlType(String urlType);
-
 
         /**
         * @return primary key value.

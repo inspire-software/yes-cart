@@ -3121,7 +3121,6 @@ public void setRangeList(final RangeList rangeList) {
                 ]]>
             </meta>
             <property name="url" column="URL" type="string" length="512" not-null="true" lazy="false"/>
-            <property name="urlType" column="URLTYPE" type="string" length="32" not-null="true" lazy="false"/>
             <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop" foreign-key="FK_SHOPDBURL_SHOP">
                 <column name="SHOP_ID" not-null="true"/>
             </many-to-one>

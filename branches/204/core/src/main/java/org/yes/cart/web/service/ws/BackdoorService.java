@@ -115,23 +115,6 @@ public interface BackdoorService {
     @WebResult(name = "queryResult")
     List<Object[]> luceneQuery(String query);
 
-    /**
-     * Get cache information.
-     * @deprecated
-     * @return list of information per each cache.
-     */
-    @WebMethod
-    @WebResult(name = "cacheInfoResult")
-    List<CacheInfoDTOImpl> getCacheInfo();
-
-    /**
-     * Evict alli caches , which are represent in getCacheInfo list.
-     * @deprecated
-     */
-    @WebMethod
-    @WebResult(name = "cacheInfoResult")
-    void evictCache();
-
 
     /**
      * Get image vault path.

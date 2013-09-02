@@ -50,17 +50,7 @@ public interface ShopBackdoorUrlDTO extends Identifiable {
     void setUrl(String url);
 
 
-    /**
-     * Get url type.
-     * @return url type.
-     */
-    String getUrlType();
 
-    /**
-     * Set url type.
-     * @param urlType
-     */
-    void setUrlType(String urlType);
 
 
 

@@ -33,8 +33,10 @@ import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.CacheDirector;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
+import org.yes.cart.web.service.ws.client.CacheDirectorClientFactory;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,39 +134,48 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
         final List<ShopDTO> allShops = dtoShopService.getAll();
 
-        final Map<Pair<String, String>, List<CacheInfoDTOImpl>> rez =
-                new HashMap<Pair<String, String>, List<CacheInfoDTOImpl>>(allShops.size());
+        final Map<Pair<String, String>, List<CacheInfoDTOImpl>> rez = new HashMap<Pair<String, String>, List<CacheInfoDTOImpl>>(allShops.size());
 
         for (ShopDTO shop : allShops) {
 
-            final List<ShopBackdoorUrlDTO> urls = this.dtoShopBackdoorUrlService.getAllByShopId(
-                    shop.getShopId(), ShopBackdoorUrl.URL_TYPE_CACHE_DIRECTOR);
+            final List<ShopBackdoorUrlDTO> urls = this.dtoShopBackdoorUrlService.getAllByShopId( shop.getShopId());
 
             for (ShopBackdoorUrlDTO url : urls) {
 
-                final AsyncContext newCtx = new AsyncFlexContextImpl(context.getAttributes());
-
-                newCtx.getAttributes().put(AsyncContext.WEB_SERVICE_URI, url.getUrl());
+                final String cacheDirUrl = url.getUrl() + "/services/cachedirector";
 
                 try {
+
+
+                    final Map<String, Object> ctxAttr = new HashMap<String,Object>(context.getAttributes());
+                    ctxAttr.put(AsyncContext.WEB_SERVICE_URI, cacheDirUrl);
+                    final AsyncContext newCtx = new AsyncFlexContextImpl(ctxAttr);
+
                     rez.put(
                             new Pair<String, String>(shop.getCode(), shop.getName()),
-                            getCacheDirector(
-                                    context,
-                                    defaultTimeout).getCacheInfo()
+                            getCacheDirector(newCtx, defaultTimeout).getCacheInfo()
                     );
+
                     break;
 
                 } catch (Exception e) {
-
                     if (LOG.isWarnEnabled()) {
-
-                        LOG.warn("Cannot get cache info for shop [" + shop.getCode() + "] from url [" + url.getUrl() + "] . Will try next one, if exists");
+                        LOG.warn("Cannot get cache info for shop ["
+                                + shop.getCode()
+                                + "] from url ["
+                                + cacheDirUrl
+                                + "] . Will try next one, if exists",
+                                e);
 
                     }
-
                 }
+            }
 
+            if (!rez.containsKey(new Pair<String, String>(shop.getCode(), shop.getName()))) {
+                rez.put(
+                        new Pair<String, String>(shop.getCode(), shop.getName()),
+                        Collections.EMPTY_LIST
+                );
             }
 
         }
@@ -187,15 +198,20 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
     }
 
     private BackdoorServiceClientFactory backdoorServiceClientFactory = null;
+    private CacheDirectorClientFactory cacheDirectorClientFactory = null;
 
     private synchronized BackdoorServiceClientFactory getBackdoorServiceClientFactory() {
-
         if (backdoorServiceClientFactory == null) {
             backdoorServiceClientFactory = new BackdoorServiceClientFactory();
         }
-
         return backdoorServiceClientFactory;
+    }
 
+    private synchronized CacheDirectorClientFactory getCacheDirectorClientFactory() {
+        if (cacheDirectorClientFactory == null) {
+            cacheDirectorClientFactory = new CacheDirectorClientFactory();
+        }
+        return cacheDirectorClientFactory;
     }
 
     /**
@@ -234,7 +250,7 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         String password = context.getAttribute(AsyncContext.CREDENTIALS);
         String uri = context.getAttribute(AsyncContext.WEB_SERVICE_URI);
 
-        return getBackdoorServiceClientFactory().getCacheDirector(
+        return getCacheDirectorClientFactory().getCacheDirector(
                 userName,
                 password,
                 uri, timeout);  //TODO: YC-149 move timeouts to config
