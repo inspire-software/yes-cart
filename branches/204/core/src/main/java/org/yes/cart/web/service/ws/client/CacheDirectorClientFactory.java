@@ -79,7 +79,7 @@ public class CacheDirectorClientFactory extends BaseClientFactory implements Cal
         }
 
         final Client client = ClientProxy.getClient(cacheDirector);
-        configureClient(userName, timeout, client);
+        configureClient(userName, timeout, client, this.getClass().getName());
         return cacheDirector;
 
     }

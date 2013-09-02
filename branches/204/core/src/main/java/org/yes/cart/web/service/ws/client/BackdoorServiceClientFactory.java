@@ -79,7 +79,7 @@ public class BackdoorServiceClientFactory extends BaseClientFactory implements C
         }
 
         final Client client = ClientProxy.getClient(backdoorService);
-        configureClient(userName, timeout, client);
+        configureClient(userName, timeout, client, this.getClass().getName());
         return backdoorService;
 
     }

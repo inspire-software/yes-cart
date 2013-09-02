@@ -19,7 +19,7 @@ import java.util.HashMap;
  */
 public class BaseClientFactory {
 
-    protected void configureClient(final String userName, final long timeout, final Client client) {
+    protected void configureClient(final String userName, final long timeout, final Client client, final String callbackClass) {
         final HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
         httpClientPolicy.setConnectionTimeout(timeout);
         httpClientPolicy.setAllowChunking(false);
@@ -37,7 +37,7 @@ public class BaseClientFactory {
 
                 put(WSHandlerConstants.USER, userName);
 
-                put(WSHandlerConstants.PW_CALLBACK_CLASS, "org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory");
+                put(WSHandlerConstants.PW_CALLBACK_CLASS, callbackClass);
 
 
             }
