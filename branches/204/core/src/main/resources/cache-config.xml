@@ -511,14 +511,14 @@
 
 
     <util:map id="evictionConfig">
-        <entry key="Attribute" value-ref="AttributeCUD"/>
-        <entry key="Category" value-ref="CategoryCUD"/>
-        <entry key="SeoImage" value-ref="SeoImageCUD"/>
-        <entry key="SkuPrice" value-ref="SkuPriceCUD"/>
-        <entry key="Product" value-ref="ProductCUD"/>
-        <entry key="ProductType" value-ref="ProductTypeCUD"/>
-        <entry key="Shop" value-ref="ShopCUD"/>
-        <entry key="System" value-ref="SystemCUD"/>
+        <entry key="AttributeEntity" value-ref="AttributeCUD"/>
+        <entry key="CategoryEntity" value-ref="CategoryCUD"/>
+        <entry key="SeoImageEntity" value-ref="SeoImageCUD"/>
+        <entry key="SkuPriceEntity" value-ref="SkuPriceCUD"/>
+        <entry key="ProductEntity" value-ref="ProductCUD"/>
+        <entry key="ProductTypeEntity" value-ref="ProductTypeCUD"/>
+        <entry key="ShopEntity" value-ref="ShopCUD"/>
+        <entry key="SystemEntity" value-ref="SystemCUD"/>
     </util:map>
 
 

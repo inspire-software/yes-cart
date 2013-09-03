@@ -113,14 +113,14 @@ public interface RemoteBackdoorService {
      * @param context web service context
      * @return list of information per each cache.
      */
-    Map<Pair<String,String>, List<CacheInfoDTOImpl>> getCacheInfo(AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    List<CacheInfoDTOImpl> getCacheInfo(AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Evict all caches , which are represent in getCacheInfo list.
      *
      * @param context web service context
      */
-    void evictCache(AsyncContext context);
+    void evictCache(AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Get real path to image vault on shop application. Need to allow have different web  context for yes-shop.

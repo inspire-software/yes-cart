@@ -136,7 +136,7 @@
             </list>
         </property>
         <property name="entityInterceptor">
-            <bean class="org.yes.cart.domain.interceptor.AuditInterceptor"/>
+            <bean class="org.yes.cart.domain.interceptor.AdminInterceptor"/>
         </property>
         <property name="hibernateProperties">
             <props>

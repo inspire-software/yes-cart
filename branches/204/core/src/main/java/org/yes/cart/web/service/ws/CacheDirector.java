@@ -35,14 +35,15 @@ public interface CacheDirector {
 
     public interface EntityName {
 
-        String ATTRIBUTE = "Attribute";
-        String CATEGORY = "Category";
-        String SEO_IMAGE = "SeoImage";
-        String PRICE = "SkuPrice";
-        String PRODUCT = "Product";
-        String PRODUCT_TYPE_ATTR = "ProductTypeAttr";
-        String SHOP = "Shop";
-        String SYSTEM = "System";
+        String ATTRIBUTE = "AttributeEntity";
+        String CATEGORY = "CategoryEntity";
+        String SEO_IMAGE = "SeoImageEntity";
+        String PRICE = "SkuPriceEntity";
+        String PRODUCT = "ProductEntity";
+
+        String PRODUCT_TYPE_ATTR = "ProductTypeAttrEntity";
+        String SHOP = "ShopEntity";
+        String SYSTEM = "SystemEntity";
 
     }
 

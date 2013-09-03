@@ -36,10 +36,7 @@ import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
 import org.yes.cart.web.service.ws.client.CacheDirectorClientFactory;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: iazarny@yahoo.com Igor Azarny
@@ -128,13 +125,13 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
     /**
      * {@inheritDoc}
      */
-    public Map<Pair<String, String>, List<CacheInfoDTOImpl>> getCacheInfo(final AsyncContext context)
+    public List<CacheInfoDTOImpl> getCacheInfo(final AsyncContext context)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
 
         final List<ShopDTO> allShops = dtoShopService.getAll();
 
-        final Map<Pair<String, String>, List<CacheInfoDTOImpl>> rez = new HashMap<Pair<String, String>, List<CacheInfoDTOImpl>>(allShops.size());
+        final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>(20 * allShops.size());
 
         for (ShopDTO shop : allShops) {
 
@@ -146,21 +143,28 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
                 try {
 
+                    final CacheDirector cacheDirector = getCacheDirector(context, cacheDirUrl);
 
-                    final Map<String, Object> ctxAttr = new HashMap<String,Object>(context.getAttributes());
-                    ctxAttr.put(AsyncContext.WEB_SERVICE_URI, cacheDirUrl);
-                    final AsyncContext newCtx = new AsyncFlexContextImpl(ctxAttr);
+                    if (LOG.isInfoEnabled()) {
+                        LOG.info("Try get cache info for shop ["
+                                + shop.getCode()
+                                + "] from url ["
+                                + cacheDirUrl
+                                + "]");
+                    }
 
-                    rez.put(
-                            new Pair<String, String>(shop.getCode(), shop.getName()),
-                            getCacheDirector(newCtx, defaultTimeout).getCacheInfo()
-                    );
+                    final List<CacheInfoDTOImpl> shopRez = cacheDirector.getCacheInfo();
+                    for(CacheInfoDTOImpl dto : shopRez) {
+                        dto.setShopCode(shop.getCode());
+                        dto.setShopName(shop.getName());
+                    }
+                    rez.addAll(shopRez);
 
                     break;
 
                 } catch (Exception e) {
                     if (LOG.isWarnEnabled()) {
-                        LOG.warn("Cannot get cache info for shop ["
+                        LOG.warn("Cannot to get cache info for shop ["
                                 + shop.getCode()
                                 + "] from url ["
                                 + cacheDirUrl
@@ -171,23 +175,87 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
                 }
             }
 
-            if (!rez.containsKey(new Pair<String, String>(shop.getCode(), shop.getName()))) {
-                rez.put(
-                        new Pair<String, String>(shop.getCode(), shop.getName()),
-                        Collections.EMPTY_LIST
-                );
-            }
 
         }
 
         return rez;
     }
 
+    private CacheDirector getCacheDirector(final AsyncContext context, final String cacheDirUrl) {
+        final Map<String, Object> ctxAttr = new HashMap<String,Object>(context.getAttributes());
+        ctxAttr.put(AsyncContext.WEB_SERVICE_URI, cacheDirUrl);
+        final AsyncContext newCtx = new AsyncFlexContextImpl(ctxAttr);
+        return getCacheDirector(newCtx, defaultTimeout);
+    }
+
+    /**
+     * Get actual remote service.
+     *
+     * @param context web service context.
+     * @param timeout timeout for operation.
+     * @return {@BackdoorService}
+     */
+    private CacheDirector getCacheDirector(final AsyncContext context, final long timeout) {
+
+
+        String userName = context.getAttribute(AsyncContext.USERNAME);
+        String password = context.getAttribute(AsyncContext.CREDENTIALS);
+        String uri = context.getAttribute(AsyncContext.WEB_SERVICE_URI);
+
+        return getCacheDirectorClientFactory().getCacheDirector(
+                userName,
+                password,
+                uri, timeout);  //TODO: YC-149 move timeouts to config
+
+    }
+
+
     /**
      * {@inheritDoc}
      */
-    public void evictCache(final AsyncContext context) {
-        getCacheDirector(context, defaultTimeout).evictCache();
+    public void evictCache(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        //getCacheDirector(context, defaultTimeout).evictCache();
+        final List<ShopDTO> allShops = dtoShopService.getAll();
+
+        for (ShopDTO shop : allShops) {
+
+            final List<ShopBackdoorUrlDTO> urls = this.dtoShopBackdoorUrlService.getAllByShopId( shop.getShopId());
+
+            for (ShopBackdoorUrlDTO url : urls) {
+
+                final String cacheDirUrl = url.getUrl() + "/services/cachedirector";
+
+                final CacheDirector cacheDirector = getCacheDirector(context, cacheDirUrl);
+
+                try {
+
+                    if (LOG.isInfoEnabled()) {
+                        LOG.info("Try to evict cache info for shop ["
+                                + shop.getCode()
+                                + "] from url ["
+                                + cacheDirUrl
+                                + "]");
+                    }
+
+                    cacheDirector.evictCache();
+                    break;
+
+                } catch (Exception e) {
+
+                    if (LOG.isWarnEnabled()) {
+                        LOG.warn("Cannot evict cache in shop ["
+                                + shop.getCode()
+                                + "] from url ["
+                                + cacheDirUrl
+                                + "] . Will try next one, if exists",
+                                e);
+                    }
+
+                }
+
+            }
+        }
+
     }
 
     /**
@@ -236,26 +304,6 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
     }
 
 
-    /**
-     * Get actual remote service.
-     *
-     * @param context web service context.
-     * @param timeout timeout for operation.
-     * @return {@BackdoorService}
-     */
-    private CacheDirector getCacheDirector(final AsyncContext context, final long timeout) {
-
-
-        String userName = context.getAttribute(AsyncContext.USERNAME);
-        String password = context.getAttribute(AsyncContext.CREDENTIALS);
-        String uri = context.getAttribute(AsyncContext.WEB_SERVICE_URI);
-
-        return getCacheDirectorClientFactory().getCacheDirector(
-                userName,
-                password,
-                uri, timeout);  //TODO: YC-149 move timeouts to config
-
-    }
 
 
 }

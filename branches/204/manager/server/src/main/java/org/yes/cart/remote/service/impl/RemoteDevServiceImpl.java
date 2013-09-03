@@ -77,12 +77,12 @@ public class RemoteDevServiceImpl implements RemoteDevService {
     }
 
     /** {@inheritDoc} */
-    public Map<Pair<String, String>, List<CacheInfoDTOImpl>> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public List<CacheInfoDTOImpl> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return remoteBackdoorService.getCacheInfo(createCtx());
     }
 
     /** {@inheritDoc} */
-    public void evictCache() {
+    public void evictCache() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         remoteBackdoorService.evictCache(createCtx());
     }
 

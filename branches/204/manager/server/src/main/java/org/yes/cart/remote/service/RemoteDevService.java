@@ -68,12 +68,12 @@ public interface RemoteDevService {
      *
      * @return list of information per each cache.
      */
-    Map<Pair<String, String>, List<CacheInfoDTOImpl>> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    List<CacheInfoDTOImpl> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Evict all caches , which are represent in getCacheInfo list.
      */
-    void evictCache();
+    void evictCache() throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
 }
