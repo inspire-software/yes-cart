@@ -20,14 +20,8 @@ package org.yes.cart.domain.interceptor;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.yes.cart.domain.dto.ShopBackdoorUrlDTO;
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.service.async.model.AsyncContext;
-import org.yes.cart.service.dto.DtoShopBackdoorUrlService;
-import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.web.service.ws.CacheDirector;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 import org.yes.cart.web.service.ws.client.CacheDirectorClientFactory;
@@ -52,11 +46,11 @@ public class AdminInterceptor extends AuditInterceptor {
 
     private final static int defaultTimeout = 60000;
 
-    private DtoShopService dtoShopService;
-
-    private DtoShopBackdoorUrlService dtoShopBackdoorUrlService;
-
     private CacheDirectorClientFactory cacheDirectorClientFactory;
+
+    private final List<String> cacheDirectorUrl;
+
+
 
     static {
 
@@ -74,6 +68,13 @@ public class AdminInterceptor extends AuditInterceptor {
 
     }
 
+    /**
+     * Create admin hibernate interceptor.
+     * @param cacheDirectorUrl url to invalidate caches.
+     */
+    public AdminInterceptor(List<String> cacheDirectorUrl) {
+        this.cacheDirectorUrl = cacheDirectorUrl;
+    }
 
     @Override
     public boolean onSave(Object entity, Serializable serializable, Object[] objects, String[] propertyNames, Type[] types) {
@@ -102,6 +103,9 @@ public class AdminInterceptor extends AuditInterceptor {
 
     }
 
+
+
+
     @Override
     public boolean onFlushDirty(Object entity, Serializable serializable, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
         try {
@@ -114,81 +118,42 @@ public class AdminInterceptor extends AuditInterceptor {
 
     }
 
+
     void invalidateCache(final String op, final String entityName, final Long pk) {
 
-        try {
+        for (String url : cacheDirectorUrl) {
 
-            final List<ShopDTO> allShops = dtoShopService.getAll();
+            try {
 
-            for (ShopDTO shop : allShops) {
+                getCacheDirector(url).onCacheableChange(op, entityName, pk);
 
-                final List<ShopBackdoorUrlDTO> urls = this.dtoShopBackdoorUrlService.getAllByShopId(shop.getShopId());
+            } catch (Exception e) {
 
-                for (ShopBackdoorUrlDTO url : urls) {
-
-                    final String cacheDirUrl = url.getUrl() + "/services/cachedirector";
-
-                    try {
-
-                        getCacheDirector(cacheDirUrl).onCacheableChange(op, entityName, pk);
-
-                    } catch (Exception e) {
-
-                        LOG.error("Cannot invalidate cache for entity [" + entityName  + "] pk value =  [" + pk  + "] url ["  + cacheDirUrl  + "]");
+                LOG.error("Cannot invalidate cache for entity [" + entityName  + "] pk value =  [" + pk  + "] url [" + url + "]");
 
 
-                    }
-
-                }
             }
 
-        } catch (Exception e) {
-
-            LOG.error("Cannot invalidate cache for entity ["
-                    + entityName
-                    + "] pk value =  ["
-                    + pk
-                    + "]", e);
-
-
         }
-
 
     }
 
     private Long getPk(final Object entity) {
         if (entity instanceof Identifiable) {
-            return  ((Identifiable) entity).getId();
+            return ((Identifiable) entity).getId();
         }
         return null;
     }
 
 
     boolean isEntityInCache(final Object entity) {
-
         if (entity != null) {
-
             final String entityName = entity.getClass().getSimpleName();
-
             return cachedEntities.contains(entityName);
-
         }
         return false;
-
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-
-        super.setApplicationContext(applicationContext);
-
-        dtoShopBackdoorUrlService = applicationContext.getBean("dtoShopBackdoorUrlService", DtoShopBackdoorUrlService.class);
-
-        dtoShopService = applicationContext.getBean("dtoShopService", DtoShopService.class);
-
-    }
 
     private CacheDirector getCacheDirector(final String cacheDirUrl) {
         final AsyncContext newCtx = new AsyncFlexContextImpl();

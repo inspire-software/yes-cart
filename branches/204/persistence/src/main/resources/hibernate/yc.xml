@@ -3080,59 +3080,7 @@ public void setRangeList(final RangeList rangeList) {
         </subclass>
     </class>
 
-    <class name="org.yes.cart.domain.entity.ShopBackdoorUrl" table="TSHOPBACKDOORURL" discriminator-value="0">
-        <meta attribute="interface">true</meta>
-        <id name="shopBackdoorUrlId" column="BACKDOORURL_ID" type="long">
-            <generator class="native">
-                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
-                <param name="column">value</param>
-            </generator>
-        </id>
-        <discriminator type="integer" formula="1"/>
-        <subclass name="org.yes.cart.domain.entity.impl.ShopBackdoorUrlEntity" discriminator-value="1">
-            <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
-            <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
-            <meta attribute="extra-import">javax.persistence.Id</meta>
-            <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
-            <meta attribute="extra-import">javax.persistence.Transient</meta>
-            <meta attribute="interface">false</meta>
-            <meta attribute="class-code">
-                <![CDATA[
-     private long shopBackdoorUrlId;
 
-     //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-     @Id @GeneratedValue /*(generator="generator")*/
-    @Column(name="BACKDOORURL_ID", nullable=false)
-    public long getShopBackdoorUrlId() {
-        return this.shopBackdoorUrlId;
-    }
-
-
-
-    @Transient public long getId() {
-        return this.shopBackdoorUrlId;
-    }
-
-    public void setShopBackdoorUrlId(long shopBackdoorUrlId) {
-        this.shopBackdoorUrlId = shopBackdoorUrlId;
-    }
-
-                ]]>
-            </meta>
-            <property name="url" column="URL" type="string" length="512" not-null="true" lazy="false"/>
-            <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop" foreign-key="FK_SHOPDBURL_SHOP">
-                <column name="SHOP_ID" not-null="true"/>
-            </many-to-one>
-
-            <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
-            <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-            <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPURL_GUID" not-null="true"/>
-
-        </subclass>
-    </class>
 
     <class name="org.yes.cart.domain.entity.ShopTopSeller" table="TSHOPTOPSELLER" discriminator-value="0">
          <meta attribute="interface">true</meta>

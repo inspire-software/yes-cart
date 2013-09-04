@@ -29,10 +29,6 @@
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
-        import com.hexagonstar.util.debug.Debug;
-
-        import org.yes.cart.impl.ShopBackdoorUrlDTOImpl;
-
         import org.yes.cart.impl.ShopDTOImpl;
         import org.yes.cart.impl.ShopUrlDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
@@ -43,7 +39,6 @@
 
         private function init():void {
             remoteShopUrlService.getAllByShopId(shopDTOImpl.shopId);
-            remoteShopBackdoorUrlService.getAllByShopId(shopDTOImpl.shopId);
         }
 
 
@@ -51,15 +46,6 @@
             shopDTOImpl = value;
         }
 
-
-        private function onAddNewBackdoorUrlClick(event:MouseEvent):void {
-            Debug.trace("Adding new backdoor url");
-            var newShopUrl:ShopBackdoorUrlDTOImpl = new ShopBackdoorUrlDTOImpl();
-            newShopUrl.shopId = shopDTOImpl.shopId;
-            newShopUrl.url = resourceManager.getString('StoreSupportedUrlsPanel', 'pressHereToEditNewBackdoorURL');
-            Debug.trace("Backdoor url is " + newShopUrl);
-            this.backdoorUrlGrid.dataProvider.addItem(newShopUrl);
-        }
 
         private function onAddNewUrlClick(event:MouseEvent):void {
 
@@ -96,24 +82,6 @@
             }
         }
 
-        private function onSaveBackdoorUrlClick(event:MouseEvent):void {
-            //if (validateUrlsBeforeSave()) {
-
-
-                for each (var urlDto:ShopBackdoorUrlDTOImpl in this.backdoorUrlGrid.dataProvider) {
-
-                    if (DomainUtils.isNewPK(urlDto.shopBackdoorUrlId)) {
-                        remoteShopBackdoorUrlService.create(urlDto);
-                    } else {
-                        remoteShopBackdoorUrlService.update(urlDto);
-                    }
-                }
-
-            this.backdoorUrlsChanged = false;
-
-           // }
-        }
-
 
         private function onDeleteUrlClick(event:MouseEvent):void {
 
@@ -122,17 +90,6 @@
                         resourceManager.getString('StoreSupportedUrlsPanel', 'deleteUrlConfirm', [ this.urlGrid.selectedItem.url ]),
                         resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteUrlConfirm, null, Alert.OK);
-            }
-        }
-
-
-        private function onDeleteBackdoorUrlClick(event:MouseEvent):void {
-
-            if (this.allowDeleteBackdoorUrl && this.backdoorUrlGrid.selectedItem != null) {
-                Alert.show(
-                        resourceManager.getString('StoreSupportedUrlsPanel', 'deleteUrlConfirm', [ this.backdoorUrlGrid.selectedItem.url ]),
-                        resourceManager.getString('ShopManagerApplication', 'warning'),
-                        Alert.OK | Alert.CANCEL, this, onDeleteBackdoorUrlConfirm, null, Alert.OK);
             }
         }
 
@@ -151,21 +108,6 @@
             }
         }
 
-        private function onDeleteBackdoorUrlConfirm(event:CloseEvent):void {
-            if (event.detail == Alert.OK) {
-                if (this.allowDeleteBackdoorUrl && this.backdoorUrlGrid.selectedItem != null) {
-
-                    if (DomainUtils.isNew(this.backdoorUrlGrid.selectedItem, 'shopBackdoorUrlId')) {
-                        this.backdoorUrlGrid.dataProvider.removeItemAt(this.backdoorUrlGrid.selectedIndex);
-                        this.allowDeleteBackdoorUrl = false;
-                        //validateUrlsBeforeSave();
-                    } else {
-                        remoteShopBackdoorUrlService.remove(this.backdoorUrlGrid.selectedItem.shopBackdoorUrlId);
-                    }
-                }
-            }
-        }
-
         private function onGetAllByShopIdResult(event:ResultEvent):void {
 
             urlsChanged = false;
@@ -177,28 +119,10 @@
 
         }
 
-        private function onGetAllBackdoorUrlByShopIdResult(event:ResultEvent):void {
-
-            backdoorUrlsChanged = false;
-            allowDeleteBackdoorUrl = false;
-            this.backdoorUrlGrid.dataProvider = event.result;
-            // default sort asc by URL
-            var columnIndex:int = 0;
-            this.backdoorUrlGrid.dispatchEvent(new DataGridEvent(DataGridEvent.HEADER_RELEASE, false, true, columnIndex, null, 0, null, null, 0));
-
-        }
-
         private function onUrlItemEditEnd(event:DataGridEvent):void {
 
             validateUrlsBeforeSave();
             this.urlsChanged = true;
-
-        }
-
-        private function onBackdoorUrlUrlItemEditEnd(event:DataGridEvent):void {
-
-            validateUrlsBeforeSave();
-            this.backdoorUrlsChanged = true;
 
         }
 
@@ -224,44 +148,13 @@
                     resourceManager.getString('ShopManagerApplication', 'info'));
         }
 
-        private function onRemoveBackdoorUrlResult(event:ResultEvent):void {
-
-            remoteShopBackdoorUrlService.getAllByShopId(shopDTOImpl.shopId);
-
-            Alert.show(
-                    resourceManager.getString('StoreSupportedUrlsPanel', 'urlDeletedConfirm'),
-                    resourceManager.getString('ShopManagerApplication', 'info'));
-        }
-
         private function onItemClick(event:ListEvent):void {
 
             this.allowDeleteUrl = this.urlGrid.selectedItem != null;
 
         }
-
-        private function onBackdoorUrlItemClick(event:ListEvent):void {
-
-            this.allowDeleteBackdoorUrl = this.backdoorUrlGrid.selectedItem != null;
-
-        }
         ]]>
 </mx:Script>
-
-    <mx:RemoteObject showBusyCursor="true"  id="remoteShopBackdoorUrlService"
-                     destination="remoteShopBackdoorUrlService"
-                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
-                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}">
-
-        <mx:method id="getAllByShopId" name="getAllByShopId"
-                   result="onGetAllBackdoorUrlByShopIdResult(event)"/>
-        <mx:method id="create" name="create"
-                   result="onSaveResult(event)"
-                   fault="onSaveFault(event)"/>
-        <mx:method id="remove" name="remove"
-                   result="onRemoveBackdoorUrlResult(event)"/>
-
-    </mx:RemoteObject>
 
     <mx:RemoteObject showBusyCursor="true"  id="remoteShopUrlService"
                      destination="remoteShopUrlService"
@@ -281,9 +174,6 @@
 
     <mx:Boolean id="urlsChanged">false</mx:Boolean>
     <mx:Boolean id="allowDeleteUrl">false</mx:Boolean>
-
-    <mx:Boolean id="backdoorUrlsChanged">false</mx:Boolean>
-    <mx:Boolean id="allowDeleteBackdoorUrl">false</mx:Boolean>
 
     <mx:HBox paddingTop="5" width="100%">
         <mx:Label text="@Resource(bundle='StoreSupportedUrlsPanel',key='supportedUrl')"/>
@@ -308,36 +198,7 @@
                  editable="true"
                  itemClick="onItemClick(event)"
                  itemEditEnd="onUrlItemEditEnd(event)"
-                 width="100%" height="50%">
-        <mx:columns>
-            <mx:DataGridColumn headerText="@Resource(bundle='StoreSupportedUrlsPanel',key='url')" dataField="url"/>
-        </mx:columns>
-    </mx:DataGrid>
-
-    <mx:HBox paddingTop="5" width="100%">
-        <mx:Label toolTip="@Resource(bundle='StoreSupportedUrlsPanel',key='backdoorUrlHint')" text="@Resource(bundle='StoreSupportedUrlsPanel',key='backdoorUrl')"/>
-        <mx:Button
-                id="addBackdoorUrlBtn"
-                enabled="{!backdoorUrlsChanged}"
-                label="@Resource(bundle='StoreSupportedUrlsPanel',key='addUrl')"
-                click="onAddNewBackdoorUrlClick(event)"/>
-        <mx:Button
-                id="deleteBackdoorUrlBtn"
-                enabled="{allowDeleteBackdoorUrl}"
-                label="@Resource(bundle='StoreSupportedUrlsPanel',key='deleteUrl')"
-                click="onDeleteBackdoorUrlClick(event)"/>
-        <mx:Button
-                id="saveBackdoorUrlBtn"
-                visible="{backdoorUrlsChanged}"
-                label="@Resource(bundle='StoreSupportedUrlsPanel',key='saveUrl')"
-                click="onSaveBackdoorUrlClick(event)"/>
-
-    </mx:HBox>
-    <mx:DataGrid id="backdoorUrlGrid"
-                 editable="true"
-                 itemClick="onBackdoorUrlItemClick(event)"
-                 itemEditEnd="onBackdoorUrlUrlItemEditEnd(event)"
-                 width="100%" height="50%">
+                 width="100%" height="100%">
         <mx:columns>
             <mx:DataGridColumn headerText="@Resource(bundle='StoreSupportedUrlsPanel',key='url')" dataField="url"/>
         </mx:columns>

@@ -39,7 +39,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private String fspointer;
     private String imageVaultFolder;
     private Set<ShopUrl> shopUrl = new HashSet<ShopUrl>(0);
-    private Set<ShopBackdoorUrl> shopBackdoorUrl = new HashSet<ShopBackdoorUrl>(0);
     private Collection<ShopExchangeRate> exchangerates = new ArrayList<ShopExchangeRate>(0);
     private Collection<ShopAdvPlace> advertisingPlaces = new ArrayList<ShopAdvPlace>(0);
     private Collection<ShopDiscount> shopDiscountRules = new ArrayList<ShopDiscount>(0);
@@ -109,15 +108,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public void setShopUrl(Set<ShopUrl> shopUrl) {
         this.shopUrl = shopUrl;
-    }
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "shop")
-    public Set<ShopBackdoorUrl> getShopBackdoorUrl() {
-        return this.shopBackdoorUrl;
-    }
-
-    public void setShopBackdoorUrl(final Set<ShopBackdoorUrl> shopBackdoorUrl) {
-        this.shopBackdoorUrl = shopBackdoorUrl;
     }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

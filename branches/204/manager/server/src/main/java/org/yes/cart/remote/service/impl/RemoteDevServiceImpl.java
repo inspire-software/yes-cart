@@ -18,7 +18,6 @@ package org.yes.cart.remote.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.domain.dto.ShopBackdoorUrlDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.misc.Pair;
@@ -28,7 +27,6 @@ import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.remote.service.RemoteDevService;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.service.dto.DtoShopBackdoorUrlService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
@@ -47,18 +45,14 @@ public class RemoteDevServiceImpl implements RemoteDevService {
 
     private final RemoteBackdoorService remoteBackdoorService;
 
-    private final DtoShopService dtoShopService;
-
-    private final DtoShopBackdoorUrlService dtoShopBackdoorUrlService;
+    private final SystemService systemService;
 
 
 
     public RemoteDevServiceImpl(final RemoteBackdoorService remoteBackdoorService,
-                                final DtoShopService dtoShopService,
-                                final DtoShopBackdoorUrlService dtoShopBackdoorUrlService) {
+                                final SystemService systemService) {
         this.remoteBackdoorService = remoteBackdoorService;
-        this.dtoShopService = dtoShopService;
-        this.dtoShopBackdoorUrlService = dtoShopBackdoorUrlService;
+        this.systemService = systemService;
     }
 
     /** {@inheritDoc} */
@@ -89,12 +83,7 @@ public class RemoteDevServiceImpl implements RemoteDevService {
     private AsyncContext createCtx() {
 
         final Map<String, Object> param = new HashMap<String, Object>();
-        param.put(
-                AsyncContext.WEB_SERVICE_URI,
-                getAdminUrl(
-                        null,
-                        RemoteDevService.URL_TYPE_REINDEX_DOOR)
-                );
+        param.put(AsyncContext.WEB_SERVICE_URI, systemService.getBackdoorURI());
 
         final AsyncContext flex = new AsyncFlexContextImpl(param);
 
@@ -102,68 +91,6 @@ public class RemoteDevServiceImpl implements RemoteDevService {
     }
 
 
-    /**
-     * GEt admin url for given shop.
-     * @param shopCode optional shop
-     * @param urlType url type - atm backdoor or cache director.
-     * @return fully composed url if found.
-     */
-    String getAdminUrl(final String  shopCode, final String urlType) {
 
-        try {
-
-            final List<ShopDTO> allShops = dtoShopService.getAll();
-
-            final Map<Pair<String, String>, List<CacheInfoDTOImpl>> rez =
-                    new HashMap<Pair<String, String>, List<CacheInfoDTOImpl>>(allShops.size());
-
-            for (ShopDTO shop : allShops) {
-
-                if (shopCode == null ||  shop.getCode().equals(shopCode) ) {
-
-                    final List<ShopBackdoorUrlDTO> urls = this.dtoShopBackdoorUrlService.getAllByShopId(
-                            shop.getShopId());
-
-                    for (ShopBackdoorUrlDTO url : urls) {
-
-                        String urlBase = url.getUrl();
-
-                        if (RemoteDevService.URL_TYPE_CACHE_DIRECTOR.equals(urlType)) {
-
-                            return urlBase + "/services/cachedirector";
-
-                        } else if (RemoteDevService.URL_TYPE_REINDEX_DOOR.equals(urlType)) {
-
-                            return urlBase + "/services/backdoor";
-
-                        } else {
-
-                            throw new Exception("Type is incorrect expect "
-                                    + RemoteDevService.URL_TYPE_CACHE_DIRECTOR
-                                    + " or "
-                                    + RemoteDevService.URL_TYPE_REINDEX_DOOR);
-
-                        }
-                    }
-                }
-            }
-
-
-        } catch (Exception e) {
-
-            if (LOG.isErrorEnabled()) {
-
-                LOG.error("Cannot gate admin url for [" + shopCode + "] type is [" + urlType + "]", e);
-
-            }
-
-
-        }
-
-
-        return null;
-
-
-    }
 
 }

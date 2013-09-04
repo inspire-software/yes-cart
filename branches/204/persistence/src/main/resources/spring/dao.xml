@@ -120,7 +120,6 @@
                 <entry key="org.yes.cart.domain.entity.ShopDiscountRule" value="org.yes.cart.domain.entity.impl.ShopDiscountRuleEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopExchangeRate" value="org.yes.cart.domain.entity.impl.ShopExchangeRateEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopUrl" value="org.yes.cart.domain.entity.impl.ShopUrlEntity"/>
-                <entry key="org.yes.cart.domain.entity.ShopBackdoorUrl" value="org.yes.cart.domain.entity.impl.ShopBackdoorUrlEntity"/>
                 <entry key="org.yes.cart.domain.entity.SkuPrice" value="org.yes.cart.domain.entity.impl.SkuPriceEntity"/>
                 <entry key="org.yes.cart.domain.entity.Warehouse" value="org.yes.cart.domain.entity.impl.WarehouseEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopWarehouse" value="org.yes.cart.domain.entity.impl.ShopWarehouseEntity"/>
@@ -383,11 +382,6 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="shopBackdoorUrlDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-        <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopBackdoorUrlEntity</value></constructor-arg>
-        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
 
     <bean id="shopExchangeRateDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopExchangeRateEntity</value></constructor-arg>

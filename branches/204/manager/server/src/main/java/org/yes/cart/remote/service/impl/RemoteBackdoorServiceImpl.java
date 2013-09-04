@@ -18,17 +18,12 @@ package org.yes.cart.remote.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.domain.dto.ShopBackdoorUrlDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
-import org.yes.cart.domain.entity.ShopBackdoorUrl;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.service.async.model.AsyncContext;
-import org.yes.cart.service.dto.DtoShopBackdoorUrlService;
-import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.CacheDirector;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
@@ -36,7 +31,10 @@ import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
 import org.yes.cart.web.service.ws.client.CacheDirectorClientFactory;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: iazarny@yahoo.com Igor Azarny
@@ -49,20 +47,16 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
     private final static int defaultTimeout = 60000;
 
-    private final DtoShopService dtoShopService;
+    private final List<String> cacheDirectorUrl;
 
-    private final DtoShopBackdoorUrlService dtoShopBackdoorUrlService;
 
     /**
      * Construct remote service to manage shop.
      *
-     * @param dtoShopService            dto shop service
-     * @param dtoShopBackdoorUrlService to get web service urls
+     * @param cacheDirectorUrl  urls of cache dir
      */
-    public RemoteBackdoorServiceImpl(final DtoShopService dtoShopService,
-                                     final DtoShopBackdoorUrlService dtoShopBackdoorUrlService) {
-        this.dtoShopService = dtoShopService;
-        this.dtoShopBackdoorUrlService = dtoShopBackdoorUrlService;
+    public RemoteBackdoorServiceImpl(List<String> cacheDirectorUrl) {
+        this.cacheDirectorUrl = cacheDirectorUrl;
     }
 
 
@@ -128,57 +122,65 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
     public List<CacheInfoDTOImpl> getCacheInfo(final AsyncContext context)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
+        final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>();
 
-        final List<ShopDTO> allShops = dtoShopService.getAll();
+        for (String url : cacheDirectorUrl) {
 
-        final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>(20 * allShops.size());
+            try {
 
-        for (ShopDTO shop : allShops) {
+                final CacheDirector cacheDirector = getCacheDirector(context, url);
 
-            final List<ShopBackdoorUrlDTO> urls = this.dtoShopBackdoorUrlService.getAllByShopId( shop.getShopId());
+                final List<CacheInfoDTOImpl> shopRez = cacheDirector.getCacheInfo();
 
-            for (ShopBackdoorUrlDTO url : urls) {
+                rez.addAll(shopRez); //todo shop code
 
-                final String cacheDirUrl = url.getUrl() + "/services/cachedirector";
+            } catch (Exception e) {
 
-                try {
+                if (LOG.isWarnEnabled()) {
+                    LOG.warn("Cannot to get cache info  from url ["
+                            + url
+                            + "] . Will try next one, if exists",
+                            e);
 
-                    final CacheDirector cacheDirector = getCacheDirector(context, cacheDirUrl);
-
-                    if (LOG.isInfoEnabled()) {
-                        LOG.info("Try get cache info for shop ["
-                                + shop.getCode()
-                                + "] from url ["
-                                + cacheDirUrl
-                                + "]");
-                    }
-
-                    final List<CacheInfoDTOImpl> shopRez = cacheDirector.getCacheInfo();
-                    for(CacheInfoDTOImpl dto : shopRez) {
-                        dto.setShopCode(shop.getCode());
-                        dto.setShopName(shop.getName());
-                    }
-                    rez.addAll(shopRez);
-
-                    break;
-
-                } catch (Exception e) {
-                    if (LOG.isWarnEnabled()) {
-                        LOG.warn("Cannot to get cache info for shop ["
-                                + shop.getCode()
-                                + "] from url ["
-                                + cacheDirUrl
-                                + "] . Will try next one, if exists",
-                                e);
-
-                    }
                 }
-            }
 
+
+            }
 
         }
 
+
+
         return rez;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void evictCache(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        for (String url : cacheDirectorUrl) {
+
+            try {
+
+                final CacheDirector cacheDirector = getCacheDirector(context, url);
+
+                cacheDirector.evictCache();
+
+            } catch (Exception e) {
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Cannot evict cache,  url ["
+                            + url
+                            + "] . Will try next one, if exists",
+                            e);
+
+                }
+
+            }
+        }
+
+
     }
 
     private CacheDirector getCacheDirector(final AsyncContext context, final String cacheDirUrl) {
@@ -210,53 +212,6 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public void evictCache(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        //getCacheDirector(context, defaultTimeout).evictCache();
-        final List<ShopDTO> allShops = dtoShopService.getAll();
-
-        for (ShopDTO shop : allShops) {
-
-            final List<ShopBackdoorUrlDTO> urls = this.dtoShopBackdoorUrlService.getAllByShopId( shop.getShopId());
-
-            for (ShopBackdoorUrlDTO url : urls) {
-
-                final String cacheDirUrl = url.getUrl() + "/services/cachedirector";
-
-                final CacheDirector cacheDirector = getCacheDirector(context, cacheDirUrl);
-
-                try {
-
-                    if (LOG.isInfoEnabled()) {
-                        LOG.info("Try to evict cache info for shop ["
-                                + shop.getCode()
-                                + "] from url ["
-                                + cacheDirUrl
-                                + "]");
-                    }
-
-                    cacheDirector.evictCache();
-                    break;
-
-                } catch (Exception e) {
-
-                    if (LOG.isWarnEnabled()) {
-                        LOG.warn("Cannot evict cache in shop ["
-                                + shop.getCode()
-                                + "] from url ["
-                                + cacheDirUrl
-                                + "] . Will try next one, if exists",
-                                e);
-                    }
-
-                }
-
-            }
-        }
-
-    }
 
     /**
      * {@inheritDoc}
