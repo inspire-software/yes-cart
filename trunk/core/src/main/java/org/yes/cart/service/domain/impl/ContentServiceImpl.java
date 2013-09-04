@@ -17,7 +17,8 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.cache.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
@@ -35,8 +36,6 @@ import java.util.*;
  * Date: 15-June-2013
  */
 public class ContentServiceImpl extends BaseGenericServiceImpl<Category> implements ContentService {
-
-    private static final String CACHE_NAME = "contentServiceImplMethodCache";
 
     private final GenericDAO<Category, Long> categoryDao;
 
@@ -64,7 +63,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "contentService-rootContent")
     public Category getRootContent(final long shopId, final boolean createIfMissing) {
         if (shopId <= 0) {
             throw new IllegalArgumentException("Shop must not be null or transient");
@@ -99,7 +98,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "contentService-contentTemplateVariation" /*, key = "content.getCategoryId()"*/)
     public String getContentTemplateVariation(final Category content) {
         String variation = null;
         if (StringUtils.isBlank(content.getUitemplate())) {
@@ -117,7 +116,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "contentService-contentTemplate" )
     public String getContentTemplate(final long contentId) {
         List<Object> count = categoryDao.findQueryObjectByNamedQuery("TEMPLATE.BY.CATEGORY.ID", contentId);
         if (count != null && count.size() == 1) {
@@ -133,7 +132,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "contentService-itemsPerPage" /*, key = "content.getCategoryId()"*/)
     public List<String> getItemsPerPage(final Category content) {
         final List<String> rez;
         if (content == null) {
@@ -152,7 +151,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "contentService-contentBody"/* , key = "content.getCategoryId()"*/)
     public String getContentBody(final long contentId, final String locale) {
         final String attributeKey = "CONTENT_BODY_" + locale + "_%";
         final List<Object> bodyList = categoryDao.findQueryObjectByNamedQuery("CONTENTBODY.BY.CONTENTID", contentId, attributeKey, new Date());
@@ -171,7 +170,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "contentService-contentAttributeRecursive"/* , key = "content.getCategoryId()"*/)
     public String getContentAttributeRecursive(final String locale, final Category content, final String attributeName, final String defaultValue) {
         final String value = getContentAttributeRecursive(locale, content, attributeName);
         if (value == null) {
@@ -183,7 +182,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "contentService-contentAttributeRecursive2" )
     public String[] getContentAttributeRecursive(final String locale, final Category incontent, final String[] attributeNames) {
         final String[] rez;
         final Category content;
@@ -263,7 +262,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "contentService-childContent")
     public List<Category> getChildContent(final long contentId) {
         return getChildContentWithAvailability(contentId, true);
     }
@@ -290,7 +289,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "contentService-childContentRecursive")
     public Set<Category> getChildContentRecursive(final long contentId) {
         final Category thisCon = getById(contentId);
         if (thisCon != null) {
@@ -315,7 +314,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc} Just to cache
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "contentService-byId")
     public Category getById(final long pk) {
         return getGenericDao().findById(pk);
     }
@@ -362,7 +361,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "contentService-contentHasSubcontent")
     public boolean isContentHasSubcontent(final long topContentId, final long subContentId) {
         final Category start = getById(subContentId);
         if (start != null) {
@@ -391,5 +390,60 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "contentService-rootContent",
+            "contentService-contentAttributeRecursive",
+            "contentService-contentAttributeRecursive2",
+            "contentService-childContent",
+            "contentService-childContentRecursive",
+            "contentService-byId",
+            "contentService-contentHasSubcontent"
 
+    },allEntries = true)
+    public Category create(Category instance) {
+        return super.create(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "contentService-rootContent",
+            "contentService-contentTemplateVariation",
+            "contentService-contentTemplate",
+            "contentService-itemsPerPage",
+            "contentService-contentBody" ,
+            "contentService-contentAttributeRecursive",
+            "contentService-contentAttributeRecursive2",
+            "contentService-childContent",
+            "contentService-childContentRecursive",
+            "contentService-byId",
+            "contentService-contentHasSubcontent"
+    }, allEntries = true)
+    public Category update(Category instance) {
+        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value ={
+            "contentService-rootContent",
+            "contentService-contentTemplateVariation",
+            "contentService-contentTemplate",
+            "contentService-itemsPerPage",
+            "contentService-contentBody" ,
+            "contentService-contentAttributeRecursive",
+            "contentService-contentAttributeRecursive2",
+            "contentService-childContent",
+            "contentService-childContentRecursive",
+            "contentService-byId",
+            "contentService-contentHasSubcontent"
+    }, allEntries = true)
+    public void delete(Category instance) {
+        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

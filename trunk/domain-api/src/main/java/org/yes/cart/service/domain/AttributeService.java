@@ -21,6 +21,7 @@ import org.yes.cart.domain.entity.Attribute;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -34,22 +35,22 @@ public interface AttributeService extends GenericService<Attribute> {
      *
      * @return set of attribute codes.
      */
-    List<String> getAllAttributeCodes();
+    Set<String> getAllAttributeCodes();
 
     /**
      * Get all attribute codes.
      *
      * @return set of attribute codes.
      */
-    List<String> getAllNavigatableAttributeCodes();
+    Set<String> getAllNavigatableAttributeCodes();
 
     /**
-     * Get attrubute names.
+     * Get attribute names.
      *
      * @param codes attribute codes
      * @return map of attribute code - name.
      */
-    Map<String, String> getAttributeNamesByCodes(List<String> codes);
+    Map<String, String> getAttributeNamesByCodes(Set<String> codes);
 
 
     /**

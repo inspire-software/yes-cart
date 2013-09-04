@@ -365,7 +365,10 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
 
-    // end of extra code specified in the hbm.xml files
+    /** {@inheritDoc} */
+    public int hashCode() {
+        return (int) (shopId ^ (shopId >>> 32));
+    }
 
 }
 

@@ -20,6 +20,8 @@ import org.hibernate.criterion.Restrictions;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.rules.TestName;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -35,6 +37,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.*;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -262,5 +265,25 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         //customer = customerDao.findSingleByCriteria(Restrictions.eq("email", prefix + "jd@domain.com"));
         customer = customerService.findCustomer(prefix + "jd@domain.com");
         return customer;
+    }
+
+
+    protected void clearCache() {
+        for (Cache cache : getCacheMap().values()) {
+            cache.clear();
+        }
+    }
+
+    protected Map<String, Cache> getCacheMap() {
+        final CacheManager cm = ctx().getBean("cacheManager", CacheManager.class);
+        final Collection<String> cacheNames = cm.getCacheNames();
+        final Map<String, Cache> cacheMap = new HashMap<String, Cache> (cacheNames.size());
+        for (String cacheName : cacheNames) {
+
+            cacheMap.put(cacheName, cm.getCache(cacheName));
+
+        }
+
+        return cacheMap;
     }
 }

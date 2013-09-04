@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.1.xsd
+           http://cxf.apache.org/jaxws
+           http://cxf.apache.org/schemas/jaxws.xsd
+           http://www.springframework.org/schema/cache
+           http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <context:component-scan base-package="org.yes.cart"/>
+
+    <cache:annotation-driven />
+
+    <aop:aspectj-autoproxy/>
+
+
+
+
+
+    <bean id="productReindexer" class="org.yes.cart.domain.entityindexer.impl.ProductIndexerImpl">
+        <constructor-arg index="0" ref="productDao"/>
+        <constructor-arg index="1" value="128"/>
+        <constructor-arg index="2" value="4"/>
+    </bean>
+
+
+    <import resource="classpath*:core-config.xml"/>
+
+    <import resource="classpath*:payment-api.xml"/>
+    <import resource="classpath*:core-module-payment-base.xml"/>
+    <import resource="classpath*:core-module-payment-capp.xml"/>
+    <import resource="classpath*:core-module-payment-gswm.xml"/>
+
+
+    <bean id="applicationDirector" class="org.yes.cart.web.application.ApplicationDirector"/>
+
+
+
+    <!-- #################################  message consumers end ######################################-->
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider>
+            <security:password-encoder hash="md5"/>
+            <security:jdbc-user-service
+                    data-source-ref="dataSourceSec"
+                    group-authorities-by-username-query=""
+                    users-by-username-query="SELECT m.email as username, m.password, 1 as enabled FROM TMANAGER m where m.email = ?"
+                    authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+
+    <bean id="dataSourceSec" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/yesjndi"/>
+        <property name="lookupOnStartup" value="true"/>
+        <property name="cache" value="true"/>
+        <property name="proxyInterface" value="javax.sql.DataSource"/>
+    </bean>
+
+    <bean id="backDoorBean" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
+                <property name="productService" ref="productService"/>
+                <property name="cacheManager" ref="cacheManager"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="cacheDirectorBean" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.web.service.ws.impl.CacheDirectorImpl">
+                <property name="entityOperationCache" ref="evictionConfig"/>
+                <property name="cacheManager" ref="cacheManager"/>
+            </bean>
+        </property>
+    </bean>
+
+
+
+
+    <jaxws:endpoint id="backDoor" implementor="#backDoorBean" address="/backdoor">
+        <jaxws:properties>
+            <entry key="ws-security.validate.token">
+                <value>false</value>
+            </entry>
+        </jaxws:properties>
+        <jaxws:inInterceptors>
+            <ref bean="wsAuthenticationInterceptor"/>
+        </jaxws:inInterceptors>
+    </jaxws:endpoint>
+
+    <jaxws:endpoint id="cacheDirector" implementor="#cacheDirectorBean" address="/cachedirector">
+        <jaxws:properties>
+            <entry key="ws-security.validate.token">
+                <value>false</value>
+            </entry>
+        </jaxws:properties>
+        <jaxws:inInterceptors>
+            <ref bean="wsAuthenticationInterceptor"/>
+        </jaxws:inInterceptors>
+    </jaxws:endpoint>
+
+    <bean id="wsAuthenticationInterceptor" class="org.yes.cart.web.service.ws.impl.BackdoorAuthenticationInInterceptor">
+        <constructor-arg>
+            <map>
+                <entry key="action" value="UsernameToken"/>
+                <entry key="passwordType" value="PasswordText"/>
+<!--                <entry key="passwordCallbackClass" value="org.yes.cart.web.service.ws.impl.BackdoorCallback"/>-->
+            </map>
+        </constructor-arg>
+        <property name="authenticationManager" ref="authenticationManager"/>
+    </bean>
+
+
+
+    <bean id="paySessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="payDataSource"/>
+        <property name="annotatedClasses">
+            <list>
+                <value>org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity</value>
+                <value>org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <map>
+                <entry key="hibernate.show_sql" value="false"/>
+                <entry key="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+                <entry key="hibernate.hbm2ddl.auto" value="create"/>
+                <entry key="hibernate.connection.autocommit" value="true"/>
+            </map>
+        </property>
+        <property name="entityInterceptor">
+            <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor"/>
+        </property>
+
+    </bean>
+
+
+    <bean  id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+           autowire="byName">
+        <property name="mappingResources">
+            <list>
+                <value>hibernate/yc.xml</value>
+            </list>
+        </property>
+        <property name="entityInterceptor">
+            <bean class="org.yes.cart.domain.interceptor.AuditInterceptor"/>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.search.default.indexBase">
+                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
+                </prop>
+                <prop key="hibernate.search.worker.execution">async</prop>
+                <prop key="hibernate.search.worker.thread_pool.size">2</prop>
+                <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+
+            </props>
+        </property>
+    </bean>
+
+
+
+</beans>

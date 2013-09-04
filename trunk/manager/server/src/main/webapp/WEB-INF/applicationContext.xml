@@ -136,7 +136,13 @@
             </list>
         </property>
         <property name="entityInterceptor">
-            <bean class="org.yes.cart.domain.interceptor.AuditInterceptor"/>
+            <bean class="org.yes.cart.domain.interceptor.AdminInterceptor">
+                <constructor-arg index="0">
+                    <list>
+                        <value>http://localhost:8080/yes-shop/services/cachedirector</value> <!-- default ootb  -->
+                    </list>
+                </constructor-arg>
+            </bean>
         </property>
         <property name="hibernateProperties">
             <props>
@@ -161,9 +167,6 @@
     <import resource="classpath*:core-module-payment-gswm.xml"/>
 
 
-    <bean id="methodCacheAdvice" class="org.yes.cart.cache.MethodCacheAdvice">
-        <property name="cacheEnabled" value="false"/>
-    </bean>
 
 
 

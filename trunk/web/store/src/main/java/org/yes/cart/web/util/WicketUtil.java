@@ -177,7 +177,7 @@ public class WicketUtil {
      */
     public static PageParameters getRetainedRequestParameters(
             final PageParameters pageParameters,
-            final Collection<String> nameFilter) {
+            final Set<String> nameFilter) {
         final PageParameters rez = new PageParameters(pageParameters);
         for (String paramName : cmdKeys) {
             rez.remove(paramName);

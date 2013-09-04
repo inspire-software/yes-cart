@@ -16,11 +16,12 @@
 
 package org.yes.cart.bulkimport.image.impl;
 
-import net.sf.ehcache.Cache;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
@@ -32,10 +33,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ProductService;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -260,15 +258,6 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-    private void clearCache() {
-        for (Cache cache : getCacheMap().values()) {
-            cache.removeAll();
-        }
-    }
 
-    private Map<String, Cache> getCacheMap() {
-        Map<String, Cache> cacheMap = createContext().getBeansOfType(Cache.class);
-        return cacheMap;
-    }
 
 }

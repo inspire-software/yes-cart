@@ -229,8 +229,7 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdateEntityAttributeValue() throws Exception {
-
-
+        clearCache();
         final List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
         for (AttrValueDTO dto : list) {
             if (dto.getAttributeDTO().getCode().equals("CATEGORY_ITEMS_PER_PAGE")) {
@@ -274,6 +273,9 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
             }
         });
 
+        //clearCache();
+        getCacheMap().get("categoryService-byId").clear();
+
         final List<? extends AttrValueDTO> list2 = dtoService.getEntityAttributes(100L);
         //assertEquals(totalSize, list2.size());
         for (AttrValueDTO dto : list2) {
@@ -285,12 +287,14 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testzCreateEntityAttributeValue() throws Exception {
+        clearCache();
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
         assertEquals(QTY, list.size());
         for (int i = 0; i < QTY; i++) {
             AttrValueDTO dto = list.get(i);
             if (dto.getVal() != null) {
                 dtoService.deleteAttributeValue(dto.getAttrvalueId());
+                clearCache();
             }
         }
         list = dtoService.getEntityAttributes(100L);
@@ -308,6 +312,7 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
         attrValueCategory.setVal("val2");
         attrValueCategory.setCategoryId(100L);
         dtoService.createEntityAttributeValue(attrValueCategory);
+        clearCache();
         list = dtoService.getEntityAttributes(100L);
         assertEquals(QTY, list.size());
         for (AttrValueDTO dto : list) {

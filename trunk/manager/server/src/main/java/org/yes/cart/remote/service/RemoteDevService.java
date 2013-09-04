@@ -17,8 +17,12 @@
 package org.yes.cart.remote.service;
 
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -26,6 +30,12 @@ import java.util.List;
  * Time: 3:07 PM
  */
 public interface RemoteDevService {
+
+
+    String URL_TYPE_CACHE_DIRECTOR = "cacheDirector";
+
+    String URL_TYPE_REINDEX_DOOR = "reindexDoor";
+
 
 
     /**
@@ -58,12 +68,12 @@ public interface RemoteDevService {
      *
      * @return list of information per each cache.
      */
-    List<CacheInfoDTOImpl> getCacheInfo();
+    List<CacheInfoDTOImpl> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Evict all caches , which are represent in getCacheInfo list.
      */
-    void evictCache();
+    void evictCache() throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
 }

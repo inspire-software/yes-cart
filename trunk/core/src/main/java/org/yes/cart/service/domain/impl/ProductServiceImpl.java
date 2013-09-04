@@ -22,8 +22,9 @@ import org.hibernate.Hibernate;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.CollectionUtils;
-import org.yes.cart.cache.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
@@ -50,10 +51,9 @@ import java.util.*;
  */
 public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implements ProductService {
 
-    private final static String PROD_SERV_METHOD_CACHE = "productServiceImplMethodCache";
+    private static final List<Pair<String, String>> NO_GROUP = Arrays.asList(new Pair<String, String>("", ""));
 
     private final GenericDAO<Product, Long> productDao;
-    //private final GenericDAO<ProductSku, Long> productSkuDao;
     private final ProductSkuService productSkuService;
     private final GenericDAO<ProductType, Long> productTypeDao;
     private final GenericDAO<ProductCategory, Long> productCategoryDao;
@@ -87,38 +87,23 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         this.dtoFactory = dtoFactory;
     }
 
-    /**
-     * Persist product. Default sku will be created.
-     *
-     * @param instance instance to persist
-     * @return persisted instanse
-     */
-    public Product create(final Product instance) {
 
-        ProductSku sku = productDao.getEntityFactory().getByIface(ProductSku.class);
-        sku.setCode(instance.getCode());
-        sku.setName(instance.getName());
-        sku.setDisplayName(instance.getDisplayName());
-        sku.setDescription(instance.getDescription());
-        sku.setProduct(instance);
-        instance.getSku().add(sku);
-
-        return getGenericDao().create(instance);
-    }
-
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    /** {@inheritDoc} */
+    @Cacheable(value = {"productService-byId"})
     public Product getById(final Long productId) {
         return productDao.findById(productId);
     }
 
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    /** {@inheritDoc} */
+    @Cacheable(value = {"productService-skuById"})
     public ProductSku getSkuById(final Long skuId) {
-        return (ProductSku) productSkuService.getGenericDao().findById(skuId);
+        return  productSkuService.getGenericDao().findById(skuId);
     }
 
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    /** {@inheritDoc} */
+    @Cacheable(value = {"productService-skuById2"})
     public ProductSku getSkuById(final Long skuId, final boolean withAttributes) {
-        final ProductSku sku = (ProductSku) productSkuService.getGenericDao().findById(skuId);
+        final ProductSku sku =  productSkuService.getGenericDao().findById(skuId);
         if (sku != null && withAttributes) {
             Hibernate.initialize(sku.getAttributes());
         }
@@ -132,7 +117,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param productId given id, which identify product
      * @return image file name if found.
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = {"productService-defaultImage"})
     public String getDefaultImage(final Long productId) {
         final Object obj = productDao.findQueryObjectsByNamedQuery("PRODUCT.ATTR.VALUE", productId, Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME);
         if (obj instanceof List) {
@@ -158,7 +143,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = {"productService-randomProductByCategory"}/*, key = "category.getCategoryId()"*/)
     public Product getRandomProductByCategory(final Category category) {
         final int qty = getProductQty(category.getCategoryId());
         if (qty > 0) {
@@ -187,7 +172,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = {"productService-productAttributes"})
     public Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(
             final String locale, final long productId, final long skuId, final long productTypeId) {
 
@@ -232,7 +217,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return attributesToShow;
     }
 
-    private static final List<Pair<String, String>> NO_GROUP = Arrays.asList(new Pair<String, String>("", ""));
+
 
     private void loadAttributeValueToAttributesToShowMap(
             final String locale, final Map<String, List<Pair<String, String>>> attributeViewGroupMap,
@@ -329,7 +314,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return map;
     }
 
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-productAttribute")
     public Pair<String, String> getProductAttribute(final String locale, final long productId, final long skuId, final String attributeCode) {
         if (skuId > 0L) {
             final List skuAvs =
@@ -359,7 +344,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-productSkuByCode")
     public ProductSku getProductSkuByCode(final String skuCode) {
         final List<ProductSku> skus = productSkuService.getGenericDao().findByNamedQuery("PRODUCT.SKU.BY.CODE", skuCode);
         if (CollectionUtils.isEmpty(skus)) {
@@ -375,7 +360,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param skuCode sku code
      * @return product sku for this sku code
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-productBySkuCode")
     public Product getProductBySkuCode(final String skuCode) {
         return (Product) productDao.getScalarResultByNamedQuery("PRODUCT.BY.SKU.CODE", skuCode);
     }
@@ -384,7 +369,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-productById")
     public Product getProductById(final Long productId) {
         return productDao.findById(productId);
     }
@@ -392,7 +377,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-productById2")
     public Product getProductById(final Long productId, final boolean withAttribute) {
         final Product prod = productDao.findById(productId);
         if (prod != null && withAttribute) {
@@ -406,7 +391,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-featuredProducts")
     public List<Product> getFeaturedProducts(final Collection categories, final int limit) {
         if (categories == null || categories.isEmpty()) {
             return Collections.EMPTY_LIST;
@@ -431,7 +416,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-newArrivalsProductInCategory")
     public List<Product> getNewArrivalsProductInCategory(
             final long categoryId,
             final int maxResults) {
@@ -446,7 +431,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-productByQuery")
     public List<Product> getProductByQuery(
             final Query query,
             final int firtsResult,
@@ -462,7 +447,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-productSearchResultDTOByQuery")
     public List<ProductSearchResultDTO> getProductSearchResultDTOByQuery(
             final Query query,
             final int firtsResult,
@@ -513,7 +498,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-productQty")
     public int getProductQty(final Query query) {
         return productDao.getResultCount(query);
     }
@@ -538,7 +523,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-distinctAttributeValues")
     public List<Object> getDistinctAttributeValues(final long productTypeId, final String code) {
         return productDao.findQueryObjectByNamedQuery(
                 "PRODUCTS.ATTRIBUTE.VALUES.BY.CODE.PRODUCTTYPEID",
@@ -549,7 +534,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-productByIdList")
     public List<Product> getProductByIdList(final List idList) {
         if (idList == null || idList.isEmpty()) {
             return Collections.EMPTY_LIST;
@@ -576,7 +561,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param productTypeId product type id
      * @return list of distinct attib values
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-distinctAttributeValues")
     public List<FilteredNavigationRecord> getDistinctAttributeValues(final String locale, final long productTypeId) {
         final List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();
         records.addAll(getSingleValueNavigationRecords(locale, productTypeId));
@@ -773,7 +758,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = PROD_SERV_METHOD_CACHE)
+    @Cacheable(value = "productService-productQty2")
     public int getProductQty(final long categoryId) {
         return Integer.valueOf(
                 String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, new Date())));  //TODO: V2 time machine
@@ -874,4 +859,91 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     }
 
+    /**
+     * Persist product. Default sku will be created.
+     *
+     * @param instance instance to persist
+     * @return persisted instanse
+     */
+    @CacheEvict(value ={
+            "productService-randomProductByCategory",
+            "productService-featuredProducts",
+            "productService-newArrivalsProductInCategory",
+            "productService-productByQuery",
+            "productService-productSearchResultDTOByQuery",
+            "productService-productQty",
+            "productService-productByIdList",
+            "productService-distinctAttributeValues",
+            "productService-productQty2"
+
+    }, allEntries = true)
+    public Product create(final Product instance) {
+
+        ProductSku sku = productDao.getEntityFactory().getByIface(ProductSku.class);
+        sku.setCode(instance.getCode());
+        sku.setName(instance.getName());
+        sku.setDisplayName(instance.getDisplayName());
+        sku.setDescription(instance.getDescription());
+        sku.setProduct(instance);
+        instance.getSku().add(sku);
+
+        return getGenericDao().create(instance);
+    }
+
+
+    /** {@inheritDoc} */
+    @CacheEvict(value ={
+            "productService-byId",
+            "productService-skuById",
+            "productService-skuById2",
+            "productService-defaultImage",
+            "productService-randomProductByCategory",
+            "productService-productAttributes",
+            "productService-productAttribute",
+            "productService-productSkuByCode",
+            "productService-productBySkuCode",
+            "productService-productById",
+            "productService-productById2",
+            "productService-featuredProducts",
+            "productService-newArrivalsProductInCategory",
+            "productService-productByQuery",
+            "productService-productSearchResultDTOByQuery",
+            "productService-productQty",
+            "productService-distinctAttributeValues",
+            "productService-productByIdList",
+            "productService-distinctAttributeValues",
+            "productService-productQty2"
+
+    }, allEntries = true)
+    public Product update(Product instance) {
+        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    /** {@inheritDoc} */
+    @CacheEvict(value ={
+            "productService-byId",
+            "productService-skuById",
+            "productService-skuById2",
+            "productService-defaultImage",
+            "productService-randomProductByCategory",
+            "productService-productAttributes",
+            "productService-productAttribute",
+            "productService-productSkuByCode",
+            "productService-productBySkuCode",
+            "productService-productById",
+            "productService-productById2",
+            "productService-featuredProducts",
+            "productService-newArrivalsProductInCategory",
+            "productService-productByQuery",
+            "productService-productSearchResultDTOByQuery",
+            "productService-productQty",
+            "productService-distinctAttributeValues",
+            "productService-productByIdList",
+            "productService-distinctAttributeValues",
+            "productService-productQty2"
+
+    }, allEntries = true)
+    public void delete(Product instance) {
+        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

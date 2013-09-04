@@ -76,9 +76,7 @@ public class Pair<FIRST, SECOND> implements Serializable {
      */
     @Override
     public int hashCode() {
-        int result = first.hashCode();
-        result = 31 * result + second.hashCode();
-        return result;
+        return (first == null   ? 0 : first.hashCode()) ^   (second == null ? 0 : second.hashCode());
     }
 
     /**

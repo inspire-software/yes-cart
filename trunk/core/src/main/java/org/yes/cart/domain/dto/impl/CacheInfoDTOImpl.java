@@ -43,6 +43,26 @@ public class CacheInfoDTOImpl implements Serializable {
 
     private long  calculateOnDiskSize;
 
+    private String shopCode;
+
+    private String shopName;
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(String shopCode) {
+        this.shopCode = shopCode;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
     public int getDiskStoreSize() {
         return diskStoreSize;
     }
@@ -97,7 +117,12 @@ public class CacheInfoDTOImpl implements Serializable {
         this.inMemorySize = inMemorySize;
     }
 
-    public CacheInfoDTOImpl(String cacheName, int cacheSize, long inMemorySize, int diskStoreSize, long calculateInMemorySize, long calculateOnDiskSize) {
+    public CacheInfoDTOImpl(final String cacheName,
+                            final int cacheSize,
+                            final long inMemorySize,
+                            final int diskStoreSize,
+                            final long calculateInMemorySize,
+                            final long calculateOnDiskSize) {
         this.cacheName = cacheName;
         this.cacheSize = cacheSize;
         this.inMemorySize = inMemorySize;
@@ -105,6 +130,28 @@ public class CacheInfoDTOImpl implements Serializable {
         this.calculateInMemorySize = calculateInMemorySize;
         this.calculateOnDiskSize = calculateOnDiskSize;
     }
+
+
+    public CacheInfoDTOImpl(final String cacheName,
+                            final int cacheSize,
+                            final long inMemorySize,
+                            final int diskStoreSize,
+                            final long calculateInMemorySize,
+                            final long calculateOnDiskSize,
+                            final String shopCode,
+                            final String shopName) {
+        this.cacheName = cacheName;
+        this.cacheSize = cacheSize;
+        this.inMemorySize = inMemorySize;
+        this.diskStoreSize = diskStoreSize;
+        this.calculateInMemorySize = calculateInMemorySize;
+        this.calculateOnDiskSize = calculateOnDiskSize;
+        this.shopCode = shopCode;
+        this.shopName = shopName;
+
+    }
+
+
 
     public CacheInfoDTOImpl() {
     }

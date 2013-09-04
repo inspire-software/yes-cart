@@ -2843,7 +2843,7 @@ public void setRangeList(final RangeList rangeList) {
 
     </class>
 
-    <!-- ####################################### Store ################################# -->
+    <!-- ####################################### Shop ################################# -->
 
     <class name="org.yes.cart.domain.entity.Shop" table="TSHOP" discriminator-value="0">
         <meta attribute="interface">true</meta>        
@@ -3079,6 +3079,8 @@ public void setRangeList(final RangeList rangeList) {
 			<property name="guid" column="GUID" type="string" length="36" unique-key="SHOP_GUID" not-null="true"/>
         </subclass>
     </class>
+
+
 
     <class name="org.yes.cart.domain.entity.ShopTopSeller" table="TSHOPTOPSELLER" discriminator-value="0">
          <meta attribute="interface">true</meta>
@@ -3462,28 +3464,28 @@ public void setRangeList(final RangeList rangeList) {
 
 
     <class name="org.yes.cart.domain.entity.ShopUrl" table="TSHOPURL" discriminator-value="0">
-        <meta attribute="interface">true</meta>
-        <id name="storeUrlId" column="STOREURL_ID" type="long">
-            <generator class="native">
-                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
-                <param name="column">value</param>
-            </generator>
-        </id>
-        <discriminator type="integer" formula="1"/>
-        <subclass name="org.yes.cart.domain.entity.impl.ShopUrlEntity" discriminator-value="1">
-            <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
-            <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
-            <meta attribute="extra-import">javax.persistence.Id</meta>
-            <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
-            <meta attribute="extra-import">javax.persistence.Transient</meta>
-            <meta attribute="interface">false</meta>
-            <meta attribute="class-code">
-                <![CDATA[
+    <meta attribute="interface">true</meta>
+    <id name="storeUrlId" column="STOREURL_ID" type="long">
+        <generator class="native">
+            <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+            <param name="column">value</param>
+        </generator>
+    </id>
+    <discriminator type="integer" formula="1"/>
+    <subclass name="org.yes.cart.domain.entity.impl.ShopUrlEntity" discriminator-value="1">
+        <meta attribute="extra-import">org.hibernate.annotations.Parameter</meta>
+        <meta attribute="extra-import">org.hibernate.annotations.GenericGenerator</meta>
+        <meta attribute="extra-import">javax.persistence.Id</meta>
+        <meta attribute="extra-import">javax.persistence.GeneratedValue</meta>
+        <meta attribute="extra-import">javax.persistence.Transient</meta>
+        <meta attribute="interface">false</meta>
+        <meta attribute="class-code">
+            <![CDATA[
      private long storeUrlId;
 
      //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
 
-     @Id @GeneratedValue /*(generator="generator")*/ 
+     @Id @GeneratedValue /*(generator="generator")*/
     @Column(name="TSTOREURL_ID", nullable=false)
     public long getStoreUrlId() {
         return this.storeUrlId;
@@ -3500,20 +3502,20 @@ public void setRangeList(final RangeList rangeList) {
     }
 
                 ]]>
-            </meta>
-            <property name="url" column="URL" type="string" length="512" not-null="true" lazy="false"/>
-            <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop" foreign-key="FK_SHOPURL_SHOP">
-                <column name="SHOP_ID" not-null="true"/>
-            </many-to-one>
+        </meta>
+        <property name="url" column="URL" type="string" length="512" not-null="true" lazy="false"/>
+        <many-to-one name="shop" class="org.yes.cart.domain.entity.Shop" foreign-key="FK_SHOPURL_SHOP">
+            <column name="SHOP_ID" not-null="true"/>
+        </many-to-one>
 
-            <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
-            <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
-            <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-			<property name="guid" column="GUID" type="string" length="36" unique-key="SHOPURL_GUID" not-null="true"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPURL_GUID" not-null="true"/>
 
-        </subclass>
-    </class>
+    </subclass>
+</class>
 
     <class name="org.yes.cart.domain.entity.ShopExchangeRate" table="TSHOPEXCHANGERATE" discriminator-value="0">
         <meta attribute="interface">true</meta>
@@ -4900,7 +4902,7 @@ public void setRangeList(final RangeList rangeList) {
         <![CDATA[
        select distinct a.code, a.name
        from AttributeEntity a
-       where a.code in (:list)
+       where a.code in (?1)
        ]]>
     </query>
 

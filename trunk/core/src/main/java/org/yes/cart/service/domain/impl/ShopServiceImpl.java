@@ -17,7 +17,8 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.cache.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.AttributeService;
@@ -70,7 +71,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopServiceImplMethodCache")
+    @Cacheable(value = "shopService-shopBuCode")
     public Shop getShopByCode(final String shopCode) {
         return shopDao.findSingleByNamedQuery("SHOP.BY.CODE", shopCode);
     }
@@ -93,7 +94,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopServiceImplMethodCache")
+    @Cacheable(value = "shopService-shopByDomainName")
     public Shop getShopByDomainName(final String serverName) {
         return shopDao.findSingleByNamedQuery("SHOP.BY.URL", serverName);
     }
@@ -101,7 +102,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopServiceImplMethodCache")
+    @Cacheable(value = "shopService-shopCategories"/*, key ="shop.getShopId()"*/)
     public Set<Category> getShopCategories(final Shop shop) {
         Set<Category> result = new HashSet<Category>();
         for (ShopCategory category : shop.getShopCategory()) {
@@ -127,13 +128,8 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         return currencies;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public Shop create(final Shop instance) {
-        final Shop shop = super.create(instance);
-        contentService.getRootContent(shop.getShopId(), true);
-        return shop;
-    }
+
+
 
     /**
      * Set attribute value. New attribute value will be created, if attribute has not value for given shop.
@@ -142,6 +138,11 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * @param attributeKey attribute key
      * @param attributeValue attribute value.
      */
+    @CacheEvict(value ={
+            "shopService-shopBuCode",
+            "shopService-shopByDomainName",
+            "shopService-shopCategories"
+    }, allEntries = true)
     public void updateAttributeValue(final long shopId, final String attributeKey, final String attributeValue) {
         final Shop shop = shopDao.findById(shopId);
         if (shop != null) {
@@ -160,5 +161,33 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         }
     }
 
+    /** {@inheritDoc} */
+    @CacheEvict(value ={
+            "shopService-shopCategories"
+    }, allEntries = true)
+    public Shop create(final Shop instance) {
+        final Shop shop = super.create(instance);
+        contentService.getRootContent(shop.getShopId(), true);
+        return shop;
+    }
 
+    /** {@inheritDoc} */
+    @CacheEvict(value ={
+            "shopService-shopBuCode",
+            "shopService-shopByDomainName",
+            "shopService-shopCategories"
+    }, allEntries = true)
+    public Shop update(Shop instance) {
+        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    /** {@inheritDoc} */
+    @CacheEvict(value ={
+            "shopService-shopBuCode",
+            "shopService-shopByDomainName",
+            "shopService-shopCategories"
+    }, allEntries = true)
+    public void delete(Shop instance) {
+        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

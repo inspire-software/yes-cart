@@ -18,7 +18,9 @@ package org.yes.cart.util;
 
 import org.yes.cart.domain.entity.AttrValue;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -60,7 +62,7 @@ public class DomainApiUtil {
         }
         return null;
     }
-    
+
     private DomainApiUtil() {
         
     }

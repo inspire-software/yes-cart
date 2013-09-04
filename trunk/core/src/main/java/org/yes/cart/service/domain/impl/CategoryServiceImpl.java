@@ -17,7 +17,8 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.cache.Cacheable;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
@@ -36,8 +37,6 @@ import java.util.*;
  * Time: 14:12:54
  */
 public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implements CategoryService {
-
-    private static final String CACHE_NAME = "categoryServiceImplMethodCache";
 
     private final GenericDAO<Category, Long> categoryDao;
 
@@ -68,7 +67,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * @param shop given shop
      * @return ordered by rank list of assigned top level categories
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-topLevelCategories"/*, key="shop.shopId"*/)
     public List<Category> getTopLevelCategories(final Shop shop) {
         return categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
     }
@@ -107,7 +106,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-rootCategory")
     public Category getRootCategory() {
         return categoryDao.findSingleByNamedQuery("ROOTCATEORY");
     }
@@ -115,7 +114,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-categoryTemplateVariation"/*, key="category.categoryId"*/)
     public String getCategoryTemplateVariation(final Category category) {
         String variation = null;
         if (StringUtils.isBlank(category.getUitemplate())) {
@@ -133,7 +132,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-categoryTemplate")
     public String getCategoryTemplate(final long categoryId) {
         List<Object> count = categoryDao.findQueryObjectByNamedQuery("TEMPLATE.BY.CATEGORY.ID", categoryId);
         if (count != null && count.size() == 1) {
@@ -148,7 +147,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-itemsPerPage"/*, key="category.getCategoryId()"*/)
     public List<String> getItemsPerPage(final Category category) {
         final List<String> rez;
         if (category == null) {
@@ -175,7 +174,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * @param defaultValue  default value will be returned if value not found in hierarchy
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-categoryAttributeRecursive")
     public String getCategoryAttributeRecursive(final String locale, final Category category, final String attributeName, final String defaultValue) {
         final String value = getCategoryAttributeRecursive(locale, category, attributeName);
         if (value == null) {
@@ -195,7 +194,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * @param attributeNames set of attributes, to collect values.
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-categoryAttributeRecursive2")
     public String[] getCategoryAttributeRecursive(final String locale, final Category incategory, final String[] attributeNames) {
         final String[] rez;
         final Category category;
@@ -276,7 +275,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-productQuantity")
     public int getProductQuantity(final long categoryId, final boolean includeChildren) {
         int qty = 0;
         List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.PRODUCT.COUNT", categoryId);
@@ -296,7 +295,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-categoryHasProducts")
     public boolean isCategoryHasProducts(final long categoryId, final boolean includeChildren) {
         List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.PRODUCT.COUNT", categoryId);
         if (count != null && count.size() == 1) {
@@ -321,7 +320,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-categoryHasChildren")
     public boolean isCategoryHasChildren(final long categoryId, final boolean includeChildren) {
         List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.SUBCATEGORY.COUNT", categoryId);
         if (count != null && count.size() == 1) {
@@ -346,7 +345,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-childCategories")
     public List<Category> getChildCategories(final long categoryId) {
         return getChildCategoriesWithAvailability(categoryId, true);
     }
@@ -373,7 +372,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-childCategoriesRecursive")
     public Set<Category> getChildCategoriesRecursive(final long categoryId) {
         final Category thisCat = getById(categoryId);
         if (thisCat != null) {
@@ -396,7 +395,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-categoryHasSubcategory")
     public boolean isCategoryHasSubcategory(final long topCategoryId, final long subCategoryId) {
         final Category start = getById(subCategoryId);
         if (start != null) {
@@ -428,7 +427,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc} Just to cache
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-byId")
     public Category getById(final long pk) {
         return getGenericDao().findById(pk);
     }
@@ -436,7 +435,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = CACHE_NAME)
+    @Cacheable(value = "categoryService-transform")
     public Set<Long> transform(final Collection<Category> categories) {
         final Set<Long> result = new LinkedHashSet<Long>(categories.size());
         for (Category category : categories) {
@@ -483,4 +482,68 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "categoryService-topLevelCategories",
+            "categoryService-rootCategory",
+            "categoryService-categoryHasChildren",
+            "categoryService-childCategories",
+            "categoryService-childCategoriesRecursive",
+            "categoryService-categoryHasSubcategory",
+            "categoryService-byId",
+            "categoryService-transform"
+    }, allEntries = true)
+    public Category create(Category instance) {
+        return super.create(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "categoryService-topLevelCategories",
+            "categoryService-rootCategory",
+            "categoryService-categoryTemplateVariation",
+            "categoryService-categoryTemplate",
+            "categoryService-itemsPerPage",
+            "categoryService-categoryAttributeRecursive",
+            "categoryService-categoryAttributeRecursive2",
+            "categoryService-productQuantity",
+            "categoryService-categoryHasProducts",
+            "categoryService-categoryHasChildren",
+            "categoryService-childCategories",
+            "categoryService-childCategoriesRecursive",
+            "categoryService-categoryHasSubcategory",
+            "categoryService-byId",
+            "categoryService-transform"
+    }, allEntries = true)
+    public Category update(Category instance) {
+        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "categoryService-topLevelCategories",
+            "categoryService-rootCategory",
+            "categoryService-categoryTemplateVariation",
+            "categoryService-categoryTemplate",
+            "categoryService-itemsPerPage",
+            "categoryService-categoryAttributeRecursive",
+            "categoryService-categoryAttributeRecursive2",
+            "categoryService-productQuantity",
+            "categoryService-categoryHasProducts",
+            "categoryService-categoryHasChildren",
+            "categoryService-childCategories",
+            "categoryService-childCategoriesRecursive",
+            "categoryService-categoryHasSubcategory",
+            "categoryService-byId",
+            "categoryService-transform"
+    }, allEntries = true)
+    public void delete(Category instance) {
+        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

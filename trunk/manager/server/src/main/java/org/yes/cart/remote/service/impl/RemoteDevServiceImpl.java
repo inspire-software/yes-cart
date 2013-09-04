@@ -16,11 +16,18 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.remote.service.RemoteDevService;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
 import java.util.HashMap;
@@ -34,9 +41,12 @@ import java.util.Map;
  */
 public class RemoteDevServiceImpl implements RemoteDevService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(RemoteDevServiceImpl.class);
+
     private final RemoteBackdoorService remoteBackdoorService;
 
     private final SystemService systemService;
+
 
 
     public RemoteDevServiceImpl(final RemoteBackdoorService remoteBackdoorService,
@@ -61,12 +71,12 @@ public class RemoteDevServiceImpl implements RemoteDevService {
     }
 
     /** {@inheritDoc} */
-    public List<CacheInfoDTOImpl> getCacheInfo() {
+    public List<CacheInfoDTOImpl> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return remoteBackdoorService.getCacheInfo(createCtx());
     }
 
     /** {@inheritDoc} */
-    public void evictCache() {
+    public void evictCache() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         remoteBackdoorService.evictCache(createCtx());
     }
 
@@ -79,5 +89,8 @@ public class RemoteDevServiceImpl implements RemoteDevService {
 
         return flex;
     }
+
+
+
 
 }

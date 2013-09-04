@@ -17,10 +17,14 @@
 package org.yes.cart.remote.service;
 
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.async.model.AsyncContext;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: iazarny@yahoo.com Igor Azarny
@@ -109,14 +113,14 @@ public interface RemoteBackdoorService {
      * @param context web service context
      * @return list of information per each cache.
      */
-    List<CacheInfoDTOImpl> getCacheInfo(AsyncContext context);
+    List<CacheInfoDTOImpl> getCacheInfo(AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Evict all caches , which are represent in getCacheInfo list.
      *
      * @param context web service context
      */
-    void evictCache(AsyncContext context);
+    void evictCache(AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Get real path to image vault on shop application. Need to allow have different web  context for yes-shop.

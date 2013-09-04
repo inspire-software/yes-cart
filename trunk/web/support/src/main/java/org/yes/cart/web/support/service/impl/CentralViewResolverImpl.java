@@ -18,8 +18,8 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanQuery;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.CollectionUtils;
-import org.yes.cart.cache.Cacheable;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
 import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
@@ -35,6 +35,7 @@ import org.yes.cart.web.support.util.HttpUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Service responsible to resolve label of central view in storefront.
@@ -75,7 +76,7 @@ public class CentralViewResolverImpl implements CentralViewResolver {
      */
     public String resolveMainPanelRendererLabel(final Map parameters) {
 
-        final List allowedAttributeNames = attributeService.getAllNavigatableAttributeCodes(); //list of product attributes plus brand and price
+        final Set<String> allowedAttributeNames = attributeService.getAllNavigatableAttributeCodes(); //list of product attributes plus brand and price
 
         if (parameters.containsKey(WebParametersKeys.SKU_ID)) {
             return CentralViewLabel.SKU;
@@ -122,7 +123,7 @@ public class CentralViewResolverImpl implements CentralViewResolver {
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "centralViewResolverImplMethodCache")
+    @Cacheable(value = "centralViewResolver-booleanQuery")
     public BooleanQuery getBooleanQuery(
             final List<BooleanQuery> queriesChain,
             final String currentQuery,
@@ -168,7 +169,7 @@ public class CentralViewResolverImpl implements CentralViewResolver {
     }
 
     private boolean isAttibutiveFilteredNavigation(
-            final List allowedAttributeNames,
+            final Set<String> allowedAttributeNames,
             final Map parameters) {
         for (Object obj : parameters.keySet()) {
             final String decodedParameterKeyName = (String) obj;
