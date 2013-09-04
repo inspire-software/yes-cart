@@ -16,16 +16,15 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.yes.cart.cache.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeGroupService;
 import org.yes.cart.service.domain.AttributeService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -104,7 +103,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeServiceImplMethodCache")
+    @Cacheable(value = "attributeService-availableAttributesByProductTypeId")
     public List<Attribute> findAvailableAttributesByProductTypeId(final long productTypeId) {
         return getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID", productTypeId);
     }
@@ -112,7 +111,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeServiceImplMethodCache")
+    @Cacheable(value = "attributeService-availableImageAttributesByGroupCode")
     public List<Attribute> findAvailableImageAttributesByGroupCode(final String attributeGroupCode) {
         return getGenericDao().findByNamedQuery("PRODUCTS.IMAGE.ATTRIBUTE.BY.GROUP.CODE", attributeGroupCode);
     }
@@ -120,33 +119,33 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeServiceImplMethodCache")
-    public List<String> getAllAttributeCodes() {
-        List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.UNIQUE");
+    @Cacheable(value = "attributeService-allAttributeCodes")
+    public Set<String> getAllAttributeCodes() {
+        final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.UNIQUE");
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
-        return allowedAttributeNames;
+        return new HashSet<String>(allowedAttributeNames);
     }
 
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeServiceImplMethodCache")
-    public List<String> getAllNavigatableAttributeCodes() {
-        List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.NAVIGATION.UNIQUE", Boolean.TRUE);
+    @Cacheable(value = "attributeService-allNavigatableAttributeCodes")
+    public Set<String> getAllNavigatableAttributeCodes() {
+        final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.NAVIGATION.UNIQUE", Boolean.TRUE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_PRICE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.QUERY);
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
-        return allowedAttributeNames;
+        return new HashSet<String>(allowedAttributeNames);
     }
 
-    @Cacheable(value = "attributeServiceImplMethodCache")
-    public Map<String, String> getAttributeNamesByCodes(final List<String> codes) {
+    @Cacheable(value = "attributeService-attributeNamesByCodes")
+    public Map<String, String> getAttributeNamesByCodes(final Set<String> codes) {
         Map<String, String> result = new HashMap<String, String>();
-        List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQueryWithList(
+        List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQuery(
                 "ATTRIBUTE.CODE.NAMES",
                 codes);
         if (codeNameList != null) {
@@ -160,4 +159,36 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         return result;
     }
 
+    /** {@inheritDoc} */
+    @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
+            "attributeService-availableImageAttributesByGroupCode",
+            "attributeService-allAttributeCodes",
+            "attributeService-allNavigatableAttributeCodes",
+            "attributeService-attributeNamesByCodes"},
+             allEntries = true)
+    public Attribute create(Attribute instance) {
+        return super.create(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    /** {@inheritDoc} */
+    @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
+            "attributeService-availableImageAttributesByGroupCode",
+            "attributeService-allAttributeCodes",
+            "attributeService-allNavigatableAttributeCodes",
+            "attributeService-attributeNamesByCodes"},
+            allEntries = true)
+    public Attribute update(Attribute instance) {
+        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    /** {@inheritDoc} */
+    @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
+            "attributeService-availableImageAttributesByGroupCode",
+            "attributeService-allAttributeCodes",
+            "attributeService-allNavigatableAttributeCodes",
+            "attributeService-attributeNamesByCodes"},
+            allEntries = true)
+    public void delete(Attribute instance) {
+        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

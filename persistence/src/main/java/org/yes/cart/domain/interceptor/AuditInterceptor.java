@@ -239,4 +239,8 @@ public class AuditInterceptor extends EmptyInterceptor implements ApplicationCon
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
 }

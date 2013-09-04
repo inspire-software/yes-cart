@@ -18,7 +18,8 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
-import org.yes.cart.cache.Cacheable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
@@ -79,7 +80,7 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "priceServiceImplMethodCache")
+    @Cacheable(value = "priceService-minimalRegularPrice")
     public SkuPrice getMinimalRegularPrice(
             final long productId,
             final String selectedSku,
@@ -99,7 +100,7 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "priceServiceImplMethodCache")
+    @Cacheable(value = "priceService-minimalRegularPrice2")
     public SkuPrice getMinimalRegularPrice(
             final Collection<ProductSku> productSkus,
             final String selectedSku,
@@ -581,5 +582,27 @@ public class PriceServiceImpl
         skuPriceDao.executeNativeUpdate(sql);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {"imageService-seoImage" , "priceService-minimalRegularPrice"   }, allEntries = true)
+    public SkuPrice create(final SkuPrice instance) {
+        return super.create(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {"imageService-seoImage" , "priceService-minimalRegularPrice"   }, allEntries = true)
+    public SkuPrice update(final SkuPrice instance) {
+        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {"imageService-seoImage" , "priceService-minimalRegularPrice"   }, allEntries = true)
+    public void delete(final SkuPrice instance) {
+        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }

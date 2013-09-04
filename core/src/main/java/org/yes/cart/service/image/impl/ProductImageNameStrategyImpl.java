@@ -17,7 +17,7 @@
 package org.yes.cart.service.image.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.cache.Cacheable;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.impl.AttrValueEntityProduct;
@@ -63,7 +63,7 @@ public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl 
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productServiceImplMethodCache")
+    @Cacheable(value = "productImageNameStrategyService-productCode")
     public String getCode(final String url) {
 
         if (StringUtils.isNotBlank(url)) {

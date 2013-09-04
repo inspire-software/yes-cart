@@ -19,6 +19,7 @@ package org.yes.cart.web.page.component.breadcrumbs;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Bread crumbs builder produce category and
@@ -50,7 +51,7 @@ public interface BreadCrumbsBuilder {
     List<Crumb> getBreadCrumbs(
             long categoryId,
             PageParameters pageParameters,
-            List<String> allowedAttributeNames,
+            Set<String> allowedAttributeNames,
             List<Long> shopCategoryIds,
             CrumbNamePrefixProvider namePrefixProvider);
 

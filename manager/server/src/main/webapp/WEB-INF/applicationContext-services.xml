@@ -158,19 +158,6 @@
         </security:intercept-methods>
     </bean>
 
-    <!--bean id="remoteShopBackdoorUrlService" class="org.yes.cart.remote.service.impl.RemoteShopBackdoorUrlServiceImpl">
-        <constructor-arg index="0" ref="dtoShopBackdoorUrlService"/>
-        <flex:remoting-destination/>
-        <security:intercept-methods>
-            <security:protect method="create" access="ROLE_SMADMIN"/>
-            <security:protect method="update" access="ROLE_SMADMIN"/>
-            <security:protect method="remove" access="ROLE_SMADMIN"/>
-            <security:protect method="getNew" access="ROLE_SMADMIN"/>
-            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="getAllByShopId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-        </security:intercept-methods>
-    </bean-->
 
     <!--seoGenericService-->
 
@@ -598,6 +585,11 @@
 
 
     <bean id="remoteBackdoorService" class="org.yes.cart.remote.service.impl.RemoteBackdoorServiceImpl">
+        <constructor-arg index="0">
+            <list>
+                <value>http://localhost:8080/yes-shop/services/cachedirector</value> <!-- default ootb  -->
+            </list>
+        </constructor-arg>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>

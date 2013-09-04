@@ -29,7 +29,7 @@ import java.util.List;
  * Back door administrative service.
  * Need to have ability:
  *
- * 1. reindex product on deman on storefront side instead of managment side.
+ * 1. reindex product on demand on storefront side instead of management side.
  *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 1/28/12
@@ -114,21 +114,6 @@ public interface BackdoorService {
     @WebMethod
     @WebResult(name = "queryResult")
     List<Object[]> luceneQuery(String query);
-
-    /**
-     * Get chache information.
-     * @return list of information per each cache.
-     */
-    @WebMethod
-    @WebResult(name = "cacheInfoResult")
-    List<CacheInfoDTOImpl> getCacheInfo();
-
-    /**
-     * Evict alli caches , which are represent in getCacheInfo list.
-     */
-    @WebMethod
-    @WebResult(name = "cacheInfoResult")
-    void evictCache();
 
 
     /**

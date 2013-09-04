@@ -20,22 +20,28 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:security="http://www.springframework.org/schema/security"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:cache="http://www.springframework.org/schema/cache"
        xmlns:jaxws="http://cxf.apache.org/jaxws"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
            http://www.springframework.org/schema/context
-           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd
            http://www.springframework.org/schema/aop
-           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security-3.1.xsd
            http://cxf.apache.org/jaxws
-           http://cxf.apache.org/schemas/jaxws.xsd">
-
+           http://cxf.apache.org/schemas/jaxws.xsd
+           http://www.springframework.org/schema/cache
+           http://www.springframework.org/schema/cache/spring-cache.xsd">
 
     <context:component-scan base-package="org.yes.cart"/>
 
+    <cache:annotation-driven />
+
     <aop:aspectj-autoproxy/>
+
+
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
           autowire="byName">
@@ -52,9 +58,7 @@
 
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.use_query_cache">true</prop>
-                <prop key="hibernate.cache.region.factory_class">
-                    org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
-                </prop>
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop>
 
                 <prop key="hibernate.search.default.indexBase">
                     #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
@@ -66,6 +70,8 @@
             </props>
         </property>
     </bean>
+
+
 
     <bean id="productReindexer" class="org.yes.cart.domain.entityindexer.impl.ProductIndexerImpl">
         <constructor-arg index="0" ref="productDao"/>
@@ -155,7 +161,7 @@
         <constructor-arg index="0" ref="cookieTuplizer"/>
     </bean>
 
-    <bean id="breadCrumbBuilderImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+    <!--<bean id="breadCrumbBuilderImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="cacheName" value="org.yes.cart.service.domain.impl.BreadCrumbBuilderImpl.cache"/>
     </bean>
@@ -179,7 +185,7 @@
     <bean id="luceneQueryFactoryImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
         <property name="cacheManager" ref="cacheManager"/>
         <property name="cacheName" value="org.yes.cart.web.support.service.impl.LuceneQueryFactoryImpl.cache"/>
-    </bean>
+    </bean>-->
 
 
     <bean id="centralViewResolver" class="org.yes.cart.web.support.service.impl.CentralViewResolverImpl">
@@ -517,7 +523,30 @@
     </bean>
 
 
+    <bean id="cacheDirectorBean" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.web.service.ws.impl.CacheDirectorImpl">
+                <property name="entityOperationCache" ref="evictionConfig"/>
+                <property name="cacheManager" ref="cacheManager"/>
+            </bean>
+        </property>
+    </bean>
+
+
+
+
     <jaxws:endpoint id="backDoor" implementor="#backDoorBean" address="/backdoor">
+        <jaxws:properties>
+            <entry key="ws-security.validate.token">
+                <value>false</value>
+            </entry>
+        </jaxws:properties>
+        <jaxws:inInterceptors>
+            <ref bean="wsAuthenticationInterceptor"/>
+        </jaxws:inInterceptors>
+    </jaxws:endpoint>
+
+    <jaxws:endpoint id="cacheDirector" implementor="#cacheDirectorBean" address="/cachedirector">
         <jaxws:properties>
             <entry key="ws-security.validate.token">
                 <value>false</value>
@@ -540,7 +569,6 @@
     </bean>
 
 
-    <bean id="methodCacheAdvice" class="org.yes.cart.cache.MethodCacheAdvice"/>
 
     <!-- ################################ JMX support  begin ###################################### -->
 
@@ -565,5 +593,7 @@
     </bean>
 
     <!-- ################################ JMX support  end ###################################### -->
+
+
 
 </beans>

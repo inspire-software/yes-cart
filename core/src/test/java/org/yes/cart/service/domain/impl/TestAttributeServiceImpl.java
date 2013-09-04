@@ -25,10 +25,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.service.domain.AttributeService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -120,7 +117,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testAllAttributeCodes() {
-        List<String> codes = attributeService.getAllAttributeCodes();
+        Set<String> codes = attributeService.getAllAttributeCodes();
         assertNotNull(codes);
         assertFalse(codes.isEmpty());
         Map<String, String> map = attributeService.getAttributeNamesByCodes(codes);
@@ -129,7 +126,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testAllNavigatableAttributeCodes() {
-        List<String> codes = attributeService.getAllNavigatableAttributeCodes();
+        Set<String> codes = attributeService.getAllNavigatableAttributeCodes();
         assertNotNull(codes);
         assertFalse(codes.isEmpty());
         Map<String, String> map = attributeService.getAttributeNamesByCodes(codes);

@@ -17,7 +17,15 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/cache
+	   http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <cache:annotation-driven />
+
+    <import resource="cache-config.xml"/>
 
     <bean id="priceNavigation" class="org.yes.cart.domain.query.impl.PriceNavigationImpl"/>
 
@@ -63,6 +71,7 @@
             </bean>
         </property>
     </bean>
+
 
     <bean id="shopExchangeRateService" parent="txProxyTemplate">
         <property name="target">
@@ -580,6 +589,7 @@
         </property>
     </bean>
 
+
     <bean id="dtoShopExchangeRateService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoShopExchangeRateServiceImpl">
@@ -952,58 +962,6 @@
     </bean>
 
 
-    <!-- ###################### Cache  ################################################ -->
-
-    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-        <property name="configLocation" value="classpath:ehcache.xml"/>
-        <property name="shared" value="true"/>
-        <!--<property name="configLocation" value="ehcache.xml"/>-->
-    </bean>
-
-    <bean id="categoryServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-        <property name="cacheManager" ref="cacheManager"/>
-        <property name="cacheName" value="org.yes.cart.service.domain.impl.CategoryServiceImpl.cache"/>
-    </bean>
-
-    <bean id="contentServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-        <property name="cacheManager" ref="cacheManager"/>
-        <property name="cacheName" value="org.yes.cart.service.domain.impl.ContentServiceImpl.cache"/>
-    </bean>
-
-    <bean id="shopServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-        <property name="cacheManager" ref="cacheManager"/>
-        <property name="cacheName" value="org.yes.cart.service.domain.impl.ShopServiceImpl.cache"/>
-    </bean>
-
-    <bean id="priceServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-        <property name="cacheManager" ref="cacheManager"/>
-        <property name="cacheName" value="org.yes.cart.service.domain.impl.PriceServiceImpl.cache"/>
-    </bean>
-
-    <bean id="attributeServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-        <property name="cacheManager" ref="cacheManager"/>
-        <property name="cacheName" value="org.yes.cart.service.domain.impl.AttributeServiceImpl.cache"/>
-    </bean>
-
-    <bean id="systemServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-        <property name="cacheManager" ref="cacheManager"/>
-        <property name="cacheName" value="org.yes.cart.service.domain.impl.SystemServiceImpl.cache"/>
-    </bean>
-
-    <bean id="productServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-        <property name="cacheManager" ref="cacheManager"/>
-        <property name="cacheName" value="org.yes.cart.service.domain.impl.ProductServiceImpl.cache"/>
-    </bean>
-
-    <bean id="productTypeAttrServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-        <property name="cacheManager" ref="cacheManager"/>
-        <property name="cacheName" value="org.yes.cart.service.domain.impl.ProductTypeAttrServiceImpl.cache"/>
-    </bean>
-
-    <bean id="imageServiceImplMethodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-        <property name="cacheManager" ref="cacheManager"/>
-        <property name="cacheName" value="org.yes.cart.service.domain.impl.ImageServiceImpl.cache"/>
-    </bean>
 
 
 

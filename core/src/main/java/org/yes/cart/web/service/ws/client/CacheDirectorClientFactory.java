@@ -26,7 +26,6 @@ import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSPasswordCallback;
 import org.apache.ws.security.handler.WSHandlerConstants;
-import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.CacheDirector;
 
 import javax.security.auth.callback.Callback;
@@ -44,7 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Date: 1/29/12
  * Time: 7:56 PM
  */
-public class BackdoorServiceClientFactory extends BaseClientFactory implements CallbackHandler {
+public class CacheDirectorClientFactory extends BaseClientFactory implements CallbackHandler {
 
     private final static ConcurrentHashMap<String, String> concurrentHashMap;
 
@@ -53,8 +52,9 @@ public class BackdoorServiceClientFactory extends BaseClientFactory implements C
     static {
         concurrentHashMap = new ConcurrentHashMap<String, String>();
         factory = new JaxWsProxyFactoryBean();
-        factory.setServiceClass(BackdoorService.class);
+        factory.setServiceClass(CacheDirector.class);
     }
+
 
 
     /**
@@ -63,27 +63,26 @@ public class BackdoorServiceClientFactory extends BaseClientFactory implements C
      * @param userName user name
      * @param password password
      * @param url      url
-     * @return {@link BackdoorService}
+     * @return {@link org.yes.cart.web.service.ws.CacheDirector}
      */
-    public BackdoorService getBackdoorService(final String userName,
+    public CacheDirector getCacheDirector(final String userName,
                                               final String password,
                                               final String url,
                                               final long timeout) {
 
-        final BackdoorService backdoorService;
+        final CacheDirector cacheDirector;
 
         synchronized (factory) {
             factory.setAddress(url);
-            backdoorService = (BackdoorService) factory.create();
+            cacheDirector = (CacheDirector) factory.create();
             concurrentHashMap.put(userName, password);
         }
 
-        final Client client = ClientProxy.getClient(backdoorService);
+        final Client client = ClientProxy.getClient(cacheDirector);
         configureClient(userName, timeout, client, this.getClass().getName());
-        return backdoorService;
+        return cacheDirector;
 
     }
-
 
 
     /**
@@ -96,5 +95,4 @@ public class BackdoorServiceClientFactory extends BaseClientFactory implements C
             return;
         }
     }
-
 }

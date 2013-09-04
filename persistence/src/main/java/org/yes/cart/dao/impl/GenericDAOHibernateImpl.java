@@ -398,9 +398,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             criteriaTuner.tune(crit);
         }
         return crit.list();
-        
+
     }
-    
+
     /**
      * Find entities by criteria.
      * @param firstResult scroll to first result.
@@ -481,7 +481,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     public int fullTextSearchReindex(final PK primaryKey) {
-       return  fullTextSearchReindex(primaryKey, false);
+        return  fullTextSearchReindex(primaryKey, false);
     }
 
     private final int IDLE = -3;

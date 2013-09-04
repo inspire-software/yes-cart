@@ -202,11 +202,12 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testGetAllByShopIdWithCreate() throws Exception {
-
+        clearCache();
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
                     dtoService.createContentRoot(50L);
+
                     List<CategoryDTO> list = dtoService.getAllByShopId(50L);
                     assertNotNull(list);
                     assertFalse(list.isEmpty());
@@ -270,6 +271,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
                 //status.setRollbackOnly();
             }
         });
+        clearCache();
 
         final List<? extends AttrValueDTO> list2 = dtoService.getEntityAttributes(10105L);
         //assertEquals(totalSize, list2.size());
@@ -282,6 +284,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testzCreateEntityAttributeValue() throws Exception {
+        clearCache();
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(10105L);
         assertEquals(QTY, list.size());
         for (int i = 0; i < QTY; i++) {
@@ -290,6 +293,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
                 dtoService.deleteAttributeValue(dto.getAttrvalueId());
             }
         }
+        clearCache();
         list = dtoService.getEntityAttributes(10105L);
         assertEquals(QTY, list.size());
         for (AttrValueDTO dto : list) {
@@ -305,6 +309,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
         attrValueCategory.setVal("val2");
         attrValueCategory.setCategoryId(10105L);
         dtoService.createEntityAttributeValue(attrValueCategory);
+        getCacheMap().get("contentService-byId").clear();
         list = dtoService.getEntityAttributes(10105L);
         assertEquals(QTY, list.size());
         for (AttrValueDTO dto : list) {
@@ -360,6 +365,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
         contentLarge.setVal(LARGE_CONTENT);
 
         dtoService.updateEntityAttributeValue(contentLarge);
+        clearCache();
 
         final String bodyLarge = service.getContentBody(10106L, "en");
         assertEquals(bodyLarge, LARGE_CONTENT);
@@ -381,8 +387,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
         }
 
 
-        final Ehcache contentCache = (Ehcache) ctx().getBean("contentServiceImplMethodCache");
-        contentCache.removeAll();
+        clearCache();
 
         final AttrValueCategoryDTO contentSmall = dtoFactory.getByIface(AttrValueCategoryDTO.class);
         contentSmall.setCategoryId(10106L);
@@ -392,6 +397,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
         dtoService.updateEntityAttributeValue(contentSmall);
         final String bodySmall = service.getContentBody(10106L, "en");
         assertEquals(bodySmall, "Small");
+        getCacheMap().get("contentService-byId").clear();
         final List<AttrValueDTO> avsAfterSmall = (List) dtoService.getEntityAttributes(10106L);
         for (final AttrValueDTO av : avsAfterSmall) {
             if (av.getAttributeDTO().getCode().startsWith("CONTENT_BODY_en_1")) {

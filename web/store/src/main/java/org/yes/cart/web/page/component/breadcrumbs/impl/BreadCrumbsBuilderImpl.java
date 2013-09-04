@@ -18,7 +18,7 @@ package org.yes.cart.web.page.component.breadcrumbs.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.yes.cart.cache.Cacheable;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsBuilder;
@@ -30,6 +30,7 @@ import org.yes.cart.web.util.WicketUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Bread crumbs builder produce category and
@@ -71,11 +72,11 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
      * @return list of crumbs
      */
-    @Cacheable(value = "breadCrumbBuilderImplMethodCache")
+    @Cacheable(value = "breadCrumbBuilder-breadCrumbs")
     public List<Crumb> getBreadCrumbs(
             final long categoryId,
             final PageParameters pageParameters,
-            final List<String> allowedAttributeNames,
+            final Set<String> allowedAttributeNames,
             final List<Long> shopCategoryIds,
             final CrumbNamePrefixProvider namePrefixProvider) {
 
@@ -86,7 +87,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     }
 
     private List<Crumb> getFilteredNavigationCrumbs(
-            final List<String> allowedAttributeNames,
+            final Set<String> allowedAttributeNames,
             final PageParameters pageParameters,
             final CrumbNamePrefixProvider namePrefixProvider) {
         final List<Crumb> navigationCrumbs = new ArrayList<Crumb>();
@@ -152,7 +153,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
     private void fillAttributes(
             final List<Crumb> navigationCrumbs,
-            final List<String> allowedAttributeNames,
+            final Set<String> allowedAttributeNames,
             final PageParameters pageParameters,
             final CrumbNamePrefixProvider namePrefixProvider) {
 

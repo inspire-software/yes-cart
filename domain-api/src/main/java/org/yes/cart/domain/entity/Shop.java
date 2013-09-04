@@ -117,6 +117,7 @@ public interface Shop extends Auditable, Seoable, Codable {
      */
     void setShopUrl(Set<ShopUrl> shopUrl);
 
+
     /**
      * Get the currency exchange rates. All exchange rates from default to target currency.
      *

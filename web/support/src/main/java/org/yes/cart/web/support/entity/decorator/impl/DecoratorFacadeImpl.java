@@ -17,9 +17,8 @@
 package org.yes.cart.web.support.entity.decorator.impl;
 
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
@@ -88,9 +87,9 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
                 i18NWebSupport);
     }
 
-    private ProductDecorator getProductDecoratorFromValueWrapper(final Element wrapper) {
+    private ProductDecorator getProductDecoratorFromValueWrapper(final Cache.ValueWrapper wrapper) {
         if (wrapper != null) {
-            return (ProductDecorator) wrapper.getObjectValue();
+            return (ProductDecorator) wrapper.get();
         }
         return null;
     }
@@ -120,7 +119,7 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
                     productService.getDefaultImage(product.getProductId())
             );
 
-            PRODUCT_CACHE.put(new Element(key, decorator));
+            PRODUCT_CACHE.put(key, decorator);
             bookmarkService.saveBookmarkForProduct(decorator);
         } else {
             decorator.attachToContext(

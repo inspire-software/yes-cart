@@ -41,6 +41,7 @@ import org.yes.cart.web.support.service.CurrencySymbolService;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -73,7 +74,7 @@ public class BreadCrumbsView extends BaseComponent implements CrumbNamePrefixPro
 
     private final List<Long> shopCategoryIds;
 
-    private final List<String> allowedAttributeNames;
+    private final Set<String> allowedAttributeNames;
 
     private final long categoryId;
 
