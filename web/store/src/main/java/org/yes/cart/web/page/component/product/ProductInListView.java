@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -36,6 +37,7 @@ import org.yes.cart.domain.entity.impl.ProductAvailabilityModelImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -202,13 +204,25 @@ public class ProductInListView extends BaseComponent {
      */
     public String getDefaultImage(final String width, final String height) {
 
-        return attributableImageService.getImageURI(
+        final Logger log = ShopCodeContext.getLog(this);
+
+        final String result = attributableImageService.getImageURI(
                 product.getDefaultImage(),
                 width,
                 height,
                 WicketUtil.getHttpServletRequest().getContextPath(),
                 product
         );
+
+        if (log.isInfoEnabled()) {
+
+            log.info("Default image is [" + product.getDefaultImage() + "]  result is [" + result + "]");
+
+        }
+
+
+
+        return  result;
     }
 
 
