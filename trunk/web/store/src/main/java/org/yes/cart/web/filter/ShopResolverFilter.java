@@ -87,7 +87,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
         if (shop == null) {
             final String url = systemService.getDefaultShopURL();
             if (log.isInfoEnabled()) {
-                log.info("Shop can not be resolved. Redirect to : " + url);
+                log.info("Shop can not be resolved. For server name [" + serverDomainName + "] Redirect to : [" + url + "]");
             }
             ((HttpServletResponse) servletResponse).sendRedirect(url);
             return null;
