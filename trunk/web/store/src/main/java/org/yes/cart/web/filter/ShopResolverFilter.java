@@ -78,14 +78,13 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
     public ServletRequest doBefore(final ServletRequest servletRequest,
                                    final ServletResponse servletResponse) throws IOException, ServletException {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final String serverDomainName = servletRequest.getServerName().toLowerCase();
 
         final Shop shop = getApplicationDirector().getShopByDomainName(serverDomainName);
 
         if (shop == null) {
             final String url = systemService.getDefaultShopURL();
+            final Logger log = ShopCodeContext.getLog(this);
             if (log.isInfoEnabled()) {
                 log.info("Shop can not be resolved. For server name [" + serverDomainName + "] Redirect to : [" + url + "]");
             }
@@ -141,11 +140,11 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
         final String servletPath = httpServletRequest.getServletPath();
 
         if (StringUtils.isNotEmpty(servletPath)) {
-            final Logger log = ShopCodeContext.getLog(this);
             final String newServletPath = shop.getMarkupFolder() + servletPath;
             try {
                 return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
             } catch (/*MalformedURL*/Exception e) {
+                final Logger log = ShopCodeContext.getLog(this);
                 if (log.isErrorEnabled()) {
                     log.error("Wrong URL for path : " + newServletPath, e);
                 }
