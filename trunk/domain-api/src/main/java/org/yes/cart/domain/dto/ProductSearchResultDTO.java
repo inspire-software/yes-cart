@@ -17,13 +17,14 @@
 package org.yes.cart.domain.dto;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
 
 /**
  * Represent product from search result. The whole entity usage id overhead.
  */
-public interface ProductSearchResultDTO {
+public interface ProductSearchResultDTO extends Identifiable {
 
     /**
      * Get product id.
