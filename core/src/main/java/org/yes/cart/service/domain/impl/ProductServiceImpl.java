@@ -295,20 +295,22 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         }
         final Map<String, List<Pair<String, String>>> map = new HashMap<String, List<Pair<String, String>>>();
         for (final ProdTypeAttributeViewGroup group : attributeViewGroup) {
-            final String[] attributesCodes = group.getAttrCodeList().split(",");
-            for (final String attrCode : attributesCodes) {
-                List<Pair<String, String>> groups = map.get(attrCode);
-                if (groups == null) {
-                    groups = new ArrayList<Pair<String, String>>();
-                    map.put(attrCode, groups);
+            if (group.getAttrCodeList() != null) {
+                final String[] attributesCodes = group.getAttrCodeList().split(",");
+                for (final String attrCode : attributesCodes) {
+                    List<Pair<String, String>> groups = map.get(attrCode);
+                    if (groups == null) {
+                        groups = new ArrayList<Pair<String, String>>();
+                        map.put(attrCode, groups);
+                    }
+                    groups.add(new Pair<String, String>(
+                            String.valueOf(group.getProdTypeAttributeViewGroupId()),
+                            new FailoverStringI18NModel(
+                                    group.getDisplayName(),
+                                    group.getName()
+                            ).getValue(locale)
+                    ));
                 }
-                groups.add(new Pair<String, String>(
-                        String.valueOf(group.getProdTypeAttributeViewGroupId()),
-                        new FailoverStringI18NModel(
-                                group.getDisplayName(),
-                                group.getName()
-                        ).getValue(locale)
-                ));
             }
         }
         return map;
