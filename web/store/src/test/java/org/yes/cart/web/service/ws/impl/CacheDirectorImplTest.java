@@ -33,15 +33,12 @@ import java.util.Map;
 import java.util.Set;
 
 import static junit.framework.Assert.*;
-import org.springframework.test.web.client.MockMvcClientHttpRequestFactory;
 
 
 /**
- * Created with IntelliJ IDEA.
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 8/19/13
  * Time: 4:16 PM
- * To change this template use File | Settings | File Templates.
  */
 public class CacheDirectorImplTest {
 

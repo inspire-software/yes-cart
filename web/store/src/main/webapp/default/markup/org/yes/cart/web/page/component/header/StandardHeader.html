@@ -89,7 +89,19 @@
                 </wicket:message></span></a></li>
                 <li><a id="newarrival" href="tag/newarrival"
                        onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
-                        key="new.arrivals">[New products]
+                        key="new.arrivals">[New products]</wicket:message></span></a></li>
+                <li><a id="multisku" href="tag/multisku"
+                       onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
+                        key="demo.multisku">[Multi sku demo]</wicket:message></span></a></li>
+                <li><a id="preorder" href="tag/preorder"
+                       onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
+                        key="demo.preorder">[Pre-order sku demo]</wicket:message></span></a></li>
+                <li><a id="backorder" href="tag/backorder"
+                       onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
+                        key="demo.backorder">[Back order sku demo]</wicket:message></span></a></li>
+                <li><a id="always" href="tag/always"
+                       onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
+                        key="demo.always">[Always sku demo]
                 </wicket:message></span></a></li>
                 <li>
                     <wicket:link>
@@ -109,12 +121,18 @@
             <script>
                 if (document.URL.indexOf('tag/sale') > -1) {
                     activeLinksetStyle(document.getElementById('sale'));
-
                 } else if (document.URL.indexOf('tag/specialoffer') > -1) {
                     activeLinksetStyle(document.getElementById('specialoffer'));
-
                 } else if (document.URL.indexOf('tag/newarrival') > -1) {
                     activeLinksetStyle(document.getElementById('newarrival'));
+                } else if (document.URL.indexOf('tag/multisku') > -1) {
+                    activeLinksetStyle(document.getElementById('multisku'));
+                } else if (document.URL.indexOf('tag/preorder') > -1) {
+                    activeLinksetStyle(document.getElementById('preorder'));
+                } else if (document.URL.indexOf('tag/backorder') > -1) {
+                    activeLinksetStyle(document.getElementById('backorder'));
+                } else if (document.URL.indexOf('tag/always') > -1) {
+                    activeLinksetStyle(document.getElementById('always'));
                 }
 
             </script>

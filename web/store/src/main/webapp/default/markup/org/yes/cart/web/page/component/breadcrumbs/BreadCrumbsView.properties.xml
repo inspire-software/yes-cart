@@ -24,4 +24,8 @@
     <entry key="sale">Sale</entry>
     <entry key="specialoffer">Special offer</entry>
     <entry key="newarrival">New arrivals</entry>
+    <entry key="multisku">Demo: multi-sku</entry>
+    <entry key="preorder">Demo: preorder</entry>
+    <entry key="backorder">Demo: backorder</entry>
+    <entry key="always">Demo: always</entry>
 </properties>

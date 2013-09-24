@@ -24,4 +24,8 @@
     <entry key="sale">Распродажа</entry>
     <entry key="specialoffer">Специальное предложение</entry>
     <entry key="newarrival">Новые послупления</entry>
+    <entry key="multisku">Демо: мульти-sku</entry>
+    <entry key="preorder">Демо: ожидаемые</entry>
+    <entry key="backorder">Демо: заказные</entry>
+    <entry key="always">Демо: всегда</entry>
 </properties>

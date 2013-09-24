@@ -20,6 +20,10 @@
     <entry key="sale">Sale</entry>
     <entry key="special.offer">Special offer</entry>
     <entry key="new.arrivals">New arrivals</entry>
+    <entry key="demo.multisku">demo: multi-sku</entry>
+    <entry key="demo.preorder">demo: preorder</entry>
+    <entry key="demo.backorder">demo: backorder</entry>
+    <entry key="demo.always">demo: always</entry>
     <entry key="profile">Profile</entry>
     <entry key="faq">FAQ</entry>
     <entry key="contacts">Contacts</entry>
