@@ -20,6 +20,10 @@
     <entry key="sale">Распродажа</entry>
     <entry key="special.offer">Специальное предложение</entry>
     <entry key="new.arrivals">Новые послупления</entry>
+    <entry key="demo.multisku">демо: мульти-sku</entry>
+    <entry key="demo.preorder">демо: ожидаемые</entry>
+    <entry key="demo.backorder">демо: заказные</entry>
+    <entry key="demo.always">демо: всегда</entry>
     <entry key="profile">Личный кабинет</entry>
     <entry key="faq">ЧАВО</entry>
     <entry key="contacts">Контакты</entry>

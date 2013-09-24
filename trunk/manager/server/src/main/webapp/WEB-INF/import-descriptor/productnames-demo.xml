@@ -104,14 +104,6 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-        <!-- availability type -->
-        <column-descriptor>
-            <column-index>-1</column-index>
-            <field-type>FIELD</field-type>
-            <name>availability</name>
-            <value-constant>1</value-constant>
-        </column-descriptor>
-
         <!-- Description -->
         <column-descriptor>
             <column-index>9</column-index>
@@ -179,13 +171,27 @@
             </import-descriptor>
         </column-descriptor>
 
+        <!-- availability type -->
+        <column-descriptor>
+            <column-index>12</column-index>
+            <field-type>FIELD</field-type>
+            <name>availability</name>
+        </column-descriptor>
+
         <!--featured-->
         <column-descriptor>
-            <column-index>-1</column-index>
+            <column-index>13</column-index>
             <field-type>FIELD</field-type>
             <data-type>BOOLEAN</data-type>
             <name>featured</name>
-            <value-constant>false</value-constant>
+        </column-descriptor>
+
+        <!--tags for demo-->
+        <column-descriptor>
+            <column-index>14</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>STRING</data-type>
+            <name>tag</name>
         </column-descriptor>
 
     </import-columns>
