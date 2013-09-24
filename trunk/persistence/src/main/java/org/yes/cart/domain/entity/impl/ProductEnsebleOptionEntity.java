@@ -20,7 +20,6 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -28,11 +27,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TENSEMBLEOPT"
-)
 public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.ProductEnsebleOption, java.io.Serializable {
 
+    private long ensembleOptId;
 
     private int qty;
     private Product product;
@@ -49,7 +46,6 @@ public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.Pr
 
 
 
-    @Column(name = "QTY", nullable = false)
     public int getQty() {
         return this.qty;
     }
@@ -58,8 +54,6 @@ public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.Pr
         this.qty = qty;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCT_ID", nullable = false)
     public Product getProduct() {
         return this.product;
     }
@@ -68,8 +62,6 @@ public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.Pr
         this.product = product;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SKU_ID", nullable = false)
     public ProductSku getSku() {
         return this.sku;
     }
@@ -78,8 +70,6 @@ public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.Pr
         this.sku = sku;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -88,8 +78,6 @@ public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.Pr
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -98,7 +86,6 @@ public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.Pr
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -107,7 +94,6 @@ public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.Pr
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -116,7 +102,6 @@ public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.Pr
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -125,22 +110,10 @@ public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.Pr
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long ensembleOptId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "ENSEMBLEOPT_ID", nullable = false)
     public long getEnsembleOptId() {
         return this.ensembleOptId;
     }
 
-    @Transient
     public long getId() {
         return this.ensembleOptId;
     }
@@ -148,9 +121,6 @@ public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.Pr
     public void setEnsembleOptId(long ensembleOptId) {
         this.ensembleOptId = ensembleOptId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

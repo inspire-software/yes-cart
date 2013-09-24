@@ -17,15 +17,12 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.entity.xml.ProductTypeRangeListXStreamProvider;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.stream.xml.XStreamProvider;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -33,11 +30,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TPRODUCTTYPEATTR"
-)
 public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.ProductTypeAttr, java.io.Serializable {
 
+    private long productTypeAttrId;
 
     private Attribute attribute;
     private ProductType producttype;
@@ -57,9 +52,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Cascade({CascadeType.SAVE_UPDATE})
-    @JoinColumn(name = "CODE", nullable = false)
     public Attribute getAttribute() {
         return this.attribute;
     }
@@ -68,9 +60,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.attribute = attribute;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Cascade({CascadeType.SAVE_UPDATE})
-    @JoinColumn(name = "PRODUCTTYPE_ID", nullable = false)
     public ProductType getProducttype() {
         return this.producttype;
     }
@@ -79,7 +68,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.producttype = producttype;
     }
 
-    @Column(name = "RANK")
     public int getRank() {
         return this.rank;
     }
@@ -88,7 +76,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.rank = rank;
     }
 
-    @Column(name = "VISIBLE")
     public boolean isVisible() {
         return this.visible;
     }
@@ -97,7 +84,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.visible = visible;
     }
 
-    @Column(name = "SIMILARITY")
     public boolean isSimilarity() {
         return this.similarity;
     }
@@ -106,7 +92,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.similarity = similarity;
     }
 
-    @Column(name = "NAV")
     public boolean isNavigation() {
         return this.navigation;
     }
@@ -115,7 +100,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.navigation = navigation;
     }
 
-    @Column(name = "NAV_TYPE", length = 1)
     public String getNavigationType() {
         return this.navigationType;
     }
@@ -124,7 +108,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.navigationType = navigationType;
     }
 
-    @Column(name = "RANGE_NAV", length = 4000)
     public String getRangeNavigation() {
         return this.rangeNavigation;
     }
@@ -133,8 +116,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.rangeNavigation = rangeNavigation;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -143,8 +124,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -153,7 +132,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -162,7 +140,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -171,7 +148,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -180,23 +156,10 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long productTypeAttrId;
-
-// @GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "PRODUCTTYPEATTR_ID", nullable = false)
     public long getProductTypeAttrId() {
         return productTypeAttrId;
     }
 
-    @Transient
     public long getId() {
         return this.productTypeAttrId;
     }
@@ -210,7 +173,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
 
     private RangeList rangeListCache = null;
 
-    @Transient
     public RangeList getRangeList() {
         if (rangeListCache == null && getRangeNavigation() != null) {
             rangeListCache = (RangeList) xStreamProvider.fromXML(getRangeNavigation());
@@ -222,9 +184,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
         setRangeNavigation(xStreamProvider.toXML(rangeList));
         this.rangeListCache = rangeList;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

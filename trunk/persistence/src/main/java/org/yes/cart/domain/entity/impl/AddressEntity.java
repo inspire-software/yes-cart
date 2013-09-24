@@ -19,7 +19,6 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Customer;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -27,12 +26,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-
-@Entity
-@Table(name = "TADDRESS"
-)
 public class AddressEntity implements org.yes.cart.domain.entity.Address, java.io.Serializable {
 
+    private long addressId;
 
     private String city;
     private String postcode;
@@ -56,7 +52,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     public AddressEntity() {
     }
 
-    @Column(name = "CITY", nullable = false, length = 128)
     public String getCity() {
         return this.city;
     }
@@ -65,7 +60,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.city = city;
     }
 
-    @Column(name = "POSTCODE", length = 16)
     public String getPostcode() {
         return this.postcode;
     }
@@ -74,7 +68,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.postcode = postcode;
     }
 
-    @Column(name = "ADDRLINE1", nullable = false)
     public String getAddrline1() {
         return this.addrline1;
     }
@@ -83,7 +76,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.addrline1 = addrline1;
     }
 
-    @Column(name = "ADDRLINE2")
     public String getAddrline2() {
         return this.addrline2;
     }
@@ -92,7 +84,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.addrline2 = addrline2;
     }
 
-    @Column(name = "ADDRESS_TYPE", nullable = false, length = 1)
     public String getAddressType() {
         return this.addressType;
     }
@@ -101,7 +92,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.addressType = addressType;
     }
 
-    @Column(name = "COUNTRY_CODE", nullable = false, length = 64)
     public String getCountryCode() {
         return this.countryCode;
     }
@@ -110,7 +100,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.countryCode = countryCode;
     }
 
-    @Column(name = "STATE_CODE", length = 64)
     public String getStateCode() {
         return this.stateCode;
     }
@@ -119,7 +108,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.stateCode = stateCode;
     }
 
-    @Column(name = "PHONES")
     public String getPhoneList() {
         return this.phoneList;
     }
@@ -128,7 +116,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.phoneList = phoneList;
     }
 
-    @Column(name = "FIRSTNAME", nullable = false, length = 128)
     public String getFirstname() {
         return this.firstname;
     }
@@ -137,7 +124,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.firstname = firstname;
     }
 
-    @Column(name = "LASTNAME", nullable = false, length = 128)
     public String getLastname() {
         return this.lastname;
     }
@@ -146,7 +132,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.lastname = lastname;
     }
 
-    @Column(name = "MIDDLENAME", length = 128)
     public String getMiddlename() {
         return this.middlename;
     }
@@ -155,7 +140,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.middlename = middlename;
     }
 
-    @Column(name = "DEFAULT_ADDR", length = 1)
     public boolean isDefaultAddress() {
         return this.defaultAddress;
     }
@@ -164,8 +148,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.defaultAddress = defaultAddress;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CUSTOMER_ID", nullable = false)
     public Customer getCustomer() {
         return this.customer;
     }
@@ -174,8 +156,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.customer = customer;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -184,8 +164,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -194,7 +172,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -203,7 +180,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -212,7 +188,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -221,23 +196,10 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long addressId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "ADDRESS_ID", nullable = false)
     public long getAddressId() {
         return this.addressId;
     }
 
-    @Transient
     public long getId() {
         return this.addressId;
     }
@@ -245,9 +207,6 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     public void setAddressId(long addressId) {
         this.addressId = addressId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

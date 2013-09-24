@@ -20,8 +20,8 @@ package org.yes.cart.domain.entity.impl;
 import org.hibernate.search.annotations.*;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.bridge.AttributeBridge;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -29,23 +29,13 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TPRODUCTATTRVALUE"
-)
 public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrValueProduct, java.io.Serializable {
 
+    private long attrvalueId;
 
     private String val;
     private String displayVal;
     private Product product;
-    /**
-     */
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO)
-    @ContainedIn
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeBridge.class)
-    /*
-*
-    */
     private Attribute attribute;
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -57,9 +47,6 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
     }
 
 
-
-
-    @Column(name = "VAL", length = 4000)
     public String getVal() {
         return this.val;
     }
@@ -68,7 +55,6 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
         this.val = val;
     }
 
-    @Column(name = "DISPLAYVAL", length = 4000)
     public String getDisplayVal() {
         return this.displayVal;
     }
@@ -77,8 +63,6 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
         this.displayVal = displayVal;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCT_ID", nullable = false)
     public Product getProduct() {
         return this.product;
     }
@@ -87,16 +71,9 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
         this.product = product;
     }
 
-    /**
-     *      */
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO)
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO,
+        bridge = @FieldBridge(impl = AttributeBridge.class))
     @ContainedIn
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeBridge.class)
-    /*
-    *
-    */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CODE", nullable = false)
     public Attribute getAttribute() {
         return this.attribute;
     }
@@ -105,8 +82,6 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
         this.attribute = attribute;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -115,8 +90,6 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -125,7 +98,6 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -134,7 +106,6 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -143,7 +114,6 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -152,22 +122,10 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long attrvalueId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"),  @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "ATTRVALUE_ID", nullable = false)
     public long getAttrvalueId() {
         return this.attrvalueId;
     }
 
-    @Transient
     public long getId() {
         return this.attrvalueId;
     }
@@ -176,9 +134,6 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
     public void setAttrvalueId(long attrvalueId) {
         this.attrvalueId = attrvalueId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

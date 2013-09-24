@@ -17,16 +17,13 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.search.annotations.*;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.util.MoneyUtils;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -37,12 +34,12 @@ import java.util.*;
  */
 
 @Indexed(index = "luceneindex/product", interceptor = org.yes.cart.domain.interceptor.ProductEntityIndexingInterceptor.class)
-@Entity
-@Table(name = "TPRODUCT")
 public class ProductEntity implements org.yes.cart.domain.entity.Product, java.io.Serializable {
 
     private static Pair<String, BigDecimal> NOT_AVAILABLE_CODE_QTY = new Pair<String, BigDecimal>("N/A", BigDecimal.ZERO);
 
+    private ProductSku defaultProductSku = null;
+    private long productId;
 
     private String code;
     private Date availablefrom;
@@ -76,7 +73,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         @Field(name = "code", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES),
         @Field(name = "code_stem", index = Index.YES, analyze = Analyze.YES, norms = Norms.NO, store = Store.NO)
     })
-    @Column(name = "CODE", nullable = false)
     public String getCode() {
         return this.code;
     }
@@ -86,8 +82,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "AVAILABLEFROM")
     public Date getAvailablefrom() {
         return this.availablefrom;
     }
@@ -98,8 +92,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     /** {@inheritDoc} */
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "AVAILABLETO")
     public Date getAvailableto() {
         return this.availableto;
     }
@@ -113,7 +105,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     @Fields({
             @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES),
             @Field(name = "name_sort", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)})
-    @Column(name = "NAME", nullable = false)
     public String getName() {
         return this.name;
     }
@@ -124,15 +115,11 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     /** {@inheritDoc} */
-    @Fields
-            (
-                {
-                        @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES),
-                        @Field(name = "displayNameAsIs", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-                }
-            )
+    @Fields({
+        @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES),
+        @Field(name = "displayNameAsIs", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    })
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class)
-    @Column(name = "DISPLAYNAME", length = 4000)
     public String getDisplayName() {
         return this.displayName;
     }
@@ -144,7 +131,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     /** {@inheritDoc} */
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    @Transient
     public String getDescriptionAsIs() {
         final StringBuilder builder = new StringBuilder();
         for (AttrValue attr : attributes) {
@@ -158,14 +144,11 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return builder.toString();
     }
 
-    @Transient
     String getLocale(final String attrCode) {
-        return attrCode.substring(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX.length() );
+        return attrCode.substring(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX.length());
     }
 
-    /** {@inheritDoc} */
     @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
-    @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;
     }
@@ -175,7 +158,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
-    @Column(name = "TAG")
     public String getTag() {
         return this.tag;
     }
@@ -186,8 +168,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BRAND_ID", nullable = false)
     public Brand getBrand() {
         return this.brand;
     }
@@ -200,8 +180,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
      *      */
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class)
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "PRODUCTTYPE_ID", nullable = false)
     public ProductType getProducttype() {
         return this.producttype;
     }
@@ -211,7 +189,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    @Column(name = "AVAILABILITY", nullable = false)
     public int getAvailability() {
         return this.availability;
     }
@@ -220,13 +197,10 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.availability = availability;
     }
 
-    /**
-     *      */
     @Field
     @ContainedIn
     @IndexedEmbedded(targetElement = AttrValueEntityProduct.class)
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
     public Set<AttrValueProduct> getAttributes() {
         return this.attributes;
     }
@@ -237,8 +211,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     @Field
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductCategoryBridge.class)
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCT_ID", updatable = false)
     public Set<ProductCategory> getProductCategory() {
         return this.productCategory;
     }
@@ -249,9 +221,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     @Field
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductSkuBridge.class)
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "PRODUCT_ID", updatable = false)
-    @Cascade({org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
     public Collection<ProductSku> getSku() {
         return this.sku;
     }
@@ -260,8 +229,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.sku = sku;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "PRODUCT_ID", updatable = false)
     public Set<ProductEnsebleOption> getEnsebleOption() {
         return this.ensebleOption;
     }
@@ -270,8 +237,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.ensebleOption = ensebleOption;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCT_ID", updatable = false)
     public Set<ProductAssociation> getProductAssociations() {
         return this.productAssociations;
     }
@@ -280,7 +245,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.productAssociations = productAssociations;
     }
 
-    @Column(name = "FEATURED", length = 1)
     public Boolean getFeatured() {
         return this.featured;
     }
@@ -289,11 +253,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.featured = featured;
     }
 
-    @AttributeOverrides({
-            @AttributeOverride(name = "uri", column = @Column(name = "URI")),
-            @AttributeOverride(name = "title", column = @Column(name = "TITLE")),
-            @AttributeOverride(name = "metakeywords", column = @Column(name = "METAKEYWORDS")),
-            @AttributeOverride(name = "metadescription", column = @Column(name = "METADESCRIPTION"))})
     public SeoEntity getSeoInternal() {
         return this.seoInternal;
     }
@@ -302,8 +261,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.seoInternal = seo;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -312,8 +269,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -322,7 +277,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -331,7 +285,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -340,7 +293,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -349,20 +301,11 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.guid = guid;
     }
 
-
-
-    private ProductSku defaultProductSku = null;
-    private long productId;
-
     @DocumentId
-    @Id
-    @GeneratedValue
-    @Column(name = "PRODUCT_ID", nullable = false)
     public long getProductId() {
         return this.productId;
     }
 
-    @Transient
     public long getId() {
         return this.productId;
     }
@@ -373,7 +316,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    @Transient
     public BigDecimal getQtyOnWarehouse() {
         BigDecimal rez = BigDecimal.ZERO.setScale(2);
         for (ProductSku sku : getSku()) {
@@ -388,7 +330,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
 
 
-    @Transient
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getFirstAvailableSkuCode() {
         if (firstAvailableSkuCodeQuantity == null) {
@@ -401,7 +342,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
      * Get default image, which is stored into lucene index, to reduce db hit.
      * @return default product image if found, otherwise no image constant.
      */
-    @Transient
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getDefaultImage() {
         final AttrValue attr = getAttributeByCode(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
@@ -414,7 +354,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
 
-    @Transient
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public BigDecimal getFirstAvailableSkuQuantity() {
         if (firstAvailableSkuCodeQuantity == null) {
@@ -450,7 +389,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
 
-    @Transient
     public ProductSku getDefaultSku() {
         if (defaultProductSku == null) {
             if (this.getSku() != null && !this.getSku().isEmpty()) {
@@ -471,7 +409,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return defaultProductSku;
     }
 
-    @Transient
     public Collection<AttrValueProduct> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueProduct> result = new ArrayList<AttrValueProduct>();
         if (attributeCode != null && this.attributes != null) {
@@ -484,7 +421,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return result;
     }
 
-    @Transient
     public Map<String, AttrValue> getAllAttibutesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         if (this.attributes != null) {
@@ -497,7 +433,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return rez;
     }
 
-    @Transient
     public AttrValueProduct getAttributeByCode(final String attributeCode) {
         if (attributeCode != null) {
             if (this.attributes != null) {
@@ -511,17 +446,14 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return null;
     }
 
-    @Transient
     public Collection<AttrValue> getAllAttibutes() {
         return new ArrayList<AttrValue>(attributes);
     }
 
-    @Transient
     public ProductSku getSku(final String skuCode) {
         return getDefaultSku();
     }
 
-    @Transient
     public boolean isMultiSkuProduct() {
         return sku.size() > 1;
     }
@@ -546,9 +478,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     public void setSeo(final Seo seo) {
         this.setSeoInternal((SeoEntity) seo);
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

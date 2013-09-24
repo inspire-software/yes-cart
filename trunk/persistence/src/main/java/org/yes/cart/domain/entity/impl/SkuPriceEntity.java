@@ -19,7 +19,6 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -28,11 +27,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TSKUPRICE"
-)
 public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java.io.Serializable {
 
+    private long skuPriceId;
 
     private ProductSku sku;
     private Shop shop;
@@ -54,8 +51,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SKU_ID", nullable = false)
     public ProductSku getSku() {
         return this.sku;
     }
@@ -64,8 +59,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.sku = sku;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SHOP_ID", nullable = false)
     public Shop getShop() {
         return this.shop;
     }
@@ -74,7 +67,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.shop = shop;
     }
 
-    @Column(name = "CURRENCY", nullable = false, length = 3)
     public String getCurrency() {
         return this.currency;
     }
@@ -83,7 +75,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.currency = currency;
     }
 
-    @Column(name = "QTY", nullable = false)
     public BigDecimal getQuantity() {
         return this.quantity;
     }
@@ -92,7 +83,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.quantity = quantity;
     }
 
-    @Column(name = "REGULAR_PRICE", nullable = false)
     public BigDecimal getRegularPrice() {
         return this.regularPrice;
     }
@@ -101,13 +91,11 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.regularPrice = regularPrice;
     }
 
-    @Column(name = "SALE_PRICE")
     public BigDecimal getSalePrice() {
         return this.salePrice;
     }
 
     /** {@inheritDoc} */
-    @Transient
     public BigDecimal getSalePriceForCalculation() {  //TODO: V2 time machine
         if (salefrom == null) {
             if (saleto == null) {
@@ -140,7 +128,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.salePrice = salePrice;
     }
 
-    @Column(name = "MINIMAL_PRICE")
     public BigDecimal getMinimalPrice() {
         return this.minimalPrice;
     }
@@ -149,8 +136,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.minimalPrice = minimalPrice;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "SALE_FROM")
     public Date getSalefrom() {
         return this.salefrom;
     }
@@ -159,8 +144,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.salefrom = salefrom;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "SALE_TO")
     public Date getSaleto() {
         return this.saleto;
     }
@@ -169,8 +152,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.saleto = saleto;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -179,8 +160,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -189,7 +168,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -198,7 +176,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -207,7 +184,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -216,7 +192,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.guid = guid;
     }
 
-    @Column(name = "TAG", length = 45)
     public String getTag() {
         return tag;
     }
@@ -225,21 +200,10 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.tag = tag;
     }
 
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long skuPriceId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "SKUPRICE_ID", nullable = false)
     public long getSkuPriceId() {
         return this.skuPriceId;
     }
 
-    @Transient
     public long getId() {
         return this.skuPriceId;
     }
@@ -247,9 +211,6 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     public void setSkuPriceId(long skuPriceId) {
         this.skuPriceId = skuPriceId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

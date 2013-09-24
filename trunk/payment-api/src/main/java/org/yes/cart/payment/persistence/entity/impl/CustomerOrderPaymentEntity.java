@@ -18,7 +18,6 @@ package org.yes.cart.payment.persistence.entity.impl;
 
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -28,9 +27,6 @@ import java.util.Date;
  * Date: 07-May-2011
  * Time: 10:33:53
  */
-@Entity
-@Table(name = "TCUSTOMERORDERPAYMENT")
-@SuppressWarnings("PMD.TooManyFields")
 public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Serializable {
 
     private static final long serialVersionUID = 20100714L;
@@ -66,7 +62,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "CARD_TYPE", length = 64)
     public String getCardType() {
         return this.cardType;
     }
@@ -81,7 +76,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "CARD_HOLDER_NAME", length = 128)
     public String getCardHolderName() {
         return this.cardHolderName;
     }
@@ -97,7 +91,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "CARD_EXPIRY_YEAR", length = 4)
     public String getCardExpireYear() {
         return this.cardExpireYear;
     }
@@ -112,7 +105,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "CARD_EXPIRY_MONTH", length = 2)
     public String getCardExpireMonth() {
         return this.cardExpireMonth;
     }
@@ -127,8 +119,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CARD_START_DATE")
     public Date getCardStartDate() {
         return this.cardStartDate;
     }
@@ -143,8 +133,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "ORDER_DATE", nullable = false)
     public Date getOrderDate() {
         return this.orderDate;
     }
@@ -159,7 +147,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "ORDER_DELIVERY_AMOUNT", nullable = false)
     public BigDecimal getPaymentAmount() {
         return paymentAmount;
     }
@@ -174,7 +161,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "ORDER_CURRENCY", nullable = false, length = 3)
     public String getOrderCurrency() {
         return this.orderCurrency;
     }
@@ -189,7 +175,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "ORDER_NUMBER", nullable = false, length = 128)
     public String getOrderNumber() {
         return this.orderNumber;
     }
@@ -204,7 +189,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "ORDER_SHIPMENT_NUMBER", nullable = false, length = 128)
     public String getOrderShipment() {
         return this.orderShipment;
     }
@@ -219,7 +203,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "TRAN_REFERENCE_ID", length = 128)
     public String getTransactionReferenceId() {
         return this.transactionReferenceId;
     }
@@ -234,7 +217,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "TRAN_REQUEST_TOKEN", length = 256)
     public String getTransactionRequestToken() {
         return this.transactionRequestToken;
     }
@@ -249,7 +231,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "TRAN_AUTH_CODE", length = 256)
     public String getTransactionAuthorizationCode() {
         return this.transactionAuthorizationCode;
     }
@@ -264,7 +245,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "TRAN_PAYMENT_GATEWAY", nullable = false, length = 128)
     public String getTransactionGatewayLabel() {
         return this.transactionGatewayLabel;
     }
@@ -279,7 +259,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "TRAN_PAYMENT_OP", nullable = false, length = 128)
     public String getTransactionOperation() {
         return this.transactionOperation;
     }
@@ -291,7 +270,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
         this.transactionOperation = transactionOperation;
     }
 
-    @Column(name = "TRAN_PAYMENT_REZCODE", length = 128)
     /** {@inheritDoc} */
     public String getTransactionOperationResultCode() {
         return this.transactionOperationResultCode;
@@ -308,7 +286,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "TRAN_PAYMENT_REZMSG", length = 1024)
     public String getTransactionOperationResultMessage() {
         return this.transactionOperationResultMessage;
     }
@@ -323,8 +300,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "PP_REZCODE", nullable = false, length = 128)
-
     public String getPaymentProcessorResult() {
         return this.paymentProcessorResult;
     }
@@ -339,7 +314,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "PP_BATCH_SETTLEMENT", nullable = false, length = 1)
     public boolean isPaymentProcessorBatchSettlement() {
         return this.paymentProcessorBatchSettlement;
     }
@@ -354,8 +328,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -370,8 +342,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -386,7 +356,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -401,7 +370,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -416,7 +384,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Column(name = "GUID", length = 36, nullable = false)
     public String getGuid() {
         return this.guid;
     }
@@ -432,9 +399,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Id
-    @GeneratedValue
-    @Column(name = "CUSTOMERORDERPAYMENT_ID", nullable = false)
     public long getCustomerOrderPaymentId() {
         return this.customerOrderPaymentId;
     }
@@ -457,7 +421,6 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
      *
      * @return 4 last digits of credit card.
      */
-    @Column(name = "CARD_NUMBER", length = 4)
     public String getCardNumber() {
         return cardNumber;
     }
@@ -484,16 +447,15 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     /**
      * {@inheritDoc}
      */
-    @Transient
-    public String getCardIsuueNumber() {
+    public String getCardIssueNumber() {
         return cardIsuueNumber;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setCardIsuueNumber(final String cardIsuueNumber) {
-        this.cardIsuueNumber = cardIsuueNumber;
+    public void setCardIssueNumber(final String cardIssueNumber) {
+        this.cardIsuueNumber = cardIssueNumber;
     }
 
 

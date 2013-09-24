@@ -17,15 +17,11 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Embeddable
 public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serializable {
 
 
@@ -38,8 +34,6 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
     }
 
 
-
-    @Column(name = "URI")
     public String getUri() {
         return this.uri;
     }
@@ -48,7 +42,6 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
         this.uri = uri;
     }
 
-    @Column(name = "TITLE")
     public String getTitle() {
         return this.title;
     }
@@ -57,7 +50,6 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
         this.title = title;
     }
 
-    @Column(name = "METAKEYWORDS")
     public String getMetakeywords() {
         return this.metakeywords;
     }
@@ -66,7 +58,6 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
         this.metakeywords = metakeywords;
     }
 
-    @Column(name = "METADESCRIPTION")
     public String getMetadescription() {
         return this.metadescription;
     }
@@ -74,16 +65,6 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
     public void setMetadescription(String metadescription) {
         this.metadescription = metadescription;
     }
-
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    //this is mistical fix to prevent copy class code from
-    //owner class by  hibernate tool during code generation ! black magic !
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

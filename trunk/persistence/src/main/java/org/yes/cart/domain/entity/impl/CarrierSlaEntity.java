@@ -19,7 +19,6 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Carrier;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -28,11 +27,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TCARRIERSLA"
-)
 public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, java.io.Serializable {
 
+    private long carrierslaId;
 
     private String name;
     private String description;
@@ -58,7 +55,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
 
 
 
-    @Column(name = "NAME", nullable = false)
     public String getName() {
         return this.name;
     }
@@ -67,7 +63,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.name = name;
     }
 
-    @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;
     }
@@ -76,7 +71,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.description = description;
     }
 
-    @Column(name = "CURRENCY", nullable = false, length = 3)
     public String getCurrency() {
         return this.currency;
     }
@@ -85,7 +79,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.currency = currency;
     }
 
-    @Column(name = "MAX_DAYS")
     public Integer getMaxDays() {
         return this.maxDays;
     }
@@ -94,7 +87,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.maxDays = maxDays;
     }
 
-    @Column(name = "SLA_TYPE", nullable = false, length = 1)
     public String getSlaType() {
         return this.slaType;
     }
@@ -103,7 +95,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.slaType = slaType;
     }
 
-    @Column(name = "PRICE")
     public BigDecimal getPrice() {
         return this.price;
     }
@@ -112,7 +103,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.price = price;
     }
 
-    @Column(name = "PER_CENT")
     public BigDecimal getPercent() {
         return this.percent;
     }
@@ -121,7 +111,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.percent = percent;
     }
 
-    @Column(name = "SCRIPT", length = 4000)
     public String getScript() {
         return this.script;
     }
@@ -130,7 +119,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.script = script;
     }
 
-    @Column(name = "PRICE_NOTLESS")
     public BigDecimal getPriceNotLess() {
         return this.priceNotLess;
     }
@@ -139,7 +127,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.priceNotLess = priceNotLess;
     }
 
-    @Column(name = "PERCENT_NOTLESS")
     public BigDecimal getPercentNotLess() {
         return this.percentNotLess;
     }
@@ -148,7 +135,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.percentNotLess = percentNotLess;
     }
 
-    @Column(name = "COST_NOTLESS")
     public BigDecimal getCostNotLess() {
         return this.costNotLess;
     }
@@ -157,8 +143,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.costNotLess = costNotLess;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CARRIER_ID", nullable = false)
     public Carrier getCarrier() {
         return this.carrier;
     }
@@ -167,8 +151,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.carrier = carrier;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -177,8 +159,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -187,7 +167,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -196,7 +175,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -205,7 +183,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -214,24 +191,11 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long carrierslaId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "CARRIERSLA_ID", nullable = false)
     public long getCarrierslaId() {
         return this.carrierslaId;
     }
 
 
-    @Transient
     public long getId() {
         return this.carrierslaId;
     }
@@ -239,9 +203,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     public void setCarrierslaId(long carrierslaId) {
         this.carrierslaId = carrierslaId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

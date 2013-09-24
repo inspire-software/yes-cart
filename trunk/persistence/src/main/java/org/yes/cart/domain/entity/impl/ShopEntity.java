@@ -19,7 +19,6 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 
-import javax.persistence.*;
 import java.util.*;
 
 /**
@@ -27,11 +26,9 @@ import java.util.*;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TSHOP"
-)
 public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Serializable {
 
+    private long shopId;
 
     private String code;
     private String name;
@@ -56,7 +53,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
 
 
-    @Column(name = "CODE", nullable = false)
     public String getCode() {
         return this.code;
     }
@@ -65,7 +61,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.code = code;
     }
 
-    @Column(name = "NAME", nullable = false, length = 64)
     public String getName() {
         return this.name;
     }
@@ -74,7 +69,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.name = name;
     }
 
-    @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;
     }
@@ -83,7 +77,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.description = description;
     }
 
-    @Column(name = "FSPOINTER", nullable = false, length = 4000)
     public String getFspointer() {
         return this.fspointer;
     }
@@ -92,7 +85,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.fspointer = fspointer;
     }
 
-    @Column(name = "IMGVAULT", nullable = false, length = 4000)
     public String getImageVaultFolder() {
         return this.imageVaultFolder;
     }
@@ -101,7 +93,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.imageVaultFolder = imageVaultFolder;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "shop")
     public Set<ShopUrl> getShopUrl() {
         return this.shopUrl;
     }
@@ -110,8 +101,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.shopUrl = shopUrl;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "SHOP_ID", nullable = false, updatable = false)
     public Collection<ShopExchangeRate> getExchangerates() {
         return this.exchangerates;
     }
@@ -120,8 +109,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.exchangerates = exchangerates;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "SHOP_ID", nullable = false, updatable = false)
     public Collection<ShopAdvPlace> getAdvertisingPlaces() {
         return this.advertisingPlaces;
     }
@@ -130,7 +117,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.advertisingPlaces = advertisingPlaces;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "shop")
     public Collection<ShopDiscount> getShopDiscountRules() {
         return this.shopDiscountRules;
     }
@@ -139,7 +125,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.shopDiscountRules = shopDiscountRules;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "shop")
     public Collection<AttrValueShop> getAttributes() {
         return this.attributes;
     }
@@ -148,11 +133,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.attributes = attributes;
     }
 
-    @AttributeOverrides({
-            @AttributeOverride(name = "uri", column = @Column(name = "URI")),
-            @AttributeOverride(name = "title", column = @Column(name = "TITLE")),
-            @AttributeOverride(name = "metakeywords", column = @Column(name = "METAKEYWORDS")),
-            @AttributeOverride(name = "metadescription", column = @Column(name = "METADESCRIPTION"))})
     public SeoEntity getSeoInternal() {
         return this.seoInternal;
     }
@@ -161,8 +141,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.seoInternal = seo;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "SHOP_ID", updatable = false)
     public Collection<ShopCategory> getShopCategory() {
         return this.shopCategory;
     }
@@ -171,8 +149,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.shopCategory = shopCategory;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -181,8 +157,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -191,7 +165,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -200,7 +173,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -209,7 +181,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -218,22 +189,10 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long shopId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "SHOP_ID", nullable = false)
     public long getShopId() {
         return this.shopId;
     }
 
-    @Transient
     public long getId() {
         return this.shopId;
     }
@@ -242,7 +201,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.shopId = shopId;
     }
 
-    @Transient
     public String getSupportedCurrencies() {
         final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.SUPPORTED_CURRENCIES);
         if (attrValueShop != null) {
@@ -251,7 +209,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return null;
     }
 
-    @Transient
     public String getDefaultCurrency() {
         String currencies = getSupportedCurrencies();
         if (currencies != null) {
@@ -260,7 +217,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return null;
     }
 
-    @Transient
     public List<String> getSupportedCurrenciesAsList() {
         final String currencies = getSupportedCurrencies();
         if (currencies != null) {
@@ -270,7 +226,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
 
-    @Transient
     public Collection<AttrValueShop> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueShop> result = new ArrayList<AttrValueShop>();
         if (attributeCode != null && this.attributes != null) {
@@ -283,7 +238,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return result;
     }
 
-    @Transient
     public AttrValueShop getAttributeByCode(final String attributeCode) {
         if (attributeCode == null) {
             return null;
@@ -303,7 +257,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.getClass().getName() + this.getShopId();
     }
 
-    @Transient
     public boolean isB2ProfileActive() {
         final AttrValueShop avs = getAttributeByCode(
                 AttributeNamesKeys.SHOP_B2B);
@@ -315,7 +268,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private String markupFolder = null;
 
-    @Transient
     public String getMarkupFolder() {
         if (markupFolder == null) {
             synchronized (this) {
@@ -327,7 +279,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private String mailFolder = null;
 
-    @Transient
     public String getMailFolder() {
         if (mailFolder == null) {
             synchronized (this) {
@@ -337,7 +288,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return mailFolder;
     }
 
-    @Transient
     public String getDefaultShopUrl() {
         for (ShopUrl shopUrl : getShopUrl()) {
             if (shopUrl.getUrl().endsWith("localhost") || shopUrl.getUrl().contains("127.0.0.1")) {
@@ -349,7 +299,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
 
-    /** {@inheritDoc} */
     public Seo getSeo() {
         SeoEntity seo = getSeoInternal();
         if (seo == null) {
@@ -359,7 +308,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return seo;
     }
 
-    /** {@inheritDoc} */
     public void setSeo(final Seo seo) {
         this.setSeoInternal((SeoEntity) seo);
     }

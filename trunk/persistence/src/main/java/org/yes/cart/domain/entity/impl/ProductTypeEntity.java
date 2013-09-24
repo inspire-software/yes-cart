@@ -20,7 +20,6 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
 import org.yes.cart.domain.entity.ProductTypeAttr;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -30,11 +29,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TPRODUCTTYPE"
-)
 public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType, java.io.Serializable {
 
+    private long producttypeId;
 
     private String name;
     private String description;
@@ -58,8 +55,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
 
 
 
-
-    @Column(name = "NAME")
     public String getName() {
         return this.name;
     }
@@ -68,7 +63,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.name = name;
     }
 
-    @Column(name = "DESCRIPTION")
     public String getDescription() {
         return this.description;
     }
@@ -77,8 +71,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.description = description;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCTTYPE_ID", nullable = false, updatable = false)
     public Collection<ProdTypeAttributeViewGroup> getAttributeViewGroup() {
         return this.attributeViewGroup;
     }
@@ -87,7 +79,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.attributeViewGroup = attributeViewGroup;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "producttype")
     public Collection<ProductTypeAttr> getAttributes() {
         return this.attributes;
     }
@@ -96,7 +87,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.attributes = attributes;
     }
 
-    @Column(name = "UITEMPLATE")
     public String getUitemplate() {
         return this.uitemplate;
     }
@@ -105,7 +95,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.uitemplate = uitemplate;
     }
 
-    @Column(name = "UISEARCHTEMPLATE")
     public String getUisearchtemplate() {
         return this.uisearchtemplate;
     }
@@ -114,7 +103,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.uisearchtemplate = uisearchtemplate;
     }
 
-    @Column(name = "SERVICE")
     public boolean isService() {
         return this.service;
     }
@@ -123,7 +111,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.service = service;
     }
 
-    @Column(name = "ENSEMBLE")
     public boolean isEnsemble() {
         return this.ensemble;
     }
@@ -132,7 +119,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.ensemble = ensemble;
     }
 
-    @Column(name = "SHIPPABLE")
     public boolean isShippable() {
         return this.shippable;
     }
@@ -141,7 +127,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.shippable = shippable;
     }
 
-    @Column(name = "DIGITAL")
     public boolean isDigital() {
         return this.digital;
     }
@@ -150,7 +135,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.digital = digital;
     }
 
-    @Column(name = "DOWNLOADABLE")
     public boolean isDownloadable() {
         return this.downloadable;
     }
@@ -159,8 +143,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.downloadable = downloadable;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -169,8 +151,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -179,7 +159,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -188,7 +167,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -197,7 +175,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -206,22 +183,10 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long producttypeId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "PRODUCTTYPE_ID", nullable = false)
     public long getProducttypeId() {
         return this.producttypeId;
     }
 
-    @Transient
     public long getId() {
         return this.producttypeId;
     }
@@ -230,7 +195,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         this.producttypeId = producttypeId;
     }
 
-    @Transient
     public ProductTypeAttr getAttributeByCode(final String attributeCode) {
         if (attributeCode == null) {
             return null;
@@ -244,9 +208,6 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
         }
         return null;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

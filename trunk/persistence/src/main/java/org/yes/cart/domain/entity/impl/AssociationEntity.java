@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -25,11 +24,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TASSOCIATION"
-)
 public class AssociationEntity implements org.yes.cart.domain.entity.Association, java.io.Serializable {
 
+    private long associationId;
 
     private String code;
     private String name;
@@ -44,7 +41,6 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
     }
 
 
-    @Column(name = "CODE", nullable = false)
     public String getCode() {
         return this.code;
     }
@@ -53,7 +49,6 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
         this.code = code;
     }
 
-    @Column(name = "NAME", nullable = false)
     public String getName() {
         return this.name;
     }
@@ -62,7 +57,6 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
         this.name = name;
     }
 
-    @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;
     }
@@ -71,8 +65,6 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
         this.description = description;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -81,8 +73,6 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -91,7 +81,6 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -100,7 +89,6 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -109,7 +97,6 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -118,22 +105,10 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long associationId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "ASSOCIATION_ID", nullable = false)
     public long getAssociationId() {
         return this.associationId;
     }
 
-    @Transient
     public long getId() {
         return this.associationId;
     }
@@ -141,9 +116,6 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
     public void setAssociationId(long associationId) {
         this.associationId = associationId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

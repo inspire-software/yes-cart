@@ -16,12 +16,10 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Indexed;
 import org.yes.cart.domain.entity.*;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -31,16 +29,10 @@ import java.util.*;
  * Time: 9:10 AM
  */
 
-/**
- */
 @Indexed(index = "luceneindex/productsku")
-/*
-*/
-@Entity
-@Table(name = "TSKU"
-)
 public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, java.io.Serializable {
 
+    private long skuId;
 
     private String code;
     private String name;
@@ -65,7 +57,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
 
 
-    @Column(name = "CODE", nullable = false)
     public String getCode() {
         return this.code;
     }
@@ -74,7 +65,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.code = code;
     }
 
-    @Column(name = "NAME", nullable = false)
     public String getName() {
         return this.name;
     }
@@ -83,7 +73,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.name = name;
     }
 
-    @Column(name = "DISPLAYNAME", length = 4000)
     public String getDisplayName() {
         return this.displayName;
     }
@@ -92,7 +81,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.displayName = displayName;
     }
 
-    @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;
     }
@@ -101,8 +89,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.description = description;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "PRODUCT_ID")
     public Product getProduct() {
         return this.product;
     }
@@ -111,7 +97,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.product = product;
     }
 
-    @Column(name = "RANK")
     public int getRank() {
         return this.rank;
     }
@@ -120,7 +105,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.rank = rank;
     }
 
-    @Column(name = "BARCODE", length = 128)
     public String getBarCode() {
         return this.barCode;
     }
@@ -129,9 +113,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.barCode = barCode;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "SKU_ID", nullable = false, updatable = false)
-    @Cascade({CascadeType.ALL})
     public Collection<SkuPrice> getSkuPrice() {
         return this.skuPrice;
     }
@@ -140,9 +121,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.skuPrice = skuPrice;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "SKU_ID", updatable = false)
-    @Cascade({CascadeType.ALL})
     public Collection<AttrValueProductSku> getAttributes() {
         return this.attributes;
     }
@@ -151,9 +129,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.attributes = attributes;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
-    @JoinColumn(name = "SKU_ID", updatable = false)
-    @Cascade({CascadeType.ALL})
     public Collection<SkuWarehouse> getQuantityOnWarehouse() {
         return this.quantityOnWarehouse;
     }
@@ -162,11 +137,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.quantityOnWarehouse = quantityOnWarehouse;
     }
 
-    @AttributeOverrides({
-            @AttributeOverride(name = "uri", column = @Column(name = "URI")),
-            @AttributeOverride(name = "title", column = @Column(name = "TITLE")),
-            @AttributeOverride(name = "metakeywords", column = @Column(name = "METAKEYWORDS")),
-            @AttributeOverride(name = "metadescription", column = @Column(name = "METADESCRIPTION"))})
     public SeoEntity getSeoInternal() {
         return this.seoInternal;
     }
@@ -175,8 +145,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.seoInternal = seo;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -185,8 +153,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -195,7 +161,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -204,7 +169,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -213,7 +177,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -222,22 +185,11 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long skuId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "SKU_ID", nullable = false)
+    @DocumentId
     public long getSkuId() {
         return this.skuId;
     }
 
-    @Transient
     public long getId() {
         return this.skuId;
     }
@@ -246,7 +198,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.skuId = skuId;
     }
 
-    @Transient
     public Collection<AttrValueProductSku> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueProductSku> result = new ArrayList<AttrValueProductSku>();
         if (attributeCode != null && this.attributes != null) {
@@ -259,7 +210,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         return result;
     }
 
-    @Transient
     public AttrValueProductSku getAttributeByCode(final String attributeCode) {
         if (attributeCode == null) {
             return null;
@@ -275,7 +225,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
 
-    @Transient
     public Map<String, AttrValue> getAllAttibutesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         if (this.attributes != null) {
@@ -288,13 +237,11 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         return rez;
     }
 
-    @Transient
     public Collection<AttrValue> getAllAttibutes() {
         return new ArrayList<AttrValue>(attributes);
     }
 
 
-    /** {@inheritDoc} */
     public Seo getSeo() {
         SeoEntity seo = getSeoInternal();
         if (seo == null) {
@@ -304,12 +251,10 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         return seo;
     }
 
-    /** {@inheritDoc} */
     public void setSeo(final Seo seo) {
         this.setSeoInternal((SeoEntity) seo);
     }
 
-    @Transient
     public BigDecimal getQty() {
         BigDecimal rez = BigDecimal.ZERO.setScale(2);
         for (SkuWarehouse swe : getQuantityOnWarehouse()) {
@@ -317,9 +262,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         }
         return rez;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

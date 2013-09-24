@@ -20,7 +20,6 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.System;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -28,11 +27,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TSYSTEMATTRVALUE"
-)
 public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrValueSystem, java.io.Serializable {
 
+    private long attrvalueId;
 
     private String val;
     private String displayVal;
@@ -50,7 +47,6 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
 
 
 
-    @Column(name = "VAL", length = 4000)
     public String getVal() {
         return this.val;
     }
@@ -59,7 +55,6 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
         this.val = val;
     }
 
-    @Column(name = "DISPLAYVAL", length = 4000)
     public String getDisplayVal() {
         return this.displayVal;
     }
@@ -68,8 +63,6 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
         this.displayVal = displayVal;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CODE", nullable = false, insertable = false, updatable = false)
     public Attribute getAttribute() {
         return this.attribute;
     }
@@ -78,8 +71,6 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
         this.attribute = attribute;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SYSTEM_ID", nullable = false)
     public System getSystem() {
         return this.system;
     }
@@ -88,8 +79,6 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
         this.system = system;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -98,8 +87,6 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -108,7 +95,6 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -117,7 +103,6 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -126,7 +111,6 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -135,23 +119,10 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long attrvalueId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"),  @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "ATTRVALUE_ID", nullable = false)
     public long getAttrvalueId() {
         return this.attrvalueId;
     }
 
-    @Transient
     public long getId() {
         return this.attrvalueId;
     }
@@ -160,9 +131,6 @@ public class AttrValueEntitySystem implements org.yes.cart.domain.entity.AttrVal
     public void setAttrvalueId(long attrvalueId) {
         this.attrvalueId = attrvalueId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

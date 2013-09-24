@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -25,11 +24,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TETYPE"
-)
 public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Serializable {
 
+    private long etypeId;
 
     private String javatype;
     private String businesstype;
@@ -43,8 +40,6 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
     }
 
 
-
-    @Column(name = "JAVATYPE", nullable = false)
     public String getJavatype() {
         return this.javatype;
     }
@@ -53,7 +48,6 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
         this.javatype = javatype;
     }
 
-    @Column(name = "BUSINESSTYPE")
     public String getBusinesstype() {
         return this.businesstype;
     }
@@ -62,8 +56,6 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
         this.businesstype = businesstype;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -72,8 +64,6 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -82,7 +72,6 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -91,7 +80,6 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -100,7 +88,6 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -109,22 +96,10 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long etypeId;
-    /*@GenericGenerator(name="generator",strategy="native",   parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})*/
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "ETYPE_ID", nullable = false)
     public long getEtypeId() {
         return this.etypeId;
     }
 
-    @Transient
     public long getId() {
         return this.etypeId;
     }
@@ -133,9 +108,6 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
     public void setEtypeId(long etypeId) {
         this.etypeId = etypeId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

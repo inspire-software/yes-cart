@@ -18,7 +18,6 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Shop;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -26,11 +25,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TSHOPURL"
-)
 public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.io.Serializable {
 
+    private long storeUrlId;
 
     private String url;
     private Shop shop;
@@ -60,8 +57,6 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
         this.guid = guid;
     }
 
-
-    @Column(name = "URL", nullable = false, length = 512)
     public String getUrl() {
         return this.url;
     }
@@ -70,8 +65,6 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
         this.url = url;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SHOP_ID", nullable = false)
     public Shop getShop() {
         return this.shop;
     }
@@ -80,8 +73,6 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
         this.shop = shop;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -90,8 +81,6 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -100,7 +89,6 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -109,7 +97,6 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -118,7 +105,6 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -127,24 +113,11 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long storeUrlId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "TSTOREURL_ID", nullable = false)
     public long getStoreUrlId() {
         return this.storeUrlId;
     }
 
 
-    @Transient
     public long getId() {
         return this.storeUrlId;
     }
@@ -152,9 +125,6 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
     public void setStoreUrlId(long storeUrlId) {
         this.storeUrlId = storeUrlId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

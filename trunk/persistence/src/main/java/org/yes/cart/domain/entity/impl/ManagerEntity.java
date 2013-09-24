@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -25,11 +24,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TMANAGER"
-)
 public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.io.Serializable {
 
+    private long managerId;
 
     private String email;
     private String firstname;
@@ -47,8 +44,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
 
 
 
-
-    @Column(name = "EMAIL", unique = true, nullable = false)
     public String getEmail() {
         return this.email;
     }
@@ -57,7 +52,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.email = email;
     }
 
-    @Column(name = "FIRSTNAME", nullable = false, length = 128)
     public String getFirstname() {
         return this.firstname;
     }
@@ -66,7 +60,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.firstname = firstname;
     }
 
-    @Column(name = "LASTNAME", nullable = false, length = 128)
     public String getLastname() {
         return this.lastname;
     }
@@ -75,7 +68,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.lastname = lastname;
     }
 
-    @Column(name = "MIDDLENAME", length = 128)
     public String getMiddlename() {
         return this.middlename;
     }
@@ -84,7 +76,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.middlename = middlename;
     }
 
-    @Column(name = "PASSWORD", nullable = false)
     public String getPassword() {
         return this.password;
     }
@@ -93,8 +84,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.password = password;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -103,8 +92,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -113,7 +100,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -122,7 +108,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -131,7 +116,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -140,23 +124,10 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long managerId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "MANAGER_ID", nullable = false)
     public long getManagerId() {
         return this.managerId;
     }
 
-    @Transient
     public long getId() {
         return this.managerId;
     }
@@ -164,9 +135,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     public void setManagerId(long managerId) {
         this.managerId = managerId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

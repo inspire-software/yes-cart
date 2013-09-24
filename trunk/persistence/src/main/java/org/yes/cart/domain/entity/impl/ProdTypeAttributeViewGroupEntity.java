@@ -19,7 +19,6 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.ProductType;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -27,11 +26,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TPRODTYPEATTRVIEWGROUP"
-)
 public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.entity.ProdTypeAttributeViewGroup, java.io.Serializable {
 
+    private long prodTypeAttributeViewGroupId;
 
     private ProductType producttype;
     private String attrCodeList;
@@ -48,8 +45,6 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     }
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCTTYPE_ID", nullable = false)
     public ProductType getProducttype() {
         return this.producttype;
     }
@@ -58,7 +53,6 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
         this.producttype = producttype;
     }
 
-    @Column(name = "ATTRCODELIST", length = 4000)
     public String getAttrCodeList() {
         return this.attrCodeList;
     }
@@ -67,7 +61,6 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
         this.attrCodeList = attrCodeList;
     }
 
-    @Column(name = "RANK")
     public int getRank() {
         return this.rank;
     }
@@ -76,7 +69,6 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
         this.rank = rank;
     }
 
-    @Column(name = "NAME", nullable = false, length = 64)
     public String getName() {
         return this.name;
     }
@@ -85,7 +77,6 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
         this.name = name;
     }
 
-    @Column(name = "DISPLAYNAME")
     public String getDisplayName() {
         return this.displayName;
     }
@@ -94,8 +85,6 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
         this.displayName = displayName;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -104,8 +93,6 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -114,7 +101,6 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -123,7 +109,6 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -132,7 +117,6 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -141,23 +125,10 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long prodTypeAttributeViewGroupId;
-
-    //@GenericGenerator( name="generator",  strategy="native",  parameters={@Parameter(name="column", value="value"),  @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "ATTRIBUTEGROUP_ID", nullable = false)
     public long getProdTypeAttributeViewGroupId() {
         return this.prodTypeAttributeViewGroupId;
     }
 
-    @Transient
     public long getId() {
         return this.prodTypeAttributeViewGroupId;
     }
@@ -165,9 +136,6 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
     public void setProdTypeAttributeViewGroupId(long prodTypeAttributeViewGroupId) {
         this.prodTypeAttributeViewGroupId = prodTypeAttributeViewGroupId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

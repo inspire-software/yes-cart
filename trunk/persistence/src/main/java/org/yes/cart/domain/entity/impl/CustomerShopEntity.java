@@ -20,7 +20,6 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -28,11 +27,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TCUSTOMERSHOP"
-)
 public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerShop, java.io.Serializable {
 
+    private long customerShopId;
 
     private Customer customer;
     private Shop shop;
@@ -46,8 +43,6 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
     }
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CUSTOMER_ID", nullable = false)
     public Customer getCustomer() {
         return this.customer;
     }
@@ -56,8 +51,6 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         this.customer = customer;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SHOP_ID", nullable = false)
     public Shop getShop() {
         return this.shop;
     }
@@ -66,8 +59,6 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         this.shop = shop;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -76,8 +67,6 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -86,7 +75,6 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -95,7 +83,6 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -104,7 +91,6 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -113,24 +99,11 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long customerShopId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "CUSTOMERWISHLIST_ID", nullable = false)
     public long getCustomerShopId() {
         return this.customerShopId;
     }
 
 
-    @Transient
     public long getId() {
         return this.customerShopId;
     }
@@ -138,9 +111,6 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
     public void setCustomerShopId(long customerShopId) {
         this.customerShopId = customerShopId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

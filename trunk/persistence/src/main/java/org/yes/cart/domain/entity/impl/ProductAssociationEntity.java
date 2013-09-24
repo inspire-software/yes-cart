@@ -20,7 +20,6 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Association;
 import org.yes.cart.domain.entity.Product;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -28,11 +27,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TPRODUCTASSOCIATION"
-)
 public class ProductAssociationEntity implements org.yes.cart.domain.entity.ProductAssociation, java.io.Serializable {
 
+    private long productassociationId;
 
     private int rank;
     private Association association;
@@ -48,7 +45,6 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
     }
 
 
-    @Column(name = "RANK")
     public int getRank() {
         return this.rank;
     }
@@ -57,8 +53,6 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
         this.rank = rank;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ASSOCIATION_ID", nullable = false)
     public Association getAssociation() {
         return this.association;
     }
@@ -67,8 +61,6 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
         this.association = association;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "PRODUCT_ID", nullable = false)
     public Product getProduct() {
         return this.product;
     }
@@ -77,8 +69,6 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
         this.product = product;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ASSOCIATEDPRODUCT_ID", nullable = false)
     public Product getProductAssociated() {
         return this.productAssociated;
     }
@@ -87,8 +77,6 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
         this.productAssociated = productAssociated;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -97,8 +85,6 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -107,7 +93,6 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -116,7 +101,6 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -125,7 +109,6 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -134,23 +117,10 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long productassociationId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "PRODUCTASSOCIATION_ID", nullable = false)
     public long getProductassociationId() {
         return this.productassociationId;
     }
 
-    @Transient
     public long getId() {
         return this.productassociationId;
     }
@@ -159,9 +129,6 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
     public void setProductassociationId(long productassociationId) {
         this.productassociationId = productassociationId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

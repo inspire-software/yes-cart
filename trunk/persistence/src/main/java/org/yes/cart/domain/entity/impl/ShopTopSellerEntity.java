@@ -19,7 +19,6 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -28,11 +27,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TSHOPTOPSELLER"
-)
 public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSeller, java.io.Serializable {
 
+    private long shopTopsellerId;
 
     private Shop shop;
     private Product product;
@@ -48,8 +45,6 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
 
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SHOP_ID", nullable = false)
     public Shop getShop() {
         return this.shop;
     }
@@ -58,8 +53,6 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
         this.shop = shop;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "PRODUCT_ID", nullable = false)
     public Product getProduct() {
         return this.product;
     }
@@ -68,7 +61,6 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
         this.product = product;
     }
 
-    @Column(name = "COUNTER")
     public BigDecimal getCounter() {
         return this.counter;
     }
@@ -77,8 +69,6 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
         this.counter = counter;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -87,8 +77,6 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -97,7 +85,6 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -106,7 +93,6 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -115,7 +101,6 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -124,17 +109,6 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long shopTopsellerId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "SHOPTOPSELLER_ID", nullable = false)
     public long getShopTopsellerId() {
         return shopTopsellerId;
     }
@@ -143,13 +117,9 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
         this.shopTopsellerId = shopTopsellerId;
     }
 
-    @Transient
     public long getId() {
         return this.shopTopsellerId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

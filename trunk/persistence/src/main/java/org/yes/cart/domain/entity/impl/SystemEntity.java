@@ -18,7 +18,6 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.AttrValueSystem;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,11 +27,9 @@ import java.util.Map;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TSYSTEM"
-)
 public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.Serializable {
 
+    private long systemId;
 
     private String code;
     private String name;
@@ -49,8 +46,6 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
 
 
 
-
-    @Column(name = "CODE", nullable = false)
     public String getCode() {
         return this.code;
     }
@@ -59,7 +54,6 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
         this.code = code;
     }
 
-    @Column(name = "NAME", nullable = false, length = 64)
     public String getName() {
         return this.name;
     }
@@ -68,7 +62,6 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
         this.name = name;
     }
 
-    @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;
     }
@@ -77,7 +70,6 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
         this.description = description;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "system")
     public Map<String, AttrValueSystem> getAttributes() {
         return this.attributes;
     }
@@ -86,8 +78,6 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
         this.attributes = attributes;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -96,8 +86,6 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -106,7 +94,6 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -115,7 +102,6 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -124,7 +110,6 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -133,23 +118,10 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long systemId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "SYSTEM_ID", nullable = false)
     public long getSystemId() {
         return this.systemId;
     }
 
-    @Transient
     public long getId() {
         return this.systemId;
     }
@@ -157,9 +129,6 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
     public void setSystemId(long systemId) {
         this.systemId = systemId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

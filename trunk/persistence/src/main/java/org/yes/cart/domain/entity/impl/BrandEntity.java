@@ -19,7 +19,6 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.AttrValueBrand;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -29,11 +28,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TBRAND"
-)
 public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Serializable {
 
+    private long brandId;
 
     private String name;
     private String description;
@@ -49,7 +46,6 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
 
 
 
-    @Column(name = "NAME", nullable = false)
     public String getName() {
         return this.name;
     }
@@ -58,7 +54,6 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         this.name = name;
     }
 
-    @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;
     }
@@ -67,7 +62,6 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         this.description = description;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "brand")
     public Collection<AttrValueBrand> getAttributes() {
         return this.attributes;
     }
@@ -76,8 +70,6 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         this.attributes = attributes;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -86,8 +78,6 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -96,7 +86,6 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -105,7 +94,6 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -114,7 +102,6 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -123,24 +110,10 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long brandId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-
-    @Column(name = "BRAND_ID", nullable = false)
     public long getBrandId() {
         return this.brandId;
     }
 
-    @Transient
     public long getId() {
         return this.brandId;
     }
@@ -148,9 +121,6 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
     public void setBrandId(long brandId) {
         this.brandId = brandId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

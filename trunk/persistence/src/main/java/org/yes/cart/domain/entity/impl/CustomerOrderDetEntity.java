@@ -20,7 +20,6 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ProductSku;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -29,11 +28,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TCUSTOMERORDERDET"
-)
 public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.CustomerOrderDet, java.io.Serializable {
 
+    private long customerOrderDetId;
 
     private BigDecimal qty;
     private BigDecimal price;
@@ -51,7 +48,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
 
 
 
-    @Column(name = "QTY")
     public BigDecimal getQty() {
         return this.qty;
     }
@@ -60,7 +56,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.qty = qty;
     }
 
-    @Column(name = "PRICE", nullable = false)
     public BigDecimal getPrice() {
         return this.price;
     }
@@ -69,11 +64,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.price = price;
     }
 
-    /**
-     * Get list / catalog price.
-     * @return price
-     */
-    @Column(name = "LIST_PRICE", nullable = false)
     public BigDecimal getListPrice() {
         return listPrice;
     }
@@ -82,8 +72,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.listPrice = listPrice;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "SKU_ID", nullable = false)
     public ProductSku getSku() {
         return this.sku;
     }
@@ -92,8 +80,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.sku = sku;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CUSTOMERORDER_ID", nullable = false)
     public CustomerOrder getCustomerOrder() {
         return this.customerOrder;
     }
@@ -102,8 +88,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.customerOrder = customerOrder;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -112,8 +96,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -122,7 +104,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -131,7 +112,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -140,7 +120,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -149,24 +128,10 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long customerOrderDetId;
-
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-
-    @Column(name = "CUSTOMERORDERDET_ID", nullable = false)
     public long getCustomerOrderDetId() {
         return this.customerOrderDetId;
     }
 
-    @Transient
     public long getId() {
         return this.customerOrderDetId;
     }
@@ -176,15 +141,9 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.customerOrderDetId = customerOrderDetId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public String getProductSkuCode() {
         return this.sku == null ? null : this.sku.getCode();
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

@@ -45,19 +45,19 @@
     <bean id="paySessionFactory"
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="payDataSource"/>
-        <property name="annotatedClasses">
+        <property name="mappingResources">
             <list>
-                <value>org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity</value>
-                <value>org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity</value>
+                <value>hibernate/ycp.xml</value>
             </list>
         </property>
+
         <property name="hibernateProperties">
-            <map>
-                <entry key="hibernate.show_sql" value="false"/>
-                <entry key="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
-                <entry key="hibernate.hbm2ddl.auto" value="create"/>
-                <entry key="hibernate.connection.autocommit" value="true"/>
-            </map>
+            <props>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
+                <prop key="hibernate.connection.autocommit">true</prop>
+            </props>
         </property>
         <property name="entityInterceptor">
             <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor"/>

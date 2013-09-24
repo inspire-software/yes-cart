@@ -63,7 +63,7 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
         payment.setCardExpireMonth("02");
         payment.setCardExpireYear("2020");
         payment.setCardHolderName("Bender Rodrigues");
-        payment.setCardIsuueNumber("123");
+        payment.setCardIssueNumber("123");
         payment.setCardNumber("41111111115678");
         payment.setCardStartDate(new Date());
         payment.setOrderCurrency("EUR");

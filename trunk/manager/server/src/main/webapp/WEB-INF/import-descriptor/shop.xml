@@ -81,7 +81,7 @@
                     <text-qualifier>&quot;</text-qualifier>
                 </import-file-descriptor>
 
-                <select-sql>select u from ShopUrl u where u.url = {url} and u.shop = {masterObject}</select-sql>
+                <select-sql>select u from ShopUrlEntity u where u.url = {url} and u.shop = {masterObject}</select-sql>
 
                 <import-columns>
 

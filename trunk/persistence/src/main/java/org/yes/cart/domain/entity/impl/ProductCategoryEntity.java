@@ -19,7 +19,6 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -27,11 +26,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TPRODUCTCATEGORY"
-)
 public class ProductCategoryEntity implements org.yes.cart.domain.entity.ProductCategory, java.io.Serializable {
 
+    private long productCategoryId;
 
     private Product product;
     private Category category;
@@ -46,9 +43,6 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
     }
 
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCT_ID", nullable = false)
     public Product getProduct() {
         return this.product;
     }
@@ -57,8 +51,6 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
         this.product = product;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_ID", nullable = false)
     public Category getCategory() {
         return this.category;
     }
@@ -67,7 +59,6 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
         this.category = category;
     }
 
-    @Column(name = "RANK")
     public int getRank() {
         return this.rank;
     }
@@ -76,8 +67,6 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
         this.rank = rank;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -86,8 +75,6 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -96,7 +83,6 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -105,7 +91,6 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -114,7 +99,6 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -123,22 +107,10 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long productCategoryId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "PRODUCTCATEGORY_ID", nullable = false)
     public long getProductCategoryId() {
         return this.productCategoryId;
     }
 
-    @Transient
     public long getId() {
         return this.productCategoryId;
     }
@@ -146,9 +118,6 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
     public void setProductCategoryId(long productCategoryId) {
         this.productCategoryId = productCategoryId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

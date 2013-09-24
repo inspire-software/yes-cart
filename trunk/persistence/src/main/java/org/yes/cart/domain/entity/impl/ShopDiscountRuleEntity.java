@@ -16,7 +16,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -24,11 +23,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TSHOPDISCOUNTRULE"
-)
 public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDiscountRule, java.io.Serializable {
 
+    private long shopDiscountRuleId;
 
     private String rule;
     private String name;
@@ -44,8 +41,6 @@ public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDi
 
 
 
-
-    @Column(name = "RULE", length = 4000)
     public String getRule() {
         return this.rule;
     }
@@ -54,7 +49,6 @@ public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDi
         this.rule = rule;
     }
 
-    @Column(name = "NAME")
     public String getName() {
         return this.name;
     }
@@ -63,7 +57,6 @@ public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDi
         this.name = name;
     }
 
-    @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;
     }
@@ -72,8 +65,6 @@ public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDi
         this.description = description;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -82,8 +73,6 @@ public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDi
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -92,7 +81,6 @@ public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDi
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -101,7 +89,6 @@ public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDi
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -110,7 +97,6 @@ public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDi
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -119,24 +105,11 @@ public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDi
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long shopDiscountRuleId;
-
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "SHOPDISCOUNTRULE_ID", nullable = false)
     public long getShopDiscountRuleId() {
         return this.shopDiscountRuleId;
     }
 
 
-    @Transient
     public long getId() {
         return this.shopDiscountRuleId;
     }
@@ -144,9 +117,6 @@ public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDi
     public void setShopDiscountRuleId(long shopDiscountRuleId) {
         this.shopDiscountRuleId = shopDiscountRuleId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

@@ -17,15 +17,12 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.search.annotations.*;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.xml.CategoryPriceNavigationXStreamProvider;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.stream.xml.XStreamProvider;
 
-import javax.persistence.*;
 import java.util.*;
 
 /**
@@ -34,10 +31,9 @@ import java.util.*;
  * Time: 9:10 AM
  */
 @Indexed(index = "luceneindex/category")
-@Entity
-@Table(name = "TCATEGORY")
 public class CategoryEntity implements org.yes.cart.domain.entity.Category, java.io.Serializable {
 
+    private long categoryId;
 
     private long parentId;
     private int rank;
@@ -66,7 +62,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
 
 
-    @Column(name = "PARENT_ID")
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public long getParentId() {
         return this.parentId;
@@ -76,7 +71,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.parentId = parentId;
     }
 
-    @Column(name = "RANK")
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public int getRank() {
         return this.rank;
@@ -86,9 +80,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.rank = rank;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @Cascade({CascadeType.SAVE_UPDATE})
-    @JoinColumn(name = "PRODUCTTYPE_ID")
     public ProductType getProductType() {
         return this.productType;
     }
@@ -97,7 +88,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.productType = productType;
     }
 
-    @Column(name = "NAME", nullable = false)
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getName() {
         return this.name;
@@ -107,7 +97,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.name = name;
     }
 
-    @Column(name = "DISPLAYNAME", length = 4000)
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getDisplayName() {
         return this.displayName;
@@ -117,7 +106,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.displayName = displayName;
     }
 
-    @Column(name = "DESCRIPTION", length = 4000)
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getDescription() {
         return this.description;
@@ -127,7 +115,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.description = description;
     }
 
-    @Column(name = "UITEMPLATE")
     public String getUitemplate() {
         return this.uitemplate;
     }
@@ -136,8 +123,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.uitemplate = uitemplate;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "AVAILABLEFROM")
     public Date getAvailablefrom() {
         return this.availablefrom;
     }
@@ -146,8 +131,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.availablefrom = availablefrom;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "AVAILABLETO")
     public Date getAvailableto() {
         return this.availableto;
     }
@@ -156,7 +139,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.availableto = availableto;
     }
 
-    @OneToMany(cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "category")
     public Collection<AttrValueCategory> getAttributes() {
         return this.attributes;
     }
@@ -165,11 +147,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.attributes = attributes;
     }
 
-    @AttributeOverrides({
-            @AttributeOverride(name = "uri", column = @Column(name = "URI")),
-            @AttributeOverride(name = "title", column = @Column(name = "TITLE")),
-            @AttributeOverride(name = "metakeywords", column = @Column(name = "METAKEYWORDS")),
-            @AttributeOverride(name = "metadescription", column = @Column(name = "METADESCRIPTION"))})
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SeoBridge.class)
     public SeoEntity getSeoInternal() {
         return this.seoInternal;
@@ -179,8 +156,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.seoInternal = seo;
     }
 
-    @OneToMany(cascade = javax.persistence.CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_ID", updatable = false)
     public Set<ProductCategory> getProductCategory() {
         return this.productCategory;
     }
@@ -189,7 +164,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.productCategory = productCategory;
     }
 
-    @Column(name = "NAV_BY_ATTR", length = 1)
     public Boolean getNavigationByAttributes() {
         return this.navigationByAttributes;
     }
@@ -198,7 +172,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.navigationByAttributes = navigationByAttributes;
     }
 
-    @Column(name = "NAV_BY_BRAND", length = 1)
     public Boolean getNavigationByBrand() {
         return this.navigationByBrand;
     }
@@ -207,7 +180,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.navigationByBrand = navigationByBrand;
     }
 
-    @Column(name = "NAV_BY_PRICE", length = 1)
     public Boolean getNavigationByPrice() {
         return this.navigationByPrice;
     }
@@ -216,7 +188,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.navigationByPrice = navigationByPrice;
     }
 
-    @Column(name = "NAV_BY_PRICE_TIERS", length = 4000)
     public String getNavigationByPriceTiers() {
         return this.navigationByPriceTiers;
     }
@@ -225,8 +196,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.navigationByPriceTiers = navigationByPriceTiers;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -235,8 +204,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -245,7 +212,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -254,7 +220,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -263,7 +228,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -272,22 +236,11 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long categoryId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    @Column(name = "CATEGORY_ID", nullable = false)
     @DocumentId
     public long getCategoryId() {
         return this.categoryId;
     }
 
-    @Transient
     public long getId() {
         return this.categoryId;
     }
@@ -314,7 +267,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
     private PriceTierTree priceTierTreeCache = null;
 
-    @Transient
     public PriceTierTree getNavigationByPriceTree() {
         if (priceTierTreeCache == null && getNavigationByPriceTiers() != null) {
             priceTierTreeCache = xStreamProvider.fromXML(getNavigationByPriceTiers()); //This method like to eat CPU
@@ -328,12 +280,10 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.priceTierTreeCache = tree;
     }
 
-    @Override
     public String toString() {
         return this.getClass().getName() + this.getCategoryId();
     }
 
-    @Transient
     public Set<AttrValueCategory> getAttributesByCode(final String attributeCode) {
         if (attributeCode == null) {
             return null;
@@ -352,7 +302,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         return result;
     }
 
-    @Transient
     public AttrValueCategory getAttributeByCode(String attributeCode) {
         if (attributeCode == null) {
             return null;
@@ -367,7 +316,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         return null;
     }
 
-    @Transient
     public Map<String, AttrValue> getAllAttibutesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         for (AttrValue attrValue : getAllAttibutes()) {
@@ -378,7 +326,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         return rez;
     }
 
-    @Transient
     public Collection<AttrValue> getAllAttibutes() {
         return new ArrayList<AttrValue>(attributes);
     }
@@ -398,9 +345,6 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     public void setSeo(final Seo seo) {
         this.setSeoInternal((SeoEntity) seo);
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

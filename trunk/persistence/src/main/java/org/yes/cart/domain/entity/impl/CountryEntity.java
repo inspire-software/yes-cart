@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -25,11 +24,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TCOUNTRY"
-)
 public class CountryEntity implements org.yes.cart.domain.entity.Country, java.io.Serializable {
 
+    private long countryId;
 
     private String countryCode;
     private String isoCode;
@@ -46,7 +43,6 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
 
 
 
-    @Column(name = "COUNTRY_CODE", nullable = false, length = 2)
     public String getCountryCode() {
         return this.countryCode;
     }
@@ -55,7 +51,6 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
         this.countryCode = countryCode;
     }
 
-    @Column(name = "ISO_CODE", nullable = false, length = 3)
     public String getIsoCode() {
         return this.isoCode;
     }
@@ -64,7 +59,6 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
         this.isoCode = isoCode;
     }
 
-    @Column(name = "NAME", nullable = false, length = 64)
     public String getName() {
         return this.name;
     }
@@ -73,8 +67,6 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
         this.name = name;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -83,8 +75,6 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -93,7 +83,6 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -102,7 +91,6 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -111,7 +99,6 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -120,21 +107,10 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long countryId;
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-
-    @Column(name = "COUNTRY_ID", nullable = false, length = 2)
     public long getCountryId() {
         return this.countryId;
     }
 
-    @Transient
     public long getId() {
         return this.countryId;
     }
@@ -143,9 +119,6 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
     public void setCountryId(long countryId) {
         this.countryId = countryId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 
