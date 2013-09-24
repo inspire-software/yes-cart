@@ -20,7 +20,6 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Category;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -28,11 +27,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TCATEGORYATTRVALUE"
-)
 public class AttrValueEntityCategory implements org.yes.cart.domain.entity.AttrValueCategory, java.io.Serializable {
 
+    private long attrvalueId;
 
     private String val;
     private String displayVal;
@@ -49,7 +46,6 @@ public class AttrValueEntityCategory implements org.yes.cart.domain.entity.AttrV
 
 
 
-    @Column(name = "VAL", length = 4000)
     public String getVal() {
         return this.val;
     }
@@ -58,7 +54,6 @@ public class AttrValueEntityCategory implements org.yes.cart.domain.entity.AttrV
         this.val = val;
     }
 
-    @Column(name = "DISPLAYVAL", length = 4000)
     public String getDisplayVal() {
         return this.displayVal;
     }
@@ -67,8 +62,6 @@ public class AttrValueEntityCategory implements org.yes.cart.domain.entity.AttrV
         this.displayVal = displayVal;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_ID", nullable = false)
     public Category getCategory() {
         return this.category;
     }
@@ -77,8 +70,6 @@ public class AttrValueEntityCategory implements org.yes.cart.domain.entity.AttrV
         this.category = category;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CODE", nullable = false)
     public Attribute getAttribute() {
         return this.attribute;
     }
@@ -87,8 +78,6 @@ public class AttrValueEntityCategory implements org.yes.cart.domain.entity.AttrV
         this.attribute = attribute;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -97,8 +86,6 @@ public class AttrValueEntityCategory implements org.yes.cart.domain.entity.AttrV
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -107,7 +94,6 @@ public class AttrValueEntityCategory implements org.yes.cart.domain.entity.AttrV
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -116,7 +102,6 @@ public class AttrValueEntityCategory implements org.yes.cart.domain.entity.AttrV
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -125,7 +110,6 @@ public class AttrValueEntityCategory implements org.yes.cart.domain.entity.AttrV
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -134,23 +118,10 @@ public class AttrValueEntityCategory implements org.yes.cart.domain.entity.AttrV
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long attrvalueId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"),     @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "ATTRVALUE_ID", nullable = false)
     public long getAttrvalueId() {
         return this.attrvalueId;
     }
 
-    @Transient
     public long getId() {
         return this.attrvalueId;
     }
@@ -159,9 +130,6 @@ public class AttrValueEntityCategory implements org.yes.cart.domain.entity.AttrV
     public void setAttrvalueId(long attrvalueId) {
         this.attrvalueId = attrvalueId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

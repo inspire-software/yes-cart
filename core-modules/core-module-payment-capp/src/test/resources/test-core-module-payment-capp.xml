@@ -14,7 +14,7 @@
 
 
     
-    <import resource="../../../../payment-api/src/test/resources/test-payment-api.xml"/>
+    <import resource="classpath*:test-payment-api.xml"/>
 
 
     <bean id="cyberSourcePaymentGateway" class="org.yes.cart.payment.impl.CyberSourcePaymentGatewayImpl" scope="prototype">

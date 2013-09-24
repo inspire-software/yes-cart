@@ -19,7 +19,6 @@ package org.yes.cart.payment.persistence.entity.impl;
 
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 
-import javax.persistence.*;
 import java.util.Date;
 
 
@@ -28,8 +27,6 @@ import java.util.Date;
  * Date: 07-May-2011
  * Time: 10:33:53
  */
-@Entity
-@Table(name = "TPAYMENTGATEWAYPARAMETER")
 public class PaymentGatewayParameterEntity extends DescriptorImpl implements PaymentGatewayParameter {
 
     private static final long serialVersionUID = 20100714L;
@@ -47,9 +44,6 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
     /**
      * @return pk value
      */
-    @Id
-    @GeneratedValue
-    @Column(name = "PAYMENTGATEWAYPARAMETER_ID", nullable = false)
     public long getPaymentGatewayParameterId() {
         return paymentGatewayParameterId;
     }
@@ -64,7 +58,6 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
     /**
      * {@inheritDoc}
      */
-    @Column(name = "P_VALUE", length = 4000)
     public String getValue() {
         return value;
     }
@@ -81,7 +74,6 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
      *
      * @return name
      */
-    @Column(name = "P_NAME", length = 64)
     public String getName() {
         return name;
     }
@@ -100,7 +92,6 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
      *
      * @return Description
      */
-    @Column(name = "P_DESCRIPTION", length = 265)
     public String getDescription() {
         return description;
     }
@@ -119,7 +110,6 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
      *
      * @return label.
      */
-    @Column(name = "P_LABEL", length = 64)
     public String getLabel() {
         return label;
     }
@@ -136,7 +126,6 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
     /**
      * {@inheritDoc}
      */
-    @Column(name = "PG_LABEL", length = 64)
     public String getPgLabel() {
         return pgLabel;
     }
@@ -148,8 +137,6 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
         this.pgLabel = pgLabel;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -158,8 +145,6 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -168,7 +153,6 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -177,7 +161,6 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -186,7 +169,6 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", length = 36)
     public String getGuid() {
         return this.guid;
     }

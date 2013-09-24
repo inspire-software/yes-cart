@@ -16,11 +16,9 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.hibernate.annotations.Cascade;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -29,11 +27,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TSKUWAREHOUSE", uniqueConstraints = {@UniqueConstraint(columnNames = {"WAREHOUSE_ID","SKU_ID"})}
-)
 public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehouse, java.io.Serializable {
 
+    private long skuWarehouseId;
 
     private Warehouse warehouse;
     private ProductSku sku;
@@ -49,9 +45,6 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     }
 
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "WAREHOUSE_ID", nullable = false)
     public Warehouse getWarehouse() {
         return this.warehouse;
     }
@@ -60,13 +53,6 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.warehouse = warehouse;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SKU_ID", nullable = false)
-    @Cascade({
-            org.hibernate.annotations.CascadeType.PERSIST,
-            org.hibernate.annotations.CascadeType.MERGE,
-            org.hibernate.annotations.CascadeType.REFRESH
-    })
     public ProductSku getSku() {
         return this.sku;
     }
@@ -75,7 +61,6 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.sku = sku;
     }
 
-    @Column(name = "QUANTITY", nullable = false)
     public BigDecimal getQuantity() {
         return this.quantity;
     }
@@ -84,7 +69,6 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.quantity = quantity;
     }
 
-    @Column(name = "RESERVED")
     public BigDecimal getReserved() {
         return this.reserved;
     }
@@ -93,8 +77,6 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.reserved = reserved;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -103,8 +85,6 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -113,7 +93,6 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -122,7 +101,6 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -131,7 +109,6 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -140,22 +117,10 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long skuWarehouseId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "SKUWAREHOUSE_ID", nullable = false)
     public long getSkuWarehouseId() {
         return skuWarehouseId;
     }
 
-    @Transient
     public long getId() {
         return this.skuWarehouseId;
     }
@@ -163,9 +128,6 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     public void setSkuWarehouseId(long skuWarehouseId) {
         this.skuWarehouseId = skuWarehouseId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

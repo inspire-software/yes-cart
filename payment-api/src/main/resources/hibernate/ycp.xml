@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity" table="TCUSTOMERORDERPAYMENT">
+        <comment>Customer payment entry</comment>
+        <id name="customerOrderPaymentId" type="long">
+            <column name="CUSTOMERORDERPAYMENT_ID" not-null="true"/>
+            <generator class="identity"/>
+        </id>
+
+        <property name="cardType" column="CARD_TYPE" length="64"  type="java.lang.String"/>
+        <property name="cardHolderName" column="CARD_HOLDER_NAME" length="128"  type="java.lang.String"/>
+        <property name="cardNumber" column="CARD_NUMBER" length="4"  type="java.lang.String"/>
+
+        <property name="cardExpireYear" column="CARD_EXPIRY_YEAR" length="4"  type="java.lang.String"/>
+        <property name="cardExpireMonth" column="CARD_EXPIRY_MONTH" length="2"  type="java.lang.String"/>
+        <property name="cardStartDate" column="CARD_START_DATE" type="timestamp"/>
+
+        <property name="orderDate" column="ORDER_DATE" type="timestamp" not-null="true"/>
+        <property name="orderNumber" column="ORDER_NUMBER" type="java.lang.String" not-null="true" length="128"/>
+        <property name="orderShipment" column="ORDER_SHIPMENT_NUMBER" type="java.lang.String" not-null="true" length="128"/>
+        <property name="paymentAmount" column="ORDER_DELIVERY_AMOUNT" type="java.math.BigDecimal" not-null="true"/>
+        <property name="orderCurrency" column="ORDER_CURRENCY" type="java.lang.String" not-null="true" length="3"/>
+
+        <property name="transactionReferenceId" column="TRAN_REFERENCE_ID" type="java.lang.String" length="128"/>
+        <property name="transactionRequestToken" column="TRAN_REQUEST_TOKEN" type="java.lang.String" length="256"/>
+        <property name="transactionAuthorizationCode" column="TRAN_AUTH_CODE" type="java.lang.String" length="256"/>
+        <property name="transactionGatewayLabel" column="TRAN_PAYMENT_GATEWAY" type="java.lang.String" length="128" not-null="true"/>
+        <property name="transactionOperation" column="TRAN_PAYMENT_OP" type="java.lang.String" length="128" not-null="true"/>
+        <property name="transactionOperationResultCode" column="TRAN_PAYMENT_REZCODE" type="java.lang.String" length="128"/>
+        <property name="transactionOperationResultMessage" column="TRAN_PAYMENT_REZMSG" type="java.lang.String" length="1024"/>
+
+        <property name="paymentProcessorResult" column="PP_REZCODE" type="java.lang.String" length="128" not-null="true"/>
+        <property name="paymentProcessorBatchSettlement" column="PP_BATCH_SETTLEMENT" type="boolean" not-null="true"/>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36" index="CUSTOMERORDERPAYMENT_GUID"/>
+    </class>
+
+    <class name="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity" table="TPAYMENTGATEWAYPARAMETER">
+        <comment>Payment gateway configuration</comment>
+        <id name="paymentGatewayParameterId" type="long">
+            <column name="PAYMENTGATEWAYPARAMETER_ID" not-null="true"/>
+            <generator class="identity"/>
+        </id>
+
+        <property name="name" length="64" type="java.lang.String" column="P_NAME"/>
+        <property name="value" length="4000" type="java.lang.String" column="P_VALUE"/>
+
+        <property name="description" length="255" type="java.lang.String" column="P_DESCRIPTION"/>
+        <property name="label" length="64" type="java.lang.String" column="P_LABEL"/>
+        <property name="pgLabel" length="64" type="java.lang.String" column="PG_LABEL"/>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36"  index="PAYMENTGATEWAYPARAMETER_GUID"/>
+    </class>
+
+</hibernate-mapping>

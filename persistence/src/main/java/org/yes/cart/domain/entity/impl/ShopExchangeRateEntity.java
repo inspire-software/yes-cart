@@ -18,7 +18,6 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Shop;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -27,11 +26,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TSHOPEXCHANGERATE"
-)
 public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopExchangeRate, java.io.Serializable {
 
+    private long shopexchangerateId;
 
     private String fromCurrency;
     private String toCurrency;
@@ -48,8 +45,6 @@ public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopEx
 
 
 
-
-    @Column(name = "FROMCURRENCY", nullable = false, length = 3)
     public String getFromCurrency() {
         return this.fromCurrency;
     }
@@ -58,7 +53,6 @@ public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopEx
         this.fromCurrency = fromCurrency;
     }
 
-    @Column(name = "TOCURRENCY", nullable = false, length = 3)
     public String getToCurrency() {
         return this.toCurrency;
     }
@@ -67,8 +61,6 @@ public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopEx
         this.toCurrency = toCurrency;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SHOP_ID", nullable = false)
     public Shop getShop() {
         return this.shop;
     }
@@ -77,7 +69,6 @@ public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopEx
         this.shop = shop;
     }
 
-    @Column(name = "RATE", nullable = false)
     public BigDecimal getRate() {
         return this.rate;
     }
@@ -86,8 +77,6 @@ public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopEx
         this.rate = rate;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -96,8 +85,6 @@ public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopEx
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -106,7 +93,6 @@ public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopEx
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -115,7 +101,6 @@ public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopEx
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -124,7 +109,6 @@ public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopEx
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -133,25 +117,10 @@ public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopEx
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long shopexchangerateId;
-
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "SHOPEXCHANGERATE_ID", nullable = false)
     public long getShopexchangerateId() {
         return this.shopexchangerateId;
     }
 
-
-    @Transient
     public long getId() {
         return this.shopexchangerateId;
     }
@@ -159,9 +128,6 @@ public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopEx
     public void setShopexchangerateId(long shopexchangerateId) {
         this.shopexchangerateId = shopexchangerateId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

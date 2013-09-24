@@ -20,7 +20,6 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopAdvPlaceRule;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,11 +29,9 @@ import java.util.Set;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TSHOPADVPLACE"
-)
 public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPlace, java.io.Serializable {
 
+    private long shopadvplaceId;
 
     private String name;
     private String description;
@@ -51,8 +48,6 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
 
 
 
-
-    @Column(name = "NAME", nullable = false)
     public String getName() {
         return this.name;
     }
@@ -61,7 +56,6 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
         this.name = name;
     }
 
-    @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;
     }
@@ -70,8 +64,6 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
         this.description = description;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SHOP_ID", nullable = false)
     public Shop getShop() {
         return this.shop;
     }
@@ -80,7 +72,6 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
         this.shop = shop;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "shopAdvPlace")
     public Set<ShopAdvPlaceRule> getShopAdvPlaceRules() {
         return this.shopAdvPlaceRules;
     }
@@ -89,8 +80,6 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
         this.shopAdvPlaceRules = shopAdvPlaceRules;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -99,8 +88,6 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -109,7 +96,6 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -118,7 +104,6 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -127,7 +112,6 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -136,24 +120,11 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long shopadvplaceId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "SHOPADVPLACE_ID", nullable = false)
     public long getShopadvplaceId() {
         return this.shopadvplaceId;
     }
 
 
-    @Transient
     public long getId() {
         return this.shopadvplaceId;
     }
@@ -161,9 +132,6 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
     public void setShopadvplaceId(long shopadvplaceId) {
         this.shopadvplaceId = shopadvplaceId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

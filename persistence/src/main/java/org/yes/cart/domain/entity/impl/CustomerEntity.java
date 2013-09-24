@@ -18,7 +18,6 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.*;
 
-import javax.persistence.*;
 import java.util.*;
 
 /**
@@ -26,11 +25,9 @@ import java.util.*;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TCUSTOMER"
-)
 public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java.io.Serializable {
 
+    private long customerId;
 
     private String email;
     private String firstname;
@@ -53,7 +50,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
 
 
 
-    @Column(name = "EMAIL", unique = true, nullable = false)
     public String getEmail() {
         return this.email;
     }
@@ -62,7 +58,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.email = email;
     }
 
-    @Column(name = "FIRSTNAME", nullable = false, length = 128)
     public String getFirstname() {
         return this.firstname;
     }
@@ -71,7 +66,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.firstname = firstname;
     }
 
-    @Column(name = "LASTNAME", nullable = false, length = 128)
     public String getLastname() {
         return this.lastname;
     }
@@ -80,7 +74,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.lastname = lastname;
     }
 
-    @Column(name = "MIDDLENAME", length = 128)
     public String getMiddlename() {
         return this.middlename;
     }
@@ -89,7 +82,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.middlename = middlename;
     }
 
-    @Column(name = "PASSWORD", nullable = false)
     public String getPassword() {
         return this.password;
     }
@@ -98,7 +90,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.password = password;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     public Collection<CustomerOrder> getOrders() {
         return this.orders;
     }
@@ -107,8 +98,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.orders = orders;
     }
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CUSTOMER_ID", nullable = false, updatable = false)
     public Collection<CustomerWishList> getWishList() {
         return this.wishList;
     }
@@ -117,7 +106,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.wishList = wishList;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
     public Collection<AttrValueCustomer> getAttributes() {
         return this.attributes;
     }
@@ -126,7 +114,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.attributes = attributes;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customer")
     public Collection<Address> getAddress() {
         return this.address;
     }
@@ -135,7 +122,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.address = address;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "customer")
     public Collection<CustomerShop> getShops() {
         return this.shops;
     }
@@ -144,8 +130,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.shops = shops;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -154,8 +138,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -164,7 +146,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -173,7 +154,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -182,7 +162,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -191,25 +170,10 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long customerId;
-
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "CUSTOMER_ID", nullable = false)
     public long getCustomerId() {
         return this.customerId;
     }
 
-
-    @Transient
     public long getId() {
         return this.customerId;
     }
@@ -218,7 +182,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.customerId = customerId;
     }
 
-    @Transient
     public Set<AttrValueCustomer> getAttributesByCode(final String attributeCode) {
         if (attributeCode == null) {
             return null;
@@ -237,7 +200,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         return result;
     }
 
-    @Transient
     public AttrValueCustomer getAttributeByCode(String attributeCode) {
         if (attributeCode == null) {
             return null;
@@ -252,7 +214,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         return null;
     }
 
-    @Transient
     public List<Address> getAddresses(final String addressType) {
         final List<Address> rez = new ArrayList<Address>();
         for (Address addr : address) {
@@ -263,7 +224,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         return rez;
     }
 
-    @Transient
     public Address getDefaultAddress(final String addressType) {
         for (Address addr : address) {
             if (addressType.equals(addr.getAddressType()) && addr.isDefaultAddress()) {
@@ -284,9 +244,6 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
                 ", customerId=" + customerId +
                 '}';
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

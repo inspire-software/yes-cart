@@ -19,7 +19,6 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Mailtemplategroup;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -27,11 +26,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TMAILTEMPLATE"
-)
 public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtemplate, java.io.Serializable {
 
+    private long mailtemplateId;
 
     private String code;
     private String fspointer;
@@ -48,9 +45,6 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
     }
 
 
-
-
-    @Column(name = "CODE", nullable = false)
     public String getCode() {
         return this.code;
     }
@@ -59,7 +53,6 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
         this.code = code;
     }
 
-    @Column(name = "FSPOINTER", nullable = false, length = 4000)
     public String getFspointer() {
         return this.fspointer;
     }
@@ -68,7 +61,6 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
         this.fspointer = fspointer;
     }
 
-    @Column(name = "NAME", nullable = false)
     public String getName() {
         return this.name;
     }
@@ -77,7 +69,6 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
         this.name = name;
     }
 
-    @Column(name = "DESCRIPTION")
     public String getDescription() {
         return this.description;
     }
@@ -86,8 +77,6 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
         this.description = description;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MAILTEMPLATEGROUP_ID", nullable = false)
     public Mailtemplategroup getMailTemplateGroup() {
         return this.mailTemplateGroup;
     }
@@ -96,8 +85,6 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
         this.mailTemplateGroup = mailTemplateGroup;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -106,8 +93,6 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -116,7 +101,6 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -125,7 +109,6 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -134,7 +117,6 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -143,24 +125,10 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long mailtemplateId; // long live robots !
-
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "MAILTEMPLATE_ID", nullable = false)
     public long getMailtemplateId() {
         return this.mailtemplateId;
     }
 
-    @Transient
     public long getId() {
         return this.mailtemplateId;
     }
@@ -169,9 +137,6 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
     public void setMailtemplateId(long mailtemplateId) {
         this.mailtemplateId = mailtemplateId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

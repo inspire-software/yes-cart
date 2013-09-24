@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -25,11 +24,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TMAILTEMPLATEGROUP"
-)
 public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailtemplategroup, java.io.Serializable {
 
+    private long mailtemplategroupId;
 
     private String name;
     private String description;
@@ -43,8 +40,6 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
     }
 
 
-
-    @Column(name = "NAME", nullable = false, length = 64)
     public String getName() {
         return this.name;
     }
@@ -53,7 +48,6 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
         this.name = name;
     }
 
-    @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;
     }
@@ -62,8 +56,6 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
         this.description = description;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -72,8 +64,6 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -82,7 +72,6 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -91,7 +80,6 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -100,7 +88,6 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -109,23 +96,10 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long mailtemplategroupId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "MAILTEMPLATEGROUP_ID", nullable = false)
     public long getMailtemplategroupId() {
         return this.mailtemplategroupId;
     }
 
-    @Transient
     public long getId() {
         return this.mailtemplategroupId;
     }
@@ -133,9 +107,6 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
     public void setMailtemplategroupId(long mailtemplategroupId) {
         this.mailtemplategroupId = mailtemplategroupId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

@@ -22,7 +22,6 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDet;
 import org.yes.cart.domain.entity.Shop;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -32,11 +31,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TCUSTOMERORDER"
-)
 public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerOrder, java.io.Serializable {
 
+    private long customerorderId;
 
     private String pgLabel;
     private String ordernum;
@@ -62,8 +59,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
 
-
-    @Column(name = "PG_LABEL")
     public String getPgLabel() {
         return this.pgLabel;
     }
@@ -72,7 +67,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.pgLabel = pgLabel;
     }
 
-    @Column(name = "ORDERNUM")
     public String getOrdernum() {
         return this.ordernum;
     }
@@ -81,7 +75,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.ordernum = ordernum;
     }
 
-    @Column(name = "CART_GUID", nullable = false, length = 36)
     public String getCartGuid() {
         return this.cartGuid;
     }
@@ -90,7 +83,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.cartGuid = cartGuid;
     }
 
-    @Column(name = "CURRENCY", nullable = false, length = 3)
     public String getCurrency() {
         return this.currency;
     }
@@ -99,7 +91,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.currency = currency;
     }
 
-    @Column(name = "MESSAGE")
     public String getOrderMessage() {
         return this.orderMessage;
     }
@@ -108,7 +99,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.orderMessage = orderMessage;
     }
 
-    @Column(name = "ORDERSTATUS", nullable = false, length = 64)
     public String getOrderStatus() {
         return this.orderStatus;
     }
@@ -117,8 +107,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.orderStatus = orderStatus;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CUSTOMER_ID")
     public Customer getCustomer() {
         return this.customer;
     }
@@ -127,8 +115,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.customer = customer;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "SHOP_ID", nullable = false)
     public Shop getShop() {
         return this.shop;
     }
@@ -137,7 +123,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.shop = shop;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customerOrder")
     public Collection<CustomerOrderDet> getOrderDetail() {
         return this.orderDetail;
     }
@@ -146,7 +131,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.orderDetail = orderDetail;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "customerOrder", orphanRemoval = true)
     public Collection<CustomerOrderDelivery> getDelivery() {
         return this.delivery;
     }
@@ -155,7 +139,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.delivery = delivery;
     }
 
-    @Column(name = "BILLING_ADDRESS")
     public String getBillingAddress() {
         return this.billingAddress;
     }
@@ -164,7 +147,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.billingAddress = billingAddress;
     }
 
-    @Column(name = "SHIPPING_ADDRESS")
     public String getShippingAddress() {
         return this.shippingAddress;
     }
@@ -173,7 +155,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.shippingAddress = shippingAddress;
     }
 
-    @Column(name = "MULTIPLE_SHIPMENT")
     public boolean isMultipleShipmentOption() {
         return this.multipleShipmentOption;
     }
@@ -182,8 +163,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.multipleShipmentOption = multipleShipmentOption;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "ORDER_TIMESTAMP", nullable = false)
     public Date getOrderTimestamp() {
         return this.orderTimestamp;
     }
@@ -192,8 +171,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.orderTimestamp = orderTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -202,8 +179,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -212,7 +187,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -221,7 +195,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -230,7 +203,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -239,25 +211,11 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long customerorderId;
-
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "CUSTOMERORDER_ID", nullable = false)
     public long getCustomerorderId() {
         return this.customerorderId;
     }
 
 
-    @Transient
     public long getId() {
         return this.customerorderId;
     }
@@ -266,9 +224,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.customerorderId = customerorderId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public CustomerOrderDelivery getCustomerOrderDelivery(final String deliveryNumber) {
         if (deliveryNumber != null) {
             for (CustomerOrderDelivery delivery : getDelivery()) {
@@ -294,9 +249,6 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
                 ", multipleShipmentOption=" + multipleShipmentOption +
                 '}';
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

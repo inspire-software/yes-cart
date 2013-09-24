@@ -329,14 +329,14 @@ public interface CustomerOrderPayment extends Auditable {
      *
      * @return card issue number.
      */
-    String getCardIsuueNumber();
+    String getCardIssueNumber();
 
     /**
      * Set  card issue number.
      *
-     * @param cardIsuueNumber card issue number.
+     * @param cardIssueNumber card issue number.
      */
-    void setCardIsuueNumber(String cardIsuueNumber);
+    void setCardIssueNumber(String cardIssueNumber);
 
 
 }

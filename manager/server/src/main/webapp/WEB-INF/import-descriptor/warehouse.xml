@@ -29,7 +29,7 @@
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
-    <select-sql>select b from Warehouse b where b.code = {code}</select-sql>
+    <select-sql>select b from WarehouseEntity b where b.code = {code}</select-sql>
 
     <import-columns>
 

@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -25,11 +24,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TSEOIMAGE"
-)
 public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java.io.Serializable {
 
+    private long seoImageId;
 
     private String imageName;
     private String alt;
@@ -45,8 +42,6 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
 
 
 
-
-    @Column(name = "IMAGE_NAME")
     public String getImageName() {
         return this.imageName;
     }
@@ -55,7 +50,6 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
         this.imageName = imageName;
     }
 
-    @Column(name = "ALT")
     public String getAlt() {
         return this.alt;
     }
@@ -64,7 +58,6 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
         this.alt = alt;
     }
 
-    @Column(name = "TITLE")
     public String getTitle() {
         return this.title;
     }
@@ -73,8 +66,6 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
         this.title = title;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -83,8 +74,6 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -93,7 +82,6 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -102,7 +90,6 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -111,7 +98,6 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -120,23 +106,11 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long seoImageId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "SEOIMAGE_ID", nullable = false)
     public long getSeoImageId() {
         return this.seoImageId;
     }
 
 
-    @Transient
     public long getId() {
         return this.seoImageId;
     }
@@ -144,9 +118,6 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
     public void setSeoImageId(long seoImageId) {
         this.seoImageId = seoImageId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

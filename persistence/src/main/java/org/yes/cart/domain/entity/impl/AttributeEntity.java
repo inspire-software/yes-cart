@@ -17,11 +17,11 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.hibernate.search.annotations.DocumentId;
 import org.hibernate.search.annotations.Indexed;
 import org.yes.cart.domain.entity.AttributeGroup;
 import org.yes.cart.domain.entity.Etype;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
@@ -31,11 +31,10 @@ import java.util.UUID;
  * Time: 9:10 AM
  */
 @Indexed(index = "luceneindex/attribute")
-@Entity
-@Table(name = "TATTRIBUTE"
-)
 public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, java.io.Serializable {
 
+
+    private long attributeId;
 
     private boolean mandatory;
     private boolean allowduplicate;
@@ -60,7 +59,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     }
 
 
-    @Column(name = "MANDATORY", nullable = false, length = 1)
     public boolean isMandatory() {
         return this.mandatory;
     }
@@ -69,7 +67,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.mandatory = mandatory;
     }
 
-    @Column(name = "ALLOWDUPLICATE", nullable = false, length = 1)
     public boolean isAllowduplicate() {
         return this.allowduplicate;
     }
@@ -78,7 +75,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.allowduplicate = allowduplicate;
     }
 
-    @Column(name = "ALLOWFAILOVER", nullable = false, length = 1)
     public boolean isAllowfailover() {
         return this.allowfailover;
     }
@@ -87,7 +83,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.allowfailover = allowfailover;
     }
 
-    @Column(name = "VAL", length = 4000)
     public String getVal() {
         return this.val;
     }
@@ -96,7 +91,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.val = val;
     }
 
-    @Column(name = "REXP", length = 4000)
     public String getRegexp() {
         return this.regexp;
     }
@@ -105,7 +99,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.regexp = regexp;
     }
 
-    @Column(name = "V_FAILED_MSG", length = 4000)
     public String getValidationFailedMessage() {
         return this.validationFailedMessage;
     }
@@ -114,7 +107,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.validationFailedMessage = validationFailedMessage;
     }
 
-    @Column(name = "RANK")
     public int getRank() {
         return this.rank;
     }
@@ -123,7 +115,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.rank = rank;
     }
 
-    @Column(name = "CHOICES", length = 4000)
     public String getChoiceData() {
         return this.choiceData;
     }
@@ -132,7 +123,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.choiceData = choiceData;
     }
 
-    @Column(name = "NAME", nullable = false)
     public String getName() {
         return this.name;
     }
@@ -141,7 +131,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.name = name;
     }
 
-    @Column(name = "DISPLAYNAME", length = 4000)
     public String getDisplayName() {
         return this.displayName;
     }
@@ -150,7 +139,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.displayName = displayName;
     }
 
-    @Column(name = "DESCRIPTION", length = 4000)
     public String getDescription() {
         return this.description;
     }
@@ -159,8 +147,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.description = description;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ETYPE_ID", nullable = false)
     public Etype getEtype() {
         return this.etype;
     }
@@ -169,8 +155,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.etype = etype;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ATTRIBUTEGROUP_ID", nullable = false)
     public AttributeGroup getAttributeGroup() {
         return this.attributeGroup;
     }
@@ -179,8 +163,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.attributeGroup = attributeGroup;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -189,8 +171,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -199,7 +179,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -208,7 +187,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -217,7 +195,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -226,23 +203,11 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long attributeId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "ATTRIBUTE_ID", nullable = false)
+    @DocumentId
     public long getAttributeId() {
         return this.attributeId;
     }
 
-    @Transient
     public long getId() {
         return this.attributeId;
     }
@@ -254,7 +219,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
 
     private String code;
 
-    @Column(name = "CODE", length = 255, nullable = false)
     public String getCode() {
         return this.code;
     }
@@ -263,7 +227,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.code = code;
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -334,9 +297,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.attributeId = attributeId;
         this.code = code;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 

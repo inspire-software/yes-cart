@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -25,11 +24,9 @@ import java.util.Date;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Entity
-@Table(name = "TROLE"
-)
 public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Serializable {
 
+    private long roleId;
 
     private String code;
     private String description;
@@ -43,9 +40,6 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
     }
 
 
-
-
-    @Column(name = "CODE", unique = true, nullable = false)
     public String getCode() {
         return this.code;
     }
@@ -54,7 +48,6 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
         this.code = code;
     }
 
-    @Column(name = "DESCRIPTION")
     public String getDescription() {
         return this.description;
     }
@@ -63,8 +56,6 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
         this.description = description;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "CREATED_TIMESTAMP")
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -73,8 +64,6 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
         this.createdTimestamp = createdTimestamp;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "UPDATED_TIMESTAMP")
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }
@@ -83,7 +72,6 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
         this.updatedTimestamp = updatedTimestamp;
     }
 
-    @Column(name = "CREATED_BY", length = 64)
     public String getCreatedBy() {
         return this.createdBy;
     }
@@ -92,7 +80,6 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
         this.createdBy = createdBy;
     }
 
-    @Column(name = "UPDATED_BY", length = 64)
     public String getUpdatedBy() {
         return this.updatedBy;
     }
@@ -101,7 +88,6 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
         this.updatedBy = updatedBy;
     }
 
-    @Column(name = "GUID", unique = true, nullable = false, length = 36)
     public String getGuid() {
         return this.guid;
     }
@@ -110,23 +96,10 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
         this.guid = guid;
     }
 
-
-    // The following is extra code specified in the hbm.xml files
-
-
-    private long roleId;
-
-    //@GenericGenerator(name="generator", strategy="native", parameters={@Parameter(name="column", value="value"), @Parameter(name="table", value="HIBERNATE_UNIQUE_KEYS")})
-
-    @Id
-    @GeneratedValue
-    /*(generator="generator")*/
-    @Column(name = "ROLE_ID", nullable = false)
     public long getRoleId() {
         return this.roleId;
     }
 
-    @Transient
     public long getId() {
         return this.roleId;
     }
@@ -135,9 +108,6 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
     public void setRoleId(long roleId) {
         this.roleId = roleId;
     }
-
-
-    // end of extra code specified in the hbm.xml files
 
 }
 
