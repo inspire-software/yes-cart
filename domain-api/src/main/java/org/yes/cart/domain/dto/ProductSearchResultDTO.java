@@ -16,7 +16,6 @@
 
 package org.yes.cart.domain.dto;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;

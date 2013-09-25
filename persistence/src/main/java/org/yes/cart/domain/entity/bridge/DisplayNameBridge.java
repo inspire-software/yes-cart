@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.bridge;
 
 import org.apache.lucene.document.Document;
-import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.TwoWayFieldBridge;
 import org.yes.cart.domain.i18n.I18NModel;

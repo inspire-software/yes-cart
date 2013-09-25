@@ -28,7 +28,10 @@ import org.yes.cart.service.mail.MailComposer;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;

@@ -18,7 +18,6 @@ package org.yes.cart.remote.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;

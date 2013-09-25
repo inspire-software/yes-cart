@@ -25,9 +25,7 @@ import org.yes.cart.domain.query.impl.AttributiveSearchQueryBuilderImpl;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Product attribute value filtering component.

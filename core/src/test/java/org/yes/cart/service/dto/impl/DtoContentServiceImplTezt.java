@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.dto.impl;
 
-import net.sf.ehcache.Ehcache;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.transaction.TransactionStatus;

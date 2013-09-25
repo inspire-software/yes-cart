@@ -24,7 +24,6 @@ import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.entity.decorator.impl.DecoratorUtil;
 import org.yes.cart.web.support.seo.BookmarkService;
 

@@ -23,11 +23,8 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
-import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
-import org.yes.cart.web.util.WicketUtil;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;

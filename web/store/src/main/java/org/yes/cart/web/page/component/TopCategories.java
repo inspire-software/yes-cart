@@ -17,7 +17,6 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;

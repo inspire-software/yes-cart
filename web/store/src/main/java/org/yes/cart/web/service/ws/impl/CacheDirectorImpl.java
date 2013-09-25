@@ -22,7 +22,6 @@ import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.ServletContextAware;
-import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;

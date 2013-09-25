@@ -21,14 +21,12 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
+import org.yes.cart.domain.entity.ProductSku;
 
 import java.math.BigDecimal;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov

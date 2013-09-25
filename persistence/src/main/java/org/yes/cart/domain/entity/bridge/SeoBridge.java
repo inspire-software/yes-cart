@@ -20,10 +20,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
-import org.hibernate.search.bridge.StringBridge;
-import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.domain.entity.Seo;
-import org.yes.cart.domain.entity.impl.SeoEntity;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
 /**

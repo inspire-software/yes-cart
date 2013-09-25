@@ -18,13 +18,9 @@ package org.yes.cart.web.page.component.product;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.util.WicketUtil;
 
 /**
  * Igor Azarny iazarny@yahoo.com

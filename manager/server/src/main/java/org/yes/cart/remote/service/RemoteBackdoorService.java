@@ -17,14 +17,12 @@
 package org.yes.cart.remote.service;
 
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.async.model.AsyncContext;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: iazarny@yahoo.com Igor Azarny

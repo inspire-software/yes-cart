@@ -1,6 +1,7 @@
 package org.yes.cart.domain.entity.impl;
 
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 
 /**

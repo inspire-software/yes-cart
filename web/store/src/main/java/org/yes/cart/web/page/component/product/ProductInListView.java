@@ -16,27 +16,24 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.impl.ProductAvailabilityModelImpl;
-import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.*;
-import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
+import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;

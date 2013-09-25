@@ -31,7 +31,6 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.impl.GlobalSearchQueryBuilderImpl;
 import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.*;
@@ -40,7 +39,6 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

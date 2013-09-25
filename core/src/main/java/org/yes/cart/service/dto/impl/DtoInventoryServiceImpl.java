@@ -35,7 +35,6 @@ import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.dto.DtoInventoryService;
 import org.yes.cart.service.dto.DtoWarehouseService;
 import org.yes.cart.service.dto.support.InventoryFilter;
