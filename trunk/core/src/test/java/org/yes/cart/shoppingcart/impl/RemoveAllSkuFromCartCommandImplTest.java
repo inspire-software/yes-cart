@@ -20,9 +20,10 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,20 +40,24 @@ public class RemoveAllSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-        new ChangeCurrencyEventCommandImpl(ctx(), Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR"))
-                .execute(shoppingCart);
-        new SetShopCartCommandImpl(ctx(), Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
-                .execute(shoppingCart);
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        commands.execute(shoppingCart, new HashMap<String, Object>() {{
+            put(ShoppingCartCommand.CMD_SETSHOP, "10");
+            put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
+            put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
+        }});
+
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal());
         Map<String, String> params = new HashMap<String, String>();
-        params.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST2");
-        params.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "10");
-        new SetSkuQuantityToCartEventCommandImpl(ctx(), params).execute(shoppingCart);
+        params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST2");
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "10");
+        commands.execute(shoppingCart, (Map) params);
+
         assertTrue("Expected 221.70 but was " + shoppingCart.getCartSubTotal(), (new BigDecimal("221.70")).equals(shoppingCart.getCartSubTotal()));
         params = new HashMap<String, String>();
-        params.put(RemoveAllSkuFromCartCommandImpl.CMD_KEY, "CC_TEST2");
-        new RemoveAllSkuFromCartCommandImpl(ctx(), params)
-                .execute(shoppingCart);
+        params.put(RemoveAllSkuFromCartCommandImpl.CMD_REMOVEALLSKU, "CC_TEST2");
+        commands.execute(shoppingCart, (Map) params);
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal());
         assertTrue(shoppingCart.getCartItemList().isEmpty());
     }

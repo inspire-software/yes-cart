@@ -31,9 +31,6 @@ import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
-import org.yes.cart.shoppingcart.impl.LogoutCommandImpl;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -46,6 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -98,21 +96,17 @@ public class AbstractWebPage extends WebPage {
     public AbstractWebPage(final PageParameters params) {
         super(params);
 
-        final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
-        if (getSession().getLocale() == null) {
-            getSession().setLocale(new Locale(languageService.getSupportedLanguages(ShopCodeContext.getShopCode()).get(0)));
+        if (StringUtils.isBlank(cart.getCurrentLocale())) {
+            getShoppingCartCommandFactory().execute(cart,
+                    (Map) Collections.singletonMap(
+                            ShoppingCartCommand.CMD_CHANGELOCALE,
+                            getSession().getLocale().getLanguage()
+                    ));
         }
-
-        if(StringUtils.isBlank(shoppingCart.getCurrentLocale())) {
-            new ChangeLocaleCartCommandImpl(
-                    null,
-                    Collections.singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, getSession().getLocale().getLanguage()))
-                    .execute(shoppingCart);
-        }
-
-        getSession().setLocale(new Locale(shoppingCart.getCurrentLocale()));
-
+        // reinstate the current cart language as our session is transient
+        getSession().setLocale(new Locale(cart.getCurrentLocale()));
         setStatelessHint(true);
 
     }
@@ -147,34 +141,28 @@ public class AbstractWebPage extends WebPage {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
-        final ShoppingCartCommand command = getShoppingCartCommandFactory().create(WicketUtil.pageParametesAsMap(getPageParameters()));
+        final PageParameters params = getPageParameters();
+        getShoppingCartCommandFactory().execute(cart, (Map) WicketUtil.pageParametesAsMap(params));
 
-        if (cart.accept(command) || needToPersists(cart)) {
-            //Not sure what the best way to apply changed locale
-            if (cart.getCurrentLocale() != null && !getSession().getLocale().getLanguage().equals(cart.getCurrentLocale())) {
-                getSession().setLocale(new Locale(cart.getCurrentLocale()));
-            }
+        if (cart.isModified()) {
             getShoppingCartPersister().persistShoppingCart(
                     (HttpServletRequest) getRequest().getContainerRequest(),
                     (HttpServletResponse) getResponse().getContainerResponse(),
                     cart
             );
-
-            if (command != null && LogoutCommandImpl.CMD_KEY.equals(command.getCmdKey())) {
+            if (params.getNamedKeys().contains(ShoppingCartCommand.CMD_CHANGELOCALE)) {
+                getSession().setLocale(new Locale(cart.getCurrentLocale()));
+            }
+            if (params.getNamedKeys().contains(ShoppingCartCommand.CMD_LOGOUT)) {
                 // Need to remove user from wicket auth
-                final IAuthenticationStrategy strategy = getApplication().getSecuritySettings()
-                        .getAuthenticationStrategy();
+                final IAuthenticationStrategy strategy = getApplication().getSecuritySettings().getAuthenticationStrategy();
                 strategy.remove();
                 AuthenticatedWebSession.get().signOut();
             }
         }
 
-        //wft ??? super.onBeforeRender();
+        //wtf ??? super.onBeforeRender();
 
-    }
-
-    private boolean needToPersists(final ShoppingCart shoppingCart) {
-       return (shoppingCart.getProcessingStartDate().getTime() <= shoppingCart.getModifiedDate().getTime());
     }
 
     /**

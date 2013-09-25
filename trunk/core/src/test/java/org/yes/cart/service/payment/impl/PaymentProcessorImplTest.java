@@ -35,7 +35,9 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.impl.*;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -631,12 +633,12 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      */
     protected ShoppingCart getShoppingCart1(String customerEmail) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
-        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
-                .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
-                .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
-                .execute(shoppingCart);
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        commands.execute(shoppingCart, (Map) Collections.singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
+        commands.execute(shoppingCart, (Map) Collections.singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
+        commands.execute(shoppingCart, (Map) Collections.singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
+
         return shoppingCart;
     }
 
@@ -647,10 +649,11 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      */
     protected ShoppingCart getShoppingCart2(final String customerEmail) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
-        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4"))
-                .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST4-M"))
-                .execute(shoppingCart);
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        commands.execute(shoppingCart, (Map) Collections.singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4"));
+        commands.execute(shoppingCart, (Map) Collections.singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4-M"));
+
         return shoppingCart;
     }
 
@@ -664,24 +667,28 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      */
     protected ShoppingCart getShoppingCartWithOneAvailableItem(final String customerEmail) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
-        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST11"))
-                .execute(shoppingCart);
+
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        commands.execute(shoppingCart, (Map) Collections.singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST11"));
+
         return shoppingCart;
     }
 
     public ShoppingCart getEmptyCart(String customerEmail) {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
         Map<String, String> params = new HashMap<String, String>();
-        params.put(LoginCommandImpl.EMAIL, customerEmail);
-        params.put(LoginCommandImpl.NAME, "John Doe");
-        new SetShopCartCommandImpl(ctx(), Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
-                .execute(shoppingCart);
-        new ChangeCurrencyEventCommandImpl(ctx(), Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
-                .execute(shoppingCart);
-        new LoginCommandImpl(null, params)
-                .execute(shoppingCart);
-        new SetCarrierSlaCartCommandImpl(null, Collections.singletonMap(SetCarrierSlaCartCommandImpl.CMD_KEY, "1"))
-                .execute(shoppingCart);
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customerEmail);
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
+        params.put(ShoppingCartCommand.CMD_LOGIN, "1");
+        params.put(ShoppingCartCommand.CMD_SETSHOP, "10");
+        params.put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
+        params.put(ShoppingCartCommand.CMD_CHANGECURRENCY, "USD");
+        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, "1");
+
+        commands.execute(shoppingCart, (Map) params);
         return shoppingCart;
     }
 }

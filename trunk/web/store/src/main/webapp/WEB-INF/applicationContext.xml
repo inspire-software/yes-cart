@@ -91,7 +91,7 @@
     <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
         <constructor-arg index="0" ref="applicationDirector"/>
         <constructor-arg index="1" ref="systemService"/>
-        <constructor-arg index="2" ref="languageService"/>
+        <constructor-arg index="2" ref="shoppingCartCommandFactory"/>
     </bean>
 
     <bean id="imageFilter" class="org.yes.cart.web.filter.ImageFilter">

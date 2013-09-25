@@ -18,6 +18,7 @@ package org.yes.cart.shoppingcart;
 
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * .
@@ -28,19 +29,37 @@ import java.io.Serializable;
  */
 public interface ShoppingCartCommand extends Serializable {
 
-    /**
-     * Execute command on shopping cart to perform changes.
-     *
-     * @param shoppingCart the shopping cart
-     */
-    void execute(ShoppingCart shoppingCart);
+    String CMD_ADDTOCART = "addToCartCmd";
+    String CMD_ADDTOCART_P_QTY = "qty";
+    String CMD_REMOVEALLSKU = "removeAllSkuCmd";
+    String CMD_REMOVEONESKU = "removeOneSkuCmd";
+    String CMD_SETQTYSKU = "setQuantityToCartCmd";
+    String CMD_SETQTYSKU_P_QTY = "qty";
+
+    String CMD_SEPARATEBILLING = "setBillingAddressSeparateCmd";
+    String CMD_SETCARRIERSLA = "setCarrierSlaCmd";
+    String CMD_MULTIPLEDELIVERY = "setMultipleDeliveryCmd";
+    String CMD_SETPGLABEL = "setPgLabelCmd";
+    String CMD_SETSHOP = "setShopIdCmd";
+
+    String CMD_CHANGECURRENCY = "changeCurrencyCmd";
+    String CMD_CHANGELOCALE = "changeLocaleCmd";
+
+    String CMD_CLEAN = "cleanCartCmd";
+    String CMD_EXPIRE = "expireCartCmd";
+    String CMD_LOGIN = "loginCmd";
+    String CMD_LOGIN_P_EMAIL = "email";
+    String CMD_LOGIN_P_NAME = "name";
+    String CMD_LOGOUT = "logoutCmd";
+
 
     /**
      * Execute command on shopping cart to perform changes.
      *
      * @param shoppingCart the shopping cart
+     * @param parameters parameters
      */
-    void setModifiedDate(ShoppingCart shoppingCart);
+    void execute(ShoppingCart shoppingCart, Map<String, Object> parameters);
 
     /**
      * @return command key

@@ -20,12 +20,13 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -39,22 +40,26 @@ public class SetSkuQuantityToCartEventCommandImplTest extends BaseCoreDBTestCase
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-        new ChangeCurrencyEventCommandImpl(ctx(), singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR"))
-                .execute(shoppingCart);
-        new SetShopCartCommandImpl(ctx(), singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
-                .execute(shoppingCart);
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        commands.execute(shoppingCart, new HashMap<String, Object>() {{
+            put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
+            put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
+            put(ShoppingCartCommand.CMD_SETSHOP, "10");
+        }});
+
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal());
         Map<String, String> params = new HashMap<String, String>();
-        params.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
-        params.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1");
-        SetSkuQuantityToCartEventCommandImpl setSkuQuantityToCartEventCommand = new SetSkuQuantityToCartEventCommandImpl(ctx(), params);
-        setSkuQuantityToCartEventCommand.execute(shoppingCart);
+        params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST4");
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1");
+        commands.execute(shoppingCart, (Map) params);
+
         assertTrue("Expected 123.00", (new BigDecimal("123.00")).equals(shoppingCart.getCartSubTotal()));
         params = new HashMap<String, String>();
-        params.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST4");
-        params.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "5");
-        setSkuQuantityToCartEventCommand = new SetSkuQuantityToCartEventCommandImpl(ctx(), params);
-        setSkuQuantityToCartEventCommand.execute(shoppingCart);
+        params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST4");
+        params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "5");
+        commands.execute(shoppingCart, (Map) params);
+
         assertTrue("Expected 499.55 but got " + shoppingCart.getCartSubTotal(),
                 (new BigDecimal("499.95")).equals(shoppingCart.getCartSubTotal()));
     }

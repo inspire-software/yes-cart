@@ -22,7 +22,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -40,13 +39,6 @@ public class BaseAuthForm extends Form {
 
     @SpringBean(name = ServiceSpringKeys.ATTRIBUTE_SERVICE)
     private AttributeService attributeService;
-
-    //@SpringBean(name = WebParametersKeys.SESSION_OBJECT_NAME)
-    //private RequestRuntimeContainer requestRuntimeContainer;
-
-    @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
-    private ShoppingCartCommandFactory shoppingCartCommandFactory;
-
 
     public BaseAuthForm(String id) {
         super(id);

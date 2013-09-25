@@ -28,8 +28,8 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
-import org.yes.cart.shoppingcart.impl.SetCarrierSlaCartCommandImpl;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl;
 
 import java.math.BigDecimal;
@@ -37,7 +37,6 @@ import java.util.*;
 
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -137,21 +136,25 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         assertEquals(getTestName() + prefix + "jd@domain.com", shoppingCart.getCustomerEmail());
         assertEquals(customer.getEmail(), shoppingCart.getCustomerEmail());
 
-        //one delivery 16.77 usd
-        new SetCarrierSlaCartCommandImpl(null, singletonMap(SetCarrierSlaCartCommandImpl.CMD_KEY, "3"))
-                .execute(shoppingCart);
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
-                .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
-                .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
-                .execute(shoppingCart);
+        //one delivery 16.77 usd
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_SETCARRIERSLA, "3"));
+
+
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
         // 3 x 180  usd
-        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
-                .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
-                .execute(shoppingCart);
+
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
         //2 x 7.99  usd
 
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
@@ -169,7 +172,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         BigDecimal amount = customerOrderService.getOrderAmount(order.getOrdernum());
 
         assertTrue("payment must be 16.77 + 3 * 190.01 + 2 * 70.99 = 728.78, but was  " + amount
-                , new BigDecimal("728.78").equals(amount));
+                , new BigDecimal("728.78").compareTo(amount) == 0);
 
 
         assertEquals(1, order.getDelivery().size());
@@ -180,17 +183,22 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
      */
     protected ShoppingCart getShoppingCart2(final String prefix) {
         ShoppingCart shoppingCart = getEmptyCart(prefix);
+
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
         // this digital product available
         Map<String, String> param = new HashMap<String, String>();
-        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST9");
-        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
-                .execute(shoppingCart);
+        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST9");
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+        commands.execute(shoppingCart,
+                (Map) param);
+
         param = new HashMap<String, String>();
-        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST5");
-        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "200.00");
-        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
-                .execute(shoppingCart);
+        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST5");
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "200.00");
+        commands.execute(shoppingCart,
+                (Map) param);
+
         return shoppingCart;
     }
 

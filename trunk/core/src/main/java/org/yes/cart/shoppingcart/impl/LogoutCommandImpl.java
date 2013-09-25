@@ -16,7 +16,6 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -31,31 +30,19 @@ public class LogoutCommandImpl extends AbstractCartCommandImpl implements Shoppi
 
     private static final long serialVersionUID = 20101025L;
 
-    public static final String CMD_KEY = "logoutCmd";
-
-    /**
-     * Execute command on shopping cart to perform changes.
-     *
-     * @param shoppingCart the shopping cart
-     */
-    public void execute(final ShoppingCart shoppingCart) {
-        shoppingCart.getShoppingContext().clearContext();
-        setModifiedDate(shoppingCart);
-    }
-
     /**
      * @return command key
      */
     public String getCmdKey() {
-        return CMD_KEY;
+        return CMD_LOGOUT;
     }
 
-    /**
-     * @param applicationContext application context
-     * @param parameters         page parameters
-     */
-    public LogoutCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
-        super();
+    /** {@inheritDoc} */
+    @Override
+    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+        if (parameters.containsKey(getCmdKey())) {
+            shoppingCart.getShoppingContext().clearContext();
+            setModifiedDate(shoppingCart);
+        }
     }
-
 }

@@ -224,6 +224,7 @@
         ORDERNUM varchar(255) comment 'Depends from order num producer.',
         CART_GUID varchar(36) not null,
         CURRENCY varchar(3) not null,
+        LOCALE varchar(5) not null,
         MESSAGE varchar(255) comment 'Free text information per each order. Can be whatever',
         ORDERSTATUS varchar(64) not null,
         CUSTOMER_ID bigint,

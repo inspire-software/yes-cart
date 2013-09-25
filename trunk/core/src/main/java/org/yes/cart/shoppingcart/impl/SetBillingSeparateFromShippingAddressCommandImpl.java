@@ -16,7 +16,6 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -31,35 +30,23 @@ public class SetBillingSeparateFromShippingAddressCommandImpl extends AbstractCa
 
     private static final long serialVersionUID = 20101029L;
 
-    public static final String CMD_KEY = "setBillingAddressSeparateCmd";
-
-    private final boolean value;
-
-    /**
-     * Execute command on shopping cart to perform changes.
-     *
-     * @param shoppingCart the shopping cart
-     */
-    public void execute(final ShoppingCart shoppingCart) {
-        shoppingCart.getOrderInfo().setSeparateBillingAddress(value);
-        setModifiedDate(shoppingCart);
-    }
 
     /**
      * @return command key
      */
     public String getCmdKey() {
-        return CMD_KEY;
+        return CMD_SEPARATEBILLING;
     }
 
-    /**
-     *
-     * @param applicationContext application context
-     * @param parameters page parameters
-     */
-    public SetBillingSeparateFromShippingAddressCommandImpl(
-            final ApplicationContext applicationContext, final Map parameters) {
-        super();
-        value = Boolean.valueOf((String) parameters.get(CMD_KEY));
+    /** {@inheritDoc} */
+    @Override
+    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+        if (parameters.containsKey(getCmdKey())) {
+            final Boolean value = Boolean.valueOf((String) parameters.get(getCmdKey()));
+            if (!value.equals(shoppingCart.getOrderInfo().isSeparateBillingAddress())) {
+                shoppingCart.getOrderInfo().setSeparateBillingAddress(value);
+                setModifiedDate(shoppingCart);
+            }
+        }
     }
 }

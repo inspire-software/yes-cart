@@ -37,8 +37,8 @@ import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.shoppingcart.impl.CleanCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
@@ -148,11 +148,12 @@ public class PaymentPage extends AbstractWebPage {
         }
 
         if (result) {
-            shoppingCartCommandFactory.create(
+            shoppingCartCommandFactory.execute(
+                    ShoppingCartCommand.CMD_CLEAN, ApplicationDirector.getShoppingCart(),
                                         Collections.singletonMap(
-                                                CleanCartCommandImpl.CMD_KEY,
+                                                ShoppingCartCommand.CMD_CLEAN,
                                                 null)
-                                ).execute(ApplicationDirector.getShoppingCart());
+                                );
         }
 
     }

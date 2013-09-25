@@ -55,7 +55,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends Abstrac
     public void testHandle() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
         //initial 15120 has 9 items on 1 warehouse without reservation - pk 30
@@ -72,7 +72,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends Abstrac
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());
         //The equal order can not pefrorm transition , because 1 item on CC_TEST2 sku reserved
-        customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
+        customerOrder = orderService.createFromCart(getStdCard(customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         delivery = customerOrder.getDelivery().iterator().next();
         assertFalse(handler.handle(new OrderEventImpl("", customerOrder, delivery)));

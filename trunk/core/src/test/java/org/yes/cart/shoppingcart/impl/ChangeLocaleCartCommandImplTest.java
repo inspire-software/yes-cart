@@ -19,6 +19,10 @@ package org.yes.cart.shoppingcart.impl;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+
+import java.util.Map;
 
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertEquals;
@@ -33,11 +37,13 @@ public class ChangeLocaleCartCommandImplTest extends BaseCoreDBTestCase {
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-        new ChangeLocaleCartCommandImpl(null, singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, "en"))
-                .execute(shoppingCart);
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGELOCALE, "en"));
         assertEquals("en", shoppingCart.getCurrentLocale());
-        new ChangeLocaleCartCommandImpl(null, singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, "uk"))
-                .execute(shoppingCart);
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGELOCALE, "uk"));
         assertEquals("uk", shoppingCart.getCurrentLocale());
     }
 }

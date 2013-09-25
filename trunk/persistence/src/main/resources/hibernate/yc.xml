@@ -1755,6 +1755,7 @@
         </property>
         <property name="cartGuid" column="CART_GUID" type="string" length="36" not-null="true"/>
         <property name="currency" column="CURRENCY" type="string" length="3" not-null="true"/>
+        <property name="locale" column="LOCALE" type="string" length="5" not-null="true"/>
         <property name="orderMessage" type="string" length="4000">
             <column name="MESSAGE">
                 <comment>Free text information per each order. Can be whatever</comment>

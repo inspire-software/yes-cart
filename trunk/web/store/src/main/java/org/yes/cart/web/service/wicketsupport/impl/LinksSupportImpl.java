@@ -21,15 +21,10 @@ import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
-import org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl;
-import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
-import org.yes.cart.shoppingcart.impl.LogoutCommandImpl;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
-
-import java.math.BigDecimal;
 
 /**
  * User: denispavlov
@@ -108,8 +103,8 @@ public class LinksSupportImpl implements LinksSupport {
     @Override
     public Link newAddToCartLink(final String linkId, final String skuCode, final String quantity, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
-        params.set(AddSkuToCartEventCommandImpl.CMD_KEY, skuCode);
-        params.set(AddSkuToCartEventCommandImpl.CMD_QTY_KEY, quantity != null ? quantity : "1");
+        params.set(ShoppingCartCommand.CMD_ADDTOCART, skuCode);
+        params.set(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, quantity != null ? quantity : "1");
         return new BookmarkablePageLink(linkId, getHomePage(), params);
     }
 
@@ -117,7 +112,7 @@ public class LinksSupportImpl implements LinksSupport {
     @Override
     public Link newLogOffLink(final String linkId, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
-        params.set(LogoutCommandImpl.CMD_KEY, LogoutCommandImpl.CMD_KEY);
+        params.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
         return new BookmarkablePageLink(linkId, getHomePage(), params);
     }
 
@@ -125,7 +120,7 @@ public class LinksSupportImpl implements LinksSupport {
     @Override
     public Link newChangeLocaleLink(final String linkId, final String language, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
-        params.set(ChangeLocaleCartCommandImpl.CMD_KEY, language);
+        params.set(ShoppingCartCommand.CMD_CHANGELOCALE, language);
         return new BookmarkablePageLink(linkId, getHomePage(), params);
     }
 
@@ -133,7 +128,7 @@ public class LinksSupportImpl implements LinksSupport {
     @Override
     public Link newChangeCurrencyLink(final String linkId, final String currency, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
-        params.set(ChangeCurrencyEventCommandImpl.CMD_KEY, currency);
+        params.set(ShoppingCartCommand.CMD_CHANGECURRENCY, currency);
         return new BookmarkablePageLink(linkId, getHomePage(), params);
     }
 

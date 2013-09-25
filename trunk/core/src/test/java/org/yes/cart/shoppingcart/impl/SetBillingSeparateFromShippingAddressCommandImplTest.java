@@ -17,7 +17,9 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,20 +32,22 @@ import static org.junit.Assert.assertTrue;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class SetBillingSeparateFromShippingAddressCommandImplTest {
+public class SetBillingSeparateFromShippingAddressCommandImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
         assertFalse(shoppingCart.isSeparateBillingAddress());
         Map params = new HashMap();
-        params.put(SetBillingSeparateFromShippingAddressCommandImpl.CMD_KEY, "true");
-        SetBillingSeparateFromShippingAddressCommandImpl command =
-                new SetBillingSeparateFromShippingAddressCommandImpl(null, params);
-        command.execute(shoppingCart);
+        params.put(SetBillingSeparateFromShippingAddressCommandImpl.CMD_SEPARATEBILLING, "true");
+        commands.execute(shoppingCart, (Map) params);
+
         assertTrue(shoppingCart.isSeparateBillingAddress());
-        params.put(SetBillingSeparateFromShippingAddressCommandImpl.CMD_KEY, "false");
-        new SetBillingSeparateFromShippingAddressCommandImpl(null, params).execute(shoppingCart);
+        params.put(SetBillingSeparateFromShippingAddressCommandImpl.CMD_SEPARATEBILLING, "false");
+        commands.execute(shoppingCart, (Map) params);
+
         assertFalse(shoppingCart.isSeparateBillingAddress());
     }
 }

@@ -17,8 +17,6 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Shop;
@@ -48,39 +46,61 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
     private static final long serialVersionUID = 20100313L;
 
-    private ProductSkuDTO productSkuDTO;
+    private final PriceService priceService;
 
-    private PriceService priceService;
+    private final ProductService productService;
 
-    private ProductService productService;
+    private final DtoProductService dtoProductService;
 
-    private DtoProductService dtoProductService;
-
-    private ShopService shopService;
+    private final ShopService shopService;
 
 
     /**
-     * Construct abstracr sku command.
+     * Construct abstract sku command.
      *
-     * @param applicationContext spring context
-     * @param parameters         parameters
+     * @param priceService price service
+     * @param productService product serice
+     * @param dtoProductService dto service
+     * @param shopService shop service
      */
-    public AbstractSkuCartCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
+    public AbstractSkuCartCommandImpl(final PriceService priceService,
+                                      final ProductService productService,
+                                      final DtoProductService dtoProductService,
+                                      final ShopService shopService) {
         super();
-        String skuCode = (String) parameters.get(getCmdKey());
-        try {
-            shopService = (ShopService) applicationContext.getBean(ServiceSpringKeys.SHOP_SERVICE);
-            productService = (ProductService) applicationContext.getBean(ServiceSpringKeys.PRODUCT_SERVICE);
-            priceService = (PriceService) applicationContext.getBean(ServiceSpringKeys.PRICE_SERVICE);
-            dtoProductService = (DtoProductService) applicationContext.getBean(ServiceSpringKeys.DTO_PRODUCT_SERVICE);
-            productSkuDTO = dtoProductService.getProductSkuByCode(skuCode);
-        } catch (Exception e) {
-            final Logger log = ShopCodeContext.getLog(this);
-            log.error("Can not retreive product sku dto with code {}", skuCode, e);
-            log.error(e.getMessage(), e);
-        }
-
+        this.priceService = priceService;
+        this.productService = productService;
+        this.dtoProductService = dtoProductService;
+        this.shopService = shopService;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public final void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+
+        if (parameters.containsKey(getCmdKey())) {
+            final String skuCode = (String) parameters.get(getCmdKey());
+            try {
+                final ProductSkuDTO productSkuDTO = dtoProductService.getProductSkuByCode(skuCode);
+                execute(shoppingCart, productSkuDTO, parameters);
+            } catch (Exception e) {
+                final Logger log = ShopCodeContext.getLog(this);
+                log.error("Can not retreive product sku dto with code {}", skuCode, e);
+                log.error(e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
+     * Abstract execute method.
+     *
+     * @param shoppingCart shopping cart
+     * @param productSkuDTO current sku DTO
+     * @param parameters all parameters
+     */
+    protected abstract void execute(final ShoppingCart shoppingCart,
+                                    final ProductSkuDTO productSkuDTO,
+                                    final Map<String, Object> parameters);
 
     /**
      * Recalucalate price in shopping cart. At this moment price depends from shop, currenct and quantity.
@@ -88,7 +108,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
      *
      * @param shoppingCart shopping cart
      */
-    protected void recalculatePrice(final ShoppingCart shoppingCart) {
+    protected void recalculatePrice(final ShoppingCart shoppingCart, final ProductSkuDTO productSkuDTO) {
 
         if (shoppingCart.getShoppingContext().getShopId() == 0) {
 
@@ -98,7 +118,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
             final Shop shop = shopService.getById(shoppingCart.getShoppingContext().getShopId());
 
-            if (getProductSkuDTO() == null) {
+            if (productSkuDTO == null) {
 
                 for (int i = 0; i < shoppingCart.getCartItemList().size(); i++) {
 
@@ -110,7 +130,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
             } else {
                 // particular sku command
-                final String skuCode = getProductSkuDTO().getCode();
+                final String skuCode = productSkuDTO.getCode();
 
                 int skuIdx = shoppingCart.indexOf(skuCode);
 
@@ -168,15 +188,6 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
      */
     public DtoProductService getDtoProductService() {
         return dtoProductService;
-    }
-
-    /**
-     * Get sku dto.
-     *
-     * @return optional {@link ProductSkuDTO} that related to current command.
-     */
-    public ProductSkuDTO getProductSkuDTO() {
-        return productSkuDTO;
     }
 
     /**

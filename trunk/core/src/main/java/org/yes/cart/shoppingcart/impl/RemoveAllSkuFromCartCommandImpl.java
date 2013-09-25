@@ -16,7 +16,11 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.springframework.context.ApplicationContext;
+import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -34,35 +38,34 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
 
     private static final long serialVersionUID = 20100313L;
 
-    public static final String CMD_KEY = "removeAllSkuCmd";
 
+    public RemoveAllSkuFromCartCommandImpl(final PriceService priceService,
+                                           final ProductService productService,
+                                           final DtoProductService dtoProductService,
+                                           final ShopService shopService) {
+        super(priceService, productService, dtoProductService, shopService);
+    }
 
     /** {@inheritDoc} */
     public String getCmdKey() {
-        return CMD_KEY;
+        return CMD_REMOVEALLSKU;
     }
 
-   /**
-     *
-     * @param applicationContext application context
-     * @param parameters page parameters
-     */
-    public RemoveAllSkuFromCartCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
-        super(applicationContext, parameters);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void execute(final ShoppingCart shoppingCart) {
-        if (getProductSkuDTO() != null) {
-            if(!shoppingCart.removeCartItem(getProductSkuDTO())) {
-                ShopCodeContext.getLog(this).warn("Can not remove all skus with code {} from cart",
-                        getProductSkuDTO().getCode());
+    /** {@inheritDoc} */
+    @Override
+    protected void execute(final ShoppingCart shoppingCart,
+                           final ProductSkuDTO productSkuDTO,
+                           final Map<String, Object> parameters) {
+        if (productSkuDTO != null) {
+            if(!shoppingCart.removeCartItem(productSkuDTO)) {
+                ShopCodeContext.getLog(this).warn("Cannot remove all skus with code {} from cart",
+                        productSkuDTO.getCode());
 
             } else  {
+                recalculatePrice(shoppingCart, null);
                 setModifiedDate(shoppingCart);
             }
         }
     }
+
 }

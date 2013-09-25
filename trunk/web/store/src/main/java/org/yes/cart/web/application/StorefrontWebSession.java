@@ -25,14 +25,11 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.shoppingcart.impl.LoginCommandImpl;
-import org.yes.cart.shoppingcart.impl.LogoutCommandImpl;
 import org.yes.cart.util.ShopCodeContext;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -71,7 +68,8 @@ public class StorefrontWebSession extends AuthenticatedWebSession {
                     customerService.findCustomer(username));
             return true;
         }
-        new LogoutCommandImpl(null, null).execute(ApplicationDirector.getShoppingCart());
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGOUT, ApplicationDirector.getShoppingCart(),
+                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT));
         return false;
     }
 
@@ -83,13 +81,13 @@ public class StorefrontWebSession extends AuthenticatedWebSession {
      * @param customer     customer.
      */
     protected void executeLoginCommand(final ShoppingCart shoppingCart, final Customer customer) {
-        shoppingCartCommandFactory.create(
-                new HashMap<String, String>() {{
-                    put(LoginCommandImpl.EMAIL, customer.getEmail());
-                    put(LoginCommandImpl.NAME, customer.getFirstname() + " " + customer.getLastname());
-                    put(LoginCommandImpl.CMD_KEY, LoginCommandImpl.CMD_KEY);
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, shoppingCart,
+                new HashMap<String, Object>() {{
+                    put("email", customer.getEmail());
+                    put("name", customer.getFirstname() + " " + customer.getLastname());
+                    put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
                 }}
-        ).execute(shoppingCart);
+        );
     }
 
 

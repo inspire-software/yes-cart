@@ -43,12 +43,7 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
-import org.yes.cart.shoppingcart.AmountCalculationResult;
-import org.yes.cart.shoppingcart.AmountCalculationStrategy;
-import org.yes.cart.shoppingcart.OrderInfo;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.impl.SetMultipleDeliveryCommandImpl;
-import org.yes.cart.shoppingcart.impl.SetPaymentGatewayLabelCommandImpl;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartPaymentVerificationView;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
@@ -66,6 +61,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Checkout page has following main steps:
@@ -149,6 +145,9 @@ public class CheckoutPage extends AbstractWebPage {
 
     @SpringBean(name = ServiceSpringKeys.PAYMENT_PROCESSOR)
     private PaymentProcessor paymentProcessor;
+
+    @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
+    private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
 
     /**
@@ -338,10 +337,9 @@ public class CheckoutPage extends AbstractWebPage {
                                             @Override
                                             public void onSelectionChanged() {
                                                 setModelObject(!getModelObject());
-                                                new SetMultipleDeliveryCommandImpl(
-                                                        null,
-                                                        Collections.singletonMap(SetMultipleDeliveryCommandImpl.CMD_KEY, getModelObject().toString()))
-                                                        .execute(ApplicationDirector.getShoppingCart());
+                                                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_MULTIPLEDELIVERY,
+                                                        ApplicationDirector.getShoppingCart(),
+                                                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, getModelObject().toString()));
                                                 super.onSelectionChanged();
                                                 processCommands();
                                                 setResponsePage(
@@ -397,10 +395,9 @@ public class CheckoutPage extends AbstractWebPage {
                                                                 .setEscapeModelStrings(false)
                                                 );
 
-                                                new SetPaymentGatewayLabelCommandImpl(
-                                                        null,
-                                                        Collections.singletonMap(SetPaymentGatewayLabelCommandImpl.CMD_KEY, descriptor.getLabel()))
-                                                        .execute(ApplicationDirector.getShoppingCart());
+                                                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL,
+                                                        ApplicationDirector.getShoppingCart(),
+                                                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, descriptor.getLabel()));
 
                                             }
 

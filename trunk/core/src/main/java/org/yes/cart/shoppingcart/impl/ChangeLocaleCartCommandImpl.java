@@ -16,7 +16,6 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.Map;
@@ -30,31 +29,20 @@ public class ChangeLocaleCartCommandImpl  extends AbstractCartCommandImpl {
 
     private static final long serialVersionUID = 20110625L;
 
-    public final static String CMD_KEY = "changeLocaleCmd";
-
-    private final String locale;
-
     /** {@inheritDoc} */
     public String getCmdKey() {
-        return CMD_KEY;
+        return CMD_CHANGELOCALE;
     }
-
-    /**
-     * Construct command to change shopping cart locale.
-     * @param applicationContext  application context.
-     * @param parameters  command parameters.
-     */
-    public ChangeLocaleCartCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
-        //super(applicationContext, parameters);
-        locale = (String) parameters.get(getCmdKey());
-    }
-
 
     /** {@inheritDoc} */
-    public void execute(final ShoppingCart shoppingCart) {
-        if (locale != null) {
-            ((ShoppingCartImpl)shoppingCart).setCurrentLocale(locale);
-            setModifiedDate(shoppingCart);
+    @Override
+    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+        if (parameters.containsKey(getCmdKey())) {
+            final String locale = (String) parameters.get(getCmdKey());
+            if (locale != null && !locale.equals(shoppingCart.getCurrentLocale())) {
+                ((ShoppingCartImpl)shoppingCart).setCurrentLocale(locale);
+                setModifiedDate(shoppingCart);
+            }
         }
     }
 }

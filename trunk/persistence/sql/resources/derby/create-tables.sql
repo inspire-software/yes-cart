@@ -234,6 +234,7 @@
         ORDERNUM varchar(255),
         CART_GUID varchar(36) not null,
         CURRENCY varchar(3) not null,
+        LOCALE varchar(5) not null,
         MESSAGE varchar(255),
         ORDERSTATUS varchar(64) not null,
         CUSTOMER_ID bigint,

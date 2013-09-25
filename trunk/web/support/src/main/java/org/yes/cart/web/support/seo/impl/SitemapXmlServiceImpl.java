@@ -22,11 +22,15 @@ import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.misc.LanguageService;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.seo.SitemapXmlService;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -212,9 +216,9 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
     private String alternativeUrl(final String original, final String language) {
         if (original.endsWith("/")) {
-            return original + ChangeLocaleCartCommandImpl.CMD_KEY + "/" + language;
+            return original + ShoppingCartCommand.CMD_CHANGELOCALE + "/" + language;
         }
-        return original + "/" + ChangeLocaleCartCommandImpl.CMD_KEY + "/" + language;
+        return original + "/" + ShoppingCartCommand.CMD_CHANGELOCALE + "/" + language;
     }
 
     private String getShopBaseUrl(final Shop shop) {

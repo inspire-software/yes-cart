@@ -17,10 +17,15 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.dto.impl.ProductSkuDTOImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -29,16 +34,20 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class CleanCartCommandImplTest {
+public class CleanCartCommandImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
         shoppingCart.addProductSkuToCart(new ProductSkuDTOImpl(), BigDecimal.ONE);
-        shoppingCart.getOrderInfo().setOrderMessage("hi im cart");
+        shoppingCart.getOrderInfo().setOrderMessage("hi, I'm a cart");
         String oldGuid = shoppingCart.getGuid();
-        new CleanCartCommandImpl(null, null)
-                .execute(shoppingCart);
+
+        commands.execute(shoppingCart,
+                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_CLEAN, ShoppingCartCommand.CMD_CLEAN));
+
         assertNull(shoppingCart.getOrderMessage());
         assertNotNull(shoppingCart.getModifiedDate());
         assertTrue(shoppingCart.getCartItemList().isEmpty());

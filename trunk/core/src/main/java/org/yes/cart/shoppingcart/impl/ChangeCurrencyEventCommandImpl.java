@@ -17,7 +17,11 @@
 package org.yes.cart.shoppingcart.impl;
 
 
-import org.springframework.context.ApplicationContext;
+import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.Map;
@@ -31,32 +35,34 @@ public class ChangeCurrencyEventCommandImpl extends AbstractSkuCartCommandImpl {
 
     private static final long serialVersionUID = 20101702L;
 
-    public static final String CMD_KEY = "changeCurrencyCmd";
-
-    private final String currencyCode;
+    public ChangeCurrencyEventCommandImpl(final PriceService priceService,
+                                          final ProductService productService,
+                                          final DtoProductService dtoProductService,
+                                          final ShopService shopService) {
+        super(priceService, productService, dtoProductService, shopService);
+    }
 
     /**
      * {@inheritDoc}
      */
     public String getCmdKey() {
-        return CMD_KEY;
+        return CMD_CHANGECURRENCY;
     }
-
-
-    public ChangeCurrencyEventCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
-        super(applicationContext, parameters);
-        currencyCode = (String) parameters.get(CMD_KEY);
-    }
-
 
     /**
      * {@inheritDoc}
      */
-    public void execute(final ShoppingCart shoppingCart) {
-        if (currencyCode != null) {
-            ((ShoppingCartImpl) shoppingCart).setCurrencyCode(currencyCode);
-            recalculatePrice(shoppingCart);
-            setModifiedDate(shoppingCart);
+    @Override
+    protected void execute(final ShoppingCart shoppingCart,
+                           final ProductSkuDTO productSkuDTO,
+                           final Map<String, Object> parameters) {
+        if (parameters.containsKey(getCmdKey())) {
+            final String currencyCode = (String) parameters.get(getCmdKey());
+            if (currencyCode != null && !currencyCode.equals(shoppingCart.getCurrencyCode())) {
+                ((ShoppingCartImpl) shoppingCart).setCurrencyCode(currencyCode);
+                recalculatePrice(shoppingCart, productSkuDTO);
+                setModifiedDate(shoppingCart);
+            }
         }
     }
 }

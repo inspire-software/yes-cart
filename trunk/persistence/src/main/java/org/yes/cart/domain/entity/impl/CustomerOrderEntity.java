@@ -39,6 +39,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private String ordernum;
     private String cartGuid;
     private String currency;
+    private String locale;
     private String orderMessage;
     private String orderStatus;
     private Customer customer;
@@ -81,6 +82,14 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     public void setCartGuid(String cartGuid) {
         this.cartGuid = cartGuid;
+    }
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(final String locale) {
+        this.locale = locale;
     }
 
     public String getCurrency() {

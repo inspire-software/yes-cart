@@ -16,7 +16,6 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -34,36 +33,24 @@ public class SetPaymentGatewayLabelCommandImpl extends AbstractCartCommandImpl  
 
     private static final long serialVersionUID = 20111106L;
 
-       public static final String CMD_KEY = "setPgLAbel";
 
-       private final String value;
+    /**
+    * @return command key
+    */
+    public String getCmdKey() {
+       return CMD_SETPGLABEL;
+    }
 
-       /**
-        * Execute command on shopping cart to perform changes.
-        *
-        * @param shoppingCart the shopping cart
-        */
-       public void execute(final ShoppingCart shoppingCart) {
-           shoppingCart.getOrderInfo().setPaymentGatewayLabel(value);
-           setModifiedDate(shoppingCart);
-       }
-
-       /**
-        * @return command key
-        */
-       public String getCmdKey() {
-           return CMD_KEY;
-       }
-
-       /**
-        * COnstruct command implementation.
-        * @param applicationContext application context
-        * @param parameters page parameters
-        */
-       public SetPaymentGatewayLabelCommandImpl(
-               final ApplicationContext applicationContext, final Map parameters) {
-           super();
-           value = (String) parameters.get(CMD_KEY);
-       }
+    /** {@inheritDoc} */
+    @Override
+    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+        if (parameters.containsKey(getCmdKey())) {
+            final String value = (String) parameters.get(getCmdKey());
+            if (value != null && !value.equals(shoppingCart.getOrderInfo().getPaymentGatewayLabel())) {
+                shoppingCart.getOrderInfo().setPaymentGatewayLabel(value);
+                setModifiedDate(shoppingCart);
+            }
+        }
+    }
 
 }

@@ -17,9 +17,13 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
-import static java.util.Collections.singletonMap;
+import java.util.HashMap;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -27,17 +31,20 @@ import static org.junit.Assert.assertEquals;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class SetCarrierSlaCartCommandImplTest {
+public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-        new ChangeCurrencyEventCommandImpl(null, singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR"))
-                .execute(shoppingCart);
-        new SetShopCartCommandImpl(null, singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
-                .execute(shoppingCart);
-        new SetCarrierSlaCartCommandImpl(null, singletonMap(SetCarrierSlaCartCommandImpl.CMD_KEY, "123"))
-                .execute(shoppingCart);
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        commands.execute(shoppingCart, new HashMap<String, Object>() {{
+            put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
+            put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
+            put(ShoppingCartCommand.CMD_SETSHOP, "10");
+            put(ShoppingCartCommand.CMD_SETCARRIERSLA, "123");
+        }});
+
         assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
     }
 }

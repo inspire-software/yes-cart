@@ -16,7 +16,6 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -31,37 +30,22 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
 
     private static final long serialVersionUID = 20101026L;
 
-    public static final String CMD_KEY = "loginCmd";
-    public static final String EMAIL = "email";
-    public static final String NAME = "name";
-
-    private final Map parameters;
-
-    /**
-     * {@inheritDoc}
-     */
-    public void execute(final ShoppingCart shoppingCart) {
-
-        shoppingCart.getShoppingContext().setCustomerEmail((String) parameters.get(EMAIL));
-        shoppingCart.getShoppingContext().setCustomerName((String) parameters.get(NAME));
-        setModifiedDate(shoppingCart);
-    }
-
     /**
      * {@inheritDoc}
      */
     public String getCmdKey() {
-        return CMD_KEY;
+        return CMD_LOGIN;
     }
 
     /**
-     * @param applicationContext application context
-     * @param parameters         page parameters
+     * {@inheritDoc}
      */
-    public LoginCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
-        super();
-        this.parameters = parameters;
+    @Override
+    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+        if (parameters.containsKey(getCmdKey())) {
+            shoppingCart.getShoppingContext().setCustomerEmail((String) parameters.get(CMD_LOGIN_P_EMAIL));
+            shoppingCart.getShoppingContext().setCustomerName((String) parameters.get(CMD_LOGIN_P_NAME));
+            setModifiedDate(shoppingCart);
+        }
     }
-
-
 }
