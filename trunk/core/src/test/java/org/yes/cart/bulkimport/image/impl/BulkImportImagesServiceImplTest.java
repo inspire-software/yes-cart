@@ -20,20 +20,19 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkimport.service.BulkImportImagesService;
-import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ProductService;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

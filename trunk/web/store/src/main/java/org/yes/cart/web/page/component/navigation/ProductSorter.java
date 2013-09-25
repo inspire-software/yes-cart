@@ -16,9 +16,6 @@
 
 package org.yes.cart.web.page.component.navigation;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -26,7 +23,6 @@ import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.util.WicketUtil;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

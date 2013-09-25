@@ -21,8 +21,8 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.*;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.domain.entity.Category;
+import org.yes.cart.service.domain.ContentService;
 
 import java.util.Arrays;
 import java.util.HashSet;

@@ -17,14 +17,16 @@
 package org.yes.cart.web.support.service.impl;
 
 import org.junit.Test;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.impl.AttributeServiceImpl;
 import org.yes.cart.service.domain.impl.CategoryServiceImpl;
 import org.yes.cart.service.domain.impl.ContentServiceImpl;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 

@@ -27,7 +27,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.impl.AsIsAnalyzer;
 import org.yes.cart.service.domain.ProductService;
@@ -40,7 +39,6 @@ import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

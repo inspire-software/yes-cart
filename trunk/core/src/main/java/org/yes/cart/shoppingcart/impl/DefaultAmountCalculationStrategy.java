@@ -18,7 +18,6 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.shoppingcart.AmountCalculationResult;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.CartItem;

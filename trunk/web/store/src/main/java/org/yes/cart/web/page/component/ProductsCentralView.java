@@ -35,7 +35,6 @@ import org.yes.cart.web.page.component.navigation.ProductSorter;
 import org.yes.cart.web.page.component.navigation.URLPagingNavigator;
 import org.yes.cart.web.page.component.product.ProductInListView;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;

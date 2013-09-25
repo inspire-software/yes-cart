@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.support.entity.decorator;
 
-import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;

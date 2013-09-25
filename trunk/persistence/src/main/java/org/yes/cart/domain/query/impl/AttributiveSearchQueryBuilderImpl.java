@@ -25,7 +25,6 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

@@ -21,8 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.ProductSkuEntity;
 import org.yes.cart.domain.entity.impl.SkuPriceEntity;

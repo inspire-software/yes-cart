@@ -16,10 +16,7 @@
 
 package org.yes.cart.web.page.component.navigation;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
@@ -29,9 +26,6 @@ import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.util.WicketUtil;
-
-import java.util.Collections;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

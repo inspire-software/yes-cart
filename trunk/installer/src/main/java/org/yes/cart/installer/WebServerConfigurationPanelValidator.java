@@ -17,9 +17,7 @@
 package org.yes.cart.installer;
 
 import com.google.common.base.Strings;
-import com.izforge.izpack.api.data.AutomatedInstallData;
 import com.izforge.izpack.api.data.InstallData;
-import com.izforge.izpack.api.data.LocaleDatabase;
 import com.izforge.izpack.api.installer.DataValidator;
 import com.izforge.izpack.api.resource.Messages;
 

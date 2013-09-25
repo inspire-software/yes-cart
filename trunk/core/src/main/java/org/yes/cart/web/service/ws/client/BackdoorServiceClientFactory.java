@@ -17,23 +17,15 @@
 package org.yes.cart.web.service.ws.client;
 
 import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.endpoint.Endpoint;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.apache.cxf.transport.http.HTTPConduit;
-import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
-import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
-import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSPasswordCallback;
-import org.apache.ws.security.handler.WSHandlerConstants;
 import org.yes.cart.web.service.ws.BackdoorService;
-import org.yes.cart.web.service.ws.CacheDirector;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

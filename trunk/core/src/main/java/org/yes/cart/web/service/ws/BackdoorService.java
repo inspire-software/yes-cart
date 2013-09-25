@@ -16,8 +16,6 @@
 
 package org.yes.cart.web.service.ws;
 
-import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
-
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;

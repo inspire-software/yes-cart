@@ -18,9 +18,7 @@ package org.yes.cart.domain.query.impl;
 
 import org.apache.lucene.analysis.LowerCaseFilter;
 import org.apache.lucene.analysis.ReusableAnalyzerBase;
-import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.util.Version;
 
 import java.io.Reader;

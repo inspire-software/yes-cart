@@ -17,9 +17,7 @@
 package org.yes.cart.web.page.component.breadcrumbs;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
