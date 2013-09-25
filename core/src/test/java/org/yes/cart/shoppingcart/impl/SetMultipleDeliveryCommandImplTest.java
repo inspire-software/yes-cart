@@ -17,7 +17,9 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,18 +32,20 @@ import static org.junit.Assert.assertTrue;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class SetMultipleDeliveryCommandImplTest {
+public class SetMultipleDeliveryCommandImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
         assertFalse(shoppingCart.getOrderInfo().isMultipleDelivery());
         Map params = new HashMap();
-        params.put(SetMultipleDeliveryCommandImpl.CMD_KEY, "true");
-        new SetMultipleDeliveryCommandImpl(null, params).execute(shoppingCart);
+        params.put(SetMultipleDeliveryCommandImpl.CMD_MULTIPLEDELIVERY, "true");
+        commands.execute(shoppingCart, params);
         assertTrue(shoppingCart.getOrderInfo().isMultipleDelivery());
-        params.put(SetMultipleDeliveryCommandImpl.CMD_KEY, "false");
-        new SetMultipleDeliveryCommandImpl(null, params).execute(shoppingCart);
+        params.put(SetMultipleDeliveryCommandImpl.CMD_MULTIPLEDELIVERY, "false");
+        commands.execute(shoppingCart, params);
         assertFalse(shoppingCart.getOrderInfo().isMultipleDelivery());
     }
 }

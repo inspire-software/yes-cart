@@ -28,7 +28,7 @@ public class OrderInfoImpl implements OrderInfo {
     private String paymentGatewayLabel;
     private boolean multipleDelivery;
     private boolean separateBillingAddress;
-    private Integer carrierSlaId;
+    private Long carrierSlaId;
     private String orderMessage;
 
     /**
@@ -52,7 +52,7 @@ public class OrderInfoImpl implements OrderInfo {
      * Get carrier shipping SLA.
      * @return carries sla id.
      */
-    public Integer getCarrierSlaId() {
+    public Long getCarrierSlaId() {
         return carrierSlaId;
     }
 
@@ -60,7 +60,7 @@ public class OrderInfoImpl implements OrderInfo {
      * Set carrier shipping SLA.
      * @param carrierSlaId selected sla id.
      */
-    public void setCarrierSlaId(final Integer carrierSlaId) {
+    public void setCarrierSlaId(final Long carrierSlaId) {
         this.carrierSlaId = carrierSlaId;
     }
 

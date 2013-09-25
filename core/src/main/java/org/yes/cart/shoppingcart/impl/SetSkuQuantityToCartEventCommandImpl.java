@@ -16,7 +16,11 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.springframework.context.ApplicationContext;
+import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -35,39 +39,29 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
 
     private static final long serialVersionUID = 20110312L;
 
-    public static final String CMD_KEY = "setQuantityToCartCmd";
-
-    public static final String CMD_PARAM_QTY = "qty";
-
-    private final String skuQty;
-
+    public SetSkuQuantityToCartEventCommandImpl(final PriceService priceService,
+                                                final ProductService productService,
+                                                final DtoProductService dtoProductService,
+                                                final ShopService shopService) {
+        super(priceService, productService, dtoProductService, shopService);
+    }
 
     /**
      * {@inheritDoc}
      */
     public String getCmdKey() {
-        return CMD_KEY;
+        return CMD_SETQTYSKU;
     }
 
-    /**
-     * Construct command.
-     * @param applicationContext application context
-     * @param parameters parameters
-     */
-    public SetSkuQuantityToCartEventCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
-        super(applicationContext, parameters);
-        skuQty = (String) parameters.get(CMD_PARAM_QTY);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void execute(final ShoppingCart shoppingCart) {
-        if (getProductSkuDTO() != null) {
-            shoppingCart.setProductSkuToCart(getProductSkuDTO(), new BigDecimal(skuQty));
-            recalculatePrice(shoppingCart);
+    /** {@inheritDoc} */
+    @Override
+    protected void execute(final ShoppingCart shoppingCart, final ProductSkuDTO productSkuDTO, final Map<String, Object> parameters) {
+        final String skuQty = (String) parameters.get(CMD_SETQTYSKU_P_QTY);
+        if (productSkuDTO != null && skuQty != null) {
+            shoppingCart.setProductSkuToCart(productSkuDTO, new BigDecimal(skuQty));
+            recalculatePrice(shoppingCart, productSkuDTO);
             ShopCodeContext.getLog(this).debug("Add product sku with code {} and qty {} to cart",
-                    getProductSkuDTO().getCode(),
+                    productSkuDTO.getCode(),
                     skuQty);
             setModifiedDate(shoppingCart);
         }

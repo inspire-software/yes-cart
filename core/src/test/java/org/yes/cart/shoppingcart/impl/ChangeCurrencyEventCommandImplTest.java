@@ -20,10 +20,13 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Map;
 
-import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -37,19 +40,21 @@ public class ChangeCurrencyEventCommandImplTest extends BaseCoreDBTestCase {
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
-        new ChangeCurrencyEventCommandImpl(ctx(), singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "EUR"))
-                .execute(shoppingCart);
-        new SetShopCartCommandImpl(ctx(), singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
-                .execute(shoppingCart);
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        commands.execute(shoppingCart,
+                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETSHOP, "10"));
+        commands.execute(shoppingCart,
+                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal());
         for (int i = 0; i < 3; i++) {
-            new AddSkuToCartEventCommandImpl(ctx(), singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
-                    .execute(shoppingCart);
+            commands.execute(shoppingCart,
+                    (Map) Collections.singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
         }
 
         assertTrue("Expected 57.00 Actual " + shoppingCart.getCartSubTotal(), (new BigDecimal("57.00")).equals(shoppingCart.getCartSubTotal()));
-        new ChangeCurrencyEventCommandImpl(ctx(), singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
-                .execute(shoppingCart);
+        commands.execute(shoppingCart,
+                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "USD"));
         assertEquals("USD", shoppingCart.getCurrencyCode());
         assertTrue("Expected 570.03", (new BigDecimal("570.03")).equals(shoppingCart.getCartSubTotal()));
     }

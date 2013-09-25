@@ -16,7 +16,6 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -31,27 +30,17 @@ public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements S
 
     private static final long serialVersionUID = 20101026L;
 
-    public static final String CMD_KEY = "expireCartCmd";
-
-    /** {@inheritDoc} */
-    public void execute(final ShoppingCart shoppingCart) {
-        shoppingCart.getShoppingContext().clearContext();        
-        setModifiedDate(shoppingCart);
-
-    }
-
     /** {@inheritDoc} */
     public String getCmdKey() {
-        return CMD_KEY;
+        return CMD_EXPIRE;
     }
 
-    /**
-     *
-     * @param applicationContext application context
-     * @param parameters page parameters
-     */
-    public ExpireCartCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
-        super();
+    /** {@inheritDoc} */
+    @Override
+    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+        if (parameters.containsKey(getCmdKey())) {
+            shoppingCart.getShoppingContext().clearContext();
+            setModifiedDate(shoppingCart);
+        }
     }
-
 }

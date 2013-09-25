@@ -17,7 +17,6 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -32,35 +31,23 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
 
     private static final long serialVersionUID = 2010522L;
 
-    public static final String CMD_KEY = "setShopIdCmd";
-
-    private final long value;
-
-    /**
-     * Execute command on shopping cart to perform changes.
-     *
-     * @param shoppingCart the shopping cart
-     */
-    public void execute(final ShoppingCart shoppingCart) {
-        shoppingCart.getShoppingContext().setShopId(value);
-        setModifiedDate(shoppingCart);
-    }
-
     /**
      * @return command key
      */
     public String getCmdKey() {
-        return CMD_KEY;
+        return CMD_SETSHOP;
     }
 
-    /**
-     * @param applicationContext application context
-     * @param parameters         page parameters
-     */
-    public SetShopCartCommandImpl(
-            final ApplicationContext applicationContext, final Map parameters) {
-        super();
-        value = NumberUtils.createLong(String.valueOf(parameters.get(CMD_KEY)));
+    /** {@inheritDoc} */
+    @Override
+    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+        if (parameters.containsKey(getCmdKey())) {
+            final Long value = NumberUtils.createLong(String.valueOf(parameters.get(getCmdKey())));
+            if (value != null && !value.equals(shoppingCart.getShoppingContext().getShopId())) {
+                shoppingCart.getShoppingContext().setShopId(value);
+                setModifiedDate(shoppingCart);
+            }
+        }
     }
 
 }

@@ -16,15 +16,14 @@
 
 package org.yes.cart.service.order.impl.handler;
 
-import org.springframework.context.ApplicationContext;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.impl.*;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.util.Collections.singletonMap;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -36,37 +35,41 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
     /**
      * Simple card with two sku, three items, standard availability, one payment
      *
-     * @param context spring context
      * @return cart
      */
-    protected ShoppingCart getStdCard(final ApplicationContext context, final String customerEmail) {
+    protected ShoppingCart getStdCard(final String customerEmail) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
         Map<String, String> param = new HashMap<String, String>();
-        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST1");
-        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "2.00");
-        new SetSkuQuantityToCartEventCommandImpl(context, param)
-                .execute(shoppingCart);
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST1");
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+        commands.execute(shoppingCart, (Map) param);
+
         param = new HashMap<String, String>();
-        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST2");
-        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.00");
-        new SetSkuQuantityToCartEventCommandImpl(context, param)
-                .execute(shoppingCart);
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST2");
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+        commands.execute(shoppingCart, (Map) param);
+
         return shoppingCart;
     }
 
     protected ShoppingCart getEmptyCart(final String customerEmail) {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
         Map<String, String> params = new HashMap<String, String>();
-        params.put(LoginCommandImpl.EMAIL, customerEmail);
-        params.put(LoginCommandImpl.NAME, "John Doe");
-        new SetShopCartCommandImpl(ctx(), singletonMap(SetShopCartCommandImpl.CMD_KEY, 10))
-                .execute(shoppingCart);
-        new ChangeCurrencyEventCommandImpl(ctx(), singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, "USD"))
-                .execute(shoppingCart);
-        new LoginCommandImpl(null, params)
-                .execute(shoppingCart);
-        new SetCarrierSlaCartCommandImpl(null, singletonMap(SetCarrierSlaCartCommandImpl.CMD_KEY, "1"))
-                .execute(shoppingCart);
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customerEmail);
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
+
+        params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
+        params.put(ShoppingCartCommand.CMD_SETSHOP, "10");
+        params.put(ShoppingCartCommand.CMD_CHANGECURRENCY, "USD");
+        params.put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
+        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, "1");
+
+        commands.execute(shoppingCart, (Map) params);
+
         return shoppingCart;
     }
 }

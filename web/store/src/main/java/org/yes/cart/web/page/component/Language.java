@@ -25,14 +25,17 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.service.misc.LanguageService;
-import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -49,6 +52,9 @@ public class Language extends BaseComponent {
 
     @SpringBean(name = StorefrontServiceSpringKeys.LANGUAGE_SERVICE)
     private LanguageService languageService;
+
+    @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
+    private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
     /**
      * Construct panel.
@@ -78,10 +84,8 @@ public class Language extends BaseComponent {
         if (isVisible()) {
 
             if (StringUtils.isBlank(ApplicationDirector.getShoppingCart().getCurrentLocale())) {
-                new ChangeLocaleCartCommandImpl(
-                        null,
-                        Collections.singletonMap(ChangeLocaleCartCommandImpl.CMD_KEY, getSession().getLocale().getLanguage()))
-                        .execute(ApplicationDirector.getShoppingCart());
+                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_CHANGELOCALE, ApplicationDirector.getShoppingCart(),
+                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_CHANGELOCALE, getSession().getLocale().getLanguage()));
             }
 
             final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());

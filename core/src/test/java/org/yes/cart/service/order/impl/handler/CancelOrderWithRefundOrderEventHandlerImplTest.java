@@ -61,7 +61,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
     public void testHandle0() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);
@@ -91,7 +91,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
     public void testHandle1() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);

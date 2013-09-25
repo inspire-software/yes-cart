@@ -94,6 +94,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
         fillOrderDetails(customerOrder, shoppingCart);
 
+        customerOrder.setLocale(shoppingCart.getCurrentLocale());
         customerOrder.setCurrency(shoppingCart.getCurrencyCode());
         customerOrder.setOrderStatus(CustomerOrder.ORDER_STATUS_NONE);
         customerOrder.setOrderTimestamp(new Date());

@@ -16,7 +16,6 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -32,27 +31,17 @@ import java.util.Map;
  */
 public class CleanCartCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
-    public static final String CMD_KEY = "cleanCartCmd";
-
-    /** {@inheritDoc} */
-    public void execute(final ShoppingCart shoppingCart) {
-        shoppingCart.clean();
-        setModifiedDate(shoppingCart);
-    }
-
-
     /** {@inheritDoc} */
     public String getCmdKey() {
-        return CMD_KEY;
+        return CMD_CLEAN;
     }
 
-    /**
-     *
-     * @param applicationContext application context
-     * @param parameters page parameters
-     */
-    public CleanCartCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
-        super();
+    /** {@inheritDoc} */
+    @Override
+    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+        if (parameters.containsKey(getCmdKey())) {
+            shoppingCart.clean();
+            setModifiedDate(shoppingCart);
+        }
     }
-
 }

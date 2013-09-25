@@ -47,14 +47,14 @@ public interface OrderInfo extends Serializable {
      *
      * @param carrierSlaId selected sla id.
      */
-    void setCarrierSlaId(Integer carrierSlaId);
+    void setCarrierSlaId(Long carrierSlaId);
 
     /**
      * Get carrier shipping SLA.
      *
      * @return carries sla id.
      */
-    Integer getCarrierSlaId();
+    Long getCarrierSlaId();
 
 
     /**

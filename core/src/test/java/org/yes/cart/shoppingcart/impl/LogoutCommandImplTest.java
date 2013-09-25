@@ -17,8 +17,12 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,22 +33,28 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class LogoutCommandImplTest {
+public class LogoutCommandImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
         Map<String, String> params = new HashMap<String, String>();
-        params.put(LoginCommandImpl.EMAIL, "test@test.com");
-        params.put(LoginCommandImpl.NAME, "John Doe");
-        new LoginCommandImpl(null, params)
-                .execute(shoppingCart);
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, "test@test.com");
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
+        params.put(LoginCommandImpl.CMD_LOGIN, "1");
+        commands.execute(shoppingCart, (Map) params);
+        assertEquals(ShoppingCart.LOGGED_IN, shoppingCart.getLogonState());
+
         assertNotNull(shoppingCart.getShoppingContext().getCustomerEmail());
-        assertEquals("Test that auth in spring security context",
+        assertEquals("Test that auth saved to cart",
                 "test@test.com",
                 shoppingCart.getShoppingContext().getCustomerEmail());
-        new LogoutCommandImpl(null, null)
-                .execute(shoppingCart);
+
+        commands.execute(shoppingCart,
+                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT));
+
         assertNull(shoppingCart.getCustomerEmail());
         assertNull(shoppingCart.getCustomerName());
         assertEquals(ShoppingCart.NOT_LOGGED, shoppingCart.getLogonState());

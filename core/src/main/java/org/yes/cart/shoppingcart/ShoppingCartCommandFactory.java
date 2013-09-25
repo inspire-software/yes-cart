@@ -26,13 +26,17 @@ import java.util.Map;
  * Date: Jan 22, 2011
  * Time: 5:25:25 PM
  */
-public interface ShoppingCartCommandFactory extends Serializable {
+public interface ShoppingCartCommandFactory extends ShoppingCartCommand, Serializable {
 
     /**
-     * Get the {@link ShoppingCartCommand} by given map of parameters.
-     * @param pageParameters map of web request parameters.
-     * @return {@link ShoppingCartCommand} on null if command can not be found in map parameters.
+     * Execute specific command by key.
+     *
+     * @param key command key
+     * @param shoppingCart the shopping cart
+     * @param parameters parameters
+     *
+     * @throws IllegalArgumentException if key is invalid
      */
-    ShoppingCartCommand create(final Map pageParameters);
+    void execute(String key, ShoppingCart shoppingCart, Map<String, Object> parameters) throws IllegalArgumentException;
 
 }

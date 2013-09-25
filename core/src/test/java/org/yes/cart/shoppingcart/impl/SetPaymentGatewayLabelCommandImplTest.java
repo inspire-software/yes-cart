@@ -17,7 +17,9 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +32,7 @@ import static org.junit.Assert.assertNull;
  * Date: 11/6/11
  * Time: 8:30 PM
  */
-public class SetPaymentGatewayLabelCommandImplTest {
+public class SetPaymentGatewayLabelCommandImplTest extends BaseCoreDBTestCase {
     /**
      * Test command.
      */
@@ -38,24 +40,20 @@ public class SetPaymentGatewayLabelCommandImplTest {
     public void testExecute() {
 
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
         assertNull(shoppingCart.getOrderInfo().getPaymentGatewayLabel());
 
         Map params = new HashMap();
 
-        params.put(SetPaymentGatewayLabelCommandImpl.CMD_KEY, "label");
+        params.put(SetPaymentGatewayLabelCommandImpl.CMD_SETPGLABEL, "label");
 
-        SetPaymentGatewayLabelCommandImpl command =
-                new SetPaymentGatewayLabelCommandImpl(null, params);
-
-        command.execute(shoppingCart);
+        commands.execute(shoppingCart, params);
         assertEquals("label", shoppingCart.getOrderInfo().getPaymentGatewayLabel());
 
-        params.put(SetPaymentGatewayLabelCommandImpl.CMD_KEY, "qwerty");
+        params.put(SetPaymentGatewayLabelCommandImpl.CMD_SETPGLABEL, "qwerty");
 
-        command =
-                new SetPaymentGatewayLabelCommandImpl(null, params);
-
-        command.execute(shoppingCart);
+        commands.execute(shoppingCart, params);
         assertEquals("qwerty", shoppingCart.getOrderInfo().getPaymentGatewayLabel());
 
     }

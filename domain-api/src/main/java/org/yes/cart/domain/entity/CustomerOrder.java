@@ -155,6 +155,19 @@ public interface CustomerOrder extends Auditable {
      */
     void setCartGuid(String cartGuid);
 
+    /**
+     * Get order locale.
+     *
+     * @return locale used when this order was placed
+     */
+    String getLocale();
+
+    /**
+     * Set order locale.
+     *
+     * @param locale locale user when this order was placed
+     */
+    void setLocale(String locale);
 
     /**
      * Get order currency code.

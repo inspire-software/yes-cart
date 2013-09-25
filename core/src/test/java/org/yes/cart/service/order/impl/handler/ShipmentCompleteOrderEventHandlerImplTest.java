@@ -36,7 +36,8 @@ import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl;
 import org.yes.cart.util.MoneyUtils;
 
@@ -81,7 +82,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
     public void testHandle() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel("testPaymentGatewayLabel");
         orderService.update(customerOrder);
@@ -194,17 +195,18 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
      */
     protected ShoppingCart getShoppingCart3(String customerEmail) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
-//        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST1"))
-//                .execute(shoppingCart);
-        new AddSkuToCartEventCommandImpl(ctx(), Collections.singletonMap(AddSkuToCartEventCommandImpl.CMD_KEY, "CC_TEST3"))
-                .execute(shoppingCart);
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+//        commands.execute(shoppingCart,
+//                (Map) Collections.singletonMap(ShoppingCartCommandFactory.CMD_ADDTOCART, "CC_TEST1"));
+        commands.execute(shoppingCart,
+                (Map) Collections.singletonMap(ShoppingCartCommandFactory.CMD_ADDTOCART, "CC_TEST3"));
 
         final Map<String, String> param = new HashMap<String, String>() {{
-            put(SetSkuQuantityToCartEventCommandImpl.CMD_KEY, "CC_TEST3");
-            put(SetSkuQuantityToCartEventCommandImpl.CMD_PARAM_QTY, "1.50");
+            put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST3");
+            put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.50");
         }};
-        new SetSkuQuantityToCartEventCommandImpl(ctx(), param)
-                .execute(shoppingCart);
+        commands.execute(shoppingCart, (Map) param);
 
         return shoppingCart;
     }

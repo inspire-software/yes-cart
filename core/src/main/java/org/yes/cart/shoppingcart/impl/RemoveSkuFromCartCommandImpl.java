@@ -16,7 +16,11 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.springframework.context.ApplicationContext;
+import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -35,39 +39,34 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
 
     private static final long serialVersionUID = 20100313L;
 
-    public static final String CMD_KEY = "removeOneSkuCmd";
-
+    public RemoveSkuFromCartCommandImpl(final PriceService priceService,
+                                        final ProductService productService,
+                                        final DtoProductService dtoProductService,
+                                        final ShopService shopService) {
+        super(priceService, productService, dtoProductService, shopService);
+    }
 
     /** {@inheritDoc} */
     public String getCmdKey() {
-        return CMD_KEY;
-    }
-
-   /**
-     *
-     * @param applicationContext application context
-     * @param parameters page parameters
-     */
-    public RemoveSkuFromCartCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
-        super(applicationContext, parameters);
+        return CMD_REMOVEONESKU;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void execute(final ShoppingCart shoppingCart) {
-        if (getProductSkuDTO() != null) {
-            final String skuCode = getProductSkuDTO().getCode();
-            if(!shoppingCart.removeCartItemQuantity(getProductSkuDTO(), BigDecimal.ONE)) {
+    @Override
+    protected void execute(final ShoppingCart shoppingCart,
+                           final ProductSkuDTO productSkuDTO, final Map<String, Object> parameters) {
+        if (productSkuDTO != null) {
+            final String skuCode = productSkuDTO.getCode();
+            if(!shoppingCart.removeCartItemQuantity(productSkuDTO, BigDecimal.ONE)) {
                 ShopCodeContext.getLog(this).warn("Can not remove one sku with code {} from cart",
                         skuCode);
             }
 
-            recalculatePrice(shoppingCart);
+            recalculatePrice(shoppingCart, productSkuDTO);
             setModifiedDate(shoppingCart);
         }
     }
-
-
 
 }

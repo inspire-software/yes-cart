@@ -18,16 +18,12 @@ package org.yes.cart.web.filter;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl;
-import org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
@@ -37,7 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.HashMap;
 
 
 /**
@@ -49,27 +45,22 @@ import java.util.Collections;
  * If shop can not be resolved by server/domain name
  * filter redirect to default url.
  */
-public class ShopResolverFilter extends AbstractFilter implements Filter, ApplicationContextAware, ServletContextAware {
+public class ShopResolverFilter extends AbstractFilter implements Filter, ServletContextAware {
 
     private final SystemService systemService;
 
-    private ApplicationContext applicationContext;
-
     private ServletContext servletContext;
 
-    private final LanguageService languageService;
+    private final ShoppingCartCommandFactory cartCommandFactory;
 
 
-    /**
-     * @param systemService service
-     */
     public ShopResolverFilter(
             final ApplicationDirector applicationDirector,
             final SystemService systemService,
-            final LanguageService languageService) {
+            final ShoppingCartCommandFactory cartCommandFactory) {
         super(applicationDirector);
         this.systemService = systemService;
-        this.languageService = languageService;
+        this.cartCommandFactory = cartCommandFactory;
     }
 
     /**
@@ -114,11 +105,10 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
 
         if (shoppingCart.getCurrencyCode() == null) { // new cart only may satisfy this condition
 
-            new SetShopCartCommandImpl(applicationContext, Collections.singletonMap(SetShopCartCommandImpl.CMD_KEY, shop.getShopId()))
-                    .execute(shoppingCart);
-
-            new ChangeCurrencyEventCommandImpl(applicationContext, Collections.singletonMap(ChangeCurrencyEventCommandImpl.CMD_KEY, shop.getDefaultCurrency()))
-                    .execute(shoppingCart);
+            cartCommandFactory.execute(shoppingCart, new HashMap<String, Object>() {{
+                put(ShoppingCartCommand.CMD_SETSHOP, shop.getShopId());
+                put(ShoppingCartCommand.CMD_CHANGECURRENCY, shop.getDefaultCurrency());
+            }});
 
         }
 
@@ -162,11 +152,6 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Applic
                         final ServletResponse servletResponse) throws IOException, ServletException {
 
 
-    }
-
-    /** {@inheritDoc} */
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
     }
 
     /** {@inheritDoc} */

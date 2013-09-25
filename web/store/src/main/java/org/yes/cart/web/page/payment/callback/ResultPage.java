@@ -25,8 +25,8 @@ import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.shoppingcart.impl.CleanCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 
@@ -91,14 +91,15 @@ public class ResultPage extends AbstractWebPage {
     }
 
     /**
-     * Clean shopiing cart end prepare it to reusing.
+     * Clean shopping cart end prepare it to reusing.
      */
     private void cleanCart() {
-        shoppingCartCommandFactory.create(
+        shoppingCartCommandFactory.execute(
+                ShoppingCartCommand.CMD_CLEAN, ApplicationDirector.getShoppingCart(),
                 Collections.singletonMap(
-                        CleanCartCommandImpl.CMD_KEY,
+                        ShoppingCartCommand.CMD_CLEAN,
                         null)
-        ).execute(ApplicationDirector.getShoppingCart());
+        );
     }
 
     /**

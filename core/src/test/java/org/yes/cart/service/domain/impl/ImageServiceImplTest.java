@@ -31,7 +31,6 @@ import java.util.UUID;
 
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * User: igora Igor Azarny

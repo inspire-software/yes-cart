@@ -34,8 +34,8 @@ import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.shoppingcart.impl.CleanCartCommandImpl;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
@@ -166,11 +166,12 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
 
                                     payLink.setVisible(false);
 
-                                    shoppingCartCommandFactory.create(
+                                    shoppingCartCommandFactory.execute(
+                                            ShoppingCartCommand.CMD_CLEAN, ApplicationDirector.getShoppingCart(),
                                             Collections.singletonMap(
-                                                    CleanCartCommandImpl.CMD_KEY,
+                                                    ShoppingCartCommand.CMD_CLEAN,
                                                     null)
-                                    ).execute(ApplicationDirector.getShoppingCart());
+                                    );
 
                                 } else {
                                     // TODO: YC-156 lacks of information to show what the real problem

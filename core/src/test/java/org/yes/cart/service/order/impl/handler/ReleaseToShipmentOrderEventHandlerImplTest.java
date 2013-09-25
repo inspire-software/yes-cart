@@ -49,7 +49,7 @@ public class ReleaseToShipmentOrderEventHandlerImplTest extends AbstractEventHan
     public void testHandle() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(ctx(), customer.getEmail()), false);
+        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
         handler.handle(

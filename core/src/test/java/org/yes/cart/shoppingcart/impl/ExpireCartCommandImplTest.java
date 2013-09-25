@@ -17,11 +17,16 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
+import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 /**
@@ -29,20 +34,24 @@ import static org.junit.Assert.assertNull;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ExpireCartCommandImplTest {
+public class ExpireCartCommandImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
         Map<String, String> params = new HashMap<String, String>();
-        params.put(LoginCommandImpl.EMAIL, "test@test.com");
-        params.put(LoginCommandImpl.NAME, "John Doe");
-        new LoginCommandImpl(null, params).execute(shoppingCart);
-        new ExpireCartCommandImpl(null, null)
-                .execute(shoppingCart);
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, "test@test.com");
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
+        params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
+        commands.execute(shoppingCart, (Map) params);
+        assertNotNull(shoppingCart.getCustomerEmail());
+        assertNotNull(shoppingCart.getCustomerName());
+
+        commands.execute(shoppingCart,
+                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_EXPIRE, null));
         assertNull(shoppingCart.getCustomerEmail());
         assertNull(shoppingCart.getCustomerName());
-        //assertEquals(ShoppingCart.SESSION_EXPIRED, shoppingCart.getLogonState());
-        //TODO: YC-151 remake test
     }
 }

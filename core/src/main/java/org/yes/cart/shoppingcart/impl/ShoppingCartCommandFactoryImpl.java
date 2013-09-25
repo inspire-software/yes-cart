@@ -16,15 +16,12 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.util.ShopCodeContext;
 
-import java.lang.reflect.Constructor;
-import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,70 +32,46 @@ import java.util.Map;
  * Time: 5:29:32 PM
  *
  */
-public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactory, ApplicationContextAware {
+public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactory {
 
     private static final long serialVersionUID = 20100122L;
 
-    private Map<String, Class<? extends ShoppingCartCommand>> commands;
-
-    private ApplicationContext applicationContext;
+    private final ShoppingCartCommand[] commands;
+    private final Map<String, ShoppingCartCommand> commandByKey = new HashMap<String, ShoppingCartCommand>();
 
     /**
      * IoC constructor.
      *
      * @param commands configured commands
      */
-    public ShoppingCartCommandFactoryImpl(final Map<String, Class<? extends ShoppingCartCommand>> commands) {
-        this.commands = commands;
-    }
-
-
-    /**
-     * IoC.
-     *
-     * @param commands
-     */
-    public void setCommands(final Map<String, Class<? extends ShoppingCartCommand>> commands) {
-        this.commands = commands;
-    }
-    
-    private String getCmdKey(final Map pageParameters) {
-        for (String cm : commands.keySet()) {
-            if (pageParameters.containsKey(cm)) {
-                return cm;
-            }
+    public ShoppingCartCommandFactoryImpl(final List<ShoppingCartCommand> commands) {
+        this.commands = commands.toArray(new ShoppingCartCommand[commands.size()]);
+        for (final ShoppingCartCommand command : commands) {
+            commandByKey.put(command.getCmdKey(), command);
         }
-        return null;
     }
 
-    /** {@inheritDoc */
-    @SuppressWarnings({"unchecked"})
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-
-    /** {@inheritDoc */
-    public ShoppingCartCommand create(final Map pageParameters) {
-        String cmdKey = getCmdKey(pageParameters);
-        if (cmdKey != null) {
-            Class<? extends ShoppingCartCommand> shoppingCartCommandClass = commands.get(cmdKey);
-            if (shoppingCartCommandClass != null) {
-                try {
-                    Constructor<? extends ShoppingCartCommand> constructor =
-                            shoppingCartCommandClass.getConstructor(
-                                    ApplicationContext.class,
-                                    Map.class);
-                    return constructor.newInstance(applicationContext, pageParameters);
-                } catch (Exception e) {
-                    ShopCodeContext.getLog(this).error(
-                            MessageFormat.format(
-                                    "Can not create command instance for given key {0}. Is appropriate constuctor with ApplicationContext and Map parameters existis ?", cmdKey),
-                            e);
-                }
-            }
-            ShopCodeContext.getLog(this).error("Command instance not found for given key {}", cmdKey);
+    /** {@inheritDoc} */
+    @Override
+    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+        for (ShoppingCartCommand command : commands) {
+            command.execute(shoppingCart, parameters);
         }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void execute(final String key, final ShoppingCart shoppingCart, final Map<String, Object> parameters) throws IllegalArgumentException {
+        if (commandByKey.containsKey(key)) {
+            commandByKey.get(key).execute(shoppingCart, parameters);
+        } else {
+            throw new IllegalArgumentException("Command " + key + " is not mapped");
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getCmdKey() {
         return null;
     }
 

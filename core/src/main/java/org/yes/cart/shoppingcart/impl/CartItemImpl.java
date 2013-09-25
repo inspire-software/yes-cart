@@ -33,7 +33,7 @@ public class CartItemImpl implements CartItem {
 
     private static final long serialVersionUID = 20100116L;
 
-    private static final BigDecimal DEFAULT_QUANTITY = BigDecimal.ONE; // do not simplyfy this, because of min quantity pair, triple , etc.
+    private static final BigDecimal DEFAULT_QUANTITY = BigDecimal.ONE; // do not simplify this, because of min quantity pair, triple , etc.
 
     private String productSkuCode;
 

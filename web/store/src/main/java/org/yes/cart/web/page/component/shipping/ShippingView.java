@@ -27,8 +27,8 @@ import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierService;
 import org.yes.cart.service.domain.CarrierSlaService;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.shoppingcart.impl.SetCarrierSlaCartCommandImpl;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -39,6 +39,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -77,7 +78,7 @@ public class ShippingView extends BaseComponent {
      */
     private void restoreCarrierSla(final List<Carrier> carriers) {
 
-        final Integer slaId = ApplicationDirector.getShoppingCart().getCarrierSlaId();
+        final Long slaId = ApplicationDirector.getShoppingCart().getCarrierSlaId();
 
         setCarrier(null);
         setCarrierSla(null);
@@ -126,11 +127,11 @@ public class ShippingView extends BaseComponent {
             protected void onSelectionChanged(final CarrierSla carrierSla) {
                 super.onSelectionChanged(carrierSla);
 
-                shoppingCartCommandFactory.create(
-                        Collections.singletonMap(
-                                SetCarrierSlaCartCommandImpl.CMD_KEY,
+                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, ApplicationDirector.getShoppingCart(),
+                        (Map) Collections.singletonMap(
+                                ShoppingCartCommand.CMD_SETCARRIERSLA,
                                 String.valueOf(carrierSla.getCarrierslaId()))
-                ).execute(ApplicationDirector.getShoppingCart());
+                );
 
                 addPriceView(form);
 
@@ -169,12 +170,11 @@ public class ShippingView extends BaseComponent {
 
                         carrierSlaChoice.setChoices(new ArrayList<CarrierSla>(carrier.getCarrierSla()));
 
-
-                        shoppingCartCommandFactory.create(
-                                Collections.singletonMap(
-                                        SetCarrierSlaCartCommandImpl.CMD_KEY,
+                        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, ApplicationDirector.getShoppingCart(),
+                                (Map) Collections.singletonMap(
+                                        ShoppingCartCommand.CMD_SETCARRIERSLA,
                                         null)
-                        ).execute(ApplicationDirector.getShoppingCart());
+                        );
 
                         addPriceView(form);
 
@@ -204,7 +204,7 @@ public class ShippingView extends BaseComponent {
      */
     private void addPriceView(final Form form) {
 
-        final Integer slaId = ApplicationDirector.getShoppingCart().getCarrierSlaId();
+        final Long slaId = ApplicationDirector.getShoppingCart().getCarrierSlaId();
 
         if (slaId == null) {
             form.addOrReplace(

@@ -980,26 +980,60 @@
 
     <bean id="shoppingCartCommandFactory" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandFactoryImpl">
         <constructor-arg index="0">
-            <map>
-                <entry key="addToCartCmd" value="org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl"/>
-                <entry key="addQuantityToCartCmd" value="org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl"/>
-                <entry key="removeAllSkuCmd" value="org.yes.cart.shoppingcart.impl.RemoveAllSkuFromCartCommandImpl"/>
-                <entry key="removeOneSkuCmd" value="org.yes.cart.shoppingcart.impl.RemoveSkuFromCartCommandImpl"/>
+            <list>
+                <!-- Order is important here! This is the order multiple command will be executed in -->
+                <bean id="setShopIdCmd" class="org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl"/>
 
-                <entry key="changeCurrencyCmd" value="org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl"/>
-                <entry key="changeLocaleCmd" value="org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl"/>
-                <entry key="logoutCmd" value="org.yes.cart.shoppingcart.impl.LogoutCommandImpl"/>
-                <entry key="loginCmd" value="org.yes.cart.shoppingcart.impl.LoginCommandImpl"/>
-                <entry key="expireCartCmd" value="org.yes.cart.shoppingcart.impl.ExpireCartCommandImpl"/>
-                <entry key="setCarrierSlaCmd" value="org.yes.cart.shoppingcart.impl.SetCarrierSlaCartCommandImpl"/>
-                <entry key="setBillingAddressSeparateCmd" value="org.yes.cart.shoppingcart.impl.SetBillingSeparateFromShippingAddressCommandImpl"/>
-                <entry key="setMultipleDeliveryCmd" value="org.yes.cart.shoppingcart.impl.SetMultipleDeliveryCommandImpl"/>
+                <bean id="changeCurrencyCmd" class="org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl">
+                    <constructor-arg index="0" ref="priceService"/>
+                    <constructor-arg index="1" ref="productService"/>
+                    <constructor-arg index="2" ref="dtoProductService"/>
+                    <constructor-arg index="3" ref="shopService"/>
+                </bean>
+                <bean id="changeLocaleCmd" class="org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl"/>
 
-                <entry key="cleanCartCmd" value="org.yes.cart.shoppingcart.impl.CleanCartCommandImpl"/>
+                <bean id="loginCmd" class="org.yes.cart.shoppingcart.impl.LoginCommandImpl"/>
 
-                <entry key="setShopIdCmd" value="org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl"/>
-                <entry key="setQuantityToCartCmd" value="org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl"/>
-            </map>
+                <bean id="setBillingAddressSeparateCmd" class="org.yes.cart.shoppingcart.impl.SetBillingSeparateFromShippingAddressCommandImpl"/>
+                <bean id="setCarrierSlaCmd" class="org.yes.cart.shoppingcart.impl.SetCarrierSlaCartCommandImpl"/>
+                <bean id="setMultipleDeliveryCmd" class="org.yes.cart.shoppingcart.impl.SetMultipleDeliveryCommandImpl"/>
+                <bean id="setPgLabelCmd" class="org.yes.cart.shoppingcart.impl.SetPaymentGatewayLabelCommandImpl"/>
+
+
+                <bean id="addToCartCmd" class="org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl">
+                    <constructor-arg index="0" ref="priceService"/>
+                    <constructor-arg index="1" ref="productService"/>
+                    <constructor-arg index="2" ref="dtoProductService"/>
+                    <constructor-arg index="3" ref="shopService"/>
+                </bean>
+
+                <bean id="removeAllSkuCmd" class="org.yes.cart.shoppingcart.impl.RemoveAllSkuFromCartCommandImpl">
+                    <constructor-arg index="0" ref="priceService"/>
+                    <constructor-arg index="1" ref="productService"/>
+                    <constructor-arg index="2" ref="dtoProductService"/>
+                    <constructor-arg index="3" ref="shopService"/>
+                </bean>
+
+                <bean id="removeOneSkuCmd" class="org.yes.cart.shoppingcart.impl.RemoveSkuFromCartCommandImpl">
+                    <constructor-arg index="0" ref="priceService"/>
+                    <constructor-arg index="1" ref="productService"/>
+                    <constructor-arg index="2" ref="dtoProductService"/>
+                    <constructor-arg index="3" ref="shopService"/>
+                </bean>
+
+                <bean id="setQuantityToCartCmd" class="org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl">
+                    <constructor-arg index="0" ref="priceService"/>
+                    <constructor-arg index="1" ref="productService"/>
+                    <constructor-arg index="2" ref="dtoProductService"/>
+                    <constructor-arg index="3" ref="shopService"/>
+                </bean>
+
+                <bean id="expireCartCmd" class="org.yes.cart.shoppingcart.impl.ExpireCartCommandImpl"/>
+                <bean id="cleanCartCmd" class="org.yes.cart.shoppingcart.impl.CleanCartCommandImpl"/>
+
+                <bean id="logoutCmd" class="org.yes.cart.shoppingcart.impl.LogoutCommandImpl"/>
+
+            </list>
         </constructor-arg>
     </bean>
 

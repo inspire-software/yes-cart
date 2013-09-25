@@ -17,7 +17,6 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.springframework.context.ApplicationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.util.ShopCodeContext;
@@ -33,40 +32,24 @@ public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl imple
 
     private static final long serialVersionUID = 20100313L;
 
-    public static final String CMD_KEY = "setCarrierSlaCmd";
-
-    private Integer slaPkvalue = null;
-
-
-    /**
-     * Construct command.
-     * @param applicationContext application context
-     * @param parameters page parameters
-     */
-    public SetCarrierSlaCartCommandImpl(final ApplicationContext applicationContext, final Map parameters) {
-        super();
-        final String val = (String) parameters.get(CMD_KEY);
-        if (val != null) {
-            slaPkvalue = NumberUtils.createInteger(val);
-        }
-
-    }
-
-    /**
-     * Execute command on shopping cart to perform changes.
-     *
-     * @param shoppingCart the shopping cart
-     */
-    public void execute(final ShoppingCart shoppingCart) {
-        ShopCodeContext.getLog(this).debug("Set carrier sla to {}", slaPkvalue);
-        shoppingCart.getOrderInfo().setCarrierSlaId(slaPkvalue);
-        setModifiedDate(shoppingCart);
-    }
-
     /**
      * @return command key
      */
     public String getCmdKey() {
-        return CMD_KEY;
+        return CMD_SETCARRIERSLA;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+        if (parameters.containsKey(getCmdKey())) {
+            final String val = (String) parameters.get(getCmdKey());
+            final Long slaPkvalue = val != null ? NumberUtils.createLong(val) : null;
+            if (slaPkvalue == null || !slaPkvalue.equals(shoppingCart.getOrderInfo().getCarrierSlaId())) {
+                ShopCodeContext.getLog(this).debug("Set carrier sla to {}", slaPkvalue);
+                shoppingCart.getOrderInfo().setCarrierSlaId(slaPkvalue);
+                setModifiedDate(shoppingCart);
+            }
+        }
     }
 }

@@ -116,7 +116,7 @@ public class ShoppingCartImpl implements ShoppingCart {
      * Get carrier shipping SLA.
      * @return carries sla id.
      */
-    public Integer getCarrierSlaId() {
+    public Long getCarrierSlaId() {
         return getOrderInfo().getCarrierSlaId();
     }
 
@@ -325,6 +325,13 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public boolean isModified() {
+        return getProcessingStartDate().getTime() <= getModifiedDate().getTime();
+    }
+
+    /**
      * Set last modified date.
      *
      * @param modifiedDate last modified date.
@@ -385,17 +392,6 @@ public class ShoppingCartImpl implements ShoppingCart {
             orderInfo = new OrderInfoImpl();
         }
         return orderInfo;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean accept(final ShoppingCartCommand command) {
-        if(command != null) {
-            command.execute(this);
-            return true;
-        }
-        return false;
     }
 
     /**

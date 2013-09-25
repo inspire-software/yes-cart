@@ -138,6 +138,13 @@ public interface ShoppingCart extends Serializable {
      */
     Date getModifiedDate();
 
+    /**
+     * Returns true if cart has been updated.
+     *
+     * @return true if was updated
+     */
+    boolean isModified();
+
 
     /**
      * Get customer name.
@@ -167,7 +174,7 @@ public interface ShoppingCart extends Serializable {
      *
      * @return carries sla id.
      */
-    Integer getCarrierSlaId();
+    Long getCarrierSlaId();
 
     /**
      * Get order message.
@@ -197,15 +204,6 @@ public interface ShoppingCart extends Serializable {
      * @return idex of cart item for this sku
      */
     int indexOf(final String skuCode);
-
-    /**
-     * Accept shopping cart visitor that potentially will make modifications
-     * to the cart.
-     *
-     * @param command the modification visitor
-     * @return true in case if command was accepted
-     */
-    boolean accept(final ShoppingCartCommand command);
 
     /**
      * Get shopping context
