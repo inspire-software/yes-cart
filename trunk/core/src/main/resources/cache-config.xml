@@ -67,7 +67,7 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeProductFlter-filteredNavigationRecords"/>
+            <constructor-arg index="0" value="filteredNavigationSupport-attributeFilteredNavigationRecords"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>
@@ -129,6 +129,10 @@
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="categoryService-childCategoriesRecursive"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-childCategoriesRecursiveIds"/>
             <constructor-arg index="1" value="key"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -216,6 +220,10 @@
             <constructor-arg index="1" value="key"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-childCategoriesRecursiveIds"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="categoryService-categoryHasSubcategory"/>
             <constructor-arg index="1" value="all"/>
         </bean>
@@ -298,7 +306,7 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="priceProduct-filteredNavigationRecords"/>
+            <constructor-arg index="0" value="filteredNavigationSupport-priceFilteredNavigationRecords"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>
@@ -342,10 +350,6 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-productSkuByCode"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="productService-productBySkuCode"/>
             <constructor-arg index="1" value="all"/>
         </bean>
@@ -382,6 +386,10 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="productService-distinctBrands"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="productService-productByIdList"/>
             <constructor-arg index="1" value="all"/>
         </bean>
@@ -390,14 +398,25 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="productService-distinctBrands"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="productService-productQty2"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeProductFlter-filteredNavigationRecords"/>
+            <constructor-arg index="0" value="filteredNavigationSupport-attributeFilteredNavigationRecords"/>
             <constructor-arg index="1" value="all"/>
         </bean>
-
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="productSkuService-productSkuBySkuCode"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="filteredNavigationSupport-brandFilteredNavigationRecords"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
     </util:set>
 
     <util:set id="ProductCreate">
@@ -434,14 +453,25 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="productService-distinctBrands"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="productService-productQty2"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="attributeProductFlter-filteredNavigationRecords"/>
+            <constructor-arg index="0" value="filteredNavigationSupport-attributeFilteredNavigationRecords"/>
             <constructor-arg index="1" value="all"/>
         </bean>
-
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="productSkuService-productSkuBySkuCode"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="filteredNavigationSupport-brandFilteredNavigationRecords"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
     </util:set>
 
     <util:map id="ProductCUD">
@@ -470,7 +500,7 @@
 
     <util:set id="ShopAll">
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="shopService-shopBuCode"/>
+            <constructor-arg index="0" value="shopService-shopByCode"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -479,6 +509,10 @@
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="shopService-shopCategories"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-shopCategoriesIds"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>

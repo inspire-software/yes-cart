@@ -73,9 +73,17 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
      * Get all categories including child categories, that belong to given shop.
      *
      * @param shop given shop
-     * @return lenear representation of caterory tree
+     * @return linear representation of category tree
      */
     Set<Category> getShopCategories(Shop shop);
+
+    /**
+     * Get all categories including child categories, that belong to given shop.
+     *
+     * @param shop given shop
+     * @return linear representation of category tree
+     */
+    Set<Long> getShopCategoriesIds(Shop shop);
 
     /**
      * Get all suported currencies by all shops.

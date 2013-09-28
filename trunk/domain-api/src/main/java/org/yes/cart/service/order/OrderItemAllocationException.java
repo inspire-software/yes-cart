@@ -28,21 +28,21 @@ import java.math.BigDecimal;
  */
 public class OrderItemAllocationException extends OrderException {
 
-    private final ProductSku productSku;
+    private final String productSkuCode;
 
     private final  BigDecimal quantity;
 
 
     /**
      *
-     * @param productSku sku code, which can not be allocated.
+     * @param productSkuCode sku code, which can not be allocated.
      * @param quantity which can not be allocated.
      * @param  message the detail message (which is saved for later retrieval
      *         by the {@link #getMessage()} method).
      */
-    public OrderItemAllocationException(final  ProductSku productSku, final  BigDecimal quantity, final String message) {
+    public OrderItemAllocationException(final String productSkuCode, final  BigDecimal quantity, final String message) {
         super(message);
-        this.productSku = productSku;
+        this.productSkuCode = productSkuCode;
         this.quantity = quantity;
     }
 
@@ -50,8 +50,8 @@ public class OrderItemAllocationException extends OrderException {
      *
      * @return product sku code
      */
-    public ProductSku getProductSku() {
-        return productSku;
+    public String getProductSkuCode() {
+        return productSkuCode;
     }
 
     /**

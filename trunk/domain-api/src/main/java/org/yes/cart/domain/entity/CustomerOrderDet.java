@@ -87,28 +87,41 @@ public interface CustomerOrderDet extends Auditable, CartItem {
      */
     void setListPrice(BigDecimal listPrice);
 
-
     /**
-     * Concrete product sku in cart.
+     * Get SKU code for item purchased.
      *
-     * @return {@link ProductSku} product sku.
+     * @return SKU code of purchased item
      */
-    ProductSku getSku();
+    String getProductSkuCode();
 
     /**
-     * Set {@link ProductSku}.
+     * Set SKU code for item purchased.
      *
-     * @param sku product sku
+     * @param skuCode SKU code of purchased item
      */
-    void setSku(ProductSku sku);
+    void setProductSkuCode(String skuCode);
 
     /**
-     * @return
+     * Get product name in CustomerOrder.locale.
+     *
+     * @return copy of product name
+     */
+    String getProductName();
+
+    /**
+     * Set product name in CustomerOrder.locale.
+     *
+     * @param productName copy of product name
+     */
+    void setProductName(String productName);
+
+    /**
+     * @return order holding this detail
      */
     CustomerOrder getCustomerOrder();
 
     /**
-     * @param customerOrder
+     * @param customerOrder order holding this detail
      */
     void setCustomerOrder(CustomerOrder customerOrder);
 

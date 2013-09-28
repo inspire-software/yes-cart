@@ -343,10 +343,6 @@
 
         <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="proxy" foreign-key="FK_P_ATTRIBUTE"
                      property-ref="code" insert="true" update="true">
-
-            <meta attribute="field-description">UNCOMMENT @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO) @ContainedIn  @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeBridge.class)
-            </meta>
-
             <column name="CODE" not-null="true"/>
         </many-to-one>
 
@@ -1827,9 +1823,8 @@
             </column>
         </property>
 
-        <many-to-one name="sku" class="org.yes.cart.domain.entity.impl.ProductSkuEntity" foreign-key="FK_ODET_SKU" lazy="false">
-            <column name="SKU_ID" not-null="true"/>
-        </many-to-one>
+        <property name="productSkuCode" column="CODE" type="string" length="255" not-null="true"/>
+        <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
         <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.impl.CustomerOrderEntity" foreign-key="FK_ODET_CUSTORDER">
             <column name="CUSTOMERORDER_ID" not-null="true"/>
         </many-to-one>
@@ -1904,9 +1899,8 @@
         </property>
         <property name="price" column="PRICE" type="java.math.BigDecimal" not-null="true"/>
         <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
-        <many-to-one name="sku" class="org.yes.cart.domain.entity.impl.ProductSkuEntity" foreign-key="FK_CODD_SKU" lazy="false">
-            <column name="SKU_ID" not-null="true"/>
-        </many-to-one>
+        <property name="productSkuCode" column="CODE" type="string" length="255" not-null="true"/>
+        <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
         <many-to-one name="delivery" class="org.yes.cart.domain.entity.impl.CustomerOrderDeliveryEntity" foreign-key="FK_CODD_DL">
             <column name="CUSTOMERORDERDELIVERY_ID" not-null="true"/>
         </many-to-one>
@@ -1973,12 +1967,10 @@
         <property name="percentNotLess"  column="PERCENT_NOTLESS" type="java.math.BigDecimal"/>
         <property name="costNotLess"     column="COST_NOTLESS"    type="java.math.BigDecimal"/>
 
-
-
-
-        <many-to-one name="carrier" class="org.yes.cart.domain.entity.impl.CarrierEntity" foreign-key="FK_CSLA_CARR">
+        <many-to-one name="carrier" class="org.yes.cart.domain.entity.impl.CarrierEntity" foreign-key="FK_CSLA_CARR" lazy="false">
             <column name="CARRIER_ID" not-null="true"/>
         </many-to-one>
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -2182,9 +2174,9 @@
     </query>
 
 
-    <query  name="SKUID.FOR.SKUWAREHOUSE.CHANGED.SINCE">
+    <query  name="SKUCODE.FOR.SKUWAREHOUSE.CHANGED.SINCE">
         <![CDATA[
-       select sw.sku.skuId from SkuWarehouseEntity sw
+       select sw.sku.code from SkuWarehouseEntity sw
        where  sw.updatedTimestamp >= ?1 or ?1 is null
        ]]>
     </query>
@@ -2194,7 +2186,7 @@
        select d from CustomerOrderDeliveryEntity d inner join d.detail dd
        where  d.deliveryStatus = ?1
        and d.customerOrder.orderStatus in ?2
-       and dd.sku.skuId in ?3
+       and dd.productSkuCode in ?3
        order by d.customerOrderDeliveryId
        ]]>
     </query>
@@ -2595,11 +2587,20 @@
         ]]>
     </query>
 
+    <query name="SKUS.ON.WAREHOUSE.BY.SKUCODE">
+        <![CDATA[
+            select sw from SkuWarehouseEntity sw
+            where sw.sku.code = ?1
+             and sw.warehouse.warehouseId = ?2
+             order by sw.warehouse.warehouseId, sw.sku.code
+        ]]>
+    </query>
+
     <query name="SKU.QTY.ON.WAREHOUSES">
         <![CDATA[
             select sum(sw.quantity ), sum(sw.reserved)
             from SkuWarehouseEntity sw
-            where sw.warehouse.warehouseId IN (:list)
+            where sw.warehouse.warehouseId IN (?2)
             and sw.sku.code = ?1
         ]]>
     </query>
@@ -2678,10 +2679,10 @@
 
    <query name="TOP.SELLER.SHOP.CALCULATE">
         <![CDATA[
-            select cod.sku.product.productId, sum(cod.qty) from CustomerOrderDetEntity  cod
+            select cod.productSkuCode, sum(cod.qty) from CustomerOrderDetEntity  cod
             where cod.customerOrder.shop = ?1
             and cod.customerOrder.orderTimestamp >= ?2
-            group by cod.sku.product.productId
+            group by cod.productSkuCode
         ]]>
     </query>
 

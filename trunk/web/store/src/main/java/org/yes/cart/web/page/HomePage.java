@@ -147,7 +147,7 @@ public class HomePage extends AbstractWebPage {
             add(new PriceProductFilter("priceFilter", query, categoryId));
         }
 
-        final List<Long> shopAllCategoriesIds = new ArrayList<Long>(categoryService.transform(shopService.getShopCategories(shop)));
+        final List<Long> shopAllCategoriesIds = new ArrayList<Long>(shopService.getShopCategoriesIds(shop));
         add(new BreadCrumbsView("breadCrumbs", categoryId, shopAllCategoriesIds));
 
 
@@ -195,8 +195,7 @@ public class HomePage extends AbstractWebPage {
      */
     private List<Long> getCategories(final Long categoryId) {
         if (categoryId > 0) {
-            return new ArrayList<Long>(categoryService.transform(
-                    categoryService.getChildCategoriesRecursive(categoryId)));
+            return new ArrayList<Long>(categoryService.getChildCategoriesRecursiveIds(categoryId));
         } else {
             return Arrays.asList(0L);
         }
@@ -238,7 +237,7 @@ public class HomePage extends AbstractWebPage {
             if (categoryId != 0 && clz != ContentCentralView.class) { //check is this category allowed to open in this shop
 
                 final Shop shop = ApplicationDirector.getCurrentShop();
-                if (!categoryService.transform(shopService.getShopCategories(shop)).contains(categoryId)) {
+                if (!shopService.getShopCategoriesIds(shop).contains(categoryId)) {
                     final Logger log = ShopCodeContext.getLog(this);
                     if (log.isWarnEnabled()) {
                         log.warn("Can not access to category  {} from shop {}", categoryId, shop.getShopId());

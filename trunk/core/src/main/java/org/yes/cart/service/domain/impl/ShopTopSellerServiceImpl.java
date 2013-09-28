@@ -24,7 +24,9 @@ import org.yes.cart.service.domain.ShopTopSellerService;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -60,11 +62,29 @@ public class ShopTopSellerServiceImpl extends BaseGenericServiceImpl<ShopTopSell
         for(Shop shop : shops) {
             getGenericDao().executeUpdate("TOP.SELLER.SHOP.CLEAN", shop);
             List<Object[]> list = getGenericDao().findQueryObjectsByNamedQuery("TOP.SELLER.SHOP.CALCULATE", shop, calendar.getTime());
+            final Map<Long, BigDecimal> topSellersCount = new HashMap<Long, BigDecimal>();
+            final Map<Long, Product> topSellersProducts = new HashMap<Long, Product>();
             for(Object [] tuple : list) {
+                final String skuCode = (String) tuple[0];
+                final BigDecimal qty = (BigDecimal) tuple[1];
+
+                final Product product = productDao.findSingleByNamedQueryCached("PRODUCT.BY.SKU.CODE", skuCode);
+                if (product != null) {
+                    topSellersProducts.put(product.getProductId(), product);
+
+                    final BigDecimal runningTotal = topSellersCount.get(product.getProductId());
+                    if (runningTotal != null) {
+                        topSellersCount.put(product.getProductId(), runningTotal.add(qty));
+                    } else {
+                        topSellersCount.put(product.getProductId(), qty);
+                    }
+                }
+            }
+            for(Map.Entry<Long, Product> top : topSellersProducts.entrySet()) {
                 ShopTopSeller shopTopSeller = getGenericDao().getEntityFactory().getByIface(ShopTopSeller.class);
-                shopTopSeller.setCounter((BigDecimal) tuple[1]);
+                shopTopSeller.setCounter(topSellersCount.get(top.getKey()));
                 shopTopSeller.setShop(shop);
-                shopTopSeller.setProduct(productDao.findById((Long) tuple[0]));
+                shopTopSeller.setProduct(top.getValue());
                 getGenericDao().create(shopTopSeller) ;
             }
         }

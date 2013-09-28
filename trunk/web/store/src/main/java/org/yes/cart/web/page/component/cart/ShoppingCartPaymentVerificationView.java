@@ -152,7 +152,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                 final CustomerOrderDeliveryDet det = customerOrderDeliveryDetListItem.getModelObject();
 
                                                 final ProductSkuDecorator productSkuDecorator = getDecoratorFacade().decorate(
-                                                        det.getSku(),
+                                                        productSkuService.getProductSkuBySkuCode(det.getProductSkuCode()),
                                                         WicketUtil.getHttpServletRequest().getContextPath(),
                                                         getI18NSupport());
 
@@ -175,7 +175,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                         new Label(ITEM_NAME, productSkuDecorator.getName(selectedLocale))
                                                         )
                                                         .add(
-                                                                new Label(ITEM_CODE, det.getSku().getCode())
+                                                                new Label(ITEM_CODE, det.getProductSkuCode())
                                                         )
                                                         .add(
                                                                 new Label(ITEM_PRICE, det.getPrice().toString())

@@ -26,13 +26,11 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
     protected CustomerOrderDeliveryDet createDeliveryItem(
             String productSkuName, String skuCode, BigDecimal price, BigDecimal qty) {
         CustomerOrderDeliveryDet deliveryDet = new CustomerOrderDeliveryDetEntity();
-        ProductSku sku = new ProductSkuEntity();
-        sku.setCode(skuCode);
-        sku.setName(productSkuName);
         deliveryDet.setPrice(price);
         deliveryDet.setListPrice(price);
         deliveryDet.setQty(qty);
-        deliveryDet.setSku(sku);
+        deliveryDet.setProductSkuCode(skuCode);
+        deliveryDet.setProductName(productSkuName);
         return deliveryDet;
     }
 

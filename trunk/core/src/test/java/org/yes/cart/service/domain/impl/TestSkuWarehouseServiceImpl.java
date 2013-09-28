@@ -96,7 +96,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         warehouses.add(warehouseService.getById(2L));
         warehouses.add(warehouseService.getById(1L));
         ProductSku psku = productSkuService.getById(11006L);
-        Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(warehouses, psku);
+        Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(warehouses, psku.getCode());
         assertEquals(new BigDecimal("14.00"), rez.getFirst());
         assertEquals(new BigDecimal("5.00"), rez.getSecond());
     }
@@ -111,7 +111,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         warehouses.add(warehouseService.getById(2L));
         warehouses.add(warehouseService.getById(1L));
         ProductSku psku = productSkuService.getById(11007L);
-        Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(warehouses, psku);
+        Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(warehouses, psku.getCode());
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), rez.getFirst());
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), rez.getSecond());
     }
@@ -151,17 +151,17 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     public void testReserveQuantity() {
         final Warehouse warehouse = warehouseService.getById(1L);
         ProductSku productSku = productSkuService.getById(10004L); // 4 items on 1 warehouse
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouseService.reservation(warehouse, productSku, new BigDecimal("3.00"))); // 4 total and 3 reserved
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouseService.reservation(warehouse, productSku.getCode(), new BigDecimal("3.00"))); // 4 total and 3 reserved
         Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
 
         assertEquals(new BigDecimal("4.00"), rez.getFirst());
         assertEquals(new BigDecimal("3.00"), rez.getSecond());
-        assertEquals(new BigDecimal("10.00"), skuWarehouseService.reservation(warehouse, productSku, new BigDecimal("11.00"))); // 4 total and 4 reserved 10 to reserve
+        assertEquals(new BigDecimal("10.00"), skuWarehouseService.reservation(warehouse, productSku.getCode(), new BigDecimal("11.00"))); // 4 total and 4 reserved 10 to reserve
         rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
         assertEquals(new BigDecimal("4.00"), rez.getFirst());
         assertEquals(new BigDecimal("4.00"), rez.getSecond());
     }
@@ -174,35 +174,35 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         final Warehouse warehouse = warehouseService.getById(1L);
         ProductSku productSku = productSkuService.getById(10004L); // 4 items on 1 warehouse
         //3 items reservation
-        BigDecimal toReserve = skuWarehouseService.reservation(warehouse, productSku, new BigDecimal("3.00"));
+        BigDecimal toReserve = skuWarehouseService.reservation(warehouse, productSku.getCode(), new BigDecimal("3.00"));
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), toReserve); // 4 total and 3 reserved
         Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
         assertEquals(new BigDecimal("4.00"), rez.getFirst());
         assertEquals(new BigDecimal("3.00"), rez.getSecond());
         // void 2 items
-        BigDecimal toVoidReserve = skuWarehouseService.voidReservation(warehouse, productSku, new BigDecimal("2.00"));
+        BigDecimal toVoidReserve = skuWarehouseService.voidReservation(warehouse, productSku.getCode(), new BigDecimal("2.00"));
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), toVoidReserve); // 4 total and 3 reserved
         rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
         assertEquals(new BigDecimal("4.00"), rez.getFirst());
         assertEquals(new BigDecimal("1.00"), rez.getSecond());
         // void 1 item
-        toVoidReserve = skuWarehouseService.voidReservation(warehouse, productSku, new BigDecimal("1.00"));
+        toVoidReserve = skuWarehouseService.voidReservation(warehouse, productSku.getCode(), new BigDecimal("1.00"));
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), toVoidReserve); // 4 total and 3 reserved
         rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
         assertEquals(new BigDecimal("4.00"), rez.getFirst());
         assertEquals(new BigDecimal("0.00"), rez.getSecond());
         // void 5 items
-        toVoidReserve = skuWarehouseService.voidReservation(warehouse, productSku, new BigDecimal("5.00"));
+        toVoidReserve = skuWarehouseService.voidReservation(warehouse, productSku.getCode(), new BigDecimal("5.00"));
         assertEquals(new BigDecimal("5.00"), toVoidReserve);
         rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
         assertEquals(new BigDecimal("4.00"), rez.getFirst());
         assertEquals(new BigDecimal("0.00"), rez.getSecond());
     }
@@ -211,46 +211,46 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     public void testDebitCredit() {
         final Warehouse warehouse = warehouseService.getById(1L);
         ProductSku productSku = productSkuService.getById(10004L); // 4 items on 1 warehouse
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouseService.debit(warehouse, productSku, new BigDecimal("3.00"))); // 2 total and 1 reserved
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouseService.debit(warehouse, productSku.getCode(), new BigDecimal("3.00"))); // 2 total and 1 reserved
         Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
         assertEquals(new BigDecimal("1.00"), rez.getFirst());
         assertEquals(new BigDecimal("0.00"), rez.getSecond());
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouseService.debit(warehouse, productSku, new BigDecimal("1.00"))); // 2 total and 1 reserved
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouseService.debit(warehouse, productSku.getCode(), new BigDecimal("1.00"))); // 2 total and 1 reserved
         rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
         assertEquals(new BigDecimal("0.00"), rez.getFirst());
         assertEquals(new BigDecimal("0.00"), rez.getSecond());
-        assertEquals(new BigDecimal("7.00"), skuWarehouseService.debit(warehouse, productSku, new BigDecimal("7.00")));
+        assertEquals(new BigDecimal("7.00"), skuWarehouseService.debit(warehouse, productSku.getCode(), new BigDecimal("7.00")));
         rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
         assertEquals(new BigDecimal("0.00"), rez.getFirst());
         assertEquals(new BigDecimal("0.00"), rez.getSecond());
-        assertEquals(new BigDecimal("0.00"), skuWarehouseService.debit(warehouse, productSku, new BigDecimal("0.00")));
+        assertEquals(new BigDecimal("0.00"), skuWarehouseService.debit(warehouse, productSku.getCode(), new BigDecimal("0.00")));
         rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
         assertEquals(new BigDecimal("0.00"), rez.getFirst());
         assertEquals(new BigDecimal("0.00"), rez.getSecond());
-        skuWarehouseService.credit(warehouse, productSku, new BigDecimal("74.00"));
+        skuWarehouseService.credit(warehouse, productSku.getCode(), new BigDecimal("74.00"));
         rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
         assertEquals(new BigDecimal("74.00"), rez.getFirst());
         assertEquals(new BigDecimal("0.00"), rez.getSecond());
-        skuWarehouseService.credit(warehouse, productSku, new BigDecimal("0.00"));
+        skuWarehouseService.credit(warehouse, productSku.getCode(), new BigDecimal("0.00"));
         rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
         assertEquals(new BigDecimal("74.00"), rez.getFirst());
         assertEquals(new BigDecimal("0.00"), rez.getSecond());
-        assertEquals(new BigDecimal("6.00"), skuWarehouseService.debit(warehouse, productSku, new BigDecimal("80.00")));
+        assertEquals(new BigDecimal("6.00"), skuWarehouseService.debit(warehouse, productSku.getCode(), new BigDecimal("80.00")));
         rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
-        }}, productSku);
+        }}, productSku.getCode());
         assertEquals(new BigDecimal("0.00"), rez.getFirst());
         assertEquals(new BigDecimal("0.00"), rez.getSecond());
     }
@@ -279,14 +279,14 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testIsSkuAvilabilityPreorder () {
-        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15300, true));
-        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15301, true));
-        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15310, true));
-        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15320, true));
-        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15300, false));
-        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15301, false));
-        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15310, false));
-        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(15320, false));
+        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15300L).getCode(), true));
+        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15301L).getCode(), true));
+        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15310L).getCode(), true));
+        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15320L).getCode(), true));
+        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15300L).getCode(), false));
+        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15301L).getCode(), false));
+        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15310L).getCode(), false));
+        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15320L).getCode(), false));
     }
 
 
@@ -324,7 +324,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         skuWarehouse.setWarehouse(warehouseService.getById(1L));
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouseService.create(skuWarehouse);
-        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSku().getSkuId());
+        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSku().getCode());
 
 
         order = customerOrderService.findByGuid(order.getCartGuid());
@@ -335,7 +335,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
         skuWarehouse.setQuantity(BigDecimal.ONE.add(BigDecimal.ONE));
         skuWarehouseService.update(skuWarehouse);
-        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSku().getSkuId());
+        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSku().getCode());
         order = customerOrderService.findByGuid(order.getCartGuid());
         assertEquals("One item not enough to continue order processing . Must still in progress 1", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
@@ -347,7 +347,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         skuWarehouse.setWarehouse(warehouseService.getById(1L));
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouseService.create(skuWarehouse);
-        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSku().getSkuId());
+        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSku().getCode());
 
         order = customerOrderService.findByGuid(order.getCartGuid());
         assertEquals("One item not enough to continue order processing . Must still in progress 2", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());

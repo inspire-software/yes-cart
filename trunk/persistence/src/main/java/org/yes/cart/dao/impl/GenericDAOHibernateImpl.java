@@ -169,6 +169,18 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
+    public <T> T findSingleByNamedQueryCached(final String namedQueryName, final Object... parameters) {
+        List<T> rez = (List<T>) this.findByNamedQueryCached(namedQueryName, parameters);
+        if (!rez.isEmpty()) {
+            return rez.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Object getScalarResultByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         setQueryParameters(query, parameters);

@@ -19,8 +19,9 @@ package org.yes.cart.service.order.impl.handler;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
@@ -43,16 +44,21 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
     private final SkuWarehouseService skuWarehouseService;
 
+    private final ProductService productService;
+
     /**
      * Construct transition.
      *
      * @param warehouseService    warehouse service
      * @param skuWarehouseService sku on warehouse service to change quantity
+     * @param productService      product service
      */
     public ProcessAllocationOrderEventHandlerImpl(final WarehouseService warehouseService,
-                                                  final SkuWarehouseService skuWarehouseService) {
+                                                  final SkuWarehouseService skuWarehouseService,
+                                                  final ProductService productService) {
         this.warehouseService = warehouseService;
         this.skuWarehouseService = skuWarehouseService;
+        this.productService = productService;
     }
 
     /**
@@ -102,15 +108,14 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
         for (CustomerOrderDeliveryDet det : deliveryDetails) {
 
-            ProductSku productSku = det.getSku();
-
+            String skuCode = det.getProductSkuCode();
             BigDecimal toAllocate = det.getQty();
 
             for (Warehouse warehouse : warehouses) {
 
-                skuWarehouseService.voidReservation(warehouse, productSku, toAllocate);
+                skuWarehouseService.voidReservation(warehouse, skuCode, toAllocate);
 
-                toAllocate = skuWarehouseService.debit(warehouse, productSku, toAllocate);
+                toAllocate = skuWarehouseService.debit(warehouse, skuCode, toAllocate);
 
                 if (MoneyUtils.isFirstEqualToSecond(toAllocate, BigDecimal.ZERO, Constants.DEFAULT_SCALE)) {
 
@@ -119,12 +124,23 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
                 
             }
             if (MoneyUtils.isFirstBiggerThanSecond(toAllocate, BigDecimal.ZERO)) {
-                throw new OrderItemAllocationException(
-                        productSku,
+
+                final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
+
+                if (product == null || Product.AVAILABILITY_STANDARD == product.getAvailability()) {
+
+                    /**
+                     * Availability.AVAILABILITY_BACKORDER -  can get more stock
+                     * Availability.AVAILABILITY_PREORDER - can pre-order from manufacturer
+                     * Availability.AVAILABILITY_ALWAYS - always
+                     */
+                    throw new OrderItemAllocationException(
+                        skuCode,
                         toAllocate,
                         "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
-                                + " for sku = " + productSku.getCode()
+                                + " for sku = " + skuCode
                                 + " in delivery " + orderDelivery.getDeliveryNum());
+                }
             }
         }
 

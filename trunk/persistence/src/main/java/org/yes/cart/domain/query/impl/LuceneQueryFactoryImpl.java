@@ -48,7 +48,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      */
     private final static String[] fields = {
             ProductSearchQueryBuilder.PRODUCT_NAME_FIELD,
-            ProductSearchQueryBuilder.PRODUCT_DESCIPTION_FIELD,
+            ProductSearchQueryBuilder.PRODUCT_DESCRIPTION_FIELD,
             ProductSearchQueryBuilder.BRAND_FIELD,
             ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD,
             ProductSearchQueryBuilder.ATTRIBUTE_VALUE_FIELD,

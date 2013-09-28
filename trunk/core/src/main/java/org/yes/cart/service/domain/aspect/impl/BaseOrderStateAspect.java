@@ -36,14 +36,14 @@ public abstract class BaseOrderStateAspect extends  BaseNotificationAspect  {
     /**
      * Create email and sent it.
      *
-     * @param orderEvent       given order event
-     * @param emailTempateName optional email tempate name
-     * @param emailsAddresses  set of email addresses
-     * @param params additional params
+     * @param orderEvent        given order event
+     * @param emailTemplateName optional email template name
+     * @param emailsAddresses   set of email addresses
+     * @param params            additional params
      */
-    protected void fillNotificationParameters(final OrderEvent orderEvent, final String emailTempateName, final Map<String,Object> params, final String... emailsAddresses) {
+    protected void fillNotificationParameters(final OrderEvent orderEvent, final String emailTemplateName, final Map<String,Object> params, final String... emailsAddresses) {
 
-        if (StringUtils.isNotBlank(emailTempateName)) {
+        if (StringUtils.isNotBlank(emailTemplateName)) {
 
             final CustomerOrder customerOrder = orderEvent.getCustomerOrder();
 
@@ -63,7 +63,7 @@ public abstract class BaseOrderStateAspect extends  BaseNotificationAspect  {
                 map.put(StandardMessageListener.TEMPLATE_FOLDER, servletContext.getRealPath(customerOrder.getShop().getMailFolder()) + File.separator);
                 map.put(StandardMessageListener.SHOP, customerOrder.getShop());
                 map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
-                map.put(StandardMessageListener.TEMPLATE_NAME, emailTempateName);
+                map.put(StandardMessageListener.TEMPLATE_NAME, emailTemplateName);
 
                 if (orderEvent.getCustomerOrderDelivery() != null) {
                     final CustomerOrderDelivery delivery = orderEvent.getCustomerOrderDelivery();

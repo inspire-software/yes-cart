@@ -92,8 +92,8 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     public void testAuthorize1() throws Exception {
 
         final Warehouse warehouse = warehouseService.getById(1);
-        final Pair<BigDecimal, BigDecimal> skuCcTest1Qty0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) ,productSkuService.getProductSkuBySkuCode("CC_TEST1"));
-        final Pair<BigDecimal, BigDecimal> skuCcTest3Qty0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) ,productSkuService.getProductSkuBySkuCode("CC_TEST3"));
+        final Pair<BigDecimal, BigDecimal> skuCcTest1Qty0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) , "CC_TEST1");
+        final Pair<BigDecimal, BigDecimal> skuCcTest3Qty0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) , "CC_TEST3");
 
         Customer customer = createCustomer();
         PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
@@ -113,8 +113,8 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
 
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT, customerOrder.getDelivery().iterator().next().getDeliveryStatus());
 
-        final Pair<BigDecimal, BigDecimal> skuCcTest1Qty1 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) ,productSkuService.getProductSkuBySkuCode("CC_TEST1"));
-        final Pair<BigDecimal, BigDecimal> skuCcTest3Qty1 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) ,productSkuService.getProductSkuBySkuCode("CC_TEST3"));
+        final Pair<BigDecimal, BigDecimal> skuCcTest1Qty1 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) , "CC_TEST1");
+        final Pair<BigDecimal, BigDecimal> skuCcTest3Qty1 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) , "CC_TEST3");
 
         assertEquals(skuCcTest1Qty0.getFirst(), skuCcTest1Qty1.getFirst());
         assertEquals(skuCcTest1Qty0.getSecond(), skuCcTest1Qty1.getSecond());

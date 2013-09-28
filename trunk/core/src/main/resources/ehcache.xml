@@ -88,6 +88,9 @@
     <cache name="categoryService-childCategoriesRecursive"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
+    <cache name="categoryService-childCategoriesRecursiveIds"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
     <cache name="categoryService-categoryHasSubcategory"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
@@ -172,9 +175,6 @@
     <cache name="productService-productAttribute"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
-    <cache name="productService-productSkuByCode"      maxElementsInMemory="2000" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
-
     <cache name="productService-productBySkuCode"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
@@ -205,9 +205,14 @@
     <cache name="productService-distinctAttributeValues"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
+    <cache name="productService-distinctBrands"      maxElementsInMemory="500" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
     <cache name="productService-productQty2"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
+    <cache name="productSkuService-productSkuBySkuCode"   maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
 
     <cache name="productTypeAttrService-byProductTypeId"      maxElementsInMemory="200" overflowToDisk="false"
@@ -215,13 +220,16 @@
 
 
 
-    <cache name="shopService-shopBuCode"      maxElementsInMemory="10" overflowToDisk="false"
+    <cache name="shopService-shopByCode"      maxElementsInMemory="10" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
     <cache name="shopService-shopByDomainName"      maxElementsInMemory="20" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
     <cache name="shopService-shopCategories"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="shopService-shopCategoriesIds"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
 
@@ -250,12 +258,15 @@
 
 
 
-    <cache name="attributeProductFlter-filteredNavigationRecords"      maxElementsInMemory="100" overflowToDisk="false"
+    <cache name="filteredNavigationSupport-attributeFilteredNavigationRecords"      maxElementsInMemory="500" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="filteredNavigationSupport-brandFilteredNavigationRecords"      maxElementsInMemory="500" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
 
 
-    <cache name="priceProduct-filteredNavigationRecords"      maxElementsInMemory="100" overflowToDisk="false"
+    <cache name="filteredNavigationSupport-priceFilteredNavigationRecords"      maxElementsInMemory="500" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
 

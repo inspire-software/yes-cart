@@ -25,6 +25,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -46,6 +47,7 @@ import static org.junit.Assert.*;
 public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
     private CustomerOrderService customerOrderService;
+    private ProductSkuService productSkuService;
 
     private OrderEventHandler handler;
 
@@ -53,6 +55,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     @Before
     public void setUp() {
         customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
+        productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
         handler = (OrderEventHandler) ctx().getBean("pendingOrderEventHandler");
         super.setUp();
     }
@@ -228,21 +231,24 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
         }
 
-        List<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(Arrays.asList(15330L), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+        List<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(
+                Arrays.asList(productSkuService.getById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                 Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-        assertEquals("Expect one order with preorder sku id = 15330" , 1, rez.size());
+        assertEquals("Expect one order with preorder sku id = 15330", 1, rez.size());
 
-        rez = customerOrderService.findAwaitingDeliveries(Arrays.asList(15340L), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+        rez = customerOrderService.findAwaitingDeliveries(
+                Arrays.asList(productSkuService.getById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                 Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-        assertEquals("Expect one order with preorder sku id = 15340" ,1, rez.size());
+        assertEquals("Expect one order with preorder sku id = 15340", 1, rez.size());
 
-        rez = customerOrderService.findAwaitingDeliveries(Arrays.asList(15129L), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+        rez = customerOrderService.findAwaitingDeliveries(
+                Arrays.asList(productSkuService.getById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                 Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
         assertEquals("Not expected orders waiting for inventory sku id = 15129" ,0, rez.size());
 
         rez = customerOrderService.findAwaitingDeliveries(null, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                 Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-        assertEquals("Total two orders wait for inventory" ,2, rez.size());
+        assertEquals("Total two orders wait for inventory", 2, rez.size());
 
 
 

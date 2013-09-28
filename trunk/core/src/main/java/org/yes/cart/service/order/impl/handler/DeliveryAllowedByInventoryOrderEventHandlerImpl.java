@@ -18,8 +18,10 @@ package org.yes.cart.service.order.impl.handler;
 
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
@@ -39,15 +41,20 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
         extends ProcessAllocationOrderEventHandlerImpl
         implements OrderEventHandler {
 
+    private final ProductService productService;
+
     /**
      * Construct transition
      *
      * @param warehouseService    warehouse service
      * @param skuWarehouseService sku on warehouse service to change quantity
+     * @param productService      product service
      */
     public DeliveryAllowedByInventoryOrderEventHandlerImpl(final WarehouseService warehouseService,
-                                                           final SkuWarehouseService skuWarehouseService) {
-        super(warehouseService, skuWarehouseService);
+                                                           final SkuWarehouseService skuWarehouseService,
+                                                           final ProductService productService) {
+        super(warehouseService, skuWarehouseService, productService);
+        this.productService = productService;
     }
 
     /**
@@ -59,11 +66,13 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
             final CustomerOrderDelivery orderDelivery = orderEvent.getCustomerOrderDelivery();
             for (CustomerOrderDeliveryDet det : orderDelivery.getDetail()) {
 
-                if (!det.getSku().getProduct().getProducttype().isDigital()) {
+                final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
+                // there may not be this product anymore potentially!
+                if (product != null && !product.getProducttype().isDigital()) {
 
                     final Pair<BigDecimal, BigDecimal> qtyPair = getSkuWarehouseService().getQuantity(
                             warehouses,
-                            det.getSku()
+                            det.getProductSkuCode()
                     );
                     if (MoneyUtils.isFirstBiggerThanSecond(
                             qtyPair.getSecond().add(det.getQty()),

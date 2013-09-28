@@ -17,7 +17,6 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.ProductSku;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -34,7 +33,8 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     private BigDecimal qty;
     private BigDecimal price;
     private BigDecimal listPrice;
-    private ProductSku sku;
+    private String productSkuCode;
+    private String productName;
     private CustomerOrderDelivery delivery;
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -62,12 +62,20 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
         this.price = price;
     }
 
-    public ProductSku getSku() {
-        return this.sku;
+    public String getProductSkuCode() {
+        return productSkuCode;
     }
 
-    public void setSku(ProductSku sku) {
-        this.sku = sku;
+    public void setProductSkuCode(final String productSkuCode) {
+        this.productSkuCode = productSkuCode;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(final String productName) {
+        this.productName = productName;
     }
 
     public CustomerOrderDelivery getDelivery() {
@@ -136,10 +144,6 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
 
     public void setCustomerOrderDeliveryDetId(long customerOrderDeliveryDetId) {
         this.customerOrderDeliveryDetId = customerOrderDeliveryDetId;
-    }
-
-    public String getProductSkuCode() {
-        return this.sku == null ? null : this.sku.getCode();
     }
 
 }

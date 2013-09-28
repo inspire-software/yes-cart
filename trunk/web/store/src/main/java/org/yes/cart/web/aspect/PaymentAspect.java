@@ -167,7 +167,7 @@ public class PaymentAspect extends BaseNotificationAspect {
 
     private void reindex(final CustomerOrder customerOrder) {
         for(CustomerOrderDet det : customerOrder.getOrderDetail()) {
-            productService.reindexProduct(det.getSku().getProduct().getProductId()) ;
+            productService.reindexProductSku(det.getProductSkuCode());
         }
     }
 

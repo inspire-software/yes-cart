@@ -39,6 +39,8 @@ public interface ShopTopSeller   extends Auditable {
     void setShop(Shop shop);
 
 
+
+
     /**
      *
      * @return  {@link Product}

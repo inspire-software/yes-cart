@@ -275,7 +275,8 @@
         QTY numeric(19,2) not null,
         PRICE numeric(19,2) not null,
         LIST_PRICE numeric(19,2) not null,
-        SKU_ID bigint not null,
+        CODE varchar(255) not null,
+        PRODUCTNAME varchar(4000) not null,
         CUSTOMERORDERDELIVERY_ID bigint not null,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
@@ -291,7 +292,8 @@
         QTY numeric(19,2),
         PRICE numeric(19,2) not null,
         LIST_PRICE numeric(19,2) not null,
-        SKU_ID bigint not null,
+        CODE varchar(255) not null,
+        PRODUCTNAME varchar(4000) not null,
         CUSTOMERORDER_ID bigint not null,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
@@ -949,16 +951,11 @@
         references TCARRIERSLA;
 
 
-    alter table TCUSTOMERORDERDELIVERYDET         add constraint FK_CODD_SKU         foreign key (SKU_ID)         references TSKU;
+    alter table TCUSTOMERORDERDELIVERYDET
+        add constraint FK_CODD_CDELIVERY
+        foreign key (CUSTOMERORDERDELIVERY_ID)
+        references TCUSTOMERORDERDELIVERY;
 
-    alter table TCUSTOMERORDERDELIVERYDET         add constraint FK_CODD_CDELIVERY   foreign key (CUSTOMERORDERDELIVERY_ID)   references TCUSTOMERORDERDELIVERY;
-
-
-
-    alter table TCUSTOMERORDERDET 
-        add constraint FK_ODET_SKU 
-        foreign key (SKU_ID) 
-        references TSKU;
 
     alter table TCUSTOMERORDERDET 
         add constraint FKCB358C37A7F39C2D 

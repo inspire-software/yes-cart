@@ -21,6 +21,7 @@
 
 
     <mx:Script><![CDATA[
+        import mx.collections.ArrayCollection;
         import mx.controls.Alert;
         import mx.rpc.AsyncResponder;
         import mx.rpc.AsyncToken;
@@ -49,13 +50,13 @@
             remoteShopService.getAssignedShop(customerId).addResponder(new AsyncResponder(
                     function (event:ResultEvent, obj:Object = null):void {
 
-                        assignedShop = new Array(event.result);
-                        for (var shop:Object in remoteShopService.getAll.lastResult) {
+                        assignedShop = ArrayCollection(event.result).source;
+                        for each (var shop:ShopDTOImpl in remoteShopService.getAll.lastResult) {
 
                             var found:Boolean = false;
 
-                            for (var registeredShop:Object in assignedShop) {
-                                if (registeredShop.name == shop.name) {
+                            for each (var registeredShop:ShopDTOImpl in assignedShop) {
+                                if (registeredShop.shopId == shop.shopId) {
                                     found = true;
                                     break;
                                 }

@@ -99,7 +99,9 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
         PreOrderJobImpl preOrderJob = new PreOrderJobImpl();
 
         preOrderJob.processAwaitingOrders(
-                Arrays.asList(15350L, 15360L), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
+                Arrays.asList(
+                        productSkuService.getById(15350L).getCode(),
+                        productSkuService.getById(15360L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                 OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT,
                 customerOrderService,
                 orderStateManager);
@@ -114,7 +116,9 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
         Thread.sleep(5000);
 
         preOrderJob.processAwaitingOrders(
-                Arrays.asList(15350L, 15360L), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
+                Arrays.asList(
+                        productSkuService.getById(15350L).getCode(),
+                        productSkuService.getById(15360L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                 OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT,
                 customerOrderService,
                 orderStateManager);
@@ -140,7 +144,9 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
         skuWarehouseService.create(skuWarehouse);
 
         preOrderJob.processAwaitingOrders(
-                Arrays.asList(15350L, 15360L), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                Arrays.asList(
+                        productSkuService.getById(15350L).getCode(),
+                        productSkuService.getById(15360L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                 OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY,
                 customerOrderService,
                 orderStateManager);
