@@ -17,12 +17,14 @@
 package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.AttributiveSearchQueryBuilderImpl;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,9 @@ public class AttributeProductFilter extends AbstractProductFilter {
     private boolean filteredNavigationByAttribute = false;
 
     private Boolean visibilityRezult;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.FILTERNAV_SUPPORT_ATTRIBUTES)
+    private AttributeFilteredNavigationSupport attributeFilteredNavigationSupport;
 
     /**
      * Construct attributive filtering component.
@@ -65,65 +70,13 @@ public class AttributeProductFilter extends AbstractProductFilter {
             if (filteredNavigationByAttribute && productType != null) {
 
                 setNavigationRecords(
-                        getFilteredNavigationRecords(
-                                getProductService().getDistinctAttributeValues(selectedLocale, productType.getProducttypeId())
-                        )
+                        attributeFilteredNavigationSupport.getFilteredNavigationRecords(
+                                getQuery(), getCategories(), selectedLocale, productType.getProducttypeId())
                 );
 
             }
         }
 
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "attributeProductFlter-filteredNavigationRecords")
-    List<FilteredNavigationRecord> getFilteredNavigationRecords(final List<FilteredNavigationRecord> allNavigationRecords) {
-
-        final AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
-
-        final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
-
-        for (FilteredNavigationRecord record : allNavigationRecords) {
-
-            if (!isAttributeAlreadyFiltered(ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD + ":" + record.getCode())) {
-
-                final BooleanQuery candidateQuery = getQueryCandidate(queryBuilder, record);
-
-                final int candidateResultCount = getProductService().getProductQty(candidateQuery);
-
-                if (candidateResultCount > 0) {
-                    record.setCount(candidateResultCount);
-                    navigationList.add(record);
-                }
-
-            }
-
-        }
-
-        return navigationList;
-
-    }
-
-
-    private BooleanQuery getQueryCandidate(final AttributiveSearchQueryBuilderImpl queryBuilder, final FilteredNavigationRecord record) {
-
-        final BooleanQuery booleanQuery;
-
-        if ("S".equals(record.getType())) {
-            booleanQuery = queryBuilder.createQuery(getCategories(), record.getCode(), record.getValue());
-        } else { // range navigarion
-            String[] range = record.getValue().split("-");
-            booleanQuery = queryBuilder.createQueryWithRangeValues(getCategories(), record.getCode(),
-                    new Pair<String, String>(range[0], range[1]));
-        }
-
-        return getLuceneQueryFactory().getSnowBallQuery(
-                getQuery(),
-                booleanQuery
-        );
     }
 
     /**

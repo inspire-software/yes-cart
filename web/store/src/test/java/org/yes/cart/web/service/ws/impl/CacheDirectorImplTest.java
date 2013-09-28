@@ -89,8 +89,7 @@ public class CacheDirectorImplTest {
         assertTrue(caches.contains(new Pair("attributeService-allNavigatableAttributeCodes", "all")));
         assertTrue(caches.contains(new Pair("attributeService-attributeNamesByCodes", "all")));
         assertTrue(caches.contains(new Pair("breadCrumbBuilder-breadCrumbs", "all")));
-        assertTrue(caches.contains(new Pair("attributeProductFlter-filteredNavigationRecords", "all")));
-
+        assertTrue(caches.contains(new Pair("filteredNavigationSupport-attributeFilteredNavigationRecords", "all")));
 
         caches = cacheDirector.resolveCacheNames(CacheDirector.EntityOperation.CREATE, "unknownEntity");
         assertNull(caches);
