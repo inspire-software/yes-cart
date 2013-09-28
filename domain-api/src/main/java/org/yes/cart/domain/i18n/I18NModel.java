@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.i18n;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -23,7 +24,7 @@ import java.util.Map;
  * Date: 12-08-08
  * Time: 7:11 PM
  */
-public interface I18NModel {
+public interface I18NModel extends Serializable {
 
     /**
      * @param locale locale

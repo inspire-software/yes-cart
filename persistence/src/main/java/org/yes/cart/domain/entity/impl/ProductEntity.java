@@ -245,6 +245,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.productAssociations = productAssociations;
     }
 
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public Boolean getFeatured() {
         return this.featured;
     }
@@ -261,6 +262,8 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.seoInternal = seo;
     }
 
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    @DateBridge(resolution = Resolution.MINUTE)
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }

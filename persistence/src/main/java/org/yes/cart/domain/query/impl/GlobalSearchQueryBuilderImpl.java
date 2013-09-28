@@ -122,7 +122,7 @@ public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
                 termQuery.add(new FuzzyQuery(new Term(PRODUCT_CODE_FIELD, word), 0.7f), BooleanClause.Occur.SHOULD);
                 termQuery.add(new FuzzyQuery(new Term(SKU_PRODUCT_CODE_FIELD, word), 0.7f), BooleanClause.Occur.SHOULD);
 
-                termQuery.add(new FuzzyQuery(new Term(PRODUCT_DESCIPTION_FIELD, word.toLowerCase()), 0.85f), BooleanClause.Occur.SHOULD);
+                termQuery.add(new FuzzyQuery(new Term(PRODUCT_DESCRIPTION_FIELD, word.toLowerCase()), 0.85f), BooleanClause.Occur.SHOULD);
                 termQuery.add(new FuzzyQuery(new Term(PRODUCT_CODE_STEM_FIELD, word.toLowerCase()), 0.75f), BooleanClause.Occur.SHOULD);
                 termQuery.add(new FuzzyQuery(new Term(SKU_PRODUCT_CODE_STEM_FIELD, word.toLowerCase()), 0.75f), BooleanClause.Occur.SHOULD);
 

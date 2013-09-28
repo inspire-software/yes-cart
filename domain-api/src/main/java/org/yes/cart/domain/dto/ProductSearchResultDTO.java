@@ -81,7 +81,7 @@ public interface ProductSearchResultDTO extends Identifiable {
     void setDescription(String description);
 
     /**
-     * Set producr availalility. See ProductEntity fields for more details.
+     * Set product availability. See ProductEntity fields for more details.
      * @return product availability.
      */
     int getAvailability();
@@ -93,7 +93,7 @@ public interface ProductSearchResultDTO extends Identifiable {
     void setAvailability(int availability);
 
     /**
-     * Get availabale quantity on warehouses.
+     * Get available quantity on warehouses.
      * @return available qty on all warehouses.
      */
     BigDecimal getQtyOnWarehouse();
@@ -163,17 +163,31 @@ public interface ProductSearchResultDTO extends Identifiable {
 
 
     /**
-     * GEt localized raw value
+     * Get localized raw value
      * @return localized raw value
      */
     String getDisplayDescription();
 
     /**
      * Set raw localized value for description.
-     * @param displayDescription
+     *
+     * @param displayDescription localized raw value
      */
     void setDisplayDescription(String displayDescription);
 
 
+    /**
+     * Get the featured flag for product.
+     *
+     * @return set featured flag.
+     */
+    Boolean getFeatured();
+
+    /**
+     * Set product featured flag.
+     *
+     * @param featured featured flag.
+     */
+    void setFeatured(Boolean featured);
 
 }

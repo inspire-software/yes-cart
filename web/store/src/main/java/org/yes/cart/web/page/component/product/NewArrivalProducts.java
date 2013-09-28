@@ -16,10 +16,14 @@
 
 package org.yes.cart.web.page.component.product;
 
+import org.apache.lucene.search.BooleanQuery;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
@@ -32,10 +36,10 @@ import java.util.List;
  * Date: 9/18/11
  * Time: 11:45 AM
  */
-public class NewArrivalProducts extends AbstractProductList {
+public class NewArrivalProducts extends AbstractProductSearchResultList {
 
 
-    private List<Product> products = null;
+    private List<ProductSearchResultDTO> products = null;
 
     /**
      * Construct product list to show.
@@ -48,12 +52,16 @@ public class NewArrivalProducts extends AbstractProductList {
 
     /** {@inheritDoc} */
     @Override
-    public List<Product> getProductListToShow() {
+    public List<ProductSearchResultDTO> getProductListToShow() {
         if (products == null) {
             final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
-            products = productService.getNewArrivalsProductInCategory(
-                    categoryId,
-                    getProductsLimit(categoryId));
+
+            final ProductsInCategoryQueryBuilderImpl inCat = new ProductsInCategoryQueryBuilderImpl();
+
+            final BooleanQuery inCategory = inCat.createQuery(categoryId);
+
+            products = productService.getProductSearchResultDTOByQuery(inCategory, 0, getProductsLimit(categoryId),
+                    ProductSearchQueryBuilder.PRODUCT_CREATED_FIELD, true);
         }
         return products;
     }

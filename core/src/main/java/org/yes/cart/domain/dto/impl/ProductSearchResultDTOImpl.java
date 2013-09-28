@@ -42,6 +42,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private String firstAvailableSkuCode;
     private BigDecimal firstAvailableSkuQuantity;
     private String defaultImage;
+    private Boolean featured;
 
     private I18NModel i18NModelName;
     private I18NModel i18NModelDescription;
@@ -181,5 +182,14 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         i18NModelDescription = new StringI18NModel(this.displayDescription);
     }
 
-    
+
+    /** {@inheritDoc} */
+    public Boolean getFeatured() {
+        return featured;
+    }
+
+    /** {@inheritDoc} */
+    public void setFeatured(final Boolean featured) {
+        this.featured = featured;
+    }
 }

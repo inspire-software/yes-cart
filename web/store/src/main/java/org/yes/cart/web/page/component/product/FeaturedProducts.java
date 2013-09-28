@@ -16,14 +16,18 @@
 
 package org.yes.cart.web.page.component.product;
 
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ShopCategory;
+import org.yes.cart.domain.query.impl.FeaturedProductsInCategoryQueryBuilderImpl;
 import org.yes.cart.service.domain.ShopCategoryService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -39,14 +43,13 @@ import java.util.List;
  * Date: 18-Sep-2011
  * Time: 11:03:57
  */
-public class FeaturedProducts extends AbstractProductList {
+public class FeaturedProducts extends AbstractProductSearchResultList {
+
+    @SpringBean(name = ServiceSpringKeys.SHOP_SERVICE)
+    private ShopService shopService;
 
 
-    @SpringBean(name = ServiceSpringKeys.SHOP_CATEGORY_SERVICE)
-    private ShopCategoryService shopCategoryService;
-
-
-    private List<Product> products = null;
+    private List<ProductSearchResultDTO> products = null;
 
     /**
      * Construct product list to show.
@@ -61,32 +64,31 @@ public class FeaturedProducts extends AbstractProductList {
      * {@inheritDoc}
      */
     @Override
-    public List<Product> getProductListToShow() {
+    public List<ProductSearchResultDTO> getProductListToShow() {
         if (products == null) {
             final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
-            final Collection<Long> categories;
+            final List<Long> categories;
             if (categoryId == 0) {
                 categories = adapt(ApplicationDirector.getCurrentShop().getShopCategory());
             } else {
 
-                final ShopCategory shopCategory = shopCategoryService.findByShopCategory(
-                        ApplicationDirector.getCurrentShop(),
-                        categoryService.getById(categoryId));
-
-                if (shopCategory == null) {
-
-                    categories = Collections.EMPTY_LIST;
-
+                if (shopService.getShopCategoriesIds(ApplicationDirector.getCurrentShop()).contains(categoryId)) {
+                    categories = Collections.singletonList(categoryId);
                 } else {
-
-                    categories = adapt(Collections.singletonList(shopCategory));
-
+                    categories = Collections.EMPTY_LIST;
                 }
             }
-            products = productService.getFeaturedProducts(
-                    categories,
-                    getProductsLimit(categoryId));
 
+            if (categories.isEmpty()) {
+                products = Collections.emptyList();
+            } else {
+
+                final FeaturedProductsInCategoryQueryBuilderImpl queryBuilder = new FeaturedProductsInCategoryQueryBuilderImpl();
+
+                final BooleanQuery featured = queryBuilder.createQuery(categories);
+
+                products = productService.getProductSearchResultDTOByQuery(featured, 0, getProductsLimit(categoryId), null, false);
+            }
         }
         return products;
     }

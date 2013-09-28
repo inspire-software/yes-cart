@@ -20,67 +20,55 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.TermQuery;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
 import java.util.List;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
- * Date: 08-May-2011
- * Time: 11:12:54
- *
- * Simple products in category query builder.
- *
+ * User: denispavlov
+ * Date: 13-09-28
+ * Time: 9:43 AM
  */
-public class ProductsInCategoryQueryBuilderImpl implements ProductSearchQueryBuilder {
-
-
+public class FeaturedProductsInCategoryQueryBuilderImpl extends ProductsInCategoryQueryBuilderImpl {
 
     /**
-     * Creates a boolean query for set of categories
+     * Enhancement of in category query by adding featured="true" clause
+     *
      * @param categories set of categories
-     * @return constructed BooleanQuery
+     *
+     * @return featured products in categories query
      */
+    @Override
     public BooleanQuery createQuery(final List<Long> categories) {
 
         BooleanQuery booleanQuery = new BooleanQuery();
 
-        if (categories != null && !categories.isEmpty()) {
+        BooleanQuery inCategories = super.createQuery(categories);
 
-            BooleanClause.Occur occur = categories.size() > 1 ? BooleanClause.Occur.SHOULD : BooleanClause.Occur.MUST;
-
-            for (Long category : categories) {
-                booleanQuery.add(
-                                new TermQuery( new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
-                                occur
-                        );
-            }
-            
-
-        }
-
+        booleanQuery.add(inCategories, BooleanClause.Occur.MUST);
+        booleanQuery.add(new TermQuery(new Term(PRODUCT_FEATURED_FIELD, Boolean.TRUE.toString())),
+                BooleanClause.Occur.MUST);
 
         return booleanQuery;
-
     }
-
-
-
-
 
     /**
-     * Create boolean query for given category
+     * Enhancement of in category query by adding featured="true" clause
+     *
      * @param categoryId given category id
-     * @return constructed BooleanQuery
+     *
+     * @return featured products in category query
      */
+    @Override
     public BooleanQuery createQuery(final Long categoryId) {
+
         BooleanQuery booleanQuery = new BooleanQuery();
-        booleanQuery.add(
-                        new TermQuery( new Term(PRODUCT_CATEGORY_FIELD, categoryId.toString())),
-                        BooleanClause.Occur.MUST
-                );
+
+        BooleanQuery inCategories = super.createQuery(categoryId);
+
+        booleanQuery.add(inCategories, BooleanClause.Occur.MUST);
+        booleanQuery.add(new TermQuery(new Term(PRODUCT_FEATURED_FIELD, Boolean.TRUE.toString())),
+                BooleanClause.Occur.MUST);
+
         return booleanQuery;
     }
-
-
 }
