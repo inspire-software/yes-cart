@@ -84,7 +84,7 @@ public class CentralViewResolverImpl implements CentralViewResolver {
             return CentralViewLabel.PRODUCT;
         } else if (parameters.containsKey(WebParametersKeys.QUERY)) {
             return CentralViewLabel.SEARCH_LIST;
-        } else if (isAttibutiveFilteredNavigation(allowedAttributeNames, parameters)) {
+        } else if (isAttributiveFilteredNavigation(allowedAttributeNames, parameters)) {
             return CentralViewLabel.SEARCH_LIST;
         } else if (parameters.containsKey(WebParametersKeys.CATEGORY_ID)) {
             final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(parameters.get(WebParametersKeys.CATEGORY_ID)));
@@ -168,7 +168,7 @@ public class CentralViewResolverImpl implements CentralViewResolver {
 
     }
 
-    private boolean isAttibutiveFilteredNavigation(
+    private boolean isAttributiveFilteredNavigation(
             final Set<String> allowedAttributeNames,
             final Map parameters) {
         for (Object obj : parameters.keySet()) {

@@ -77,14 +77,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     private CategoryService categoryService;
 
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
-    private ProductService productService;
-
-    @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
-    private LuceneQueryFactory luceneQueryFactory;
-
     private final BooleanQuery query;
-
 
     /**
      * Construct panel.
@@ -98,8 +91,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
         this.query = query;
         this.categoryId  = categoryId;
         if (categoryId > 0) {
-            categories = new ArrayList<Long>(categoryService.transform(
-                    categoryService.getChildCategoriesRecursive(categoryId)));
+            categories = new ArrayList<Long>(categoryService.getChildCategoriesRecursiveIds(categoryId));
         } else {
             categories = Arrays.asList(categoryId);
         }
@@ -118,69 +110,12 @@ public abstract class AbstractProductFilter extends BaseComponent {
     }
 
     /**
-     * Get {@link CategoryService}.
-     *
-     * @return Category service
-     */
-    public CategoryService getCategoryService() {
-        return categoryService;
-    }
-
-    /**
-     * Get product service.
-     *
-     * @return product service.
-     */
-    public ProductService getProductService() {
-        return productService;
-    }
-
-    /**
-     * Get Lucene query factory.
-     *
-     * @return {@link LuceneQueryFactory}
-     */
-    public LuceneQueryFactory getLuceneQueryFactory() {
-        return luceneQueryFactory;
-    }
-
-
-    /**
      * Get the current subcategories sub tree as list.
      *
      * @return current subcategories sub tree as list.
      */
     protected List<Long> getCategories() {
         return categories;
-    }
-
-    /**
-     * Filter navigation records. To calculate real quantity of products, that can be selected with this attribute value
-     * 1. getByKey "last" appplied query
-     * 2. add to it new boolean query, that can be build with FilteredNavigationQueryBuilderImpl
-     * 3. ask GenericDAO#getResultCount through product service for real quantity
-     * 4. add to result if quanrity more that 0
-     *
-     * @param allNavigationRecords all navigation records
-     * @return list of navigatior records, that have product or empty list if no records selected for navigation
-     */
-    abstract List<FilteredNavigationRecord> getFilteredNavigationRecords(
-            final List<FilteredNavigationRecord> allNavigationRecords);
-
-
-    /**
-     * @param luceneQuerySubString query substring
-     * @return true if filter already present in applyed query
-     */
-    protected boolean isAttributeAlreadyFiltered(final String luceneQuerySubString) {
-        boolean result = false;
-        if (query != null) {
-            final String appliedQueryString = query.toString();
-            if (StringUtils.isNotBlank(appliedQueryString)) {
-                result = (appliedQueryString.indexOf(luceneQuerySubString) != -1);
-            }
-        }
-        return result;
     }
 
     /**

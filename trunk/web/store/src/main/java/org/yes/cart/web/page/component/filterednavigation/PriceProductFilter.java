@@ -28,6 +28,7 @@ import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.PriceSearchQueryBuilderImpl;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
@@ -48,26 +49,16 @@ import java.util.List;
  */
 public class PriceProductFilter extends AbstractProductFilter {
 
-    protected boolean filteredNavigationByPriceAllowed = false;
-
     private Boolean visibilityRezult;
-
-    private PriceTierTree priceTierTree = null;
-
-    private String currency;
-
-    private Shop shop;
 
     @SpringBean(name = ServiceSpringKeys.PRICE_NAVIGATION)
     private PriceNavigation priceNavigation;
 
-    @SpringBean(name = ServiceSpringKeys.PRICE_SERVICE)
-    private PriceService priceService;
-
     @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
 
-    private List<FilteredNavigationRecord> allNavigationRecords = Collections.EMPTY_LIST;
+    @SpringBean(name = StorefrontServiceSpringKeys.FILTERNAV_SUPPORT_PRICE)
+    private PriceFilteredNavigationSupport priceFilteredNavigationSupport;
 
 
      /**
@@ -78,57 +69,6 @@ public class PriceProductFilter extends AbstractProductFilter {
      */
     public PriceProductFilter(final String id, final BooleanQuery query, final long categoryId) {
         super(id, query, categoryId);
-
-        if (categoryId > 0) {
-            priceTierTree = getCategory().getNavigationByPriceTree();
-            filteredNavigationByPriceAllowed = (getCategory().getNavigationByPrice() == null || priceTierTree == null)
-                    ? false : getCategory().getNavigationByPrice();
-            if (filteredNavigationByPriceAllowed) {
-                currency = ApplicationDirector.getShoppingCart().getCurrencyCode();
-                shop = ApplicationDirector.getCurrentShop();
-                allNavigationRecords = priceService.getPriceNavigationRecords(
-                        priceTierTree,
-                        currency,
-                        shop);
-            }
-
-        }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "priceProduct-filteredNavigationRecords")
-    List<FilteredNavigationRecord> getFilteredNavigationRecords(
-            final List<FilteredNavigationRecord> allNavigationRecords) {
-        final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
-        if (!isAttributeAlreadyFiltered(ProductSearchQueryBuilder.PRODUCT_PRICE_AMOUNT)) {
-            PriceSearchQueryBuilderImpl queryBuilder = new PriceSearchQueryBuilderImpl();
-
-            for (FilteredNavigationRecord record : allNavigationRecords) {
-                Pair<String, Pair<BigDecimal, BigDecimal>> priceNavigationRecord = priceNavigation.decomposePriceRequestParams(record.getValue());
-                BooleanQuery candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
-                        getQuery(),
-                        queryBuilder.createQuery(
-                                getCategories(),
-                                shop.getShopId(),
-                                currency,
-                                priceNavigationRecord.getSecond().getFirst(),
-                                priceNavigationRecord.getSecond().getSecond())
-                );
-                int candidateResultCount = getProductService().getProductQty(candidateQuery);
-                if (candidateResultCount > 0) {
-                    record.setName(getLocalizer().getString("price", this));
-                    record.setCode(ProductSearchQueryBuilder.PRODUCT_PRICE);
-                    record.setCount(candidateResultCount);
-                    navigationList.add(record);
-                }
-            }
-
-
-        }
-        return navigationList;
     }
 
     /**
@@ -157,12 +97,17 @@ public class PriceProductFilter extends AbstractProductFilter {
      */
     public boolean isVisible() {
 
-        if (filteredNavigationByPriceAllowed) {
+        if (getCategoryId() > 0) {
 
             if(visibilityRezult == null) {
 
                 setNavigationRecords(
-                        getFilteredNavigationRecords(allNavigationRecords)
+                        priceFilteredNavigationSupport.getFilteredNavigationRecords(
+                                getQuery(), getCategoryId(), getCategories(), ShopCodeContext.getShopCode(),
+                                ApplicationDirector.getShoppingCart().getCurrencyCode(),
+                                ApplicationDirector.getShoppingCart().getCurrentLocale(),
+                                getLocalizer().getString("price", this)
+                        )
                 );
 
                 visibilityRezult = super.isVisible()

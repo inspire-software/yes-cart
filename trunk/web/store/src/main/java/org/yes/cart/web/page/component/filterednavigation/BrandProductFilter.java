@@ -17,9 +17,11 @@
 package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.BrandSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,10 @@ public class BrandProductFilter extends AbstractProductFilter {
     private boolean filteringNavigationAllowedIncategory = false;
 
     private Boolean visibilityRezult;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.FILTERNAV_SUPPORT_BRANDS)
+    private BrandFilteredNavigationSupport brandsFilteredNavigationSupport;
+
 
     /**
      * Construct filtered navigation by brand.
@@ -58,40 +64,6 @@ public class BrandProductFilter extends AbstractProductFilter {
     /**
      * {@inheritDoc}
      */
-    List<FilteredNavigationRecord> getFilteredNavigationRecords(
-            final List<FilteredNavigationRecord> allNavigationRecords) {
-
-        final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
-
-        if (!isAttributeAlreadyFiltered(ProductSearchQueryBuilder.BRAND_FIELD)) {
-
-            final BrandSearchQueryBuilder queryBuilder = new BrandSearchQueryBuilder();
-
-            for (FilteredNavigationRecord record : allNavigationRecords) {
-                BooleanQuery candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
-                        getQuery(),
-                        queryBuilder.createQuery(getCategories(), record.getValue())
-                );
-                int candidateResultCount = getProductService().getProductQty(candidateQuery);
-                if (candidateResultCount > 0) {
-                    record.setName(getLocalizer().getString("brand", this));
-                    record.setCode(ProductSearchQueryBuilder.BRAND_FIELD);
-                    record.setCount(candidateResultCount);
-                    navigationList.add(record);
-                }
-            }
-
-        }
-        return navigationList;
-    }
-
-
-
-
-
-    /**
-     * {@inheritDoc}
-     */
     public boolean isVisible() {
 
         if (filteringNavigationAllowedIncategory) {
@@ -100,10 +72,8 @@ public class BrandProductFilter extends AbstractProductFilter {
 
                 final String selectedLocale = getLocale().getLanguage();
 
-                setNavigationRecords(
-                        getFilteredNavigationRecords(
-                                getProductService().getDistinctBrands(selectedLocale, getCategories())
-                        )
+                setNavigationRecords(brandsFilteredNavigationSupport.getFilteredNavigationRecords(
+                        getQuery(), getCategories(), selectedLocale, getLocalizer().getString("brand", this))
                 );
 
                 visibilityRezult = super.isVisible()

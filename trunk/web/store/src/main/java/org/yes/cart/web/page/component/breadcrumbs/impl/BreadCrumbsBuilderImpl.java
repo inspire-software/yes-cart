@@ -68,7 +68,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
      * @param pageParameters        current query string
      * @param allowedAttributeNames allowed attribute names for filtering including price, brand, search...
      * @param shopCategoryIds       all categoryIds, that belong to shop
-     * @param namePrefixProvider    name prifix provider for price, brand, search..
+     * @param namePrefixProvider    name prefix provider for price, brand, search..
 
      * @return list of crumbs
      */
