@@ -30,10 +30,12 @@ public interface ProductSearchQueryBuilder {
     public final static String PRODUCT_CODE_FIELD = "code";
     public final static String PRODUCT_CODE_STEM_FIELD = "code_stem";
 
+    public final static String PRODUCT_CREATED_FIELD = "createdTimestamp"; //for projections only
+    public final static String PRODUCT_FEATURED_FIELD = "featured"; //for projections only
     public final static String PRODUCT_AVAILABILITY_FIELD = "availability"; //for projections only
     public final static String PRODUCT_QTY_FIELD = "qtyOnWarehouse"; //for projections only
-    public final static String PRODUCT_AVAILABESKUCODE_FIELD = "firstAvailableSkuCode"; //for projections only
-    public final static String PRODUCT_AVAILABESKUCODEQTY_FIELD = "firstAvailableSkuQuantity"; //for projections only
+    public final static String PRODUCT_AVAILABLESKUCODE_FIELD = "firstAvailableSkuCode"; //for projections only
+    public final static String PRODUCT_AVAILABLESKUCODEQTY_FIELD = "firstAvailableSkuQuantity"; //for projections only
     public final static String PRODUCT_DEFAULTIMAGE_FIELD = "defaultImage"; //for projections only
     public final static String PRODUCT_DESCRIPTION_ASIS_FIELD = "descriptionAsIs"; //for projections only
 
@@ -41,7 +43,7 @@ public interface ProductSearchQueryBuilder {
     public final static String SKU_PRODUCT_CODE_FIELD = "sku.code";
     public final static String SKU_PRODUCT_CODE_STEM_FIELD = "sku.code_stem";
     public final static String PRODUCT_NAME_SORT_FIELD = "name_sort";
-    public final static String PRODUCT_DESCIPTION_FIELD = "description";
+    public final static String PRODUCT_DESCRIPTION_FIELD = "description";
     public final static String BRAND_FIELD = "brand";
     public final static String ATTRIBUTE_CODE_FIELD = "attribute.attribute";
     public final static String ATTRIBUTE_VALUE_FIELD = "attribute.val";
