@@ -146,13 +146,13 @@ public interface CategoryService extends GenericService<Category> {
     Set<Category> getChildCategoriesRecursive(long categoryId);
 
     /**
-     * Transform collection of categories into collection of IDs.
+     * Get the child categories with recursion.
+     * Category from parameter will be included also.
      *
-     * @param categories list of category objects
-     * @return list of category IDs
+     * @param categoryId given categoryId
+     * @return list of child categories
      */
-    Set<Long> transform(Collection<Category> categories);
-
+    Set<Long> getChildCategoriesRecursiveIds(long categoryId);
 
     /**
      * Get the items per page for particular category.

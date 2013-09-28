@@ -35,7 +35,8 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     private BigDecimal qty;
     private BigDecimal price;
     private BigDecimal listPrice;
-    private ProductSku sku;
+    private String productSkuCode;
+    private String productName;
     private CustomerOrder customerOrder;
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -72,12 +73,20 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.listPrice = listPrice;
     }
 
-    public ProductSku getSku() {
-        return this.sku;
+    public String getProductSkuCode() {
+        return productSkuCode;
     }
 
-    public void setSku(ProductSku sku) {
-        this.sku = sku;
+    public void setProductSkuCode(final String productSkuCode) {
+        this.productSkuCode = productSkuCode;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(final String productName) {
+        this.productName = productName;
     }
 
     public CustomerOrder getCustomerOrder() {
@@ -139,10 +148,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
 
     public void setCustomerOrderDetId(long customerOrderDetId) {
         this.customerOrderDetId = customerOrderDetId;
-    }
-
-    public String getProductSkuCode() {
-        return this.sku == null ? null : this.sku.getCode();
     }
 
 }

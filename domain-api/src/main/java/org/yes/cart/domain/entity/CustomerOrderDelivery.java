@@ -239,7 +239,7 @@ public interface CustomerOrderDelivery extends Auditable {
     String getDeliveryGroup();
 
     /**
-     * Set Delvery group.
+     * Set Delivery group.
      *
      * @param deliveryGroup delivery group.
      */

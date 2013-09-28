@@ -30,9 +30,9 @@ public interface ShopCategoryService extends GenericService<ShopCategory> {
     /**
      * Delete all relation between shops and given category
      *
-     * @param caterogy category pk
+     * @param category category pk
      */
-    void deleteAll(Category caterogy);
+    void deleteAll(Category category);
 
     /**
      * Find shop category by given shop and category.

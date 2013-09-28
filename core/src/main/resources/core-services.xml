@@ -1047,7 +1047,7 @@
                 <constructor-arg index="0" ref="orderNumberGenerator"/>
                 <constructor-arg index="1" ref="customerDao"/>
                 <constructor-arg index="2" ref="shopDao"/>
-                <constructor-arg index="3" ref="productSkuDao"/>
+                <constructor-arg index="3" ref="productSkuService"/>
                 <constructor-arg index="4" value="{0} {1} {2} {3} {4} {5} {6} {7} {8}"/>
                 <!-- Address format
                 0 - address line 1
@@ -1055,7 +1055,7 @@
                 2 - post(zip) code
                 3 - city
                 4 - country code
-                5 - county/state/provicne/area code
+                5 - county/state/province/area code
                 6 - first name
                 7 - last name
                 8 - contact phone(s) as string
@@ -1070,6 +1070,7 @@
         <constructor-arg index="0" ref="warehouseService"/>
         <constructor-arg index="1" ref="skuWarehouseService"/>        
         <constructor-arg index="2" ref="carrierSlaService"/>
+        <constructor-arg index="3" ref="productService"/>
     </bean>
 
 
@@ -1151,6 +1152,7 @@
                 <constructor-arg index="0" ref="paymentProcessorFactory"/>
                 <constructor-arg index="1" ref="warehouseService"/>
                 <constructor-arg index="2" ref="skuWarehouseService"/>
+                <constructor-arg index="3" ref="productService"/>
             </bean>
         </property>
     </bean>
@@ -1171,6 +1173,7 @@
             <bean class="org.yes.cart.service.order.impl.handler.ProcessAllocationOrderEventHandlerImpl">
                 <constructor-arg index="0" ref="warehouseService"/>
                 <constructor-arg index="1" ref="skuWarehouseService"/>
+                <constructor-arg index="2" ref="productService"/>
             </bean>
         </property>
     </bean>
@@ -1199,7 +1202,9 @@
 
     <!-- Transition from time wait to inventory wait state -->
     <bean id="deliveryAllowedByTimeoutOrderEventHandler"
-          class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByTimeoutOrderEventHandlerImpl"/>
+          class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByTimeoutOrderEventHandlerImpl">
+        <constructor-arg index="0" ref="productService"/>
+    </bean>
 
     <!-- Transition from inventory wait state to inventory allocation -->
     <bean id="deliveryAllowedByInventoryOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
@@ -1207,6 +1212,7 @@
             <bean class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByInventoryOrderEventHandlerImpl">
                 <constructor-arg index="0" ref="warehouseService"/>
                 <constructor-arg index="1" ref="skuWarehouseService"/>
+                <constructor-arg index="2" ref="productService"/>
             </bean>
         </property>
     </bean>

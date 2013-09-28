@@ -28,7 +28,25 @@ public interface StorefrontServiceSpringKeys {
      */
     public String CURRENCY_SYMBOL_SERVICE = "currencySymbolService";
 
+    /**
+     * Breadcrumbs builder
+     */
     public String BREAD_CRUMBS_BUILDER = "breadCrumbsBuilder";
+
+    /**
+     * Filtered navigation support
+     */
+    public String FILTERNAV_SUPPORT_ATTRIBUTES = "attributeFilteredNavigationSupport";
+
+    /**
+     * Filtered navigation support
+     */
+    public String FILTERNAV_SUPPORT_BRANDS = "brandFilteredNavigationSupport";
+
+    /**
+     * Filtered navigation support
+     */
+    public String FILTERNAV_SUPPORT_PRICE = "priceFilteredNavigationSupport";
 
     /**
      * Language service.

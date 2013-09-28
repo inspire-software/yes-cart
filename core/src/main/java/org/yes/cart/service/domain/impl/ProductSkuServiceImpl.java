@@ -17,6 +17,8 @@
 package org.yes.cart.service.domain.impl;
 
 import org.hibernate.criterion.Restrictions;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
@@ -62,10 +64,18 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
-    public ProductSku getProductSkuBySkuCode(final String skuCode) {
+    public ProductSku getProductSkuBySkuCodeForIndexing(final String skuCode) {
         return getGenericDao().findSingleByCriteria(
                 Restrictions.eq("code", skuCode)
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "productSkuService-productSkuBySkuCode")
+    public ProductSku getProductSkuBySkuCode(final String skuCode) {
+        return getProductSkuBySkuCodeForIndexing(skuCode);
     }
 
     /**
@@ -99,6 +109,9 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+        "productSkuService-productSkuBySkuCode"
+    }, allEntries = true)
     public void removeAllItems(final ProductSku sku) {
             getGenericDao().executeUpdate("REMOVE.ALL.SKU.ITEMS", sku);
     }

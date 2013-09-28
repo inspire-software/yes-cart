@@ -260,10 +260,11 @@
 
     create table TCUSTOMERORDERDELIVERYDET (
         CUSTOMERORDERDELIVERYDET_ID bigint not null auto_increment,
-        QTY decimal(19,2) not null comment 'Quantity of SKU in this praticular delivery',
+        QTY decimal(19,2) not null comment 'Quantity of SKU in this particular delivery',
         PRICE decimal(19,2) not null,
         LIST_PRICE decimal(19,2) not null,
-        SKU_ID bigint not null,
+        CODE varchar(255) not null,
+        PRODUCTNAME longtext not null,
         CUSTOMERORDERDELIVERY_ID bigint not null,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
@@ -279,7 +280,8 @@
         PRICE decimal(19,2) not null comment 'Price per one unit',
         LIST_PRICE decimal(19,2) not null comment 'List
          price per one unit',
-        SKU_ID bigint not null,
+        CODE varchar(255) not null,
+        PRODUCTNAME longtext not null,
         CUSTOMERORDER_ID bigint not null,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
@@ -714,7 +716,7 @@
         DISPLAYNAME longtext,
         DESCRIPTION longtext,
         PRODUCT_ID bigint,
-        RANK integer comment 'Order of sku for product. Firts is default.',
+        RANK integer comment 'Order of sku for product. First is default.',
         BARCODE varchar(128),
         URI varchar(255),
         TITLE varchar(255),
@@ -918,24 +920,24 @@
 
 
 
-    alter table TCUSTOMERORDERDELIVERY         add index FK_OD_ORD (CUSTOMERORDER_ID),                  add constraint FK_OD_ORD                  foreign key (CUSTOMERORDER_ID)         references TCUSTOMERORDER (CUSTOMERORDER_ID) on delete cascade;
+    alter table TCUSTOMERORDERDELIVERY
+        add index FK_OD_ORD (CUSTOMERORDER_ID),
+        add constraint FK_OD_ORD
+        foreign key (CUSTOMERORDER_ID)
+        references TCUSTOMERORDER (CUSTOMERORDER_ID) on delete cascade;
 
-    alter table TCUSTOMERORDERDELIVERY         add index FK_OD_CSLA (CARRIERSLA_ID),                     add constraint FK_OD_CSLA                foreign key (CARRIERSLA_ID)            references TCARRIERSLA (CARRIERSLA_ID);
+    alter table TCUSTOMERORDERDELIVERY
+        add index FK_OD_CSLA (CARRIERSLA_ID),
+        add constraint FK_OD_CSLA
+        foreign key (CARRIERSLA_ID)
+        references TCARRIERSLA (CARRIERSLA_ID);
 
+    alter table TCUSTOMERORDERDELIVERYDET
+        add index FK_CODD_CDELIVERY (CUSTOMERORDERDELIVERY_ID),
+        add constraint FK_CODD_CDELIVERY
+        foreign key (CUSTOMERORDERDELIVERY_ID)
+        references TCUSTOMERORDERDELIVERY (CUSTOMERORDERDELIVERY_ID);
 
-    alter table TCUSTOMERORDERDELIVERYDET         add index FK_CODD_SKU (SKU_ID),         add constraint FK_CODD_SKU         
-               foreign key (SKU_ID)         references TSKU (SKU_ID);
-
-    alter table TCUSTOMERORDERDELIVERYDET         add index FK_CODD_CDELIVERY (CUSTOMERORDERDELIVERY_ID),         add constraint FK_CODD_CDELIVERY         
-               foreign key (CUSTOMERORDERDELIVERY_ID)         references TCUSTOMERORDERDELIVERY (CUSTOMERORDERDELIVERY_ID);
-
-
-
-    alter table TCUSTOMERORDERDET 
-        add index FK_ODET_SKU (SKU_ID), 
-        add constraint FK_ODET_SKU 
-        foreign key (SKU_ID) 
-        references TSKU (SKU_ID);
 
     alter table TCUSTOMERORDERDET 
         add index FKCB358C37A7F39C2D (CUSTOMERORDER_ID), 

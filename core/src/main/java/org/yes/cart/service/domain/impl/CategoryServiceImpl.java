@@ -384,6 +384,18 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         return Collections.emptySet();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "categoryService-childCategoriesRecursiveIds")
+    public Set<Long> getChildCategoriesRecursiveIds(final long categoryId) {
+        final Set<Category> cats = getChildCategoriesRecursive(categoryId);
+        if (cats.isEmpty()) {
+            return Collections.emptySet();
+        }
+        return transform(cats);
+    }
+
     private void loadChildCategoriesRecursiveInternal(final Set<Category> result, final Category category) {
         List<Category> categories = getChildCategories(category.getCategoryId());
         result.addAll(categories);
@@ -491,6 +503,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-categoryHasChildren",
             "categoryService-childCategories",
             "categoryService-childCategoriesRecursive",
+            "categoryService-childCategoriesRecursiveIds",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
             "categoryService-transform"
@@ -515,6 +528,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-categoryHasChildren",
             "categoryService-childCategories",
             "categoryService-childCategoriesRecursive",
+            "categoryService-childCategoriesRecursiveIds",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
             "categoryService-transform"
@@ -539,6 +553,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-categoryHasChildren",
             "categoryService-childCategories",
             "categoryService-childCategoriesRecursive",
+            "categoryService-childCategoriesRecursiveIds",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
             "categoryService-transform"

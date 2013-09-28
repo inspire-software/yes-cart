@@ -97,16 +97,16 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
         }
 
         for (CustomerOrderDeliveryDet det : delivery.getDetail()) {
-            final ProductSku productSku = det.getSku();
+            final String skuCode = det.getProductSkuCode();
             BigDecimal toCredit = det.getQty();
             for (Warehouse wh : warehouses) {
                 if (isNeedVoidReservation(delivery.getDeliveryStatus())) {
                     // this delivery was not completed, so can just void reservation
-                    toCredit = skuWarehouseService.voidReservation(wh, productSku, toCredit);
+                    toCredit = skuWarehouseService.voidReservation(wh, skuCode, toCredit);
                 } else if (isNeedCredit(delivery.getDeliveryStatus())) {
                     // this delivery is completed, so need to credit qty
 
-                    toCredit = skuWarehouseService.credit(wh, productSku, toCredit);
+                    toCredit = skuWarehouseService.credit(wh, skuCode, toCredit);
                 }
                 if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), toCredit.setScale(Constants.DEFAULT_SCALE))) {
                     break;

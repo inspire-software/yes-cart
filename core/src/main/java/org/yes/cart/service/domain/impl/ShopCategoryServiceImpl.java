@@ -43,9 +43,9 @@ public class ShopCategoryServiceImpl extends BaseGenericServiceImpl<ShopCategory
     /**
      * {@inheritDoc}
      */
-    public void deleteAll(final Category caterogy) {
+    public void deleteAll(final Category category) {
         final Collection<ShopCategory> shopCategories = shopCategoryDao.findByCriteria(
-                Restrictions.eq("category",caterogy));
+                Restrictions.eq("category", category));
         for (ShopCategory shopCategory : shopCategories) {
             shopCategoryDao.delete(shopCategory);
         }        

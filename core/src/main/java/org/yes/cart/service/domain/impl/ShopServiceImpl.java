@@ -71,7 +71,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopBuCode")
+    @Cacheable(value = "shopService-shopByCode")
     public Shop getShopByCode(final String shopCode) {
         return shopDao.findSingleByNamedQuery("SHOP.BY.CODE", shopCode);
     }
@@ -113,6 +113,23 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "shopService-shopCategoriesIds"/*, key ="shop.getShopId()"*/)
+    public Set<Long> getShopCategoriesIds(final Shop shop) {
+        return transform(getShopCategories(shop));
+    }
+
+    public Set<Long> transform(final Collection<Category> categories) {
+        final Set<Long> result = new LinkedHashSet<Long>(categories.size());
+        for (Category category : categories) {
+            result.add(category.getCategoryId());
+        }
+        return result;
+    }
+
+
     /** {@inheritDoc} */
     public Collection<String> getAllSupportedCurrenciesByShops() {
         final List<Shop> shops = shopDao.findAll();
@@ -139,9 +156,10 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * @param attributeValue attribute value.
      */
     @CacheEvict(value ={
-            "shopService-shopBuCode",
+            "shopService-shopByCode",
             "shopService-shopByDomainName",
-            "shopService-shopCategories"
+            "shopService-shopCategories",
+            "shopService-shopCategoriesIds"
     }, allEntries = true)
     public void updateAttributeValue(final long shopId, final String attributeKey, final String attributeValue) {
         final Shop shop = shopDao.findById(shopId);
@@ -163,7 +181,8 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
 
     /** {@inheritDoc} */
     @CacheEvict(value ={
-            "shopService-shopCategories"
+            "shopService-shopCategories",
+            "shopService-shopCategoriesIds"
     }, allEntries = true)
     public Shop create(final Shop instance) {
         final Shop shop = super.create(instance);
@@ -173,9 +192,10 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
 
     /** {@inheritDoc} */
     @CacheEvict(value ={
-            "shopService-shopBuCode",
+            "shopService-shopByCode",
             "shopService-shopByDomainName",
-            "shopService-shopCategories"
+            "shopService-shopCategories",
+            "shopService-shopCategoriesIds"
     }, allEntries = true)
     public Shop update(Shop instance) {
         return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
@@ -183,9 +203,10 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
 
     /** {@inheritDoc} */
     @CacheEvict(value ={
-            "shopService-shopBuCode",
+            "shopService-shopByCode",
             "shopService-shopByDomainName",
-            "shopService-shopCategories"
+            "shopService-shopCategories",
+            "shopService-shopCategoriesIds"
     }, allEntries = true)
     public void delete(Shop instance) {
         super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.

@@ -26,9 +26,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueShop;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.order.OrderEvent;
@@ -64,20 +66,18 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect implem
 
     private final Map<String, String> adminTemplates;
 
+    private final ProductSkuService productSkuService;
 
 
 
-    /**
-     * Construct base notification aspect class.
-     *
-     * @param taskExecutor to use
-     */
+
     public OrderStateChangeListenerAspect(final TaskExecutor taskExecutor,
                                           final JavaMailSender javaMailSender,
                                           final MailComposer mailComposer,
                                           final CustomerService customerService,
                                           final CustomerOrderService customerOrderService,
                                           final ShopService shopService,
+                                          final ProductSkuService productSkuService,
                                           final Map<String, String> shopperTemplates,
                                           final Map<String, String> adminTemplates) {
         super(taskExecutor);
@@ -89,6 +89,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect implem
         this.shopperTemplates = shopperTemplates;
         this.adminTemplates = adminTemplates;
 
+        this.productSkuService = productSkuService;
     }
 
     /** {@inheritDoc} */
@@ -136,16 +137,18 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect implem
             return rez;
         } catch (final OrderItemAllocationException th) {
 
-            LOG.error("Cant allocation quantity for product " + th.getProductSku().getCode() );
+            LOG.error("Cant allocation quantity for product " + th.getProductSkuCode() );
 
             if (attrVal == null) {
                 LOG.error("Cant get admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );
             }   else {
 
+                final ProductSku sku = productSkuService.getProductSkuBySkuCode(th.getProductSkuCode());
+
                 fillNotificationParameters(
                         orderEvent,
                         "adm-cant-allocate-product-qty",
-                        new HashMap<String, Object>() {{ put("sku", th.getProductSku()); }},
+                        new HashMap<String, Object>() {{ put("sku", sku); }},
                         attrVal.getVal());
             }
 

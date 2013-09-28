@@ -42,6 +42,14 @@ public interface ProductSkuService extends GenericService<ProductSku> {
      * @param skuCode given sku code.
      * @return product sku if found, otherwise null
      */
+    ProductSku getProductSkuBySkuCodeForIndexing(String skuCode);
+
+    /**
+     * Get product sku by code.
+     *
+     * @param skuCode given sku code.
+     * @return product sku if found, otherwise null
+     */
     ProductSku getProductSkuBySkuCode(String skuCode);
 
     /**

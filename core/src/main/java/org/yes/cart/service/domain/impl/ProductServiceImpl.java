@@ -346,14 +346,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productService-productSkuByCode")
     public ProductSku getProductSkuByCode(final String skuCode) {
-        final List<ProductSku> skus = productSkuService.getGenericDao().findByNamedQuery("PRODUCT.SKU.BY.CODE", skuCode);
-        if (CollectionUtils.isEmpty(skus)) {
-            return null;
-            //throw new ObjectNotFoundException(ProductSku.class, "skuCode", skuCode);
-        }
-        return skus.get(0);
+        return productSkuService.getProductSkuBySkuCode(skuCode);
     }
 
     /**
@@ -381,7 +375,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Cacheable(value = "productService-productById2")
     public Product getProductById(final Long productId, final boolean withAttribute) {
-        final Product prod = productDao.findById(productId);
+        final Product prod = productDao.findById(productId); // query with
         if (prod != null && withAttribute) {
             Hibernate.initialize(prod.getAttributes());
         }
@@ -436,12 +430,12 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     @Cacheable(value = "productService-productByQuery")
     public List<Product> getProductByQuery(
             final Query query,
-            final int firtsResult,
+            final int firstResult,
             final int maxResults,
             final String sortFieldName,
             final boolean reverse) {
 
-        return productDao.fullTextSearch(query, firtsResult, maxResults, sortFieldName, reverse);
+        return productDao.fullTextSearch(query, firstResult, maxResults, sortFieldName, reverse);
 
     }
 
@@ -452,28 +446,29 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     @Cacheable(value = "productService-productSearchResultDTOByQuery")
     public List<ProductSearchResultDTO> getProductSearchResultDTOByQuery(
             final Query query,
-            final int firtsResult,
+            final int firstResult,
             final int maxResults,
             final String sortFieldName,
             final boolean reverse) {
 
         final List<Object[]> searchRez = productDao.fullTextSearch(
                 query,
-                firtsResult,
+                firstResult,
                 maxResults,
                 sortFieldName,
                 reverse,
                 ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_CODE_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_NAME_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_DESCIPTION_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_DESCRIPTION_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_QTY_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_AVAILABESKUCODE_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_AVAILABESKUCODEQTY_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_AVAILABLESKUCODE_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_AVAILABLESKUCODEQTY_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_DEFAULTIMAGE_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_DESCRIPTION_ASIS_FIELD);
+                ProductSearchQueryBuilder.PRODUCT_DESCRIPTION_ASIS_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD);
 
         final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.size());
         for (Object[] obj : searchRez) {
@@ -489,6 +484,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             dto.setDefaultImage((String) obj[8]);
             dto.setDisplayName((String) obj[9]);
             dto.setDisplayDescription((String) obj[10]);
+            dto.setFeatured(obj[11] != null && (Boolean) obj[11]);
             rez.add(dto);
         }
 
@@ -547,6 +543,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "productService-distinctBrands")
     public List<FilteredNavigationRecord> getDistinctBrands(final String locale, final List categories) {
         List<Object[]> list = productDao.findQueryObjectsByNamedQueryWithList(
                 "PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES",
@@ -796,7 +793,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     public int reindexProductSku(final String code) {
-        final ProductSku productSku = productSkuService.getProductSkuBySkuCode(code);
+        final ProductSku productSku = productSkuService.getProductSkuBySkuCodeForIndexing(code);
         if (productSku != null) {
             return productDao.fullTextSearchReindex(productSku.getProduct().getProductId());
         }
@@ -876,6 +873,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             "productService-productQty",
             "productService-productByIdList",
             "productService-distinctAttributeValues",
+            "productService-distinctBrands",
             "productService-productQty2"
 
     }, allEntries = true)
@@ -902,7 +900,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             "productService-randomProductByCategory",
             "productService-productAttributes",
             "productService-productAttribute",
-            "productService-productSkuByCode",
             "productService-productBySkuCode",
             "productService-productById",
             "productService-productById2",
@@ -912,8 +909,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             "productService-productSearchResultDTOByQuery",
             "productService-productQty",
             "productService-distinctAttributeValues",
+            "productService-distinctBrands",
             "productService-productByIdList",
-            "productService-distinctAttributeValues",
             "productService-productQty2"
 
     }, allEntries = true)
@@ -930,7 +927,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             "productService-randomProductByCategory",
             "productService-productAttributes",
             "productService-productAttribute",
-            "productService-productSkuByCode",
             "productService-productBySkuCode",
             "productService-productById",
             "productService-productById2",
@@ -940,8 +936,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             "productService-productSearchResultDTOByQuery",
             "productService-productQty",
             "productService-distinctAttributeValues",
+            "productService-distinctBrands",
             "productService-productByIdList",
-            "productService-distinctAttributeValues",
             "productService-productQty2"
 
     }, allEntries = true)

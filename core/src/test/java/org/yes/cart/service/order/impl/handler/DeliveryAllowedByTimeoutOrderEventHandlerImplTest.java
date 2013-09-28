@@ -23,6 +23,7 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
@@ -38,12 +39,14 @@ import static org.junit.Assert.*;
 public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
     private CustomerOrderService orderService;
+    private ProductService productService;
     private OrderEventHandler handler;
 
     @Before
     public void setUp()  {
         handler = (OrderEventHandler) ctx().getBean("deliveryAllowedByTimeoutOrderEventHandler");
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
+        productService = (ProductService) ctx().getBean("productService");
         super.setUp();
     }
 
@@ -58,7 +61,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
         //set allowed time in the future
         calendar.set(2020, 9, 11);
         for (CustomerOrderDeliveryDet det : delivery.getDetail()) {
-            det.getSku().getProduct().setAvailablefrom(calendar.getTime());
+            productService.getProductBySkuCode(det.getProductSkuCode()).setAvailablefrom(calendar.getTime());
         }
         assertFalse(handler.handle(
                 new OrderEventImpl(
@@ -70,7 +73,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImplTest extends AbstractE
         //set allowed time in the past
         calendar.set(2011, 1, 22);
         for (CustomerOrderDeliveryDet det : delivery.getDetail()) {
-            det.getSku().getProduct().setAvailablefrom(calendar.getTime());
+            productService.getProductBySkuCode(det.getProductSkuCode()).setAvailablefrom(calendar.getTime());
         }
         assertTrue(handler.handle(
                 new OrderEventImpl(

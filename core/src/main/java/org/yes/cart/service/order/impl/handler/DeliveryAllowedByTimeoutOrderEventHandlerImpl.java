@@ -21,7 +21,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Product;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
@@ -43,6 +44,12 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
     private OrderStateManager orderStateManager = null;
     private ApplicationContext applicationContext;
 
+    private final ProductService productService;
+
+    public DeliveryAllowedByTimeoutOrderEventHandlerImpl(final ProductService productService) {
+        this.productService = productService;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -53,8 +60,9 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
             final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderEvent.getCustomerOrderDelivery().getDetail();
 
             for (CustomerOrderDeliveryDet det : deliveryDetails) {
-                final ProductSku productSku = det.getSku();
-                final Date availableFrom = productSku.getProduct().getAvailablefrom();
+
+                final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
+                final Date availableFrom = product.getAvailablefrom();
                 if ((availableFrom != null) && (availableFrom.getTime() > now.getTime())) {
                     return false; // no transition, because need to wait
                 }

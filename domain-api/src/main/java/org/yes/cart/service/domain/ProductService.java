@@ -161,7 +161,10 @@ public interface ProductService extends GenericService<Product> {
      * @param categoryId  given category id
      * @param maxResults  max result
      * @return  list of new arrived products
+     *
+     * @deprecated use ProductsInCategoryQueryBuilderImpl with search
      */
+    @Deprecated
     List<Product> getNewArrivalsProductInCategory(
             long categoryId,
             int maxResults);
@@ -234,15 +237,15 @@ public interface ProductService extends GenericService<Product> {
      * Get the all products , that match the given query
      *
      * @param query         lucene query
-     * @param firtsResult   index of first result
+     * @param firstResult   index of first result
      * @param maxResults    quantity results to return
      * @param sortFieldName sort field name
-     * @param reverse       reverce the search result if true
+     * @param reverse       reverse the search result if true
      * @return list of products
      */
     List<ProductSearchResultDTO> getProductSearchResultDTOByQuery(
             Query query,
-            int firtsResult,
+            int firstResult,
             int maxResults,
             String sortFieldName,
             boolean reverse);
@@ -251,15 +254,18 @@ public interface ProductService extends GenericService<Product> {
      * Get the all products , that match the given query
      *
      * @param query         lucene query
-     * @param firtsResult   index of first result
+     * @param firstResult   index of first result
      * @param maxResults    quantity results to return
      * @param sortFieldName sort field name
-     * @param reverse       reverce the search result if true
+     * @param reverse       reverse the search result if true
      * @return list of products
+     *
+     * @deprecated use ProductSearchQueryBuilder with search
      */
+    @Deprecated
     List<Product> getProductByQuery(
             Query query,
-            int firtsResult,
+            int firstResult,
             int maxResults,
             String sortFieldName,
             boolean reverse);
@@ -273,7 +279,10 @@ public interface ProductService extends GenericService<Product> {
      * @param categories current shop categories
      * @param limit limit of products to return.
      * @return shuffled list of featured products.
+     *
+     * @deprecated use FeaturedProductsInCategoryQueryBuilderImpl with search
      */
+    @Deprecated
     List<Product> getFeaturedProducts(Collection categories, int limit);
 
     /**

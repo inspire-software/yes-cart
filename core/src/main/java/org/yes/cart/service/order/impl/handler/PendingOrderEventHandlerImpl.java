@@ -22,6 +22,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.*;
@@ -48,6 +49,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
     private ApplicationContext applicationContext;
     private final WarehouseService warehouseService;
     private final SkuWarehouseService skuWarehouseService;
+    private final ProductService productService;
 
     /**
      * Construct transition handler.
@@ -55,13 +57,16 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
      * @param paymentProcessorFactory to perform authorize operation
      * @param warehouseService        warehouse service
      * @param skuWarehouseService     sku on warehouse service to change quantity
+     * @param productService          product service
      */
     public PendingOrderEventHandlerImpl(final PaymentProcessorFactory paymentProcessorFactory,
                                         final WarehouseService warehouseService,
-                                        final SkuWarehouseService skuWarehouseService) {
+                                        final SkuWarehouseService skuWarehouseService,
+                                        final ProductService productService) {
         this.paymentProcessorFactory = paymentProcessorFactory;
         this.warehouseService = warehouseService;
         this.skuWarehouseService = skuWarehouseService;
+        this.productService = productService;
     }
 
     /**
@@ -123,32 +128,35 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
 
 
         for (CustomerOrderDeliveryDet det : deliveryDetails) {
-            ProductSku productSku = det.getSku();
+            String skuCode = det.getProductSkuCode();
             BigDecimal toReserve = det.getQty();
             for (Warehouse warehouse : warehouses) {
 
-                toReserve = skuWarehouseService.reservation(warehouse, productSku, toReserve);
+                toReserve = skuWarehouseService.reservation(warehouse, skuCode, toReserve);
                 if (BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE).equals(toReserve.setScale(Constants.DEFAULT_SCALE))) {
                     break; // quantity allocated
                 }
             }
 
 
-            if ((MoneyUtils.isFirstBiggerThanSecond(toReserve, BigDecimal.ZERO))
-                    &&
-                    (Product.AVAILABILITY_STANDARD == productSku.getProduct().getAvailability())) {
+            if (MoneyUtils.isFirstBiggerThanSecond(toReserve, BigDecimal.ZERO)) {
 
-                /**
-                 * Availability.AVAILABILITY_BACKORDER -  can get more stock
-                 * Availability.AVAILABILITY_PREORDER - can pre-order from manufacturer
-                 * Availability.AVAILABILITY_ALWAYS - always
-                 */
-                throw new OrderItemAllocationException(
-                        productSku,
-                        toReserve,
-                        "PendingOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
-                        + " for sku = " + productSku.getCode()
-                        + " in delivery " + orderDelivery.getDeliveryNum());
+                final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
+
+                if (product == null || Product.AVAILABILITY_STANDARD == product.getAvailability()) {
+
+                    /**
+                     * Availability.AVAILABILITY_BACKORDER -  can get more stock
+                     * Availability.AVAILABILITY_PREORDER - can pre-order from manufacturer
+                     * Availability.AVAILABILITY_ALWAYS - always
+                     */
+                    throw new OrderItemAllocationException(
+                            skuCode,
+                            toReserve,
+                            "PendingOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
+                            + " for sku = " + skuCode
+                            + " in delivery " + orderDelivery.getDeliveryNum());
+                }
             }
         }
         orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);

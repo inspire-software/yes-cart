@@ -129,8 +129,6 @@ public abstract class AbstractProductList extends BaseComponent {
             category = categoryService.getRootCategory();
         }
 
-        final LinksSupport links = getWicketSupportFacade().links();
-
 
         add(
                 new ListView<Product>(PRODUCT_LIST, getProductListToShow()) {
@@ -147,6 +145,7 @@ public abstract class AbstractProductList extends BaseComponent {
                         final String width = size[0];
                         final String height = size[1];
 
+                        final LinksSupport links = getWicketSupportFacade().links();
 
                         listItem.add(
                                 links.newProductLink(PRODUCT_LINK_IMAGE, prod.getProductId(), getPage().getPageParameters())

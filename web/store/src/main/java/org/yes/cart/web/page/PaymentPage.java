@@ -33,6 +33,8 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.payment.PaymentProcessFacade;
@@ -90,6 +92,9 @@ public class PaymentPage extends AbstractWebPage {
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
     private CustomerOrderService customerOrderService;
 
+    @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
+    private ProductSkuService productSkuService;
+
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
@@ -131,7 +136,7 @@ public class PaymentPage extends AbstractWebPage {
 
 
             addOrReplace(
-                    createNegativeItemAllocationResultFragment(e.getProductSku())
+                    createNegativeItemAllocationResultFragment(e.getProductSkuCode())
             );
 
             result = false;
@@ -187,9 +192,13 @@ public class PaymentPage extends AbstractWebPage {
      *
      * @return negative result fragment
      */
-    private MarkupContainer createNegativeItemAllocationResultFragment(final ProductSku sku) {
+    private MarkupContainer createNegativeItemAllocationResultFragment(final String sku) {
 
-        final String errorMessage =  new StringResourceModel(ALLOCATION_DETAIL, this, null, new Object [] {sku.getName(), sku.getCode() } ).getString()  ;
+        final ProductSku productSku = productSkuService.getProductSkuBySkuCode(sku);
+        final String errorMessage =  new StringResourceModel(ALLOCATION_DETAIL, this, null,
+                new Object [] {
+                        getI18NSupport().getFailoverModel(productSku.getDisplayName(), productSku.getName()).getValue(getLocale().getLanguage()),
+                        sku } ).getString()  ;
 
         error(errorMessage);
 

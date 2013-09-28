@@ -60,7 +60,7 @@ public class PreOrderJobImpl extends QuartzJobBean implements StatefulJob {
 
         log.info("Transitioned {} deliveries awaiting preorder start date", dateWaiting);
 
-        final List<Long> productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
+        final List<String> productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
 
         if (productSkus != null && !productSkus.isEmpty()) {
             log.info("Check for awaiting orders for SKUs {}", productSkus);
@@ -91,7 +91,7 @@ public class PreOrderJobImpl extends QuartzJobBean implements StatefulJob {
      * @param orderStateManager    order state manager
      * @return quantity of processed deliveries
      */
-    int processAwaitingOrders(final List<Long> productSkus,
+    int processAwaitingOrders(final List<String> productSkus,
                               final String status,
                               final String event,
                               final CustomerOrderService customerOrderService,

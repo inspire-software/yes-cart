@@ -61,18 +61,32 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
     void setQty(BigDecimal qty);
 
     /**
-     * Get {@link ProductSku} sku
+     * Get SKU code for item purchased.
      *
-     * @return sku
+     * @return SKU code of purchased item
      */
-    ProductSku getSku();
+    String getProductSkuCode();
 
     /**
-     * Set sku.
+     * Set SKU code for item purchased.
      *
-     * @param sku product sku
+     * @param skuCode SKU code of purchased item
      */
-    void setSku(ProductSku sku);
+    void setProductSkuCode(String skuCode);
+
+    /**
+     * Get product name in CustomerOrder.locale.
+     *
+     * @return copy of product name
+     */
+    String getProductName();
+
+    /**
+     * Set product name in CustomerOrder.locale.
+     *
+     * @param productName copy of product name
+     */
+    void setProductName(String productName);
 
     /**
      * Get order delivery.
@@ -89,7 +103,7 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
     void setDelivery(CustomerOrderDelivery delivery);
 
     /**
-     * Get sku price for this partucular order.
+     * Get sku price for this particular order.
      *
      * @return price.
      */

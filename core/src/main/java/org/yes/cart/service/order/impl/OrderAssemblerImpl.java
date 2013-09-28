@@ -24,6 +24,9 @@ import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
+import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.service.order.OrderNumberGenerator;
 import org.yes.cart.shoppingcart.CartItem;
@@ -43,7 +46,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
     private final GenericDAO<Customer, Long> customerDao;
     private final EntityFactory entityFactory;
     private final GenericDAO<Shop, Long> shopDao;
-    private final GenericDAO<ProductSku, Long> productSkuDao;
+    private final ProductSkuService productSkuService;
     private final String addressFormat;
 
     /**
@@ -52,21 +55,21 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * @param orderNumberGenerator order bumber generator
      * @param customerDao          customer dao to get customer from email
      * @param shopDao              shop dao
-     * @param productSkuDao        product sku dao
+     * @param productSkuService    product sku service
      * @param addressFormat        format string to create address in one string from {@link Address} entity.
      */
     public OrderAssemblerImpl(
             final OrderNumberGenerator orderNumberGenerator,
             final GenericDAO<Customer, Long> customerDao,
             final GenericDAO<Shop, Long> shopDao,
-            final GenericDAO<ProductSku, Long> productSkuDao,
+            final ProductSkuService productSkuService,
             final String addressFormat
     ) {
         this.entityFactory = customerDao.getEntityFactory();
         this.orderNumberGenerator = orderNumberGenerator;
         this.customerDao = customerDao;
         this.shopDao = shopDao;
-        this.productSkuDao = productSkuDao;
+        this.productSkuService = productSkuService;
         this.addressFormat = addressFormat;
     }
 
@@ -157,18 +160,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
             customerOrderDet.setListPrice(item.getListPrice());
             customerOrderDet.setQty(item.getQty());
 
-            customerOrderDet.setSku(
-                    productSkuDao.findSingleByCriteria(
-                            //Need products with availibility
-                            new CriteriaTuner() {
-                                public void tune(final Criteria crit) {
-                                    crit.setFetchMode("product", FetchMode.JOIN);
-                                }
-                            }
-                            ,
-                            Restrictions.eq("code", item.getProductSkuCode())
-                    )
-            ); //collect all skus by codes and that search in results if this will be slow
+            customerOrderDet.setProductSkuCode(item.getProductSkuCode());
+
+            // this is cached call so it should speed-up things
+            final ProductSku sku = productSkuService.getProductSkuBySkuCode(item.getProductSkuCode());
+            customerOrderDet.setProductName(
+                    new FailoverStringI18NModel(sku.getDisplayName(), sku.getName()).getValue(customerOrder.getLocale()));
 
         }
 

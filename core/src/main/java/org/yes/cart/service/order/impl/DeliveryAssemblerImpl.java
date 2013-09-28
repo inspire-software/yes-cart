@@ -21,6 +21,7 @@ import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierSlaService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryAssembler;
@@ -63,10 +64,13 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
     private final WarehouseService warehouseService;
     private final SkuWarehouseService skuWarehouseService;
     private final CarrierSlaService carrierSlaService;
+    private final ProductService productService;
 
     public DeliveryAssemblerImpl(final WarehouseService warehouseService,
                                  final SkuWarehouseService skuWarehouseService,
-                                 final CarrierSlaService carrierSlaService) {
+                                 final CarrierSlaService carrierSlaService,
+                                 final ProductService productService) {
+        this.productService = productService;
         this.entityFactory = warehouseService.getGenericDao().getEntityFactory();
         this.warehouseService = warehouseService;
         this.skuWarehouseService = skuWarehouseService;
@@ -137,7 +141,8 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         deliveryDet.setDelivery(customerOrderDelivery);
         customerOrderDelivery.getDetail().add(deliveryDet);
         deliveryDet.setQty(orderDet.getQty());
-        deliveryDet.setSku(orderDet.getSku());
+        deliveryDet.setProductSkuCode(orderDet.getProductSkuCode());
+        deliveryDet.setProductName(orderDet.getProductName());
         deliveryDet.setPrice(orderDet.getPrice());
         deliveryDet.setListPrice(orderDet.getListPrice());
     }
@@ -206,11 +211,11 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
             final Pair<BigDecimal, BigDecimal> quantity = skuWarehouseService.getQuantity(
                     warehouses,
-                    customerOrderDet.getSku()
+                    customerOrderDet.getProductSkuCode()
             );
 
             // qty on warehouse minus reserved qty.
-            // actual reservation when payment was successful or curier payment gw was selected for payment. 
+            // actual reservation when payment was successful or courier payment gw was selected for payment.
             final BigDecimal rest = MoneyUtils.notNull(quantity.getFirst(), BigDecimal.ZERO)
                     .add(MoneyUtils.notNull(quantity.getSecond(), BigDecimal.ZERO).negate());
 
@@ -287,11 +292,12 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
         final Date now = new Date(); //TODO: V2 time machine
 
-        final int availability = customerOrderDet.getSku().getProduct().getAvailability();
+        final Product product = productService.getProductBySkuCode(customerOrderDet.getProductSkuCode());
+        final int availability = product.getAvailability();
 
         if (availability == Product.AVAILABILITY_ALWAYS) {
 
-            final Date availableFrom = customerOrderDet.getSku().getProduct().getAvailablefrom();
+            final Date availableFrom = product.getAvailablefrom();
             if ((availableFrom != null)
                     &&
                     (now.getTime() < availableFrom.getTime())) {
@@ -299,7 +305,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                 return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
             }
 
-            if (customerOrderDet.getSku().getProduct().getProducttype().isDigital()) {
+            if (product.getProducttype().isDigital()) {
                 return CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP;
             }
             return CustomerOrderDelivery.STANDARD_DELIVERY_GROUP;
@@ -308,19 +314,19 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         if (MoneyUtils.isFirstBiggerThanSecond(rest, BigDecimal.ZERO)) {
             //inventory available
             if (availability == Product.AVAILABILITY_PREORDER) {
-                final Date availableFrom = customerOrderDet.getSku().getProduct().getAvailablefrom();
+                final Date availableFrom = product.getAvailablefrom();
                 if ((availableFrom != null) && (now.getTime() < availableFrom.getTime())) {
                     return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
                 }
             }
             if (MoneyUtils.isFirstBiggerThanSecond(customerOrderDet.getQty(), rest)) {
-                return CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP; //we can not cover all ordered qty from warehouses. TODO: V2 here posible additional split
+                return CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP; //we can not cover all ordered qty from warehouses. TODO: V2 here possible additional split
             }
             return CustomerOrderDelivery.STANDARD_DELIVERY_GROUP;
         } else {
             //inventory NOT available
             if (availability == Product.AVAILABILITY_PREORDER) {
-                final Date availableFrom = customerOrderDet.getSku().getProduct().getAvailablefrom();
+                final Date availableFrom = product.getAvailablefrom();
                 if ((availableFrom != null) && (now.getTime() < availableFrom.getTime())) {
                     return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
                 }

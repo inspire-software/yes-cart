@@ -11,7 +11,7 @@ try {
           out.println(lineDelimiter);
           for(Object deliveryItem : delivery.getDetail()) {
               def lineTotal =  (deliveryItem.price * deliveryItem.qty).setScale(2, BigDecimal.ROUND_HALF_UP);
-              def line = "| " + deliveryItem.sku.code  + " - " + deliveryItem.sku.name   + "    " +  deliveryItem.qty.setScale(0, BigDecimal.ROUND_HALF_UP)   + " * " + deliveryItem.price.setScale(2, BigDecimal.ROUND_HALF_UP) + "=" + lineTotal  + " " + root.currency;
+              def line = "| " + deliveryItem.productSkuCode  + " - " + deliveryItem.productName   + "    " +  deliveryItem.qty.setScale(0, BigDecimal.ROUND_HALF_UP)   + " * " + deliveryItem.price.setScale(2, BigDecimal.ROUND_HALF_UP) + "=" + lineTotal  + " " + root.currency;
               deliverySum += lineTotal;
               out.println(line.padRight(lineDelimiter.length() -1 ) + "|");
           }

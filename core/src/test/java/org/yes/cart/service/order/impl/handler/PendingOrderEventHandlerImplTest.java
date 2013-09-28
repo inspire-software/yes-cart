@@ -88,7 +88,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                 new ArrayList<Warehouse>() {{
                     add(warehouse);
                 }},
-                sku
+                sku.getCode()
         );
         assertEquals(new BigDecimal("9.00"), qty.getFirst());
         assertEquals(new BigDecimal("2.00"), qty.getSecond());
@@ -97,7 +97,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                 new ArrayList<Warehouse>() {{
                     add(warehouse);
                 }},
-                sku
+                sku.getCode()
         );
         assertEquals(new BigDecimal("1.00"), qty.getFirst());
         assertEquals(new BigDecimal("1.00"), qty.getSecond());
@@ -135,7 +135,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                 new ArrayList<Warehouse>() {{
                     add(warehouse);
                 }},
-                sku
+                sku.getCode()
         );
         assertEquals(new BigDecimal("7.00"), qty.getFirst());
         assertEquals(new BigDecimal("0.00"), qty.getSecond());
@@ -144,7 +144,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                 new ArrayList<Warehouse>() {{
                     add(warehouse);
                 }},
-                sku
+                sku.getCode()
         );
         assertEquals(new BigDecimal("0.00"), qty.getFirst());
         assertEquals(new BigDecimal("0.00"), qty.getSecond());
@@ -185,7 +185,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                 new ArrayList<Warehouse>() {{
                     add(warehouse);
                 }},
-                sku
+                sku.getCode()
         );
         assertEquals(new BigDecimal("9.00"), qty.getFirst());
         assertEquals(new BigDecimal("0.00"), qty.getSecond());
@@ -194,7 +194,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                 new ArrayList<Warehouse>() {{
                     add(warehouse);
                 }},
-                sku
+                sku.getCode()
         );
         assertEquals(new BigDecimal("1.00"), qty.getFirst());
         assertEquals(new BigDecimal("0.00"), qty.getSecond());

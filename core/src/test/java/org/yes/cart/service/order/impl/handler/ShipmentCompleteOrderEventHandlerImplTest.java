@@ -148,7 +148,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
 
 
         final Warehouse warehouse = warehouseService.getById(1);
-        final Pair<BigDecimal, BigDecimal> skuTest0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) ,productSkuService.getProductSkuBySkuCode("CC_TEST3"));
+        final Pair<BigDecimal, BigDecimal> skuTest0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse), "CC_TEST3");
 
 
 
@@ -172,7 +172,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
 
 
 
-        final Pair<BigDecimal, BigDecimal> skuTest1 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) ,productSkuService.getProductSkuBySkuCode("CC_TEST3"));
+        final Pair<BigDecimal, BigDecimal> skuTest1 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse), "CC_TEST3");
 
 
 

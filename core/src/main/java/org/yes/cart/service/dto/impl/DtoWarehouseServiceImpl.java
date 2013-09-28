@@ -168,7 +168,7 @@ public class DtoWarehouseServiceImpl
                 getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
         skuWarehouse = skuWarehouseService.create(skuWarehouse);
-        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSku().getSkuId());
+        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouseDTO.getSkuCode());
         return assembleSkuWarehouseDTO(skuWarehouse);
     }
 
@@ -186,7 +186,7 @@ public class DtoWarehouseServiceImpl
                 getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
         skuWarehouse = skuWarehouseService.update(skuWarehouse);
-        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSku().getSkuId());
+        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouseDTO.getSkuCode());
         return assembleSkuWarehouseDTO(skuWarehouse);
 
     }

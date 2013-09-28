@@ -41,10 +41,10 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     @DtoField(value = "customerOrderDeliveryDetId", readOnly = true)
     private long customerOrderDeliveryDetId;
 
-    @DtoField(value = "sku.code")
+    @DtoField(value = "productSkuCode")
     private String skuCode;
 
-    @DtoField(value = "sku.name")
+    @DtoField(value = "productName")
     private String skuName;
 
 
