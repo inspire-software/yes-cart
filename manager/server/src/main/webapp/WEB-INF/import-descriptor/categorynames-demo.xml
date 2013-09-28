@@ -114,6 +114,7 @@
                 </import-file-descriptor>
                 <select-sql/>
                 <insert-sql>
+                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_CATDESC_en';
                     INSERT INTO TCATEGORYATTRVALUE (CATEGORY_ID, GUID, CODE, VAL)
                         VALUES ({masterObjectId}, '{masterObjectId}_CATDESC_en', 'CATEGORY_DESCRIPTION_en','{val}')
                 </insert-sql>
@@ -143,6 +144,7 @@
                 </import-file-descriptor>
                 <select-sql/>
                 <insert-sql>
+                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_CATDESC_ru';
                     INSERT INTO TCATEGORYATTRVALUE (CATEGORY_ID, GUID, CODE, VAL)
                         VALUES ({masterObjectId}, '{masterObjectId}_CATDESC_ru', 'CATEGORY_DESCRIPTION_ru','{val}')
                 </insert-sql>
@@ -154,6 +156,15 @@
                     </column-descriptor>
                 </import-columns>
             </import-descriptor>
+        </column-descriptor>
+
+        <!-- Category SEO url -->
+        <column-descriptor>
+            <column-index>11</column-index>
+            <field-type>FIELD</field-type>
+            <name>seo.uri</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <!-- Category rank in parent category -->
