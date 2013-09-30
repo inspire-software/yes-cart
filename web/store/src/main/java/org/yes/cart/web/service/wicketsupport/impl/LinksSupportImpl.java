@@ -101,6 +101,7 @@ public class LinksSupportImpl implements LinksSupport {
 
     /** {@inheritDoc} */
     @Override
+    @SuppressWarnings("unchecked")
     public Link newAddToCartLink(final String linkId, final String skuCode, final String quantity, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_ADDTOCART, skuCode);
@@ -110,6 +111,7 @@ public class LinksSupportImpl implements LinksSupport {
 
     /** {@inheritDoc} */
     @Override
+    @SuppressWarnings("unchecked")
     public Link newLogOffLink(final String linkId, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
@@ -118,6 +120,7 @@ public class LinksSupportImpl implements LinksSupport {
 
     /** {@inheritDoc} */
     @Override
+    @SuppressWarnings("unchecked")
     public Link newChangeLocaleLink(final String linkId, final String language, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_CHANGELOCALE, language);
@@ -126,12 +129,17 @@ public class LinksSupportImpl implements LinksSupport {
 
     /** {@inheritDoc} */
     @Override
-    public Link newChangeCurrencyLink(final String linkId, final String currency, final PageParameters pageParameters) {
+    @SuppressWarnings("unchecked")
+    public Link newChangeCurrencyLink(final String linkId, final String currency, final Class<? extends Page> pageClass, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_CHANGECURRENCY, currency);
-        return new BookmarkablePageLink(linkId, getHomePage(), params);
+        return new BookmarkablePageLink(
+                linkId,
+                pageClass==null?getHomePage():pageClass,
+                params);
     }
 
+    @SuppressWarnings("unchecked")
     private Class<Page> getHomePage() {
         if (currentHomePage.get() == null) {
             currentHomePage.set((Class<Page>) Application.get().getHomePage());
@@ -142,6 +150,7 @@ public class LinksSupportImpl implements LinksSupport {
     /*
      * Generate bookmarkable link for current shop home page. This covers all pa
      */
+    @SuppressWarnings("unchecked")
     private Link newBookmarkableLink(final String linkId, final String uriContext, final Object uri) {
         final PageParameters params = new PageParameters().add(uriContext, uri);
         return new BookmarkablePageLink(linkId, getHomePage(), params);
@@ -150,6 +159,7 @@ public class LinksSupportImpl implements LinksSupport {
     /*
      * Generate bookmarkable link for current shop home page. This covers all pa
      */
+    @SuppressWarnings("unchecked")
     private Link newBookmarkableLink(final String linkId, final String uriContext, final Object uri, final PageParameters carried) {
         carried.set(uriContext, uri);
         return new BookmarkablePageLink(linkId, getHomePage(), carried);

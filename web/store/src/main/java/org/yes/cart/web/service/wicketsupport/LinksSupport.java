@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.wicketsupport;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -150,9 +151,9 @@ public interface LinksSupport {
      * @param linkId wicket link component id
      * @param currency currency to change to
      * @param pageParameters current request parameters that will be filtered and carried over to new link
-     *
+     * @param pageClass optional current page class
      * @return bookmarkable content link
      */
-    Link newChangeCurrencyLink(String linkId, String currency, PageParameters pageParameters);
+    Link newChangeCurrencyLink(String linkId, String currency, final Class<? extends Page> pageClass, PageParameters pageParameters);
 
 }
