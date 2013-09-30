@@ -90,6 +90,7 @@ public class Currency extends BaseComponent {
                     final Link pageLink = getWicketSupportFacade().links().newChangeCurrencyLink(
                             CURRENCY_LINK,
                             currencyCode,
+                            getPage().getPageClass(),
                             basePageParameters);
 
                     final Label currencyLabel = new Label(CURRENCY_NAME, currencySymbol);
