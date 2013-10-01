@@ -334,15 +334,14 @@
             </generator>
         </id>
 
-        <property name="val" column="VAL" type="string" length="4000">
-            <!--<meta attribute="field-description">UNCOMMENT @Fields( { @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO), @Field(name = "attrvalsearch", index = Index.YES, analyze = Analyze.YES, norms = Norms.YES) } )    @ContainedIn</meta>-->
-        </property>
+        <property name="val" column="VAL" type="string" length="4000"/>
+
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
 
         <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" lazy="proxy" not-null="true" column="PRODUCT_ID"/>
 
-        <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="proxy" foreign-key="FK_P_ATTRIBUTE"
-                     property-ref="code" insert="true" update="true">
+        <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false" foreign-key="FK_P_ATTRIBUTE"
+                     property-ref="code" insert="true" update="true" fetch="join">
             <column name="CODE" not-null="true"/>
         </many-to-one>
 
@@ -2224,6 +2223,14 @@
        ]]>
     </query>
 
+    <query name="PRODUCT.TYPE.VIEWGROUP.BY.PROD.TYPE.ID">
+          <![CDATA[
+       select ptg
+       from  ProdTypeAttributeViewGroupEntity ptg
+            where ptg.producttype.producttypeId = ?1
+       ]]>
+    </query>
+
     <query name="PRODUCT.TYPE.ATTR.BY.PROD.TYPE.ID">
           <![CDATA[
        select pta
@@ -2261,34 +2268,27 @@
        ]]>
     </query>
 
-    <query name="PRODUCTS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID">
+    <query name="ALL.PRODUCT.ATTR.VALUE">
         <![CDATA[
-       select a.attribute.name, a.attribute.displayName, a.attribute.code, a.val, a.displayVal, 0, pta.rank
-       from  ProductTypeEntity pt, ProductTypeAttrEntity pta, ProductEntity p inner join p.attributes a
-            where p.producttype.producttypeId = pt.producttypeId
-            and pt.producttypeId = pta.producttype.producttypeId
-            and pta.producttype.producttypeId = ?1
-            and pta.attribute.code = a.attribute.code
-            and pta.navigationType = 'S'
-            and pta.navigation = ?2
-            group by a.attribute.name, a.attribute.displayName, a.attribute.code, a.val, a.displayVal, pta.rank
-            order by pta.rank, a.attribute.name, a.val
+       select pav.product.productId, pav.val
+       from  AttrValueEntityProduct pav
+            where pav.attribute.code = ?1
        ]]>
     </query>
 
-    <query name="PRODUCTSKUS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID">
+    <query name="PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES">
         <![CDATA[
-       select a.attribute.name, a.attribute.displayName, a.attribute.code, a.val, a.displayVal, 0, pta.rank
-       from  ProductTypeEntity pt, ProductTypeAttrEntity pta, ProductEntity p, ProductSkuEntity s inner join s.attributes a
-            where s.product.productId = p.productId
-            and p.producttype.producttypeId = pt.producttypeId
-            and pt.producttypeId = pta.producttype.producttypeId
-            and pta.producttype.producttypeId = ?1
-            and pta.attribute.code = a.attribute.code
-            and pta.navigationType = 'S'
-            and pta.navigation = ?2
-            group by a.attribute.name, a.attribute.displayName, a.attribute.code, a.val, a.displayVal, pta.rank
-            order by pta.rank, a.attribute.name, a.val
+       select a.attribute.code, a.val, a.displayVal from  AttrValueEntityProduct a
+       where a.attribute.code in (?1)
+            group by a.attribute.code, a.val, a.displayVal
+       ]]>
+    </query>
+
+    <query name="PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES">
+        <![CDATA[
+       select a.attribute.code, a.val, a.displayVal from AttrValueEntityProductSku a
+       where a.attribute.code in (?1)
+            group by a.attribute.code, a.val, a.displayVal
        ]]>
     </query>
 
@@ -2330,7 +2330,16 @@
 
     <query name="ATTRIBUTE.CODES.NAVIGATION.UNIQUE">
         <![CDATA[
-       select distinct a.code from ProductTypeAttrEntity pt inner join pt.attribute a where pt.navigation = ?1
+       select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.navigation = ?1
+       ]]>
+    </query>
+
+    <query name="ATTRIBUTE.CODES.AND.RANK.SINGLE.NAVIGATION.UNIQUE.BY.PRODUCTTYPE.ID">
+        <![CDATA[
+       select distinct pt.attribute.code, pt.rank from ProductTypeAttrEntity pt
+       where pt.producttype.producttypeId = ?1
+         and pt.navigation = ?2
+         and pt.navigationType = 'S'
        ]]>
     </query>
 
@@ -2363,9 +2372,16 @@
 
     <query name="ATTRIBUTE.CODE.NAMES">
         <![CDATA[
-       select distinct a.code, a.name
+       select distinct a.code, a.name, a.displayName
        from AttributeEntity a
        where a.code in (?1)
+       ]]>
+    </query>
+
+    <query name="ATTRIBUTE.CODE.NAMES.ALL">
+        <![CDATA[
+       select distinct a.code, a.name, a.displayName
+       from AttributeEntity a
        ]]>
     </query>
 
@@ -2381,6 +2397,16 @@
     <query name="PRODUCT.ASSOCIATIONS.BY.TYPE">
         <![CDATA[
        select a
+       from ProductAssociationEntity a
+       where a.product.productId = ?1
+        and a.association.code = ?2
+       order by a.rank
+       ]]>
+    </query>
+
+    <query name="PRODUCT.ASSOCIATIONS.IDS.BY.TYPE">
+        <![CDATA[
+       select a.productAssociated.productId
        from ProductAssociationEntity a
        where a.product.productId = ?1
         and a.association.code = ?2

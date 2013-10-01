@@ -123,9 +123,6 @@ public class SkuCentralView extends AbstractCentralView {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
 
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
-    protected ProductSkuService productSkuService;
-
     @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
     protected AttributableImageService attributableImageService;
 
@@ -165,7 +162,7 @@ public class SkuCentralView extends AbstractCentralView {
         String skuId = getPage().getPageParameters().get(WebParametersKeys.SKU_ID).toString();
         if (skuId != null) {
             isProduct = false;
-            sku = productSkuService.getById(Long.valueOf(skuId));
+            sku = productService.getSkuById(Long.valueOf(skuId));
             product = sku.getProduct();
         } else if (productId != null) {
             isProduct = true;
@@ -222,7 +219,7 @@ public class SkuCentralView extends AbstractCentralView {
         );
 
 
-        final List<ProductAssociation> associatedProducts = productAssociationService.getProductAssociations(
+        final List<Long> associatedProducts = productAssociationService.getProductAssociationsIds(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
                 Association.ACCESSORIES
         );

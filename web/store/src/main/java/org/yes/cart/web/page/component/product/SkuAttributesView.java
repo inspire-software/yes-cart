@@ -67,12 +67,12 @@ public class SkuAttributesView extends BaseComponent {
 
         final String selectedLocale = getLocale().getLanguage();
 
-        final long productTypeId = sku.getProduct().getProducttype().getId();
+        final long productTypeId = sku.getProduct().getProducttype().getProducttypeId();
 
         if (productOnly) {
-            attributesToShow = adapt(productService.getProductAttributes(selectedLocale, sku.getProduct().getId(), 0L, productTypeId));
+            attributesToShow = adapt(productService.getProductAttributes(selectedLocale, sku.getProduct().getProductId(), 0L, productTypeId));
         } else {
-            attributesToShow = adapt(productService.getProductAttributes(selectedLocale, sku.getProduct().getId(), sku.getId(), productTypeId));
+            attributesToShow = adapt(productService.getProductAttributes(selectedLocale, sku.getProduct().getProductId(), sku.getSkuId(), productTypeId));
         }
 
     }

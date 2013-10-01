@@ -87,8 +87,17 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "shopService-shopById")
     public Shop findById(final long shopId) {
         return shopDao.findById(shopId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "shopService-allShops")
+    public List<Shop> findAll() {
+        return super.findAll();
     }
 
     /**
@@ -157,7 +166,9 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      */
     @CacheEvict(value ={
             "shopService-shopByCode",
+            "shopService-shopById",
             "shopService-shopByDomainName",
+            "shopService-allShops",
             "shopService-shopCategories",
             "shopService-shopCategoriesIds"
     }, allEntries = true)
@@ -193,22 +204,26 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /** {@inheritDoc} */
     @CacheEvict(value ={
             "shopService-shopByCode",
+            "shopService-shopById",
             "shopService-shopByDomainName",
+            "shopService-allShops",
             "shopService-shopCategories",
             "shopService-shopCategoriesIds"
     }, allEntries = true)
     public Shop update(Shop instance) {
-        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.update(instance);
     }
 
     /** {@inheritDoc} */
     @CacheEvict(value ={
             "shopService-shopByCode",
+            "shopService-shopById",
             "shopService-shopByDomainName",
+            "shopService-allShops",
             "shopService-shopCategories",
             "shopService-shopCategoriesIds"
     }, allEntries = true)
     public void delete(Shop instance) {
-        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        super.delete(instance);
     }
 }
