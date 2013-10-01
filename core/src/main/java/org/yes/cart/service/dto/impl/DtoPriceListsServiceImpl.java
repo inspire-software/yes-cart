@@ -112,7 +112,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
             // only allow lists for shop+currency selection
 
             final List<Criterion> criteria = new ArrayList<Criterion>();
-            criteria.add(Restrictions.eq("shop.shopId", filter.getShop().getId()));
+            criteria.add(Restrictions.eq("shop.shopId", filter.getShop().getShopId()));
             criteria.add(Restrictions.eq("currency", filter.getCurrencyCode()));
             if (StringUtils.hasLength(filter.getProductCode())) {
                 if (filter.getProductCodeExact()) {

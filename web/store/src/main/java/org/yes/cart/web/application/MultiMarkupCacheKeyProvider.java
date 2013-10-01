@@ -18,6 +18,7 @@ package org.yes.cart.web.application;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.DefaultMarkupCacheKeyProvider;
+import org.yes.cart.util.ShopCodeContext;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -38,8 +39,7 @@ public class MultiMarkupCacheKeyProvider extends DefaultMarkupCacheKeyProvider {
 	 */
 	public String getCacheKey(final MarkupContainer container, final Class<?> clazz) {
 
-            final StorefrontApplication app = (StorefrontApplication) container.getApplication();
-            return ApplicationDirector.getCurrentShop().getCode() + '_' + super.getCacheKey(container, clazz);
+            return ShopCodeContext.getShopCode() + '_' + super.getCacheKey(container, clazz);
 
     }
 }

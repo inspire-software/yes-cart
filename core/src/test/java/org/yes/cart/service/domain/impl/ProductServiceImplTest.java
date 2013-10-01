@@ -79,7 +79,13 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetRangeValueNavigationRecords() {
 
-        List<FilteredNavigationRecord> rez = productService.getRangeValueNavigationRecords("en", 1);
+        final List<FilteredNavigationRecord> all = productService.getDistinctAttributeValues("en", 1);
+        final List<FilteredNavigationRecord> rez = new ArrayList<FilteredNavigationRecord>();
+        for (final FilteredNavigationRecord rec : all) {
+            if ("R".equals(rec.getType())) {
+                rez.add(rec);
+            }
+        }
 
         assertEquals("Ten range navigation records was configured for 32 type", 10, rez.size());
 

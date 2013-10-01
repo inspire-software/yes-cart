@@ -87,7 +87,7 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
             // only allow lists for warehouse inventory lists
 
             final List<Criterion> criteria = new ArrayList<Criterion>();
-            criteria.add(Restrictions.eq("warehouse.warehouseId", filter.getWarehouse().getId()));
+            criteria.add(Restrictions.eq("warehouse.warehouseId", filter.getWarehouse().getWarehouseId()));
             if (StringUtils.hasLength(filter.getProductCode())) {
                 if (filter.getProductCodeExact()) {
                     criteria.add(

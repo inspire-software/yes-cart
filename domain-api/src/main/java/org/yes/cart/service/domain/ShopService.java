@@ -86,9 +86,9 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
     Set<Long> getShopCategoriesIds(Shop shop);
 
     /**
-     * Get all suported currencies by all shops.
+     * Get all supported currencies by all shops.
      *
-     * @return all suported currencies.
+     * @return all supported currencies.
      */
     Collection<String> getAllSupportedCurrenciesByShops();
 

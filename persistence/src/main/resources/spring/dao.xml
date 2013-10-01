@@ -429,5 +429,16 @@
 
     <bean id="hibernateSearchBridgeStaticLocator" class="org.yes.cart.domain.entity.bridge.HibernateSearchBridgeStaticLocator"/>
 
+    <bean id="shopCategoryRelationshipSupport" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.domain.entity.bridge.support.impl.ShopCategoryRelationshipSupportImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
+
 </beans>
 

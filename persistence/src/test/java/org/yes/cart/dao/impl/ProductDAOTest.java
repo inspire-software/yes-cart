@@ -896,18 +896,27 @@ public class ProductDAOTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-
-                int currentRank = Integer.MIN_VALUE;
-                List<Object[]> list = productDao.findQueryObjectsByNamedQuery("PRODUCTS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
+                List<Object[]> codesByProductId = productDao.findQueryObjectsByNamedQuery("ATTRIBUTE.CODES.AND.RANK.SINGLE.NAVIGATION.UNIQUE.BY.PRODUCTTYPE.ID",
                         1L, true);
+                final Map<String, Integer> map = new HashMap<String, Integer>();
+                for (final Object[] codeAndRank : codesByProductId) {
+                    map.put((String) codeAndRank[0], (Integer) codeAndRank[1]);
+                }
+
+                List<Object[]> list;
+                list = productDao.findQueryObjectsByNamedQuery("PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES",
+                        map.keySet());
                 assertNotNull(list);
                 assertTrue(!list.isEmpty());
-                // be sure, that list is ranked
-                for (Object[] array : list) {
-                    int rank = Integer.valueOf(String.valueOf(array[5]));
-                    assertTrue(rank >= currentRank);
-                    currentRank = rank;
-                }
+
+                list = productDao.findQueryObjectsByNamedQuery("PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES",
+                        map.keySet());
+                assertNotNull(list);
+                assertTrue(list.isEmpty());
+
+                // no need to check for sorting by rank since this is done in code,
+                // in fact it should only be done in code as raking sort in SQL has low
+                // performance
 
                 status.setRollbackOnly();
 
