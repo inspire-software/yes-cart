@@ -45,4 +45,13 @@ public interface ProductAssociationService
      */
     List<ProductAssociation> getProductAssociations(Long productId, String associationCode);
 
+    /**
+     * Get all product associations by association type.
+     *
+     * @param productId       product primary key
+     * @param associationCode association code [up, cross, etc]
+     * @return list of product associations ids
+     */
+    List<Long> getProductAssociationsIds(Long productId, String associationCode);
+
 }

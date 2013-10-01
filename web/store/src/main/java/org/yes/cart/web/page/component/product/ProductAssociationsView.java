@@ -16,11 +16,15 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductAssociation;
+import org.apache.lucene.search.BooleanQuery;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,9 +35,9 @@ import java.util.List;
  * Date: 16-Sep-2011
  * Time: 15:36:10
  */
-public class ProductAssociationsView extends AbstractProductList {
+public class ProductAssociationsView extends AbstractProductSearchResultList {
 
-    private List<Product> associatedProductList = null;
+    private List<ProductSearchResultDTO> associatedProductList = null;
     private final String associationType;
 
     /**
@@ -67,17 +71,29 @@ public class ProductAssociationsView extends AbstractProductList {
     /**
      * {@inheritDoc
      */
-    public List<Product> getProductListToShow() {
+    public List<ProductSearchResultDTO> getProductListToShow() {
         if (associatedProductList == null) {
-            final List<ProductAssociation> associatedProducts = productAssociationService.getProductAssociations(
+            final List<Long> productIds = productAssociationService.getProductAssociationsIds(
                     getProductId(),
                     associationType
             );
-            final List<Long> productIds = new ArrayList<Long>(associatedProducts.size());
-            for (ProductAssociation pass : associatedProducts) {
-                productIds.add(pass.getProductAssociated().getId());
+
+            if (productIds != null && !productIds.isEmpty()) {
+
+                final Collection<String> ids = new ArrayList<String>();
+                for (final Long productId : productIds) {
+                    ids.add(String.valueOf(productId));
+                }
+
+                final ProductQueryBuilderImpl builder = new ProductQueryBuilderImpl();
+                final BooleanQuery assoc = builder.createQuery(ids);
+
+                associatedProductList = productService.getProductSearchResultDTOByQuery(
+                        assoc, 0, productIds.size(), ProductSearchQueryBuilder.SKU_PRODUCT_CODE_FIELD, false);
+            } else {
+
+                associatedProductList = Collections.emptyList();
             }
-            associatedProductList = productService.getProductByIdList(productIds);
 
         }
         return associatedProductList;
