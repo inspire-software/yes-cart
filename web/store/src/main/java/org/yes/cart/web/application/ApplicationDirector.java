@@ -17,8 +17,6 @@
 package org.yes.cart.web.application;
 
 import org.springframework.beans.BeansException;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.Shop;
@@ -45,8 +43,6 @@ public class ApplicationDirector implements ApplicationContextAware {
     private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
     private static ThreadLocal<String> mailTemplatePathThreadLocal = new ThreadLocal<String>();
 
-    private Cache urlShopCache;
-
     /**
      * Get app director instance.
      *
@@ -72,20 +68,7 @@ public class ApplicationDirector implements ApplicationContextAware {
      * @return {@link Shop}
      */
     public Shop getShopByDomainName(final String serverDomainName) {
-        Shop shop = null;
-        Cache.ValueWrapper elem = urlShopCache.get(serverDomainName);
-        if (elem != null) {
-            shop = (Shop) elem.get();
-        }
-
-        if (shop == null) {
-            shop = shopService.getShopByDomainName(serverDomainName);
-            if (shop != null) {
-                urlShopCache.put(serverDomainName, shop);
-                //getIdShopCache().put(shop.getId(), shop);
-            }
-        }
-        return shop;
+        return shopService.getShopByDomainName(serverDomainName);
     }
 
     /**
@@ -171,7 +154,5 @@ public class ApplicationDirector implements ApplicationContextAware {
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.shopService = applicationContext.getBean("shopService", ShopService.class);
         this.systemService = applicationContext.getBean("systemService", SystemService.class);
-        final CacheManager cacheManager = applicationContext.getBean("cacheManager", CacheManager.class);
-        this.urlShopCache = cacheManager.getCache("org.yes.cart.web.urlShopCache");
     }
 }

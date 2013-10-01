@@ -78,14 +78,6 @@ public interface ContentService extends GenericService<Category> {
      */
     Set<Category> getChildContentRecursive(long contentId);
 
-    /**
-     * Transform collection of content into collection of IDs.
-     *
-     * @param contents list of content objects
-     * @return list of content IDs
-     */
-    Set<Long> transform(Collection<Category> contents);
-
 
     /**
      * Get the items per page for particular content.

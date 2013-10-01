@@ -64,12 +64,12 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * Get the top level categories assigned to shop.
      *
-     * @param shop given shop
+     * @param shopId given shop
      * @return ordered by rank list of assigned top level categories
      */
     @Cacheable(value = "categoryService-topLevelCategories"/*, key="shop.shopId"*/)
-    public List<Category> getTopLevelCategories(final Shop shop) {
-        return categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
+    public List<Category> getTopLevelCategories(final Long shopId) {
+        return categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shopId, new Date());
     }
 
     /**
@@ -120,7 +120,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         if (StringUtils.isBlank(category.getUitemplate())) {
             if (category.getParentId() != category.getCategoryId()) {
                 Category parentCategory =
-                        categoryDao.findById(category.getParentId());
+                        proxy().getById(category.getParentId());
                 variation = getCategoryTemplateVariation(parentCategory);
             }
         } else {
@@ -153,7 +153,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         if (category == null) {
             rez = Constants.DEFAULT_ITEMS_ON_PAGE;
         } else {
-            final String val = getCategoryAttributeRecursive(null, category, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+            final String val = proxy().getCategoryAttributeRecursive(null, category, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
             if (val == null) {
                 rez = Constants.DEFAULT_ITEMS_ON_PAGE;
             } else {
@@ -213,8 +213,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
                 rez = null; //root of hierarchy
             } else {
                 final Category parentCategory =
-                        categoryDao.findById(category.getParentId());
-                rez = getCategoryAttributeRecursive(null, parentCategory, attributeNames);
+                        proxy().getById(category.getParentId());
+                rez = proxy().getCategoryAttributeRecursive(null, parentCategory, attributeNames);
             }
         } else {
             rez = new String[attributeNames.length];
@@ -267,7 +267,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             return null; //root of hierarchy
         }
         final Category parentCategory =
-                categoryDao.findById(category.getParentId());
+                proxy().getById(category.getParentId());
         return getCategoryAttributeRecursive(locale, parentCategory, attributeName);
     }
 
@@ -282,9 +282,9 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         if (count != null && count.size() == 1) {
             qty = ((Number) count.get(0)).intValue();
             if (includeChildren) {
-                List<Category> childs = getChildCategories(categoryId);
+                List<Category> childs = proxy().getChildCategories(categoryId);
                 for (Category childCategory : childs) {
-                    qty += getProductQuantity(childCategory.getCategoryId(), includeChildren);
+                    qty += proxy().getProductQuantity(childCategory.getCategoryId(), includeChildren);
                 }
 
             }
@@ -304,9 +304,9 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
                 return true;
             }
             if (includeChildren) {
-                List<Category> childs = getChildCategories(categoryId);
+                List<Category> childs = proxy().getChildCategories(categoryId);
                 for (Category childCategory : childs) {
-                    final boolean childHasProducts = isCategoryHasProducts(childCategory.getCategoryId(), includeChildren);
+                    final boolean childHasProducts = proxy().isCategoryHasProducts(childCategory.getCategoryId(), includeChildren);
                     if (childHasProducts) {
                         return true;
                     }
@@ -329,9 +329,9 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
                 return true;
             }
             if (includeChildren) {
-                List<Category> childs = getChildCategories(categoryId);
+                List<Category> childs = proxy().getChildCategories(categoryId);
                 for (Category childCategory : childs) {
-                    final boolean childHasProducts = isCategoryHasChildren(childCategory.getCategoryId(), includeChildren);
+                    final boolean childHasProducts = proxy().isCategoryHasChildren(childCategory.getCategoryId(), includeChildren);
                     if (childHasProducts) {
                         return true;
                     }
@@ -374,7 +374,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @Cacheable(value = "categoryService-childCategoriesRecursive")
     public Set<Category> getChildCategoriesRecursive(final long categoryId) {
-        final Category thisCat = getById(categoryId);
+        final Category thisCat = proxy().getById(categoryId);
         if (thisCat != null) {
             final Set<Category> all = new HashSet<Category>();
             all.add(thisCat);
@@ -397,7 +397,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     }
 
     private void loadChildCategoriesRecursiveInternal(final Set<Category> result, final Category category) {
-        List<Category> categories = getChildCategories(category.getCategoryId());
+        List<Category> categories = proxy().getChildCategories(category.getCategoryId());
         result.addAll(categories);
         for (Category subCategory : categories) {
             loadChildCategoriesRecursiveInternal(result, subCategory);
@@ -409,7 +409,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @Cacheable(value = "categoryService-categoryHasSubcategory")
     public boolean isCategoryHasSubcategory(final long topCategoryId, final long subCategoryId) {
-        final Category start = getById(subCategoryId);
+        final Category start = proxy().getById(subCategoryId);
         if (start != null) {
             if (subCategoryId == topCategoryId) {
                 return true;
@@ -447,7 +447,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-transform")
     public Set<Long> transform(final Collection<Category> categories) {
         final Set<Long> result = new LinkedHashSet<Long>(categories.size());
         for (Category category : categories) {
@@ -505,11 +504,10 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-childCategoriesRecursive",
             "categoryService-childCategoriesRecursiveIds",
             "categoryService-categoryHasSubcategory",
-            "categoryService-byId",
-            "categoryService-transform"
+            "categoryService-byId"
     }, allEntries = true)
     public Category create(Category instance) {
-        return super.create(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.create(instance);
     }
 
     /**
@@ -530,11 +528,10 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-childCategoriesRecursive",
             "categoryService-childCategoriesRecursiveIds",
             "categoryService-categoryHasSubcategory",
-            "categoryService-byId",
-            "categoryService-transform"
+            "categoryService-byId"
     }, allEntries = true)
     public Category update(Category instance) {
-        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.update(instance);
     }
 
     /**
@@ -555,10 +552,28 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-childCategoriesRecursive",
             "categoryService-childCategoriesRecursiveIds",
             "categoryService-categoryHasSubcategory",
-            "categoryService-byId",
-            "categoryService-transform"
+            "categoryService-byId"
     }, allEntries = true)
     public void delete(Category instance) {
-        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        super.delete(instance);
     }
+
+
+    private CategoryService proxy;
+
+    private CategoryService proxy() {
+        if (proxy == null) {
+            proxy = getSelf();
+        }
+        return proxy;
+    }
+
+    /**
+     * @return self proxy to reuse AOP caching
+     */
+    public CategoryService getSelf() {
+        // Spring lookup method to get self proxy
+        return null;
+    }
+
 }
