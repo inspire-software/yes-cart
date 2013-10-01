@@ -22,6 +22,8 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.TermQuery;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
+import java.util.Collection;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 08-May-2011
@@ -41,5 +43,23 @@ public class ProductQueryBuilderImpl implements ProductSearchQueryBuilder {
                 );
         return booleanQuery;
     }
+
+
+    /**
+     * Create boolean query for given category
+     * @param productIds given product ids
+     * @return constructed BooleanQuery
+     */
+    public BooleanQuery createQuery(final Collection<String> productIds) {
+        BooleanQuery booleanQuery = new BooleanQuery();
+        for (final String productId : productIds) {
+            booleanQuery.add(
+                    new TermQuery( new Term(PRODUCT_ID_FIELD, productId.trim())),
+                    BooleanClause.Occur.SHOULD
+            );
+        }
+        return booleanQuery;
+    }
+
 
 }

@@ -17,6 +17,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.ProductAssociation;
 import org.yes.cart.service.domain.ProductAssociationService;
@@ -59,12 +60,26 @@ public class ProductAssociationServiceImpl
     /**
      * Get all product associations by association type.
      *
+     * For storefront use getProductAssociationsIds() and then ProductQueryBuilderImpl with FT search
+     *
      * @param productId       product primary key
      * @param associationCode association code [up, cross, etc]
      * @return list of product associations
      */
     public List<ProductAssociation> getProductAssociations(final Long productId, final String associationCode) {
         return productAssociationDao.findByNamedQuery("PRODUCT.ASSOCIATIONS.BY.TYPE", productId, associationCode);
+    }
+
+    /**
+     * Get all product associations by association type.
+     *
+     * @param productId       product primary key
+     * @param associationCode association code [up, cross, etc]
+     * @return list of product associations
+     */
+    @Cacheable(value = "productService-productAssociationsIds")
+    public List<Long> getProductAssociationsIds(final Long productId, final String associationCode) {
+        return (List) productAssociationDao.findQueryObjectByNamedQuery("PRODUCT.ASSOCIATIONS.IDS.BY.TYPE", productId, associationCode);
     }
 
 
