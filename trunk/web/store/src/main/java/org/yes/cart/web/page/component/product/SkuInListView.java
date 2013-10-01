@@ -59,8 +59,6 @@ public class SkuInListView extends BaseComponent {
 
         final I18NModel nameModel = getI18NSupport().getFailoverModel(sku.getDisplayName(), sku.getName());
 
-        final Class homePage = Application.get().getHomePage();
-
         add(
                 getWicketSupportFacade().links().newProductSkuLink(SKU_LINK, sku.getId(), getPage().getPageParameters())
                         .add(new Label(SKU_CODE_LABEL, sku.getCode()))

@@ -23,6 +23,7 @@ import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.service.domain.AttributeService;
 
 import java.util.*;
@@ -120,7 +121,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
         Set<String> codes = attributeService.getAllAttributeCodes();
         assertNotNull(codes);
         assertFalse(codes.isEmpty());
-        Map<String, String> map = attributeService.getAttributeNamesByCodes(codes);
+        Map<String, I18NModel> map = attributeService.getAttributeNamesByCodes(codes);
         assertNotNull(map);
     }
 
@@ -129,7 +130,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
         Set<String> codes = attributeService.getAllNavigatableAttributeCodes();
         assertNotNull(codes);
         assertFalse(codes.isEmpty());
-        Map<String, String> map = attributeService.getAttributeNamesByCodes(codes);
+        Map<String, I18NModel> map = attributeService.getAttributeNamesByCodes(codes);
         assertNotNull(map);
     }
 

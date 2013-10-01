@@ -64,7 +64,7 @@ public class TopCategories extends BaseComponent {
 
         final String selectedLocale = getLocale().getLanguage();
 
-        final List<Category> categories = categoryService.getTopLevelCategories(ApplicationDirector.getCurrentShop());
+        final List<Category> categories = categoryService.getTopLevelCategories(ApplicationDirector.getCurrentShop().getShopId());
 
         final long categoryId = NumberUtils.toLong(getPage().getPageParameters().get(WebParametersKeys.CATEGORY_ID).toString());
 

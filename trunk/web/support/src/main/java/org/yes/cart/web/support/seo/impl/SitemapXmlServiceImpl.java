@@ -23,7 +23,6 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.seo.SitemapXmlService;
 
@@ -93,7 +92,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
         xml.append("<!-- Categories -->\n");
 
-        final List<Category> categories = categoryService.getTopLevelCategories(shop);
+        final List<Category> categories = categoryService.getTopLevelCategories(shop.getShopId());
         for (final Category category : categories) {
 
             final Set<Category> children = categoryService.getChildCategoriesRecursive(category.getCategoryId());
