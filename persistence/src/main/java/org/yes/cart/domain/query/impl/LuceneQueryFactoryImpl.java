@@ -98,7 +98,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      * Parse string into query
      *
      * @param queryString string representation of lucene query
-     * @return query if string was succsesfuly parsed.
+     * @return query if string was successfuly parsed.
      */
     private Query parseQuery(final String queryString, final boolean abatement) {
         try {
@@ -112,7 +112,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     /**
      * Get the combined from query chain query.
-     * The currecnt query will be last in this chain.
+     * The current query will be last in this chain.
      * Chain will be truncated if <code>currentQuery</code> already present in
      * list
      *
@@ -144,7 +144,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     /**
      * Get the combined from query chain query.
-     * The currecnt query will be last in this chain.
+     * The currect query will be last in this chain.
      * Chain will be truncated if <code>currentQuery</code> already present in
      * list
      *
@@ -202,7 +202,9 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
                         } else if (ProductSearchQueryBuilder.QUERY.equals(decodedKeyName)) {
                             query = createSearchChain(categories, shopId, val, false);
                             final BooleanQuery booleanQueryToTest = getSnowBallQuery(queryChain, query.toString());
-                            if (productDao.fullTextSearch(booleanQueryToTest,0,1, null, false).isEmpty()) {
+                            // Take care here - we only need FT, so always put some projection value to prevent db access
+                            if (productDao.fullTextSearch(booleanQueryToTest, 0, 1, null, false,
+                                    ProductSearchQueryBuilder.PRODUCT_CODE_FIELD).isEmpty()) {
                                 //create not very strict query with lowercase
                                 query = createSearchChain(categories, shopId, val, true);
                             }

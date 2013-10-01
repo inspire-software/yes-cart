@@ -110,7 +110,8 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * {@inheritDoc}
      */
     @CacheEvict(value = {
-        "productSkuService-productSkuBySkuCode"
+        "productSkuService-productSkuBySkuCode",
+        "productService-skuById"
     }, allEntries = true)
     public void removeAllItems(final ProductSku sku) {
             getGenericDao().executeUpdate("REMOVE.ALL.SKU.ITEMS", sku);

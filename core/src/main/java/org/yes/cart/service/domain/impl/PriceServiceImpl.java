@@ -22,7 +22,10 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.AttrValueShop;
+import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.misc.navigation.price.impl.PriceTierNodeImpl;
@@ -32,6 +35,7 @@ import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordImpl;
 import org.yes.cart.service.domain.ExchangeRateService;
 import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -52,8 +56,8 @@ public class PriceServiceImpl
 
     private final ExchangeRateService exchangeRateService;
     private final PriceNavigation priceNavigation;
+    private final ProductService productService;
     private final GenericDAO<SkuPrice, Long> skuPriceDao;
-    private final GenericDAO<Product, Long> productDao;
 
 
     /**
@@ -61,18 +65,19 @@ public class PriceServiceImpl
      *
      * @param exchangeRateService exchange rate service for handle not filled price lists
      * @param priceNavigation     price navigation composer
-     * @param skuPriceDao         sku proce dao service
+     * @param productService      product service
+     * @param skuPriceDao         sku price dao service
      */
     public PriceServiceImpl(final ExchangeRateService exchangeRateService,
                             final PriceNavigation priceNavigation,
-                            final GenericDAO<SkuPrice, Long> skuPriceDao,
-                            final GenericDAO<Product, Long> productDao
+                            final ProductService productService,
+                            final GenericDAO<SkuPrice, Long> skuPriceDao
     ) {
         super(skuPriceDao);
         this.exchangeRateService = exchangeRateService;
         this.priceNavigation = priceNavigation;
+        this.productService = productService;
         this.skuPriceDao = skuPriceDao;
-        this.productDao = productDao;
 
     }
 
@@ -89,7 +94,11 @@ public class PriceServiceImpl
             final BigDecimal quantity) {
 
         return getMinimalRegularPrice(
-                productDao.findById(productId).getSku(),
+                /*
+                 * We display prices everywhere but need attributes only on product details page
+                 * so in the long run this should be an attribute-less product entity
+                 */
+                productService.getProductById(productId).getSku(),
                 selectedSku,
                 shop,
                 currencyCode,
@@ -272,7 +281,7 @@ public class PriceServiceImpl
      * and add it into given result holder - <code>allPrices</code>
      *
      * @param allPrices          result holder for all skus.
-     * @param skuPricesForOneSku pricces for one sku
+     * @param skuPricesForOneSku prices for one sku
      * @param time               current time
      * @return true in case if result was added
      */
@@ -587,7 +596,7 @@ public class PriceServiceImpl
      */
     @CacheEvict(value = {"imageService-seoImage" , "priceService-minimalRegularPrice"   }, allEntries = true)
     public SkuPrice create(final SkuPrice instance) {
-        return super.create(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.create(instance);
     }
 
     /**
@@ -595,7 +604,7 @@ public class PriceServiceImpl
      */
     @CacheEvict(value = {"imageService-seoImage" , "priceService-minimalRegularPrice"   }, allEntries = true)
     public SkuPrice update(final SkuPrice instance) {
-        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.update(instance);
     }
 
     /**
@@ -603,6 +612,6 @@ public class PriceServiceImpl
      */
     @CacheEvict(value = {"imageService-seoImage" , "priceService-minimalRegularPrice"   }, allEntries = true)
     public void delete(final SkuPrice instance) {
-        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        super.delete(instance);
     }
 }
