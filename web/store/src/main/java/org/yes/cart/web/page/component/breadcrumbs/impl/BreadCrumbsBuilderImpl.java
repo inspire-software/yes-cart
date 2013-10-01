@@ -20,17 +20,20 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.query.PriceNavigation;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsBuilder;
 import org.yes.cart.web.page.component.breadcrumbs.Crumb;
-import org.yes.cart.web.page.component.breadcrumbs.CrumbNamePrefixProvider;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * Bread crumbs builder produce category and
@@ -47,51 +50,54 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
 
     private final CategoryService categoryService;
+    private final CurrencySymbolService currencySymbolService;
+    private final PriceNavigation priceNavigation;
+    private final AttributeService attributeService;
 
     /**
      *
      * @param categoryService       category service
+     * @param currencySymbolService currency symbols for price crumbs
+     * @param priceNavigation       price navigation
+     * @param attributeService      attribute service
      */
-    public BreadCrumbsBuilderImpl (final CategoryService categoryService) {
+    public BreadCrumbsBuilderImpl(final CategoryService categoryService,
+                                  final CurrencySymbolService currencySymbolService,
+                                  final PriceNavigation priceNavigation,
+                                  final AttributeService attributeService) {
 
         this.categoryService = categoryService;
-
+        this.currencySymbolService = currencySymbolService;
+        this.priceNavigation = priceNavigation;
+        this.attributeService = attributeService;
     }
 
 
-    /**
-     * We have 2 kinds of breadcrumbs:
-     * 1. category path, for example electronics -> phones -> ip phones
-     * 2. attributive filters, for example ip phones [price range, brands, weight, ect]
-     *
-     * @param categoryId            current category id
-     * @param pageParameters        current query string
-     * @param allowedAttributeNames allowed attribute names for filtering including price, brand, search...
-     * @param shopCategoryIds       all categoryIds, that belong to shop
-     * @param namePrefixProvider    name prefix provider for price, brand, search..
-
-     * @return list of crumbs
-     */
+    /** {@inheritDoc} */
     @Cacheable(value = "breadCrumbBuilder-breadCrumbs")
-    public List<Crumb> getBreadCrumbs(
-            final long categoryId,
-            final PageParameters pageParameters,
-            final Set<String> allowedAttributeNames,
-            final List<Long> shopCategoryIds,
-            final CrumbNamePrefixProvider namePrefixProvider) {
+    public List<Crumb> getBreadCrumbs(final String locale,
+                                      final long categoryId,
+                                      final PageParameters pageParameters,
+                                      final List<Long> shopCategoryIds,
+                                      final String brandPrefix,
+                                      final String pricePrefix,
+                                      final String queryPrefix,
+                                      final String tagPrefix) {
 
         final List<Crumb> crumbs = new ArrayList<Crumb>();
         crumbs.addAll(getCategoriesCrumbs(categoryId, shopCategoryIds));
-        crumbs.addAll(getFilteredNavigationCrumbs(allowedAttributeNames, pageParameters, namePrefixProvider));
+        crumbs.addAll(getFilteredNavigationCrumbs(locale, pageParameters, brandPrefix, pricePrefix, queryPrefix, tagPrefix));
         return crumbs;
     }
 
-    private List<Crumb> getFilteredNavigationCrumbs(
-            final Set<String> allowedAttributeNames,
-            final PageParameters pageParameters,
-            final CrumbNamePrefixProvider namePrefixProvider) {
+    private List<Crumb> getFilteredNavigationCrumbs(final String locale,
+                                                    final PageParameters pageParameters,
+                                                    final String brandPrefix,
+                                                    final String pricePrefix,
+                                                    final String queryPrefix,
+                                                    final String tagPrefix) {
         final List<Crumb> navigationCrumbs = new ArrayList<Crumb>();
-        fillAttributes(navigationCrumbs, allowedAttributeNames, pageParameters, namePrefixProvider);
+        fillAttributes(locale, navigationCrumbs, pageParameters, brandPrefix, pricePrefix, queryPrefix, tagPrefix);
         return navigationCrumbs;
     }
 
@@ -151,11 +157,22 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         return new PageParameters();
     }
 
-    private void fillAttributes(
-            final List<Crumb> navigationCrumbs,
-            final Set<String> allowedAttributeNames,
-            final PageParameters pageParameters,
-            final CrumbNamePrefixProvider namePrefixProvider) {
+    private void fillAttributes(final String locale,
+                                final List<Crumb> navigationCrumbs,
+                                final PageParameters pageParameters,
+                                final String brandPrefix,
+                                final String pricePrefix,
+                                final String queryPrefix,
+                                final String tagPrefix) {
+
+        final Set<String> allowedAttributeNames = attributeService.getAllAttributeCodes();
+        /*
+           Call below creates very unproductive query for all attribute codes, so we
+           use a separate method for that:
+            this.attributeCodeName = attributeService.getAttributeNamesByCodes(allowedAttributeNames);
+         */
+        final Map<String, I18NModel> attributeCodeName = attributeService.getAllAttributeNames();
+
 
         //This is attributive only filtered navigation from request
         final PageParameters attributesOnly = WicketUtil.getRetainedRequestParameters(
@@ -172,7 +189,9 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         base.remove(WebParametersKeys.SKU_ID);
 
         for (PageParameters.NamedPair namedPair : attributesOnly.getAllNamed()) {
-            navigationCrumbs.add(createFilteredNavigationCrumb(base, namedPair.getKey(), namedPair.getValue(), pageParameters, namePrefixProvider));
+            navigationCrumbs.add(createFilteredNavigationCrumb(
+                    base, namedPair.getKey(), namedPair.getValue(), locale, pageParameters,
+                    brandPrefix, pricePrefix, queryPrefix, tagPrefix, attributeCodeName));
         }
     }
 
@@ -187,18 +206,17 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
      * ^^^^^^^^^^^^^^^^^^^^^^^ this will be removed,
      * so uri will be
      * example category/17/subcategory/156/price/100-200/nextkey/nextvalue
-     *
-     * @param base  initial parameter map, usually category and sub category navigation
-     * @param key   current key
-     * @param value current value
-     * @return {@link Crumb}
      */
-    private Crumb createFilteredNavigationCrumb(
-            final PageParameters base,
-            final String key,
-            final String value,
-            final PageParameters pageParameters,
-            final CrumbNamePrefixProvider namePrefixProvider) {
+    private Crumb createFilteredNavigationCrumb(final PageParameters base,
+                                                final String key,
+                                                final String value,
+                                                final String locale,
+                                                final PageParameters pageParameters,
+                                                final String brandPrefix,
+                                                final String pricePrefix,
+                                                final String queryPrefix,
+                                                final String tagPrefix,
+                                                final Map<String, I18NModel> attributeCodeName) {
 
         final PageParameters withoutCurrent = WicketUtil.getFilteredRequestParameters(
                 pageParameters,
@@ -206,16 +224,53 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                 value
         );
 
-        String linkName = namePrefixProvider.getLinkNamePrefix(key);
+        String linkName = getLinkNamePrefix(key, locale, brandPrefix, pricePrefix, queryPrefix, tagPrefix, attributeCodeName);
         if (StringUtils.isNotBlank(linkName)) {
-            linkName += "::" + namePrefixProvider.getLinkName(key, value);
+            linkName += "::" + getLinkName(key, value);
         } else {
-            linkName = namePrefixProvider.getLinkName(key, value);
+            linkName = getLinkName(key, value);
         }
 
         base.add(key, value);
         return new Crumb(key, linkName, null, new PageParameters(base), withoutCurrent);
     }
+
+    private String getLinkNamePrefix(final String key,
+                                     final String locale,
+                                     final String brandPrefix,
+                                     final String pricePrefix,
+                                     final String queryPrefix,
+                                     final String tagPrefix,
+                                     final Map<String, I18NModel> attributeCodeName) {
+        final String name;
+        if (ProductSearchQueryBuilder.BRAND_FIELD.equals(key)) {
+            name = brandPrefix;
+        } else if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(key)) {
+            name = pricePrefix;
+        } else if (ProductSearchQueryBuilder.PRODUCT_TAG_FIELD.equals(key)) {
+            name = tagPrefix;
+        } else if (WebParametersKeys.QUERY.equals(key)) {
+            name = queryPrefix;
+        } else {
+            name = attributeCodeName.get(key).getValue(locale);
+        }
+        return name;
+    }
+
+    private String getLinkName(final String key, final String value) {
+        if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(key)) {
+            Pair<String, Pair<BigDecimal, BigDecimal>> pair = priceNavigation.decomposePriceRequestParams(value);
+            return priceNavigation.composePriceRequestParams(
+                    currencySymbolService.getCurrencySymbol(pair.getFirst()),
+                    pair.getSecond().getFirst(),
+                    pair.getSecond().getSecond(),
+                    " ",
+                    "..."
+            );
+        }
+        return value;
+    }
+
 
 
 }
