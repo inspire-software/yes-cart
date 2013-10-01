@@ -30,9 +30,9 @@ import org.yes.cart.web.support.service.AttributableImageService;
 public interface ProductDecorator extends Product, ObjectDecorator {
 
     /**
-     * Attache to context after deserialization in case of cache overflow.
+     * Attache to context after de-serialization in case of cache overflow.
      *
-     * @param imageService image serice to get the image seo info
+     * @param imageService image service to get the image seo info
      * @param attributableImageService category image service to get the image.
      * @param categoryService          to get image width and height
      * @param productService           product service
