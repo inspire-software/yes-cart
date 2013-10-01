@@ -17,10 +17,8 @@
 package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopCategory;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -34,10 +32,10 @@ public interface CategoryService extends GenericService<Category> {
     /**
      * Get the top level categories assigned to shop.
      *
-     * @param shop given shop
+     * @param shopId given shop
      * @return ordered by rank list of assigned top level categories
      */
-    List<Category> getTopLevelCategories(Shop shop);
+    List<Category> getTopLevelCategories(Long shopId);
 
     /**
      * Get all assigned to shop categories.

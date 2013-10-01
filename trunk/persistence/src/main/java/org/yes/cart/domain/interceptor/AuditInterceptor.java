@@ -64,18 +64,18 @@ public class AuditInterceptor extends EmptyInterceptor implements ApplicationCon
 
         if (entity instanceof ProductCategory) {
 
-            return ((ProductCategory) entity).getProduct().getId();
+            return ((ProductCategory) entity).getProduct().getProductId();
 
         } else if (entity instanceof ProductSku) {
 
             if (((ProductSku) entity).getProduct() != null) {
 
-                return ((ProductSku) entity).getProduct().getId();
+                return ((ProductSku) entity).getProduct().getProductId();
             }
 
         } else if (entity instanceof SkuWarehouse) {
 
-            return ((SkuWarehouse) entity).getSku().getProduct().getId();
+            return ((SkuWarehouse) entity).getSku().getProduct().getProductId();
 
         }
 

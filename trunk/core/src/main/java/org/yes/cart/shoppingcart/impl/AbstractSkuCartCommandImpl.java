@@ -59,7 +59,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
      * Construct abstract sku command.
      *
      * @param priceService price service
-     * @param productService product serice
+     * @param productService product service
      * @param dtoProductService dto service
      * @param shopService shop service
      */
@@ -116,7 +116,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
         } else {
 
-            final Shop shop = shopService.getById(shoppingCart.getShoppingContext().getShopId());
+            final Shop shop = shopService.findById(shoppingCart.getShoppingContext().getShopId());
 
             if (productSkuDTO == null) {
 
