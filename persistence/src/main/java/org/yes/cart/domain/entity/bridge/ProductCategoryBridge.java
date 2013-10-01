@@ -20,18 +20,13 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.ShopCategory;
+import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.service.domain.ShopService;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -79,103 +74,45 @@ public class ProductCategoryBridge implements FieldBridge {
 
             }
 
+            /*
+             * We use service here as this is a heavy DB operation to scan all categories.
+             * We cannot run it on every indexing of product, which happens every time we
+             * update the product (including when it's inventory updates during ordering).
+             * This is the result of performance testing and unless we find a smarter way
+             * to flush/use cache we need this here.
+             *
+             * This should not cause any issues as product indexing should happen after
+             * all categories updates took place, so it is highly unlikely that the cache
+             * on getShopCategoriesIds(shop) will be out of sync.
+             */
 
-            new TransactionTemplate(HibernateSearchBridgeStaticLocator.getTransactionManager()).execute(
-                    new TransactionCallbackWithoutResult() {
-                        public void doInTransactionWithoutResult(final TransactionStatus status) {
+            final ShopCategoryRelationshipSupport support = getShopCategoryRelationshipSupport();
 
-                            final List<Shop> allShop = HibernateSearchBridgeStaticLocator.getShopDao().findAll();
+            final List<Shop> shops = support.findAll();
 
-                            for (Shop shop : allShop) {
+            for (final Shop shop : shops) {
 
-                                if (isIntersected(getShopCategories(shop), (Set<ProductCategory>) value)) {
-
-                                    document.add(new Field(
-                                            ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD,
-                                            String.valueOf(shop.getShopId()),
-                                            luceneOptions.getStore(),
-                                            Field.Index.NOT_ANALYZED,
-                                            luceneOptions.getTermVector()
-                                    ));
-
-                                }
-
-                            }
-
-                            //status.setRollbackOnly();
-
-
-                        }
+                for (final ProductCategory category : (Set<ProductCategory>) value) {
+                    if (support.getShopCategoriesIds(shop).contains(category.getCategory().getCategoryId())) {
+                        document.add(new Field(
+                                ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD,
+                                String.valueOf(shop.getShopId()),
+                                luceneOptions.getStore(),
+                                Field.Index.NOT_ANALYZED,
+                                luceneOptions.getTermVector()
+                        ));
+                        break; // need only one match
                     }
-
-            );
-
-
-
-        }
-
-    }
-
-    /**
-     * Get all cat4egories, which are belong to shop.
-     * @param shop given shop
-     * @return all categories in the shop
-     */
-    Set<Category> getShopCategories(final Shop shop) {
-
-        final Set<Category> result = new HashSet<Category>();
-
-        for (ShopCategory shopCategory : shop.getShopCategory()) {
-
-            loadChildCategoriesRecursiveInternal(result, shopCategory.getCategory().getCategoryId());
-
-        }
-
-        return result;
-    }
-
-    private void loadChildCategoriesRecursiveInternal(final Set<Category> result, final Long categoryId) {
-
-        final GenericDAO<Category, Long> categoryDao =  HibernateSearchBridgeStaticLocator.getCategoryDao();
-
-        result.add(categoryDao.findById(categoryId));
-
-        final List<Category> categories = categoryDao.findByNamedQueryCached(
-                "CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING",
-                categoryId
-        );
-
-        result.addAll(categories);
-
-        for (Category subCategory : categories) {
-
-            loadChildCategoriesRecursiveInternal(result, subCategory.getCategoryId());
-
-        }
-
-    }
-
-
-
-
-
-    /**
-     * Detect intersection between given sets of categories, which are belong to particular shop and
-     * categories where product is resided.
-     * @param shopCategories  given shop categories
-     * @param productCategories  given product categories
-     * @return true in case of intersection
-     */
-    boolean isIntersected(final Set<Category> shopCategories, final Set<ProductCategory> productCategories) {
-        for (ProductCategory productCategory : productCategories) {
-            for (Category category : shopCategories) {
-                if (productCategory.getCategory().getCategoryId() == category.getCategoryId()) {
-                    return true;
                 }
+
             }
+
         }
-        return false;
+
     }
 
+    private ShopCategoryRelationshipSupport getShopCategoryRelationshipSupport() {
+        return HibernateSearchBridgeStaticLocator.getShopCategoryRelationshipSupport();
+    }
 
 }

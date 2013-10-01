@@ -47,12 +47,12 @@ public class SkuPriceBridge implements FieldBridge {
             final Map<Long, Map<String, SkuPrice>> lowestQuantityPrice = new HashMap<Long, Map<String, SkuPrice>>();
             for (Object obj : (Collection)value) {
                 SkuPrice skuPrice = (SkuPrice) obj;
-                final Map<String, SkuPrice> lowestQuantityPriceByShop = lowestQuantityPrice.get(skuPrice.getShop().getId());
+                final Map<String, SkuPrice> lowestQuantityPriceByShop = lowestQuantityPrice.get(skuPrice.getShop().getShopId());
                 if (lowestQuantityPriceByShop == null) {
                     // if we do not have a "byShop" this is the new lowest price
                     final Map<String, SkuPrice> newLowestQuantity = new HashMap<String, SkuPrice>();
                     newLowestQuantity.put(skuPrice.getCurrency(), skuPrice);
-                    lowestQuantityPrice.put(skuPrice.getShop().getId(), newLowestQuantity);
+                    lowestQuantityPrice.put(skuPrice.getShop().getShopId(), newLowestQuantity);
                 } else {
                     final SkuPrice oldLowestQuantity = lowestQuantityPriceByShop.get(skuPrice.getCurrency());
                     if (oldLowestQuantity == null) {
