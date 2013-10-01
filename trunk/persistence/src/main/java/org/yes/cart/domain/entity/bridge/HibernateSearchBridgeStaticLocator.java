@@ -19,9 +19,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
+import org.yes.cart.service.domain.ShopService;
 
 /**
  * User: denispavlov
@@ -30,32 +29,15 @@ import org.yes.cart.domain.entity.Shop;
  */
 public class HibernateSearchBridgeStaticLocator implements ApplicationContextAware {
 
-    private static PlatformTransactionManager transactionManager;
+    private static ShopCategoryRelationshipSupport SHOP_CATEGORY_SUPPORT;
 
-    private static GenericDAO<Shop, Long> shopDao;
-
-    private static GenericDAO<Category, Long> categoryDao;
-
-
-    public static PlatformTransactionManager getTransactionManager() {
-        return transactionManager;
+    public static ShopCategoryRelationshipSupport getShopCategoryRelationshipSupport() {
+        return SHOP_CATEGORY_SUPPORT;
     }
-
-    public static GenericDAO<Shop, Long> getShopDao() {
-        return shopDao;
-    }
-
-    public static GenericDAO<Category, Long> getCategoryDao() {
-        return categoryDao;
-    }
-
-
 
     /** {@inheritDoc} */
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        shopDao = applicationContext.getBean("shopDao", GenericDAO.class);
-        categoryDao = applicationContext.getBean("categoryDao", GenericDAO.class);
-        transactionManager = applicationContext.getBean("transactionManager", PlatformTransactionManager.class);
+        SHOP_CATEGORY_SUPPORT = applicationContext.getBean("shopCategoryRelationshipSupport", ShopCategoryRelationshipSupport.class);
     }
 }
