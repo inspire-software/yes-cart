@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain;
 
+import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
 import org.yes.cart.domain.entity.ProductTypeAttr;
 
 import java.util.List;
@@ -26,6 +27,14 @@ import java.util.List;
  * Time: 11:13:01
  */
 public interface ProductTypeAttrService extends GenericService<ProductTypeAttr> {
+
+    /**
+     * Get list of view groups by product type
+     *
+     * @param productTypeId given product ype id
+     * @return list of view groups
+     */
+    List<ProdTypeAttributeViewGroup> getViewGroupsByProductTypeId(final long productTypeId);
 
     /**
      * Get the list of {@link ProductTypeAttr} , that belong to product type.

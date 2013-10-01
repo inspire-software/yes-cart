@@ -82,18 +82,18 @@ public interface ProductService extends GenericService<Product> {
 
     /**
      * Get the grouped product attributes, with values. The result can be represented in following form:
-     * Shippment details:
+     * Shipment details:
      * weight: 17 Kg
      * length: 15 Cm
      * height: 20 Cm
      * width: 35 Cm
      * Power:
      * Charger: 200/110
-     * Battery type: Litium
+     * Battery type: Lithium
      *
      * So the hierarchy returned for the above example will be:
      * Map
-     *    Entry[1001, Shippment details] =>
+     *    Entry[1001, Shipment details] =>
      *      Map
      *          Entry [10010, weight] =>
      *              List
@@ -125,6 +125,12 @@ public interface ProductService extends GenericService<Product> {
      */
     Pair<String, String> getProductAttribute(
             String locale, long productId, long skuId, String attributeCode);
+
+    /**
+     * @param attributeCode code
+     * @return raw and display value pair
+     */
+    Map<Long, String> getAllProductsAttributeValues(String attributeCode);
 
     /**
      * Get product by his primary key value
@@ -195,25 +201,6 @@ public interface ProductService extends GenericService<Product> {
      * @return list of distinct attib values
      */
     List<FilteredNavigationRecord> getDistinctAttributeValues(String locale, long productTypeId);
-
-    /**
-     * Collect the single attribute value navigation see ProductTypeAttr#navigationType
-     *
-     * @param locale locale
-     * @param productTypeId product type id
-     * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
-     */
-    List<FilteredNavigationRecord> getSingleValueNavigationRecords(String locale, long productTypeId);
-
-
-    /**
-     * Get the navigation records for range values.
-     *
-     * @param locale locale
-     * @param productTypeId product type id
-     * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
-     */
-    List<FilteredNavigationRecord> getRangeValueNavigationRecords(String locale, long productTypeId);
 
     /**
      * Get all distinct brands in given categories list

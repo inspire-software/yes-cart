@@ -18,6 +18,7 @@ package org.yes.cart.service.domain;
 
 
 import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.i18n.I18NModel;
 
 import java.util.List;
 import java.util.Map;
@@ -31,18 +32,34 @@ import java.util.Set;
 public interface AttributeService extends GenericService<Attribute> {
 
     /**
-     * Get all attribute codes.
+     * Get all attribute codes (+ brands, price, query and tag).
      *
      * @return set of attribute codes.
      */
     Set<String> getAllAttributeCodes();
 
     /**
-     * Get all attribute codes.
+     * Get all navigatable attribute codes (+ brands, price, query and tag).
      *
      * @return set of attribute codes.
      */
     Set<String> getAllNavigatableAttributeCodes();
+
+    /**
+     * Get all single value navigatable attribute codes for product type.
+     *
+     * @param productTypeId product type
+     *
+     * @return set of attribute codes.
+     */
+    Map<String, Integer> getSingleNavigatableAttributeCodesByProductType(long productTypeId);
+
+    /**
+     * Get attribute names.
+     *
+     * @return map of attribute code - name.
+     */
+    Map<String, I18NModel> getAllAttributeNames();
 
     /**
      * Get attribute names.
@@ -50,7 +67,7 @@ public interface AttributeService extends GenericService<Attribute> {
      * @param codes attribute codes
      * @return map of attribute code - name.
      */
-    Map<String, String> getAttributeNamesByCodes(Set<String> codes);
+    Map<String, I18NModel> getAttributeNamesByCodes(Set<String> codes);
 
 
     /**

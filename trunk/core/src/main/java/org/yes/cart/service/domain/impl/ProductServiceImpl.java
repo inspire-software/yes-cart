@@ -31,6 +31,7 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
@@ -38,8 +39,7 @@ import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordImpl;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ProductSkuService;
+import org.yes.cart.service.domain.*;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -55,7 +55,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     private final GenericDAO<Product, Long> productDao;
     private final ProductSkuService productSkuService;
-    private final GenericDAO<ProductType, Long> productTypeDao;
+    private final ProductTypeAttrService productTypeAttrService;
+    private final AttributeService attributeService;
     private final GenericDAO<ProductCategory, Long> productCategoryDao;
     private final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao;
     private final Random rand;
@@ -66,20 +67,23 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      *
      * @param productDao         product dao
      * @param productSkuService  product service
-     * @param productTypeDao     product type dao to deal with type information
-     * @param productCategoryDao category dao to work with category nformation
+     * @param productTypeAttrService     product type dao to deal with type information
+     * @param attributeService   attribute service
+     * @param productCategoryDao category dao to work with category information
      * @param productTypeAttrDao product type attributes need to work with range navigation
      */
     public ProductServiceImpl(final GenericDAO<Product, Long> productDao,
                               final ProductSkuService productSkuService,
-                              final GenericDAO<ProductType, Long> productTypeDao,
+                              final ProductTypeAttrService productTypeAttrService,
+                              final AttributeService attributeService,
                               final GenericDAO<ProductCategory, Long> productCategoryDao,
                               final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao,
                               final DtoFactory dtoFactory) {
         super(productDao);
         this.productDao = productDao;
         this.productSkuService = productSkuService;
-        this.productTypeDao = productTypeDao;
+        this.productTypeAttrService = productTypeAttrService;
+        this.attributeService = attributeService;
         this.productCategoryDao = productCategoryDao;
         this.productTypeAttrDao = productTypeAttrDao;
         rand = new Random();
@@ -95,13 +99,12 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = {"productService-skuById"})
     public ProductSku getSkuById(final Long skuId) {
-        return  productSkuService.getGenericDao().findById(skuId);
+        return proxy().getSkuById(skuId, false);
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = {"productService-skuById2"})
+    @Cacheable(value = "productService-skuById")
     public ProductSku getSkuById(final Long skuId, final boolean withAttributes) {
         final ProductSku sku =  productSkuService.getGenericDao().findById(skuId);
         if (sku != null && withAttributes) {
@@ -119,17 +122,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Cacheable(value = {"productService-defaultImage"})
     public String getDefaultImage(final Long productId) {
-        final Object obj = productDao.findQueryObjectsByNamedQuery("PRODUCT.ATTR.VALUE", productId, Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME);
-        if (obj instanceof List) {
-            final List<Object> rez = (List<Object>) obj;
-            if (rez.isEmpty()) {
-                return null;
-            }
-            return (String) rez.get(0);
-        }
-        return (String) obj;
-
-
+        final Map<Long, String> images = proxy().getAllProductsAttributeValues(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME);
+        return images.get(productId);
     }
 
 
@@ -143,7 +137,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = {"productService-randomProductByCategory"}/*, key = "category.getCategoryId()"*/)
+    @Cacheable(value = "productService-randomProductByCategory"/*, key = "category.getCategoryId()"*/)
     public Product getRandomProductByCategory(final Category category) {
         final int qty = getProductQty(category.getCategoryId());
         if (qty > 0) {
@@ -172,17 +166,17 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = {"productService-productAttributes"})
+    @Cacheable(value = "productService-productAttributes")
     public Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(
             final String locale, final long productId, final long skuId, final long productTypeId) {
 
-        final ProductType productType = productTypeDao.findById(productTypeId);
+        final List<ProdTypeAttributeViewGroup> productTypeAttrGroups = productTypeAttrService.getViewGroupsByProductTypeId(productTypeId);
         final Map<String, List<Pair<String, String>>> attributeViewGroupMap =
-                mapAttributeGroupsByAttributeCode(locale, productType.getAttributeViewGroup());
+                mapAttributeGroupsByAttributeCode(locale, productTypeAttrGroups);
 
-        final ProductSku sku = skuId != 0L ? getSkuById(skuId, true) : null;
-        final Product product = productId != 0 ? getProductById(productId, true) :
-                (sku != null ? getProductById(sku.getProduct().getId(), true) : null);
+        final ProductSku sku = skuId != 0L ? proxy().getSkuById(skuId, true) : null;
+        final Product product = productId != 0L ? proxy().getProductById(productId, true) :
+                (sku != null ? proxy().getProductById(sku.getProduct().getProductId(), true) : null);
 
         Collection<AttrValue> productAttrValues;
         Collection<AttrValue> skuAttrValues;
@@ -245,7 +239,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         List<Pair<String, String>> groupsForAttr = attributeViewGroupMap.get(attr.getFirst());
         if (groupsForAttr == null) {
             // groupsForAttr = NO_GROUP;
-            return; // no need to show un-groupped attributes
+            return; // no need to show un-grouped attributes
         }
         for (final Pair<String, String> groupForAttr : groupsForAttr) {
 
@@ -343,6 +337,19 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return null;
     }
 
+    @Cacheable(value = "productService-allProductsAttributeValues")
+    public Map<Long, String> getAllProductsAttributeValues(final String attributeCode) {
+        final List<Object[]> values = (List) getGenericDao().findByNamedQuery("ALL.PRODUCT.ATTR.VALUE", attributeCode);
+        if (values != null && !values.isEmpty()) {
+            final Map<Long, String> map = new HashMap<Long, String>();
+            for (final Object[] value : values) {
+                map.put((Long) value[0], (String) value[1]);
+            }
+            return map;
+        }
+        return Collections.emptyMap();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -365,15 +372,14 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productService-productById")
     public Product getProductById(final Long productId) {
-        return productDao.findById(productId);
+        return proxy().getProductById(productId, false);
     }
 
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productService-productById2")
+    @Cacheable(value = "productService-productById")
     public Product getProductById(final Long productId, final boolean withAttribute) {
         final Product prod = productDao.findById(productId); // query with
         if (prod != null && withAttribute) {
@@ -589,21 +595,20 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param productTypeId product type id
      * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
      */
-    public List<FilteredNavigationRecord> getSingleValueNavigationRecords(final String locale, final long productTypeId) {
+    List<FilteredNavigationRecord> getSingleValueNavigationRecords(final String locale, final long productTypeId) {
         List<Object[]> list;
-        List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();
+        final List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();
+
+        final Map<String, Integer> singleNavAttrCodes = attributeService.getSingleNavigatableAttributeCodesByProductType(productTypeId);
+        final Map<String, I18NModel> attrNames = attributeService.getAllAttributeNames();
 
         list = productDao.findQueryObjectsByNamedQuery(
-                "PRODUCTS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
-                productTypeId,
-                true);
-        records.addAll(constructFilteredNavigationRecords(locale, list));
+                "PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
+        appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
 
         list = productDao.findQueryObjectsByNamedQuery(
-                "PRODUCTSKUS.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
-                productTypeId,
-                true);
-        records.addAll(constructFilteredNavigationRecords(locale, list));
+                "PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
+        appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
 
         return records;
     }
@@ -616,12 +621,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param productTypeId product type id
      * @return list of {@link org.yes.cart.domain.queryobject.FilteredNavigationRecord}
      */
-    public List<FilteredNavigationRecord> getRangeValueNavigationRecords(final String locale, final long productTypeId) {
+    List<FilteredNavigationRecord> getRangeValueNavigationRecords(final String locale, final long productTypeId) {
 
         final List<ProductTypeAttr> rangeNavigationInType = productTypeAttrDao.findByNamedQuery(
                 "PRODUCTS.RANGE.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
-                productTypeId,
-                true);
+                productTypeId, Boolean.TRUE);
 
 
         final List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();
@@ -637,7 +641,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                                     entry.getAttribute().getCode(),
                                     node.getFrom() + '-' + node.getTo(),
                                     node.getFrom() + '-' + node.getTo(),
-                                    0,
+                                    0, // put zero initially as this this be populated by FT query
                                     entry.getRank(),
                                     "R"
                             )
@@ -648,30 +652,33 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return records;
     }
 
-    /**
-     * Construct filtered navigation records.
-     *
-     * @param list of raw object arrays after, result of named query
-     * @return constructed list of navigation records.
-     */
-    private List<FilteredNavigationRecord> constructFilteredNavigationRecords(final String locale, final List<Object[]> list) {
-        List<FilteredNavigationRecord> result = new ArrayList<FilteredNavigationRecord>(list.size());
+    private static final I18NModel BLANK = new FailoverStringI18NModel(null, "-");
+
+    private void appendFilteredNavigationRecords(final List<FilteredNavigationRecord> toAppendTo,
+                                                 final String locale,
+                                                 final List<Object[]> list,
+                                                 final Map<String, I18NModel> attrNames,
+                                                 final Map<String, Integer> attrRanks) {
         for (Object[] objArray : list) {
-            result.add(
+
+            final String attrCode = (String) objArray[0];
+            final I18NModel attrName = attrNames.containsKey(attrCode) ? attrNames.get(attrCode) : BLANK;
+            final Integer attrRank = attrRanks.containsKey(attrCode) ? attrRanks.get(attrCode) : Integer.MAX_VALUE;
+
+            toAppendTo.add(
                     new FilteredNavigationRecordImpl(
-                            (String) objArray[0],
-                            new FailoverStringI18NModel((String) objArray[1], (String) objArray[0]).getValue(locale),
-                            (String) objArray[2],
-                            (String) objArray[3],
-                            new FailoverStringI18NModel((String) objArray[4], (String) objArray[3]).getValue(locale),
-                            (Integer) objArray[5],
-                            (Integer) objArray[6],
+                            attrName.getValue("-"),
+                            attrName.getValue(locale),
+                            attrCode,
+                            (String) objArray[1],
+                            new FailoverStringI18NModel((String) objArray[2], (String) objArray[1]).getValue(locale),
+                            0, // put zero initially as this this be populated by FT query
+                            attrRank,
                             "S"
                     )
             );
 
         }
-        return result;
     }
 
 
@@ -895,14 +902,14 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     @CacheEvict(value ={
             "productService-byId",
             "productService-skuById",
-            "productService-skuById2",
             "productService-defaultImage",
             "productService-randomProductByCategory",
             "productService-productAttributes",
             "productService-productAttribute",
+            "productService-allProductsAttributeValues",
+            "productService-productAssociationsIds",
             "productService-productBySkuCode",
             "productService-productById",
-            "productService-productById2",
             "productService-featuredProducts",
             "productService-newArrivalsProductInCategory",
             "productService-productByQuery",
@@ -915,21 +922,21 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     }, allEntries = true)
     public Product update(Product instance) {
-        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.update(instance);
     }
 
     /** {@inheritDoc} */
     @CacheEvict(value ={
             "productService-byId",
             "productService-skuById",
-            "productService-skuById2",
             "productService-defaultImage",
             "productService-randomProductByCategory",
             "productService-productAttributes",
             "productService-productAttribute",
+            "productService-allProductsAttributeValues",
+            "productService-productAssociationsIds",
             "productService-productBySkuCode",
             "productService-productById",
-            "productService-productById2",
             "productService-featuredProducts",
             "productService-newArrivalsProductInCategory",
             "productService-productByQuery",
@@ -942,6 +949,25 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     }, allEntries = true)
     public void delete(Product instance) {
-        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        super.delete(instance);
     }
+
+    private ProductService proxy;
+
+    private ProductService proxy() {
+        if (proxy == null) {
+            proxy = getSelf();
+        }
+        return proxy;
+    }
+
+    /**
+     * @return self proxy to reuse AOP caching
+     */
+    public ProductService getSelf() {
+        // Spring lookup method to get self proxy
+        return null;
+    }
+
+
 }

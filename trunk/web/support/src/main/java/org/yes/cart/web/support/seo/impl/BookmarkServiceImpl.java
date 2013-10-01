@@ -48,7 +48,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     private final ProductService productService;
 
     /**
-     * Constrcut bookmark service.
+     * Construct bookmark service.
      *
      * @param categoryService category service
      * @param contentService  content service
@@ -65,14 +65,14 @@ public class BookmarkServiceImpl implements BookmarkService {
         this.productService = productService;
         this.contentService = contentService;
 
-        CATEGORY_DECODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoCategoryDecodeCache");
-        CATEGORY_ENCODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoCategoryEncodeCache");
-        CONTENT_DECODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoContentDecodeCache");
-        CONTENT_ENCODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoContentEncodeCache");
-        SKU_DECODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoSkuDecodeCache");
-        SKU_ENCODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoSkuEncodeCache");
-        PRODUCT_DECODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoProductDecodeCache");
-        PRODUCT_ENCODE_CACHE = cacheManager.getCache("org.yes.cart.web.seoProductEncodeCache");
+        CATEGORY_DECODE_CACHE = cacheManager.getCache("web.bookmarkService-seoCategoryDecodeCache");
+        CATEGORY_ENCODE_CACHE = cacheManager.getCache("web.bookmarkService-seoCategoryEncodeCache");
+        CONTENT_DECODE_CACHE = cacheManager.getCache("web.bookmarkService-seoContentDecodeCache");
+        CONTENT_ENCODE_CACHE = cacheManager.getCache("web.bookmarkService-seoContentEncodeCache");
+        SKU_DECODE_CACHE = cacheManager.getCache("web.bookmarkService-seoSkuDecodeCache");
+        SKU_ENCODE_CACHE = cacheManager.getCache("web.bookmarkService-seoSkuEncodeCache");
+        PRODUCT_DECODE_CACHE = cacheManager.getCache("web.bookmarkService-seoProductDecodeCache");
+        PRODUCT_ENCODE_CACHE = cacheManager.getCache("web.bookmarkService-seoProductEncodeCache");
 
 
     }
@@ -200,7 +200,7 @@ public class BookmarkServiceImpl implements BookmarkService {
      */
     public String saveBookmarkForProduct(final Product product) {
 
-        final String bookmark = String.valueOf(product.getId());
+        final String bookmark = String.valueOf(product.getProductId());
         String seoData = getStringFromValueWrapper(PRODUCT_ENCODE_CACHE.get(bookmark));
         if (seoData == null) {
             if (product != null) {
