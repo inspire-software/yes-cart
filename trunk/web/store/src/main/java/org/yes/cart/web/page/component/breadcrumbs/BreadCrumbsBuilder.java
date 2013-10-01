@@ -40,20 +40,25 @@ public interface BreadCrumbsBuilder {
      * 1. category path, for example electronics -> phones -> ip phones
      * 2. attributive filters, for example ip phones [price range, brands, weight, ect]
      *
+     * @param locale                locale
      * @param categoryId            current category id
      * @param pageParameters        current query string
-     * @param allowedAttributeNames allowed attribute names for filtering including price, brand, search...
      * @param shopCategoryIds       all categoryIds, that belong to shop
-     * @param namePrefixProvider    name prefix provider for price, brand, search..
-
+     * @param brandPrefix           prefix for brand
+     * @param pricePrefix           prefix for price
+     * @param queryPrefix           prefix for search
+     * @param tagPrefix             prefix for tag
+     *
      * @return list of crumbs
      */
-    List<Crumb> getBreadCrumbs(
-            long categoryId,
-            PageParameters pageParameters,
-            Set<String> allowedAttributeNames,
-            List<Long> shopCategoryIds,
-            CrumbNamePrefixProvider namePrefixProvider);
+    List<Crumb> getBreadCrumbs(String locale,
+                               long categoryId,
+                               PageParameters pageParameters,
+                               List<Long> shopCategoryIds,
+                               String brandPrefix,
+                               String pricePrefix,
+                               String queryPrefix,
+                               String tagPrefix);
 
 
 
