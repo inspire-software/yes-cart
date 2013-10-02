@@ -44,13 +44,31 @@
         <column-descriptor>
             <column-index>1</column-index>
             <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>en</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>2</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>ru</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>3</column-index>
+            <field-type>FIELD</field-type>
             <name>description</name>
             <value-regex>(.{0,4000})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>2</column-index>
+            <column-index>6</column-index>
             <field-type>FIELD</field-type>
             <data-type>DECIMAL</data-type>
             <name>price</name>
@@ -65,13 +83,13 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>3</column-index>
+            <column-index>7</column-index>
             <field-type>FIELD</field-type>
             <name>currency</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>4</column-index>
+            <column-index>8</column-index>
             <field-type>FK_FIELD</field-type>
             <entity-type>org.yes.cart.domain.entity.Carrier</entity-type>
             <name>carrier</name>
@@ -81,7 +99,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>5</column-index>
+            <column-index>9</column-index>
             <field-type>FIELD</field-type>
             <name>slaType</name>
             <value-regex>(.{1,1})(.*)</value-regex>

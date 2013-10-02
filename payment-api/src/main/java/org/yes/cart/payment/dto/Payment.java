@@ -216,6 +216,20 @@ public interface Payment extends Serializable {
     void setOrderCurrency(final String orderCurrency);
 
     /**
+     * Locale of order.
+     *
+     * @return locale.
+     */
+    String getOrderLocale();
+
+    /**
+     * Set locale.
+     *
+     * @param orderLocale locale.
+     */
+    void setOrderLocale(final String orderLocale);
+
+    /**
      * Get items in current shipment to pay. One of the line will hold delivery record to pay in case
      * of physical delivery.
      *

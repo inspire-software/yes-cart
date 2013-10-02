@@ -7,6 +7,7 @@ import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
@@ -452,7 +453,7 @@ public class PaymentProcessorSurrogate {
         payment.setOrderShipment(singlePay ? order.getOrdernum() : delivery.getDeliveryNum());
 
         fillPaymentItems(delivery, payment);
-        fillPaymentShipment(delivery, payment);
+        fillPaymentShipment(order, delivery, payment);
         fillPaymentAmount(order, delivery, payment);
     }
 
@@ -474,13 +475,16 @@ public class PaymentProcessorSurrogate {
         }
         payment.setPaymentAmount(rez);
         payment.setOrderCurrency(order.getCurrency());
+        payment.setOrderLocale(order.getLocale());
     }
 
-    private void fillPaymentShipment(final CustomerOrderDelivery delivery, final Payment payment) {
+    private void fillPaymentShipment(final CustomerOrder order, final CustomerOrderDelivery delivery, final Payment payment) {
         payment.getOrderItems().add(
                 new PaymentLineImpl(
                         String.valueOf(delivery.getCarrierSla().getCarrierslaId()),
-                        delivery.getCarrierSla().getName(),
+                        new FailoverStringI18NModel(
+                                delivery.getCarrierSla().getDisplayName(),
+                                delivery.getCarrierSla().getName()).getValue(order.getLocale()),
                         BigDecimal.ONE,
                         delivery.getPrice(),
                         BigDecimal.ZERO,

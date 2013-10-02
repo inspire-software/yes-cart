@@ -114,7 +114,7 @@ public class GoogleCheckoutPaymentGatewayImplTest extends TestCase {
 
             /** {@inheritDoc} */
             @Override
-            MerchantCheckoutFlowSupport.ShippingMethods createShipmentMethod(String currency, ObjectFactory objectFactory) {
+            MerchantCheckoutFlowSupport.ShippingMethods createShipmentMethod(final String language, String currency, ObjectFactory objectFactory) {
                 final MerchantCheckoutFlowSupport.ShippingMethods shippingMethods =
                         objectFactory.createMerchantCheckoutFlowSupportShippingMethods();
 
@@ -171,6 +171,7 @@ public class GoogleCheckoutPaymentGatewayImplTest extends TestCase {
 
         payment.setOrderItems(orderItems);
         payment.setOrderCurrency("USD");
+        payment.setOrderLocale("en");
 
         return payment;
 

@@ -150,7 +150,7 @@ public class ShippingView extends BaseComponent {
 
         };
 
-        carrierSlaChoice.setChoiceRenderer(new CarrierSlaRenderer()).setRequired(true);
+        carrierSlaChoice.setChoiceRenderer(new CarrierSlaRenderer(this)).setRequired(true);
 
         form.addOrReplace(carrierSlaChoice);
 
@@ -184,7 +184,7 @@ public class ShippingView extends BaseComponent {
                     protected boolean wantOnSelectionChangedNotifications() {
                         return true;
                     }
-                }.setChoiceRenderer(new CarrierRenderer()).setRequired(true)
+                }.setChoiceRenderer(new CarrierRenderer(this)).setRequired(true)
 
         );
 
@@ -198,7 +198,10 @@ public class ShippingView extends BaseComponent {
 
 
     /**
-     * Add shipping price view to given form if shipping methid is selected.
+     * Add shipping price view to given form if shipping method is selected.
+     *
+     * CPOINT - this method just displays the fixed price for this SLA, potentially this
+     *          value can be calculated based on order or promotions
      *
      * @param form given form.
      */

@@ -1,3 +1,4 @@
-name;description
-"UPS";"The UPS carries"
-"TNT";"The TNT carries"
+name;EN;RU;description;EN;RU;worldwide;country;state;local
+"UPS";"UPS";"UPS";"The UPS carries";"The UPS carries";"Служба доставки UPS";true;true;true;true
+"TNT";"TNT";"TNT";"The TNT carries";"The TNT carries";"Служба доставки TNT";true;true;true;true
+"Нова Пошта";"Нова Пошта";"Нова Пошта";"New Post carriers";"New Post carriers";"Служба доставки Нова Пошта";false;true;true;true

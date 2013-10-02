@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.CarrierSlaDTO;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -74,6 +75,12 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     )
     private long carrierId;
 
+    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    private Map<String, String> displayNames;
+
+    @DtoField(value = "displayDescription", converter = "i18nStringConverter")
+    private Map<String, String> displayDescriptions;
+
 
     /** {@inheritDoc} */
     public long getCarrierslaId() {
@@ -111,6 +118,20 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
+    public Map<String, String> getDisplayNames() {
+        return displayNames;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDisplayNames(final Map<String, String> displayNames) {
+        this.displayNames = displayNames;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getDescription() {
         return description;
     }
@@ -120,6 +141,20 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
      */
     public void setDescription(final String description) {
         this.description = description;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, String> getDisplayDescriptions() {
+        return displayDescriptions;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDisplayDescriptions(final Map<String, String> displayDescriptions) {
+        this.displayDescriptions = displayDescriptions;
     }
 
     /**

@@ -21,6 +21,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentAddress;
@@ -434,7 +435,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         payment.setOrderShipment(singlePay ? order.getOrdernum() : delivery.getDeliveryNum());
 
         fillPaymentItems(delivery, payment);
-        fillPaymentShipment(delivery, payment);
+        fillPaymentShipment(order, delivery, payment);
         fillPaymentAmount(order, delivery, payment);
     }
 
@@ -458,11 +459,14 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         payment.setOrderCurrency(order.getCurrency());
     }
 
-    private void fillPaymentShipment(final CustomerOrderDelivery delivery, final Payment payment) {
+    private void fillPaymentShipment(final CustomerOrder order, final CustomerOrderDelivery delivery, final Payment payment) {
         payment.getOrderItems().add(
                 new PaymentLineImpl(
                         delivery.getCarrierSla() == null ? "N/A" : String.valueOf(delivery.getCarrierSla().getCarrierslaId()),
-                        delivery.getCarrierSla() == null ? "No SLA" : delivery.getCarrierSla().getName(),
+                        delivery.getCarrierSla() == null ? "No SLA" :
+                                new FailoverStringI18NModel(
+                                        delivery.getCarrierSla().getDisplayName(),
+                                        delivery.getCarrierSla().getName()).getValue(order.getLocale()),
                         BigDecimal.ONE,
                         delivery.getPrice(),
                         BigDecimal.ZERO,
@@ -532,6 +536,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         templatePayment.setOrderDate(order.getOrderTimestamp());
         templatePayment.setOrderCurrency(order.getCurrency());
+        templatePayment.setOrderLocale(order.getLocale());
         templatePayment.setOrderNumber(order.getOrdernum());
 
         templatePayment.setTransactionOperation(transactionOperation);

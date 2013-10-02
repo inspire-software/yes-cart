@@ -235,7 +235,7 @@ public class RegisterPanel extends BaseComponent {
 
 
                                 //CPOINT
-                                //this commente out, becaue of yc-168
+                                //this commented out, because of YC-168
                                 //but it may be valid behavior for some clients.
                                 //Customer customer = getCustomerService().findCustomer(getEmail());
                                 //getCustomerService().resetPassword(customer, ApplicationDirector.getCurrentShop());

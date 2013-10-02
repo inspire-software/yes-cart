@@ -47,6 +47,7 @@ public class PaymentImpl implements Payment {
     private Date orderDate;
     private BigDecimal paymentAmount;
     private String orderCurrency;
+    private String orderLocale;
     private List<PaymentLine> orderItems;
     private String orderNumber;
     private String orderShipment;
@@ -265,6 +266,20 @@ public class PaymentImpl implements Payment {
      */
     public void setOrderCurrency(final String orderCurrency) {
         this.orderCurrency = orderCurrency;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getOrderLocale() {
+        return orderLocale;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setOrderLocale(final String orderLocale) {
+        this.orderLocale = orderLocale;
     }
 
     /**
