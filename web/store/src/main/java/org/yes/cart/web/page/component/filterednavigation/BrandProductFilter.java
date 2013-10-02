@@ -18,13 +18,7 @@ package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.query.impl.BrandSearchQueryBuilder;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

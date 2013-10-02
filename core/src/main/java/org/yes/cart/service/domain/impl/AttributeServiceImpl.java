@@ -20,6 +20,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeGroupService;
 import org.yes.cart.service.domain.AttributeService;
@@ -142,9 +144,43 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         return new HashSet<String>(allowedAttributeNames);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "attributeService-singleNavigatableAttributeCodesByProductType")
+    public Map<String, Integer> getSingleNavigatableAttributeCodesByProductType(final long productTypeId) {
+        final List<Object[]> allowedAttributeNames = attributeDao
+                .findQueryObjectsByNamedQuery("ATTRIBUTE.CODES.AND.RANK.SINGLE.NAVIGATION.UNIQUE.BY.PRODUCTTYPE.ID",
+                        productTypeId, Boolean.TRUE);
+        if (allowedAttributeNames.isEmpty()) {
+            return Collections.emptyMap();
+        }
+        final Map<String, Integer> map = new HashMap<String, Integer>();
+        for (final Object[] codeAndRank : allowedAttributeNames) {
+            map.put((String) codeAndRank[0], (Integer) codeAndRank[1]);
+        }
+        return map;
+    }
+
+    @Cacheable(value = "attributeService-allAttributeNames")
+    public Map<String, I18NModel> getAllAttributeNames() {
+        Map<String, I18NModel> result = new HashMap<String, I18NModel>();
+        List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQuery(
+                "ATTRIBUTE.CODE.NAMES.ALL");
+        if (codeNameList != null) {
+            for (Object[] tuple : codeNameList) {
+                result.put(
+                        (String) tuple[0],
+                        new FailoverStringI18NModel((String) tuple[2], (String) tuple[1])
+                );
+            }
+        }
+        return result;
+    }
+
     @Cacheable(value = "attributeService-attributeNamesByCodes")
-    public Map<String, String> getAttributeNamesByCodes(final Set<String> codes) {
-        Map<String, String> result = new HashMap<String, String>();
+    public Map<String, I18NModel> getAttributeNamesByCodes(final Set<String> codes) {
+        Map<String, I18NModel> result = new HashMap<String, I18NModel>();
         List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQuery(
                 "ATTRIBUTE.CODE.NAMES",
                 codes);
@@ -152,7 +188,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             for (Object[] tuple : codeNameList) {
                 result.put(
                         (String) tuple[0],
-                        (String) tuple[1]
+                        new FailoverStringI18NModel((String) tuple[2], (String) tuple[1])
                 );
             }
         }
@@ -164,10 +200,12 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-availableImageAttributesByGroupCode",
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
-            "attributeService-attributeNamesByCodes"},
+            "attributeService-singleNavigatableAttributeCodesByProductType",
+            "attributeService-attributeNamesByCodes",
+            "attributeService-allAttributeNames"},
              allEntries = true)
     public Attribute create(Attribute instance) {
-        return super.create(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.create(instance);
     }
 
     /** {@inheritDoc} */
@@ -175,10 +213,12 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-availableImageAttributesByGroupCode",
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
-            "attributeService-attributeNamesByCodes"},
+            "attributeService-singleNavigatableAttributeCodesByProductType",
+            "attributeService-attributeNamesByCodes",
+            "attributeService-allAttributeNames"},
             allEntries = true)
     public Attribute update(Attribute instance) {
-        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.update(instance);
     }
 
     /** {@inheritDoc} */
@@ -186,9 +226,11 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-availableImageAttributesByGroupCode",
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
-            "attributeService-attributeNamesByCodes"},
+            "attributeService-singleNavigatableAttributeCodesByProductType",
+            "attributeService-attributeNamesByCodes",
+            "attributeService-allAttributeNames"},
             allEntries = true)
     public void delete(Attribute instance) {
-        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        super.delete(instance);
     }
 }

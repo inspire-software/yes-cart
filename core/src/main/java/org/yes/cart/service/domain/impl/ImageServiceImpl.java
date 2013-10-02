@@ -402,7 +402,7 @@ public class ImageServiceImpl
             "imageService-seoImage"
     }, allEntries = true)
     public SeoImage update(SeoImage instance) {
-        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.update(instance);
     }
 
     /**
@@ -412,6 +412,6 @@ public class ImageServiceImpl
             "imageService-seoImage"
     }, allEntries = true)
     public void delete(SeoImage instance) {
-        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        super.delete(instance);
     }
 }

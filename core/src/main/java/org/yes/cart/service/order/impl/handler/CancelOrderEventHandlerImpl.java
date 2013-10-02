@@ -17,7 +17,10 @@
 package org.yes.cart.service.order.impl.handler;
 
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;

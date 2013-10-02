@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.order;
 
-import org.yes.cart.domain.entity.ProductSku;
-
 import java.math.BigDecimal;
 
 /**

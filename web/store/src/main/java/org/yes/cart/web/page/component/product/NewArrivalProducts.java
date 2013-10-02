@@ -21,7 +21,6 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
 import org.yes.cart.web.util.WicketUtil;

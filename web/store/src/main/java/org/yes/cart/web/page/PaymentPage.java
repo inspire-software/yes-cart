@@ -33,7 +33,6 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderItemAllocationException;

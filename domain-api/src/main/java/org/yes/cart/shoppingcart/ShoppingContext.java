@@ -52,7 +52,7 @@ public interface ShoppingContext extends Serializable {
     void setResolvedIp(String resolvedIp);
 
     /**
-     * Get lastest viewed sku codes.
+     * Get last viewed sku codes.
      *
      * @return comma separated string of viewed skus.
      */
@@ -67,14 +67,14 @@ public interface ShoppingContext extends Serializable {
 
 
     /**
-     * Get lastest viewed categories.
+     * Get last viewed categories.
      *
      * @return comma separated string of category ids.
      */
     String getLatestViewedCategories();
 
     /**
-     * Get lastest viewed categories.
+     * Get last viewed categories.
      *
      * @param latestViewedCategories comma separated list of category ids.
      */
@@ -116,7 +116,7 @@ public interface ShoppingContext extends Serializable {
 
     /* private long currentCategoryId;
 
-    private BooleanQuery apppliedQuery;
+    private BooleanQuery appliedQuery;
 
     private Date currentDate;*/
 

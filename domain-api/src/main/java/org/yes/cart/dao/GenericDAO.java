@@ -359,7 +359,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param maxResults    size of result set
      * @param sortFieldName optional  sort field name
      * @param reverse       reverse the search result
-     * @param fields        list of fileds for projections
+     * @param fields        list of fields for projections
      * @return list of found entities
      */
     List<Object[]> fullTextSearch(final org.apache.lucene.search.Query query,

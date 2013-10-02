@@ -18,7 +18,6 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.ProductSku;
 
 import java.math.BigDecimal;
 import java.util.Date;

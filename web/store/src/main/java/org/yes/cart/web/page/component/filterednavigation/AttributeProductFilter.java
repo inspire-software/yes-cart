@@ -18,16 +18,8 @@ package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.entity.ProductType;
-import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.query.impl.AttributiveSearchQueryBuilderImpl;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Product attribute value filtering component.
