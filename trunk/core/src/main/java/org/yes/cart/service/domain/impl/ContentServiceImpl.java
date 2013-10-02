@@ -104,8 +104,8 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         if (StringUtils.isBlank(content.getUitemplate())) {
             if (content.getParentId() != 0) {
                 Category parentCategory =
-                        categoryDao.findById(content.getParentId());
-                variation = getContentTemplateVariation(parentCategory);
+                        proxy().getById(content.getParentId());
+                variation = proxy().getContentTemplateVariation(parentCategory);
             }
         } else {
             variation = content.getUitemplate();
@@ -138,7 +138,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         if (content == null) {
             rez = Constants.DEFAULT_ITEMS_ON_PAGE;
         } else {
-            final String val = getContentAttributeRecursive(null, content, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+            final String val = proxy().getContentAttributeRecursive(null, content, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
             if (val == null) {
                 rez = Constants.DEFAULT_ITEMS_ON_PAGE;
             } else {
@@ -201,7 +201,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
                 rez = null; //root of hierarchy
             } else {
                 final Category parentCategory =
-                        categoryDao.findById(content.getParentId());
+                        proxy().getById(content.getParentId());
                 rez = getContentAttributeRecursive(null, parentCategory, attributeNames);
             }
         } else {
@@ -255,7 +255,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             return null; //root of hierarchy
         }
         final Category parentCategory =
-                categoryDao.findById(category.getParentId());
+                proxy().getById(category.getParentId());
         return getContentAttributeRecursive(locale, parentCategory, attributeName);
     }
 
@@ -291,7 +291,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @Cacheable(value = "contentService-childContentRecursive")
     public Set<Category> getChildContentRecursive(final long contentId) {
-        final Category thisCon = getById(contentId);
+        final Category thisCon = proxy().getById(contentId);
         if (thisCon != null) {
             final Set<Category> all = new HashSet<Category>();
             all.add(thisCon);
@@ -303,7 +303,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
 
 
     private void loadChildContentRecursiveInternal(final Set<Category> result, final Category category) {
-        List<Category> categories = getChildContent(category.getCategoryId());
+        List<Category> categories = proxy().getChildContent(category.getCategoryId());
         result.addAll(categories);
         for (Category subCategory : categories) {
             loadChildContentRecursiveInternal(result, subCategory);
@@ -363,7 +363,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @Cacheable(value = "contentService-contentHasSubcontent")
     public boolean isContentHasSubcontent(final long topContentId, final long subContentId) {
-        final Category start = getById(subContentId);
+        final Category start = proxy().getById(subContentId);
         if (start != null) {
             if (subContentId == topContentId) {
                 return true;
@@ -380,7 +380,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     private void addParent(final List<Category> categoryChain, final long categoryIdStopAt) {
         final Category cat = categoryChain.get(categoryChain.size() - 1);
         if (cat.getParentId() != cat.getCategoryId()) {
-            final Category parent = getById(cat.getParentId());
+            final Category parent = proxy().getById(cat.getParentId());
             if (parent != null) {
                 categoryChain.add(parent);
                 if (parent.getCategoryId() != categoryIdStopAt) {
@@ -404,7 +404,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
 
     },allEntries = true)
     public Category create(Category instance) {
-        return super.create(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.create(instance);
     }
 
     /**
@@ -424,7 +424,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             "contentService-contentHasSubcontent"
     }, allEntries = true)
     public Category update(Category instance) {
-        return super.update(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.update(instance);
     }
 
     /**
@@ -444,6 +444,25 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             "contentService-contentHasSubcontent"
     }, allEntries = true)
     public void delete(Category instance) {
-        super.delete(instance);    //To change body of overridden methods use File | Settings | File Templates.
+        super.delete(instance);
     }
+
+    private ContentService proxy;
+
+    private ContentService proxy() {
+        if (proxy == null) {
+            proxy = getSelf();
+        }
+        return proxy;
+    }
+
+    /**
+     * @return self proxy to reuse AOP caching
+     */
+    public ContentService getSelf() {
+        // Spring lookup method to get self proxy
+        return null;
+    }
+
+
 }

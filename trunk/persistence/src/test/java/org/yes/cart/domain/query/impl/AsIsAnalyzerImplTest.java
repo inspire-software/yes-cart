@@ -36,7 +36,7 @@ public class AsIsAnalyzerImplTest {
     private static final String[] FIELDS = {"productCategory.category", "attribute.attribute", "attribute.val"};
 
     @Test
-    public void testThatQueryIsNotTransformaedByAnalyzerWithMultipleFiledsQueryParser() throws ParseException {
+    public void testThatQueryIsNotTransformedByAnalyzerWithMultipleFieldsQueryParser() throws ParseException {
         MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_31, FIELDS, new AsIsAnalyzer(false));
         Query query = queryParser.parse(LUCENE_QUERY);
         assertEquals(LUCENE_QUERY, query.toString());

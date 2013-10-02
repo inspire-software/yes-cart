@@ -35,7 +35,6 @@ import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.entity.decorator.ProductDecorator;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 

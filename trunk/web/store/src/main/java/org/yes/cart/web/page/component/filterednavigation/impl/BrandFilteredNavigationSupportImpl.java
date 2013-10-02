@@ -23,7 +23,6 @@ import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.BrandSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.web.page.component.filterednavigation.AttributeFilteredNavigationSupport;
 import org.yes.cart.web.page.component.filterednavigation.BrandFilteredNavigationSupport;
 
 import java.util.ArrayList;
