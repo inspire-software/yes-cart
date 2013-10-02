@@ -18,6 +18,8 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.Map;
+
 /**
  * Carrier DTO interface.
  * <p/>
@@ -55,10 +57,26 @@ public interface CarrierDTO extends Identifiable {
      */
     void setName(String name);
 
+
+    /**
+     * Carrier name.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayNames();
+
+    /**
+     * Get carrier name
+     *
+     * @param names localised locale => name pairs
+     */
+    void setDisplayNames(Map<String, String> names);
+
+
     /**
      * Get carrier description.
      *
-     * @return desrciption
+     * @return description
      */
     String getDescription();
 
@@ -69,9 +87,23 @@ public interface CarrierDTO extends Identifiable {
      */
     void setDescription(String description);
 
+    /**
+     * Carrier description.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayDescriptions();
 
     /**
-     * Is carrier perform world wide devilery.
+     * Get carrier description
+     *
+     * @param names localised locale => name pairs
+     */
+    void setDisplayDescriptions(Map<String, String> names);
+
+
+    /**
+     * Is carrier perform world wide delivery.
      *
      * @return true if performs delivery.
      */

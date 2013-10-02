@@ -55,6 +55,20 @@ public interface Carrier extends Auditable {
     void setName(String name);
 
     /**
+     * Get name.
+     *
+     * @return localisable name of carrier.
+     */
+    String getDisplayName();
+
+    /**
+     * Set name of carrier.
+     *
+     * @param name localisable name.
+     */
+    void setDisplayName(String name);
+
+    /**
      * Get carrier description.
      *
      * @return description
@@ -67,6 +81,20 @@ public interface Carrier extends Auditable {
      * @param description description
      */
     void setDescription(String description);
+
+    /**
+     * Get name.
+     *
+     * @return localisable description of carrier.
+     */
+    String getDisplayDescription();
+
+    /**
+     * Set description of carrier.
+     *
+     * @param description localisable description.
+     */
+    void setDisplayDescription(String description);
 
     /**
      * Get the list of carrier SLAs.
@@ -120,9 +148,9 @@ public interface Carrier extends Auditable {
     boolean isState();
 
     /**
-     * Set state devivery flag.
+     * Set state delivery flag.
      *
-     * @param state state devivery flag
+     * @param state state delivery flag
      */
     void setState(boolean state);
 

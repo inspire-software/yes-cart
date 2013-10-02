@@ -33,7 +33,9 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     private long carrierId;
 
     private String name;
+    private String displayName;
     private String description;
+    private String displayDescription;
     private boolean worldwide;
     private boolean country;
     private boolean state;
@@ -58,12 +60,28 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
         this.name = name;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(final String displayName) {
+        this.displayName = displayName;
+    }
+
     public String getDescription() {
         return this.description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDisplayDescription() {
+        return displayDescription;
+    }
+
+    public void setDisplayDescription(final String displayDescription) {
+        this.displayDescription = displayDescription;
     }
 
     public boolean isWorldwide() {

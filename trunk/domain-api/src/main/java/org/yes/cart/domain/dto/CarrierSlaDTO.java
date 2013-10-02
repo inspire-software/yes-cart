@@ -19,9 +19,10 @@ package org.yes.cart.domain.dto;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
- * Carrier's SLA DTO inteface.
+ * Carrier's SLA DTO interface.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -74,19 +75,51 @@ public interface CarrierSlaDTO extends Identifiable {
      */
     void setName(String name);
 
+
     /**
-     * Get SLA adescition.
+     * Carrier SLA name.
      *
-     * @return SLA desrpition.
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayNames();
+
+    /**
+     * Get carrier SLA name
+     *
+     * @param names localised locale => name pairs
+     */
+    void setDisplayNames(Map<String, String> names);
+
+
+    /**
+     * Get SLA description.
+     *
+     * @return SLA description.
      */
     String getDescription();
 
     /**
-     * Set desvcription.
+     * Set description.
      *
      * @param description description
      */
     void setDescription(String description);
+
+
+    /**
+     * Carrier SLA description.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayDescriptions();
+
+    /**
+     * Get carrier SLA description
+     *
+     * @param names localised locale => name pairs
+     */
+    void setDisplayDescriptions(Map<String, String> names);
+
 
     /**
      * Get price.
