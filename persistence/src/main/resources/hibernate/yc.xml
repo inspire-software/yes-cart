@@ -1921,7 +1921,9 @@
             </generator>
         </id>
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
-        <property name="description" column="DESCRIPTION" type="string" length="4000"/>
+        <property name="description" column="DESCRIPTION" type="string" length="255"/>
+        <property name="displayName" column="DISPLAYNAME" type="string" length="255"/>
+        <property name="displayDescription" column="DISPLAYDESCRIPTION" type="string" length="255"/>
 
         <property name="worldwide" type="boolean" column="WORLDWIDE" length="1"  not-null="false"/>
         <property name="country"   type="boolean" column="COUNTRY"   length="1"  not-null="false"/>
@@ -1951,8 +1953,12 @@
                 <param name="column">value</param>
             </generator>
         </id>
+
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
-        <property name="description" column="DESCRIPTION" type="string" length="4000"/>
+        <property name="description" column="DESCRIPTION" type="string" length="255"/>
+        <property name="displayName" column="DISPLAYNAME" type="string" length="255"/>
+        <property name="displayDescription" column="DISPLAYDESCRIPTION" type="string" length="255"/>
+
         <property name="currency" column="CURRENCY" type="string" length="3" not-null="true"/>
         <property name="maxDays" column="MAX_DAYS" type="java.lang.Integer"/>
 

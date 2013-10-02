@@ -32,7 +32,9 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     private long carrierslaId;
 
     private String name;
+    private String displayName;
     private String description;
+    private String displayDescription;
     private String currency;
     private Integer maxDays;
     private String slaType;
@@ -63,12 +65,28 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.name = name;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(final String displayName) {
+        this.displayName = displayName;
+    }
+
     public String getDescription() {
         return this.description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDisplayDescription() {
+        return displayDescription;
+    }
+
+    public void setDisplayDescription(final String displayDescription) {
+        this.displayDescription = displayDescription;
     }
 
     public String getCurrency() {

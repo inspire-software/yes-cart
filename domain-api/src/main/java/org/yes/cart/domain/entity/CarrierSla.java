@@ -127,18 +127,47 @@ public interface CarrierSla extends Auditable {
     void setName(String name);
 
     /**
-     * Get SLA adescition.
+     * Get name.
      *
-     * @return SLA desrpition.
+     * @return localisable name of carrier SLA.
+     */
+    String getDisplayName();
+
+    /**
+     * Set name of carrier SLA.
+     *
+     * @param name localisable name.
+     */
+    void setDisplayName(String name);
+
+    /**
+     * Get SLA description.
+     *
+     * @return SLA description.
      */
     String getDescription();
 
     /**
-     * Set desvcription.
+     * Set description.
      *
      * @param description description
      */
     void setDescription(String description);
+
+    /**
+     * Get name.
+     *
+     * @return localisable description of carrier SLA.
+     */
+    String getDisplayDescription();
+
+    /**
+     * Set description of carrier SLA.
+     *
+     * @param description localisable description.
+     */
+    void setDisplayDescription(String description);
+
 
     /**
      * Get price. This is for internal usage only. Not a part of api.

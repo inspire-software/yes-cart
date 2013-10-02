@@ -86,7 +86,7 @@ public interface ProdTypeAttributeViewGroup extends Auditable {
      */
     void setName(String name);
 
-     /**
+    /**
      * Get name.
      *
      * @return localisable name of view group.

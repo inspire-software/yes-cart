@@ -100,7 +100,9 @@
     create table TCARRIER (
         CARRIER_ID bigint not null auto_increment,
         NAME varchar(255) not null,
-        DESCRIPTION longtext,
+        DISPLAYNAME varchar(255),
+        DESCRIPTION varchar(255),
+        DISPLAYDESCRIPTION varchar(255),
         WORLDWIDE bit,
         COUNTRY bit,
         STATE bit,
@@ -116,7 +118,9 @@
     create table TCARRIERSLA (
         CARRIERSLA_ID bigint not null auto_increment,
         NAME varchar(255) not null,
-        DESCRIPTION longtext,
+        DISPLAYNAME varchar(255),
+        DESCRIPTION varchar(255),
+        DISPLAYDESCRIPTION varchar(255),
         CURRENCY varchar(3) not null,
         MAX_DAYS integer,
         SLA_TYPE varchar(1) not null,

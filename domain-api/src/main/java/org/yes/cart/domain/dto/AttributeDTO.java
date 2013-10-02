@@ -108,7 +108,7 @@ public interface AttributeDTO extends Identifiable {
     String getName();
 
     /**
-     * Get atribute name
+     * Get attribute name
      *
      * @param name name
      */
