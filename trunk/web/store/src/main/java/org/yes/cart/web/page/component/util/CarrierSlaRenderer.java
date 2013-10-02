@@ -16,8 +16,10 @@
 
 package org.yes.cart.web.page.component.util;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 
 /**
  * User: Igor Azarny iazarnmy@yahoo.com
@@ -26,19 +28,17 @@ import org.yes.cart.domain.entity.CarrierSla;
  */
 
 public class CarrierSlaRenderer extends ChoiceRenderer<CarrierSla> {
-    
+
+    private final Component component;
+
+    public CarrierSlaRenderer(final Component component) {
+        this.component = component;
+    }
+
     /** {@inheritDoc} */
     @Override
     public Object getDisplayValue(final CarrierSla carrierSla) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(carrierSla.getName());
-        stringBuilder.append('(');
-        stringBuilder.append(carrierSla.getMaxDays());
-        stringBuilder.append(") ");
-        stringBuilder.append(carrierSla.getPrice()); //TODO: V2 calculate shipping price
-        stringBuilder.append(' ');
-        stringBuilder.append(carrierSla.getCurrency());        
-        return stringBuilder.toString();
+        return new FailoverStringI18NModel(carrierSla.getDisplayName(), carrierSla.getName()).getValue(getLocale());
     }
 
     /** {@inheritDoc} */
@@ -46,6 +46,9 @@ public class CarrierSlaRenderer extends ChoiceRenderer<CarrierSla> {
     public String getIdValue(final CarrierSla carrierSla, final int i) {
         return String.valueOf(carrierSla.getCarrierslaId());
     }
-    
-    
+
+    private String getLocale() {
+        return this.component.getLocale().getLanguage();
+    }
+
 }

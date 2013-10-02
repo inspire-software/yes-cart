@@ -23,7 +23,11 @@ public class CarrierDTOImpl {
 
     public var name:String;
 
+    public var displayNames:Object;
+
     public var  description:String;
+
+    public var displayDescriptions:Object;
 
     public var worldwide:Boolean;
 

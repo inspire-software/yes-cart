@@ -68,6 +68,7 @@ public class LiqPayPaymentGatewayImplTest extends TestCase {
 
         payment.setOrderItems(orderItems);
         payment.setOrderCurrency("USD");
+        payment.setOrderLocale("en");
 
         return payment;
 

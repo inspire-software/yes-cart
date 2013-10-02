@@ -15,7 +15,7 @@
   -    limitations under the License.
   -->
 
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*"
                 creationComplete="init()"
                 creationCompleteEffect="Zoom"
                 title="@Resource(bundle='CarrierManagementPanel',key='newCarrierSlaDialogTitle')"
@@ -39,8 +39,14 @@
         <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='name')">
             <mx:TextInput width="180" id="cname"/>
         </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayName')">
+            <yci18n:i18nStringField id="displayNames"/>
+        </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='description')">
             <mx:TextArea width="180" id="description"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayDescription')">
+            <yci18n:i18nStringField id="displayDescriptions"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='maxDays')">
             <mx:TextInput width="180" id="maxDays"/>
@@ -157,6 +163,9 @@
                     }
                 }
             }
+
+            displayNames.setSourceObject(_carrierSlaDTOImpl, 'displayNames');
+            displayDescriptions.setSourceObject(_carrierSlaDTOImpl, 'displayDescriptions');
 
             BindingUtils.bindProperty(this.cname, "text", _carrierSlaDTOImpl, "name");
             BindingUtils.bindProperty(this.description, "text", _carrierSlaDTOImpl, "description");

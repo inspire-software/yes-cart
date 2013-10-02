@@ -16,8 +16,11 @@
 
 package org.yes.cart.web.page.component.util;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.yes.cart.domain.entity.Carrier;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.web.page.FaqPage;
 
 /**
  * User: Igor Azarny iazarnmy@yahoo.com
@@ -26,16 +29,26 @@ import org.yes.cart.domain.entity.Carrier;
  */
 public class CarrierRenderer  extends ChoiceRenderer<Carrier> {
 
+    private final Component component;
+
+    public CarrierRenderer(final Component component) {
+        this.component = component;
+    }
+
     /** {@inheritDoc} */
     @Override
     public Object getDisplayValue(final Carrier carrier) {
-        return carrier.getName();
+        return new FailoverStringI18NModel(carrier.getDisplayName(), carrier.getName()).getValue(getLocale());
     }
 
     /** {@inheritDoc} */
     @Override
     public String getIdValue(final Carrier carrier, final int i) {
         return String.valueOf(carrier.getCarrierId());
+    }
+
+    private String getLocale() {
+        return this.component.getLocale().getLanguage();
     }
 
 }

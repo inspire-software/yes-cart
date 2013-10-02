@@ -89,6 +89,7 @@ public class RobokassaPaymentGatewayImplTest extends TestCase {
 
         payment.setOrderItems(orderItems);
         payment.setOrderCurrency("USD");
+        payment.setOrderLocale("en");
         payment.setOrderNumber("20121012-12");
 
         return payment;

@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.util.Assert;
 import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
@@ -247,6 +248,7 @@ public class GoogleCheckoutPaymentGatewayImpl
         cartFlowSupport.setMerchantCheckoutFlowSupport(flowSupport);
 
         final String currency = payment.getOrderCurrency();
+        final String language = payment.getOrderLocale();
 
         for (PaymentLine paymentLine : payment.getOrderItems()) {
             //Products only
@@ -263,6 +265,7 @@ public class GoogleCheckoutPaymentGatewayImpl
         //set shipping methods to select on google
         flowSupport.setShippingMethods(
                 createShipmentMethod(
+                        language,
                         currency,
                         objectFactory)
         );
@@ -312,24 +315,27 @@ public class GoogleCheckoutPaymentGatewayImpl
      * Create shipment method. CPOINT shipment method already selected by customer, so
      * is sme cases need customise how it should be represent in google cart.
      *
-     * @param currency      order curreny
+     *
+     * @param language      order language
+     * @param currency      order currency
      * @param objectFactory object factory
      * @return {@link MerchantCheckoutFlowSupport.ShippingMethods}
      */
-    MerchantCheckoutFlowSupport.ShippingMethods createShipmentMethod(final String currency,
+    MerchantCheckoutFlowSupport.ShippingMethods createShipmentMethod(final String language,
+                                                                     final String currency,
                                                                      final ObjectFactory objectFactory) {
 
         final MerchantCheckoutFlowSupport.ShippingMethods shippingMethods =
                 objectFactory.createMerchantCheckoutFlowSupportShippingMethods();
 
-        for (CarrierSla sla : getUniqueNames(getCarrierSlaService().findByCurrency(currency))) {
+        for (CarrierSla sla : getCarrierSlaService().findByCurrency(currency)) {
 
             final FlatRateShipping.Price price = objectFactory.createFlatRateShippingPrice();
             price.setCurrency(currency);
             price.setValue(sla.getPrice());
 
             final FlatRateShipping flatRateShipping = objectFactory.createFlatRateShipping();
-            flatRateShipping.setName(sla.getName());
+            flatRateShipping.setName(new FailoverStringI18NModel(sla.getDisplayName(), sla.getName()).getValue(language));
             flatRateShipping.setPrice(price);
 
             shippingMethods.getAllShippingMethods().add(flatRateShipping);
@@ -339,19 +345,6 @@ public class GoogleCheckoutPaymentGatewayImpl
 
         return shippingMethods;
     }
-
-    private List<CarrierSla> getUniqueNames(final List<CarrierSla> slas) {
-        final Set<String> stringSet = new HashSet<String>(slas.size());
-        final List<CarrierSla> carrierSlas = new ArrayList<CarrierSla>(slas.size());
-        for (CarrierSla sla : slas) {
-            if (!stringSet.contains(sla.getName())) {
-                stringSet.add(sla.getName());
-                carrierSlas.add(sla);
-            }
-        }
-        return carrierSlas;
-    }
-
 
     /**
      * {@inheritDoc}

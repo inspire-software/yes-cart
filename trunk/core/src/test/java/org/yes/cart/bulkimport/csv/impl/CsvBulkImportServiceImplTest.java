@@ -627,7 +627,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listenerCarrierSla).notifyPing();
             allowing(listenerCarrierSla).notifyPing(with(any(String.class)));
             allowing(listenerCarrierSla).notifyMessage(with(any(String.class)));
-            one(listenerCarrierSla).notifyError(with(aStringStartingWith("during import row : CsvImportTupleImpl{sid=carrierslanames.csv:1, line=[NEW_V 1 day,New Vasuki express 1")));
+            one(listenerCarrierSla).notifyError(with(aStringStartingWith("during import row : CsvImportTupleImpl{sid=carrierslanames.csv:1, line=[NEW_V 1 day,,,New Vasuki express 1")));
         }});
 
         Set<String> importedFilesSet = new HashSet<String>();
@@ -652,12 +652,12 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             // Two carries are imported
             rs = getConnection().getConnection().createStatement().executeQuery(
-                    "select count(*) as cnt from TCARRIER where name in ('UPS','TNT')");
+                    "select count(*) as cnt from TCARRIER where name in ('UPS','TNT','Нова Пошта')");
             rs.next();
             int cntNewCarries = rs.getInt("cnt");
             rs.close();
 
-            assertEquals(2, cntNewCarries);
+            assertEquals(3, cntNewCarries);
 
             //sla for UPS only + 3 from initialdata.xml, not for  new vasuki carrier
             rs = getConnection().getConnection().createStatement().executeQuery(
