@@ -52,6 +52,13 @@ public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware
 
     private CacheManager cacheManager;
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean ping() {
+        return true;
+    }
 
     /**
      * {@inheritDoc}
@@ -85,10 +92,21 @@ public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware
     /**
      * {@inheritDoc}
      */
-    public void evictCache() {
+    public void evictAllCache() {
         final CacheManager cm = getCacheManager();
         for (String cacheName : cm.getCacheNames()) {
             final Cache cache = cm.getCache(cacheName);
+            cache.clear();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void evictCache(final String cacheName) {
+        final CacheManager cm = getCacheManager();
+        final Cache cache = cm.getCache(cacheName);
+        if (cache != null) {
             cache.clear();
         }
     }

@@ -51,11 +51,10 @@
             </list>
         </property>
         <property name="entityInterceptor">
-            <bean class="org.yes.cart.domain.interceptor.AuditInterceptor"/>
+            <bean class="org.yes.cart.domain.interceptor.StorefrontInterceptor"/>
         </property>
         <property name="hibernateProperties">
             <props>
-
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.use_query_cache">true</prop>
                 <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop>
@@ -64,9 +63,8 @@
                     #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
                 </prop>
                 <prop key="hibernate.search.worker.execution">async</prop>
-                <prop key="hibernate.search.worker.thread_pool.size">2</prop>
+                <prop key="hibernate.search.worker.thread_pool.size">10</prop>
                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
-
             </props>
         </property>
     </bean>
@@ -121,13 +119,13 @@
         <constructor-arg index="2" ref="paymentModulesManager"/>
     </bean>
 
-    <!-- CPOINT is authorize net need for you ? -->
+    <!-- CPOINT do you need authorize net ? -->
     <bean id="anetPaymentCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
         <constructor-arg index="0" ref="applicationDirector"/>
         <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
     </bean>
 
-    <!-- CPOINT is liq pay need for you ? -->
+    <!-- CPOINT do you need liq pay ? -->
     <bean id="liqPayCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
         <constructor-arg index="0" ref="applicationDirector"/>
         <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
@@ -564,7 +562,17 @@
         <property name="authenticationManager" ref="authenticationManager"/>
     </bean>
 
+    <!-- ################################ Clustering begin ###################################### -->
 
+
+    <bean id="nodeService" class="org.yes.cart.web.service.ws.node.impl.NodeServiceImpl">
+        <constructor-arg index="0" ref="systemService"/>
+        <constructor-arg index="1" ref="attributeService"/>
+        <constructor-arg index="2" ref="etypeService"/>
+        <constructor-arg index="3" ref="attributeGroupService"/>
+    </bean>
+
+    <!-- ################################ Clustering end ######################################## -->
 
     <!-- ################################ JMX support  begin ###################################### -->
 

@@ -550,11 +550,7 @@
 
     <util:set id="SystemAll">
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="systemService-AttributeValue"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="systemService-AttributeValues"/>
+            <constructor-arg index="0" value="systemService-attributeValue"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>

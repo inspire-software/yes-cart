@@ -43,7 +43,6 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
     private final DtoImageService dtoImageService;
     private final DtoShopService dtoShopService;
     private final RemoteBackdoorService remoteBackdoorService;
-    private final SystemService systemService;
 
     /**
      * Construct dtoRemote service.
@@ -51,17 +50,14 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
      * @param dtoImageService       image service
      * @param dtoShopService        shop service to
      * @param remoteBackdoorService to get path to image vault
-     * @param systemService         system service
      */
     public RemoteImageServiceImpl(final DtoImageService dtoImageService,
                                   final DtoShopService dtoShopService,
-                                  final RemoteBackdoorService remoteBackdoorService,
-                                  final SystemService systemService) {
+                                  final RemoteBackdoorService remoteBackdoorService) {
         super(dtoImageService);
         this.dtoImageService = dtoImageService;
         this.dtoShopService = dtoShopService;
         this.remoteBackdoorService = remoteBackdoorService;
-        this.systemService = systemService;
     }
 
 
@@ -74,14 +70,10 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
             final byte[] imgBody,
             final String storagePrefix) throws IOException {
 
-        final Map<String, Object> param = new HashMap<String, Object>();
-        param.put(AsyncContext.WEB_SERVICE_URI, systemService.getBackdoorURI());
-
-        final AsyncContext flex = new AsyncFlexContextImpl(param);
-
         // TODO: YC-150 this is quite strange that we have this method on dtoImageService but we do not use it since it puts
         // TODO: YC-150 a blank string into path? maybe we need to revise all this??
-        final String realPath = remoteBackdoorService.getImageVaultPath(flex) + File.separator;
+        // TODO: YC-237 Image vault resolution - we are calling this on every image! - maybe this is related to YC-213??
+        final String realPath = remoteBackdoorService.getImageVaultPath(new AsyncFlexContextImpl()) + File.separator;
         return addImageToRepository(fullFileName, code, imgBody, storagePrefix, realPath);
     }
 
@@ -105,14 +97,12 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
                                       final String code,
                                       final String storagePrefix) throws IOException {
 
-        final Map<String, Object> param = new HashMap<String, Object>();
-        param.put(AsyncContext.WEB_SERVICE_URI, systemService.getBackdoorURI());
-
-        final AsyncContext flex = new AsyncFlexContextImpl(param);
-
         // TODO: YC-150 this is quite strange that we have this method on dtoImageService but we do not use it since it puts
         // TODO: YC-150 a blank string into path? maybe we need to revise all this??
-        final String realPath = remoteBackdoorService.getImageVaultPath(flex) + File.separator;
+        final Map<String, String> path = remoteBackdoorService.getImageVaultPath(new AsyncFlexContextImpl());
+        // TODO: YC-237 Image vault resolution - we are calling this on every image! - maybe this is related to YC-213??
+        final String firstAvailable = path.values().iterator().next();
+        final String realPath = firstAvailable + File.separator;
         return getImageAsByteArray(fileName, code, storagePrefix, realPath);
     }
 

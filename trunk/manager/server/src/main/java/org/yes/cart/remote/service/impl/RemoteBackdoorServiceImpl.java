@@ -23,11 +23,13 @@ import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.service.async.model.AsyncContext;
+import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.CacheDirector;
-import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
 import org.yes.cart.web.service.ws.client.CacheDirectorClientFactory;
+import org.yes.cart.web.service.ws.node.NodeService;
+import org.yes.cart.web.service.ws.node.dto.Node;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,179 +46,307 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoteBackdoorServiceImpl.class);
 
-    private final static int defaultTimeout = 60000;
+    private final static int DEFAULT_TIMEOUT_MS = 60000;
 
-    private final List<String> cacheDirectorUrl;
+    private final NodeService nodeService;
+    private final BackdoorService localBackdoorService;
 
-
-    /**
-     * Construct remote service to manage shop.
-     *
-     * @param cacheDirectorUrl  urls of cache dir
-     */
-    public RemoteBackdoorServiceImpl(List<String> cacheDirectorUrl) {
-        this.cacheDirectorUrl = cacheDirectorUrl;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public int reindexAllProducts(final AsyncContext context) {
-        return getBackdoorService(context, 300000).reindexAllProducts();
+    public RemoteBackdoorServiceImpl(final NodeService nodeService,
+                                     final BackdoorService localBackdoorService) {
+        this.nodeService = nodeService;
+        this.localBackdoorService = localBackdoorService;
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProduct(final AsyncContext context, final long productPk) {
-        return getBackdoorService(context, defaultTimeout).reindexProduct(productPk);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int reindexProductSku(final AsyncContext context, final long productPk) {
-        return getBackdoorService(context, defaultTimeout).reindexProductSku(productPk);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int reindexProductSkuCode(final AsyncContext context, final String productSkuCode) {
-        return getBackdoorService(context, defaultTimeout).reindexProductSkuCode(productSkuCode);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int reindexProducts(final AsyncContext context, final long[] productPks) {
-        return getBackdoorService(context, defaultTimeout).reindexProducts(productPks);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<Object[]> sqlQuery(final AsyncContext context, final String query) {
-        return getBackdoorService(context, defaultTimeout).sqlQuery(query);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<Object[]> hsqlQuery(final AsyncContext context, final String query) {
-        return getBackdoorService(context, defaultTimeout).hsqlQuery(query);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<Object[]> luceneQuery(final AsyncContext context, final String query) {
-        return getBackdoorService(context, defaultTimeout).luceneQuery(query);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<CacheInfoDTOImpl> getCacheInfo(final AsyncContext context)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>();
-
-        for (String url : cacheDirectorUrl) {
-
-            try {
-
-                final CacheDirector cacheDirector = getCacheDirector(context, url);
-
-                final List<CacheInfoDTOImpl> shopRez = cacheDirector.getCacheInfo();
-
-                rez.addAll(shopRez); //todo shop code
-
-            } catch (Exception e) {
-
-                if (LOG.isWarnEnabled()) {
-                    LOG.warn("Cannot to get cache info  from url ["
-                            + url
-                            + "] . Will try next one, if exists",
-                            e);
-
-                }
-
-
-            }
-
+    public Map<String, Integer> reindexAllProducts(final AsyncContext context) {
+        final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
+        if (indexFinished == null) {
+            throw new IllegalArgumentException("Must have [" + JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE + "] attribute [Map<String, Boolean>] in async context");
         }
-
-
-
-        return rez;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public void evictCache(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        for (String url : cacheDirectorUrl) {
-
+        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
+        for (final Node yesNode : nodeService.getYesNodes()) {
             try {
-
-                final CacheDirector cacheDirector = getCacheDirector(context, url);
-
-                cacheDirector.evictCache();
-
+                final Boolean finished = indexFinished.get(yesNode) != null && indexFinished.get(yesNode);
+                if (!finished) {
+                    indexStatus.put(yesNode.getNodeId(),
+                            getBackdoorService(context, yesNode.getBackdoorUri()).reindexAllProducts());
+                }
             } catch (Exception e) {
+                indexStatus.put(yesNode.getNodeId(), null);
                 if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot evict cache,  url ["
-                            + url
+                    LOG.error("Cannot get image vault path,  url ["
+                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
                             + "] . Will try next one, if exists",
                             e);
-
                 }
-
             }
+
         }
-
-
-    }
-
-    private CacheDirector getCacheDirector(final AsyncContext context, final String cacheDirUrl) {
-        final Map<String, Object> ctxAttr = new HashMap<String,Object>(context.getAttributes());
-        ctxAttr.put(AsyncContext.WEB_SERVICE_URI, cacheDirUrl);
-        final AsyncContext newCtx = new AsyncFlexContextImpl(ctxAttr);
-        return getCacheDirector(newCtx, defaultTimeout);
+        return indexStatus;
     }
 
     /**
-     * Get actual remote service.
-     *
-     * @param context web service context.
-     * @param timeout timeout for operation.
-     * @return {@BackdoorService}
+     * {@inheritDoc}
      */
-    private CacheDirector getCacheDirector(final AsyncContext context, final long timeout) {
+    public Map<String, Integer> reindexProduct(final AsyncContext context, final long productPk) {
+        final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
+        for (final Node yesNode : nodeService.getYesNodes()) {
+            try {
+                reindexResult.put(yesNode.getNodeId(), getBackdoorService(context, yesNode.getBackdoorUri()).reindexProduct(productPk));
+            } catch (Exception e) {
+                reindexResult.put(yesNode.getNodeId(), null);
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Cannot reindex product [" + productPk + "],  url ["
+                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
+                            + "] . Will try next one, if exists",
+                            e);
+                }
+            }
 
-
-        String userName = context.getAttribute(AsyncContext.USERNAME);
-        String password = context.getAttribute(AsyncContext.CREDENTIALS);
-        String uri = context.getAttribute(AsyncContext.WEB_SERVICE_URI);
-
-        return getCacheDirectorClientFactory().getCacheDirector(
-                userName,
-                password,
-                uri, timeout);  //TODO: YC-149 move timeouts to config
-
+        }
+        return reindexResult;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, Integer> reindexProductSku(final AsyncContext context, final long productPk) {
+        final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
+        for (final Node yesNode : nodeService.getYesNodes()) {
+            try {
+                reindexResult.put(yesNode.getNodeId(),
+                        getBackdoorService(context, yesNode.getBackdoorUri()).reindexProductSku(productPk));
+            } catch (Exception e) {
+                reindexResult.put(yesNode.getNodeId(), null);
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Cannot reindex product sku [" + productPk + "],  url ["
+                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
+                            + "] . Will try next one, if exists",
+                            e);
+                }
+            }
+
+        }
+        return reindexResult;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, Integer> reindexProductSkuCode(final AsyncContext context, final String productSkuCode) {
+        final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
+        for (final Node yesNode : nodeService.getYesNodes()) {
+            try {
+                reindexResult.put(yesNode.getNodeId(),
+                        getBackdoorService(context, yesNode.getBackdoorUri()).reindexProductSkuCode(productSkuCode));
+            } catch (Exception e) {
+                reindexResult.put(yesNode.getNodeId(), null);
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Cannot reindex product sku [" + productSkuCode + "],  url ["
+                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
+                            + "] . Will try next one, if exists",
+                            e);
+                }
+            }
+
+        }
+        return reindexResult;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, Integer> reindexProducts(final AsyncContext context, final long[] productPks) {
+        final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
+        for (final Node yesNode : nodeService.getYesNodes()) {
+            try {
+                reindexResult.put(yesNode.getNodeId(),
+                        getBackdoorService(context, yesNode.getBackdoorUri()).reindexProducts(productPks));
+            } catch (Exception e) {
+                reindexResult.put(yesNode.getNodeId(), null);
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Cannot reindex products [" + productPks + "],  url ["
+                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
+                            + "] . Will try next one, if exists",
+                            e);
+                }
+            }
+
+        }
+        return reindexResult;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Object[]> sqlQuery(final AsyncContext context, final String query, final String node) {
+        if (nodeService.getCurrentNodeId().equals(node)) {
+            return localBackdoorService.sqlQuery(query);
+        }
+        return getBackdoorService(context, getBackdoorUriForNode(node, false)).sqlQuery(query);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Object[]> hsqlQuery(final AsyncContext context, final String query, final String node) {
+        if (nodeService.getCurrentNodeId().equals(node)) {
+            return localBackdoorService.hsqlQuery(query);
+        }
+        return getBackdoorService(context, getBackdoorUriForNode(node, false)).hsqlQuery(query);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Object[]> luceneQuery(final AsyncContext context, final String query, final String node) {
+        return getBackdoorService(context, getBackdoorUriForNode(node, true)).luceneQuery(query);
+    }
+
+    private String getBackdoorUriForNode(final String node, final boolean yesOnly) {
+        final List<Node> nodes = nodeService.getCluster();
+        for (final Node n : nodes) {
+            if (n.getNodeId().equals(node)) {
+                if (yesOnly && n.isYum()) {
+                    throw new IllegalArgumentException("Unable to perform operation on YUM node");
+                }
+                return n.getBackdoorUri();
+            }
+        }
+        throw new IllegalArgumentException("Unknown node: " + node);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, List<CacheInfoDTOImpl>> getCacheInfo(final AsyncContext context)
+             throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+         final Map<String, List<CacheInfoDTOImpl>> info = new HashMap<String, List<CacheInfoDTOImpl>>();
+
+         for (final Node yesNode : nodeService.getYesNodes()) {
+
+             try {
+
+                 final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>();
+
+                 final CacheDirector cacheDirector = getCacheDirector(context, yesNode.getCacheManagerUri());
+                 final List<CacheInfoDTOImpl> shopRez = cacheDirector.getCacheInfo();
+                 for (final CacheInfoDTOImpl cacheInfoDTO : shopRez) {
+                     cacheInfoDTO.setNodeId(yesNode.getNodeId());
+                     cacheInfoDTO.setNodeUri(yesNode.getCacheManagerUri());
+                     rez.add(cacheInfoDTO);
+                 }
+
+                 info.put(yesNode.getNodeId(), rez);
+
+             } catch (Exception e) {
+
+                 info.put(yesNode.getNodeId(), null);
+
+                 if (LOG.isWarnEnabled()) {
+                     LOG.warn("Cannot to get cache info  from url ["
+                             + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
+                             + "] . Will try next one, if exists",
+                             e);
+
+                 }
+
+
+             }
+
+         }
+         return info;
+    }
 
 
     /**
      * {@inheritDoc}
      */
-    public String getImageVaultPath(final AsyncContext context) throws IOException {
-        return getBackdoorService(context, defaultTimeout).getImageVaultPath();
+    public Map<String, Boolean> evictAllCache(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+         final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
+         for (final Node yesNode : nodeService.getYesNodes()) {
+
+             try {
+
+                 final CacheDirector cacheDirector = getCacheDirector(context, yesNode.getCacheManagerUri());
+                 cacheDirector.evictAllCache();
+                 evicts.put(yesNode.getNodeId(), Boolean.TRUE);
+
+             } catch (Exception e) {
+                 evicts.put(yesNode.getNodeId(), Boolean.FALSE);
+                 if (LOG.isErrorEnabled()) {
+                     LOG.error("Cannot evict cache,  url ["
+                             + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
+                             + "] . Will try next one, if exists",
+                             e);
+
+                 }
+
+             }
+         }
+         return evicts;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, Boolean> evictCache(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+         final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
+         for (final Node yesNode : nodeService.getYesNodes()) {
+
+             try {
+
+                 final CacheDirector cacheDirector = getCacheDirector(context, yesNode.getCacheManagerUri());
+                 cacheDirector.evictCache(name);
+                 evicts.put(yesNode.getNodeId(), Boolean.TRUE);
+
+             } catch (Exception e) {
+                 evicts.put(yesNode.getNodeId(), Boolean.FALSE);
+                 if (LOG.isErrorEnabled()) {
+                     LOG.error("Cannot evict cache [" + name + "],  url ["
+                             + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
+                             + "] . Will try next one, if exists",
+                             e);
+
+                 }
+
+             }
+         }
+         return evicts;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, String> getImageVaultPath(final AsyncContext context) throws IOException {
+
+         // TODO: need to have a better way for this - ATM we assume we are on the same FS!!!
+         // TODO: potentially we need either dedicated server for images or we need to transfer images via WS
+
+         final Map<String, String> paths = new HashMap<String, String>();
+         for (final Node yesNode : nodeService.getYesNodes()) {
+             try {
+                 paths.put(yesNode.getNodeId(),
+                         getBackdoorService(context, yesNode.getBackdoorUri()).getImageVaultPath());
+             } catch (Exception e) {
+                 paths.put(yesNode.getNodeId(), null);
+                 if (LOG.isErrorEnabled()) {
+                     LOG.error("Cannot get image vault path,  url ["
+                             + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
+                             + "] . Will try next one, if exists",
+                             e);
+                 }
+             }
+
+         }
+         return paths;
     }
 
     private BackdoorServiceClientFactory backdoorServiceClientFactory = null;
@@ -236,27 +366,30 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         return cacheDirectorClientFactory;
     }
 
-    /**
-     * Get actual remote service.
-     *
-     * @param context web service context.
-     * @param timeout timeout for operation.
-     * @return {@BackdoorService}
-     */
-    private BackdoorService getBackdoorService(final AsyncContext context, final long timeout) {
+    private BackdoorService getBackdoorService(final AsyncContext context, final String backdoorUrl) {
 
 
         String userName = context.getAttribute(AsyncContext.USERNAME);
         String password = context.getAttribute(AsyncContext.CREDENTIALS);
-        String uri = context.getAttribute(AsyncContext.WEB_SERVICE_URI);
 
         return getBackdoorServiceClientFactory().getBackdoorService(
                 userName,
                 password,
-                uri, timeout);  //TODO: YC-149 move timeouts to config
+                backdoorUrl, DEFAULT_TIMEOUT_MS);  //TODO: YC-149 move timeouts to config
 
     }
 
+
+    private CacheDirector getCacheDirector(final AsyncContext context, final String cacheDirUrl) {
+
+        String userName = context.getAttribute(AsyncContext.USERNAME);
+        String password = context.getAttribute(AsyncContext.CREDENTIALS);
+
+        return getCacheDirectorClientFactory().getCacheDirector(
+                userName,
+                password,
+                cacheDirUrl, DEFAULT_TIMEOUT_MS);  //TODO: YC-149 move timeouts to config
+    }
 
 
 

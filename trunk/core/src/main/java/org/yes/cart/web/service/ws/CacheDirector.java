@@ -55,6 +55,12 @@ public interface CacheDirector {
 
     }
 
+    /**
+     * @return true if service is online
+     */
+    @WebMethod
+    @WebResult(name = "ping")
+    boolean ping();
 
     /**
      * Get cache information.
@@ -65,17 +71,25 @@ public interface CacheDirector {
     List<CacheInfoDTOImpl> getCacheInfo();
 
     /**
-     * Evict all caches , which are represent in getCacheInfo list.
+     * Evict all caches, which are represent in getCacheInfo list.
      */
     @WebMethod
     @WebResult(name = "cacheInfoResult")
-    void evictCache();
+    void evictAllCache();
 
     /**
+     * Evict specific cache.
+     */
+    @WebMethod
+    @WebResult(name = "cacheInfoResult")
+    void evictCache(String cache);
+
+    /**
+     * Fire event entity change event
      *
-     * @param entityOperation
-     * @param entityName
-     * @param pkValue
+     * @param entityOperation operation type
+     * @param entityName entity type
+     * @param pkValue primary key
      */
     @WebMethod
     @WebResult(name = "itemCount")

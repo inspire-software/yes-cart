@@ -91,6 +91,7 @@
         import org.yes.cart.ui.content.ContentManagementPanel;
         import org.yes.cart.ui.customer.CustomerManagementPanel;
         import org.yes.cart.ui.location.LocationManagementPanel;
+        import org.yes.cart.ui.monitoring.ClusterPanel;
         import org.yes.cart.ui.monitoring.MonitoringPanel;
         import org.yes.cart.ui.order.OrdersManagementPanel;
         import org.yes.cart.ui.payment.PaymentGateConfigManagementPanel;
@@ -438,6 +439,15 @@
                 mainPanel.addChild(panelCache['MonitoringPanel']);
             }
             showMainPanelSection(panelCache['MonitoringPanel']);
+        }
+
+        private function onClusterClick(event:MouseEvent):void {
+            setFontWeight(clusterBtn);
+            if (!panelCache.hasOwnProperty('ClusterPanel')) {
+                panelCache['ClusterPanel'] = new ClusterPanel();
+                mainPanel.addChild(panelCache['ClusterPanel']);
+            }
+            showMainPanelSection(panelCache['ClusterPanel']);
         }
 
         private function onProductTypesManagementClick(event:MouseEvent):void {
@@ -927,6 +937,10 @@
                                         <mx:LinkButton id="monitoringBtn" width="100%"
                                                        label="@Resource(bundle='ShopManagerApplication',key='monitoring')"
                                                        click="onMonitoringClick(event)"/>
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton id="clusterBtn" width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='cluster')"
+                                                       click="onClusterClick(event)"/>
 
                                     </mx:VBox>
                                 </mx:Canvas>

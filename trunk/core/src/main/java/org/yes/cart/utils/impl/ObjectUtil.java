@@ -21,6 +21,7 @@ import org.hibernate.proxy.HibernateProxy;
 import org.yes.cart.domain.entity.Auditable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Map;
 
 /**
@@ -70,6 +71,10 @@ public class ObjectUtil {
         Object[] rez = new Object[fields.length];
 
         for (int i = 0; i < fields.length; i++) {
+
+            if (Modifier.isStatic(fields[i].getModifiers())) {
+                continue;
+            }
 
             if (!fields[i].isAccessible()) {
                 fields[i].setAccessible(true);

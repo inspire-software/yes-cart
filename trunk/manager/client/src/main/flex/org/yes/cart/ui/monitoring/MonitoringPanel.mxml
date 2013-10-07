@@ -22,28 +22,35 @@
 
     <mx:Script>
 		<![CDATA[
+        import mx.collections.ArrayCollection;
+        import mx.events.ListEvent;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-
-        private var indexJobToken:String;
 
 
         private function monitoringIndexPanel():void {
             remoteDevService.getCacheInfo();
         }
 
-        /* private function onStatusTimerComplete(event:TimerEvent):void {
-         remoteBackdoorService.getCacheInfo();
-         }  */
-
         /**
          * Perform evict all objects from all caches.
          * @param event
          */
         private function onClearCacheClick(event:MouseEvent):void {
-            remoteDevService.evictCache();
+            remoteDevService.evictAllCache();
+        }
+
+        private function onSingleCacheSelected(event:ListEvent):void {
+            cacheItemSelected = cacheInfoDataGrid.selectedItem != null;
+        }
+
+        private function onClearSingleCacheClick(event:MouseEvent):void {
+            var _selectedCache = cacheInfoDataGrid.selectedItem;
+            if (_selectedCache != null) {
+                remoteDevService.evictCache(_selectedCache['cacheName']);
+            }
         }
 
         private function onRefreshCacheClick(event:MouseEvent):void {
@@ -55,7 +62,12 @@
         }
 
         private function onGetCacheInfoResult(event:ResultEvent):void {
-            cacheInfoDataGrid.dataProvider = event.result;
+            var _caches:Object = event.result;
+            var _all:ArrayCollection = new ArrayCollection();
+            for (var prop:String in _caches) {
+                _all.addAll(_caches[prop] as ArrayCollection);
+            }
+            cacheInfoDataGrid.dataProvider = _all;
         }
 
         private function onEvictCacheResult(event:ResultEvent):void {
@@ -74,13 +86,18 @@
                    result="onGetCacheInfoResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="evictAllCache" name="evictAllCache"
+                   result="onEvictCacheResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
         <mx:method id="evictCache" name="evictCache"
                    result="onEvictCacheResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
 
-
     </mx:RemoteObject>
+
+    <mx:Boolean id="cacheItemSelected">false</mx:Boolean>
 
     <mx:VBox width="100%" height="100%">
 
@@ -89,13 +106,15 @@
                        click="onRefreshCacheClick(event)"/>
             <mx:Button id="clearCacheBtn" label="@Resource(bundle='MonitoringPanel',key='clearCache')"
                        click="onClearCacheClick(event)"/>
+            <mx:Button id="clearSingleCacheBtn" label="@Resource(bundle='MonitoringPanel',key='clearSingleCache')"
+                       click="onClearSingleCacheClick(event)" enabled="{cacheItemSelected}"/>
 
         </mx:ControlBar>
 
-        <mx:DataGrid id="cacheInfoDataGrid" width="100%" height="100%" >
+        <mx:DataGrid id="cacheInfoDataGrid" width="100%" height="100%" itemClick="onSingleCacheSelected(event)">
             <mx:columns>
-                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='shopCode')"
-                                   dataField="shopCode"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeId')"
+                                   dataField="nodeId"/>
                 <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='name')"
                                    dataField="cacheName"/>
                 <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='size')"
@@ -108,6 +127,8 @@
                                    dataField="calculateInMemorySize"/>
                 <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='calculateOnDiskSize')"
                                    dataField="calculateOnDiskSize"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeUri')"
+                                   dataField="nodeUri"/>
             </mx:columns>
         </mx:DataGrid>
 

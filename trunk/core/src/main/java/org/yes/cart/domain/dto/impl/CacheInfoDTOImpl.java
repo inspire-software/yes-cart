@@ -29,8 +29,6 @@ import java.io.Serializable;
  */
 public class CacheInfoDTOImpl implements Serializable {
 
-
-
     private String cacheName;
 
     private int cacheSize;
@@ -43,24 +41,24 @@ public class CacheInfoDTOImpl implements Serializable {
 
     private long  calculateOnDiskSize;
 
-    private String shopCode;
+    private String nodeId;
 
-    private String shopName;
+    private String nodeUri;
 
-    public String getShopCode() {
-        return shopCode;
+    public String getNodeId() {
+        return nodeId;
     }
 
-    public void setShopCode(String shopCode) {
-        this.shopCode = shopCode;
+    public void setNodeId(final String nodeId) {
+        this.nodeId = nodeId;
     }
 
-    public String getShopName() {
-        return shopName;
+    public String getNodeUri() {
+        return nodeUri;
     }
 
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
+    public void setNodeUri(String nodeUri) {
+        this.nodeUri = nodeUri;
     }
 
     public int getDiskStoreSize() {
@@ -138,16 +136,14 @@ public class CacheInfoDTOImpl implements Serializable {
                             final int diskStoreSize,
                             final long calculateInMemorySize,
                             final long calculateOnDiskSize,
-                            final String shopCode,
-                            final String shopName) {
+                            final String nodeUri) {
         this.cacheName = cacheName;
         this.cacheSize = cacheSize;
         this.inMemorySize = inMemorySize;
         this.diskStoreSize = diskStoreSize;
         this.calculateInMemorySize = calculateInMemorySize;
         this.calculateOnDiskSize = calculateOnDiskSize;
-        this.shopCode = shopCode;
-        this.shopName = shopName;
+        this.nodeUri = nodeUri;
 
     }
 

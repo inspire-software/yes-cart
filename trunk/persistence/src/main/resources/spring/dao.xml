@@ -50,6 +50,7 @@
                 <prop key="doImport*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="getRootContent">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="getEntityFactory">PROPAGATION_SUPPORTS,readOnly,-Throwable</prop>
+                <prop key="getEntityAttributes*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
                 <prop key="find*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
                 <prop key="*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
 

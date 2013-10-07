@@ -449,7 +449,6 @@
         <constructor-arg index="0" ref="dtoImageService"/>
         <constructor-arg index="1" ref="dtoShopService"/>
         <constructor-arg index="2" ref="remoteBackdoorService"/>
-        <constructor-arg index="3" ref="systemService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -556,7 +555,7 @@
           class="org.yes.cart.remote.service.impl.ReindexServiceImpl">
         <constructor-arg index="0" ref="productIndexExecutor"/>
         <constructor-arg index="1" ref="remoteBackdoorService"/>
-        <constructor-arg index="2" ref="systemService"/>
+        <constructor-arg index="2" ref="nodeService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
@@ -567,7 +566,6 @@
     <bean id="remoteDevService"
           class="org.yes.cart.remote.service.impl.RemoteDevServiceImpl">
         <constructor-arg index="0" ref="remoteBackdoorService"/>
-        <constructor-arg index="1" ref="systemService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="sqlQuery" access="ROLE_SMADMIN"/>
@@ -578,18 +576,32 @@
         </security:intercept-methods>
     </bean>
 
+    <bean id="remoteNodeService"
+          class="org.yes.cart.remote.service.impl.RemoteNodeServiceImpl">
+        <constructor-arg index="0" ref="nodeService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="getCluster" access="ROLE_SMADMIN"/>
+        </security:intercept-methods>
+    </bean>
+
     <bean id="remoteFlexSupportService"
           class="org.yes.cart.remote.service.impl.RemoteFlexSupportServiceImpl">
         <flex:remoting-destination/>
     </bean>
 
+    <bean id="localBackdoorService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.web.service.ws.impl.LocalBackdoorServiceImpl">
+                <property name="productService" ref="productService"/>
+            </bean>
+        </property>
+    </bean>
+
 
     <bean id="remoteBackdoorService" class="org.yes.cart.remote.service.impl.RemoteBackdoorServiceImpl">
-        <constructor-arg index="0">
-            <list>
-                <value>http://localhost:8080/yes-shop/services/cachedirector</value> <!-- default ootb  -->
-            </list>
-        </constructor-arg>
+        <constructor-arg index="0" ref="nodeService"/>
+        <constructor-arg index="1" ref="localBackdoorService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -723,8 +735,7 @@
         <constructor-arg index="4" ref="productService"/>
         <constructor-arg index="5" ref="bulkImportExecutor"/>
         <constructor-arg index="6" ref="remoteBackdoorService"/>
-        <constructor-arg index="7" ref="systemService"/>
-        <constructor-arg index="8">
+        <constructor-arg index="7">
             <bean class="org.yes.cart.utils.impl.ZipUtils">
                 <constructor-arg index="0" value="Cp866"/>       <!--CPOINT-->
             </bean>

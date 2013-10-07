@@ -29,7 +29,9 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.SystemService;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,15 +60,14 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "systemService-AttributeValue")
+    @Cacheable(value = "systemService-attributeValue")
     public String getAttributeValue(final String key) {
-        return getAttirbuteValue(key, getSystem().getAttributes());
+        return getAttributeValue(key, getSystem().getAttributes());
     }
 
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value =  "systemService-AttributeValues")
     public Map<String, AttrValueSystem> getAttributeValues() {
         return getSystem().getAttributes();
     }
@@ -75,8 +76,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     @CacheEvict(value ={
-            "systemService-AttributeValue",
-            "systemService-AttributeValues"
+            "systemService-attributeValue"
     }, allEntries = true)
     public void updateAttributeValue(final String key, final String value) {
 
@@ -104,7 +104,7 @@ public class SystemServiceImpl implements SystemService {
      * @return    true if google checkout enabled.
      */
     public boolean isGoogleCheckoutEnabled() {
-        final String allGws = getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
+        final String allGws = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
         return StringUtils.isNotBlank(allGws) &&  allGws.contains("googleCheckoutPaymentGatewayLabel");
     }
 
@@ -112,24 +112,14 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getDefaultShopURL() {
-        return getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_SHOP,
-                getSystem().getAttributes());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getBackdoorURI() {
-        return getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI,
-                getSystem().getAttributes());
+        return proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_SHOP);
     }
 
     /**
      * {@inheritDoc}
      */
     public String getMailResourceDirectory() {
-        return addTailFileSeparator(getAttirbuteValue(AttributeNamesKeys.SYSTEM_MAILTEMPLATES_FSPOINTER,
-                getSystem().getAttributes()));
+        return addTailFileSeparator(proxy().getAttributeValue(AttributeNamesKeys.SYSTEM_MAILTEMPLATES_FSPOINTER));
     }
 
 
@@ -137,8 +127,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getDefaultResourceDirectory() {
-        return getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_FSPOINTER,
-                getSystem().getAttributes());
+        return proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_DEFAULT_FSPOINTER);
     }
 
     /**
@@ -146,8 +135,7 @@ public class SystemServiceImpl implements SystemService {
      */
     public String getImageRepositoryDirectory() {
         return addTailFileSeparator(
-                getAttirbuteValue(AttributeNamesKeys.System.SYSTEM_IMAGE_VAULT,
-                        getSystem().getAttributes()));
+                proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_IMAGE_VAULT));
     }
 
 
@@ -156,9 +144,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public Integer getEtagExpirationForImages() {
-        final String expirationTimeout = getAttirbuteValue(
-                AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_IMAGES_TIME,
-                getSystem().getAttributes());
+        final String expirationTimeout = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_IMAGES_TIME);
         if (expirationTimeout != null) {
             return Integer.valueOf(expirationTimeout);
         }
@@ -169,9 +155,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public Integer getEtagExpirationForPages() {
-        final String expirationTimeout = getAttirbuteValue(
-                AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_PAGES_TIME,
-                getSystem().getAttributes());
+        final String expirationTimeout = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_ETAG_CACHE_PAGES_TIME);
         if (expirationTimeout != null) {
             return Integer.valueOf(expirationTimeout);
         }
@@ -199,7 +183,7 @@ public class SystemServiceImpl implements SystemService {
      * @param values   map of attribute name and {@link AttrValue}
      * @return null if attribute not present in map, otherwise value of attribute
      */
-    public static String getAttirbuteValue(final String attrName, final Map<String, AttrValueSystem> values) {
+    public static String getAttributeValue(final String attrName, final Map<String, AttrValueSystem> values) {
         AttrValue attrValue = values.get(attrName);
         if (attrValue != null) {
             return attrValue.getVal();
@@ -214,7 +198,7 @@ public class SystemServiceImpl implements SystemService {
      * @param attributes collection of attribute
      * @return value if fount otherwise null
      */
-    public static String getAttirbuteValue(final String attrName, final Collection<? extends AttrValueSystem> attributes) {
+    public static String getAttributeValue(final String attrName, final Collection<? extends AttrValueSystem> attributes) {
         for (AttrValue attrValue : attributes) {
             if (attrName.equals(attrValue.getAttribute().getName())) {
                 return attrValue.getVal();
@@ -226,6 +210,23 @@ public class SystemServiceImpl implements SystemService {
     /** {@inheritDoc} */
     public GenericDAO getGenericDao() {
         return systemDao;
+    }
+
+    private SystemService proxy;
+
+    private SystemService proxy() {
+        if (proxy == null) {
+            proxy = getSelf();
+        }
+        return proxy;
+    }
+
+    /**
+     * @return self proxy
+     */
+    public SystemService getSelf() {
+        // Strping AOP
+        return null;
     }
 
 

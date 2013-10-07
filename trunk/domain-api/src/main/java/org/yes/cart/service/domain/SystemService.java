@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueSystem;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,22 +67,15 @@ public interface SystemService {
     String getDefaultShopURL();
 
     /**
-     * URI of Backdoor web service.
-     *
-     * @return Backdoor web service URI
-     */
-    String getBackdoorURI();
-
-    /**
      * Get the mail templates directory.
      * Mail template directory has following structure:
      * <p/>
      * /mail/template/directory
      * <p/>
-     * /mail/template/directory/shopCode1/tamplatename - has two templates text and html
-     * /mail/template/directory/shopCode1/tamplatename/resources has resources to inline into html template     *
-     * /mail/template/directory/shopCode2/tamplatename - has two templates text and html
-     * /mail/template/directory/shopCode2/tamplatename/resources has resources to inline into html template
+     * /mail/template/directory/shopCode1/templatename - has two templates text and html
+     * /mail/template/directory/shopCode1/templatename/resources has resources to inline into html template     *
+     * /mail/template/directory/shopCode2/templatename - has two templates text and html
+     * /mail/template/directory/shopCode2/templatename/resources has resources to inline into html template
      *
      * @return mail templates directory with tail File.separator
      */

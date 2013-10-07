@@ -116,15 +116,47 @@ public class CacheDirectorImplTest {
 
 
     @Test
-    public void testEvictCache() {
+    public void testAllEvictCache() {
 
-        List<CacheInfoDTOImpl> rez = cacheDirector.getCacheInfo();
+        List<CacheInfoDTOImpl> rez;
+
+        rez = cacheDirector.getCacheInfo();
         for (CacheInfoDTOImpl cacheInfoDTO : rez) {
             cacheDirector.getCacheManager().getCache(cacheInfoDTO.getCacheName()).put("hi", "there");
         }
-        cacheDirector.evictCache();
+        rez = cacheDirector.getCacheInfo();
+        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+            assertTrue(cacheInfoDTO.getCacheSize() > 0);
+        }
+        cacheDirector.evictAllCache();
+        rez = cacheDirector.getCacheInfo();
         for (CacheInfoDTOImpl cacheInfoDTO : rez) {
             assertEquals(0, cacheInfoDTO.getCacheSize());
+        }
+
+    }
+
+    @Test
+    public void testEvictCache() {
+
+        List<CacheInfoDTOImpl> rez;
+        rez = cacheDirector.getCacheInfo();
+        final String first = rez.get(0).getCacheName();
+        cacheDirector.getCacheManager().getCache(first).put("hi", "there");
+
+        rez = cacheDirector.getCacheInfo();
+        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+            if (cacheInfoDTO.getCacheName().equals(first)) {
+                assertTrue(cacheInfoDTO.getCacheSize() > 0);
+            }
+        }
+
+        cacheDirector.evictCache(first);
+        rez = cacheDirector.getCacheInfo();
+        for (CacheInfoDTOImpl cacheInfoDTO : rez) {
+            if (cacheInfoDTO.getCacheName().equals(first)) {
+                assertEquals(0, cacheInfoDTO.getCacheSize());
+            }
         }
 
     }

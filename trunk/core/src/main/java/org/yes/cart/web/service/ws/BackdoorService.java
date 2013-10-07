@@ -37,6 +37,13 @@ import java.util.List;
 public interface BackdoorService {
 
     /**
+     * @return true if service is online
+     */
+    @WebMethod
+    @WebResult(name = "ping")
+    boolean ping();
+
+    /**
      * Reindex all products.
      * @return quantity of objects in index
      */
@@ -84,7 +91,7 @@ public interface BackdoorService {
 
     /**
      * Execute sql and return result.
-     * DML operatin also allowed, in this case result has quantity of affected rows.
+     * DML operating also allowed, in this case result has quantity of affected rows.
      *
      * @param query query ot execute.
      * @return list of rows
@@ -121,8 +128,5 @@ public interface BackdoorService {
     @WebMethod
     @WebResult(name = "imageVaultPath")
     String getImageVaultPath() throws IOException;
-
-
-
 
 }

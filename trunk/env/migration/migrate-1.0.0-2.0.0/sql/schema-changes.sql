@@ -102,4 +102,11 @@ alter table TCARRIERSLA modify column DESCRIPTION varchar(255);
 
 
 
+--
+-- YC-282 Cache director url should not be hardcoded.
+--
+
+DELETE FROM TSYSTEMATTRVALUE WHERE CODE = 'SYSTEM_BACKDOOR_URI';
+DELETE FROM TATTRIBUTE WHERE CODE = 'SYSTEM_BACKDOOR_URI';
+
 

@@ -28,9 +28,10 @@ import java.util.Map;
  */
 public interface AsyncContext {
 
+    String SECURITY_CTX = "SECURITY_CTX";
     String USERNAME = "USERNAME";
     String CREDENTIALS = "CREDENTIALS";
-    String WEB_SERVICE_URI = "URI";
+    String FLEX_SESSION_CREDENTIALS = "pwd";
 
     /**
      * Convenience method for retrieving attributes.

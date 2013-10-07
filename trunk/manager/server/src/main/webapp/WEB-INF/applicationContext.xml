@@ -105,6 +105,18 @@
 
     <!-- #################################  aspects configurations end ######################################-->
 
+    <!-- ################################ Clustering begin ###################################### -->
+
+
+    <bean id="nodeService" class="org.yes.cart.web.service.ws.node.impl.NodeServiceImpl">
+        <constructor-arg index="0" ref="systemService"/>
+        <constructor-arg index="1" ref="attributeService"/>
+        <constructor-arg index="2" ref="etypeService"/>
+        <constructor-arg index="3" ref="attributeGroupService"/>
+    </bean>
+
+    <!-- ################################ Clustering end ######################################## -->
+
 
     <!-- #################################  message consumers begin ######################################-->
 
@@ -137,20 +149,17 @@
             </list>
         </property>
         <property name="entityInterceptor">
-            <bean class="org.yes.cart.domain.interceptor.AdminInterceptor">
-                <constructor-arg index="0">
-                    <list>
-                        <value>http://localhost:8080/yes-shop/services/cachedirector</value> <!-- default ootb  -->
-                    </list>
-                </constructor-arg>
-            </bean>
+            <bean class="org.yes.cart.domain.interceptor.AdminInterceptor"/>
         </property>
         <property name="hibernateProperties">
             <props>
-		<prop key="hibernate.search.default.indexBase">
-                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
+		        <prop key="hibernate.search.default.indexBase">
+                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart-yum'}
                 </prop>
                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+                <!-- Disable hibernate search automatic support - since we do not have FT index in YUM -->
+                <prop key="hibernate.search.autoregister_listeners">false</prop>
+                <prop key="hibernate.search.indexing_strategy">manual</prop>
 
             </props>
         </property>

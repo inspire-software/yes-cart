@@ -18,17 +18,21 @@
 package org.yes.cart.domain.interceptor;
 
 import org.hibernate.type.Type;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.service.async.model.AsyncContext;
+import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.CacheDirector;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 import org.yes.cart.web.service.ws.client.CacheDirectorClientFactory;
+import org.yes.cart.web.service.ws.node.NodeService;
+import org.yes.cart.web.service.ws.node.dto.Node;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,21 +40,18 @@ import java.util.Set;
  * Date: 01-Sep-2013
  * Time: 16:13:01
  * <p/>
- * Delegate cache eviction to shops in case if operation was performed on some cachable entity.
+ * Delegate cache eviction to shops in case if operation was performed on a cacheable entity.
  */
-public class AdminInterceptor extends AuditInterceptor {
-
-    private static final Logger LOG = LoggerFactory.getLogger(AdminInterceptor.class);
+public class AdminInterceptor extends AuditInterceptor implements ApplicationContextAware {
 
     private final static Set<String> cachedEntities;
 
     private final static int defaultTimeout = 60000;
 
-    private CacheDirectorClientFactory cacheDirectorClientFactory;
+    private final CacheDirectorClientFactory cacheDirectorClientFactory = new CacheDirectorClientFactory();
 
-    private final List<String> cacheDirectorUrl;
-
-
+    private ApplicationContext applicationContext;
+    private NodeService nodeService;
 
     static {
 
@@ -66,14 +67,6 @@ public class AdminInterceptor extends AuditInterceptor {
         cachedEntities.add(CacheDirector.EntityName.SHOP);
         cachedEntities.add(CacheDirector.EntityName.SYSTEM);
 
-    }
-
-    /**
-     * Create admin hibernate interceptor.
-     * @param cacheDirectorUrl url to invalidate caches.
-     */
-    public AdminInterceptor(List<String> cacheDirectorUrl) {
-        this.cacheDirectorUrl = cacheDirectorUrl;
     }
 
     @Override
@@ -103,9 +96,6 @@ public class AdminInterceptor extends AuditInterceptor {
 
     }
 
-
-
-
     @Override
     public boolean onFlushDirty(Object entity, Serializable serializable, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
         try {
@@ -121,16 +111,36 @@ public class AdminInterceptor extends AuditInterceptor {
 
     void invalidateCache(final String op, final String entityName, final Long pk) {
 
-        for (String url : cacheDirectorUrl) {
+        if (nodeService == null) {
+            synchronized (this) {
+                if (nodeService == null) {
+                    nodeService = applicationContext.getBean("nodeService", NodeService.class);
+                }
+            }
+        }
+
+        final AsyncContext async = getAsyncContext();
+        if (async == null) {
+            ShopCodeContext.getLog(this)
+                    .error("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
+            return;
+        }
+        String userName = async.getAttribute(AsyncContext.USERNAME);
+        String password = async.getAttribute(AsyncContext.CREDENTIALS);
+
+        for (final Node node : nodeService.getYesNodes()) {
 
             try {
 
-                getCacheDirector(url).onCacheableChange(op, entityName, pk);
+                cacheDirectorClientFactory.getCacheDirector(userName, password,
+                        node.getCacheManagerUri(), defaultTimeout).onCacheableChange(op, entityName, pk);
+                //TODO: YC-149 move timeouts to config
 
             } catch (Exception e) {
 
-                LOG.error("Cannot invalidate cache for entity [" + entityName  + "] pk value =  [" + pk  + "] url [" + url + "]");
-
+                ShopCodeContext.getLog(this)
+                        .error("Cannot invalidate cache for entity [" + entityName
+                                + "] pk value =  [" + pk + "] url [" + node.getNodeId() + ":" + node.getCacheManagerUri() + "]");
 
             }
 
@@ -155,23 +165,21 @@ public class AdminInterceptor extends AuditInterceptor {
     }
 
 
-    private CacheDirector getCacheDirector(final String cacheDirUrl) {
-        final AsyncContext newCtx = new AsyncFlexContextImpl();
-        String userName = newCtx.getAttribute(AsyncContext.USERNAME);
-        String password = newCtx.getAttribute(AsyncContext.CREDENTIALS);
-        return getCacheDirectorClientFactory().getCacheDirector(
-                userName,
-                password,
-                cacheDirUrl,
-                defaultTimeout);  //TODO: YC-149 move timeouts to config
-    }
+    private AsyncContext getAsyncContext() {
 
-    private synchronized CacheDirectorClientFactory getCacheDirectorClientFactory() {
-        if (cacheDirectorClientFactory == null) {
-            cacheDirectorClientFactory = new CacheDirectorClientFactory();
+        try {
+            return new AsyncFlexContextImpl();
+        } catch (IllegalStateException ise) {
+            // if we are here we are in async op already
+            return ThreadLocalAsyncContextUtils.getContext();
         }
-        return cacheDirectorClientFactory;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 
 }

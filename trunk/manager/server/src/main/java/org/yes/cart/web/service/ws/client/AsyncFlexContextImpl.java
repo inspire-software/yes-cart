@@ -16,10 +16,13 @@
 
 package org.yes.cart.web.service.ws.client;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
 import flex.messaging.FlexContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.service.async.model.AsyncContext;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,12 +54,8 @@ public class AsyncFlexContextImpl implements AsyncContext {
         }
         this.attributes.put(USERNAME, ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getName());
         //String password = (String) ((UsernamePasswordAuthenticationToken) FlexContext.getUserPrincipal()).getCredentials();
-        this.attributes.put(CREDENTIALS, FlexContext.getFlexSession().getAttribute("pwd"));
-
-        if (attributes == null || !attributes.containsKey(WEB_SERVICE_URI) || attributes.get(WEB_SERVICE_URI) == null) {
-            this.attributes.put(WEB_SERVICE_URI, "http://localhost:8080/yes-shop/services/backdoor");
-        }
-
+        this.attributes.put(CREDENTIALS, FlexContext.getFlexSession().getAttribute(FLEX_SESSION_CREDENTIALS));
+        this.attributes.put(SECURITY_CTX, SecurityContextHolder.getContext());
     }
 
     /** {@inheritDoc} */
