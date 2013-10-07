@@ -27,7 +27,7 @@ package org.yes.cart.service.locator;
  */
 public interface ServiceLocator {
 
-/**
+    /**
      * Get service instance or proxy or home interface.
      * ATM the nature of service is dual: web or ejb, so caller of this method must cast to particular service interface.
      * Particular service instantiation depends from his url. Distinguish between url must be non ambiguity. Example

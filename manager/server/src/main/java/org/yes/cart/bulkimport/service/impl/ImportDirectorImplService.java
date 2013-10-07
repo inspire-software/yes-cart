@@ -37,6 +37,7 @@ import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
+import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.utils.impl.ZipUtils;
@@ -74,8 +75,6 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private final RemoteBackdoorService remoteBackdoorService;
 
-    private final SystemService systemService;
-
     private final ZipUtils zipUtils;
 
     /**
@@ -88,7 +87,6 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      * @param executor                async executor
      * @param productService          product service
      * @param remoteBackdoorService   backdoor service
-     * @param systemService           system service
      */
     public ImportDirectorImplService(
             final Map<String, List<String>> importDescriptors,
@@ -98,7 +96,6 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
             final ProductService productService,
             final TaskExecutor executor,
             final RemoteBackdoorService remoteBackdoorService,
-            final SystemService systemService,
             final ZipUtils zipUtils) {
         super(executor);
         this.pathToImportDescriptors = pathToImportDescriptors;
@@ -107,7 +104,6 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         this.importDescriptors = importDescriptors;
         this.productService = productService;
         this.remoteBackdoorService = remoteBackdoorService;
-        this.systemService = systemService;
         this.zipUtils = zipUtils;
 
     }
@@ -138,13 +134,15 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     public String doImport(final String descriptorGroup, final String fileName, final boolean async) {
 
         final Map<String, Object> param = new HashMap<String, Object>();
-        param.put(AsyncContext.WEB_SERVICE_URI, systemService.getBackdoorURI());
 
         final AsyncContext flex = new AsyncFlexContextImpl(param);
 
         final String imgVault;
         try {
-            imgVault = remoteBackdoorService.getImageVaultPath(flex) + File.separator;
+            // TODO: YC-237 We take the first path available for now - this needs to be refactored
+            final Map<String, String> path = remoteBackdoorService.getImageVaultPath(flex);
+            final String firstAvailable = path.values().iterator().next();
+            imgVault = firstAvailable + File.separator;
         } catch (IOException ioe) {
             LOG.error("Unable to get image vault path", ioe);
             throw new IllegalStateException("Unable to get image vault path");
@@ -176,6 +174,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
             public void run() {
                 try {
+                    ThreadLocalAsyncContextUtils.init(ctx);
 
                     final String file = context.getAttribute(JobContextKeys.IMPORT_FILE);
                     final Set<String> importedFiles = context.getAttribute(JobContextKeys.IMPORT_FILE_SET);
@@ -205,6 +204,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                     listener.notifyError(trw.getMessage());
                     listener.notifyMessage("Import Job was terminated. Error: " + trw.getMessage());
                     listener.notifyCompleted(JobStatus.Completion.ERROR);
+                } finally {
+                    ThreadLocalAsyncContextUtils.clear();
                 }
             }
         };

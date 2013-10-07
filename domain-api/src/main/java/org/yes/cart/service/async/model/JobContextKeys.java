@@ -23,6 +23,13 @@ package org.yes.cart.service.async.model;
  */
 public interface JobContextKeys {
 
+    //-- INDEXING JOBS --------------------------------//
+
+    /** Holds Map<String, Boolean> to keep track which nodes have finished full index */
+    String NODE_FULL_PRODUCT_INDEX_STATE = "nodeIndexState";
+
+    //-- IMPORT JOBS ----------------------------------//
+
     /** file name of the currently imported file */
     String IMPORT_FILE = "fileName";
     /** Set of imported file, so that we can archive them. */

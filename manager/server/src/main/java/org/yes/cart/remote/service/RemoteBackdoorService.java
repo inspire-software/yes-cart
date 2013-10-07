@@ -23,6 +23,7 @@ import org.yes.cart.service.async.model.AsyncContext;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: iazarny@yahoo.com Igor Azarny
@@ -37,7 +38,7 @@ public interface RemoteBackdoorService {
      * @param context web service context
      * @return quantity product in index.
      */
-    int reindexAllProducts(AsyncContext context);
+    Map<String, Integer> reindexAllProducts(AsyncContext context);
 
     /**
      * Reindex single product.
@@ -46,7 +47,7 @@ public interface RemoteBackdoorService {
      * @param productPk product pk.
      * @return quantity of objects in index
      */
-    int reindexProduct(AsyncContext context, long productPk);
+    Map<String, Integer> reindexProduct(AsyncContext context, long productPk);
 
     /**
      * Reindex single product by sku.
@@ -55,7 +56,7 @@ public interface RemoteBackdoorService {
      * @param productSkuPk product SKU pk.
      * @return quantity of objects in index
      */
-    int reindexProductSku(AsyncContext context, long productSkuPk);
+    Map<String, Integer> reindexProductSku(AsyncContext context, long productSkuPk);
 
     /**
      * Reindex single product by sku.
@@ -64,7 +65,7 @@ public interface RemoteBackdoorService {
      * @param productSkuCode product SKU code.
      * @return quantity of objects in index
      */
-    int reindexProductSkuCode(AsyncContext context, String productSkuCode);
+    Map<String, Integer> reindexProductSkuCode(AsyncContext context, String productSkuCode);
 
 
     /**
@@ -74,36 +75,42 @@ public interface RemoteBackdoorService {
      * @param productPks product PKs to reindex
      * @return quantity of objects in index
      */
-    int reindexProducts(AsyncContext context, long[] productPks);
+    Map<String, Integer> reindexProducts(AsyncContext context, long[] productPks);
 
 
     /**
      * Execute sql and return result.
-     * DML operatin also allowed, in this case result has quantity of affected rows.
+     * DML operating also allowed, in this case result has quantity of affected rows.
      *
      * @param context web service context
      * @param query query ot execute.
+     * @param node node (0..n) on which to run the query
+     *
      * @return list of rows
      */
-    List<Object[]> sqlQuery(AsyncContext context, String query);
+    List<Object[]> sqlQuery(AsyncContext context, String query, String node);
 
     /**
      * Execute hsql and return result.
      *
      * @param context web service context
      * @param query query ot execute.
+     * @param node node (0..n) on which to run the query
+     *
      * @return list of rows
      */
-    List<Object[]> hsqlQuery(AsyncContext context, String query);
+    List<Object[]> hsqlQuery(AsyncContext context, String query, String node);
 
     /**
      * Execute lucene and return result.
      *
      * @param context web service context
      * @param query query ot execute.
+     * @param node node (0..n) on which to run the query
+     *
      * @return list of rows
      */
-    List<Object[]> luceneQuery(AsyncContext context, String query);
+    List<Object[]> luceneQuery(AsyncContext context, String query, String node);
 
     /**
      * Get cache information.
@@ -111,14 +118,23 @@ public interface RemoteBackdoorService {
      * @param context web service context
      * @return list of information per each cache.
      */
-    List<CacheInfoDTOImpl> getCacheInfo(AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    Map<String, List<CacheInfoDTOImpl>> getCacheInfo(AsyncContext context)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Evict all caches , which are represent in getCacheInfo list.
      *
      * @param context web service context
      */
-    void evictCache(AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    Map<String, Boolean> evictAllCache(AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Evict cache by name.
+     *
+     * @param context web service context
+     * @param name name of cache to evict
+     */
+    Map<String, Boolean> evictCache(AsyncContext context, String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Get real path to image vault on shop application. Need to allow have different web  context for yes-shop.
@@ -127,7 +143,7 @@ public interface RemoteBackdoorService {
      * @return  real path to image vault
      * @throws IOException    in case of io error.
      */
-    String getImageVaultPath(AsyncContext context) throws IOException;
+    Map<String, String> getImageVaultPath(AsyncContext context) throws IOException;
 
 
 }

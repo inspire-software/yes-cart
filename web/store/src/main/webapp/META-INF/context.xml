@@ -76,6 +76,9 @@
         userRoleTable="TMANAGERROLE"
         roleNameCol="code"/>
 
+    <Parameter name="NODE_ID" value="YES0" override="false"/>
+    <Parameter name="BACKDOOR_URI" value="http://localhost:8080/yes-shop/services/backdoor" override="false"/>
+    <Parameter name="CACHEDIRECTOR_URI" value="http://localhost:8080/yes-shop/services/cachedirector" override="false"/>
 
 </Context>
 

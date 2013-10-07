@@ -11,11 +11,9 @@ import org.apache.ws.security.handler.WSHandlerConstants;
 import java.util.HashMap;
 
 /**
- * Created with IntelliJ IDEA.
  * User: igora
  * Date: 9/2/13
  * Time: 5:14 PM
- * To change this template use File | Settings | File Templates.
  */
 public class BaseClientFactory {
 

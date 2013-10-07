@@ -21,6 +21,7 @@
 
     <mx:Script>
     <![CDATA[
+        import mx.collections.ArrayCollection;
         import mx.containers.VDividedBox;
         import mx.controls.DataGrid;
         import mx.controls.TextArea;
@@ -75,20 +76,21 @@
             var sqlLabel:String = resourceManager.getString('QueryPanel', 'sql');
             var hsqlLabel:String = resourceManager.getString('QueryPanel', 'hsql');
             var luceneLabel:String = resourceManager.getString('QueryPanel', 'lucene');
+            var node:String = node.selectedItem as String;
 
-            var sql:String = ((queryTabNavigator.selectedChild as VDividedBox).getChildAt(0) as TextArea).text;
+            var query:String = ((queryTabNavigator.selectedChild as VDividedBox).getChildAt(0) as TextArea).text;
 
             if (sqlLabel == (queryTabNavigator.selectedChild as VDividedBox).label) {
 
-                remoteDevService.sqlQuery(sql);
+                remoteDevService.sqlQuery(query, node);
 
             } else if (hsqlLabel == (queryTabNavigator.selectedChild as VDividedBox).label) {
 
-                remoteDevService.hsqlQuery(sql);
+                remoteDevService.hsqlQuery(query, node);
 
             } else if (luceneLabel == (queryTabNavigator.selectedChild as VDividedBox).label) {
 
-                remoteDevService.luceneQuery(sql);
+                remoteDevService.luceneQuery(query, node);
 
             }
 
@@ -121,9 +123,35 @@
 
         private function initPanel():void {
             addNewTab();
+            remoteNodeService.getCluster();
         }
+
+        private function onGetClusterResult(event:ResultEvent):void {
+            var _nodes:Object = event.result;
+            var _all:ArrayCollection = new ArrayCollection();
+            for each (var node:Object in _nodes) {
+                _all.addItem(node['nodeId']);
+            }
+            nodes.removeAll();
+            nodes.addAll(_all);
+            nodes.refresh();
+            node.selectedIndex = 0;
+        }
+
         ]]>
-</mx:Script>
+    </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteNodeService"
+                     fault="onRpcMethodFault(event)"
+                     destination="remoteNodeService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getCluster" name="getCluster"
+                   result="onGetClusterResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
 
     <mx:RemoteObject showBusyCursor="true" id="remoteDevService"
                      fault="onRpcMethodFault(event)"
@@ -144,6 +172,8 @@
 
     </mx:RemoteObject>
 
+    <mx:ArrayCollection id="nodes"/>
+
     <mx:Panel width="100%" height="100%" title="@Resource(bundle='QueryPanel',key='query')"
             paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
 
@@ -156,6 +186,8 @@
             <mx:RadioButton group="{queryType}" selected="true" id="Sql" label="@Resource(bundle='QueryPanel',key='sql')"/>
             <mx:RadioButton group="{queryType}" id="Hsql" label="@Resource(bundle='QueryPanel',key='hsql')"/>
             <mx:RadioButton group="{queryType}" id="Lucene" label="@Resource(bundle='QueryPanel',key='lucene')"/>
+
+            <mx:ComboBox id="node" dataProvider="{nodes}"/>
 
 
             <mx:Button id="executeQueryBtn" toolTip="@Resource(bundle='QueryPanel',key='executeHint')"

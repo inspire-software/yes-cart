@@ -173,7 +173,7 @@
             </list>
         </property>
         <property name="entityInterceptor">
-            <bean class="org.yes.cart.domain.interceptor.AuditInterceptor"/>
+            <bean class="org.yes.cart.domain.interceptor.StorefrontInterceptor"/>
         </property>
         <property name="hibernateProperties">
             <props>

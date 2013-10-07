@@ -42,49 +42,43 @@ public class RemoteDevServiceImpl implements RemoteDevService {
 
     private final RemoteBackdoorService remoteBackdoorService;
 
-    private final SystemService systemService;
 
-
-
-    public RemoteDevServiceImpl(final RemoteBackdoorService remoteBackdoorService,
-                                final SystemService systemService) {
+    public RemoteDevServiceImpl(final RemoteBackdoorService remoteBackdoorService) {
         this.remoteBackdoorService = remoteBackdoorService;
-        this.systemService = systemService;
     }
 
     /** {@inheritDoc} */
-    public List<Object[]> sqlQuery(final String query) {
-        return remoteBackdoorService.sqlQuery(createCtx(), query);
+    public List<Object[]> sqlQuery(final String query, final String node) {
+        return remoteBackdoorService.sqlQuery(createCtx(), query, node);
     }
 
     /** {@inheritDoc} */
-    public List<Object[]> hsqlQuery(final String query) {
-        return remoteBackdoorService.hsqlQuery(createCtx(), query);
+    public List<Object[]> hsqlQuery(final String query, final String node) {
+        return remoteBackdoorService.hsqlQuery(createCtx(), query, node);
     }
 
     /** {@inheritDoc} */
-    public List<Object[]> luceneQuery(final String query) {
-        return remoteBackdoorService.luceneQuery(createCtx(), query);
+    public List<Object[]> luceneQuery(final String query, final String node) {
+        return remoteBackdoorService.luceneQuery(createCtx(), query, node);
     }
 
     /** {@inheritDoc} */
-    public List<CacheInfoDTOImpl> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public Map<String, List<CacheInfoDTOImpl>> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return remoteBackdoorService.getCacheInfo(createCtx());
     }
 
     /** {@inheritDoc} */
-    public void evictCache() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        remoteBackdoorService.evictCache(createCtx());
+    public Map<String, Boolean> evictAllCache() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return remoteBackdoorService.evictAllCache(createCtx());
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, Boolean> evictCache(final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return remoteBackdoorService.evictCache(createCtx(), name);
     }
 
     private AsyncContext createCtx() {
-
-        final Map<String, Object> param = new HashMap<String, Object>();
-        param.put(AsyncContext.WEB_SERVICE_URI, systemService.getBackdoorURI());
-
-        final AsyncContext flex = new AsyncFlexContextImpl(param);
-
-        return flex;
+        return new AsyncFlexContextImpl();
     }
 
 

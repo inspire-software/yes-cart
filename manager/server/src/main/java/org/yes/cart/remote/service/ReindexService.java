@@ -18,6 +18,8 @@ package org.yes.cart.remote.service;
 
 import org.yes.cart.service.async.model.JobStatus;
 
+import java.util.Map;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 15-May-2011
@@ -46,7 +48,7 @@ public interface ReindexService {
      * @param pk product primary key
      * @return quantity of products in created index.
      */
-    int reindexProduct(long pk);
+    Map<String, Integer> reindexProduct(long pk);
 
     /**
      * Reindex product by given sku primary key.
@@ -54,7 +56,7 @@ public interface ReindexService {
      * @param pk sku primary key
      * @return quantity of products in created index.
      */
-    int reindexProductSku(long pk);
+    Map<String, Integer> reindexProductSku(long pk);
 
     /**
      * Reindex product by given sku primary key.
@@ -62,6 +64,6 @@ public interface ReindexService {
      * @param code sku code
      * @return quantity of products in created index.
      */
-    int reindexProductSkuCode(String code);
+    Map<String, Integer> reindexProductSkuCode(String code);
 
 }

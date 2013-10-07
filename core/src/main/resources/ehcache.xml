@@ -31,6 +31,20 @@
 
             />
 
+    <!-- ############################################# cluster cache #######################################-->
+
+    <cache name="nodeService-cluster"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="600"/>
+
+    <cache name="nodeService-yumNode"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="600"/>
+
+    <cache name="nodeService-yesNodes"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="600"/>
+
+    <cache name="nodeService-otherYesNodes"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="600"/>
+
     <!-- ############################################# service cache #######################################-->
 
     <cache name="attributeService-availableAttributesByProductTypeId"      maxElementsInMemory="20" overflowToDisk="false"
@@ -245,12 +259,8 @@
 
 
 
-    <cache name="systemService-AttributeValue"      maxElementsInMemory="200" overflowToDisk="false"
+    <cache name="systemService-attributeValue"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="600"/>
-
-    <cache name="systemService-AttributeValues"      maxElementsInMemory="200" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="600"/>
-
 
 
 

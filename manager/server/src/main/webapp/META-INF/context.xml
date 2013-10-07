@@ -61,6 +61,9 @@
         userRoleTable="TMANAGERROLE"
         roleNameCol="code"/>
 
+    <Parameter name="NODE_ID" value="YUM" override="false"/>
+    <Parameter name="BACKDOOR_URI" value="yum" override="false"/>
+    <Parameter name="CACHEDIRECTOR_URI" value="yum" override="false"/>
 
 </Context>
 

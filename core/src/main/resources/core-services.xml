@@ -47,6 +47,7 @@
             <bean class="org.yes.cart.service.domain.impl.SystemServiceImpl">
                 <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="systemDao"/>
                 <constructor-arg type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
+                <lookup-method name="getSelf" bean="systemService"/>
             </bean>
         </property>
     </bean>

@@ -21,6 +21,7 @@ import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -41,37 +42,54 @@ public interface RemoteDevService {
      * DML operatin also allowed, in this case result has quantity of affected rows.
      *
      * @param query query ot execute.
+     * @param node node on which to run query
+     *
      * @return list of rows
      */
-    List<Object[]> sqlQuery(String query);
+    List<Object[]> sqlQuery(String query, String node);
 
     /**
      * Execute hsql and return result.
      *
      * @param query query ot execute.
+     * @param node node on which to run query
+     *
      * @return list of rows
      */
-    List<Object[]> hsqlQuery(String query);
+    List<Object[]> hsqlQuery(String query, String node);
 
     /**
      * Execute lucene and return result.
      *
      * @param query query ot execute.
+     * @param node node on which to run query
+     *
      * @return list of rows
      */
-    List<Object[]> luceneQuery(String query);
+    List<Object[]> luceneQuery(String query, String node);
 
     /**
      * Get cache information.
      *
-     * @return list of information per each cache.
+     * @return list of information per each cache per node.
      */
-    List<CacheInfoDTOImpl> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    Map<String, List<CacheInfoDTOImpl>> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Evict all caches , which are represent in getCacheInfo list.
+     *
+     * @return state if the cache has evicted on nodes
      */
-    void evictCache() throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    Map<String, Boolean> evictAllCache() throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Evict cache by name.
+     *
+     * @param name name of cache to evict
+     *
+     * @return state if the cache has evicted on nodes
+     */
+    Map<String, Boolean> evictCache(String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
 }

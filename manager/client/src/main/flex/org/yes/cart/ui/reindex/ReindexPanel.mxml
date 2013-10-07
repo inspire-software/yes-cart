@@ -94,7 +94,7 @@
 
         private function onGetReindexStatusResultSuccess(event:CloseEvent):void {
             if (event.detail == Alert.YES) {
-                remoteDevService.evictCache();
+                remoteDevService.evictAllCache();
             }
         }
 
@@ -124,7 +124,7 @@
                      destination="remoteDevService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-        <mx:method id="evictCache" name="evictCache"
+        <mx:method id="evictAllCache" name="evictAllCache"
                    fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>

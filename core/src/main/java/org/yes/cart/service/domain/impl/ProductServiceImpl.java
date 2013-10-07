@@ -600,16 +600,17 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         final List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();
 
         final Map<String, Integer> singleNavAttrCodes = attributeService.getSingleNavigatableAttributeCodesByProductType(productTypeId);
-        final Map<String, I18NModel> attrNames = attributeService.getAllAttributeNames();
+        if (!singleNavAttrCodes.isEmpty()) {
+            final Map<String, I18NModel> attrNames = attributeService.getAllAttributeNames();
 
-        list = productDao.findQueryObjectsByNamedQuery(
-                "PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
-        appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
+            list = productDao.findQueryObjectsByNamedQuery(
+                    "PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
+            appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
 
-        list = productDao.findQueryObjectsByNamedQuery(
-                "PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
-        appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
-
+            list = productDao.findQueryObjectsByNamedQuery(
+                    "PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
+            appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
+        }
         return records;
     }
 
