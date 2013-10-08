@@ -82,14 +82,14 @@
 
         <mx:AdvancedDataGrid id="clusterDataGrid" width="100%" height="100%" initialize="groupedClusterData.refresh();">
             <mx:dataProvider>
-                <mx:GroupingCollection id="groupedClusterData" source="{clusterData}">
+                <mx:GroupingCollection2 id="groupedClusterData" source="{clusterData}">
                     <mx:grouping>
                         <mx:Grouping>
                             <mx:GroupingField name="nodeGroup"/>
                             <mx:GroupingField name="nodeId"/>
                         </mx:Grouping>
                     </mx:grouping>
-                </mx:GroupingCollection>
+                </mx:GroupingCollection2>
             </mx:dataProvider>
             <mx:columns>
                 <mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeGroup')"
