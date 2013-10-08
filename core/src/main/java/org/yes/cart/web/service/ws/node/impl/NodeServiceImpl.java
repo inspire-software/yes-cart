@@ -84,12 +84,12 @@ public class NodeServiceImpl implements NodeService, ServletContextAware {
         final Set<String> nodes = new HashSet<String>();
 
         for (final String key : configs.keySet()) {
-            if (key.startsWith(AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI)
-                    && key.length() > AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI.length()) {
-                nodes.add(key.substring(AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI.length() + 1));
-            } else if (key.startsWith(AttributeNamesKeys.System.SYSTEM_CACHEDIRECTOR_URI)
-                    && key.length() > AttributeNamesKeys.System.SYSTEM_CACHEDIRECTOR_URI.length()) {
-                nodes.add(key.substring(AttributeNamesKeys.System.SYSTEM_CACHEDIRECTOR_URI.length() + 1));
+            if (key.startsWith(AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI_PREFIX)
+                    && key.length() > AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI_PREFIX.length()) {
+                nodes.add(key.substring(AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI_PREFIX.length() + 1));
+            } else if (key.startsWith(AttributeNamesKeys.System.SYSTEM_CACHEDIRECTOR_URI_PREFIX)
+                    && key.length() > AttributeNamesKeys.System.SYSTEM_CACHEDIRECTOR_URI_PREFIX.length()) {
+                nodes.add(key.substring(AttributeNamesKeys.System.SYSTEM_CACHEDIRECTOR_URI_PREFIX.length() + 1));
             }
         }
 
@@ -98,8 +98,8 @@ public class NodeServiceImpl implements NodeService, ServletContextAware {
             if (node.equals(this.node.getNodeId())) {
                 cluster.add(this.node);
             } else {
-                final AttrValueSystem backdoorUri = configs.get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI + "_" + node);
-                final AttrValueSystem cacheDirectorUri = configs.get(AttributeNamesKeys.System.SYSTEM_CACHEDIRECTOR_URI + "_" + node);
+                final AttrValueSystem backdoorUri = configs.get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI_PREFIX + "_" + node);
+                final AttrValueSystem cacheDirectorUri = configs.get(AttributeNamesKeys.System.SYSTEM_CACHEDIRECTOR_URI_PREFIX + "_" + node);
                 cluster.add(new NodeImpl(false, node,
                         backdoorUri != null ? backdoorUri.getVal() : null,
                         cacheDirectorUri != null ? cacheDirectorUri.getVal() : null
@@ -186,8 +186,8 @@ public class NodeServiceImpl implements NodeService, ServletContextAware {
                 configuration.get(CACHEDIRECTOR_URI)
         );
 
-        final String backdoorKey = AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI + "_" + node.getNodeId();
-        final String cacheDirectorKey = AttributeNamesKeys.System.SYSTEM_CACHEDIRECTOR_URI + "_" + node.getNodeId();
+        final String backdoorKey = AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI_PREFIX + "_" + node.getNodeId();
+        final String cacheDirectorKey = AttributeNamesKeys.System.SYSTEM_CACHEDIRECTOR_URI_PREFIX + "_" + node.getNodeId();
 
         final Set<String> codes = attributeService.getAllAttributeCodes();
         if (!codes.contains(backdoorKey)) {
