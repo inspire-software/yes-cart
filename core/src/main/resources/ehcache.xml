@@ -33,6 +33,9 @@
 
     <!-- ############################################# cluster cache #######################################-->
 
+    <cache name="nodeService-config"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="600"/>
+
     <cache name="nodeService-cluster"      maxElementsInMemory="1" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="600"/>
 

@@ -21,6 +21,7 @@ import org.hibernate.type.Type;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
@@ -45,8 +46,6 @@ import java.util.Set;
 public class AdminInterceptor extends AuditInterceptor implements ApplicationContextAware {
 
     private final static Set<String> cachedEntities;
-
-    private final static int defaultTimeout = 60000;
 
     private final CacheDirectorClientFactory cacheDirectorClientFactory = new CacheDirectorClientFactory();
 
@@ -127,14 +126,14 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
         }
         String userName = async.getAttribute(AsyncContext.USERNAME);
         String password = async.getAttribute(AsyncContext.CREDENTIALS);
+        final int timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS));
 
         for (final Node node : nodeService.getYesNodes()) {
 
             try {
 
                 cacheDirectorClientFactory.getCacheDirector(userName, password,
-                        node.getCacheManagerUri(), defaultTimeout).onCacheableChange(op, entityName, pk);
-                //TODO: YC-149 move timeouts to config
+                        node.getCacheManagerUri(), timeout).onCacheableChange(op, entityName, pk);
 
             } catch (Exception e) {
 

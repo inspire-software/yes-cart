@@ -50,13 +50,47 @@ public interface AttributeNamesKeys {
          */
         String SYSTEM_DEFAULT_SHOP = "SYSTEM_DEFAULT_SHOP";
         /**
-         * Default backdoor uri.
+         * Default backdoor uri prefix.
+         * Real example of attribute would be: SYSTEM_BACKDOOR_URI_YES0
          */
         String SYSTEM_BACKDOOR_URI_PREFIX = "SYSTEM_BACKDOOR_URI";
         /**
          * Default cache director uri.
+         * Real example of attribute would be: SYSTEM_CACHEDIRECTOR_URI_YES0
          */
         String SYSTEM_CACHEDIRECTOR_URI_PREFIX = "SYSTEM_CACHEDIRECTOR_URI";
+        /**
+         * Size of the log tail in characters to show in YUM.
+         */
+        String IMPORT_JOB_LOG_SIZE = "IMPORT_JOB_LOG_SIZE";
+        /**
+         * Import job timeout (if ping takes more than this value then the job is considered haulted).
+         */
+        String IMPORT_JOB_TIMEOUT_MS = "IMPORT_JOB_TIMEOUT_MS";
+        /**
+         * Timeout for backdoor WS call.
+         */
+        String SYSTEM_BACKDOOR_TIMEOUT_MS = "SYSTEM_BACKDOOR_TIMEOUT_MS";
+        /**
+         * Timeout for backdoor WS call.
+         */
+        String SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS = "1058_SYSTEM_BACKDOOR_PRODB_IDX_TIMEOUT_MS";
+        /**
+         * Timeout for backdoor WS call.
+         */
+        String SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS = "1059_SYSTEM_BACKDOOR_PRODS_IDX_TIMEOUT_MS";
+        /**
+         * Timeout for backdoor WS call.
+         */
+        String SYSTEM_BACKDOOR_SQL_TIMEOUT_MS = "SYSTEM_BACKDOOR_SQL_TIMEOUT_MS";
+        /**
+         * Timeout for backdoor WS call.
+         */
+        String SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS = "SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS";
+        /**
+         * Timeout for backdoor WS call.
+         */
+        String SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS = "SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS";
         /**
          * Default (failover) directory for resources.
          */

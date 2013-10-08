@@ -68,6 +68,17 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    public String getAttributeValueOrDefault(final String key, final String defaultValue) {
+        final String original = proxy().getAttributeValue(key);
+        if (StringUtils.isBlank(original)) {
+            return defaultValue;
+        }
+        return original;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, AttrValueSystem> getAttributeValues() {
         return getSystem().getAttributes();
     }
