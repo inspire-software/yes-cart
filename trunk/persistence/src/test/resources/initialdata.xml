@@ -54,6 +54,72 @@
                 ALLOWDUPLICATE="0"
                 ALLOWFAILOVER="0"
             />
+    <TATTRIBUTE ATTRIBUTE_ID="1055" GUID="IMPORT_JOB_LOG_SIZE" CODE="IMPORT_JOB_LOG_SIZE" MANDATORY="1" VAL="10000"
+                NAME="System. Import log file size in YUM"
+                DESCRIPTION="Size in characters of tail of actual log file to display in YUM during import"
+                ETYPE_ID="1006"
+                ATTRIBUTEGROUP_ID="1000"
+                ALLOWDUPLICATE="0"
+                ALLOWFAILOVER="0"
+            />
+    <TATTRIBUTE ATTRIBUTE_ID="1056" GUID="IMPORT_JOB_TIMEOUT_MS" CODE="IMPORT_JOB_TIMEOUT_MS" MANDATORY="1" VAL="60000"
+                NAME="System. Import job timeout"
+                DESCRIPTION="Timeout in ms during which no ping action performed by import"
+                ETYPE_ID="1006"
+                ATTRIBUTEGROUP_ID="1000"
+                ALLOWDUPLICATE="0"
+                ALLOWFAILOVER="0"
+            />
+    <TATTRIBUTE ATTRIBUTE_ID="1057" GUID="SYSTEM_BACKDOOR_TIMEOUT_MS" CODE="SYSTEM_BACKDOOR_TIMEOUT_MS" MANDATORY="1" VAL="60000"
+                NAME="System. Webservice timeout"
+                DESCRIPTION="Timeout in ms for web service calls"
+                ETYPE_ID="1006"
+                ATTRIBUTEGROUP_ID="1000"
+                ALLOWDUPLICATE="0"
+                ALLOWFAILOVER="0"
+            />
+    <TATTRIBUTE ATTRIBUTE_ID="1058" GUID="SYSTEM_BACKDOOR_PRODB_IDX_TIMEOUT_MS" CODE="SYSTEM_BACKDOOR_PRODB_IDX_TIMEOUT_MS" MANDATORY="1" VAL="60000"
+                NAME="System. Webservice bulk product index timeout"
+                DESCRIPTION="Timeout in ms for web service calls"
+                ETYPE_ID="1006"
+                ATTRIBUTEGROUP_ID="1000"
+                ALLOWDUPLICATE="0"
+                ALLOWFAILOVER="0"
+            />
+    <TATTRIBUTE ATTRIBUTE_ID="1059" GUID="SYSTEM_BACKDOOR_PRODS_IDX_TIMEOUT_MS" CODE="SYSTEM_BACKDOOR_PRODS_IDX_TIMEOUT_MS" MANDATORY="1" VAL="60000"
+                NAME="System. Webservice single product index timeout"
+                DESCRIPTION="Timeout in ms for web service calls"
+                ETYPE_ID="1006"
+                ATTRIBUTEGROUP_ID="1000"
+                ALLOWDUPLICATE="0"
+                ALLOWFAILOVER="0"
+            />
+    <TATTRIBUTE ATTRIBUTE_ID="1060" GUID="SYSTEM_BACKDOOR_SQL_TIMEOUT_MS" CODE="SYSTEM_BACKDOOR_SQL_TIMEOUT_MS" MANDATORY="1" VAL="60000"
+                NAME="System. Webservice SQL, HSQL, FTQL timeout"
+                DESCRIPTION="Timeout in ms for web service calls"
+                ETYPE_ID="1006"
+                ATTRIBUTEGROUP_ID="1000"
+                ALLOWDUPLICATE="0"
+                ALLOWFAILOVER="0"
+            />
+    <TATTRIBUTE ATTRIBUTE_ID="1061" GUID="SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS" CODE="SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS" MANDATORY="1" VAL="60000"
+                NAME="System. Webservice clear cache timeout"
+                DESCRIPTION="Timeout in ms for web service calls"
+                ETYPE_ID="1006"
+                ATTRIBUTEGROUP_ID="1000"
+                ALLOWDUPLICATE="0"
+                ALLOWFAILOVER="0"
+            />
+    <TATTRIBUTE ATTRIBUTE_ID="1062" GUID="SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS" CODE="SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS" MANDATORY="1" VAL="60000"
+                NAME="System. Webservice image operation timeout"
+                DESCRIPTION="Timeout in ms for web service calls"
+                ETYPE_ID="1006"
+                ATTRIBUTEGROUP_ID="1000"
+                ALLOWDUPLICATE="0"
+                ALLOWFAILOVER="0"
+            />
+
+
 
     <TATTRIBUTE ATTRIBUTE_ID="1001" GUID="BRAND_IMAGE" CODE="BRAND_IMAGE" MANDATORY="0" NAME="Brand image" ETYPE_ID="1003"
                 ATTRIBUTEGROUP_ID="1005" ALLOWDUPLICATE="0" ALLOWFAILOVER="0"/>
@@ -169,6 +235,22 @@
     <TSYSTEM SYSTEM_ID="100" GUID="SYSTEM" CODE="SYSTEM" NAME="YesCart e-commerce system" DESCRIPTION="System table"/>
 
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1000" GUID="1000_TSYSTEMATTRVALUE" CODE="SYSTEM_DEFAULT_SHOP" VAL="http://www.gadget.yescart.org:8080/yes-shop"
+                      SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1055" GUID="1055_TSYSTEMATTRVALUE" CODE="IMPORT_JOB_LOG_SIZE" VAL="10000"
+                      SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1056" GUID="1056_TSYSTEMATTRVALUE" CODE="IMPORT_JOB_TIMEOUT_MS" VAL="60000"
+                      SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1057" GUID="1057_TSYSTEMATTRVALUES" CODE="SYSTEM_BACKDOOR_TIMEOUT_MS" VAL="60000"
+                      SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1058" GUID="1058_TSYSTEMATTRVALUE" CODE="SYSTEM_BDOOR_PRODB_IDX_TIMEOUT_MS" VAL="60000"
+                      SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1059" GUID="1059_TSYSTEMATTRVALUE" CODE="SYSTEM_BDOOR_PRODS_IDX_TIMEOUT_MS" VAL="60000"
+                      SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1060" GUID="1060_TSYSTEMATTRVALUE" CODE="SYSTEM_BACKDOOR_SQL_TIMEOUT_MS" VAL="60000"
+                      SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1061" GUID="1061_TSYSTEMATTRVALUE" CODE="SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS" VAL="60000"
+                      SYSTEM_ID="100"/>
+    <TSYSTEMATTRVALUE ATTRVALUE_ID="1062" GUID="1062_TSYSTEMATTRVALUE" CODE="SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS" VAL="60000"
                       SYSTEM_ID="100"/>
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1004" GUID="1004_TSYSTEMATTRVALUE" CODE="SYSTEM_IMPORT_DESCRIPTORS" VAL="src/import/descriptors"
                       SYSTEM_ID="100"/>

@@ -47,10 +47,22 @@ public interface SystemService {
      * Get attribute value
      *
      * @param key key
+     *
      * @return value if found, otherwise is null
      */
 
     String getAttributeValue(String key);
+
+    /**
+     * Get attribute value
+     *
+     * @param key key
+     * @param defaultValue default value if null or empty
+     *
+     * @return value if found, otherwise is null
+     */
+
+    String getAttributeValueOrDefault(String key, String defaultValue);
 
     /**
      * Get all system attributes.

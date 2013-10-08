@@ -70,8 +70,43 @@ public class NodeServiceImpl implements NodeService, ServletContextAware {
 
     /** {@inheritDoc} */
     @Override
+    @Cacheable(value = "nodeService-config")
     public Map<String, String> getConfiguration() {
-        return configuration;
+        final Map<String, String> all = new HashMap<String, String>();
+        all.putAll(configuration);
+        all.put(
+                AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE, "10000")
+        );
+        all.put(
+                AttributeNamesKeys.System.IMPORT_JOB_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.IMPORT_JOB_TIMEOUT_MS, "60000")
+        );
+        all.put(
+                AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS, "60000")
+        );
+        all.put(
+                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS, "60000")
+        );
+        all.put(
+                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS, "60000")
+        );
+        all.put(
+                AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS, "60000")
+        );
+        all.put(
+                AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS, "60000")
+        );
+        all.put(
+                AttributeNamesKeys.System.SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS,
+                systemService.getAttributeValueOrDefault(AttributeNamesKeys.System.SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS, "60000")
+        );
+        return all;
     }
 
     /** {@inheritDoc} */

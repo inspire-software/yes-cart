@@ -28,6 +28,7 @@ import org.yes.cart.bulkimport.service.BulkImportImagesService;
 import org.yes.cart.bulkimport.service.BulkImportService;
 import org.yes.cart.bulkimport.service.ImportDirectorService;
 import org.yes.cart.bulkimport.service.model.JobContextDecoratorImpl;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
@@ -42,6 +43,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.utils.impl.ZipUtils;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
+import org.yes.cart.web.service.ws.node.NodeService;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +77,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private final RemoteBackdoorService remoteBackdoorService;
 
+    private final NodeService nodeService;
+
     private final ZipUtils zipUtils;
 
     /**
@@ -84,9 +88,11 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      * @param pathToArchiveFolder     path to archive folder.
      * @param pathToImportDescriptors path to use.
      * @param pathToImportFolder      path to use.
-     * @param executor                async executor
      * @param productService          product service
+     * @param executor                async executor
      * @param remoteBackdoorService   backdoor service
+     * @param nodeService             node service
+     * @param zipUtils                zip algorithm
      */
     public ImportDirectorImplService(
             final Map<String, List<String>> importDescriptors,
@@ -96,6 +102,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
             final ProductService productService,
             final TaskExecutor executor,
             final RemoteBackdoorService remoteBackdoorService,
+            final NodeService nodeService,
             final ZipUtils zipUtils) {
         super(executor);
         this.pathToImportDescriptors = pathToImportDescriptors;
@@ -104,6 +111,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         this.importDescriptors = importDescriptors;
         this.productService = productService;
         this.remoteBackdoorService = remoteBackdoorService;
+        this.nodeService = nodeService;
         this.zipUtils = zipUtils;
 
     }
@@ -148,14 +156,12 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
             throw new IllegalStateException("Unable to get image vault path");
         }
 
-        //TODO: YC-149 move timeouts to config
-        /*
-         * Max 10K char of report to UI since it will get huge and simply will crash the UI,
-         * not to mention traffic cost.
-         * Timeout is set to 60sec - just in case runnable crashes and we need to unlock through
-         * timeout.
-         */
-        return doJob(new JobContextImpl(async, new JobStatusListenerImpl(10000, 60000),
+        // Max char of report to UI since it will get huge and simply will crash the UI, not to mention traffic cost.
+        final int logSize = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE));
+        // Timeout - just in case runnable crashes and we need to unlock through timeout.
+        final int timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_TIMEOUT_MS));
+
+        return doJob(new JobContextImpl(async, new JobStatusListenerImpl(logSize, timeout),
                 new HashMap<String, Object>() {{
                     put(JobContextKeys.IMPORT_DESCRIPTOR_GROUP, descriptorGroup);
                     put(JobContextKeys.IMPORT_FILE, fileName);

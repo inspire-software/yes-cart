@@ -18,6 +18,7 @@ package org.yes.cart.remote.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -71,7 +72,8 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
                 final Boolean finished = indexFinished.get(yesNode) != null && indexFinished.get(yesNode);
                 if (!finished) {
                     indexStatus.put(yesNode.getNodeId(),
-                            getBackdoorService(context, yesNode.getBackdoorUri()).reindexAllProducts());
+                            getBackdoorService(context, yesNode.getBackdoorUri(),
+                                    AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS).reindexAllProducts());
                 }
             } catch (Exception e) {
                 indexStatus.put(yesNode.getNodeId(), null);
@@ -94,7 +96,9 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
         for (final Node yesNode : nodeService.getYesNodes()) {
             try {
-                reindexResult.put(yesNode.getNodeId(), getBackdoorService(context, yesNode.getBackdoorUri()).reindexProduct(productPk));
+                reindexResult.put(yesNode.getNodeId(),
+                        getBackdoorService(context, yesNode.getBackdoorUri(),
+                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS).reindexProduct(productPk));
             } catch (Exception e) {
                 reindexResult.put(yesNode.getNodeId(), null);
                 if (LOG.isErrorEnabled()) {
@@ -117,7 +121,8 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         for (final Node yesNode : nodeService.getYesNodes()) {
             try {
                 reindexResult.put(yesNode.getNodeId(),
-                        getBackdoorService(context, yesNode.getBackdoorUri()).reindexProductSku(productPk));
+                        getBackdoorService(context, yesNode.getBackdoorUri(),
+                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS).reindexProductSku(productPk));
             } catch (Exception e) {
                 reindexResult.put(yesNode.getNodeId(), null);
                 if (LOG.isErrorEnabled()) {
@@ -140,7 +145,8 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         for (final Node yesNode : nodeService.getYesNodes()) {
             try {
                 reindexResult.put(yesNode.getNodeId(),
-                        getBackdoorService(context, yesNode.getBackdoorUri()).reindexProductSkuCode(productSkuCode));
+                        getBackdoorService(context, yesNode.getBackdoorUri(),
+                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS).reindexProductSkuCode(productSkuCode));
             } catch (Exception e) {
                 reindexResult.put(yesNode.getNodeId(), null);
                 if (LOG.isErrorEnabled()) {
@@ -163,7 +169,8 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         for (final Node yesNode : nodeService.getYesNodes()) {
             try {
                 reindexResult.put(yesNode.getNodeId(),
-                        getBackdoorService(context, yesNode.getBackdoorUri()).reindexProducts(productPks));
+                        getBackdoorService(context, yesNode.getBackdoorUri(),
+                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS).reindexProducts(productPks));
             } catch (Exception e) {
                 reindexResult.put(yesNode.getNodeId(), null);
                 if (LOG.isErrorEnabled()) {
@@ -185,7 +192,8 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         if (nodeService.getCurrentNodeId().equals(node)) {
             return localBackdoorService.sqlQuery(query);
         }
-        return getBackdoorService(context, getBackdoorUriForNode(node, false)).sqlQuery(query);
+        return getBackdoorService(context, getBackdoorUriForNode(node, false),
+                AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS).sqlQuery(query);
     }
 
     /**
@@ -195,14 +203,16 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         if (nodeService.getCurrentNodeId().equals(node)) {
             return localBackdoorService.hsqlQuery(query);
         }
-        return getBackdoorService(context, getBackdoorUriForNode(node, false)).hsqlQuery(query);
+        return getBackdoorService(context, getBackdoorUriForNode(node, false),
+                AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS).hsqlQuery(query);
     }
 
     /**
      * {@inheritDoc}
      */
     public List<Object[]> luceneQuery(final AsyncContext context, final String query, final String node) {
-        return getBackdoorService(context, getBackdoorUriForNode(node, true)).luceneQuery(query);
+        return getBackdoorService(context, getBackdoorUriForNode(node, true),
+                AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS).luceneQuery(query);
     }
 
     private String getBackdoorUriForNode(final String node, final boolean yesOnly) {
@@ -334,7 +344,8 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
          for (final Node yesNode : nodeService.getYesNodes()) {
              try {
                  paths.put(yesNode.getNodeId(),
-                         getBackdoorService(context, yesNode.getBackdoorUri()).getImageVaultPath());
+                         getBackdoorService(context, yesNode.getBackdoorUri(),
+                                 AttributeNamesKeys.System.SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS).getImageVaultPath());
              } catch (Exception e) {
                  paths.put(yesNode.getNodeId(), null);
                  if (LOG.isErrorEnabled()) {
@@ -366,29 +377,34 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         return cacheDirectorClientFactory;
     }
 
-    private BackdoorService getBackdoorService(final AsyncContext context, final String backdoorUrl) {
+    private BackdoorService getBackdoorService(final AsyncContext context,
+                                               final String backdoorUrl,
+                                               final String timeoutKey) {
 
 
-        String userName = context.getAttribute(AsyncContext.USERNAME);
-        String password = context.getAttribute(AsyncContext.CREDENTIALS);
+        final String userName = context.getAttribute(AsyncContext.USERNAME);
+        final String password = context.getAttribute(AsyncContext.CREDENTIALS);
+
+        final int timeout = Integer.parseInt(nodeService.getConfiguration().get(timeoutKey));
 
         return getBackdoorServiceClientFactory().getBackdoorService(
                 userName,
                 password,
-                backdoorUrl, DEFAULT_TIMEOUT_MS);  //TODO: YC-149 move timeouts to config
+                backdoorUrl, timeout);
 
     }
 
 
     private CacheDirector getCacheDirector(final AsyncContext context, final String cacheDirUrl) {
 
-        String userName = context.getAttribute(AsyncContext.USERNAME);
-        String password = context.getAttribute(AsyncContext.CREDENTIALS);
+        final String userName = context.getAttribute(AsyncContext.USERNAME);
+        final String password = context.getAttribute(AsyncContext.CREDENTIALS);
+        final int timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS));
 
         return getCacheDirectorClientFactory().getCacheDirector(
                 userName,
                 password,
-                cacheDirUrl, DEFAULT_TIMEOUT_MS);  //TODO: YC-149 move timeouts to config
+                cacheDirUrl, timeout);
     }
 
 

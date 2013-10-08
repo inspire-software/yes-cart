@@ -19,6 +19,7 @@ package org.yes.cart.remote.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.remote.service.ReindexService;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.service.async.JobStatusListener;
@@ -150,35 +151,45 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
     /** {@inheritDoc} */
     @Override
     public String reindexAllProducts() {
-        return doJob(createAsyncContext());
+        return doJob(createAsyncContext(true));
     }
 
     /** {@inheritDoc} */
     @Override
     public Map<String, Integer> reindexProduct(long pk) {
-        return remoteBackdoorService.reindexProduct(createAsyncContext(), pk);
+        return remoteBackdoorService.reindexProduct(createAsyncContext(false), pk);
     }
 
     /** {@inheritDoc} */
     @Override
     public Map<String, Integer> reindexProductSku(long pk) {
-        return remoteBackdoorService.reindexProductSku(createAsyncContext(), pk);
+        return remoteBackdoorService.reindexProductSku(createAsyncContext(false), pk);
     }
 
     /** {@inheritDoc} */
     @Override
     public Map<String, Integer> reindexProductSkuCode(String code) {
-        return remoteBackdoorService.reindexProductSkuCode(createAsyncContext(), code);
+        return remoteBackdoorService.reindexProductSkuCode(createAsyncContext(false), code);
     }
 
-    private JobContext createAsyncContext() {
+    private JobContext createAsyncContext(final boolean bulk) {
 
         final Map<String, Object> param = new HashMap<String, Object>();
         param.put(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE, new HashMap<String, Boolean>());
 
         final AsyncContext flex = new AsyncFlexContextImpl(param);
-        //TODO: YC-149 move timeouts to config
-        return new JobContextImpl(true, new JobStatusListenerImpl(10000, 300000), flex.getAttributes());
+
+        // Max char of report to UI since it will get huge and simply will crash the UI, not to mention traffic cost.
+        final int logSize = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE));
+        // Timeout - just in case runnable crashes and we need to unlock through timeout.
+        final int timeout;
+        if (bulk) {
+            timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS));
+        } else {
+            timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS));
+        }
+
+        return new JobContextImpl(true, new JobStatusListenerImpl(logSize, timeout), flex.getAttributes());
     }
 
 }
