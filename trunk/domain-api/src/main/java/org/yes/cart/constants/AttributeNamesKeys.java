@@ -52,11 +52,11 @@ public interface AttributeNamesKeys {
         /**
          * Default backdoor uri.
          */
-        String SYSTEM_BACKDOOR_URI = "SYSTEM_BACKDOOR_URI";
+        String SYSTEM_BACKDOOR_URI_PREFIX = "SYSTEM_BACKDOOR_URI";
         /**
          * Default cache director uri.
          */
-        String SYSTEM_CACHEDIRECTOR_URI = "SYSTEM_CACHEDIRECTOR_URI";
+        String SYSTEM_CACHEDIRECTOR_URI_PREFIX = "SYSTEM_CACHEDIRECTOR_URI";
         /**
          * Default (failover) directory for resources.
          */

@@ -55,24 +55,6 @@
                 ALLOWFAILOVER="0"
             />
 
-    <TATTRIBUTE ATTRIBUTE_ID="1055" GUID="SYSTEM_BACKDOOR_URI" CODE="SYSTEM_BACKDOOR_URI" MANDATORY="1" VAL="http://localhost:8080/yes-shop/services/backdoor"
-                NAME="System. Backdoor URI"
-                DESCRIPTION="This value will be used to locate backdoor web service"
-                ETYPE_ID="1002"
-                ATTRIBUTEGROUP_ID="1000"
-                ALLOWDUPLICATE="0"
-                ALLOWFAILOVER="0"
-            />
-
-
-    <TATTRIBUTE ATTRIBUTE_ID="1056" GUID="SYSTEM_CACHEDIRECTOR_URI" CODE="SYSTEM_CACHEDIRECTOR_URI" MANDATORY="1" VAL="http://localhost:8080/yes-shop/services/cachedirector"
-                NAME="System. Cache director URI"
-                DESCRIPTION="This value will be used to locate cache director web service"
-                ETYPE_ID="1002"
-                ATTRIBUTEGROUP_ID="1000"
-                ALLOWDUPLICATE="0"
-                ALLOWFAILOVER="0"
-            />
     <TATTRIBUTE ATTRIBUTE_ID="1001" GUID="BRAND_IMAGE" CODE="BRAND_IMAGE" MANDATORY="0" NAME="Brand image" ETYPE_ID="1003"
                 ATTRIBUTEGROUP_ID="1005" ALLOWDUPLICATE="0" ALLOWFAILOVER="0"/>
     <TATTRIBUTE ATTRIBUTE_ID="1002" GUID="CATEGORY_ITEMS_PER_PAGE" CODE="CATEGORY_ITEMS_PER_PAGE" MANDATORY="0" NAME="Category item per page settings"
@@ -187,10 +169,6 @@
     <TSYSTEM SYSTEM_ID="100" GUID="SYSTEM" CODE="SYSTEM" NAME="YesCart e-commerce system" DESCRIPTION="System table"/>
 
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1000" GUID="1000_TSYSTEMATTRVALUE" CODE="SYSTEM_DEFAULT_SHOP" VAL="http://www.gadget.yescart.org:8080/yes-shop"
-                      SYSTEM_ID="100"/>
-    <TSYSTEMATTRVALUE ATTRVALUE_ID="1055" GUID="1055_TSYSTEMATTRVALUE" CODE="SYSTEM_BACKDOOR_URI" VAL="http://localhost:8080/yes-shop/services/backdoor"
-                      SYSTEM_ID="100"/>
-    <TSYSTEMATTRVALUE ATTRVALUE_ID="1056" GUID="1056_TSYSTEMATTRVALUE" CODE="SYSTEM_CACHEDIRECTOR_URI" VAL="http://localhost:8080/yes-shop/services/cachedirector"
                       SYSTEM_ID="100"/>
     <TSYSTEMATTRVALUE ATTRVALUE_ID="1004" GUID="1004_TSYSTEMATTRVALUE" CODE="SYSTEM_IMPORT_DESCRIPTORS" VAL="src/import/descriptors"
                       SYSTEM_ID="100"/>
