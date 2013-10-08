@@ -47,7 +47,7 @@
         }
 
         private function onClearSingleCacheClick(event:MouseEvent):void {
-            var _selectedCache = cacheInfoDataGrid.selectedItem;
+            var _selectedCache:String = cacheInfoDataGrid.selectedItem as String;
             if (_selectedCache != null) {
                 remoteDevService.evictCache(_selectedCache['cacheName']);
             }
