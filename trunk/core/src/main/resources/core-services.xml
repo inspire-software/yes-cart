@@ -992,8 +992,7 @@
                 <bean id="changeCurrencyCmd" class="org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl">
                     <constructor-arg index="0" ref="priceService"/>
                     <constructor-arg index="1" ref="productService"/>
-                    <constructor-arg index="2" ref="dtoProductService"/>
-                    <constructor-arg index="3" ref="shopService"/>
+                    <constructor-arg index="2" ref="shopService"/>
                 </bean>
                 <bean id="changeLocaleCmd" class="org.yes.cart.shoppingcart.impl.ChangeLocaleCartCommandImpl"/>
 
@@ -1008,29 +1007,25 @@
                 <bean id="addToCartCmd" class="org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl">
                     <constructor-arg index="0" ref="priceService"/>
                     <constructor-arg index="1" ref="productService"/>
-                    <constructor-arg index="2" ref="dtoProductService"/>
-                    <constructor-arg index="3" ref="shopService"/>
+                    <constructor-arg index="2" ref="shopService"/>
                 </bean>
 
                 <bean id="removeAllSkuCmd" class="org.yes.cart.shoppingcart.impl.RemoveAllSkuFromCartCommandImpl">
                     <constructor-arg index="0" ref="priceService"/>
                     <constructor-arg index="1" ref="productService"/>
-                    <constructor-arg index="2" ref="dtoProductService"/>
-                    <constructor-arg index="3" ref="shopService"/>
+                    <constructor-arg index="2" ref="shopService"/>
                 </bean>
 
                 <bean id="removeOneSkuCmd" class="org.yes.cart.shoppingcart.impl.RemoveSkuFromCartCommandImpl">
                     <constructor-arg index="0" ref="priceService"/>
                     <constructor-arg index="1" ref="productService"/>
-                    <constructor-arg index="2" ref="dtoProductService"/>
-                    <constructor-arg index="3" ref="shopService"/>
+                    <constructor-arg index="2" ref="shopService"/>
                 </bean>
 
                 <bean id="setQuantityToCartCmd" class="org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl">
                     <constructor-arg index="0" ref="priceService"/>
                     <constructor-arg index="1" ref="productService"/>
-                    <constructor-arg index="2" ref="dtoProductService"/>
-                    <constructor-arg index="3" ref="shopService"/>
+                    <constructor-arg index="2" ref="shopService"/>
                 </bean>
 
                 <bean id="expireCartCmd" class="org.yes.cart.shoppingcart.impl.ExpireCartCommandImpl"/>

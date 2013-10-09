@@ -32,7 +32,7 @@ import java.util.Date;
  * Time: 11:12:54
  * <p/>
  */
-public interface Auditable extends Identifiable, Guidable {
+public interface Auditable extends Identifiable, Guidable, Versionable {
 
     /**
      * @return created timestamp.

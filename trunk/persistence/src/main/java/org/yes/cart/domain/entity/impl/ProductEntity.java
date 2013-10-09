@@ -40,6 +40,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     private ProductSku defaultProductSku = null;
     private long productId;
+    private long version;
 
     private String code;
     private Date availablefrom;
@@ -316,6 +317,14 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     public void setProductId(long productId) {
         this.productId = productId;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
     }
 
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)

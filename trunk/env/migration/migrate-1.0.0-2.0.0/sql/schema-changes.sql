@@ -151,3 +151,60 @@ INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)   VAL
 INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)   VALUES (1022,'60000','SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS',100, 'YC_SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS');
 
 
+--
+-- YC-155 Hibernate versions to solve concurrent modifications issue
+--
+
+alter table TADDRESS add column VERSION bigint not null default 0;
+alter table TASSOCIATION add column VERSION bigint not null default 0;
+alter table TATTRIBUTE add column VERSION bigint not null default 0;
+alter table TATTRIBUTEGROUP add column VERSION bigint not null default 0;
+alter table TBRAND add column VERSION bigint not null default 0;
+alter table TBRANDATTRVALUE add column VERSION bigint not null default 0;
+alter table TCARRIER add column VERSION bigint not null default 0;
+alter table TCARRIERSLA add column VERSION bigint not null default 0;
+alter table TCATEGORY add column VERSION bigint not null default 0;
+alter table TCATEGORYATTRVALUE add column VERSION bigint not null default 0;
+alter table TCOUNTRY add column VERSION bigint not null default 0;
+alter table TCUSTOMER add column VERSION bigint not null default 0;
+alter table TCUSTOMERATTRVALUE add column VERSION bigint not null default 0;
+alter table TCUSTOMERORDER add column VERSION bigint not null default 0;
+alter table TCUSTOMERORDERDELIVERY add column VERSION bigint not null default 0;
+alter table TCUSTOMERORDERDELIVERYDET add column VERSION bigint not null default 0;
+alter table TCUSTOMERORDERDET add column VERSION bigint not null default 0;
+alter table TCUSTOMERSHOP add column VERSION bigint not null default 0;
+alter table TCUSTOMERWISHLIST add column VERSION bigint not null default 0;
+alter table TENSEMBLEOPT add column VERSION bigint not null default 0;
+alter table TETYPE add column VERSION bigint not null default 0;
+alter table TMAILTEMPLATE add column VERSION bigint not null default 0;
+alter table TMAILTEMPLATEGROUP add column VERSION bigint not null default 0;
+alter table TMANAGER add column VERSION bigint not null default 0;
+alter table TMANAGERROLE add column VERSION bigint not null default 0;
+alter table TPRODTYPEATTRVIEWGROUP add column VERSION bigint not null default 0;
+alter table TPRODUCT add column VERSION bigint not null default 0;
+alter table TPRODUCTASSOCIATION add column VERSION bigint not null default 0;
+alter table TPRODUCTATTRVALUE add column VERSION bigint not null default 0;
+alter table TPRODUCTCATEGORY add column VERSION bigint not null default 0;
+alter table TPRODUCTSKUATTRVALUE add column VERSION bigint not null default 0;
+alter table TPRODUCTTYPE add column VERSION bigint not null default 0;
+alter table TPRODUCTTYPEATTR add column VERSION bigint not null default 0;
+alter table TROLE add column VERSION bigint not null default 0;
+alter table TSEOIMAGE add column VERSION bigint not null default 0;
+alter table TSHOP add column VERSION bigint not null default 0;
+alter table TSHOPADVPLACE add column VERSION bigint not null default 0;
+alter table TSHOPADVRULES add column VERSION bigint not null default 0;
+alter table TSHOPATTRVALUE add column VERSION bigint not null default 0;
+alter table TSHOPCATEGORY add column VERSION bigint not null default 0;
+alter table TSHOPDISCOUNT add column VERSION bigint not null default 0;
+alter table TSHOPDISCOUNTRULE add column VERSION bigint not null default 0;
+alter table TSHOPEXCHANGERATE add column VERSION bigint not null default 0;
+alter table TSHOPTOPSELLER add column VERSION bigint not null default 0;
+alter table TSHOPURL add column VERSION bigint not null default 0;
+alter table TSHOPWAREHOUSE add column VERSION bigint not null default 0;
+alter table TSKU add column VERSION bigint not null default 0;
+alter table TSKUPRICE add column VERSION bigint not null default 0;
+alter table TSKUWAREHOUSE add column VERSION bigint not null default 0;
+alter table TSTATE add column VERSION bigint not null default 0;
+alter table TSYSTEM add column VERSION bigint not null default 0;
+alter table TSYSTEMATTRVALUE add column VERSION bigint not null default 0;
+alter table TWAREHOUSE add column VERSION bigint not null default 0;

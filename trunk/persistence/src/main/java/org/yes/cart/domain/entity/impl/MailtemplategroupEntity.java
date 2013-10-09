@@ -27,6 +27,7 @@ import java.util.Date;
 public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailtemplategroup, java.io.Serializable {
 
     private long mailtemplategroupId;
+    private long version;
 
     private String name;
     private String description;
@@ -108,6 +109,13 @@ public class MailtemplategroupEntity implements org.yes.cart.domain.entity.Mailt
         this.mailtemplategroupId = mailtemplategroupId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

@@ -27,6 +27,7 @@ import java.util.Date;
 public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Serializable {
 
     private long etypeId;
+    private long version;
 
     private String javatype;
     private String businesstype;
@@ -109,6 +110,13 @@ public class EtypeEntity implements org.yes.cart.domain.entity.Etype, java.io.Se
         this.etypeId = etypeId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

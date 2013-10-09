@@ -29,6 +29,7 @@ import java.util.Date;
 public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entity.CustomerOrderDeliveryDet, java.io.Serializable {
 
     private long customerOrderDeliveryDetId;
+    private long version;
 
     private BigDecimal qty;
     private BigDecimal price;
@@ -146,6 +147,13 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
         this.customerOrderDeliveryDetId = customerOrderDeliveryDetId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

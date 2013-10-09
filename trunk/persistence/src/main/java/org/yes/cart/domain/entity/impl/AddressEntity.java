@@ -29,6 +29,7 @@ import java.util.Date;
 public class AddressEntity implements org.yes.cart.domain.entity.Address, java.io.Serializable {
 
     private long addressId;
+    private long version;
 
     private String city;
     private String postcode;
@@ -208,6 +209,13 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.addressId = addressId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

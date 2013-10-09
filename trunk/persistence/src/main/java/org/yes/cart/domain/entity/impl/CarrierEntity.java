@@ -31,6 +31,7 @@ import java.util.Date;
 public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.io.Serializable {
 
     private long carrierId;
+    private long version;
 
     private String name;
     private String displayName;
@@ -176,6 +177,13 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
         this.carrierId = carrierId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

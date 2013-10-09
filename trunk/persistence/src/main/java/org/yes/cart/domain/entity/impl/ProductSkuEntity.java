@@ -33,6 +33,7 @@ import java.util.*;
 public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, java.io.Serializable {
 
     private long skuId;
+    private long version;
 
     private String code;
     private String name;
@@ -196,6 +197,14 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
     public void setSkuId(long skuId) {
         this.skuId = skuId;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
     }
 
     public Collection<AttrValueProductSku> getAttributesByCode(final String attributeCode) {

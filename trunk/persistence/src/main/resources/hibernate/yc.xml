@@ -29,14 +29,13 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="email" length="255" type="java.lang.String" column="EMAIL" unique-key="MANAGER_EMAIL" not-null="true"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
         <property name="password" length="255" type="java.lang.String" column="PASSWORD" not-null="true"/>
-
-
-
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -54,8 +53,11 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="code" length="255" type="java.lang.String" column="CODE" unique-key="ROLE_CODE" not-null="true"/>
         <property name="description" length="255" type="java.lang.String" column="DESCRIPTION"/>
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -72,6 +74,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="email" length="255" type="java.lang.String" column="EMAIL"  not-null="true"/>
         <property name="code" length="255" type="java.lang.String" column="CODE"  not-null="true"/>
 
@@ -100,6 +104,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="javatype" type="string" not-null="true">
             <column name="JAVATYPE" length="255" not-null="true">
                 <comment>Shows the java type</comment>
@@ -128,6 +134,7 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
 
         <property name="code" column="CODE" type="string" length="255" not-null="true"/>
         <property name="name" type="string" length="64" not-null="true">
@@ -160,6 +167,7 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
 
         <property name="code" column="CODE" type="string" length="255" index="ATTRIBUTE_CODE" not-null="true"/>
 
@@ -206,7 +214,6 @@
             </column>
         </property>
 
-
         <property name="name" column="NAME" not-null="true" type="string" length="255"/>
         <property name="displayName" column="DISPLAYNAME" type="string" length="4000"/>
         <property name="description" column="DESCRIPTION" type="string" length="4000"/>
@@ -236,6 +243,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity"  not-null="true" column="CUSTOMER_ID"/>
@@ -258,6 +267,7 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
 
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
@@ -282,6 +292,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
         <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false"
@@ -309,6 +321,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <many-to-one name="brand" class="org.yes.cart.domain.entity.impl.BrandEntity"  not-null="true" column="BRAND_ID"/>
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
@@ -333,13 +347,11 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
 
         <property name="val" column="VAL" type="string" length="4000"/>
-
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
-
         <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" lazy="proxy" not-null="true" column="PRODUCT_ID"/>
-
         <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false" foreign-key="FK_P_ATTRIBUTE"
                      property-ref="code" insert="true" update="true" fetch="join">
             <column name="CODE" not-null="true"/>
@@ -362,11 +374,11 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
-
         <many-to-one name="productSku" class="org.yes.cart.domain.entity.impl.ProductSkuEntity"  not-null="true" column="SKU_ID"/>
-
         <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false" foreign-key="FK_S_ATTRIBUTE"
                      property-ref="code" insert="true" update="true">
             <column name="CODE" not-null="true"/>
@@ -388,11 +400,11 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="val" column="VAL" type="string" length="4000"/>
         <property name="displayVal" column="DISPLAYVAL" type="string" length="4000"/>
-
         <many-to-one name="category" class="org.yes.cart.domain.entity.impl.CategoryEntity"  not-null="true" column="CATEGORY_ID"/>
-
         <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false"
                      foreign-key="FK_CAT_ATTRIBUTE" property-ref="code" insert="true" update="true">
             <column name="CODE" not-null="true"/>
@@ -421,6 +433,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="countryCode" type="string" length="2">
             <column name="COUNTRY_CODE" length="2" not-null="true"/>
         </property>
@@ -449,6 +463,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="countryCode" type="string" length="2">
             <column name="COUNTRY_CODE" length="2" not-null="true"/>
         </property>
@@ -477,6 +493,7 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
 
         <property name="city" type="string" column="CITY" length="128" not-null="true"/>
         <property name="postcode" type="string" column="POSTCODE" length="16" not-null="false"/>
@@ -515,12 +532,15 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="name" type="string" length="64" not-null="true">
             <column name="NAME" length="64" not-null="true"/>
         </property>
         <property name="description" length="4000" type="string">
             <column name="DESCRIPTION" length="4000"/>
         </property>
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -536,6 +556,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="code" column="CODE" type="string" length="255" not-null="true"/>
         <property name="fspointer" type="string" length="4000">
             <column name="FSPOINTER" length="4000" not-null="true">
@@ -569,6 +591,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="code" column="CODE" type="string" length="255" not-null="true"/>
         <property name="name" type="string" length="64" not-null="true">
             <column name="NAME" length="64" not-null="true"/>
@@ -603,6 +627,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <many-to-one name="attribute" class="org.yes.cart.domain.entity.impl.AttributeEntity" lazy="false" foreign-key="FK_PTA_ATTR"
                      property-ref="code" insert="true" update="true" cascade="save-update">
             <column name="CODE" not-null="true"/>
@@ -660,6 +686,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="name" type="string" length="255" not-null="true">
             <column name="NAME"/>
         </property>
@@ -740,6 +768,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <many-to-one name="producttype" class="org.yes.cart.domain.entity.impl.ProductTypeEntity">
             <column name="PRODUCTTYPE_ID" not-null="true"/>
         </many-to-one>
@@ -777,6 +807,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="parentId" column="PARENT_ID" type="long"/>
         <property name="rank" type="int" not-null="false">
             <column name="RANK">
@@ -863,6 +895,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
         <property name="description" column="DESCRIPTION" type="string" length="4000"/>
 
@@ -890,6 +924,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="code" type="string" length="255" index="PRODUCT_CODE" not-null="true">
             <column name="CODE" length="255" not-null="true">
                 <comment>Product or product sku code</comment>
@@ -996,6 +1032,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="qty" column="QTY" type="int" not-null="true"/>
         <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" foreign-key="FK_ENS_PROD">
             <column name="PRODUCT_ID" not-null="true"/>
@@ -1019,6 +1057,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="code" column="CODE" type="string" length="255" index="SKU_CODE" not-null="true"/>
         <property name="name" type="string" length="255" not-null="true">
             <column name="NAME" length="255" not-null="true"/>
@@ -1092,6 +1132,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <many-to-one name="sku" class="org.yes.cart.domain.entity.impl.ProductSkuEntity" foreign-key="FK_SP_SKU">
             <column name="SKU_ID" not-null="true"/>
         </many-to-one>
@@ -1139,6 +1181,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <many-to-one name="product" class="org.yes.cart.domain.entity.impl.ProductEntity" foreign-key="FK_PC_PRODUCT">
             <column name="PRODUCT_ID" not-null="true"/>
         </many-to-one>
@@ -1170,6 +1214,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="code" column="CODE" type="string" length="255" not-null="true"/>
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
         <property name="description" column="DESCRIPTION" type="string" length="4000"/>
@@ -1190,6 +1236,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="rank" type="int" not-null="false">
             <column name="RANK">
                 <comment>
@@ -1227,6 +1275,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="code" column="CODE" type="string" length="255" not-null="true"/>
         <property name="name" type="string" length="64" not-null="true">
             <column name="NAME" length="64" not-null="true"/>
@@ -1264,6 +1314,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="code" column="CODE" type="string" length="255" index="SHOP_CODE" not-null="true" lazy="false"/>
         <property name="name" type="string" length="64" not-null="true" lazy="false">
             <column name="NAME" length="64" not-null="true"/>
@@ -1348,6 +1400,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity">
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
@@ -1374,7 +1428,9 @@
                 <param name="column">value</param>
             </generator>
         </id>
-        <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity">
+       <version name="version" column="VERSION" type="long"/>
+
+       <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity">
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
 
@@ -1405,6 +1461,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <many-to-one name="warehouse" class="org.yes.cart.domain.entity.impl.WarehouseEntity">
             <column name="WAREHOUSE_ID" not-null="true"/>
         </many-to-one>
@@ -1441,6 +1499,7 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
 
         <property name="rank" type="int" not-null="false">
             <column name="RANK">
@@ -1473,6 +1532,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
         <property name="description" column="DESCRIPTION" type="string" length="4000"/>
         <property name="availablefrom" column="AVAILABLEFROM" type="timestamp"/>
@@ -1500,6 +1561,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <!--many-to-one name="shopDiscount" class="org.yes.cart.domain.entity.ShopDiscount" foreign-key="FK_SDR_SHOPDISC" update="false" insert="false">
             <column name="SHOPDISCOUNT_ID" not-null="true"/>
         </many-to-one-->
@@ -1522,6 +1585,7 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
 
         <property name="url" column="URL" type="string" length="512" not-null="true" lazy="false"/>
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_SHOPURL_SHOP">
@@ -1543,6 +1607,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="fromCurrency" type="string" length="3" not-null="true" column="FROMCURRENCY"/>
         <property name="toCurrency" type="string" length="3" not-null="true" column="TOCURRENCY"/>
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_ER_SHOP">
@@ -1565,6 +1631,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
         <property name="description" column="DESCRIPTION" type="string" length="4000"/>
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_ADVP_SHOP">
@@ -1591,6 +1659,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="rank" type="int" not-null="false"/>
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
         <property name="description" column="DESCRIPTION" type="string" length="4000"/>
@@ -1619,6 +1689,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="email" type="string" column="EMAIL" length="255" unique-key="CUSTOMER_GUID" not-null="true"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
@@ -1675,6 +1747,7 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
 
         <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity" foreign-key="FK_CS_CUSTOMER">
             <column name="CUSTOMER_ID" not-null="true"/>
@@ -1703,6 +1776,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <many-to-one name="skus" class="org.yes.cart.domain.entity.impl.ProductSkuEntity" foreign-key="FK_WL_SKU">
             <column name="SKU_ID" not-null="true"/>
         </many-to-one>
@@ -1738,6 +1813,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="pgLabel" type="string" length="64" not-null="false">
             <column name="PG_LABEL">
                 <comment>Payment gateway label</comment>
@@ -1812,6 +1889,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="qty" column="QTY" type="java.math.BigDecimal" not-null="false"/>
         <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
         <property name="price" type="java.math.BigDecimal" not-null="false">
@@ -1845,6 +1924,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="deliveryNum" type="string" length="16" not-null="true">
             <column name="DELIVERYNUM">
                 <comment>Order contract in case of splited orders (XXX-1,XXX-2, etc).
@@ -1890,6 +1971,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="qty" type="java.math.BigDecimal" not-null="true">
             <column name="QTY" not-null="true">
                 <comment>Quantity of SKU in this praticular delivery
@@ -1920,6 +2003,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
         <property name="description" column="DESCRIPTION" type="string" length="255"/>
         <property name="displayName" column="DISPLAYNAME" type="string" length="255"/>
@@ -1953,6 +2038,7 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
 
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
         <property name="description" column="DESCRIPTION" type="string" length="255"/>
@@ -1994,6 +2080,8 @@
                 <param name="column">value</param>
             </generator>
         </id>
+        <version name="version" column="VERSION" type="long"/>
+
         <property name="imageName" type="string" length="255" not-null="false">
             <column name="IMAGE_NAME" length="255"/>
         </property>

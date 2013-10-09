@@ -30,6 +30,7 @@ import java.util.Date;
 public class ShopCategoryEntity implements org.yes.cart.domain.entity.ShopCategory, java.io.Serializable {
 
     private long shopCategoryId;
+    private long version;
 
     private int rank;
     private Shop shop;
@@ -121,6 +122,13 @@ public class ShopCategoryEntity implements org.yes.cart.domain.entity.ShopCatego
         this.shopCategoryId = shopCategoryId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

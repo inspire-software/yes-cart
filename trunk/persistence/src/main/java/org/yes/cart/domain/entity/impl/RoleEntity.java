@@ -27,6 +27,7 @@ import java.util.Date;
 public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Serializable {
 
     private long roleId;
+    private long version;
 
     private String code;
     private String description;
@@ -109,6 +110,13 @@ public class RoleEntity implements org.yes.cart.domain.entity.Role, java.io.Seri
         this.roleId = roleId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

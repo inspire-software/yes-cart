@@ -30,6 +30,7 @@ import java.util.Date;
 public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, java.io.Serializable {
 
     private long warehouseId;
+    private long version;
 
     private String code;
     private String name;
@@ -167,6 +168,13 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
         this.warehouseId = warehouseId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

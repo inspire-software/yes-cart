@@ -17,7 +17,6 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.ShopCodeContext;
@@ -135,7 +134,7 @@ public class ShoppingCartImpl implements ShoppingCart {
     /**
      * {@inheritDoc}
      */
-    public boolean addProductSkuToCart(final ProductSkuDTO sku, final BigDecimal quantity) {
+    public boolean addProductSkuToCart(final String sku, final BigDecimal quantity) {
 
         final int skuIndex = indexOf(sku);
         if (skuIndex != -1) {
@@ -144,7 +143,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         }
 
         final CartItemImpl newItem = new CartItemImpl();
-        newItem.setProductSkuCode(sku.getCode());
+        newItem.setProductSkuCode(sku);
         newItem.setQuantity(quantity);
         getItems().add(newItem);
         return true;
@@ -153,10 +152,10 @@ public class ShoppingCartImpl implements ShoppingCart {
     /**
      * {@inheritDoc}
      */
-    public boolean setProductSkuToCart(final ProductSkuDTO sku, final BigDecimal quantity) {
+    public boolean setProductSkuToCart(final String sku, final BigDecimal quantity) {
 
         final CartItemImpl newItem = new CartItemImpl();
-        newItem.setProductSkuCode(sku.getCode());
+        newItem.setProductSkuCode(sku);
         newItem.setQuantity(quantity);
 
         final int skuIndex = indexOf(sku);
@@ -173,7 +172,7 @@ public class ShoppingCartImpl implements ShoppingCart {
      *
      * @param productSku
      */
-    public boolean removeCartItem(final ProductSkuDTO productSku) {
+    public boolean removeCartItem(final String productSku) {
         final int skuIndex = indexOf(productSku);
         if (skuIndex != -1) {
             getItems().remove(skuIndex);
@@ -185,7 +184,7 @@ public class ShoppingCartImpl implements ShoppingCart {
     /**
      * {@inheritDoc}
      */
-    public boolean removeCartItemQuantity(final ProductSkuDTO productSku, final BigDecimal quantity) {
+    public boolean removeCartItemQuantity(final String productSku, final BigDecimal quantity) {
         final int skuIndex = indexOf(productSku);
         if (skuIndex != -1) {
             try {
@@ -253,14 +252,6 @@ public class ShoppingCartImpl implements ShoppingCart {
                 getShoppingContext(),
                 orderDelivery
         );
-    }
-
-    /**
-     * @param sku product sku for which to locate position of shopping cart item
-     * @return idex of cart item for this sku
-     */
-    int indexOf(final ProductSkuDTO sku) {
-        return indexOf(sku.getCode());
     }
 
     /**

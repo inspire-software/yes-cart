@@ -16,7 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -41,9 +41,8 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
 
     public SetSkuQuantityToCartEventCommandImpl(final PriceService priceService,
                                                 final ProductService productService,
-                                                final DtoProductService dtoProductService,
                                                 final ShopService shopService) {
-        super(priceService, productService, dtoProductService, shopService);
+        super(priceService, productService, shopService);
     }
 
     /**
@@ -55,13 +54,14 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
 
     /** {@inheritDoc} */
     @Override
-    protected void execute(final ShoppingCart shoppingCart, final ProductSkuDTO productSkuDTO, final Map<String, Object> parameters) {
+    protected void execute(final ShoppingCart shoppingCart,
+                           final ProductSku productSku, final Map<String, Object> parameters) {
         final String skuQty = (String) parameters.get(CMD_SETQTYSKU_P_QTY);
-        if (productSkuDTO != null && skuQty != null) {
-            shoppingCart.setProductSkuToCart(productSkuDTO, new BigDecimal(skuQty));
-            recalculatePrice(shoppingCart, productSkuDTO);
+        if (productSku != null && skuQty != null) {
+            shoppingCart.setProductSkuToCart(productSku.getCode(), new BigDecimal(skuQty));
+            recalculatePrice(shoppingCart, productSku);
             ShopCodeContext.getLog(this).debug("Add product sku with code {} and qty {} to cart",
-                    productSkuDTO.getCode(),
+                    productSku.getCode(),
                     skuQty);
             setModifiedDate(shoppingCart);
         }

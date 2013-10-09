@@ -52,7 +52,7 @@ import java.util.List;
  *
  * Page  responsible to handle payments for gateways with internal/advanced
  * integration methods, in this case we are responsible to get the order from db perform
- * gateway call and show sucsessful of failed result.
+ * gateway call and show successful of failed result.
  *
  * Igor Azarny iazarny@yahoo.com
  * Date: 12/11/11

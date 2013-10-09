@@ -29,6 +29,7 @@ import java.util.Set;
 public class AttributeGroupEntity implements org.yes.cart.domain.entity.AttributeGroup, java.io.Serializable {
 
     private long attributegroupId;
+    private long version;
 
     private String code;
     private String name;
@@ -129,6 +130,13 @@ public class AttributeGroupEntity implements org.yes.cart.domain.entity.Attribut
         this.attributegroupId = attributegroupId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

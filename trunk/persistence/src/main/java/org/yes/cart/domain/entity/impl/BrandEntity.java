@@ -31,6 +31,7 @@ import java.util.Date;
 public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Serializable {
 
     private long brandId;
+    private long version;
 
     private String name;
     private String description;
@@ -122,6 +123,13 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         this.brandId = brandId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

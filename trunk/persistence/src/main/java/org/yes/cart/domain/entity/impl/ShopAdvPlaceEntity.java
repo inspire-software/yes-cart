@@ -32,6 +32,7 @@ import java.util.Set;
 public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPlace, java.io.Serializable {
 
     private long shopadvplaceId;
+    private long version;
 
     private String name;
     private String description;
@@ -133,6 +134,13 @@ public class ShopAdvPlaceEntity implements org.yes.cart.domain.entity.ShopAdvPla
         this.shopadvplaceId = shopadvplaceId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

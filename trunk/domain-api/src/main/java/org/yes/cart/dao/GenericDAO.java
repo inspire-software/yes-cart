@@ -142,6 +142,16 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Find entities within named query .
      *
      * @param namedQueryName name of query
+     * @param timeout timeout to lock object for
+     * @param parameters     optional parameters for named query
+     * @return list of found entities
+     */
+    List<T> findByNamedQueryForUpdate(String namedQueryName, int timeout, Object... parameters);
+
+    /**
+     * Find entities within named query .
+     *
+     * @param namedQueryName name of query
      * @param parameters     optional parameters for named query
      * @return list of found entities
      */
@@ -444,12 +454,17 @@ public interface GenericDAO<T, PK extends Serializable> {
     int executeNativeUpdate(String nativeQuery, Object... parameters);
 
     /**
-     * Flush clear.
+     * Flush clear session.
      */
     void flushClear();
 
+    /**
+     * Flush session.
+     */
+    void flush();
 
+    /**
+     * Clear session.
+     */
     void clear();
-
-
 }

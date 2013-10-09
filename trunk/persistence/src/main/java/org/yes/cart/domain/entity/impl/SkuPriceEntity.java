@@ -30,6 +30,7 @@ import java.util.Date;
 public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java.io.Serializable {
 
     private long skuPriceId;
+    private long version;
 
     private ProductSku sku;
     private Shop shop;
@@ -212,6 +213,13 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
         this.skuPriceId = skuPriceId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

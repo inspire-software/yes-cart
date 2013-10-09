@@ -1,5 +1,6 @@
     create table TADDRESS (
         ADDRESS_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CITY varchar(128) not null,
         POSTCODE varchar(16),
         ADDRLINE1 varchar(255) not null,
@@ -23,6 +24,7 @@
 
     create table TASSOCIATION (
         ASSOCIATION_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CODE varchar(255) not null,
         NAME varchar(255) not null,
         DESCRIPTION longtext,
@@ -36,6 +38,7 @@
 
     create table TATTRIBUTE (
         ATTRIBUTE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CODE varchar(255) not null  unique,
         MANDATORY bit not null comment 'Attribute must have the default value if mandatory flag is true',
         ALLOWDUPLICATE bit default 0 not null comment 'Allow to duplicate attr values. Example color - red and black',
@@ -60,6 +63,7 @@
 
     create table TATTRIBUTEGROUP (
         ATTRIBUTEGROUP_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CODE varchar(255) not null,
         NAME varchar(64) not null,
         DESCRIPTION longtext,
@@ -73,6 +77,7 @@
 
     create table TBRAND (
         BRAND_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         NAME varchar(255) not null,
         DESCRIPTION longtext,
         CREATED_TIMESTAMP datetime,
@@ -85,6 +90,7 @@
 
     create table TBRANDATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         BRAND_ID bigint not null,
         VAL longtext,
         DISPLAYVAL longtext,
@@ -99,6 +105,7 @@
 
     create table TCARRIER (
         CARRIER_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         NAME varchar(255) not null,
         DISPLAYNAME varchar(255),
         DESCRIPTION varchar(255),
@@ -117,6 +124,7 @@
 
     create table TCARRIERSLA (
         CARRIERSLA_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         NAME varchar(255) not null,
         DISPLAYNAME varchar(255),
         DESCRIPTION varchar(255),
@@ -141,6 +149,7 @@
 
     create table TCATEGORY (
         CATEGORY_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         PARENT_ID bigint,
         RANK integer comment 'What the default order of child category in parent ?',
         PRODUCTTYPE_ID bigint comment 'Default product type in category, can be null if category contains different product types',
@@ -168,6 +177,7 @@
 
     create table TCATEGORYATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         VAL longtext,
         DISPLAYVAL longtext,
         CATEGORY_ID bigint not null,
@@ -182,6 +192,7 @@
 
     create table TCOUNTRY (
         COUNTRY_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         COUNTRY_CODE varchar(2) not null,
         ISO_CODE varchar(3) not null,
         NAME varchar(64) not null,
@@ -195,6 +206,7 @@
 
     create table TCUSTOMER (
         CUSTOMER_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         EMAIL varchar(255) not null unique,
         FIRSTNAME varchar(128) not null,
         LASTNAME varchar(128) not null,
@@ -210,6 +222,7 @@
 
     create table TCUSTOMERATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         VAL longtext,
         DISPLAYVAL longtext,
         CUSTOMER_ID bigint not null,
@@ -224,6 +237,7 @@
 
     create table TCUSTOMERORDER (
         CUSTOMERORDER_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         PG_LABEL varchar(255) comment 'Payment gateway label',
         ORDERNUM varchar(255) comment 'Depends from order num producer.',
         CART_GUID varchar(36) not null,
@@ -247,6 +261,7 @@
 
     create table TCUSTOMERORDERDELIVERY (
         CUSTOMERORDERDELIVERY_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         DELIVERYNUM varchar(255) comment 'Order contract in case of splited orders (XXX-1,XXX-2, etc). Delivery contract XXX-2-DDD1,XXX-2-DDD2, XXX-2-DDD3, where XXX order num, DDD delivery num.',
         REF_NO varchar(255) comment 'External ref number',
         PRICE decimal(19,2) not null,
@@ -264,6 +279,7 @@
 
     create table TCUSTOMERORDERDELIVERYDET (
         CUSTOMERORDERDELIVERYDET_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         QTY decimal(19,2) not null comment 'Quantity of SKU in this particular delivery',
         PRICE decimal(19,2) not null,
         LIST_PRICE decimal(19,2) not null,
@@ -280,6 +296,7 @@
 
     create table TCUSTOMERORDERDET (
         CUSTOMERORDERDET_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         QTY decimal(19,2),
         PRICE decimal(19,2) not null comment 'Price per one unit',
         LIST_PRICE decimal(19,2) not null comment 'List
@@ -297,6 +314,7 @@
 
     create table TCUSTOMERSHOP (
         CUSTOMERSHOP_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CUSTOMER_ID bigint not null,
         SHOP_ID bigint not null,
         CREATED_TIMESTAMP datetime,
@@ -309,6 +327,7 @@
 
     create table TCUSTOMERWISHLIST (
         CUSTOMERWISHLIST_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         SKU_ID bigint not null,
         CUSTOMER_ID bigint not null,
         WL_TYPE varchar(1) default 'W' comment 'W-single, A-Available reminder, P-Price reminder, R-In promo reminder',
@@ -322,6 +341,7 @@
 
     create table TENSEMBLEOPT (
         ENSEMBLEOPT_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         QTY integer not null,
         PRODUCT_ID bigint not null,
         SKU_ID bigint not null,
@@ -335,6 +355,7 @@
 
     create table TETYPE (
         ETYPE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         JAVATYPE varchar(255) not null comment 'Shows the java type',
         BUSINESSTYPE varchar(255) comment 'Used mosty on UI. How to represent product, category, attributes, etc',
         CREATED_TIMESTAMP datetime,
@@ -347,6 +368,7 @@
 
     create table TMAILTEMPLATE (
         MAILTEMPLATE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CODE varchar(255) not null,
         FSPOINTER longtext not null comment 'Absolute path to folder with html template files and images.',
         NAME varchar(255) not null,
@@ -362,6 +384,7 @@
 
     create table TMAILTEMPLATEGROUP (
         MAILTEMPLATEGROUP_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         NAME varchar(64) not null,
         DESCRIPTION longtext,
         CREATED_TIMESTAMP datetime,
@@ -374,6 +397,7 @@
 
     create table TMANAGER (
         MANAGER_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         EMAIL varchar(255) not null unique,
         FIRSTNAME varchar(128) not null,
         LASTNAME varchar(128) not null,
@@ -389,6 +413,7 @@
 
     create table TMANAGERROLE (
         MANAGERROLE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         EMAIL varchar(255) not null,
         CODE varchar(255) not null,
         CREATED_TIMESTAMP datetime,
@@ -401,6 +426,7 @@
 
     create table TPRODTYPEATTRVIEWGROUP (
         PRODTYPEATTRIBUTEGROUP_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         PRODUCTTYPE_ID bigint not null,
         ATTRCODELIST longtext,
         RANK integer comment 'What the default order of attribute group for prod type ?',
@@ -416,6 +442,7 @@
 
     create table TPRODUCT (
         PRODUCT_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CODE varchar(255) not null comment 'Product or product sku code' unique,
         AVAILABLEFROM datetime comment 'AVAILABLEFROM AVAILABLETO date range when product will be available, for pre and back orders',
         AVAILABLETO datetime,
@@ -441,6 +468,7 @@
 
     create table TPRODUCTASSOCIATION (
         PRODUCTASSOCIATION_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         RANK integer comment 'RANK can have different meaning, depending from association type for example similarity always will be less, that 1000000 (MAX similarity) who buy , counter of who buy the one product also buy other product',
         ASSOCIATION_ID bigint not null,
         PRODUCT_ID bigint not null,
@@ -455,6 +483,7 @@
 
     create table TPRODUCTATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         VAL longtext,
         DISPLAYVAL longtext,
         PRODUCT_ID bigint not null,
@@ -469,6 +498,7 @@
 
     create table TPRODUCTCATEGORY (
         PRODUCTCATEGORY_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         PRODUCT_ID bigint not null,
         CATEGORY_ID bigint not null,
         RANK integer comment 'What the default order of particular product in partcular category',
@@ -482,6 +512,7 @@
 
     create table TPRODUCTSKUATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         VAL longtext,
         DISPLAYVAL longtext,
         SKU_ID bigint not null,
@@ -496,6 +527,7 @@
 
     create table TPRODUCTTYPE (
         PRODUCTTYPE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         NAME varchar(255),
         DESCRIPTION varchar(255),
         UITEMPLATE varchar(255) comment 'What UI template will be used for show particular type of product.',
@@ -515,6 +547,7 @@
 
     create table TPRODUCTTYPEATTR (
         PRODTYPEATTR_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CODE varchar(255) not null,
         PRODUCTTYPE_ID bigint not null,
         RANK integer default 500 comment 'What order for filtered navigation',
@@ -533,6 +566,7 @@
 
     create table TROLE (
         ROLE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CODE varchar(255) not null unique,
         DESCRIPTION varchar(255),
         CREATED_TIMESTAMP datetime,
@@ -545,6 +579,7 @@
 
     create table TSEOIMAGE (
         SEOIMAGE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         IMAGE_NAME varchar(255),
         ALT varchar(255),
         TITLE varchar(255),
@@ -558,6 +593,7 @@
 
     create table TSHOP (
         SHOP_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CODE varchar(255) not null,
         NAME varchar(64) not null,
         DESCRIPTION longtext,
@@ -577,6 +613,7 @@
 
     create table TSHOPADVPLACE (
         SHOPADVPLACE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         NAME varchar(255) not null,
         DESCRIPTION longtext,
         SHOP_ID bigint not null,
@@ -590,6 +627,7 @@
 
     create table TSHOPADVRULES (
         SHOPADVRULES_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         rank integer,
         NAME varchar(255) not null,
         DESCRIPTION longtext,
@@ -607,6 +645,7 @@
 
     create table TSHOPATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         VAL longtext,
         DISPLAYVAL longtext,
         SHOP_ID bigint not null,
@@ -621,7 +660,8 @@
 
     create table TSHOPCATEGORY (
         SHOPCATEGORY_ID bigint not null auto_increment,
-        RANK integer comment 'What the default order of assignmet ?',
+        VERSION bigint not null default 0,
+        RANK integer comment 'What the default order of assignment ?',
         SHOP_ID bigint not null,
         CATEGORY_ID bigint not null,
         CREATED_TIMESTAMP datetime,
@@ -634,6 +674,7 @@
 
     create table TSHOPDISCOUNT (
         SHOPDISCOUNT_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         NAME varchar(255) not null,
         DESCRIPTION longtext,
         AVAILABLEFROM datetime,
@@ -649,6 +690,7 @@
 
     create table TSHOPDISCOUNTRULE (
         SHOPDISCOUNTRULE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         RULE longtext,
         NAME varchar(255),
         DESCRIPTION longtext,
@@ -663,6 +705,7 @@
 
     create table TSHOPEXCHANGERATE (
         SHOPEXCHANGERATE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         FROMCURRENCY varchar(3) not null,
         TOCURRENCY varchar(3) not null,
         SHOP_ID bigint not null,
@@ -677,6 +720,7 @@
 
     create table TSHOPTOPSELLER (
         SHOPTOPSELLER_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         SHOP_ID bigint not null,
         PRODUCT_ID bigint not null,
         COUNTER decimal(19,2),
@@ -690,6 +734,7 @@
 
     create table TSHOPURL (
         STOREURL_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         URL longtext not null,
         SHOP_ID bigint not null,
         CREATED_TIMESTAMP datetime,
@@ -702,6 +747,7 @@
 
     create table TSHOPWAREHOUSE (
         SHOPWAREHOUSE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         SHOP_ID bigint not null,
         WAREHOUSE_ID bigint not null,
         RANK integer comment 'Warehouse priority usage',
@@ -715,6 +761,7 @@
 
     create table TSKU (
         SKU_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CODE varchar(255) not null unique,
         NAME varchar(255) not null,
         DISPLAYNAME longtext,
@@ -736,6 +783,7 @@
 
     create table TSKUPRICE (
         SKUPRICE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         SKU_ID bigint not null,
         SHOP_ID bigint not null,
         CURRENCY varchar(3) not null,
@@ -756,6 +804,7 @@
 
     create table TSKUWAREHOUSE (
         SKUWAREHOUSE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         WAREHOUSE_ID bigint not null,
         SKU_ID bigint not null,
         QUANTITY decimal(19,2) not null comment 'Current quantity',
@@ -770,6 +819,7 @@
 
     create table TSTATE (
         STATE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         COUNTRY_CODE varchar(2) not null,
         STATE_CODE varchar(64) not null,
         NAME varchar(64) not null,
@@ -783,6 +833,7 @@
 
     create table TSYSTEM (
         SYSTEM_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CODE varchar(255) not null,
         NAME varchar(64) not null,
         DESCRIPTION longtext,
@@ -796,6 +847,7 @@
 
     create table TSYSTEMATTRVALUE (
         ATTRVALUE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         VAL longtext,
         DISPLAYVAL longtext,
         CODE varchar(255) not null,
@@ -810,6 +862,7 @@
 
     create table TWAREHOUSE (
         WAREHOUSE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
         CODE varchar(255) not null,
         NAME varchar(64) not null,
         DESCRIPTION longtext,

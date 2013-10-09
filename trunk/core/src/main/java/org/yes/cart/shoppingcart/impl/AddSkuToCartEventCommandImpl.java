@@ -17,7 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
-import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -42,9 +42,8 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
 
     public AddSkuToCartEventCommandImpl(final PriceService priceService,
                                         final ProductService productService,
-                                        final DtoProductService dtoProductService,
                                         final ShopService shopService) {
-        super(priceService, productService, dtoProductService, shopService);
+        super(priceService, productService, shopService);
     }
 
     /**
@@ -74,16 +73,16 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
      */
     @Override
     protected void execute(final ShoppingCart shoppingCart,
-                           final ProductSkuDTO productSkuDTO,
+                           final ProductSku productSku,
                            final Map<String, Object> parameters) {
-        if (productSkuDTO != null) {
-            shoppingCart.addProductSkuToCart(productSkuDTO, getQuantityValue(parameters));
-            recalculatePrice(shoppingCart, productSkuDTO);
+        if (productSku != null) {
+            shoppingCart.addProductSkuToCart(productSku.getCode(), getQuantityValue(parameters));
+            recalculatePrice(shoppingCart, productSku);
             setModifiedDate(shoppingCart);
             final Logger log = ShopCodeContext.getLog(this);
             if (log.isDebugEnabled()) {
                 log.debug("Added one item of sku code {} to cart",
-                        productSkuDTO.getCode());
+                        productSku.getCode());
             }
         }
     }

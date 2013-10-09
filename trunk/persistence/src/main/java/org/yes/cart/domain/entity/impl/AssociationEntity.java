@@ -27,6 +27,7 @@ import java.util.Date;
 public class AssociationEntity implements org.yes.cart.domain.entity.Association, java.io.Serializable {
 
     private long associationId;
+    private long version;
 
     private String code;
     private String name;
@@ -117,6 +118,13 @@ public class AssociationEntity implements org.yes.cart.domain.entity.Association
         this.associationId = associationId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

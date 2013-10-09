@@ -28,6 +28,7 @@ import java.util.Date;
 public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.io.Serializable {
 
     private long storeUrlId;
+    private long version;
 
     private String url;
     private Shop shop;
@@ -126,6 +127,13 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
         this.storeUrlId = storeUrlId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

@@ -30,6 +30,7 @@ import java.util.Date;
 public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerShop, java.io.Serializable {
 
     private long customerShopId;
+    private long version;
 
     private Customer customer;
     private Shop shop;
@@ -112,6 +113,13 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
         this.customerShopId = customerShopId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

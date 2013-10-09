@@ -31,6 +31,7 @@ import java.util.Set;
 public class ShopDiscountEntity implements org.yes.cart.domain.entity.ShopDiscount, java.io.Serializable {
 
     private long shopDiscountId;
+    private long version;
 
     private String name;
     private String description;
@@ -149,6 +150,13 @@ public class ShopDiscountEntity implements org.yes.cart.domain.entity.ShopDiscou
         this.shopDiscountId = shopDiscountId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

@@ -27,6 +27,7 @@ import java.util.Date;
 public class ManagerRoleEntity implements org.yes.cart.domain.entity.ManagerRole, java.io.Serializable {
 
     private long managerRoleId;
+    private long version;
 
     private String email;
     private String code;
@@ -110,6 +111,13 @@ public class ManagerRoleEntity implements org.yes.cart.domain.entity.ManagerRole
         this.managerRoleId = managerRoleId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

@@ -28,6 +28,7 @@ import java.util.*;
 public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java.io.Serializable {
 
     private long customerId;
+    private long version;
 
     private String email;
     private String firstname;
@@ -180,6 +181,14 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
 
     public void setCustomerId(long customerId) {
         this.customerId = customerId;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
     }
 
     public Set<AttrValueCustomer> getAttributesByCode(final String attributeCode) {

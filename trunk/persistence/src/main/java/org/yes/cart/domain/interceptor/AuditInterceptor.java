@@ -102,7 +102,7 @@ public class AuditInterceptor extends EmptyInterceptor {
             setValue(objects, propertyNames, "updatedTimestamp", date);
             auditable.setUpdatedTimestamp(date);
 
-            logOperation("SAVE", entity);
+            logOperation("SAVE", entity, userName);
         }
 
         return super.onSave(entity, serializable, objects, propertyNames, types);
@@ -114,7 +114,10 @@ public class AuditInterceptor extends EmptyInterceptor {
     @Override
     public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
 
-        logOperation("DELETE", entity);
+        if (entity instanceof Auditable) {
+            final String userName = getUserName();
+            logOperation("DELETE", entity, userName);
+        }
         super.onDelete(entity, id, state, propertyNames, types);
 
     }
@@ -154,14 +157,14 @@ public class AuditInterceptor extends EmptyInterceptor {
             setValue(currentState, propertyNames, "updatedTimestamp", date);
             auditable.setUpdatedTimestamp(date);
 
-            logOperation("FLUSH", entity);
+            logOperation("FLUSH", entity, userName);
         }
 
         return super.onFlushDirty(entity, serializable, currentState, previousState, propertyNames, types);
 
     }
 
-    private void logOperation(final String operation, final Object entity) {
+    private void logOperation(final String operation, final Object entity, final String user) {
         if (LOG.isInfoEnabled()) {
             final StringBuilder line = new StringBuilder();
             line.append(operation);
@@ -169,6 +172,8 @@ public class AuditInterceptor extends EmptyInterceptor {
             line.append(entity.getClass().getSimpleName());
             line.append(",");
             line.append(((entity instanceof Identifiable) ? ((Identifiable) entity).getId() : "N/A"));
+            line.append(",");
+            line.append(user);
             LOG.info(line.toString());
         }
     }

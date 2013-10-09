@@ -33,6 +33,7 @@ import java.util.Date;
 public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.CustomerOrderDelivery, java.io.Serializable {
 
     private long customerOrderDeliveryId;
+    private long version;
 
     private String deliveryNum;
     private String refNo;
@@ -169,6 +170,13 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
         this.customerOrderDeliveryId = customerOrderDeliveryId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

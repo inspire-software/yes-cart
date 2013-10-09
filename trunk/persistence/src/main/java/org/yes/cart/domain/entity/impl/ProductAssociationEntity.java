@@ -30,6 +30,7 @@ import java.util.Date;
 public class ProductAssociationEntity implements org.yes.cart.domain.entity.ProductAssociation, java.io.Serializable {
 
     private long productassociationId;
+    private long version;
 
     private int rank;
     private Association association;
@@ -130,6 +131,13 @@ public class ProductAssociationEntity implements org.yes.cart.domain.entity.Prod
         this.productassociationId = productassociationId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

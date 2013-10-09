@@ -29,6 +29,7 @@ import java.util.Date;
 public class ProductCategoryEntity implements org.yes.cart.domain.entity.ProductCategory, java.io.Serializable {
 
     private long productCategoryId;
+    private long version;
 
     private Product product;
     private Category category;
@@ -119,6 +120,13 @@ public class ProductCategoryEntity implements org.yes.cart.domain.entity.Product
         this.productCategoryId = productCategoryId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

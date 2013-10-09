@@ -27,6 +27,7 @@ import java.util.Date;
 public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java.io.Serializable {
 
     private long seoImageId;
+    private long version;
 
     private String imageName;
     private String alt;
@@ -119,6 +120,13 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
         this.seoImageId = seoImageId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

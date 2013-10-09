@@ -27,6 +27,7 @@ import java.util.Date;
 public class CountryEntity implements org.yes.cart.domain.entity.Country, java.io.Serializable {
 
     private long countryId;
+    private long version;
 
     private String countryCode;
     private String isoCode;
@@ -120,6 +121,13 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
         this.countryId = countryId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 
