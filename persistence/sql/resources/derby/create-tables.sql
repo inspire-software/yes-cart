@@ -1278,7 +1278,7 @@
         foreign key (SYSTEM_ID) 
         references TSYSTEM;
 
-
+    create index IMAGE_NAME_IDX on TSEOIMAGE (IMAGE_NAME);
 
     create table HIBERNATE_UNIQUE_KEYS (
          value integer 

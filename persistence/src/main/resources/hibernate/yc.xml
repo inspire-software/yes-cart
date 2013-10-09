@@ -2082,7 +2082,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="imageName" type="string" length="255" not-null="false">
+        <property name="imageName" type="string" length="255" not-null="false" index="IMAGE_NAME_IDX">
             <column name="IMAGE_NAME" length="255"/>
         </property>
         <property name="alt" type="string" length="255" not-null="false">

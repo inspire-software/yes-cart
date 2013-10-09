@@ -208,3 +208,10 @@ alter table TSTATE add column VERSION bigint not null default 0;
 alter table TSYSTEM add column VERSION bigint not null default 0;
 alter table TSYSTEMATTRVALUE add column VERSION bigint not null default 0;
 alter table TWAREHOUSE add column VERSION bigint not null default 0;
+
+
+--
+-- YC-141 postcreate.sql indexes and constraints
+--
+
+create index IMAGE_NAME_IDX on TSEOIMAGE (IMAGE_NAME);

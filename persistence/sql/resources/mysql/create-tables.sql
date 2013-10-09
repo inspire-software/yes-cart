@@ -1301,3 +1301,4 @@
         references TSYSTEM (SYSTEM_ID);
 
 
+    create index IMAGE_NAME_IDX on TSEOIMAGE (IMAGE_NAME);
