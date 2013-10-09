@@ -30,6 +30,7 @@ import java.util.Date;
 public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.ProductEnsebleOption, java.io.Serializable {
 
     private long ensembleOptId;
+    private long version;
 
     private int qty;
     private Product product;
@@ -122,6 +123,13 @@ public class ProductEnsebleOptionEntity implements org.yes.cart.domain.entity.Pr
         this.ensembleOptId = ensembleOptId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

@@ -16,7 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -41,9 +41,8 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
 
     public RemoveAllSkuFromCartCommandImpl(final PriceService priceService,
                                            final ProductService productService,
-                                           final DtoProductService dtoProductService,
                                            final ShopService shopService) {
-        super(priceService, productService, dtoProductService, shopService);
+        super(priceService, productService, shopService);
     }
 
     /** {@inheritDoc} */
@@ -54,12 +53,12 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
     /** {@inheritDoc} */
     @Override
     protected void execute(final ShoppingCart shoppingCart,
-                           final ProductSkuDTO productSkuDTO,
+                           final ProductSku productSku,
                            final Map<String, Object> parameters) {
-        if (productSkuDTO != null) {
-            if(!shoppingCart.removeCartItem(productSkuDTO)) {
+        if (productSku != null) {
+            if(!shoppingCart.removeCartItem(productSku.getCode())) {
                 ShopCodeContext.getLog(this).warn("Cannot remove all skus with code {} from cart",
-                        productSkuDTO.getCode());
+                        productSku.getCode());
 
             } else  {
                 recalculatePrice(shoppingCart, null);

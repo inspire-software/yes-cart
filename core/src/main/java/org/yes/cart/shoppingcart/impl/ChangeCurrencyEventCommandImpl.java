@@ -17,7 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 
-import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -37,9 +37,8 @@ public class ChangeCurrencyEventCommandImpl extends AbstractSkuCartCommandImpl {
 
     public ChangeCurrencyEventCommandImpl(final PriceService priceService,
                                           final ProductService productService,
-                                          final DtoProductService dtoProductService,
                                           final ShopService shopService) {
-        super(priceService, productService, dtoProductService, shopService);
+        super(priceService, productService, shopService);
     }
 
     /**
@@ -54,13 +53,13 @@ public class ChangeCurrencyEventCommandImpl extends AbstractSkuCartCommandImpl {
      */
     @Override
     protected void execute(final ShoppingCart shoppingCart,
-                           final ProductSkuDTO productSkuDTO,
+                           final ProductSku productSku,
                            final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             final String currencyCode = (String) parameters.get(getCmdKey());
             if (currencyCode != null && !currencyCode.equals(shoppingCart.getCurrencyCode())) {
                 ((ShoppingCartImpl) shoppingCart).setCurrencyCode(currencyCode);
-                recalculatePrice(shoppingCart, productSkuDTO);
+                recalculatePrice(shoppingCart, productSku);
                 setModifiedDate(shoppingCart);
             }
         }

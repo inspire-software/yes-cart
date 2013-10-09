@@ -33,9 +33,10 @@ import java.util.UUID;
 @Indexed(index = "luceneindex/attribute")
 public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, java.io.Serializable {
 
-
     private long attributeId;
+    private long version;
 
+    private String code;
     private boolean mandatory;
     private boolean allowduplicate;
     private boolean allowfailover;
@@ -217,7 +218,13 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.attributeId = attributeId;
     }
 
-    private String code;
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 
     public String getCode() {
         return this.code;

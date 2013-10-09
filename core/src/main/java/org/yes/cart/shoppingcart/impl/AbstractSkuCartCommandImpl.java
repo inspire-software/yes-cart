@@ -17,8 +17,8 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
-import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
@@ -50,8 +50,6 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
     private final ProductService productService;
 
-    private final DtoProductService dtoProductService;
-
     private final ShopService shopService;
 
 
@@ -60,17 +58,14 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
      *
      * @param priceService price service
      * @param productService product service
-     * @param dtoProductService dto service
      * @param shopService shop service
      */
     public AbstractSkuCartCommandImpl(final PriceService priceService,
                                       final ProductService productService,
-                                      final DtoProductService dtoProductService,
                                       final ShopService shopService) {
         super();
         this.priceService = priceService;
         this.productService = productService;
-        this.dtoProductService = dtoProductService;
         this.shopService = shopService;
     }
 
@@ -81,8 +76,8 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
         if (parameters.containsKey(getCmdKey())) {
             final String skuCode = (String) parameters.get(getCmdKey());
             try {
-                final ProductSkuDTO productSkuDTO = dtoProductService.getProductSkuByCode(skuCode);
-                execute(shoppingCart, productSkuDTO, parameters);
+                final ProductSku productSku = productService.getProductSkuByCode(skuCode);
+                execute(shoppingCart, productSku, parameters);
             } catch (Exception e) {
                 final Logger log = ShopCodeContext.getLog(this);
                 log.error("Can not retreive product sku dto with code {}", skuCode, e);
@@ -95,20 +90,21 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
      * Abstract execute method.
      *
      * @param shoppingCart shopping cart
-     * @param productSkuDTO current sku DTO
+     * @param productSku current sku
      * @param parameters all parameters
      */
     protected abstract void execute(final ShoppingCart shoppingCart,
-                                    final ProductSkuDTO productSkuDTO,
+                                    final ProductSku productSku,
                                     final Map<String, Object> parameters);
 
     /**
-     * Recalucalate price in shopping cart. At this moment price depends from shop, currenct and quantity.
+     * Recalculate price in shopping cart. At this moment price depends from shop, current and quantity.
      * Promotions also can impact the price. It will be implemented letter
      *
      * @param shoppingCart shopping cart
+     * @param productSku current sku (or null)
      */
-    protected void recalculatePrice(final ShoppingCart shoppingCart, final ProductSkuDTO productSkuDTO) {
+    protected void recalculatePrice(final ShoppingCart shoppingCart, final ProductSku productSku) {
 
         if (shoppingCart.getShoppingContext().getShopId() == 0) {
 
@@ -118,7 +114,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
             final Shop shop = shopService.findById(shoppingCart.getShoppingContext().getShopId());
 
-            if (productSkuDTO == null) {
+            if (productSku == null) {
 
                 for (int i = 0; i < shoppingCart.getCartItemList().size(); i++) {
 
@@ -130,7 +126,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
             } else {
                 // particular sku command
-                final String skuCode = productSkuDTO.getCode();
+                final String skuCode = productSku.getCode();
 
                 int skuIdx = shoppingCart.indexOf(skuCode);
 
@@ -179,15 +175,6 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
      */
     public PriceService getPriceService() {
         return priceService;
-    }
-
-    /**
-     * Get {@link DtoProductService}.
-     *
-     * @return {@link DtoProductService}.
-     */
-    public DtoProductService getDtoProductService() {
-        return dtoProductService;
     }
 
     /**

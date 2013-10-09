@@ -48,6 +48,8 @@ public class OrderStateManagerImplTest extends BaseCoreDBTestCase {
 
     @Before
     public void setUp()  {
+        afterTransitionListenerWasFired = false;
+        beforeTransitionListenerWasFired = false;
         handlersOk = new HashMap<String, OrderEventHandler>() {{
             put("payment.ok", new OrderEventHandler() {
                 public boolean handle(OrderEvent orderEvent) {
@@ -94,10 +96,10 @@ public class OrderStateManagerImplTest extends BaseCoreDBTestCase {
      * @throws Exception
      */
     @Test
-    public void testFireTransition0() throws Exception {
+    public void testFireTransitionUnmappedEvent() throws Exception {
         OrderStateManagerImpl orderStateManager = new OrderStateManagerImpl(handlersOk, beforeListenersMapOk, afterListenersMapOk);
         assertFalse(orderStateManager.fireTransition(
-                new OrderEventImpl("some.unhendled.cart.event", null)
+                new OrderEventImpl("some.unhandled.cart.event", null)
         ));
         assertFalse(afterTransitionListenerWasFired);
         assertFalse(beforeTransitionListenerWasFired);
@@ -109,7 +111,7 @@ public class OrderStateManagerImplTest extends BaseCoreDBTestCase {
      * @throws Exception
      */
     @Test
-    public void testFireTransition1() throws Exception {
+    public void testFireTransitionHandledEvent() throws Exception {
         OrderStateManagerImpl orderStateManager = new OrderStateManagerImpl(handlersOk, beforeListenersMapOk, afterListenersMapOk);
         assertTrue(orderStateManager.fireTransition(
                 new OrderEventImpl("payment.ok", null)
@@ -119,12 +121,12 @@ public class OrderStateManagerImplTest extends BaseCoreDBTestCase {
     }
 
     /**
-     * Prove, that before listeners will be faired, but after - not in case if handler not perform transition
+     * Prove, that before listeners only before listener is fired if handler result is false
      *
      * @throws Exception
      */
     @Test
-    public void testFireTransition2() throws Exception {
+    public void testFireTransitionUnhandledEvent() throws Exception {
         OrderStateManagerImpl orderStateManager = new OrderStateManagerImpl(handlersFailed, beforeListenersMapOk, afterListenersMapOk);
         assertFalse(orderStateManager.fireTransition(
                 new OrderEventImpl("payment.ok", null)
@@ -139,7 +141,7 @@ public class OrderStateManagerImplTest extends BaseCoreDBTestCase {
      * @throws Exception
      */
     @Test
-    public void testAddBeforeAfterTransitionListener0() throws Exception {
+    public void testAddBeforeAfterTransitionListenerDynamicHandlers() throws Exception {
         OrderStateManagerImpl orderStateManager = new OrderStateManagerImpl(handlersOk, beforeListenersMapOk, afterListenersMapOk);
         List<OrderStateTransitionListener> afterTransitionEventHandlers = (List<OrderStateTransitionListener>)
                 orderStateManager.getAfterListenersMap().get("payment.ok");

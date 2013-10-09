@@ -41,8 +41,6 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-        <!-- TODO: YC-142 add localisable names to product types -->
-
         <column-descriptor>
             <column-index>3</column-index>
             <field-type>FIELD</field-type>

@@ -126,6 +126,8 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         return findById(id, false);
     }
 
+    private static final LockOptions UPDATE = new LockOptions(LockMode.PESSIMISTIC_WRITE);
+
     /**
      * {@inheritDoc}
      */
@@ -133,7 +135,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     public T findById(final PK id, final boolean lock) {
         T entity;
         if (lock) {
-            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id, LockMode.UPGRADE);
+            entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id, UPDATE);
         } else {
             entity = (T) sessionFactory.getCurrentSession().get(getPersistentClass(), id);
         }
@@ -240,6 +242,21 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     @SuppressWarnings("unchecked")
     public List<T> findByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
+        if (parameters != null) {
+            setQueryParameters(query, parameters);
+        }
+        return query.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public List<T> findByNamedQueryForUpdate(final String namedQueryName, final int timeout, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
+        LockOptions opts = new LockOptions(LockMode.PESSIMISTIC_WRITE);
+        opts.setTimeOut(timeout);
+        query.setLockOptions(opts);
         if (parameters != null) {
             setQueryParameters(query, parameters);
         }
@@ -785,9 +802,15 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    public void flush() {
+        sessionFactory.getCurrentSession().flush();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void clear() {
         sessionFactory.getCurrentSession().clear();
     }
-
 
 }

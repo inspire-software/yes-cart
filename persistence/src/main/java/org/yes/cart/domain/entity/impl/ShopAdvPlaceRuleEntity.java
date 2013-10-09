@@ -30,6 +30,7 @@ import java.util.Date;
 public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAdvPlaceRule, java.io.Serializable {
 
     private long shopadvrulesId;
+    private long version;
 
     private int rank;
     private String name;
@@ -158,6 +159,13 @@ public class ShopAdvPlaceRuleEntity implements org.yes.cart.domain.entity.ShopAd
         this.shopadvrulesId = shopadvrulesId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

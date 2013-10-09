@@ -564,11 +564,11 @@ public class PriceServiceImpl
 
         /**
          * Native sql is used, because i have got from hibernate
-         * "number of select types did not match those for insert" this exeption is incorrect.
+         * "number of select types did not match those for insert" this exception is incorrect.
          */
 
-        sql = MessageFormat.format("insert into tskuprice (sku_id, shop_id, currency, qty, regular_price, sale_price, minimal_price, sale_from, sale_to, guid)" +
-                " select o.sku_id, o.shop_id, ''{0}'', o.qty, o.regular_price * {1}, o.sale_price * {1}, o.minimal_price * {1}, o.sale_from, o.sale_to, o.guid from tskuprice o" +
+        sql = MessageFormat.format("insert into tskuprice (sku_id, shop_id, currency, qty, regular_price, sale_price, minimal_price, sale_from, sale_to, guid, version)" +
+                " select o.sku_id, o.shop_id, ''{0}'', o.qty, o.regular_price * {1}, o.sale_price * {1}, o.minimal_price * {1}, o.sale_from, o.sale_to, o.guid, 0 from tskuprice o" +
                 " where o.shop_id = {2} and o.currency = ''{3}''",
                 derivedCurrency,
                 decimalFormat.format(exchangeRate),

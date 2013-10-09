@@ -29,6 +29,7 @@ import java.util.Date;
 public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopExchangeRate, java.io.Serializable {
 
     private long shopexchangerateId;
+    private long version;
 
     private String fromCurrency;
     private String toCurrency;
@@ -129,6 +130,13 @@ public class ShopExchangeRateEntity implements org.yes.cart.domain.entity.ShopEx
         this.shopexchangerateId = shopexchangerateId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

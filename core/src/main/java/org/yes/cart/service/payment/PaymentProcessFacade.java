@@ -38,7 +38,7 @@ public interface PaymentProcessFacade {
      * @param paymentParameter the payment parameters.
      * @param shoppingCart  the shopping cart.
      * @throws OrderException in case if payment was failed
-     * @return true in case of succesfull payment
+     * @return true in case of successful payment
      */
     boolean pay(final ShoppingCart shoppingCart, final Map paymentParameter) throws OrderException;
 

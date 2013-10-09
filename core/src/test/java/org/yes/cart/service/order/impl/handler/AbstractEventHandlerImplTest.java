@@ -33,7 +33,7 @@ import java.util.Map;
 public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
 
     /**
-     * Simple card with two sku, three items, standard availability, one payment
+     * Simple cart with two sku, three items, standard availability, one payment
      *
      * @return cart
      */

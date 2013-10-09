@@ -26,6 +26,7 @@ import java.util.Date;
 public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDiscountRule, java.io.Serializable {
 
     private long shopDiscountRuleId;
+    private long version;
 
     private String rule;
     private String name;
@@ -118,6 +119,13 @@ public class ShopDiscountRuleEntity implements org.yes.cart.domain.entity.ShopDi
         this.shopDiscountRuleId = shopDiscountRuleId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

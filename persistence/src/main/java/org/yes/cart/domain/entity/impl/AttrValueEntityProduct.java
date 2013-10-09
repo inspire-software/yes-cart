@@ -32,6 +32,7 @@ import java.util.Date;
 public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrValueProduct, java.io.Serializable {
 
     private long attrvalueId;
+    private long version;
 
     private String val;
     private String displayVal;
@@ -135,6 +136,13 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
         this.attrvalueId = attrvalueId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

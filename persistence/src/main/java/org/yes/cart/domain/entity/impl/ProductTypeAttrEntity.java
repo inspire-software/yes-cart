@@ -33,6 +33,7 @@ import java.util.Date;
 public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.ProductTypeAttr, java.io.Serializable {
 
     private long productTypeAttrId;
+    private long version;
 
     private Attribute attribute;
     private ProductType producttype;
@@ -167,6 +168,14 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
 
     public void setProductTypeAttrId(long productTypeAttrId) {
         this.productTypeAttrId = productTypeAttrId;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
     }
 
     private static final XStreamProvider xStreamProvider = new ProductTypeRangeListXStreamProvider();

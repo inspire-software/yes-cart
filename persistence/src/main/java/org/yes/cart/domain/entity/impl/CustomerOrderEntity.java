@@ -34,6 +34,7 @@ import java.util.Date;
 public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerOrder, java.io.Serializable {
 
     private long customerorderId;
+    private long version;
 
     private String pgLabel;
     private String ordernum;
@@ -231,6 +232,14 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     public void setCustomerorderId(long customerorderId) {
         this.customerorderId = customerorderId;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
     }
 
     public CustomerOrderDelivery getCustomerOrderDelivery(final String deliveryNumber) {

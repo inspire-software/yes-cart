@@ -29,6 +29,7 @@ import java.util.Date;
 public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWarehouse, java.io.Serializable {
 
     private long shopWarehouseId;
+    private long version;
 
     private Shop shop;
     private Warehouse warehouse;
@@ -122,6 +123,13 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
         this.shopWarehouseId = shopWarehouseId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

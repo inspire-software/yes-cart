@@ -29,6 +29,7 @@ import java.util.Date;
 public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.entity.ProdTypeAttributeViewGroup, java.io.Serializable {
 
     private long prodTypeAttributeViewGroupId;
+    private long version;
 
     private ProductType producttype;
     private String attrCodeList;
@@ -137,6 +138,13 @@ public class ProdTypeAttributeViewGroupEntity implements org.yes.cart.domain.ent
         this.prodTypeAttributeViewGroupId = prodTypeAttributeViewGroupId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

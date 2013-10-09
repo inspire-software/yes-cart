@@ -29,6 +29,7 @@ import java.util.*;
 public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Serializable {
 
     private long shopId;
+    private long version;
 
     private String code;
     private String name;
@@ -199,6 +200,14 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public void setShopId(long shopId) {
         this.shopId = shopId;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
     }
 
     public String getSupportedCurrencies() {

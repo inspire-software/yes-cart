@@ -30,6 +30,7 @@ import java.util.Date;
 public class CustomerWishListEntity implements org.yes.cart.domain.entity.CustomerWishList, java.io.Serializable {
 
     private long customerwishlistId;
+    private long version;
 
     private ProductSku skus;
     private Customer customer;
@@ -120,6 +121,13 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
         this.customerwishlistId = customerwishlistId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

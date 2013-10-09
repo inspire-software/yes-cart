@@ -30,6 +30,7 @@ import java.util.Date;
 public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehouse, java.io.Serializable {
 
     private long skuWarehouseId;
+    private long version;
 
     private Warehouse warehouse;
     private ProductSku sku;
@@ -129,6 +130,13 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.skuWarehouseId = skuWarehouseId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

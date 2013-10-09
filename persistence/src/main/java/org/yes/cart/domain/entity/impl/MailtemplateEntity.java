@@ -29,6 +29,7 @@ import java.util.Date;
 public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtemplate, java.io.Serializable {
 
     private long mailtemplateId;
+    private long version;
 
     private String code;
     private String fspointer;
@@ -138,6 +139,13 @@ public class MailtemplateEntity implements org.yes.cart.domain.entity.Mailtempla
         this.mailtemplateId = mailtemplateId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

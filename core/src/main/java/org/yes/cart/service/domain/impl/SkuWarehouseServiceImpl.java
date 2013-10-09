@@ -45,13 +45,13 @@ import java.util.List;
  */
 public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse> implements SkuWarehouseService, ApplicationContextAware {
 
-    private  ProductService productService;
+    private ProductService productService;
 
     private ApplicationContext applicationContext;
 
-    private  OrderStateManager orderStateManager;
+    private OrderStateManager orderStateManager;
 
-    private  CustomerOrderService customerOrderService;
+    private CustomerOrderService customerOrderService;
 
 
     /**
@@ -118,7 +118,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      */
     public BigDecimal reservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal reserveQty) {
 
-        final SkuWarehouse skuWarehouse = findByWarehouseSku(warehouse, productSkuCode);
+        final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
         if (skuWarehouse == null) {
             return reserveQty.setScale(Constants.DEFAULT_SCALE);
@@ -139,7 +139,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
             }
         }
 
-
     }
 
 
@@ -147,7 +146,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      * {@inheritDoc}
      */
     public BigDecimal voidReservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal voidQty) {
-        final SkuWarehouse skuWarehouse = findByWarehouseSku(warehouse, productSkuCode);
+        final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
         if (skuWarehouse == null) {
             return voidQty.setScale(Constants.DEFAULT_SCALE);
@@ -170,7 +169,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      * {@inheritDoc}
      */
     public BigDecimal credit(final Warehouse warehouse, final String productSkuCode, final BigDecimal addQty) {
-        final SkuWarehouse skuWarehouse = findByWarehouseSku(warehouse, productSkuCode);
+        final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
         if (skuWarehouse == null) {
             final ProductSku sku = productService.getProductSkuByCode(productSkuCode);
@@ -197,6 +196,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /** {@inheritDoc}*/
     public SkuWarehouse update(SkuWarehouse instance) {
         final SkuWarehouse rez = super.update(instance);
+        getGenericDao().flush(); // Need to make changes immediately available
         return rez;
     }
 
@@ -205,7 +205,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      */
     public BigDecimal debit(final Warehouse warehouse, final String productSkuCode, final BigDecimal debitQty) {
 
-        final SkuWarehouse skuWarehouse = findByWarehouseSku(warehouse, productSkuCode);
+        final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
         if (skuWarehouse == null) {
             return debitQty.setScale(Constants.DEFAULT_SCALE);
@@ -221,6 +221,14 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
             }
         }
 
+    }
+
+    private SkuWarehouse findByWarehouseSkuForUpdate(final Warehouse warehouse, final String productSkuCode) {
+        final SkuWarehouse inventory = findByWarehouseSku(warehouse, productSkuCode);
+        if (inventory != null) {
+            return getGenericDao().findById(inventory.getSkuWarehouseId(), true);
+        }
+        return null;
     }
 
 

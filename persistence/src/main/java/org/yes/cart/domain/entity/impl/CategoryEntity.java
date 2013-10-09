@@ -34,6 +34,7 @@ import java.util.*;
 public class CategoryEntity implements org.yes.cart.domain.entity.Category, java.io.Serializable {
 
     private long categoryId;
+    private long version;
 
     private long parentId;
     private int rank;
@@ -346,6 +347,13 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         this.setSeoInternal((SeoEntity) seo);
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

@@ -16,7 +16,6 @@
 
 package org.yes.cart.shoppingcart;
 
-import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 
 import java.io.Serializable;
@@ -76,7 +75,7 @@ public interface ShoppingCart extends Serializable {
      *         false if adding this item cause only quantity update of already present in cart
      *         product sku.
      */
-    boolean addProductSkuToCart(ProductSkuDTO sku, BigDecimal quantity);
+    boolean addProductSkuToCart(String sku, BigDecimal quantity);
 
     /**
      * Set sku quantity, in case if sku not present in cart it will be added.
@@ -87,7 +86,7 @@ public interface ShoppingCart extends Serializable {
      *         false if adding this item cause only quantity update of already present in cart
      *         product sku.
      */
-    boolean setProductSkuToCart(ProductSkuDTO sku, BigDecimal quantity);
+    boolean setProductSkuToCart(String sku, BigDecimal quantity);
 
 
     /**
@@ -96,7 +95,7 @@ public interface ShoppingCart extends Serializable {
      * @param productSku product sku
      * @return true if item has been removed, false if item was not present in the cart.
      */
-    boolean removeCartItem(ProductSkuDTO productSku);
+    boolean removeCartItem(String productSku);
 
     /**
      * Removes a specified quantity from the shopping cart item
@@ -105,7 +104,7 @@ public interface ShoppingCart extends Serializable {
      * @param quantity   quantity to remove
      * @return true if quantity has been removed, false if item was not present in the cart.
      */
-    boolean removeCartItemQuantity(ProductSkuDTO productSku, BigDecimal quantity);
+    boolean removeCartItemQuantity(String productSku, BigDecimal quantity);
 
     /**
      * Set product sku price
@@ -260,7 +259,7 @@ public interface ShoppingCart extends Serializable {
     BigDecimal getCartSubTotal(boolean useListPrice);
 
     /**
-     * Calculate taxes and amount withing current cart shopping context.
+     * Calculate taxes and amount within current cart shopping context.
      *
      * @param items         items to perform calculation on.
      * @param orderDelivery optional delivery

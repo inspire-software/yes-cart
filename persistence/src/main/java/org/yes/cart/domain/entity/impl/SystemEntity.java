@@ -30,6 +30,7 @@ import java.util.Map;
 public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.Serializable {
 
     private long systemId;
+    private long version;
 
     private String code;
     private String name;
@@ -130,6 +131,13 @@ public class SystemEntity implements org.yes.cart.domain.entity.System, java.io.
         this.systemId = systemId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

@@ -16,7 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.domain.dto.ProductSkuDTO;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -41,9 +41,8 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
 
     public RemoveSkuFromCartCommandImpl(final PriceService priceService,
                                         final ProductService productService,
-                                        final DtoProductService dtoProductService,
                                         final ShopService shopService) {
-        super(priceService, productService, dtoProductService, shopService);
+        super(priceService, productService, shopService);
     }
 
     /** {@inheritDoc} */
@@ -56,15 +55,15 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
      */
     @Override
     protected void execute(final ShoppingCart shoppingCart,
-                           final ProductSkuDTO productSkuDTO, final Map<String, Object> parameters) {
-        if (productSkuDTO != null) {
-            final String skuCode = productSkuDTO.getCode();
-            if(!shoppingCart.removeCartItemQuantity(productSkuDTO, BigDecimal.ONE)) {
+                           final ProductSku productSku, final Map<String, Object> parameters) {
+        if (productSku != null) {
+            final String skuCode = productSku.getCode();
+            if(!shoppingCart.removeCartItemQuantity(productSku.getCode(), BigDecimal.ONE)) {
                 ShopCodeContext.getLog(this).warn("Can not remove one sku with code {} from cart",
                         skuCode);
             }
 
-            recalculatePrice(shoppingCart, productSkuDTO);
+            recalculatePrice(shoppingCart, productSku);
             setModifiedDate(shoppingCart);
         }
     }

@@ -40,7 +40,7 @@ public interface CustomerOrder extends Auditable {
     String ORDER_STATUS_PENDING = "os.pending";
 
     /**
-     * Waiting for approvment, because of offline payment system is selected for payment.
+     * Waiting for approval, because of offline payment system is selected for payment.
      * It can be bank of currier payment.
      */
     String ORDER_STATUS_WAITING = "os.waiting";

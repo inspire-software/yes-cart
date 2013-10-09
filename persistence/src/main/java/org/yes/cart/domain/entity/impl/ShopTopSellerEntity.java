@@ -30,6 +30,7 @@ import java.util.Date;
 public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSeller, java.io.Serializable {
 
     private long shopTopsellerId;
+    private long version;
 
     private Shop shop;
     private Product product;
@@ -121,6 +122,13 @@ public class ShopTopSellerEntity implements org.yes.cart.domain.entity.ShopTopSe
         return this.shopTopsellerId;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
+    }
 }
 
 

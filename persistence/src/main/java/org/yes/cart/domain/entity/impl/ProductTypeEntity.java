@@ -32,6 +32,7 @@ import java.util.Date;
 public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType, java.io.Serializable {
 
     private long producttypeId;
+    private long version;
 
     private String name;
     private String description;
@@ -193,6 +194,14 @@ public class ProductTypeEntity implements org.yes.cart.domain.entity.ProductType
 
     public void setProducttypeId(long producttypeId) {
         this.producttypeId = producttypeId;
+    }
+
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(final long version) {
+        this.version = version;
     }
 
     public ProductTypeAttr getAttributeByCode(final String attributeCode) {
