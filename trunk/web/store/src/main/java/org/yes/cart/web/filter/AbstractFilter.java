@@ -17,21 +17,25 @@
 package org.yes.cart.web.filter;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.web.application.ApplicationDirector;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 2011-May-17
  * Time: 11:56:24 AM
  */
-public abstract class AbstractFilter {
+public abstract class AbstractFilter implements Filter {
 
     private FilterConfig filterConfig = null;
 
     private final ApplicationDirector applicationDirector;
+    private Pattern skipUri = null;
 
     /**
      * Construct filter.
@@ -55,12 +59,22 @@ public abstract class AbstractFilter {
     public final void doFilter(final ServletRequest servletRequest,
                                final ServletResponse servletResponse,
                                final FilterChain filterChain) throws IOException, ServletException {
+        if (mustBeSkipped(servletRequest)) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
         final ServletRequest passRequest = doBefore(servletRequest, servletResponse);
         if (passRequest == null) {
             return;
         }
         filterChain.doFilter(passRequest, servletResponse);
         doAfter(passRequest, servletResponse);
+    }
+
+    private boolean mustBeSkipped(final ServletRequest servletRequest) {
+        return skipUri != null
+                && (servletRequest instanceof HttpServletRequest)
+                && skipUri.matcher(((HttpServletRequest) servletRequest).getRequestURI()).find();
     }
 
     /**
@@ -91,6 +105,9 @@ public abstract class AbstractFilter {
      */
     public void init(final FilterConfig filterConfig) throws ServletException {
         this.filterConfig = filterConfig;
+        if (StringUtils.isNotBlank(filterConfig.getInitParameter("excludePattern"))) {
+            skipUri = Pattern.compile(filterConfig.getInitParameter("excludePattern"));
+        }
     }
 
     /**

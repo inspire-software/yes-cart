@@ -80,6 +80,10 @@
             <param-name>targetFilterLifecycle</param-name>
             <param-value>true</param-value>
         </init-param>
+        <init-param>
+            <param-name>excludePattern</param-name>
+            <param-value>services/(backdoor|cachedirector)</param-value>
+        </init-param>
     </filter>
 
     <filter>
@@ -88,6 +92,10 @@
         <init-param>
             <param-name>targetFilterLifecycle</param-name>
             <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>excludePattern</param-name>
+            <param-value>services/(backdoor|cachedirector)</param-value>
         </init-param>
     </filter>
 
