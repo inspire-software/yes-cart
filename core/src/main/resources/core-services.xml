@@ -1343,6 +1343,8 @@
     </bean>
 
 
+    <!-- ########################################## WS support ########################## -->
 
+    <bean id="wsAbstractFactoryClientFactory" class="org.yes.cart.web.service.ws.client.impl.WsAbstractFactoryClientFactoryImpl"/>
 
 </beans>

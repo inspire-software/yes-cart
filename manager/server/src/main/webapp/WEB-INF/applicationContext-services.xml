@@ -602,6 +602,7 @@
     <bean id="remoteBackdoorService" class="org.yes.cart.remote.service.impl.RemoteBackdoorServiceImpl">
         <constructor-arg index="0" ref="nodeService"/>
         <constructor-arg index="1" ref="localBackdoorService"/>
+        <constructor-arg index="2" ref="wsAbstractFactoryClientFactory"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>

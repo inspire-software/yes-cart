@@ -28,7 +28,8 @@ import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.CacheDirector;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
-import org.yes.cart.web.service.ws.client.CacheDirectorClientFactory;
+import org.yes.cart.web.service.ws.client.WsAbstractFactoryClientFactory;
+import org.yes.cart.web.service.ws.client.WsClientFactory;
 import org.yes.cart.web.service.ws.node.NodeService;
 import org.yes.cart.web.service.ws.node.dto.Node;
 
@@ -45,26 +46,25 @@ import java.util.Set;
  */
 public class AdminInterceptor extends AuditInterceptor implements ApplicationContextAware {
 
-    private final static Set<String> cachedEntities;
-
-    private final CacheDirectorClientFactory cacheDirectorClientFactory = new CacheDirectorClientFactory();
+    private final static Set<String> CACHED_ENTITIES;
 
     private ApplicationContext applicationContext;
     private NodeService nodeService;
+    private WsAbstractFactoryClientFactory wsAbstractFactoryClientFactory;
 
     static {
 
-        cachedEntities = new HashSet<String>();
+        CACHED_ENTITIES = new HashSet<String>();
 
-        cachedEntities.add(CacheDirector.EntityName.ATTRIBUTE);
-        cachedEntities.add(CacheDirector.EntityName.PRODUCT);
-        cachedEntities.add(CacheDirector.EntityName.CATEGORY);
-        cachedEntities.add(CacheDirector.EntityName.PRICE);
-        cachedEntities.add(CacheDirector.EntityName.PRODUCT_TYPE_ATTR);
+        CACHED_ENTITIES.add(CacheDirector.EntityName.ATTRIBUTE);
+        CACHED_ENTITIES.add(CacheDirector.EntityName.PRODUCT);
+        CACHED_ENTITIES.add(CacheDirector.EntityName.CATEGORY);
+        CACHED_ENTITIES.add(CacheDirector.EntityName.PRICE);
+        CACHED_ENTITIES.add(CacheDirector.EntityName.PRODUCT_TYPE_ATTR);
 
-        cachedEntities.add(CacheDirector.EntityName.SEO_IMAGE);
-        cachedEntities.add(CacheDirector.EntityName.SHOP);
-        cachedEntities.add(CacheDirector.EntityName.SYSTEM);
+        CACHED_ENTITIES.add(CacheDirector.EntityName.SEO_IMAGE);
+        CACHED_ENTITIES.add(CacheDirector.EntityName.SHOP);
+        CACHED_ENTITIES.add(CacheDirector.EntityName.SYSTEM);
 
     }
 
@@ -114,6 +114,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
             synchronized (this) {
                 if (nodeService == null) {
                     nodeService = applicationContext.getBean("nodeService", NodeService.class);
+                    wsAbstractFactoryClientFactory = applicationContext.getBean("wsAbstractFactoryClientFactory", WsAbstractFactoryClientFactory.class);
                 }
             }
         }
@@ -128,12 +129,16 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
         String password = async.getAttribute(AsyncContext.CREDENTIALS);
         final int timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS));
 
-        /*for (final Node node : nodeService.getYesNodes()) {
+        for (final Node node : nodeService.getYesNodes()) {
 
             try {
 
-                cacheDirectorClientFactory.getCacheDirector(userName, password,
-                        node.getCacheManagerUri(), timeout).onCacheableChange(op, entityName, pk);
+                final WsClientFactory<CacheDirector> factory =
+                        wsAbstractFactoryClientFactory.getFactory(CacheDirector.class, userName, password, node.getCacheManagerUri(), timeout);
+                CacheDirector wsCacheDirector = factory.getService();
+                wsCacheDirector.onCacheableChange(op, entityName, pk);
+                factory.release(wsCacheDirector);
+                wsCacheDirector = null;
 
             } catch (Exception e) {
 
@@ -143,7 +148,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
 
             }
 
-        }        */
+        }
 
     }
 
@@ -158,7 +163,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
     boolean isEntityInCache(final Object entity) {
         if (entity != null) {
             final String entityName = entity.getClass().getSimpleName();
-            return cachedEntities.contains(entityName);
+            return CACHED_ENTITIES.contains(entityName);
         }
         return false;
     }
