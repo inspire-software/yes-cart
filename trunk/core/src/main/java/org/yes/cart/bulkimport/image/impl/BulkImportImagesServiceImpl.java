@@ -106,8 +106,11 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
                     files.length);
             statusListener.notifyMessage(info);
             LOG.info(info);
+            int count = 0;
+            int total = files.length;
             for (File file : files) {
                 doImport(file, statusListener, importedFiles, imageVault);
+                statusListener.notifyPing("Processed " + (++count) + " of " + total + " images");
             }
 
         }

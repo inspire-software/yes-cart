@@ -27,8 +27,8 @@ import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.CacheDirector;
-import org.yes.cart.web.service.ws.client.BackdoorServiceClientFactory;
-import org.yes.cart.web.service.ws.client.CacheDirectorClientFactory;
+import org.yes.cart.web.service.ws.client.WsAbstractFactoryClientFactory;
+import org.yes.cart.web.service.ws.client.WsClientFactory;
 import org.yes.cart.web.service.ws.node.NodeService;
 import org.yes.cart.web.service.ws.node.dto.Node;
 
@@ -47,15 +47,17 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoteBackdoorServiceImpl.class);
 
-    private final static int DEFAULT_TIMEOUT_MS = 60000;
-
     private final NodeService nodeService;
     private final BackdoorService localBackdoorService;
+    private final WsAbstractFactoryClientFactory wsAbstractFactoryClientFactory;
+
 
     public RemoteBackdoorServiceImpl(final NodeService nodeService,
-                                     final BackdoorService localBackdoorService) {
+                                     final BackdoorService localBackdoorService,
+                                     final WsAbstractFactoryClientFactory wsAbstractFactoryClientFactory) {
         this.nodeService = nodeService;
         this.localBackdoorService = localBackdoorService;
+        this.wsAbstractFactoryClientFactory = wsAbstractFactoryClientFactory;
     }
 
     /**
@@ -71,9 +73,18 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
             try {
                 final Boolean finished = indexFinished.get(yesNode) != null && indexFinished.get(yesNode);
                 if (!finished) {
-                    indexStatus.put(yesNode.getNodeId(),
+                    final WsClientFactory<BackdoorService> factory =
                             getBackdoorService(context, yesNode.getBackdoorUri(),
-                                    AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS).reindexAllProducts());
+                                    AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
+
+                    BackdoorService service = factory.getService();
+                    try {
+                        indexStatus.put(yesNode.getNodeId(), service.reindexAllProducts());
+                    } finally {
+                        factory.release(service);
+                        service = null;
+                    }
+
                 }
             } catch (Exception e) {
                 indexStatus.put(yesNode.getNodeId(), null);
@@ -96,9 +107,18 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
         for (final Node yesNode : nodeService.getYesNodes()) {
             try {
-                reindexResult.put(yesNode.getNodeId(),
+                final WsClientFactory<BackdoorService> factory =
                         getBackdoorService(context, yesNode.getBackdoorUri(),
-                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS).reindexProduct(productPk));
+                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS);
+
+                BackdoorService service = factory.getService();
+                try {
+                    reindexResult.put(yesNode.getNodeId(), service.reindexProduct(productPk));
+                } finally {
+                    factory.release(service);
+                    service = null;
+                }
+
             } catch (Exception e) {
                 reindexResult.put(yesNode.getNodeId(), null);
                 if (LOG.isErrorEnabled()) {
@@ -120,9 +140,18 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
         for (final Node yesNode : nodeService.getYesNodes()) {
             try {
-                reindexResult.put(yesNode.getNodeId(),
+                final WsClientFactory<BackdoorService> factory =
                         getBackdoorService(context, yesNode.getBackdoorUri(),
-                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS).reindexProductSku(productPk));
+                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS);
+
+                BackdoorService service = factory.getService();
+                try {
+                    reindexResult.put(yesNode.getNodeId(), service.reindexProductSku(productPk));
+                } finally {
+                    factory.release(service);
+                    service = null;
+                }
+
             } catch (Exception e) {
                 reindexResult.put(yesNode.getNodeId(), null);
                 if (LOG.isErrorEnabled()) {
@@ -144,9 +173,18 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
         for (final Node yesNode : nodeService.getYesNodes()) {
             try {
-                reindexResult.put(yesNode.getNodeId(),
+                final WsClientFactory<BackdoorService> factory =
                         getBackdoorService(context, yesNode.getBackdoorUri(),
-                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS).reindexProductSkuCode(productSkuCode));
+                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS);
+
+                BackdoorService service = factory.getService();
+                try {
+                    reindexResult.put(yesNode.getNodeId(), service.reindexProductSkuCode(productSkuCode));
+                } finally {
+                    factory.release(service);
+                    service = null;
+                }
+
             } catch (Exception e) {
                 reindexResult.put(yesNode.getNodeId(), null);
                 if (LOG.isErrorEnabled()) {
@@ -168,9 +206,18 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
         for (final Node yesNode : nodeService.getYesNodes()) {
             try {
-                reindexResult.put(yesNode.getNodeId(),
+                final WsClientFactory<BackdoorService> factory =
                         getBackdoorService(context, yesNode.getBackdoorUri(),
-                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS).reindexProducts(productPks));
+                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS);
+
+                BackdoorService service = factory.getService();
+                try {
+                    reindexResult.put(yesNode.getNodeId(), service.reindexProducts(productPks));
+                } finally {
+                    factory.release(service);
+                    service = null;
+                }
+
             } catch (Exception e) {
                 reindexResult.put(yesNode.getNodeId(), null);
                 if (LOG.isErrorEnabled()) {
@@ -192,8 +239,17 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         if (nodeService.getCurrentNodeId().equals(node)) {
             return localBackdoorService.sqlQuery(query);
         }
-        return getBackdoorService(context, getBackdoorUriForNode(node, false),
-                AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS).sqlQuery(query);
+        final WsClientFactory<BackdoorService> factory =
+                getBackdoorService(context, getBackdoorUriForNode(node, false),
+                        AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
+
+        BackdoorService service = factory.getService();
+        try {
+            return service.sqlQuery(query);
+        } finally {
+            factory.release(service);
+            service = null;
+        }
     }
 
     /**
@@ -203,16 +259,34 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         if (nodeService.getCurrentNodeId().equals(node)) {
             return localBackdoorService.hsqlQuery(query);
         }
-        return getBackdoorService(context, getBackdoorUriForNode(node, false),
-                AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS).hsqlQuery(query);
+        final WsClientFactory<BackdoorService> factory =
+                getBackdoorService(context, getBackdoorUriForNode(node, false),
+                        AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
+
+        BackdoorService service = factory.getService();
+        try {
+            return service.hsqlQuery(query);
+        } finally {
+            factory.release(service);
+            service = null;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public List<Object[]> luceneQuery(final AsyncContext context, final String query, final String node) {
-        return getBackdoorService(context, getBackdoorUriForNode(node, true),
-                AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS).luceneQuery(query);
+        final WsClientFactory<BackdoorService> factory =
+                getBackdoorService(context, getBackdoorUriForNode(node, true),
+                        AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
+
+        BackdoorService service = factory.getService();
+        try {
+            return service.luceneQuery(query);
+        } finally {
+            factory.release(service);
+            service = null;
+        }
     }
 
     private String getBackdoorUriForNode(final String node, final boolean yesOnly) {
@@ -242,8 +316,16 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
                  final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>();
 
-                 final CacheDirector cacheDirector = getCacheDirector(context, yesNode.getCacheManagerUri());
-                 final List<CacheInfoDTOImpl> shopRez = cacheDirector.getCacheInfo();
+                 final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
+                 CacheDirector cacheDirector = factory.getService();
+                 List<CacheInfoDTOImpl> shopRez = null;
+                 try {
+                    shopRez = cacheDirector.getCacheInfo();
+                 } finally {
+                     factory.release(cacheDirector);
+                     cacheDirector = null;
+                 }
+
                  for (final CacheInfoDTOImpl cacheInfoDTO : shopRez) {
                      cacheInfoDTO.setNodeId(yesNode.getNodeId());
                      cacheInfoDTO.setNodeUri(yesNode.getCacheManagerUri());
@@ -282,8 +364,14 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
              try {
 
-                 final CacheDirector cacheDirector = getCacheDirector(context, yesNode.getCacheManagerUri());
-                 cacheDirector.evictAllCache();
+                 final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
+                 CacheDirector cacheDirector = factory.getService();
+                 try {
+                     cacheDirector.evictAllCache();
+                 } finally {
+                     factory.release(cacheDirector);
+                     cacheDirector = null;
+                 }
                  evicts.put(yesNode.getNodeId(), Boolean.TRUE);
 
              } catch (Exception e) {
@@ -312,8 +400,14 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
              try {
 
-                 final CacheDirector cacheDirector = getCacheDirector(context, yesNode.getCacheManagerUri());
-                 cacheDirector.evictCache(name);
+                 final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
+                 CacheDirector cacheDirector = factory.getService();
+                 try {
+                     cacheDirector.evictCache(name);
+                 } finally {
+                     factory.release(cacheDirector);
+                     cacheDirector = null;
+                 }
                  evicts.put(yesNode.getNodeId(), Boolean.TRUE);
 
              } catch (Exception e) {
@@ -343,9 +437,18 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
          final Map<String, String> paths = new HashMap<String, String>();
          for (final Node yesNode : nodeService.getYesNodes()) {
              try {
-                 paths.put(yesNode.getNodeId(),
+                 final WsClientFactory<BackdoorService> factory =
                          getBackdoorService(context, yesNode.getBackdoorUri(),
-                                 AttributeNamesKeys.System.SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS).getImageVaultPath());
+                                 AttributeNamesKeys.System.SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS);
+
+                 BackdoorService service = factory.getService();
+                 try {
+                    paths.put(yesNode.getNodeId(), service.getImageVaultPath());
+                 } finally {
+                     factory.release(service);
+                     service = null;
+                 }
+
              } catch (Exception e) {
                  paths.put(yesNode.getNodeId(), null);
                  if (LOG.isErrorEnabled()) {
@@ -360,26 +463,9 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
          return paths;
     }
 
-    private BackdoorServiceClientFactory backdoorServiceClientFactory = null;
-    private CacheDirectorClientFactory cacheDirectorClientFactory = null;
-
-    private synchronized BackdoorServiceClientFactory getBackdoorServiceClientFactory() {
-        if (backdoorServiceClientFactory == null) {
-            backdoorServiceClientFactory = new BackdoorServiceClientFactory();
-        }
-        return backdoorServiceClientFactory;
-    }
-
-    private synchronized CacheDirectorClientFactory getCacheDirectorClientFactory() {
-        if (cacheDirectorClientFactory == null) {
-            cacheDirectorClientFactory = new CacheDirectorClientFactory();
-        }
-        return cacheDirectorClientFactory;
-    }
-
-    private BackdoorService getBackdoorService(final AsyncContext context,
-                                               final String backdoorUrl,
-                                               final String timeoutKey) {
+    private WsClientFactory<BackdoorService> getBackdoorService(final AsyncContext context,
+                                                                final String backdoorUrl,
+                                                                final String timeoutKey) {
 
 
         final String userName = context.getAttribute(AsyncContext.USERNAME);
@@ -387,24 +473,20 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
         final int timeout = Integer.parseInt(nodeService.getConfiguration().get(timeoutKey));
 
-        return getBackdoorServiceClientFactory().getBackdoorService(
-                userName,
-                password,
-                backdoorUrl, timeout);
+        return wsAbstractFactoryClientFactory.getFactory(BackdoorService.class, userName, password, backdoorUrl, timeout);
 
     }
 
 
-    private CacheDirector getCacheDirector(final AsyncContext context, final String cacheDirUrl) {
+    private WsClientFactory<CacheDirector> getCacheDirector(final AsyncContext context,
+                                                            final String cacheDirUrl) {
 
         final String userName = context.getAttribute(AsyncContext.USERNAME);
         final String password = context.getAttribute(AsyncContext.CREDENTIALS);
         final int timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS));
 
-        return getCacheDirectorClientFactory().getCacheDirector(
-                userName,
-                password,
-                cacheDirUrl, timeout);
+        return wsAbstractFactoryClientFactory.getFactory(CacheDirector.class, userName, password, cacheDirUrl, timeout);
+
     }
 
 
