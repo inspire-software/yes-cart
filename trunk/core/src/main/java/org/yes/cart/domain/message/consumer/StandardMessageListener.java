@@ -103,6 +103,11 @@ public class StandardMessageListener implements Runnable {
      */
     public static final String DELIVERY_EXTERNAL_NUM = "deliveryExtNum";
 
+    /**
+     * Payment gatewa features.
+     */
+    public static final String PAYMENT_GATEWAY_FEATURE = "paymentGatewayFeatures";
+
     private final JavaMailSender javaMailSender;
 
     private final MailComposer mailComposer;

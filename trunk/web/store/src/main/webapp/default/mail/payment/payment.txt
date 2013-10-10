@@ -1,3 +1,44 @@
 Dear $customer.firstname $customer.lastname !
+<%
+if (paymentGatewayFeatures.isOnlineGateway()) {
+%>
 Result of payment at $shop.name for $root.ordernum was $result
+<%
+} else {
+%>
+Need payment or order confirmation
+<%
+}
+%>
 Please check detail at self care page at "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
+Order information
+<%
+def lineDelimiter = "|-------------------------------------------------------------------------------|";
+try {
+    def totalSum = 0;
+    for (Object delivery : root.getDelivery()) {
+          def deliverySum = 0;
+          out.println(lineDelimiter);
+          out.println(("| Delivery " + delivery.deliveryNum).padRight(lineDelimiter.length() -1 ) + "|");
+          out.println(lineDelimiter);
+          for(Object deliveryItem : delivery.getDetail()) {
+              def lineTotal =  (deliveryItem.price * deliveryItem.qty).setScale(2, BigDecimal.ROUND_HALF_UP);
+              def line = "| " + deliveryItem.productSkuCode  + " - " + deliveryItem.productName   + "    " +  deliveryItem.qty.setScale(0, BigDecimal.ROUND_HALF_UP)   + " * " + deliveryItem.price.setScale(2, BigDecimal.ROUND_HALF_UP) + "=" + lineTotal  + " " + root.currency;
+              deliverySum += lineTotal;
+              out.println(line.padRight(lineDelimiter.length() -1 ) + "|");
+          }
+          out.println(lineDelimiter);
+          out.println(("| Delivery items cost    " + deliverySum + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+          out.println(("| Delivery cost          " + delivery.price + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+          out.println(("| Delivery total         " + (delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP) + " " + root.currency ).padRight(lineDelimiter.length() -1 ) + "|");
+          out.println(lineDelimiter);
+          totalSum += (delivery.price + deliverySum);
+    }
+    out.println(lineDelimiter);
+    out.println(("| Order total            " + totalSum.setScale(2, BigDecimal.ROUND_HALF_UP) + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+    out.println(lineDelimiter);
+} catch (Exception e) {
+out.print(e.getMessage());
+}
+%>
+

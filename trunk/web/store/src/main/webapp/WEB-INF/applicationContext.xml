@@ -432,6 +432,7 @@
         <constructor-arg index="3" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
         <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
         <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <constructor-arg index="6" type="org.yes.cart.service.payment.PaymentModulesManager" ref="paymentModulesManager"/>
     </bean>
 
     <bean id="orderStateChangeAspect" class="org.yes.cart.service.domain.aspect.impl.OrderStateChangeListenerAspect">
