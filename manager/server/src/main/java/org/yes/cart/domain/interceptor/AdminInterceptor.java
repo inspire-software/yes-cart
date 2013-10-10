@@ -128,7 +128,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
         String password = async.getAttribute(AsyncContext.CREDENTIALS);
         final int timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS));
 
-        for (final Node node : nodeService.getYesNodes()) {
+        /*for (final Node node : nodeService.getYesNodes()) {
 
             try {
 
@@ -143,7 +143,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
 
             }
 
-        }
+        }        */
 
     }
 

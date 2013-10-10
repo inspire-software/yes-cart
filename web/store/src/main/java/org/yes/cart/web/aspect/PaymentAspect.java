@@ -29,6 +29,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
 import org.yes.cart.service.mail.MailComposer;
+import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
@@ -54,6 +55,8 @@ public class PaymentAspect extends BaseNotificationAspect {
 
     private final ShopService shopService;
 
+    private final PaymentModulesManager paymentModulesManager;
+
 
     /**
      * Construct aspect.
@@ -65,7 +68,8 @@ public class PaymentAspect extends BaseNotificationAspect {
                          final JavaMailSender javaMailSender,
                          final MailComposer mailComposer,
                          final CustomerService customerService,
-                         final ShopService shopService) {
+                         final ShopService shopService,
+                         final PaymentModulesManager paymentModulesManager) {
         super(taskExecutor);
         this.productService = productService;
 
@@ -74,6 +78,7 @@ public class PaymentAspect extends BaseNotificationAspect {
         this.mailComposer = mailComposer;
         this.shopService = shopService;
         this.customerService = customerService;
+        this.paymentModulesManager = paymentModulesManager;
 
 
     }
@@ -116,6 +121,12 @@ public class PaymentAspect extends BaseNotificationAspect {
         map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
 
         map.put(StandardMessageListener.TEMPLATE_NAME, "payment");
+
+        map.put(StandardMessageListener.PAYMENT_GATEWAY_FEATURE,
+                paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel()).getPaymentGatewayFeatures()
+        );
+
+
 
 
         sendNotification(map);
