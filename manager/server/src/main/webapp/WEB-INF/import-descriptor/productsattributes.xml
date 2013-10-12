@@ -45,8 +45,8 @@
         DELETE FROM TPRODUCTATTRVALUE
             WHERE PRODUCT_ID = (SELECT p.PRODUCT_ID FROM TPRODUCT p WHERE p.GUID = '{product}')
                 AND CODE = '{attribute}' AND 0 = (SELECT a.ALLOWDUPLICATE FROM TATTRIBUTE a WHERE a.CODE = '{attribute}');
-        INSERT INTO TPRODUCTATTRVALUE (PRODUCT_ID, GUID, CODE, VAL, DISPLAYVAL)
-            VALUES (
+        INSERT INTO TPRODUCTATTRVALUE (VERSION, PRODUCT_ID, GUID, CODE, VAL, DISPLAYVAL)
+            VALUES (0,
                 (SELECT p.PRODUCT_ID FROM TPRODUCT p WHERE p.GUID = '{product}'),
             '{GUID}', '{attribute}','{val}','en#~#{displayValEn}#~#ru#~#{displayValRu}')
     </insert-sql>

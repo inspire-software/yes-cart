@@ -128,8 +128,8 @@
                 </import-file-descriptor>
                 <select-sql/>
                 <insert-sql>
-                    INSERT INTO TPRODUCTSKUATTRVALUE (SKU_ID, GUID, CODE, VAL)
-                        VALUES ({masterObjectId}, '{masterObjectId}_SKUDESC_en', 'PRODUCT_DESCRIPTION_en','{val}')
+                    INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL)
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_en', 'PRODUCT_DESCRIPTION_en','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
@@ -157,8 +157,8 @@
                 </import-file-descriptor>
                 <select-sql/>
                 <insert-sql>
-                    INSERT INTO TPRODUCTSKUATTRVALUE (SKU_ID, GUID, CODE, VAL)
-                        VALUES ({masterObjectId}, '{masterObjectId}_SKUDESC_ru', 'PRODUCT_DESCRIPTION_ru','{val}')
+                    INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL)
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_ru', 'PRODUCT_DESCRIPTION_ru','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
