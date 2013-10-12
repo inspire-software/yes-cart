@@ -115,8 +115,8 @@
                 <select-sql/>
                 <insert-sql>
                     DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_CATDESC_en';
-                    INSERT INTO TCATEGORYATTRVALUE (CATEGORY_ID, GUID, CODE, VAL)
-                        VALUES ({masterObjectId}, '{masterObjectId}_CATDESC_en', 'CATEGORY_DESCRIPTION_en','{val}')
+                    INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_CATDESC_en', 'CATEGORY_DESCRIPTION_en','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
@@ -145,8 +145,8 @@
                 <select-sql/>
                 <insert-sql>
                     DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_CATDESC_ru';
-                    INSERT INTO TCATEGORYATTRVALUE (CATEGORY_ID, GUID, CODE, VAL)
-                        VALUES ({masterObjectId}, '{masterObjectId}_CATDESC_ru', 'CATEGORY_DESCRIPTION_ru','{val}')
+                    INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_CATDESC_ru', 'CATEGORY_DESCRIPTION_ru','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
