@@ -46,7 +46,7 @@ public class AuditInterceptor extends EmptyInterceptor {
 
     public AuditInterceptor() {
         // set logging headers
-        LOG.info("Operation,Class,PK");
+        LOG.info("Operation,Class,PK,user\n");
     }
 
     private String getUserName() {
@@ -174,6 +174,7 @@ public class AuditInterceptor extends EmptyInterceptor {
             line.append(((entity instanceof Identifiable) ? ((Identifiable) entity).getId() : "N/A"));
             line.append(",");
             line.append(user);
+            line.append('\n');
             LOG.info(line.toString());
         }
     }
