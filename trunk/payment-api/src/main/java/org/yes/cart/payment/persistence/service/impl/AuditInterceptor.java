@@ -16,9 +16,12 @@
 
 package org.yes.cart.payment.persistence.service.impl;
 
+import com.sun.corba.se.spi.ior.Identifiable;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -37,6 +40,8 @@ import java.util.UUID;
  * Time: 10:22:53
  */
 public class AuditInterceptor extends EmptyInterceptor {
+
+    private static final Logger LOG = LoggerFactory.getLogger("AUDIT");
 
     private String getUserName() {
 
@@ -83,8 +88,24 @@ public class AuditInterceptor extends EmptyInterceptor {
             auditable.setUpdatedBy(userName);
             setValue(objects, propertyNames, "updatedTimestamp", date);
             auditable.setUpdatedTimestamp(date);
+
+            logOperation("SAVE", entity, userName);
         }
         return super.onSave(entity, serializable, objects, propertyNames, types);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+
+        if (entity instanceof Auditable) {
+            final String userName = getUserName();
+            logOperation("DELETE", entity, userName);
+        }
+        super.onDelete(entity, id, state, propertyNames, types);
+
     }
 
     /**
@@ -119,12 +140,27 @@ public class AuditInterceptor extends EmptyInterceptor {
             setValue(currentState, propertyNames, "updatedTimestamp", date);
             auditable.setUpdatedTimestamp(date);
 
+            logOperation("FLUSH", entity, userName);
         }
 
         return super.onFlushDirty(entity, serializable, currentState, previousState, propertyNames, types);
 
     }
 
+    private void logOperation(final String operation, final Object entity, final String user) {
+        if (LOG.isInfoEnabled()) {
+            final StringBuilder line = new StringBuilder();
+            line.append(operation);
+            line.append(",");
+            line.append(entity.getClass().getSimpleName());
+            line.append(",");
+            line.append(((entity instanceof Identifiable) ? ((Identifiable) entity).getId() : "N/A"));
+            line.append(",");
+            line.append(user);
+            line.append('\n');
+            LOG.info(line.toString());
+        }
+    }
 
     private void setValue(final Object[] currentState, final String[] propertyNames,
                           final String propertyToSet, final Object value) {
