@@ -16,17 +16,18 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.lucene.search.Query;
 import org.junit.Test;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
 import org.yes.cart.service.domain.impl.AttributeServiceImpl;
 import org.yes.cart.service.domain.impl.CategoryServiceImpl;
 import org.yes.cart.service.domain.impl.ContentServiceImpl;
+import org.yes.cart.service.domain.impl.ProductServiceImpl;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -72,7 +73,17 @@ public class CentralViewResolverImplTest {
                         return null;
                     }
                 },
-                new AttributeServiceImpl(null, null, false) {
+                new ProductServiceImpl(null, null, null, null, null, null, null) {
+                    @Override
+                    public List<ProductSearchResultDTO> getProductSearchResultDTOByQuery(final Query query, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse) {
+                        if (query.toString().indexOf("category:10") == -1 && query.toString().indexOf("category:999") == -1) {
+                            return new ArrayList<ProductSearchResultDTO>() {{
+                                add(new ProductSearchResultDTOImpl());
+                            }};
+                        }
+                        return Collections.emptyList();
+                    }
+                }, new AttributeServiceImpl(null, null, false) {
                     @Override
                     public Set<String> getAllNavigatableAttributeCodes() {
                         return new HashSet<String>() {{

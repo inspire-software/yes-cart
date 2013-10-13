@@ -27,15 +27,13 @@ import org.yes.cart.domain.query.impl.SkuQueryBuilderImpl;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.util.HttpUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Service responsible to resolve label of central view in storefront.
@@ -47,23 +45,30 @@ public class CentralViewResolverImpl implements CentralViewResolver {
 
     private final ContentService contentService;
     private final CategoryService categoryService;
+    private final ProductService productService;
     private final AttributeService attributeService;
     private final LuceneQueryFactory luceneQueryFactory;
+
+    private final ProductsInCategoryQueryBuilderImpl productsInCategoryQueryBuilder = new ProductsInCategoryQueryBuilderImpl();
+
 
     /**
      * Construct central view resolver.
      *
      * @param categoryService    for product, sub categories, quantity and ui template lookup.
      * @param contentService     for content templates lookup
+     * @param productService     for category template look up
      * @param attributeService   for allowed attributes name lookup
      * @param luceneQueryFactory luceneQueryFactory
      */
     public CentralViewResolverImpl(final CategoryService categoryService,
                                    final ContentService contentService,
+                                   final ProductService productService,
                                    final AttributeService attributeService,
                                    final LuceneQueryFactory luceneQueryFactory) {
         this.categoryService = categoryService;
         this.contentService = contentService;
+        this.productService = productService;
         this.attributeService = attributeService;
         this.luceneQueryFactory = luceneQueryFactory;
     }
@@ -93,7 +98,16 @@ public class CentralViewResolverImpl implements CentralViewResolver {
                 final boolean lookInSubCats = parameters.containsKey(WebParametersKeys.CATEGORY_PRODUCTS_RECURSIVE)
                         && Boolean.valueOf(String.valueOf(parameters.get(WebParametersKeys.CATEGORY_PRODUCTS_RECURSIVE)));
 
-                if (categoryService.isCategoryHasProducts(categoryId, lookInSubCats)) {
+                final List<Long> catIds;
+                if (lookInSubCats) {
+                    catIds = new ArrayList<Long>(categoryService.getChildCategoriesRecursiveIds(categoryId));
+                } else {
+                    catIds = Collections.singletonList(categoryId);
+                }
+
+                final BooleanQuery hasProducts = productsInCategoryQueryBuilder.createQuery(catIds);
+
+                if (!productService.getProductSearchResultDTOByQuery(hasProducts, 0, 1, null, false).isEmpty()) {
                     return CentralViewLabel.PRODUCTS_LIST;
                 } else {
 
