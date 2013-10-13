@@ -21,15 +21,12 @@ import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.remote.service.RemoteImageService;
-import org.yes.cart.service.async.model.AsyncContext;
-import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.dto.DtoImageService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -73,8 +70,17 @@ public class RemoteImageServiceImpl extends AbstractRemoteService<SeoImageDTO> i
         // TODO: YC-150 this is quite strange that we have this method on dtoImageService but we do not use it since it puts
         // TODO: YC-150 a blank string into path? maybe we need to revise all this??
         // TODO: YC-237 Image vault resolution - we are calling this on every image! - maybe this is related to YC-213??
-        final String realPath = remoteBackdoorService.getImageVaultPath(new AsyncFlexContextImpl()) + File.separator;
-        return addImageToRepository(fullFileName, code, imgBody, storagePrefix, realPath);
+
+
+        String rez = null;
+        final Map<String, String> paths =  remoteBackdoorService.getImageVaultPath(new AsyncFlexContextImpl());
+        for (Map.Entry<String, String> path : paths.entrySet()) {
+            final String realPath = path.getValue() + File.separator;
+            rez = addImageToRepository(fullFileName, code, imgBody, storagePrefix, realPath);
+        }
+
+        return rez;
+
     }
 
     /**
