@@ -46,25 +46,23 @@
         <div class="grid-60 mobile-grid-60 grid-parent">
 
 
-
-
             <div class="grid-100 mobile-grid-100 grid-parent">
-                <div class="grid-50 mobile-grid-50">
+                <div class="grid-40 mobile-grid-40">
                     <wicket:message key="sku.code">[sku.code:]</wicket:message>
                     <span wicket:id="skuCode">[sku num]</span>
                 </div>
-                <div class="grid-50 mobile-grid-50">
-                    <wicket:container wicket:id="priceView">
-                        [price]
-                    </wicket:container>
+                <div class="grid-60 mobile-grid-60" style="text-align: right">
+                    <a wicket:id="addToCartLink" class="button big orange">
+                        <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
+                    </a>
                 </div>
             </div>
 
 
             <div class="grid-100 mobile-grid-100" style="text-align: right">
-                <a wicket:id="addToCartLink" class="button big orange">
-                    <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
-                </a>
+                <wicket:container wicket:id="priceView">
+                    [price]
+                </wicket:container>
             </div>
 
 
