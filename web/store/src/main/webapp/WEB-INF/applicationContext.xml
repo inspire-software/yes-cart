@@ -162,8 +162,9 @@
     <bean id="centralViewResolver" class="org.yes.cart.web.support.service.impl.CentralViewResolverImpl">
         <constructor-arg index="0" ref="categoryService"/>
         <constructor-arg index="1" ref="contentService"/>
-        <constructor-arg index="2" ref="attributeService"/>
-        <constructor-arg index="3" ref="luceneQueryFactory"/>
+        <constructor-arg index="2" ref="productService"/>
+        <constructor-arg index="3" ref="attributeService"/>
+        <constructor-arg index="4" ref="luceneQueryFactory"/>
     </bean>
 
     <bean id="productAvailabilityStrategy"
