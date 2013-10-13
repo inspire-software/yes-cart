@@ -1,0 +1,144 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+
+<wicket:head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <wicket:link>
+
+        <script type="text/javascript" src="../../../../../js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/jquery.flexslider-min.js"></script>
+        <script type="text/javascript" src="../../../../../js/autoload.js"></script>
+
+        <!--[if lt IE 9]>
+        <script src="../../../../../js/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/demo.css"/>
+        <!--[if (gt IE 8) | (IEMobile)]><!-->
+        <link rel="stylesheet" href="../../../../../style/unsemantic-grid-responsive.css"/>
+        <!--<![endif]-->
+        <!--[if (lt IE 9) & (!IEMobile)]>
+        <link rel="stylesheet" href="../../../../../style/ie.css"/>
+        <![endif]-->
+
+        <link rel="stylesheet" href="../../../../../style/flexslider.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../style/lightbox.css"/>
+
+
+    </wicket:link>
+    <title>
+        <wicket:message key="orderPayment">[Order payment]</wicket:message>
+    </title>
+</wicket:head>
+
+<body>
+
+<div class="mainpage">
+
+    <span wicket:id="header">[header]</span>
+	<div class="row">
+		<div class="column grid_16">
+			<p>
+				<wicket:message key="orderPayment">[Order payment]</wicket:message>
+			</p>	
+		</div>
+	</div>
+	
+	<div class="row">
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+        <div class="column grid_14">
+            <ul class="menu">
+				<li>
+                <wicket:link>
+                    <a href="HomePage.html">
+                        <span><wicket:message key="continueShopping"> [Shopping ]</wicket:message></span>
+                    </a>
+                </wicket:link>					
+				</li>
+            </ul>
+
+        </div>
+        <div class="column grid_1">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+    </div>
+	
+    <div class="row">
+        <div class="column grid_1">
+            &nbsp;
+        </div>
+        <div class="column grid_14">
+            <span wicket:id="feedback"/>
+            <p>
+                <wicket:container wicket:id="paymentResult">
+                    [payment result panel]
+                </wicket:container>
+            </p>
+        </div>
+        <div class="column grid_1">
+            &nbsp;
+        </div>
+    </div>
+
+    <span wicket:id="footer">[footer]</span>
+	
+
+</div>
+
+
+<wicket:fragment wicket:id="negativeItemAllocationResultFragment">
+    <span style="display: none" wicket:id="negativeItemAllocationNotes">[negative item allocation]</span>
+
+</wicket:fragment>
+
+
+<wicket:fragment wicket:id="negativeResultFragment">
+    <span style="display: none">
+        <wicket:message key="negativePaymentNotes">[negative payments]</wicket:message>
+    </span>
+    <table width="100%">
+        <tr wicket:id="paymentDetail">
+            <td valign="top"><span wicket:id="id">[id]</span></td>
+            <td valign="top"><span wicket:id="transactionId">[transaction id]</span></td>
+            <td valign="top"><span wicket:id="authCode">[auchorization code]</span></td>
+            <td valign="top"><span wicket:id="errorCode">[error code]</span></td>
+            <td valign="top"><span wicket:id="errorDecription">[error decription]</span></td>
+        </tr>
+    </table>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="positiveResultFragment">
+    <span style="display: none">
+        <wicket:message key="positivePaymentNotes">[negative payments]</wicket:message>
+    </span>
+    <wicket:link>
+
+        <a href="CustomerSelfCarePage.html">
+            <wicket:message key="checkStatus">[check order status]</wicket:message>
+        </a>
+    </wicket:link>
+</wicket:fragment>
+
+</body>
+</html>
