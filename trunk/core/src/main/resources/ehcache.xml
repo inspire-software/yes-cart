@@ -28,6 +28,10 @@
         * 1d (timeToLiveSeconds) and 2h (timeToIdleSeconds) for: configurations, categories and
           content
         * 1h (timeToLiveSeconds) and 30min (timeToIdleSeconds) for: products, sku and prices
+        * Search result and product by id and sku should have interval no more than 10m
+          (timeToLiveSeconds) and 2m (timeToIdleSeconds) to correctly reflect inventory and
+          pricing information. (Which means that under heavy load we have caching for up 10m
+          to keep the server fast and with less load the cache will only last 2 minutes).
 
         This is however only recommendation which is based on the assumption that category, content
         and configurations will only change once a day at most and products and prices information
@@ -38,6 +42,9 @@
         For the filtered navigation it is advisable to set: 1h (timeToLiveSeconds) and 30min
         (timeToIdleSeconds) and items going out of stock will affect the contents of filtered
         navigation menu
+
+        All methods that return product entities should be kept in cache at minimum to prevent
+        phantom products (i.e. those that already are sold but data has not been updated in cache).
 
         Second level cache is recommended to have no more than 10 minutes timeToLiveSeconds
         as risk of concurrent modification exceptions rises with longer cache times.
@@ -202,12 +209,17 @@
 
 
 
-
-    <cache name="productService-byId"      maxElementsInMemory="5000" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+    <cache name="productService-productById"      maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
     <cache name="productService-skuById"      maxElementsInMemory="15000" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="productService-productBySkuCode"      maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="productSkuService-productSkuBySkuCode"   maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
     <cache name="productService-defaultImage"      maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
@@ -227,12 +239,6 @@
     <cache name="productService-productAssociationsIds"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="productService-productBySkuCode"      maxElementsInMemory="5000" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
-
-    <cache name="productService-productById"      maxElementsInMemory="5000" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
-
     <cache name="productService-featuredProducts"      maxElementsInMemory="100" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
@@ -240,10 +246,10 @@
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="productService-productByQuery"      maxElementsInMemory="2000" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="300"/>
 
     <cache name="productService-productSearchResultDTOByQuery"      maxElementsInMemory="2000" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="300"/>
 
     <cache name="productService-productQty"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
@@ -258,9 +264,6 @@
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="productService-productQty2"      maxElementsInMemory="2000" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
-
-    <cache name="productSkuService-productSkuBySkuCode"   maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
 

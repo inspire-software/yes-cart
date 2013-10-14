@@ -321,10 +321,6 @@
 
     <util:set id="ProductDeleteUpdate">
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-byId"/>
-            <constructor-arg index="1" value="key"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="productService-skuById"/>
             <constructor-arg index="1" value="key"/>
         </bean>

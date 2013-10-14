@@ -93,7 +93,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
 
     /** {@inheritDoc} */
-    @Cacheable(value = {"productService-byId"})
     public Product getById(final Long productId) {
         return productDao.findById(productId);
     }
@@ -901,7 +900,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     /** {@inheritDoc} */
     @CacheEvict(value ={
-            "productService-byId",
             "productService-skuById",
             "productService-defaultImage",
             "productService-randomProductByCategory",
@@ -928,7 +926,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     /** {@inheritDoc} */
     @CacheEvict(value ={
-            "productService-byId",
             "productService-skuById",
             "productService-defaultImage",
             "productService-randomProductByCategory",
