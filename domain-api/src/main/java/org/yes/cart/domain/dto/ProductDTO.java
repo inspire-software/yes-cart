@@ -274,18 +274,19 @@ public interface ProductDTO extends Identifiable {
      */
     void setAttributes(Collection<AttrValueProductDTO> attribute);
 
-    /** Get product tags.
+    /**
+     * Get product tags.
      *
      * @return tag line.
      */
     String getTag();
 
     /**
-     * Set prouct tag.
+     * Set product tag.
      *
      * @param tag product tag line
      */
-    void setTag(String tag) ;
+    void setTag(String tag);
 
 
 }

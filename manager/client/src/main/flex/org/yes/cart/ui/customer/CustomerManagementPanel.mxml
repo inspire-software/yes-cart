@@ -55,6 +55,7 @@
         //private var TAB_WISHLIST_IDX:int = 2;
         private var TAB_ADDRESS_IDX:int = 2;
         private var TAB_SHOP_IDX:int = 3;
+        private var TAB_TAGS_IDX:int = 4;
 
 
         [Bindable]
@@ -108,6 +109,12 @@
                         break;
                     }
 
+                    case TAB_TAGS_IDX:
+                    {
+                        tagsTabSelected();
+                        break;
+                    }
+
 
                 }
             }
@@ -132,6 +139,11 @@
             customerShops.addChild(panel);
         }
 
+        private function tagsTabSelected():void {
+            Debug.trace("INFO Customer tags tab selected for customer id" + selectedCustomer.customerId);
+            customerTags.customer = selectedCustomer;
+        }
+
         private function addressTabSelected():void {
             Debug.trace("INFO Customer address tab selected for customer id" + selectedCustomer.customerId);
             customerAddresses.customerId = selectedCustomer.customerId;
@@ -151,7 +163,8 @@
                     emailFilterValue.text,
                     firstNameFilterValue.text,
                     lastNameFilterValue.text,
-                    null);
+                    null,
+                    tagFilterValue.text);
         }
 
         private function onTabClick(event:IndexChangedEvent):void {
@@ -225,6 +238,10 @@
                                 <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='emailFilter')"/>
                                 <mx:TextInput id="emailFilterValue" width="150"/>
                             </mx:GridItem>
+                            <mx:GridItem>
+                                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='tagFilter')"/>
+                                <mx:TextInput id="tagFilterValue" width="150"/>
+                            </mx:GridItem>
                         </mx:GridRow>
                     </mx:Grid>
                 </mx:VBox>
@@ -250,6 +267,8 @@
                                        dataField="firstname"/>
                     <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='middlename')"
                                        dataField="middlename"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='tags')"
+                                       dataField="tag"/>
                 </mx:columns>
             </mx:DataGrid>
 
@@ -270,6 +289,7 @@
             <mx:Canvas id="customerShops" label="@Resource(bundle='CustomerManagementPanel',key='customerShops')"
                        width="100%" height="100%"/>
 
+            <cust:CustomerTagsPanel id="customerTags"/>
 
         </mx:TabNavigator>
 

@@ -111,7 +111,7 @@ public interface GenericDTOService<T> {
 
     /**
      * Get generic service. Please, use this method to getByKey related dao service from generic service,
-     * rather then inject the dao direclty into dto services.
+     * rather then inject the dao directly into dto services.
      *
      * @return {@link org.yes.cart.service.domain.GenericService}
      */

@@ -215,3 +215,10 @@ alter table TWAREHOUSE add column VERSION bigint not null default 0;
 --
 
 create index IMAGE_NAME_IDX on TSEOIMAGE (IMAGE_NAME);
+
+
+--
+--  YC-258 Shopper segmentation
+--
+
+alter table TCUSTOMER add column TAG varchar(255);

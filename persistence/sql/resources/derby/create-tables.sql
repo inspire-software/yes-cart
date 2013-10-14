@@ -222,6 +222,7 @@
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
         PASSWORD varchar(255) not null,
+        TAG varchar(255),
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),

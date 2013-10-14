@@ -114,5 +114,19 @@ public interface CustomerDTO extends Identifiable {
      */
     void setAttributes(Set<AttrValueCustomerDTO> attribute);
 
+    /**
+     * Get customer tags.
+     *
+     * @return tag line.
+     */
+    String getTag();
+
+    /**
+     * Set customer tag.
+     *
+     * @param tag customer tag line
+     */
+    void setTag(String tag) ;
+
 
 }

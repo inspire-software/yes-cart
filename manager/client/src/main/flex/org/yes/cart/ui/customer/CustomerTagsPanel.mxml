@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas
+           label="@Resource(bundle='CustomerManagementPanel',key='tags')"
+           xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="100%"
+           height="100%"
+           creationComplete="init()">
+
+    <mx:Script><![CDATA[
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.CustomerDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        private var _customer:CustomerDTOImpl;
+
+        public function get customer():CustomerDTOImpl {
+            return _customer;
+        }
+
+        public function set customer(value:CustomerDTOImpl):void {
+            if (_customer != null && value != null && _customer.customerId == value.customerId) {
+                return;
+            }
+            _customer = value;
+            if (tagsInput != null) {
+                tagsInput.text = _customer.tag;
+                tagsChanged = false;
+            }
+        }
+
+        private function onUpdateCustomerTagsResult(event:ResultEvent):void {
+            // updated
+            _customer.tag = tagsInput.text;
+            tagsChanged = false;
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onChangeTags(event:Event):void {
+            tagsChanged = (customer.tag != tagsInput.text)
+        }
+
+        private function onSaveTags(event:MouseEvent):void {
+            remoteCustomerService.updateCustomerTags(_customer, tagsInput.text);
+        }
+
+        private function init():void {
+            if (customer != null) {
+                tagsInput.text = customer.tag;
+                tagsChanged = false;
+            }
+        }
+
+        ]]></mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCustomerService"
+                     destination="remoteCustomerService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="updateCustomerTags" name="updateCustomerTags"
+                   result="onUpdateCustomerTagsResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:Boolean id="tagsChanged"/>
+
+    <mx:VBox>
+        <mx:Form>
+            <mx:FormItem label="@Resource(bundle='CustomerManagementPanel',key='tags')">
+                <mx:TextInput id="tagsInput" width="150" change="onChangeTags(event)"/>
+            </mx:FormItem>
+        </mx:Form>
+        <mx:ControlBar horizontalAlign="right" width="100%">
+            <mx:Button id="saveBtn"
+                       label="@Resource(bundle='ShopManagerApplication',key='save')"
+                       enabled="{tagsChanged}"
+                       click="onSaveTags(event)"/>
+        </mx:ControlBar>
+    </mx:VBox>
+
+</mx:Canvas>

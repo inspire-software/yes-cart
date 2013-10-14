@@ -27,7 +27,7 @@ import java.util.List;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Customer extends RegisteredPerson, Auditable {
+public interface Customer extends RegisteredPerson, Auditable, Taggable {
 
     /**
      * Get person id.
@@ -99,6 +99,23 @@ public interface Customer extends RegisteredPerson, Auditable {
      * @param password new password.
      */
     void setPassword(String password);
+
+    /**
+     * Get the space separated customer tags. For example
+     * newbuyer, frequentshopper, totalorderover5000 etc.
+     *
+     * This tags should not be shown to customer, just for promotions.
+     *
+     * @return space separated customer tags
+     */
+    String getTag();
+
+    /**
+     * Set space separated customer tags.
+     *
+     * @param tag space separated customer tags.
+     */
+    void setTag(String tag);
 
 
     /**

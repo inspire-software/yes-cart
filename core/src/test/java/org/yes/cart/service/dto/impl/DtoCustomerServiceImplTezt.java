@@ -73,6 +73,27 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testUpdateCustomerTags() throws Exception {
+        CustomerDTO dto = getCustomerDto(getTestName());
+        dto = dtoService.create(dto);
+        assertTrue(dto.getCustomerId() > 0);
+        dto.setFirstname("Jane");
+        dto.setLastname("Gav");
+        dto = dtoService.update(dto);
+        dtoService.updateCustomerTags(dto, "tag1 tag2 tag2 tag3");
+        dto = dtoService.getById(dto.getCustomerId());
+        assertEquals("Jane", dto.getFirstname());
+        assertEquals("Gav", dto.getLastname());
+        assertEquals("tag1 tag2 tag3", dto.getTag());
+        dtoService.updateCustomerTags(dto, "");
+        dto = dtoService.getById(dto.getCustomerId());
+        assertEquals("Jane", dto.getFirstname());
+        assertEquals("Gav", dto.getLastname());
+        assertNull(dto.getTag());
+        dtoService.remove(dto.getCustomerId());
+    }
+
+    @Test
     public void testCreateEntityAttributeValue() throws Exception {
         CustomerDTO dto = getCustomerDto(getTestName());
         dto = dtoService.create(dto);

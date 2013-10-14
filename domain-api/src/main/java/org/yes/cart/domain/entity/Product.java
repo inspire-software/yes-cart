@@ -24,14 +24,14 @@ import java.util.Set;
 
 /**
  * Product.
- * TODO: V2 need to think about delivery estimation time when product has back order capabiliy and
- * it in order and no items on stock
+ * TODO: V2 need to think about delivery estimation time when product has back order capability and
+ * it is in order and no items on stock
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Product extends Auditable, Attributable, Seoable, Codable {
+public interface Product extends Auditable, Attributable, Seoable, Codable, Taggable {
 
     /**
      * When available on warehouse.
@@ -286,8 +286,9 @@ public interface Product extends Auditable, Attributable, Seoable, Codable {
     void setDescription(String description);
 
     /**
-     * Get description for
-     * @return
+     * Get description for indexing
+     *
+     * @return as is description
      */
     String getDescriptionAsIs();
 
@@ -333,14 +334,17 @@ public interface Product extends Auditable, Attributable, Seoable, Codable {
 
     /**
      * Get the space separated product tags. For example
-     * sale specialoffer newarrival etc.
-     * This tags should not show to shopper, just for query navigation.
+     * sale specialoffer, newarrival etc.
+     *
+     * This tags should not be shown to customer, just for query navigation.
+     *
      * @return space separated product tags
      */
     String getTag();
 
     /**
      * Set space separated product tags.
+     *
      * @param tag space separated product tags.
      */
     void setTag(String tag);

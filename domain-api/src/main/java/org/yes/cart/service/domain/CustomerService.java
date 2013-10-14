@@ -30,21 +30,23 @@ import java.util.List;
 public interface CustomerService extends GenericService<Customer> {
 
     /**
-     * Find customer by given serach criteria. Serch will be performed using like operation.
+     * Find customer by given search criteria. Search will be performed using like operation.
+     *
      *
      * @param email      optional email
      * @param firstname  optional first name
      * @param lastname   optional last name
-     * @param middlename optional middlename
+     * @param middlename optional middle name
+     * @param tag        optional tag
      * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
      */
-    List<Customer> findCustomer(String email, String firstname, String lastname, String middlename);
+    List<Customer> findCustomer(String email, String firstname, String lastname, String middlename, String tag);
 
     /**
      * Get customer by email.
      *
      * @param email email
-     * @return {@link Customer} or null if custome not found
+     * @return {@link Customer} or null if customer not found
      */
     Customer findCustomer(String email);
 
@@ -52,7 +54,7 @@ public interface CustomerService extends GenericService<Customer> {
      * check is given email unique.
      *
      * @param email email to check
-     * @return true in case if provided email not present in databse.
+     * @return true in case if provided email not present in database.
      */
     boolean isEmailUnique(String email);
 
@@ -77,16 +79,16 @@ public interface CustomerService extends GenericService<Customer> {
      * Reset password to given user and send generated password via email.
      *
      * @param customer customer to create
-     * @param shop     shop to assing
+     * @param shop     shop to assign
      */
     void resetPassword(Customer customer, final Shop shop);
 
 
     /**
-     * Create customer and assing it to particular shop
+     * Create customer and assign it to particular shop
      *
      * @param customer customer to create
-     * @param shop     shop to assing
+     * @param shop     shop to assign
      * @return customer instance
      */
     Customer create(final Customer customer, final Shop shop);
@@ -94,9 +96,9 @@ public interface CustomerService extends GenericService<Customer> {
 
     /**
      * Get sorted by attribute rank collection of customer attributes.
-     * Not all customes attributes can be filled ot new attributes can
-     * be added, so the result list will contans filled values and
-     * posible values to fill.
+     * Not all customers attributes can be filled ot new attributes can
+     * be added, so the result list will contains filled values and
+     * possible values to fill.
      *
      * @param customer customer
      * @return sorted by attribute.
