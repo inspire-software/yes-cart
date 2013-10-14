@@ -19,4 +19,5 @@
 <properties>
 	<entry key="shopping">Вернуться в магазин</entry>
 	<entry key="selfCare">Персональная страница</entry>
+    <entry key="addresses">Адреса</entry>
 </properties>

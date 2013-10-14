@@ -41,33 +41,45 @@
 
 
     </wicket:link>
-    <title><wicket:message key="login">[Login]</wicket:message></title>
+    <title wicket:id="pageTitle">[page title]</title>
+    <meta wicket:id="description" name="description" content=""/>
+    <meta wicket:id="keywords" name="keywords" content=""/>
 </wicket:head>
 
 <body>
 
-<div class="mainpage">
+<div class="grid-container">
 
 
     <span wicket:id="header">[header]</span>
-	<div class="row">
-        <div class="column grid_16">
-			<ul class="menu">
-				<li>
-					<span><span><wicket:message key="login">[Login]</wicket:message></span></span>
-				</li>
-            </ul>            
-        </div>
-    </div>	
 
-
-    <div class="row">
-        <div class="column grid_1">
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-10 hide-on-mobile grid-parent">
             <p>
                 &nbsp;
             </p>
         </div>
-        <div class="column grid_14">
+
+        <div class="grid-80 mobile-grid-100 grid-parent">
+            <p>
+                <span><wicket:message key="login">[Login]</wicket:message></span>
+            </p>
+        </div>
+        <div class="grid-10 hide-on-mobile grid-parent">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+    </div>
+    <hr>
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-10 hide-on-mobile grid-parent">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+        <div class="grid-80 mobile-grid-100 grid-parent">
             <p>
 				<span wicket:id="feedback"/>
                 <wicket:container wicket:id="authView">
@@ -75,7 +87,7 @@
                 </wicket:container>
             </p>
         </div>
-        <div class="column grid_1">
+        <div class="grid-10 hide-on-mobile grid-parent">
             <p>
                 &nbsp;
             </p>

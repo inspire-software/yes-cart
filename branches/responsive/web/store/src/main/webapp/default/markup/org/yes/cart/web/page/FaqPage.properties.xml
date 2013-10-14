@@ -19,4 +19,5 @@
 <properties>
     <entry key="shopping">Back to shopping</entry>
     <entry key="faq">FAQ</entry>
+    <entry key="faqTitle">Frequently Asked Question(s)</entry>
 </properties>

@@ -18,44 +18,29 @@
 <wicket:panel>
 
     <div class="grid-100 mobile-grid-100 grid-parent">
-
-        <div class="grid-25 mobile-grid-25 grid-parent">
-            <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.yes-cart.org&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21"
-                    scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;"
-                    allowTransparency="true"></iframe>
-            <br>
-
-            <div class="g-plusone" data-size="medium"></div>
-            <script type="text/javascript">
-                (function () {
-                    var po = document.createElement('script');
-                    po.type = 'text/javascript';
-                    po.async = true;
-                    po.src = 'https://apis.google.com/js/plusone.js';
-                    var s = document.getElementsByTagName('script')[0];
-                    s.parentNode.insertBefore(po, s);
-                })();
-            </script>
-            <br>
-            <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="yescart">Tweet</a>
-            <script>!function (d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-                if (!d.getElementById(id)) {
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = p + '://platform.twitter.com/widgets.js';
-                    fjs.parentNode.insertBefore(js, fjs);
-                }
-            }(document, 'script', 'twitter-wjs');</script>
+        &nbsp;
+    </div>
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-25 mobile-grid-25">
+            <p>
+                <wicket:link>
+                    <a href="HomePage.html">
+                        <wicket:link>
+                            <img src="../../../../../../../image/yes-logo.png" border="0"/>
+                        </wicket:link>
+                    </a>
+                </wicket:link>
+            </p>
         </div>
-        <div class="grid-50 mobile-grid-100 grid-parent">
+
+        <div class="grid-50 mobile-grid-50" style="padding-top: 10px;">
             <p>
                 <wicket:container wicket:id="search">
                     [search]
                 </wicket:container>
             </p>
         </div>
-        <div class="grid-25 mobile-grid-25 grid-parent">
+        <div class="grid-25 mobile-grid-25">
             <p align="right">
                 <wicket:container wicket:id="smallCart">
                     [small shopping cart]
@@ -63,6 +48,37 @@
             </p>
         </div>
 
+    </div>
+
+    <div class="grid-100 mobile-grid-100 grid-parent" style="text-align: right;">
+        <div class="g-plusone" data-size="medium"></div>
+        <script type="text/javascript">
+            (function () {
+                var po = document.createElement('script');
+                po.type = 'text/javascript';
+                po.async = true;
+                po.src = 'https://apis.google.com/js/plusone.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(po, s);
+            })();
+        </script>
+        &nbsp;
+        <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="yescart">Tweet</a>
+        <script>!function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+            if (!d.getElementById(id)) {
+                js = d.createElement(s);
+                js.id = id;
+                js.src = p + '://platform.twitter.com/widgets.js';
+                fjs.parentNode.insertBefore(js, fjs);
+            }
+        }(document, 'script', 'twitter-wjs');</script>
+        &nbsp;
+        <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.yes-cart.org&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21"
+                scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:110px; height:21px;"
+                allowTransparency="true">
+
+        </iframe>
     </div>
 
     <script>
@@ -178,13 +194,7 @@
     <div class="grid-100 mobile-grid-100  grid-parent">
         <div class="grid-25 mobile-grid-50">
             <p>
-                <wicket:link>
-                    <a href="HomePage.html">
-                        <wicket:link>
-                            <img src="../../../../../../../image/yes-logo.png" border="0"/>
-                        </wicket:link>
-                    </a>
-                </wicket:link>
+                aaaaaaaaaaaaaa
             </p>
         </div>
         <div class="grid-50 hide-on-mobile">
