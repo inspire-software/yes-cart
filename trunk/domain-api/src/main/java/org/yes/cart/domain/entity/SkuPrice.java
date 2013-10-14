@@ -29,7 +29,7 @@ import java.util.Date;
  * any discounts and promotional. Sale price will be show in particular time frame or everytime if
  * time frame not present. Minimal price will be used in "name-your-price" pricing strategy.
  */
-public interface SkuPrice extends Auditable {
+public interface SkuPrice extends Auditable, Taggable {
 
     /**
      * Get the product sku.

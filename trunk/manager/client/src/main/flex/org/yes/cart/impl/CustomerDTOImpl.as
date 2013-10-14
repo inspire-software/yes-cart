@@ -33,6 +33,8 @@ public class CustomerDTOImpl {
 
     public var attributes:ArrayCollection;
 
+    public var tag : String;
+
     public function CustomerDTOImpl() {
     }
 }

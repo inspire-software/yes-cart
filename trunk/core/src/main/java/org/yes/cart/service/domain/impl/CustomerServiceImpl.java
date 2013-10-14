@@ -85,7 +85,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     public List<Customer> findCustomer(final String email, final String firstname,
-                                       final String lastname, final String middlename) {
+                                       final String lastname, final String middlename, final String tag) {
 
         final List<Criterion> criterionList = new ArrayList<Criterion>();
 
@@ -103,6 +103,10 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
 
         if (StringUtils.isNotBlank(middlename)) {
             criterionList.add(Restrictions.like("middlename", middlename, MatchMode.ANYWHERE));
+        }
+
+        if (StringUtils.isNotBlank(tag)) {
+            criterionList.add(Restrictions.like("tag", tag, MatchMode.ANYWHERE));
         }
 
         if (criterionList.isEmpty()) {
@@ -123,7 +127,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     public boolean isEmailUnique(final String email) {
-        List<Customer> cust = findCustomer(email, null, null, null);
+        List<Customer> cust = findCustomer(email, null, null, null, null);
         return (cust == null || cust.isEmpty());
     }
 
@@ -131,7 +135,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     public boolean isCustomerExists(final String email) {
-        List<Customer> cust = findCustomer(email, null, null, null);
+        List<Customer> cust = findCustomer(email, null, null, null, null);
         return (cust != null && !cust.isEmpty());
     }
 

@@ -950,10 +950,10 @@
             <column name="DESCRIPTION" length="4000"/>
         </property>
 
-        <property name="tag" type="string" length="255" not-null="true">
+        <property name="tag" type="string" length="255">
             <column name="TAG">
                 <comment>
-                    Set of product tags
+                    Set of space separated product tags
                 </comment>
             </column>
         </property>
@@ -1165,7 +1165,13 @@
         </property>
         <property name="salefrom" column="SALE_FROM" type="timestamp" not-null="false"/>
         <property name="saleto" column="SALE_TO" type="timestamp" not-null="false"/>
-        <property name="tag" column="TAG" type="string" length="45" not-null="false"/>
+        <property name="tag" type="string" length="45" not-null="false">
+            <column name="TAG">
+                <comment>
+                    Set of space separated price tags
+                </comment>
+            </column>
+        </property>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -1696,6 +1702,14 @@
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
         <property name="password" length="255" type="java.lang.String" column="PASSWORD" not-null="true"/>
+
+        <property name="tag" type="string" length="255">
+            <column name="TAG">
+                <comment>
+                    Set of space separated customer tags
+                </comment>
+            </column>
+        </property>
 
         <bag name="orders" inverse="true">
             <key>

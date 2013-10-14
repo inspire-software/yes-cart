@@ -35,6 +35,8 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private String lastname;
     private String middlename;
     private String password;
+    private String tag;
+
     private Collection<CustomerOrder> orders = new ArrayList<CustomerOrder>(0);
     private Collection<CustomerWishList> wishList = new ArrayList<CustomerWishList>(0);
     private Collection<AttrValueCustomer> attributes = new ArrayList<AttrValueCustomer>(0);
@@ -90,6 +92,15 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getTag() {
+        return this.tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
 
     public Collection<CustomerOrder> getOrders() {
         return this.orders;

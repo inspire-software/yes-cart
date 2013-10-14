@@ -19,6 +19,7 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.AttrValueCustomerDTO;
@@ -42,9 +43,7 @@ import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCustomerService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -198,12 +197,12 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<CustomerDTO> findCustomer(
-            final String email,
-            final String firstname,
-            final String lastname,
-            final String middlename) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Customer> entities = ((CustomerService)service).findCustomer(email, firstname, lastname, middlename);
+    public List<CustomerDTO> findCustomer(final String email,
+                                          final String firstname,
+                                          final String lastname,
+                                          final String middlename,
+                                          final String tag) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Customer> entities = ((CustomerService)service).findCustomer(email, firstname, lastname, middlename, tag);
         final List<CustomerDTO> dtos  = new ArrayList<CustomerDTO>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;
@@ -217,6 +216,35 @@ public class DtoCustomerServiceImpl
         if (cust != null) {
             final Shop shop = shopDao.findById(shopId);
             ((CustomerService)service).resetPassword(cust, shop);
+        }
+    }
+
+    @Override
+    public void updateCustomerTags(final CustomerDTO customer, final String tags) {
+        final Customer cust = service.getById(customer.getCustomerId());
+        if (cust != null) {
+            if (StringUtils.isBlank(tags)) {
+                cust.setTag(null);
+            } else {
+                final Set<String> unique = new TreeSet<String>();
+                final String[] values = tags.split(" ");
+                for (final String value : values) {
+                    if (StringUtils.isNotBlank(value)) {
+                        unique.add(value.trim());
+                    }
+                }
+                if (!unique.isEmpty()) {
+                    final StringBuilder tagsUnique = new StringBuilder();
+                    for (final String tag : unique) {
+                        tagsUnique.append(tag).append(' ');
+                    }
+                    tagsUnique.deleteCharAt(tagsUnique.length() - 1);
+                    cust.setTag(tagsUnique.toString());
+                } else {
+                    cust.setTag(null);
+                }
+            }
+            service.update(cust);
         }
     }
 

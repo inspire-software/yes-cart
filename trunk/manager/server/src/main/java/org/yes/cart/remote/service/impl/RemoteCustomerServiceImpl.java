@@ -53,9 +53,10 @@ public class RemoteCustomerServiceImpl
     public List<CustomerDTO> findCustomer(final String email,
                                           final String firstname,
                                           final String lastname,
-                                          final String middlename)
+                                          final String middlename,
+                                          final String tag)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoCustomerService.findCustomer(email, firstname, lastname, middlename);
+        return dtoCustomerService.findCustomer(email, firstname, lastname, middlename, tag);
     }
 
     /**
@@ -65,6 +66,12 @@ public class RemoteCustomerServiceImpl
         dtoCustomerService.remoteResetPassword(customer, shopId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void updateCustomerTags(final CustomerDTO customerDTO, final String tags) {
+        dtoCustomerService.updateCustomerTags(customerDTO, tags);
+    }
 
     /**
      * {@inheritDoc}

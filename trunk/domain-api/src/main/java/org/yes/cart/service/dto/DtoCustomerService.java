@@ -30,19 +30,26 @@ import java.util.List;
 public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, GenericAttrValueService {
 
     /**
-     * Find customer by given serach criteria. Serch will be performed using like operation.
+     * Find customer by given search criteria. Search will be performed using like operation.
+     *
      *
      * @param email      optional email
      * @param firstname  optional first name
      * @param lastname   optional last name
-     * @param middlename optional middlename
+     * @param middlename optional middle name
+     * @param tag        optional tag
+     *
      * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case of dto mapping errors
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of config errors
      */
-    List<CustomerDTO> findCustomer(String email, String firstname, String lastname, String middlename) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    List<CustomerDTO> findCustomer(String email,
+                                   String firstname,
+                                   String lastname,
+                                   String middlename,
+                                   String tag) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**
@@ -51,7 +58,15 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
      * @param customer customer to create
      * @param shopId   from what shop customer will have notification
      */
-    void remoteResetPassword(CustomerDTO customer, final long shopId);
+    void remoteResetPassword(CustomerDTO customer, long shopId);
 
+
+    /**
+     * Update tags of customer.
+     *
+     * @param customerDTO customer
+     * @param tags        tags to update
+     */
+    void updateCustomerTags(CustomerDTO customerDTO, String tags);
 
 }

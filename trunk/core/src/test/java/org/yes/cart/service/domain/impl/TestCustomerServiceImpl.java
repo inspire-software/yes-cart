@@ -93,22 +93,29 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         customer.setLastname("Akintola");
         customer.setPassword("rawpassword");
         customer.setEmail("user2@somedomain.com");
+        customer.setTag("tag1 tag2 tag3");
         customerService.create(customer, shopService.getById(10L));
-        List<Customer> list = customerService.findCustomer(getTestName(), null, null, null);
+        List<Customer> list = customerService.findCustomer(getTestName(), null, null, null, null);
         assertNotNull(list);
-        list = customerService.findCustomer("user2", null, null, null);
+        list = customerService.findCustomer("user2", null, null, null, null);
         assertEquals(1, list.size());
-        list = customerService.findCustomer("omedomain", null, null, null);
+        list = customerService.findCustomer("somedomain", null, null, null, null);
         assertEquals(2, list.size());
-        list = customerService.findCustomer(null, "SomeFirsname", null, null);
+        list = customerService.findCustomer(null, "SomeFirsname", null, null, null);
         assertEquals(2, list.size());
-        list = customerService.findCustomer(null, null, "user1LastName", null);
+        list = customerService.findCustomer(null, null, "user1LastName", null, null);
         assertEquals(1, list.size());
-        list = customerService.findCustomer(null, null, "kintola", null);
+        list = customerService.findCustomer(null, null, "kintola", null, null);
         assertEquals(1, list.size());
-        list = customerService.findCustomer(null, "SomeFirsname", null, null);
+        list = customerService.findCustomer(null, "SomeFirsname", null, null, null);
         assertEquals(2, list.size());
-        list = customerService.findCustomer(null, "SomeFirsname", "Akintola", null);
+        list = customerService.findCustomer(null, "SomeFirsname", "Akintola", null, null);
+        assertEquals(1, list.size());
+        list = customerService.findCustomer(null, null, null, null, "tag1");
+        assertEquals(1, list.size());
+        list = customerService.findCustomer(null, null, null, null, "tag2");
+        assertEquals(1, list.size());
+        list = customerService.findCustomer(null, null, null, null, "tag3");
         assertEquals(1, list.size());
     }
 
