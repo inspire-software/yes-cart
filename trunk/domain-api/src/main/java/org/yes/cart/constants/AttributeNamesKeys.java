@@ -74,11 +74,11 @@ public interface AttributeNamesKeys {
         /**
          * Timeout for backdoor WS call.
          */
-        String SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS = "1058_SYSTEM_BACKDOOR_PRODB_IDX_TIMEOUT_MS";
+        String SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS = "SYSTEM_BACKDOOR_PRODB_IDX_TIMEOUT_MS";
         /**
          * Timeout for backdoor WS call.
          */
-        String SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS = "1059_SYSTEM_BACKDOOR_PRODS_IDX_TIMEOUT_MS";
+        String SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS = "SYSTEM_BACKDOOR_PRODS_IDX_TIMEOUT_MS";
         /**
          * Timeout for backdoor WS call.
          */
