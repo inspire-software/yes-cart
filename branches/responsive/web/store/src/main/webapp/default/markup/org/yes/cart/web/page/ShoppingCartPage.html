@@ -41,7 +41,6 @@
 
 
     </wicket:link>
-    <title><wicket:message key="shoppingCart">[Shopping cart]</wicket:message></title>
     <title wicket:id="pageTitle">[page title]</title>
     <meta wicket:id="description" name="description" content=""/>
     <meta wicket:id="keywords" name="keywords" content=""/>
@@ -52,59 +51,52 @@
 <div class="grid-container">
 
     <span wicket:id="header">[header]</span>
-	
-	<div class="row">
-        <div class="column grid_16">
-			<ul class="menu">
-				<li>
-					<span><span><wicket:message key="shoppingCart">[Shopping cart]</wicket:message></span></span>				
-				</li>
-            </ul>            
-        </div>
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <ul class="menu">
+            <li>
+                <span><span><wicket:message key="shoppingCart">[Shopping cart]</wicket:message></span></span>
+            </li>
+        </ul>
     </div>
 
-    
 
-    <div class="row">
-        <div class="column grid_1">
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-10 mobile-grid-10">
             <p>
                 &nbsp;
             </p>
         </div>
-        <div class="column grid_14">
+        <div class="grid-80 mobile-grid-80 grid-parent">
             <p>
                 <wicket:container wicket:id="shoppingCartView">
                     [shopping cart]
                 </wicket:container>
             </p>
         </div>
-        <div class="column grid_1">
+        <div class="grid-10 mobile-grid-10">
             <p>
                 &nbsp;
             </p>
         </div>
     </div>
-	
-	<div class="row">
-        <div class="column grid_1">
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-10 mobile-grid-10">
             <p>
                 &nbsp;
             </p>
         </div>
-        <div class="column grid_14">
-		
-			<div class="g864">
-				<p>
-					<wicket:link>				
-						<a href="CheckoutPage.html" class="button gray forward">
-							<span><wicket:message key="checkout"> [Checkout &gt;&gt;&gt;]</wicket:message></span>
-						</a>
-					</wicket:link>
-				</p>
-			</div>
-            
+        <div class="grid-80 mobile-grid-80 grid-parent">
+            <p>
+                <wicket:link>
+                    <a href="CheckoutPage.html" class="button gray forward">
+                        <span><wicket:message key="checkout"> [Checkout &gt;&gt;&gt;]</wicket:message></span>
+                    </a>
+                </wicket:link>
+            </p>
         </div>
-        <div class="column grid_1">
+        <div class="grid-10 mobile-grid-10">
             <p>
                 &nbsp;
             </p>

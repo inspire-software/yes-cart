@@ -25,6 +25,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.https.RequireHttps;
@@ -602,6 +603,17 @@ public class CheckoutPage extends AbstractWebPage {
         super.onBeforeRender();
 
     }
+
+
+    /**
+     * Get page title.
+     *
+     * @return page title
+     */
+    public IModel<String> getPageTitle() {
+        return new Model<String>(getLocalizer().getString("checkout",this));
+    }
+
 
 
 }

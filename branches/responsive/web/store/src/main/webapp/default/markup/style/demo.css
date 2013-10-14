@@ -77,7 +77,7 @@ h1 {
 
 .grid-container {
     padding-bottom: 20px;
-    background-color: #fdfdf1;
+    background-color: #fafafa;
     /*background-color: red; */
 }
 
@@ -732,6 +732,16 @@ a.active-category {
     font-size: 12px;
 }
 
+.input-text {
+    width:260px;
+
+}
+
+.input-select {
+    width:260px;
+
+}
+
 .currency {
     display: inline-block;
     outline: none;
@@ -818,13 +828,13 @@ a.active-category {
 
 
 .button {
-    font-family: fut;
+
     display: inline-block;
     outline: none;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
-    /*font: 16px/100% Arial, Helvetica, sans-serif;*/
+    font: 16px/100% Arial, Helvetica, sans-serif;
     padding: .5em 2em .55em;
     text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
     -webkit-border-radius: .5em;
