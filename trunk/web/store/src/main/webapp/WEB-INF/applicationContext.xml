@@ -44,7 +44,14 @@
 
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
-          autowire="byName">
+          autowire="byName"><!-- add if using 2nd lvl cache: depends-on="hibernateCacheManagerProvider" -->
+        <!--
+            YC-315 investigation showed that we should not use 2nd level cache as it created adverse
+            effect on performance by splitting selects into N + 1 selects in order to manage cache
+            for joined objects.
+            It seems like we never use objects by PK and hence YC does not benefit from 2nd level cache
+         -->
+        <!--<property name="configLocation" value="classpath:hibernate.cfg.xml"/>-->
         <property name="mappingResources">
             <list>
                 <value>hibernate/yc.xml</value>
@@ -55,10 +62,6 @@
         </property>
         <property name="hibernateProperties">
             <props>
-                <prop key="hibernate.cache.use_second_level_cache">true</prop>
-                <prop key="hibernate.cache.use_query_cache">true</prop>
-                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop>
-
                 <prop key="hibernate.search.default.indexBase">
                     #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
                 </prop>
