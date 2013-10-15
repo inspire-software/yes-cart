@@ -103,4 +103,9 @@ public interface StorefrontServiceSpringKeys {
       */
      public String PRODUCT_AVAILABILITY_STRATEGY = "productAvailabilityStrategy";
 
+     /**
+      * Address book facade
+      */
+     public String ADDRESS_BOOK_FACADE = "addressBookFacade";
+
 }

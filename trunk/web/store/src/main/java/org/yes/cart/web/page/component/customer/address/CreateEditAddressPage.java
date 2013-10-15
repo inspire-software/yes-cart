@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component.customer.address;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
@@ -30,7 +29,9 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.CustomerSelfCarePage;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.service.AddressBookFacade;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -50,11 +51,14 @@ public class CreateEditAddressPage extends AbstractWebPage {
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
     private CustomerService customerService;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
+    private AddressBookFacade addressBookFacade;
+
     /**
      * Construct page to create / edit customer address.
      * Created address will be treated as default  shipping or billing address.
      *
-     * @param params
+     * @param params page parameters
      */
     public CreateEditAddressPage(final PageParameters params) {
 
@@ -66,7 +70,7 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
         final String addrType = params.get(WebParametersKeys.ADDRESS_TYPE).toString();
 
-        final Address address = getAddress(customer, addrId, addrType);
+        final Address address = addressBookFacade.getAddress(customer, addrId, addrType);
 
 
         final Class<? extends Page>  returnToPageClass = RETURN_TO_SELFCARE.equals(
@@ -93,38 +97,5 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
 
     }
-
-
-    /**
-     * Get existing or create new address to edit.
-     *
-     * @param customer    customer
-     * @param addrId      address id
-     * @param addressType address type
-     * @return instance of {@link Address}
-     */
-    private Address getAddress(final Customer customer, final String addrId, final String addressType) {
-        long pk;
-        try {
-            pk = NumberUtils.createLong(addrId);
-        } catch (NumberFormatException nfe) {
-            pk = 0;
-        }
-        Address rez = null;
-        for (Address addr : customer.getAddress()) {
-            if (addr.getAddressId() == pk) {
-                rez = addr;
-                break;
-            }
-        }
-        if (rez == null) {
-            rez = customerService.getGenericDao().getEntityFactory().getByIface(Address.class);
-            rez.setCustomer(customer);
-            rez.setAddressType(addressType);
-            customer.getAddress().add(rez);
-        }
-        return rez;
-    }
-
 
 }
