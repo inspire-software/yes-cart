@@ -36,7 +36,7 @@
         <property name="cardStartDate" column="CARD_START_DATE" type="timestamp"/>
 
         <property name="orderDate" column="ORDER_DATE" type="timestamp" not-null="true"/>
-        <property name="orderNumber" column="ORDER_NUMBER" type="java.lang.String" not-null="true" length="128"/>
+        <property name="orderNumber" column="ORDER_NUMBER" type="java.lang.String" index="CUSTOMERORDERPAYMENT_ONUM" not-null="true" length="128"/>
         <property name="orderShipment" column="ORDER_SHIPMENT_NUMBER" type="java.lang.String" not-null="true" length="128"/>
         <property name="paymentAmount" column="ORDER_DELIVERY_AMOUNT" type="java.math.BigDecimal" not-null="true"/>
         <property name="orderCurrency" column="ORDER_CURRENCY" type="java.lang.String" not-null="true" length="3"/>
@@ -71,7 +71,7 @@
 
         <property name="description" length="255" type="java.lang.String" column="P_DESCRIPTION"/>
         <property name="label" length="64" type="java.lang.String" column="P_LABEL"/>
-        <property name="pgLabel" length="64" type="java.lang.String" column="PG_LABEL"/>
+        <property name="pgLabel" length="64" type="java.lang.String" index="PAYMENTGATEWAYPARAMETER_PGL" column="PG_LABEL"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>

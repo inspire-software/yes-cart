@@ -976,6 +976,8 @@
         foreign key (CUSTOMER_ID) 
         references TCUSTOMER (CUSTOMER_ID);
 
+    create index CUSTOMERORDER_NUM on TCUSTOMERORDER (ORDERNUM);
+    create index CUSTOMERORDER_CART on TCUSTOMERORDER (CART_GUID);
 
 
     alter table TCUSTOMERORDERDELIVERY
