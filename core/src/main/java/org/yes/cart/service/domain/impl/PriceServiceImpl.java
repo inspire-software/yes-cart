@@ -23,9 +23,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueShop;
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SkuPriceQuantityComparatorImpl;
 import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.misc.navigation.price.impl.PriceTierNodeImpl;
@@ -86,40 +87,28 @@ public class PriceServiceImpl
      * {@inheritDoc}
      */
     @Cacheable(value = "priceService-minimalRegularPrice")
-    public SkuPrice getMinimalRegularPrice(
-            final long productId,
-            final String selectedSku,
-            final Shop shop,
-            final String currencyCode,
-            final BigDecimal quantity) {
+    public SkuPrice getMinimalRegularPrice(final Long productId,
+                                           final String selectedSku,
+                                           final Shop shop,
+                                           final String currencyCode,
+                                           final BigDecimal quantity) {
 
-        return getMinimalRegularPrice(
-                /*
-                 * We display prices everywhere but need attributes only on product details page
-                 * so in the long run this should be an attribute-less product entity
-                 */
-                productService.getProductById(productId).getSku(),
-                selectedSku,
-                shop,
-                currencyCode,
-                quantity
-                );
+        final List<Pair<String, SkuPrice>> skuPrices;
+        if (selectedSku == null && productId != null) {
+            skuPrices = getSkuPrices(productId, shop, currencyCode);
+        } else if (selectedSku != null) {
+            skuPrices = getSkuPrices(selectedSku, shop, currencyCode);
+        } else {
+            skuPrices = Collections.emptyList();
+        }
+
+        return getMinimalSkuPrice(skuPrices, selectedSku, quantity);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "priceService-minimalRegularPrice2")
-    public SkuPrice getMinimalRegularPrice(
-            final Collection<ProductSku> productSkus,
-            final String selectedSku,
-            final Shop shop,
-            final String currencyCode,
-            final BigDecimal quantity) {
+    private SkuPrice getMinimalSkuPrice(List<Pair<String, SkuPrice>> skuPrices, final String selectedSku, final BigDecimal quantity) {
 
         BigDecimal minimalRegularPrice = null;
 
-        List<SkuPrice> skuPrices = getSkuPrices(productSkus, shop, currencyCode);
         skuPrices = getSkuPricesFilteredByTimeFrame(skuPrices);
 
         if (quantity != null) {
@@ -129,23 +118,49 @@ public class PriceServiceImpl
         }
 
 
-        SkuPrice rez = null;
-        for (SkuPrice skuPrice : skuPrices) {
-            if ((selectedSku == null || skuPrice.getSku().getCode().equals(selectedSku))
+        Pair<String, SkuPrice> rez = null;
+        for (Pair<String, SkuPrice> skuPrice : skuPrices) {
+            if ((selectedSku == null || skuPrice.getFirst().equals(selectedSku))
                     && (minimalRegularPrice == null
-                    || MoneyUtils.isFirstBiggerThanOrEqualToSecond(minimalRegularPrice, skuPrice.getRegularPrice())
+                    || MoneyUtils.isFirstBiggerThanOrEqualToSecond(minimalRegularPrice, skuPrice.getSecond().getRegularPrice())
             )
                     ) {
-                minimalRegularPrice = skuPrice.getRegularPrice();
+                minimalRegularPrice = skuPrice.getSecond().getRegularPrice();
                 rez = skuPrice;
             }
         }
         if (rez == null) {
-            rez = skuPriceDao.getEntityFactory().getByIface(SkuPrice.class);
+            return skuPriceDao.getEntityFactory().getByIface(SkuPrice.class);
         }
-        return rez;
+        return rez.getSecond();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "priceService-allCurrentPrices")
+    public List<SkuPrice> getAllCurrentPrices(final Long productId, final String selectedSku, final Shop shop, final String currencyCode) {
+
+        final List<Pair<String, SkuPrice>> skuPrices;
+        if (selectedSku == null && productId != null) {
+            skuPrices = getSkuPrices(productId, shop, currencyCode);
+        } else if (selectedSku != null) {
+            skuPrices = getSkuPrices(selectedSku, shop, currencyCode);
+        } else {
+            skuPrices = Collections.emptyList();
+        }
+
+        final List<Pair<String, SkuPrice>> filtered = getSkuPricesFilteredByTimeFrame(skuPrices);
+
+        final List<SkuPrice> prices = new ArrayList<SkuPrice>();
+        for (final Pair<String, SkuPrice> price : filtered) {
+            prices.add(price.getSecond());
+        }
+
+        Collections.sort(prices, new SkuPriceQuantityComparatorImpl());
+
+        return prices;
+    }
 
     /**
      * Atm we can have different price definitions (lowest in list with high priority):
@@ -157,14 +172,14 @@ public class PriceServiceImpl
      * @param skuPrices all prices filtered by currency, and quantity for all skus
      * @return the list of sku prices, which is filtered by time frame
      */
-    public List<SkuPrice> getSkuPricesFilteredByTimeFrame(final Collection<SkuPrice> skuPrices) {
+    List<Pair<String, SkuPrice>> getSkuPricesFilteredByTimeFrame(final List<Pair<String, SkuPrice>> skuPrices) {
 
-        final List<SkuPrice> allPrices = new LinkedList<SkuPrice>();
+        final List<Pair<String, SkuPrice>> allPrices = new LinkedList<Pair<String, SkuPrice>>();
 
         final MultiMap qtySkuPriceMap = new MultiValueMap();
 
-        for (SkuPrice skuPrice : skuPrices) {
-            qtySkuPriceMap.put(skuPrice.getSku().getCode() + ":" + skuPrice.getQuantity(), skuPrice);
+        for (Pair<String, SkuPrice> skuPrice : skuPrices) {
+            qtySkuPriceMap.put(skuPrice.getFirst() + ":" + skuPrice.getSecond().getQuantity(), skuPrice);
         }
 
 
@@ -172,7 +187,8 @@ public class PriceServiceImpl
 
             final String key = (String) o;
 
-            final List<SkuPrice> skuPricesForOneSku = new ArrayList<SkuPrice>((Collection<SkuPrice>) qtySkuPriceMap.get(key));
+            final List<Pair<String, SkuPrice>> skuPricesForOneSku = new ArrayList<Pair<String, SkuPrice>>(
+                    (Collection<Pair<String, SkuPrice>>) qtySkuPriceMap.get(key));
 
             reorderSkuPrices(skuPricesForOneSku);
 
@@ -200,14 +216,15 @@ public class PriceServiceImpl
         return allPrices;
     }
 
-    void reorderSkuPrices(List<SkuPrice> skuPricesForOneSku) {
+    void reorderSkuPrices(List<Pair<String, SkuPrice>> skuPricesForOneSku) {
         Collections.sort(
                 skuPricesForOneSku,
-                new Comparator<SkuPrice>() {
+                new Comparator<Pair<String, SkuPrice>>() {
 
-                    public int compare(final SkuPrice skuPrice1, final SkuPrice skuPrice2) {
+                    public int compare(final Pair<String, SkuPrice> skuPrice1, final Pair<String, SkuPrice> skuPrice2) {
                         //the new price definition has high priority
-                        return skuPrice2.getSkuPriceId() < skuPrice1.getSkuPriceId() ? -1 : skuPrice2.getSkuPriceId() == skuPrice1.getSkuPriceId() ? 0 : 1;
+                        return skuPrice2.getSecond().getSkuPriceId() < skuPrice1.getSecond().getSkuPriceId() ? -1 :
+                                (skuPrice2.getSecond().getSkuPriceId() == skuPrice1.getSecond().getSkuPriceId() ? 0 : 1);
                     }
                 }
         );
@@ -218,14 +235,13 @@ public class PriceServiceImpl
      * and add it into given result holder - <code>allPrices</code>
      *
      * @param allPrices          result holder for all skus.
-     * @param skuPricesForOneSku pricces for one sku
+     * @param skuPricesForOneSku prices for one sku
      * @param time               current time
      * @return true in case if result was added
      */
-    boolean addAllTimePrice(List<SkuPrice> allPrices, List<SkuPrice> skuPricesForOneSku, long time) {
-        boolean found;
-        for (SkuPrice skuPrice : skuPricesForOneSku) {
-            if (skuPrice.getSalefrom() == null && skuPrice.getSaleto() == null) {
+    boolean addAllTimePrice(List<Pair<String, SkuPrice>> allPrices, List<Pair<String, SkuPrice>> skuPricesForOneSku, long time) {
+        for (Pair<String, SkuPrice> skuPrice : skuPricesForOneSku) {
+            if (skuPrice.getSecond().getSalefrom() == null && skuPrice.getSecond().getSaleto() == null) {
                 allPrices.add(skuPrice);
                 return true;
             }
@@ -238,14 +254,14 @@ public class PriceServiceImpl
      * and add it into given result holder - <code>allPrices</code>
      *
      * @param allPrices          result holder for all skus.
-     * @param skuPricesForOneSku pricces for one sku
+     * @param skuPricesForOneSku prices for one sku
      * @param time               current time
      * @return true in case if result was added
      */
-    boolean addStartPrice(List<SkuPrice> allPrices, List<SkuPrice> skuPricesForOneSku, long time) {
-        for (SkuPrice skuPrice : skuPricesForOneSku) {
-            if (skuPrice.getSalefrom() != null && skuPrice.getSaleto() == null) {
-                if (skuPrice.getSalefrom().getTime() < time) {
+    boolean addStartPrice(List<Pair<String, SkuPrice>> allPrices, List<Pair<String, SkuPrice>> skuPricesForOneSku, long time) {
+        for (Pair<String, SkuPrice> skuPrice : skuPricesForOneSku) {
+            if (skuPrice.getSecond().getSalefrom() != null && skuPrice.getSecond().getSaleto() == null) {
+                if (skuPrice.getSecond().getSalefrom().getTime() < time) {
                     allPrices.add(skuPrice);
                     return true;
                 }
@@ -260,14 +276,14 @@ public class PriceServiceImpl
      * and add it into given result holder - <code>allPrices</code>
      *
      * @param allPrices          result holder for all skus.
-     * @param skuPricesForOneSku pricces for one sku
+     * @param skuPricesForOneSku prices for one sku
      * @param time               current time
      * @return true in case if result was added
      */
-    boolean addEndPrice(List<SkuPrice> allPrices, List<SkuPrice> skuPricesForOneSku, long time) {
-        for (SkuPrice skuPrice : skuPricesForOneSku) {
-            if (skuPrice.getSalefrom() == null && skuPrice.getSaleto() != null) {
-                if (time < skuPrice.getSaleto().getTime()) {
+    boolean addEndPrice(List<Pair<String, SkuPrice>> allPrices, List<Pair<String, SkuPrice>> skuPricesForOneSku, long time) {
+        for (Pair<String, SkuPrice> skuPrice : skuPricesForOneSku) {
+            if (skuPrice.getSecond().getSalefrom() == null && skuPrice.getSecond().getSaleto() != null) {
+                if (time < skuPrice.getSecond().getSaleto().getTime()) {
                     allPrices.add(skuPrice);
                     return true;
                 }
@@ -285,10 +301,10 @@ public class PriceServiceImpl
      * @param time               current time
      * @return true in case if result was added
      */
-    boolean addFramedPrice(List<SkuPrice> allPrices, List<SkuPrice> skuPricesForOneSku, long time) {
-        for (SkuPrice skuPrice : skuPricesForOneSku) {
-            if (skuPrice.getSalefrom() != null && skuPrice.getSaleto() != null) {
-                if (skuPrice.getSalefrom().getTime() < time && time < skuPrice.getSaleto().getTime()) {
+    boolean addFramedPrice(List<Pair<String, SkuPrice>> allPrices, List<Pair<String, SkuPrice>> skuPricesForOneSku, long time) {
+        for (Pair<String, SkuPrice> skuPrice : skuPricesForOneSku) {
+            if (skuPrice.getSecond().getSalefrom() != null && skuPrice.getSecond().getSaleto() != null) {
+                if (skuPrice.getSecond().getSalefrom().getTime() < time && time < skuPrice.getSecond().getSaleto().getTime()) {
                     allPrices.add(skuPrice);
                     return true;
                 }
@@ -297,18 +313,51 @@ public class PriceServiceImpl
         return false;
     }
 
-
     /**
-     * {@inheritDoc}
+     * Get the sku prices filtered by shop.
+     * Exchange rate will be used if shop has not prices
+     * for given currency.
+     *
+     * @param skuCode      SKU code
+     * @param shop         shop filter
+     * @param currencyCode currency code
+     * @return list of sku prices
      */
-    public List<SkuPrice> getSkuPrices(final Collection<ProductSku> productSkus, final Shop shop, final String currencyCode) {
+    List<Pair<String, SkuPrice>> getSkuPrices(final String skuCode, final Shop shop, final String currencyCode) {
 
-        List<SkuPrice> rez = getSkuPriceFilteredByShopCurrency(productSkus, shop, currencyCode);
+        List<Pair<String, SkuPrice>> rez = getSkuPriceFilteredByShopCurrency(skuCode, shop, currencyCode);
 
         if (rez.isEmpty() && currencyCode != null && !currencyCode.equals(shop.getDefaultCurrency())) {
 
-            final List<SkuPrice> shopSkuPrices = getSkuPriceFilteredByShop(productSkus, shop);
-            List<SkuPrice> skuPrices = getSkuPriceFilteredByCurrency(shopSkuPrices, shop.getDefaultCurrency());
+            List<Pair<String, SkuPrice>> skuPrices = getSkuPriceFilteredByShopCurrency(skuCode, shop, shop.getDefaultCurrency());
+            BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, shop.getDefaultCurrency(), currencyCode);
+            if (exchangeRate == null) {
+                skuPrices.clear();
+            } else {
+                skuPrices = recalculatePrices(currencyCode, skuPrices, exchangeRate);
+            }
+            rez = skuPrices;
+        }
+        return rez;
+    }
+
+    /**
+     * Get the sku prices filtered by shop.
+     * Exchange rate will be used if shop has not prices
+     * for given currency.
+     *
+     * @param productId    product PK
+     * @param shop         shop filter
+     * @param currencyCode currency code
+     * @return list of sku prices
+     */
+    List<Pair<String, SkuPrice>> getSkuPrices(final long productId, final Shop shop, final String currencyCode) {
+
+        List<Pair<String, SkuPrice>> rez = getSkuPriceFilteredByShopCurrency(productId, shop, currencyCode);
+
+        if (rez.isEmpty() && currencyCode != null && !currencyCode.equals(shop.getDefaultCurrency())) {
+
+            List<Pair<String, SkuPrice>> skuPrices = getSkuPriceFilteredByShopCurrency(productId, shop, shop.getDefaultCurrency());
             BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, shop.getDefaultCurrency(), currencyCode);
             if (exchangeRate == null) {
                 skuPrices.clear();
@@ -328,39 +377,39 @@ public class PriceServiceImpl
      * @param exchangeRate  exchange rate
      * @return list of skus with recalculated prices
      */
-    private List<SkuPrice> recalculatePrices(final String currencyCode,
-                                             final List<SkuPrice> baseSkuPrices,
+    private List<Pair<String, SkuPrice>> recalculatePrices(final String currencyCode,
+                                             final List<Pair<String, SkuPrice>> baseSkuPrices,
                                              final BigDecimal exchangeRate) {
 
-        final List<SkuPrice> skuPrices = new ArrayList<SkuPrice>(baseSkuPrices.size());
+        final List<Pair<String, SkuPrice>> skuPrices = new ArrayList<Pair<String, SkuPrice>>(baseSkuPrices.size());
 
-        for (SkuPrice baseSkuPrice : baseSkuPrices) {
+        for (Pair<String, SkuPrice> baseSkuPrice : baseSkuPrices) {
 
             final SkuPrice skuPrice = skuPriceDao.getEntityFactory().getByIface(SkuPrice.class);
 
 
-            skuPrice.setRegularPrice(baseSkuPrice.getRegularPrice().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
-            if (baseSkuPrice.getSalePriceForCalculation() != null) {
-                skuPrice.setSalePrice(baseSkuPrice.getSalePriceForCalculation().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+            skuPrice.setRegularPrice(baseSkuPrice.getSecond().getRegularPrice().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+            if (baseSkuPrice.getSecond().getSalePriceForCalculation() != null) {
+                skuPrice.setSalePrice(baseSkuPrice.getSecond().getSalePriceForCalculation().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
             }
-            if (baseSkuPrice.getMinimalPrice() != null) {
-                skuPrice.setMinimalPrice(baseSkuPrice.getMinimalPrice().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+            if (baseSkuPrice.getSecond().getMinimalPrice() != null) {
+                skuPrice.setMinimalPrice(baseSkuPrice.getSecond().getMinimalPrice().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
             }
             skuPrice.setCurrency(currencyCode);
-            skuPrice.setQuantity(baseSkuPrice.getQuantity());
-            skuPrice.setSku(baseSkuPrice.getSku());
+            skuPrice.setQuantity(baseSkuPrice.getSecond().getQuantity());
+            skuPrice.setSku(baseSkuPrice.getSecond().getSku());
 
-            skuPrices.add(skuPrice);
+            skuPrices.add(new Pair<String, SkuPrice>(baseSkuPrice.getFirst(), skuPrice));
         }
 
         return skuPrices;
     }
 
 
-    private List<SkuPrice> getSkuPricesFilteredSkuCode(final List<SkuPrice> prices, final String selectedSkuCode) {
-        List<SkuPrice> result = new ArrayList<SkuPrice>();
-        for (SkuPrice skuPrice : prices) {
-            if (skuPrice.getSku().getCode().equals(selectedSkuCode)) {
+    private List<Pair<String, SkuPrice>> getSkuPricesFilteredSkuCode(final List<Pair<String, SkuPrice>> prices, final String selectedSkuCode) {
+        List<Pair<String, SkuPrice>> result = new ArrayList<Pair<String, SkuPrice>>();
+        for (Pair<String, SkuPrice> skuPrice : prices) {
+            if (skuPrice.getFirst().equals(selectedSkuCode)) {
                 result.add(skuPrice);
             }
         }
@@ -369,27 +418,38 @@ public class PriceServiceImpl
 
 
     /**
-     * {@inheritDoc}
+     * Get the sku prices filtered by quantity. Example:
+     * ProductSKU1 has defined price ties 1 - 100 USD, 2 - 87 USD, 5 - 85 USD
+     * ProductSKU2 has defined price ties 1 - 100 USD, 2 - 98 USD, 3 - 90 USD
+     * <p/>
+     * For quantity 4 result will hold only two SkuPrice:
+     * ProductSKU1 87 USD
+     * ProductSKU2 90 USD
+     *
+     * @param prices   sku prices
+     * @param quantity quantity
+     * @return list of sku prices filtered by quantity
      */
-    public List<SkuPrice> getSkuPricesFilteredByQuantity(final List<SkuPrice> prices, final BigDecimal quantity) {
-        List<SkuPrice> result = new ArrayList<SkuPrice>();
+    List<Pair<String, SkuPrice>> getSkuPricesFilteredByQuantity(final List<Pair<String, SkuPrice>> prices,
+                                                                final BigDecimal quantity) {
+        List<Pair<String, SkuPrice>> result = new ArrayList<Pair<String, SkuPrice>>();
         final Set<String> uniqueSkuCodes = getUniqueSkuCodes(prices);
         for (String selectedSkuCode : uniqueSkuCodes) {
-            final List<SkuPrice> selectedSkuPrices = getSkuPricesFilteredSkuCode(prices, selectedSkuCode);
+            final List<Pair<String, SkuPrice>> selectedSkuPrices = getSkuPricesFilteredSkuCode(prices, selectedSkuCode);
             Collections.sort(
                     selectedSkuPrices,
-                    new Comparator<SkuPrice>() {
+                    new Comparator<Pair<String, SkuPrice>>() {
                         /**
                          * {@inheritDoc}
                          * ReverveComparator by quantity.
                          */
-                        public int compare(final SkuPrice skuPrice1, final SkuPrice skuPrice2) {
-                            return skuPrice2.getQuantity().compareTo(skuPrice1.getQuantity());
+                        public int compare(final Pair<String, SkuPrice> skuPrice1, final Pair<String, SkuPrice> skuPrice2) {
+                            return skuPrice2.getSecond().getQuantity().compareTo(skuPrice1.getSecond().getQuantity());
                         }
                     }
             );
-            for (SkuPrice skuPrice : selectedSkuPrices) {
-                if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(quantity, skuPrice.getQuantity())) {
+            for (Pair<String, SkuPrice> skuPrice : selectedSkuPrices) {
+                if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(quantity, skuPrice.getSecond().getQuantity())) {
                     result.add(skuPrice);
                     break;
                 }
@@ -406,56 +466,30 @@ public class PriceServiceImpl
     }
 
 
-    private Set<String> getUniqueSkuCodes(final List<SkuPrice> prices) {
+    private Set<String> getUniqueSkuCodes(final List<Pair<String, SkuPrice>> prices) {
         Set<String> stringSet = new HashSet<String>();
-        for (SkuPrice skuPrice : prices) {
-            stringSet.add(skuPrice.getSku().getCode());
+        for (Pair<String, SkuPrice> skuPrice : prices) {
+            stringSet.add(skuPrice.getFirst());
         }
         return stringSet;
     }
 
+    private List<Pair<String, SkuPrice>> getSkuPriceFilteredByShopCurrency(final String skuCode,
+                                                                           final Shop shop,
+                                                                           final String currencyCode) {
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<SkuPrice> getSkuPriceFilteredByCurrency(final List<SkuPrice> skuPrices, final String currencyCode) {
-        List<SkuPrice> skuPricesFiltered = new ArrayList<SkuPrice>();
-        for (SkuPrice skuPrice : skuPrices) {
-            if (skuPrice.getCurrency().equals(currencyCode)) {
-                skuPricesFiltered.add(skuPrice);
-            }
-        }
-        return skuPricesFiltered;
+        return (List) getGenericDao().findQueryObjectByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP",
+                skuCode, currencyCode, shop.getShopId());
+
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<SkuPrice> getSkuPriceFilteredByShop(final Collection<ProductSku> productSkus, final Shop shop) {
-        List<SkuPrice> skuPrices = new ArrayList<SkuPrice>();
-        for (ProductSku sku : productSkus) {
-            for (SkuPrice skuPrice : sku.getSkuPrice()) {
-                if (shop.getShopId() == skuPrice.getShop().getShopId()) {
-                    skuPrices.add(skuPrice);
-                }
-            }
-        }
-        return skuPrices;
-    }
+    private List<Pair<String, SkuPrice>> getSkuPriceFilteredByShopCurrency(final long productId,
+                                                                           final Shop shop,
+                                                                           final String currencyCode) {
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<SkuPrice> getSkuPriceFilteredByShopCurrency(final Collection<ProductSku> productSkus, final Shop shop, final String currencyCode) {
-        List<SkuPrice> skuPrices = new ArrayList<SkuPrice>();
-        for (ProductSku sku : productSkus) {
-            for (SkuPrice skuPrice : sku.getSkuPrice()) {
-                if (shop.getShopId() == skuPrice.getShop().getShopId() && skuPrice.getCurrency().equals(currencyCode)) {
-                    skuPrices.add(skuPrice);
-                }
-            }
-        }
-        return skuPrices;
+        return (List) getGenericDao().findQueryObjectByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP",
+                productId, currencyCode, shop.getShopId());
+
     }
 
     /**
@@ -594,7 +628,11 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {"imageService-seoImage" , "priceService-minimalRegularPrice"   }, allEntries = true)
+    @CacheEvict(value = {
+            "imageService-seoImage" ,
+            "priceService-minimalRegularPrice",
+            "priceService-allCurrentPrices"
+    }, allEntries = true)
     public SkuPrice create(final SkuPrice instance) {
         return super.create(instance);
     }
@@ -602,7 +640,11 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {"imageService-seoImage" , "priceService-minimalRegularPrice"   }, allEntries = true)
+    @CacheEvict(value = {
+            "imageService-seoImage" ,
+            "priceService-minimalRegularPrice",
+            "priceService-allCurrentPrices"
+    }, allEntries = true)
     public SkuPrice update(final SkuPrice instance) {
         return super.update(instance);
     }
@@ -610,7 +652,11 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {"imageService-seoImage" , "priceService-minimalRegularPrice"   }, allEntries = true)
+    @CacheEvict(value = {
+            "imageService-seoImage" ,
+            "priceService-minimalRegularPrice",
+            "priceService-allCurrentPrices"
+    }, allEntries = true)
     public void delete(final SkuPrice instance) {
         super.delete(instance);
     }

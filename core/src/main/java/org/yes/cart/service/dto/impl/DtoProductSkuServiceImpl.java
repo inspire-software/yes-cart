@@ -143,7 +143,7 @@ public class DtoProductSkuServiceImpl
      */
     public void remove(long id) {
         ProductSku sku =  getService().getById(id);
-        ((ProductSkuService)getService()).removeAllItems(sku);
+        ((ProductSkuService)getService()).removeAllInventory(sku);
         ((ProductSkuService)getService()).removeAllPrices(sku);
         getService().getGenericDao().evict(sku);
 
@@ -191,8 +191,8 @@ public class DtoProductSkuServiceImpl
      *
      * @param productId product pk value
      */
-    public void removeAllItems(final long productId) {
-        ((ProductSkuService) getService()).removeAllItems(productId);
+    public void removeAllInventory(final long productId) {
+        ((ProductSkuService) getService()).removeAllInventory(productId);
 
     }
 

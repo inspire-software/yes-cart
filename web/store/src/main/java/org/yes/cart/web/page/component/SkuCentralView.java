@@ -271,10 +271,12 @@ public class SkuCentralView extends AbstractCentralView {
      * @return collection of sku prices.
      */
     private Collection<SkuPrice> getSkuPrices() {
-        if (isProduct) {
-            return priceService.getSkuPricesFilteredByTimeFrame(product.getDefaultSku().getSkuPrice());
-        }
-        return priceService.getSkuPricesFilteredByTimeFrame(sku.getSkuPrice());
+        /* We always preselect a SKU */
+        return priceService.getAllCurrentPrices(
+                product.getProductId(),
+                sku.getCode(),
+                ApplicationDirector.getCurrentShop(),
+                ApplicationDirector.getShoppingCart().getCurrencyCode());
     }
 
     /*
@@ -304,14 +306,8 @@ public class SkuCentralView extends AbstractCentralView {
      * @return {@link SkuPrice}
      */
     private SkuPrice getSkuPrice() {
-        final Collection<ProductSku> productSkus;
-        if (isProduct) {
-            productSkus = product.getSku();
-        } else {
-            productSkus = Collections.singletonList(sku);
-        }
         return priceService.getMinimalRegularPrice(
-                productSkus,
+                null,
                 sku.getCode(), /* We always preselect a SKU */
                 ApplicationDirector.getCurrentShop(),
                 ApplicationDirector.getShoppingCart().getCurrencyCode(),

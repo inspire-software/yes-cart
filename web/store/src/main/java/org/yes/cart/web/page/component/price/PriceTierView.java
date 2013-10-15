@@ -56,13 +56,7 @@ public class PriceTierView extends BaseComponent {
      */
     public PriceTierView(final String id, final Collection<SkuPrice> rawPrices) {
         super(id);
-        final String currency = ApplicationDirector.getShoppingCart().getCurrencyCode();
-        skuPrices = new ArrayList<SkuPrice>();
-        for (SkuPrice skuPrice : rawPrices) {
-            if (skuPrice.getCurrency().equals(currency)) {
-                skuPrices.add(skuPrice);
-            }
-        }
+        skuPrices = new ArrayList<SkuPrice>(rawPrices);
         Collections.sort(skuPrices, new SkuPriceQuantityComparatorImpl());
     }
 

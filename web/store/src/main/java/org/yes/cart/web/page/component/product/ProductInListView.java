@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -29,11 +28,7 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.domain.entity.impl.ProductAvailabilityModelImpl;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.domain.PriceService;
-import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -86,6 +81,9 @@ public class ProductInListView extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
+    private ProductAvailabilityStrategy productAvailabilityStrategy;
+
     private final String[] defImgSize;
 
 
@@ -125,8 +123,6 @@ public class ProductInListView extends BaseComponent {
         final String width = defImgSize[0];
         final String height = defImgSize[1];
 
-        final Class homePage = Application.get().getHomePage();
-
         add(links.newProductLink(PRODUCT_LINK_SKU, product.getId(), getPage().getPageParameters())
                 .add(new Label(SKU_CODE_LABEL, product.getCode()))
         );
@@ -149,7 +145,7 @@ public class ProductInListView extends BaseComponent {
         );
 
 
-        final ProductAvailabilityModel skuPam = new ProductAvailabilityModelImpl(product.getAvailability(), product.getFirstAvailableSkuQuantity());
+        final ProductAvailabilityModel skuPam = productAvailabilityStrategy.getAvailabilityModel(product);
 
         add(links.newAddToCartLink(ADD_TO_CART_LINK, product.getFirstAvailableSkuCode(), null, getPage().getPageParameters())
                         .add(new Label(ADD_TO_CART_LINK_LABEL, skuPam.isInStock() || skuPam.isPerpetual() ?
@@ -176,7 +172,7 @@ public class ProductInListView extends BaseComponent {
      */
     private SkuPrice getSkuPrice(final String firstAvailableSkuCode) {
         return priceService.getMinimalRegularPrice(
-                product.getId(),
+                null,
                 firstAvailableSkuCode,
                 ApplicationDirector.getCurrentShop(),
                 ApplicationDirector.getShoppingCart().getCurrencyCode(),

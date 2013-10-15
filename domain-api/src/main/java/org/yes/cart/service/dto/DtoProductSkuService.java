@@ -80,6 +80,6 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
      * Remove from all warehouses.
      * @param productId product pk value
      */
-    void removeAllItems(long productId);
+    void removeAllInventory(long productId);
 
 }

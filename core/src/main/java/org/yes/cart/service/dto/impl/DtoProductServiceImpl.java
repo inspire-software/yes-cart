@@ -429,7 +429,7 @@ public class DtoProductServiceImpl
      */
     public void remove(long id) {
         dtoProductCategoryService.removeByProductIds(id);
-        dtoProductSkuService.removeAllItems(id);
+        dtoProductSkuService.removeAllInventory(id);
         dtoProductSkuService.removeAllPrices(id);
         final Object obj = getService().getById(id);
         getService().getGenericDao().evict(obj);

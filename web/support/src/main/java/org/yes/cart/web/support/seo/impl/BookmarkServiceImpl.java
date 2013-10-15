@@ -65,14 +65,14 @@ public class BookmarkServiceImpl implements BookmarkService {
         this.productService = productService;
         this.contentService = contentService;
 
-        CATEGORY_DECODE_CACHE = cacheManager.getCache("web.bookmarkService-seoCategoryDecodeCache");
-        CATEGORY_ENCODE_CACHE = cacheManager.getCache("web.bookmarkService-seoCategoryEncodeCache");
-        CONTENT_DECODE_CACHE = cacheManager.getCache("web.bookmarkService-seoContentDecodeCache");
-        CONTENT_ENCODE_CACHE = cacheManager.getCache("web.bookmarkService-seoContentEncodeCache");
-        SKU_DECODE_CACHE = cacheManager.getCache("web.bookmarkService-seoSkuDecodeCache");
-        SKU_ENCODE_CACHE = cacheManager.getCache("web.bookmarkService-seoSkuEncodeCache");
-        PRODUCT_DECODE_CACHE = cacheManager.getCache("web.bookmarkService-seoProductDecodeCache");
-        PRODUCT_ENCODE_CACHE = cacheManager.getCache("web.bookmarkService-seoProductEncodeCache");
+        CATEGORY_DECODE_CACHE = cacheManager.getCache("web.bookmarkService-seoCategoryDecode");
+        CATEGORY_ENCODE_CACHE = cacheManager.getCache("web.bookmarkService-seoCategoryEncode");
+        CONTENT_DECODE_CACHE = cacheManager.getCache("web.bookmarkService-seoContentDecode");
+        CONTENT_ENCODE_CACHE = cacheManager.getCache("web.bookmarkService-seoContentEncode");
+        SKU_DECODE_CACHE = cacheManager.getCache("web.bookmarkService-seoSkuDecode");
+        SKU_ENCODE_CACHE = cacheManager.getCache("web.bookmarkService-seoSkuEncode");
+        PRODUCT_DECODE_CACHE = cacheManager.getCache("web.bookmarkService-seoProductDecode");
+        PRODUCT_ENCODE_CACHE = cacheManager.getCache("web.bookmarkService-seoProductEncode");
 
 
     }
