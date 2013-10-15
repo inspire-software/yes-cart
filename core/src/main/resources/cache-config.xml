@@ -39,6 +39,17 @@
           p:configLocation="classpath:ehcache.xml"
           p:shared="true"/>
 
+    <!--
+        use org.yes.cart.domain.entity.cache.HibernateEhCacheRegionFactory as cache factory provider to
+        have cacheManager singleton with correct configurations applied. If we do not feed this in as
+        static then there is no guarantee in which order the cache manager instance (race condition
+        between hibernate and Spring) is created and which configuration is applied
+        This was proven by debug as part of investigation in YC-315
+     -->
+    <!--<bean id="hibernateCacheManagerProvider" class="org.yes.cart.domain.entity.cache.HibernateEhCacheRegionFactory">-->
+        <!--<property name="cacheManager" ref="cacheManager"/>-->
+    <!--</bean>-->
+
     <!-- ###################### Attributes  ################################################################################################################## -->
 
     <util:set id="AttributeAll">
