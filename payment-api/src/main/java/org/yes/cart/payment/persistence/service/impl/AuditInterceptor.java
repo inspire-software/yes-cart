@@ -157,7 +157,6 @@ public class AuditInterceptor extends EmptyInterceptor {
             line.append(((entity instanceof Identifiable) ? ((Identifiable) entity).getId() : "N/A"));
             line.append(",");
             line.append(user);
-            line.append('\n');
             LOG.info(line.toString());
         }
     }
