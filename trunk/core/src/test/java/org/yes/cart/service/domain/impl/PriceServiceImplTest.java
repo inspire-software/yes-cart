@@ -24,6 +24,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.ProductSkuEntity;
 import org.yes.cart.domain.entity.impl.SkuPriceEntity;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.CategoryService;
@@ -60,7 +61,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         try {
             dumpDataBase("x0x0xx_cats", new String[]{"TCATEGORY"});
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         super.setUp();
     }
@@ -75,7 +76,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         try {
             dumpDataBase("x1x1xx_cats_nav", new String[]{"TCATEGORY"});
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         assertNotNull(priceTierTree);
         List<FilteredNavigationRecord> navigationRecords = priceService.getPriceNavigationRecords(priceTierTree, "EUR", shop);
@@ -101,86 +102,68 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
 
-        SkuPrice skuPrice = priceService.getMinimalRegularPrice(product.getSku(), product.getDefaultSku().getCode(), shop, "EUR", BigDecimal.ONE);
+        SkuPrice skuPrice = priceService.getMinimalRegularPrice(10000L, product.getDefaultSku().getCode(), shop, "EUR", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
 
-        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), null, shop, "EUR", BigDecimal.ONE);
+        skuPrice = priceService.getMinimalRegularPrice(10000L, null, shop, "EUR", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("150.00")).equals(skuPrice.getRegularPrice()));
 
-        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), null, shop, "EUR", new BigDecimal("2"));
+        skuPrice = priceService.getMinimalRegularPrice(10000L, null, shop, "EUR", new BigDecimal("2"));
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("145.00")).equals(skuPrice.getRegularPrice()));
 
-        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), product.getDefaultSku().getCode(),shop, "EUR", new BigDecimal("2"));
+        skuPrice = priceService.getMinimalRegularPrice(10000L, product.getDefaultSku().getCode(), shop, "EUR", new BigDecimal("2"));
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
 
-        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), "SOBOT-LIGHT",shop, "EUR", new BigDecimal("2"));
+        skuPrice = priceService.getMinimalRegularPrice(10000L, "SOBOT-LIGHT", shop, "EUR", new BigDecimal("2"));
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("145.00")).equals(skuPrice.getRegularPrice()));
 
         //Test than we are can not getByKey the minimal price through price tiers for multisku product for not cofigured currency
-        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), product.getDefaultSku().getCode(),shop, "BYR", BigDecimal.ONE);
+        skuPrice = priceService.getMinimalRegularPrice(10000L, product.getDefaultSku().getCode(), shop, "BYR", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePriceForCalculation());
         //Test than we are can getByKey the minimal price through price tiers for multisku product.
-        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), product.getDefaultSku().getCode(), shop, "UAH", BigDecimal.ONE);
+        skuPrice = priceService.getMinimalRegularPrice(10000L, product.getDefaultSku().getCode(), shop, "UAH", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1716.67"), skuPrice.getRegularPrice()));
 
-        skuPrice = priceService.getMinimalRegularPrice(product.getSku(), null, shop, "UAH", BigDecimal.ONE);
+        skuPrice = priceService.getMinimalRegularPrice(10000L, null, shop, "UAH", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1707.00"), skuPrice.getRegularPrice()));
     }
 
     @Test
-    public void testGetSkuPricesFilteredByQuantity() {
-        Shop shop = shopService.getShopByDomainName("www.gadget.yescart.org");
-        Product product = productService.getProductById(10000L);
-        List<SkuPrice> skus = priceService.getSkuPriceFilteredByShop(product.getSku(), shop);
-        skus = priceService.getSkuPriceFilteredByCurrency(
-                priceService.getSkuPricesFilteredByQuantity(skus, new BigDecimal(2)), "EUR");
-        boolean found = false;
-        for (SkuPrice skuPrice : skus) {
-            if ("SOBOT-LIGHT".equals(skuPrice.getSku().getCode())) {
-                assertEquals(new BigDecimal("145.00"), skuPrice.getRegularPrice());
-                found = true;
-            }
-        }
-        assertTrue(found);
-    }
-
-    /**
-     * Test than we are can getByKey the minimal price through price tiers for multisku product.
-     */
-    @Test
-    public void testGetMinimalRegularPriceForNosupportedCurrencyTest() {
+    public void testGetAllCurrentPrices() throws Exception {
         Shop shop = shopService.getShopByDomainName("www.gadget.yescart.org");
         Product product = productService.getProductById(10000L);
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
-    }
 
-    /**
-     * Test than we are can getByKey the minimal price through price tiers for multisku product.
-     */
-    @Test
-    public void testGetMinimalRegularPriceForsupportedCurrencyTest() {
-        Product product = productService.getProductById(10000L);
-        Shop shop = shopService.getShopByDomainName("www.gadget.yescart.org");
-        assertNotNull(product);
-        assertEquals(4, product.getSku().size());
-        SkuPrice skuPrice = priceService.getMinimalRegularPrice(product.getSku(), product.getDefaultSku().getCode(), shop, "UAH", BigDecimal.ONE);
+        List<SkuPrice> skuPrice = priceService.getAllCurrentPrices(10000L, product.getDefaultSku().getCode(), shop, "EUR");
         assertNotNull(skuPrice);
-        assertTrue(MoneyUtils.isFirstEqualToSecond(new BigDecimal("1716.67"), skuPrice.getRegularPrice()));
+        assertEquals(1, skuPrice.size());
+        assertNull(skuPrice.get(0).getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.get(0).getRegularPrice()));
+
+        skuPrice = priceService.getAllCurrentPrices(10000L, null, shop, "EUR");
+        assertNotNull(skuPrice);
+        assertEquals(5, skuPrice.size());  // 4 regular prices + 1 tier 2
+        for (int i = 0; i < skuPrice.size(); i++) {
+            assertNotNull(skuPrice.get(i).getRegularPrice());
+
+        }
+
+
     }
 
     @Test
@@ -218,68 +201,68 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     
     @Test
     public void testAddAllTimePrice() {
-        List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
+        List<Pair<String, SkuPrice>> skuPricesForOneSku = getSkuPrices("sku1");
         skuPricesForOneSku.addAll(getSkuPrices("sku2"));
         PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null, null);
         priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
-        List<SkuPrice> rez = new LinkedList<SkuPrice>();
+        List<Pair<String, SkuPrice>> rez = new LinkedList<Pair<String, SkuPrice>>();
         assertTrue(priceServiceImpl.addAllTimePrice(rez, skuPricesForOneSku , System.currentTimeMillis()));
         assertEquals(1, rez.size());
-        assertEquals(11, rez.get(0).getSkuPriceId());
+        assertEquals(11, rez.get(0).getSecond().getSkuPriceId());
     }
 
     @Test
     public void testAddStartPrice() {
-        List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
+        List<Pair<String, SkuPrice>> skuPricesForOneSku = getSkuPrices("sku1");
         PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null, null);
         priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
-        List<SkuPrice> rez = new LinkedList<SkuPrice>();
+        List<Pair<String, SkuPrice>> rez = new LinkedList<Pair<String, SkuPrice>>();
         assertTrue(priceServiceImpl.addStartPrice(rez, skuPricesForOneSku, System.currentTimeMillis()));
         assertEquals(1, rez.size());
-        assertEquals(8, rez.get(0).getSkuPriceId());
+        assertEquals(8, rez.get(0).getSecond().getSkuPriceId());
     }
 
     @Test
     public void testAddEndPrice() {
-        List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
+        List<Pair<String, SkuPrice>> skuPricesForOneSku = getSkuPrices("sku1");
         PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null, null);
         priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
-        List<SkuPrice> rez = new LinkedList<SkuPrice>();
+        List<Pair<String, SkuPrice>> rez = new LinkedList<Pair<String, SkuPrice>>();
         assertTrue(priceServiceImpl.addEndPrice(rez, skuPricesForOneSku, System.currentTimeMillis()));
         assertEquals(1, rez.size());
-        assertEquals(5, rez.get(0).getSkuPriceId());
+        assertEquals(5, rez.get(0).getSecond().getSkuPriceId());
     }
 
     @Test
     public void testAllFramedPrice() {
-        List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
+        List<Pair<String, SkuPrice>> skuPricesForOneSku = getSkuPrices("sku1");
         PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null, null);
         priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
-        List<SkuPrice> rez = new LinkedList<SkuPrice>();
+        List<Pair<String, SkuPrice>> rez = new LinkedList<Pair<String, SkuPrice>>();
         assertTrue(priceServiceImpl.addFramedPrice(rez, skuPricesForOneSku, System.currentTimeMillis()));
         assertEquals(1, rez.size());
-        assertEquals(1, rez.get(0).getSkuPriceId());
+        assertEquals(1, rez.get(0).getSecond().getSkuPriceId());
     }
 
     @Test
     public void testGetSkuPricesFilteredByTimeFrame() {
 
-        List<SkuPrice> skuPricesForOneSku = getSkuPrices("sku1");
+        List<Pair<String, SkuPrice>> skuPricesForOneSku = getSkuPrices("sku1");
 
         skuPricesForOneSku.addAll(getSkuPrices("sku2"));
 
         PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null, null, null);
 
-        List<SkuPrice> rez = priceServiceImpl.getSkuPricesFilteredByTimeFrame(skuPricesForOneSku);
+        List<Pair<String, SkuPrice>> rez = priceServiceImpl.getSkuPricesFilteredByTimeFrame(skuPricesForOneSku);
 
         assertEquals(2, rez.size());
 
-        assertEquals(1, rez.get(0).getSkuPriceId());
-        assertEquals(1, rez.get(1).getSkuPriceId());
+        assertEquals(1, rez.get(0).getSecond().getSkuPriceId());
+        assertEquals(1, rez.get(1).getSecond().getSkuPriceId());
     }
 
 
-    private List<SkuPrice> getSkuPrices(final String skuCode) {
+    private List<Pair<String, SkuPrice>> getSkuPrices(final String skuCode) {
 
 
         //this price will be overwrited by skuPrice1  because of order of adding -  skuPriceId
@@ -342,27 +325,21 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
 
 
 
-        List<SkuPrice> rez =  new ArrayList<SkuPrice>() {{
-            add( skuPrice0 );
-            add( skuPrice1 );
-            add( skuPrice2 );
-            add( skuPrice3 );
-            add( skuPrice4 );
-            add( skuPrice5 );
-            add( skuPrice6 );
-            add( skuPrice7 );
-            add( skuPrice8 );
-            add( skuPrice9 );
-            add( skuPrice10 );
-            add( skuPrice11 );
+        List<Pair<String, SkuPrice>> rez =  new ArrayList<Pair<String, SkuPrice>>() {{
+            add(new Pair<String, SkuPrice>(skuCode, skuPrice0));
+            add(new Pair<String, SkuPrice>(skuCode, skuPrice1));
+            add(new Pair<String, SkuPrice>(skuCode, skuPrice2));
+            add(new Pair<String, SkuPrice>(skuCode, skuPrice3));
+            add(new Pair<String, SkuPrice>(skuCode, skuPrice4));
+            add(new Pair<String, SkuPrice>(skuCode, skuPrice5));
+            add(new Pair<String, SkuPrice>(skuCode, skuPrice6));
+            add(new Pair<String, SkuPrice>(skuCode, skuPrice7));
+            add(new Pair<String, SkuPrice>(skuCode, skuPrice8));
+            add(new Pair<String, SkuPrice>(skuCode, skuPrice9));
+            add(new Pair<String, SkuPrice>(skuCode, skuPrice10));
+            add(new Pair<String, SkuPrice>(skuCode, skuPrice11));
         }};
 
-        for (SkuPrice sp : rez) {
-            ProductSku ps = new ProductSkuEntity();
-            ps.setCode(skuCode);
-            sp.setSku(ps);
-        }
-        
         Collections.shuffle(rez);
 
         return rez;

@@ -1086,7 +1086,7 @@
         </property>
 
 
-        <bag name="skuPrice" inverse="false" lazy="false" cascade="all-delete-orphan" order-by="qty">
+        <bag name="skuPrice" inverse="false" lazy="true" cascade="all-delete-orphan" order-by="qty">
             <key>
                 <column name="SKU_ID" not-null="true"/>
             </key>
@@ -2799,13 +2799,53 @@
         ]]>
     </query>
 
+    <query name="SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP">
+        <![CDATA[
+            select new org.yes.cart.domain.misc.Pair(sp.sku.code, sp)
+            from SkuPriceEntity sp
+            where sp.sku.code = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
+        ]]>
+    </query>
+
+    <query name="SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP">
+        <![CDATA[
+            select new org.yes.cart.domain.misc.Pair(sp.sku.code, sp)
+            from SkuPriceEntity sp
+            where sp.sku.product.productId = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
+        ]]>
+    </query>
+
+    <query name="SKUPRICE.BY.PRODUCT">
+        <![CDATA[
+            select new org.yes.cart.domain.misc.Pair(sp.sku.code, sp)
+            from SkuPriceEntity sp
+            where sp.sku.product.productId = ?1
+        ]]>
+    </query>
+
+    <query name="SKUPRICE.BY.PRODUCT.AND.CURRENCY">
+        <![CDATA[
+            select new org.yes.cart.domain.misc.Pair(sp.sku.code, sp)
+            from SkuPriceEntity sp
+            where sp.sku.product.productId = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
+        ]]>
+    </query>
+
+    <query name="SKUWAREHOUSE.BY.PRODUCT">
+        <![CDATA[
+            select new org.yes.cart.domain.misc.Pair(sw.sku.code, sw)
+            from SkuWarehouseEntity sw
+            where sw.sku.product.productId = ?1
+        ]]>
+    </query>
+
     <query name="REMOVE.ALL.SKU.PRICES">
         <![CDATA[
             delete from SkuPriceEntity  sp   where sp.sku  = ?1
         ]]>
     </query>
 
-    <query name="REMOVE.ALL.SKU.ITEMS">
+    <query name="REMOVE.ALL.SKU.INVENTORY">
         <![CDATA[
             delete from SkuWarehouseEntity  sw   where sw.sku  = ?1
         ]]>

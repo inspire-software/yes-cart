@@ -26,44 +26,50 @@
         <property name="cache.provider_configuration_file_resource_path">ehcache.xml</property>
 
         <property name="hibernate.cache.use_query_cache">true</property>
+        <property name="hibernate.cache.use_second_level_cache">true</property>
         <property name="hibernate.cache.provider_configuration_file_resource_path">ehcache.xml</property>
         <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</property>
         <!--<property name="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.EhCacheRegionFactory</property>-->
 
-        <!--<property name="hibernate.cache.use_second_level_cache">false</property>-->
         <property name="hibernate.search.default.indexBase">${lucene.config.index.dir}</property>
         <property name="hibernate.dialect">${db.config.yes.hibernate.dialect}</property>
-        <property name="hibernate.hbm2ddl.auto">update</property>
-        <property name="show_sql">true</property>
+        <!--<property name="hibernate.hbm2ddl.auto">update</property>-->
+        <!--<property name="show_sql">true</property>-->
+        <!--<property name="hibernate.show_sql">true</property>-->
 
         <!-- validate | update | create | create-drop -->
 
 
-        <class-cache class="org.yes.cart.domain.entity.Category" usage="read-only"/>
-        <collection-cache collection="org.yes.cart.domain.entity.impl.CategoryEntity.attribute" usage="read-only"/>
-        <collection-cache collection="org.yes.cart.domain.entity.impl.CategoryEntity.productCategory" usage="read-only"/>
+        <class-cache class="org.yes.cart.domain.entity.impl.CategoryEntity" usage="transactional"/>
+        <collection-cache collection="org.yes.cart.domain.entity.impl.CategoryEntity.attributes" usage="transactional"/>
+        <collection-cache collection="org.yes.cart.domain.entity.impl.CategoryEntity.productCategory" usage="transactional"/>
 
-        <class-cache class="org.yes.cart.domain.entity.ProductCategory" usage="read-only"/>
+        <class-cache class="org.yes.cart.domain.entity.impl.ProductCategoryEntity" usage="transactional"/>
 
-        <class-cache class="org.yes.cart.domain.entity.AttributeGroup" usage="read-only"/>
+        <class-cache class="org.yes.cart.domain.entity.impl.AttributeGroupEntity" usage="transactional"/>
 
+        <class-cache class="org.yes.cart.domain.entity.impl.ProductEntity" usage="transactional"/>
+        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.sku" usage="transactional"/>
+        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.productAssociations" usage="transactional"/>
+        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.ensebleOption" usage="transactional"/>
+        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.attributes" usage="transactional"/>
 
+        <class-cache class="org.yes.cart.domain.entity.impl.EtypeEntity" usage="transactional"/>
+        <!--<collection-cache collection="org.yes.cart.domain.entity.impl.EtypeEntity.attributes" usage="transactional"/>-->
 
-        <class-cache class="org.yes.cart.domain.entity.Product" usage="read-only"/>
-        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.sku" usage="read-only"/>
-        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.productAssociations" usage="read-only"/>
-        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.ensebleOption" usage="read-only"/>
-        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.attribute" usage="read-only"/>
+        <class-cache class="org.yes.cart.domain.entity.impl.AttributeEntity" usage="transactional"/>
 
-        <class-cache class="org.yes.cart.domain.entity.Etype" usage="read-only"/>
-        <!--<collection-cache collection="org.yes.cart.domain.entity.impl.EtypeEntity.attributes" usage="read-only"/>-->
+        <class-cache class="org.yes.cart.domain.entity.impl.ProductTypeEntity" usage="transactional"/>
+        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductTypeEntity.attributeViewGroup" usage="transactional"/>
+        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductTypeEntity.attributes" usage="transactional"/>
 
-        <class-cache class="org.yes.cart.domain.entity.Attribute" usage="read-only"/>
+        <class-cache class="org.yes.cart.domain.entity.impl.BrandEntity" usage="transactional"/>
 
-        <class-cache class="org.yes.cart.domain.entity.ProductType" usage="read-only"/>
-        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductTypeEntity.attributeViewGroup" usage="read-only"/>
-        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductTypeEntity.attribute" usage="read-only"/>
+        <class-cache class="org.yes.cart.domain.entity.impl.CustomerEntity" usage="transactional"/>
 
+        <class-cache class="org.yes.cart.domain.entity.impl.CarrierSlaEntity" usage="transactional"/>
+
+        <class-cache class="org.yes.cart.domain.entity.impl.ShopEntity" usage="transactional"/>
 
 
     </session-factory>

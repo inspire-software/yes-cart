@@ -176,8 +176,8 @@ public class RemoteProductSkuServiceImpl
     }
 
     /** {@inheritDoc} */
-    public void removeAllItems(long productId) {
-        dtoProductSkuService.removeAllItems(productId);
+    public void removeAllInventory(long productId) {
+        dtoProductSkuService.removeAllInventory(productId);
         reindexService.reindexProduct(productId);
     }
 

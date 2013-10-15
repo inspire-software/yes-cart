@@ -66,13 +66,17 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
      * to enforce changes to take immediate effect on the storefront.
      */
     private void flushCache() {
-        safeFlushCache(cacheManager.getCache("org.yes.cart.service.domain.impl.PriceServiceImpl.cache"));
-        safeFlushCache(cacheManager.getCache("org.yes.cart.service.domain.impl.ProductServiceImpl.cache"));
-        safeFlushCache(cacheManager.getCache("org.yes.cart.web.decoratedProductCache"));
-        safeFlushCache(cacheManager.getCache("org.yes.cart.web.seoProductDecodeCache"));
-        safeFlushCache(cacheManager.getCache("org.yes.cart.web.seoProductEncodeCache"));
-        safeFlushCache(cacheManager.getCache("org.yes.cart.web.seoSkuDecodeCache"));
-        safeFlushCache(cacheManager.getCache("org.yes.cart.web.seoSkuEncodeCache"));
+        safeFlushCache(cacheManager.getCache("priceService-minimalRegularPrice"));
+        safeFlushCache(cacheManager.getCache("priceService-allCurrentPrices"));
+        safeFlushCache(cacheManager.getCache("productService-productById"));
+        safeFlushCache(cacheManager.getCache("productService-skuById"));
+        safeFlushCache(cacheManager.getCache("productService-productBySkuCode"));
+        safeFlushCache(cacheManager.getCache("productSkuService-productSkuBySkuCode"));
+        safeFlushCache(cacheManager.getCache("web.decoratorFacade-decorate"));
+        safeFlushCache(cacheManager.getCache("web.bookmarkService-seoProductDecode"));
+        safeFlushCache(cacheManager.getCache("web.bookmarkService-seoProductEncode"));
+        safeFlushCache(cacheManager.getCache("web.bookmarkService-seoSkuDecode"));
+        safeFlushCache(cacheManager.getCache("web.bookmarkService-seoSkuEncode"));
     }
 
     private void safeFlushCache(final Cache cache) {

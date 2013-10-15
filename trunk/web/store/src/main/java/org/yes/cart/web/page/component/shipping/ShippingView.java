@@ -72,7 +72,7 @@ public class ShippingView extends BaseComponent {
 
 
     /**
-     * Restore carrier by sla from shoppint cart into current model.
+     * Restore carrier by sla from shopping cart into current model.
      *
      * @param carriers list of carriers
      */

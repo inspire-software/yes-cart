@@ -204,7 +204,7 @@
     <cache name="priceService-minimalRegularPrice"      maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
-    <cache name="priceService-minimalRegularPrice2"      maxElementsInMemory="5000" overflowToDisk="false"
+    <cache name="priceService-allCurrentPrices"      maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
 
@@ -375,70 +375,93 @@
     <cache name="org.yes.cart.domain.entity.impl.ProductTypeEntity.attribute" maxElementsInMemory="1000"
            overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
 
+    <cache name="org.yes.cart.domain.entity.impl.BrandEntity" maxElementsInMemory="100"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
 
+    <cache name="org.yes.cart.domain.entity.impl.CustomerEntity" maxElementsInMemory="1000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
 
+    <cache name="org.yes.cart.domain.entity.impl.CarrierSlaEntity" maxElementsInMemory="1000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ShopEntity" maxElementsInMemory="10"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
 
 
 
     <!-- ############################################# seo cache #######################################-->
 
-    <cache name="web.bookmarkService-seoCategoryDecodeCache"
+    <cache name="web.bookmarkService-seoCategoryDecode"
            maxElementsInMemory="200"
            overflowToDisk="true"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
-    <cache name="web.bookmarkService-seoCategoryEncodeCache"
+    <cache name="web.bookmarkService-seoCategoryEncode"
            maxElementsInMemory="200"
            overflowToDisk="true"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
-    <cache name="web.bookmarkService-seoContentDecodeCache"
+    <cache name="web.bookmarkService-seoContentDecode"
            maxElementsInMemory="1000"
            overflowToDisk="true"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
-    <cache name="web.bookmarkService-seoContentEncodeCache"
+    <cache name="web.bookmarkService-seoContentEncode"
            maxElementsInMemory="1000"
            overflowToDisk="true"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
-    <cache name="web.bookmarkService-seoSkuDecodeCache"
+    <cache name="web.bookmarkService-seoSkuDecode"
            maxElementsInMemory="15000"
            overflowToDisk="true"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
-    <cache name="web.bookmarkService-seoSkuEncodeCache"
+    <cache name="web.bookmarkService-seoSkuEncode"
            maxElementsInMemory="15000"
            overflowToDisk="true"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
-    <cache name="web.bookmarkService-seoProductDecodeCache"
+    <cache name="web.bookmarkService-seoProductDecode"
            maxElementsInMemory="5000"
            overflowToDisk="true"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
-    <cache name="web.bookmarkService-seoProductEncodeCache"
+    <cache name="web.bookmarkService-seoProductEncode"
            maxElementsInMemory="5000"
            overflowToDisk="true"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
-    <cache name="org.yes.cart.web.decoratedProductCache"
+    <cache name="web.decoratorFacade-decorate"
            maxElementsInMemory="5000"
            overflowToDisk="true"
            eternal="false"
-           timeToLiveSeconds="3600"
-           timeToIdleSeconds="1800"/>
+           timeToLiveSeconds="600"
+           timeToIdleSeconds="120"/>
+
+    <cache name="web.addressBookFacade-findAllCountries"
+           maxElementsInMemory="10"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+    <cache name="web.addressBookFacade-findStatesByCountry"
+           maxElementsInMemory="200"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
 
 </ehcache>

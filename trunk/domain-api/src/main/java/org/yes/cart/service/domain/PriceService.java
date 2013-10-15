@@ -41,110 +41,46 @@ public interface PriceService extends GenericService<SkuPrice> {
      * Exchange rate will be used for recalculate price if price does not present
      * in price list for given currency.
      *
-     * @param productId  product id
+     *
+     * @param productId    optional product to filter the prices. If null the price will be chosen by selectedSku.
+     * @param selectedSku  optional sku to filter the prices. if null all product skus will be  considered to
+     *                     determine minimal price
      * @param shop         shop            sku will be c
-     * @param selectedSku  optional sku to filter the prices. if null all product skus will be  considered to determinate minimal price
      * @param currencyCode desirable currency
      * @param quantity     quantity
-     * @return SkuPrice
+     *
+     * @return lowest available sku price
      */
-    SkuPrice getMinimalRegularPrice(
-            final long productId,
-            final String selectedSku,
-            final Shop shop,
-            final String currencyCode,
-            final BigDecimal quantity);
-
+    SkuPrice getMinimalRegularPrice(final Long productId,
+                                    final String selectedSku,
+                                    final Shop shop,
+                                    final String currencyCode,
+                                    final BigDecimal quantity);
 
     /**
-     * Get minimal price for given product skus (all), shop, currency and quantity.
-     * Exchange rate will be used for recalculate price if price does not present
-     * in price list for given currency.
+     * Get all prices for given product skus (all), shop, currency and quantity.
      *
-     * @param productSkus  product skus
+     * @param productId    optional product to filter the prices. If null the price will be chosen by selectedSku.
+     * @param selectedSku  optional sku to filter the prices. if null all product skus will be  considered to
+     *                     determine minimal price
      * @param shop         shop            sku will be c
-     * @param selectedSku  optional sku to filter the prices. if null all product skus will be  considered to determinate minimal price
      * @param currencyCode desirable currency
-     * @param quantity     quantity
-     * @return SkuPrice
-     */
-    SkuPrice getMinimalRegularPrice(
-            final Collection<ProductSku> productSkus,
-            final String selectedSku,
-            final Shop shop,
-            final String currencyCode,
-            final BigDecimal quantity);
-
-
-
-
-    /**
-     * Atm we can have different price definitions (lowest in list with high priority):
-     * price without any time limitations;
-     * price, which starts in infinitive past and will be end at some date;
-     * price, which has the start date but no end date;
-     * price with start and end date.
      *
-     * @param skuPrices all prices filtered by currency, and quantity for all skus
-     * @return the list of sku prices, which is filtered by time frame
+     * @return lowest available sku price
      */
-    List<SkuPrice> getSkuPricesFilteredByTimeFrame(Collection<SkuPrice> skuPrices);
+    List<SkuPrice> getAllCurrentPrices(final Long productId,
+                                       final String selectedSku,
+                                       final Shop shop,
+                                       final String currencyCode);
 
-
-    /**
-     * Get the sku prices filtered by shop.
-     * Exchange rate will be used if shop has not prices
-     * for gived curency.
-     *
-     * @param productSkus  product skus
-     * @param shop         shop filter
-     * @param currencyCode currency code
-     * @return list of sku prices
-     */
-    List<SkuPrice> getSkuPrices(Collection<ProductSku> productSkus, Shop shop, String currencyCode);
-
-
-    /**
-     * Get the sku prices filtered by quantity. Example:
-     * ProductSKU1 has defined price ties 1 - 100 USD, 2 - 87 USD, 5 - 85 USD
-     * ProductSKU2 has defined price ties 1 - 100 USD, 2 - 98 USD, 3 - 90 USD
-     * <p/>
-     * For quantity 4 result will hold only two SkuPrice:
-     * ProductSKU1 87 USD
-     * ProductSKU2 90 USD
-     *
-     * @param prices   sku prices
-     * @param quantity
-     * @return list of sku prices filtered by quantity
-     */
-    List<SkuPrice> getSkuPricesFilteredByQuantity(List<SkuPrice> prices, BigDecimal quantity);
-
-
-    /**
-     * Get the list of skus prices filtered by currency.
-     *
-     * @param skuPrices    sku prices with all currencies
-     * @param currencyCode currency code filter
-     * @return list of skus prices filtered by currency code
-     */
-    List<SkuPrice> getSkuPriceFilteredByCurrency(List<SkuPrice> skuPrices, String currencyCode);
-
-    /**
-     * Get the list of skus prices filtered by shop.
-     *
-     * @param productSkus produc skus
-     * @param shop        shop
-     * @return list of skus prices filtered by shop
-     */
-    List<SkuPrice> getSkuPriceFilteredByShop(Collection<ProductSku> productSkus, Shop shop);
 
     /**
      * Get navigation records for prices
      *
      * @param priceTierTree given price tier tree
-     * @param currency      currence code
-     * @param shop          currenct shop
-     * @return list of navigation records for given price tree and currecny
+     * @param currency      currency code
+     * @param shop          currency shop
+     * @return list of navigation records for given price tree and currency
      */
     List<FilteredNavigationRecord> getPriceNavigationRecords(
             PriceTierTree priceTierTree,
@@ -154,7 +90,7 @@ public interface PriceService extends GenericService<SkuPrice> {
     /**
      * Recalculate derived prices. Derived prices - prices not in default currency, for example default shop currency is
      * USD and shop support EUR also, but has not price lists for EUR currency and used currency exchange rate instead.
-     * Use delete / insert paragigm instead of insert/update.
+     * Use delete / insert paradigm instead of insert/update.
      *
      * @param shop            shop
      * @param derivedCurrency target currency

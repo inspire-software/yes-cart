@@ -142,7 +142,7 @@
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
           autowire="byName">
-        <property name="configLocation" value="classpath:hibernate-nc.cfg.xml"/>
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
         <property name="mappingResources">
             <list>
                 <value>hibernate/yc.xml</value>

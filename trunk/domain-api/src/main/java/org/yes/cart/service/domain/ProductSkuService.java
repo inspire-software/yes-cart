@@ -17,8 +17,12 @@
 package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.domain.misc.Pair;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -53,28 +57,46 @@ public interface ProductSkuService extends GenericService<ProductSku> {
     ProductSku getProductSkuBySkuCode(String skuCode);
 
     /**
+     * Get all sku prices for all shops.
+     *
+     * @param productId product pk value
+     */
+    List<Pair<String, SkuPrice>> getAllPrices(long productId);
+
+    /**
+     * Get all sku inventory for all shops.
+     *
+     * @param productId product pk value
+     */
+    List<Pair<String, SkuWarehouse>> getAllInventory(long productId);
+
+    /**
      * Remove all sku prices from all shops.
+     *
      * @param productId product pk value
      */
     void removeAllPrices(long productId);
 
     /**
      * Remove from all warehouses.
+     *
      * @param productId product pk value
      */
-    void removeAllItems(long productId);
+    void removeAllInventory(long productId);
 
     /**
      * Remove all prices for given sku.
+     *
      * @param sku  given sku.
      */
     void removeAllPrices(final ProductSku sku);
 
     /**
      * Remove all items for warehouse for given sku
+     *
      * @param sku  given sku.
      */
-    void removeAllItems(final ProductSku sku);
+    void removeAllInventory(final ProductSku sku);
 
 
 }
