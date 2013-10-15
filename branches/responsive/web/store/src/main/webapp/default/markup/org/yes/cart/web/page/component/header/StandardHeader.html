@@ -21,7 +21,7 @@
         &nbsp;
     </div>
     <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-25 mobile-grid-25">
+        <div class="grid-25 hide-on-mobile">
             <p>
                 <wicket:link>
                     <a href="HomePage.html">
@@ -33,52 +33,78 @@
             </p>
         </div>
 
-        <div class="grid-50 mobile-grid-50" style="padding-top: 10px;">
+        <div class="grid-50 mobile-grid-75" style="padding-top: 10px;">
             <p>
                 <wicket:container wicket:id="search">
                     [search]
                 </wicket:container>
             </p>
         </div>
-        <div class="grid-25 mobile-grid-25">
+        <div class="grid-25 mobile-grid-25" style="padding-top: 10px; text-align: right;">
             <p align="right">
                 <wicket:container wicket:id="smallCart">
                     [small shopping cart]
+                </wicket:container>
+            </p>
+            <p align="right">
+                <wicket:container wicket:id="logout">
+                    [logout language]
                 </wicket:container>
             </p>
         </div>
 
     </div>
 
-    <div class="grid-100 mobile-grid-100 grid-parent" style="text-align: right;">
-        <div class="g-plusone" data-size="medium"></div>
-        <script type="text/javascript">
-            (function () {
-                var po = document.createElement('script');
-                po.type = 'text/javascript';
-                po.async = true;
-                po.src = 'https://apis.google.com/js/plusone.js';
-                var s = document.getElementsByTagName('script')[0];
-                s.parentNode.insertBefore(po, s);
-            })();
-        </script>
-        &nbsp;
-        <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="yescart">Tweet</a>
-        <script>!function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-            if (!d.getElementById(id)) {
-                js = d.createElement(s);
-                js.id = id;
-                js.src = p + '://platform.twitter.com/widgets.js';
-                fjs.parentNode.insertBefore(js, fjs);
-            }
-        }(document, 'script', 'twitter-wjs');</script>
-        &nbsp;
-        <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.yes-cart.org&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21"
-                scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:110px; height:21px;"
-                allowTransparency="true">
+    <div class="grid-100 mobile-grid-100 grid-parent">
 
-        </iframe>
+        <div class="grid-40 hide-on-mobile grid-parent">
+            <div class="g-plusone" data-size="medium"></div>
+            <script type="text/javascript">
+                (function () {
+                    var po = document.createElement('script');
+                    po.type = 'text/javascript';
+                    po.async = true;
+                    po.src = 'https://apis.google.com/js/plusone.js';
+                    var s = document.getElementsByTagName('script')[0];
+                    s.parentNode.insertBefore(po, s);
+                })();
+            </script>
+            &nbsp;
+            <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="yescart">Tweet</a>
+            <script>!function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                if (!d.getElementById(id)) {
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = p + '://platform.twitter.com/widgets.js';
+                    fjs.parentNode.insertBefore(js, fjs);
+                }
+            }(document, 'script', 'twitter-wjs');</script>
+            &nbsp;
+            <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.yes-cart.org&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21"
+                    scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:110px; height:21px;"
+                    allowTransparency="true">
+
+            </iframe>
+        </div>
+
+        <div class="grid-60 mobile-grid-100 grid-parent" style="text-align: right;">
+
+            <div class="grid-60 mobile-grid-50 grid-parent">
+                <wicket:container wicket:id="language">
+                    [switch language]
+                </wicket:container>
+            </div>
+
+            <div class="grid-40 mobile-grid-50 grid-parent" style="text-align: right;">
+                <wicket:container wicket:id="currency">
+                    [switch currency]
+                </wicket:container>
+            </div>
+
+        </div>
+
+
     </div>
 
     <script>
@@ -191,37 +217,6 @@
     </div>
 
 
-    <div class="grid-100 mobile-grid-100  grid-parent">
-        <div class="grid-25 mobile-grid-50">
-            <p>
-                aaaaaaaaaaaaaa
-            </p>
-        </div>
-        <div class="grid-50 hide-on-mobile">
-            <p>
-                <wicket:container wicket:id="featured">
-                    [featured products]
-                </wicket:container>
-            </p>
-        </div>
-        <div class="grid-25 mobile-grid-50">
-            <p align="right">
-                <wicket:container wicket:id="currency">
-                    [switch currency]
-                </wicket:container>
-            </p>
-            <p align="right">
-                <wicket:container wicket:id="language">
-                    [switch language]
-                </wicket:container>
-            </p>
-            <p align="right">
-                <wicket:container wicket:id="logout">
-                    [logout language]
-                </wicket:container>
-            </p>
-        </div>
-    </div>
 
 </wicket:panel>
 </body>

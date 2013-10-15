@@ -18,16 +18,18 @@
 <body>
 <wicket:panel>
 
-    <div class="grid-100 mobile-grid-100 breadcrumb">
-        <ul id="breadcrumbsId" class="breadcrumb">
-            <li>
-                <a href="HomePage.html"><span><wicket:message key="home">[Home]</wicket:message></span></a>
-            </li>
-            <li wicket:id="breadcrumbs">
-                <a wicket:id="link"><span wicket:id="linkName"></span></a>
-                <a wicket:id="remLink"><span>x</span></a>
-            </li>
-        </ul>
+    <div class="grid-100 mobile-grid-100" style="padding-right: 0px; padding-left: 0px;">
+        <div class="breadcrumb">
+            <ul id="breadcrumbsId">
+                <li>
+                    <a href="HomePage.html"><span><wicket:message key="home">[Home]</wicket:message></span></a>
+                </li>
+                <li wicket:id="breadcrumbs">
+                    <a wicket:id="link"><span wicket:id="linkName"></span></a>
+                    <a wicket:id="remLink"><span>x</span></a>
+                </li>
+            </ul>
+        </div>
     </div>
 
 </wicket:panel>

@@ -63,11 +63,20 @@
         </wicket:container>
     </div>
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <wicket:container wicket:id="breadCrumbs">
-            [bread crumbs]
-        </wicket:container>
+    <div class="grid-100 hide-on-mobile grid-parent">
+        <div class="grid-100 hide-on-mobile">
+            <p>
+                <wicket:container wicket:id="featured">
+                    [featured products]
+                </wicket:container>
+            </p>
+        </div>
     </div>
+
+
+    <wicket:container wicket:id="breadCrumbs">
+        [bread crumbs]
+    </wicket:container>
 
     <div class="grid-100 mobile-grid-100 grid-parent">
         <div class="grid-20 mobile-grid-30 grid-parent">
