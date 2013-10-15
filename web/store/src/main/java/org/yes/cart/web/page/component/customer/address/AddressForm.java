@@ -27,15 +27,15 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.service.domain.AddressService;
-import org.yes.cart.service.domain.CountryService;
 import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.StateService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.util.CountryModel;
 import org.yes.cart.web.page.component.util.CountryRenderer;
 import org.yes.cart.web.page.component.util.StateModel;
 import org.yes.cart.web.page.component.util.StateRenderer;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.AddressBookFacade;
 
 import java.util.List;
 
@@ -69,18 +69,11 @@ public class AddressForm extends Form<Address> {
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
     private CustomerService customerService;
 
-    @SpringBean(name = ServiceSpringKeys.ADDRESS_SERVICE)
-    private AddressService addressService;
+    @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
+    private AddressBookFacade addressBookFacade;
 
-    @SpringBean(name = ServiceSpringKeys.COUNTRY_SERVICE)
-    private CountryService countryService;
-
-    @SpringBean(name = ServiceSpringKeys.STATE_SERVICE)
-    private StateService stateService;
-
-
-    private final Class<? extends Page> succsessPage;
-    private final PageParameters succsessPageParameters;
+    private final Class<? extends Page> successPage;
+    private final PageParameters successPageParameters;
 
     /**
      * Create address form.
@@ -88,23 +81,23 @@ public class AddressForm extends Form<Address> {
      * @param s                      form id
      * @param addressIModel          address model.
      * @param addressType            address type
-     * @param succsessPage           succsess page class
-     * @param succsessPageParameters succsess page parameters
+     * @param successPage            success page class
+     * @param successPageParameters  success page parameters
      * @param cancelPage             optional cancel page class
      * @param cancelPageParameters   optional  cancel page parameters
      */
     public AddressForm(final String s,
                        final IModel<Address> addressIModel,
                        final String addressType,
-                       final Class<? extends Page> succsessPage,
-                       final PageParameters succsessPageParameters,
+                       final Class<? extends Page> successPage,
+                       final PageParameters successPageParameters,
                        final Class<? extends Page> cancelPage,
                        final PageParameters cancelPageParameters) {
 
         super(s, addressIModel);
 
-        this.succsessPage = succsessPage;
-        this.succsessPageParameters = succsessPageParameters;
+        this.successPage = successPage;
+        this.successPageParameters = successPageParameters;
 
 
         final Address address = addressIModel.getObject();
@@ -118,7 +111,7 @@ public class AddressForm extends Form<Address> {
 
 
         final List<State> stateList = getStateList(address.getCountryCode());
-        final List<Country> countryList = countryService.findAll();
+        final List<Country> countryList = addressBookFacade.findAllCountries(ShopCodeContext.getShopCode());
 
         final AbstractChoice<State, State> stateDropDownChoice = new DropDownChoice<State>(
                 STATE,
@@ -176,12 +169,8 @@ public class AddressForm extends Form<Address> {
                     @Override
                     public void onSubmit() {
                         final Address addr = getModelObject();
-                        if (addr.getAddressId() == 0) {
-                            addressService.create(addr);
-                        } else {
-                            addressService.update(addr);
-                        }
-                        setResponsePage(succsessPage, succsessPageParameters);
+                        addressBookFacade.createOrUpdate(addr);
+                        setResponsePage(successPage, successPageParameters);
                     }
 
                 }
@@ -201,7 +190,7 @@ public class AddressForm extends Form<Address> {
     /**
      * Fill some data in case of new {@link Address}
      *
-     * @param addressType addres type
+     * @param addressType address type
      * @param address     address to preprocess
      * @param customer    customer.
      */
@@ -234,11 +223,11 @@ public class AddressForm extends Form<Address> {
     /**
      * Get states inside selected country.
      *
-     * @param countryCode country ot retrive the states.
+     * @param countryCode country ot retrieve the states.
      * @return state list inside selected country.
      */
     private List<State> getStateList(final String countryCode) {
-        return stateService.findByCountry(countryCode);
+        return addressBookFacade.findStatesByCountry(countryCode);
     }
 
 

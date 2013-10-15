@@ -380,6 +380,13 @@
         </constructor-arg>
     </bean>
 
+    <bean id="addressBookFacade" class="org.yes.cart.web.support.service.impl.AddressBookFacadeImpl">
+        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="addressService"/>
+        <constructor-arg index="2" ref="countryService"/>
+        <constructor-arg index="3" ref="stateService"/>
+    </bean>
+
 
     <!-- ############################ Category , Product and Sku image services end ############################### -->
 
