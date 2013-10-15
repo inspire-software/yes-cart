@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
 import org.springframework.cache.annotation.CacheEvict;
@@ -478,8 +479,16 @@ public class PriceServiceImpl
                                                                            final Shop shop,
                                                                            final String currencyCode) {
 
-        return (List) getGenericDao().findQueryObjectByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP",
+        final List<Object[]> prices = (List) getGenericDao().findQueryObjectByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP",
                 skuCode, currencyCode, shop.getShopId());
+        if (CollectionUtils.isNotEmpty(prices)) {
+            final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
+            for (final Object[] price : prices) {
+                rez.add(new Pair<String, SkuPrice>((String) price[1], (SkuPrice) price[0]));
+            }
+            return rez;
+        }
+        return Collections.emptyList();
 
     }
 
@@ -487,8 +496,16 @@ public class PriceServiceImpl
                                                                            final Shop shop,
                                                                            final String currencyCode) {
 
-        return (List) getGenericDao().findQueryObjectByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP",
+        final List<Object[]> prices = (List) getGenericDao().findQueryObjectByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP",
                 productId, currencyCode, shop.getShopId());
+        if (CollectionUtils.isNotEmpty(prices)) {
+            final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
+            for (final Object[] price : prices) {
+                rez.add(new Pair<String, SkuPrice>((String) price[1], (SkuPrice) price[0]));
+            }
+            return rez;
+        }
+        return Collections.emptyList();
 
     }
 
