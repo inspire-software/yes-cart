@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,7 +28,9 @@ import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ProductSkuService;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -84,14 +87,30 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * {@inheritDoc}
      */
     public List<Pair<String, SkuPrice>> getAllPrices(final long productId) {
-        return (List) getGenericDao().findQueryObjectsByNamedQuery("SKUPRICE.BY.PRODUCT", productId);
+        final List<Object[]> prices = (List) getGenericDao().findQueryObjectsByNamedQuery("SKUPRICE.BY.PRODUCT", productId);
+        if (CollectionUtils.isNotEmpty(prices)) {
+            final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
+            for (final Object[] price : prices) {
+                rez.add(new Pair<String, SkuPrice>((String) price[1], (SkuPrice) price[0]));
+            }
+            return rez;
+        }
+        return Collections.emptyList();
     }
 
     /**
      * {@inheritDoc}
      */
     public List<Pair<String, SkuWarehouse>> getAllInventory(final long productId) {
-        return (List) getGenericDao().findQueryObjectsByNamedQuery("SKUWAREHOUSE.BY.PRODUCT", productId);
+        final List<Object[]> inventory = (List) getGenericDao().findQueryObjectsByNamedQuery("SKUWAREHOUSE.BY.PRODUCT", productId);
+        if (CollectionUtils.isNotEmpty(inventory)) {
+            final List<Pair<String, SkuWarehouse>> rez = new ArrayList<Pair<String, SkuWarehouse>>(inventory.size());
+            for (final Object[] price : inventory) {
+                rez.add(new Pair<String, SkuWarehouse>((String) price[1], (SkuWarehouse) price[0]));
+            }
+            return rez;
+        }
+        return Collections.emptyList();
     }
 
     /**
