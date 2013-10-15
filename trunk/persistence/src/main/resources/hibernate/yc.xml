@@ -990,7 +990,7 @@
         </bag>
 
 
-        <set name="ensebleOption" inverse="false" lazy="false" cascade="all">
+        <set name="ensebleOption" inverse="false" lazy="true" cascade="all">
             <key>
                 <column name="PRODUCT_ID" not-null="false"/>
             </key>
@@ -1697,7 +1697,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="email" type="string" column="EMAIL" length="255" unique-key="CUSTOMER_GUID" not-null="true"/>
+        <property name="email" type="string" column="EMAIL" length="255" unique-key="CUSTOMER_EMAIL" not-null="true"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
@@ -1834,12 +1834,12 @@
                 <comment>Payment gateway label</comment>
             </column>
         </property>
-        <property name="ordernum" type="string" length="16" not-null="true">
+        <property name="ordernum" type="string" length="16" not-null="true" index="CUSTOMERORDER_NUM">
             <column name="ORDERNUM">
                 <comment>Depends from order num producer.</comment>
             </column>
         </property>
-        <property name="cartGuid" column="CART_GUID" type="string" length="36" not-null="true"/>
+        <property name="cartGuid" column="CART_GUID" type="string" length="36" index="CUSTOMERORDER_CART" not-null="true"/>
         <property name="currency" column="CURRENCY" type="string" length="3" not-null="true"/>
         <property name="locale" column="LOCALE" type="string" length="5" not-null="true"/>
         <property name="orderMessage" type="string" length="4000">
@@ -2801,41 +2801,33 @@
 
     <query name="SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP">
         <![CDATA[
-            select new org.yes.cart.domain.misc.Pair(sp.sku.code, sp)
-            from SkuPriceEntity sp
-            where sp.sku.code = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
+            select sp, s.code
+            from SkuPriceEntity sp join sp.sku as s
+            where s.code = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
         ]]>
     </query>
 
     <query name="SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP">
         <![CDATA[
-            select new org.yes.cart.domain.misc.Pair(sp.sku.code, sp)
-            from SkuPriceEntity sp
-            where sp.sku.product.productId = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
+            select sp, s.code
+            from SkuPriceEntity sp join sp.sku as s
+            where s.product.productId = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
         ]]>
     </query>
 
     <query name="SKUPRICE.BY.PRODUCT">
         <![CDATA[
-            select new org.yes.cart.domain.misc.Pair(sp.sku.code, sp)
-            from SkuPriceEntity sp
-            where sp.sku.product.productId = ?1
-        ]]>
-    </query>
-
-    <query name="SKUPRICE.BY.PRODUCT.AND.CURRENCY">
-        <![CDATA[
-            select new org.yes.cart.domain.misc.Pair(sp.sku.code, sp)
-            from SkuPriceEntity sp
-            where sp.sku.product.productId = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
+            select sp, s.code
+            from SkuPriceEntity sp join sp.sku as s
+            where s.product.productId = ?1
         ]]>
     </query>
 
     <query name="SKUWAREHOUSE.BY.PRODUCT">
         <![CDATA[
-            select new org.yes.cart.domain.misc.Pair(sw.sku.code, sw)
-            from SkuWarehouseEntity sw
-            where sw.sku.product.productId = ?1
+            select sw, s.code
+            from SkuWarehouseEntity sw join sw.sku as s
+            where s.product.productId = ?1
         ]]>
     </query>
 
