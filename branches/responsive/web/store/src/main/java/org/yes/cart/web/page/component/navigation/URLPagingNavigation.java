@@ -34,14 +34,12 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
  */
 public class URLPagingNavigation extends PagingNavigation {
 
-    private final String activePageLinkHtmlClass;
 
     /**
      * {@inheritDoc}
      */
-    public URLPagingNavigation(final String s, final IPageable iPageable, final IPagingLabelProvider iPagingLabelProvider, final String activePageLinkHtmlClass) {
+    public URLPagingNavigation(final String s, final IPageable iPageable, final IPagingLabelProvider iPagingLabelProvider) {
         super(s, iPageable, iPagingLabelProvider);
-        this.activePageLinkHtmlClass = activePageLinkHtmlClass;
         setViewSize(5);
     }
 
@@ -57,7 +55,7 @@ public class URLPagingNavigation extends PagingNavigation {
         pageParameters.set(WebParametersKeys.PAGE, pageIndex);
 
         final Link rez = links.newLink(id, pageParameters);
-        pagination.markSelectedPageLink(rez, activePageLinkHtmlClass, getPage().getPageParameters(), pageIndex);
+        pagination.markSelectedPageLink(rez, getPage().getPageParameters(), pageIndex);
 
         return  rez;
     }

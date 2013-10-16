@@ -19,24 +19,20 @@
 <wicket:panel>
 
     <div class="grid-100 mobile-grid-100 grid-parent">
-        <table width="96%" align="center">
-            <tr>
-                <td>
-                    <wicket:container wicket:id="sorter">
-                        [sorter]
-                    </wicket:container>
-                </td>
-                <td align="right">
-                    <span><wicket:message key="items">[items]</wicket:message></span>
-                    <wicket:container wicket:id="itemsPerPageList">
-                        <a wicket:id="itemsPerPage"><span wicket:id="items"/></a>
-                    </wicket:container>
-                </td>
-                <td colspan="2" align="right">
-                    <span wicket:id="paginator">[dataview navigator]</span>
-                </td>
-            </tr>
-        </table>
+
+        <div class="grid-65 mobile-grid-100 grid-parent">
+            <wicket:container wicket:id="sorter">
+                [sorter]
+            </wicket:container>
+        </div>
+
+        <div class="grid-35 hide-on-mobile grid-parent" style="text-align: right">
+            <span><wicket:message key="items">[items]</wicket:message></span>
+            <wicket:container wicket:id="itemsPerPageList">
+                <a wicket:id="itemsPerPage"><span wicket:id="items"/></a>
+            </wicket:container>
+        </div>
+
     </div>
 
 
@@ -49,6 +45,11 @@
             </td>
         </tr>
     </table>
+
+    <div class="grid-100 mobile-grid-100 grid-parent" style="text-align: center;">
+        <span wicket:id="paginator">[dataview navigator]</span>
+    </div>
+
 </wicket:panel>
 
 </body>

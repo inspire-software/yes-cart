@@ -554,6 +554,27 @@ a.active-category {
 }
 
 
+/* -- product, sku  ------------------------------------------------------------ */
+
+.product-tittle {
+    color: #000000;
+    font-size: 20px;
+}
+
+.product-tittle a:hover {
+    color: #f52f11;
+    font-size: 20px;
+
+}
+
+.product-sku-code {
+    color: #000000;
+}
+
+.product-sku-code a:hover {
+    color: #f52f11;
+}
+
 /* -- PRICE ------------------------------------------------------------ */
 
 .regular-price-whole {
@@ -693,7 +714,7 @@ a.active-category {
 }
 
 
-.currency-active, .language-active, .items-per-page-active {
+.currency-active, .language-active, .items-per-page-active, .sort-order-active, .nav-page-active {
     display: inline-block;
     outline: none;
     cursor: pointer;
@@ -705,7 +726,7 @@ a.active-category {
     border: 1px solid #000000;
 }
 
-.currency, .language, .items-per-page  {
+.currency, .language, .items-per-page, .sort-order, .nav-page, .nav-page-control  {
     display: inline-block;
     outline: none;
     cursor: pointer;

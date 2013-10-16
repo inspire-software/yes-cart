@@ -21,10 +21,10 @@
 
     <div class="grid-100 mobile-grid-100 grid-parent">
 
-        <div class="grid-100 mobile-grid-100" style="min-height: 65px">
+        <div class="grid-100 mobile-grid-100" style="min-height: 65px; height: 65px; overflow: hidden;">
             <p align="justify">
-                <a wicket:id="productLinkName">
-                    <span class="grafik-tittle" wicket:id="name">[name]</span>
+                <a wicket:id="productLinkName" class="product-tittle">
+                    <span  wicket:id="name">[name]</span>
                 </a>
             </p>
         </div>
@@ -41,16 +41,6 @@
             </wicket:container>
         </div>
 
-
-
-
-
-
-
-
-
-
-
         <div class="grid-100 mobile-grid-100" style="text-align: center;">
             <a wicket:id="productLinkImage"  class="image-border">
                 <img border="1" wicket:id="productDefaultImage"/>
@@ -61,7 +51,7 @@
             <wicket:message key="sku.code">[sku.code:]</wicket:message>
         </div>
         <div class="grid-70 hide-on-mobile">
-            <a wicket:id="productLinkSku">
+            <a wicket:id="productLinkSku" class="product-sku-code">
                 <span wicket:id="skuCode">[sku num]</span>
             </a>
         </div>
