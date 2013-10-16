@@ -23,7 +23,7 @@ import org.yes.cart.bulkimport.model.ValueAdapter;
 import org.yes.cart.bulkimport.service.support.EntityCacheKeyStrategy;
 import org.yes.cart.bulkimport.service.support.LookUpQuery;
 import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategy;
-import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.dao.GenericDAO;
 
 /**
  * User: denispavlov
@@ -33,9 +33,12 @@ import org.yes.cart.domain.entity.Identifiable;
 public class ColumnLookUpQueryCacheKeyStrategy implements EntityCacheKeyStrategy {
 
     private final LookUpQueryParameterStrategy hsqlStrategy;
+    private final GenericDAO<Object, Long> genericDAO;
 
-    public ColumnLookUpQueryCacheKeyStrategy(final LookUpQueryParameterStrategy hsqlStrategy) {
+    public ColumnLookUpQueryCacheKeyStrategy(final LookUpQueryParameterStrategy hsqlStrategy,
+                                             final GenericDAO<Object, Long> genericDAO) {
         this.hsqlStrategy = hsqlStrategy;
+        this.genericDAO = genericDAO;
     }
 
     /** {@inheritDoc} */
@@ -54,10 +57,16 @@ public class ColumnLookUpQueryCacheKeyStrategy implements EntityCacheKeyStrategy
         }
 
         if (column.isUseMasterObject()) {
-            if (masterObject instanceof Identifiable) {
-                sb.append('_').append(((Identifiable) masterObject).getId());
+            final Object pk;
+            if (masterObject != null) {
+                pk = genericDAO.getEntityIdentifier(masterObject);
             } else {
-                sb.append("_unknownMaster");
+                pk = null; // Not Available
+            }
+            if (pk != null) {
+                sb.append('_').append(pk);
+            } else {
+                sb.append("_NA");
             }
         }
         return sb.toString();

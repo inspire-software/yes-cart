@@ -69,7 +69,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
     private ValueAdapter valueStringAdapter = new CsvPlainStringValueAdapter();
     private final LookUpQueryParameterStrategy descriptorInsert = new CsvDescriptorNativeInsertStrategy();
     private final LookUpQueryParameterStrategy columnLookUp = new CsvColumnLookUpQueryStrategy();
-    private final EntityCacheKeyStrategy cacheKey = new ColumnLookUpQueryCacheKeyStrategy(columnLookUp);
+    private EntityCacheKeyStrategy cacheKey;
 
     /**
      * IoC. Set {@link GenericConversionService}.
@@ -431,7 +431,15 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                     singleObjectValue = getEntity(tuple, importColumn, masterObject, importDescriptor);
                 }
                 propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);
-                propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
+                final Object oldValue = propertyDescriptor.getReadMethod().invoke(object);
+                final Object oldValuePK = oldValue != null ? genericDAO.getEntityIdentifier(oldValue) : null;
+                final Object newValuePK = singleObjectValue != null ? genericDAO.getEntityIdentifier(singleObjectValue) : null;
+
+                if (oldValuePK == null || !oldValuePK.equals(newValuePK)) {
+                    // Update the object only if the value has changed
+                    propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
+                }
+
             }
         } catch (Exception exp) {
 
@@ -471,7 +479,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
             // no caching for prime select
             final Object prime = getExistingEntity(importDescriptor, importDescriptor.getSelectSql(), masterObject, tuple);
             if (prime == null) {
-                return genericDAO.getEntityFactory().getByIface(Class.forName(importDescriptor.getEntityType()));
+                return genericDAO.getEntityFactory().getByKey(importDescriptor.getEntityType());
             }
             return prime;
         }
@@ -540,6 +548,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
      */
     public void setGenericDAO(GenericDAO<Object, Long> genericDAO) {
         this.genericDAO = genericDAO;
+        this.cacheKey = new ColumnLookUpQueryCacheKeyStrategy(columnLookUp, genericDAO);
     }
 
     /**

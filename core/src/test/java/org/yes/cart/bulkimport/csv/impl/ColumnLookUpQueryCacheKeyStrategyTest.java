@@ -27,6 +27,7 @@ import org.yes.cart.bulkimport.model.ValueAdapter;
 import org.yes.cart.bulkimport.service.support.EntityCacheKeyStrategy;
 import org.yes.cart.bulkimport.service.support.LookUpQuery;
 import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategy;
+import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Identifiable;
 
 import static org.junit.Assert.assertEquals;
@@ -44,6 +45,7 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
     public void testKeyForMaster() throws Exception {
 
         final LookUpQueryParameterStrategy sqlStrategy = mockery.mock(LookUpQueryParameterStrategy.class, "sqlStrategy");
+        final GenericDAO<Object, Long> genericDAO = mockery.mock(GenericDAO.class, "genericDAO");
         final LookUpQuery query = mockery.mock(LookUpQuery.class, "query");
         final Identifiable master = mockery.mock(Identifiable.class, "master");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
@@ -52,7 +54,7 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
         final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
 
         mockery.checking(new Expectations() {{
-            allowing(master).getId(); will(returnValue(10L));
+            one(genericDAO).getEntityIdentifier(master); will(returnValue(10L));
             allowing(codeColumn).getColumnIndex(); will(returnValue(3));
             allowing(codeColumn).getName(); will(returnValue("code"));
             allowing(codeColumn).getLookupQuery(); will(returnValue("queryString"));
@@ -62,7 +64,7 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
             one(query).getParameters(); will(returnValue(new Object[] { "p1", "p2" }));
         }});
 
-        final EntityCacheKeyStrategy strategy = new ColumnLookUpQueryCacheKeyStrategy(sqlStrategy);
+        final EntityCacheKeyStrategy strategy = new ColumnLookUpQueryCacheKeyStrategy(sqlStrategy, genericDAO);
         final String key = strategy.keyFor(descriptor, codeColumn, master, tuple, adapter);
 
         assertEquals("code_3_queryString_p1_p2_10", key);
@@ -75,6 +77,7 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
     public void testKeyForMasterNull() throws Exception {
 
         final LookUpQueryParameterStrategy sqlStrategy = mockery.mock(LookUpQueryParameterStrategy.class, "sqlStrategy");
+        final GenericDAO<Object, Long> genericDAO = mockery.mock(GenericDAO.class, "genericDAO");
         final LookUpQuery query = mockery.mock(LookUpQuery.class, "query");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
         final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
@@ -91,10 +94,10 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
             one(query).getParameters(); will(returnValue(new Object[] { "p1", "p2" }));
         }});
 
-        final EntityCacheKeyStrategy strategy = new ColumnLookUpQueryCacheKeyStrategy(sqlStrategy);
+        final EntityCacheKeyStrategy strategy = new ColumnLookUpQueryCacheKeyStrategy(sqlStrategy, genericDAO);
         final String key = strategy.keyFor(descriptor, codeColumn, null, tuple, adapter);
 
-        assertEquals("code_3_queryString_p1_p2_unknownMaster", key);
+        assertEquals("code_3_queryString_p1_p2_NA", key);
 
         mockery.assertIsSatisfied();
 
@@ -104,6 +107,7 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
     public void testKeyForNoMaster() throws Exception {
 
         final LookUpQueryParameterStrategy sqlStrategy = mockery.mock(LookUpQueryParameterStrategy.class, "sqlStrategy");
+        final GenericDAO<Object, Long> genericDAO = mockery.mock(GenericDAO.class, "genericDAO");
         final LookUpQuery query = mockery.mock(LookUpQuery.class, "query");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
         final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
@@ -121,7 +125,7 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
             one(query).getParameters(); will(returnValue(new Object[] { "p1", "p2" }));
         }});
 
-        final EntityCacheKeyStrategy strategy = new ColumnLookUpQueryCacheKeyStrategy(sqlStrategy);
+        final EntityCacheKeyStrategy strategy = new ColumnLookUpQueryCacheKeyStrategy(sqlStrategy, genericDAO);
         final String key = strategy.keyFor(descriptor, codeColumn, null, tuple, adapter);
 
         assertEquals("code_3_queryString_p1_p2", key);
@@ -134,6 +138,7 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
     public void testKeyForNoMasterNoParams() throws Exception {
 
         final LookUpQueryParameterStrategy sqlStrategy = mockery.mock(LookUpQueryParameterStrategy.class, "sqlStrategy");
+        final GenericDAO<Object, Long> genericDAO = mockery.mock(GenericDAO.class, "genericDAO");
         final LookUpQuery query = mockery.mock(LookUpQuery.class, "query");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
         final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
@@ -151,7 +156,7 @@ public class ColumnLookUpQueryCacheKeyStrategyTest {
             one(query).getParameters(); will(returnValue(new Object[0]));
         }});
 
-        final EntityCacheKeyStrategy strategy = new ColumnLookUpQueryCacheKeyStrategy(sqlStrategy);
+        final EntityCacheKeyStrategy strategy = new ColumnLookUpQueryCacheKeyStrategy(sqlStrategy, genericDAO);
         final String key = strategy.keyFor(descriptor, codeColumn, null, tuple, adapter);
 
         assertEquals("code_3_queryString", key);
