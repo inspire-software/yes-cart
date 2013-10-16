@@ -21,6 +21,7 @@ import org.apache.lucene.search.SortField;
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
+import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
@@ -35,6 +36,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -117,6 +119,26 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     public EntityFactory getEntityFactory() {
         return entityFactory;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public <I> I getEntityIdentifier(final Object entity) {
+        if (entity == null) {
+            // That's ok - it is null
+            return null;
+        } if (entity instanceof HibernateProxy && !Hibernate.isInitialized(entity)) {
+            // Avoid Lazy select by getting identifier from session meta
+            // If hibernate proxy is initialised then DO NOT use this approach as chances
+            // are that this is detached entity from cache which is not associate with the
+            // session and will result in exception
+            return (I) sessionFactory.getCurrentSession().getIdentifier(entity);
+        } else if (entity instanceof Identifiable) {
+            // If it is not proxy or it is initialised then we can use identifiable
+            return (I) Long.valueOf(((Identifiable) entity).getId());
+        }
+        throw new IllegalArgumentException("Cannot get PK from object: " + entity);
     }
 
     /**

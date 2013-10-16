@@ -40,6 +40,16 @@ public interface GenericDAO<T, PK extends Serializable> {
     EntityFactory getEntityFactory();
 
     /**
+     * Get value of PK from an object.
+     *
+     * @param entity entity object
+     * @param <I> type
+     *
+     * @return id value
+     */
+    <I> I getEntityIdentifier(Object entity);
+
+    /**
      * Find entity by Id.
      *
      * @param id   primary key
