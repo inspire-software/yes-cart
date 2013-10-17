@@ -48,7 +48,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
     /**
      * Create order assembler.
      *
-     * @param orderNumberGenerator order bumber generator
+     * @param orderNumberGenerator order number generator
      * @param customerDao          customer dao to get customer from email
      * @param shopDao              shop dao
      * @param productSkuService    product sku service

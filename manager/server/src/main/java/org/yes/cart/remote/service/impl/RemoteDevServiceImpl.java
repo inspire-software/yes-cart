@@ -75,6 +75,11 @@ public class RemoteDevServiceImpl implements RemoteDevService {
         return remoteBackdoorService.evictCache(createCtx(), name);
     }
 
+    /** {@inheritDoc} */
+    public void warmUp() {
+        remoteBackdoorService.warmUp(createCtx());
+    }
+
     private AsyncContext createCtx() {
         return new AsyncFlexContextImpl();
     }

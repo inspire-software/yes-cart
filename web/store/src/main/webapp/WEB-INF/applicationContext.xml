@@ -522,11 +522,21 @@
         <property name="proxyInterface" value="javax.sql.DataSource"/>
     </bean>
 
+    <bean id="warmUpService" class="org.yes.cart.web.service.ws.node.impl.WarmUpServiceImpl">
+        <constructor-arg index="0" ref="languageService"/>
+        <constructor-arg index="1" ref="productTypeService"/>
+        <constructor-arg index="2" ref="productTypeAttrService"/>
+        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="4" ref="shopService"/>
+        <constructor-arg index="5" ref="addressBookFacade"/>
+    </bean>
+
     <bean id="backDoorBean" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
                 <property name="productService" ref="productService"/>
                 <property name="cacheManager" ref="cacheManager"/>
+                <property name="warmUpService" ref="warmUpService"/>
             </bean>
         </property>
     </bean>

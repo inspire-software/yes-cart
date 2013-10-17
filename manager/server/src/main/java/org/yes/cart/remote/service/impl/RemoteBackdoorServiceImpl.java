@@ -63,6 +63,35 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
     /**
      * {@inheritDoc}
      */
+    public void warmUp(final AsyncContext context) {
+        for (final Node yesNode : nodeService.getYesNodes()) {
+            try {
+                final WsClientFactory<BackdoorService> factory =
+                        getBackdoorService(context, yesNode.getBackdoorUri(),
+                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
+
+                BackdoorService service = factory.getService();
+                try {
+                    service.warmUp();
+                } finally {
+                    factory.release(service);
+                    service = null;
+                }
+
+            } catch (Exception e) {
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Cannot warmUp server,  url ["
+                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
+                            + "] . Will try next one, if exists",
+                            e);
+                }
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, Integer> reindexAllProducts(final AsyncContext context) {
         final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
         if (indexFinished == null) {

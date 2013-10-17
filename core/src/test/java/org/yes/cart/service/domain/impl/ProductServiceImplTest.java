@@ -195,7 +195,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         CategoryService categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
         Shop shop = shopService.getById(10L);
         assertNotNull(shop);
-        Set<Long> shopCategories = shopService.getShopCategoriesIds(shop);
+        Set<Long> shopCategories = shopService.getShopCategoriesIds(shop.getShopId());
         assertNotNull(shopCategories);
         assertFalse(shopCategories.isEmpty());
         List<Long> shopCategoryIds = new ArrayList<Long>(shopCategories);

@@ -112,9 +112,9 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * {@inheritDoc}
      */
     @Cacheable(value = "shopService-shopCategories"/*, key ="shop.getShopId()"*/)
-    public Set<Category> getShopCategories(final Shop shop) {
+    public Set<Category> getShopCategories(final long shopId) {
         Set<Category> result = new HashSet<Category>();
-        for (ShopCategory category : shop.getShopCategory()) {
+        for (ShopCategory category : shopDao.findById(shopId).getShopCategory()) {
             result.addAll(
                     categoryService.getChildCategoriesRecursive(category.getCategory().getCategoryId())
             );
@@ -126,8 +126,8 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * {@inheritDoc}
      */
     @Cacheable(value = "shopService-shopCategoriesIds"/*, key ="shop.getShopId()"*/)
-    public Set<Long> getShopCategoriesIds(final Shop shop) {
-        return transform(getShopCategories(shop));
+    public Set<Long> getShopCategoriesIds(final long shopId) {
+        return transform(getShopCategories(shopId));
     }
 
     public Set<Long> transform(final Collection<Category> categories) {

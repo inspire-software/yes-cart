@@ -61,6 +61,13 @@ public class LocalBackdoorServiceImpl implements BackdoorService, ApplicationCon
     /**
      * {@inheritDoc}
      */
+    public void warmUp() {
+        throw new UnsupportedOperationException("YUM does nto support product warm up");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public int reindexAllProducts() {
         throw new UnsupportedOperationException("YUM does nto support product index");
     }

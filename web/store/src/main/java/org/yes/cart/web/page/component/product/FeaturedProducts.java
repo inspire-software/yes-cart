@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.domain.query.impl.FeaturedProductsInCategoryQueryBuilderImpl;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -70,7 +71,7 @@ public class FeaturedProducts extends AbstractProductSearchResultList {
                 categories = adapt(ApplicationDirector.getCurrentShop().getShopCategory());
             } else {
 
-                if (shopService.getShopCategoriesIds(ApplicationDirector.getCurrentShop()).contains(categoryId)) {
+                if (shopService.getShopCategoriesIds(ShopCodeContext.getShopId()).contains(categoryId)) {
                     categories = Collections.singletonList(categoryId);
                 } else {
                     categories = Collections.EMPTY_LIST;

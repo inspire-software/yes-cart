@@ -33,6 +33,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ObjectUtil;
 import org.yes.cart.web.service.ws.BackdoorService;
+import org.yes.cart.web.service.ws.node.WarmUpService;
 
 import javax.jws.WebService;
 import javax.servlet.ServletContext;
@@ -60,6 +61,8 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
     private ServletContext servletContext;
 
     private CacheManager cacheManager;
+
+    private WarmUpService warmUpService;
 
     /*
      * Once a product is reindexed we need to flush all cached information
@@ -93,6 +96,14 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
     @Override
     public boolean ping() {
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void warmUp() {
+        warmUpService.warmpUp();
     }
 
     /**
@@ -238,6 +249,14 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
         return rezList;
     }
 
+    /**
+     * IoC. Set product service.
+     *
+     * @param warmUpService warm up service to use.
+     */
+    public void setWarmUpService(final WarmUpService warmUpService) {
+        this.warmUpService = warmUpService;
+    }
 
     /**
      * IoC. Set product service.
