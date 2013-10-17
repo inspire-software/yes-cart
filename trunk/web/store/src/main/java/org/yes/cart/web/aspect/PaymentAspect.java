@@ -19,6 +19,7 @@ package org.yes.cart.web.aspect;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -102,6 +103,10 @@ public class PaymentAspect extends BaseNotificationAspect {
      * @return result of original operation.
      * @throws Throwable re throws exception
      */
+    @CacheEvict(value = {
+            "skuWarehouseService-findProductOnWarehouse",
+            "skuWarehouseService-findProductSkusOnWarehouse"
+    }, allEntries = true)
     @Around("execution(* org.yes.cart.service.payment.impl.PaymentProcessorImpl.authorize(..))")
     public Object doAuthorize(final ProceedingJoinPoint pjp) throws Throwable {
         final String rez = (String) pjp.proceed();
@@ -144,6 +149,10 @@ public class PaymentAspect extends BaseNotificationAspect {
      * @return result of original operation.
      * @throws Throwable re throws exception
      */
+    @CacheEvict(value = {
+            "skuWarehouseService-findProductOnWarehouse",
+            "skuWarehouseService-findProductSkusOnWarehouse"
+    }, allEntries = true)
     @Around("execution(* org.yes.cart.service.payment.impl.PaymentProcessorImpl.shipmentComplete(..))")
     public Object doShipmentComplete(final ProceedingJoinPoint pjp) throws Throwable {
 

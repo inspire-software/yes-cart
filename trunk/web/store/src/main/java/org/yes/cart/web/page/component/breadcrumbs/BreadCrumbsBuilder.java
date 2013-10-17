@@ -19,7 +19,6 @@ package org.yes.cart.web.page.component.breadcrumbs;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Bread crumbs builder produce category and

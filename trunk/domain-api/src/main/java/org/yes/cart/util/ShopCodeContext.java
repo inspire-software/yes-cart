@@ -31,11 +31,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ShopCodeContext {
 
     private static ThreadLocal<String> shopCode = new ThreadLocal<String>();
+    private static ThreadLocal<Long> shopId = new ThreadLocal<Long>();
 
     private static final Map<String, Logger> LOGS = new ConcurrentHashMap<String, Logger>();
 
     /**
-     * Get curent shop code.
+     * Get current shop code.
+     *
      * @return current shop code.
      */
     public static String getShopCode() {
@@ -47,11 +49,31 @@ public class ShopCodeContext {
 
     /**
      * Set shop code.
+     *
      * @param currentShopCode shop code to set.
      */
     public static void setShopCode(final String currentShopCode) {
         shopCode.set(currentShopCode);
     }
+
+    /**
+     * Get current shop Id
+     *
+     * @return current shop id
+     */
+    public static Long getShopId() {
+        return shopId.get();
+    }
+
+    /**
+     * Set shop Id.
+     *
+     * @param currentShopId shop Id to set.
+     */
+    public static void setShopId(final long currentShopId) {
+        shopId.set(currentShopId);
+    }
+
 
     /**
      * This is a faster way to get loggers since we keep references in a concurrent

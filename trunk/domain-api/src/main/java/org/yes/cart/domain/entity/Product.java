@@ -19,6 +19,7 @@ package org.yes.cart.domain.entity;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -352,9 +353,12 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
 
     /**
      * Get total quantity of skus on all warehouses.
+     *
+     * @param warehouses warehouse to consider
+     *
      * @return total quantity
      */
-    BigDecimal getQtyOnWarehouse();
+    Map<String, BigDecimal> getQtyOnWarehouse(Collection<Warehouse> warehouses);
 
 }
 

@@ -21,6 +21,7 @@ import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -31,16 +32,44 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
 
     public static final BigDecimal PERPETUAL = new BigDecimal(Integer.MAX_VALUE);
 
-    private final boolean available;
-    private final boolean inStock;
-    private final boolean perpetual;
-    private final BigDecimal availableToSellQuantity;
+    private static final SortedSet<String> NO_SKU = new TreeSet<String>();
 
-    public ProductAvailabilityModelImpl(final int availability, final BigDecimal inventoryQty) {
+    private final boolean available;
+    private boolean inStock;
+    private final boolean perpetual;
+    private final Map<String, BigDecimal> availableToSellQuantity;
+    private final SortedSet<String> skuCodes;
+    private final String defaultSku;
+    private String firstAvailableSku = null;
+
+    public ProductAvailabilityModelImpl(final String defaultSku,
+                                        final int availability,
+                                        final Map<String, BigDecimal> inventoryQty) {
+        this.defaultSku = defaultSku;
         perpetual = availability == Product.AVAILABILITY_ALWAYS;
-        inStock = !perpetual && MoneyUtils.isFirstBiggerThanSecond(inventoryQty, BigDecimal.ZERO);
+        if (perpetual) {
+            inStock = false; // perpetual is used exactly for purpose of not needing to have stock
+        }
+        if (inventoryQty != null) {
+            inStock = false;
+            availableToSellQuantity = new HashMap<String, BigDecimal>(inventoryQty);
+            skuCodes = new TreeSet<String>(inventoryQty.keySet());
+            if (!perpetual) {
+                for (final BigDecimal qty : inventoryQty.values()) {
+                    if (MoneyUtils.isFirstBiggerThanSecond(qty, BigDecimal.ZERO)) {
+                        inStock = true;
+                        break;
+                    }
+                }
+            }
+        } else {
+            // This would probably mean that this product is not available at all
+            availableToSellQuantity = Collections.emptyMap();
+            skuCodes = NO_SKU;
+            inStock = false;
+        }
+
         available = inStock || (availability != Product.AVAILABILITY_STANDARD);
-        availableToSellQuantity = perpetual ? PERPETUAL : MoneyUtils.notNull(inventoryQty);
     }
 
     /** {@inheritDoc} */
@@ -59,7 +88,44 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
     }
 
     /** {@inheritDoc} */
-    public BigDecimal getAvailableToSellQuantity() {
-        return availableToSellQuantity;
+    public String getDefaultSkuCode() {
+        return defaultSku;
     }
+
+    /** {@inheritDoc} */
+    public String getFirstAvailableSkuCode() {
+        if (firstAvailableSku == null) {
+            firstAvailableSku = determineFirstAvailableSkuCode(defaultSku, skuCodes);
+        }
+        return firstAvailableSku;
+    }
+
+    public String determineFirstAvailableSkuCode(final String defaultSku, final SortedSet<String> skuCodes) {
+        final BigDecimal defValue = getAvailableToSellQuantity(defaultSku);
+        if (MoneyUtils.isFirstBiggerThanSecond(defValue, BigDecimal.ZERO)) {
+            return defaultSku;
+        }
+        for (final String skuCode : skuCodes) {
+            final BigDecimal value = getAvailableToSellQuantity(skuCode);
+            if (MoneyUtils.isFirstBiggerThanSecond(value, BigDecimal.ZERO)) {
+                return skuCode;
+            }
+        }
+        return defaultSku;
+    }
+
+
+    /** {@inheritDoc} */
+    public SortedSet<String> getSkuCodes() {
+        return skuCodes;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getAvailableToSellQuantity(final String skuCode) {
+        if (perpetual) {
+            return PERPETUAL;
+        }
+        return MoneyUtils.notNull(availableToSellQuantity.get(skuCode));
+    }
+
 }

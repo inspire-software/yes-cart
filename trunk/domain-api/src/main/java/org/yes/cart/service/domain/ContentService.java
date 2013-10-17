@@ -18,7 +18,6 @@ package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.entity.Category;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 

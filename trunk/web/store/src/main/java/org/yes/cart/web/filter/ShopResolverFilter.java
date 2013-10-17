@@ -87,6 +87,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
         ApplicationDirector.setCurrentShop(shop);
         ShopCodeContext.setShopCode(shop.getCode());
+        ShopCodeContext.setShopId(shop.getShopId()) ;
         //ApplicationDirector.setCurrentServletContext(servletContext);
         ApplicationDirector.setCurrentMailTemplateFolder(servletContext.getRealPath(shop.getMailFolder()) + File.separator);
 

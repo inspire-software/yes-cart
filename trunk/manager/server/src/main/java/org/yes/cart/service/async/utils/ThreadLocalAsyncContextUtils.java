@@ -16,13 +16,9 @@
 
 package org.yes.cart.service.async.utils;
 
-import flex.messaging.FlexContext;
-import flex.messaging.NonHttpFlexSession;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.service.async.model.AsyncContext;
-
-import java.util.UUID;
 
 /**
  * Thread local security allows to set security context for current thread.

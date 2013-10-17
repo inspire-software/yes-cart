@@ -264,10 +264,22 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.setSeoInternal((SeoEntity) seo);
     }
 
-    public BigDecimal getQty() {
+    public BigDecimal getQty(final Collection<Warehouse> warehouses) {
+        final Set<Long> pks = new HashSet<Long>();
+        for (final Warehouse warehouse : warehouses) {
+            if (warehouse != null) {
+                pks.add(warehouse.getWarehouseId());
+            }
+        }
+        return getQtyInternal(pks);
+    }
+
+    public BigDecimal getQtyInternal(final Set<Long> warehousesIds) {
         BigDecimal rez = BigDecimal.ZERO.setScale(2);
         for (SkuWarehouse swe : getQuantityOnWarehouse()) {
-            rez = rez.add(swe.getQuantity());
+            if (warehousesIds.contains(swe.getWarehouse().getWarehouseId())) {
+                rez = rez.add(swe.getQuantity());
+            }
         }
         return rez;
     }

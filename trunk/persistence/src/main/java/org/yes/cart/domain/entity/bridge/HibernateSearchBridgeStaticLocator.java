@@ -18,9 +18,8 @@ package org.yes.cart.domain.entity.bridge;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
-import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.domain.entity.bridge.support.ShopWarehouseRelationshipSupport;
 
 /**
  * User: denispavlov
@@ -30,14 +29,20 @@ import org.yes.cart.service.domain.ShopService;
 public class HibernateSearchBridgeStaticLocator implements ApplicationContextAware {
 
     private static ShopCategoryRelationshipSupport SHOP_CATEGORY_SUPPORT;
+    private static ShopWarehouseRelationshipSupport SHOP_WAREHOUSE_SUPPORT;
 
     public static ShopCategoryRelationshipSupport getShopCategoryRelationshipSupport() {
         return SHOP_CATEGORY_SUPPORT;
+    }
+
+    public static ShopWarehouseRelationshipSupport getShopWarehouseRelationshipSupport() {
+        return SHOP_WAREHOUSE_SUPPORT;
     }
 
     /** {@inheritDoc} */
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         SHOP_CATEGORY_SUPPORT = applicationContext.getBean("shopCategoryRelationshipSupport", ShopCategoryRelationshipSupport.class);
+        SHOP_WAREHOUSE_SUPPORT = applicationContext.getBean("shopWarehouseRelationshipSupport", ShopWarehouseRelationshipSupport.class);
     }
 }

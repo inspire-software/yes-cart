@@ -23,8 +23,14 @@ import org.junit.Test;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.service.domain.WarehouseService;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -37,8 +43,14 @@ public class ProductAvailabilityStrategyImplTest {
 
     private final Mockery context = new JUnit4Mockery();
 
+    private WarehouseService warehouseService;
+    private SkuWarehouseService skuWarehouseService;
+
     private Product product;
     private ProductSku sku;
+
+    private long shopId = 10l;
+    private String skuCode = "SKU";
 
     @Test
     public void testGetAvailabilityModelForStandardOne() throws Exception {
@@ -48,21 +60,21 @@ public class ProductAvailabilityStrategyImplTest {
 
         setTestExpectations(availability, qty);
 
-        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl().getAvailabilityModel(product);
+        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, product);
 
         assertNotNull(modelProduct);
         assertTrue(modelProduct.isAvailable());
         assertTrue(modelProduct.isInStock());
         assertFalse(modelProduct.isPerpetual());
-        assertTrue(modelProduct.getAvailableToSellQuantity().compareTo(qty) == 0);
+        assertTrue(modelProduct.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
 
-        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl().getAvailabilityModel(sku);
+        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, sku);
 
         assertNotNull(modelSku);
         assertTrue(modelSku.isAvailable());
         assertTrue(modelSku.isInStock());
         assertFalse(modelSku.isPerpetual());
-        assertTrue(modelSku.getAvailableToSellQuantity().compareTo(qty) == 0);
+        assertTrue(modelSku.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
 
         context.assertIsSatisfied();
 
@@ -76,21 +88,21 @@ public class ProductAvailabilityStrategyImplTest {
 
         setTestExpectations(availability, qty);
 
-        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl().getAvailabilityModel(product);
+        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, product);
 
         assertNotNull(modelProduct);
         assertFalse(modelProduct.isAvailable());
         assertFalse(modelProduct.isInStock());
         assertFalse(modelProduct.isPerpetual());
-        assertTrue(modelProduct.getAvailableToSellQuantity().compareTo(qty) == 0);
+        assertTrue(modelProduct.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
 
-        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl().getAvailabilityModel(sku);
+        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, sku);
 
         assertNotNull(modelSku);
         assertFalse(modelSku.isAvailable());
         assertFalse(modelSku.isInStock());
         assertFalse(modelSku.isPerpetual());
-        assertTrue(modelSku.getAvailableToSellQuantity().compareTo(qty) == 0);
+        assertTrue(modelSku.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
 
         context.assertIsSatisfied();
 
@@ -105,21 +117,21 @@ public class ProductAvailabilityStrategyImplTest {
 
         setTestExpectations(availability, qty);
 
-        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl().getAvailabilityModel(product);
+        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, product);
 
         assertNotNull(modelProduct);
         assertTrue(modelProduct.isAvailable());
         assertTrue(modelProduct.isInStock());
         assertFalse(modelProduct.isPerpetual());
-        assertTrue(modelProduct.getAvailableToSellQuantity().compareTo(qty) == 0);
+        assertTrue(modelProduct.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
 
-        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl().getAvailabilityModel(sku);
+        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, sku);
 
         assertNotNull(modelSku);
         assertTrue(modelSku.isAvailable());
         assertTrue(modelSku.isInStock());
         assertFalse(modelSku.isPerpetual());
-        assertTrue(modelSku.getAvailableToSellQuantity().compareTo(qty) == 0);
+        assertTrue(modelSku.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
 
         context.assertIsSatisfied();
 
@@ -133,21 +145,21 @@ public class ProductAvailabilityStrategyImplTest {
 
         setTestExpectations(availability, qty);
 
-        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl().getAvailabilityModel(product);
+        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, product);
 
         assertNotNull(modelProduct);
         assertTrue(modelProduct.isAvailable());
         assertFalse(modelProduct.isInStock());
         assertFalse(modelProduct.isPerpetual());
-        assertTrue(modelProduct.getAvailableToSellQuantity().compareTo(qty) == 0);
+        assertTrue(modelProduct.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
 
-        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl().getAvailabilityModel(sku);
+        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, sku);
 
         assertNotNull(modelSku);
         assertTrue(modelSku.isAvailable());
         assertFalse(modelSku.isInStock());
         assertFalse(modelSku.isPerpetual());
-        assertTrue(modelSku.getAvailableToSellQuantity().compareTo(qty) == 0);
+        assertTrue(modelSku.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
 
         context.assertIsSatisfied();
 
@@ -162,21 +174,21 @@ public class ProductAvailabilityStrategyImplTest {
 
         setTestExpectations(availability, qty);
 
-        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl().getAvailabilityModel(product);
+        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, product);
 
         assertNotNull(modelProduct);
         assertTrue(modelProduct.isAvailable());
         assertTrue(modelProduct.isInStock());
         assertFalse(modelProduct.isPerpetual());
-        assertTrue(modelProduct.getAvailableToSellQuantity().compareTo(qty) == 0);
+        assertTrue(modelProduct.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
 
-        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl().getAvailabilityModel(sku);
+        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, sku);
 
         assertNotNull(modelSku);
         assertTrue(modelSku.isAvailable());
         assertTrue(modelSku.isInStock());
         assertFalse(modelSku.isPerpetual());
-        assertTrue(modelSku.getAvailableToSellQuantity().compareTo(qty) == 0);
+        assertTrue(modelSku.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
 
         context.assertIsSatisfied();
 
@@ -190,21 +202,21 @@ public class ProductAvailabilityStrategyImplTest {
 
         setTestExpectations(availability, qty);
 
-        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl().getAvailabilityModel(product);
+        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, product);
 
         assertNotNull(modelProduct);
         assertTrue(modelProduct.isAvailable());
         assertFalse(modelProduct.isInStock());
         assertFalse(modelProduct.isPerpetual());
-        assertTrue(modelProduct.getAvailableToSellQuantity().compareTo(qty) == 0);
+        assertTrue(modelProduct.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
 
-        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl().getAvailabilityModel(sku);
+        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, sku);
 
         assertNotNull(modelSku);
         assertTrue(modelSku.isAvailable());
         assertFalse(modelSku.isInStock());
         assertFalse(modelSku.isPerpetual());
-        assertTrue(modelSku.getAvailableToSellQuantity().compareTo(qty) == 0);
+        assertTrue(modelSku.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
 
         context.assertIsSatisfied();
 
@@ -220,21 +232,21 @@ public class ProductAvailabilityStrategyImplTest {
 
         setTestExpectations(availability, qty);
 
-        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl().getAvailabilityModel(product);
+        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, product);
 
         assertNotNull(modelProduct);
         assertTrue(modelProduct.isAvailable());
         assertFalse(modelProduct.isInStock());
         assertTrue(modelProduct.isPerpetual());
-        assertTrue(modelProduct.getAvailableToSellQuantity().compareTo(max) == 0);
+        assertTrue(modelProduct.getAvailableToSellQuantity(skuCode).compareTo(max) == 0);
 
-        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl().getAvailabilityModel(sku);
+        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, sku);
 
         assertNotNull(modelSku);
         assertTrue(modelSku.isAvailable());
         assertFalse(modelSku.isInStock());
         assertTrue(modelSku.isPerpetual());
-        assertTrue(modelSku.getAvailableToSellQuantity().compareTo(max) == 0);
+        assertTrue(modelSku.getAvailableToSellQuantity(skuCode).compareTo(max) == 0);
 
         context.assertIsSatisfied();
 
@@ -249,21 +261,21 @@ public class ProductAvailabilityStrategyImplTest {
 
         setTestExpectations(availability, qty);
 
-        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl().getAvailabilityModel(product);
+        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, product);
 
         assertNotNull(modelProduct);
         assertTrue(modelProduct.isAvailable());
         assertFalse(modelProduct.isInStock());
         assertTrue(modelProduct.isPerpetual());
-        assertTrue(modelProduct.getAvailableToSellQuantity().compareTo(max) == 0);
+        assertTrue(modelProduct.getAvailableToSellQuantity(skuCode).compareTo(max) == 0);
 
-        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl().getAvailabilityModel(sku);
+        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, sku);
 
         assertNotNull(modelSku);
         assertTrue(modelSku.isAvailable());
         assertFalse(modelSku.isInStock());
         assertTrue(modelSku.isPerpetual());
-        assertTrue(modelSku.getAvailableToSellQuantity().compareTo(max) == 0);
+        assertTrue(modelSku.getAvailableToSellQuantity(skuCode).compareTo(max) == 0);
 
         context.assertIsSatisfied();
 
@@ -271,14 +283,28 @@ public class ProductAvailabilityStrategyImplTest {
 
 
     private void setTestExpectations(final int availability, final BigDecimal qty) {
+
+        warehouseService = context.mock(WarehouseService.class, "warehouseService");
+        skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+
+        final Warehouse warehouse = context.mock(Warehouse.class, "warehouse");
+        final List<Warehouse> warehouses = Arrays.asList(warehouse);
+
         sku = context.mock(ProductSku.class, "sku");
         product = context.mock(Product.class, "product");
 
         context.checking(new Expectations() {{
+            allowing(warehouseService).findByShopId(shopId); will(returnValue(warehouses));
             allowing(sku).getProduct(); will(returnValue(product));
             allowing(product).getAvailability(); will(returnValue(availability));
-            allowing(sku).getQty(); will(returnValue(qty));
-            allowing(product).getQtyOnWarehouse(); will(returnValue(qty));
+            allowing(product).getCode(); will(returnValue(skuCode));
+            allowing(sku).getCode(); will(returnValue(skuCode));
+            allowing(skuWarehouseService).findProductAvailableToSellQuantity(product, warehouses); will(returnValue(new HashMap<String, BigDecimal>() {{
+                put(skuCode, qty);
+            }}));
+            allowing(skuWarehouseService).findProductSkuAvailableToSellQuantity(sku, warehouses); will(returnValue(new HashMap<String, BigDecimal>() {{
+                put(skuCode, qty);
+            }}));
         }});
 
     }

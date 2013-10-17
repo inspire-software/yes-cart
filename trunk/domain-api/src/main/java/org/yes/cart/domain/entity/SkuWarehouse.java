@@ -99,4 +99,18 @@ public interface SkuWarehouse extends Auditable {
      */
     void setReserved(BigDecimal reserved);
 
+    /**
+     * Returns true if has quantity and quantity is larger than reserved.
+     *
+     * @return true if there is quantity available to sell
+     */
+    boolean isAvailableToSell();
+
+    /**
+     * Returns quantity available for sale.
+     *
+     * @return quantity less reservations
+     */
+    BigDecimal getAvailableToSell();
+
 }

@@ -1076,7 +1076,7 @@
         <property name="rank" type="int" not-null="false">
             <column name="RANK">
                 <comment>
-                    Order of sku for product. Firts is default.
+                    Order of sku for product. First is default.
                 </comment>
             </column>
         </property>
@@ -1101,7 +1101,7 @@
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.AttrValueEntityProductSku" />
         </bag>
 
-        <bag name="quantityOnWarehouse" inverse="false" lazy="false" cascade="all-delete-orphan">
+        <bag name="quantityOnWarehouse" inverse="false" lazy="true" cascade="all-delete-orphan">
             <key>
                 <column name="SKU_ID" not-null="false"/>
             </key>
@@ -2640,21 +2640,6 @@
         ]]>
     </query>
 
-    <query name="SKU.QTY.BY.PRODUCT">
-        <![CDATA[
-                 select sum(s.quantity) from SkuWarehouseEntity s  where s.sku.product = ?1
-        ]]>
-    </query>
-
-    <query name="SKU.QTY.BY.PRODUCT.SHOP">
-        <![CDATA[
-                 select sum(s.quantity) from SkuWarehouseEntity s, ShopWarehouseEntity sw
-                 where s.warehouse = sw.warehouse
-                 and   s.sku.product = ?1
-                 and   sw.shop = ?2
-        ]]>
-    </query>
-
     <query name="ASSIGNED.ROLES.BY.USER.EMAIL">
         <![CDATA[
             select r from RoleEntity r, ManagerRoleEntity mr
@@ -2736,6 +2721,24 @@
             from SkuWarehouseEntity sw
             where sw.warehouse.warehouseId IN (?2)
             and sw.sku.code = ?1
+        ]]>
+    </query>
+
+    <query name="SKU.QTY.ON.WAREHOUSES.BY.SHOP">
+        <![CDATA[
+            select sw.sku.code, sw.quantity, sw.reserved
+            from SkuWarehouseEntity sw
+            where sw.warehouse.warehouseId IN (?2)
+            and sw.sku.skuId = ?1
+        ]]>
+    </query>
+
+    <query name="PRODUCT.SKU.QTY.ON.WAREHOUSES.BY.SHOP">
+        <![CDATA[
+            select sw.sku.code, sw.quantity, sw.reserved
+            from SkuWarehouseEntity sw
+            where sw.warehouse.warehouseId IN (?2)
+            and sw.sku.product.productId = ?1
         ]]>
     </query>
 

@@ -39,9 +39,11 @@ import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordImpl;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ProductSkuService;
+import org.yes.cart.service.domain.ProductTypeAttrService;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -50,8 +52,6 @@ import java.util.*;
  * Time: 14:12:54
  */
 public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implements ProductService {
-
-    private static final List<Pair<String, String>> NO_GROUP = Arrays.asList(new Pair<String, String>("", ""));
 
     private final GenericDAO<Product, Long> productDao;
     private final ProductSkuService productSkuService;
@@ -468,8 +468,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 ProductSearchQueryBuilder.PRODUCT_DESCRIPTION_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_QTY_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_AVAILABLESKUCODE_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_AVAILABLESKUCODEQTY_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_DEFAULTIMAGE_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_DESCRIPTION_ASIS_FIELD,
@@ -483,13 +481,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             dto.setName((String) obj[2]);
             dto.setDescription((String) obj[3]);
             dto.setAvailability(obj[4] == null ? Product.AVAILABILITY_STANDARD : (Integer) obj[4]);
-            dto.setQtyOnWarehouse((BigDecimal) obj[5]);
-            dto.setFirstAvailableSkuCode((String) obj[6]);
-            dto.setFirstAvailableSkuQuantity((BigDecimal) obj[7]);
-            dto.setDefaultImage((String) obj[8]);
-            dto.setDisplayName((String) obj[9]);
-            dto.setDisplayDescription((String) obj[10]);
-            dto.setFeatured(obj[11] != null && (Boolean) obj[11]);
+            dto.setQtyOnWarehouse((Map) obj[5]);
+            dto.setDefaultImage((String) obj[6]);
+            dto.setDisplayName((String) obj[7]);
+            dto.setDisplayDescription((String) obj[8]);
+            dto.setFeatured(obj[9] != null && (Boolean) obj[9]);
             rez.add(dto);
         }
 
@@ -806,24 +802,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         }
         return 0;
     }
-
-    /**
-     * Get the total quantity of product skus on all warehouses.
-     *
-     * @param product product
-     * @return quantity of product.
-     */
-    public BigDecimal getProductQuantity(final Product product) {
-        return productDao.findSingleByNamedQuery("SKU.QTY.BY.PRODUCT", product);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public BigDecimal getProductQuantity(final Product product, final Shop shop) {
-        return productDao.findSingleByNamedQuery("SKU.QTY.BY.PRODUCT.SHOP", product, shop);
-    }
-
 
     /**
      * {@inheritDoc}

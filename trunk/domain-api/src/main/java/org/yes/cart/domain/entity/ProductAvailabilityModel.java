@@ -17,6 +17,7 @@
 package org.yes.cart.domain.entity;
 
 import java.math.BigDecimal;
+import java.util.SortedSet;
 
 /**
  * User: denispavlov
@@ -45,8 +46,29 @@ public interface ProductAvailabilityModel {
     boolean isPerpetual();
 
     /**
+     * @return default sku for multisku
+     */
+    String getDefaultSkuCode();
+
+    /**
+     * Returns sku code for the first available item. The order is:
+     * default SKU if available first then other skus from getSkuCodes()
+     *
+     * @return the first available sku.
+     */
+    String getFirstAvailableSkuCode();
+
+    /**
+     * @return all sku codes
+     */
+    SortedSet<String> getSkuCodes();
+
+    /**
+     * @param skuCode code
      * @return quantity that is available for customer to purchase.
      */
-    BigDecimal getAvailableToSellQuantity();
+    BigDecimal getAvailableToSellQuantity(String skuCode);
+
+
 
 }

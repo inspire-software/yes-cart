@@ -16,10 +16,7 @@
 
 package org.yes.cart.web.service.ws.node.dto.impl;
 
-import org.yes.cart.web.service.ws.node.NodeService;
 import org.yes.cart.web.service.ws.node.dto.Node;
-
-import java.io.Serializable;
 
 /**
  * User: denispavlov

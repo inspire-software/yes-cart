@@ -18,11 +18,13 @@ package org.yes.cart.service.order.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.*;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -35,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: denispavlov

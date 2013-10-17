@@ -92,7 +92,7 @@ public class SkuPriceBridge implements FieldBridge {
      */
     public String objectToString(final long shopId, final String currency, final BigDecimal regularPrice) {
         StringBuilder stringBuilder = new StringBuilder();
-        long price = regularPrice.movePointRight(2).longValue();
+        long price = regularPrice.movePointRight(Constants.MONEY_SCALE).longValue();
         stringBuilder.append(formatter.format(shopId));
         stringBuilder.append('_');
         stringBuilder.append(currency);

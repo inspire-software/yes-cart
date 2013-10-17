@@ -16,13 +16,17 @@
 
 package org.yes.cart.service.domain;
 
+import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -40,6 +44,25 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      */
     List<SkuWarehouse> findProductSkusOnWarehouse(long productId, long warehouseId);
 
+    /**
+     * Find ATS value per product sku for product.
+     *
+     * @param product product
+     * @param warehouses warehouses to consider
+     *
+     * @return SKU code -> ATS map
+     */
+    Map<String, BigDecimal> findProductAvailableToSellQuantity(Product product, Collection<Warehouse> warehouses);
+
+    /**
+     * Find ATS value per product sku for product.
+     *
+     * @param productSku product sku
+     * @param warehouses warehouses to consider
+     *
+     * @return SKU code -> ATS map
+     */
+    Map<String, BigDecimal> findProductSkuAvailableToSellQuantity(ProductSku productSku, Collection<Warehouse> warehouses);
 
     /**
      * Reserve quantity of skus on warehouse. Method returns the rest to reserve if quantity of skus is not enough

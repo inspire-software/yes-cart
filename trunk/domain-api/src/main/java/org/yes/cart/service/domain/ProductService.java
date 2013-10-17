@@ -22,11 +22,9 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -360,26 +358,6 @@ public interface ProductService extends GenericService<Product> {
      * @return product sku uri if found otherwise null
      */
     String getSeoUriByProductSkuId(Long skuId);
-
-
-    /**
-     * Get the total quantity of product skus on all warehouses.
-     *
-     * @param product product
-     * @return quantity of product.
-     */
-    BigDecimal getProductQuantity(Product product);
-
-    /**
-     * Get the total quantity of product SKUs on warehouses that belong to given shop.
-     * In multi-shop environment some product has 0 quantity at one shop and non 0 quantity at another,
-     * this is can be used when shop owner want to getByKey more money from this situation.
-     *
-     * @param shop    {@link Shop} given shop.
-     * @param product product
-     * @return quantity of product.
-     */
-    BigDecimal getProductQuantity(Product product, Shop shop);
 
     /**
      * Clear empty product attributes, that can appear after bulk import.

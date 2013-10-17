@@ -31,16 +31,15 @@ import java.util.Collection;
  */
 public class ProductSkuBridge implements FieldBridge {
 
+    private final SkuPriceBridge skuPriceBridge = new SkuPriceBridge();
+    private final AttributeValueBridge attributeValueBridge = new AttributeValueBridge();
+
     /**
      * {@inheritDoc}
      */
     public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
 
         if (value instanceof Collection) {
-
-            final SkuPriceBridge skuPriceBridge = new SkuPriceBridge();
-
-            final AttributeValueBridge attributeValueBridge = new AttributeValueBridge();
 
             for (Object obj : (Collection) value) {
 
@@ -73,7 +72,6 @@ public class ProductSkuBridge implements FieldBridge {
 
                 skuPriceBridge.set("sku.skuPrice", sku.getSkuPrice(), document, luceneOptions);
                 attributeValueBridge.set("attribute", sku.getAttributes(), document, luceneOptions);
-
 
             }
         }

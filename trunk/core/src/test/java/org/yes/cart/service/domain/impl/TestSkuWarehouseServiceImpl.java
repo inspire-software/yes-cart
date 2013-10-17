@@ -23,10 +23,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.ProductSkuService;
-import org.yes.cart.service.domain.SkuWarehouseService;
-import org.yes.cart.service.domain.WarehouseService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
@@ -36,6 +33,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -50,6 +48,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     private WarehouseService warehouseService;
     private SkuWarehouseService skuWarehouseService;
     private ProductSkuService productSkuService;
+    private ProductService productService;
     private CustomerOrderService customerOrderService;
     private OrderStateManager orderStateManager;
 
@@ -58,6 +57,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         warehouseService = (WarehouseService) ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
         skuWarehouseService = (SkuWarehouseService) ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
         productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
+        productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
         orderStateManager = (OrderStateManager) ctx().getBean(ServiceSpringKeys.ORDER_STATE_MANAGER);
         super.setUp();
@@ -276,9 +276,114 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         }
     }
 
+    @Test
+    public void testFindProductAvailableToSellQuantitySobotSHOP10() {
+        //10000 product id - sobot has 4 skus on 1 warehouse
+        final List<Warehouse> shop10wh = warehouseService.findByShopId(10L);
+        final Product sobot = productService.getProductById(10000L);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductAvailableToSellQuantity(sobot, shop10wh);
+        assertEquals(4, skusWarehouse.size());
+        assertEquals(0, new BigDecimal(1).compareTo(skusWarehouse.get("SOBOT-BEER")));
+        assertEquals(0, new BigDecimal(2).compareTo(skusWarehouse.get("SOBOT-PINK")));
+        assertEquals(0, new BigDecimal(3).compareTo(skusWarehouse.get("SOBOT-LIGHT")));
+        assertEquals(0, new BigDecimal(4).compareTo(skusWarehouse.get("SOBOT-ORIG")));
+    }
 
     @Test
-    public void testIsSkuAvilabilityPreorder () {
+    public void testFindProductSkuAvailableToSellQuantitySobotSHOP10() {
+        //10000 product id - sobot has 4 skus on 1 warehouse
+        final List<Warehouse> shop10wh = warehouseService.findByShopId(10L);
+        final ProductSku sobot = productService.getProductSkuByCode("SOBOT-PINK");
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductSkuAvailableToSellQuantity(sobot, shop10wh);
+        assertEquals(1, skusWarehouse.size());
+        assertEquals(0, new BigDecimal(2).compareTo(skusWarehouse.get("SOBOT-PINK")));
+    }
+
+    @Test
+    public void testFindProductAvailableToSellQuantityProduct5AccSHOP10() {
+        //14004 product id - PRODUCT5-ACC only has associations
+        final List<Warehouse> shop10wh = warehouseService.findByShopId(10L);
+        final Product product5acc = productService.getProductById(14004L);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductAvailableToSellQuantity(product5acc, shop10wh);
+        assertEquals(0, skusWarehouse.size());
+    }
+
+    @Test
+    public void testFindProductSkuAvailableToSellQuantityProduct8SHOP10() {
+        //15007 product id - PRODUCT8 only has SKU
+        final List<Warehouse> shop10wh = warehouseService.findByShopId(10L);
+        final Product product8 = productService.getProductById(15007L);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductAvailableToSellQuantity(product8, shop10wh);
+        assertEquals(1, skusWarehouse.size());
+        assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("PRODUCT8")));
+    }
+
+    @Test
+    public void testFindProductSkuAvailableToSellQuantityProduct8bySkuSHOP10() {
+        //15007 product id - PRODUCT8 only has SKU
+        final List<Warehouse> shop10wh = warehouseService.findByShopId(10L);
+        final ProductSku product8 = productService.getSkuById(11007L);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductSkuAvailableToSellQuantity(product8, shop10wh);
+        assertEquals(1, skusWarehouse.size());
+        assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("PRODUCT8")));
+    }
+
+
+    @Test
+    public void testFindProductAvailableToSellQuantitySobotSHOP50() {
+        //10000 product id - sobot has 4 skus on 1 warehouse
+        final List<Warehouse> shop10wh = warehouseService.findByShopId(50L);
+        final Product sobot = productService.getProductById(10000L);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductAvailableToSellQuantity(sobot, shop10wh);
+        assertEquals(4, skusWarehouse.size());
+        assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("SOBOT-BEER")));
+        assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("SOBOT-PINK")));
+        assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("SOBOT-LIGHT")));
+        assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("SOBOT-ORIG")));
+    }
+
+    @Test
+    public void testFindProductSkuAvailableToSellQuantitySobotSHOP50() {
+        //10000 product id - sobot has 4 skus on 1 warehouse
+        final List<Warehouse> shop10wh = warehouseService.findByShopId(50L);
+        final ProductSku sobot = productService.getProductSkuByCode("SOBOT-PINK");
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductSkuAvailableToSellQuantity(sobot, shop10wh);
+        assertEquals(1, skusWarehouse.size());
+        assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("SOBOT-PINK")));
+    }
+
+    @Test
+    public void testFindProductAvailableToSellQuantityProduct5AccSHOP50() {
+        //14004 product id - PRODUCT5-ACC only has associations
+        final List<Warehouse> shop10wh = warehouseService.findByShopId(50L);
+        final Product product5acc = productService.getProductById(14004L);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductAvailableToSellQuantity(product5acc, shop10wh);
+        assertEquals(0, skusWarehouse.size());
+    }
+
+    @Test
+    public void testFindProductSkuAvailableToSellQuantityProduct8SHOP50() {
+        //15007 product id - PRODUCT8 only has SKU
+        final List<Warehouse> shop10wh = warehouseService.findByShopId(50L);
+        final Product product8 = productService.getProductById(15007L);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductAvailableToSellQuantity(product8, shop10wh);
+        assertEquals(1, skusWarehouse.size());
+        assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("PRODUCT8")));
+    }
+
+    @Test
+    public void testFindProductSkuAvailableToSellQuantityProduct8bySkuSHOP50() {
+        //15007 product id - PRODUCT8 only has SKU
+        final List<Warehouse> shop10wh = warehouseService.findByShopId(50L);
+        final ProductSku product8 = productService.getSkuById(11007L);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductSkuAvailableToSellQuantity(product8, shop10wh);
+        assertEquals(1, skusWarehouse.size());
+        assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("PRODUCT8")));
+    }
+
+
+    @Test
+    public void testIsSkuAvailabilityPreorder () {
         assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15300L).getCode(), true));
         assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15301L).getCode(), true));
         assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15310L).getCode(), true));

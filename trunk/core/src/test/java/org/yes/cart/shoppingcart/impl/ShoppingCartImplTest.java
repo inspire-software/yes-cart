@@ -17,8 +17,6 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
-import org.yes.cart.domain.dto.ProductSkuDTO;
-import org.yes.cart.domain.dto.impl.ProductSkuDTOImpl;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
