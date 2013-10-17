@@ -19,10 +19,9 @@ package org.yes.cart.domain.interceptor;
 import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
 import org.hibernate.search.indexes.interceptor.IndexingOverride;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.impl.ProductEntity;
-import org.yes.cart.util.MoneyUtils;
-
-import java.math.BigDecimal;
 
 /**
  * User:  Igor Azarny
@@ -37,7 +36,7 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
      * Product will be added to index:
      * in case if product available for pre/back order;
      * or always available (for example digital products);
-     * or has quantity of sku more than 0  on any stock.
+     * or has quantity of sku more than 0  on any stock (in any shop).
      *
      *
      * @param entity entity to check
@@ -45,7 +44,14 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
      */
     public boolean isIncludeInLuceneIndex(final Product entity) {
        if (entity != null && Product.AVAILABILITY_STANDARD == entity.getAvailability()) {
-           return MoneyUtils.isFirstBiggerThanSecond(entity.getQtyOnWarehouse(), BigDecimal.ZERO);
+           for (final ProductSku sku : entity.getSku()) {
+               for (final SkuWarehouse inventory : sku.getQuantityOnWarehouse()) {
+                   if (inventory.isAvailableToSell()) {
+                       return true; // has stock
+                   }
+               }
+           }
+           return false; // no
        }
        return true;
     }

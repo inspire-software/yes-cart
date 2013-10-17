@@ -199,16 +199,14 @@ public interface ProductSku extends Auditable, Attributable, Rankable , Seoable,
      */
     void setQuantityOnWarehouse(Collection<SkuWarehouse> quantityOnWarehouse);
 
-
     /**
      * Get total quantity of skus on all warehouses.
      *
+     * @param warehouses warehouse to consider
+     *
      * @return total quantity
      */
-    BigDecimal getQty();
-
-
-
+    BigDecimal getQty(Collection<Warehouse> warehouses);
 
 }
 

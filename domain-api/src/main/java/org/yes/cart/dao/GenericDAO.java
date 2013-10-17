@@ -375,15 +375,15 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Get the full text search result.
      *
      * @param query         lucene search query
-     * @param firtsResult   first row of result
+     * @param firstResult   first row of result
      * @param maxResults    size of result set
      * @param sortFieldName optional  sort field name
      * @param reverse       reverse the search result
      * @param fields        list of fields for projections
      * @return list of found entities
      */
-    List<Object[]> fullTextSearch(final org.apache.lucene.search.Query query,
-                                  int firtsResult,
+    List<Object[]> fullTextSearch(org.apache.lucene.search.Query query,
+                                  int firstResult,
                                   int maxResults,
                                   String sortFieldName,
                                   boolean reverse,

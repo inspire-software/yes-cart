@@ -20,7 +20,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
-import org.yes.cart.web.page.FaqPage;
 
 /**
  * User: Igor Azarny iazarnmy@yahoo.com

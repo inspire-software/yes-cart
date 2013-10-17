@@ -244,7 +244,7 @@ public class StorefrontApplication
      * @return instance of {@link MultiWebApplicationPath}
      */
     private MultiWebApplicationPath getMultiWebApplicationPath() {
-        MultiWebApplicationPath multiWebApplicationPath = resourceResolvers.get(ApplicationDirector.getCurrentShop().getCode());
+        MultiWebApplicationPath multiWebApplicationPath = resourceResolvers.get(ShopCodeContext.getShopCode());
         if (multiWebApplicationPath == null) { //first request to this shop, lets create a resolver
             multiWebApplicationPath = new MultiWebApplicationPath(getServletContext());
 
@@ -252,7 +252,7 @@ public class StorefrontApplication
             multiWebApplicationPath.add("default/markup"); // default place to search resource
             // TODO: v2 shop specific failover stacks with multiple themes?
 
-            resourceResolvers.put(ApplicationDirector.getCurrentShop().getCode(), multiWebApplicationPath);
+            resourceResolvers.put(ShopCodeContext.getShopCode(), multiWebApplicationPath);
         }
         return multiWebApplicationPath;
     }

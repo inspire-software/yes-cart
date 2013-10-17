@@ -20,8 +20,15 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.entity.impl.ProductAvailabilityModelImpl;
 import org.yes.cart.service.domain.ProductAvailabilityStrategy;
+import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.service.domain.WarehouseService;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -30,20 +37,43 @@ import org.yes.cart.service.domain.ProductAvailabilityStrategy;
  */
 public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrategy {
 
+    private final WarehouseService warehouseService;
+    private final SkuWarehouseService skuWarehouseService;
+
+    public ProductAvailabilityStrategyImpl(final WarehouseService warehouseService,
+                                           final SkuWarehouseService skuWarehouseService) {
+        this.warehouseService = warehouseService;
+        this.skuWarehouseService = skuWarehouseService;
+    }
+
     /** {@inheritDoc} */
-    public ProductAvailabilityModel getAvailabilityModel(final Product product) {
-        return new ProductAvailabilityModelImpl(product.getAvailability(), product.getQtyOnWarehouse());
+    public ProductAvailabilityModel getAvailabilityModel(final long shopId, final Product product) {
+        final List<Warehouse> warehouses = warehouseService.findByShopId(shopId);
+        final Map<String, BigDecimal> qty = skuWarehouseService.findProductAvailableToSellQuantity(product, warehouses);
+        return new ProductAvailabilityModelImpl(
+                product.getCode(),
+                product.getAvailability(),
+                qty);
     }
 
 
     /** {@inheritDoc} */
-    public ProductAvailabilityModel getAvailabilityModel(final ProductSearchResultDTO product) {
-        return new ProductAvailabilityModelImpl(product.getAvailability(), product.getQtyOnWarehouse());
+    public ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSearchResultDTO product) {
+        final Map<String, BigDecimal> skuInventory = product.getQtyOnWarehouse().get(shopId);
+        return new ProductAvailabilityModelImpl(
+                product.getCode(),
+                product.getAvailability(),
+                skuInventory);
     }
 
     /** {@inheritDoc} */
-    public ProductAvailabilityModel getAvailabilityModel(final ProductSku sku) {
+    public ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSku sku) {
         final Product product = sku.getProduct();
-        return new ProductAvailabilityModelImpl(product.getAvailability(), sku.getQty());
+        final List<Warehouse> warehouses = warehouseService.findByShopId(shopId);
+        final Map<String, BigDecimal> qty = skuWarehouseService.findProductSkuAvailableToSellQuantity(sku, warehouses);
+        return new ProductAvailabilityModelImpl(
+                sku.getCode(),
+                product.getAvailability(),
+                qty);
     }
 }

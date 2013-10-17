@@ -170,7 +170,9 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "shopService-shopByDomainName",
             "shopService-allShops",
             "shopService-shopCategories",
-            "shopService-shopCategoriesIds"
+            "shopService-shopCategoriesIds",
+            "shopService-shopWarehouses",
+            "shopService-shopWarehousesIds"
     }, allEntries = true)
     public void updateAttributeValue(final long shopId, final String attributeKey, final String attributeValue) {
         final Shop shop = shopDao.findById(shopId);
@@ -208,7 +210,9 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "shopService-shopByDomainName",
             "shopService-allShops",
             "shopService-shopCategories",
-            "shopService-shopCategoriesIds"
+            "shopService-shopCategoriesIds",
+            "shopService-shopWarehouses",
+            "shopService-shopWarehousesIds"
     }, allEntries = true)
     public Shop update(Shop instance) {
         return super.update(instance);
@@ -221,7 +225,9 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "shopService-shopByDomainName",
             "shopService-allShops",
             "shopService-shopCategories",
-            "shopService-shopCategoriesIds"
+            "shopService-shopCategoriesIds",
+            "shopService-shopWarehouses",
+            "shopService-shopWarehousesIds"
     }, allEntries = true)
     public void delete(Shop instance) {
         super.delete(instance);

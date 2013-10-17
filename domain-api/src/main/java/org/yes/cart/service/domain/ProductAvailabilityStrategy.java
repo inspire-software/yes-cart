@@ -34,22 +34,28 @@ public interface ProductAvailabilityStrategy {
 
 
     /**
+     *
+     * @param shopId shop PK
      * @param product product
      * @return availability of this product
      */
-    ProductAvailabilityModel getAvailabilityModel(final Product product);
+    ProductAvailabilityModel getAvailabilityModel(final long shopId, final Product product);
 
     /**
+     *
+     * @param shopId shop PK
      * @param product product
      * @return availability of this product
      */
-    ProductAvailabilityModel getAvailabilityModel(final ProductSearchResultDTO product);
+    ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSearchResultDTO product);
 
     /**
+     *
+     * @param shopId shop PK
      * @param sku product sku
      * @return availability of this sku
      */
-    ProductAvailabilityModel getAvailabilityModel(final ProductSku sku);
+    ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSku sku);
 
 
 }

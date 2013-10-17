@@ -26,7 +26,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.util.List;
@@ -64,7 +64,7 @@ public class TopCategories extends BaseComponent {
 
         final String selectedLocale = getLocale().getLanguage();
 
-        final List<Category> categories = categoryService.getTopLevelCategories(ApplicationDirector.getCurrentShop().getShopId());
+        final List<Category> categories = categoryService.getTopLevelCategories(ShopCodeContext.getShopId());
 
         final long categoryId = NumberUtils.toLong(getPage().getPageParameters().get(WebParametersKeys.CATEGORY_ID).toString());
 

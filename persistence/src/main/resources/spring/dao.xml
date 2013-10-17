@@ -51,6 +51,7 @@
                 <prop key="getRootContent">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="getEntityFactory">PROPAGATION_SUPPORTS,readOnly,-Throwable</prop>
                 <prop key="getEntityAttributes*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="getAttributeValue*">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
                 <prop key="find*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
                 <prop key="*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
 
@@ -435,6 +436,15 @@
             <bean class="org.yes.cart.domain.entity.bridge.support.impl.ShopCategoryRelationshipSupportImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
                 <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="shopWarehouseRelationshipSupport" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.domain.entity.bridge.support.impl.ShopWarehouseRelationshipSupportImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="warehouseDao"/>
             </bean>
         </property>
     </bean>

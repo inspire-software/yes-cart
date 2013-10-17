@@ -56,6 +56,17 @@ public interface Constants {
      */
     String MONEY_FORMAT_TOINDEX = "00000000";
     String MONEY_FORMAT = "######.00";
+    int MONEY_SCALE = 2;
+
+    /**
+     * Inventory in minor units. For example
+     * 12.345 meter of fabric would be 12345.
+     * 1 item would be 1000
+     */
+    String INVENTORY_FORMAT_TOINDEX = "00000000";
+    String INVENTORY_FORMAT = "######.000";
+    int INVENTORY_SCALE = 3;
+
     /**
      * Default decimal scale
      */

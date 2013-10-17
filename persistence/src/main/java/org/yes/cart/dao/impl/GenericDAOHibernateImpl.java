@@ -682,13 +682,13 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     @SuppressWarnings("unchecked")
     public List<Object[]> fullTextSearch(final org.apache.lucene.search.Query query,
-                                         final int firtsResult,
+                                         final int firstResult,
                                          final int maxResults,
                                          final String sortFieldName,
                                          final boolean reverse,
                                          final String ... fields) {
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
-            final FullTextQuery fullTextQuery = createFullTextQuery(query, firtsResult, maxResults, sortFieldName, reverse);
+            final FullTextQuery fullTextQuery = createFullTextQuery(query, firstResult, maxResults, sortFieldName, reverse);
             fullTextQuery.setProjection(fields);
             final List<Object[]> list = fullTextQuery.list();
             if (list != null) {

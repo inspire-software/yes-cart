@@ -16,8 +16,10 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -136,6 +138,16 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
 
     public void setVersion(final long version) {
         this.version = version;
+    }
+
+    public boolean isAvailableToSell() {
+        return MoneyUtils.isFirstBiggerThanSecond(getQuantity(), BigDecimal.ZERO)
+                && MoneyUtils.isFirstBiggerThanSecond(getQuantity(), getReserved());
+    }
+
+    public BigDecimal getAvailableToSell() {
+        return getQuantity().subtract(
+                MoneyUtils.notNull(getReserved(), BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE)));
     }
 }
 

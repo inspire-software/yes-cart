@@ -80,7 +80,7 @@ public final class MoneyUtils {
     /**
      * @param value  value to check
      * @param ifNull value to return if value to check is null
-     * @return value or ifNull if value is null. if ifNull is null retirns BigDecimal.ZERO.
+     * @return value or ifNull if value is null. if ifNull is null returns BigDecimal.ZERO.
      */
     public static BigDecimal notNull(final BigDecimal value, final BigDecimal ifNull) {
         if (value == null) {

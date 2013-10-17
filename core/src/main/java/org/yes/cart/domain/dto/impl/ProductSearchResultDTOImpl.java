@@ -22,6 +22,7 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * Implement search result dto item.
@@ -38,9 +39,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private String description;
     private String displayDescription;
     private int availability;
-    private BigDecimal qtyOnWarehouse;
-    private String firstAvailableSkuCode;
-    private BigDecimal firstAvailableSkuQuantity;
+    private Map<Long, Map<String, BigDecimal>> qtyOnWarehouse;
     private String defaultImage;
     private Boolean featured;
 
@@ -59,32 +58,12 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     }
 
     /** {@inheritDoc} */
-    public String getFirstAvailableSkuCode() {
-        return firstAvailableSkuCode;
-    }
-
-    /** {@inheritDoc} */
-    public void setFirstAvailableSkuCode(final String firstAvailableSkuCode) {
-        this.firstAvailableSkuCode = firstAvailableSkuCode;
-    }
-
-    /** {@inheritDoc} */
-    public BigDecimal getFirstAvailableSkuQuantity() {
-        return firstAvailableSkuQuantity;
-    }
-
-    /** {@inheritDoc} */
-    public void setFirstAvailableSkuQuantity(final BigDecimal firstAvailableSkuQuantity) {
-        this.firstAvailableSkuQuantity = firstAvailableSkuQuantity;
-    }
-
-    /** {@inheritDoc} */
-    public BigDecimal getQtyOnWarehouse() {
+    public Map<Long, Map<String, BigDecimal>> getQtyOnWarehouse() {
         return qtyOnWarehouse;
     }
 
     /** {@inheritDoc} */
-    public void setQtyOnWarehouse(final BigDecimal qtyOnWarehouse) {
+    public void setQtyOnWarehouse(final Map<Long, Map<String, BigDecimal>> qtyOnWarehouse) {
         this.qtyOnWarehouse = qtyOnWarehouse;
     }
 

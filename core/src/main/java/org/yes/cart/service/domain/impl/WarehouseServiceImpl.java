@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopWarehouse;
@@ -52,6 +54,7 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
+    @Cacheable(value = "shopService-shopWarehouses"/*, key ="shop.getShopId()"*/)
     public List<Warehouse> findByShopId(final long shopId) {
         return getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shopId);
     }
@@ -72,6 +75,12 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
+    @CacheEvict(value = {
+            "shopService-shopWarehouses",
+            "shopService-shopWarehousesIds",
+            "skuWarehouseService-findProductOnWarehouse",
+            "skuWarehouseService-findProductSkusOnWarehouse"
+    }, allEntries = true)
     public ShopWarehouse assignWarehouse(final long warehouseId, final long shopId) {
         final ShopWarehouse shopWarehouse = shopWarehouseDao.getEntityFactory().getByIface(ShopWarehouse.class);
         shopWarehouse.setWarehouse(getById(warehouseId));
@@ -81,6 +90,12 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
+    @CacheEvict(value = {
+            "shopService-shopWarehouses",
+            "shopService-shopWarehousesIds",
+            "skuWarehouseService-findProductOnWarehouse",
+            "skuWarehouseService-findProductSkusOnWarehouse"
+    }, allEntries = true)
     public void unassignWarehouse(final long warehouseId, final long shopId) {
         final ShopWarehouse shopWarehouse = shopWarehouseDao.findSingleByNamedQuery(
                 "ASSIGNED.SHOPWAREHOUSE", warehouseId, shopId);

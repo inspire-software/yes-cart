@@ -19,6 +19,7 @@ package org.yes.cart.domain.dto;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * Represent product from search result. The whole entity usage id overhead.
@@ -96,37 +97,13 @@ public interface ProductSearchResultDTO extends Identifiable {
      * Get available quantity on warehouses.
      * @return available qty on all warehouses.
      */
-    BigDecimal getQtyOnWarehouse();
+    Map<Long, Map<String, BigDecimal>> getQtyOnWarehouse();
 
     /**
      * Set available qty on all warehouses.
      * @param qty quantity.
      */
-    void setQtyOnWarehouse(BigDecimal qty);
-
-    /**
-     * Get first available available sku code. In case of multisku products some of particular sku may be unavailable.
-     * @return first available sku code.
-     */
-    String getFirstAvailableSkuCode();
-
-    /**
-     * Set first available sku code.
-     * @param firstAvailableSkuCode first available sku code.
-     */
-    void setFirstAvailableSkuCode(String firstAvailableSkuCode);
-
-    /**
-     * Get price of  first available sku code.
-     * @return price of  first available sku code.
-     */
-    BigDecimal getFirstAvailableSkuQuantity();
-
-    /**
-     * Set price of  first available sku code.
-     * @param firstAvailableSkuQuantity price of  first available sku code.
-     */
-    void setFirstAvailableSkuQuantity(BigDecimal firstAvailableSkuQuantity);
+    void setQtyOnWarehouse(Map<Long, Map<String, BigDecimal>> qty);
 
     /**
      * Get default image, under IMAGE0 attribute.

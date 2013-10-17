@@ -16,13 +16,11 @@
 
 package org.yes.cart.web.service.ws.client;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
 import flex.messaging.FlexContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.service.async.model.AsyncContext;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

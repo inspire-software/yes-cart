@@ -10,7 +10,6 @@ import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSPasswordCallback;
 import org.apache.ws.security.handler.WSHandlerConstants;
-import org.yes.cart.web.service.ws.CacheDirector;
 import org.yes.cart.web.service.ws.client.WsClientFactory;
 
 import javax.security.auth.callback.Callback;
@@ -19,7 +18,6 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

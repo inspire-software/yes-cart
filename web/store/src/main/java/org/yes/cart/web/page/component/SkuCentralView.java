@@ -26,6 +26,7 @@ import org.springframework.util.StringUtils;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.price.PriceTierView;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -41,7 +42,6 @@ import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -167,7 +167,7 @@ public class SkuCentralView extends AbstractCentralView {
         } else if (productId != null) {
             isProduct = true;
             product = productService.getProductById(Long.valueOf(productId), true);
-            final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(product);
+            final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), product);
             sku = getDefault(product, pam);
         } else {
             throw new RuntimeException("Product or Sku id expected");
@@ -204,7 +204,7 @@ public class SkuCentralView extends AbstractCentralView {
                 new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false)
         );
 
-        final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(sku);
+        final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), sku);
 
         add(
                 getWicketSupportFacade().links().newAddToCartLink(ADD_TO_CART_LINK, sku.getCode(), null, getPage().getPageParameters())
@@ -286,7 +286,7 @@ public class SkuCentralView extends AbstractCentralView {
         if (productPam.isAvailable()) {
             if (product.isMultiSkuProduct()) {
                 for (final ProductSku sku : product.getSku()) {
-                    final ProductAvailabilityModel skuPam = productAvailabilityStrategy.getAvailabilityModel(sku);
+                    final ProductAvailabilityModel skuPam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), sku);
                     if (skuPam.isAvailable()) {
                         return sku;
                     }

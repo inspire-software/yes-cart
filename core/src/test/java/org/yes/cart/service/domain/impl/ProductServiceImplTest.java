@@ -17,6 +17,7 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.lucene.search.Query;
+import org.hibernate.LazyInitializationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.cache.Cache;
@@ -27,15 +28,12 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.*;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -101,129 +99,49 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testGetProductQuantity0() {
-        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
-        Shop shop = shopService.getById(10L);
-        assertNotNull(shop);
-        Product product = productService.getProductById(10000L);
-        assertNotNull(product);
-        assertEquals("SOBOT", product.getCode());
-        /* test that sobot has 10 skus on all warehouses  */
-        BigDecimal qty = productService.getProductQuantity(product);
-        assertNotNull(qty);
-        assertEquals(BigDecimal.TEN.setScale(2), qty);
+    public void testPricesOnSkuAreLazy() throws Exception {
+
+        final Product product = productService.getProductById(10000L); // Sobot
+        final Collection<SkuPrice> prodPrices = product.getSku().iterator().next().getSkuPrice();
+        try {
+            prodPrices.iterator().next().getRegularPrice();
+            fail("Prices must be lazy. We work with prices through priceService with appropriate cache and timing");
+        } catch (LazyInitializationException exp) {
+            // good we need it lazy - as prices are retrieved from priceService
+        }
+
+        final ProductSku productSku = productService.getSkuById(10000L); // Sobot
+        final Collection<SkuPrice> skuPrices = productSku.getSkuPrice();
+        try {
+            skuPrices.iterator().next().getRegularPrice();
+            fail("Prices must be lazy. We work with prices through priceService with appropriate cache and timing");
+        } catch (LazyInitializationException exp) {
+            // good we need it lazy - as prices are retrieved from priceService
+        }
+
     }
 
     @Test
-    public void testGetProductQuantity1() {
-        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
-        Shop shop = shopService.getById(10L);
-        assertNotNull(shop);
-        BigDecimal qty;
-        Product product = productService.getProductById(14004L);
-        //PRODUCT5-ACC has no price records
-        assertNotNull(product);
-        assertEquals("PRODUCT5-ACC", product.getCode());
-        /* Ttest that sobot has 10 skus on warehouse */
-        qty = productService.getProductQuantity(product);
-        assertNull(qty);
-    }
+    public void testInventoryOnSkuAreLazy() throws Exception {
 
-    @Test
-    public void testGetProductQuantity2() {
-        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
-        Shop shop = shopService.getById(10L);
-        assertNotNull(shop);
-        BigDecimal qty;
-        Product product = productService.getProductById(15007L);
-        //product has null qty
-        assertNotNull(product);
-        assertEquals("PRODUCT8", product.getCode());
-        /* Ttest that sobot has 0 skus on warehouse */
-        qty = productService.getProductQuantity(product);
-        assertNull("Product  " + product.getProductId() + " has " + qty + " quyantity, but expected null", qty);
-    }
+        final Product product = productService.getProductById(10000L); // Sobot
+        final Collection<SkuWarehouse> prodInventory = product.getSku().iterator().next().getQuantityOnWarehouse();
+        try {
+            prodInventory.iterator().next().getQuantity();
+            fail("Inventory must be lazy. We work with inventory through skuWarehouseService with appropriate cache and timing");
+        } catch (LazyInitializationException exp) {
+            // good we need it lazy - as prices are retrieved from priceService
+        }
 
-    /**
-     * The same tests for particular shop, that has skus on warehouses
-     */
-    @Test
-    public void testGetProductQuantityByProdShop0() {
-        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
-        Shop shop = shopService.getById(10L);
-        assertNotNull(shop);
-        Product product = productService.getProductById(10000L);
-        assertNotNull(product);
-        assertEquals("SOBOT", product.getCode());
-        /* test that sobot has 10 skus on all warehouses  */
-        BigDecimal qty = productService.getProductQuantity(product, shop);
-        assertNotNull(qty);
-        assertEquals(BigDecimal.TEN.setScale(2), qty);
-    }
+        final ProductSku productSku = productService.getSkuById(10000L); // Sobot
+        final Collection<SkuWarehouse> skuInventory = productSku.getQuantityOnWarehouse();
+        try {
+            skuInventory.iterator().next().getQuantity();
+            fail("Inventory must be lazy. We work with inventory through skuWarehouseService with appropriate cache and timing");
+        } catch (LazyInitializationException exp) {
+            // good we need it lazy - as prices are retrieved from priceService
+        }
 
-    /**
-     * The same tests for particular shop, that has skus on warehouses
-     */
-    @Test
-    public void testGetProductQuantityByProdShop1() {
-        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
-        Shop shop = shopService.getById(10L);
-        assertNotNull(shop);
-        Product product = productService.getProductById(14004L);
-        //PRODUCT5-ACC has no price records
-        assertNotNull(product);
-        assertEquals("PRODUCT5-ACC", product.getCode());
-        /* Ttest that sobot has 10 skus on warehouse */
-        BigDecimal qty = productService.getProductQuantity(product, shop);
-        assertNull(qty);
-    }
-
-    /**
-     * The same tests for particular shop, that has skus on warehouses
-     */
-    @Test
-    public void testGetProductQuantityByProdShop2() {
-        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
-        Shop shop = shopService.getById(10L);
-        assertNotNull(shop);
-        Product product = productService.getProductById(15005L);
-        //PRODUCT4 has 0 qty
-        assertNotNull(product);
-        assertEquals("PRODUCT6", product.getCode());
-        /* Ttest that 0 skus on warehouses */
-        BigDecimal qty = productService.getProductQuantity(product, shop);
-        assertNotNull(qty);
-        assertEquals(BigDecimal.ZERO.setScale(2), qty);
-    }
-
-    /**
-     * The same tests for particular shop, that has not skus on warehouses
-     */
-    @Test
-    public void testGetProductQuantityByProdShop3() {
-        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
-        Shop shop = shopService.getById(50L);
-        assertNotNull(shop);
-        Product product = productService.getProductById(10000L);
-        assertNotNull(product);
-        assertEquals("SOBOT", product.getCode());
-        /* test that sobot has 10 skus on all warehouses  */
-        BigDecimal qty = productService.getProductQuantity(product, shop);
-        assertNull(qty);
-        //PRODUCT5-ACC has no price records
-        product = productService.getProductById(14004L);
-        assertNotNull(product);
-        assertEquals("PRODUCT5-ACC", product.getCode());
-        /* Ttest that sobot has 10 skus on warehouse */
-        qty = productService.getProductQuantity(product, shop);
-        assertNull(qty);
-        //PRODUCT4 has 0 qty
-        product = productService.getProductById(11003L);
-        assertNotNull(product);
-        assertEquals("PRODUCT4", product.getCode());
-        /* Ttest that sobot has 10 skus on warehouse */
-        qty = productService.getProductQuantity(product, shop);
-        assertNull(qty);
     }
 
     @Test

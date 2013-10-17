@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.i18n.I18NModel;

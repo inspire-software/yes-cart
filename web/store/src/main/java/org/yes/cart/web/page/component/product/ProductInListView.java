@@ -145,9 +145,9 @@ public class ProductInListView extends BaseComponent {
         );
 
 
-        final ProductAvailabilityModel skuPam = productAvailabilityStrategy.getAvailabilityModel(product);
+        final ProductAvailabilityModel skuPam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), product);
 
-        add(links.newAddToCartLink(ADD_TO_CART_LINK, product.getFirstAvailableSkuCode(), null, getPage().getPageParameters())
+        add(links.newAddToCartLink(ADD_TO_CART_LINK, skuPam.getFirstAvailableSkuCode(), null, getPage().getPageParameters())
                         .add(new Label(ADD_TO_CART_LINK_LABEL, skuPam.isInStock() || skuPam.isPerpetual() ?
                                 getLocalizer().getString("add.to.cart", this) :
                                 getLocalizer().getString("preorder.cart", this)))
@@ -155,7 +155,7 @@ public class ProductInListView extends BaseComponent {
         );
 
         add(
-                new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice(product.getFirstAvailableSkuCode())), true, true)
+                new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice(skuPam.getFirstAvailableSkuCode())), true, true)
         );
 
 

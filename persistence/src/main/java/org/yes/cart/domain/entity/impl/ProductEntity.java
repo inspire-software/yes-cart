@@ -22,7 +22,6 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
-import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -35,8 +34,6 @@ import java.util.*;
 
 @Indexed(index = "luceneindex/product", interceptor = org.yes.cart.domain.interceptor.ProductEntityIndexingInterceptor.class)
 public class ProductEntity implements org.yes.cart.domain.entity.Product, java.io.Serializable {
-
-    private static Pair<String, BigDecimal> NOT_AVAILABLE_CODE_QTY = new Pair<String, BigDecimal>("N/A", BigDecimal.ZERO);
 
     private ProductSku defaultProductSku = null;
     private long productId;
@@ -220,8 +217,11 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.productCategory = productCategory;
     }
 
-    @Field
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductSkuBridge.class)
+    @Fields({
+        @Field(bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductSkuBridge.class)),
+        @Field(name = "qtyOnWarehouse", store = Store.YES, analyze = Analyze.NO,
+                bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.SkuWarehouseBridge.class))
+    })
     public Collection<ProductSku> getSku() {
         return this.sku;
     }
@@ -327,27 +327,13 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.version = version;
     }
 
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    public BigDecimal getQtyOnWarehouse() {
-        BigDecimal rez = BigDecimal.ZERO.setScale(2);
+    @Override
+    public Map<String, BigDecimal> getQtyOnWarehouse(final Collection<Warehouse> warehouses) {
+        final Map<String, BigDecimal> qty = new HashMap<String, BigDecimal>();
         for (ProductSku sku : getSku()) {
-            for (SkuWarehouse swe : sku.getQuantityOnWarehouse()) {
-                rez = rez.add(swe.getQuantity());
-            }
+            qty.put(sku.getCode(), sku.getQty(warehouses));
         }
-        return rez;
-    }
-
-    private Pair<String, BigDecimal> firstAvailableSkuCodeQuantity = null;
-
-
-
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    public String getFirstAvailableSkuCode() {
-        if (firstAvailableSkuCodeQuantity == null) {
-            firstAvailableSkuCodeQuantity = createFirstAvailableCodeQuantityPair();
-        }
-        return firstAvailableSkuCodeQuantity.getFirst();
+        return qty;
     }
 
     /**
@@ -364,42 +350,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         }
         return attr.getVal();
     }
-
-
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    public BigDecimal getFirstAvailableSkuQuantity() {
-        if (firstAvailableSkuCodeQuantity == null) {
-            firstAvailableSkuCodeQuantity = createFirstAvailableCodeQuantityPair();
-        }
-        return firstAvailableSkuCodeQuantity.getSecond();
-    }
-
-
-    /*
-    * Return first available sku rather than default to improve customer experience.
-    */
-    private Pair<String, BigDecimal>  createFirstAvailableCodeQuantityPair() {
-        final ProductAvailabilityModel productPam = new ProductAvailabilityModelImpl(getAvailability(), getQtyOnWarehouse());
-        if (productPam.isAvailable()) {
-            if (isMultiSkuProduct()) {
-                for (final ProductSku sku : getSku()) {
-                    final ProductAvailabilityModel skuPam = new ProductAvailabilityModelImpl(getAvailability(), sku.getQty());
-                    if (skuPam.isAvailable()) {
-                        return  new Pair<String, BigDecimal>(sku.getCode(), sku.getQty());
-                    }
-                }
-            }
-        }
-
-        ProductSku productSku  = getDefaultSku();
-        if(productSku != null) {
-            // single SKU and N/A product just use default
-            return  new Pair<String, BigDecimal>(productSku.getCode(), productSku.getQty());
-
-        }
-        return NOT_AVAILABLE_CODE_QTY;
-    }
-
 
     public ProductSku getDefaultSku() {
         if (defaultProductSku == null) {
