@@ -57,6 +57,10 @@
             remoteDevService.getCacheInfo();
         }
 
+        private function onWarmUpClick(event:MouseEvent):void {
+            remoteDevService.warmUp();
+        }
+
         protected function onRpcMethodFault(event:FaultEvent):void {
             ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
@@ -71,6 +75,10 @@
         }
 
         private function onEvictCacheResult(event:ResultEvent):void {
+            remoteDevService.getCacheInfo();
+        }
+
+        private function onWarmUpResult(event:ResultEvent):void {
             remoteDevService.getCacheInfo();
         }
         ]]>
@@ -94,6 +102,10 @@
                    result="onEvictCacheResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="warmUp" name="warmUp"
+                   result="onWarmUpResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
 
     </mx:RemoteObject>
 
@@ -108,6 +120,8 @@
                        click="onClearCacheClick(event)"/>
             <mx:Button id="clearSingleCacheBtn" label="@Resource(bundle='MonitoringPanel',key='clearSingleCache')"
                        click="onClearSingleCacheClick(event)" enabled="{cacheItemSelected}"/>
+            <mx:Button id="warmUpBtn" label="@Resource(bundle='MonitoringPanel',key='warmUp')"
+                       click="onWarmUpClick(event)"/>
 
         </mx:ControlBar>
 

@@ -43,7 +43,7 @@
         <spring-security.version>3.1.4.RELEASE</spring-security.version>
         <spring.version>3.2.3.RELEASE</spring.version>
         <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
-        <ehcache.version>2.6.0</ehcache.version>
+        <ehcache.version>2.6.6</ehcache.version>
         <!--<ehcache.version>1.6.2</ehcache.version>-->
 
         <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>

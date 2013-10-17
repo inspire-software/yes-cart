@@ -43,6 +43,10 @@ public interface BackdoorService {
     @WebResult(name = "ping")
     boolean ping();
 
+    @WebMethod
+    @WebResult(name = "warmUp")
+    void warmUp();
+
     /**
      * Reindex all products.
      * @return quantity of objects in index

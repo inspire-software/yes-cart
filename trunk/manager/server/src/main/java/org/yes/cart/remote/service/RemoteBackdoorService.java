@@ -33,6 +33,13 @@ import java.util.Map;
 public interface RemoteBackdoorService {
 
     /**
+     * Warm up all storefront servers.
+     *
+     * @param context web service context
+     */
+    void warmUp(AsyncContext context);
+
+    /**
      * Reindex all products.
      *
      * @param context web service context

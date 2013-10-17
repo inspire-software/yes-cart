@@ -91,5 +91,9 @@ public interface RemoteDevService {
      */
     Map<String, Boolean> evictCache(String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Warm up all storefront servers.
+     */
+    void warmUp();
 
 }
