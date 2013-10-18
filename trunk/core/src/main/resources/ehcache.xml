@@ -255,7 +255,7 @@
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="300"/>
 
     <cache name="productService-productSearchResultDTOByQuery"      maxElementsInMemory="2000" overflowToDisk="false"
-           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="300"/>
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="300"/>
 
     <cache name="productService-productQty"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
