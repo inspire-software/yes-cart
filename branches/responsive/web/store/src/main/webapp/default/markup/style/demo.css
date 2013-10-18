@@ -287,6 +287,17 @@ a.active-category {
 
 /** --------------------------------------------------------------------------- */
 
+.toggleMenu2 {
+    display: none;
+    background: #707070;
+    padding: 15px 10px;
+    color: #fff;
+    text-align: left;
+    margin-bottom: 0px;
+    border-bottom-width: 0px;
+    width: 97%;
+}
+
 
 .topcatnav {
     list-style: none;
@@ -386,11 +397,7 @@ a.active-category {
     border-top: 1px solid #ffffff;
 }
 /* ------------------------------------------------------------------------------------- */
-.navcontainer {
-    width: 100%;
-    /* max-width: 900px;
-     margin: 10px auto;*/
-}
+
 
 .toggleMenu {
     display: none;
@@ -401,7 +408,6 @@ a.active-category {
     margin-bottom: 0px;
     border-bottom-width: 0px;
     width: 97%;
-
 }
 
 .nav {
@@ -539,18 +545,21 @@ a.active-category {
 
 /* ------------------------------------------------------------------*/
 .filternav-head {
-    color: #ff28ff;
-    font-size: 16px;
+    color: #000000;
+    font-weight: bold;
     margin-top: 5px;
-    margin-bottom: 0px;
+    margin-bottom: 1px;
     display: block;
-    background-color: #FBFBE6;
 }
 
 .filternav {
     margin: 0;
     padding: 0;
-    background-color: #ffffea;
+}
+
+.filternav li a:hover div div div  {
+    color: #f52f11;
+    text-decoration: underline;
 }
 
 

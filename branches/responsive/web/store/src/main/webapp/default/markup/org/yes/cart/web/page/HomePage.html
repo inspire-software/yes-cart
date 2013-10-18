@@ -78,13 +78,25 @@
         [bread crumbs]
     </wicket:container>
 
+    <div class="hide-on-desktop mobile-grid-100 grid-parent"  id="top-categories-mobile">
+        <wicket:container wicket:id="topCategories">
+            [top categories]
+        </wicket:container>
+    </div>
+
     <div class="grid-100 mobile-grid-100 grid-parent">
         <div class="grid-20 mobile-grid-30 grid-parent">
-            <p>
-                <wicket:container wicket:id="topCategories">
-                    [top categories]
-                </wicket:container>
-            </p>
+            <div class="grid-100 hide-on-mobile grid-parent" id="top-categories-desktop">
+
+            </div>
+            <script>
+                var pMenu  = document.getElementById("top-categories-mobile").innerHTML;
+                document.getElementById("top-categories-desktop").innerHTML = pMenu;
+                var all = document.getElementById("top-categories-desktop").getElementsByTagName('li');
+                for (var i = -1, l = all.length; ++i < l;) {
+                        all[i].style.cssFloat="none";
+                }
+            </script>
             <p>
                 <wicket:container wicket:id="priceFilter">
                     [price filter]
