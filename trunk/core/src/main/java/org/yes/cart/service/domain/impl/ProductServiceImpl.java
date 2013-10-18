@@ -592,7 +592,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     List<FilteredNavigationRecord> getSingleValueNavigationRecords(final String locale, final long productTypeId) {
         List<Object[]> list;
-        final List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();
+        final Set<FilteredNavigationRecord> records = new HashSet<FilteredNavigationRecord>();
 
         final Map<String, Integer> singleNavAttrCodes = attributeService.getSingleNavigatableAttributeCodesByProductType(productTypeId);
         if (!singleNavAttrCodes.isEmpty()) {
@@ -606,7 +606,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                     "PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
             appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
         }
-        return records;
+        return new ArrayList<FilteredNavigationRecord>(records);
     }
 
 
@@ -650,7 +650,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     private static final I18NModel BLANK = new FailoverStringI18NModel(null, "-");
 
-    private void appendFilteredNavigationRecords(final List<FilteredNavigationRecord> toAppendTo,
+    private void appendFilteredNavigationRecords(final Set<FilteredNavigationRecord> toAppendTo,
                                                  final String locale,
                                                  final List<Object[]> list,
                                                  final Map<String, I18NModel> attrNames,
