@@ -200,5 +200,30 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
 
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        FilteredNavigationRecordImpl that = (FilteredNavigationRecordImpl) o;
+        // we do not include display* fields as they will be the same if the original are the same
+        if (rank != that.rank) return false;
+        if (code != null ? !code.equals(that.code) : that.code != null) return false;
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (value != null ? !value.equals(that.value) : that.value != null) return false;
+
+        return true;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        // we do not include display* fields as they will be the same if the original are the same
+        int result = code != null ? code.hashCode() : 0;
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        result = 31 * result + rank;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        return result;
+    }
 }
