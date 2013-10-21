@@ -247,17 +247,17 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             dt = System.currentTimeMillis();
             bulkImportService.doImport(createContext("src/test/resources/import/categorynames.xml", listener, importedFilesSet));
             final long cats = System.currentTimeMillis() - dt;
-            System.out.println("  12 categories in " + cats + "millis (~" + (cats / 12) + " per item)");
+            System.out.println("  14 categories in " + cats + "millis (~" + (cats / 14) + " per item)");
 
             rs = getConnection().getConnection().createStatement().executeQuery (
-                    "select count(*) as cnt from TCATEGORY c where c.GUID in ('151','1296','942','803','788','195','194','197','943','196','191','192') ");
+                    "select count(*) as cnt from TCATEGORY c where c.GUID in ('151','1296','942','803','788','195','19501','19502','194','197','943','196','191','192') ");
             rs.next();
             long cntCats = rs.getLong("cnt");
             rs.close();
-            assertEquals(12L, cntCats);  // 12 categories
+            assertEquals(14L, cntCats);  // 14 categories
 
             rs = getConnection().getConnection().createStatement().executeQuery (
-                    "select PARENT_ID, PRODUCTTYPE_ID, DESCRIPTION, GUID, URI from TCATEGORY where NAME = 'mice'");
+                    "select CATEGORY_ID,PARENT_ID, PRODUCTTYPE_ID, DESCRIPTION, GUID, URI from TCATEGORY where NAME = 'mice'");
             rs.next();
             assertFalse(rs.isAfterLast());
             String catDesc = rs.getString("DESCRIPTION");
@@ -265,6 +265,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             String catSeoUri = rs.getString("URI");
             long catParentId = rs.getLong("PARENT_ID");
             long catPtypeId = rs.getLong("PRODUCTTYPE_ID");
+            long catMiceId = rs.getLong("CATEGORY_ID");
             rs.close();
             assertEquals("The mouse is the second most important way of communicating with a computer. " +
                     "Please be careful to choose the right type of connection when buying a mouse, there are three different types:- " +
@@ -276,6 +277,22 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("195", catGuid);
             assertEquals("mice", catSeoUri);
 
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select CATEGORY_ID,PARENT_ID from TCATEGORY where NAME = 'wireless mice'");
+            rs.next();
+            assertFalse(rs.isAfterLast());
+            long catWirelessId = rs.getLong("CATEGORY_ID");
+            long parentWirelessId = rs.getLong("PARENT_ID");
+            rs.close();
+            assertEquals(catMiceId, parentWirelessId);
+
+            rs = getConnection().getConnection().createStatement().executeQuery (
+                    "select CATEGORY_ID,PARENT_ID from TCATEGORY where NAME = 'optical mice'");
+            rs.next();
+            assertFalse(rs.isAfterLast());
+            long parentOpticalId = rs.getLong("PARENT_ID");
+            rs.close();
+            assertEquals(catWirelessId, parentOpticalId);
 
             dt = System.currentTimeMillis();
             bulkImportService.doImport(createContext("src/test/resources/import/contentnames.xml", listener, importedFilesSet));

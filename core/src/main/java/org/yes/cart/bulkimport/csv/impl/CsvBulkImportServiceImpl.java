@@ -31,6 +31,7 @@ import org.yes.cart.bulkimport.service.support.EntityCacheKeyStrategy;
 import org.yes.cart.bulkimport.service.support.LookUpQuery;
 import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategy;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
@@ -432,11 +433,16 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements B
                 }
                 propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);
                 final Object oldValue = propertyDescriptor.getReadMethod().invoke(object);
-                final Object oldValuePK = oldValue != null ? genericDAO.getEntityIdentifier(oldValue) : null;
-                final Object newValuePK = singleObjectValue != null ? genericDAO.getEntityIdentifier(singleObjectValue) : null;
+                if (oldValue instanceof Identifiable) {
+                    final Object oldValuePK = oldValue != null ? genericDAO.getEntityIdentifier(oldValue) : null;
+                    final Object newValuePK = singleObjectValue != null ? genericDAO.getEntityIdentifier(singleObjectValue) : null;
 
-                if (oldValuePK == null || !oldValuePK.equals(newValuePK)) {
-                    // Update the object only if the value has changed
+                    if (oldValuePK == null || !oldValuePK.equals(newValuePK)) {
+                        // Update the object only if the value has changed
+                        propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
+                    }
+                } else {
+                    // This is not identifiable, possibly primitive (PK) so write always
                     propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
                 }
 
