@@ -82,20 +82,24 @@ alter table TCUSTOMERORDERDELIVERYDET drop column SKU_ID;
 --
 
 -- add columns that allow blanks
-alter table TCARRIER add column DISPLAYNAME varchar(255);
-alter table TCARRIER add column DISPLAYDESCRIPTION  varchar(255);
-alter table TCARRIERSLA add column DISPLAYNAME  varchar(255);
-alter table TCARRIERSLA add column DISPLAYDESCRIPTION  varchar(255);
+alter table TCARRIER add column DISPLAYNAME longtext;
+-- alter table TCARRIER add column DISPLAYNAME varchar(4000);
+alter table TCARRIER add column DISPLAYDESCRIPTION longtext;
+-- alter table TCARRIER add column DISPLAYDESCRIPTION  varchar(4000);
+alter table TCARRIERSLA add column DISPLAYNAME longtext;
+-- alter table TCARRIERSLA add column DISPLAYNAME  varchar(4000);
+alter table TCARRIERSLA add column DISPLAYDESCRIPTION longtext;
+-- alter table TCARRIERSLA add column DISPLAYDESCRIPTION  varchar(4000);
 
--- modify descriptions to 255 characters 4000 is too much
-alter table TCARRIER modify column DESCRIPTION varchar(255);
-alter table TCARRIERSLA modify column DESCRIPTION varchar(255);
+-- modify descriptions to 1000 characters 4000 is too much
+alter table TCARRIER modify column DESCRIPTION varchar(1000);
+alter table TCARRIERSLA modify column DESCRIPTION varchar(1000);
 -- Derby (derby cannot decrease the size so swap and rename)
--- alter table TCARRIER add column DESCRIPTION_TMP varchar(255);
+-- alter table TCARRIER add column DESCRIPTION_TMP varchar(1000);
 -- update TCARRIER set DESCRIPTION_TMP = DESCRIPTION;
 -- alter table TCARRIER drop column DESCRIPTION;
 -- rename column TCARRIER.DESCRIPTION_TMP to DESCRIPTION;
--- alter table TCARRIERSLA add column DESCRIPTION_TMP varchar(255);
+-- alter table TCARRIERSLA add column DESCRIPTION_TMP varchar(1000);
 -- update TCARRIERSLA set DESCRIPTION_TMP = DESCRIPTION;
 -- alter table TCARRIERSLA drop column DESCRIPTION;
 -- rename column TCARRIERSLA.DESCRIPTION_TMP to DESCRIPTION;
