@@ -82,7 +82,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>services/(backdoor|cachedirector)</param-value>
+            <param-value>(services/(backdoor|cachedirector))|(imgvault/)|(wicket/resource/)</param-value>
         </init-param>
     </filter>
 
