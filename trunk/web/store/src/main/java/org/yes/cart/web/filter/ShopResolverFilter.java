@@ -103,17 +103,16 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
     private void setDefaultValues(final Shop shop) {
 
         final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
+        if (shoppingCart != null) { // this may happen if shoppingCart filter is not assigned to this url pattern
+            if (shoppingCart.getCurrencyCode() == null) { // new cart only may satisfy this condition
 
-        if (shoppingCart.getCurrencyCode() == null) { // new cart only may satisfy this condition
+                cartCommandFactory.execute(shoppingCart, new HashMap<String, Object>() {{
+                    put(ShoppingCartCommand.CMD_SETSHOP, shop.getShopId());
+                    put(ShoppingCartCommand.CMD_CHANGECURRENCY, shop.getDefaultCurrency());
+                }});
 
-            cartCommandFactory.execute(shoppingCart, new HashMap<String, Object>() {{
-                put(ShoppingCartCommand.CMD_SETSHOP, shop.getShopId());
-                put(ShoppingCartCommand.CMD_CHANGECURRENCY, shop.getDefaultCurrency());
-            }});
-
+            }
         }
-
-
     }
 
 
