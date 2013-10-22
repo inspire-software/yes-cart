@@ -46,7 +46,7 @@
             <field-type>FIELD</field-type>
             <name>displayName</name>
             <language>en</language>
-            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex>(.{0,4000})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
@@ -55,7 +55,7 @@
             <field-type>FIELD</field-type>
             <name>displayName</name>
             <language>ru</language>
-            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex>(.{0,4000})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
@@ -63,6 +63,24 @@
             <column-index>3</column-index>
             <field-type>FIELD</field-type>
             <name>description</name>
+            <value-regex>(.{0,1000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>4</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayDescription</name>
+            <language>en</language>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayDescription</name>
+            <language>ru</language>
             <value-regex>(.{0,4000})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
