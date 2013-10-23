@@ -60,6 +60,8 @@
         import org.yes.cart.impl.CategoryDTOImpl;
         import org.yes.cart.impl.CustomerDTOImpl;
         import org.yes.cart.impl.CustomerOrderDTOImpl;
+        import org.yes.cart.impl.CustomerOrderDeliveryDTOImpl;
+        import org.yes.cart.impl.CustomerOrderDeliveryDetailDTOImpl;
         import org.yes.cart.impl.InventoryDTOImpl;
         import org.yes.cart.impl.JobStatusImpl;
         import org.yes.cart.impl.PriceListDTOImpl;
@@ -70,6 +72,7 @@
         import org.yes.cart.impl.ProductSkuDTOImpl;
         import org.yes.cart.impl.ProductTypeAttrDTOImpl;
         import org.yes.cart.impl.ProductTypeDTOImpl;
+        import org.yes.cart.impl.PromotionDTOImpl;
         import org.yes.cart.impl.SeoDTOImpl;
         import org.yes.cart.impl.SeoImageDTOImpl;
 
@@ -99,6 +102,7 @@
         import org.yes.cart.ui.price.PriceListManagementPanel;
         import org.yes.cart.ui.product.ProductManagementPanel;
         import org.yes.cart.ui.producttype.ProductTypeManagementPanel;
+        import org.yes.cart.ui.promotion.PromotionManagementPanel;
         import org.yes.cart.ui.reindex.ReindexPanel;
         import org.yes.cart.ui.report.ReportPanel;
         import org.yes.cart.ui.role.RoleManagementPanel;
@@ -141,6 +145,8 @@
             registerClassAlias("org.yes.cart.domain.dto.impl.CategoryDTOImpl", CategoryDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.CustomerDTOImpl", CustomerDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl", CustomerOrderDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl", CustomerOrderDeliveryDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl", CustomerOrderDeliveryDetailDTOImpl);
             registerClassAlias("org.yes.cart.service.async.model.impl.JobStatusImpl", JobStatusImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl", ProdTypeAttributeViewGroupDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl", ProductAssociationDTOImpl);
@@ -160,6 +166,7 @@
             registerClassAlias("org.yes.cart.domain.dto.impl.InventoryDTOImpl", InventoryDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.StateDTOImpl", StateDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.WarehouseDTOImpl", WarehouseDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.PromotionDTOImpl", PromotionDTOImpl);
 
             registerClassAlias("org.yes.cart.service.dto.support.impl.InventoryFilterImpl", InventoryFilter);
             registerClassAlias("org.yes.cart.service.dto.support.impl.PriceListFilterImpl", PriceListFilter);
@@ -477,6 +484,15 @@
             showMainPanelSection(panelCache['PriceListManagementPanel']);
         }
 
+        private function onPromotionsManagementClick(event:MouseEvent):void {
+            setFontWeight(promoBtn);
+            if (!panelCache.hasOwnProperty('PromotionManagementPanel')) {
+                panelCache['PromotionManagementPanel'] = new PromotionManagementPanel();
+                mainPanel.addChild(panelCache['PromotionManagementPanel']);
+            }
+            showMainPanelSection(panelCache['PromotionManagementPanel']);
+        }
+
         private function onCustomerManagementClick(event:MouseEvent):void {
             setFontWeight(customersBtn);
             if (!panelCache.hasOwnProperty('CustomerManagementPanel')) {
@@ -662,10 +678,10 @@
                                                label="@Resource(bundle='ShopManagerApplication',key='loginFormLogin')"
                                                enabled="{loginButtonEnabled}"
                                                click="login()"/>
-                                    <!--<mx:Button id="cheatLoginButton"
+                                    <mx:Button id="cheatLoginButton"
                                                label="Cheat"
                                                enabled="true"
-                                               click="cheatLogin()"/>-->
+                                               click="cheatLogin()"/>
                                 </mx:ControlBar>
                             </mx:Panel>
                         </mx:HBox>
@@ -741,6 +757,12 @@
                                                        label="@Resource(bundle='ShopManagerApplication',key='productPrices')"
                                                        click="onPriceManagementClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='productPricesHint')"
+                                                />
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="promoBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='promotions')"
+                                                       click="onPromotionsManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='promotionsHint')"
                                                 />
 
                                         <!--

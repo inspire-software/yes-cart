@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.entity;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 
@@ -52,7 +53,7 @@ public interface CustomerOrder extends Auditable {
     String ORDER_STATUS_IN_PROGRESS = "os.in.progress";
 
     /**
-     * Order canceled. Quantity returned from revervation.
+     * Order canceled. Quantity returned from reservation.
      */
     String ORDER_STATUS_CANCELLED = "os.cancelled";
 
@@ -111,18 +112,18 @@ public interface CustomerOrder extends Auditable {
     void setPgLabel(String pgLabel);
 
     /**
-     * Get formated billing address, that copied from customer profile.
+     * Get formatted billing address, that copied from customer profile.
      * This need to prevent situation when address can be edited by customer in his
      * profile during delivery, so need to copy billing address.
      *
-     * @return formated delivery address.
+     * @return formatted delivery address.
      */
     String getBillingAddress();
 
     /**
      * Set formated address.
      *
-     * @param billingAddress formated address.
+     * @param billingAddress formatted address.
      */
     void setBillingAddress(String billingAddress);
 
@@ -184,7 +185,7 @@ public interface CustomerOrder extends Auditable {
     void setCurrency(String currency);
 
     /**
-     * Order message, can be a gift message or what ever
+     * Order message (e.g. a gift message)
      *
      * @return order message.
      */
@@ -193,7 +194,7 @@ public interface CustomerOrder extends Auditable {
     /**
      * Set order message from shopping cart.
      *
-     * @param orderMessage order messge.
+     * @param orderMessage order message.
      */
     void setOrderMessage(String orderMessage);
 
@@ -256,7 +257,7 @@ public interface CustomerOrder extends Auditable {
 
 
     /**
-     * Get gollection of order datails, i.e. items
+     * Get collection of order details, i.e. items
      *
      * @return order details.
      */
@@ -271,7 +272,7 @@ public interface CustomerOrder extends Auditable {
 
     /**
      * Get order delivery. Actually it will be one delivery in most cases
-     * but delivery can be splited by several reasons.
+     * but delivery can be split by several reasons.
      *
      * @return Order deliveries
      */
@@ -307,6 +308,64 @@ public interface CustomerOrder extends Auditable {
      */
     void setOrderTimestamp(Date orderTimestamp);
 
+
+    /**
+     * Get sum of order details prices less promotion discounts applied
+     * (does not include delivery).
+     *
+     * @return order price.
+     */
+    BigDecimal getPrice();
+
+    /**
+     * Set sum of order details prices less promotion discounts applied
+     * (does not include delivery).
+     *
+     * @param price order price.
+     */
+    void setPrice(BigDecimal price);
+
+    /**
+     * Get order list price is the sum of all list prices of oder details.
+     * This price is effectively sub total (does not include delivery).
+     *
+     * @return order price
+     */
+    BigDecimal getListPrice();
+
+    /**
+     * Set order list price is the sum of all list prices of oder details.
+     * This price is effectively sub total (does not include delivery).
+     *
+     * @param listPrice order price.
+     */
+    void setListPrice(BigDecimal listPrice);
+
+    /**
+     * Returns true if promotions have been applied to this
+     * item.
+     *
+     * @return true if promotions have been applied
+     */
+    boolean isPromoApplied();
+
+    /**
+     * @param promoApplied set promotion applied flag
+     */
+    void setPromoApplied(boolean promoApplied);
+
+    /**
+     * Comma separated list of promotion codes that have been applied
+     * for this cart item.
+     *
+     * @return comma separated promo codes
+     */
+    String getAppliedPromo();
+
+    /**
+     * @param appliedPromo comma separated promo codes
+     */
+    void setAppliedPromo(String appliedPromo);
 
 }
 

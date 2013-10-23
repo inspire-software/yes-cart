@@ -58,6 +58,11 @@ public class CustomerOrderDTOImpl {
 
     public var code:String;
 
+    public var listPrice:Number;
+    public var price:Number;
+    public var promoApplied:Boolean;
+    public var appliedPromo:String;
+
     public var amount:Number;
 
     public function get fullname():String {

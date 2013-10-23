@@ -42,7 +42,8 @@ public class LogoutCommandImpl extends AbstractCartCommandImpl implements Shoppi
     public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             shoppingCart.getShoppingContext().clearContext();
-            setModifiedDate(shoppingCart);
+            recalculate(shoppingCart);
+            markDirty(shoppingCart);
         }
     }
 }

@@ -17,14 +17,12 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,84 +43,76 @@ public class ShoppingCartImpl implements ShoppingCart {
 
     private String currencyCode;
 
-    private Date modifiedDate;
+    private long modifiedTimestamp;
 
-    private Date processingStartDate;
+    private long processingStartTimestamp;
 
     private ShoppingContext shoppingContext;
 
     private OrderInfo orderInfo;
+
+    private Total total;
 
     private transient AmountCalculationStrategy calculationStrategy;
 
 
     private AmountCalculationStrategy getCalculationStrategy() {
         if (calculationStrategy == null) {
-            calculationStrategy = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, true);
-            ShopCodeContext.getLog(this).error("Default amount calculation strategy used with 0% tax. Please configure \"calculationStrategy\" and set it to cart");
+            ShopCodeContext.getLog(this).error("Cart amount calculation strategy is not configured. Please configure \"calculationStrategy\" and set it to cart");
+            throw new RuntimeException("Cart amount calculation strategy is not configured. Please configure \"calculationStrategy\" and set it to cart");
         }
         return calculationStrategy;
     }
 
     /**
-     * Set amount calculation strategy.
+     * Initialise this cart.
+     *
      * @param calculationStrategy {@link AmountCalculationStrategy}
      */
-    public void setCalculationStrategy(final AmountCalculationStrategy calculationStrategy) {
+    public void initialise(final AmountCalculationStrategy calculationStrategy) {
         this.calculationStrategy = calculationStrategy;
+        this.processingStartTimestamp = System.currentTimeMillis();
     }
 
-    /**
-     * Clean current cart and prepare it to reuse.
-     */
+    /** {@inheritDoc} */
+    public void markDirty() {
+        this.modifiedTimestamp = System.currentTimeMillis();
+    }
+
+    /** {@inheritDoc} */
     public void clean() {
         guid = java.util.UUID.randomUUID().toString();
         items = new ArrayList<CartItemImpl>();
         orderInfo = null;
-        modifiedDate = new Date();
+        modifiedTimestamp = System.currentTimeMillis();
     }
 
+    /** {@inheritDoc} */
+    public void recalculate() {
+        total = getCalculationStrategy().calculate(this);
+    }
 
-    /**
-     * Is billing address different from shipping adress.
-     * @return true is billing and shipping address are different.
-     */
+    /** {@inheritDoc} */
     public boolean isSeparateBillingAddress() {
         return getOrderInfo().isSeparateBillingAddress();
     }
 
-
-    /**
-     * Get order message.
-     * @return order message
-     */
+    /** {@inheritDoc} */
     public String getOrderMessage() {
         return getOrderInfo().getOrderMessage();
     }
 
-
-
-    /**
-     * Get shopping cart guid.
-     * @return shopping cart guid.
-     */
+    /** {@inheritDoc} */
     public String getGuid() {
         return guid;
     }
 
-
-    /**
-     * Get carrier shipping SLA.
-     * @return carries sla id.
-     */
+    /** {@inheritDoc} */
     public Long getCarrierSlaId() {
         return getOrderInfo().getCarrierSlaId();
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public List<CartItem> getCartItemList() {
         final List<CartItem> immutableItems = new ArrayList<CartItem>(getItems().size());
         for (CartItem item : getItems()) {
@@ -131,9 +121,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         return Collections.unmodifiableList(immutableItems);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public boolean addProductSkuToCart(final String sku, final BigDecimal quantity) {
 
         final int skuIndex = indexOf(sku);
@@ -149,9 +137,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public boolean setProductSkuToCart(final String sku, final BigDecimal quantity) {
 
         final CartItemImpl newItem = new CartItemImpl();
@@ -167,11 +153,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param productSku
-     */
+    /** {@inheritDoc} */
     public boolean removeCartItem(final String productSku) {
         final int skuIndex = indexOf(productSku);
         if (skuIndex != -1) {
@@ -181,9 +163,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public boolean removeCartItemQuantity(final String productSku, final BigDecimal quantity) {
         final int skuIndex = indexOf(productSku);
         if (skuIndex != -1) {
@@ -197,9 +177,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public boolean setProductSkuPrice(final String skuCode, final BigDecimal price, final BigDecimal listPrice) {
         final int skuIndex = indexOf(skuCode);
         if (skuIndex != -1) {
@@ -211,9 +189,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public int getCartItemsCount() {
         BigDecimal quantity = BigDecimal.ZERO;
         final List<? extends CartItem> items = getItems();
@@ -223,41 +199,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         return quantity.intValue();
     }
 
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public BigDecimal getCartSubTotal() {
-
-        return getCalculationStrategy().calculateSubTotal(this.getCartItemList());
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public BigDecimal getCartSubTotal(final boolean useListPrice) {
-
-        return getCalculationStrategy().calculateSubTotal(this.getCartItemList(), useListPrice);
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public AmountCalculationResult getCartAmount(final List<? extends CartItem> items,
-                                                 final CustomerOrderDelivery orderDelivery) {
-        return getCalculationStrategy().calculate(
-                getShoppingContext(),
-                orderDelivery
-        );
-    }
-
-    /**
-     * @param  skuCode sku code
-     * @return idex of cart item for this sku
-     */
+    /** {@inheritDoc} */
     public int indexOf(final String skuCode) {
         for (int index = 0; index < getItems().size(); index++) {
             final CartItem item = getItems().get(index);
@@ -269,82 +211,52 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
 
-    /**
-     * Is sku code present in cart
-     * @param skuCode product sku code
-     * @return true if sku code present in cart
-     */
+    /** {@inheritDoc} */
     public boolean contains(final String skuCode) {
         return (indexOf(skuCode) != -1);
     }
 
 
-    /**
-     * @return list of items (testing convenience method)
-     */
+    /** {@inheritDoc} */
     List<CartItemImpl> getItems() {
         return items;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public String getCurrencyCode() {
         return currencyCode;
     }
 
     /**
-     * {@inheritDoc}
+     * Set currency.
+     *
+     * @param currencyCode new currency to use
      */
     void setCurrencyCode(final String currencyCode) {
         this.currencyCode = currencyCode;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public String getCustomerName() {
         return getShoppingContext().getCustomerName();
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    public Date getModifiedDate() {
-        return modifiedDate;
+    /** {@inheritDoc} */
+    public long getModifiedTimestamp() {
+        return modifiedTimestamp;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public boolean isModified() {
-        return getProcessingStartDate().getTime() <= getModifiedDate().getTime();
+        return processingStartTimestamp < modifiedTimestamp;
     }
-
-    /**
-     * Set last modified date.
-     *
-     * @param modifiedDate last modified date.
-     */
-    void setModifiedDate(final Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
-
 
     /** {@inheritDoc} */
     public String getCustomerEmail() {
         return  getShoppingContext().getCustomerEmail();
     }
 
-
-    /**
-     *
-     * Get logon state.
-     *
-     * @return Logon state
-     */
+    /** {@inheritDoc} */
     public int getLogonState() {
         if (StringUtils.isBlank(getCustomerEmail())
                    && StringUtils.isNotBlank(getCustomerName())) {
@@ -370,7 +282,8 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /**
-     * Set shopping cart generic locale
+     * Set shopping cart generic locale.
+     *
      * @param currentLocale current locale
      */
     void setCurrentLocale(final String currentLocale) {
@@ -385,19 +298,17 @@ public class ShoppingCartImpl implements ShoppingCart {
         return orderInfo;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Date getProcessingStartDate() {
-        return processingStartDate;
+    /** {@inheritDoc} */
+    public long getProcessingStartTimestamp() {
+        return processingStartTimestamp;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setProcessingStartDate(final Date processingStartDate) {
-        this.processingStartDate = processingStartDate;
+    /** {@inheritDoc} */
+    public Total getTotal() {
+        if (total == null) {
+            ShopCodeContext.getLog(this).error("Total requested before cart was recalculated - revise page flow to ensure that recalculation happens");
+            total = new TotalImpl();
+        }
+        return total;
     }
-
-
 }

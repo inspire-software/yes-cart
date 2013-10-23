@@ -22,11 +22,15 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierService;
 import org.yes.cart.service.domain.CarrierSlaService;
+import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -36,10 +40,7 @@ import org.yes.cart.web.page.component.util.CarrierRenderer;
 import org.yes.cart.web.page.component.util.CarrierSlaRenderer;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -61,6 +62,9 @@ public class ShippingView extends BaseComponent {
 
     @SpringBean(name = ServiceSpringKeys.CARRIER_SLA_SERVICE)
     private CarrierSlaService carrierSlaService;
+
+    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
+    private CustomerService customerService;
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
@@ -127,10 +131,32 @@ public class ShippingView extends BaseComponent {
             protected void onSelectionChanged(final CarrierSla carrierSla) {
                 super.onSelectionChanged(carrierSla);
 
+                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+                final Customer customer = customerService.findCustomer(cart.getShoppingContext().getCustomerEmail());
+                final String shippingAddressId;
+                final String billingAddressId;
+                if (customer != null) {
+                    Address billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
+                    Address shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+
+                    shippingAddressId = String.valueOf(shippingAddress.getAddressId());
+
+                    if (!cart.isSeparateBillingAddress() || billingAddress == null) {
+                        billingAddress = shippingAddress;
+                    }
+
+                    billingAddressId = String.valueOf(billingAddress.getAddressId());
+                } else {
+                    shippingAddressId = "";
+                    billingAddressId = "";
+                }
+
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, ApplicationDirector.getShoppingCart(),
-                        (Map) Collections.singletonMap(
-                                ShoppingCartCommand.CMD_SETCARRIERSLA,
-                                String.valueOf(carrierSla.getCarrierslaId()))
+                        (Map) new HashMap() {{
+                            put(ShoppingCartCommand.CMD_SETCARRIERSLA, String.valueOf(carrierSla.getCarrierslaId()));
+                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billingAddressId);
+                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, shippingAddressId);
+                        }}
                 );
 
                 addPriceView(form);

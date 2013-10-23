@@ -1143,7 +1143,7 @@
 
         <property name="currency" type="string" length="3" not-null="true" column="CURRENCY"/>
 
-        <property name="quantity" type="java.math.BigDecimal" not-null="false">
+        <property name="quantity" type="java.math.BigDecimal" not-null="true">
             <column name="QTY" not-null="true">
                 <comment>Quantity of SKU. Price tier</comment>
             </column>
@@ -1361,12 +1361,6 @@
             </key>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ShopAdvPlaceEntity"/>
         </bag>
-        <bag name="shopDiscountRules" inverse="true" lazy="false" cascade="all">
-            <key>
-                <column name="SHOP_ID" not-null="true"/>
-            </key>
-            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ShopDiscountEntity"/>
-        </bag>
 
         <bag name="attributes" inverse="true" lazy="false" cascade="all">
             <key column="SHOP_ID" not-null="true" foreign-key="FK_ATTR_SHOP"/>
@@ -1527,59 +1521,6 @@
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPCATEGORY_GUID" not-null="true"/>
-
-    </class>
-
-
-    <class name="org.yes.cart.domain.entity.impl.ShopDiscountEntity" table="TSHOPDISCOUNT">
-        <id name="shopDiscountId" column="SHOPDISCOUNT_ID" type="long">
-            <generator class="native">
-                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
-                <param name="column">value</param>
-            </generator>
-        </id>
-        <version name="version" column="VERSION" type="long"/>
-
-        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
-        <property name="description" column="DESCRIPTION" type="string" length="4000"/>
-        <property name="availablefrom" column="AVAILABLEFROM" type="timestamp"/>
-        <property name="availableto" column="AVAILABLETO" type="timestamp"/>
-        <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_SD_SHOP">
-            <column name="SHOP_ID" not-null="true"/>
-        </many-to-one>
-        <set name="shopDiscountRules" inverse="false">
-            <key column="SHOPDISCOUNT_ID" not-null="true" foreign-key="FK_SDR_SDRULE"/>
-            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ShopDiscountRuleEntity"/>
-        </set>
-
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
-        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-        <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPDISCOUNT_GUID" not-null="true"/>
-
-    </class>
-
-    <class name="org.yes.cart.domain.entity.impl.ShopDiscountRuleEntity" table="TSHOPDISCOUNTRULE">
-        <id name="shopDiscountRuleId" column="SHOPDISCOUNTRULE_ID" type="long">
-            <generator class="native">
-                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
-                <param name="column">value</param>
-            </generator>
-        </id>
-        <version name="version" column="VERSION" type="long"/>
-
-        <!--many-to-one name="shopDiscount" class="org.yes.cart.domain.entity.ShopDiscount" foreign-key="FK_SDR_SHOPDISC" update="false" insert="false">
-            <column name="SHOPDISCOUNT_ID" not-null="true"/>
-        </many-to-one-->
-        <property name="rule" column="RULE" type="string" length="4000"/>
-        <property name="name" column="NAME" type="string" length="255"/>
-        <property name="description" column="DESCRIPTION" type="string" length="4000"/>
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
-        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-        <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPDISCOUNTRULE_GUID" not-null="true"/>
 
     </class>
 
@@ -1840,7 +1781,14 @@
             </column>
         </property>
         <property name="cartGuid" column="CART_GUID" type="string" length="36" index="CUSTOMERORDER_CART" not-null="true"/>
+
         <property name="currency" column="CURRENCY" type="string" length="3" not-null="true"/>
+        <property name="price" column="PRICE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
+
+        <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
+        <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
+
         <property name="locale" column="LOCALE" type="string" length="5" not-null="true"/>
         <property name="orderMessage" type="string" length="4000">
             <column name="MESSAGE">
@@ -1905,7 +1853,8 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="qty" column="QTY" type="java.math.BigDecimal" not-null="false"/>
+        <property name="qty" column="QTY" type="java.math.BigDecimal" not-null="true"/>
+        <property name="salePrice" column="SALE_PRICE" type="java.math.BigDecimal" not-null="true"/>
         <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
         <property name="price" type="java.math.BigDecimal" not-null="false">
 
@@ -1914,6 +1863,10 @@
                 </comment>
             </column>
         </property>
+
+        <property name="gift" column="IS_GIFT" type="boolean" length="1" not-null="true"/>
+        <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
+        <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
 
         <property name="productSkuCode" column="CODE" type="string" length="255" not-null="true"/>
         <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
@@ -1953,7 +1906,13 @@
                 </comment>
             </column>
         </property>
+
         <property name="price" column="PRICE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
+
+        <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
+        <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
+
         <property name="deliveryStatus" column="DELIVERYSTATUS" type="string" length="64" not-null="true"/>
         <bag name="detail" cascade="all" inverse="true" lazy="false">
             <key column="CUSTOMERORDERDELIVERY_ID" not-null="true" foreign-key="FK_CODD_CDELIVERY"/>
@@ -1994,7 +1953,13 @@
             </column>
         </property>
         <property name="price" column="PRICE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="salePrice" column="SALE_PRICE" type="java.math.BigDecimal" not-null="true"/>
         <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
+
+        <property name="gift" column="IS_GIFT" type="boolean" length="1" not-null="true"/>
+        <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
+        <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
+
         <property name="productSkuCode" column="CODE" type="string" length="255" not-null="true"/>
         <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
         <many-to-one name="delivery" class="org.yes.cart.domain.entity.impl.CustomerOrderDeliveryEntity" foreign-key="FK_CODD_DL">
@@ -2111,6 +2076,53 @@
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SEOIMAGE_GUID" not-null="true"/>
+
+    </class>
+
+    <!--     ########################################### PROMO ################################# -->
+
+    <class name="org.yes.cart.domain.entity.impl.PromotionEntity" table="TPROMOTION">
+        <id name="promotionId" type="long" column="PROMOTION_ID">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="shopCode" column="SHOP_CODE" type="string" length="255" not-null="true" index="PROMO_SHOP_CODE"/>
+        <property name="currency" column="CURRENCY" type="string" length="5" not-null="true" index="PROMO_CURRENCY"/>
+        <property name="code" column="CODE" type="string" length="255" not-null="true" index="PROMO_CODE"/>
+        <property name="promoType" column="PROMO_TYPE" type="string" length="1" not-null="true" index="PROMO_PTYPE"/>
+        <property name="promoAction" column="PROMO_ACTION" type="string" length="1" not-null="true" index="PROMO_PACTION"/>
+
+        <property name="eligibilityCondition" column="ELIGIBILITY_CONDITION" type="string" length="4000" not-null="true"/>
+        <property name="promoActionContext" column="PROMO_ACTION_CONTEXT" type="string" length="255"/>
+
+        <property name="name" column="NAME" type="string" length="255" not-null="true"/>
+        <property name="description" column="DESCRIPTION" type="string" length="1000"/>
+        <property name="displayName" column="DISPLAYNAME" type="string" length="4000"/>
+        <property name="displayDescription" column="DISPLAYDESCRIPTION" type="string" length="4000"/>
+
+        <property name="tag" type="string" length="255">
+            <column name="TAG">
+                <comment>
+                    Set of space separated promotion tags
+                </comment>
+            </column>
+        </property>
+
+        <property name="canBeCombined" column="CAN_BE_COMBINED" type="boolean" length="1" not-null="true"/>
+        <property name="enabled" column="ENABLED" type="boolean" length="1" not-null="true" index="PROMO_ENABLED"/>
+
+        <property name="enabledFrom" column="ENABLED_FROM" type="timestamp" not-null="false" index="PROMO_ENABLED_FROM"/>
+        <property name="enabledTo" column="ENABLED_TO" type="timestamp" not-null="false" index="PROMO_ENABLED_TO"/>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36" unique-key="PROMO_GUID" not-null="true"/>
 
     </class>
 
@@ -2855,6 +2867,20 @@
         ]]>
     </query>
 
+    <query name="PROMOTION.BY.SHOPCODE">
+        <![CDATA[
+            select p from PromotionEntity p where p.shopCode = ?1
+        ]]>
+    </query>
+
+    <query name="PROMOTION.BY.SHOPCODE.ACTIVE">
+        <![CDATA[
+            select p from PromotionEntity p
+            where p.shopCode = ?1 and p.enabled = ?2
+             and (p.enabledFrom < ?3 OR p.enabledFrom IS NULL)
+             and (p.enabledTo > ?4 OR p.enabledTo IS NULL)
+        ]]>
+    </query>
 
 
 

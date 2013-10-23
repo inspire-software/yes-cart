@@ -36,9 +36,6 @@
         }
 
         public function set customer(value:CustomerDTOImpl):void {
-            if (_customer != null && value != null && _customer.customerId == value.customerId) {
-                return;
-            }
             _customer = value;
             if (tagsInput != null) {
                 tagsInput.text = _customer.tag;
@@ -58,6 +55,7 @@
 
         private function onChangeTags(event:Event):void {
             tagsChanged = (customer.tag != tagsInput.text)
+            customer.tag = tagsInput.text;
         }
 
         private function onSaveTags(event:MouseEvent):void {

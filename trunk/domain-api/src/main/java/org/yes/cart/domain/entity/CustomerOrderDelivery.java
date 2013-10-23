@@ -34,7 +34,7 @@ public interface CustomerOrderDelivery extends Auditable {
 
 
     /**
-     * On full fillment center.
+     * On fulfilment center.
      */
     String DELIVERY_STATUS_ON_FULLFILMENT = "ds.fullfillment";
 
@@ -160,19 +160,58 @@ public interface CustomerOrderDelivery extends Auditable {
     void setRefNo(String refNo);
 
     /**
-     * Calculated delivery price.
+     * Get actual delivery price after all promotions applied.
      *
      * @return delivery price.
      */
     BigDecimal getPrice();
 
     /**
-     * Set delivery price.
+     * Set actual delivery price after all promotions applied.
      *
      * @param price delivery price.
      */
     void setPrice(BigDecimal price);
 
+    /**
+     * Set delivery list price (i.e. cost of delivery as per carrier SLA price).
+     *
+     * @return delivery list cost
+     */
+    BigDecimal getListPrice();
+
+    /**
+     * Set delivery list price (i.e. cost of delivery as per carrier SLA price).
+     *
+     * @param listPrice delivery list cost.
+     */
+    void setListPrice(BigDecimal listPrice);
+
+    /**
+     * Returns true if promotions have been applied to this
+     * item.
+     *
+     * @return true if promotions have been applied
+     */
+    boolean isPromoApplied();
+
+    /**
+     * @param promoApplied set promotion applied flag
+     */
+    void setPromoApplied(boolean promoApplied);
+
+    /**
+     * Comma separated list of promotion codes that have been applied
+     * for this cart item.
+     *
+     * @return comma separated promo codes
+     */
+    String getAppliedPromo();
+
+    /**
+     * @param appliedPromo comma separated promo codes
+     */
+    void setAppliedPromo(String appliedPromo);
 
     /**
      * Get order delivery status

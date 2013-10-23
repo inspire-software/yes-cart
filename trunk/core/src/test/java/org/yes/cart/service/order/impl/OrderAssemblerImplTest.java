@@ -57,7 +57,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
         assertEquals("By default billing and shipping addresses the same",
                 customerOrder.getBillingAddress(),
                 customerOrder.getShippingAddress());
-        assertTrue("By Default billind address is shipping address ",
+        assertTrue("By Default billing address is shipping address ",
                 customerOrder.getBillingAddress().contains("shipping addr"));
         assertEquals("Order must be in ORDER_STATUS_NONE state",
                 CustomerOrder.ORDER_STATUS_NONE,

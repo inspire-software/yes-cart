@@ -126,7 +126,7 @@ public interface CustomerDTO extends Identifiable {
      *
      * @param tag customer tag line
      */
-    void setTag(String tag) ;
+    void setTag(String tag);
 
 
 }

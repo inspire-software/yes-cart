@@ -72,7 +72,7 @@ public class CookieTuplizerImpl implements CookieTuplizer {
      * @param keyRingPassword      key ring password to use.
      * @param chunkSize            Base64 chunk size.
      * @param secretKeyFactoryName Secret Key Factory Name.
-     * @param cipherName           Chipher name.
+     * @param cipherName           Cipher name.
      */
     public CookieTuplizerImpl(final String keyRingPassword, final int chunkSize,
                               final String secretKeyFactoryName, final String cipherName) {
@@ -103,7 +103,7 @@ public class CookieTuplizerImpl implements CookieTuplizer {
      * Split string to chunks by size.
      *
      * @param stringToSplit string to split.
-     * @return array of string cunks or null if string is blank.
+     * @return array of string chunks or null if string is blank.
      */
     String[] split(final String stringToSplit) {
         if (StringUtils.isNotBlank(stringToSplit)) {

@@ -45,7 +45,8 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
         if (parameters.containsKey(getCmdKey())) {
             shoppingCart.getShoppingContext().setCustomerEmail((String) parameters.get(CMD_LOGIN_P_EMAIL));
             shoppingCart.getShoppingContext().setCustomerName((String) parameters.get(CMD_LOGIN_P_NAME));
-            setModifiedDate(shoppingCart);
+            recalculate(shoppingCart);
+            markDirty(shoppingCart);
         }
     }
 }

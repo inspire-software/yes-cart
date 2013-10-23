@@ -98,7 +98,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
                 orderSummary.getOrderAdjustment().getShipping().getFlatRateShippingAdjustment().getShippingName());
 
         if (carrierSla != null) {
-
+            // TODO: YC-303 Rework ShopDiscount and ShopDiscountRule domain objects
             customerOrderDelivery.setCarrierSla(carrierSla); // only one delivery, so just set sla
             if (carrierSla.getPrice() != null) {
                 customerOrderDelivery.setPrice(carrierSla.getPrice());

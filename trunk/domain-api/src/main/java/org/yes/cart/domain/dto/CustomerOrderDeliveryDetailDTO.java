@@ -94,8 +94,20 @@ public interface CustomerOrderDeliveryDetailDTO extends Identifiable {
     void setInvoicePrice(BigDecimal invoicePrice);
 
     /**
+     * Get sale price.
+     * @return price
+     */
+    BigDecimal getSalePrice();
+
+    /**
+     * Set sale price.
+     * @param salePrice to set.
+     */
+    void setSalePrice(BigDecimal salePrice);
+
+    /**
      * Get price in catalog.
-     * @return proce in catalog.
+     * @return price in catalog.
      */
     BigDecimal getListPrice();
 
@@ -103,11 +115,51 @@ public interface CustomerOrderDeliveryDetailDTO extends Identifiable {
      * Set price in catalog.
      * @param listPrice price in catalog.
      */
-    void setListPrice(BigDecimal listPrice) ;
+    void setListPrice(BigDecimal listPrice);
+
+
+    /**
+     * Returns true if this item has been added as gift as
+     * a result of promotion.
+     *
+     * @return true if this is a promotion gift
+     */
+    boolean isGift();
+
+    /**
+     * @param gift set gift flag
+     */
+    void setGift(boolean gift);
+
+    /**
+     * Returns true if promotions have been applied to this
+     * item.
+     *
+     * @return true if promotions have been applied
+     */
+    boolean isPromoApplied();
+
+    /**
+     * @param promoApplied set promotion applied flag
+     */
+    void setPromoApplied(boolean promoApplied);
+
+    /**
+     * Comma separated list of promotion codes that have been applied
+     * for this cart item.
+     *
+     * @return comma separated promo codes
+     */
+    String getAppliedPromo();
+
+    /**
+     * @param appliedPromo comma separated promo codes
+     */
+    void setAppliedPromo(String appliedPromo);
 
     /**
      * Get delivery number.
-     * @return delivery nimber.
+     * @return delivery number.
      */
     String getDeliveryNum();
 
@@ -118,7 +170,7 @@ public interface CustomerOrderDeliveryDetailDTO extends Identifiable {
     void setDeliveryNum(String deliveryNum) ;
 
     /**
-     * Get devivery status label for more details look at {@link org.yes.cart.domain.entity.CustomerOrderDelivery}
+     * Get delivery status label for more details look at {@link org.yes.cart.domain.entity.CustomerOrderDelivery}
      * @return delivery detail .
      */
     String getDeliveryStatusLabel();

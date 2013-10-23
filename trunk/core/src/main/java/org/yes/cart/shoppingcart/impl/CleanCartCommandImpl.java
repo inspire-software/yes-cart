@@ -41,7 +41,7 @@ public class CleanCartCommandImpl extends AbstractCartCommandImpl implements Sho
     public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             shoppingCart.clean();
-            setModifiedDate(shoppingCart);
+            markDirty(shoppingCart);
         }
     }
 }

@@ -34,7 +34,13 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
 
     private BigDecimal qty;
     private BigDecimal price;
+    private BigDecimal salePrice;
     private BigDecimal listPrice;
+
+    private boolean gift;
+    private boolean promoApplied;
+    private String appliedPromo;
+
     private String productSkuCode;
     private String productName;
     private CustomerOrder customerOrder;
@@ -65,12 +71,44 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.price = price;
     }
 
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(final BigDecimal salePrice) {
+        this.salePrice = salePrice;
+    }
+
     public BigDecimal getListPrice() {
         return listPrice;
     }
 
     public void setListPrice(BigDecimal listPrice) {
         this.listPrice = listPrice;
+    }
+
+    public boolean isGift() {
+        return gift;
+    }
+
+    public void setGift(final boolean gift) {
+        this.gift = gift;
+    }
+
+    public boolean isPromoApplied() {
+        return promoApplied;
+    }
+
+    public void setPromoApplied(final boolean promoApplied) {
+        this.promoApplied = promoApplied;
+    }
+
+    public String getAppliedPromo() {
+        return appliedPromo;
+    }
+
+    public void setAppliedPromo(final String appliedPromo) {
+        this.appliedPromo = appliedPromo;
     }
 
     public String getProductSkuCode() {

@@ -39,7 +39,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Set<ShopUrl> shopUrl = new HashSet<ShopUrl>(0);
     private Collection<ShopExchangeRate> exchangerates = new ArrayList<ShopExchangeRate>(0);
     private Collection<ShopAdvPlace> advertisingPlaces = new ArrayList<ShopAdvPlace>(0);
-    private Collection<ShopDiscount> shopDiscountRules = new ArrayList<ShopDiscount>(0);
     private Collection<AttrValueShop> attributes = new ArrayList<AttrValueShop>(0);
     private SeoEntity seoInternal;
     private Collection<ShopCategory> shopCategory = new ArrayList<ShopCategory>(0);
@@ -116,14 +115,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public void setAdvertisingPlaces(Collection<ShopAdvPlace> advertisingPlaces) {
         this.advertisingPlaces = advertisingPlaces;
-    }
-
-    public Collection<ShopDiscount> getShopDiscountRules() {
-        return this.shopDiscountRules;
-    }
-
-    public void setShopDiscountRules(Collection<ShopDiscount> shopDiscountRules) {
-        this.shopDiscountRules = shopDiscountRules;
     }
 
     public Collection<AttrValueShop> getAttributes() {

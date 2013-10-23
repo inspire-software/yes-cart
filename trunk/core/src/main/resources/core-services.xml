@@ -441,6 +441,14 @@
         </property>
     </bean>
 
+    <bean id="promotionService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.PromotionServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="promotionDao"/>
+            </bean>
+        </property>
+    </bean>
+
 
 
 
@@ -832,6 +840,16 @@
         </property>
     </bean>
 
+    <bean id="dtoPromotionService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoPromotionServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="promotionService"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
 
     <bean id="dtoInterfaceToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
         <constructor-arg>
@@ -884,14 +902,14 @@
                 <entry key="org.yes.cart.domain.dto.CountryDTO"  value="org.yes.cart.domain.dto.impl.CountryDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.StateDTO"  value="org.yes.cart.domain.dto.impl.StateDTOImpl"/>
 
-
-                <entry key="org.yes.cart.domain.dto.CustomerOrderDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl"/>
-
                 <entry key="org.yes.cart.domain.entity.Seo"  value="org.yes.cart.domain.entity.impl.SeoEntity"/>
 
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>
+
+                <entry key="org.yes.cart.domain.dto.PromotionDTO"        value="org.yes.cart.domain.dto.impl.PromotionDTOImpl"/>
 
             </map>
         </constructor-arg>
@@ -1035,6 +1053,21 @@
 
             </list>
         </constructor-arg>
+    </bean>
+
+    <bean id="amountCalculationStrategy"
+          class="org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy">  <!-- CPOINT tax and amount calculation strategy -->
+        <constructor-arg index="0" value="20.00"/>
+        <constructor-arg index="1" value="true"/>
+        <constructor-arg index="2" ref="deliveryCostCalculationStrategy"/>
+    </bean>
+
+    <bean id="deliveryCostCalculationStrategy" parent="txProxyTemplate"> <!-- CPOINT delivery calculation strategy -->
+        <property name="target">
+            <bean class="org.yes.cart.shoppingcart.impl.DefaultDeliveryCostCalculationStrategy">
+                <constructor-arg index="0" ref="carrierSlaDao"/>
+            </bean>
+        </property>
     </bean>
 
     <bean id="orderNumberGenerator" class="org.yes.cart.service.order.impl.DefaultOrderNumberGeneratorImpl">

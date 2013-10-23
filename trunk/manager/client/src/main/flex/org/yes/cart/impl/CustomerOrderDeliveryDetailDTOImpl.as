@@ -33,6 +33,14 @@ public class CustomerOrderDeliveryDetailDTOImpl {
 
     public var listPrice:Number;
 
+    public var salePrice:Number;
+
+    public var gift:Boolean;
+
+    public var promoApplied:Boolean;
+
+    public var appliedPromo:String;
+
     public var lineTotal:Number;
 
     public var deliveryNum:String;

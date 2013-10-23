@@ -26,6 +26,6 @@ import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.web.support.util.cookie.annotations.PersistentCookie;
 
 
-@PersistentCookie(value = "yes", expirySeconds = 864000, path = "/")
+@PersistentCookie(value = "yc", expirySeconds = 864000, path = "/")
 public class WebShoppingCartImpl extends ShoppingCartImpl {
 }

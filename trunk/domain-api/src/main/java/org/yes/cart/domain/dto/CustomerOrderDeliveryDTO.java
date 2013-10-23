@@ -89,6 +89,43 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
      */
     void setPrice(BigDecimal price);
 
+    /**
+     * Get sale price.
+     * @return price
+     */
+    BigDecimal getListPrice();
+
+    /**
+     * Set sale price.
+     * @param salePrice to set.
+     */
+    void setListPrice(BigDecimal salePrice);
+
+    /**
+     * Returns true if promotions have been applied to this
+     * item.
+     *
+     * @return true if promotions have been applied
+     */
+    boolean isPromoApplied();
+
+    /**
+     * @param promoApplied set promotion applied flag
+     */
+    void setPromoApplied(boolean promoApplied);
+
+    /**
+     * Comma separated list of promotion codes that have been applied
+     * for this cart item.
+     *
+     * @return comma separated promo codes
+     */
+    String getAppliedPromo();
+
+    /**
+     * @param appliedPromo comma separated promo codes
+     */
+    void setAppliedPromo(String appliedPromo);
 
     /**
      * Get order delivery status

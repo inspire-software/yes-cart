@@ -147,21 +147,6 @@ public interface Shop extends Auditable, Seoable, Codable {
     void setAdvertisingPlaces(Collection<ShopAdvPlace> advertisingPlaces);
 
     /**
-     * Get the discount rules.
-     *
-     * @return discount rules.
-     */
-    Collection<ShopDiscount> getShopDiscountRules();
-
-    /**
-     * Set discount rules.
-     *
-     * @param shopDiscountRules discount rules.
-     */
-    void setShopDiscountRules(Collection<ShopDiscount> shopDiscountRules);
-
-
-    /**
      * Get all  attributes.
      *
      * @return collection of product attributes.

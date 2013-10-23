@@ -17,35 +17,60 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.shoppingcart.AmountCalculationResult;
-import org.yes.cart.shoppingcart.AmountCalculationStrategy;
-import org.yes.cart.shoppingcart.CartItem;
-import org.yes.cart.shoppingcart.ShoppingContext;
+import org.yes.cart.shoppingcart.*;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
+ * Default calculation strategy provides basic functionality necessary for promotion
+ * calculation and taxes.
+ *
+ * Promotions assumed to be only applicable to shopping cart as whatever is displayed in
+ * shopping cart should be what goes into the order - we deliver what we promise!
+ *
+ * Hence promotion engine applies all necessary item, order and shipping level promotions
+ * when shopping cart is recalculated. At the point when user checks out shopping cart
+ * already contains all promotions and hence they can simply be copied to the order
+ * entity.
+ *
+ * Calculation of order does not involve any manipulation of the order or deliveries it
+ * simply scans all object tree to compute totals and taxes.
+ *
+ * Shipping cost are special since there is no default per se and most of shipping logic is
+ * either fixed price used from SLA (default strategy) or some carrier specific customisation
+ * which should be implemented on per project basis.
+ *
  * Igor Azarny iazarny@yahoo.com
  * Date: 29/11/11
  * Time: 14:22
  */
 public class DefaultAmountCalculationStrategy implements AmountCalculationStrategy {
 
-    private static final BigDecimal HUNDRED = new BigDecimal("100.00");
+    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal HUNDRED = new BigDecimal("100").setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
     private final BigDecimal tax;
     private final boolean taxIncluded;
+
+    private final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy;
 
     /**
      * Construct default amount calculator with included tax.
      *
      * @param tax vat value in percents
+     * @param taxIncluded if true taxes assumed to be included in price, otherwise they are added to totals
+     * @param deliveryCostCalculationStrategy delivery cost calculation strategy
      */
-    public DefaultAmountCalculationStrategy(final BigDecimal tax, final boolean taxIncluded) {
+    public DefaultAmountCalculationStrategy(final BigDecimal tax,
+                                            final boolean taxIncluded,
+                                            final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy) {
+
+        this.deliveryCostCalculationStrategy = deliveryCostCalculationStrategy;
         this.tax = tax.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         this.taxIncluded = taxIncluded;
     }
@@ -64,101 +89,222 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         return taxIncluded;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public AmountCalculationResult calculate(final ShoppingContext shoppingContext,
-                                             final Collection<CustomerOrderDelivery> orderDelivery) {
-        return calculate(shoppingContext, orderDelivery, false);
+    /** {@inheritDoc} */
+    public Total calculate(final ShoppingCart cart) {
+
+        // 1. Apply all item level promotions as the first step
+        applyItemLevelPromotions(cart);
+
+        // 2. Calculate current subtotal (including item promotions)
+        final CartItemPrices sub = calculateSubTotal(cart.getCartItemList());
+
+        // 3. Calculate delivery costs
+        final BigDecimal deliveryListCost = deliveryCostCalculationStrategy.getDeliveryPrice(cart);
+        final boolean shippingPromoApplied = false;
+        final String appliedShippingPromo = null;
+        final BigDecimal deliveryCost = deliveryListCost;
+        final BigDecimal deliveryTax = calculateTax(deliveryCost);
+        final BigDecimal deliveryCostAmount = calculateAmount(deliveryCost, deliveryTax);
+
+        // 4. Create dummy total for items
+        final boolean orderPromoApplied = false;
+        final String appliedOrderPromo = null;
+        final BigDecimal subTotalList = sub.listPrice;
+        final BigDecimal subTotalTaxList = calculateTax(subTotalList);
+        final BigDecimal subTotalAmountList = calculateAmount(subTotalList, subTotalTaxList);
+        final BigDecimal subTotal = sub.finalPrice;
+        final BigDecimal subTotalTax = calculateTax(subTotal);
+        final BigDecimal subTotalAmount = calculateAmount(subTotal, subTotalTax);
+
+        final BigDecimal total = subTotal.add(deliveryCost);
+        final BigDecimal totalTax = subTotalTax.add(deliveryTax);
+        final BigDecimal totalAmount = subTotalAmount.add(deliveryCostAmount);
+        final BigDecimal listTotalAmount = subTotalAmountList.add(
+                calculateAmount(deliveryListCost, calculateTax(deliveryListCost)));
+
+
+        final Total itemTotal = new TotalImpl(
+                sub.listPrice,
+                sub.salePrice,
+                sub.finalPrice,
+                orderPromoApplied,
+                appliedOrderPromo,
+                subTotal,
+                subTotalTax,
+                subTotalAmount,
+                deliveryListCost,
+                deliveryCost,
+                shippingPromoApplied,
+                appliedShippingPromo,
+                deliveryTax,
+                deliveryCostAmount,
+                total,
+                totalTax,
+                listTotalAmount, // This can be useful for showing total savings
+                totalAmount
+        );
+
+        // 5. Use current cart + dummy item total to calculate order level promotions
+        final Total orderTotal = applyOrderLevelPromotions(cart, itemTotal);
+
+
+        // 6. At this stage we have reliable total for the whole order so we can
+        //    calculate shipping promotions, which would be calculation for single
+        //    delivery. If we have multiple we can reuse this calculation.
+        final Total finalTotal = applyShippingPromotions(cart, orderTotal);
+
+        return finalTotal;
+
     }
 
-        /**
-        * {@inheritDoc}
-        */
-    public AmountCalculationResult calculate(final ShoppingContext shoppingContext,
-                                             final Collection<CustomerOrderDelivery> orderDelivery,
-                                             final boolean useListPrice) {
-        final AmountCalculationResult rez = new AmountCalculationResultImpl();
-        for (CustomerOrderDelivery delivery : orderDelivery) {
+    private void applyItemLevelPromotions(final ShoppingCart cart) {
 
-            calculate(shoppingContext, delivery, useListPrice, rez);
+        // TODO: YC-326 apply item level promotions
+        // promoCtx.applyItemPromo(cart);
+
+    }
+
+    private Total applyOrderLevelPromotions(final ShoppingCart cart, final Total itemTotal) {
+
+        // TODO: YC-326 apply order level promotions
+        // promoCtx.applyOrderPromo(cart, itemTotal);
+
+        return itemTotal;
+
+    }
+
+    private Total applyShippingPromotions(final ShoppingCart cart, final Total orderTotal) {
+
+        // TODO: YC-326 apply shipping promotions
+        // promoCtx.applyShippingPromo(cart, itemTotal);
+
+        return orderTotal;
+
+    }
+
+    /** {@inheritDoc} */
+    public Total calculate(final CustomerOrder order, final CustomerOrderDelivery orderDelivery) {
+        return calculate(orderDelivery);
+    }
+
+    /** {@inheritDoc} */
+    public Total calculate(final CustomerOrder order) {
+        Total deliveriesTotal = new TotalImpl();
+        for (final CustomerOrderDelivery delivery : order.getDelivery()) {
+
+            final Total deliveryTotal = calculate(delivery);
+            deliveriesTotal = deliveriesTotal.add(deliveryTotal);
 
         }
-        return rez;
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public AmountCalculationResult calculate(final ShoppingContext shoppingContext,
-                                             final CustomerOrderDelivery orderDelivery) {
-        return calculate(shoppingContext, orderDelivery, false);
-    }
+        final boolean orderPromoApplied = order.isPromoApplied();
+        final String appliedOrderPromo = order.getAppliedPromo();
+        final BigDecimal subTotalList = deliveriesTotal.getListSubTotal();
+        final BigDecimal subTotalTaxList = calculateTax(subTotalList);
+        final BigDecimal subTotalAmountList = calculateAmount(subTotalList, subTotalTaxList);
+        final BigDecimal subTotal = order.getPrice();
+        final BigDecimal subTotalTax = calculateTax(subTotal);
+        final BigDecimal subTotalAmount = calculateAmount(subTotal, subTotalTax);
 
-        /**
-        * {@inheritDoc}
-        */
-    public AmountCalculationResult calculate(final ShoppingContext shoppingContext,
-                                             final CustomerOrderDelivery orderDelivery,
-                                             final boolean useListPrice) {
+        final BigDecimal total = subTotal.add(deliveriesTotal.getDeliveryCost());
+        final BigDecimal totalTax = subTotalTax.add(deliveriesTotal.getDeliveryTax());
+        final BigDecimal totalAmount = subTotalAmount.add(deliveriesTotal.getDeliveryCostAmount());
+        final BigDecimal listTotalAmount = subTotalAmountList.add(
+                calculateAmount(deliveriesTotal.getDeliveryListCost(), calculateTax(deliveriesTotal.getDeliveryListCost())));
 
-        final AmountCalculationResult rez = new AmountCalculationResultImpl();
+        final Total orderTotal = new TotalImpl(
+                deliveriesTotal.getListSubTotal(),
+                deliveriesTotal.getSaleSubTotal(),
+                deliveriesTotal.getPriceSubTotal(),
+                orderPromoApplied,
+                appliedOrderPromo,
+                subTotal,
+                subTotalTax,
+                subTotalAmount,
+                deliveriesTotal.getDeliveryListCost(),
+                deliveriesTotal.getDeliveryCost(),
+                deliveriesTotal.isDeliveryPromoApplied(),
+                deliveriesTotal.getAppliedDeliveryPromo(),
+                deliveriesTotal.getDeliveryTax(),
+                deliveriesTotal.getDeliveryCostAmount(),
+                total,
+                totalTax,
+                listTotalAmount,
+                totalAmount
+        );
 
-        calculate(shoppingContext, orderDelivery, useListPrice, rez);
-
-        return rez;
+        return orderTotal;
     }
 
     /*
      * Calculate by adding current delivery amount to rez
      */
-    void calculate(final ShoppingContext shoppingContext,
-                   final CustomerOrderDelivery orderDelivery,
-                   final boolean useListPrice,
-                   final AmountCalculationResult rez) {
+    Total calculate(final CustomerOrderDelivery orderDelivery) {
 
-        rez.setSubTotal(rez.getSubTotal().add(calculateSubTotal(new ArrayList<CartItem>(orderDelivery.getDetail()), useListPrice)));
-        rez.setSubTotalTax(calculateTax(rez.getSubTotal()));
-        rez.setSubTotalAmount(calculateAmount(rez.getSubTotal(), rez.getSubTotalTax()));
+        final CartItemPrices sub = calculateSubTotal(new ArrayList<CartItem>(orderDelivery.getDetail()));
 
-        rez.setDelivery(rez.getDelivery().add(calculateDelivery(orderDelivery)));
-        rez.setDeliveryTax(calculateTax(rez.getDelivery()));
-        rez.setDeliveryAmount(calculateAmount(rez.getDelivery(), rez.getDeliveryTax()));
+        final BigDecimal deliveryListCost = orderDelivery.getListPrice();
+        final BigDecimal deliveryCost = orderDelivery.getPrice();
+        final boolean shippingPromoApplied = orderDelivery.isPromoApplied();
+        final String appliedShippingPromo = orderDelivery.getAppliedPromo();
+        final BigDecimal deliveryTax = calculateTax(deliveryCost);
+        final BigDecimal deliveryCostAmount = calculateAmount(deliveryCost, deliveryTax);
 
-        rez.setTotal(rez.getSubTotal().add(rez.getDelivery()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
-        rez.setTotalTax(calculateTax(rez.getTotal()));
-        rez.setTotalAmount(calculateAmount(rez.getTotal(), rez.getTotalTax()));
+        final boolean orderPromoApplied = false;
+        final String appliedOrderPromo = null;
+        final BigDecimal subTotalList = sub.listPrice;
+        final BigDecimal subTotalTaxList = calculateTax(subTotalList);
+        final BigDecimal subTotalAmountList = calculateAmount(subTotalList, subTotalTaxList);
+        final BigDecimal subTotal = sub.finalPrice;
+        final BigDecimal subTotalTax = calculateTax(subTotal);
+        final BigDecimal subTotalAmount = calculateAmount(subTotal, subTotalTax);
+
+        final BigDecimal total = subTotal.add(deliveryCost);
+        final BigDecimal totalList = subTotalList.add(deliveryListCost);
+        final BigDecimal totalTax = calculateTax(total);
+        final BigDecimal totalAmountList = calculateAmount(totalList, calculateTax(totalList));
+        final BigDecimal totalAmount = calculateAmount(total, totalTax);
+
+        return new TotalImpl(
+                sub.listPrice,
+                sub.salePrice,
+                sub.finalPrice,
+                orderPromoApplied,
+                appliedOrderPromo,
+                subTotal,
+                subTotalTax,
+                subTotalAmount,
+                deliveryListCost,
+                deliveryCost,
+                shippingPromoApplied,
+                appliedShippingPromo,
+                deliveryTax,
+                deliveryCostAmount,
+                total,
+                totalTax,
+                totalAmountList,
+                totalAmount
+        );
+
     }
 
     /**
-     * Calculate sub total of shopping cart by given list of {@link CartItem}.
+     * Calculate sub total of cart items.
      *
      * @param items given list of cart items.
-     * @return cart sub total.
-     */
-    public BigDecimal calculateSubTotal(final List<CartItem> items) {
-        return calculateSubTotal(items, false);
-    }
-
-    /**
-     * Calculate sub total of shopping cart by given list of {@link CartItem}.
      *
-     * @param items given list of cart items.
-     * @param useListPrice if true then this calculation should be done using list price of items,
-     *                     otherwise sale price should be used.
      * @return cart sub total.
      */
-    public BigDecimal calculateSubTotal(final List<CartItem> items, final boolean useListPrice) {
-        BigDecimal cartSubTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    protected CartItemPrices calculateSubTotal(final List<CartItem> items) {
+        final CartItemPrices prices = new CartItemPrices();
         if (items != null) {
             for (CartItem cartItem : items) {
-                final BigDecimal price = useListPrice ? cartItem.getListPrice() : cartItem.getPrice();
-                if (price != null && cartItem.getQty() != null) {
-                    cartSubTotal = cartSubTotal.add(price.multiply(cartItem.getQty()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
-                }
+                // TODO: YC-303 apply item level promotions
+                final CartItemPrices price = new CartItemPrices(cartItem);
+                prices.add(price);
             }
         }
-        return cartSubTotal;
+        return prices;
     }
 
     /**
@@ -178,7 +324,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
     /**
      * Calculate subtotal tax by given sub total.
      *
-     * @param money to claculate tax.
+     * @param money to calculate tax.
      * @return tax.
      */
     BigDecimal calculateTax(final BigDecimal money) {
@@ -210,6 +356,52 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
             return money; // tax already included;
         }
         return money.add(tax);
+    }
+
+    public static class CartItemPrices {
+
+        private BigDecimal listPrice = ZERO;
+        private BigDecimal salePrice = ZERO;
+        private BigDecimal finalPrice = ZERO;
+
+        private CartItemPrices() {
+        }
+
+        private CartItemPrices(final CartItem cartItem) {
+            if (!MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO, cartItem.getQty())) {
+                if (cartItem.getListPrice() != null) {
+                    this.listPrice = multiply(cartItem.getListPrice(), cartItem.getQty());
+                }
+                if (cartItem.getSalePrice() != null) {
+                    this.salePrice = multiply(cartItem.getSalePrice(), cartItem.getQty());
+                }
+                if (cartItem.getPrice() != null) {
+                    this.finalPrice = multiply(cartItem.getPrice(), cartItem.getQty());
+                }
+            }
+        }
+
+        private BigDecimal multiply(final BigDecimal price, final BigDecimal qty) {
+            return price.multiply(qty).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        }
+
+        public void add(final CartItemPrices prices) {
+            this.listPrice = this.listPrice.add(prices.listPrice);
+            this.salePrice = this.salePrice.add(prices.salePrice);
+            this.finalPrice = this.finalPrice.add(prices.finalPrice);
+        }
+
+        public BigDecimal getListPrice() {
+            return listPrice;
+        }
+
+        public BigDecimal getSalePrice() {
+            return salePrice;
+        }
+
+        public BigDecimal getFinalPrice() {
+            return finalPrice;
+        }
     }
 
 

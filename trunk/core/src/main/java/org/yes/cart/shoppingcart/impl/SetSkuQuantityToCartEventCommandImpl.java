@@ -62,7 +62,7 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
             ShopCodeContext.getLog(this).debug("Add product sku with code {} and qty {} to cart",
                     productSku.getCode(),
                     skuQty);
-            setModifiedDate(shoppingCart);
+            markDirty(shoppingCart);
         }
     }
 

@@ -33,6 +33,7 @@ import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
@@ -81,6 +82,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
     protected ShoppingCart getEmptyCart(String prefix) {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         Map<String, String> params = new HashMap<String, String>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, prefix + "jd@domain.com");
         params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, prefix + "John Doe");
@@ -172,6 +174,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
     protected ShoppingCart getShoppingCart2(String customerEmail) {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         Map<String, String> params;

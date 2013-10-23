@@ -31,7 +31,6 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -191,13 +190,13 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
         // this digital product available
         Map<String, String> param = new HashMap<String, String>();
-        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST9");
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart,
                 (Map) param);
 
         param = new HashMap<String, String>();
-        param.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST5");
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "200.00");
         commands.execute(shoppingCart,
                 (Map) param);

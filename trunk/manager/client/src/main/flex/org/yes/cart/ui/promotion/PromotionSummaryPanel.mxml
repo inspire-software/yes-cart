@@ -1,0 +1,306 @@
+<?xml version="1.0"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas
+        label="@Resource(bundle='PromotionManagementPanel',key='promotions')"
+        xmlns:mx="http://www.adobe.com/2006/mxml"
+        width="100%"
+        height="100%"
+        creationComplete="init()" xmlns:yci18n="org.yes.cart.ui.i18n.*" xmlns:georg="com.georg.*">
+
+    <mx:Script><![CDATA[
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.controls.Alert;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.PromotionDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.util.DomainUtils;
+
+        private var _promotion:PromotionDTOImpl;
+
+        private var _updateCallback:Function;
+
+        public function set updateCallback(value:Function):void {
+            _updateCallback = value;
+        }
+
+        public function get promotion():PromotionDTOImpl {
+            return _promotion;
+        }
+
+        public function set promotion(value:PromotionDTOImpl):void {
+            unbindProperties();
+            _promotion = value;
+            entityIsNew = DomainUtils.isNewPK(_promotion.promotionId);
+            bindProperties();
+            this.label = _promotion.code;
+        }
+
+        private function onUpdatePromotionResult(event:ResultEvent):void {
+            // updated
+            if (_updateCallback != null) {
+                _updateCallback(event.result);
+            }
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onChange(event:Event):void {
+            formChanged = true;
+        }
+
+        private function onChangeType(event:Event):void {
+
+            if (entityIsNew) {
+
+                var _seleted:Object = promoType.selectedItem;
+
+                if (_seleted != null && _seleted.data != null) {
+
+                    var _selectedData:String = _seleted.data;
+                    setPromoActionOptions(_selectedData);
+
+                } else {
+                    promoAction.dataProvider = [
+                            { data:null, label:'' }
+                        ];
+                    }
+                    _promotion.promoType = _selectedData;
+                    _promotion.promoAction = null;
+
+                    onChange(event);
+                }
+            }
+
+            private function onChangeAction(event:Event):void {
+
+                if (entityIsNew) {
+
+                    var _seleted:Object = event.target.selectedItem;
+
+                    if (_seleted != null && _seleted.data != null) {
+
+                        _promotion.promoAction = _seleted.data;
+
+                    } else {
+
+                        _promotion.promoAction = null;
+
+                    }
+                    onChange(event);
+
+                }
+            }
+
+            private function onSavePromotion(event:MouseEvent):void {
+                if (DomainUtils.isNewPK(_promotion.promotionId)) {
+                    remotePromotionService.create(_promotion);
+                } else {
+                    remotePromotionService.update(_promotion);
+                }
+            }
+
+            private function init():void {
+
+                promoType.dataProvider = [
+                    { data:null, label:'' },
+                    { data:'O', label:resourceManager.getString('PromotionManagementPanel', 'promoTypeO') },
+                    { data:'S', label:resourceManager.getString('PromotionManagementPanel', 'promoTypeS') },
+                    { data:'I', label:resourceManager.getString('PromotionManagementPanel', 'promoTypeI') },
+                    { data:'C', label:resourceManager.getString('PromotionManagementPanel', 'promoTypeC') }
+                ];
+                promoAction.dataProvider = [
+                    { data:null, label:'' }
+                ];
+
+                formChanged = false;
+            }
+
+            private function promoActionContextTooltip():String {
+                if (promotion.promoAction != null) {
+                    return resourceManager.getString('PromotionManagementPanel', 'promoAction' + promotion.promoAction);
+                }
+                return "";
+            }
+
+            private function unbindProperties():void {
+                for each (var watcher:ChangeWatcher in propertyWatchers) {
+                    watcher.unwatch();
+                }
+                propertyWatchers.removeAll();
+            }
+
+            private function bindProperties():void {
+
+
+                try {
+
+                    if (entityIsNew) {
+                        propertyWatchers.addItem(BindingUtils.bindProperty(code, "text", _promotion, "code"));
+                        propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "code", code, "text"));
+                        propertyWatchers.addItem(BindingUtils.bindProperty(shopCode, "text", _promotion, "shopCode"));
+                        propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "shopCode", shopCode, "text"));
+                        propertyWatchers.addItem(BindingUtils.bindProperty(currency, "text", _promotion, "currency"));
+                        propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "currency", currency, "text"));
+                    } else {
+                        propertyWatchers.addItem(BindingUtils.bindProperty(code, "text", _promotion, "code"));
+                        propertyWatchers.addItem(BindingUtils.bindProperty(shopCode, "text", _promotion, "shopCode"));
+                        propertyWatchers.addItem(BindingUtils.bindProperty(currency, "text", _promotion, "currency"));
+                        preselectCombo(promoType, _promotion.promoType);
+                        setPromoActionOptions(_promotion.promoType);
+                        preselectCombo(promoAction, _promotion.promoAction);
+                    }
+                    propertyWatchers.addItem(BindingUtils.bindProperty(canBeCombined, "selected", _promotion, "canBeCombined"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "canBeCombined", canBeCombined, "selected"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(promoName, "text", _promotion, "name"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "name", promoName, "text"));
+                    displayNames.setSourceObject(_promotion, 'displayNames');
+                    propertyWatchers.addItem(BindingUtils.bindProperty(description, "text", _promotion, "description"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "description", description, "text"));
+                    displayDescription.setSourceObject(_promotion, 'displayDescriptions');
+                    propertyWatchers.addItem(BindingUtils.bindProperty(promoEnabled, "selected", _promotion, "enabled"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "enabled", promoEnabled, "selected"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "enabledFrom", enabledFrom, "selectedDate"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(enabledFrom, "selectedDate", _promotion, "enabledFrom"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "enabledTo", enabledTo, "selectedDate"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(enabledTo, "selectedDate", _promotion, "enabledTo"));
+
+                } catch (e:Error) {
+
+                    Alert.show("" + e.toString());
+
+                }
+
+            }
+
+            private function preselectCombo(combo:ComboBox, value:Object):void {
+                var _index:int = 0;
+                for each (var _object:Object in combo.dataProvider) {
+                    if (_object.data == value) {
+                        combo.selectedItem = _object;
+                        combo.selectedIndex = _index;
+                        return;
+                    }
+                    _index++;
+                }
+            }
+
+            private function setPromoActionOptions(_selectedData:String):void {
+                switch (_selectedData) {
+                    case 'O':
+                    case 'I':
+                        promoAction.dataProvider = [
+                            { data:null, label:'' },
+                            { data:'F', label:resourceManager.getString('PromotionManagementPanel', 'promoActionF') },
+                            { data:'P', label:resourceManager.getString('PromotionManagementPanel', 'promoActionP') },
+                            { data:'G', label:resourceManager.getString('PromotionManagementPanel', 'promoActionG') },
+                        ];
+                        break;
+                    case 'S':
+                        promoAction.dataProvider = [
+                            { data:null, label:'' },
+                            { data:'F', label:resourceManager.getString('PromotionManagementPanel', 'promoActionF') },
+                            { data:'P', label:resourceManager.getString('PromotionManagementPanel', 'promoActionP') },
+                        ];
+                        break;
+                    case 'C':
+                        promoAction.dataProvider = [
+                            { data:null, label:'' },
+                            { data:'T', label:resourceManager.getString('PromotionManagementPanel', 'promoActionT') }
+                        ];
+                        break;
+                    default:
+                }
+            }
+        ]]></mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remotePromotionService"
+                     destination="remotePromotionService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="create" name="create"
+                   result="onUpdatePromotionResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="update" name="update"
+                   result="onUpdatePromotionResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:ArrayCollection id="propertyWatchers"/>
+    <mx:Boolean id="formChanged"/>
+    <mx:Boolean id="entityIsNew"/>
+
+    <mx:VBox>
+        <mx:Form>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='code')">
+                <mx:TextInput id="code" enabled="{entityIsNew}" width="150" change="onChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='shopCode')">
+                <mx:TextInput id="shopCode" enabled="{entityIsNew}" width="150" change="onChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='currency')">
+                <mx:TextInput id="currency" enabled="{entityIsNew}" width="150" change="onChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='promoType')">
+                <mx:ComboBox id="promoType" enabled="{entityIsNew}" width="150" change="onChangeType(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='promoAction')">
+                <mx:ComboBox id="promoAction" enabled="{entityIsNew}" width="150" change="onChangeAction(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='canBeCombined')">
+                <mx:CheckBox id="canBeCombined" change="onChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='name')">
+                <mx:TextInput id="promoName" change="onChange(event)" width="150"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='displayName')">
+                <yci18n:i18nStringField id="displayNames" change="onChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='description')">
+                <mx:TextInput id="description" change="onChange(event)" width="150"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='displayDescription')">
+                <yci18n:i18nStringField id="displayDescription" change="onChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='enabled')">
+                <mx:CheckBox id="promoEnabled" change="onChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='enabledFrom')">
+                <georg:DateTimeField id="enabledFrom" change="onChange(event)" width="130"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='enabledTo')">
+                <georg:DateTimeField id="enabledTo" change="onChange(event)" width="130"/>
+            </mx:FormItem>
+
+        </mx:Form>
+        <mx:ControlBar horizontalAlign="right" width="100%">
+            <mx:Button id="saveBtn"
+                       label="@Resource(bundle='ShopManagerApplication',key='save')"
+                       enabled="{formChanged}"
+                       click="onSavePromotion(event)"/>
+        </mx:ControlBar>
+    </mx:VBox>
+
+</mx:Canvas>

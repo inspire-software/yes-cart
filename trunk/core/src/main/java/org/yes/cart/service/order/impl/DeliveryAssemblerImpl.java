@@ -49,8 +49,8 @@ import java.util.*;
  * Delivery group 3 - awaiting for inventory
  * Delivery group 4 - electronic delivery
  * <p/>
- * Note 1 - in case if current date more that product start availibility date and inventory available
- * Note 2 - in case if current date more that product start availibility date and no inventory
+ * Note 1 - in case if current date more that product start availability date and inventory available
+ * Note 2 - in case if current date more that product start availability date and no inventory
  * <p/>
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
@@ -108,15 +108,16 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
             if (order.getCustomer() == null || CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP.equals(entry.getKey())) {
                 // this is electronic delivery
                 customerOrderDelivery.setPrice(BigDecimal.ZERO);
+                customerOrderDelivery.setListPrice(BigDecimal.ZERO);
+                customerOrderDelivery.setPromoApplied(false);
+                customerOrderDelivery.setAppliedPromo(null);
 
             } else {
 
-                customerOrderDelivery.setPrice(
-                        carrierSlaService.getDeliveryPrice(
-                                customerOrderDelivery.getCarrierSla(),
-                                customerOrderDelivery.getDetail(),
-                                order.getCustomer().getDefaultAddress(Address.ADDR_TYPE_SHIPING))
-                );
+                customerOrderDelivery.setPrice(shoppingCart.getTotal().getDeliveryCost());
+                customerOrderDelivery.setListPrice(shoppingCart.getTotal().getDeliveryListCost());
+                customerOrderDelivery.setPromoApplied(shoppingCart.getTotal().isDeliveryPromoApplied());
+                customerOrderDelivery.setAppliedPromo(shoppingCart.getTotal().getAppliedDeliveryPromo());
 
             }
             order.getDelivery().add(customerOrderDelivery);
@@ -144,7 +145,11 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         deliveryDet.setProductSkuCode(orderDet.getProductSkuCode());
         deliveryDet.setProductName(orderDet.getProductName());
         deliveryDet.setPrice(orderDet.getPrice());
+        deliveryDet.setSalePrice(orderDet.getSalePrice());
         deliveryDet.setListPrice(orderDet.getListPrice());
+        deliveryDet.setGift(orderDet.isGift());
+        deliveryDet.setPromoApplied(orderDet.isPromoApplied());
+        deliveryDet.setAppliedPromo(orderDet.getAppliedPromo());
     }
 
     /**

@@ -232,7 +232,8 @@ public class CheckoutPage extends AbstractWebPage {
      * @return markup container
      */
     private MarkupContainer getContent(final String currentStep) {
-        if (!((AuthenticatedWebSession) getSession()).isSignedIn()) {
+        if (!((AuthenticatedWebSession) getSession()).isSignedIn()
+                || StringUtils.isBlank(ApplicationDirector.getShoppingCart().getCustomerEmail())) {
             return createLoginFragment();
         }
 
@@ -321,7 +322,7 @@ public class CheckoutPage extends AbstractWebPage {
                 )
                 .addOrReplace(
 
-                        new ShoppingCartPaymentVerificationView("orderVerificationView", shoppingCart.getShoppingContext(), getDeliveries(shoppingCart))
+                        new ShoppingCartPaymentVerificationView("orderVerificationView", shoppingCart.getGuid())
 
                 )
                 .addOrReplace(
@@ -378,10 +379,8 @@ public class CheckoutPage extends AbstractWebPage {
 
                                                 final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel());
                                                 final CustomerOrder order = customerOrderService.findByGuid(shoppingCart.getGuid());
-                                                final AmountCalculationResult amountCalculationResult = amountCalculationStrategy.calculate(
-                                                        shoppingCart.getShoppingContext(), getDeliveries(shoppingCart)
-                                                );
-                                                final BigDecimal grandTotal = amountCalculationResult.getTotalAmount();
+                                                final Total total = amountCalculationStrategy.calculate(order);
+                                                final BigDecimal grandTotal = total.getTotalAmount();
 
                                                 //pay pal express checkout gateway support
                                                 order.setPgLabel(descriptor.getLabel());

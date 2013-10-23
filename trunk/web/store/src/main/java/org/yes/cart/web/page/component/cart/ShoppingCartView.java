@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -63,9 +64,7 @@ public class ShoppingCartView extends BaseComponent {
 
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-        final BigDecimal totalSale = cart.getCartSubTotal();
-        final BigDecimal totalList = cart.getCartSubTotal(true);
-
+        final Total total = cart.getTotal();
 
         addOrReplace(
                 new Form(CART_FORM).addOrReplace(
@@ -75,7 +74,7 @@ public class ShoppingCartView extends BaseComponent {
                 ).addOrReplace(
                         new PriceView(
                                 SUB_TOTAL_VIEW,
-                                new Pair<BigDecimal, BigDecimal>(totalList, totalSale),
+                                new Pair<BigDecimal, BigDecimal>(total.getListSubTotal(), total.getSubTotal()),
                                 cart.getCurrencyCode(),
                                 true, true)
                 )

@@ -40,7 +40,7 @@ public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements S
     public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             shoppingCart.getShoppingContext().clearContext();
-            setModifiedDate(shoppingCart);
+            markDirty(shoppingCart);
         }
     }
 }

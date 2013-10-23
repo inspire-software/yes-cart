@@ -45,7 +45,7 @@ public class SetBillingSeparateFromShippingAddressCommandImpl extends AbstractCa
             final Boolean value = Boolean.valueOf((String) parameters.get(getCmdKey()));
             if (!value.equals(shoppingCart.getOrderInfo().isSeparateBillingAddress())) {
                 shoppingCart.getOrderInfo().setSeparateBillingAddress(value);
-                setModifiedDate(shoppingCart);
+                markDirty(shoppingCart);
             }
         }
     }

@@ -39,16 +39,48 @@ public interface CartItem extends Serializable {
     BigDecimal getQty();
 
     /**
-     * Get the sku price price.
+     * Get the sku sale price including all promotions.
      *
      * @return sku price.
      */
     BigDecimal getPrice();
 
     /**
+     * Get sale price.
+     *
+     * @return price
+     */
+    BigDecimal getSalePrice();
+
+    /**
      * Get list / catalog price.
+     *
      * @return price
      */
     BigDecimal getListPrice();
+
+    /**
+     * Returns true if this item has been added as gift as
+     * a result of promotion.
+     *
+     * @return true if this is a promotion gift
+     */
+    boolean isGift();
+
+    /**
+     * Returns true if promotions have been applied to this
+     * item.
+     *
+     * @return true if promotions have been applied
+     */
+    boolean isPromoApplied();
+
+    /**
+     * Comma separated list of promotion codes that have been applied
+     * for this cart item.
+     *
+     * @return comma separated promo codes
+     */
+    String getAppliedPromo();
 
 }

@@ -38,7 +38,6 @@ import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -203,7 +202,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
                 (Map) Collections.singletonMap(ShoppingCartCommandFactory.CMD_ADDTOCART, "CC_TEST3"));
 
         final Map<String, String> param = new HashMap<String, String>() {{
-            put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST3");
+            put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST3");
             put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.50");
         }};
         commands.execute(shoppingCart, (Map) param);

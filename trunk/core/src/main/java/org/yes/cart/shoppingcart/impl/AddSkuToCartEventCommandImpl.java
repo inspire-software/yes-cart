@@ -77,7 +77,7 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
         if (productSku != null) {
             shoppingCart.addProductSkuToCart(productSku.getCode(), getQuantityValue(parameters));
             recalculatePrice(shoppingCart, productSku);
-            setModifiedDate(shoppingCart);
+            markDirty(shoppingCart);
             final Logger log = ShopCodeContext.getLog(this);
             if (log.isDebugEnabled()) {
                 log.debug("Added one item of sku code {} to cart",
