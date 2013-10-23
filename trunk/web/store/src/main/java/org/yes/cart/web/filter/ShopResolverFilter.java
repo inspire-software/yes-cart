@@ -151,6 +151,9 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
     public void doAfter(final ServletRequest servletRequest,
                         final ServletResponse servletResponse) throws IOException, ServletException {
 
+        ApplicationDirector.setCurrentShop(null);
+        ShopCodeContext.setShopCode(null);
+        ShopCodeContext.setShopId(0) ;
 
     }
 
