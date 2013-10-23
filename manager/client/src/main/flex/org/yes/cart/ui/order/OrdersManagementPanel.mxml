@@ -90,7 +90,8 @@
     <mx:ArrayCollection id="attrValues"/>
 
     <mx:VBox width="100%" height="100%">
-        <mx:Panel width="100%" height="100%" title="@Resource(bundle='CustomerOrderPanel',key='orders')">
+        <mx:Panel width="100%" height="100%" title="@Resource(bundle='CustomerOrderPanel',key='orders')"
+                  paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
             <mx:ControlBar
                     visible="{_searchCriteriaCustomerId == 0}"
                     includeInLayout="{_searchCriteriaCustomerId == 0}">
@@ -196,9 +197,31 @@
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
 
-                    <mx:DataGridColumn showDataTips="true"
-                                       headerText="@Resource(bundle='CustomerOrderPanel',key='amount')"
-                            >
+                    <mx:DataGridColumn showDataTips="true" width="80"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='listPrice')">
+                        <mx:itemRenderer>
+                            <mx:Component>
+                                <mx:VBox horizontalAlign="right">
+                                    <mx:Label text="{data.listPrice}"/>
+                                    <mx:Label text="{data.currency}"/>
+                                </mx:VBox>
+                            </mx:Component>
+                        </mx:itemRenderer>
+                    </mx:DataGridColumn>
+
+                    <mx:DataGridColumn showDataTips="true"  width="80"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='appliedPromo')">
+                        <mx:itemRenderer>
+                            <mx:Component>
+                                <mx:VBox horizontalAlign="left">
+                                    <mx:Label text="{data.appliedPromo}"/>
+                                </mx:VBox>
+                            </mx:Component>
+                        </mx:itemRenderer>
+                    </mx:DataGridColumn>
+
+                    <mx:DataGridColumn showDataTips="true"  width="80"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='amount')">
                         <mx:itemRenderer>
                             <mx:Component>
                                 <mx:VBox horizontalAlign="right">
@@ -321,6 +344,7 @@
 
 
         <mx:Panel id="customerOrderDetailPanel" width="100%" height="100%"
+                  paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2"
                   visible="{customerOrderGrid.selectedItem != null}">
 
             <mx:TabNavigator id="customerOrderDetailTabNavigator"
@@ -348,27 +372,45 @@
                                         />
                                 <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='listPrice')"
-                                                   dataField="listPrice"
+                                                   dataField="listPrice" width="80"
                                         />
                                 <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
-                                                   dataField="invoicePrice"
+                                                   dataField="invoicePrice" width="80"
                                         />
                                 <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='discount')"
-                                                   labelFunction="discountLabelFunction"
+                                                   labelFunction="discountLabelFunction" width="80"
                                         />
+
+                                <mx:DataGridColumn
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='appliedPromo')"
+                                                   dataField="appliedPromo" width="80"
+                                        />
+
+                                <mx:DataGridColumn
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='gift')"
+                                                   width="40">
+                                    <mx:itemRenderer>
+                                        <mx:Component>
+                                            <mx:VBox horizontalAlign="center" horizontalScrollPolicy="off">
+                                                <mx:CheckBox selected="{data.gift}" enabled="false"/>
+                                            </mx:VBox>
+                                        </mx:Component>
+                                    </mx:itemRenderer>
+                                </mx:DataGridColumn>
+
                                 <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='qty')"
-                                                   dataField="qty"
+                                                   dataField="qty" width="40"
                                         />
                                 <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='total')"
-                                                   labelFunction="lineTotalLabelFunction"
+                                                   labelFunction="lineTotalLabelFunction"  width="100"
                                         />
                                 <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNum')"
-                                                   dataField="deliveryNum"
+                                                   dataField="deliveryNum" width="140"
                                         />
 
                             </mx:columns>
@@ -429,7 +471,7 @@
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
                                                dataField="customerOrderDeliveryId"
                                     />
-                            <mx:DataGridColumn showDataTips="true"
+                            <mx:DataGridColumn
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNumRefNo')">
                                 <mx:itemRenderer>
                                     <mx:Component>
@@ -440,7 +482,7 @@
                                     </mx:Component>
                                 </mx:itemRenderer>
                             </mx:DataGridColumn>
-                            <mx:DataGridColumn showDataTips="true"
+                            <mx:DataGridColumn
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='inventoryStatus')"
                                                labelFunction="getDeliveryStatusLabel"
                                     />
@@ -448,14 +490,20 @@
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsInfo')"
                                                labelFunction="itemsInfoLabelFunction"
                                                wordWrap="true"/>
-                            <mx:DataGridColumn showDataTips="true"
+                            <mx:DataGridColumn width="80"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsCost')"
                                                labelFunction="itemsCostInDeliveryLabelFunction"/>
-                            <mx:DataGridColumn showDataTips="true"
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='listPrice')"
+                                               dataField="listPrice"/>
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='appliedPromo')"
+                                               dataField="appliedPromo"/>
+                            <mx:DataGridColumn width="80"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='shipmentCost')"
                                                dataField="price"
                                     />
-                            <mx:DataGridColumn showDataTips="true"
+                            <mx:DataGridColumn
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='carrierInfo')">
                                 <mx:itemRenderer>
                                     <mx:Component>
@@ -467,20 +515,20 @@
                                 </mx:itemRenderer>
                             </mx:DataGridColumn>
 
-                            <mx:DataGridColumn showDataTips="true"
+                            <mx:DataGridColumn showDataTips="true" width="80"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryTotal')"
                                                labelFunction="deliveryTotalLabelFunction"
                                     />
-                            <mx:DataGridColumn showDataTips="true"
+                            <mx:DataGridColumn
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryAddr')"
                                                labelFunction="deliveryAddrLabelFunction"
                                                wordWrap="true"
                                     />
-                            <mx:DataGridColumn showDataTips="true" width="150"
+                            <mx:DataGridColumn width="150"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='actions')">
                                 <mx:itemRenderer>
                                     <mx:Component>
-                                            <mx:VBox horizontalAlign="left" horizontalScrollPolicy="off">
+                                            <mx:VBox horizontalCenter="true" horizontalAlign="left" horizontalScrollPolicy="off">
                                                 <mx:Script>
                                                     <![CDATA[
                                                     import mx.collections.ArrayCollection;                                                    import mx.controls.Alert;
@@ -493,24 +541,25 @@
                                                     import mx.utils.ObjectUtil;
 
                                                     import org.yes.cart.impl.CustomerOrderDTOImpl;
+                                                    import org.yes.cart.impl.CustomerOrderDeliveryDTOImpl;
 
                                                     import org.yes.cart.ui.attributes.valuedialog.SimpleTextDialog;
                                                     import org.yes.cart.ui.attributes.valuedialog.ValueDialog;
 
                                                     public function onDeliveryActionButtonClick(customerOrderDeliveryDTO:Object):void {
 
-                                                        var destiNatuinDeliveryStatus:String;
+                                                        var destinationDeliveryStatus:String;
 
                                                         var deliveryStatus:String = customerOrderDeliveryDTO.deliveryStatus;
 
                                                         if (deliveryStatus == "ds.inventory.allocated") {
-                                                            destiNatuinDeliveryStatus = "ds.packing";
+                                                            destinationDeliveryStatus = "ds.packing";
                                                         } else if (deliveryStatus == "ds.packing") {
-                                                            destiNatuinDeliveryStatus = "ds.shipment.ready";
+                                                            destinationDeliveryStatus = "ds.shipment.ready";
                                                         } else if (deliveryStatus == "ds.shipment.ready") {
-                                                            destiNatuinDeliveryStatus = "ds.shipment.inprogress";
+                                                            destinationDeliveryStatus = "ds.shipment.inprogress";
                                                         } else if (deliveryStatus == "ds.shipment.inprogress") {
-                                                            destiNatuinDeliveryStatus = "ds.shipped";
+                                                            destinationDeliveryStatus = "ds.shipped";
                                                         }
 
 
@@ -519,7 +568,7 @@
                                                                 customerOrderDeliveryDTO.ordernum,
                                                                 customerOrderDeliveryDTO.deliveryNum,
                                                                 deliveryStatus,
-                                                                destiNatuinDeliveryStatus
+                                                                destinationDeliveryStatus
 
                                                         );
 
@@ -619,7 +668,7 @@
                                                      * Edit delivery.
                                                      * @param customerOrderDeliveryDTO
                                                      */
-                                                    public function onEditDeliveryActionButtonClick(customerOrderDeliveryDTO:Object):void {
+                                                    public function onEditDeliveryActionButtonClick(customerOrderDeliveryDTO:CustomerOrderDeliveryDTOImpl):void {
                                                         var maxAmount:Number = Number (outerDocument.itemsCostInDeliveryLabelFunction(customerOrderDeliveryDTO, null));
                                                         editDeliveryDialog = EditOrderDeliveryDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), EditOrderDeliveryDialog, true));
                                                         editDeliveryDialog.maxAmount = maxAmount; //todov2 maxamount must be taken from order delivery payments
@@ -766,6 +815,7 @@
         import org.yes.cart.impl.AttrValueCustomerDTOImpl;
 
         import org.yes.cart.impl.CustomerOrderDTOImpl;
+        import org.yes.cart.impl.CustomerOrderDeliveryDTOImpl;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
@@ -996,12 +1046,10 @@
          * @param column
          * @return
          */
-        private function itemsInfoLabelFunction(item:Object, column:DataGridColumn):String {
+        private function itemsInfoLabelFunction(item:CustomerOrderDeliveryDTOImpl, column:DataGridColumn):String {
             var rez:String = "";
             for (var i:int = 0; i < item.detail.length; i++) {
-                if (item.deliveryNum == item.detail[i].deliveryNum) {
-                    rez += "[" + item.detail[i].skuCode + "] " + item.detail[i].skuName + "\n";
-                }
+                rez += "[" + item.detail[i].skuCode + "] " + item.detail[i].skuName + "\n";
             }
             return rez;
         }
@@ -1041,7 +1089,7 @@
          * @param column column
          * @return amount of items in delivery.
          */
-        public function itemsCostInDeliveryLabelFunction(item:Object, column:DataGridColumn):String {
+        public function itemsCostInDeliveryLabelFunction(item:CustomerOrderDeliveryDTOImpl, column:DataGridColumn):String {
             var sum:Number = 0;
             for (var i:int = 0; i < item.detail.length; i++) {
                 sum += Number((item.detail[i].qty * item.detail[i].invoicePrice).toFixed(2));

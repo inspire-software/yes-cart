@@ -45,7 +45,7 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
             final Long value = NumberUtils.createLong(String.valueOf(parameters.get(getCmdKey())));
             if (value != null && !value.equals(shoppingCart.getShoppingContext().getShopId())) {
                 shoppingCart.getShoppingContext().setShopId(value);
-                setModifiedDate(shoppingCart);
+                markDirty(shoppingCart);
             }
         }
     }

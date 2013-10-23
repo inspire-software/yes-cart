@@ -61,31 +61,89 @@ public interface CustomerOrderDet extends Auditable, CartItem {
     void setQty(BigDecimal qty);
 
     /**
-     * Get the price.
+     * Get the final price after all promotion have been applied.
      *
      * @return price per single sku.
      */
     BigDecimal getPrice();
 
     /**
-     * Set single sku price.
+     * Set the final price after all promotion have been applied.
      *
      * @param price single sku price.
      */
     void setPrice(BigDecimal price);
 
     /**
+     * Get sale price for this item (i.e. special sale price before promotions).
+     *
+     * @return price
+     */
+    BigDecimal getSalePrice();
+
+    /**
+     * Set sale price for this item (i.e. special sale price before promotions).
+     *
+     * @param salePrice sale price.
+     */
+    void setSalePrice(BigDecimal salePrice);
+
+
+    /**
      * Get list / catalog price.
+     *
      * @return list price
      */
     BigDecimal getListPrice();
 
 
     /**
-     * Set list price.
-     * @param listPrice   list price
+     * Set list / catalog price.
+     *
+     * @param listPrice list price
      */
     void setListPrice(BigDecimal listPrice);
+
+
+    /**
+     * Returns true if this item has been added as gift as
+     * a result of promotion.
+     *
+     * @return true if this is a promotion gift
+     */
+    boolean isGift();
+
+    /**
+     * @param gift set gift flag
+     */
+    void setGift(boolean gift);
+
+    /**
+     * Returns true if promotions have been applied to this
+     * item.
+     *
+     * @return true if promotions have been applied
+     */
+    boolean isPromoApplied();
+
+    /**
+     * @param promoApplied set promotion applied flag
+     */
+    void setPromoApplied(boolean promoApplied);
+
+    /**
+     * Comma separated list of promotion codes that have been applied
+     * for this cart item.
+     *
+     * @return comma separated promo codes
+     */
+    String getAppliedPromo();
+
+    /**
+     * @param appliedPromo comma separated promo codes
+     */
+    void setAppliedPromo(String appliedPromo);
+
 
     /**
      * Get SKU code for item purchased.

@@ -16,12 +16,8 @@
 
 package org.yes.cart.service.domain;
 
-import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.CarrierSla;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 
-import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -45,17 +41,6 @@ public interface CarrierSlaService extends GenericService<CarrierSla> {
      * @return {@link CarrierSla}
      */
     CarrierSla finaByName(final String slaName);
-
-    /**
-     * Get the price of delivery.
-     *
-     * @param carrierSla     carries sla
-     * @param items          items to deliver
-     * @param defaultAddress deliver to address.
-     * @return price of delivery
-     */
-    BigDecimal getDeliveryPrice(CarrierSla carrierSla, Collection<CustomerOrderDeliveryDet> items, Address defaultAddress);
-
 
     /**
      * Fin all sla for given currency.

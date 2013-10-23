@@ -18,6 +18,7 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
@@ -38,6 +39,7 @@ public class CleanCartCommandImplTest extends BaseCoreDBTestCase {
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         shoppingCart.addProductSkuToCart("ABC", BigDecimal.ONE);
@@ -48,7 +50,7 @@ public class CleanCartCommandImplTest extends BaseCoreDBTestCase {
                 (Map) Collections.singletonMap(ShoppingCartCommand.CMD_CLEAN, ShoppingCartCommand.CMD_CLEAN));
 
         assertNull(shoppingCart.getOrderMessage());
-        assertNotNull(shoppingCart.getModifiedDate());
+        assertNotNull(shoppingCart.getModifiedTimestamp());
         assertTrue(shoppingCart.getCartItemList().isEmpty());
         assertNotSame(oldGuid, shoppingCart.getGuid());
     }

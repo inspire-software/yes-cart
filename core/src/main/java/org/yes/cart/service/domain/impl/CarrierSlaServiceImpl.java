@@ -18,13 +18,9 @@ package org.yes.cart.service.domain.impl;
 
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.CarrierSla;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.service.domain.CarrierSlaService;
 
-import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -51,17 +47,6 @@ public class CarrierSlaServiceImpl extends BaseGenericServiceImpl<CarrierSla> im
     /** {@inheritDoc} */
     public List<CarrierSla> findByCarrier(final long carrierId) {
         return getGenericDao().findByNamedQuery("CARRIER.SLA.BY.CARRIER", carrierId);
-    }
-
-    /** {@inheritDoc} */
-    public BigDecimal getDeliveryPrice(final CarrierSla carrierSla,
-                                       final Collection<CustomerOrderDeliveryDet> items,
-                                       final Address defaultAddress) {
-        // TODO: V2 at this moment fixed or zero delivery prices are supported, so just return the price from sla
-        if (carrierSla == null || carrierSla.getPrice() == null) {
-            return BigDecimal.ZERO;
-        }
-        return carrierSla.getPrice();
     }
 
     /**

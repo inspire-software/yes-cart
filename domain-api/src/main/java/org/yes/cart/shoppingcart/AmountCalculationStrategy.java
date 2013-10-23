@@ -16,11 +16,11 @@
 
 package org.yes.cart.shoppingcart;
 
+import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.List;
 
 /**
  *
@@ -44,76 +44,44 @@ public interface AmountCalculationStrategy {
 
     /**
      * Get tax value.
+     *
      * @return tax value.
      */
     BigDecimal getTax();
 
     /**
-     * Is tax included in items prices .
+     * Is tax included in items prices.
+     *
      * @return true in case if price included in item price, otherwise false.
      */
     boolean isTaxIncluded();
 
-
     /**
      * Calculate shopping cart amount.
-     * @param shoppingContext  current {@link ShoppingContext}
-     * @param orderDelivery  {@link CustomerOrderDelivery}
-     * @return {@link AmountCalculationResult}
-     */
-    AmountCalculationResult calculate(ShoppingContext shoppingContext,
-                                      CustomerOrderDelivery orderDelivery);
-
-    /**
-     * Calculate shopping cart amount.
-     * @param shoppingContext  current {@link ShoppingContext}
-     * @param orderDelivery  {@link CustomerOrderDelivery}
-     * @param useListPrice if true then this calculation should be done using list price of items,
-     *                     otherwise sale price should be used.
-     * @return {@link AmountCalculationResult}
-     */
-    AmountCalculationResult calculate(ShoppingContext shoppingContext,
-                                      CustomerOrderDelivery orderDelivery,
-                                      boolean useListPrice);
-
-    /**
-     * Calculate shopping cart amount.
-     * @param shoppingContext  current {@link ShoppingContext}
-     * @param orderDelivery list of {@link CustomerOrderDelivery}
-     * @return {@link AmountCalculationResult}
-     */
-    AmountCalculationResult calculate(ShoppingContext shoppingContext,
-                                      Collection<CustomerOrderDelivery> orderDelivery);
-
-    /**
-     * Calculate shopping cart amount.
-     * @param shoppingContext  current {@link ShoppingContext}
-     * @param orderDelivery list of {@link CustomerOrderDelivery}
-     * @param useListPrice if true then this calculation should be done using list price of items,
-     *                     otherwise sale price should be used.
-     * @return {@link AmountCalculationResult}
-     */
-    AmountCalculationResult calculate(ShoppingContext shoppingContext,
-                                      Collection<CustomerOrderDelivery> orderDelivery,
-                                      boolean useListPrice);
-
-
-    /**
-     * Calculate sub total of shopping cart by given list of {@link CartItem}.
      *
-     * @param items given list of cart items.
-     * @return cart sub total.
+     * @param cart shopping cart
+     *
+     * @return {@link Total}
      */
-    BigDecimal calculateSubTotal(List<CartItem> items);
+    Total calculate(ShoppingCart cart);
 
     /**
-     * Calculate sub total of shopping cart by given list of {@link CartItem}.
+     * Calculate single delivery amount.
      *
-     * @param items given list of cart items.
-     * @param useListPrice if true then this calculation should be done using list price of items,
-     *                     otherwise sale price should be used.
-     * @return cart sub total.
+     * @param order order
+     * @param orderDelivery  {@link CustomerOrderDelivery}
+     *
+     * @return {@link Total}
      */
-    BigDecimal calculateSubTotal(List<CartItem> items, boolean useListPrice);
+    Total calculate(CustomerOrder order, CustomerOrderDelivery orderDelivery);
+
+    /**
+     * Calculate order amount.
+     *
+     * @param order order
+     *
+     * @return {@link Total}
+     */
+    Total calculate(CustomerOrder order);
 
 }

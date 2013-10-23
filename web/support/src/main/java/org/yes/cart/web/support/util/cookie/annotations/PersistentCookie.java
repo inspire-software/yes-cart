@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Anotation that defines the key for Cookie objects.
+ * Annotation that defines the key for Cookie objects.
  * <p/>
  * User: dogma
  * Date: 2011-May-17

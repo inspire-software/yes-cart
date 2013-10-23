@@ -63,7 +63,7 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
             }
 
             recalculatePrice(shoppingCart, productSku);
-            setModifiedDate(shoppingCart);
+            markDirty(shoppingCart);
         }
     }
 

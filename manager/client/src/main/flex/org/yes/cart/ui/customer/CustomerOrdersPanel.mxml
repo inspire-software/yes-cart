@@ -75,6 +75,10 @@
                     </mx:itemRenderer>
                 </mx:DataGridColumn>
 
+                <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='listPrice')"
+                                   dataField="listPrice"/>
+                <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='appliedPromo')"
+                                   dataField="appliedPromo"/>
                 <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='amount')"
                                    dataField="amount"/>
                 <mx:DataGridColumn showDataTips="true" width="50" headerText="@Resource(bundle='CustomerOrderPanel',key='currency')"
@@ -151,7 +155,11 @@
 
         private function statusLabelFunction(item:Object, column:DataGridColumn):String {
 
-            return resourceManager.getString('CustomerOrderPanel', item.orderStatus);
+            var label:String = resourceManager.getString('Common', item.orderStatus);
+            if (label == null) {
+                label = item.orderStatus;
+            }
+            return label;
 
         }
 

@@ -71,4 +71,33 @@ public class ImmutableCartItemImpl implements CartItem {
     public BigDecimal getListPrice() {
         return cartItem.getListPrice();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getSalePrice() {
+        return cartItem.getSalePrice();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isGift() {
+        return cartItem.isGift();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isPromoApplied() {
+        return cartItem.isPromoApplied();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getAppliedPromo() {
+        return cartItem.getAppliedPromo();
+    }
+
 }

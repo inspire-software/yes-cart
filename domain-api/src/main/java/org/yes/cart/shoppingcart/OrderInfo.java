@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 /**
  * Hold specific order information.
- * Just remove from shopping cart to keep it simple as posible.
+ * Just remove from shopping cart to keep it simple as possible.
  * <p/>
  * Igor Azarny iazarny@yahoo.com
  * Date: 19-May-2011
@@ -56,20 +56,48 @@ public interface OrderInfo extends Serializable {
      */
     Long getCarrierSlaId();
 
-
     /**
-     * Is billing address different from shipping adress.
+     * Is billing address different from shipping address.
      *
      * @return true is billing and shipping address are different.
      */
     boolean isSeparateBillingAddress();
 
     /**
-     * Set billilnd address different from shipping address flag.
+     * Set billing address different from shipping address flag.
      *
      * @param separateBillingAddress flag.
      */
     void setSeparateBillingAddress(boolean separateBillingAddress);
+
+    /**
+     * Set delivery address.
+     *
+     * @param deliveryAddressId delivery address.
+     */
+    void setDeliveryAddressId(Long deliveryAddressId);
+
+    /**
+     * Get delivery address.
+     *
+     * @return delivery address.
+     */
+    Long getDeliveryAddressId();
+
+    /**
+     * Set billing address.
+     *
+     * @param billingAddressId billing address.
+     */
+    void setBillingAddressId(Long billingAddressId);
+
+    /**
+     * Get billing address.
+     *
+     * @return billing address.
+     */
+    Long getBillingAddressId();
+
 
     /**
      * Get selected payment gateway.
@@ -86,7 +114,7 @@ public interface OrderInfo extends Serializable {
     void setPaymentGatewayLabel(String paymentGatewayLabel);
 
     /**
-     * Is order need multiple delivery.
+     * Does order need multiple delivery.
      *
      * @return true if need multiple delivery.
      */
@@ -98,6 +126,5 @@ public interface OrderInfo extends Serializable {
      * @param multipleDelivery multiple delivery for order.
      */
     void setMultipleDelivery(boolean multipleDelivery);
-
 
 }

@@ -41,21 +41,30 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     @DtoField(value = "customerOrderDeliveryDetId", readOnly = true)
     private long customerOrderDeliveryDetId;
 
-    @DtoField(value = "productSkuCode")
+    @DtoField(value = "productSkuCode", readOnly = true)
     private String skuCode;
 
-    @DtoField(value = "productName")
+    @DtoField(value = "productName", readOnly = true)
     private String skuName;
 
 
-    @DtoField(value = "qty")
+    @DtoField(value = "qty", readOnly = true)
     private BigDecimal qty;
 
-    @DtoField(value = "price")
+    @DtoField(value = "price", readOnly = true)
     private BigDecimal invoicePrice;
 
-    @DtoField(value = "listPrice")
+    @DtoField(value = "listPrice", readOnly = true)
     private BigDecimal listPrice;
+    @DtoField(value = "salePrice", readOnly = true)
+    private BigDecimal salePrice;
+    @DtoField(value = "gift", readOnly = true)
+    private boolean gift;
+    @DtoField(value = "promoApplied", readOnly = true)
+    private boolean promoApplied;
+    @DtoField(value = "appliedPromo", readOnly = true)
+    private String appliedPromo;
+
 
     private BigDecimal lineTotal;
 
@@ -151,6 +160,46 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     /** {@inheritDoc} */
     public void setListPrice(final BigDecimal listPrice) {
         this.listPrice = listPrice;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
+
+    /** {@inheritDoc} */
+    public void setSalePrice(final BigDecimal salePrice) {
+        this.salePrice = salePrice;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isGift() {
+        return gift;
+    }
+
+    /** {@inheritDoc} */
+    public void setGift(final boolean gift) {
+        this.gift = gift;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isPromoApplied() {
+        return promoApplied;
+    }
+
+    /** {@inheritDoc} */
+    public void setPromoApplied(final boolean promoApplied) {
+        this.promoApplied = promoApplied;
+    }
+
+    /** {@inheritDoc} */
+    public String getAppliedPromo() {
+        return appliedPromo;
+    }
+
+    /** {@inheritDoc} */
+    public void setAppliedPromo(final String appliedPromo) {
+        this.appliedPromo = appliedPromo;
     }
 
     /** {@inheritDoc} */

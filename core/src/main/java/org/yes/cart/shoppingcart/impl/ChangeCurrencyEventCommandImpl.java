@@ -59,7 +59,7 @@ public class ChangeCurrencyEventCommandImpl extends AbstractSkuCartCommandImpl {
             if (currencyCode != null && !currencyCode.equals(shoppingCart.getCurrencyCode())) {
                 ((ShoppingCartImpl) shoppingCart).setCurrencyCode(currencyCode);
                 recalculatePrice(shoppingCart, productSku);
-                setModifiedDate(shoppingCart);
+                markDirty(shoppingCart);
             }
         }
     }

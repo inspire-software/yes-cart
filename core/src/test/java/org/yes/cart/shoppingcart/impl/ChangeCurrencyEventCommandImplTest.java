@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
@@ -40,22 +41,23 @@ public class ChangeCurrencyEventCommandImplTest extends BaseCoreDBTestCase {
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         commands.execute(shoppingCart,
                 (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETSHOP, "10"));
         commands.execute(shoppingCart,
                 (Map) Collections.singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal());
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getSubTotal());
         for (int i = 0; i < 3; i++) {
             commands.execute(shoppingCart,
                     (Map) Collections.singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
         }
 
-        assertTrue("Expected 57.00 Actual " + shoppingCart.getCartSubTotal(), (new BigDecimal("57.00")).equals(shoppingCart.getCartSubTotal()));
+        assertTrue("Expected 57.00 Actual " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("57.00")).equals(shoppingCart.getTotal().getSubTotal()));
         commands.execute(shoppingCart,
                 (Map) Collections.singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "USD"));
         assertEquals("USD", shoppingCart.getCurrencyCode());
-        assertTrue("Expected 570.03", (new BigDecimal("570.03")).equals(shoppingCart.getCartSubTotal()));
+        assertTrue("Expected 570.03", (new BigDecimal("570.03")).equals(shoppingCart.getTotal().getSubTotal()));
     }
 }

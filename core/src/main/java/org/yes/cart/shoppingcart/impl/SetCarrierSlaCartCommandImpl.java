@@ -48,7 +48,17 @@ public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl imple
             if (slaPkvalue == null || !slaPkvalue.equals(shoppingCart.getOrderInfo().getCarrierSlaId())) {
                 ShopCodeContext.getLog(this).debug("Set carrier sla to {}", slaPkvalue);
                 shoppingCart.getOrderInfo().setCarrierSlaId(slaPkvalue);
-                setModifiedDate(shoppingCart);
+                if (slaPkvalue != null) {
+                    final Long billingId = NumberUtils.createLong((String) parameters.get(CMD_SETCARRIERSLA_P_BILLING_ADDRESS));
+                    final Long shippingId = NumberUtils.createLong((String) parameters.get(CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS));
+                    shoppingCart.getOrderInfo().setBillingAddressId(billingId);
+                    shoppingCart.getOrderInfo().setDeliveryAddressId(shippingId);
+                } else {
+                    shoppingCart.getOrderInfo().setBillingAddressId(null);
+                    shoppingCart.getOrderInfo().setDeliveryAddressId(null);
+                }
+                recalculate(shoppingCart);
+                markDirty(shoppingCart);
             }
         }
     }

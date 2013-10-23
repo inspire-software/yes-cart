@@ -184,10 +184,10 @@ public class StandardMessageListener implements Runnable {
                         ShopCodeContext.getLog(this).info("Mail send to {}", map.get(CUSTOMER_EMAIL));
                     } catch (MailSendException me) {
                         /**
-                         * TODO
-                         * In case of failure, thread must use some persisten storage to
+                         * TODO: YC-318
+                         * In case of failure, thread must use some persistent storage to
                          * store email and send it latter.
-                         * Any persistem cache may be used for this purposes.
+                         * Any persistent cache may be used for this purposes.
                          */
                         ShopCodeContext.getLog(this).error("Cant send email to {} {}", map.get(CUSTOMER_EMAIL), me.getMessage());
                         Thread.sleep(60000);
@@ -219,7 +219,7 @@ public class StandardMessageListener implements Runnable {
     /**
      * Enrich given map with shopper object.
      *
-     * @param map givem map to enrich
+     * @param map given map to enrich
      */
     private void enrichMapWithCustomer(final Map<String, Object> map) {
         map.put(CUSTOMER,
@@ -231,7 +231,7 @@ public class StandardMessageListener implements Runnable {
     /**
      * Enrich given map with shop object.
      *
-     * @param map givem map to enrich
+     * @param map given map to enrich
      */
     private void enrichMapWithShop(final Map<String, Object> map) {
 

@@ -37,7 +37,13 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
 
     private String deliveryNum;
     private String refNo;
+
     private BigDecimal price;
+    private BigDecimal listPrice;
+
+    private boolean promoApplied;
+    private String appliedPromo;
+
     private String deliveryStatus;
     private Collection<CustomerOrderDeliveryDet> detail = new ArrayList<CustomerOrderDeliveryDet>(0);
     private CarrierSla carrierSla;
@@ -76,6 +82,30 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public BigDecimal getListPrice() {
+        return listPrice;
+    }
+
+    public void setListPrice(final BigDecimal listPrice) {
+        this.listPrice = listPrice;
+    }
+
+    public boolean isPromoApplied() {
+        return promoApplied;
+    }
+
+    public void setPromoApplied(final boolean promoApplied) {
+        this.promoApplied = promoApplied;
+    }
+
+    public String getAppliedPromo() {
+        return appliedPromo;
+    }
+
+    public void setAppliedPromo(final String appliedPromo) {
+        this.appliedPromo = appliedPromo;
     }
 
     public String getDeliveryStatus() {

@@ -22,6 +22,7 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDet;
 import org.yes.cart.domain.entity.Shop;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -39,7 +40,14 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private String pgLabel;
     private String ordernum;
     private String cartGuid;
+
     private String currency;
+    private BigDecimal price;
+    private BigDecimal listPrice;
+
+    private boolean promoApplied;
+    private String appliedPromo;
+
     private String locale;
     private String orderMessage;
     private String orderStatus;
@@ -181,6 +189,38 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.orderTimestamp = orderTimestamp;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(final BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getListPrice() {
+        return listPrice;
+    }
+
+    public void setListPrice(final BigDecimal listPrice) {
+        this.listPrice = listPrice;
+    }
+
+    public boolean isPromoApplied() {
+        return promoApplied;
+    }
+
+    public void setPromoApplied(final boolean promoApplied) {
+        this.promoApplied = promoApplied;
+    }
+
+    public String getAppliedPromo() {
+        return appliedPromo;
+    }
+
+    public void setAppliedPromo(final String appliedPromo) {
+        this.appliedPromo = appliedPromo;
+    }
+
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -260,6 +300,10 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
                 ", ordernum='" + ordernum + '\'' +
                 ", cartGuid='" + cartGuid + '\'' +
                 ", currency='" + currency + '\'' +
+                ", price='" + price + '\'' +
+                ", salePrice='" + listPrice + '\'' +
+                ", promoApplied='" + promoApplied + '\'' +
+                ", appliedPromo='" + appliedPromo + '\'' +
                 ", customer=" + customer +
                 ", orderStatus='" + orderStatus + '\'' +
                 ", shop=" + shop +

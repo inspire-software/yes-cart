@@ -37,16 +37,16 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @DtoField(value = "customerorderId", readOnly = true)
     private long customerorderId;
 
-    @DtoField(value = "ordernum")
+    @DtoField(value = "ordernum", readOnly = true)
     private String ordernum;
 
-    @DtoField(value = "pgLabel")
+    @DtoField(value = "pgLabel", readOnly = true)
     private String pgLabel;
 
-    @DtoField(value = "billingAddress")
+    @DtoField(value = "billingAddress", readOnly = true)
     private String billingAddress;
 
-    @DtoField(value = "shippingAddress")
+    @DtoField(value = "shippingAddress", readOnly = true)
     private String shippingAddress;
 
     @DtoField(value = "cartGuid", readOnly = true)
@@ -55,10 +55,10 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @DtoField(value = "currency", readOnly = true)
     private String currency;
 
-    @DtoField(value = "orderMessage")
+    @DtoField(value = "orderMessage", readOnly = true)
     private String orderMessage;
 
-    @DtoField(value = "orderStatus")
+    @DtoField(value = "orderStatus", readOnly = true)
     private String orderStatus;
 
     @DtoField(value = "multipleShipmentOption", readOnly = true)
@@ -92,6 +92,14 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
 
     private BigDecimal amount = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
 
+    @DtoField(value = "price", readOnly = true)
+    private BigDecimal price;
+    @DtoField(value = "listPrice", readOnly = true)
+    private BigDecimal listPrice;
+    @DtoField(value = "promoApplied", readOnly = true)
+    private boolean promoApplied;
+    @DtoField(value = "appliedPromo", readOnly = true)
+    private String appliedPromo;
 
     /**
      * {@inheritDoc
@@ -105,6 +113,62 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      */
     public void setAmount(final BigDecimal amount) {
         this.amount = amount;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public void setPrice(final BigDecimal price) {
+        this.price = price;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public BigDecimal getListPrice() {
+        return listPrice;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public void setListPrice(final BigDecimal listPrice) {
+        this.listPrice = listPrice;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public boolean isPromoApplied() {
+        return promoApplied;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public void setPromoApplied(final boolean promoApplied) {
+        this.promoApplied = promoApplied;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public String getAppliedPromo() {
+        return appliedPromo;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public void setAppliedPromo(final String appliedPromo) {
+        this.appliedPromo = appliedPromo;
     }
 
     /**

@@ -553,6 +553,21 @@
         <entry key="Delete" value-ref="ShopAll"/>
     </util:map>
 
+    <!-- ###################### Shop  ################################################################################################################## -->
+
+    <util:set id="PromotionAll">
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="promotionService-promotionsByShop"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+    </util:set>
+
+    <util:map id="PromotionCUD">
+        <entry key="Create" value-ref="PromotionAll"/>
+        <entry key="Update" value-ref="PromotionAll"/>
+        <entry key="Delete" value-ref="PromotionAll"/>
+    </util:map>
+
     <!-- ###################### System  ################################################################################################################## -->
 
     <util:set id="SystemAll">
@@ -578,6 +593,7 @@
         <entry key="ProductEntity" value-ref="ProductCUD"/>
         <entry key="ProductTypeEntity" value-ref="ProductTypeCUD"/>
         <entry key="ShopEntity" value-ref="ShopCUD"/>
+        <entry key="PromotionEntity" value-ref="PromotionCUD"/>
         <entry key="SystemEntity" value-ref="SystemCUD"/>
     </util:map>
 

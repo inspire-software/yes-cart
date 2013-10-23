@@ -41,7 +41,7 @@ public class ChangeLocaleCartCommandImpl  extends AbstractCartCommandImpl {
             final String locale = (String) parameters.get(getCmdKey());
             if (locale != null && !locale.equals(shoppingCart.getCurrentLocale())) {
                 ((ShoppingCartImpl)shoppingCart).setCurrentLocale(locale);
-                setModifiedDate(shoppingCart);
+                markDirty(shoppingCart);
             }
         }
     }

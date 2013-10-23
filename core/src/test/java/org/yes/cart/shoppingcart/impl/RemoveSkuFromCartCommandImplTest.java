@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
@@ -40,6 +41,7 @@ public class RemoveSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         commands.execute(shoppingCart, new HashMap<String, Object>() {{
@@ -48,18 +50,18 @@ public class RemoveSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
         }});
 
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal());
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getTotal());
         Map<String, String> params = new HashMap<String, String>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST3");
         params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "3");
         commands.execute(shoppingCart, (Map) params);
 
-        assertTrue("Expected 21.00 but was " + shoppingCart.getCartSubTotal(), (new BigDecimal("21.00")).equals(shoppingCart.getCartSubTotal()));
+        assertTrue("Expected 21.00 but was " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("21.00")).equals(shoppingCart.getTotal().getSubTotal()));
         params = new HashMap<String, String>();
         params.put(RemoveSkuFromCartCommandImpl.CMD_REMOVEONESKU, "CC_TEST3");
         commands.execute(shoppingCart, (Map) params);
 
-        assertTrue("Expected 15.98 but was " + shoppingCart.getCartSubTotal(), (new BigDecimal("15.98")).equals(shoppingCart.getCartSubTotal()));
+        assertTrue("Expected 15.98 but was " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("15.98")).equals(shoppingCart.getTotal().getSubTotal()));
         assertEquals(2, shoppingCart.getCartItemsCount());
     }
 }

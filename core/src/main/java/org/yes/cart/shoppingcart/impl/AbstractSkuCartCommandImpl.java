@@ -134,6 +134,9 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
                 }
             }
+
+            recalculate(shoppingCart);
+
         }
 
     }

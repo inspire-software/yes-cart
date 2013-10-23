@@ -25,16 +25,13 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ProductSkuService;
-import org.yes.cart.shoppingcart.AmountCalculationResult;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
-import org.yes.cart.shoppingcart.ShoppingContext;
+import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -88,6 +85,9 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
     @SpringBean(name = StorefrontServiceSpringKeys.AMOUNT_CALCULATION_STRATEGY)
     private AmountCalculationStrategy amountCalculationStrategy;
 
+    @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
+    private CustomerOrderService customerOrderService;
+
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
     private ProductSkuService productSkuService;
 
@@ -112,22 +112,21 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
      * shows deliveries, items in deliveries and prices.
      *
      * @param id         component id
-     * @param deliveries deliveries
+     * @param orderGuid  order guid
      */
     public ShoppingCartPaymentVerificationView(final String id,
-                                               final ShoppingContext shoppingContext,
-                                               final List<CustomerOrderDelivery> deliveries) {
+                                               final String orderGuid) {
         super(id);
 
         rootCategory = categoryService.getRootCategory();
 
-        final AmountCalculationResult grandTotal = amountCalculationStrategy.calculate(shoppingContext, deliveries);
-        final AmountCalculationResult grandTotalList = amountCalculationStrategy.calculate(shoppingContext, deliveries, true);
+        final CustomerOrder customerOrder = customerOrderService.findByGuid(orderGuid);
+        final Total grandTotal = amountCalculationStrategy.calculate(customerOrder);
 
         final String selectedLocale = getLocale().getLanguage();
 
         add(
-                new ListView<CustomerOrderDelivery>(DELIVERY_LIST, deliveries) {
+                new ListView<CustomerOrderDelivery>(DELIVERY_LIST, new ArrayList<CustomerOrderDelivery>(customerOrder.getDelivery())) {
 
                     @Override
                     protected void populateItem(ListItem<CustomerOrderDelivery> customerOrderDeliveryListItem) {
@@ -136,7 +135,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                         final List<CustomerOrderDeliveryDet> deliveryDet = new ArrayList<CustomerOrderDeliveryDet>(delivery.getDetail());
 
-                        final AmountCalculationResult amountCalculationResult = amountCalculationStrategy.calculate(shoppingContext, delivery);
+                        final Total total = amountCalculationStrategy.calculate(customerOrder, delivery);
 
                         customerOrderDeliveryListItem
                                 .add(
@@ -199,22 +198,22 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                                 )
                                 .add(
-                                        new Label(DELIVERY_SUB_TOTAL, amountCalculationResult.getSubTotal().toString())
+                                        new Label(DELIVERY_SUB_TOTAL, total.getSubTotal().toString())
                                 )
                                 .add(
-                                        new Label(DELIVERY_SUB_TOTAL_TAX, amountCalculationResult.getSubTotalTax().toString())
+                                        new Label(DELIVERY_SUB_TOTAL_TAX, total.getSubTotalTax().toString())
                                 )
                                 .add(
-                                        new Label(DELIVERY_SUB_TOTAL_AMOUNT, amountCalculationResult.getSubTotalAmount().toString())
+                                        new Label(DELIVERY_SUB_TOTAL_AMOUNT, total.getSubTotalAmount().toString())
                                 )
                                 .add(
-                                        new Label(DELIVERY_COST, amountCalculationResult.getDelivery().toString())
+                                        new Label(DELIVERY_COST, total.getDeliveryCost().toString())
                                 )
                                 .add(
-                                        new Label(DELIVERY_COST_TAX, amountCalculationResult.getDeliveryTax().toString())
+                                        new Label(DELIVERY_COST_TAX, total.getDeliveryTax().toString())
                                 )
                                 .add(
-                                        new Label(DELIVERY_COST_AMOUNT, amountCalculationResult.getDeliveryAmount().toString())
+                                        new Label(DELIVERY_COST_AMOUNT, total.getDeliveryCostAmount().toString())
                                 );
                     }
                 }
@@ -228,7 +227,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                 .add(
                         new PriceView(
                                 DELIVERY_GRAND_AMOUNT,
-                                new Pair<BigDecimal, BigDecimal>(grandTotalList.getTotalAmount(), grandTotal.getTotalAmount()),
+                                new Pair<BigDecimal, BigDecimal>(grandTotal.getListTotalAmount(), grandTotal.getTotalAmount()),
                                 ApplicationDirector.getShoppingCart().getCurrencyCode(),
                                 true, true)
                 );

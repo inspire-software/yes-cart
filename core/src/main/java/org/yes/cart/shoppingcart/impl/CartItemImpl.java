@@ -40,22 +40,25 @@ public class CartItemImpl implements CartItem {
     private BigDecimal quantity = DEFAULT_QUANTITY;
 
     private BigDecimal price = BigDecimal.ZERO;
-
+    private BigDecimal salePrice = BigDecimal.ZERO;
     private BigDecimal listPrice = BigDecimal.ZERO;
+
+    private boolean gift;
+    private boolean promoApplied;
+    private String appliedPromo;
 
     /**
      * {@inheritDoc}
      */
-   /* public ProductSkuDTO getProductSku() {
-        return productSku;
-    }*/
-
     public String getProductSkuCode() {
         return productSkuCode;
     }
 
     /**
+     * Set sku code for this item.
+     *
      * @param productSkuCode product sku for this cart item
+     *
      * @throws IllegalArgumentException if productSku is null.
      */
     void setProductSkuCode(final String productSkuCode) throws IllegalArgumentException {
@@ -80,16 +83,13 @@ public class CartItemImpl implements CartItem {
         } else {
             this.quantity = quantity;
         }
-        //
-        /*if (!MoneyUtils.isFirstBiggerThanOrEqualToSecond(this.quantity, BigDecimal.ONE)) {
-            this.quantity = DEFAULT_QUANTITY;
-        } */
     }
 
     /**
      * Adds quantity to current quantity. Null/Negative value safe, it is converted to zero.
      *
      * @param quantity quantity to add
+     *
      * @return current quantity for this cart item
      */
     public BigDecimal addQuantity(final BigDecimal quantity) {
@@ -106,7 +106,9 @@ public class CartItemImpl implements CartItem {
      * Removes quantity to current quantity. Null/Negative value safe, it is converted to zero.
      *
      * @param quantity quantity to remove
+     *
      * @return current quantity for this cart item
+     *
      * @throws CartItemRequiresDeletion thrown when cart item quantity goe down to zero.
      */
     public BigDecimal removeQuantity(final BigDecimal quantity) throws CartItemRequiresDeletion {
@@ -129,7 +131,8 @@ public class CartItemImpl implements CartItem {
     }
 
     /**
-     * Set price.
+     * Set price including all promotions.
+     *
      * @param price price to set.
      */
     public void setPrice(final BigDecimal price) {
@@ -144,9 +147,66 @@ public class CartItemImpl implements CartItem {
 
     /**
      * Set list (regular/catalog) price.
+     *
      * @param listPrice to set.
      */
     public void setListPrice(final BigDecimal listPrice) {
         this.listPrice = listPrice;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
+
+    /**
+     * Sale price before promotions.
+     *
+     * @param salePrice sale price
+     */
+    public void setSalePrice(final BigDecimal salePrice) {
+        this.salePrice = salePrice;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isGift() {
+        return gift;
+    }
+
+    /**
+     * Set gift flag.
+     *
+     * @param gift true if this is a gift
+     */
+    public void setGift(final boolean gift) {
+        this.gift = gift;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isPromoApplied() {
+        return promoApplied;
+    }
+
+    /**
+     * Set promo flag.
+     *
+     * @param promoApplied true if promotion has been applied
+     */
+    public void setPromoApplied(final boolean promoApplied) {
+        this.promoApplied = promoApplied;
+    }
+
+    /** {@inheritDoc} */
+    public String getAppliedPromo() {
+        return appliedPromo;
+    }
+
+    /**
+     * Set comma separated list of promotions.
+     *
+     * @param appliedPromo promotions
+     */
+    public void setAppliedPromo(final String appliedPromo) {
+        this.appliedPromo = appliedPromo;
     }
 }

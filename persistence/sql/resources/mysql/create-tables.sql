@@ -244,6 +244,10 @@
         CART_GUID varchar(36) not null,
         CURRENCY varchar(3) not null,
         LOCALE varchar(5) not null,
+        PRICE decimal(19,2) not null,
+        LIST_PRICE numeric(19,2) not null,
+        IS_PROMO_APPLIED bit not null default 0,
+        APPLIED_PROMO varchar(255),
         MESSAGE varchar(255) comment 'Free text information per each order. Can be whatever',
         ORDERSTATUS varchar(64) not null,
         CUSTOMER_ID bigint,
@@ -266,6 +270,9 @@
         DELIVERYNUM varchar(255) comment 'Order contract in case of splited orders (XXX-1,XXX-2, etc). Delivery contract XXX-2-DDD1,XXX-2-DDD2, XXX-2-DDD3, where XXX order num, DDD delivery num.',
         REF_NO varchar(255) comment 'External ref number',
         PRICE decimal(19,2) not null,
+        LIST_PRICE decimal(19,2) not null,
+        IS_PROMO_APPLIED bit not null default 0,
+        APPLIED_PROMO varchar(255),
         DELIVERYSTATUS varchar(64) not null,
         CARRIERSLA_ID bigint,
         CUSTOMERORDER_ID bigint not null,
@@ -283,7 +290,11 @@
         VERSION bigint not null default 0,
         QTY decimal(19,2) not null comment 'Quantity of SKU in this particular delivery',
         PRICE decimal(19,2) not null,
+        SALE_PRICE decimal(19,2) not null,
         LIST_PRICE decimal(19,2) not null,
+        IS_GIFT  bit not null default 0,
+        IS_PROMO_APPLIED bit not null default 0,
+        APPLIED_PROMO varchar(255),
         CODE varchar(255) not null,
         PRODUCTNAME longtext not null,
         CUSTOMERORDERDELIVERY_ID bigint not null,
@@ -298,10 +309,13 @@
     create table TCUSTOMERORDERDET (
         CUSTOMERORDERDET_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        QTY decimal(19,2),
+        QTY decimal(19,2) not null,
         PRICE decimal(19,2) not null comment 'Price per one unit',
-        LIST_PRICE decimal(19,2) not null comment 'List
-         price per one unit',
+        SALE_PRICE decimal(19,2) not null,
+        LIST_PRICE decimal(19,2) not null,
+        IS_GIFT  bit not null default 0,
+        IS_PROMO_APPLIED bit not null default 0,
+        APPLIED_PROMO varchar(255),
         CODE varchar(255) not null,
         PRODUCTNAME longtext not null,
         CUSTOMERORDER_ID bigint not null,
@@ -673,37 +687,6 @@
         primary key (SHOPCATEGORY_ID)
     ) ;
 
-    create table TSHOPDISCOUNT (
-        SHOPDISCOUNT_ID bigint not null auto_increment,
-        VERSION bigint not null default 0,
-        NAME varchar(255) not null,
-        DESCRIPTION longtext,
-        AVAILABLEFROM datetime,
-        AVAILABLETO datetime,
-        SHOP_ID bigint not null,
-        CREATED_TIMESTAMP datetime,
-        UPDATED_TIMESTAMP datetime,
-        CREATED_BY varchar(64),
-        UPDATED_BY varchar(64),
-        GUID varchar(36) not null unique,
-        primary key (SHOPDISCOUNT_ID)
-    ) ;
-
-    create table TSHOPDISCOUNTRULE (
-        SHOPDISCOUNTRULE_ID bigint not null auto_increment,
-        VERSION bigint not null default 0,
-        RULE longtext,
-        NAME varchar(255),
-        DESCRIPTION longtext,
-        CREATED_TIMESTAMP datetime,
-        UPDATED_TIMESTAMP datetime,
-        CREATED_BY varchar(64),
-        UPDATED_BY varchar(64),
-        GUID varchar(36) not null unique,
-        SHOPDISCOUNT_ID bigint not null,
-        primary key (SHOPDISCOUNTRULE_ID)
-    ) ;
-
     create table TSHOPEXCHANGERATE (
         SHOPEXCHANGERATE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
@@ -878,7 +861,36 @@
         GUID varchar(36) not null unique,
         primary key (WAREHOUSE_ID)
     ) ;
-	
+
+
+
+    create table TPROMOTION (
+        PROMOTION_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        CODE varchar(255) not null,
+        SHOP_CODE varchar(255) not null,
+        CURRENCY varchar(5) not null,
+        PROMO_TYPE varchar(1) not null,
+        PROMO_ACTION varchar(1) not null,
+        ELIGIBILITY_CONDITION longtext not null,
+        PROMO_ACTION_CONTEXT varchar(255),
+        NAME varchar(255) not null,
+        DISPLAYNAME longtext,
+        DESCRIPTION varchar(100),
+        DISPLAYDESCRIPTION longtext,
+        TAG varchar(255),
+        CAN_BE_COMBINED bit not null,
+        ENABLED bit not null,
+        ENABLED_FROM datetime,
+        ENABLED_TO datetime,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (PROMOTION_ID)
+    );
+
 	create table HIBERNATE_UNIQUE_KEYS (
          value integer 
     );
@@ -1203,21 +1215,6 @@
 
 
 
-    alter table TSHOPDISCOUNT 
-        add index FK_SD_SHOP (SHOP_ID), 
-        add constraint FK_SD_SHOP 
-        foreign key (SHOP_ID) 
-        references TSHOP (SHOP_ID);
-
-
-    alter table TSHOPDISCOUNTRULE 
-        add index FK_SDR_SDRULE (SHOPDISCOUNT_ID), 
-        add constraint FK_SDR_SDRULE 
-        foreign key (SHOPDISCOUNT_ID) 
-        references TSHOPDISCOUNT (SHOPDISCOUNT_ID);
-
-
-
     alter table TSHOPEXCHANGERATE 
         add index FK_ER_SHOP (SHOP_ID), 
         add constraint FK_ER_SHOP 
@@ -1305,3 +1302,12 @@
 
 
     create index IMAGE_NAME_IDX on TSEOIMAGE (IMAGE_NAME);
+
+    create index PROMO_SHOP_CODE on TPROMOTION (SHOP_CODE);
+    create index PROMO_CURRENCY on TPROMOTION (CURRENCY);
+    create index PROMO_CODE on TPROMOTION (CODE);
+    create index PROMO_PTYPE on TPROMOTION (PROMO_TYPE);
+    create index PROMO_PACTION on TPROMOTION (PROMO_ACTION);
+    create index PROMO_ENABLED on TPROMOTION (ENABLED);
+    create index PROMO_ENABLED_FROM on TPROMOTION (ENABLED_FROM);
+    create index PROMO_ENABLED_TO on TPROMOTION (ENABLED_TO);

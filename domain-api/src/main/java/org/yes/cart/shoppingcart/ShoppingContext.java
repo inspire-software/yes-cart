@@ -114,11 +114,4 @@ public interface ShoppingContext extends Serializable {
      */
     void clearContext();
 
-    /* private long currentCategoryId;
-
-    private BooleanQuery appliedQuery;
-
-    private Date currentDate;*/
-
-
 }

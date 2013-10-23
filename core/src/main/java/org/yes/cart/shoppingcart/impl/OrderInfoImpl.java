@@ -29,94 +29,80 @@ public class OrderInfoImpl implements OrderInfo {
     private boolean multipleDelivery;
     private boolean separateBillingAddress;
     private Long carrierSlaId;
+    private Long billingAddressId;
+    private Long deliveryAddressId;
     private String orderMessage;
 
-    /**
-     * Get order message.
-     * @return order message
-     */
+    /** {@inheritDoc} */
     public String getOrderMessage() {
         return orderMessage;
     }
 
-    /**
-     * Set order message.
-     * @param orderMessage order message.
-     */
+    /** {@inheritDoc} */
     public void setOrderMessage(final String orderMessage) {
         this.orderMessage = orderMessage;
     }
 
 
-    /**
-     * Get carrier shipping SLA.
-     * @return carries sla id.
-     */
+    /** {@inheritDoc} */
     public Long getCarrierSlaId() {
         return carrierSlaId;
     }
 
-    /**
-     * Set carrier shipping SLA.
-     * @param carrierSlaId selected sla id.
-     */
+    /** {@inheritDoc} */
     public void setCarrierSlaId(final Long carrierSlaId) {
         this.carrierSlaId = carrierSlaId;
     }
 
+    /** {@inheritDoc} */
+    public Long getBillingAddressId() {
+        return billingAddressId;
+    }
 
+    /** {@inheritDoc} */
+    public void setBillingAddressId(final Long billingAddressId) {
+        this.billingAddressId = billingAddressId;
+    }
 
-    /**
-     * Is billing address different from shipping adress.
-     * @return true is billing and shipping address are different.
-     */
+    /** {@inheritDoc} */
+    public Long getDeliveryAddressId() {
+        return deliveryAddressId;
+    }
+
+    /** {@inheritDoc} */
+    public void setDeliveryAddressId(final Long deliveryAddressId) {
+        this.deliveryAddressId = deliveryAddressId;
+    }
+
+    /** {@inheritDoc} */
     public boolean isSeparateBillingAddress() {
         return separateBillingAddress;
     }
 
-    /**
-     * Set billilnd address different from shipping address flag.
-     * @param separateBillingAddress flag.
-     */
+    /** {@inheritDoc} */
     public void setSeparateBillingAddress(final boolean separateBillingAddress) {
         this.separateBillingAddress = separateBillingAddress;
     }
 
-    /**
-     * Get selected payment gateway.
-     * @return selected payment gateway
-     */
+    /** {@inheritDoc} */
     public String getPaymentGatewayLabel() {
         return paymentGatewayLabel;
     }
 
-    /**
-     * Set selected payment gateway.
-     * @param paymentGatewayLabel   selected payment gateway.
-     */
+    /** {@inheritDoc} */
     public void setPaymentGatewayLabel(final String paymentGatewayLabel) {
         this.paymentGatewayLabel = paymentGatewayLabel;
     }
 
 
-    /**
-     * Is order need multiple delivery.
-     * @return true if need multiple delivery.
-     */
+    /** {@inheritDoc} */
     public boolean isMultipleDelivery() {
         return multipleDelivery;
     }
 
-    /**
-     * Set multiple delivery for order.
-     * @param multipleDelivery multiple delivery for order.
-     */
+    /** {@inheritDoc} */
     public void setMultipleDelivery(final boolean multipleDelivery) {
         this.multipleDelivery = multipleDelivery;
     }
-
-    
-
-
 
 }

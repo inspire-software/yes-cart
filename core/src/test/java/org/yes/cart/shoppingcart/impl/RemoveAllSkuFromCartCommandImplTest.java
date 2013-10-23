@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
@@ -40,6 +41,7 @@ public class RemoveAllSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
     @Test
     public void testExecute() {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         commands.execute(shoppingCart, new HashMap<String, Object>() {{
@@ -48,17 +50,17 @@ public class RemoveAllSkuFromCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
         }});
 
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal());
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getSubTotal());
         Map<String, String> params = new HashMap<String, String>();
         params.put(SetSkuQuantityToCartEventCommandImpl.CMD_SETQTYSKU, "CC_TEST2");
         params.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "10");
         commands.execute(shoppingCart, (Map) params);
 
-        assertTrue("Expected 221.70 but was " + shoppingCart.getCartSubTotal(), (new BigDecimal("221.70")).equals(shoppingCart.getCartSubTotal()));
+        assertTrue("Expected 221.70 but was " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("221.70")).equals(shoppingCart.getTotal().getSubTotal()));
         params = new HashMap<String, String>();
         params.put(RemoveAllSkuFromCartCommandImpl.CMD_REMOVEALLSKU, "CC_TEST2");
         commands.execute(shoppingCart, (Map) params);
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getCartSubTotal());
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getSubTotal());
         assertTrue(shoppingCart.getCartItemList().isEmpty());
     }
 }

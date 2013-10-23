@@ -44,7 +44,7 @@ public class SetMultipleDeliveryCommandImpl  extends AbstractCartCommandImpl  im
             final Boolean value = Boolean.valueOf((String) parameters.get(getCmdKey()));
             if (value != null && !value.equals(shoppingCart.getOrderInfo().isMultipleDelivery())) {
                 shoppingCart.getOrderInfo().setMultipleDelivery(value);
-                setModifiedDate(shoppingCart);
+                markDirty(shoppingCart);
             }
         }
     }

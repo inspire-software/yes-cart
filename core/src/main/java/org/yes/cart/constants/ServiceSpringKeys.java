@@ -422,4 +422,10 @@ public interface ServiceSpringKeys {
      * Product type view group
      */
     String DTO_PRODUCT_TYPE_AV_SERVICE = "dtoProdTypeAttributeViewGroupService";
+
+    /**
+     * {@link org.yes.cart.service.dto.DtoPromotionService}
+     */
+    String DTO_PROMOTION_SERVICE = "dtoPromotionService";
+
 }

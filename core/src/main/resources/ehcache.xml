@@ -333,9 +333,10 @@
     <cache name="filteredNavigationSupport-brandFilteredNavigationRecords"      maxElementsInMemory="500" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
-
-
     <cache name="filteredNavigationSupport-priceFilteredNavigationRecords"      maxElementsInMemory="500" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="promotionService-promotionsByShop"  maxElementsInMemory="20" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
 
@@ -401,7 +402,7 @@
 
 
 
-    <!-- ############################################# seo cache #######################################-->
+    <!-- ############################################# storefront cache #######################################-->
 
     <cache name="web.bookmarkService-seoCategoryDecode"
            maxElementsInMemory="200"

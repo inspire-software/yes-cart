@@ -48,7 +48,7 @@ public class SetPaymentGatewayLabelCommandImpl extends AbstractCartCommandImpl  
             final String value = (String) parameters.get(getCmdKey());
             if (value != null && !value.equals(shoppingCart.getOrderInfo().getPaymentGatewayLabel())) {
                 shoppingCart.getOrderInfo().setPaymentGatewayLabel(value);
-                setModifiedDate(shoppingCart);
+                markDirty(shoppingCart);
             }
         }
     }

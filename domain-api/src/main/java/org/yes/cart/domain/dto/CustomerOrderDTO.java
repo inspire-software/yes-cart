@@ -31,21 +31,6 @@ import java.util.Date;
 public interface CustomerOrderDTO extends Identifiable {
 
     /**
-     * Get order amount. Calculated as sum of payments.
-     *
-     * @return amount
-     */
-    BigDecimal getAmount();
-
-    /**
-     * Set order amount
-     *
-     * @param amount order amount.
-     */
-    void setAmount(BigDecimal amount);
-
-
-    /**
      * Get order pk value.
      *
      * @return order pk value.
@@ -308,6 +293,74 @@ public interface CustomerOrderDTO extends Identifiable {
      * @param code shop code.
      */
     void setCode(String code);
+
+    /**
+     * Get order amount. Calculated as sum of payments.
+     *
+     * @return amount
+     */
+    BigDecimal getAmount();
+
+    /**
+     * Set order amount
+     *
+     * @param amount order amount.
+     */
+    void setAmount(BigDecimal amount);
+
+
+    /**
+     * Calculated delivery price.
+     *
+     * @return delivery price.
+     */
+    BigDecimal getPrice();
+
+    /**
+     * Set delivery price.
+     *
+     * @param price delivery price.
+     */
+    void setPrice(BigDecimal price);
+
+    /**
+     * Get sale price.
+     * @return price
+     */
+    BigDecimal getListPrice();
+
+    /**
+     * Set sale price.
+     * @param salePrice to set.
+     */
+    void setListPrice(BigDecimal salePrice);
+
+    /**
+     * Returns true if promotions have been applied to this
+     * item.
+     *
+     * @return true if promotions have been applied
+     */
+    boolean isPromoApplied();
+
+    /**
+     * @param promoApplied set promotion applied flag
+     */
+    void setPromoApplied(boolean promoApplied);
+
+    /**
+     * Comma separated list of promotion codes that have been applied
+     * for this cart item.
+     *
+     * @return comma separated promo codes
+     */
+    String getAppliedPromo();
+
+    /**
+     * @param appliedPromo comma separated promo codes
+     */
+    void setAppliedPromo(String appliedPromo);
+
 
 
 }

@@ -151,13 +151,6 @@
         <property name="minIdle" value="5"/>
     </bean>
 
-    <bean id="amountCalculationStrategy"
-          class="org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy">  <!-- CPOINT tax and amount calculation strategy -->
-        <constructor-arg index="0" value="20.00"/>
-        <constructor-arg index="1" value="true"/>
-    </bean>
-
-
     <bean id="shoppingCartPersister" class="org.yes.cart.web.support.util.cookie.impl.ShoppingCartPersisterImpl">
         <constructor-arg index="0" ref="cookieTuplizer"/>
     </bean>
@@ -391,6 +384,10 @@
         <constructor-arg index="1" ref="addressService"/>
         <constructor-arg index="2" ref="countryService"/>
         <constructor-arg index="3" ref="stateService"/>
+    </bean>
+
+    <bean id="promotionFacade" class="org.yes.cart.web.support.service.impl.PromotionFacadeImpl">
+        <constructor-arg index="0" ref="promotionService"/>
     </bean>
 
 

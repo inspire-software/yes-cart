@@ -99,6 +99,10 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setOrderTimestamp(new Date());
         customerOrder.setGuid(shoppingCart.getGuid());
         customerOrder.setCartGuid(shoppingCart.getGuid());
+        customerOrder.setListPrice(shoppingCart.getTotal().getListSubTotal());
+        customerOrder.setPrice(shoppingCart.getTotal().getSubTotal());
+        customerOrder.setPromoApplied(shoppingCart.getTotal().isOrderPromoApplied());
+        customerOrder.setAppliedPromo(shoppingCart.getTotal().getAppliedOrderPromo());
 
         if (!temp) {
             customerOrder.setOrdernum(orderNumberGenerator.getNextOrderNumber());
@@ -120,8 +124,30 @@ public class OrderAssemblerImpl implements OrderAssembler {
                 Restrictions.eq("email", shoppingCart.getCustomerEmail()));
 
         if (customer != null) {
-            Address billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
-            Address shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+            long selectedBillingAddressId = shoppingCart.getOrderInfo().getBillingAddressId() != null ? shoppingCart.getOrderInfo().getBillingAddressId() : 0L;
+            long selectedShippingAddressId = shoppingCart.getOrderInfo().getDeliveryAddressId()!= null ? shoppingCart.getOrderInfo().getDeliveryAddressId() : 0L;
+
+            Address billingAddress = null;
+            Address shippingAddress = null;
+
+            for (final Address address : customer.getAddress()) {
+                if (address.getAddressId() == selectedBillingAddressId) {
+                    billingAddress = address;
+                }
+                if (address.getAddressId() == selectedShippingAddressId) {
+                    shippingAddress = address;
+                }
+                if (billingAddress != null && shippingAddress != null) {
+                    break;
+                }
+            }
+
+            if (billingAddress == null) {
+                billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
+            }
+            if (shippingAddress == null) {
+                shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+            }
 
             customerOrder.setShippingAddress(formatAddress(shippingAddress));
 
@@ -153,8 +179,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
             customerOrder.getOrderDetail().add(customerOrderDet);
 
             customerOrderDet.setPrice(item.getPrice());
+            customerOrderDet.setSalePrice(item.getSalePrice());
             customerOrderDet.setListPrice(item.getListPrice());
             customerOrderDet.setQty(item.getQty());
+            customerOrderDet.setGift(item.isGift());
+            customerOrderDet.setPromoApplied(item.isPromoApplied());
+            customerOrderDet.setAppliedPromo(item.getAppliedPromo());
 
             customerOrderDet.setProductSkuCode(item.getProductSkuCode());
 

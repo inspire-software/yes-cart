@@ -84,8 +84,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
             } catch (UnableToObjectizeCookieException e) {
                 ShopCodeContext.getLog(this).warn("Cart not restored from cookies");
             }
-            cart.setProcessingStartDate(new Date());
-            cart.setCalculationStrategy(calculationStrategy);
+            cart.initialise(calculationStrategy);
             ApplicationDirector.setShoppingCart(cart);
 
         } catch (Exception e) {

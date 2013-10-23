@@ -44,13 +44,13 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     @DtoField(value = "customerOrderDeliveryId", readOnly = true)
     private long customerOrderDeliveryId;
 
-    @DtoField(value = "deliveryNum")
+    @DtoField(value = "deliveryNum", readOnly = true)
     private String deliveryNum;
 
-    @DtoField(value = "refNo")
+    @DtoField(value = "refNo", readOnly = true)
     private String refNo;
 
-    @DtoField(value = "deliveryStatus")
+    @DtoField(value = "deliveryStatus", readOnly = true)
     private String deliveryStatus;
 
     @DtoField(value = "carrierSla.name", readOnly = true)
@@ -86,6 +86,14 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
+    @DtoField(value = "listPrice", readOnly = true)
+    private BigDecimal listPrice;
+    @DtoField(value = "promoApplied", readOnly = true)
+    private boolean promoApplied;
+    @DtoField(value = "appliedPromo", readOnly = true)
+    private String appliedPromo;
+
+
 
 
     @DtoCollection(
@@ -158,6 +166,36 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     /** {@inheritDoc} */
     public void setPrice(final BigDecimal price) {
         this.price = price;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getListPrice() {
+        return listPrice;
+    }
+
+    /** {@inheritDoc} */
+    public void setListPrice(final BigDecimal listPrice) {
+        this.listPrice = listPrice;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isPromoApplied() {
+        return promoApplied;
+    }
+
+    /** {@inheritDoc} */
+    public void setPromoApplied(final boolean promoApplied) {
+        this.promoApplied = promoApplied;
+    }
+
+    /** {@inheritDoc} */
+    public String getAppliedPromo() {
+        return appliedPromo;
+    }
+
+    /** {@inheritDoc} */
+    public void setAppliedPromo(final String appliedPromo) {
+        this.appliedPromo = appliedPromo;
     }
 
     /** {@inheritDoc} */
