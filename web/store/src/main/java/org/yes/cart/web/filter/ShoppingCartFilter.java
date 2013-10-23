@@ -108,7 +108,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
      * {@inheritDoc}
      */
     public void doAfter(final ServletRequest servletRequest, final ServletResponse servletResponse) throws IOException, ServletException {
-        // NOTHING
+        ApplicationDirector.setShoppingCart(null);
     }
 
 
