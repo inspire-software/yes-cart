@@ -75,5 +75,12 @@ public interface PaginationSupport {
                               String cssClass,
                               PageParameters pageParameters, int pageIndex);
 
-
+    /**
+     *
+     * Get current page index
+     *
+     * @param pageParameters current page parameters
+     * @return current page index
+     */
+    int getCurrentPage(PageParameters pageParameters);
 }

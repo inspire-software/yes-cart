@@ -22,6 +22,7 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -151,15 +152,11 @@ public class ProductsCentralView extends AbstractCentralView {
         productDataView.setColumns(columns);
         productDataView.setRows(selectedItemPerPage / columns);
 
-
-        final String curentPage = getPage().getPageParameters().get(WebParametersKeys.PAGE).toString();
-        if (curentPage != null) {
-            int currentPageIdx = NumberUtils.toInt(curentPage);
-            if (currentPageIdx < productDataView.getPageCount()) {
-                productDataView.setCurrentPage(currentPageIdx);
-            } else {
-                productDataView.setCurrentPage(0);
-            }
+        int currentPageIdx = getWicketSupportFacade().pagination().getCurrentPage(getPage().getPageParameters());
+        if (currentPageIdx < productDataView.getPageCount()) {
+            productDataView.setCurrentPage(currentPageIdx);
+        } else {
+            productDataView.setCurrentPage(0);
         }
 
         add(new ProductSorter(SORTER, "sort-order-active"));
