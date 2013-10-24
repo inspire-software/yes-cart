@@ -26,17 +26,23 @@
         <property name="transactionManager" ref="transactionManager"/>
         <property name="transactionAttributes">
             <props>
-                <prop key="add*">PROPAGATION_REQUIRED,-Throwable</prop>
-                <prop key="grant*">PROPAGATION_REQUIRED,-Throwable</prop>
-                <prop key="revoke*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <!-- Basic CRUD -->
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
                 <prop key="create*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="update*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="delete*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="remove*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="save*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <!-- Role management -->
+                <prop key="grant*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="revoke*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <!-- Reset password -->
+                <prop key="reset*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <!-- Attribute management -->
+                <prop key="add*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="assign*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="unassign*">PROPAGATION_REQUIRED,-Throwable</prop>
-                <prop key="reset*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <!-- Inventory management -->
                 <prop key="reserve*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="debit*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="credit*">PROPAGATION_REQUIRED,-Throwable</prop>
@@ -44,15 +50,23 @@
                 <prop key="fireTransition">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="handle">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="reservation*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <!-- Content special -->
+                <prop key="getRootContent">PROPAGATION_REQUIRED,-Throwable</prop>
+                <!-- Full text search -->
                 <prop key="fullTextSearchReindex">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="fullTextSearchPurge">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="executeNative*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <!-- Import -->
                 <prop key="doImport*">PROPAGATION_REQUIRED,-Throwable</prop>
-                <prop key="getRootContent">PROPAGATION_REQUIRED,-Throwable</prop>
+                <!-- Utility call that should just pass through -->
                 <prop key="getEntityFactory">PROPAGATION_SUPPORTS,readOnly,-Throwable</prop>
+                <!-- Dto attribute support -->
                 <prop key="getEntityAttributes*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
-                <prop key="getAttributeValue*">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
-                <prop key="find*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="getAttributeValue">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="getAttributeValues">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <!-- Special system preferences - must be in its own transaction -->
+                <prop key="getAttributeValueOrDefault">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
+                <!-- Other patterns: TODO: remove this wildcard YC-191 -->
                 <prop key="*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
 
             </props>
