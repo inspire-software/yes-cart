@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.wicketsupport.impl;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -59,5 +60,21 @@ public class PaginationSupportImpl implements PaginationSupport {
         if (isPageSelected(pageParameters, pageIndex)) {
             link.add(new AttributeModifier("class", cssClass));
         }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getCurrentPage(PageParameters pageParameters) {
+
+        final String currentPage = pageParameters.get(WebParametersKeys.PAGE).toString();
+        int currentPageIdx = 0;
+        if (currentPage != null) {
+            currentPageIdx = NumberUtils.toInt(currentPage);
+        }
+
+        if (currentPageIdx < 0) {
+            return 0;
+        }
+        return currentPageIdx;
     }
 }
