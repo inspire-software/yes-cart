@@ -128,21 +128,21 @@
         <mx:DataGrid id="cacheInfoDataGrid" width="100%" height="100%" itemClick="onSingleCacheSelected(event)">
             <mx:columns>
                 <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeId')"
-                                   dataField="nodeId"/>
+                                   dataField="nodeId" width="60"/>
                 <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='name')"
                                    dataField="cacheName"/>
                 <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='size')"
-                                   dataField="cacheSize"/>
+                                   dataField="cacheSize" width="80"/>
                 <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='sizeInMem')"
-                                   dataField="inMemorySize"/>
+                                   dataField="inMemorySize" width="80"/>
                 <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='sizeonDisk')"
-                                   dataField="diskStoreSize"/>
+                                   dataField="diskStoreSize" width="80"/>
                 <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='calculateInMemorySize')"
-                                   dataField="calculateInMemorySize"/>
+                                   dataField="calculateInMemorySize" width="80"/>
                 <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='calculateOnDiskSize')"
-                                   dataField="calculateOnDiskSize"/>
+                                   dataField="calculateOnDiskSize" width="80"/>
                 <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeUri')"
-                                   dataField="nodeUri"/>
+                                   dataField="nodeUri" width="200"/>
             </mx:columns>
         </mx:DataGrid>
 
