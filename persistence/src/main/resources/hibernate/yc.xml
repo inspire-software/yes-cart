@@ -2775,6 +2775,13 @@
         ]]>
     </query>
 
+    <query name="ADDRESSES.BY.CUSTOMER.EMAIL">
+        <![CDATA[
+            select a.addressId from AddressEntity a
+                where a.customer.email = ?1
+        ]]>
+    </query>
+
     <query name="ADDRESSES.BY.CUSTOMER.TYPE">
         <![CDATA[
             select a from AddressEntity a

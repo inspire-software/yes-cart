@@ -31,6 +31,16 @@ import java.util.List;
 public interface AddressBookFacade {
 
     /**
+     * Returns true if customer identified by given email address
+     * has at least one address in the address book.
+     *
+     * @param email customer email
+     *
+     * @return true if at least one address exists
+     */
+    boolean customerHasAtLeastOneAddress(String email);
+
+    /**
      * Get existing address or create new instance object.
      *
      * @param customer customer of the address
@@ -47,6 +57,22 @@ public interface AddressBookFacade {
      * @param address address
      */
     void createOrUpdate(Address address);
+
+    /**
+     * Removes address and resets default address.
+     *
+     * @param address address to remove
+     */
+    void remove(Address address);
+
+    /**
+     * Set given address as default inside address type group.
+     *
+     * @param address instance to update
+     *
+     * @return persisted instance of address.
+     */
+    Address useAsDefault(Address address);
 
     /**
      * Find all countries.

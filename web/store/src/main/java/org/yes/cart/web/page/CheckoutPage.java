@@ -55,6 +55,7 @@ import org.yes.cart.web.page.component.shipping.ShippingView;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorModel;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.AddressBookFacade;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -149,6 +150,9 @@ public class CheckoutPage extends AbstractWebPage {
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
+    private AddressBookFacade addressBookFacade;
+
 
     /**
      * Construct page.
@@ -237,10 +241,7 @@ public class CheckoutPage extends AbstractWebPage {
             return createLoginFragment();
         }
 
-
-        final Customer customer = customerService.findCustomer(
-                ApplicationDirector.getShoppingCart().getCustomerEmail());
-        if (customer.getAddress().isEmpty()) {
+        if (!addressBookFacade.customerHasAtLeastOneAddress(ApplicationDirector.getShoppingCart().getCustomerEmail())) {
             return createAddressFragment();
         }
 
@@ -578,26 +579,12 @@ public class CheckoutPage extends AbstractWebPage {
     }
 
     /**
-     * Get deliveries.
-     *
-     * @param cart {@link ShoppingCart}
-     * @return list of deliveries
-     */
-    private List<CustomerOrderDelivery> getDeliveries(final ShoppingCart cart) {
-
-        return new ArrayList<CustomerOrderDelivery>(customerOrderService.findByGuid(cart.getGuid()).getDelivery());
-
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     protected void onBeforeRender() {
 
         processCommands();
-
-
         super.onBeforeRender();
 
     }

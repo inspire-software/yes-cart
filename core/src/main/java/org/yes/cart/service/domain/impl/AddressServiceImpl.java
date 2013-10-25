@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.service.domain.AddressService;
@@ -35,6 +36,12 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
      */
     public AddressServiceImpl(final GenericDAO<Address, Long> genericDao) {
         super(genericDao);
+    }
+
+    /** {@inheritDoc} */
+    public boolean customerHasAtLeastOneAddress(String email) {
+        final List pks = (List) getGenericDao().findQueryObjectByNamedQuery("ADDRESSES.BY.CUSTOMER.EMAIL", email);
+        return CollectionUtils.isNotEmpty(pks);
     }
 
     /** {@inheritDoc} */

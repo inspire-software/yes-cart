@@ -28,6 +28,17 @@ import java.util.List;
 public interface AddressService extends GenericService<Address> {
 
     /**
+     * Returns true if customer identified by given email address
+     * has at least one address in the address book.
+     *
+     * @param email customer email
+     *
+     * @return true if at least one address exists
+     */
+    boolean customerHasAtLeastOneAddress(String email);
+
+
+    /**
      * Get customer addresses.
      *
      * @param customerId customer id
