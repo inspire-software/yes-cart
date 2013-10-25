@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.criterion.Criterion;
@@ -122,21 +123,15 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
 
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isEmailUnique(final String email) {
-        List<Customer> cust = findCustomer(email, null, null, null, null);
-        return (cust == null || cust.isEmpty());
-    }
-
     /**
      * {@inheritDoc}
      */
     public boolean isCustomerExists(final String email) {
-        List<Customer> cust = findCustomer(email, null, null, null, null);
-        return (cust != null && !cust.isEmpty());
+        final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("EMAIL.CHECK", email);
+        if (CollectionUtils.isNotEmpty(counts)) {
+            return ((Number) counts.get(0)).intValue() > 0;
+        }
+        return false;
     }
 
     /**

@@ -23,10 +23,10 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -44,8 +44,8 @@ public class SummaryPanel extends BaseComponent {
 
 // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
-    private CustomerService customerService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
+    private CustomerServiceFacade customerServiceFacade;
 
 
     /**
@@ -65,7 +65,7 @@ public class SummaryPanel extends BaseComponent {
 
                     @Override
                     protected void onSubmit() {
-                        customerService.update(getModelObject());
+                        customerServiceFacade.updateCustomer(getModelObject());
                         info(getLocalizer().getString("profileUpdated", this));
                         super.onSubmit();
                     }

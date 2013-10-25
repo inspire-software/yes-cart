@@ -22,12 +22,13 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.util.*;
 
@@ -38,8 +39,8 @@ import java.util.*;
  */
 public class StorefrontWebSession extends AuthenticatedWebSession {
 
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
-    private CustomerService customerService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
+    private CustomerServiceFacade customerServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
@@ -61,11 +62,10 @@ public class StorefrontWebSession extends AuthenticatedWebSession {
      * {@inheritDoc}
      */
     public boolean authenticate(final String username, final String password) {
-        if (customerService.isCustomerExists(username) &&
-                customerService.isPasswordValid(username, password)) {
+        if (customerServiceFacade.authenticate(username, password)) {
             executeLoginCommand(
                     ApplicationDirector.getShoppingCart(),
-                    customerService.findCustomer(username));
+                    customerServiceFacade.findCustomer(username));
             return true;
         }
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGOUT, ApplicationDirector.getShoppingCart(),

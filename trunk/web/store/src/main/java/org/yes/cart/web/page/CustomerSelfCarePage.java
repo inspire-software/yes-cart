@@ -23,10 +23,8 @@ import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.util.StringUtils;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
 import org.yes.cart.web.page.component.customer.dynaform.DynaFormPanel;
@@ -35,6 +33,8 @@ import org.yes.cart.web.page.component.customer.password.PasswordPanel;
 import org.yes.cart.web.page.component.customer.summary.SummaryPanel;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 /**
  *
@@ -57,8 +57,8 @@ public class CustomerSelfCarePage extends AbstractWebPage {
     private final static String ORDERS_PANEL = "ordersView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
-    private CustomerService customerService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
+    private CustomerServiceFacade customerServiceFacade;
 
 
     /**
@@ -72,7 +72,7 @@ public class CustomerSelfCarePage extends AbstractWebPage {
         final String email = ApplicationDirector.getShoppingCart().getCustomerEmail();
         final Customer customer;
         if (StringUtils.hasLength(email)) {
-            customer = customerService.findCustomer(ApplicationDirector.getShoppingCart().getCustomerEmail());
+            customer = customerServiceFacade.findCustomer(ApplicationDirector.getShoppingCart().getCustomerEmail());
         } else {
             customer = null;
         }

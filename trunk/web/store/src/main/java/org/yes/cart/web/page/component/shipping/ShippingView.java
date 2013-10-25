@@ -29,7 +29,6 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierService;
 import org.yes.cart.service.domain.CarrierSlaService;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
@@ -38,6 +37,8 @@ import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.page.component.util.CarrierRenderer;
 import org.yes.cart.web.page.component.util.CarrierSlaRenderer;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -63,8 +64,8 @@ public class ShippingView extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.CARRIER_SLA_SERVICE)
     private CarrierSlaService carrierSlaService;
 
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
-    private CustomerService customerService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
+    private CustomerServiceFacade customerServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
@@ -132,7 +133,7 @@ public class ShippingView extends BaseComponent {
                 super.onSelectionChanged(carrierSla);
 
                 final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-                final Customer customer = customerService.findCustomer(cart.getShoppingContext().getCustomerEmail());
+                final Customer customer = customerServiceFacade.findCustomer(cart.getShoppingContext().getCustomerEmail());
                 final String shippingAddressId;
                 final String billingAddressId;
                 if (customer != null) {

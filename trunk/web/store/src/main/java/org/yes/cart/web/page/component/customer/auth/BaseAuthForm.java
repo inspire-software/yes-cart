@@ -19,9 +19,8 @@ package org.yes.cart.web.page.component.customer.auth;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -34,11 +33,8 @@ public class BaseAuthForm extends Form {
     protected static final int MAX_LEN = 256;
 
 
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
-    private CustomerService customerService;
-
-    @SpringBean(name = ServiceSpringKeys.ATTRIBUTE_SERVICE)
-    private AttributeService attributeService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
+    private CustomerServiceFacade customerServiceFacade;
 
     public BaseAuthForm(String id) {
         super(id);
@@ -52,40 +48,17 @@ public class BaseAuthForm extends Form {
      * @return true in case if email unique.
      */
     protected boolean isCustomerExists(final String customerEmail) {
-        return customerService.isCustomerExists(customerEmail);
+        return customerServiceFacade.isCustomerRegistered(customerEmail);
     }
 
     /**
-     * Check is provided password for customer valid.
+     * Get {@link CustomerServiceFacade} service.
      *
-     * @param customerEmail email to check
-     * @param password      password
-     * @return true in case if email unique.
+     * @return {@link CustomerServiceFacade} service
      */
-    protected boolean isPasswordValid(final String customerEmail, final String password) {
-        return customerService.isPasswordValid(customerEmail, password);
+    protected CustomerServiceFacade getCustomerServiceFacade() {
+        return customerServiceFacade;
     }
-
-
-    /**
-     * Get {@link CustomerService} service.
-     *
-     * @return {@link CustomerService} service
-     */
-    protected CustomerService getCustomerService() {
-        return customerService;
-    }
-
-    /**
-     * Get attribute service.
-     *
-     * @return {@link AttributeService}
-     */
-    protected AttributeService getAttributeService() {
-        return attributeService;
-    }
-
-
 
     /**
      * Sign in user if possible.

@@ -51,7 +51,7 @@ public class ShoppingCartImpl implements ShoppingCart {
 
     private OrderInfo orderInfo;
 
-    private Total total;
+    private Total total = new TotalImpl();
 
     private transient AmountCalculationStrategy calculationStrategy;
 
@@ -84,6 +84,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         guid = java.util.UUID.randomUUID().toString();
         items = new ArrayList<CartItemImpl>();
         orderInfo = null;
+        total = null;
         modifiedTimestamp = System.currentTimeMillis();
     }
 

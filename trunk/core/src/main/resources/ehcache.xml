@@ -463,6 +463,13 @@
            timeToLiveSeconds="600"
            timeToIdleSeconds="120"/>
 
+    <cache name="web.customerServiceFacade-findCustomer"
+           maxElementsInMemory="5000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
     <cache name="web.addressBookFacade-customerHasAtLeastOneAddress"
            maxElementsInMemory="5000"
            overflowToDisk="true"

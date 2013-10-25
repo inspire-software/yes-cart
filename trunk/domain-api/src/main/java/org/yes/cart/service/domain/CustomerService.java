@@ -51,14 +51,6 @@ public interface CustomerService extends GenericService<Customer> {
     Customer findCustomer(String email);
 
     /**
-     * check is given email unique.
-     *
-     * @param email email to check
-     * @return true in case if provided email not present in database.
-     */
-    boolean isEmailUnique(String email);
-
-    /**
      * Check is customer already registered.
      *
      * @param email email to check
@@ -96,8 +88,8 @@ public interface CustomerService extends GenericService<Customer> {
 
     /**
      * Get sorted by attribute rank collection of customer attributes.
-     * Not all customers attributes can be filled ot new attributes can
-     * be added, so the result list will contains filled values and
+     * Not all customers attributes can be filled out new attributes can
+     * be added, so the result list contains filled values and
      * possible values to fill.
      *
      * @param customer customer

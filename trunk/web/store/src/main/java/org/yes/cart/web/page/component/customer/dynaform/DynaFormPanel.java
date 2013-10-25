@@ -17,7 +17,6 @@
 package org.yes.cart.web.page.component.customer.dynaform;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -34,15 +33,15 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.slf4j.Logger;
 import org.springframework.core.convert.TypeDescriptor;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ExtendedConversionService;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.util.PairChoiceRenderer;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -73,8 +72,8 @@ public class DynaFormPanel extends BaseComponent {
     private final static String VALUE_FILED = "val";
 
 
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
-    private CustomerService customerService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
+    private CustomerServiceFacade customerService;
 
 
     /**
@@ -98,7 +97,7 @@ public class DynaFormPanel extends BaseComponent {
 
         final Customer customer = customerModel.getObject();
 
-        final List<? extends AttrValue> attrValueCollection = customerService.getRankedAttributeValues(customer);
+        final List<? extends AttrValue> attrValueCollection = customerService.getCustomerRegistrationAttributes(customer);
 
         final Form form = new Form(FORM) {
 
@@ -124,7 +123,7 @@ public class DynaFormPanel extends BaseComponent {
                     }
                 }
 
-                customerService.update(customer);
+                customerService.updateCustomer(customer);
             }
         };
 
@@ -159,12 +158,6 @@ public class DynaFormPanel extends BaseComponent {
                 getI18NSupport().getFailoverModel(
                         attrValue.getAttribute().getDisplayName(),
                         attrValue.getAttribute().getName()).getValue(lang));
-
-        if (StringUtils.isNotBlank(attrValue.getAttribute().getDescription())) {
-
-            rez.add(new AttributeModifier(HTML_TITLE, attrValue.getAttribute().getDescription()));
-
-        }
 
         return rez;
     }

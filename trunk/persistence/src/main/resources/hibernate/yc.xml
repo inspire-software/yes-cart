@@ -2798,7 +2798,11 @@
         ]]>
     </query>
 
-
+    <query name="EMAIL.CHECK">
+        <![CDATA[
+            select count(email) from CustomerEntity where email = ?1
+        ]]>
+    </query>
 
     <query name="WISHLIST.BY.CUSTOMER">
         <![CDATA[

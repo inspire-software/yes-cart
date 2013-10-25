@@ -21,19 +21,15 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.AttrValueCustomer;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.page.component.BaseComponent;
+
+import java.util.HashMap;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -52,13 +48,6 @@ public class RegisterPanel extends BaseComponent {
     private static final String REGISTER_BUTTON = "registerBtn";
     private static final String REGISTER_FORM = "registerForm";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
-
-
-    @SpringBean(name = ServiceSpringKeys.PASSPHRAZE_GENERATOR)
-    private PassPhrazeGenerator phrazeGenerator;
-
-
-
 
     /**
      * Create register panel.
@@ -222,9 +211,7 @@ public class RegisterPanel extends BaseComponent {
                         @Override
                         public void onSubmit() {
 
-                            final String password = phrazeGenerator.getNextPassPhrase();
-
-                            if (getCustomerService().isCustomerExists(getEmail())) {
+                            if (isCustomerExists(getEmail())) {
 
                                 error(
                                         getLocalizer().getString("customerExists", this)
@@ -242,22 +229,14 @@ public class RegisterPanel extends BaseComponent {
 
                             } else {
 
-
-                                Customer customer = getCustomerService().getGenericDao().getEntityFactory().getByIface(Customer.class);
-                                customer.setEmail(getEmail());
-                                customer.setFirstname(getFirstname());
-                                customer.setLastname(getLastname());
-                                customer.setPassword(password); // aspect will create hash
-
-                                final AttrValueCustomer attrValueCustomer = getCustomerService().getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
-                                attrValueCustomer.setCustomer(customer);
-                                attrValueCustomer.setVal(getPhone());
-                                attrValueCustomer.setAttribute(getAttributeService().findByAttributeCode(
-                                        AttributeNamesKeys.CUSTOMER_PHONE));
-
-                                customer.getAttributes().add(attrValueCustomer);
-
-                                getCustomerService().create(customer, ApplicationDirector.getCurrentShop());
+                                final String password = getCustomerServiceFacade().registerCustomer(
+                                        ApplicationDirector.getCurrentShop(),
+                                        email, new HashMap<String, Object>() {{
+                                            put("firstname", getFirstname());
+                                            put("lastname", getLastname());
+                                            put("phone", getPhone());
+                                        }}
+                                );
 
                                 if (signIn(getEmail(), password)) {
 
