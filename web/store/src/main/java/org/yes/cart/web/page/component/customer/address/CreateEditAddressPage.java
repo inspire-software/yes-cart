@@ -21,10 +21,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
@@ -32,6 +30,7 @@ import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -48,8 +47,8 @@ public class CreateEditAddressPage extends AbstractWebPage {
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
 
 
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
-    private CustomerService customerService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
+    private CustomerServiceFacade customerServiceFacade;
 
     @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
     private AddressBookFacade addressBookFacade;
@@ -64,7 +63,7 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
         super(params);
 
-        final Customer customer = customerService.findCustomer(ApplicationDirector.getShoppingCart().getCustomerEmail());
+        final Customer customer = customerServiceFacade.findCustomer(ApplicationDirector.getShoppingCart().getCustomerEmail());
 
         final String addrId = params.get(WebParametersKeys.ADDRESS_ID).toString();
 

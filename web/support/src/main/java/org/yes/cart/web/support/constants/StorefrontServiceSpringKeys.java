@@ -108,4 +108,9 @@ public interface StorefrontServiceSpringKeys {
       */
      public String ADDRESS_BOOK_FACADE = "addressBookFacade";
 
+     /**
+      * Customer service facade
+      */
+     public String CUSTOMER_SERVICE_FACADE = "customerServiceFacade";
+
 }

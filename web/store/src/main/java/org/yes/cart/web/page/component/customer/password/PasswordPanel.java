@@ -20,11 +20,11 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -40,8 +40,8 @@ public class PasswordPanel extends BaseComponent {
     private final static String SAVE_LINK = "saveLink";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
-    private CustomerService customerService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
+    private CustomerServiceFacade customerServiceFacade;
 
 
     /**
@@ -59,7 +59,7 @@ public class PasswordPanel extends BaseComponent {
 
                     @Override
                     protected void onSubmit() {
-                        customerService.resetPassword(getModelObject(), ApplicationDirector.getCurrentShop());
+                        customerServiceFacade.resetPassword(ApplicationDirector.getCurrentShop(), getModelObject());
                         info(getLocalizer().getString(PASSWORD_SENT, this));
                         super.onSubmit();
                     }

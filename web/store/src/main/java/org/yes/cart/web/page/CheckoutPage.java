@@ -34,13 +34,11 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.shoppingcart.*;
@@ -56,12 +54,11 @@ import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorModel;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -132,8 +129,8 @@ public class CheckoutPage extends AbstractWebPage {
     // ---------------------------------- PARAMETER NAMES  END ------------------------------- //
 
 
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
-    private CustomerService customerService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
+    private CustomerServiceFacade customerServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
     private CustomerOrderService customerOrderService;
@@ -538,7 +535,7 @@ public class CheckoutPage extends AbstractWebPage {
         boolean billingAddressHidden = getRequest().getRequestParameters().getParameterValue(
                 BILLING_ADDR_VISIBLE).toBoolean(true);
 
-        final Customer customer = customerService.findCustomer(
+        final Customer customer = customerServiceFacade.findCustomer(
                 ApplicationDirector.getShoppingCart().getCustomerEmail());
 
         final Model<Customer> customerModel = new Model<Customer>(customer);

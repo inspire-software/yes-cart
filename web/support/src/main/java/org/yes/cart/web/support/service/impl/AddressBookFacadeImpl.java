@@ -109,8 +109,9 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
     /** {@inheritDoc} */
     @CacheEvict(value = {
-        "web.addressBookFacade-customerHasAtLeastOneAddress"
-    }, allEntries = true)
+        "web.addressBookFacade-customerHasAtLeastOneAddress",
+        "web.customerServiceFacade-findCustomer"
+    }, key = "#address.customer.email")
     public void createOrUpdate(final Address address) {
         if (address.getAddressId() == 0) {
             addressService.create(address);
@@ -121,8 +122,9 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
     /** {@inheritDoc} */
     @CacheEvict(value = {
-            "web.addressBookFacade-customerHasAtLeastOneAddress"
-    }, allEntries = true)
+            "web.addressBookFacade-customerHasAtLeastOneAddress",
+            "web.customerServiceFacade-findCustomer"
+    }, key = "#address.customer.email")
     public void remove(Address address) {
 
         final boolean isDefault = address.isDefaultAddress();
@@ -141,6 +143,10 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    @CacheEvict(value = {
+            "web.addressBookFacade-customerHasAtLeastOneAddress",
+            "web.customerServiceFacade-findCustomer"
+    }, key = "#address.customer.email")
     public Address useAsDefault(Address address) {
         return addressService.updateSetDefault(address);
     }

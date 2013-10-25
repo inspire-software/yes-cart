@@ -386,6 +386,13 @@
         <constructor-arg index="3" ref="stateService"/>
     </bean>
 
+    <bean id="customerServiceFacade" class="org.yes.cart.web.support.service.impl.CustomerServiceFacadeImpl">
+        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="attributeService"/>
+        <constructor-arg index="2" ref="passPhraseGenerator"/>
+
+    </bean>
+
     <bean id="promotionFacade" class="org.yes.cart.web.support.service.impl.PromotionFacadeImpl">
         <constructor-arg index="0" ref="promotionService"/>
     </bean>
