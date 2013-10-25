@@ -16,9 +16,13 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Address;
+import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Country;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.State;
@@ -52,14 +56,17 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
         this.stateService = stateService;
     }
 
-    /**
-     * Get existing or create new address to edit.
-     *
-     * @param customer    customer
-     * @param addrId      address id
-     * @param addressType address type
-     * @return instance of {@link org.yes.cart.domain.entity.Address}
-     */
+    /** {@inheritDoc} */
+    @Cacheable(value = "web.addressBookFacade-customerHasAtLeastOneAddress")
+    public boolean customerHasAtLeastOneAddress(final String email) {
+
+        if (StringUtils.isNotBlank(email)) {
+            return addressService.customerHasAtLeastOneAddress(email);
+        }
+        return false;
+    }
+
+    /** {@inheritDoc} */
     public Address getAddress(final Customer customer, final String addrId, final String addressType) {
         long pk;
         try {
@@ -79,6 +86,11 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             rez.setCustomer(customer);
             rez.setAddressType(addressType);
             customer.getAddress().add(rez);
+
+            final AttrValueCustomer attrValue = customer.getAttributeByCode(AttributeNamesKeys.CUSTOMER_PHONE);
+            rez.setFirstname(customer.getFirstname());
+            rez.setLastname(customer.getLastname());
+            rez.setPhoneList(attrValue == null ? StringUtils.EMPTY : attrValue.getVal());
         }
         return rez;
     }
@@ -96,6 +108,9 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    @CacheEvict(value = {
+        "web.addressBookFacade-customerHasAtLeastOneAddress"
+    }, allEntries = true)
     public void createOrUpdate(final Address address) {
         if (address.getAddressId() == 0) {
             addressService.create(address);
@@ -103,4 +118,31 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             addressService.update(address);
         }
     }
+
+    /** {@inheritDoc} */
+    @CacheEvict(value = {
+            "web.addressBookFacade-customerHasAtLeastOneAddress"
+    }, allEntries = true)
+    public void remove(Address address) {
+
+        final boolean isDefault = address.isDefaultAddress();
+        addressService.delete(address);
+
+        if (isDefault) {
+            // set new default address in case if default address was deleted
+            final List<Address> restOfAddresses = addressService.getAddressesByCustomerId(
+                    address.getCustomer().getCustomerId(),
+                    address.getAddressType());
+            if (!restOfAddresses.isEmpty()) {
+                addressService.updateSetDefault(restOfAddresses.get(0));
+            }
+        }
+
+    }
+
+    /** {@inheritDoc} */
+    public Address useAsDefault(Address address) {
+        return addressService.updateSetDefault(address);
+    }
+
 }

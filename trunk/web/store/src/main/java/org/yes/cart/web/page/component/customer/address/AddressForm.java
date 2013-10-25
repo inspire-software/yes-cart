@@ -66,9 +66,6 @@ public class AddressForm extends Form<Address> {
     private final static int MEDIUM_LENGTH = 128;
     private final static int LARGE_LENGTH = 256;
 
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
-    private CustomerService customerService;
-
     @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
     private AddressBookFacade addressBookFacade;
 
@@ -102,12 +99,7 @@ public class AddressForm extends Form<Address> {
 
         final Address address = addressIModel.getObject();
 
-        final Customer customer = customerService.findCustomer(
-                ApplicationDirector.getShoppingCart().getCustomerEmail()
-        );
-
-
-        preprocessAddress(address, addressType, customer);
+        preprocessAddress(address);
 
 
         final List<State> stateList = getStateList(address.getCountryCode());
@@ -190,17 +182,11 @@ public class AddressForm extends Form<Address> {
     /**
      * Fill some data in case of new {@link Address}
      *
-     * @param addressType address type
      * @param address     address to preprocess
-     * @param customer    customer.
      */
-    private void preprocessAddress(final Address address, final String addressType, final Customer customer) {
+    private void preprocessAddress(final Address address) {
         if (address.getAddressId() == 0) {
-
-            address.setAddressType(addressType);
-            address.setCustomer(customer);
-            fillAddressWithGeoIpData(address, customer);
-
+            fillAddressWithGeoIpData(address);
         }
     }
 
@@ -210,13 +196,9 @@ public class AddressForm extends Form<Address> {
      * INTEGRATION POINT with tag cloud, that will have geo ip data
      *
      * @param address  address to fill
-     * @param customer customer.
      */
-    private void fillAddressWithGeoIpData(final Address address, final Customer customer) {
-        final AttrValueCustomer attrValue = customer.getAttributeByCode(AttributeNamesKeys.CUSTOMER_PHONE);
-        address.setFirstname(customer.getFirstname());
-        address.setLastname(customer.getLastname());
-        address.setPhoneList(attrValue == null ? StringUtils.EMPTY : attrValue.getVal());
+    private void fillAddressWithGeoIpData(final Address address) {
+        // CPOINT
     }
 
 

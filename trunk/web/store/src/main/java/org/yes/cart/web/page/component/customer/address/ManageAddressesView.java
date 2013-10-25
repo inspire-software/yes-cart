@@ -35,7 +35,9 @@ import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.service.AddressBookFacade;
 
 import java.util.List;
 
@@ -68,12 +70,8 @@ public class ManageAddressesView extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
-    @SpringBean(name = ServiceSpringKeys.ADDRESS_SERVICE)
-    private AddressService addressService;
-
-
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_SERVICE)
-    private CustomerService customerService;
+    @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
+    private AddressBookFacade addressBookFacade;
 
 
     /**
@@ -93,12 +91,12 @@ public class ManageAddressesView extends BaseComponent {
                 new Form(SELECT_ADDRESSES_FORM).add(
                         new RadioGroup<Address>(
                                 ADDRESS_RADIO_GROUP,
-                                new Model<Address>(getDefaultAddress(customerModel.getObject().getAddresses(addressType)))) {
+                                new Model<Address>(customerModel.getObject().getDefaultAddress(addressType))) {
 
                             @Override
                             protected void onSelectionChanged(final Object o) {
                                 super.onSelectionChanged(o);
-                                addressService.updateSetDefault((Address) o);
+                                addressBookFacade.useAsDefault((Address) o);
                             }
 
                             @Override
@@ -172,39 +170,11 @@ public class ManageAddressesView extends BaseComponent {
                             /** {@inheritDoc} */
                             @Override
                             public void onSubmit() {
-                                addressService.delete(address);
-
-                                if (address.isDefaultAddress()) {
-                                    // set new default address in case if default addres was deleted
-                                    final List<Address> restOfAddresses = addressService.getAddressesByCustomerId(
-                                            address.getCustomer().getCustomerId(),
-                                            address.getAddressType());
-                                    if (!restOfAddresses.isEmpty()) {
-                                        addressService.updateSetDefault(restOfAddresses.get(0));
-                                    }
-                                }
-
+                                addressBookFacade.remove(address);
                                 setResponsePage(CustomerSelfCarePage.class);
-
                             }
                         }.setDefaultFormProcessing(false)
                 );
-    }
-
-
-    /**
-     * Getr first default address.
-     *
-     * @param addresses address list
-     * @return first address, that marked as default or null if not found
-     */
-    protected Address getDefaultAddress(final List<Address> addresses) {
-        for (Address addr : addresses) {
-            if (addr.isDefaultAddress()) {
-                return addr;
-            }
-        }
-        return null;
     }
 
 }
