@@ -58,7 +58,7 @@
 
     <bean id="applicationDirector" class="org.yes.cart.web.application.ApplicationDirector"/>
 
-    <import resource="test-ds.xml"/>
+    <import resource="../../../../support/src/test/resources/test-ds.xml"/>
 
     <!-- #################################  message consumers end ######################################-->
 

@@ -32,7 +32,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * Shopping cart  filter responsible to restore shopping cart from cookies, if it possible.

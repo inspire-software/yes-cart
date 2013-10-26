@@ -19,11 +19,11 @@ package org.yes.cart.web.theme.impl;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.MountedMapper;
+import org.apache.wicket.request.mapper.parameter.IPageParametersEncoder;
 import org.apache.wicket.util.ClassProvider;
 import org.slf4j.Logger;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.theme.WicketPagesMounter;
-import org.yes.cart.web.util.SeoBookmarkablePageParametersEncoder;
 
 import java.util.List;
 import java.util.Map;
@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class WicketPagesMounterImpl implements WicketPagesMounter {
 
-    private final SeoBookmarkablePageParametersEncoder encoder;
+    private final IPageParametersEncoder encoder;
     private final String loginUrl;
     private final Map<String, Map<String, Class<IRequestablePage>>> pageMapping;
     private final List<String> encoderEnabledUrls;
@@ -43,7 +43,7 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
     private ClassProvider<IRequestablePage> loginPage;
     private ClassProvider<IRequestablePage> homePage;
 
-    public WicketPagesMounterImpl(final SeoBookmarkablePageParametersEncoder encoder,
+    public WicketPagesMounterImpl(final IPageParametersEncoder encoder,
                                   final Map<String, Map<String, Class<IRequestablePage>>> pageMapping,
                                   final String loginUrl,
                                   final List<String> encoderEnabledUrls) {

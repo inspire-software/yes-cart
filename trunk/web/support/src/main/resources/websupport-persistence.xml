@@ -35,30 +35,35 @@
            http://www.springframework.org/schema/cache
            http://www.springframework.org/schema/cache/spring-cache.xsd">
 
-    <context:component-scan base-package="org.yes.cart"/>
 
-    <cache:annotation-driven />
-
-    <aop:aspectj-autoproxy/>
-
-    <import resource="classpath*:websupport-webapp.xml"/>
-    <import resource="modules.xml"/>
-    <import resource="wicket.xml"/>
-
-
-    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="${ycs.mail.host}"/>
-        <property name="port" value="${ycs.mail.port}"/>
-        <property name="username" value="${ycs.mail.username}"/>
-        <property name="password" value="${ycs.mail.password}"/>
-        <property name="javaMailProperties">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+          autowire="byName"><!-- add if using 2nd lvl cache: depends-on="hibernateCacheManagerProvider" -->
+        <!--
+            YC-315 investigation showed that we should not use 2nd level cache as it created adverse
+            effect on performance by splitting selects into N + 1 selects in order to manage cache
+            for joined objects.
+            It seems like we never use objects by PK and hence YC does not benefit from 2nd level cache
+         -->
+        <!--<property name="configLocation" value="classpath:hibernate.cfg.xml"/>-->
+        <property name="mappingResources">
+            <list>
+                <value>hibernate/yc.xml</value>
+            </list>
+        </property>
+        <property name="entityInterceptor">
+            <bean class="org.yes.cart.domain.interceptor.StorefrontInterceptor"/>
+        </property>
+        <property name="hibernateProperties">
             <props>
-                <!-- Use SMTP-AUTH to authenticate to SMTP server -->
-                <!--<prop key="mail.smtp.auth">true</prop>-->
-                <!-- Use TLS to encrypt communication with SMTP server -->
-                <prop key="mail.smtp.starttls.enable">${ycs.mail.smtp.starttls.enable}</prop>
+                <prop key="hibernate.search.default.indexBase">
+                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
+                </prop>
+                <prop key="hibernate.search.worker.execution">async</prop>
+                <prop key="hibernate.search.worker.thread_pool.size">10</prop>
+                <prop key="hibernate.search.default.exclusive_index_use">false</prop>
             </props>
         </property>
     </bean>
+
 
 </beans>
