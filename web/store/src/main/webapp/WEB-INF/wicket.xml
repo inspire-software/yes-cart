@@ -131,4 +131,44 @@
         <constructor-arg ref="sitemapXmlService"/>
     </bean>
 
+    <bean id="wicketSupportFacade" class="org.yes.cart.web.service.wicketsupport.impl.WicketSupportFacadeImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.web.service.wicketsupport.impl.LinksSupportImpl"/>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <bean class="org.yes.cart.web.service.wicketsupport.impl.PaginationSupportImpl"/>
+        </constructor-arg>
+    </bean>
+
+
+    <bean id="wicketUtil" class="org.yes.cart.web.util.WicketUtil">
+        <property name="cmdKeys">
+            <list>
+                <value>addToCartCmd</value>
+                <value>changeCurrencyCmd</value>
+                <value>changeLocaleCmd</value>
+                <value>cleanCartCmd</value>
+                <value>expireCartCmd</value>
+                <value>loginCmd</value>
+                <value>logoutCmd</value>
+                <value>removeAllSkuCmd</value>
+                <value>removeOneSkuCmd</value>
+                <value>setBillingAddressSeparateCmd</value>
+                <value>setCarrierSlaCmd</value>
+                <value>setMultipleDeliveryCmd</value>
+                <value>setShopIdCmd</value>
+                <value>setQuantityToCartCmd</value>
+                <value>sku</value>
+            </list>
+        </property>
+    </bean>
+
+
+    <bean id="seoBookmarkablePageParametersEncoder" class="org.yes.cart.web.service.wicketsupport.impl.SeoBookmarkablePageParametersEncoder">
+        <constructor-arg index="0" ref="bookmarkService"/>
+        <constructor-arg index="1" value="true"/>
+        <!-- is seo url rewriting enabled -->
+    </bean>
+
+
 </beans>

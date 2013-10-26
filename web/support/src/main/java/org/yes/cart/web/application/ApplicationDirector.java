@@ -46,7 +46,7 @@ public class ApplicationDirector implements ApplicationContextAware {
     /**
      * Get app director instance.
      *
-     * @return app directorr instance.
+     * @return app director instance.
      */
     public static ApplicationDirector getInstance() {
         return applicationDirector;

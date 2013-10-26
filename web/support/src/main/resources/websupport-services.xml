@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.1.xsd
+           http://cxf.apache.org/jaxws
+           http://cxf.apache.org/schemas/jaxws.xsd
+           http://www.springframework.org/schema/cache
+           http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <context:component-scan base-package="org.yes.cart"/>
+
+    <cache:annotation-driven />
+
+    <aop:aspectj-autoproxy/>
+
+    <import resource="classpath*:core-config.xml"/>
+
+    <bean id="productReindexer" class="org.yes.cart.domain.entityindexer.impl.ProductIndexerImpl">
+        <constructor-arg index="0" ref="productDao"/>
+        <constructor-arg index="1" value="128"/>
+        <constructor-arg index="2" value="4"/>
+    </bean>
+
+    <!-- ################################## Category , Product and Sku image services begin ######################## -->
+
+    <bean id="categoryImageAttributeStrategy"
+          class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyAttributeImpl">
+        <constructor-arg index="0" value="CATEGORY_IMAGE"/>
+    </bean>
+
+    <bean id="categoryImageRandomProduct"
+          class="org.yes.cart.web.support.service.impl.CategoryImageRetrieveStrategyRandomProductImpl">
+        <constructor-arg index="0" ref="productService"/>
+        <constructor-arg index="1" value="IMAGE0"/>
+    </bean>
+
+    <bean id="categoryImageService" class="org.yes.cart.web.support.service.impl.CategoryImageServiceImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="ATTRIBUTE" value-ref="categoryImageAttributeStrategy"/>
+                <entry key="RANDOM_PRODUCT" value-ref="categoryImageRandomProduct"/>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="1" ref="categoryService"/>
+        <constructor-arg index="2" value="RANDOM_PRODUCT"/>
+        <!-- one of the allowed stategy label -->
+    </bean>
+
+    <bean id="attributableImageService" class="org.yes.cart.web.support.service.impl.AttributableImageServiceImpl"/>
+
+    <bean id="productAvailabilityStrategy"
+          class="org.yes.cart.web.support.service.impl.ProductAvailabilityStrategyImpl">
+        <constructor-arg index="0" ref="warehouseService"/>
+        <constructor-arg index="1" ref="skuWarehouseService"/>
+    </bean>
+
+    <!-- ############################ Category , Product and Sku image services end ############################### -->
+
+    <!-- ############################ Facades for web start ####################################################### -->
+
+    <bean id="addressBookFacade" class="org.yes.cart.web.support.service.impl.AddressBookFacadeImpl">
+        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="addressService"/>
+        <constructor-arg index="2" ref="countryService"/>
+        <constructor-arg index="3" ref="stateService"/>
+    </bean>
+
+    <bean id="customerServiceFacade" class="org.yes.cart.web.support.service.impl.CustomerServiceFacadeImpl">
+        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="attributeService"/>
+        <constructor-arg index="2" ref="passPhraseGenerator"/>
+
+    </bean>
+
+    <bean id="promotionFacade" class="org.yes.cart.web.support.service.impl.PromotionFacadeImpl">
+        <constructor-arg index="0" ref="promotionService"/>
+    </bean>
+
+    <!-- ############################ Facades for web end ####################################################### -->
+
+
+    <!-- #################################  aspects configurations begin ######################################-->
+
+    <bean id="aspectExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"/>
+
+    <bean id="customerRegistrationAspect" class="org.yes.cart.web.aspect.RegistrationAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" ref="passPhraseGenerator"/>
+        <constructor-arg index="2" ref="passwordHashHelper"/>
+        <constructor-arg index="3" ref="mailSender"/>
+        <constructor-arg index="4" ref="mailComposer"/>
+
+    </bean>
+
+    <bean id="paymentNotificationAspect" class="org.yes.cart.web.aspect.PaymentAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" ref="productService"/>
+
+        <constructor-arg index="2" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
+        <constructor-arg index="3" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
+        <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <constructor-arg index="6" type="org.yes.cart.service.payment.PaymentModulesManager" ref="paymentModulesManager"/>
+    </bean>
+
+    <bean id="orderStateChangeAspect" class="org.yes.cart.service.domain.aspect.impl.OrderStateChangeListenerAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
+        <constructor-arg index="2" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+        <constructor-arg index="3" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
+        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerOrderService" ref="customerOrderService"/>
+        <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <constructor-arg index="6" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
+        <constructor-arg index="7">
+            <map>
+                <entry key="evt.order.cancel-os.cancelled" value="order-canceled"/>
+                <entry key="evt.packing.complete-os.in.progress-ds.shipment.ready"
+                       value="order-delivery-readytoshipping"/>
+                <entry key="evt.payment.confirmed-os.in.progress" value="order-confirmed"/>
+                <entry key="evt.pending-os.in.progress" value="order-new"/>
+                <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress"
+                       value="order-delivery-shipped"/>
+                <entry key="evt.shipment.complete-os.completed-ds.shipped" value="order-shipping-completed"/>
+
+            </map>
+        </constructor-arg>
+        <constructor-arg index="8">
+            <map>
+                <entry key="evt.order.cancel-os.cancelled" value="adm-order-canceled"/>
+                <entry key="evt.payment.confirmed-os.in.progress" value="adm-order-confirmed"/>
+                <entry key="evt.pending-os.in.progress" value="adm-order-new"/>
+                <entry key="evt.pending-os.waiting" value="adm-order-wait-confirmation"/>
+                <entry key="evt.shipment.complete-os.completed-ds.shipped" value="adm-order-shipping-completed"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <!-- #################################  aspects configurations end ######################################-->
+
+
+
+
+</beans>

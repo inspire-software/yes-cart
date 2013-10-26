@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.util;
+package org.yes.cart.web.service.wicketsupport.impl;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.request.Request;
