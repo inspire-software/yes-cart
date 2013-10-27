@@ -117,7 +117,7 @@ public class CustomerSelfCarePage extends AbstractWebPage {
      * @return page title
      */
     public IModel<String> getPageTitle() {
-        return new Model<String>(getLocalizer().getString("contact",this));
+        return new Model<String>(getLocalizer().getString("selfCare",this));
     }
 
 

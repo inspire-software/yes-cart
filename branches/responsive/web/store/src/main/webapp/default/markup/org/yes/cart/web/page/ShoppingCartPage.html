@@ -60,6 +60,10 @@
         </ul>
     </div>
 
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div wicket:id="feedback">[feedpack panel]</div>
+    </div>
+
 
     <div class="grid-100 mobile-grid-100 grid-parent">
         <div class="grid-10 mobile-grid-10">
@@ -89,11 +93,9 @@
         </div>
         <div class="grid-80 mobile-grid-80 grid-parent">
             <p>
-                <wicket:link>
-                    <a href="CheckoutPage.html" class="button gray forward">
-                        <span><wicket:message key="checkout"> [Checkout &gt;&gt;&gt;]</wicket:message></span>
-                    </a>
-                </wicket:link>
+                <a  wicket:id="checkoutLink"  class="button orange forward">
+                    <span><wicket:message key="checkout"> [Checkout &gt;&gt;&gt;]</wicket:message></span>
+                </a>
             </p>
         </div>
         <div class="grid-10 mobile-grid-10">

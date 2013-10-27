@@ -202,29 +202,13 @@ public class CheckoutPage extends AbstractWebPage {
         ).addOrReplace(
                 new StandardHeader(HEADER)
         );
-
-
     }
 
-    private Label getGoogleCheckoutLabel(final CustomerOrder customerOrder) {
+    private String getCurrentStep(final PageParameters params) {
 
-        final String htmlForm = getPaymentForm(
-                paymentModulesManager.getPaymentGateway("googleCheckoutPaymentGatewayLabel"),
-                customerOrder,
-                null);
+        return STEP_LOGIN;
 
-        final Label googleCheckoutLabel = new Label(
-                GOOGLECHECKOUT_VIEW,
-                htmlForm
-        );
-
-        googleCheckoutLabel
-                .setEscapeModelStrings(false);
-
-
-        return googleCheckoutLabel;
     }
-
 
     /**
      * Resolve content by given current step.
@@ -233,10 +217,10 @@ public class CheckoutPage extends AbstractWebPage {
      * @return markup container
      */
     private MarkupContainer getContent(final String currentStep) {
+
         if (!((AuthenticatedWebSession) getSession()).isSignedIn()) {
             return createLoginFragment();
         }
-
 
         final Customer customer = customerService.findCustomer(
                 ApplicationDirector.getShoppingCart().getCustomerEmail());
@@ -260,6 +244,28 @@ public class CheckoutPage extends AbstractWebPage {
             return createLoginFragment();
         }
     }
+
+    private Label getGoogleCheckoutLabel(final CustomerOrder customerOrder) {
+
+        final String htmlForm = getPaymentForm(
+                paymentModulesManager.getPaymentGateway("googleCheckoutPaymentGatewayLabel"),
+                customerOrder,
+                null);
+
+        final Label googleCheckoutLabel = new Label(
+                GOOGLECHECKOUT_VIEW,
+                htmlForm
+        );
+
+        googleCheckoutLabel
+                .setEscapeModelStrings(false);
+
+
+        return googleCheckoutLabel;
+    }
+
+
+
 
     /**
      * The default fragment is login/register page.

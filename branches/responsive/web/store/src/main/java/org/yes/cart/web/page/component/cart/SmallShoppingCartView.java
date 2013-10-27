@@ -43,6 +43,7 @@ public class SmallShoppingCartView extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String QTY_LABEL = "qtyLabel";
+    private static final String EMPTY_LABEL = "emptyCart";
     private static final String SUB_TOTAL_VIEW = "subTotal";
     private static final String CART_LINK = "cartLink";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
@@ -86,27 +87,33 @@ public class SmallShoppingCartView extends BaseComponent {
                 pluralForms);
 
         add(
-                new PriceView(
-                        SUB_TOTAL_VIEW,
-                        new Model<SkuPrice>(skuPrice),
-                        true, false
-                ).setVisible(!isCartEmpty())
-        );
-
-        add(
                 new Label(
-                        QTY_LABEL,
-                        isCartEmpty()?
-                        new StringResourceModel("no.item", this, null, itemsInCart):
-                        new StringResourceModel(resourceKey, this, null, itemsInCart)
-                )
+                        EMPTY_LABEL,
+                        new StringResourceModel("no.item", this, null, itemsInCart)
+                ).setVisible(isCartEmpty())
         );
 
         add(
                 new BookmarkablePageLink<ShoppingCartPage>(
                         CART_LINK,
                         ShoppingCartPage.class
-                ).setVisible(!isCartEmpty())
+                )
+                        .add(
+                                new PriceView(
+                                        SUB_TOTAL_VIEW,
+                                        new Model<SkuPrice>(skuPrice),
+                                        true, false
+                                )
+                        )
+                        .add(
+                                new Label(
+                                        QTY_LABEL,
+                                        isCartEmpty()?
+                                                new StringResourceModel("no.item", this, null, itemsInCart):
+                                                new StringResourceModel(resourceKey, this, null, itemsInCart)
+                                )
+                        )
+                        .setVisible(!isCartEmpty())
         );
 
         super.onBeforeRender();
