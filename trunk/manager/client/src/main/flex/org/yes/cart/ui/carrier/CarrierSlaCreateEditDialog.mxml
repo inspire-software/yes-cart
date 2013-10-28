@@ -37,33 +37,33 @@
 
     <mx:Form>
         <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='name')">
-            <mx:TextInput width="180" id="cname"/>
+            <mx:TextInput width="195" id="cname"/>
         </mx:FormItem>
         <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayName')">
             <yci18n:i18nStringField id="displayNames"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='description')">
-            <mx:TextArea width="180" id="description"/>
+            <mx:TextArea width="195" id="description"/>
         </mx:FormItem>
         <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayDescription')">
             <yci18n:i18nStringField id="displayDescriptions"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='maxDays')">
-            <mx:TextInput width="180" id="maxDays"/>
+            <mx:TextInput width="195" id="maxDays"/>
         </mx:FormItem>
 
         <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='currency')">
             <mx:ComboBox id="currencyComboBox"
                          change="currencyChangeEvt(event)"
                          prompt="@Resource(bundle='CarrierManagementPanel',key='selectCurrency')"
-                         width="180"/>
+                         width="195"/>
         </mx:FormItem>
 
         <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='slaType')">
             <mx:ComboBox id="slaTypeComboBox"
                          change="slaTypeChangeEvt(event)"
                          prompt="@Resource(bundle='CarrierManagementPanel',key='selectSlaType')"
-                         width="180"
+                         width="195"
                          dataProvider="{slaTypes}"
                     />
         </mx:FormItem>
@@ -72,12 +72,12 @@
                      label="@Resource(bundle='CarrierManagementPanel',key='script')"
                      toolTip="@Resource(bundle='CarrierManagementPanel',key='scriptHint')"
                 >
-            <mx:TextInput width="180" id="script"
+            <mx:TextInput width="195" id="script"
                           toolTip="@Resource(bundle='CarrierManagementPanel',key='scriptHint')"/>
         </mx:FormItem>
 
         <mx:FormItem id="priceFormItem" width="100%" label="@Resource(bundle='CarrierManagementPanel',key='price')">
-            <mx:TextInput width="180" id="price"/>
+            <mx:TextInput width="195" id="price"/>
             <mx:Button id="priceBtn"
                        label="@Resource(bundle='CarrierManagementPanel',key='priceMatrix')"
                        toolTip="@Resource(bundle='CarrierManagementPanel',key='priceMatrixHint')"
@@ -87,21 +87,21 @@
 
         <mx:FormItem id="priceNotLessFormItem" width="100%"
                      label="@Resource(bundle='CarrierManagementPanel',key='priceNotLess')">
-            <mx:TextInput width="180" id="priceNotLess"/>
+            <mx:TextInput width="195" id="priceNotLess"/>
         </mx:FormItem>
 
         <mx:FormItem id="percentFormItem" width="100%" label="@Resource(bundle='CarrierManagementPanel',key='percent')">
-            <mx:TextInput width="180" id="percent"/>
+            <mx:TextInput width="195" id="percent"/>
         </mx:FormItem>
 
         <mx:FormItem id="percentNotLessFormItem" width="100%"
                      label="@Resource(bundle='CarrierManagementPanel',key='percentNotLess')">
-            <mx:TextInput width="180" id="percentNotLess"/>
+            <mx:TextInput width="195" id="percentNotLess"/>
         </mx:FormItem>
 
         <mx:FormItem id="costNotLessFormItem" width="100%"
                      label="@Resource(bundle='CarrierManagementPanel',key='costNotLess')">
-            <mx:TextInput width="180" id="costNotLess"/>
+            <mx:TextInput width="195" id="costNotLess"/>
         </mx:FormItem>
 
     </mx:Form>

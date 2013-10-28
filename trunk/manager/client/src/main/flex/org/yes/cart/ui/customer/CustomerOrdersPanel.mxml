@@ -33,7 +33,7 @@
 
     <mx:VBox width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
         <mx:HBox>
-            <mx:ComboBox id="statusComboBox" width="120"
+            <mx:ComboBox id="statusComboBox" width="130"
                          prompt="@Resource(bundle='CustomerOrderPanel',key='selectStatusPropmt')"
                          dataProvider="{statuses}"
                          data="code" labelField="name"

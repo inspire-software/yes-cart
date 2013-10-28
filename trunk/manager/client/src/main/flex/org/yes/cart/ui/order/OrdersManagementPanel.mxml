@@ -116,7 +116,7 @@
                             <mx:GridRow>
                                 <mx:GridItem>
                                     <mx:Label text="@Resource(bundle='CustomerOrderPanel',key='orderStatusFilter')"/>
-                                    <mx:ComboBox id="statusComboBox" width="120"
+                                    <mx:ComboBox id="statusComboBox" width="130"
                                                  prompt="@Resource(bundle='CustomerOrderPanel',key='selectStatusPropmt')"
                                                  dataProvider="{statuses}"
                                                  data="code" labelField="name"/>

@@ -145,7 +145,7 @@
             <mx:Label text="@Resource(bundle='ProductManagementPanel',key='name')"/>
             <mx:TextInput id="nameTextInput" width="100"/>
             <mx:Label text="@Resource(bundle='ProductManagementPanel',key='brand')"/>
-            <mx:ComboBox id="brandComboBox" width="120"
+            <mx:ComboBox id="brandComboBox" width="130"
                          labelField="name"
                          data="brandId"
                          prompt="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"

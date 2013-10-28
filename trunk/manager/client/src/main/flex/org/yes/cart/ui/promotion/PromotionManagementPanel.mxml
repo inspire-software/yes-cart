@@ -264,11 +264,15 @@
                         <mx:GridRow>
                             <mx:GridItem>
                                 <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='promoType')"/>
-                                <mx:ComboBox id="typeFilterValue" width="100"/>
+                                <mx:ComboBox id="typeFilterValue" width="120"
+                                             prompt="@Resource(bundle='PromotionManagementPanel',key='selectPromoType')"
+                                        />
                             </mx:GridItem>
                             <mx:GridItem>
                                 <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='promoAction')"/>
-                                <mx:ComboBox id="actionFilterValue" width="100"/>
+                                <mx:ComboBox id="actionFilterValue" width="145"
+                                             prompt="@Resource(bundle='PromotionManagementPanel',key='selectPromoAction')"
+                                        />
                             </mx:GridItem>
                         </mx:GridRow>
                         <mx:GridRow>

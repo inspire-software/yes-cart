@@ -24,25 +24,25 @@
 
     <mx:Form width="100%">
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productCode')">
-            <mx:TextInput id="codeTextInput" width="200"/>
+            <mx:TextInput id="codeTextInput" width="215"/>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productName')">
-            <mx:TextInput id="nameTextImput" width="200"/>
+            <mx:TextInput id="nameTextImput" width="215"/>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productBrand')">
-            <mx:ComboBox id="brandComboBox" width="200"
+            <mx:ComboBox id="brandComboBox" width="215"
                          labelField="name"
                          prompt="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
                     />
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productType')">
-            <mx:ComboBox id="productTypeComboBox" width="200"
+            <mx:ComboBox id="productTypeComboBox" width="215"
                          labelField="name"
                          prompt="@Resource(bundle='ProductManagementPanel',key='selectProductType')"
                     />
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productAvailability')">
-            <mx:ComboBox id="productAvailabilityComboBox" width="200"
+            <mx:ComboBox id="productAvailabilityComboBox" width="215"
                          labelField="name"
                          prompt="@Resource(bundle='ProductManagementPanel',key='selectAvailability')"
                     />
