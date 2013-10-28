@@ -19,4 +19,5 @@
 <properties>
 	<entry key="quantity">Кол-во</entry>
 	<entry key="price">Цена за единицу</entry>
+    <entry key="descountRule">Покупая более одной единицы товара, вы получаете скидку. Чем больше однотипных товаров Вы покупаете, тем больше скидка</entry>
 </properties>

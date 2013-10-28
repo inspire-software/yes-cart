@@ -19,4 +19,5 @@
 <properties>
 	<entry key="quantity">Quantity</entry>
 	<entry key="price">Price of one item</entry>
+    <entry key="descountRule">Buy more than one item and get discount</entry>
 </properties>

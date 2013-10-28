@@ -78,7 +78,7 @@
         [bread crumbs]
     </wicket:container>
 
-    <div class="hide-on-desktop mobile-grid-100 grid-parent"  id="top-categories-mobile">
+    <div class="hide-on-desktop mobile-grid-100 grid-parent" id="top-categories-mobile">
         <wicket:container wicket:id="topCategories">
             [top categories]
         </wicket:container>
@@ -90,11 +90,11 @@
 
             </div>
             <script>
-                var pMenu  = document.getElementById("top-categories-mobile").innerHTML;
+                var pMenu = document.getElementById("top-categories-mobile").innerHTML;
                 document.getElementById("top-categories-desktop").innerHTML = pMenu;
                 var all = document.getElementById("top-categories-desktop").getElementsByTagName('li');
                 for (var i = -1, l = all.length; ++i < l;) {
-                        all[i].style.cssFloat="none";
+                    all[i].style.cssFloat = "none";
                 }
             </script>
             <p>
@@ -113,12 +113,26 @@
                 </wicket:container>
             </p>
         </div>
-        <div class="grid-70 mobile-grid-70 grid-parent">
+        <div id="centralView" class="grid-70 mobile-grid-70 grid-parent">
             <p>
                 <wicket:container wicket:id="centralView">
-                    [switch language]
+                    [central view]
                 </wicket:container>
             </p>
+            <script>
+                if (document.URL.indexOf('/product/') > -1 || document.URL.indexOf('/sku/')  > -1) {
+
+                    document.getElementById('centralView').classList.add('mobile-grid-100');
+                    document.getElementById('centralView').classList.remove('mobile-grid-70');
+
+                }  else {
+
+                    document.getElementById('centralView').classList.add('mobile-grid-70');
+                    document.getElementById('centralView').classList.remove('mobile-grid-100');
+
+                }
+
+            </script>
         </div>
         <div class="grid-10 hide-on-mobile grid-parent">
             <p>
@@ -128,7 +142,6 @@
             </p>
         </div>
     </div>
-
 
 
     <span wicket:id="footer">[footer]</span>
