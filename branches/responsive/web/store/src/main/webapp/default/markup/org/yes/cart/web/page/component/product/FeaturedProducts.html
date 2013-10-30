@@ -15,40 +15,53 @@
   -->
 
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:head>
+    <!-- fire plugin onDocumentReady -->
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+
+                    $("#featuredProducts").carouFredSel(
+
+                            {
+                                responsive:true,
+                                width:'100%',
+                                scroll:2,
+                                items:{
+                                    width:80,
+                                    height: 80,	//	optionally resize item-height
+                                    visible:{
+                                        min:2,
+                                        max:6
+                                    }
+                                }
+                            }
+                    );
+
+                }
+        );
+
+
+    </script>
+
+</wicket:head>
 <body>
 <wicket:panel>
 
-    <!--<div class="grid-100 mobile-grid-100 grid-parent">-->
-        <div id="featuredProducts" class="flexslider carousel">
-            <ul class="slides">
-                <li wicket:id="products">
-                    <a wicket:id="productLinkImage" class="image-border">
-                        <img wicket:id="productDefaultImage"/>
-                    </a>
-                    <p align="center">
-                        <a wicket:id="productLinkName"><span wicket:id="name">[product name]</span></a>
-                    </p>
-                </li>
-            </ul>
 
-        </div>
-    <!--</div>-->
+    <div class="list_carousel responsive grid-100 hide-on-mobile grid-parent">
+        <ul id="featuredProducts">
+            <li wicket:id="products">
+                <a wicket:id="productLinkImage" class="image-border">
+                    <img wicket:id="productDefaultImage"/>
+                </a>
 
-
-    <script type="text/javascript">
-        $(window).load(function () {
-            $('#featuredProducts').flexslider({
-                animation: "slide",
-                animationLoop: false,
-                controlNav: false,
-                slideshow: false,
-                itemWidth: 160,
-                itemMargin: 80,
-                minItems: 2,
-                maxItems: 5
-            });
-        });
-    </script>
+                <p align="center">
+                    <a wicket:id="productLinkName"><span wicket:id="name">[product name]</span></a>
+                </p>
+            </li>
+            <div class="clearfix"></div>
+        </ul>
+    </div>
 
 
 </wicket:panel>

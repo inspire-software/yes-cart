@@ -29,8 +29,9 @@
     <wicket:link>
 
         <script type="text/javascript" src="../../../../../js/jquery.min.js"></script>
-        <script type="text/javascript" src="../../../../../js/jquery.flexslider.js"></script>
+        <!--<script type="text/javascript" src="../../../../../js/jquery.flexslider.js"></script>-->
         <script type="text/javascript" src="../../../../../js/autoload.js"></script>
+        <script type="text/javascript" src="../../../../../js/jquery.carouFredSel-6.2.1.js"></script>
 
         <!--[if lt IE 9]>
         <script src="../../../../../js/html5.js"></script>
@@ -43,7 +44,7 @@
         <link rel="stylesheet" href="../../../../../style/ie.css"/>
         <![endif]-->
 
-        <link rel="stylesheet" href="../../../../../style/flexslider.css"/>
+        <!--<link rel="stylesheet" href="../../../../../style/flexslider.css"/>-->
         <!--<link rel="stylesheet" type="text/css" href="../../../../../style/lightbox.css"/>-->
 
 
@@ -65,11 +66,9 @@
 
     <div class="grid-100 hide-on-mobile grid-parent">
         <div class="grid-100 hide-on-mobile">
-            <p>
-                <wicket:container wicket:id="featured">
-                    [featured products]
-                </wicket:container>
-            </p>
+            <wicket:container wicket:id="featured">
+                [featured products]
+            </wicket:container>
         </div>
     </div>
 
