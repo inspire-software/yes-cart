@@ -36,7 +36,7 @@
         <link rel="stylesheet" href="../../../../../style/ie.css"/>
         <![endif]-->
 
-        <link rel="stylesheet" href="../../../../../style/flexslider.css"/>
+
         <link rel="stylesheet" type="text/css" href="../../../../../style/lightbox.css"/>
 
 
@@ -53,11 +53,22 @@
     <span wicket:id="header">[header]</span>
 
     <div class="grid-100 mobile-grid-100 grid-parent">
-        <ul class="menu">
-            <li>
-                <span><span><wicket:message key="shoppingCart">[Shopping cart]</wicket:message></span></span>
-            </li>
-        </ul>
+        <div class="grid-15 hide-on-mobile">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+        <div class="grid-70 mobile-grid-100 grid-parent">
+            <p>
+                <span class="grafik-tittle"><wicket:message key="shoppingCart">[Shopping cart]</wicket:message></span>
+            </p>
+            <hr>
+        </div>
+        <div class="grid-15 hide-on-mobile">
+            <p>
+                &nbsp;
+            </p>
+        </div>
     </div>
 
     <div class="grid-100 mobile-grid-100 grid-parent">
@@ -66,19 +77,19 @@
 
 
     <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-10 mobile-grid-10">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>
         </div>
-        <div class="grid-80 mobile-grid-80 grid-parent">
+        <div class="grid-70 mobile-grid-100 grid-parent">
             <p>
                 <wicket:container wicket:id="shoppingCartView">
                     [shopping cart]
                 </wicket:container>
             </p>
         </div>
-        <div class="grid-10 mobile-grid-10">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>
@@ -86,19 +97,19 @@
     </div>
 
     <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-10 mobile-grid-10">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>
         </div>
-        <div class="grid-80 mobile-grid-80 grid-parent">
+        <div class="grid-70 mobile-grid-100 grid-parent">
             <p>
                 <a  wicket:id="checkoutLink"  class="button orange forward">
                     <span><wicket:message key="checkout"> [Checkout &gt;&gt;&gt;]</wicket:message></span>
                 </a>
             </p>
         </div>
-        <div class="grid-10 mobile-grid-10">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>

@@ -25,7 +25,12 @@
                             {
                                 responsive:true,
                                 width:'100%',
-                                scroll:2,
+                                scroll: {
+                                    items:2,
+                                    fx: "fade",
+                                    duration: 2000,
+                                    pauseOnHover: true
+                                },
                                 items:{
                                     width:80,
                                     height: 80,	//	optionally resize item-height

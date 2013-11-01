@@ -1058,7 +1058,7 @@ h2.resp-accordion:first-child {
     /*background-color: #eee;
     border: 5px solid #999;*/
     width: 50px;
-    height: 50px;
+    height: 80px;
     padding: 0;
     margin: 6px;
     display: block;
@@ -1096,4 +1096,21 @@ h2.resp-accordion:first-child {
     background-color: #999;
     height: 6px;
     width: 0px;
+}
+
+/* --------------------------------------------- */
+
+.grafik-tittle{
+    font-size: 22px;
+    color:#000000;
+}
+
+.grafik-tittle2{
+    font-size: 18px;
+    color: red;
+}
+
+.grafik-tittle3{
+    font-size: 16px;
+    color: green;
 }
