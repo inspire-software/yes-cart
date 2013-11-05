@@ -59,15 +59,15 @@
 
 
     <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-10 mobile-grid-10">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>
         </div>
-        <div class="grid-80 mobile-grid-80 grid-parent">
+        <div class="grid-70 mobile-grid-100 grid-parent">
 
             <div class="grid-100 mobile-grid-100 grid-parent">
-                <span class="grafik-tittle">
+                <span class="big-title">
                     <wicket:message key="checkout">[Checkout]</wicket:message>
                 </span>
             </div>
@@ -85,7 +85,7 @@
             </wicket:container>
 
         </div>
-        <div class="grid-10 mobile-grid-10">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>
@@ -94,15 +94,15 @@
 
 
     <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-10 mobile-grid-10">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>
         </div>
-        <div class="grid-80 mobile-grid-80 grid-parent">
+        <div class="grid-70 mobile-grid-100 grid-parent">
             <div wicket:id="feedback">[feedpack panel]</div>
         </div>
-        <div class="grid-10 mobile-grid-10">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>
@@ -111,17 +111,17 @@
 
 
     <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-10 mobile-grid-10">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>
         </div>
-        <div class="grid-80 mobile-grid-80 grid-parent">
+        <div class="grid-70 mobile-grid-100 grid-parent">
             <wicket:container wicket:id="content">
                 [current content]
             </wicket:container>
         </div>
-        <div class="grid-10 mobile-grid-10">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>
@@ -135,14 +135,13 @@
 
 
 <wicket:fragment wicket:id="addressFragment">
-    <div class="grid-100 mobile-grid-100 grid-parent">
+    <div class="grid-100 mobile-grid-100 grid-parent" style="margin-bottom: 10px">
         <div class="grid-33 mobile-grid-33 grid-parent">
             <wicket:link>
                 <a href="?thp=true&amp;step=address">
                     <span class="active-checkout-step"><wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message></span>
                 </a>
             </wicket:link>
-
         </div>
         <div class="grid-33 mobile-grid-33 grid-parent">
             <wicket:link>
@@ -245,13 +244,12 @@
 <wicket:fragment wicket:id="shipmentFragment">
 
     <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-33 mobile-grid-33 grid-parent">
+        <div class="grid-33 mobile-grid-33 grid-parent" style="margin-bottom: 10px">
             <wicket:link>
                 <a href="?thp=true&amp;step=address">
                     <span><wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message></span>
                 </a>
             </wicket:link>
-
         </div>
         <div class="grid-33 mobile-grid-33 grid-parent">
             <wicket:link>
@@ -295,7 +293,7 @@
 <wicket:fragment wicket:id="paymentFragment">
 
     <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-33 mobile-grid-33 grid-parent">
+        <div class="grid-33 mobile-grid-33 grid-parent" style="margin-bottom: 10px">
             <wicket:link>
                 <a href="?thp=true&amp;step=address">
                     <span><wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message></span>
@@ -327,7 +325,7 @@
 
     <div class="grid-100 mobile-grid-100  grid-parent">
         <p>
-            <span class="grafik-tittle2">
+            <span class="middle-title">
                 <wicket:message key="select.payment">[Payment details heading]</wicket:message>
             </span>
         </p>

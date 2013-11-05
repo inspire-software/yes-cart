@@ -174,17 +174,13 @@ ul.text-links .level-4 {
 
 
 .active-checkout-step {
-    color: #3b3ca1;
-    font-size: 18px;
-    margin-top: 4px;
+    font-weight: bold;
+    color: #000000;
     margin-bottom: 5px;
     display: block;
-    text-decoration: underline;
 }
 
 .checkout-step {
-    color: #888787;
-    font-size: 15px;
     margin-top: 4px;
     margin-bottom: 5px;
     display: block;
@@ -831,7 +827,6 @@ a.active-category {
     font-weight:bold;
     color: #ff4444;
     margin-bottom:5px;
-    text-shadow:1px 1px 1px #ffaaaa;
 }
 
 .feedbackPanelINFO {
@@ -839,7 +834,6 @@ a.active-category {
     font-weight:bold;
     color: #44ff44;
     margin-bottom:5px;
-    text-shadow:1px 1px 1px #aaffaa;
 }
 
 
@@ -1100,17 +1094,19 @@ h2.resp-accordion:first-child {
 
 /* --------------------------------------------- */
 
-.grafik-tittle{
+.big-title{
     font-size: 22px;
-    color:#000000;
+    font-weight: bold;
+    color: #000000;
 }
 
-.grafik-tittle2{
+.middle-title{
     font-size: 18px;
-    color: red;
+    font-weight: bold;
+    color: #000000;
 }
 
-.grafik-tittle3{
-    font-size: 16px;
-    color: green;
+.small-title{
+    font-weight: bold;
+    color: #000000;
 }
