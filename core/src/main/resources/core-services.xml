@@ -449,7 +449,62 @@
         </property>
     </bean>
 
+    <bean id="promotionConditionParser" class="org.yes.cart.promotion.impl.GroovyPromotionConditionParser"/>
 
+    <bean id="promotionContextFactory" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.promotion.impl.PromotionContextFactoryImpl">
+                <constructor-arg index="0" ref="shopService"/>
+                <constructor-arg index="1" ref="promotionService"/>
+                <constructor-arg index="2" ref="promotionConditionParser"/>
+                <constructor-arg index="3">
+                    <map>
+                        <entry key="O">
+                            <map>
+                                <entry key="P" value-ref="promoActionOrderDiscount"/>
+                                <entry key="F" value-ref="promoActionOrderAmountOff"/>
+                                <entry key="G" value-ref="promoActionOrderGift"/>
+                            </map>
+                        </entry>
+                        <entry key="S">
+                            <map>
+                                <entry key="P" value-ref="promoActionShippingDiscount"/>
+                                <entry key="F" value-ref="promoActionShippingAmountOff"/>
+                            </map>
+                        </entry>
+                        <entry key="I">
+                            <map>
+                                <entry key="P" value-ref="promoActionItemDiscount"/>
+                                <entry key="F" value-ref="promoActionItemAmountOff"/>
+                                <entry key="G" value-ref="promoActionItemGift"/>
+                            </map>
+                        </entry>
+                        <entry key="C">
+                            <map/>
+                        </entry>
+                    </map>
+                </constructor-arg>
+                <lookup-method name="getSelf" bean="promotionContextFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="promoActionItemDiscount" class="org.yes.cart.promotion.impl.action.ItemDiscountPromotionAction"/>
+    <bean id="promoActionItemAmountOff" class="org.yes.cart.promotion.impl.action.ItemAmountOffPromotionAction"/>
+    <bean id="promoActionItemGift" class="org.yes.cart.promotion.impl.action.ItemGiftPromotionAction">
+        <constructor-arg index="0" ref="priceService"/>
+        <constructor-arg index="1" ref="shopService"/>
+    </bean>
+
+    <bean id="promoActionOrderDiscount" class="org.yes.cart.promotion.impl.action.OrderDiscountPromotionAction"/>
+    <bean id="promoActionOrderAmountOff" class="org.yes.cart.promotion.impl.action.OrderAmountOffPromotionAction"/>
+    <bean id="promoActionOrderGift" class="org.yes.cart.promotion.impl.action.OrderGiftPromotionAction">
+        <constructor-arg index="0" ref="priceService"/>
+        <constructor-arg index="1" ref="shopService"/>
+    </bean>
+
+    <bean id="promoActionShippingDiscount" class="org.yes.cart.promotion.impl.action.ShippingDiscountPromotionAction"/>
+    <bean id="promoActionShippingAmountOff" class="org.yes.cart.promotion.impl.action.ShippingAmountOffPromotionAction"/>
 
 
     <!-- ############################################ DTO Support ######################################################################### -->
@@ -1005,7 +1060,9 @@
         <constructor-arg index="0">
             <list>
                 <!-- Order is important here! This is the order multiple command will be executed in -->
-                <bean id="setShopIdCmd" class="org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl"/>
+                <bean id="setShopIdCmd" class="org.yes.cart.shoppingcart.impl.SetShopCartCommandImpl">
+                    <constructor-arg index="0" ref="shopService"/>
+                </bean>
 
                 <bean id="changeCurrencyCmd" class="org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl">
                     <constructor-arg index="0" ref="priceService"/>
@@ -1056,10 +1113,12 @@
     </bean>
 
     <bean id="amountCalculationStrategy"
-          class="org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy">  <!-- CPOINT tax and amount calculation strategy -->
+          class="org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy">  <!-- CPOINT cart calculation algorithm -->
         <constructor-arg index="0" value="20.00"/>
         <constructor-arg index="1" value="true"/>
         <constructor-arg index="2" ref="deliveryCostCalculationStrategy"/>
+        <constructor-arg index="3" ref="promotionContextFactory"/>
+        <constructor-arg index="4" ref="customerService"/>
     </bean>
 
     <bean id="deliveryCostCalculationStrategy" parent="txProxyTemplate"> <!-- CPOINT delivery calculation strategy -->

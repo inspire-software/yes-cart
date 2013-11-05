@@ -46,6 +46,7 @@ public class PriceView extends BaseComponent {
     private static final String DOT_LABEL = "dot";
     private static final String DECIMAL_LABEL = "decimal";
     private static final String SAVE_LABEL = "save";
+    private static final String PROMO_LABEL = "promo";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     
@@ -56,26 +57,27 @@ public class PriceView extends BaseComponent {
     private static final String CSS_SUFFIX_CURRENCY = "-price-currency";
 
 
-
+    private final String promos;
     private final Pair<BigDecimal, BigDecimal> pricePair;
     private final String currencySymbol;
     private final boolean showCurrencySymbol;
     private final boolean showSavings;
-    private static final String decimalSeparator; // to perform split operation
-    private static final String[] emptyFormatedPrice;
+
+    private static final String DECIMAL_SEPARATOR; // to perform split operation
+    private static final String[] EMPTY_FORMATED_PRICE;
 
     @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
 
 
     static {
-        emptyFormatedPrice  = new String[] {StringUtils.EMPTY, StringUtils.EMPTY};
+        EMPTY_FORMATED_PRICE = new String[] {StringUtils.EMPTY, StringUtils.EMPTY};
         DecimalFormat decimalFormat = new DecimalFormat(Constants.MONEY_FORMAT);
         String separator =  String.valueOf(decimalFormat.getDecimalFormatSymbols().getDecimalSeparator());
         if (".".equals(separator)) {
-            decimalSeparator = "\\.";
+            DECIMAL_SEPARATOR = "\\.";
         } else {
-            decimalSeparator = separator;
+            DECIMAL_SEPARATOR = separator;
         }
     }
 
@@ -100,6 +102,7 @@ public class PriceView extends BaseComponent {
         this.currencySymbol = skuPrice == null ? null : skuPrice.getCurrency();
         this.showCurrencySymbol = showCurrencySymbol;
         this.showSavings = showSavings;
+        this.promos = null;
 
     }
 
@@ -107,13 +110,15 @@ public class PriceView extends BaseComponent {
      * Create price view.
      * @param id component id.
      * @param pricePair regular / sale price pair.
-     * @param showCurrencySymbol currency symbol.
      * @param currencySymbol currency symbol
+     * @param appliedPromos applied promotions
+     * @param showCurrencySymbol currency symbol.
      * @param showSavings show user friendly percentage savings
      */
     public PriceView(final String id,
                      final Pair<BigDecimal, BigDecimal> pricePair,
                      final String currencySymbol,
+                     final String appliedPromos,
                      final boolean showCurrencySymbol,
                      final boolean showSavings) {
         super(id);
@@ -121,6 +126,7 @@ public class PriceView extends BaseComponent {
         this.showCurrencySymbol = showCurrencySymbol;
         this.currencySymbol = currencySymbol;
         this.showSavings = showSavings;
+        this.promos = appliedPromos;
     }
 
     /**
@@ -139,24 +145,25 @@ public class PriceView extends BaseComponent {
         this.showCurrencySymbol = showCurrencySymbol;
         this.currencySymbol = currencySymbol;
         this.showSavings = false;
+        this.promos = null;
     }
 
     /**
-     * Get whole and decimal part of monay to render.
+     * Get whole and decimal part of money to render.
      * @param price price
      * @return array of string to render.
      */
-    String[] getFormatedPrice(BigDecimal price) {
-        final DecimalFormat decimalFormat = new DecimalFormat(Constants.MONEY_FORMAT);
-        final String[] formated;
-        if (MoneyUtils.isFirstBiggerThanSecond(price, BigDecimal.ZERO)) {
-            formated = decimalFormat.format(
+    String[] getFormattedPrice(BigDecimal price) {
+        final String[] formatted;
+        if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(price, BigDecimal.ZERO)) { // show zeros!
+            final DecimalFormat decimalFormat = new DecimalFormat(Constants.MONEY_FORMAT);
+            formatted = decimalFormat.format(
                     MoneyUtils.notNull(price, BigDecimal.ZERO)
-            ).split(decimalSeparator);
-        } else {
-            formated = emptyFormatedPrice;
+            ).split(DECIMAL_SEPARATOR);
+        } else { // if price was null
+            formatted = EMPTY_FORMATED_PRICE;
         }
-        return formated;
+        return formatted;
     }
 
     @Override
@@ -176,18 +183,18 @@ public class PriceView extends BaseComponent {
                 savePercent = save.toString();
             }
         }
-        final String[] formated = getFormatedPrice(priceToFormat);
+        final String[] formatted = getFormattedPrice(priceToFormat);
 
         addOrReplace(
-                new Label(WHOLE_LABEL, formated[0])
+                new Label(WHOLE_LABEL, formatted[0])
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_WHOLE)))
         .addOrReplace(
                 new Label(DOT_LABEL, ".")
-                        .setVisible(StringUtils.isNotBlank(formated[0]) || StringUtils.isNotBlank(formated[1]))
+                        .setVisible(StringUtils.isNotBlank(formatted[0]) || StringUtils.isNotBlank(formatted[1]))
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DOT)))
         .addOrReplace(
-                new Label(DECIMAL_LABEL, formated[1])
-                        .setVisible(StringUtils.isNotBlank(formated[0]) || StringUtils.isNotBlank(formated[1]))
+                new Label(DECIMAL_LABEL, formatted[1])
+                        .setVisible(StringUtils.isNotBlank(formatted[0]) || StringUtils.isNotBlank(formatted[1]))
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DECIMAL)))
         .addOrReplace(
                 new Label(CURRENCY_LABEL, currencySymbolService.getCurrencySymbol(currencySymbol))
@@ -200,6 +207,12 @@ public class PriceView extends BaseComponent {
         addOrReplace(
                 new Label(SAVE_LABEL, new StringResourceModel("save.percent", this, null, new Object[] { savePercent }))
                         .setVisible(showSave)
+                        .add(new AttributeModifier(HTML_CLASS, "sale-price-save"))
+        );
+
+        addOrReplace(
+                new Label(PROMO_LABEL, promos)
+                        .setVisible(StringUtils.isNotBlank(promos))
                         .add(new AttributeModifier(HTML_CLASS, "sale-price-save"))
         );
 

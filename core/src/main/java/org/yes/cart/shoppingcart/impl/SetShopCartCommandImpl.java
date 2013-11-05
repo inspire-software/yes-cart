@@ -17,6 +17,8 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -31,6 +33,12 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
 
     private static final long serialVersionUID = 2010522L;
 
+    private final ShopService shopService;
+
+    public SetShopCartCommandImpl(final ShopService shopService) {
+        this.shopService = shopService;
+    }
+
     /**
      * @return command key
      */
@@ -44,7 +52,9 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
         if (parameters.containsKey(getCmdKey())) {
             final Long value = NumberUtils.createLong(String.valueOf(parameters.get(getCmdKey())));
             if (value != null && !value.equals(shoppingCart.getShoppingContext().getShopId())) {
-                shoppingCart.getShoppingContext().setShopId(value);
+                final Shop shop = shopService.findById(value);
+                shoppingCart.getShoppingContext().setShopId(shop.getShopId());
+                shoppingCart.getShoppingContext().setShopCode(shop.getCode());
                 markDirty(shoppingCart);
             }
         }

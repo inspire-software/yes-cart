@@ -65,6 +65,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
         CACHED_ENTITIES.add(CacheDirector.EntityName.SEO_IMAGE);
         CACHED_ENTITIES.add(CacheDirector.EntityName.SHOP);
         CACHED_ENTITIES.add(CacheDirector.EntityName.SYSTEM);
+        CACHED_ENTITIES.add(CacheDirector.EntityName.PROMOTION);
 
     }
 

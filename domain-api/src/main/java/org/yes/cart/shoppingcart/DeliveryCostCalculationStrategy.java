@@ -16,12 +16,7 @@
 
 package org.yes.cart.shoppingcart;
 
-import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.CarrierSla;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-
 import java.math.BigDecimal;
-import java.util.Collection;
 
 /**
  * User: denispavlov

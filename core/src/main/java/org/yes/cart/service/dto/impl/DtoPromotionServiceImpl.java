@@ -72,7 +72,8 @@ public class DtoPromotionServiceImpl
         Promotion iface = (Promotion) getEntityFactory().getByIface(getEntityIFace());
         assembler.assembleEntity(instance, iface, getAdaptersRepository(), getDtoFactory());
 
-        iface.setCode(instance.getCode());
+        // we store comma separated lists of promo codes on cart item, so we cannot allow commas
+        iface.setCode(instance.getCode().replace(',','_'));
         iface.setShopCode(instance.getShopCode());
         iface.setCurrency(instance.getCurrency());
         iface.setPromoType(instance.getPromoType());

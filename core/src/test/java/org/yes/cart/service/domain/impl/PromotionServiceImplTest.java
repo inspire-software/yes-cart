@@ -23,9 +23,7 @@ import org.yes.cart.service.domain.PromotionService;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -41,10 +39,10 @@ public class PromotionServiceImplTest extends BaseCoreDBTestCase {
 
         List<Promotion> allPromotions, activePromotions;
 
-        allPromotions = promotionService.getPromotionsByShop("SHOP10", false);
+        allPromotions = promotionService.getPromotionsByShopCode("SHOP10", "EUR", false);
         assertNotNull(allPromotions);
         assertTrue(allPromotions.isEmpty());
-        activePromotions = promotionService.getPromotionsByShop("SHOP10", true);
+        activePromotions = promotionService.getPromotionsByShopCode("SHOP10", "EUR", true);
         assertNotNull(activePromotions);
         assertTrue(activePromotions.isEmpty());
 
@@ -63,29 +61,29 @@ public class PromotionServiceImplTest extends BaseCoreDBTestCase {
 
         promotionService.create(sku10PercentOff);
 
-        allPromotions = promotionService.getPromotionsByShop("SHOP10", false);
+        allPromotions = promotionService.getPromotionsByShopCode("SHOP10", "EUR", false);
         assertNotNull(allPromotions);
         assertEquals(1, allPromotions.size());
-        activePromotions = promotionService.getPromotionsByShop("SHOP10", true);
+        activePromotions = promotionService.getPromotionsByShopCode("SHOP10", "EUR", true);
         assertNotNull(activePromotions);
         assertTrue(activePromotions.isEmpty());
 
         sku10PercentOff.setEnabled(true);
         sku10PercentOff = promotionService.update(sku10PercentOff);
 
-        allPromotions = promotionService.getPromotionsByShop("SHOP10", false);
+        allPromotions = promotionService.getPromotionsByShopCode("SHOP10", "EUR", false);
         assertNotNull(allPromotions);
         assertEquals(1, allPromotions.size());
-        activePromotions = promotionService.getPromotionsByShop("SHOP10", true);
+        activePromotions = promotionService.getPromotionsByShopCode("SHOP10", "EUR", true);
         assertNotNull(activePromotions);
         assertEquals(1, activePromotions.size());
 
         promotionService.delete(sku10PercentOff);
 
-        allPromotions = promotionService.getPromotionsByShop("SHOP10", false);
+        allPromotions = promotionService.getPromotionsByShopCode("SHOP10", "EUR", false);
         assertNotNull(allPromotions);
         assertTrue(allPromotions.isEmpty());
-        activePromotions = promotionService.getPromotionsByShop("SHOP10", true);
+        activePromotions = promotionService.getPromotionsByShopCode("SHOP10", "EUR", true);
         assertNotNull(activePromotions);
         assertTrue(activePromotions.isEmpty());
 

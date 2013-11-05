@@ -336,9 +336,14 @@
     <cache name="filteredNavigationSupport-priceFilteredNavigationRecords"      maxElementsInMemory="500" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
-    <cache name="promotionService-promotionsByShop"  maxElementsInMemory="20" overflowToDisk="false"
+    <cache name="promotionService-promotionsByShopCode"  maxElementsInMemory="20" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
+    <cache name="promotionService-factoryGetInstance"  maxElementsInMemory="20" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="promotionService-groovyCache"  maxElementsInMemory="500" overflowToDisk="false"
+           eternal="true"  timeToLiveSeconds="86400" timeToIdleSeconds="86400"/>
 
     <!-- ############################################# hibernate entity cache #######################################-->
 

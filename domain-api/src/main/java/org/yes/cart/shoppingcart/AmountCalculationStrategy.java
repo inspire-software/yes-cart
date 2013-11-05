@@ -19,9 +19,6 @@ package org.yes.cart.shoppingcart;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 
-import java.math.BigDecimal;
-import java.util.Collection;
-
 /**
  *
  * This strategy responsible for following kind of calculation:
@@ -40,21 +37,6 @@ import java.util.Collection;
  * Time: 18:57
  */
 public interface AmountCalculationStrategy {
-
-
-    /**
-     * Get tax value.
-     *
-     * @return tax value.
-     */
-    BigDecimal getTax();
-
-    /**
-     * Is tax included in items prices.
-     *
-     * @return true in case if price included in item price, otherwise false.
-     */
-    boolean isTaxIncluded();
 
     /**
      * Calculate shopping cart amount.

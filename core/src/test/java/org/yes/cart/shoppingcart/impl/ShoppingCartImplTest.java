@@ -35,7 +35,7 @@ public class ShoppingCartImplTest {
     @Test
     public void testIndexOfSkuInexistent() {
         assertEquals("Size should be 0", 0, cart.getCartItemsCount());
-        assertEquals("Index must be -1 for inexistent sku", -1, cart.indexOf("sku"));
+        assertEquals("Index must be -1 for inexistent sku", -1, cart.indexOfProductSku("sku"));
     }
 
     @Test
@@ -43,7 +43,7 @@ public class ShoppingCartImplTest {
         boolean newItem = cart.addProductSkuToCart("sku", BigDecimal.TEN);
         assertTrue("Must create new item", newItem);
         assertEquals("Size should be 10", 10, cart.getCartItemsCount());
-        assertEquals("Index must be 0 for sku", 0, cart.indexOf("sku"));
+        assertEquals("Index must be 0 for sku", 0, cart.indexOfProductSku("sku"));
         assertEquals("Items must have 1 element", 1, cart.getCartItemList().size());
         assertEquals("1st element must be sku", "sku", cart.getCartItemList().get(0).getProductSkuCode());
     }
@@ -55,7 +55,7 @@ public class ShoppingCartImplTest {
         assertTrue("Must create new item", newItem1);
         assertFalse("Must not create new item", newItem2);
         assertEquals("Size should be 20", 20, cart.getCartItemsCount());
-        assertEquals("Index must be 0 for sku", 0, cart.indexOf("sku"));
+        assertEquals("Index must be 0 for sku", 0, cart.indexOfProductSku("sku"));
         assertEquals("Items must have 1 element", 1, cart.getCartItemList().size());
         assertEquals("1st element must be sku", "sku", cart.getCartItemList().get(0).getProductSkuCode());
     }
@@ -69,11 +69,33 @@ public class ShoppingCartImplTest {
         assertFalse("Must not create new item", newItem2);
         assertTrue("Must create new item", newItem3);
         assertEquals("Size should be 30", 30, cart.getCartItemsCount());
-        assertEquals("Index must be 0 for sku01", 0, cart.indexOf("sku01"));
-        assertEquals("Index must be 1 for sku02", 1, cart.indexOf("sku02"));
+        assertEquals("Index must be 0 for sku01", 0, cart.indexOfProductSku("sku01"));
+        assertEquals("Index must be 1 for sku02", 1, cart.indexOfProductSku("sku02"));
         assertEquals("Items must have 2 elements", 2, cart.getCartItemList().size());
         assertEquals("1st element must be sku01", "sku01", cart.getCartItemList().get(0).getProductSkuCode());
         assertEquals("1st element must be sku02", "sku02", cart.getCartItemList().get(1).getProductSkuCode());
+    }
+
+    @Test
+    public void testAddGiftToCart() throws Exception {
+        boolean newItem1 = cart.addProductSkuToCart("sku01", BigDecimal.TEN);
+        boolean newItem2 = cart.addGiftToCart("sku01", BigDecimal.ONE, "TEST01");
+        boolean newItem3 = cart.addProductSkuToCart("sku02", BigDecimal.TEN);
+        boolean newItem4 = cart.addGiftToCart("sku01", BigDecimal.ONE, "TEST02");
+        assertTrue("Must create new item", newItem1);
+        assertTrue("Must not create new item", newItem2);
+        assertTrue("Must create new item", newItem3);
+        assertFalse("Must not create new item", newItem4);
+        assertEquals("Size should be 30", 22, cart.getCartItemsCount());
+        assertEquals("Index must be 0 for sku01", 0, cart.indexOfProductSku("sku01"));
+        assertEquals("Index must be 0 for sku01", 0, cart.indexOfGift("sku01")); // gift index is separate from product
+        assertEquals("Index must be 1 for sku02", 1, cart.indexOfProductSku("sku02"));
+        assertEquals("Items must have 2 elements", 3, cart.getCartItemList().size());
+        assertEquals("1st element must be sku01", "sku01", cart.getCartItemList().get(0).getProductSkuCode());
+        assertEquals("2nd element must be sku02", "sku02", cart.getCartItemList().get(1).getProductSkuCode());
+        assertEquals("3rd element must be sku01", "sku01", cart.getCartItemList().get(2).getProductSkuCode()); // index = count(prod) + giftIndex
+        assertTrue("3rd element must be gift", cart.getCartItemList().get(2).isGift());
+        assertEquals("3rd element must have promos", "TEST01,TEST02", cart.getCartItemList().get(2).getAppliedPromo());
     }
 
     @Test
@@ -94,7 +116,7 @@ public class ShoppingCartImplTest {
         boolean removed = cart.removeCartItem("sku02");
         assertTrue("Must be removed", removed);
         assertEquals("Size should be 20", 20, cart.getCartItemsCount());
-        assertEquals("Index of removed should be -1", -1, cart.indexOf("sku02"));
+        assertEquals("Index of removed should be -1", -1, cart.indexOfProductSku("sku02"));
     }
 
     @Test
@@ -115,7 +137,7 @@ public class ShoppingCartImplTest {
         boolean removed = cart.removeCartItemQuantity("sku02", BigDecimal.ONE);
         assertTrue("Must be removed", removed);
         assertEquals("Size should be 29", 29, cart.getCartItemsCount());
-        assertEquals("Index of removed should be 1", 1, cart.indexOf("sku02"));
+        assertEquals("Index of removed should be 1", 1, cart.indexOfProductSku("sku02"));
         assertTrue("Quantity should change to 9", MoneyUtils.isFirstEqualToSecond(new BigDecimal(9), cart.getCartItemList().get(1).getQty()));
     }
 
@@ -127,7 +149,7 @@ public class ShoppingCartImplTest {
         boolean removed = cart.removeCartItemQuantity("sku02", BigDecimal.TEN);
         assertTrue("Must be removed", removed);
         assertEquals("Size should be 20", 20, cart.getCartItemsCount());
-        assertEquals("Index of removed should be -1", -1, cart.indexOf("sku02"));
+        assertEquals("Index of removed should be -1", -1, cart.indexOfProductSku("sku02"));
     }
 
     @Test
@@ -138,7 +160,7 @@ public class ShoppingCartImplTest {
         boolean removed = cart.removeCartItemQuantity("sku02", new BigDecimal(100));
         assertTrue("Must be removed", removed);
         assertEquals("Size should be 20", 20, cart.getCartItemsCount());
-        assertEquals("Index of removed should be -1", -1, cart.indexOf("sku02"));
+        assertEquals("Index of removed should be -1", -1, cart.indexOfProductSku("sku02"));
     }
 
 }

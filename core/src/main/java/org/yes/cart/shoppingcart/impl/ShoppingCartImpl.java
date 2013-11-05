@@ -18,11 +18,13 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.shoppingcart.*;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -36,6 +38,7 @@ public class ShoppingCartImpl implements ShoppingCart {
     private static final long serialVersionUID =  20110509L;
 
     private List<CartItemImpl> items = new ArrayList<CartItemImpl>();
+    private List<CartItemImpl> gifts = new ArrayList<CartItemImpl>();
 
     private String guid = java.util.UUID.randomUUID().toString();
 
@@ -82,7 +85,8 @@ public class ShoppingCartImpl implements ShoppingCart {
     /** {@inheritDoc} */
     public void clean() {
         guid = java.util.UUID.randomUUID().toString();
-        items = new ArrayList<CartItemImpl>();
+        items.clear();
+        gifts.clear();
         orderInfo = null;
         total = null;
         modifiedTimestamp = System.currentTimeMillis();
@@ -116,7 +120,12 @@ public class ShoppingCartImpl implements ShoppingCart {
     /** {@inheritDoc} */
     public List<CartItem> getCartItemList() {
         final List<CartItem> immutableItems = new ArrayList<CartItem>(getItems().size());
+        // first items (in the order they were added)
         for (CartItem item : getItems()) {
+            immutableItems.add(new ImmutableCartItemImpl(item));
+        }
+        // gifts in the order promotions were applied
+        for (CartItem item : getGifts()) {
             immutableItems.add(new ImmutableCartItemImpl(item));
         }
         return Collections.unmodifiableList(immutableItems);
@@ -125,7 +134,7 @@ public class ShoppingCartImpl implements ShoppingCart {
     /** {@inheritDoc} */
     public boolean addProductSkuToCart(final String sku, final BigDecimal quantity) {
 
-        final int skuIndex = indexOf(sku);
+        final int skuIndex = indexOfProductSku(sku);
         if (skuIndex != -1) {
             getItems().get(skuIndex).addQuantity(quantity);
             return false;
@@ -139,13 +148,57 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /** {@inheritDoc} */
+    public boolean addGiftToCart(final String sku, final BigDecimal quantity, final String promotionCode) {
+
+        final int skuIndex = indexOfGift(sku);
+        if (skuIndex != -1) {
+            final CartItemImpl item = getGifts().get(skuIndex);
+            item.addQuantity(quantity);
+            addPromoCode(item, promotionCode);
+            return false;
+        }
+
+        final CartItemImpl newItem = new CartItemImpl();
+        newItem.setProductSkuCode(sku);
+        newItem.setQuantity(quantity);
+        newItem.setGift(true);
+        newItem.setPromoApplied(true);
+        newItem.setAppliedPromo(promotionCode);
+        getGifts().add(newItem);
+        return true;
+    }
+
+    private void addPromoCode(final CartItemImpl item, final String promotionCode) {
+        final String promo = item.getAppliedPromo();
+        if (promo == null) {
+            item.setAppliedPromo(promotionCode);
+            item.setPromoApplied(true);
+        } else {
+            final String[] promoCodes = StringUtils.split(promo, ',');
+            // could do a binary search but in most cases this would be a single promo
+            // and we have overhead of sorting before binary search
+            boolean duplicate = false;
+            for (final String promoCode : promoCodes) {
+                if (promoCode.equals(promotionCode)) {
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (!duplicate) {
+                item.setAppliedPromo(item.getAppliedPromo() + "," + promotionCode);
+                item.setPromoApplied(true);
+            }
+        }
+    }
+
+    /** {@inheritDoc} */
     public boolean setProductSkuToCart(final String sku, final BigDecimal quantity) {
 
         final CartItemImpl newItem = new CartItemImpl();
         newItem.setProductSkuCode(sku);
         newItem.setQuantity(quantity);
 
-        final int skuIndex = indexOf(sku);
+        final int skuIndex = indexOfProductSku(sku);
         if (skuIndex == -1) { //not found
             getItems().add(newItem);
         } else {
@@ -156,7 +209,7 @@ public class ShoppingCartImpl implements ShoppingCart {
 
     /** {@inheritDoc} */
     public boolean removeCartItem(final String productSku) {
-        final int skuIndex = indexOf(productSku);
+        final int skuIndex = indexOfProductSku(productSku);
         if (skuIndex != -1) {
             getItems().remove(skuIndex);
             return true;
@@ -166,7 +219,7 @@ public class ShoppingCartImpl implements ShoppingCart {
 
     /** {@inheritDoc} */
     public boolean removeCartItemQuantity(final String productSku, final BigDecimal quantity) {
-        final int skuIndex = indexOf(productSku);
+        final int skuIndex = indexOfProductSku(productSku);
         if (skuIndex != -1) {
             try {
                 getItems().get(skuIndex).removeQuantity(quantity);
@@ -179,12 +232,61 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /** {@inheritDoc} */
-    public boolean setProductSkuPrice(final String skuCode, final BigDecimal price, final BigDecimal listPrice) {
-        final int skuIndex = indexOf(skuCode);
+    public boolean removeItemPromotions() {
+        boolean removed = getGifts().isEmpty();
+        getGifts().clear();
+
+        final Iterator<CartItemImpl> it = getItems().iterator();
+        while (it.hasNext()) {
+            final CartItemImpl item = it.next();
+            if (item.isPromoApplied()) {
+                // reinstate sale price
+                removed = true;
+                item.setPrice(item.getSalePrice());
+                item.setAppliedPromo(null);
+                item.setPromoApplied(false);
+            }
+        }
+        return removed;
+    }
+
+    /** {@inheritDoc} */
+    public boolean setProductSkuPrice(final String skuCode, final BigDecimal salePrice, final BigDecimal listPrice) {
+        final int skuIndex = indexOfProductSku(skuCode);
         if (skuIndex != -1) {
             final CartItemImpl cartItem = getItems().get(skuIndex);
-            cartItem.setPrice(price);
+            cartItem.setPrice(salePrice);
+            cartItem.setSalePrice(salePrice);
             cartItem.setListPrice(listPrice);
+            // clear promotion as we effectively changed the base price for promo calculations
+            cartItem.setAppliedPromo(null);
+            cartItem.setPromoApplied(false);
+            return true;
+        }
+        return false;
+    }
+
+    /** {@inheritDoc} */
+    public boolean setGiftPrice(final String skuCode, final BigDecimal salePrice, final BigDecimal listPrice) {
+        final int skuIndex = indexOfGift(skuCode);
+        if (skuIndex != -1) {
+            final CartItemImpl cartItem = getGifts().get(skuIndex);
+            cartItem.setPrice(MoneyUtils.ZERO);
+            cartItem.setSalePrice(salePrice);
+            cartItem.setListPrice(listPrice);
+            // must not clear any promotion data
+            return true;
+        }
+        return false;
+    }
+
+    /** {@inheritDoc} */
+    public boolean setProductSkuPromotion(final String skuCode, final BigDecimal promoPrice, final String promoCode) {
+        final int skuIndex = indexOfProductSku(skuCode);
+        if (skuIndex != -1) {
+            final CartItemImpl cartItem = getItems().get(skuIndex);
+            cartItem.setPrice(promoPrice);
+            addPromoCode(cartItem, promoCode);
             return true;
         }
         return false;
@@ -193,17 +295,28 @@ public class ShoppingCartImpl implements ShoppingCart {
     /** {@inheritDoc} */
     public int getCartItemsCount() {
         BigDecimal quantity = BigDecimal.ZERO;
-        final List<? extends CartItem> items = getItems();
-        for (CartItem cartItem : items) {
+        for (CartItem cartItem : getItems()) {
+            quantity = quantity.add(cartItem.getQty());
+        }
+        for (CartItem cartItem : getGifts()) {
             quantity = quantity.add(cartItem.getQty());
         }
         return quantity.intValue();
     }
 
     /** {@inheritDoc} */
-    public int indexOf(final String skuCode) {
-        for (int index = 0; index < getItems().size(); index++) {
-            final CartItem item = getItems().get(index);
+    public int indexOfProductSku(final String skuCode) {
+        return indexOf(skuCode, getItems());
+    }
+
+    /** {@inheritDoc} */
+    public int indexOfGift(final String skuCode) {
+        return indexOf(skuCode, getGifts());
+    }
+
+    public int indexOf(final String skuCode, final List<? extends CartItem> items) {
+        for (int index = 0; index < items.size(); index++) {
+            final CartItem item = items.get(index);
             if (item.getProductSkuCode().equals(skuCode)) {
                 return index;
             }
@@ -212,15 +325,31 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
 
+
     /** {@inheritDoc} */
     public boolean contains(final String skuCode) {
-        return (indexOf(skuCode) != -1);
+        return (indexOfProductSku(skuCode) != -1);
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * Internal access to mutable items.
+     */
     List<CartItemImpl> getItems() {
+        if (items == null) {
+            items = new ArrayList<CartItemImpl>();
+        }
         return items;
+    }
+
+    /**
+     * Internal access to mutable items.
+     */
+    List<CartItemImpl> getGifts() {
+        if (gifts == null) {
+            gifts = new ArrayList<CartItemImpl>();
+        }
+        return gifts;
     }
 
     /** {@inheritDoc} */

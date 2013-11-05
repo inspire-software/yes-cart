@@ -18,6 +18,7 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -39,12 +40,15 @@ public class ExpireCartCommandImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testExecute() {
+
+        final Customer customer = createCustomer();
+
         ShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, "test@test.com");
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customer.getEmail());
         params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
         params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
         commands.execute(shoppingCart, (Map) params);

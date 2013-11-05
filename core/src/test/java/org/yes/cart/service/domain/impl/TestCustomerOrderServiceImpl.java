@@ -119,7 +119,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     public void testPersistReassembledOrder3() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart2(getTestName());
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
         assertFalse(customerOrderService.isOrderCanHasMultipleDeliveries(shoppingCart));
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
         assertEquals(2, order.getDelivery().size());
@@ -133,7 +133,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         assertNotNull(customer.getDefaultAddress(Address.ADDR_TYPE_BILLING));
         assertNotNull(customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING));
 
-        ShoppingCart shoppingCart = getEmptyCart(getTestName() + prefix);
+        ShoppingCart shoppingCart = getEmptyCartByPrefix(getTestName() + prefix);
 
         assertEquals(getTestName() + prefix + "jd@domain.com", shoppingCart.getCustomerEmail());
         assertEquals(customer.getEmail(), shoppingCart.getCustomerEmail());
@@ -183,8 +183,18 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     /**
      * @return cart with one digital available product.
      */
-    protected ShoppingCart getShoppingCart2(final String prefix) {
-        ShoppingCart shoppingCart = getEmptyCart(prefix);
+    protected ShoppingCart getShoppingCart2ByPrefix(final String prefix) {
+        return getShoppingCart2(getEmptyCartByPrefix(prefix));
+    }
+
+    /**
+     * @return cart with one digital available product.
+     */
+    protected ShoppingCart getShoppingCart2(final String customerEmail) {
+        return getShoppingCart2(getEmptyCart(customerEmail));
+    }
+
+    private ShoppingCart getShoppingCart2(final ShoppingCart shoppingCart) {
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -211,7 +221,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindDeliveryAwaitingForInventory()      throws Exception {
         final Customer customer = createCustomer();
-        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems("pre", 1);
+        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 1);
 
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());

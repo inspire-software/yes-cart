@@ -34,6 +34,7 @@ public class ShoppingContextImpl implements ShoppingContext {
     private String latestViewedCategories;
     private String customerName;
     private long shopId;
+    private String shopCode;
     private String resolvedIp;
     private String customerEmail;
 
@@ -89,32 +90,22 @@ public class ShoppingContextImpl implements ShoppingContext {
         this.latestViewedCategories = latestViewedCategories;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public String getCustomerName() {
         return customerName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     public void setCustomerName(final String customerName) {
         this.customerName = customerName;
     }
 
-/**
-     * Get current shop id
-     * @return current shop id.
-     */
+    /** {@inheritDoc} */
     public long getShopId() {
         return shopId;
     }
 
-    /**
-     * Set current shop id.
-     * @param shopId current shop id.
-     */
+    /** {@inheritDoc} */
     public void setShopId(final long shopId) {
         if (this.shopId != shopId) {
             clearShopRelatedParameters();
@@ -122,5 +113,16 @@ public class ShoppingContextImpl implements ShoppingContext {
         this.shopId = shopId;
     }
 
-    
+    /** {@inheritDoc} */
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    /** {@inheritDoc} */
+    public void setShopCode(final String shopCode) {
+        if (!shopCode.equals(this.shopCode)) {
+            clearShopRelatedParameters();
+        }
+        this.shopCode = shopCode;
+    }
 }

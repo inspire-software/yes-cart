@@ -16,8 +16,6 @@
 
 package org.yes.cart.shoppingcart;
 
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -86,6 +84,18 @@ public interface ShoppingCart extends Serializable {
     boolean addProductSkuToCart(String sku, BigDecimal quantity);
 
     /**
+     * Add product sku to cart.
+     *
+     * @param sku      product sku to add
+     * @param quantity the quantity to add
+     * @param promotionCode promotion code fof promotion that resulted in this gift
+     * @return true if item has been added to the cart as a separate cart item,
+     *         false if adding this item cause only quantity update of already present in cart
+     *         product sku.
+     */
+    boolean addGiftToCart(String sku, BigDecimal quantity, String promotionCode);
+
+    /**
      * Set sku quantity, in case if sku not present in cart it will be added.
      *
      * @param sku      product sku to add
@@ -115,14 +125,46 @@ public interface ShoppingCart extends Serializable {
     boolean removeCartItemQuantity(String productSku, BigDecimal quantity);
 
     /**
-     * Set product sku price
+     * Remove all cart promotions, which effectively removes promotion prices and reinstates
+     * sale price as final price and clear all promotion data and gift items.
+     *
+     * This method only acts upon promotions at the item level. Note that this method should
+     * not be used manually as it puts the cart total in out of sync. The purpose of this method
+     * is clearing up cart by amount calculation strategy before it starts calculating cart.
+     *
+     * @return  true if promotions have been removed, false if item was not present in the cart.
+     */
+    boolean removeItemPromotions();
+
+    /**
+     * Set product sku price and clear all promotion details
      *
      * @param productSkuCode product sku
-     * @param price          price to set
+     * @param salePrice      price to set - sale price without promos
      * @param listPrice      list price - without discounts, promos, etc.
      * @return true if price has been set
      */
-    boolean setProductSkuPrice(String productSkuCode, BigDecimal price, BigDecimal listPrice);
+    boolean setProductSkuPrice(String productSkuCode, BigDecimal salePrice, BigDecimal listPrice);
+
+    /**
+     * Set product sku price and clear all promotion details
+     *
+     * @param productSkuCode product sku
+     * @param salePrice      price to set - sale price without promos
+     * @param listPrice      list price - without discounts, promos, etc.
+     * @return true if price has been set
+     */
+    boolean setGiftPrice(String productSkuCode, BigDecimal salePrice, BigDecimal listPrice);
+
+    /**
+     * Set product sku price and clear all promotion details
+     *
+     * @param productSkuCode product sku
+     * @param promoPrice     price to set
+     * @param promoCode      promotion code that activated this discount
+     * @return true if price has been set
+     */
+    boolean setProductSkuPromotion(String productSkuCode, BigDecimal promoPrice, String promoCode);
 
     /**
      * @return number of cart items currently in the shopping cart.
@@ -207,10 +249,20 @@ public interface ShoppingCart extends Serializable {
     boolean contains(String skuCode);
 
     /**
+     * This method only searches for non-gift items indexes.
+     *
      * @param skuCode sku code
      * @return index of cart item for this sku
      */
-    int indexOf(final String skuCode);
+    int indexOfProductSku(final String skuCode);
+
+    /**
+     * This method only searches for gift items indexes.
+     *
+     * @param skuCode sku code
+     * @return index of cart item for this sku
+     */
+    int indexOfGift(final String skuCode);
 
     /**
      * Get shopping context

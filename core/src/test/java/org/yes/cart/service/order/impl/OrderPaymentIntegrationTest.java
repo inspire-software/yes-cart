@@ -64,7 +64,7 @@ public class OrderPaymentIntegrationTest extends BaseCoreDBTestCase {
 
         final String gateway = "courierPaymentGatewayLabel";
 
-        final ShoppingCart cart = getStdCard(customer.getEmail(), gateway, "CC_TEST1", "2.00");
+        final ShoppingCart cart = getStdCart(customer.getEmail(), gateway, "CC_TEST1", "2.00");
         final CustomerOrder customerOrder = orderService.createFromCart(cart, false);
         assertNotNull(customerOrder);
         assertEquals(customerOrder.getOrderStatus(), CustomerOrder.ORDER_STATUS_NONE);
@@ -111,7 +111,7 @@ public class OrderPaymentIntegrationTest extends BaseCoreDBTestCase {
 
         final String gateway = "testPaymentGatewayLabel";
 
-        final ShoppingCart cart = getStdCard(customer.getEmail(), gateway, "CC_TEST1", "2.00");
+        final ShoppingCart cart = getStdCart(customer.getEmail(), gateway, "CC_TEST1", "2.00");
         final CustomerOrder customerOrder = orderService.createFromCart(cart, false);
         assertNotNull(customerOrder);
         assertEquals(customerOrder.getOrderStatus(), CustomerOrder.ORDER_STATUS_NONE);
@@ -164,9 +164,9 @@ public class OrderPaymentIntegrationTest extends BaseCoreDBTestCase {
         return new BigDecimal[] { stock, reserved };
     }
 
-    protected ShoppingCart getStdCard(final String customerEmail,
+    protected ShoppingCart getStdCart(final String customerEmail,
                                       final String paymentLabel,
-                                      final String ... skuAndQty) {
+                                      final String... skuAndQty) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 

@@ -18,12 +18,10 @@ package org.yes.cart.web.service.ws.node.impl;
 
 import org.yes.cart.domain.entity.Country;
 import org.yes.cart.domain.entity.ProductType;
+import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.ShopUrl;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ProductTypeAttrService;
-import org.yes.cart.service.domain.ProductTypeService;
-import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.promotion.PromotionConditionParser;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.web.service.ws.node.WarmUpService;
 import org.yes.cart.web.support.service.AddressBookFacade;
@@ -47,26 +45,43 @@ public class WarmUpServiceImpl implements WarmUpService {
 
     private final AddressBookFacade addressBookFacade;
 
+    private final PromotionService promotionService;
+    private final PromotionConditionParser promotionConditionParser;
+
     public WarmUpServiceImpl(final LanguageService languageService,
                              final ProductTypeService productTypeService,
                              final ProductTypeAttrService productTypeAttrService,
                              final ProductService productService,
                              final ShopService shopService,
-                             final AddressBookFacade addressBookFacade) {
+                             final AddressBookFacade addressBookFacade,
+                             final PromotionService promotionService,
+                             final PromotionConditionParser promotionConditionParser) {
         this.languageService = languageService;
         this.productTypeService = productTypeService;
         this.productTypeAttrService = productTypeAttrService;
         this.productService = productService;
         this.shopService = shopService;
         this.addressBookFacade = addressBookFacade;
+        this.promotionService = promotionService;
+        this.promotionConditionParser = promotionConditionParser;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void warmpUp() {
+    public void warmUp() {
         loadShopData();
         loadProductData();
         loadAddressData();
+        loadPromotionConditions();
+    }
+
+    private void loadPromotionConditions() {
+
+        final List<Promotion> promotions = promotionService.findAll();
+        for (final Promotion promotion : promotions) {
+            promotionConditionParser.parse(promotion); // parse all groovy conditions
+        }
+
     }
 
     private void loadAddressData() {

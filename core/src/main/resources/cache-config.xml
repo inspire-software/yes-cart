@@ -557,7 +557,11 @@
 
     <util:set id="PromotionAll">
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="promotionService-promotionsByShop"/>
+            <constructor-arg index="0" value="promotionService-promotionsByShopCode"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="promotionService-factoryGetInstance"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>

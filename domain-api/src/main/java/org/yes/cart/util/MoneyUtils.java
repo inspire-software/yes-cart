@@ -16,6 +16,8 @@
 
 package org.yes.cart.util;
 
+import org.yes.cart.constants.Constants;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -28,7 +30,9 @@ import java.math.RoundingMode;
  */
 public final class MoneyUtils {
 
-    public static final BigDecimal HUNDRED = new BigDecimal("100.00");
+    public static final BigDecimal ZERO = new BigDecimal("0.00").setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    public static final BigDecimal ONE = new BigDecimal("1.00").setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    public static final BigDecimal HUNDRED = new BigDecimal("100.00").setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
     private MoneyUtils() {
         // prevent instantiation

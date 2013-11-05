@@ -123,7 +123,7 @@ public interface Address extends Auditable {
     /**
      * Get country.
      *
-     * @return coubtry.
+     * @return country.
      */
     String getCountryCode();
 
