@@ -32,6 +32,8 @@ public class PromotionDTOImpl {
 
     public var currency:String;
 
+    public var rank:Number;
+
     public var code:String;
 
     public var promoType:String;

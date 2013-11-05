@@ -16,7 +16,6 @@
 
 package org.yes.cart.domain.entity;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -94,6 +93,13 @@ public interface Promotion extends Auditable, Codable, Taggable {
      * - Tags to be applied
      * - SkuCode of gift to be applied
      *
+     * Each context has its own scope of function:
+     * - item context only affects final price per unit
+     * - order context only affects final sub total
+     * - shipping context only affects shipping cost
+     *
+     * E.g. item gift - will be applied for each
+     *
      * @return context object
      */
     String getPromoActionContext();
@@ -102,7 +108,6 @@ public interface Promotion extends Auditable, Codable, Taggable {
      * @param promoActionContext promotion context
      */
     void setPromoActionContext(String promoActionContext);
-
 
     /**
      * Eligibility condition context depends on the promo type.
@@ -205,5 +210,21 @@ public interface Promotion extends Auditable, Codable, Taggable {
      * @param enabledTo promotion finish time
      */
     void setEnabledTo(Date enabledTo);
+
+
+    /**
+     * Get promotion rank when combined.
+     *
+     * @return promotion rank.
+     */
+    int getRank();
+
+    /**
+     * Set promotion rank.
+     *
+     * @param rank promotion rank
+     */
+    void setRank(int rank);
+
 
 }

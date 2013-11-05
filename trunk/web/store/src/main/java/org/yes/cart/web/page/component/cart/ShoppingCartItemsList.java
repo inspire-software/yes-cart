@@ -142,10 +142,10 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         ).add(
                 getProductLink(productSkuDecorator)
         ).add(
-                new PriceView(PRICE_VIEW, new Pair<BigDecimal, BigDecimal>(cartItem.getListPrice(), cartItem.getPrice()), null, false, true)
+                new PriceView(PRICE_VIEW, new Pair<BigDecimal, BigDecimal>(cartItem.getListPrice(), cartItem.getPrice()), null, cartItem.getAppliedPromo(), false, true)
         ).add(
                 new PriceView(LINE_TOTAL_VIEW, new Pair<BigDecimal, BigDecimal>(
-                        cartItem.getPrice().multiply(cartItem.getQty()), null), null, false, false)
+                        cartItem.getPrice().multiply(cartItem.getQty()), null), null, null, false, false)
         );
 
 

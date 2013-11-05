@@ -398,9 +398,9 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testPushOrdersAwaitingForInventory() throws OrderException {
 
-        Customer cust = createCustomer("preorder-tester");
+        Customer cust = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCartWithPreorderItems("pre-test2", 0);
+        ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 0);
 
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());

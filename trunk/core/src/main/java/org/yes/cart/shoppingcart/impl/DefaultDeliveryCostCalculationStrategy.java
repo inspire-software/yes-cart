@@ -18,15 +18,11 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.CarrierSla;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
 /**
  * User: denispavlov

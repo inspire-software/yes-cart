@@ -44,6 +44,7 @@ public interface CacheDirector {
         String PRODUCT_TYPE_ATTR = "ProductTypeAttrEntity";
         String SHOP = "ShopEntity";
         String SYSTEM = "SystemEntity";
+        String PROMOTION = "PromotionEntity";
 
     }
 

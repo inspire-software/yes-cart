@@ -42,6 +42,8 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
 
     private String tag;
 
+    private int rank;
+
     private String name;
     private String displayName;
     private String description;
@@ -244,5 +246,28 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
 
     public void setGuid(final String guid) {
         this.guid = guid;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(final int rank) {
+        this.rank = rank;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "PromotionEntity{" +
+                "shopCode='" + shopCode + '\'' +
+                ", currency='" + currency + '\'' +
+                ", code='" + code + '\'' +
+                ", rank='" + rank + '\'' +
+                ", promoType='" + promoType + '\'' +
+                ", promoAction='" + promoAction + '\'' +
+                ", eligibilityCondition='" + eligibilityCondition + '\'' +
+                ", promoActionContext='" + promoActionContext + '\'' +
+                '}';
     }
 }

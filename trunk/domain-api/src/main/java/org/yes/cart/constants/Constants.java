@@ -34,19 +34,17 @@ public interface Constants {
     String DEFAULT_DATE_FORMAT = "dd MMMMM yyyy";
 
     /**
-     * Accourding to HTTP/1.1 (RFC2068) spec date time must be in  RFC850 format.
+     * According to HTTP/1.1 (RFC2068) spec date time must be in  RFC850 format.
      * <p/>
      * <p/>
-     * HTTP приложения исторически допускали три различных формата для
-     * представления даты/времени:
+     * HTTP application historically accepted three formats to represent date/time:
      * <p/>
-     * Sun, 06 Nov 1994 08:49:37 GMT  ; RFC 822, дополненный в RFC 1123
-     * Sunday, 06-Nov-94 08:49:37 GMT ; RFC 850, переписанный как RFC 1036
-     * Sun Nov  6 08:49:37 1994       ; формат asctime() ANSI C
+     * Sun, 06 Nov 1994 08:49:37 GMT  ; RFC 822, enhanced in RFC 1123
+     * Sunday, 06-Nov-94 08:49:37 GMT ; RFC 850, rewritten as RFC 1036
+     * Sun Nov  6 08:49:37 1994       ; format asctime() ANSI C
      * <p/>
-     * Первый формат выбран в качестве стандарта Интернета и представляет
-     * подмножество фиксированной длины, как определено в RFC 1123
-     * (модифицированном RFC 822)
+     * The first format is chosen as Internet standard and represents fixed
+     * length string as stated in RFC 1123 (modified RFC 822)
      */
     String RFC850_DATE_TIME_FORMAT = "EEE, dd MMM yyyy HH:mm:ss z";
 
@@ -55,7 +53,7 @@ public interface Constants {
      * 12 dollars and 34 cent will be 1234 cents.
      */
     String MONEY_FORMAT_TOINDEX = "00000000";
-    String MONEY_FORMAT = "######.00";
+    String MONEY_FORMAT = "#####0.00";
     int MONEY_SCALE = 2;
 
     /**
@@ -64,7 +62,7 @@ public interface Constants {
      * 1 item would be 1000
      */
     String INVENTORY_FORMAT_TOINDEX = "00000000";
-    String INVENTORY_FORMAT = "######.000";
+    String INVENTORY_FORMAT = "#####0.000";
     int INVENTORY_SCALE = 3;
 
     /**

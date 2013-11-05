@@ -42,13 +42,13 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "promotionService-promotionsByShop")
-    public List<Promotion> getPromotionsByShop(final String shopCode, final boolean active) {
+    @Cacheable(value = "promotionService-promotionsByShopCode")
+    public List<Promotion> getPromotionsByShopCode(final String shopCode, final String currency, final boolean active) {
         if (active) {
             final Date now = new Date();
-            return getGenericDao().findByNamedQuery("PROMOTION.BY.SHOPCODE.ACTIVE", shopCode, active, now, now);
+            return getGenericDao().findByNamedQuery("PROMOTION.BY.SHOPCODE.CURRENCY.ACTIVE", shopCode, currency, active, now, now);
         }
-        return getGenericDao().findByNamedQuery("PROMOTION.BY.SHOPCODE", shopCode);
+        return getGenericDao().findByNamedQuery("PROMOTION.BY.SHOPCODE.CURRENCY", shopCode, currency);
     }
 
     /** {@inheritDoc} */
@@ -102,7 +102,9 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
 
     /** {@inheritDoc} */
     @CacheEvict(value = {
-            "promotionService-promotionsByShop"
+            "promotionService-promotionsByShopCode",
+            "promotionService-factoryGetInstance",
+            "promotionService-groovyCache"
     }, allEntries = true)
     public Promotion create(final Promotion instance) {
         return super.create(instance);
@@ -110,7 +112,9 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
 
     /** {@inheritDoc} */
     @CacheEvict(value = {
-            "promotionService-promotionsByShop"
+            "promotionService-promotionsByShopCode",
+            "promotionService-factoryGetInstance",
+            "promotionService-groovyCache"
     }, allEntries = true)
     public Promotion update(final Promotion instance) {
         return super.update(instance);
@@ -118,7 +122,9 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
 
     /** {@inheritDoc} */
     @CacheEvict(value = {
-            "promotionService-promotionsByShop"
+            "promotionService-promotionsByShopCode",
+            "promotionService-factoryGetInstance",
+            "promotionService-groovyCache"
     }, allEntries = true)
     public void delete(final Promotion instance) {
         super.delete(instance);

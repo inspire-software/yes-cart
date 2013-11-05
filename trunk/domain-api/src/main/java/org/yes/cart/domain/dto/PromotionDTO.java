@@ -230,4 +230,19 @@ public interface PromotionDTO extends Identifiable {
     void setEnabledTo(Date enabledTo);
 
 
+    /**
+     * Get promotion rank when combined.
+     *
+     * @return promotion rank.
+     */
+    int getRank();
+
+    /**
+     * Set promotion rank.
+     *
+     * @param rank promotion rank
+     */
+    void setRank(int rank);
+
+
 }

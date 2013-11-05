@@ -108,6 +108,20 @@ public interface ShoppingContext extends Serializable {
      */
     void setShopId(long shopId);
 
+    /**
+     * Get current shop code
+     *
+     * @return current shop id.
+     */
+    String getShopCode();
+
+    /**
+     * Set current shop code.
+     *
+     * @param shopCode current shop code.
+     */
+    void setShopCode(String shopCode);
+
 
     /**
      * Clear context.

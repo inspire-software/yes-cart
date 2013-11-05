@@ -30,18 +30,19 @@ public interface PromotionService extends GenericService<Promotion> {
     /**
      * Get all promotions by shop code.
      *
+     *
+     *
      * @param shopCode shop code
+     * @param currency currency
      * @param active if false then select all promotions for given shop, if true only enabled
      *               promotions with enabledFrom and enabledTo times within current time
      *
      * @return list of promotions
      */
-    List<Promotion> getPromotionsByShop(String shopCode, boolean active);
+    List<Promotion> getPromotionsByShopCode(String shopCode, final String currency, boolean active);
 
     /**
      * Customer search function to find promotions by given parameters.
-     *
-     *
      *
      * @param code promo code
      * @param shopCode optional shop code

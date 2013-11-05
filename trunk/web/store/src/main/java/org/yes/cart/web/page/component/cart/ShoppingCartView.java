@@ -76,7 +76,7 @@ public class ShoppingCartView extends BaseComponent {
                                 SUB_TOTAL_VIEW,
                                 new Pair<BigDecimal, BigDecimal>(total.getListSubTotal(), total.getSubTotal()),
                                 cart.getCurrencyCode(),
-                                true, true)
+                                total.getAppliedOrderPromo(), true, true)
                 )
         );
 

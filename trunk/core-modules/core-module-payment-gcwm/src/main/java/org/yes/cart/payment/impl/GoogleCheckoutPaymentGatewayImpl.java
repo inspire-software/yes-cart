@@ -32,7 +32,8 @@ import java.math.BigDecimal;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Map;
 
 /**
  * Google checkout payment gateway

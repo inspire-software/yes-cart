@@ -2092,13 +2092,14 @@
 
         <property name="shopCode" column="SHOP_CODE" type="string" length="255" not-null="true" index="PROMO_SHOP_CODE"/>
         <property name="currency" column="CURRENCY" type="string" length="5" not-null="true" index="PROMO_CURRENCY"/>
-        <property name="code" column="CODE" type="string" length="255" not-null="true" index="PROMO_CODE"/>
+        <property name="code" column="CODE" type="string" length="255" not-null="true" unique-key="PROMO_CODE"/>
         <property name="promoType" column="PROMO_TYPE" type="string" length="1" not-null="true" index="PROMO_PTYPE"/>
         <property name="promoAction" column="PROMO_ACTION" type="string" length="1" not-null="true" index="PROMO_PACTION"/>
 
         <property name="eligibilityCondition" column="ELIGIBILITY_CONDITION" type="string" length="4000" not-null="true"/>
         <property name="promoActionContext" column="PROMO_ACTION_CONTEXT" type="string" length="255"/>
 
+        <property name="rank" column="RANK" type="int" not-null="true" />
         <property name="name" column="NAME" type="string" length="255" not-null="true"/>
         <property name="description" column="DESCRIPTION" type="string" length="1000"/>
         <property name="displayName" column="DISPLAYNAME" type="string" length="4000"/>
@@ -2878,21 +2879,22 @@
         ]]>
     </query>
 
-    <query name="PROMOTION.BY.SHOPCODE">
+    <query name="PROMOTION.BY.SHOPCODE.CURRENCY">
         <![CDATA[
-            select p from PromotionEntity p where p.shopCode = ?1
+            select p from PromotionEntity p where p.shopCode = ?1 and p.currency = ?2
+            order by p.enabledFrom asc, p.enabledTo asc, p.rank asc, p.promotionId asc
         ]]>
     </query>
 
-    <query name="PROMOTION.BY.SHOPCODE.ACTIVE">
+    <query name="PROMOTION.BY.SHOPCODE.CURRENCY.ACTIVE">
         <![CDATA[
             select p from PromotionEntity p
-            where p.shopCode = ?1 and p.enabled = ?2
-             and (p.enabledFrom < ?3 OR p.enabledFrom IS NULL)
-             and (p.enabledTo > ?4 OR p.enabledTo IS NULL)
+            where p.shopCode = ?1 and p.currency = ?2 and p.enabled = ?3
+             and (p.enabledFrom < ?4 OR p.enabledFrom IS NULL)
+             and (p.enabledTo > ?5 OR p.enabledTo IS NULL)
+            order by p.enabledFrom asc, p.enabledTo asc, p.rank asc, p.promotionId asc
         ]]>
     </query>
-
 
 
 </hibernate-mapping>

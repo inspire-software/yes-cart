@@ -32,6 +32,7 @@ import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -234,7 +235,9 @@ public class ShippingView extends BaseComponent {
      */
     private void addPriceView(final Form form) {
 
-        final Long slaId = ApplicationDirector.getShoppingCart().getCarrierSlaId();
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final Total total = cart.getTotal();
+        final Long slaId = cart.getCarrierSlaId();
 
         if (slaId == null) {
             form.addOrReplace(
@@ -245,9 +248,9 @@ public class ShippingView extends BaseComponent {
             form.addOrReplace(
                     new PriceView(
                             PRICE_VIEW,
-                            new Pair<BigDecimal, BigDecimal>(carrierSla.getPrice(), null),
+                            new Pair<BigDecimal, BigDecimal>(total.getDeliveryListCost(), total.getDeliveryCost()),
                             carrierSla.getCurrency(),
-                            true, true
+                            total.getAppliedDeliveryPromo(), true, true
                     )
             );
 

@@ -55,7 +55,7 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
 
     /**
      * Get shop by given shop code.
-     * @param shopCode  givem shop code.
+     * @param shopCode  given shop code.
      * @return instance of Shop if it has given server name, otherwise null
      */
     Shop getShopByCode(String shopCode);

@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.cart;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -32,7 +33,6 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -41,8 +41,7 @@ import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class responsible to show cart with delivery amount and taxes for verification before payments.
@@ -124,12 +123,19 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
         final Total grandTotal = amountCalculationStrategy.calculate(customerOrder);
 
         final String selectedLocale = getLocale().getLanguage();
+        final Set<String> allPromos = new HashSet<String>();
+
+        if (StringUtils.isNotBlank(customerOrder.getAppliedPromo())) {
+            allPromos.addAll(Arrays.asList(StringUtils.split(customerOrder.getAppliedPromo(), ',')));
+        }
 
         add(
-                new ListView<CustomerOrderDelivery>(DELIVERY_LIST, new ArrayList<CustomerOrderDelivery>(customerOrder.getDelivery())) {
+                new ListView<CustomerOrderDelivery>(DELIVERY_LIST, new ArrayList<CustomerOrderDelivery>(customerOrder.getDelivery()))
+                {
 
                     @Override
-                    protected void populateItem(ListItem<CustomerOrderDelivery> customerOrderDeliveryListItem) {
+                    protected void populateItem(ListItem<CustomerOrderDelivery> customerOrderDeliveryListItem)
+                    {
 
                         final CustomerOrderDelivery delivery = customerOrderDeliveryListItem.getModelObject();
 
@@ -137,16 +143,22 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                         final Total total = amountCalculationStrategy.calculate(customerOrder, delivery);
 
+                        if (StringUtils.isNotBlank(delivery.getAppliedPromo())) {
+                            allPromos.addAll(Arrays.asList(StringUtils.split(delivery.getAppliedPromo(), ',')));
+                        }
+
                         customerOrderDeliveryListItem
                                 .add(
                                         new Label(DELIVERY_CODE, delivery.getDeliveryNum())
                                 )
                                 .add(
 
-                                        new ListView<CustomerOrderDeliveryDet>(ITEM_LIST, deliveryDet) {
+                                        new ListView<CustomerOrderDeliveryDet>(ITEM_LIST, deliveryDet)
+                                        {
 
                                             @Override
-                                            protected void populateItem(ListItem<CustomerOrderDeliveryDet> customerOrderDeliveryDetListItem) {
+                                            protected void populateItem(ListItem<CustomerOrderDeliveryDet> customerOrderDeliveryDetListItem)
+                                            {
 
                                                 final CustomerOrderDeliveryDet det = customerOrderDeliveryDetListItem.getModelObject();
 
@@ -169,9 +181,13 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                         .multiply(det.getQty())
                                                         .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
+                                                if (StringUtils.isNotBlank(det.getAppliedPromo())) {
+                                                    allPromos.addAll(Arrays.asList(StringUtils.split(det.getAppliedPromo(), ',')));
+                                                }
+
                                                 customerOrderDeliveryDetListItem
                                                         .add(
-                                                        new Label(ITEM_NAME, productSkuDecorator.getName(selectedLocale))
+                                                                new Label(ITEM_NAME, productSkuDecorator.getName(selectedLocale))
                                                         )
                                                         .add(
                                                                 new Label(ITEM_CODE, det.getProductSkuCode())
@@ -228,8 +244,8 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                         new PriceView(
                                 DELIVERY_GRAND_AMOUNT,
                                 new Pair<BigDecimal, BigDecimal>(grandTotal.getListTotalAmount(), grandTotal.getTotalAmount()),
-                                ApplicationDirector.getShoppingCart().getCurrencyCode(),
-                                true, true)
+                                customerOrder.getCurrency(),
+                                StringUtils.join(allPromos, ','), true, true)
                 );
 
     }

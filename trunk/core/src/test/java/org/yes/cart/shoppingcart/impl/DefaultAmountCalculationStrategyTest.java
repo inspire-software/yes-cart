@@ -20,12 +20,13 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.promotion.PromotionContext;
+import org.yes.cart.promotion.PromotionContextFactory;
+import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -47,7 +48,9 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateDeliveryNull() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
-        final BigDecimal delivery = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy).calculateDelivery(null);
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
+        final BigDecimal delivery = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateDelivery(null);
         assertEquals(BigDecimal.ZERO.compareTo(delivery), 0);
 
     }
@@ -57,12 +60,14 @@ public class DefaultAmountCalculationStrategyTest {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
         final CustomerOrderDelivery orderDelivery = context.mock(CustomerOrderDelivery.class, "orderDelivery");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         context.checking(new Expectations() {{
             one(orderDelivery).getPrice(); will(returnValue(null));
         }});
 
-        final BigDecimal delivery = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy).calculateDelivery(orderDelivery);
+        final BigDecimal delivery = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateDelivery(orderDelivery);
         assertEquals(BigDecimal.ZERO.compareTo(delivery), 0);
 
     }
@@ -72,12 +77,14 @@ public class DefaultAmountCalculationStrategyTest {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
         final CustomerOrderDelivery orderDelivery = context.mock(CustomerOrderDelivery.class, "orderDelivery");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         context.checking(new Expectations() {{
             allowing(orderDelivery).getPrice(); will(returnValue(new BigDecimal("9.99")));
         }});
 
-        final BigDecimal delivery = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy).calculateDelivery(orderDelivery);
+        final BigDecimal delivery = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateDelivery(orderDelivery);
         assertEquals(new BigDecimal("9.99").compareTo(delivery), 0);
 
     }
@@ -86,13 +93,15 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateTaxNull() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final BigDecimal amount = null;
 
-        final BigDecimal taxIncluded = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, true, deliveryCostCalculationStrategy).calculateTax(amount);
+        final BigDecimal taxIncluded = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateTax(amount);
         assertEquals(new BigDecimal("0").compareTo(taxIncluded), 0);
 
-        final BigDecimal taxExcluded = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, false, deliveryCostCalculationStrategy).calculateTax(amount);
+        final BigDecimal taxExcluded = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, false, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateTax(amount);
         assertEquals(new BigDecimal("0").compareTo(taxExcluded), 0);
 
     }
@@ -101,13 +110,15 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateTaxNone() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final BigDecimal amount = new BigDecimal("100.00");
 
-        final BigDecimal taxIncluded = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, true, deliveryCostCalculationStrategy).calculateTax(amount);
+        final BigDecimal taxIncluded = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateTax(amount);
         assertEquals(new BigDecimal("0").compareTo(taxIncluded), 0);
 
-        final BigDecimal taxExcluded = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, false, deliveryCostCalculationStrategy).calculateTax(amount);
+        final BigDecimal taxExcluded = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, false, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateTax(amount);
         assertEquals(new BigDecimal("0").compareTo(taxExcluded), 0);
 
     }
@@ -116,13 +127,15 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateTax() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final BigDecimal amount = new BigDecimal("100.00");
 
-        final BigDecimal taxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy).calculateTax(amount);
+        final BigDecimal taxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateTax(amount);
         assertEquals(new BigDecimal("16.67").compareTo(taxIncluded), 0);
 
-        final BigDecimal taxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy).calculateTax(amount);
+        final BigDecimal taxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateTax(amount);
         assertEquals(new BigDecimal("20.00").compareTo(taxExcluded), 0);
 
     }
@@ -131,15 +144,17 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateAmountNull() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final BigDecimal amount = null;
         final BigDecimal taxIncluded = new BigDecimal("16.67");
         final BigDecimal taxExcluded = new BigDecimal("20.00");
 
-        final BigDecimal amountTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy).calculateAmount(amount, taxIncluded);
+        final BigDecimal amountTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateAmount(amount, taxIncluded);
         assertEquals(BigDecimal.ZERO.compareTo(amountTaxIncluded), 0);
 
-        final BigDecimal amountTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy).calculateAmount(amount, taxExcluded);
+        final BigDecimal amountTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateAmount(amount, taxExcluded);
         assertEquals(BigDecimal.ZERO.compareTo(amountTaxExcluded), 0);
 
     }
@@ -148,15 +163,17 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateAmountTaxNull() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final BigDecimal amount = new BigDecimal("100.00");
         final BigDecimal taxIncluded = null;
         final BigDecimal taxExcluded = null;
 
-        final BigDecimal amountTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy).calculateAmount(amount, taxIncluded);
+        final BigDecimal amountTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateAmount(amount, taxIncluded);
         assertEquals(new BigDecimal("100").compareTo(amountTaxIncluded), 0);
 
-        final BigDecimal amountTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy).calculateAmount(amount, taxExcluded);
+        final BigDecimal amountTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateAmount(amount, taxExcluded);
         assertEquals(new BigDecimal("100").compareTo(amountTaxExcluded), 0);
 
     }
@@ -165,15 +182,17 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateAmount() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final BigDecimal amount = new BigDecimal("100.00");
         final BigDecimal taxIncluded = new BigDecimal("16.67");
         final BigDecimal taxExcluded = new BigDecimal("20.00");
 
-        final BigDecimal amountTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy).calculateAmount(amount, taxIncluded);
+        final BigDecimal amountTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateAmount(amount, taxIncluded);
         assertEquals(new BigDecimal("100").compareTo(amountTaxIncluded), 0);
 
-        final BigDecimal amountTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy).calculateAmount(amount, taxExcluded);
+        final BigDecimal amountTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateAmount(amount, taxExcluded);
         assertEquals(new BigDecimal("120.00").compareTo(amountTaxExcluded), 0);
 
     }
@@ -182,6 +201,8 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateSubTotal() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final CartItem item1 = context.mock(CartItem.class, "item1");
         final CartItem item2 = context.mock(CartItem.class, "item2");
@@ -198,7 +219,7 @@ public class DefaultAmountCalculationStrategyTest {
         }});
 
 
-        final DefaultAmountCalculationStrategy.CartItemPrices subTotal = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, true, deliveryCostCalculationStrategy)
+        final DefaultAmountCalculationStrategy.CartItemPrices subTotal = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService)
                 .calculateSubTotal(Arrays.asList(item1, item2));
         assertEquals(new BigDecimal("80").compareTo(subTotal.getFinalPrice()), 0);
         assertEquals(new BigDecimal("90").compareTo(subTotal.getSalePrice()), 0);
@@ -210,6 +231,8 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateSubTotalWithNullPrice() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final CartItem item1 = context.mock(CartItem.class, "item1");
         final CartItem item2 = context.mock(CartItem.class, "item2");
@@ -226,7 +249,7 @@ public class DefaultAmountCalculationStrategyTest {
         }});
 
 
-        final DefaultAmountCalculationStrategy.CartItemPrices subTotal = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, true, deliveryCostCalculationStrategy)
+        final DefaultAmountCalculationStrategy.CartItemPrices subTotal = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService)
                 .calculateSubTotal(Arrays.asList(item1, item2));
         assertEquals(new BigDecimal("40").compareTo(subTotal.getFinalPrice()), 0);
         assertEquals(new BigDecimal("40").compareTo(subTotal.getSalePrice()), 0);
@@ -239,6 +262,8 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateSubTotalQtyNull() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final CartItem item1 = context.mock(CartItem.class, "item1");
         final CartItem item2 = context.mock(CartItem.class, "item2");
@@ -255,7 +280,7 @@ public class DefaultAmountCalculationStrategyTest {
         }});
 
 
-        final DefaultAmountCalculationStrategy.CartItemPrices subTotal = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, true, deliveryCostCalculationStrategy)
+        final DefaultAmountCalculationStrategy.CartItemPrices subTotal = new DefaultAmountCalculationStrategy(BigDecimal.ZERO, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService)
                 .calculateSubTotal(Arrays.asList(item1, item2));
         assertEquals(new BigDecimal("40").compareTo(subTotal.getFinalPrice()), 0);
         assertEquals(new BigDecimal("50").compareTo(subTotal.getSalePrice()), 0);
@@ -267,6 +292,8 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateInternal() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final CartItem item1 = context.mock(CartItem.class, "item1");
         final CartItem item2 = context.mock(CartItem.class, "item2");
@@ -289,7 +316,7 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
         }});
 
-        final Total rezTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy).calculate(orderDelivery);
+        final Total rezTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculate(orderDelivery);
 
         assertEquals("Was: " + rezTaxIncluded.getListSubTotal(), new BigDecimal("90").compareTo(rezTaxIncluded.getListSubTotal()), 0);
         assertEquals("Was: " + rezTaxIncluded.getSaleSubTotal(), new BigDecimal("85").compareTo(rezTaxIncluded.getSaleSubTotal()), 0);
@@ -310,7 +337,7 @@ public class DefaultAmountCalculationStrategyTest {
         assertEquals("Was: " + rezTaxIncluded.getTotalAmount(), new BigDecimal("90").compareTo(rezTaxIncluded.getTotalAmount()), 0);
         assertEquals("Was: " + rezTaxIncluded.getTotalTax(), new BigDecimal("15").compareTo(rezTaxIncluded.getTotalTax()), 0);
 
-        final Total rezTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy).calculate(orderDelivery);
+        final Total rezTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculate(orderDelivery);
 
         assertEquals("Was: " + rezTaxExcluded.getListSubTotal(), new BigDecimal("90").compareTo(rezTaxExcluded.getListSubTotal()), 0);
         assertEquals("Was: " + rezTaxExcluded.getSaleSubTotal(), new BigDecimal("85").compareTo(rezTaxExcluded.getSaleSubTotal()), 0);
@@ -337,6 +364,8 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateSingleDelivery() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final CartItem item1 = context.mock(CartItem.class, "item1");
         final CartItem item2 = context.mock(CartItem.class, "item2");
@@ -360,7 +389,7 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
         }});
 
-        final Total rezTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy).calculate(order, orderDelivery);
+        final Total rezTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculate(order, orderDelivery);
 
         assertEquals("Was: " + rezTaxIncluded.getListSubTotal(), new BigDecimal("90").compareTo(rezTaxIncluded.getListSubTotal()), 0);
         assertEquals("Was: " + rezTaxIncluded.getSaleSubTotal(), new BigDecimal("85").compareTo(rezTaxIncluded.getSaleSubTotal()), 0);
@@ -381,7 +410,7 @@ public class DefaultAmountCalculationStrategyTest {
         assertEquals("Was: " + rezTaxIncluded.getTotalAmount(), new BigDecimal("90").compareTo(rezTaxIncluded.getTotalAmount()), 0);
         assertEquals("Was: " + rezTaxIncluded.getTotalTax(), new BigDecimal("15").compareTo(rezTaxIncluded.getTotalTax()), 0);
 
-        final Total rezTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy).calculate(order, orderDelivery);
+        final Total rezTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculate(order, orderDelivery);
 
         assertEquals("Was: " + rezTaxExcluded.getListSubTotal(), new BigDecimal("90").compareTo(rezTaxExcluded.getListSubTotal()), 0);
         assertEquals("Was: " + rezTaxExcluded.getSaleSubTotal(), new BigDecimal("85").compareTo(rezTaxExcluded.getSaleSubTotal()), 0);
@@ -408,6 +437,8 @@ public class DefaultAmountCalculationStrategyTest {
     public void testCalculateMultiDelivery() throws Exception {
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final CartItem item1 = context.mock(CartItem.class, "item1");
         final CartItem item2 = context.mock(CartItem.class, "item2");
@@ -442,7 +473,7 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
         }});
 
-        final Total rezTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy).calculate(order);
+        final Total rezTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculate(order);
 
         assertEquals("Was: " + rezTaxIncluded.getListSubTotal(), new BigDecimal("90").compareTo(rezTaxIncluded.getListSubTotal()), 0);
         assertEquals("Was: " + rezTaxIncluded.getSaleSubTotal(), new BigDecimal("85").compareTo(rezTaxIncluded.getSaleSubTotal()), 0);
@@ -463,7 +494,7 @@ public class DefaultAmountCalculationStrategyTest {
         assertEquals("Was: " + rezTaxIncluded.getTotalAmount(), new BigDecimal("80").compareTo(rezTaxIncluded.getTotalAmount()), 0);
         assertEquals("Was: " + rezTaxIncluded.getTotalTax(), new BigDecimal("13.34").compareTo(rezTaxIncluded.getTotalTax()), 0);
 
-        final Total rezTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy).calculate(order);
+        final Total rezTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculate(order);
 
         assertEquals("Was: " + rezTaxExcluded.getListSubTotal(), new BigDecimal("90").compareTo(rezTaxExcluded.getListSubTotal()), 0);
         assertEquals("Was: " + rezTaxExcluded.getSaleSubTotal(), new BigDecimal("85").compareTo(rezTaxExcluded.getSaleSubTotal()), 0);
@@ -491,14 +522,26 @@ public class DefaultAmountCalculationStrategyTest {
 
 
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
 
         final CartItem item1 = context.mock(CartItem.class, "item1");
         final CartItem item2 = context.mock(CartItem.class, "item2");
 
         final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext shoppingContext = context.mock(ShoppingContext.class, "ctx");
+        final Customer customer = context.mock(Customer.class, "customer");
+
+        final PromotionContext promotionContext = context.mock(PromotionContext.class, "promoCtx");
 
         context.checking(new Expectations() {{
             allowing(deliveryCostCalculationStrategy).getDeliveryPrice(cart); will(returnValue(new BigDecimal("20.00")));
+            allowing(promotionContextFactory).getInstance("SHOP10", "EUR"); will(returnValue(promotionContext));
+            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(customerService).findCustomer("bob@doe.com"); will(returnValue(customer));
+            allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
+            allowing(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2)));
             allowing(item1).getPrice(); will(returnValue(new BigDecimal("20.00")));
             allowing(item1).getSalePrice(); will(returnValue(new BigDecimal("22.50")));
@@ -510,7 +553,31 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
         }});
 
-        final Total rezTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy).calculate(cart);
+        final Total rezTaxIncluded = new DefaultAmountCalculationStrategy(TAX, true, deliveryCostCalculationStrategy, promotionContextFactory, customerService) {
+
+            @Override
+            void applyItemLevelPromotions(final Customer cust, final ShoppingCart scart, final PromotionContext promoCtx) {
+                assertSame(customer, cust);
+                assertSame(cart, scart);
+                assertSame(promotionContext, promoCtx);
+            }
+
+            @Override
+            Total applyOrderLevelPromotions(final Customer cust, final ShoppingCart scart, final Total itemTotal, final PromotionContext promoCtx) {
+                assertSame(customer, cust);
+                assertSame(cart, scart);
+                assertSame(promotionContext, promoCtx);
+                return itemTotal;
+            }
+
+            @Override
+            Total applyShippingPromotions(final Customer cust, final ShoppingCart scart, final Total orderTotal, final PromotionContext promoCtx) {
+                assertSame(customer, cust);
+                assertSame(cart, scart);
+                assertSame(promotionContext, promoCtx);
+                return orderTotal;
+            }
+        }.calculate(cart);
 
         assertEquals("Was: " + rezTaxIncluded.getListSubTotal(), new BigDecimal("90").compareTo(rezTaxIncluded.getListSubTotal()), 0);
         assertEquals("Was: " + rezTaxIncluded.getSaleSubTotal(), new BigDecimal("85").compareTo(rezTaxIncluded.getSaleSubTotal()), 0);
@@ -529,9 +596,33 @@ public class DefaultAmountCalculationStrategyTest {
         assertEquals("Was: " + rezTaxIncluded.getTotal(), new BigDecimal("100").compareTo(rezTaxIncluded.getTotal()), 0);
         assertEquals("Was: " + rezTaxIncluded.getListTotalAmount(), new BigDecimal("110").compareTo(rezTaxIncluded.getListTotalAmount()), 0);
         assertEquals("Was: " + rezTaxIncluded.getTotalAmount(), new BigDecimal("100").compareTo(rezTaxIncluded.getTotalAmount()), 0);
-        assertEquals("Was: " + rezTaxIncluded.getTotalTax(), new BigDecimal("16.66").compareTo(rezTaxIncluded.getTotalTax()), 0);
+        assertEquals("Was: " + rezTaxIncluded.getTotalTax(), new BigDecimal("16.67").compareTo(rezTaxIncluded.getTotalTax()), 0);
 
-        final Total rezTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy).calculate(cart);
+        final Total rezTaxExcluded = new DefaultAmountCalculationStrategy(TAX, false, deliveryCostCalculationStrategy, promotionContextFactory, customerService) {
+
+            @Override
+            void applyItemLevelPromotions(final Customer cust, final ShoppingCart scart, final PromotionContext promoCtx) {
+                assertSame(customer, cust);
+                assertSame(cart, scart);
+                assertSame(promotionContext, promoCtx);
+            }
+
+            @Override
+            Total applyOrderLevelPromotions(final Customer cust, final ShoppingCart scart, final Total itemTotal, final PromotionContext promoCtx) {
+                assertSame(customer, cust);
+                assertSame(cart, scart);
+                assertSame(promotionContext, promoCtx);
+                return itemTotal;
+            }
+
+            @Override
+            Total applyShippingPromotions(final Customer cust, final ShoppingCart scart, final Total orderTotal, final PromotionContext promoCtx) {
+                assertSame(customer, cust);
+                assertSame(cart, scart);
+                assertSame(promotionContext, promoCtx);
+                return orderTotal;
+            }
+        }.calculate(cart);
 
         assertEquals("Was: " + rezTaxExcluded.getListSubTotal(), new BigDecimal("90").compareTo(rezTaxExcluded.getListSubTotal()), 0);
         assertEquals("Was: " + rezTaxExcluded.getSaleSubTotal(), new BigDecimal("85").compareTo(rezTaxExcluded.getSaleSubTotal()), 0);

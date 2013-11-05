@@ -54,6 +54,9 @@ public class PromotionDTOImpl implements PromotionDTO {
     @DtoField(value = "tag")
     private String tag;
 
+    @DtoField(value = "rank")
+    private int rank;
+
     @DtoField(value = "name")
     private String name;
     @DtoField(value = "description")
@@ -247,4 +250,13 @@ public class PromotionDTOImpl implements PromotionDTO {
         this.enabledTo = enabledTo;
     }
 
+    /** {@inheritDoc} */
+    public int getRank() {
+        return rank;
+    }
+
+    /** {@inheritDoc} */
+    public void setRank(final int rank) {
+        this.rank = rank;
+    }
 }

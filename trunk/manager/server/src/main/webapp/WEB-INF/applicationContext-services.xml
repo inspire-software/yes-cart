@@ -645,6 +645,7 @@
                         <value>state.xml</value>
                         <value>carriernames.xml</value>
                         <value>carrierslanames.xml</value>
+                        <value>promotionnames.xml</value>
                     </list>
                 </entry>
                 <entry key="YC DEMO: IceCat Catalog">
@@ -701,9 +702,10 @@
                         <value>skuinventory.xml</value>
                     </list>
                 </entry>
-                <entry key="Prices import">
+                <entry key="Prices and Promotions import">
                     <list>
                         <value>skuprices.xml</value>
+                        <value>promotionnames.xml</value>
                     </list>
                 </entry>
                 <entry key="IMAGES ONLY">

@@ -609,7 +609,7 @@
     create table TSHOP (
         SHOP_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        CODE varchar(255) not null,
+        CODE varchar(255) not null unique,
         NAME varchar(64) not null,
         DESCRIPTION longtext,
         FSPOINTER longtext not null comment 'Point to jsps',
@@ -867,7 +867,8 @@
     create table TPROMOTION (
         PROMOTION_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        CODE varchar(255) not null,
+        CODE varchar(255) not null unique,
+        RANK integer default 500,
         SHOP_CODE varchar(255) not null,
         CURRENCY varchar(5) not null,
         PROMO_TYPE varchar(1) not null,
@@ -1167,10 +1168,6 @@
     create index ROLE_CODE on TROLE (CODE);
 
 
-    create index SHOP_CODE on TSHOP (CODE);
-
-
-
     alter table TSHOPADVPLACE 
         add index FK_ADVP_SHOP (SHOP_ID), 
         add constraint FK_ADVP_SHOP 
@@ -1305,7 +1302,6 @@
 
     create index PROMO_SHOP_CODE on TPROMOTION (SHOP_CODE);
     create index PROMO_CURRENCY on TPROMOTION (CURRENCY);
-    create index PROMO_CODE on TPROMOTION (CODE);
     create index PROMO_PTYPE on TPROMOTION (PROMO_TYPE);
     create index PROMO_PACTION on TPROMOTION (PROMO_ACTION);
     create index PROMO_ENABLED on TPROMOTION (ENABLED);

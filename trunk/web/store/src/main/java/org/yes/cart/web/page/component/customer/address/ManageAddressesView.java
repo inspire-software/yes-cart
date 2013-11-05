@@ -28,18 +28,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.service.domain.AddressService;
-import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
-
-import java.util.List;
 
 /**
  * Igor Azarny iazarny@yahoo.com

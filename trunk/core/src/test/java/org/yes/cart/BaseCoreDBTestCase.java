@@ -80,12 +80,16 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         //sharedContext =  null;
     }
 
-    protected ShoppingCart getEmptyCart(String prefix) {
+    protected ShoppingCart getEmptyCartByPrefix(String prefix) {
+        return getEmptyCart(prefix + "jd@domain.com");
+    }
+
+    protected ShoppingCart getEmptyCart(String email) {
         ShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         Map<String, String> params = new HashMap<String, String>();
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, prefix + "jd@domain.com");
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, prefix + "John Doe");
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, email);
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -111,7 +115,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         };
         final String firstCode = skuCodeSet[skuCodeSetIdx][0];
         final String secondCode = skuCodeSet[skuCodeSetIdx][1];
-        ShoppingCart shoppingCart = getEmptyCart(prefix);
+        ShoppingCart shoppingCart = getEmptyCartByPrefix(prefix);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         // this digital product available
@@ -134,7 +138,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
      */
     protected ShoppingCart getShoppingCart() {
         String prefix = getTestName();
-        ShoppingCart shoppingCart = getEmptyCart(prefix);
+        ShoppingCart shoppingCart = getEmptyCartByPrefix(prefix);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         Map<String, String> param = new HashMap<String, String>();

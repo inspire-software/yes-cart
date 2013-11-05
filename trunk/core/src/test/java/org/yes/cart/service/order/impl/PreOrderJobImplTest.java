@@ -72,7 +72,7 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
         productService.update(product);
 
         final Customer customer = createCustomer();
-        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems("pre", 2);
+        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 2);
 
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());

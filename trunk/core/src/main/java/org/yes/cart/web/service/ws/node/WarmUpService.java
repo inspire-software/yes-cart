@@ -29,6 +29,6 @@ public interface WarmUpService {
     /**
      * Perform the server warm up.
      */
-    void warmpUp();
+    void warmUp();
 
 }

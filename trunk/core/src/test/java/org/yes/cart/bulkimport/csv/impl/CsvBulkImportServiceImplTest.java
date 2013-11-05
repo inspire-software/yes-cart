@@ -567,6 +567,22 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
             assertEquals(60L + cntBeforeProductCategory, cntProductCategory);   // 60 new + 27 initialdata.xml
 
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPROMOTION  ");
+            rs.next();
+            long cntBeforePromotion = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/promotionnames.xml", listener, importedFilesSet));
+            final long promos = System.currentTimeMillis() - dt;
+            System.out.println("   8 promotions in " + promos + "millis (~" + (promos / 8) + " per item)");
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPROMOTION  ");
+            rs.next();
+            long cntPromotions = rs.getLong(1);
+            rs.close();
+            assertEquals(8L + cntBeforePromotion, cntPromotions);   // 3 new
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {
@@ -577,7 +593,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
                     "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY", "TCATEGORYATTRVALUE",
                     "TPRODTYPEATTRVIEWGROUP" ,
-                    "TSHOPCATEGORY"
+                    "TSHOPCATEGORY", "TPROMOTION"
             });
         }
 
@@ -676,13 +692,13 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             assertEquals(3, cntNewCarries);
 
-            //sla for UPS only + 3 from initialdata.xml, not for  new vasuki carrier
+            //sla for UPS only + 4 from initialdata.xml, not for  new vasuki carrier
             rs = getConnection().getConnection().createStatement().executeQuery(
                     "select count(*) as cnt from TCARRIERSLA");
             rs.next();
             int cntCarriesSlas = rs.getInt("cnt");
             rs.close();
-            assertEquals(4, cntCarriesSlas);
+            assertEquals(5, cntCarriesSlas);
 
 
         } catch (Exception e) {

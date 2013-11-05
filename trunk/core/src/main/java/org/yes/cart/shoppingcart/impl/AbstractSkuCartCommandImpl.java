@@ -126,7 +126,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
                 // particular sku command
                 final String skuCode = productSku.getCode();
 
-                int skuIdx = shoppingCart.indexOf(skuCode);
+                int skuIdx = shoppingCart.indexOfProductSku(skuCode);
 
                 if (skuIdx != -1) {
 

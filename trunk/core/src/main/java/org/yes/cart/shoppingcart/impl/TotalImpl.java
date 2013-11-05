@@ -33,8 +33,6 @@ public class TotalImpl implements Total {
 
     private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
-    //20% vat = item*20/120
-
     private BigDecimal listSubTotal;
     private BigDecimal saleSubTotal;
     private BigDecimal priceSubTotal;
@@ -213,45 +211,44 @@ public class TotalImpl implements Total {
                 listTotalAmount,
                 totalAmount);
 
-        sum.listSubTotal = sum.listSubTotal.add(summand.getListSubTotal());
-        sum.saleSubTotal = sum.saleSubTotal.add(summand.getSaleSubTotal());
-        sum.priceSubTotal = sum.priceSubTotal.add(summand.getPriceSubTotal());
+        sum.listSubTotal = sum.listSubTotal.add(summand.getListSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.saleSubTotal = sum.saleSubTotal.add(summand.getSaleSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.priceSubTotal = sum.priceSubTotal.add(summand.getPriceSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         sum.orderPromoApplied = sum.orderPromoApplied || summand.isOrderPromoApplied();
         sum.appliedOrderPromo = mergePromo(sum.appliedOrderPromo, summand.getAppliedOrderPromo());
-        sum.subTotal = sum.subTotal.add(summand.getSubTotal());
-        sum.subTotalTax = sum.subTotalTax.add(summand.getSubTotalTax());
-        sum.subTotalAmount = sum.subTotalAmount.add(summand.getSubTotalAmount());
-        sum.deliveryListCost = sum.deliveryListCost.add(summand.getDeliveryListCost());
-        sum.deliveryCost = sum.deliveryCost.add(summand.getDeliveryCost());
+        sum.subTotal = sum.subTotal.add(summand.getSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.subTotalTax = sum.subTotalTax.add(summand.getSubTotalTax()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.subTotalAmount = sum.subTotalAmount.add(summand.getSubTotalAmount()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.deliveryListCost = sum.deliveryListCost.add(summand.getDeliveryListCost()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.deliveryCost = sum.deliveryCost.add(summand.getDeliveryCost()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         sum.deliveryPromoApplied = sum.deliveryPromoApplied || summand.isDeliveryPromoApplied();
         sum.appliedDeliveryPromo = mergePromo(sum.appliedDeliveryPromo, summand.getAppliedDeliveryPromo());
-        sum.deliveryTax = sum.deliveryTax.add(summand.getDeliveryTax());
-        sum.deliveryCostAmount = sum.deliveryCostAmount.add(summand.getDeliveryCostAmount());
-        sum.total = sum.total.add(summand.getTotal());
-        sum.totalTax = sum.totalTax.add(summand.getTotalTax());
-        sum.listTotalAmount = sum.listTotalAmount.add(summand.getListTotalAmount());
-        sum.totalAmount = sum.totalAmount.add(summand.getTotalAmount());
+        sum.deliveryTax = sum.deliveryTax.add(summand.getDeliveryTax()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.deliveryCostAmount = sum.deliveryCostAmount.add(summand.getDeliveryCostAmount()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.total = sum.total.add(summand.getTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.totalTax = sum.totalTax.add(summand.getTotalTax()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.listTotalAmount = sum.listTotalAmount.add(summand.getListTotalAmount()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.totalAmount = sum.totalAmount.add(summand.getTotalAmount()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         return sum;
     }
 
     String mergePromo(String first, String second) {
-        if (StringUtils.isBlank(first)) {
-            if (StringUtils.isBlank(second)) {
-                return null;
-            }
-            return second;
-        } else if (StringUtils.isBlank(second)) {
-            return first;
+        if (StringUtils.isBlank(first) && StringUtils.isBlank(second)) {
+            return null;
         }
         final Set<String> unique = new HashSet<String>();
-        for (final String item : StringUtils.split(first, ',')) {
-            if (StringUtils.isNotBlank(second)) {
-                unique.add(item);
+        if (StringUtils.isNotBlank(first)) {
+            for (final String item : StringUtils.split(first, ',')) {
+                if (StringUtils.isNotBlank(item)) {
+                    unique.add(item);
+                }
             }
         }
-        for (final String item : StringUtils.split(second, ',')) {
-            if (StringUtils.isNotBlank(second)) {
-                unique.add(item);
+        if (StringUtils.isNotBlank(second)) {
+            for (final String item : StringUtils.split(second, ',')) {
+                if (StringUtils.isNotBlank(item)) {
+                    unique.add(item);
+                }
             }
         }
         return StringUtils.join(unique, ',');

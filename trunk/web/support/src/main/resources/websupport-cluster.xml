@@ -63,6 +63,8 @@
         <constructor-arg index="3" ref="productService"/>
         <constructor-arg index="4" ref="shopService"/>
         <constructor-arg index="5" ref="addressBookFacade"/>
+        <constructor-arg index="6" ref="promotionService"/>
+        <constructor-arg index="7" ref="promotionConditionParser"/>
     </bean>
 
     <bean id="backDoorBean" parent="txProxyTemplate">

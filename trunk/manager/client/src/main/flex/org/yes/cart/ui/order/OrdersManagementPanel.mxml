@@ -375,6 +375,10 @@
                                                    dataField="listPrice" width="80"
                                         />
                                 <mx:DataGridColumn
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='salePrice')"
+                                                   dataField="salePrice" width="80"
+                                        />
+                                <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
                                                    dataField="invoicePrice" width="80"
                                         />

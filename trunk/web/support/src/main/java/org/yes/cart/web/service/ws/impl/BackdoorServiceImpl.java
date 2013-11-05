@@ -103,7 +103,7 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
      */
     @Override
     public void warmUp() {
-        warmUpService.warmpUp();
+        warmUpService.warmUp();
     }
 
     /**

@@ -18,7 +18,6 @@ package org.yes.cart.web.page.component.cart;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -88,8 +87,9 @@ public class SmallShoppingCartView extends BaseComponent {
         add(
                 new PriceView(
                         SUB_TOTAL_VIEW,
-                        new Model<SkuPrice>(skuPrice),
-                        true, false
+                        cart.getTotal().getSubTotal(),
+                        cart.getCurrencyCode(),
+                        true
                 ).setVisible(!isCartEmpty())
         );
 
