@@ -69,7 +69,7 @@ public class DtoProductTypeAttrServiceImpl
      * {@inheritDoc}
      */
     public ProductTypeAttrDTO update(final ProductTypeAttrDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ProductTypeAttr productTypeAttr = service.getById(instance.getProductTypeAttrId());
+        ProductTypeAttr productTypeAttr = service.findById(instance.getProductTypeAttrId());
         assembler.assembleEntity(instance, productTypeAttr, getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(getEntityFactory()));
         productTypeAttr = service.update(productTypeAttr);

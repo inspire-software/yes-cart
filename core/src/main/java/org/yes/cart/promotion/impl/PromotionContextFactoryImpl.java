@@ -86,13 +86,13 @@ public class PromotionContextFactoryImpl implements PromotionContextFactory {
 
     /** {@inheritDoc} */
     public PromotionContext getInstance(final long shopId, final String currency) {
-        final Shop shop = shopService.findById(shopId);
+        final Shop shop = shopService.getById(shopId);
         return proxy().getInstance(shop.getCode(), currency);
     }
 
     /** {@inheritDoc} */
     public PromotionContext getInstance(final long shopId, final String currency, final boolean ensureNew) {
-        final Shop shop = shopService.findById(shopId);
+        final Shop shop = shopService.getById(shopId);
         return getInstance(shop.getCode(), currency, ensureNew);
     }
 

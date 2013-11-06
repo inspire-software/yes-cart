@@ -22,6 +22,8 @@ import org.hibernate.Hibernate;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
@@ -72,7 +74,8 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * @param email email
      * @return {@link Customer}
      */
-    public Customer findCustomer(final String email) {
+    @Cacheable(value = "customerService-customerByEmail")
+    public Customer getCustomerByEmail(final String email) {
         Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("email", email));
         Hibernate.initialize(customer.getAttributes());
         for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
@@ -165,6 +168,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * @param attributeCode  given attribute code
      * @param attributeValue given attribute value
      */
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, key = "#customer.email")
     public void addAttribute(final Customer customer, final String attributeCode, final String attributeValue) {
         if (StringUtils.isNotBlank(attributeValue)) {
             AttrValueCustomer attrVal = customer.getAttributeByCode(attributeCode);
@@ -214,6 +220,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+        "customerService-customerByEmail"
+    }, allEntries = false, key = "#customer.email")
     public Customer create(final Customer customer, final Shop shop) {
         if (shop != null) {
             final CustomerShop customerShop = getGenericDao().getEntityFactory().getByIface(CustomerShop.class);
@@ -235,10 +244,13 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    public void delete(final Customer instance) {
-        for(CustomerShop cshop : instance.getShops()) {
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, key = "#customer.email")
+    public void delete(final Customer customer) {
+        for(CustomerShop cshop : customer.getShops()) {
             customerShopDao.delete(cshop);
         }
-        super.delete(instance);
+        super.delete(customer);
     }
 }

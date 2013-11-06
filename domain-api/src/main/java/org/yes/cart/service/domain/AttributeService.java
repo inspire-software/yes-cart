@@ -102,7 +102,7 @@ public interface AttributeService extends GenericService<Attribute> {
      * @param productTypeId given product ype id
      * @return list of attributes
      */
-    List<Attribute> findAvailableAttributesByProductTypeId(long productTypeId);
+    List<Attribute> getAvailableAttributesByProductTypeId(long productTypeId);
 
     /**
      * Get the list of image attributes , that belong to product type.
@@ -110,7 +110,7 @@ public interface AttributeService extends GenericService<Attribute> {
      * @param attributeGroupCode     see AttributeGroup#code
      * @return list of attributes
      */
-    List<Attribute> findAvailableImageAttributesByGroupCode(String attributeGroupCode);
+    List<Attribute> getAvailableImageAttributesByGroupCode(String attributeGroupCode);
 
 
     /**

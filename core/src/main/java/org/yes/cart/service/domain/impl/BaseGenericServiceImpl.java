@@ -46,7 +46,7 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     /**
      * {@inheritDoc}
      */
-    public ENTITY getById(final long pk) {
+    public ENTITY findById(final long pk) {
         return genericDao.findById(pk);
     }
 

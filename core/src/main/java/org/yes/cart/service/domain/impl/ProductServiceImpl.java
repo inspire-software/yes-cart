@@ -91,12 +91,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         this.dtoFactory = dtoFactory;
     }
 
-
-    /** {@inheritDoc} */
-    public Product getById(final Long productId) {
-        return productDao.findById(productId);
-    }
-
     /** {@inheritDoc} */
     public ProductSku getSkuById(final Long skuId) {
         return proxy().getSkuById(skuId, false);
@@ -119,7 +113,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param productId given id, which identify product
      * @return image file name if found.
      */
-    @Cacheable(value = {"productService-defaultImage"})
+    @Cacheable(value = "productService-defaultImage")
     public String getDefaultImage(final Long productId) {
         final Map<Long, String> images = proxy().getAllProductsAttributeValues(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME);
         return images.get(productId);
@@ -497,7 +491,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productService-productQty")
+    @Cacheable(value = "productService-productQtyByQuery")
     public int getProductQty(final Query query) {
         return productDao.getResultCount(query);
     }
@@ -760,7 +754,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productService-productQty2")
+    @Cacheable(value = "productService-productQtyByCategoryId")
     public int getProductQty(final long categoryId) {
         return Integer.valueOf(
                 String.valueOf(productDao.getScalarResultByNamedQuery("PRODUCTS.QTY.BY.CATEGORYID", categoryId, new Date())));  //TODO: V2 time machine
@@ -785,7 +779,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     public int reindexProductSku(final Long pk) {
-        final ProductSku productSku = productSkuService.getById(pk);
+        final ProductSku productSku = productSkuService.findById(pk);
         if (productSku != null) {
             return productDao.fullTextSearchReindex(productSku.getProduct().getProductId());
         }
@@ -796,7 +790,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     public int reindexProductSku(final String code) {
-        final ProductSku productSku = productSkuService.getProductSkuBySkuCodeForIndexing(code);
+        final ProductSku productSku = productSkuService.findProductSkuBySkuCode(code);
         if (productSku != null) {
             return productDao.fullTextSearchReindex(productSku.getProduct().getProductId());
         }
@@ -855,11 +849,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             "productService-newArrivalsProductInCategory",
             "productService-productByQuery",
             "productService-productSearchResultDTOByQuery",
-            "productService-productQty",
+            "productService-productQtyByQuery",
             "productService-productByIdList",
             "productService-distinctAttributeValues",
             "productService-distinctBrands",
-            "productService-productQty2"
+            "productService-productQtyByCategoryId"
 
     }, allEntries = true)
     public Product create(final Product instance) {
@@ -891,11 +885,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             "productService-newArrivalsProductInCategory",
             "productService-productByQuery",
             "productService-productSearchResultDTOByQuery",
-            "productService-productQty",
+            "productService-productQtyByQuery",
             "productService-distinctAttributeValues",
             "productService-distinctBrands",
             "productService-productByIdList",
-            "productService-productQty2"
+            "productService-productQtyByCategoryId"
 
     }, allEntries = true)
     public Product update(Product instance) {
@@ -917,11 +911,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             "productService-newArrivalsProductInCategory",
             "productService-productByQuery",
             "productService-productSearchResultDTOByQuery",
-            "productService-productQty",
+            "productService-productQtyByQuery",
             "productService-distinctAttributeValues",
             "productService-distinctBrands",
             "productService-productByIdList",
-            "productService-productQty2"
+            "productService-productQtyByCategoryId"
 
     }, allEntries = true)
     public void delete(Product instance) {

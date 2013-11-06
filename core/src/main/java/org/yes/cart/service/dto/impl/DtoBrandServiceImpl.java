@@ -143,9 +143,9 @@ public class DtoBrandServiceImpl
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueBrand valueEntityBrand = getEntityFactory().getByIface(AttrValueBrand.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityBrand, getAdaptersRepository(), dtoFactory);
-        Attribute atr = ((GenericService<Attribute>)dtoAttributeService.getService()).getById(attrValueDTO.getAttributeDTO().getAttributeId());
+        Attribute atr = ((GenericService<Attribute>)dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntityBrand.setAttribute(atr);
-        valueEntityBrand.setBrand(service.getById(((AttrValueBrandDTO) attrValueDTO).getBrandId()));
+        valueEntityBrand.setBrand(service.findById(((AttrValueBrandDTO) attrValueDTO).getBrandId()));
         valueEntityBrand = attrValueEntityBrandDao.create((AttrValueEntityBrand) valueEntityBrand);
         attrValueDTO.setAttrvalueId(valueEntityBrand.getAttrvalueId());
         return attrValueDTO;

@@ -182,7 +182,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentAttributeRecursive2" )
+    @Cacheable(value = "contentService-contentAttributesRecursive" )
     public String[] getContentAttributeRecursive(final String locale, final Category incontent, final String[] attributeNames) {
         final String[] rez;
         final Category content;
@@ -264,13 +264,13 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @Cacheable(value = "contentService-childContent")
     public List<Category> getChildContent(final long contentId) {
-        return getChildContentWithAvailability(contentId, true);
+        return findChildContentWithAvailability(contentId, true);
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<Category> getChildContentWithAvailability(final long contentId, final boolean withAvailability) {
+    public List<Category> findChildContentWithAvailability(final long contentId, final boolean withAvailability) {
         if (withAvailability) {
             return categoryDao.findByNamedQuery(
                     "CATEGORIES.BY.PARENTID",
@@ -333,7 +333,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    public Long getContentIdBySeoUri(final String seoUri) {
+    public Long findContentIdBySeoUri(final String seoUri) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("CATEGORY.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
             final Object id = list.get(0);
@@ -347,7 +347,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    public String getSeoUriByContentId(final Long contentId) {
+    public String findSeoUriByContentId(final Long contentId) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("SEO.URI.BY.CATEGORY.ID", contentId);
         if (list != null && !list.isEmpty()) {
             final Object uri = list.get(0);
@@ -396,7 +396,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     @CacheEvict(value = {
             "contentService-rootContent",
             "contentService-contentAttributeRecursive",
-            "contentService-contentAttributeRecursive2",
+            "contentService-contentAttributesRecursive",
             "contentService-childContent",
             "contentService-childContentRecursive",
             "contentService-byId",
@@ -417,7 +417,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             "contentService-itemsPerPage",
             "contentService-contentBody" ,
             "contentService-contentAttributeRecursive",
-            "contentService-contentAttributeRecursive2",
+            "contentService-contentAttributesRecursive",
             "contentService-childContent",
             "contentService-childContentRecursive",
             "contentService-byId",
@@ -437,7 +437,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             "contentService-itemsPerPage",
             "contentService-contentBody" ,
             "contentService-contentAttributeRecursive",
-            "contentService-contentAttributeRecursive2",
+            "contentService-contentAttributesRecursive",
             "contentService-childContent",
             "contentService-childContentRecursive",
             "contentService-byId",

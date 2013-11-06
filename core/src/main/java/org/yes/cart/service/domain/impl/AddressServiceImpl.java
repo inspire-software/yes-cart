@@ -17,6 +17,7 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.service.domain.AddressService;
@@ -56,10 +57,11 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
 
 
     /**
-     * The new address is default.
-     * @param instance instance to persist
-     * @return persisted instance of address.
+     * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, key = "#instance.customer.email")
     public Address create(final Address instance) {
         setDefault(instance);
         return super.create(instance);
@@ -67,15 +69,35 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
 
 
     /**
-     * Set given address as default inside address type group.
-     * @param instance instance to update
-     * @return persisted instance of address.
+     * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, key = "#instance.customer.email")
     public Address updateSetDefault(final Address instance) {
         setDefault(instance);
         return super.update(instance);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, key = "#instance.customer.email")
+    public Address update(final Address instance) {
+        return super.update(instance);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, key = "#instance.customer.email")
+    public void delete(final Address instance) {
+        super.delete(instance);
+    }
 
     private void setDefault(final Address instance) {
         getGenericDao().executeUpdate(

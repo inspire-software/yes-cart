@@ -34,7 +34,7 @@ public interface ProductAssociationService
      * @param productId product primary key
      * @return list of product associations
      */
-    List<ProductAssociation> getProductAssociations(Long productId);
+    List<ProductAssociation> findProductAssociations(Long productId);
 
     /**
      * Get all product associations by association type.
@@ -43,7 +43,7 @@ public interface ProductAssociationService
      * @param associationCode association code [up, cross, etc]
      * @return list of product associations
      */
-    List<ProductAssociation> getProductAssociations(Long productId, String associationCode);
+    List<ProductAssociation> findProductAssociations(Long productId, String associationCode);
 
     /**
      * Get all product associations by association type.

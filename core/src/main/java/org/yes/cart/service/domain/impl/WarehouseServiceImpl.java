@@ -55,7 +55,7 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
 
     /** {@inheritDoc} */
     @Cacheable(value = "shopService-shopWarehouses"/*, key ="shop.getShopId()"*/)
-    public List<Warehouse> findByShopId(final long shopId) {
+    public List<Warehouse> getByShopId(final long shopId) {
         return getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shopId);
     }
 
@@ -78,12 +78,12 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     @CacheEvict(value = {
             "shopService-shopWarehouses",
             "shopService-shopWarehousesIds",
-            "skuWarehouseService-findProductOnWarehouse",
-            "skuWarehouseService-findProductSkusOnWarehouse"
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public ShopWarehouse assignWarehouse(final long warehouseId, final long shopId) {
         final ShopWarehouse shopWarehouse = shopWarehouseDao.getEntityFactory().getByIface(ShopWarehouse.class);
-        shopWarehouse.setWarehouse(getById(warehouseId));
+        shopWarehouse.setWarehouse(findById(warehouseId));
         shopWarehouse.setShop(shopDao.findById(shopId));
         shopWarehouse.setRank(DEFAULT_USAGE_RANK);
         return shopWarehouseDao.create(shopWarehouse);
@@ -93,8 +93,8 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     @CacheEvict(value = {
             "shopService-shopWarehouses",
             "shopService-shopWarehousesIds",
-            "skuWarehouseService-findProductOnWarehouse",
-            "skuWarehouseService-findProductSkusOnWarehouse"
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public void unassignWarehouse(final long warehouseId, final long shopId) {
         final ShopWarehouse shopWarehouse = shopWarehouseDao.findSingleByNamedQuery(

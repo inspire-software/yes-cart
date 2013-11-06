@@ -63,7 +63,7 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
         super(params);
 
-        final Customer customer = customerServiceFacade.findCustomer(ApplicationDirector.getShoppingCart().getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getShoppingCart().getCustomerEmail());
 
         final String addrId = params.get(WebParametersKeys.ADDRESS_ID).toString();
 

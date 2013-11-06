@@ -71,7 +71,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
     public void testGetPriceNavigationRecords() {
         Shop shop = shopService.getShopByDomainName("www.gadget.yescart.org");
         CategoryService categoryService = ctx().getBean("categoryService", CategoryService.class);
-        Category cat = categoryService.getById(129L); // this category hold navigation by price tiers
+        Category cat = categoryService.findById(129L); // this category hold navigation by price tiers
         assertNotNull(cat);
         PriceTierTree priceTierTree = cat.getNavigationByPriceTree();
         try {

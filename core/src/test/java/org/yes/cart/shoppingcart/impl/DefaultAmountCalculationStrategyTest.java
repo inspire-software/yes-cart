@@ -538,7 +538,7 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(deliveryCostCalculationStrategy).getDeliveryPrice(cart); will(returnValue(new BigDecimal("20.00")));
             allowing(promotionContextFactory).getInstance("SHOP10", "EUR"); will(returnValue(promotionContext));
             allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
-            allowing(customerService).findCustomer("bob@doe.com"); will(returnValue(customer));
+            allowing(customerService).getCustomerByEmail("bob@doe.com"); will(returnValue(customer));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
             allowing(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));

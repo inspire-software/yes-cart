@@ -294,12 +294,12 @@ public class ProductAvailabilityStrategyImplTest {
         product = context.mock(Product.class, "product");
 
         context.checking(new Expectations() {{
-            allowing(warehouseService).findByShopId(shopId); will(returnValue(warehouses));
+            allowing(warehouseService).getByShopId(shopId); will(returnValue(warehouses));
             allowing(sku).getProduct(); will(returnValue(product));
             allowing(product).getAvailability(); will(returnValue(availability));
             allowing(product).getCode(); will(returnValue(skuCode));
             allowing(sku).getCode(); will(returnValue(skuCode));
-            allowing(skuWarehouseService).findProductAvailableToSellQuantity(product, warehouses); will(returnValue(new HashMap<String, BigDecimal>() {{
+            allowing(skuWarehouseService).getProductAvailableToSellQuantity(product, warehouses); will(returnValue(new HashMap<String, BigDecimal>() {{
                 put(skuCode, qty);
             }}));
             allowing(skuWarehouseService).findProductSkuAvailableToSellQuantity(sku, warehouses); will(returnValue(new HashMap<String, BigDecimal>() {{

@@ -53,7 +53,7 @@ public class ProductAssociationServiceImpl
      * @param productId product primary key
      * @return list of product associations
      */
-    public List<ProductAssociation> getProductAssociations(final Long productId) {
+    public List<ProductAssociation> findProductAssociations(final Long productId) {
         return productAssociationDao.findByNamedQuery("PRODUCT.ASSOCIATIONS", productId);
     }
 
@@ -66,7 +66,7 @@ public class ProductAssociationServiceImpl
      * @param associationCode association code [up, cross, etc]
      * @return list of product associations
      */
-    public List<ProductAssociation> getProductAssociations(final Long productId, final String associationCode) {
+    public List<ProductAssociation> findProductAssociations(final Long productId, final String associationCode) {
         return productAssociationDao.findByNamedQuery("PRODUCT.ASSOCIATIONS.BY.TYPE", productId, associationCode);
     }
 

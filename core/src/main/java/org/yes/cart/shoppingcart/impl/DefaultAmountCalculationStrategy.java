@@ -94,7 +94,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
         final Customer customer;
         if (StringUtils.isNotBlank(cart.getCustomerEmail())) {
-            customer = customerService.findCustomer(cart.getCustomerEmail());
+            customer = customerService.getCustomerByEmail(cart.getCustomerEmail());
         } else {
             customer = null;
         }

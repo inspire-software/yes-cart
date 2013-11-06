@@ -63,9 +63,9 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         product.setCode("PROD_CODE_123");
         product.setName("product");
         product.setDescription("description");
-        product.setProducttype(productTypeService.getById(1L));
+        product.setProducttype(productTypeService.findById(1L));
         product.setAvailability(Product.AVAILABILITY_ALWAYS);
-        product.setBrand(brandService.getById(101L));
+        product.setBrand(brandService.findById(101L));
         product = productService.create(product);
         assertTrue(product.getProductId() > 0);
         //test that default sku is created
@@ -171,7 +171,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     public void testGetRandomProductByCategory() {
 
         CategoryService categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
-        Category category = categoryService.getById(211L);
+        Category category = categoryService.findById(211L);
         Set<Long> list = new HashSet<Long>();
 
         final CacheManager cm = ctx().getBean("cacheManager", CacheManager.class);

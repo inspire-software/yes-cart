@@ -75,7 +75,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    public List<Category> getAllByShopId(final long shopId) {
+    public List<Category> findAllByShopId(final long shopId) {
         return categoryDao.findByNamedQuery("ALL.TOPCATEGORIES.BY.SHOPID", shopId);
     }
 
@@ -83,6 +83,15 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "categoryService-topLevelCategories",
+            "shopService-shopByCode",
+            "shopService-shopById",
+            "shopService-shopByDomainName",
+            "shopService-allShops",
+            "shopService-shopCategories",
+            "shopService-shopCategoriesIds"
+    }, allEntries = true)
     public ShopCategory assignToShop(final long categoryId, final long shopId) {
         final ShopCategory shopCategory = shopCategoryDao.getEntityFactory().getByIface(ShopCategory.class);
         shopCategory.setCategory(categoryDao.findById(categoryId));
@@ -93,6 +102,15 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "categoryService-topLevelCategories",
+            "shopService-shopByCode",
+            "shopService-shopById",
+            "shopService-shopByDomainName",
+            "shopService-allShops",
+            "shopService-shopCategories",
+            "shopService-shopCategoriesIds"
+    }, allEntries = true)
     public void unassignFromShop(final long categoryId, final long shopId) {
         ShopCategory shopCategory = shopCategoryDao.findSingleByNamedQuery(
                 "SHOP.CATEGORY",
@@ -120,7 +138,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         if (StringUtils.isBlank(category.getUitemplate())) {
             if (category.getParentId() != category.getCategoryId()) {
                 Category parentCategory =
-                        proxy().getById(category.getParentId());
+                        proxy().findById(category.getParentId());
                 variation = getCategoryTemplateVariation(parentCategory);
             }
         } else {
@@ -194,7 +212,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * @param attributeNames set of attributes, to collect values.
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
-    @Cacheable(value = "categoryService-categoryAttributeRecursive2")
+    @Cacheable(value = "categoryService-categoryAttributesRecursive")
     public String[] getCategoryAttributeRecursive(final String locale, final Category incategory, final String[] attributeNames) {
         final String[] rez;
         final Category category;
@@ -213,7 +231,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
                 rez = null; //root of hierarchy
             } else {
                 final Category parentCategory =
-                        proxy().getById(category.getParentId());
+                        proxy().findById(category.getParentId());
                 rez = proxy().getCategoryAttributeRecursive(null, parentCategory, attributeNames);
             }
         } else {
@@ -267,7 +285,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             return null; //root of hierarchy
         }
         final Category parentCategory =
-                proxy().getById(category.getParentId());
+                proxy().findById(category.getParentId());
         return getCategoryAttributeRecursive(locale, parentCategory, attributeName);
     }
 
@@ -347,13 +365,13 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @Cacheable(value = "categoryService-childCategories")
     public List<Category> getChildCategories(final long categoryId) {
-        return getChildCategoriesWithAvailability(categoryId, true);
+        return findChildCategoriesWithAvailability(categoryId, true);
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<Category> getChildCategoriesWithAvailability(final long categoryId, final boolean withAvailability) {
+    public List<Category> findChildCategoriesWithAvailability(final long categoryId, final boolean withAvailability) {
         if (withAvailability) {
             return categoryDao.findByNamedQuery(
                     "CATEGORIES.BY.PARENTID",
@@ -374,7 +392,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @Cacheable(value = "categoryService-childCategoriesRecursive")
     public Set<Category> getChildCategoriesRecursive(final long categoryId) {
-        final Category thisCat = proxy().getById(categoryId);
+        final Category thisCat = proxy().findById(categoryId);
         if (thisCat != null) {
             final Set<Category> all = new HashSet<Category>();
             all.add(thisCat);
@@ -409,7 +427,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @Cacheable(value = "categoryService-categoryHasSubcategory")
     public boolean isCategoryHasSubcategory(final long topCategoryId, final long subCategoryId) {
-        final Category start = proxy().getById(subCategoryId);
+        final Category start = proxy().findById(subCategoryId);
         if (start != null) {
             if (subCategoryId == topCategoryId) {
                 return true;
@@ -426,7 +444,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     private void addParent(final List<Category> categoryChain, final long categoryIdStopAt) {
         final Category cat = categoryChain.get(categoryChain.size() - 1);
         if (cat.getParentId() != cat.getCategoryId()) {
-            final Category parent = getById(cat.getParentId());
+            final Category parent = findById(cat.getParentId());
             if (parent != null) {
                 categoryChain.add(parent);
                 if (parent.getCategoryId() != categoryIdStopAt) {
@@ -458,7 +476,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    public Long getCategoryIdBySeoUri(final String seoUri) {
+    public Long findCategoryIdBySeoUri(final String seoUri) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("CATEGORY.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
             final Object id = list.get(0);
@@ -472,7 +490,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    public String getSeoUriByCategoryId(final Long categoryId) {
+    public String findSeoUriByCategoryId(final Long categoryId) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("SEO.URI.BY.CATEGORY.ID", categoryId);
         if (list != null && !list.isEmpty()) {
             final Object uri = list.get(0);
@@ -486,7 +504,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    public List<Category> getByProductId(final long productId) {
+    public List<Category> findByProductId(final long productId) {
         return categoryDao.findByNamedQuery(
                 "CATEGORIES.BY.PRODUCTID",
                 productId
@@ -520,7 +538,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-categoryTemplate",
             "categoryService-itemsPerPage",
             "categoryService-categoryAttributeRecursive",
-            "categoryService-categoryAttributeRecursive2",
+            "categoryService-categoryAttributesRecursive",
             "categoryService-productQuantity",
             "categoryService-categoryHasProducts",
             "categoryService-categoryHasChildren",
@@ -544,7 +562,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-categoryTemplate",
             "categoryService-itemsPerPage",
             "categoryService-categoryAttributeRecursive",
-            "categoryService-categoryAttributeRecursive2",
+            "categoryService-categoryAttributesRecursive",
             "categoryService-productQuantity",
             "categoryService-categoryHasProducts",
             "categoryService-categoryHasChildren",

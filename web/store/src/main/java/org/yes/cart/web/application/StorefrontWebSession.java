@@ -65,7 +65,7 @@ public class StorefrontWebSession extends AuthenticatedWebSession {
         if (customerServiceFacade.authenticate(username, password)) {
             executeLoginCommand(
                     ApplicationDirector.getShoppingCart(),
-                    customerServiceFacade.findCustomer(username));
+                    customerServiceFacade.getCustomerByEmail(username));
             return true;
         }
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGOUT, ApplicationDirector.getShoppingCart(),

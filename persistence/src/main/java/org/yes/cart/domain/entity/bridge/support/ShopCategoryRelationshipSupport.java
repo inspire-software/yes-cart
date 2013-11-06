@@ -34,7 +34,7 @@ public interface ShopCategoryRelationshipSupport {
      *
      * @return list of all entities
      */
-    List<Shop> findAll();
+    List<Shop> getAll();
 
     /**
      * Get all categories including child categories, that belong to given shop.

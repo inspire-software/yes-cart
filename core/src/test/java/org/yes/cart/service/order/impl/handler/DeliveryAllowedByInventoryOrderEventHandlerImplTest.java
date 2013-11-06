@@ -60,14 +60,14 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends Abstrac
         CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
         //initial 15120 has 9 items on 1 warehouse without reservation - pk 30
         //initial 15121 has 1 item  on 1 warehouse without reservation - pk 31
-        SkuWarehouse skuWarehouse = skuWarehouseService.getById(31);
+        SkuWarehouse skuWarehouse = skuWarehouseService.findById(31);
 //        skuWarehouse.setReserved(BigDecimal.ONE);
 //        skuWarehouseService.update(skuWarehouse);
         assertTrue(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
-        skuWarehouse = skuWarehouseService.getById(31);
+        skuWarehouse = skuWarehouseService.findById(31);
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
-        skuWarehouse = skuWarehouseService.getById(30);
+        skuWarehouse = skuWarehouseService.findById(30);
         assertEquals(new BigDecimal("7.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());
@@ -78,7 +78,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends Abstrac
         assertFalse(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
         assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT, delivery.getDeliveryStatus());
         // update qty
-        skuWarehouse = skuWarehouseService.getById(31);
+        skuWarehouse = skuWarehouseService.findById(31);
         skuWarehouse.setQuantity(new BigDecimal("2"));
         skuWarehouseService.update(skuWarehouse);
         //delivery, than not pass before, now can perform transition

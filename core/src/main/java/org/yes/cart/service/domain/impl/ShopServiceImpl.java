@@ -88,7 +88,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * {@inheritDoc}
      */
     @Cacheable(value = "shopService-shopById")
-    public Shop findById(final long shopId) {
+    public Shop getById(final long shopId) {
         return shopDao.findById(shopId);
     }
 
@@ -96,7 +96,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * {@inheritDoc}
      */
     @Cacheable(value = "shopService-allShops")
-    public List<Shop> findAll() {
+    public List<Shop> getAll() {
         return super.findAll();
     }
 
@@ -140,7 +140,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
 
 
     /** {@inheritDoc} */
-    public Collection<String> getAllSupportedCurrenciesByShops() {
+    public Collection<String> findAllSupportedCurrenciesByShops() {
         final List<Shop> shops = shopDao.findAll();
         final Set<String> currencies = new TreeSet<String>();
 

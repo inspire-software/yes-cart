@@ -100,8 +100,8 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
 
         preOrderJob.processAwaitingOrders(
                 Arrays.asList(
-                        productSkuService.getById(15350L).getCode(),
-                        productSkuService.getById(15360L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
+                        productSkuService.findById(15350L).getCode(),
+                        productSkuService.findById(15360L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                 OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT,
                 customerOrderService,
                 orderStateManager);
@@ -117,8 +117,8 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
 
         preOrderJob.processAwaitingOrders(
                 Arrays.asList(
-                        productSkuService.getById(15350L).getCode(),
-                        productSkuService.getById(15360L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
+                        productSkuService.findById(15350L).getCode(),
+                        productSkuService.findById(15360L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                 OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT,
                 customerOrderService,
                 orderStateManager);
@@ -132,21 +132,21 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
 
         //add inventory
         SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSku(productSkuService.getById(15350L)); //need 2 items to push order back to life cycle
-        skuWarehouse.setWarehouse(warehouseService.getById(1L));
+        skuWarehouse.setSku(productSkuService.findById(15350L)); //need 2 items to push order back to life cycle
+        skuWarehouse.setWarehouse(warehouseService.findById(1L));
         skuWarehouse.setQuantity(BigDecimal.TEN);
         skuWarehouseService.create(skuWarehouse);
 
         skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSku(productSkuService.getById(15360L)); //need 2 items to push order back to life cycle
-        skuWarehouse.setWarehouse(warehouseService.getById(1L));
+        skuWarehouse.setSku(productSkuService.findById(15360L)); //need 2 items to push order back to life cycle
+        skuWarehouse.setWarehouse(warehouseService.findById(1L));
         skuWarehouse.setQuantity(BigDecimal.TEN);
         skuWarehouseService.create(skuWarehouse);
 
         preOrderJob.processAwaitingOrders(
                 Arrays.asList(
-                        productSkuService.getById(15350L).getCode(),
-                        productSkuService.getById(15360L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        productSkuService.findById(15350L).getCode(),
+                        productSkuService.findById(15360L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                 OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY,
                 customerOrderService,
                 orderStateManager);

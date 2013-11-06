@@ -71,18 +71,18 @@ public class DtoAttributeServiceImpl
     public AttributeDTO create(final AttributeDTO dto) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Attribute attribute = getEntityFactory().getByIface(Attribute.class);
         assembler.assembleEntity(dto, attribute,  getAdaptersRepository(), dtoFactory);
-        attribute.setEtype(etypeService.getById(dto.getEtypeId()));
-        attribute.setAttributeGroup(attributeGroupService.getById(dto.getAttributegroupId()));
+        attribute.setEtype(etypeService.findById(dto.getEtypeId()));
+        attribute.setAttributeGroup(attributeGroupService.findById(dto.getAttributegroupId()));
         attribute = service.create(attribute);
         return getById(attribute.getAttributeId());
     }
 
     /** {@inheritDoc}  */
     public AttributeDTO update(final AttributeDTO dto) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Attribute attribute = service.getById(dto.getAttributeId());
+        Attribute attribute = service.findById(dto.getAttributeId());
         assembler.assembleEntity(dto, attribute,  getAdaptersRepository(), dtoFactory);
-        attribute.setEtype(etypeService.getById(dto.getEtypeId()));
-        attribute.setAttributeGroup(attributeGroupService.getById(dto.getAttributegroupId()));
+        attribute.setEtype(etypeService.findById(dto.getEtypeId()));
+        attribute.setAttributeGroup(attributeGroupService.findById(dto.getAttributegroupId()));
         attribute = service.update(attribute);
         return getById(attribute.getAttributeId());
     }
@@ -115,7 +115,7 @@ public class DtoAttributeServiceImpl
             final long productTypeId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<Attribute> attributes = ((AttributeService)service).findAvailableAttributesByProductTypeId(productTypeId);
+        final List<Attribute> attributes = ((AttributeService)service).getAvailableAttributesByProductTypeId(productTypeId);
         final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attributes.size());
         fillDTOs(attributes, attributesDTO);
         return attributesDTO;
@@ -125,7 +125,7 @@ public class DtoAttributeServiceImpl
     public List<AttributeDTO> findAvailableImageAttributesByGroupCode(
             final String attributeGroupCode)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Attribute> attributes = ((AttributeService)service).findAvailableImageAttributesByGroupCode(attributeGroupCode);
+        final List<Attribute> attributes = ((AttributeService)service).getAvailableImageAttributesByGroupCode(attributeGroupCode);
         final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attributes.size());
         fillDTOs(attributes, attributesDTO);
         return attributesDTO;

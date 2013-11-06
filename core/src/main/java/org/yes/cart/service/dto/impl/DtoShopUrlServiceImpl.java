@@ -61,7 +61,7 @@ public class DtoShopUrlServiceImpl
     public ShopUrlDTO create(final ShopUrlDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ShopUrl shopUrl = getEntityFactory().getByIface(ShopUrl.class);
         assembler.assembleEntity(instance, shopUrl, getAdaptersRepository(), dtoFactory);
-        shopUrl.setShop(shopService.getById(instance.getShopId()));
+        shopUrl.setShop(shopService.findById(instance.getShopId()));
         shopUrl = service.create(shopUrl);        
         return getById(shopUrl.getStoreUrlId());
     }
@@ -69,7 +69,7 @@ public class DtoShopUrlServiceImpl
 
     /** {@inheritDoc} */
     public List<ShopUrlDTO> getAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Shop shop = shopService.getById(shopId);
+        final Shop shop = shopService.findById(shopId);
         final List<ShopUrlDTO> shopUrlDTOs = new ArrayList<ShopUrlDTO>(shop.getShopUrl().size());
         fillDTOs(shop.getShopUrl(), shopUrlDTOs);
         return shopUrlDTOs;

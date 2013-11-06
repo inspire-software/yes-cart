@@ -79,7 +79,7 @@ public interface AddressBookFacade {
      *
      * @return all countries
      */
-    List<Country> findAllCountries(String shopCode);
+    List<Country> getAllCountries(String shopCode);
 
     /**
      * Find by country code.
@@ -87,6 +87,6 @@ public interface AddressBookFacade {
      * @param countryCode country code.
      * @return list of states , that belong to given country.
      */
-    List<State> findStatesByCountry(String countryCode);
+    List<State> getStatesByCountry(String countryCode);
 
 }

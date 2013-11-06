@@ -87,7 +87,7 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
             return priceService.getMinimalRegularPrice(
                     null,
                     sku,
-                    shopService.findById(cart.getShoppingContext().getShopId()),
+                    shopService.getById(cart.getShoppingContext().getShopId()),
                     cart.getCurrencyCode(),
                     BigDecimal.ONE);
         } catch (Exception exp) {

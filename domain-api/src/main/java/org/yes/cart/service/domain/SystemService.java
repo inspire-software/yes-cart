@@ -68,6 +68,13 @@ public interface SystemService {
      *
      * @return system attributes
      */
+    Map<String, AttrValueSystem> findAttributeValues();
+
+    /**
+     * Get all system attributes.
+     *
+     * @return system attributes
+     */
     Map<String, AttrValueSystem> getAttributeValues();
 
     /**

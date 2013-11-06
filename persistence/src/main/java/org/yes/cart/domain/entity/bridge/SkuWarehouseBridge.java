@@ -54,7 +54,7 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
 
                 final ProductSku sku = (ProductSku) obj;
 
-                final List<Shop> shops = support.findAll();
+                final List<Shop> shops = support.getAll();
 
                 for (final Shop shop : shops) {
 

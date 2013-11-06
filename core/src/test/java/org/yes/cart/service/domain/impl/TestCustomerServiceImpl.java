@@ -75,7 +75,7 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
         assertTrue(customer.getCustomerId() > 0);
         long pk = customer.getCustomerId();
         customerService.delete(customer);
-        customer = customerService.getById(pk);
+        customer = customerService.findById(pk);
         assertNull(customer);
     }
 

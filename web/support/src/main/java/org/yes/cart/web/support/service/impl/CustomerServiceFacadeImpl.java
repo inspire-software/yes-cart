@@ -18,7 +18,6 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueCustomer;
@@ -59,9 +58,8 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "web.customerServiceFacade-findCustomer")
-    public Customer findCustomer(final String email) {
-        return customerService.findCustomer(email);
+    public Customer getCustomerByEmail(final String email) {
+        return customerService.getCustomerByEmail(email);
     }
 
     /** {@inheritDoc} */
@@ -71,7 +69,6 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
     /** {@inheritDoc} */
     @CacheEvict(value = {
-            "web.customerServiceFacade-findCustomer",
             "web.addressBookFacade-customerHasAtLeastOneAddress"
     }, key = "#email")
     public String registerCustomer(Shop registrationShop, String email, Map<String, Object> registrationData) {
@@ -110,7 +107,6 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
     /** {@inheritDoc} */
     @CacheEvict(value = {
-            "web.customerServiceFacade-findCustomer",
             "web.addressBookFacade-customerHasAtLeastOneAddress"
     }, key = "#customer.email")
     public void updateCustomer(final Customer customer) {

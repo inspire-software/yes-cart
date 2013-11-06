@@ -41,7 +41,7 @@ public interface GenericService<T> {
      * @param pk pk value.
      * @return instance if found, otherwise null.
      */
-    T getById(long pk);
+    T findById(long pk);
 
     /**
      * Persist instance.

@@ -66,7 +66,7 @@ public interface ContentService extends GenericService<Category> {
      * @param withAvailability with availability date range filtering or not
      * @return list of child content
      */
-    List<Category> getChildContentWithAvailability(long contentId, boolean withAvailability);
+    List<Category> findChildContentWithAvailability(long contentId, boolean withAvailability);
 
     /**
      * Get the child contents with recursion.
@@ -140,7 +140,7 @@ public interface ContentService extends GenericService<Category> {
      * @param seoUri given seo uri
      * @return content id if found otherwise null
      */
-    Long getContentIdBySeoUri(String seoUri);
+    Long findContentIdBySeoUri(String seoUri);
 
     /**
      * Get content SEO uri by given id
@@ -148,7 +148,7 @@ public interface ContentService extends GenericService<Category> {
      * @param contentId given content id
      * @return seo uri if found otherwise null
      */
-    String getSeoUriByContentId(Long contentId);
+    String findSeoUriByContentId(Long contentId);
 
     /**
      * Does given sub content belong to tree with given parent <code>topContent</code>.

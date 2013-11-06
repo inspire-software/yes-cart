@@ -77,15 +77,24 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
-    public Map<String, AttrValueSystem> getAttributeValues() {
+    public Map<String, AttrValueSystem> findAttributeValues() {
         return getSystem().getAttributes();
     }
 
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "systemService-attributeValues")
+    public Map<String, AttrValueSystem> getAttributeValues() {
+        return findAttributeValues();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @CacheEvict(value ={
-            "systemService-attributeValue"
+            "systemService-attributeValue",
+            "systemService-attributeValues"
     }, allEntries = true)
     public void updateAttributeValue(final String key, final String value) {
 
@@ -192,26 +201,10 @@ public class SystemServiceImpl implements SystemService {
      * @param values   map of attribute name and {@link AttrValue}
      * @return null if attribute not present in map, otherwise value of attribute
      */
-    public static String getAttributeValue(final String attrName, final Map<String, AttrValueSystem> values) {
+    private String getAttributeValue(final String attrName, final Map<String, AttrValueSystem> values) {
         AttrValue attrValue = values.get(attrName);
         if (attrValue != null) {
             return attrValue.getVal();
-        }
-        return null;
-    }
-
-    /**
-     * Get attribute value
-     *
-     * @param attrName   attribute name
-     * @param attributes collection of attribute
-     * @return value if fount otherwise null
-     */
-    public static String getAttributeValue(final String attrName, final Collection<? extends AttrValueSystem> attributes) {
-        for (AttrValue attrValue : attributes) {
-            if (attrName.equals(attrValue.getAttribute().getName())) {
-                return attrValue.getVal();
-            }
         }
         return null;
     }

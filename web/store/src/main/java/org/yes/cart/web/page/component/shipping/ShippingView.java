@@ -90,7 +90,7 @@ public class ShippingView extends BaseComponent {
         setCarrierSla(null);
 
         if (slaId != null) {
-            carrierSlaService.getById(slaId);
+            carrierSlaService.findById(slaId);
             for (Carrier carrier : carriers) {
                 for (CarrierSla carrierSla : carrier.getCarrierSla()) {
                     if (slaId == carrierSla.getCarrierslaId()) {
@@ -134,7 +134,7 @@ public class ShippingView extends BaseComponent {
                 super.onSelectionChanged(carrierSla);
 
                 final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-                final Customer customer = customerServiceFacade.findCustomer(cart.getShoppingContext().getCustomerEmail());
+                final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getShoppingContext().getCustomerEmail());
                 final String shippingAddressId;
                 final String billingAddressId;
                 if (customer != null) {
@@ -244,7 +244,7 @@ public class ShippingView extends BaseComponent {
                     new Label(PRICE_VIEW)
             );
         } else {
-            final CarrierSla carrierSla = carrierSlaService.getById(slaId);
+            final CarrierSla carrierSla = carrierSlaService.findById(slaId);
             form.addOrReplace(
                     new PriceView(
                             PRICE_VIEW,

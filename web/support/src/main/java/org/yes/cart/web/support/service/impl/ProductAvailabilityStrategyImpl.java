@@ -48,8 +48,8 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
 
     /** {@inheritDoc} */
     public ProductAvailabilityModel getAvailabilityModel(final long shopId, final Product product) {
-        final List<Warehouse> warehouses = warehouseService.findByShopId(shopId);
-        final Map<String, BigDecimal> qty = skuWarehouseService.findProductAvailableToSellQuantity(product, warehouses);
+        final List<Warehouse> warehouses = warehouseService.getByShopId(shopId);
+        final Map<String, BigDecimal> qty = skuWarehouseService.getProductAvailableToSellQuantity(product, warehouses);
         return new ProductAvailabilityModelImpl(
                 product.getCode(),
                 product.getAvailability(),
@@ -69,7 +69,7 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
     /** {@inheritDoc} */
     public ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSku sku) {
         final Product product = sku.getProduct();
-        final List<Warehouse> warehouses = warehouseService.findByShopId(shopId);
+        final List<Warehouse> warehouses = warehouseService.getByShopId(shopId);
         final Map<String, BigDecimal> qty = skuWarehouseService.findProductSkuAvailableToSellQuantity(sku, warehouses);
         return new ProductAvailabilityModelImpl(
                 sku.getCode(),

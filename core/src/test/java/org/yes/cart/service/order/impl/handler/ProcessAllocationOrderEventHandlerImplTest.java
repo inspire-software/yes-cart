@@ -65,7 +65,7 @@ public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHan
         orderService.update(customerOrder);
         CustomerOrderDelivery customerOrderDelivery = customerOrder.getDelivery().iterator().next();
         assertTrue(handler.handle(new OrderEventImpl("", customerOrder, customerOrderDelivery)));
-        final Warehouse warehouse = warehouseService.getById(1);
+        final Warehouse warehouse = warehouseService.findById(1);
         // check reserved quantity
         ProductSku sku = productSkuService.getProductSkuBySkuCode("CC_TEST1");
         Pair<BigDecimal, BigDecimal> qty = skuWarehouseService.getQuantity(

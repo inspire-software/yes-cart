@@ -127,7 +127,7 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="categoryService-categoryAttributeRecursive2"/>
+            <constructor-arg index="0" value="categoryService-categoryAttributesRecursive"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -188,7 +188,7 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="contentService-contentAttributeRecursive2"/>
+            <constructor-arg index="0" value="contentService-contentAttributesRecursive"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -256,7 +256,7 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="contentService-contentAttributeRecursive2"/>
+            <constructor-arg index="0" value="contentService-contentAttributesRecursive"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -388,7 +388,7 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-productQty"/>
+            <constructor-arg index="0" value="productService-productQtyByQuery"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -412,7 +412,7 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-productQty2"/>
+            <constructor-arg index="0" value="productService-productQtyByCategoryId"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -455,7 +455,7 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-productQty"/>
+            <constructor-arg index="0" value="productService-productQtyByQuery"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -471,7 +471,7 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-productQty2"/>
+            <constructor-arg index="0" value="productService-productQtyByCategoryId"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -577,6 +577,10 @@
     <util:set id="SystemAll">
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="systemService-attributeValue"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="systemService-attributeValues"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>

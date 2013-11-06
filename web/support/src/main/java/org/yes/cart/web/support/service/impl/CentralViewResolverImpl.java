@@ -138,13 +138,12 @@ public class CentralViewResolverImpl implements CentralViewResolver {
      * {@inheritDoc}
      */
     @Cacheable(value = "centralViewResolver-booleanQuery")
-    public BooleanQuery getBooleanQuery(
-            final List<BooleanQuery> queriesChain,
-            final String currentQuery,
-            final long categoryId,
-            final List<Long> categories,
-            final String viewLabel,
-            final String itemId) {
+    public BooleanQuery getBooleanQuery(final List<BooleanQuery> queriesChain,
+                                        final String currentQuery,
+                                        final long categoryId,
+                                        final List<Long> categories,
+                                        final String viewLabel,
+                                        final String itemId) {
 
         BooleanQuery rez = null;
 

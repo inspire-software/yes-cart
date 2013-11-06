@@ -68,7 +68,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         long pk = order.getCustomerorderId();
         assertTrue(pk > 0);
         customerOrderService.delete(order);
-        assertNull(customerOrderService.getById(pk));
+        assertNull(customerOrderService.findById(pk));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         CustomerOrder order2 = customerOrderService.findByGuid(shoppingCart.getGuid());
         assertNotNull(order2);
         customerOrderService.delete(order);
-        assertNull(customerOrderService.getById(pk));
+        assertNull(customerOrderService.findById(pk));
         assertNull(customerOrderService.findByGuid(shoppingCart.getGuid()));
         assertNull(customerOrderService.findByGuid(null));
     }
@@ -241,17 +241,17 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         }
 
         List<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(
-                Arrays.asList(productSkuService.getById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                Arrays.asList(productSkuService.findById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                 Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
         assertEquals("Expect one order with preorder sku id = 15330", 1, rez.size());
 
         rez = customerOrderService.findAwaitingDeliveries(
-                Arrays.asList(productSkuService.getById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                Arrays.asList(productSkuService.findById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                 Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
         assertEquals("Expect one order with preorder sku id = 15340", 1, rez.size());
 
         rez = customerOrderService.findAwaitingDeliveries(
-                Arrays.asList(productSkuService.getById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                Arrays.asList(productSkuService.findById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                 Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
         assertEquals("Not expected orders waiting for inventory sku id = 15129" ,0, rez.size());
 

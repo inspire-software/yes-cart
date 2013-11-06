@@ -94,7 +94,7 @@ public class RemoteWarehouseServiceImpl
      * {@inheritDoc
      */
     public void removeSkuOnWarehouse(final long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final SkuWarehouse skuWarehouse = getSkuWarehouseService().getById(skuWarehouseId);
+        final SkuWarehouse skuWarehouse = getSkuWarehouseService().findById(skuWarehouseId);
         dtoWarehouseService.removeSkuOnWarehouse(skuWarehouseId);
         if (skuWarehouse != null) {
             reindexService.reindexProductSku(skuWarehouse.getSku().getSkuId());

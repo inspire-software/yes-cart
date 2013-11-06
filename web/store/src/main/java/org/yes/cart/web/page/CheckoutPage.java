@@ -535,7 +535,7 @@ public class CheckoutPage extends AbstractWebPage {
         boolean billingAddressHidden = getRequest().getRequestParameters().getParameterValue(
                 BILLING_ADDR_VISIBLE).toBoolean(true);
 
-        final Customer customer = customerServiceFacade.findCustomer(
+        final Customer customer = customerServiceFacade.getCustomerByEmail(
                 ApplicationDirector.getShoppingCart().getCustomerEmail());
 
         final Model<Customer> customerModel = new Model<Customer>(customer);

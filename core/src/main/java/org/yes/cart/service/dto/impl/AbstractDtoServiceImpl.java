@@ -70,7 +70,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     /** {@inheritDoc} */
     public DTOIFACE getById(final long id, final Map converters)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final IFACE entity = service.getById(id);
+        final IFACE entity = service.findById(id);
         if (entity != null) {
             final DTOIFACE dto = (DTOIFACE) dtoFactory.getByIface(getDtoIFace());
             assembler.assembleDto(dto, entity, converters, dtoFactory);
@@ -86,7 +86,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
 
     /** {@inheritDoc} */
     public void remove(final long id) {
-        service.delete(service.getById(id));
+        service.delete(service.findById(id));
     }
 
 
@@ -186,7 +186,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     /** {@inheritDoc}*/
     public DTOIFACE update(final DTOIFACE instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        IFACE iface = service.getById(instance.getId());
+        IFACE iface = service.findById(instance.getId());
         assembler.assembleEntity(instance, iface, getAdaptersRepository(), dtoFactory);
         updatePostProcess(instance, iface);
         iface = service.update(iface);

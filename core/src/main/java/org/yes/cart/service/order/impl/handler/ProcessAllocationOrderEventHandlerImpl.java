@@ -103,7 +103,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
         final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
 
-        final List<Warehouse> warehouses = warehouseService.findByShopId(
+        final List<Warehouse> warehouses = warehouseService.getByShopId(
                 orderDelivery.getCustomerOrder().getShop().getShopId());
 
         for (CustomerOrderDeliveryDet det : deliveryDetails) {

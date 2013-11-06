@@ -27,6 +27,7 @@
         <property name="transactionAttributes">
             <props>
                 <!-- Basic CRUD -->
+                <prop key="get*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
                 <prop key="find*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
                 <prop key="create*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="update*">PROPAGATION_REQUIRED,-Throwable</prop>
@@ -62,9 +63,10 @@
                 <prop key="getEntityFactory">PROPAGATION_SUPPORTS,readOnly,-Throwable</prop>
                 <!-- Dto attribute support -->
                 <prop key="getEntityAttributes*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
-                <prop key="getAttributeValue">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
-                <prop key="getAttributeValues">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
                 <!-- Special system preferences - must be in its own transaction -->
+                <prop key="findAttributeValues">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="getAttributeValue">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
+                <prop key="getAttributeValues">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
                 <prop key="getAttributeValueOrDefault">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
                 <!-- Other patterns: TODO: remove this wildcard YC-191 -->
                 <prop key="*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>

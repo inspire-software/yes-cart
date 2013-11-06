@@ -48,7 +48,7 @@ public interface CustomerService extends GenericService<Customer> {
      * @param email email
      * @return {@link Customer} or null if customer not found
      */
-    Customer findCustomer(String email);
+    Customer getCustomerByEmail(String email);
 
     /**
      * Check is customer already registered.
