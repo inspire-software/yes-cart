@@ -69,7 +69,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
-    public ProductSku getProductSkuBySkuCodeForIndexing(final String skuCode) {
+    public ProductSku findProductSkuBySkuCode(final String skuCode) {
         return getGenericDao().findSingleByCriteria(
                 Restrictions.eq("code", skuCode)
         );
@@ -80,7 +80,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      */
     @Cacheable(value = "productSkuService-productSkuBySkuCode")
     public ProductSku getProductSkuBySkuCode(final String skuCode) {
-        return getProductSkuBySkuCodeForIndexing(skuCode);
+        return findProductSkuBySkuCode(skuCode);
     }
 
     /**

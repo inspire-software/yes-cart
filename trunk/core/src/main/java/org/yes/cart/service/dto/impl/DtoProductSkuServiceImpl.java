@@ -130,7 +130,7 @@ public class DtoProductSkuServiceImpl
      * {@inheritDoc}
      */
     public long updateSkuPrice(final SkuPriceDTO skuPriceDTO) {
-        final SkuPrice skuPrice = priceService.getById(skuPriceDTO.getSkuPriceId());
+        final SkuPrice skuPrice = priceService.findById(skuPriceDTO.getSkuPriceId());
         skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
                 getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
@@ -142,12 +142,12 @@ public class DtoProductSkuServiceImpl
      * {@inheritDoc}
      */
     public void remove(long id) {
-        ProductSku sku =  getService().getById(id);
+        ProductSku sku =  getService().findById(id);
         ((ProductSkuService)getService()).removeAllInventory(sku);
         ((ProductSkuService)getService()).removeAllPrices(sku);
         getService().getGenericDao().evict(sku);
 
-        sku =  getService().getById(id);
+        sku =  getService().findById(id);
         final Product prod = sku.getProduct();
         prod.getSku().remove(sku);
         sku.setProduct(null);
@@ -159,7 +159,7 @@ public class DtoProductSkuServiceImpl
      * {@inheritDoc}
      */
     public SkuPriceDTO getSkuPrice(final long skuPriceId) {
-        SkuPrice skuPrice = priceService.getById(skuPriceId);
+        SkuPrice skuPrice = priceService.findById(skuPriceId);
         SkuPriceDTO skuPriceDTO = getDtoFactory().getByIface(SkuPriceDTO.class);
         skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
                 getAdaptersRepository(),
@@ -172,7 +172,7 @@ public class DtoProductSkuServiceImpl
      */
     public void removeSkuPrice(final long skuPriceId) {
         priceService.delete(
-                priceService.getById(skuPriceId)
+                priceService.findById(skuPriceId)
         );
     }
 
@@ -215,7 +215,7 @@ public class DtoProductSkuServiceImpl
      */
     public ProductSkuDTO update(final ProductSkuDTO instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ProductSku productSku = service.getById(instance.getSkuId());
+        ProductSku productSku = service.findById(instance.getSkuId());
         assembler.assembleEntity(
                 instance,
                 productSku,
@@ -351,9 +351,9 @@ public class DtoProductSkuServiceImpl
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueProductSku valueEntity = getEntityFactory().getByIface(AttrValueProductSku.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntity, getAdaptersRepository(), dtoFactory);
-        Attribute atr = attributeService.getById(attrValueDTO.getAttributeDTO().getAttributeId());
+        Attribute atr = attributeService.findById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntity.setAttribute(atr);
-        valueEntity.setProductSku(service.getById(((AttrValueProductSkuDTO) attrValueDTO).getSkuId()));
+        valueEntity.setProductSku(service.findById(((AttrValueProductSkuDTO) attrValueDTO).getSkuId()));
         valueEntity = attrValueEntityProductSkuDao.create((AttrValueEntityProductSku) valueEntity);
         attrValueDTO.setAttrvalueId(valueEntity.getAttrvalueId());
         return attrValueDTO;

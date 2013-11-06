@@ -94,7 +94,7 @@ public class BookmarkServiceImpl implements BookmarkService {
             final long categoryId = NumberUtils.toLong(bookmark, 0L);
             if (categoryId > 0L) {
 
-                final String categorySeoUri = categoryService.getSeoUriByCategoryId(categoryId);
+                final String categorySeoUri = categoryService.findSeoUriByCategoryId(categoryId);
                 seoData = DecoratorUtil.encodeId(
                         bookmark,
                         categorySeoUri
@@ -117,7 +117,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         String id = getStringFromValueWrapper(CATEGORY_DECODE_CACHE.get(uri));
         if (id == null) {
-            final Long catId = categoryService.getCategoryIdBySeoUri(uri);
+            final Long catId = categoryService.findCategoryIdBySeoUri(uri);
             if (catId != null) {
                 saveBookmarkForCategory(catId.toString());
                 id = catId.toString();
@@ -137,7 +137,7 @@ public class BookmarkServiceImpl implements BookmarkService {
             final long contentId = NumberUtils.toLong(bookmark, 0L);
             if (contentId > 0L) {
 
-                final String contentSeoUri = contentService.getSeoUriByContentId(contentId);
+                final String contentSeoUri = contentService.findSeoUriByContentId(contentId);
                 seoData = DecoratorUtil.encodeId(
                         bookmark,
                         contentSeoUri
@@ -160,7 +160,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         String id = getStringFromValueWrapper(CONTENT_DECODE_CACHE.get(uri));
         if (id == null) {
-            final Long conId = contentService.getContentIdBySeoUri(uri);
+            final Long conId = contentService.findContentIdBySeoUri(uri);
             if (conId != null) {
                 saveBookmarkForContent(conId.toString());
                 id = conId.toString();

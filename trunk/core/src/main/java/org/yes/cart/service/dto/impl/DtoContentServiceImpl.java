@@ -100,7 +100,7 @@ public class DtoContentServiceImpl
      */
     @Override
     public List<CategoryDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        throw new UnsupportedOperationException("Use getAllByShopId()");
+        throw new UnsupportedOperationException("Use getAllFromRoot()");
     }
 
     /**
@@ -129,7 +129,7 @@ public class DtoContentServiceImpl
     private List<CategoryDTO> getAllFromRoot(final CategoryDTO rootDTO, final boolean withAvailalilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final ContentService categoryService = (ContentService) service;
-        final List<Category> childCategories = categoryService.getChildContentWithAvailability(
+        final List<Category> childCategories = categoryService.findChildContentWithAvailability(
                 rootDTO.getCategoryId(),
                 withAvailalilityFiltering);
         final List<CategoryDTO> childCategoriesDTO = new ArrayList<CategoryDTO>(childCategories.size());
@@ -157,7 +157,7 @@ public class DtoContentServiceImpl
      * {@inheritDoc}
      */
     public CategoryDTO update(final CategoryDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Category category = service.getById(instance.getCategoryId());
+        Category category = service.findById(instance.getCategoryId());
         assembler.assembleEntity(instance, category, getAdaptersRepository(), dtoFactory);
         bindDictionaryData(instance, category);
         category = service.update(category);
@@ -173,7 +173,7 @@ public class DtoContentServiceImpl
      */
     private void bindDictionaryData(final CategoryDTO instance, final Category category) {
         if (instance.getProductTypeId() != null && instance.getProductTypeId() > 0) {
-            category.setProductType(productTypeService.getById(instance.getProductTypeId()));
+            category.setProductType(productTypeService.findById(instance.getProductTypeId()));
         } else {
             category.setProductType(null);
         }
@@ -336,7 +336,7 @@ public class DtoContentServiceImpl
                         + " characters. Your input (" + val.length() + ") exceeds this limit. Add more body attributes.");
             }
 
-            final Category content = service.getById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId());
+            final Category content = service.findById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId());
             final Iterator<AttrValueCategory> itOld = content.getAttributes().iterator();
             while (itOld.hasNext()) {
                 final AttrValueCategory old = itOld.next();
@@ -394,9 +394,9 @@ public class DtoContentServiceImpl
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueCategory valueEntityCategory = getEntityFactory().getByIface(AttrValueCategory.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCategory, getAdaptersRepository(), dtoFactory);
-        Attribute atr = attributeService.getById(attrValueDTO.getAttributeDTO().getAttributeId());
+        Attribute atr = attributeService.findById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntityCategory.setAttribute(atr);
-        valueEntityCategory.setCategory(service.getById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId()));
+        valueEntityCategory.setCategory(service.findById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId()));
         valueEntityCategory = attrValueEntityCategoryDao.create((AttrValueEntityCategory) valueEntityCategory);
         attrValueDTO.setAttrvalueId(valueEntityCategory.getAttrvalueId());
         return attrValueDTO;

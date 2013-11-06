@@ -58,7 +58,7 @@ public class DtoShopExchangeRateServiceImpl
     /** {@inheritDoc} */
     public List<ShopExchangeRateDTO> getAllByShopId(long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Shop shop = shopService.getById(shopId);
+        final Shop shop = shopService.findById(shopId);
         final List<ShopExchangeRateDTO> rez = new ArrayList<ShopExchangeRateDTO>();
         fillDTOs(shop.getExchangerates(), rez);
         return rez;
@@ -69,7 +69,7 @@ public class DtoShopExchangeRateServiceImpl
 
         int rez =0;
 
-        final Shop shop = shopService.getById(shopId);
+        final Shop shop = shopService.findById(shopId);
 
         final String defaultCurrency =  shop.getDefaultCurrency();
 

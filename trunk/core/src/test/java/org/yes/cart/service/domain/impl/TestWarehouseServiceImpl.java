@@ -58,21 +58,21 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testAssignWarehouse() {
         createShopAndWareHouse("TESTSHOP", "TESTWAREHOUSE");
-        List<Warehouse> shopWarehouses = warehouseService.findByShopId(shop.getShopId());
+        List<Warehouse> shopWarehouses = warehouseService.getByShopId(shop.getShopId());
         assertNotNull(shopWarehouses);
         assertTrue(shopWarehouses.isEmpty());
         ShopWarehouse shopWarehouse = warehouseService.assignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
         assertNotNull(shopWarehouse);
         assertEquals(warehouse.getWarehouseId(), shopWarehouse.getWarehouse().getWarehouseId());
         assertEquals(shop.getShopId(), shopWarehouse.getShop().getShopId());
-        shopWarehouses = warehouseService.findByShopId(shop.getShopId());
+        shopWarehouses = warehouseService.getByShopId(shop.getShopId());
         assertNotNull(shopWarehouses);
         assertFalse(shopWarehouses.isEmpty());
         assertEquals(warehouse.getWarehouseId(), shopWarehouses.get(0).getWarehouseId());
 
         // unassign
         warehouseService.unassignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
-        List<Warehouse> shopWarehousesAfter = warehouseService.findByShopId(shop.getShopId());
+        List<Warehouse> shopWarehousesAfter = warehouseService.getByShopId(shop.getShopId());
         assertNotNull(shopWarehousesAfter);
         assertTrue(shopWarehousesAfter.isEmpty());
 
@@ -81,7 +81,7 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testSetShopWarehouseRank() {
         createShopAndWareHouse("TESTSHOP123", "TESTWAREHOUSE123");
-        List<Warehouse> shopWarehouses = warehouseService.findByShopId(shop.getShopId());
+        List<Warehouse> shopWarehouses = warehouseService.getByShopId(shop.getShopId());
         assertNotNull(shopWarehouses);
         assertTrue(shopWarehouses.isEmpty());
 

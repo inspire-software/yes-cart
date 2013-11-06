@@ -42,7 +42,7 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      * @param warehouseId given warehouse id.
      * @return list of founded {@link SkuWarehouse}
      */
-    List<SkuWarehouse> findProductSkusOnWarehouse(long productId, long warehouseId);
+    List<SkuWarehouse> getProductSkusOnWarehouse(long productId, long warehouseId);
 
     /**
      * Find ATS value per product sku for product.
@@ -52,7 +52,7 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      *
      * @return SKU code -> ATS map
      */
-    Map<String, BigDecimal> findProductAvailableToSellQuantity(Product product, Collection<Warehouse> warehouses);
+    Map<String, BigDecimal> getProductAvailableToSellQuantity(Product product, Collection<Warehouse> warehouses);
 
     /**
      * Find ATS value per product sku for product.

@@ -104,7 +104,7 @@ public class DtoWarehouseServiceImpl
      * {@inheritDoc}
      */
     public List<WarehouseDTO> findByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        List<Warehouse> warehouses = ((WarehouseService) service).findByShopId(shopId);
+        List<Warehouse> warehouses = ((WarehouseService) service).getByShopId(shopId);
         List<WarehouseDTO> dtos = new ArrayList<WarehouseDTO>();
         fillDTOs(warehouses, dtos);
         return dtos;
@@ -146,7 +146,7 @@ public class DtoWarehouseServiceImpl
      * @return list of founded {@link SkuWarehouseDTO}
      */
     public List<SkuWarehouseDTO> findProductSkusOnWarehouse(final long productId, final long warehouseId) {
-        final List<SkuWarehouse> skuWarehouses = skuWarehouseService.findProductSkusOnWarehouse(productId, warehouseId);
+        final List<SkuWarehouse> skuWarehouses = skuWarehouseService.getProductSkusOnWarehouse(productId, warehouseId);
         final List<SkuWarehouseDTO> result = new ArrayList<SkuWarehouseDTO>(skuWarehouses.size());
         for (SkuWarehouse sw : skuWarehouses) {
             result.add(assembleSkuWarehouseDTO(sw));
@@ -179,7 +179,7 @@ public class DtoWarehouseServiceImpl
      * @return updated SkuWarehouseDTO.
      */
     public SkuWarehouseDTO updateSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) {
-        SkuWarehouse skuWarehouse = skuWarehouseService.getById(skuWarehouseDTO.getSkuWarehouseId());
+        SkuWarehouse skuWarehouse = skuWarehouseService.findById(skuWarehouseDTO.getSkuWarehouseId());
         dtoSkuWarehouseAssembler.assembleEntity(
                 skuWarehouseDTO,
                 skuWarehouse,
@@ -207,7 +207,7 @@ public class DtoWarehouseServiceImpl
      * @param skuWarehouseId given pk value.
      */
     public void removeSkuOnWarehouse(final long skuWarehouseId) {
-        final SkuWarehouse skuWarehouse = skuWarehouseService.getById(skuWarehouseId);
+        final SkuWarehouse skuWarehouse = skuWarehouseService.findById(skuWarehouseId);
         skuWarehouse.setQuantity(BigDecimal.ZERO);
         skuWarehouse.setReserved(BigDecimal.ZERO);
         skuWarehouseService.update(skuWarehouse);

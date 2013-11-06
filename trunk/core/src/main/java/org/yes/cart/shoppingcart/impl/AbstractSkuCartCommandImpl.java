@@ -110,7 +110,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
         } else {
 
-            final Shop shop = shopService.findById(shoppingCart.getShoppingContext().getShopId());
+            final Shop shop = shopService.getById(shoppingCart.getShoppingContext().getShopId());
 
             if (productSku == null) {
 

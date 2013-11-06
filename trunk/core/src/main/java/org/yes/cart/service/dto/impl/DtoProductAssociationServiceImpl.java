@@ -78,7 +78,7 @@ public class DtoProductAssociationServiceImpl
      * {@inheritDoc}
      */
     public ProductAssociationDTO update(final ProductAssociationDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ProductAssociation productAssociation = service.getById(instance.getProductassociationId());
+        ProductAssociation productAssociation = service.findById(instance.getProductassociationId());
         assembler.assembleEntity(instance, productAssociation,  getAdaptersRepository(), new EntityFactoryToBeanFactoryAdaptor(getEntityFactory()));
         productAssociation = getService().update(productAssociation);
         return getById(productAssociation.getProductassociationId());
@@ -119,7 +119,7 @@ public class DtoProductAssociationServiceImpl
      * @return list of product assotiations
      */
     public List<ProductAssociationDTO> getProductAssociations(final long productId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        List<ProductAssociation> list = productAssociationService.getProductAssociations(productId);
+        List<ProductAssociation> list = productAssociationService.findProductAssociations(productId);
         List<ProductAssociationDTO> result = new ArrayList<ProductAssociationDTO>(list.size());
         fillDTOs(list, result);
         return result;
@@ -134,7 +134,7 @@ public class DtoProductAssociationServiceImpl
      */
     public List<ProductAssociationDTO> getProductAssociationsByProductAssociationType(final long productId, final String accosiationCode) 
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        List<ProductAssociation> list = productAssociationService.getProductAssociations(productId, accosiationCode);
+        List<ProductAssociation> list = productAssociationService.findProductAssociations(productId, accosiationCode);
         List<ProductAssociationDTO> result = new ArrayList<ProductAssociationDTO>(list.size());
         fillDTOs(list, result);
         return result;

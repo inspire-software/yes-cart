@@ -151,7 +151,7 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testRemoveSkuOnWarehouse() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         dtoService.removeSkuOnWarehouse(13L);
-        SkuWarehouse sw = dtoService.getSkuWarehouseService().getById(13L);
+        SkuWarehouse sw = dtoService.getSkuWarehouseService().findById(13L);
         assertEquals(BigDecimal.ZERO.setScale(2), sw.getQuantity().setScale(2));
         assertEquals(BigDecimal.ZERO.setScale(2), sw.getReserved().setScale(2));
     }

@@ -39,21 +39,16 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     private final GenericDAO<Attribute, Long> attributeDao;
     private final AttributeGroupService attributeGroupService;
 
-    private final boolean allowProductToSkuMirror;
-
     /**
      * Construct attribute service
      *
      * @param attributeDao            dao to use.
-     * @param allowProductToSkuMirror in case if ths flag is true all product attributes will be also created as sku attributes. CPOINT
      * @param attributeGroupService   group service to use
      */
     public AttributeServiceImpl(final GenericDAO<Attribute, Long> attributeDao,
-                                final AttributeGroupService attributeGroupService,
-                                final boolean allowProductToSkuMirror) {
+                                final AttributeGroupService attributeGroupService) {
         super(attributeDao);
         this.attributeDao = attributeDao;
-        this.allowProductToSkuMirror = allowProductToSkuMirror;
         this.attributeGroupService = attributeGroupService;
     }
 
@@ -106,7 +101,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
      * {@inheritDoc}
      */
     @Cacheable(value = "attributeService-availableAttributesByProductTypeId")
-    public List<Attribute> findAvailableAttributesByProductTypeId(final long productTypeId) {
+    public List<Attribute> getAvailableAttributesByProductTypeId(final long productTypeId) {
         return getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID", productTypeId);
     }
 
@@ -114,7 +109,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
      * {@inheritDoc}
      */
     @Cacheable(value = "attributeService-availableImageAttributesByGroupCode")
-    public List<Attribute> findAvailableImageAttributesByGroupCode(final String attributeGroupCode) {
+    public List<Attribute> getAvailableImageAttributesByGroupCode(final String attributeGroupCode) {
         return getGenericDao().findByNamedQuery("PRODUCTS.IMAGE.ATTRIBUTE.BY.GROUP.CODE", attributeGroupCode);
     }
 

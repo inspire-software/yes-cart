@@ -75,7 +75,7 @@ public class TestAddressServiceImpl extends BaseCoreDBTestCase {
         address.setAddressType(Address.ADDR_TYPE_BILLING);
         address.setCustomer(customer);
         addressService.create(address);
-        customer = customerService.getById(customer.getCustomerId());
+        customer = customerService.findById(customer.getCustomerId());
         assertEquals(2, customer.getAddress().size());
         assertEquals(2, addressService.getAddressesByCustomerId(customer.getCustomerId()).size());
         assertTrue(addressService.getAddressesByCustomerId(customer.getCustomerId(), Address.ADDR_TYPE_SHIPING).isEmpty());

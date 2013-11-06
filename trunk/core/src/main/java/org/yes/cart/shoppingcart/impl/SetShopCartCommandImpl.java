@@ -52,7 +52,7 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
         if (parameters.containsKey(getCmdKey())) {
             final Long value = NumberUtils.createLong(String.valueOf(parameters.get(getCmdKey())));
             if (value != null && !value.equals(shoppingCart.getShoppingContext().getShopId())) {
-                final Shop shop = shopService.findById(value);
+                final Shop shop = shopService.getById(value);
                 shoppingCart.getShoppingContext().setShopId(shop.getShopId());
                 shoppingCart.getShoppingContext().setShopCode(shop.getCode());
                 markDirty(shoppingCart);

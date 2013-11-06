@@ -35,7 +35,7 @@ public interface WarehouseService extends GenericService<Warehouse> {
      * @param shopId given shop id
      * @return list of assigned warehouses
      */
-    List<Warehouse> findByShopId(long shopId);
+    List<Warehouse> getByShopId(long shopId);
 
     /**
      * Set usage rank to ShopWarehouseDTO.

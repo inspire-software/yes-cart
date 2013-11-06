@@ -43,7 +43,7 @@ public class ShopWarehouseRelationshipSupportImpl implements ShopWarehouseRelati
 
     /** {@inheritDoc} */
     @Cacheable(value = "shopService-allShops")
-    public List<Shop> findAll() {
+    public List<Shop> getAll() {
         return this.shopDao.findAll();
     }
 

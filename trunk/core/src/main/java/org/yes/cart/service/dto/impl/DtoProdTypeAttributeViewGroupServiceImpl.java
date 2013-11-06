@@ -62,7 +62,7 @@ public class DtoProdTypeAttributeViewGroupServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         //final List<ProdTypeAttributeViewGroup> list = getService().findByCriteria(Restrictions.eq("producttype.producttypeId", productTypeId)); hibernate plus derby fails
-        ProductType prodType = productTypeService.getById(productTypeId);
+        ProductType prodType = productTypeService.findById(productTypeId);
         final List<ProdTypeAttributeViewGroupDTO> rez = new ArrayList<ProdTypeAttributeViewGroupDTO>(prodType.getAttributeViewGroup().size());
         fillDTOs(prodType.getAttributeViewGroup(), rez);
         return rez;

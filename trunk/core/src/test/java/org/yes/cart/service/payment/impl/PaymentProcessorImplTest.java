@@ -92,7 +92,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testAuthorize1() throws Exception {
 
-        final Warehouse warehouse = warehouseService.getById(1);
+        final Warehouse warehouse = warehouseService.findById(1);
         final Pair<BigDecimal, BigDecimal> skuCcTest1Qty0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) , "CC_TEST1");
         final Pair<BigDecimal, BigDecimal> skuCcTest3Qty0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) , "CC_TEST3");
 

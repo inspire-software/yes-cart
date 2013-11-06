@@ -182,7 +182,7 @@ public class DtoProductServiceImpl
      * {@inheritDoc}
      */
     public ProductDTO update(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Product product = service.getById(instance.getProductId());
+        Product product = service.findById(instance.getProductId());
         assembler.assembleEntity(
                 instance,
                 product,
@@ -371,9 +371,9 @@ public class DtoProductServiceImpl
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueProduct valueEntity = getEntityFactory().getByIface(AttrValueProduct.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntity, getAdaptersRepository(), dtoFactory);
-        Attribute atr = attributeService.getById(attrValueDTO.getAttributeDTO().getAttributeId());
+        Attribute atr = attributeService.findById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntity.setAttribute(atr);
-        valueEntity.setProduct(service.getById(((AttrValueProductDTO) attrValueDTO).getProductId()));
+        valueEntity.setProduct(service.findById(((AttrValueProductDTO) attrValueDTO).getProductId()));
         valueEntity = attrValueEntityProductDao.create((AttrValueEntityProduct) valueEntity);
         attrValueDTO.setAttrvalueId(valueEntity.getAttrvalueId());
         return attrValueDTO;
@@ -404,7 +404,7 @@ public class DtoProductServiceImpl
         attrDto = dtoAttributeService.create(attrDto);
 
 
-        ProductType productType = productService.getById(entityPk).getProducttype();
+        ProductType productType = productService.findById(entityPk).getProducttype();
         ProductTypeAttrDTO productTypeAttrDTO = dtoFactory.getByIface(ProductTypeAttrDTO.class);
         productTypeAttrDTO.setAttributeDTO(attrDto);
         productTypeAttrDTO.setProducttypeId(productType.getProducttypeId());
@@ -431,7 +431,7 @@ public class DtoProductServiceImpl
         dtoProductCategoryService.removeByProductIds(id);
         dtoProductSkuService.removeAllInventory(id);
         dtoProductSkuService.removeAllPrices(id);
-        final Object obj = getService().getById(id);
+        final Object obj = getService().findById(id);
         getService().getGenericDao().evict(obj);
         super.remove(id);
     }

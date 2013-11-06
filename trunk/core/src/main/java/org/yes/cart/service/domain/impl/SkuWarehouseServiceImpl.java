@@ -67,8 +67,8 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "skuWarehouseService-findProductSkusOnWarehouse")
-    public List<SkuWarehouse> findProductSkusOnWarehouse(final long productId, final long warehouseId) {
+    @Cacheable(value = "skuWarehouseService-productSkusOnWarehouse")
+    public List<SkuWarehouse> getProductSkusOnWarehouse(final long productId, final long warehouseId) {
         return getGenericDao().findByNamedQuery(
                 "SKUS.ON.WAREHOUSE",
                 productId,
@@ -78,8 +78,8 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "skuWarehouseService-findProductOnWarehouse")
-    public Map<String, BigDecimal> findProductAvailableToSellQuantity(final Product product, final Collection<Warehouse> warehouses) {
+    @Cacheable(value = "skuWarehouseService-productOnWarehouse")
+    public Map<String, BigDecimal> getProductAvailableToSellQuantity(final Product product, final Collection<Warehouse> warehouses) {
 
         final Map<String, BigDecimal> qty = new HashMap<String, BigDecimal>();
         for (final ProductSku sku : product.getSku()) {
@@ -259,8 +259,8 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
     /** {@inheritDoc}*/
     @CacheEvict(value = {
-            "skuWarehouseService-findProductOnWarehouse",
-            "skuWarehouseService-findProductSkusOnWarehouse"
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public SkuWarehouse create(SkuWarehouse instance) {
         final SkuWarehouse rez = super.create(instance);
@@ -269,8 +269,8 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
     /** {@inheritDoc}*/
     @CacheEvict(value = {
-            "skuWarehouseService-findProductOnWarehouse",
-            "skuWarehouseService-findProductSkusOnWarehouse"
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     public SkuWarehouse update(SkuWarehouse instance) {
         final SkuWarehouse rez = super.update(instance);

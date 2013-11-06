@@ -83,7 +83,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
 
     private void creditQuantity(final CustomerOrderDelivery delivery) throws OrderException {
 
-        final List<Warehouse> warehouses = warehouseService.findByShopId(
+        final List<Warehouse> warehouses = warehouseService.getByShopId(
                 delivery.getCustomerOrder().getShop().getShopId());
 
         String newStatus = null;

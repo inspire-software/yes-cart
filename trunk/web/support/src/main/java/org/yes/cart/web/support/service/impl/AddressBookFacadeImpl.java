@@ -92,21 +92,20 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "web.addressBookFacade-findAllCountries")
-    public List<Country> findAllCountries(final String shopCode) {
+    @Cacheable(value = "web.addressBookFacade-allCountries")
+    public List<Country> getAllCountries(final String shopCode) {
         return countryService.findAll();
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "web.addressBookFacade-findStatesByCountry")
-    public List<State> findStatesByCountry(final String countryCode) {
+    @Cacheable(value = "web.addressBookFacade-statesByCountry")
+    public List<State> getStatesByCountry(final String countryCode) {
         return stateService.findByCountry(countryCode);
     }
 
     /** {@inheritDoc} */
     @CacheEvict(value = {
-        "web.addressBookFacade-customerHasAtLeastOneAddress",
-        "web.customerServiceFacade-findCustomer"
+        "web.addressBookFacade-customerHasAtLeastOneAddress"
     }, key = "#address.customer.email")
     public void createOrUpdate(final Address address) {
         if (address.getAddressId() == 0) {
@@ -118,8 +117,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
     /** {@inheritDoc} */
     @CacheEvict(value = {
-            "web.addressBookFacade-customerHasAtLeastOneAddress",
-            "web.customerServiceFacade-findCustomer"
+            "web.addressBookFacade-customerHasAtLeastOneAddress"
     }, key = "#address.customer.email")
     public void remove(Address address) {
 
@@ -140,8 +138,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
     /** {@inheritDoc} */
     @CacheEvict(value = {
-            "web.addressBookFacade-customerHasAtLeastOneAddress",
-            "web.customerServiceFacade-findCustomer"
+            "web.addressBookFacade-customerHasAtLeastOneAddress"
     }, key = "#address.customer.email")
     public Address useAsDefault(Address address) {
         return addressService.updateSetDefault(address);

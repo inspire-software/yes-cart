@@ -81,7 +81,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         customerOrder,
                         null,
                         Collections.EMPTY_MAP)));
-        final Warehouse warehouse = warehouseService.getById(1);
+        final Warehouse warehouse = warehouseService.findById(1);
         // check reserved quantity
         ProductSku sku = productSkuService.getProductSkuBySkuCode("CC_TEST1");
         Pair<BigDecimal, BigDecimal> qty = skuWarehouseService.getQuantity(
@@ -128,7 +128,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         customerOrder,
                         null,
                         Collections.EMPTY_MAP)));
-        final Warehouse warehouse = warehouseService.getById(1);
+        final Warehouse warehouse = warehouseService.findById(1);
         // check reserved quantity
         ProductSku sku = productSkuService.getProductSkuBySkuCode("CC_TEST1");
         Pair<BigDecimal, BigDecimal> qty = skuWarehouseService.getQuantity(
@@ -178,7 +178,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP
                 )
         ));
-        final Warehouse warehouse = warehouseService.getById(1);
+        final Warehouse warehouse = warehouseService.findById(1);
         // check reserved quantity
         ProductSku sku = productSkuService.getProductSkuBySkuCode("CC_TEST1");
         Pair<BigDecimal, BigDecimal> qty = skuWarehouseService.getQuantity(

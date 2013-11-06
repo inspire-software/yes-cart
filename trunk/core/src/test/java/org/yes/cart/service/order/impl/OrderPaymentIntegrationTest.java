@@ -143,7 +143,7 @@ public class OrderPaymentIntegrationTest extends BaseCoreDBTestCase {
         final WarehouseService warehouseService = ctx().getBean("warehouseService", WarehouseService.class);
         final SkuWarehouseService skuWarehouseService = ctx().getBean("skuWarehouseService", SkuWarehouseService.class);
 
-        final List<Warehouse> shop10warehouses = warehouseService.findByShopId(10L);
+        final List<Warehouse> shop10warehouses = warehouseService.getByShopId(10L);
 
         BigDecimal stock = BigDecimal.ZERO;
         BigDecimal reserved = BigDecimal.ZERO;

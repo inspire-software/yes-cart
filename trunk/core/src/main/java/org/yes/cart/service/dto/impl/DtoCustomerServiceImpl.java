@@ -175,9 +175,9 @@ public class DtoCustomerServiceImpl
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueCustomer valueEntityCustomer = getEntityFactory().getByIface(AttrValueCustomer.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCustomer, getAdaptersRepository(), dtoFactory);
-        Attribute atr =((AttributeService)dtoAttributeService.getService()).getById(attrValueDTO.getAttributeDTO().getAttributeId());
+        Attribute atr =((AttributeService)dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntityCustomer.setAttribute(atr);
-        valueEntityCustomer.setCustomer(service.getById(((AttrValueCustomerDTO) attrValueDTO).getCustomerId()));
+        valueEntityCustomer.setCustomer(service.findById(((AttrValueCustomerDTO) attrValueDTO).getCustomerId()));
         valueEntityCustomer = attrValueEntityCustomerDao.create((AttrValueEntityCustomer) valueEntityCustomer);
         attrValueDTO.setAttrvalueId(valueEntityCustomer.getAttrvalueId());
         return attrValueDTO;
@@ -212,7 +212,7 @@ public class DtoCustomerServiceImpl
      * {@inheritDoc}
      */
     public void remoteResetPassword(final CustomerDTO customer, final long shopId) {
-        final Customer cust = service.getById(customer.getCustomerId());
+        final Customer cust = service.findById(customer.getCustomerId());
         if (cust != null) {
             final Shop shop = shopDao.findById(shopId);
             ((CustomerService)service).resetPassword(cust, shop);
@@ -221,7 +221,7 @@ public class DtoCustomerServiceImpl
 
     @Override
     public void updateCustomerTags(final CustomerDTO customer, final String tags) {
-        final Customer cust = service.getById(customer.getCustomerId());
+        final Customer cust = service.findById(customer.getCustomerId());
         if (cust != null) {
             if (StringUtils.isBlank(tags)) {
                 cust.setTag(null);

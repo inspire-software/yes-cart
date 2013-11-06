@@ -92,7 +92,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
                         customerOrder,
                         null,
                         Collections.EMPTY_MAP)));
-        final Warehouse warehouse = warehouseService.getById(1);
+        final Warehouse warehouse = warehouseService.findById(1);
         /* //adjust reserved quanity
        SkuWarehouse sw = skuWarehouseService.findByWarehouseSku(warehouse,  productSkuService.getProductSkuBySkuCode("CC_TEST1"));
        sw.setReserved(new BigDecimal("2.00"));
@@ -105,10 +105,10 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
         // funds not captured and quantity not changed
         TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.CAPTURE_FAIL, new PaymentGatewayParameterEntity());
         assertFalse(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
-        skuWarehouse = skuWarehouseService.getById(31);
+        skuWarehouse = skuWarehouseService.findById(31);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
-        skuWarehouse = skuWarehouseService.getById(30);
+        skuWarehouse = skuWarehouseService.findById(30);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         assertEquals(new BigDecimal("7.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
         List<CustomerOrderPayment> rezList = customerOrderPaymentService.findBy(
@@ -120,10 +120,10 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
         // same operation with ok fund capture
         TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.CAPTURE_FAIL, null);
         assertTrue(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
-        skuWarehouse = skuWarehouseService.getById(30);
+        skuWarehouse = skuWarehouseService.findById(30);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         assertEquals(new BigDecimal("7.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
-        skuWarehouse = skuWarehouseService.getById(31);
+        skuWarehouse = skuWarehouseService.findById(31);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
         rezList = customerOrderPaymentService.findBy(
@@ -146,7 +146,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
     public void testShipmentWithNonIntegerQty() throws Exception {
 
 
-        final Warehouse warehouse = warehouseService.getById(1);
+        final Warehouse warehouse = warehouseService.findById(1);
         final Pair<BigDecimal, BigDecimal> skuTest0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse), "CC_TEST3");
 
 

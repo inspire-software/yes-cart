@@ -43,7 +43,7 @@ public interface CategoryService extends GenericService<Category> {
      * @param shopId shop id
      * @return list of assigned categories
      */
-    List<Category> getAllByShopId(long shopId);
+    List<Category> findAllByShopId(long shopId);
 
 
     /**
@@ -132,7 +132,7 @@ public interface CategoryService extends GenericService<Category> {
      * @param withAvailability with availability date range filtering or not
      * @return list of child categories
      */
-    List<Category> getChildCategoriesWithAvailability(long categoryId, boolean withAvailability);
+    List<Category> findChildCategoriesWithAvailability(long categoryId, boolean withAvailability);
 
     /**
      * Get the child categories with recursion.
@@ -205,7 +205,7 @@ public interface CategoryService extends GenericService<Category> {
      * @param seoUri given seo uri
      * @return category id if found otherwise null
      */
-    Long getCategoryIdBySeoUri(String seoUri);
+    Long findCategoryIdBySeoUri(String seoUri);
 
     /**
      * Get category SEO uri by given id
@@ -213,7 +213,7 @@ public interface CategoryService extends GenericService<Category> {
      * @param categoryId given category id
      * @return seo uri if found otherwise null
      */
-    String getSeoUriByCategoryId(Long categoryId);
+    String findSeoUriByCategoryId(Long categoryId);
 
     /**
      * Get all categories, that contains product with given id.
@@ -222,7 +222,7 @@ public interface CategoryService extends GenericService<Category> {
      *
      * @return list of categories, that contains product.
      */
-    List<Category> getByProductId(long productId);
+    List<Category> findByProductId(long productId);
 
 
     /**

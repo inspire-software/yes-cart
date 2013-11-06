@@ -72,7 +72,7 @@ public class CustomerSelfCarePage extends AbstractWebPage {
         final String email = ApplicationDirector.getShoppingCart().getCustomerEmail();
         final Customer customer;
         if (StringUtils.hasLength(email)) {
-            customer = customerServiceFacade.findCustomer(ApplicationDirector.getShoppingCart().getCustomerEmail());
+            customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getShoppingCart().getCustomerEmail());
         } else {
             customer = null;
         }

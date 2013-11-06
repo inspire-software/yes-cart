@@ -59,7 +59,7 @@ public interface CustomerServiceFacade {
      *
      * @return customer object or null
      */
-    Customer findCustomer(String email);
+    Customer getCustomerByEmail(String email);
 
     /**
      * Reset password to given user and send generated password via email.

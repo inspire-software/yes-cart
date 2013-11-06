@@ -125,7 +125,7 @@ public class DtoCategoryServiceImpl
     private List<CategoryDTO> getAllFromRoot(final CategoryDTO rootDTO, final boolean withAvailalilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final CategoryService categoryService = (CategoryService) service;
-        final List<Category> childCategories = categoryService.getChildCategoriesWithAvailability(
+        final List<Category> childCategories = categoryService.findChildCategoriesWithAvailability(
                 rootDTO.getCategoryId(),
                 withAvailalilityFiltering);
         final List<CategoryDTO> childCategoriesDTO = new ArrayList<CategoryDTO>(childCategories.size());
@@ -153,7 +153,7 @@ public class DtoCategoryServiceImpl
      * {@inheritDoc}
      */
     public CategoryDTO update(final CategoryDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Category category = service.getById(instance.getCategoryId());
+        Category category = service.findById(instance.getCategoryId());
         assembler.assembleEntity(instance, category, getAdaptersRepository(), dtoFactory);
         bindDictionaryData(instance, category);
         category = service.update(category);
@@ -169,7 +169,7 @@ public class DtoCategoryServiceImpl
      */
     private void bindDictionaryData(final CategoryDTO instance, final Category category) {
         if (instance.getProductTypeId() != null && instance.getProductTypeId() > 0) {
-            category.setProductType(productTypeService.getById(instance.getProductTypeId()));
+            category.setProductType(productTypeService.findById(instance.getProductTypeId()));
         } else {
             category.setProductType(null);
         }
@@ -179,7 +179,7 @@ public class DtoCategoryServiceImpl
      * {@inheritDoc}
      */
     public void remove(final long id) {
-        ((ShopCategoryService) shopCategoryGenericService).deleteAll(service.getById(id));
+        ((ShopCategoryService) shopCategoryGenericService).deleteAll(service.findById(id));
         super.remove(id);
     }
 
@@ -187,7 +187,7 @@ public class DtoCategoryServiceImpl
      * {@inheritDoc}
      */
     public List<CategoryDTO> getAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Category> categories = ((CategoryService) service).getAllByShopId(shopId);
+        final List<Category> categories = ((CategoryService) service).findAllByShopId(shopId);
         final List<CategoryDTO> dtos = new ArrayList<CategoryDTO>(categories.size());
         fillDTOs(categories, dtos);
         return dtos;
@@ -197,7 +197,7 @@ public class DtoCategoryServiceImpl
      * {@inheritDoc}
      */
     public List<CategoryDTO> getByProductId(final long productId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Category> categories = ((CategoryService) service).getByProductId(productId);
+        final List<Category> categories = ((CategoryService) service).findByProductId(productId);
         final List<CategoryDTO> dtos = new ArrayList<CategoryDTO>(categories.size());
         fillDTOs(categories, dtos);
         return dtos;
@@ -319,9 +319,9 @@ public class DtoCategoryServiceImpl
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueCategory valueEntityCategory = getEntityFactory().getByIface(AttrValueCategory.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCategory, getAdaptersRepository(), dtoFactory);
-        Attribute atr = attributeService.getById(attrValueDTO.getAttributeDTO().getAttributeId());
+        Attribute atr = attributeService.findById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntityCategory.setAttribute(atr);
-        valueEntityCategory.setCategory(service.getById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId()));
+        valueEntityCategory.setCategory(service.findById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId()));
         valueEntityCategory = attrValueEntityCategoryDao.create((AttrValueEntityCategory) valueEntityCategory);
         attrValueDTO.setAttrvalueId(valueEntityCategory.getAttrvalueId());
         return attrValueDTO;

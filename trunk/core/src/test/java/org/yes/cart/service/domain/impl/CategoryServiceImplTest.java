@@ -60,25 +60,25 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
         product.setCode("PROD_CODE");
         product.setName("product");
         product.setDescription("description");
-        product.setProducttype(productTypeService.getById(1L));
+        product.setProducttype(productTypeService.findById(1L));
         product.setAvailability(Product.AVAILABILITY_ALWAYS);
-        product.setBrand(brandService.getById(101L));
+        product.setBrand(brandService.findById(101L));
         product = productService.create(product);
         assertTrue(product.getProductId() > 0);
         // assign created product it to categories
         ProductCategory productCategory = entityFactory.getByIface(ProductCategory.class);
         productCategory.setProduct(product);
-        productCategory.setCategory(categoryService.getById(128L));
+        productCategory.setCategory(categoryService.findById(128L));
         productCategory.setRank(0);
         productCategory = productCategoryService.create(productCategory);
         assertTrue(productCategory.getProductCategoryId() > 0);
         productCategory = entityFactory.getByIface(ProductCategory.class);
         productCategory.setProduct(product);
-        productCategory.setCategory(categoryService.getById(133L));
+        productCategory.setCategory(categoryService.findById(133L));
         productCategory.setRank(0);
         productCategory = productCategoryService.create(productCategory);
         assertTrue(productCategory.getProductCategoryId() > 0);
-        List<Category> list = categoryService.getByProductId(product.getProductId());
+        List<Category> list = categoryService.findByProductId(product.getProductId());
         assertEquals(2, list.size());
     }
 
@@ -121,11 +121,11 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetCategoryAttributeRecursive() {
-        String val = categoryService.getCategoryAttributeRecursive(null, categoryService.getById(105L), "SOME_NOT_EXISTING_ATTR", null);
+        String val = categoryService.getCategoryAttributeRecursive(null, categoryService.findById(105L), "SOME_NOT_EXISTING_ATTR", null);
         assertNull(val);
-        val = categoryService.getCategoryAttributeRecursive(null, categoryService.getById(105L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        val = categoryService.getCategoryAttributeRecursive(null, categoryService.findById(105L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("10,20,50", val);
-        val = categoryService.getCategoryAttributeRecursive(null, categoryService.getById(139L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        val = categoryService.getCategoryAttributeRecursive(null, categoryService.findById(139L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("6,12,24", val);
     }
 
@@ -135,7 +135,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetItemsPerPageTest() {
         // Category with seted CATEGORY_ITEMS_PER_PAGE
-        Category category = categoryService.getById(105L);
+        Category category = categoryService.findById(105L);
         assertNotNull(category);
         assertNotNull(category.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE));
         List<String> itemsPerPage = categoryService.getItemsPerPage(category);
@@ -145,7 +145,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("20", itemsPerPage.get(1));
         assertEquals("50", itemsPerPage.get(2));
         // Failover part
-        category = categoryService.getById(139L);
+        category = categoryService.findById(139L);
         assertNotNull(category);
         assertNull(category.getAttributesByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE));
         itemsPerPage = categoryService.getItemsPerPage(category);
@@ -162,7 +162,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetUIVariationTestWithFailover() {
-        Category category = categoryService.getById(139L);
+        Category category = categoryService.findById(139L);
         assertNotNull(category);
         assertNull(category.getUitemplate());
         String uiVariation = categoryService.getCategoryTemplateVariation(category);
@@ -171,7 +171,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetUIVariationTestNoFailover() {
-        Category category = categoryService.getById(139L);
+        Category category = categoryService.findById(139L);
         assertNotNull(category);
         assertNull(category.getUitemplate());
         String uiVariation = categoryService.getCategoryTemplate(139L);
@@ -180,7 +180,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetUIVariationTestExists() {
-        Category category = categoryService.getById(100L);
+        Category category = categoryService.findById(100L);
         assertNotNull(category);
         assertEquals("default", category.getUitemplate());
         String uiVariation = categoryService.getCategoryTemplate(100L);

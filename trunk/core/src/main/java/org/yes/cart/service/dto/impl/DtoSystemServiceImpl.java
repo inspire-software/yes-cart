@@ -68,7 +68,7 @@ public class DtoSystemServiceImpl implements DtoSystemService {
     }
 
     private final Collection<AttrValueSystemDTO> getAttributesById() {
-        final Map<String, AttrValueSystem> attrMap = systemService.getAttributeValues();
+        final Map<String, AttrValueSystem> attrMap = systemService.findAttributeValues();
         final List<AttrValueSystemDTO> values = new ArrayList<AttrValueSystemDTO>();
         for (final AttrValueSystem attr : attrMap.values()) {
             AttrValueSystemDTO attrValueSystemDTO = dtoFactory.getByIface(AttrValueSystemDTO.class);
@@ -105,13 +105,13 @@ public class DtoSystemServiceImpl implements DtoSystemService {
     /** {@inheritDoc}*/
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
 
-        Attribute atr = ((GenericService<Attribute>)dtoAttributeService.getService()).getById(attrValueDTO.getAttributeDTO().getAttributeId());
+        Attribute atr = ((GenericService<Attribute>)dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
         if (atr == null) {
             return null;
         }
         systemService.updateAttributeValue(atr.getCode(), attrValueDTO.getVal());
 
-        final AttrValueSystem val = systemService.getAttributeValues().get(atr.getCode());
+        final AttrValueSystem val = systemService.findAttributeValues().get(atr.getCode());
         attrValueAssembler.assembleDto(attrValueDTO, val, adaptersRepository.getAll(), dtoFactory);
 
         return attrValueDTO;

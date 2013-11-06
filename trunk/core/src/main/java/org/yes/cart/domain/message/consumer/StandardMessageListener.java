@@ -223,7 +223,7 @@ public class StandardMessageListener implements Runnable {
      */
     private void enrichMapWithCustomer(final Map<String, Object> map) {
         map.put(CUSTOMER,
-                customerService.findCustomer((String) map.get(CUSTOMER_EMAIL)));
+                customerService.getCustomerByEmail((String) map.get(CUSTOMER_EMAIL)));
 
 
     }

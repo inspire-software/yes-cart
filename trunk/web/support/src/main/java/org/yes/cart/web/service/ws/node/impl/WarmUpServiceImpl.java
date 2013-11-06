@@ -88,10 +88,10 @@ public class WarmUpServiceImpl implements WarmUpService {
         final List<Shop> shops = shopService.findAll();
         for (final Shop shop : shops) {
             // Preload all countries
-            final List<Country> countries = addressBookFacade.findAllCountries(shop.getCode());
+            final List<Country> countries = addressBookFacade.getAllCountries(shop.getCode());
             for (final Country country : countries) {
                 // Preload states by country
-                addressBookFacade.findStatesByCountry(country.getCountryCode());
+                addressBookFacade.getStatesByCountry(country.getCountryCode());
             }
         }
 
@@ -111,10 +111,10 @@ public class WarmUpServiceImpl implements WarmUpService {
     }
 
     private void loadShopData() {
-        final List<Shop> shops = shopService.findAll();
+        final List<Shop> shops = shopService.getAll();
         for (final Shop shop : shops) {
             // Used in SKU commands
-            final Shop cachedShop = shopService.findById(shop.getShopId());
+            final Shop cachedShop = shopService.getById(shop.getShopId());
             // Used for navigation and determination of current category belonging to current shop
             shopService.getShopCategories(cachedShop.getShopId());
             shopService.getShopCategoriesIds(cachedShop.getShopId());

@@ -104,8 +104,8 @@ public class PaymentAspect extends BaseNotificationAspect {
      * @throws Throwable re throws exception
      */
     @CacheEvict(value = {
-            "skuWarehouseService-findProductOnWarehouse",
-            "skuWarehouseService-findProductSkusOnWarehouse"
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     @Around("execution(* org.yes.cart.service.payment.impl.PaymentProcessorImpl.authorize(..))")
     public Object doAuthorize(final ProceedingJoinPoint pjp) throws Throwable {
@@ -150,8 +150,8 @@ public class PaymentAspect extends BaseNotificationAspect {
      * @throws Throwable re throws exception
      */
     @CacheEvict(value = {
-            "skuWarehouseService-findProductOnWarehouse",
-            "skuWarehouseService-findProductSkusOnWarehouse"
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
     @Around("execution(* org.yes.cart.service.payment.impl.PaymentProcessorImpl.shipmentComplete(..))")
     public Object doShipmentComplete(final ProceedingJoinPoint pjp) throws Throwable {

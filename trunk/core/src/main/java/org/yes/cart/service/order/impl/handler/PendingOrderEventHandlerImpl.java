@@ -123,7 +123,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
 
         final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
 
-        final List<Warehouse> warehouses = warehouseService.findByShopId(
+        final List<Warehouse> warehouses = warehouseService.getByShopId(
                 orderDelivery.getCustomerOrder().getShop().getShopId());
 
 

@@ -67,8 +67,8 @@ public class DtoProductCategoryServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         ProductCategory productCategory = getEntityFactory().getByIface(ProductCategory.class);
         assembler.assembleEntity(instance, productCategory, getAdaptersRepository(), dtoFactory);
-        productCategory.setCategory(categoryService.getById(instance.getCategoryId()));
-        productCategory.setProduct(productService.getById(instance.getProductId()));
+        productCategory.setCategory(categoryService.findById(instance.getCategoryId()));
+        productCategory.setProduct(productService.findById(instance.getProductId()));
         productCategory = service.create(productCategory);
         return getById(productCategory.getProductCategoryId());
     }
@@ -78,10 +78,10 @@ public class DtoProductCategoryServiceImpl
      */
     public ProductCategoryDTO update(final ProductCategoryDTO instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ProductCategory productCategory = service.getById(instance.getProductCategoryId());
+        ProductCategory productCategory = service.findById(instance.getProductCategoryId());
         assembler.assembleEntity(instance, productCategory, getAdaptersRepository(), dtoFactory);
-        productCategory.setCategory(categoryService.getById(instance.getCategoryId()));
-        productCategory.setProduct(productService.getById(instance.getProductId()));
+        productCategory.setCategory(categoryService.findById(instance.getCategoryId()));
+        productCategory.setProduct(productService.findById(instance.getProductId()));
         productCategory = service.update(productCategory);
         return getById(productCategory.getProductCategoryId());
 

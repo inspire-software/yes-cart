@@ -54,14 +54,6 @@ public interface ProductService extends GenericService<Product> {
 
 
     /**
-     * Get product by his id.
-     *
-     * @param productId product id
-     * @return product
-     */
-    Product getById(Long productId);
-
-    /**
      * Get product sku by his id
      *
      * @param skuId given sku id

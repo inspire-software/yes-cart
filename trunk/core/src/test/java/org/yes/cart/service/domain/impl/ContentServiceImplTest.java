@@ -66,11 +66,11 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetCategoryAttributeRecursive() {
-        String val = contentService.getContentAttributeRecursive(null, contentService.getById(10105L), "SOME_NOT_EXISTING_ATTR", null);
+        String val = contentService.getContentAttributeRecursive(null, contentService.findById(10105L), "SOME_NOT_EXISTING_ATTR", null);
         assertNull(val);
-        val = contentService.getContentAttributeRecursive(null, contentService.getById(10105L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        val = contentService.getContentAttributeRecursive(null, contentService.findById(10105L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("10,20,50", val);
-        val = contentService.getContentAttributeRecursive(null, contentService.getById(10107L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        val = contentService.getContentAttributeRecursive(null, contentService.findById(10107L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("6,12,24", val);
     }
 
@@ -80,7 +80,7 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testGetItemsPerPageTest() {
         // Category with set CATEGORY_ITEMS_PER_PAGE
-        Category content = contentService.getById(10105L);
+        Category content = contentService.findById(10105L);
         assertNotNull(content);
         assertNotNull(content.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE));
         List<String> itemsPerPage = contentService.getItemsPerPage(content);
@@ -90,7 +90,7 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("20", itemsPerPage.get(1));
         assertEquals("50", itemsPerPage.get(2));
         // Failover part
-        content = contentService.getById(10109L);
+        content = contentService.findById(10109L);
         assertNotNull(content);
         assertNull(content.getAttributesByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE));
         itemsPerPage = contentService.getItemsPerPage(content);
@@ -107,7 +107,7 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetUIVariationTestWithFailover() {
-        Category content = contentService.getById(10107L);
+        Category content = contentService.findById(10107L);
         assertNotNull(content);
         assertNull(content.getUitemplate());
         String uiVariation = contentService.getContentTemplateVariation(content);
@@ -116,7 +116,7 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetUIVariationTestNoFailover() {
-        Category category = contentService.getById(10107L);
+        Category category = contentService.findById(10107L);
         assertNotNull(category);
         assertNull(category.getUitemplate());
         String uiVariation = contentService.getContentTemplate(10107L);
@@ -125,7 +125,7 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetUIVariationTestExists() {
-        Category category = contentService.getById(10105L);
+        Category category = contentService.findById(10105L);
         assertNotNull(category);
         assertEquals("default", category.getUitemplate());
         String uiVariation = contentService.getContentTemplate(10105L);

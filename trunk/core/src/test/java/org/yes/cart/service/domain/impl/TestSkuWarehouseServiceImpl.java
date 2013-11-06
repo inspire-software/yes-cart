@@ -67,8 +67,8 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testCreate() {
         SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSku(productSkuService.getById(11006L));
-        skuWarehouse.setWarehouse(warehouseService.getById(1L));
+        skuWarehouse.setSku(productSkuService.findById(11006L));
+        skuWarehouse.setWarehouse(warehouseService.findById(1L));
         skuWarehouse.setQuantity(BigDecimal.TEN);
         skuWarehouse = skuWarehouseService.create(skuWarehouse);
         assertTrue(skuWarehouse.getSkuWarehouseId() > 0);
@@ -80,22 +80,22 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     public void testGetQuantity() {
         SkuWarehouse skuWarehouse;
         skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSku(productSkuService.getById(11006L));
-        skuWarehouse.setWarehouse(warehouseService.getById(2L));
+        skuWarehouse.setSku(productSkuService.findById(11006L));
+        skuWarehouse.setWarehouse(warehouseService.findById(2L));
         skuWarehouse.setQuantity(new BigDecimal("10.00"));
         skuWarehouse.setReserved(new BigDecimal("5.00"));
         skuWarehouseService.create(skuWarehouse);
         skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSku(productSkuService.getById(11006L));
-        skuWarehouse.setWarehouse(warehouseService.getById(3L));
+        skuWarehouse.setSku(productSkuService.findById(11006L));
+        skuWarehouse.setWarehouse(warehouseService.findById(3L));
         skuWarehouse.setQuantity(new BigDecimal("4.00"));
         skuWarehouse.setReserved(new BigDecimal("0.00"));
         skuWarehouseService.create(skuWarehouse);
         List<Warehouse> warehouses = new ArrayList<Warehouse>();
-        warehouses.add(warehouseService.getById(3L));
-        warehouses.add(warehouseService.getById(2L));
-        warehouses.add(warehouseService.getById(1L));
-        ProductSku psku = productSkuService.getById(11006L);
+        warehouses.add(warehouseService.findById(3L));
+        warehouses.add(warehouseService.findById(2L));
+        warehouses.add(warehouseService.findById(1L));
+        ProductSku psku = productSkuService.findById(11006L);
         Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(warehouses, psku.getCode());
         assertEquals(new BigDecimal("14.00"), rez.getFirst());
         assertEquals(new BigDecimal("5.00"), rez.getSecond());
@@ -107,10 +107,10 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testGetQuantity2() {
         List<Warehouse> warehouses = new ArrayList<Warehouse>();
-        warehouses.add(warehouseService.getById(3L));
-        warehouses.add(warehouseService.getById(2L));
-        warehouses.add(warehouseService.getById(1L));
-        ProductSku psku = productSkuService.getById(11007L);
+        warehouses.add(warehouseService.findById(3L));
+        warehouses.add(warehouseService.findById(2L));
+        warehouses.add(warehouseService.findById(1L));
+        ProductSku psku = productSkuService.findById(11007L);
         Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(warehouses, psku.getCode());
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), rez.getFirst());
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), rez.getSecond());
@@ -119,8 +119,8 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testUpdate() {
         SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSku(productSkuService.getById(11006L));
-        skuWarehouse.setWarehouse(warehouseService.getById(1L));
+        skuWarehouse.setSku(productSkuService.findById(11006L));
+        skuWarehouse.setWarehouse(warehouseService.findById(1L));
         skuWarehouse.setQuantity(BigDecimal.TEN);
         skuWarehouse = skuWarehouseService.create(skuWarehouse);
         assertTrue(skuWarehouse.getSkuWarehouseId() > 0);
@@ -129,28 +129,28 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         assertEquals(BigDecimal.ONE, skuWarehouse.getQuantity());
         long pk = skuWarehouse.getSkuWarehouseId();
         skuWarehouseService.delete(skuWarehouse);
-        skuWarehouse = skuWarehouseService.getById(pk);
+        skuWarehouse = skuWarehouseService.findById(pk);
         assertNull(skuWarehouse);
     }
 
     @Test
     public void testDelete() {
         SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSku(productSkuService.getById(11006L));
-        skuWarehouse.setWarehouse(warehouseService.getById(1L));
+        skuWarehouse.setSku(productSkuService.findById(11006L));
+        skuWarehouse.setWarehouse(warehouseService.findById(1L));
         skuWarehouse.setQuantity(BigDecimal.TEN);
         skuWarehouse = skuWarehouseService.create(skuWarehouse);
         assertTrue(skuWarehouse.getSkuWarehouseId() > 0);
         long pk = skuWarehouse.getSkuWarehouseId();
         skuWarehouseService.delete(skuWarehouse);
-        skuWarehouse = skuWarehouseService.getById(pk);
+        skuWarehouse = skuWarehouseService.findById(pk);
         assertNull(skuWarehouse);
     }
 
     @Test
     public void testReserveQuantity() {
-        final Warehouse warehouse = warehouseService.getById(1L);
-        ProductSku productSku = productSkuService.getById(10004L); // 4 items on 1 warehouse
+        final Warehouse warehouse = warehouseService.findById(1L);
+        ProductSku productSku = productSkuService.findById(10004L); // 4 items on 1 warehouse
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouseService.reservation(warehouse, productSku.getCode(), new BigDecimal("3.00"))); // 4 total and 3 reserved
         Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
@@ -171,8 +171,8 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
      */
     @Test
     public void testReservationandVoidReservation() {
-        final Warehouse warehouse = warehouseService.getById(1L);
-        ProductSku productSku = productSkuService.getById(10004L); // 4 items on 1 warehouse
+        final Warehouse warehouse = warehouseService.findById(1L);
+        ProductSku productSku = productSkuService.findById(10004L); // 4 items on 1 warehouse
         //3 items reservation
         BigDecimal toReserve = skuWarehouseService.reservation(warehouse, productSku.getCode(), new BigDecimal("3.00"));
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), toReserve); // 4 total and 3 reserved
@@ -209,8 +209,8 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testDebitCredit() {
-        final Warehouse warehouse = warehouseService.getById(1L);
-        ProductSku productSku = productSkuService.getById(10004L); // 4 items on 1 warehouse
+        final Warehouse warehouse = warehouseService.findById(1L);
+        ProductSku productSku = productSkuService.findById(10004L); // 4 items on 1 warehouse
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouseService.debit(warehouse, productSku.getCode(), new BigDecimal("3.00"))); // 2 total and 1 reserved
         Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
@@ -258,7 +258,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductSkusOnWarehouse() {
         //10000 product id - sobot has 4 skus on 1 warehouse
-        List<SkuWarehouse> skusWarehouseList = skuWarehouseService.findProductSkusOnWarehouse(10000L, 1L);
+        List<SkuWarehouse> skusWarehouseList = skuWarehouseService.getProductSkusOnWarehouse(10000L, 1L);
         assertEquals(4, skusWarehouseList.size());
         for (SkuWarehouse skuWarehouse : skusWarehouseList) {
             if (skuWarehouse.getSku().getSkuId() == 10000L) {
@@ -279,9 +279,9 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductAvailableToSellQuantitySobotSHOP10() {
         //10000 product id - sobot has 4 skus on 1 warehouse
-        final List<Warehouse> shop10wh = warehouseService.findByShopId(10L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L);
         final Product sobot = productService.getProductById(10000L);
-        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductAvailableToSellQuantity(sobot, shop10wh);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductAvailableToSellQuantity(sobot, shop10wh);
         assertEquals(4, skusWarehouse.size());
         assertEquals(0, new BigDecimal(1).compareTo(skusWarehouse.get("SOBOT-BEER")));
         assertEquals(0, new BigDecimal(2).compareTo(skusWarehouse.get("SOBOT-PINK")));
@@ -292,7 +292,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductSkuAvailableToSellQuantitySobotSHOP10() {
         //10000 product id - sobot has 4 skus on 1 warehouse
-        final List<Warehouse> shop10wh = warehouseService.findByShopId(10L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L);
         final ProductSku sobot = productService.getProductSkuByCode("SOBOT-PINK");
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductSkuAvailableToSellQuantity(sobot, shop10wh);
         assertEquals(1, skusWarehouse.size());
@@ -302,18 +302,18 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductAvailableToSellQuantityProduct5AccSHOP10() {
         //14004 product id - PRODUCT5-ACC only has associations
-        final List<Warehouse> shop10wh = warehouseService.findByShopId(10L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L);
         final Product product5acc = productService.getProductById(14004L);
-        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductAvailableToSellQuantity(product5acc, shop10wh);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductAvailableToSellQuantity(product5acc, shop10wh);
         assertEquals(0, skusWarehouse.size());
     }
 
     @Test
     public void testFindProductSkuAvailableToSellQuantityProduct8SHOP10() {
         //15007 product id - PRODUCT8 only has SKU
-        final List<Warehouse> shop10wh = warehouseService.findByShopId(10L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L);
         final Product product8 = productService.getProductById(15007L);
-        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductAvailableToSellQuantity(product8, shop10wh);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductAvailableToSellQuantity(product8, shop10wh);
         assertEquals(1, skusWarehouse.size());
         assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("PRODUCT8")));
     }
@@ -321,7 +321,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductSkuAvailableToSellQuantityProduct8bySkuSHOP10() {
         //15007 product id - PRODUCT8 only has SKU
-        final List<Warehouse> shop10wh = warehouseService.findByShopId(10L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L);
         final ProductSku product8 = productService.getSkuById(11007L);
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductSkuAvailableToSellQuantity(product8, shop10wh);
         assertEquals(1, skusWarehouse.size());
@@ -332,9 +332,9 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductAvailableToSellQuantitySobotSHOP50() {
         //10000 product id - sobot has 4 skus on 1 warehouse
-        final List<Warehouse> shop10wh = warehouseService.findByShopId(50L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L);
         final Product sobot = productService.getProductById(10000L);
-        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductAvailableToSellQuantity(sobot, shop10wh);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductAvailableToSellQuantity(sobot, shop10wh);
         assertEquals(4, skusWarehouse.size());
         assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("SOBOT-BEER")));
         assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("SOBOT-PINK")));
@@ -345,7 +345,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductSkuAvailableToSellQuantitySobotSHOP50() {
         //10000 product id - sobot has 4 skus on 1 warehouse
-        final List<Warehouse> shop10wh = warehouseService.findByShopId(50L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L);
         final ProductSku sobot = productService.getProductSkuByCode("SOBOT-PINK");
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductSkuAvailableToSellQuantity(sobot, shop10wh);
         assertEquals(1, skusWarehouse.size());
@@ -355,18 +355,18 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductAvailableToSellQuantityProduct5AccSHOP50() {
         //14004 product id - PRODUCT5-ACC only has associations
-        final List<Warehouse> shop10wh = warehouseService.findByShopId(50L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L);
         final Product product5acc = productService.getProductById(14004L);
-        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductAvailableToSellQuantity(product5acc, shop10wh);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductAvailableToSellQuantity(product5acc, shop10wh);
         assertEquals(0, skusWarehouse.size());
     }
 
     @Test
     public void testFindProductSkuAvailableToSellQuantityProduct8SHOP50() {
         //15007 product id - PRODUCT8 only has SKU
-        final List<Warehouse> shop10wh = warehouseService.findByShopId(50L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L);
         final Product product8 = productService.getProductById(15007L);
-        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductAvailableToSellQuantity(product8, shop10wh);
+        Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductAvailableToSellQuantity(product8, shop10wh);
         assertEquals(1, skusWarehouse.size());
         assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("PRODUCT8")));
     }
@@ -374,7 +374,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductSkuAvailableToSellQuantityProduct8bySkuSHOP50() {
         //15007 product id - PRODUCT8 only has SKU
-        final List<Warehouse> shop10wh = warehouseService.findByShopId(50L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L);
         final ProductSku product8 = productService.getSkuById(11007L);
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.findProductSkuAvailableToSellQuantity(product8, shop10wh);
         assertEquals(1, skusWarehouse.size());
@@ -384,14 +384,14 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testIsSkuAvailabilityPreorder () {
-        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15300L).getCode(), true));
-        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15301L).getCode(), true));
-        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15310L).getCode(), true));
-        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15320L).getCode(), true));
-        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15300L).getCode(), false));
-        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15301L).getCode(), false));
-        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15310L).getCode(), false));
-        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.getById(15320L).getCode(), false));
+        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.findById(15300L).getCode(), true));
+        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.findById(15301L).getCode(), true));
+        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.findById(15310L).getCode(), true));
+        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.findById(15320L).getCode(), true));
+        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.findById(15300L).getCode(), false));
+        assertFalse(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.findById(15301L).getCode(), false));
+        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.findById(15310L).getCode(), false));
+        assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.findById(15320L).getCode(), false));
     }
 
 
@@ -425,8 +425,8 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         }
 
         SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSku(productSkuService.getById(15320L)); //need 2 items to push order back to life cycle
-        skuWarehouse.setWarehouse(warehouseService.getById(1L));
+        skuWarehouse.setSku(productSkuService.findById(15320L)); //need 2 items to push order back to life cycle
+        skuWarehouse.setWarehouse(warehouseService.findById(1L));
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouseService.create(skuWarehouse);
         skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSku().getCode());
@@ -448,8 +448,8 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         }
 
         skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSku(productSkuService.getById(15310L)); //need 2 items to push order back to life cycle
-        skuWarehouse.setWarehouse(warehouseService.getById(1L));
+        skuWarehouse.setSku(productSkuService.findById(15310L)); //need 2 items to push order back to life cycle
+        skuWarehouse.setWarehouse(warehouseService.findById(1L));
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouseService.create(skuWarehouse);
         skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSku().getCode());

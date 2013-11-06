@@ -236,7 +236,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
         dto = dtoService.create(dto);
         assertTrue(dto.getProductId() > 0);
         dtoService.remove(dto.getProductId());
-        dto = dtoService.getById(dto.getProductId());
+        dto = dtoService.findById(dto.getProductId());
         assertNull(dto);
 
 
@@ -246,7 +246,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
 
 
         AttrValueProductDTO attrValueProductDTO = dtoFactory.getByIface(AttrValueProductDTO.class);
-        attrValueProductDTO.setAttributeDTO(dtoAttrService.getById(2010L)); //POWERSUPPLY
+        attrValueProductDTO.setAttributeDTO(dtoAttrService.findById(2010L)); //POWERSUPPLY
         attrValueProductDTO.setProductId(dto.getProductId());
         attrValueProductDTO.setVal("Дрова"); //Firewood
         attrValueProductDTO = (AttrValueProductDTO) dtoService.createEntityAttributeValue(attrValueProductDTO);
@@ -259,7 +259,7 @@ public class DtoProductServiceImplTezt extends BaseCoreDBTestCase {
 
 
         dtoService.remove(dto.getProductId());
-        dto = dtoService.getById(dto.getProductId());
+        dto = dtoService.findById(dto.getProductId());
         assertNull(dto);         */
 
 

@@ -34,7 +34,7 @@ public interface ShopWarehouseRelationshipSupport {
      *
      * @return list of all entities
      */
-    List<Shop> findAll();
+    List<Shop> getAll();
 
     /**
      * Get all warehouses that belong to given shop.

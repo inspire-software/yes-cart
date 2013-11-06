@@ -170,7 +170,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         Assert.notNull(order, "Expecting order, but found null");
         Assert.notNull(shoppingCart, "Expecting shopping cart, but found null");
         final CustomerOrderDelivery customerOrderDelivery = entityFactory.getByIface(CustomerOrderDelivery.class);
-        customerOrderDelivery.setCarrierSla(carrierSlaService.getById(shoppingCart.getCarrierSlaId() == null ? 0 : shoppingCart.getCarrierSlaId()));
+        customerOrderDelivery.setCarrierSla(carrierSlaService.findById(shoppingCart.getCarrierSlaId() == null ? 0 : shoppingCart.getCarrierSlaId()));
         customerOrderDelivery.setDeliveryNum(order.getOrdernum() + "-" + idx);
         customerOrderDelivery.setDeliveryGroup(deliveryGroup);
 
@@ -208,7 +208,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      */
     Map<String, List<CustomerOrderDet>> getDeliveryGroups(final CustomerOrder order, final boolean onePhysicalDelivery) {
 
-        final List<Warehouse> warehouses = warehouseService.findByShopId(order.getShop().getShopId());
+        final List<Warehouse> warehouses = warehouseService.getByShopId(order.getShop().getShopId());
 
         final Map<String, List<CustomerOrderDet>> deliveryGroups = new HashMap<String, List<CustomerOrderDet>>();
 

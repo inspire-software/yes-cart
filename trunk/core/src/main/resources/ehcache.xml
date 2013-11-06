@@ -130,7 +130,7 @@
     <cache name="categoryService-categoryAttributeRecursive"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="categoryService-categoryAttributeRecursive2"      maxElementsInMemory="200" overflowToDisk="false"
+    <cache name="categoryService-categoryAttributesRecursive"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="categoryService-productQuantity"      maxElementsInMemory="200" overflowToDisk="false"
@@ -177,7 +177,7 @@
     <cache name="contentService-contentAttributeRecursive"      maxElementsInMemory="1000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="contentService-contentAttributeRecursive2"      maxElementsInMemory="200" overflowToDisk="false"
+    <cache name="contentService-contentAttributesRecursive"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="contentService-childContent"      maxElementsInMemory="1000" overflowToDisk="false"
@@ -208,10 +208,10 @@
            eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
 
-    <cache name="skuWarehouseService-findProductOnWarehouse"      maxElementsInMemory="5000" overflowToDisk="false"
+    <cache name="skuWarehouseService-productOnWarehouse"      maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
-    <cache name="skuWarehouseService-findProductSkusOnWarehouse"  maxElementsInMemory="15000" overflowToDisk="false"
+    <cache name="skuWarehouseService-productSkusOnWarehouse"  maxElementsInMemory="15000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
 
 
@@ -257,7 +257,7 @@
     <cache name="productService-productSearchResultDTOByQuery"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="300"/>
 
-    <cache name="productService-productQty"      maxElementsInMemory="2000" overflowToDisk="false"
+    <cache name="productService-productQtyByQuery"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
     <cache name="productService-productByIdList"      maxElementsInMemory="2000" overflowToDisk="false"
@@ -269,7 +269,7 @@
     <cache name="productService-distinctBrands"      maxElementsInMemory="500" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="productService-productQty2"      maxElementsInMemory="2000" overflowToDisk="false"
+    <cache name="productService-productQtyByCategoryId"      maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
 
@@ -310,6 +310,9 @@
     <cache name="systemService-attributeValue"      maxElementsInMemory="200" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="systemService-attributeValues"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
 
 
     <cache name="productImageNameStrategyService-productCode"      maxElementsInMemory="2000" overflowToDisk="false"
@@ -344,6 +347,10 @@
 
     <cache name="promotionService-groovyCache"  maxElementsInMemory="500" overflowToDisk="false"
            eternal="true"  timeToLiveSeconds="86400" timeToIdleSeconds="86400"/>
+
+    <cache name="customerService-customerByEmail" maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
 
     <!-- ############################################# hibernate entity cache #######################################-->
 
@@ -411,87 +418,80 @@
 
     <cache name="web.bookmarkService-seoCategoryDecode"
            maxElementsInMemory="200"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
     <cache name="web.bookmarkService-seoCategoryEncode"
            maxElementsInMemory="200"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
     <cache name="web.bookmarkService-seoContentDecode"
            maxElementsInMemory="1000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
     <cache name="web.bookmarkService-seoContentEncode"
            maxElementsInMemory="1000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
     <cache name="web.bookmarkService-seoSkuDecode"
            maxElementsInMemory="15000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
     <cache name="web.bookmarkService-seoSkuEncode"
            maxElementsInMemory="15000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
     <cache name="web.bookmarkService-seoProductDecode"
            maxElementsInMemory="5000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
     <cache name="web.bookmarkService-seoProductEncode"
            maxElementsInMemory="5000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
     <cache name="web.decoratorFacade-decorate"
            maxElementsInMemory="5000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="600"
            timeToIdleSeconds="120"/>
 
-    <cache name="web.customerServiceFacade-findCustomer"
-           maxElementsInMemory="5000"
-           overflowToDisk="true"
-           eternal="false"
-           timeToLiveSeconds="86400"
-           timeToIdleSeconds="7200"/>
-
     <cache name="web.addressBookFacade-customerHasAtLeastOneAddress"
            maxElementsInMemory="5000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
-    <cache name="web.addressBookFacade-findAllCountries"
+    <cache name="web.addressBookFacade-allCountries"
            maxElementsInMemory="10"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
-    <cache name="web.addressBookFacade-findStatesByCountry"
+    <cache name="web.addressBookFacade-statesByCountry"
            maxElementsInMemory="200"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>

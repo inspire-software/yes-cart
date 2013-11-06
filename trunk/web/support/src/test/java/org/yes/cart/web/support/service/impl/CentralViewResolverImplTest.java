@@ -83,7 +83,7 @@ public class CentralViewResolverImplTest {
                         }
                         return Collections.emptyList();
                     }
-                }, new AttributeServiceImpl(null, null, false) {
+                }, new AttributeServiceImpl(null, null) {
                     @Override
                     public Set<String> getAllNavigatableAttributeCodes() {
                         return new HashSet<String>() {{

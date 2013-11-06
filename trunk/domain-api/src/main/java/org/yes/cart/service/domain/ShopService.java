@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -38,11 +39,18 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
     Shop getShopByDomainName(String serverName);
 
     /**
+     * Get all entities.
+     *
+     * @return list of all entities
+     */
+    List<Shop> getAll();
+
+    /**
      * Find shop by id
      * @param shopId  given id
      * @return     shop if found, otherwise null
      */
-    Shop findById(long shopId);
+    Shop getById(long shopId);
 
     /**
      * Get the {@link Shop} by given order guid.
@@ -90,7 +98,7 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
      *
      * @return all supported currencies.
      */
-    Collection<String> getAllSupportedCurrenciesByShops();
+    Collection<String> findAllSupportedCurrenciesByShops();
 
 
 }

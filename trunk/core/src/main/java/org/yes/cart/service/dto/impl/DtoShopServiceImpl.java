@@ -89,12 +89,12 @@ public class DtoShopServiceImpl
 
     /** {@inheritDoc} */
     public String getSupportedCurrencies(final long shopId) {
-        return service.getById(shopId).getSupportedCurrencies();
+        return service.findById(shopId).getSupportedCurrencies();
     }
 
     /** {@inheritDoc} */
     public Collection<String> getAllSupportedCurrenciesByShops() {
-        return ((ShopService)service).getAllSupportedCurrenciesByShops();
+        return ((ShopService)service).findAllSupportedCurrenciesByShops();
     }
 
     /**
@@ -120,7 +120,7 @@ public class DtoShopServiceImpl
     /** {@inheritDoc} */
     public List<ShopDTO> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         List<Shop> rez = new ArrayList<Shop>();
-        for (CustomerShop customerShop : customerService.getById(customerId).getShops()) {
+        for (CustomerShop customerShop : customerService.findById(customerId).getShops()) {
             rez.add(customerShop.getShop());
         }
         return getDTOs(rez);
@@ -171,9 +171,9 @@ public class DtoShopServiceImpl
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
         AttrValueShop valueEntityShop = getEntityFactory().getByIface(AttrValueShop.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityShop, getAdaptersRepository(), dtoFactory);
-        Attribute atr = ((GenericService<Attribute>)dtoAttributeService.getService()).getById(attrValueDTO.getAttributeDTO().getAttributeId());
+        Attribute atr = ((GenericService<Attribute>)dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntityShop.setAttribute(atr);
-        valueEntityShop.setShop(service.getById(((AttrValueShopDTO) attrValueDTO).getShopId()));
+        valueEntityShop.setShop(service.findById(((AttrValueShopDTO) attrValueDTO).getShopId()));
         valueEntityShop = attrValueEntityShopDao.create((AttrValueEntityShop) valueEntityShop);
         attrValueDTO.setAttrvalueId(valueEntityShop.getAttrvalueId());
         return attrValueDTO;

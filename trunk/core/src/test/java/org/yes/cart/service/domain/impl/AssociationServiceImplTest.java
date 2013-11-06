@@ -49,8 +49,8 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
     @After
     public void cleanUp() {
         for (Long pk : cleanupPks) {
-            associationService.delete(associationService.getById(pk));
-            assertNull(associationService.getById(pk));
+            associationService.delete(associationService.findById(pk));
+            assertNull(associationService.findById(pk));
         }
     }
 
@@ -92,7 +92,7 @@ public class AssociationServiceImplTest extends BaseCoreDBTestCase {
         assertTrue(association.getAssociationId() > 0);
         long pk = association.getAssociationId();
         associationService.delete(association);
-        association = associationService.getById(pk);
+        association = associationService.findById(pk);
         assertNull(association);
     }
 

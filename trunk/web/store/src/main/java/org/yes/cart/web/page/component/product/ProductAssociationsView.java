@@ -61,7 +61,7 @@ public class ProductAssociationsView extends AbstractProductSearchResultList {
         String productIdStr = getPage().getPageParameters().get(WebParametersKeys.PRODUCT_ID).toString();
         if (productIdStr == null) {
             long skuId = getPage().getPageParameters().get(WebParametersKeys.SKU_ID).toLong();
-            productId = productSkuService.getById(skuId).getProduct().getProductId();
+            productId = productService.getSkuById(skuId).getProduct().getProductId();
         } else {
             productId = Long.valueOf(productIdStr);
         }

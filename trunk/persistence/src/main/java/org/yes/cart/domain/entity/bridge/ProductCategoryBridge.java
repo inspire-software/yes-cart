@@ -87,7 +87,7 @@ public class ProductCategoryBridge implements FieldBridge {
 
             final ShopCategoryRelationshipSupport support = getShopCategoryRelationshipSupport();
 
-            final List<Shop> shops = support.findAll();
+            final List<Shop> shops = support.getAll();
 
             for (final Shop shop : shops) {
 

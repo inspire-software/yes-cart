@@ -115,7 +115,7 @@ public interface ImageService extends GenericService<SeoImage> {
      * @return byte array
      * @throws IOException in case of any I/O errors
      */
-    byte[] getImageAsByteArray(String fileName, String code, String storagePrefix, String pathToRepository) throws IOException;
+    byte[] imageToByteArray(String fileName, String code, String storagePrefix, String pathToRepository) throws IOException;
 
     /**
      * Get the image seo data by given image name.

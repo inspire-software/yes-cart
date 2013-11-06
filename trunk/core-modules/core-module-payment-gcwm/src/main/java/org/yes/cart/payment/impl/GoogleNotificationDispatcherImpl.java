@@ -264,7 +264,7 @@ public class GoogleNotificationDispatcherImpl extends BaseNotificationDispatcher
                 String.valueOf(notification.getBuyerId())
         );
 
-        Customer customer = getCustomerService().findCustomer(email);
+        Customer customer = getCustomerService().getCustomerByEmail(email);
 
         if (customer == null) {
 
