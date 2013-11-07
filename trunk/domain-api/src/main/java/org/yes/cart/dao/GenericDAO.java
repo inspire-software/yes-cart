@@ -67,11 +67,18 @@ public interface GenericDAO<T, PK extends Serializable> {
     T findById(PK id);
 
     /**
-     * Get the All entities.
+     * Get all entities.
      *
-     * @return lis tof all entities
+     * @return list of all entities
      */
     List<T> findAll();
+
+    /**
+     * Get all entities iterator (scroll results as opposed to load all)
+     *
+     * @return scrollable results iterator
+     */
+    ResultsIterator<T> findAllIterator();
 
     /**
      * Find entities, that mach given example.

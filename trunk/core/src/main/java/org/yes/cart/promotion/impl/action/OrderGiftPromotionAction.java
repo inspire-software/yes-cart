@@ -177,7 +177,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
                 return orderAmount.divide(ratio, RoundingMode.FLOOR).setScale(0, RoundingMode.FLOOR);
             } else {
                 // else we have a scale and we get non exact ratio
-                return orderAmount.divide(ratio);
+                return orderAmount.divide(ratio, RoundingMode.CEILING).setScale(0, RoundingMode.CEILING);
             }
         }
 

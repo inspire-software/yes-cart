@@ -461,7 +461,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 List rez =  productDao.fullTextSearch(
                         parsed
                 ) ;
-                assertEquals("Feiled [" + parsed + "]",  1, rez.size());
+                assertEquals("Failed [" + parsed + "]",  1, rez.size());
 
                 status.setRollbackOnly();
 

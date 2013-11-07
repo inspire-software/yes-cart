@@ -176,7 +176,7 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
                 return cartItemQuantity.divide(ratio, RoundingMode.FLOOR).setScale(0, RoundingMode.FLOOR);
             } else {
                 // else we have a scale and we get non exact ratio
-                return cartItemQuantity.divide(ratio);
+                return cartItemQuantity.divide(ratio, RoundingMode.CEILING).setScale(0, RoundingMode.CEILING);
             }
         }
 

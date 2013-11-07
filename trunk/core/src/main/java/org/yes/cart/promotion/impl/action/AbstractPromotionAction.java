@@ -22,6 +22,7 @@ import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.promotion.PromotionCondition;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -76,6 +77,17 @@ public abstract class AbstractPromotionAction implements PromotionAction {
      */
     protected Customer getCustomer(final Map<String, Object> context) {
         return (Customer) context.get(PromotionCondition.VAR_CUSTOMER);
+    }
+
+    /**
+     * Get customer tags.
+     *
+     * @param context evaluation context
+     *
+     * @return customer tags
+     */
+    protected List<String> getCustomerTags(final Map<String, Object> context) {
+        return (List<String>) context.get(PromotionCondition.VAR_CUSTOMER_TAGS);
     }
 
 }
