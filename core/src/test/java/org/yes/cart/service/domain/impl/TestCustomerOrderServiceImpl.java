@@ -18,8 +18,11 @@ package org.yes.cart.service.domain.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
@@ -219,7 +222,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
 
     @Test
-    public void testFindDeliveryAwaitingForInventory()      throws Exception {
+    public void testFindDeliveryAwaitingForInventory() throws Exception {
         final Customer customer = createCustomer();
         final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 1);
 
@@ -240,24 +243,62 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
         }
 
-        List<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(
-                Arrays.asList(productSkuService.findById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-        assertEquals("Expect one order with preorder sku id = 15330", 1, rez.size());
+        final int[] count = new int[1];
 
-        rez = customerOrderService.findAwaitingDeliveries(
-                Arrays.asList(productSkuService.findById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-        assertEquals("Expect one order with preorder sku id = 15340", 1, rez.size());
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+                ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(
+                        Arrays.asList(productSkuService.findById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+                for (count[0] = 0; rez.hasNext(); rez.next()) {
+                    count[0]++;
+                }
+                transactionStatus.setRollbackOnly();
+            }
+        });
+        assertEquals("Expect one order with preorder sku id = 15330", 1, count[0]);
 
-        rez = customerOrderService.findAwaitingDeliveries(
-                Arrays.asList(productSkuService.findById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-        assertEquals("Not expected orders waiting for inventory sku id = 15129" ,0, rez.size());
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+                ResultsIterator<CustomerOrderDelivery> rez  = customerOrderService.findAwaitingDeliveries(
+                        Arrays.asList(productSkuService.findById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+                for (count[0] = 0; rez.hasNext(); rez.next()) {
+                    count[0]++;
+                }
+                transactionStatus.setRollbackOnly();
+            }
+        });
+        assertEquals("Expect one order with preorder sku id = 15340", 1, count[0]);
 
-        rez = customerOrderService.findAwaitingDeliveries(null, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-        assertEquals("Total two orders wait for inventory", 2, rez.size());
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+                ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(
+                        Arrays.asList(productSkuService.findById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+                for (count[0] = 0; rez.hasNext(); rez.next()) {
+                    count[0]++;
+                }
+                transactionStatus.setRollbackOnly();
+            }
+        });
+        assertEquals("Not expected orders waiting for inventory sku id = 15129" ,0, count[0]);
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+                ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(null, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+                for (count[0] = 0; rez.hasNext(); rez.next()) {
+                    count[0]++;
+                }
+                transactionStatus.setRollbackOnly();
+            }
+        });
+        assertEquals("Total two orders wait for inventory", 2, count[0]);
 
 
 

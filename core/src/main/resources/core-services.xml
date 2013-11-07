@@ -169,6 +169,16 @@
         </property>
     </bean>
 
+    <bean id="runtimeAttributeService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.RuntimeAttributeServiceImpl">
+                <constructor-arg index="0" ref="attributeService"/>
+                <constructor-arg index="1" ref="etypeService"/>
+                <constructor-arg index="2" ref="attributeGroupService"/>
+            </bean>
+        </property>
+    </bean>
+
 
     <!--     #############################   Image section begin   #############################    -->
     <bean id="categoryImageNameStrategy" class="org.yes.cart.service.image.impl.CategoryImageNameStrategyImpl"/>

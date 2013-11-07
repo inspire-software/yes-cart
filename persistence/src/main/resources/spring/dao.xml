@@ -67,8 +67,9 @@
                 <prop key="findAttributeValues">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
                 <prop key="getAttributeValue">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
                 <prop key="getAttributeValues">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
-                <prop key="getAttributeValueOrDefault">PROPAGATION_REQUIRES_NEW,readOnly,-Throwable</prop>
+                <prop key="getAttributeValueOrDefault">PROPAGATION_SUPPORTS,readOnly,-Throwable</prop>
                 <!-- Other patterns: TODO: remove this wildcard YC-191 -->
+                <prop key="getSelf">PROPAGATION_SUPPORTS</prop>
                 <prop key="*">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
 
             </props>

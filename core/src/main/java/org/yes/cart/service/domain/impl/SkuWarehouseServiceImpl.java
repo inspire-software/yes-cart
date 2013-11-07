@@ -24,6 +24,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerOrderService;
@@ -328,32 +329,39 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
         if (isSkuAvailabilityPreorderOrBackorder(productSkuCode, true)) {
 
-            List<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findAwaitingDeliveries(
+            final ResultsIterator<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findAwaitingDeliveries(
                     Arrays.asList(productSkuCode),
                     CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                     Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED)
             );
 
-            for (CustomerOrderDelivery delivery : waitForInventory) {
+            try {
+                while (waitForInventory.hasNext()) {
 
-                try {
-                    boolean rez = getOrderStateManager().fireTransition(
-                            new OrderEventImpl(OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT, delivery.getCustomerOrder(), delivery));
-                    if (rez) {
-                        customerOrderService.update(delivery.getCustomerOrder());
-                        ShopCodeContext.getLog(this).info("Push delivery " + delivery.getDeliveryNum() + " back to life cycle , because of sku quantity is changed. Product sku code =" + productSkuCode);
+                    final CustomerOrderDelivery delivery = waitForInventory.next();
 
-                    } else {
-                        ShopCodeContext.getLog(this).info("Cannot push delivery "
-                                + delivery.getDeliveryNum() + " back to life cycle , because of sku quantity is changed. Product sku code ="
-                                + productSkuCode
-                                + " Stop pushing");
-                        break;
+                    try {
+                        boolean rez = getOrderStateManager().fireTransition(
+                                new OrderEventImpl(OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT, delivery.getCustomerOrder(), delivery));
+                        if (rez) {
+                            customerOrderService.update(delivery.getCustomerOrder());
+                            ShopCodeContext.getLog(this).info("Push delivery " + delivery.getDeliveryNum() + " back to life cycle , because of sku quantity is changed. Product sku code =" + productSkuCode);
+
+                        } else {
+                            ShopCodeContext.getLog(this).info("Cannot push delivery "
+                                    + delivery.getDeliveryNum() + " back to life cycle , because of sku quantity is changed. Product sku code ="
+                                    + productSkuCode
+                                    + " Stop pushing");
+                            break;
+                        }
+                    } catch (OrderException e) {
+                        ShopCodeContext.getLog(this).warn("Cannot push orders, which are awaiting for inventory", e);
                     }
-                } catch (OrderException e) {
-                    ShopCodeContext.getLog(this).error("Cannot push orders, which are awaiting for inventory", e);
-                }
 
+                }
+            } catch (Exception exp) {
+                waitForInventory.close();
+                ShopCodeContext.getLog(this).error(exp.getMessage(), exp);
             }
 
         }

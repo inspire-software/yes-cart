@@ -127,9 +127,7 @@
 
     <bean id="nodeService" class="org.yes.cart.web.service.ws.node.impl.NodeServiceImpl">
         <constructor-arg index="0" ref="systemService"/>
-        <constructor-arg index="1" ref="attributeService"/>
-        <constructor-arg index="2" ref="etypeService"/>
-        <constructor-arg index="3" ref="attributeGroupService"/>
+        <constructor-arg index="1" ref="runtimeAttributeService"/>
     </bean>
 
     <!-- ################################ Clustering end ######################################## -->

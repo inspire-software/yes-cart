@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain;
 
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
@@ -92,7 +93,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @param orderStatus    order status
      * @return awaiting orders
      */
-    List<CustomerOrderDelivery> findAwaitingDeliveries(List<String> skuCodes, String deliveryStatus, List<String> orderStatus);
+    ResultsIterator<CustomerOrderDelivery> findAwaitingDeliveries(List<String> skuCodes, String deliveryStatus, List<String> orderStatus);
 
 
     /**

@@ -32,9 +32,21 @@
         </property>
     </bean>
 
+    <bean id="bulkAwaitingInvetoryDeliveriesProcessor" parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.order.BulkAwaitingInventoryDeliveriesProcessorImpl">
+                <constructor-arg index="0" ref="customerOrderService"/>
+                <constructor-arg index="1" ref="orderStateManager"/>
+                <constructor-arg index="2" ref="skuWarehouseService"/>
+                <constructor-arg index="3" ref="systemService"/>
+                <constructor-arg index="4" ref="runtimeAttributeService"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="bulkCustomerTagProcessor" parent="txJobProxyTemplate">
         <property name="target">
-            <bean class="org.yes.cart.promotion.impl.BulkCustomerTagProcessorImpl">
+            <bean class="org.yes.cart.bulkjob.promotion.BulkCustomerTagProcessorImpl">
                 <constructor-arg index="0" ref="shopService"/>
                 <constructor-arg index="1" ref="customerService"/>
                 <constructor-arg index="2" ref="promotionContextFactory"/>

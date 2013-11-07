@@ -275,6 +275,18 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
+    public ResultsIterator<T> findByNamedQueryIterator(final String namedQueryName, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
+        if (parameters != null) {
+            setQueryParameters(query, parameters);
+        }
+        return new ResultsIteratorImpl<T>(query.scroll(ScrollMode.FORWARD_ONLY));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
     public List<T> findByNamedQueryForUpdate(final String namedQueryName, final int timeout, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         LockOptions opts = new LockOptions(LockMode.PESSIMISTIC_WRITE);

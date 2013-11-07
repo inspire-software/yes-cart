@@ -25,7 +25,6 @@ import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -34,7 +33,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test awaiting orders.
  */
-public class PreOrderJobImplTest extends BaseCoreDBTestCase {
+public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDBTestCase {
 
     private CustomerOrderService customerOrderService;
     private ProductService productService;
@@ -42,6 +41,8 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
     private WarehouseService warehouseService;
     private SkuWarehouseService skuWarehouseService;
     private ProductSkuService productSkuService;
+
+    private Runnable bulkAwaitingInvetoryDeliveriesProcessor;
 
 
 
@@ -53,6 +54,7 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
         warehouseService =  ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE, WarehouseService.class);
         skuWarehouseService =  ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE, SkuWarehouseService.class);
         productSkuService =  ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE, ProductSkuService.class);
+        bulkAwaitingInvetoryDeliveriesProcessor =  ctx().getBean("bulkAwaitingInvetoryDeliveriesProcessor", Runnable.class);
         super.setUp();
     }
 
@@ -96,15 +98,7 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT, delivery.getDeliveryStatus());
         }
 
-        PreOrderJobImpl preOrderJob = new PreOrderJobImpl();
-
-        preOrderJob.processAwaitingOrders(
-                Arrays.asList(
-                        productSkuService.findById(15350L).getCode(),
-                        productSkuService.findById(15360L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
-                OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT,
-                customerOrderService,
-                orderStateManager);
+        bulkAwaitingInvetoryDeliveriesProcessor.run();
 
         //No changes
         order = customerOrderService.findByGuid(order.getCartGuid());
@@ -115,13 +109,7 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
 
         Thread.sleep(5000);
 
-        preOrderJob.processAwaitingOrders(
-                Arrays.asList(
-                        productSkuService.findById(15350L).getCode(),
-                        productSkuService.findById(15360L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
-                OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT,
-                customerOrderService,
-                orderStateManager);
+        bulkAwaitingInvetoryDeliveriesProcessor.run();
 
         //wait for inventory
         order = customerOrderService.findByGuid(order.getCartGuid());
@@ -143,15 +131,9 @@ public class PreOrderJobImplTest extends BaseCoreDBTestCase {
         skuWarehouse.setQuantity(BigDecimal.TEN);
         skuWarehouseService.create(skuWarehouse);
 
-        preOrderJob.processAwaitingOrders(
-                Arrays.asList(
-                        productSkuService.findById(15350L).getCode(),
-                        productSkuService.findById(15360L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY,
-                customerOrderService,
-                orderStateManager);
+        bulkAwaitingInvetoryDeliveriesProcessor.run();
 
-        //wait for inventory
+        // inventory allocated
         order = customerOrderService.findByGuid(order.getCartGuid());
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery: order.getDelivery()) {
