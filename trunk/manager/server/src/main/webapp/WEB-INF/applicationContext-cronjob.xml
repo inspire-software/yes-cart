@@ -27,12 +27,11 @@
     <!-- ################################ Pre order inventory scanning  ###################################### -->
 
     <bean name="preorderJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-        <property name="jobClass" value="org.yes.cart.service.order.impl.PreOrderJobImpl" />
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
-                <entry key="customerOrderService" value-ref="customerOrderService" />
-                <entry key="orderStateManager" value-ref="orderStateManager" />
-                <entry key="skuWarehouseService" value-ref="skuWarehouseService" />
+                <entry key="jobName" value="Inventory Awaiting Delivery Processing" />
+                <entry key="job" value-ref="bulkAwaitingInvetoryDeliveriesProcessor" />
             </map>
         </property>
     </bean>

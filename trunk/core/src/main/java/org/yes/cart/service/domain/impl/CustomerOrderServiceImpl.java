@@ -18,6 +18,7 @@ package org.yes.cart.service.domain.impl;
 
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
@@ -92,25 +93,20 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
-    public List<CustomerOrderDelivery> findAwaitingDeliveries(final List<String> skuCodes, final String deliveryStatus, final List<String> orderStatus) {
+    public ResultsIterator<CustomerOrderDelivery> findAwaitingDeliveries(final List<String> skuCodes, final String deliveryStatus, final List<String> orderStatus) {
 
-        final List<CustomerOrderDelivery> waitingDeliveries;
+        final ResultsIterator<CustomerOrderDelivery> waitingDeliveries;
 
         if (skuCodes != null) {
-            waitingDeliveries = customerOrderDeliveryDao.findByNamedQuery("DELIVERIES.WAITING.FOR.INVENTORY.BY.SKU",
-                deliveryStatus,
-                orderStatus,
-                skuCodes);
+            waitingDeliveries = customerOrderDeliveryDao.findByNamedQueryIterator("DELIVERIES.WAITING.FOR.INVENTORY.BY.SKU",
+                    deliveryStatus,
+                    orderStatus,
+                    skuCodes);
         } else {
-            waitingDeliveries = customerOrderDeliveryDao.findByNamedQuery("DELIVERIES.WAITING.FOR.INVENTORY",
-                deliveryStatus,
-                orderStatus);
+            waitingDeliveries = customerOrderDeliveryDao.findByNamedQueryIterator("DELIVERIES.WAITING.FOR.INVENTORY",
+                    deliveryStatus,
+                    orderStatus);
         }
-
-        for (final CustomerOrderDelivery delivery : waitingDeliveries) {
-            delivery.getCustomerOrder().getShop().getAttributes();
-        }
-
 
         return waitingDeliveries;
 

@@ -16,16 +16,12 @@
 
 package org.yes.cart.web.service.ws.node.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueSystem;
-import org.yes.cart.domain.entity.Attribute;
-import org.yes.cart.service.domain.AttributeGroupService;
-import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.EtypeService;
+import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.node.NodeService;
@@ -47,19 +43,13 @@ public class NodeServiceImpl implements NodeService, ServletContextAware {
     private NodeImpl node = new NodeImpl(true, "-", null, null);
 
     private final SystemService systemService;
-    private final AttributeService attributeService;
-    private final EtypeService etypeService;
-    private final AttributeGroupService attributeGroupService;
+    private final RuntimeAttributeService runtimeAttributeService;
 
 
     public NodeServiceImpl(final SystemService systemService,
-                           final AttributeService attributeService,
-                           final EtypeService etypeService,
-                           final AttributeGroupService attributeGroupService) {
+                           final RuntimeAttributeService runtimeAttributeService) {
         this.systemService = systemService;
-        this.attributeService = attributeService;
-        this.etypeService = etypeService;
-        this.attributeGroupService = attributeGroupService;
+        this.runtimeAttributeService = runtimeAttributeService;
     }
 
     /** {@inheritDoc} */
@@ -224,26 +214,8 @@ public class NodeServiceImpl implements NodeService, ServletContextAware {
         final String backdoorKey = AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI_PREFIX + "_" + node.getNodeId();
         final String cacheDirectorKey = AttributeNamesKeys.System.SYSTEM_CACHEDIRECTOR_URI_PREFIX + "_" + node.getNodeId();
 
-        final Set<String> codes = attributeService.getAllAttributeCodes();
-        if (!codes.contains(backdoorKey)) {
-            final Attribute attribute = attributeService.getGenericDao().getEntityFactory().getByIface(Attribute.class);
-            attribute.setCode(backdoorKey);
-            attribute.setName(backdoorKey);
-            attribute.setAttributeGroup(attributeGroupService.getAttributeGroupByCode("SYSTEM"));
-            attribute.setEtype(etypeService.findSingleByCriteria(Restrictions.eq("businesstype", "URI")));
-            attribute.setGuid(backdoorKey);
-            attributeService.create(attribute);
-        }
-
-        if (!codes.contains(cacheDirectorKey)) {
-            final Attribute attribute = attributeService.getGenericDao().getEntityFactory().getByIface(Attribute.class);
-            attribute.setCode(cacheDirectorKey);
-            attribute.setName(cacheDirectorKey);
-            attribute.setAttributeGroup(attributeGroupService.getAttributeGroupByCode("SYSTEM"));
-            attribute.setEtype(etypeService.findSingleByCriteria(Restrictions.eq("businesstype", "URI")));
-            attribute.setGuid(cacheDirectorKey);
-            attributeService.create(attribute);
-        }
+        runtimeAttributeService.create(backdoorKey, "SYSTEM", "URI");
+        runtimeAttributeService.create(cacheDirectorKey, "SYSTEM", "URI");
 
         systemService.updateAttributeValue(backdoorKey, configuration.get(BACKDOOR_URI));
         systemService.updateAttributeValue(cacheDirectorKey, configuration.get(CACHEDIRECTOR_URI));
