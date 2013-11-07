@@ -818,58 +818,8 @@
     </bean>
 
 
-    <!-- ################################ JMX support  begin ###################################### -->
-
-    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean">
-        <property name="locateExistingServerIfPossible" value="true"/>
-        <property name="defaultDomain" value="YesManager"/>
-    </bean>
-
-    <bean class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
-        <property name="server" ref="mbeanServer"/>
-        <property name="registrationBehaviorName" value="REGISTRATION_REPLACE_EXISTING"/>
-        <property name="beans">
-            <map>
-                <entry key="bean:name=YesManager-BulkImportImageService" value-ref="bulkImportImageService"/>
-                <entry key="bean:name=YesManager-BulkImportServiceImpl" value-ref="bulkImportService"/>
-                <entry key="bean:name=YesManager-BulkImportService" value-ref="bulkImportService"/>
-            </map>
-        </property>
-    </bean>
-
-    <!-- ################################ JMX support  end ###################################### -->
-
-
-    <!-- ################################ preorder support   ###################################### -->
-
-    <bean name="preorderJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-        <property name="jobClass" value="org.yes.cart.service.order.impl.PreOrderJobImpl" />
-        <property name="jobDataAsMap">
-            <map>
-                <entry key="customerOrderService" value-ref="customerOrderService" />
-                <entry key="orderStateManager" value-ref="orderStateManager" />
-                <entry key="skuWarehouseService" value-ref="skuWarehouseService" />
-            </map>
-        </property>
-    </bean>
-
-    <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-        <property name="jobDetail" ref="preorderJob" />
-        <!-- each 5 minute 05,10,15,20, etc -->
-        <property name="cronExpression" value="0 0/5 * * * ?" />
-    </bean>
-
-    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-        <property name="triggers">
-            <list>
-                <ref bean="cronTrigger" />
-            </list>
-        </property>
-    </bean>
-
-
-
-
+    <import resource="applicationContext-tools.xml"/>
+    <import resource="applicationContext-cronjob.xml"/>
 
 </beans>
         

@@ -170,14 +170,37 @@ public class PromotionContextImpl implements PromotionContext {
         return (Total) context.get(PromotionCondition.VAR_TMP_TOTAL);
     }
 
+    /** {@inheritDoc} */
+    public void applyCustomerPromo(final Customer customer, final ShoppingCart cart) {
+
+        if (customer == null) {
+            return;
+        }
+
+        final List<List<PromoTriplet>> tagPromoBuckets = promotionBuckets.get(Promotion.TYPE_CUSTOMER_TAG);
+
+        if (CollectionUtils.isEmpty(tagPromoBuckets)) {
+            return;
+        }
+
+        final Map<String, Object> context = new HashMap<String, Object>() {{
+            put(PromotionCondition.VAR_CUSTOMER, customer);
+            put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
+            put(PromotionCondition.VAR_CART, cart);
+        }};
+
+        applyBestValuePromotion(tagPromoBuckets, context);
+
+    }
+
     /*
-     * Test all applicable promotions for best cumulative discount value and apply it
-     * to given context.
-     *
-     * CPOINT - best deal is the industry standard since provide customer with lowest
-     *          price possible. However there are use cases when we want alternative
-     *          promotion strategy - e.g. by priority.
-     */
+    * Test all applicable promotions for best cumulative discount value and apply it
+    * to given context.
+    *
+    * CPOINT - best deal is the industry standard since provide customer with lowest
+    *          price possible. However there are use cases when we want alternative
+    *          promotion strategy - e.g. by priority.
+    */
     private void applyBestValuePromotion(final List<List<PromoTriplet>> promoBuckets,
                                          final Map<String, Object> context) {
 
@@ -198,6 +221,7 @@ public class PromotionContextImpl implements PromotionContext {
                 for (final PromoTriplet promo : promoBucket) {
 
                     context.put(PromotionCondition.VAR_ACTION_CONTEXT, promo.promotion.getPromoActionContext());
+                    context.put(PromotionCondition.VAR_PROMOTION, promo.promotion);
 
                     final boolean eligible = promo.condition.isEligible(context);
 

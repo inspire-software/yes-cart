@@ -48,7 +48,7 @@ public interface PromotionContext {
      * @param customer customer
      * @param cart cart
      */
-    void applyItemPromo(final Customer customer, ShoppingCart cart);
+    void applyItemPromo(Customer customer, ShoppingCart cart);
 
     /**
      * Apply order level promotions on cart.
@@ -59,7 +59,7 @@ public interface PromotionContext {
      *
      * @return  order total (does not include shipping promotions)
      */
-    Total applyOrderPromo(final Customer customer, ShoppingCart cart, Total itemTotal);
+    Total applyOrderPromo(Customer customer, ShoppingCart cart, Total itemTotal);
 
     /**
      * Apply shipping promotions on cart.
@@ -70,5 +70,16 @@ public interface PromotionContext {
      *
      * @return final total (includes all promotions)
      */
-    Total applyShippingPromo(final Customer customer, ShoppingCart cart, Total orderTotal);
+    Total applyShippingPromo(Customer customer, ShoppingCart cart, Total orderTotal);
+
+    /**
+     * Apply promotion on customer. This is not strictly speaking promotion
+     * but rather customer segmentation.
+     *
+     * @param customer customer object to evaluate
+     * @param cart (optional) current shopping cart. This is an extension mechanism
+     *             if anyone would want to use this on storefront for some custom
+     *             events
+     */
+    void applyCustomerPromo(Customer customer, ShoppingCart cart);
 }

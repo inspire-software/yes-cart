@@ -36,6 +36,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.util.ShopCodeContext;
@@ -75,7 +76,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     }
 
     /**
-     * Executir that will perform indexing jobs asynchronously.
+     * Executer that will perform indexing jobs asynchronously.
      *
      * @param indexExecutor index executor
      */
@@ -366,6 +367,14 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         return findByCriteria();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public ResultsIterator<T> findAllIterator() {
+        final Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        final ScrollableResults results = crit.scroll(ScrollMode.FORWARD_ONLY);
+        return new ResultsIteratorImpl<T>(results);
+    }
 
     /**
      * {@inheritDoc}
@@ -434,7 +443,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     /**
      * Find entities by criteria.
      * @param criteriaTuner optional criteria tuner.
-     * @param criterion given criterias
+     * @param criterion given criteria
      * @return list of found entities.
      */
     @SuppressWarnings("unchecked")
@@ -487,17 +496,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     }
 
 
-    /**
-     * Check is entity need to be in index.
-     *
-     * @param entity entity to check
-     * @return true if entity need to be in lucene index.
-     */
-    protected boolean isIncludeInLuceneIndex(T entity) {
-        return true;
-    }
-
-
     public int fullTextSearchReindex(PK primaryKey, boolean purgeOnly) {
         int result = 0;
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
@@ -510,8 +508,8 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             if (!purgeOnly) {
                 T entity = findById(primaryKey);
                 if(entity != null) {
-                    final T unproxed = (T) HibernateHelper.unproxy(entity);
-                    fullTextSession.index(unproxed);
+                    final T unproxied = (T) HibernateHelper.unproxy(entity);
+                    fullTextSession.index(unproxied);
                 }
 
 
@@ -624,6 +622,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                         }
                         fullTextSession.flushToIndexes(); //apply changes to indexes
                         fullTextSession.clear(); //clear since the queue is processed
+                        if (log.isInfoEnabled()) {
+                            log.info("Indexed " + index + " items of " + persistentClass + " class");
+                        }
                     }
                 } catch (Exception exp) {
                     LOG.error("Error during indexing", exp);

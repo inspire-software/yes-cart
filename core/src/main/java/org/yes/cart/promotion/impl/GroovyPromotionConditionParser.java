@@ -98,6 +98,7 @@ public class GroovyPromotionConditionParser implements PromotionConditionParser 
         script.append("public boolean isEligible(Map<String, Object> context) {\n");
         script.append("def registered = context.registered;\n");
         script.append("def customer = context.customer;\n");
+        script.append("def customerTags = context.customerTags;\n");
         script.append("def shoppingCart = context.shoppingCart;\n");
         script.append("def shoppingCartItem = context.shoppingCartItem;\n");
         script.append("def shoppingCartItemTotal = context.shoppingCartItemTotal;\n");

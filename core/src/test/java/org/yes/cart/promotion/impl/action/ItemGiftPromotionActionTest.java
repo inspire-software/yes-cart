@@ -37,7 +37,7 @@ import static org.junit.Assert.*;
 public class ItemGiftPromotionActionTest extends BaseCoreDBTestCase {
 
     @Test
-    public void testSingleItemGiftPromotion() throws Exception {
+    public void testSingleExactItemGiftPromotion() throws Exception {
 
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
 
@@ -69,7 +69,7 @@ public class ItemGiftPromotionActionTest extends BaseCoreDBTestCase {
         // add qualifying items
         Map<String, String> param = new HashMap<String, String>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "5.00");
         commands.execute(shoppingCart, (Map) param);
 
         assertEquals(2, shoppingCart.getCartItemList().size());
@@ -79,10 +79,10 @@ public class ItemGiftPromotionActionTest extends BaseCoreDBTestCase {
         assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
         assertTrue(cc_test4.isPromoApplied());
         assertEquals("CC_TEST_GIFT", cc_test4.getAppliedPromo());
-        assertEquals("2.00", cc_test4.getQty().toString());
-        assertEquals("123.00", cc_test4.getListPrice().toString());
-        assertEquals("123.00", cc_test4.getSalePrice().toString());
-        assertEquals("123.00", cc_test4.getPrice().toString());
+        assertEquals("5.00", cc_test4.getQty().toString());
+        assertEquals("99.99", cc_test4.getListPrice().toString());
+        assertEquals("99.99", cc_test4.getSalePrice().toString());
+        assertEquals("99.99", cc_test4.getPrice().toString());
 
         final CartItem cc_test6 = shoppingCart.getCartItemList().get(1);
 
@@ -90,13 +90,80 @@ public class ItemGiftPromotionActionTest extends BaseCoreDBTestCase {
         assertTrue(cc_test6.isPromoApplied());
         assertTrue(cc_test6.isGift());
         assertEquals("CC_TEST_GIFT", cc_test6.getAppliedPromo());
-        assertEquals("1.00", cc_test6.getQty().toString());
+        assertEquals("2.00", cc_test6.getQty().toString());
         assertEquals("55.17", cc_test6.getListPrice().toString());
         assertEquals("55.17", cc_test6.getSalePrice().toString());
         assertEquals("0.00", cc_test6.getPrice().toString());
 
-        assertEquals("301.17", shoppingCart.getTotal().getListSubTotal().toString());
-        assertEquals("246.00", shoppingCart.getTotal().getSubTotal().toString());
+        assertEquals("610.29", shoppingCart.getTotal().getListSubTotal().toString());
+        assertEquals("499.95", shoppingCart.getTotal().getSubTotal().toString());
+
+        // clean test
+        promotionService.delete(gift6);
+
+    }
+
+    @Test
+    public void testSingleApproxItemGiftPromotion() throws Exception {
+
+        final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
+
+        ShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        // basic init
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+
+        // create gift promotion
+        final Promotion gift6 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
+        gift6.setCode("CC_TEST_GIFT");
+        gift6.setShopCode(shoppingCart.getShoppingContext().getShopCode());
+        gift6.setCurrency("EUR");
+        gift6.setName("Buy 2 CC_TEST items get one free");
+        gift6.setPromoType(Promotion.TYPE_ITEM);
+        gift6.setPromoAction(Promotion.ACTION_GIFT);
+        gift6.setEligibilityCondition("['CC_TEST4', 'CC_TEST5'].contains(shoppingCartItem.productSkuCode)");
+        gift6.setPromoActionContext("CC_TEST6 ~ 2"); // one gift for approx 2 items round up
+        gift6.setEnabled(true);
+
+        promotionService.create(gift6);
+
+
+        // add qualifying items
+        Map<String, String> param = new HashMap<String, String>();
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "5.00");
+        commands.execute(shoppingCart, (Map) param);
+
+        assertEquals(2, shoppingCart.getCartItemList().size());
+
+        final CartItem cc_test4 = shoppingCart.getCartItemList().get(0);
+
+        assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
+        assertTrue(cc_test4.isPromoApplied());
+        assertEquals("CC_TEST_GIFT", cc_test4.getAppliedPromo());
+        assertEquals("5.00", cc_test4.getQty().toString());
+        assertEquals("99.99", cc_test4.getListPrice().toString());
+        assertEquals("99.99", cc_test4.getSalePrice().toString());
+        assertEquals("99.99", cc_test4.getPrice().toString());
+
+        final CartItem cc_test6 = shoppingCart.getCartItemList().get(1);
+
+        assertEquals("CC_TEST6", cc_test6.getProductSkuCode());
+        assertTrue(cc_test6.isPromoApplied());
+        assertTrue(cc_test6.isGift());
+        assertEquals("CC_TEST_GIFT", cc_test6.getAppliedPromo());
+        assertEquals("3.00", cc_test6.getQty().toString());
+        assertEquals("55.17", cc_test6.getListPrice().toString());
+        assertEquals("55.17", cc_test6.getSalePrice().toString());
+        assertEquals("0.00", cc_test6.getPrice().toString());
+
+        assertEquals("665.46", shoppingCart.getTotal().getListSubTotal().toString());
+        assertEquals("499.95", shoppingCart.getTotal().getSubTotal().toString());
 
         // clean test
         promotionService.delete(gift6);
