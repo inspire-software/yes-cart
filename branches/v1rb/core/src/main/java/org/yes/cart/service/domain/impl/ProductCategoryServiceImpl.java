@@ -50,28 +50,14 @@ public class ProductCategoryServiceImpl extends BaseGenericServiceImpl<ProductCa
      * {@inheritDoc}
      */
     public void removeByCategoryProductIds(final long categoryId, final long productId) {
-        getGenericDao().executeNativeUpdate(
-                "delete from tproductcategory where category_id = :1 and product_id = :2",
-                categoryId,
-                productId);
-        /**
-         * This method used from flex ui. Appropriate reindexing cal must be performed on ui side.
-         */
+        getGenericDao().executeUpdate("REMOVE.PRODUCTCATEGORY.BY.CATEGORYID.PRODUCTID", categoryId, productId);
     }
 
     /**
-     * Unlink product from all categories.
-     *
-     * @param productId given product id
+     * {@inheritDoc}
      */
     public void removeByProductIds(final long productId) {
-        getGenericDao().executeNativeUpdate(
-                "delete from tproductcategory where  product_id = :1",
-                productId);
-        /**
-         * This method used from flex ui. Appropriate reindexing cal must be performed on ui side.
-         */
-
+        getGenericDao().executeUpdate("REMOVE.PRODUCTCATEGORIES.BY.PRODUCTID", productId);
     }
 
     /**

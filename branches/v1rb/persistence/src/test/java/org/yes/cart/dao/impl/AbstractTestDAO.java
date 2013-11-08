@@ -25,10 +25,13 @@ import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,6 +50,19 @@ public abstract class AbstractTestDAO {
     private SessionFactory sessionFactory;
     private Session session;
     private AbstractDatabaseTester dbTester;
+
+    private PlatformTransactionManager transactionManager;
+    private TransactionTemplate tx;
+
+    @Before
+    public void setUp() throws Exception  {
+        transactionManager =   ctx().getBean("transactionManager", PlatformTransactionManager.class);
+        tx = new TransactionTemplate(transactionManager);
+    }
+
+    public TransactionTemplate getTx() {
+        return tx;
+    }
 
     @Rule
     public ExternalResource dbResource = new ExternalResource() {
