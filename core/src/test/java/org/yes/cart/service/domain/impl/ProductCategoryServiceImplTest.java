@@ -16,10 +16,17 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.service.domain.ProductCategoryService;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -54,7 +61,75 @@ public class ProductCategoryServiceImplTest extends BaseCoreDBTestCase {
     }
 
 
+    @Test
+    public void testRemoveByProductIds() throws Exception {
+
+        final GenericDAO<ProductCategory, Long> productCategoryDAO =
+                (GenericDAO<ProductCategory, Long>) ctx().getBean("productCategoryDao");
+        final ProductCategoryService productCategoryService =
+                (ProductCategoryService) ctx().getBean(ServiceSpringKeys.PRODUCT_CATEGORY_SERVICE);
+
+        final long product1pk = 11000L;
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+                final List<ProductCategory> pc = productCategoryDAO.findByCriteria(
+                        Restrictions.eq("product.productId", product1pk));
+                assertEquals(1, pc.size());
+                transactionStatus.setRollbackOnly();
+            }
+        });
+
+        productCategoryService.removeByProductIds(product1pk);
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+                final List<ProductCategory> pc = productCategoryDAO.findByCriteria(
+                        Restrictions.eq("product.productId", product1pk));
+                assertEquals(0, pc.size());
+                transactionStatus.setRollbackOnly();
+            }
+        });
+
+    }
+
+    @Test
+    public void testRemoveByCategoryProductIds() throws Exception {
+
+        final GenericDAO<ProductCategory, Long> productCategoryDAO =
+                (GenericDAO<ProductCategory, Long>) ctx().getBean("productCategoryDao");
+        final ProductCategoryService productCategoryService =
+                (ProductCategoryService) ctx().getBean(ServiceSpringKeys.PRODUCT_CATEGORY_SERVICE);
+
+        final long product1pk = 11000L;
+        final long[] product1categorypk = new long[1];
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+                final List<ProductCategory> pc = productCategoryDAO.findByCriteria(
+                        Restrictions.eq("product.productId", product1pk));
+                assertEquals(1, pc.size());
+                product1categorypk[0] = pc.get(0).getCategory().getCategoryId();
+                transactionStatus.setRollbackOnly();
+            }
+        });
+
+        assertTrue(product1categorypk[0] > 0L);
+        productCategoryService.removeByCategoryProductIds(product1categorypk[0], product1pk);
 
 
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+                final List<ProductCategory> pc = productCategoryDAO.findByCriteria(
+                        Restrictions.eq("product.productId", product1pk));
+                assertEquals(0, pc.size());
+                transactionStatus.setRollbackOnly();
+            }
+        });
 
+    }
 }
