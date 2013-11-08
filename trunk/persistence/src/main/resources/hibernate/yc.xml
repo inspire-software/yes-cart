@@ -2272,6 +2272,18 @@
        ]]>
     </query>
 
+    <query name="REMOVE.PRODUCTCATEGORIES.BY.PRODUCTID">
+        <![CDATA[
+       delete from ProductCategoryEntity pc where pc.product.productId = ?1
+       ]]>
+    </query>
+
+    <query name="REMOVE.PRODUCTCATEGORY.BY.CATEGORYID.PRODUCTID">
+        <![CDATA[
+       delete from ProductCategoryEntity pc where pc.category.categoryId = ?1 and pc.product.productId = ?2
+       ]]>
+    </query>
+
     <query name="ORDERS.COUNT">
         <![CDATA[
        select count(p) from CustomerOrderEntity p

@@ -28,21 +28,26 @@ public interface ProductCategoryService extends GenericService<ProductCategory> 
     /**
      * Delete product from given category
      *
+     * This method used from flex ui. Appropriate re-indexing call must be performed on ui side.
+     *
      * @param categoryId given category id
      * @param productId  given product id
      */
     void removeByCategoryProductIds(long categoryId, long productId);
 
     /**
-     * Find single product-caterory entity by category and product id.
+     * Find single product-category entity by category and product id.
+     *
      * @param categoryId  category id
      * @param productId   product id
      * @return {@link ProductCategory} if found, otherwise null
      */
-    ProductCategory findByCategoryIdProductId( long categoryId,  long productId);
+    ProductCategory findByCategoryIdProductId(long categoryId,  long productId);
 
-     /**
+    /**
      * Unlink product from all categories.
+     *
+     * This method used from flex ui. Appropriate re-indexing call must be performed on ui side.
      *
      * @param productId  given product id
      */
