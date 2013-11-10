@@ -16,13 +16,12 @@
 
 package org.yes.cart.domain.message.consumer;
 
-import org.springframework.mail.MailSendException;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.message.RegistrationMessage;
+import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
 
-import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,23 +32,20 @@ import java.util.Map;
  */
 public class ManagerRegistrationMessageListener implements Runnable {
 
-    private final JavaMailSender javaMailSender;
+    private final MailService mailService;
 
     private final MailComposer mailComposer;
 
     private final Object objectMessage;
 
     /**
-     * Contruct jms listener.
-     *
-     * @param javaMailSender mail sender to use.
-     * @param mailComposer   mail composer
+     * Construct listener.
      */
     public ManagerRegistrationMessageListener(
-            final JavaMailSender javaMailSender,
+            final MailService mailService,
             final MailComposer mailComposer,
             final Object objectMessage) {
-        this.javaMailSender = javaMailSender;
+        this.mailService = mailService;
         this.mailComposer = mailComposer;
         this.objectMessage = objectMessage;
     }
@@ -64,7 +60,7 @@ public class ManagerRegistrationMessageListener implements Runnable {
             final RegistrationMessage registrationMessage = (RegistrationMessage) objectMessage;
             processMessage(registrationMessage);
         } catch (Exception e) {
-            ShopCodeContext.getLog(this).error("Cant process " + objectMessage, e);
+            ShopCodeContext.getLog(this).error("Can not process " + objectMessage, e);
             throw new RuntimeException(e); //rollback message
         }
 
@@ -83,10 +79,9 @@ public class ManagerRegistrationMessageListener implements Runnable {
         model.put("firstName", registrationMessage.getFirstname());
         model.put("lastName", registrationMessage.getLastname());
 
-        final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-
+        final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
         mailComposer.composeMessage(
-                mimeMessage,
+                mail,
                 null,
                 registrationMessage.getPathToTemplateFolder(),
                 registrationMessage.getTemplateName(),
@@ -96,19 +91,7 @@ public class ManagerRegistrationMessageListener implements Runnable {
                 null,
                 model);
 
-        boolean send = false;
-        while (!send) {
-            try {
-                javaMailSender.send(mimeMessage);
-                send = true;
-                ShopCodeContext.getLog(this).info("Manager mail send to " + registrationMessage.getEmail() );
-            } catch (MailSendException me) {
-                ShopCodeContext.getLog(this).error("Cant send email to " + registrationMessage.getEmail() + " " + me.getMessage());
-                Thread.sleep(60000);
-
-            }
-        }
-
+        mailService.create(mail);
 
     }
 

@@ -521,6 +521,14 @@
     <bean id="promoActionCustomerTag" class="org.yes.cart.promotion.impl.action.CustomerTagPromotionAction"/>
 
 
+    <bean id="mailService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.MailServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="mailDao"/>
+            </bean>
+        </property>
+    </bean>
+
     <!-- ############################################ DTO Support ######################################################################### -->
 
 

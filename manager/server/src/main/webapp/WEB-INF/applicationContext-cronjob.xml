@@ -60,6 +60,34 @@
         <property name="cronExpression" value="0 0 3 * * ?" />
     </bean>
 
+    <!-- ################################ Bulk email  ###################################################### -->
+
+    <bean id="bulkMailProcessor" class="org.yes.cart.bulkjob.mail.BulkMailProcessorImpl">
+        <constructor-arg index="0" ref="mailService"/>
+        <constructor-arg index="1" ref="mailComposer"/>
+        <constructor-arg index="2" ref="mailSender"/>
+        <constructor-arg index="3" ref="systemService"/>
+        <constructor-arg index="4" ref="runtimeAttributeService"/>
+        <property name="delayBetweenEmailsMs" value="10000"/>
+        <property name="cycleExceptionsThreshold" value="3"/>
+    </bean>
+
+    <bean name="sendMailJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobName" value="Send Mail" />
+                <entry key="job" value-ref="bulkMailProcessor" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="sendMailJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="sendMailJob" />
+        <!-- each 10 minute 0,10,20,30,40,50 -->
+        <property name="cronExpression" value="0 0/10 * * * ?" />
+    </bean>
+
     <!-- ################################ Scheduler  ####################################################### -->
 
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -67,6 +95,7 @@
             <list>
                 <ref bean="preOrderJobCronTrigger" />
                 <ref bean="customerTagJobCronTrigger" />
+                <ref bean="sendMailJobCronTrigger" />
             </list>
         </property>
     </bean>

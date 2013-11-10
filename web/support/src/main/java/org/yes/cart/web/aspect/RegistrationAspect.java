@@ -20,13 +20,13 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.entity.RegisteredPerson;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.domain.message.consumer.CustomerRegistrationMessageListener;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.HashHelper;
+import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
 import org.yes.cart.service.mail.MailComposer;
@@ -51,7 +51,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
     private final PassPhrazeGenerator phrazeGenerator;
 
-    private final JavaMailSender javaMailSender;
+    private final MailService mailService;
 
     private final MailComposer mailComposer;
 
@@ -67,13 +67,13 @@ public class RegistrationAspect extends BaseNotificationAspect {
             final TaskExecutor taskExecutor,
             final PassPhrazeGenerator phrazeGenerator,
             final HashHelper hashHelper,
-            final JavaMailSender javaMailSender,
+            final MailService mailService,
             final MailComposer mailComposer) {
         super(taskExecutor);
 
         this.hashHelper = hashHelper;
         this.phrazeGenerator = phrazeGenerator;
-        this.javaMailSender = javaMailSender;
+        this.mailService = mailService;
         this.mailComposer = mailComposer;
 
 
@@ -88,14 +88,14 @@ public class RegistrationAspect extends BaseNotificationAspect {
     public RegistrationAspect(
             final PassPhrazeGenerator phrazeGenerator,
             final HashHelper hashHelper,
-            final JavaMailSender javaMailSender,
+            final MailService mailService,
             final MailComposer mailComposer) {
         super(null);
 
         this.hashHelper = hashHelper;
         this.phrazeGenerator = phrazeGenerator;
 
-        this.javaMailSender = javaMailSender;
+        this.mailService = mailService;
         this.mailComposer = mailComposer;
 
 
@@ -105,10 +105,10 @@ public class RegistrationAspect extends BaseNotificationAspect {
     /**
      * Perform notification about person registration.
      *
-     * @param pjp
+     * @param pjp join point
      * @param newPerson in case if new person was created.
      * @return inherited return
-     * @throws Throwable in case it was in underlaing method
+     * @throws Throwable in case it was in underlying method
      */
     protected Object notifyInternal(final ProceedingJoinPoint pjp, final boolean newPerson) throws Throwable {
         final Object[] args = pjp.getArgs();
@@ -156,7 +156,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
      */
     public Runnable getTask(Serializable serializableMessage) {
         return new CustomerRegistrationMessageListener(
-                javaMailSender,
+                mailService,
                 mailComposer,
                 serializableMessage
         );

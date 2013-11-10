@@ -127,6 +127,8 @@
                 <entry key="org.yes.cart.domain.entity.CustomerShop" value="org.yes.cart.domain.entity.impl.CustomerShopEntity"/>
                 <entry key="org.yes.cart.payment.persistence.entity.CustomerOrderPayment" value="org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity"/>
 
+                <entry key="org.yes.cart.domain.entity.Mail" value="org.yes.cart.domain.entity.impl.MailEntity"/>
+                <entry key="org.yes.cart.domain.entity.MailPart" value="org.yes.cart.domain.entity.impl.MailPartEntity"/>
                 <entry key="org.yes.cart.domain.entity.Mailtemplate" value="org.yes.cart.domain.entity.impl.MailtemplateEntity"/>
                 <entry key="org.yes.cart.domain.entity.Mailtemplategroup" value="org.yes.cart.domain.entity.impl.MailtemplategroupEntity"/>
                 <entry key="org.yes.cart.domain.entity.System" value="org.yes.cart.domain.entity.impl.SystemEntity"/>
@@ -436,24 +438,28 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="customerOrderDeliveryDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.CustomerOrderDeliveryEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="customerOrderDeliveryDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.CustomerOrderDeliveryEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="promotionDao" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-                <constructor-arg><value>org.yes.cart.domain.entity.impl.PromotionEntity</value></constructor-arg>
-                <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-                <property name="sessionFactory" ref="sessionFactory"/>
-            </bean>
-        </property>
+    <bean id="promotionDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.PromotionEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="mailDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.MailEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="mailPartDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.MailPartEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <bean id="hibernateSearchBridgeStaticLocator" class="org.yes.cart.domain.entity.bridge.HibernateSearchBridgeStaticLocator"/>

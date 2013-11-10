@@ -892,6 +892,43 @@
         primary key (PROMOTION_ID)
     );
 
+
+    create table TMAIL (
+        MAIL_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        SHOP_CODE varchar(255),
+        SUBJECT varchar(512) not null,
+        EMAIL_FROM varchar(512) not null,
+        EMAIL_RECEPIENTS varchar(512) not null,
+        EMAIL_CC varchar(512),
+        EMAIL_BCC varchar(512),
+        TEXT_VERSION clob,
+        HTML_VERSION clob,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (PROMOTION_ID)
+    );
+
+
+    create table TMAILPART (
+        MAILPART_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        MAIL_ID bigint not null default 0,
+        RESOURCE_ID varchar(255),
+        FILENAME varchar(255),
+        PART_DATA blob,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (PROMOTION_ID)
+    );
+
+
 	create table HIBERNATE_UNIQUE_KEYS (
          value integer 
     );
@@ -1307,3 +1344,10 @@
     create index PROMO_ENABLED on TPROMOTION (ENABLED);
     create index PROMO_ENABLED_FROM on TPROMOTION (ENABLED_FROM);
     create index PROMO_ENABLED_TO on TPROMOTION (ENABLED_TO);
+
+
+    alter table TMAILPART         add constraint FKMAILMAILPART
+        foreign key (MAIL_ID)
+        references TMAIL
+        on delete cascade;
+

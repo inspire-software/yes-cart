@@ -27,6 +27,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.order.OrderEvent;
@@ -49,7 +50,7 @@ public class CancelOrderWithRefundAspect  extends BaseOrderStateAspect  implemen
 
     private static final Logger LOG = LoggerFactory.getLogger(CancelOrderWithRefundAspect.class);
 
-    private final JavaMailSender javaMailSender;
+    private final MailService mailService;
 
     private final MailComposer mailComposer;
 
@@ -69,13 +70,13 @@ public class CancelOrderWithRefundAspect  extends BaseOrderStateAspect  implemen
      */
     public CancelOrderWithRefundAspect(
             final TaskExecutor taskExecutor,
-            final JavaMailSender javaMailSender,
+            final MailService mailService,
             final MailComposer mailComposer,
             final CustomerService customerService,
             final ShopService shopService) {
         super(taskExecutor);
 
-        this.javaMailSender = javaMailSender;
+        this.mailService = mailService;
         this.mailComposer = mailComposer;
         this.customerService = customerService;
         this.shopService = shopService;
@@ -117,7 +118,7 @@ public class CancelOrderWithRefundAspect  extends BaseOrderStateAspect  implemen
     /** {@inheritDoc} */
     public Runnable getTask(final Serializable serializableMessage) {
         return new StandardMessageListener(
-                javaMailSender,
+                mailService,
                 mailComposer,
                 customerService,
                 shopService,

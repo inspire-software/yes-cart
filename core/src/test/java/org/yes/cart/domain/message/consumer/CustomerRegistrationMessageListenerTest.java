@@ -24,6 +24,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
+import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.mail.MailComposer;
 
 import java.util.HashSet;
@@ -45,7 +46,7 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         RegistrationMessage registrationMessage = createRegistrationMessage();
         SimpleSmtpServer server = SimpleSmtpServer.start(2525);
         new CustomerRegistrationMessageListener(
-                (JavaMailSender) ctx().getBean("mailSender"),
+                (MailService) ctx().getBean("mailService"),
                 (MailComposer)ctx().getBean("mailComposer"),
                 registrationMessage
         ).run();
