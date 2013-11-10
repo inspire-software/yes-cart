@@ -16,13 +16,12 @@
 
 package org.yes.cart.domain.message.consumer;
 
-import org.springframework.mail.MailSendException;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.message.RegistrationMessage;
+import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
 
-import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,23 +39,23 @@ import java.util.Map;
  */
 public class CustomerRegistrationMessageListener implements Runnable {
 
-    private final JavaMailSender javaMailSender;
+    private final MailService mailService;
 
     private final MailComposer mailComposer;
 
     private final Object objectMessage;
 
     /**
-     * Contruct jms listener.
+     * Construct jms listener.
      *
-     * @param javaMailSender mail sender to use.
+     * @param mailService mail service.
      * @param mailComposer   mail composer
      */
     public CustomerRegistrationMessageListener(
-            final JavaMailSender javaMailSender,
+            final MailService mailService,
             final MailComposer mailComposer,
             final Object objectMessage) {
-        this.javaMailSender = javaMailSender;
+        this.mailService = mailService;
         this.mailComposer = mailComposer;
         this.objectMessage = objectMessage;
     }
@@ -69,14 +68,14 @@ public class CustomerRegistrationMessageListener implements Runnable {
         try {
             final RegistrationMessage registrationMessage = (RegistrationMessage) objectMessage;
 
-            ShopCodeContext.getLog(this).info("CustomerRegistrationMessageListener#onMessage responce :" + registrationMessage);
+            ShopCodeContext.getLog(this).info("CustomerRegistrationMessageListener#onMessage response :" + registrationMessage);
 
             if (registrationMessage.getPathToTemplateFolder() != null) {
                 processMessage(registrationMessage);
             }
 
         } catch (Exception e) {
-            ShopCodeContext.getLog(this).error("Cant process " + objectMessage, e);
+            ShopCodeContext.getLog(this).error("Can not process " + objectMessage, e);
             throw new RuntimeException(e); //rollback message
         }
     }
@@ -96,9 +95,9 @@ public class CustomerRegistrationMessageListener implements Runnable {
         model.put("shopUrl", registrationMessage.getShopUrl());
         model.put("shopName", registrationMessage.getShopName());
 
-        final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
         mailComposer.composeMessage(
-                mimeMessage,
+                mail,
                 registrationMessage.getShopCode(),
                 registrationMessage.getPathToTemplateFolder(),
                 registrationMessage.getTemplateName(),
@@ -107,22 +106,9 @@ public class CustomerRegistrationMessageListener implements Runnable {
                 null,
                 null,
                 model);
-        
-        boolean send = false;
-        while (!send) {
-            // TODO: This is not good with timeout done by sleep, need to refactor this into a Job task with persistent queue, JMS maybe?
-            try {
-                javaMailSender.send(mimeMessage);
-                send = true;
-                ShopCodeContext.getLog(this).info("Customer registration mail send to {}", registrationMessage.getEmail() );
-            } catch (MailSendException me) {
-                ShopCodeContext.getLog(this).error("Cant send email to {} {}", registrationMessage.getEmail(), me.getMessage());
-                Thread.sleep(60000);
-                
-            }
-        }
-        
-        
+
+        mailService.create(mail);
+
     }
 
 

@@ -22,13 +22,13 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Manager;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.domain.message.consumer.ManagerRegistrationMessageListener;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.HashHelper;
+import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.service.mail.MailComposer;
 
@@ -54,7 +54,7 @@ public class ManagerRegistrationAspect  extends BaseNotificationAspect implement
 
     private final PassPhrazeGenerator phrazeGenerator;
 
-    private final JavaMailSender javaMailSender;
+    private final MailService mailService;
 
     private final MailComposer mailComposer;
 
@@ -63,41 +63,34 @@ public class ManagerRegistrationAspect  extends BaseNotificationAspect implement
 
 
     /**
-     * Construct base for aspect.
-     *
-     * @param phrazeGenerator {@link PassPhrazeGenerator}
-     * @param hashHelper      {@link HashHelper}
-     * @param taskExecutor     {@link TaskExecutor} to execute asyn task.
+     * Constructor for aspect with asynchronous notification.
      */
     public ManagerRegistrationAspect( final TaskExecutor taskExecutor,
                                       final PassPhrazeGenerator phrazeGenerator,
                                       final HashHelper hashHelper,
-                                      final JavaMailSender javaMailSender,
+                                      final MailService mailService,
                                       final MailComposer mailComposer
                                       ) {
         super(taskExecutor);
         this.hashHelper = hashHelper;
         this.phrazeGenerator = phrazeGenerator;
-        this.javaMailSender = javaMailSender;
+        this.mailService = mailService;
         this.mailComposer = mailComposer;
 
     }
 
     /**
-     * Construct manager aspect.
-     *
-     * @param phrazeGenerator {@link org.yes.cart.service.domain.PassPhrazeGenerator}
-     * @param hashHelper      {@link org.yes.cart.service.domain.HashHelper}
+     *  Constructor for aspect with synchronous notification.
      */
     public ManagerRegistrationAspect(
             final PassPhrazeGenerator phrazeGenerator,
             final HashHelper hashHelper,
-            final JavaMailSender javaMailSender,
+            final MailService mailService,
             final MailComposer mailComposer) {
         super(null);
         this.hashHelper = hashHelper;
         this.phrazeGenerator = phrazeGenerator;
-        this.javaMailSender = javaMailSender;
+        this.mailService = mailService;
         this.mailComposer = mailComposer;
 
     }
@@ -154,7 +147,7 @@ public class ManagerRegistrationAspect  extends BaseNotificationAspect implement
     @Override
     public Runnable getTask(Serializable serializableMessage) {
         return new ManagerRegistrationMessageListener(
-                javaMailSender,
+                mailService,
                 mailComposer,
                 serializableMessage
         );

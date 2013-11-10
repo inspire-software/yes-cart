@@ -16,17 +16,16 @@
 
 package org.yes.cart.domain.message.consumer;
 
-import org.springframework.mail.MailSendException;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueShop;
+import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
 
-import javax.mail.internet.MimeMessage;
 import java.text.MessageFormat;
 import java.util.Map;
 
@@ -108,7 +107,7 @@ public class StandardMessageListener implements Runnable {
      */
     public static final String PAYMENT_GATEWAY_FEATURE = "paymentGatewayFeatures";
 
-    private final JavaMailSender javaMailSender;
+    private final MailService mailService;
 
     private final MailComposer mailComposer;
 
@@ -119,20 +118,15 @@ public class StandardMessageListener implements Runnable {
     private final Object objectMessage;
 
     /**
-     * Contruct jms listener.
-     *
-     * @param javaMailSender  mail sender to use.
-     * @param mailComposer    mail composer
-     * @param shopService     shop service
-     * @param customerService customer service
+     * Constructor for listener.
      */
     public StandardMessageListener(
-            final JavaMailSender javaMailSender,
+            final MailService mailService,
             final MailComposer mailComposer,
             final CustomerService customerService,
             final ShopService shopService,
             final Object objectMessage) {
-        this.javaMailSender = javaMailSender;
+        this.mailService = mailService;
         this.mailComposer = mailComposer;
         this.shopService = shopService;
         this.customerService = customerService;
@@ -157,7 +151,7 @@ public class StandardMessageListener implements Runnable {
                     enrichMapWithShop(map);
                 }
 
-                final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+                final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
 
                 final AttrValueShop attrVal = ((Shop)map.get(SHOP)).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
                 String fromEmail = null;
@@ -166,7 +160,7 @@ public class StandardMessageListener implements Runnable {
                 }
 
                 mailComposer.composeMessage(
-                        mimeMessage,
+                        mail,
                         (String) map.get(SHOP_CODE),
                         (String) map.get(TEMPLATE_FOLDER),
                         (String) map.get(TEMPLATE_NAME),
@@ -176,25 +170,7 @@ public class StandardMessageListener implements Runnable {
                         null,
                         map);
 
-                boolean send = false;
-                while (!send) {
-                    try {
-                        javaMailSender.send(mimeMessage);
-                        send = true;
-                        ShopCodeContext.getLog(this).info("Mail send to {}", map.get(CUSTOMER_EMAIL));
-                    } catch (MailSendException me) {
-                        /**
-                         * TODO: YC-318
-                         * In case of failure, thread must use some persistent storage to
-                         * store email and send it latter.
-                         * Any persistent cache may be used for this purposes.
-                         */
-                        ShopCodeContext.getLog(this).error("Cant send email to {} {}", map.get(CUSTOMER_EMAIL), me.getMessage());
-                        Thread.sleep(60000);
-
-                    }
-                }
-
+                mailService.create(mail);
 
             } catch (Exception e) {
                 ShopCodeContext.getLog(this).error(

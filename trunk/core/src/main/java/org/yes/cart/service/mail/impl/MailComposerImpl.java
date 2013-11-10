@@ -18,10 +18,14 @@ package org.yes.cart.service.mail.impl;
 
 import groovy.lang.Writable;
 import groovy.text.GStringTemplateEngine;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.yes.cart.domain.entity.Mail;
+import org.yes.cart.domain.entity.MailPart;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.mail.MailComposer;
@@ -114,7 +118,7 @@ public class MailComposerImpl implements MailComposer {
      *
      * @param view  groovy string template
      * @param model model
-     * @return megred view.
+     * @return merged view.
      * @throws java.io.IOException    in case of inline resources can not be found
      * @throws ClassNotFoundException in case if something wrong with template engine
      */
@@ -128,30 +132,17 @@ public class MailComposerImpl implements MailComposer {
     }
 
     /**
-     * Compose mail message.
-     *
-     * @param message      mime message to fill
-     * @param shopCode     optional shop code
-     * @param templateName template name
-     * @param from         from address
-     * @param toEmail      mail desctinatiol address
-     * @param ccEmail      optional cc
-     * @param bccEmail     optional bcc
-     * @param model        model
-     * @throws MessagingException     in case if mail message can not be converted
-     * @throws java.io.IOException    in case of inline resources can not be found
-     * @throws ClassNotFoundException in case if something wrong with template engine
+     * {@inheritDoc}
      */
-    public void composeMessage(
-            final MimeMessage message,
-            final String shopCode,
-            final String pathToTemplateFolder,
-            final String templateName,
-            final String from,
-            final String toEmail,
-            final String ccEmail,
-            final String bccEmail,
-            final Map<String, Object> model)
+    public void composeMessage(final MimeMessage message,
+                               final String shopCode,
+                               final String pathToTemplateFolder,
+                               final String templateName,
+                               final String from,
+                               final String toEmail,
+                               final String ccEmail,
+                               final String bccEmail,
+                               final Map<String, Object> model)
             throws MessagingException, IOException, ClassNotFoundException {
 
 
@@ -190,18 +181,13 @@ public class MailComposerImpl implements MailComposer {
             helper.setFrom(from);
         }
 
-
-        composeMessage(helper,
-                textTemplate,
-                htmlTemplate,
-                pathToResources,
-                model);
+        composeMessage(helper, textTemplate, htmlTemplate, pathToResources, model);
 
     }
 
 
     /**
-     * Fill mail messagge. At least one of the templates must be given.
+     * Fill mail message. At least one of the templates must be given.
      *
      * @param textTemplate    optional text template
      * @param htmlTemplate    optional html template
@@ -212,15 +198,12 @@ public class MailComposerImpl implements MailComposer {
      * @throws java.io.IOException    in case of inline resources can not be found
      * @throws ClassNotFoundException in case if something wrong with template engine
      */
-    void composeMessage(
-            final MimeMessageHelper helper,
-            final String textTemplate,
-            final String htmlTemplate,
-            final String pathToResources,
-            final Map<String, Object> model
-    ) throws MessagingException, ClassNotFoundException, IOException {
-
-        final String htmlMergeResult;
+    void composeMessage(final MimeMessageHelper helper,
+                        final String textTemplate,
+                        final String htmlTemplate,
+                        final String pathToResources,
+                        final Map<String, Object> model)
+            throws MessagingException, ClassNotFoundException, IOException {
 
         if (textTemplate == null || htmlTemplate == null) {
             if (textTemplate != null) {
@@ -228,17 +211,17 @@ public class MailComposerImpl implements MailComposer {
             }
 
             if (htmlTemplate != null) {
-                htmlMergeResult = merge(htmlTemplate, model);
-                helper.setText(htmlMergeResult, true);
+                helper.setText(merge(htmlTemplate, model), true);
+                inlineResources(helper, htmlTemplate, pathToResources);
             }
 
         } else {
-            htmlMergeResult = merge(htmlTemplate, model);
-            helper.setText(merge(textTemplate, model), htmlMergeResult);
+            helper.setText(
+                    merge(textTemplate, model),
+                    merge(htmlTemplate, model)
+            );
+            inlineResources(helper, htmlTemplate, pathToResources);
         }
-
-        inlineResources(helper, htmlTemplate, pathToResources);
-
 
     }
 
@@ -250,12 +233,11 @@ public class MailComposerImpl implements MailComposer {
      * @param helper          MimeMessageHelper, that has mail message
      * @param htmlTemplate    html message template
      * @param pathToResources physical path to resources
-     * @throws javax.mail.MessagingException in case if resource can not inlined
+     * @throws javax.mail.MessagingException in case if resource can not be inlined
      */
-    void inlineResources(
-            final MimeMessageHelper helper,
-            final String htmlTemplate,
-            final String pathToResources) throws MessagingException {
+    void inlineResources(final MimeMessageHelper helper,
+                         final String htmlTemplate,
+                         final String pathToResources) throws MessagingException {
 
         if (StringUtils.isNotBlank(htmlTemplate)) {
             final List<String> resourcesIds = getResourcesId(htmlTemplate);
@@ -274,7 +256,7 @@ public class MailComposerImpl implements MailComposer {
     }
 
     /**
-     * Transform resource id in filename_extenstion format to filename.extension
+     * Transform resource id in filename_extension format to filename.extension
      *
      * @param resourceName resource id
      * @return filename
@@ -288,7 +270,7 @@ public class MailComposerImpl implements MailComposer {
      * Collect resource ids
      *
      * @param htmlTemplate given html template
-     * @return list of resourcve ids in template order.
+     * @return list of resource ids in template order.
      */
     List<String> getResourcesId(final String htmlTemplate) {
         final List<String> resourceIds = new ArrayList<String>();
@@ -364,6 +346,206 @@ public class MailComposerImpl implements MailComposer {
         stringBuilder.append(File.separator);
 
         return stringBuilder.toString();
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void composeMessage(final Mail mail,
+                               final String shopCode,
+                               final String pathToTemplateFolder,
+                               final String templateName,
+                               final String from,
+                               final String toEmail,
+                               final String ccEmail,
+                               final String bccEmail,
+                               final Map<String, Object> model)
+            throws MessagingException, IOException, ClassNotFoundException {
+
+        mail.setShopCode(shopCode);
+        mail.setRecipients(toEmail);
+
+        if (ccEmail != null) {
+            mail.setCc(ccEmail);
+        }
+
+        if (bccEmail != null) {
+            mail.setBcc(bccEmail);
+        }
+
+        final String fullPath = pathToTemplateFolder + templateName + File.separator;
+
+
+        final String textTemplate = getTemplate(fullPath, templateName + ".txt");
+        final String htmlTemplate = getTemplate(fullPath, templateName + ".html");
+        final String pathToResources = fullPath + "resources" + File.separator;
+        final String propString = getTemplate(fullPath, templateName + ".properties");
+        final Properties prop = new Properties();
+        if (propString != null) {
+
+            prop.load(new StringReader(propString));
+
+        }
+        mail.setSubject(prop.getProperty("subject") );
+
+        if (from == null) {
+            mail.setFrom(prop.getProperty("from"));
+        } else {
+            mail.setFrom(from);
+        }
+
+
+        composeMessage(mail,
+                textTemplate,
+                htmlTemplate,
+                pathToResources,
+                model);
+
+
+    }
+
+
+    /**
+     * Fill mail message. At least one of the templates must be given.
+     *
+     * @param textTemplate    optional text template
+     * @param htmlTemplate    optional html template
+     * @param model           model
+     * @param pathToResources optional path to inline resources. Used if htmlTemplate is set and has "cid" resoures.
+     * @param mail          mail message
+     *
+     * @throws MessagingException     in case if message can not be composed
+     * @throws java.io.IOException    in case of inline resources can not be found
+     * @throws ClassNotFoundException in case if something wrong with template engine
+     */
+    void composeMessage(final Mail mail,
+                        final String textTemplate,
+                        final String htmlTemplate,
+                        final String pathToResources,
+                        final Map<String, Object> model)
+            throws MessagingException, ClassNotFoundException, IOException {
+
+        if (textTemplate == null || htmlTemplate == null) {
+            if (textTemplate != null) {
+                mail.setTextVersion(merge(textTemplate, model));
+            }
+            if (htmlTemplate != null) {
+                mail.setHtmlVersion(merge(htmlTemplate, model));
+                inlineResources(mail, htmlTemplate, pathToResources);
+            }
+
+        } else {
+            mail.setTextVersion(merge(textTemplate, model));
+            mail.setHtmlVersion(merge(htmlTemplate, model));
+            inlineResources(mail, htmlTemplate, pathToResources);
+        }
+
+    }
+
+
+    /**
+     * Add inline resource to mail message.
+     * Resource id will be interpreted as file name in following fashion: filename_ext.
+     *
+     * @param mail          MimeMessageHelper, that has mail message
+     * @param htmlTemplate    html message template
+     * @param pathToResources physical path to resources
+     * @throws javax.mail.MessagingException in case if resource can not be inlined
+     */
+    void inlineResources(final Mail mail,
+                         final String htmlTemplate,
+                         final String pathToResources) throws MessagingException, IOException {
+
+        if (StringUtils.isNotBlank(htmlTemplate)) {
+            final List<String> resourcesIds = getResourcesId(htmlTemplate);
+            if (!resourcesIds.isEmpty()) {
+                for (String resourceId : resourcesIds) {
+                    final String fileName = pathToResources + transformResourceIdToFileName(resourceId);
+                    final File file = new File(fileName);
+                    if (file.exists()) {
+                        final MailPart part = mail.addPart();
+                        part.setResourceId(resourceId);
+                        part.setFilename(fileName);
+                        part.setData(FileUtils.readFileToByteArray(file));
+                    }
+                }
+            }
+        }
+
+    }
+
+
+
+    /** {@inheritDoc} */
+    @Override
+    public void convertMessage(final Mail mail, final MimeMessage mimeMessage)
+            throws MessagingException, IOException, ClassNotFoundException {
+
+        final MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+        helper.setTo(mail.getRecipients());
+
+        helper.setSentDate(new Date());
+
+        if (mail.getCc() != null) {
+            helper.setCc(mail.getCc());
+        }
+
+        if (mail.getBcc() != null) {
+            helper.setBcc(mail.getBcc());
+        }
+
+        final String textTemplate = mail.getTextVersion();
+        final String htmlTemplate = mail.getHtmlVersion();
+
+        helper.setSubject(mail.getSubject());
+        helper.setFrom(mail.getFrom());
+
+        if (textTemplate == null || htmlTemplate == null) {
+            if (textTemplate != null) {
+                helper.setText(textTemplate, false);
+            }
+
+            if (htmlTemplate != null) {
+                helper.setText(htmlTemplate, true);
+                inlineResources(helper, mail);
+            }
+
+        } else {
+            helper.setText(
+                    textTemplate,
+                    htmlTemplate
+            );
+            inlineResources(helper, mail);
+        }
+
+    }
+
+
+    /**
+     * Add inline resource to mail message.
+     * Resource id will be interpreted as file name in following fashion: filename_ext.
+     *
+     * @param helper          MimeMessageHelper, that has mail message
+     * @param mail            html message template
+     *
+     * @throws javax.mail.MessagingException in case if resource can not be inlined
+     */
+    void inlineResources(final MimeMessageHelper helper,
+                         final Mail mail) throws MessagingException {
+
+        if (CollectionUtils.isNotEmpty(mail.getParts())) {
+            for (final MailPart part : mail.getParts()) {
+                final String fileName = part.getFilename();
+                final String resourceId = part.getResourceId();
+                helper.addInline(resourceId, new ByteArrayResource(part.getData()) {
+                    @Override
+                    public String getFilename() {
+                        return fileName;
+                    }
+                });
+            }
+        }
 
     }
 

@@ -582,6 +582,72 @@
 
     </class>
 
+
+    <class name="org.yes.cart.domain.entity.impl.MailEntity" table="TMAIL">
+        <id name="mailId" type="long">
+            <column name="MAIL_ID" not-null="true"/>
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="shopCode" column="SHOP_CODE" type="string" length="255"/>
+        <property name="subject" column="SUBJECT" type="string" length="512" not-null="true"/>
+        <property name="from" column="EMAIL_FROM" type="string" length="512" not-null="true"/>
+        <property name="recipients" column="EMAIL_RECEPIENTS" type="string" length="512" not-null="true"/>
+        <property name="cc" column="EMAIL_CC" type="string" length="512"/>
+        <property name="bcc" column="EMAIL_BCC" type="string" length="512"/>
+
+        <property name="textVersion" type="text">
+            <column name="TEXT_VERSION" sql-type="clob"/>
+        </property>
+        <property name="htmlVersion" type="text">
+            <column name="HTML_VERSION" sql-type="clob"/>
+        </property>
+
+        <set name="parts" cascade="all,delete-orphan" lazy="false">
+            <key column="MAIL_ID" not-null="true" foreign-key="FKMAILMAILPART"/>
+            <one-to-many class="org.yes.cart.domain.entity.impl.MailPartEntity"/>
+        </set>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36" unique-key="MAIL_GUID" not-null="true"/>
+    </class>
+
+    <class name="org.yes.cart.domain.entity.impl.MailPartEntity" table="TMAILPART">
+        <id name="mailPartId" type="long">
+            <column name="MAILPART_ID" not-null="true"/>
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <many-to-one name="mail" class="org.yes.cart.domain.entity.impl.MailEntity"
+                     column="MAIL_ID" insert="false" update="false"
+                     foreign-key="FKMAILMAILPART"/>
+
+        <property name="resourceId" column="RESOURCE_ID" type="string" length="255" not-null="true"/>
+        <property name="filename" column="FILENAME" type="string" length="255" not-null="true"/>
+
+        <property name="data" type="binary">
+            <column name="PART_DATA" sql-type="blob"/>
+        </property>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36" unique-key="MAILTEMPLATEGROUP_GUID" not-null="true"/>
+    </class>
+
+
     <!-- ########################################## #############################################################-->
 
     <class name="org.yes.cart.domain.entity.impl.SystemEntity" table="TSYSTEM">
@@ -2907,6 +2973,13 @@
             order by p.enabledFrom asc, p.enabledTo asc, p.rank asc, p.promotionId asc
         ]]>
     </query>
+
+    <query name="OLDEST.MAIL">
+        <![CDATA[
+            select m from MailEntity m order by m.createdTimestamp asc
+        ]]>
+    </query>
+
 
 
 </hibernate-mapping>

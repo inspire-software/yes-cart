@@ -22,16 +22,12 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
-import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.ProductSkuService;
-import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderItemAllocationException;
@@ -52,7 +48,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect implem
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderStateChangeListenerAspect.class);
 
-    private final JavaMailSender javaMailSender;
+    private final MailService mailService;
 
     private final MailComposer mailComposer;
 
@@ -72,7 +68,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect implem
 
 
     public OrderStateChangeListenerAspect(final TaskExecutor taskExecutor,
-                                          final JavaMailSender javaMailSender,
+                                          final MailService mailService,
                                           final MailComposer mailComposer,
                                           final CustomerService customerService,
                                           final CustomerOrderService customerOrderService,
@@ -81,7 +77,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect implem
                                           final Map<String, String> shopperTemplates,
                                           final Map<String, String> adminTemplates) {
         super(taskExecutor);
-        this.javaMailSender = javaMailSender;
+        this.mailService = mailService;
         this.mailComposer = mailComposer;
         this.customerService = customerService;
         this.customerOrderService = customerOrderService;
@@ -95,7 +91,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect implem
     /** {@inheritDoc} */
     public Runnable getTask(final Serializable serializableMessage) {
         return new StandardMessageListener(
-                javaMailSender,
+                mailService,
                 mailComposer,
                 customerService,
                 shopService,

@@ -115,7 +115,7 @@
         <constructor-arg index="0" ref="aspectExecutor"/>
         <constructor-arg index="1" ref="passPhraseGenerator"/>
         <constructor-arg index="2" ref="passwordHashHelper"/>
-        <constructor-arg index="3" ref="mailSender"/>
+        <constructor-arg index="3" ref="mailService"/>
         <constructor-arg index="4" ref="mailComposer"/>
 
     </bean>
@@ -123,8 +123,7 @@
     <bean id="paymentNotificationAspect" class="org.yes.cart.web.aspect.PaymentAspect">
         <constructor-arg index="0" ref="aspectExecutor"/>
         <constructor-arg index="1" ref="productService"/>
-
-        <constructor-arg index="2" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
+        <constructor-arg index="2" type="org.yes.cart.service.domain.MailService" ref="mailService"/>
         <constructor-arg index="3" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
         <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
         <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
@@ -133,7 +132,7 @@
 
     <bean id="orderStateChangeAspect" class="org.yes.cart.service.domain.aspect.impl.OrderStateChangeListenerAspect">
         <constructor-arg index="0" ref="aspectExecutor"/>
-        <constructor-arg index="1" type="org.springframework.mail.javamail.JavaMailSender" ref="mailSender"/>
+        <constructor-arg index="1" type="org.yes.cart.service.domain.MailService" ref="mailService"/>
         <constructor-arg index="2" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
         <constructor-arg index="3" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
         <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerOrderService" ref="customerOrderService"/>

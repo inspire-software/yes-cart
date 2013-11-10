@@ -21,11 +21,11 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
@@ -48,7 +48,7 @@ public class PaymentAspect extends BaseNotificationAspect {
 
     private final ProductService productService;
 
-    private final JavaMailSender javaMailSender;
+    private final MailService mailService;
 
     private final MailComposer mailComposer;
 
@@ -65,17 +65,14 @@ public class PaymentAspect extends BaseNotificationAspect {
      */
     public PaymentAspect(final TaskExecutor taskExecutor,
                          final ProductService productService,
-
-                         final JavaMailSender javaMailSender,
+                         final MailService mailService,
                          final MailComposer mailComposer,
                          final CustomerService customerService,
                          final ShopService shopService,
                          final PaymentModulesManager paymentModulesManager) {
         super(taskExecutor);
         this.productService = productService;
-
-
-        this.javaMailSender = javaMailSender;
+        this.mailService = mailService;
         this.mailComposer = mailComposer;
         this.shopService = shopService;
         this.customerService = customerService;
@@ -86,7 +83,7 @@ public class PaymentAspect extends BaseNotificationAspect {
 
     public Runnable getTask(final Serializable serializableMessage) {
         return new StandardMessageListener(
-                javaMailSender,
+                mailService,
                 mailComposer,
                 customerService,
                 shopService,

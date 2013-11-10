@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.mail;
 
+import org.yes.cart.domain.entity.Mail;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
@@ -39,23 +41,68 @@ public interface MailComposer {
      * @param pathToTemplateFolder path to template folder
      * @param templateName template name
      * @param from         from address
-     * @param toEmail           mail desctinatiol address
+     * @param toEmail           mail destination address
      * @param ccEmail           optional cc
      * @param bccEmail          optional bcc
      * @param model        model
+     *
+     * @throws javax.mail.MessagingException in case if mail message can not be converted
+     * @throws java.io.IOException    in case of inline resources can not be found
+     * @throws ClassNotFoundException  in case if something wrong with template engine
+     *
+     * @deprecated need to persist the mail and then cron job will send it
+     */
+    @Deprecated
+    void composeMessage(MimeMessage message,
+                        String shopCode,
+                        String pathToTemplateFolder,
+                        String templateName,
+                        String from,
+                        String toEmail,
+                        String ccEmail,
+                        String bccEmail,
+                        Map<String, Object> model)
+                throws MessagingException, IOException, ClassNotFoundException;
+
+    /**
+     * Convert mime message into persistent message.
+     *
+     * @param mail mail message
+     * @param shopCode     optional shop code
+     * @param pathToTemplateFolder path to template folder
+     * @param templateName template name
+     * @param from         from address
+     * @param toEmail           mail destination address
+     * @param ccEmail           optional cc
+     * @param bccEmail          optional bcc
+     * @param model        model
+     *
      * @throws javax.mail.MessagingException in case if mail message can not be converted
      * @throws java.io.IOException    in case of inline resources can not be found
      * @throws ClassNotFoundException  in case if something wrong with template engine
      */
-    void composeMessage(
-            MimeMessage message,
-            String shopCode,
-            String pathToTemplateFolder,
-            String templateName,
-            String from,
-            String toEmail,
-            String ccEmail,
-            String bccEmail,
-            Map<String, Object> model)
-                throws MessagingException, IOException, ClassNotFoundException;
+    void composeMessage(Mail mail,
+                        String shopCode,
+                        String pathToTemplateFolder,
+                        String templateName,
+                        String from,
+                        String toEmail,
+                        String ccEmail,
+                        String bccEmail,
+                        Map<String, Object> model)
+            throws MessagingException, IOException, ClassNotFoundException;
+
+    /**
+     * Convert persistent message into mime message.
+     *
+     * @param mail persistent mail
+     * @param mimeMessage mime message
+     *
+     * @throws javax.mail.MessagingException in case if mail message can not be converted
+     * @throws java.io.IOException    in case of inline resources can not be found
+     * @throws ClassNotFoundException  in case if something wrong with template engine
+     */
+    void convertMessage(Mail mail, MimeMessage mimeMessage)
+            throws MessagingException, IOException, ClassNotFoundException;
+
 }
