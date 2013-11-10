@@ -18,6 +18,8 @@
 <body>
 <wicket:panel>
 
+
+
     <div class="grid-100 mobile-grid-100 grid-parent">
 
         <div class="grid-100 mobile-grid-100">
@@ -29,12 +31,46 @@
         <div class="grid-100 mobile-grid-100 grid-parent hide-on-mobile" style="margin-top: 5px;">
             <div class="grid-20 mobile-grid-20" wicket:id="altImageList">
                 <a wicket:id="altImageRef"  class="example-image-link" rel="lightbox-alternatives">
-                    <img wicket:id="altImage" align="center" class="example-image" />
+                    <img    onmouseout="onMouseOutAlternativeImage()"
+                            onmouseover="onMouseOverAlternativeImage(this)"
+                            wicket:id="altImage" align="center" class="example-image" />
                 </a>
             </div>
         </div>
 
     </div>
+
+    <script>
+
+        var defaultImageUrl;
+        var defaultImageWidth;
+        var defaultImageHeight;
+
+        defaultImageUrl = document.getElementById("defaultImage").src;
+        var wRe = /(w=)(\d{1,10})/;
+        wRe.exec(defaultImageUrl)
+        defaultImageWidth = wRe.exec(defaultImageUrl)[2];
+        var hRe = /(h=)(\d{1,10})/;
+        hRe.exec(defaultImageUrl)
+        defaultImageHeight = wRe.exec(defaultImageUrl)[2];
+
+        function onMouseOutAlternativeImage() {
+
+            document.getElementById("defaultImage").src = defaultImageUrl;
+
+        }
+
+        function onMouseOverAlternativeImage(altImage) {
+
+            var src = altImage.src;
+
+            src = src.substring(0, src.indexOf('?')) + "?w="+defaultImageWidth+"&h="+defaultImageHeight;
+
+            document.getElementById("defaultImage").src = src;
+
+        }
+
+    </script>
 
 </wicket:panel>
 </body>

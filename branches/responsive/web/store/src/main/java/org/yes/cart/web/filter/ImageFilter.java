@@ -164,7 +164,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
 
             final File origFile = new File(original);
 
-            if (!origFile.exists()) {
+            if (!origFile.exists() || origFile.isDirectory() ) {
                 code = Constants.NO_IMAGE;
                 fileName = imageNameStrategy.getFileName(code);  //here file name with prefix
                 original =

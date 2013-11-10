@@ -237,7 +237,7 @@ public class ImageServiceImpl
 
         return ScaleDescriptor.create(
                 image, scale, scale, 0f, 0f,
-                Interpolation.getInstance(Interpolation.INTERP_BICUBIC),
+                Interpolation.getInstance(Interpolation.INTERP_BILINEAR), //Interpolation.INTERP_BILINEAR to resize down , bicubic to scale up
                 renderingHints);
     }
 
