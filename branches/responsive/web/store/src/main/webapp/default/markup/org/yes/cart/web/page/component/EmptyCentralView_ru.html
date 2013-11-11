@@ -23,7 +23,7 @@
     </wicket:link>
     <style type="text/css">
         .banner { position: relative; overflow: auto; }
-        .banner li { list-style: none; }
+        .banner li { list-style: none; height: 300px }
         .banner ul li { float: left; }
     </style>
 </wicket:head>
@@ -32,16 +32,30 @@
 
     <div class="grid-100 mobile-grid-100 grid-parent">
 
-        <div class="banner">
-            <ul>
-                <li>This is a slide.</li>
-                <li>This is another slide.</li>
-                <li>This is a final slide.</li>
+        <div class="banner" style="background-color: blue;">
+            <ul style="background-color: #000000;">
+                <li style="background-color: red">
+                    <a href="/yes-shop/category/notebooks/product/1">
+                        <img src="/yes-shop/imgvault/noimage.jpeg?w=400&h=400" vspace="5" hspace="5">
+                    </a>
+                    HP Pavilion dv7-7061ea Entertainment Notebook PC. Тактовая частота процессора: 2500 МГц, Семейство процессоров: Intel Core i5-2450M, L2 кэш-память: 3 МБ. Слоты памяти: 2 user accessible. Диагональ экрана: 1115.1 мм (43.9)
+                </li>
+                <li style="background-color: green">This is another slide.</li>
+                <li style="background-color: #8a2be2">This is a final slide.</li>
             </ul>
         </div>
         <script>
             $(function() {
-                $('.banner').unslider();
+                $('.banner').unslider(
+                        {
+                            speed: 500,               //  The speed to animate each slide (in milliseconds)
+                            delay: 5000,              //  The delay between slide animations (in milliseconds)
+                            complete: function() {},  //  A function that gets called after every slide animation
+                            keys: true,               //  Enable keyboard (left, right) arrow shortcuts
+                            dots: true,               //  Display dot navigation
+                            fluid: true              //  Support responsive design. May break non-responsive designs
+                        }
+                );
             });
         </script>
 
