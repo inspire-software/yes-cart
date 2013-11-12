@@ -21,7 +21,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.misc.PluralFormService;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -29,8 +28,6 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
-
-import java.math.BigDecimal;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -74,10 +71,6 @@ public class SmallShoppingCartView extends BaseComponent {
     protected void onBeforeRender() {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         final Integer itemsInCart = cart.getCartItemsCount();
-        final SkuPrice skuPrice = priceService.getGenericDao().getEntityFactory().getByIface(SkuPrice.class);
-        skuPrice.setRegularPrice(cart.getTotal().getSubTotal());
-        skuPrice.setCurrency(cart.getCurrencyCode());
-        skuPrice.setQuantity(BigDecimal.ONE);
 
         final String resourceKey = pluralFormService.getPluralForm(
                 cart.getCurrentLocale(),
