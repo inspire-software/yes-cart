@@ -34,7 +34,7 @@
     <mx:NumberValidator id="skuQuantityValidator"
                         source="{quantityTextInput}"
                         property="text"
-                        minValue="0" allowNegative="false" domain="int"/>
+                        minValue="0" allowNegative="false" domain="real" decimalSeparator="."/>
 
     <mx:ControlBar horizontalAlign="right" width="100%">
         <mx:Button id="saveBtn"
