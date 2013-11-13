@@ -521,14 +521,20 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                 T entity = findById(primaryKey);
                 if(entity != null) {
                     final T unproxied = (T) HibernateHelper.unproxy(entity);
-                    fullTextSession.index(unproxied);
+
+                    if (entityIndexingInterceptor != null) {
+                        if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onAdd(unproxied)) {
+                            fullTextSession.index(unproxied);
+                        }
+                    } else {
+                        fullTextSession.index(unproxied);
+                    }
                 }
 
 
             }
             result++;
             fullTextSession.flushToIndexes(); //apply changes to indexes
-
             fullTextSession.clear(); //clear since the queue is processed
 
         }

@@ -16,22 +16,20 @@
 
 package org.yes.cart.domain.message.consumer;
 
-import com.dumbster.smtp.SimpleSmtpServer;
-import com.dumbster.smtp.SmtpMessage;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.mail.MailComposer;
 
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -41,29 +39,27 @@ import static org.hamcrest.Matchers.*;
 public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase {
 
     @Test
-    @Ignore("Need to refactor this, since this test just hangs, goes into infine loop to send mail")
     public void testOnMessage0() throws Exception {
+        final MailService mailService = (MailService) ctx().getBean("mailService");
+        final MailComposer mailComposer = (MailComposer) ctx().getBean("mailComposer");
         RegistrationMessage registrationMessage = createRegistrationMessage();
-        SimpleSmtpServer server = SimpleSmtpServer.start(2525);
         new CustomerRegistrationMessageListener(
-                (MailService) ctx().getBean("mailService"),
-                (MailComposer)ctx().getBean("mailComposer"),
+                mailService,
+                mailComposer,
                 registrationMessage
         ).run();
-        Thread.sleep(100);
-        server.stop();
-        assertThat(server.getReceivedEmailSize(), is(1));
-        Iterator emailIter = server.getReceivedEmail();
-        SmtpMessage email = (SmtpMessage) emailIter.next();
-        assertThat(email.getBody(),
+        final List<Mail> mail = mailService.findAll();
+        assertEquals(1, mail.size());
+        final Mail email = mail.get(0);
+        assertThat(email.getHtmlVersion(),
                 allOf(containsString("neWpaSswOrd"),
                         containsString("neWpaSswOrd"),
                         containsString("Bender"),
                         containsString("Rodrigez"),
                         containsString("Gadget universe"),
                         containsString("somegadget.com")));
-        assertThat(email.getHeaderValue("From"), is("noreply@shop.com"));
-        assertThat(email.getHeaderValue("Subject"), is("Password has been changed"));
+        assertThat(email.getFrom(), is("noreply@shop.com"));
+        assertThat(email.getSubject(), is("Password has been changed"));
     }
 
     private RegistrationMessage createRegistrationMessage() {

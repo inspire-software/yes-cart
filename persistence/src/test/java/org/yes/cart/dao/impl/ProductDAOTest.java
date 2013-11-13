@@ -570,16 +570,17 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productSku.setCode("SONY_PRODUCT_CODE");
                 productSku.setName("product sony name");
                 product.getSku().add(productSku);
-                productDao.saveOrUpdate(product);
-                productSkuDao.saveOrUpdate(productSku);
+                product = productDao.saveOrUpdate(product);
+                productSku = productSkuDao.saveOrUpdate(productSku);
 
-                // add quantity on warehoues
+                // add quantity on warehouses
                 SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
                 skuWarehouse.setSku(productSku);
                 skuWarehouse.setQuantity(BigDecimal.ONE);
                 skuWarehouse.setWarehouse(warehouseDao.findById(2L));
 
-                skuWareHouseDao.create(skuWarehouse);
+                skuWarehouse = skuWareHouseDao.create(skuWarehouse);
+                productSku.getQuantityOnWarehouse().add(skuWarehouse);
 
                 // assign it to category
                 ProductCategory productCategory = assignToCategory(product, 128L);
@@ -650,16 +651,18 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productSku.setCode("SONY_PRODUCT_CODE");
                 productSku.setName("product sony name");
                 product.getSku().add(productSku);
-                productDao.saveOrUpdate(product);
-                productSkuDao.saveOrUpdate(productSku);
+                product = productDao.saveOrUpdate(product);
+                productSku = productSkuDao.saveOrUpdate(productSku);
 
-                // add quantity on warehoues
+                // add quantity on warehouses
                 SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
                 skuWarehouse.setSku(productSku);
                 skuWarehouse.setQuantity(BigDecimal.ONE);
                 skuWarehouse.setWarehouse(warehouseDao.findById(2L));
 
-                skuWareHouseDao.create(skuWarehouse);
+                skuWarehouse = skuWareHouseDao.create(skuWarehouse);
+
+                productSku.getQuantityOnWarehouse().add(skuWarehouse);
 
                 // assign it to category
                 ProductCategory productCategory = assignToCategory(product, 128L);
@@ -775,41 +778,41 @@ public class ProductDAOTest extends AbstractTestDAO {
                 createdProducts.add(createProduct(103L, "SONY_MP3_PLAYER", "product sony mp3 player", 2L, 135L));
                 createdProducts.add(createProduct(104L, "SAM_MP3_PLAYER", "product sam mp3 player", 2L, 136L));
                 // productDao.fullTextSearchReindex(false);
-                List<Product> foundedProducts;
+                List<Product> foundProducts;
                 BooleanQuery query;
                 List<Long> categories = new ArrayList<Long>();
                 BrandSearchQueryBuilder brandSearchQueryBuilder = new BrandSearchQueryBuilder();
-                //exisitng LG product in category 134
+                //existing LG product in category 134
                 categories.clear();
                 categories.add(134L);
                 query = brandSearchQueryBuilder.createQuery(categories, "LG");
-                foundedProducts = productDao.fullTextSearch(query);
-                assertNotNull(foundedProducts);
-                assertEquals(query.toString(), 1, foundedProducts.size());
-                //exisitng two LG products in category 135 135
+                foundProducts = productDao.fullTextSearch(query);
+                assertNotNull(foundProducts);
+                assertEquals(query.toString(), 1, foundProducts.size());
+                //existing two LG products in category 135 135
                 categories.clear();
                 categories.add(134L);
                 categories.add(135L);
                 query = brandSearchQueryBuilder.createQuery(categories, "LG");
-                foundedProducts = productDao.fullTextSearch(query);
-                assertNotNull(foundedProducts);
-                assertEquals(query.toString(), 2, foundedProducts.size());
+                foundProducts = productDao.fullTextSearch(query);
+                assertNotNull(foundProducts);
+                assertEquals(query.toString(), 2, foundProducts.size());
                 //only one Sony product in categories 135, 134,136
                 categories.clear();
                 categories.add(134L);
                 categories.add(135L);
                 categories.add(136L);
                 query = brandSearchQueryBuilder.createQuery(categories, "Sony");
-                foundedProducts = productDao.fullTextSearch(query);
-                assertNotNull(foundedProducts);
-                assertEquals(query.toString(), 1, foundedProducts.size());
+                foundProducts = productDao.fullTextSearch(query);
+                assertNotNull(foundProducts);
+                assertEquals(query.toString(), 1, foundProducts.size());
                 //LG prod not exists in 136 category
                 categories.clear();
                 categories.add(136L);
                 query = brandSearchQueryBuilder.createQuery(categories, "LG");
-                foundedProducts = productDao.fullTextSearch(query);
-                assertNotNull(foundedProducts);
-                assertEquals(0, foundedProducts.size());
+                foundProducts = productDao.fullTextSearch(query);
+                assertNotNull(foundProducts);
+                assertEquals(0, foundProducts.size());
 
                 status.setRollbackOnly();
 
@@ -849,15 +852,15 @@ public class ProductDAOTest extends AbstractTestDAO {
         productDao.saveOrUpdate(product);
         productSkuDao.saveOrUpdate(productSku);
         productSkuDao.saveOrUpdate(productSku);
-        // add quantity on warehoues
+        // add quantity on warehouses
         SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
         skuWarehouse.setSku(productSku);
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouse.setWarehouse(warehouseDao.findById(2L));
         skuWareHouseDao.create(skuWarehouse);
+        productSku.getQuantityOnWarehouse().add(skuWarehouse);
         productDao.fullTextSearchReindex(product.getProductId());
         skuWareHouseDao.flushClear();
-        java.lang.System.out.println("\n");
         return pk;
     }
 

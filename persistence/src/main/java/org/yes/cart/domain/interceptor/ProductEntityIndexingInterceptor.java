@@ -23,6 +23,8 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.impl.ProductEntity;
 
+import java.util.Date;
+
 /**
  * User:  Igor Azarny
  * Date: 5/5/12
@@ -43,17 +45,22 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
      * @return true if entity need to be in lucene index.
      */
     public boolean isIncludeInLuceneIndex(final Product entity) {
-       if (entity != null && Product.AVAILABILITY_STANDARD == entity.getAvailability()) {
-           for (final ProductSku sku : entity.getSku()) {
-               for (final SkuWarehouse inventory : sku.getQuantityOnWarehouse()) {
-                   if (inventory.isAvailableToSell()) {
-                       return true; // has stock
+        if (entity != null) {
+            if (entity.getAvailableto() == null || (entity.getAvailableto() != null && entity.getAvailableto().after(new Date()))) {
+               if (Product.AVAILABILITY_STANDARD == entity.getAvailability()) {
+                   for (final ProductSku sku : entity.getSku()) {
+                       for (final SkuWarehouse inventory : sku.getQuantityOnWarehouse()) {
+                           if (inventory.isAvailableToSell()) {
+                               return true; // has stock
+                           }
+                       }
                    }
+                   return false; // no
                }
-           }
-           return false; // no
-       }
-       return true;
+               return true;
+            }
+        }
+        return false;
     }
 
 

@@ -57,7 +57,7 @@ public class ProductIndexerImpl implements ProductIndexer {
     }
 
     /**
-     * Push pk value to inderlar set for reindex.
+     * Push pk value to indexer set for reindex.
      *
      * @param productPkValue product primary key value.
      */
