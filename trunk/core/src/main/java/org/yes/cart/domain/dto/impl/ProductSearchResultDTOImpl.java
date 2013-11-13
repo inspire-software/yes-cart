@@ -34,6 +34,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     private long id;
     private String code;
+    private String defaultSkuCode;
     private String name;
     private String displayName;
     private String description;
@@ -95,6 +96,16 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     /** {@inheritDoc} */
     public void setCode(final String code) {
         this.code = code;
+    }
+
+    /** {@inheritDoc} */
+    public String getDefaultSkuCode() {
+        return defaultSkuCode;
+    }
+
+    /** {@inheritDoc} */
+    public void setDefaultSkuCode(final String defaultSkuCode) {
+        this.defaultSkuCode = defaultSkuCode;
     }
 
     /** {@inheritDoc} */

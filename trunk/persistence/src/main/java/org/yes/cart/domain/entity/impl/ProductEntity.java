@@ -21,6 +21,7 @@ import org.hibernate.search.annotations.*;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.bridge.ProductSkuCodeBridge;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.math.BigDecimal;
@@ -196,8 +197,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     @Field
-    @ContainedIn
-    @IndexedEmbedded(targetElement = AttrValueEntityProduct.class)
     @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)
     public Set<AttrValueProduct> getAttributes() {
         return this.attributes;
@@ -351,6 +350,8 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return attr.getVal();
     }
 
+    @Field(index = Index.YES, analyze = Analyze.NO, store = Store.YES,
+            bridge = @FieldBridge(impl = ProductSkuCodeBridge.class))
     public ProductSku getDefaultSku() {
         if (defaultProductSku == null) {
             if (this.getSku() != null && !this.getSku().isEmpty()) {

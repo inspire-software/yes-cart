@@ -24,6 +24,7 @@
     <import resource="websupport-services.xml"/>
     <import resource="websupport-cluster.xml"/>
     <import resource="websupport-tools.xml"/>
+    <import resource="websupport-cronjob.xml"/>
 
     <bean id="applicationDirector" class="org.yes.cart.web.application.ApplicationDirector"/>
 

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.promotion.impl;
+package org.yes.cart.bulkjob.promotion;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;

@@ -51,6 +51,18 @@ public interface ProductSearchResultDTO extends Identifiable {
     void setCode(String code);
 
     /**
+     * Get product default sku code.
+     * @return product default sku code.
+     */
+    String getDefaultSkuCode();
+
+    /**
+     * Set product default sku code.
+     * @param defaultSkuCode product default sku code.
+     */
+    void setDefaultSkuCode(String defaultSkuCode);
+
+    /**
      * Get product name by specified locale.
      * @param locale givem locale
      * @return product name.

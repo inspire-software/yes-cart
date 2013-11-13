@@ -2338,6 +2338,13 @@
        ]]>
     </query>
 
+    <query name="DISCONTINUED.PRODUCTS.AFTER.DATE">
+        <![CDATA[
+       select p.productId from ProductEntity p
+            where p.availableto IS NOT NULL and p.availableto <= ?1
+       ]]>
+    </query>
+
     <query name="REMOVE.PRODUCTCATEGORIES.BY.PRODUCTID">
         <![CDATA[
        delete from ProductCategoryEntity pc where pc.product.productId = ?1

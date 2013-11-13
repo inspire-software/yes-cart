@@ -297,7 +297,7 @@ public class ProductAvailabilityStrategyImplTest {
             allowing(warehouseService).getByShopId(shopId); will(returnValue(warehouses));
             allowing(sku).getProduct(); will(returnValue(product));
             allowing(product).getAvailability(); will(returnValue(availability));
-            allowing(product).getCode(); will(returnValue(skuCode));
+            allowing(product).getDefaultSku(); will(returnValue(sku));
             allowing(sku).getCode(); will(returnValue(skuCode));
             allowing(skuWarehouseService).getProductAvailableToSellQuantity(product, warehouses); will(returnValue(new HashMap<String, BigDecimal>() {{
                 put(skuCode, qty);

@@ -458,6 +458,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 reverse,
                 ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_CODE_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_DEFAULT_SKU_CODE_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_NAME_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_DESCRIPTION_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_FIELD,
@@ -472,14 +473,15 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             final ProductSearchResultDTO dto = dtoFactory.getByIface(ProductSearchResultDTO.class);
             dto.setId((Long) obj[0]);
             dto.setCode((String) obj[1]);
-            dto.setName((String) obj[2]);
-            dto.setDescription((String) obj[3]);
-            dto.setAvailability(obj[4] == null ? Product.AVAILABILITY_STANDARD : (Integer) obj[4]);
-            dto.setQtyOnWarehouse((Map) obj[5]);
-            dto.setDefaultImage((String) obj[6]);
-            dto.setDisplayName((String) obj[7]);
-            dto.setDisplayDescription((String) obj[8]);
-            dto.setFeatured(obj[9] != null && (Boolean) obj[9]);
+            dto.setDefaultSkuCode((String) obj[2]);
+            dto.setName((String) obj[3]);
+            dto.setDescription((String) obj[4]);
+            dto.setAvailability(obj[5] == null ? Product.AVAILABILITY_STANDARD : (Integer) obj[5]);
+            dto.setQtyOnWarehouse((Map) obj[6]);
+            dto.setDefaultImage((String) obj[7]);
+            dto.setDisplayName((String) obj[8]);
+            dto.setDisplayDescription((String) obj[9]);
+            dto.setFeatured(obj[10] != null && (Boolean) obj[10]);
             rez.add(dto);
         }
 

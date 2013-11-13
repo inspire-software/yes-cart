@@ -28,6 +28,7 @@ public interface ProductSearchQueryBuilder {
     public final static String PRODUCT_DISPLAYNAME_FIELD = "displayName";
     public final static String PRODUCT_DISPLAYNAME_ASIS_FIELD = "displayNameAsIs"; //for projections only
     public final static String PRODUCT_CODE_FIELD = "code";
+    public final static String PRODUCT_DEFAULT_SKU_CODE_FIELD = "defaultSku";
     public final static String PRODUCT_CODE_STEM_FIELD = "code_stem";
 
     public final static String PRODUCT_CREATED_FIELD = "createdTimestamp"; //for projections only

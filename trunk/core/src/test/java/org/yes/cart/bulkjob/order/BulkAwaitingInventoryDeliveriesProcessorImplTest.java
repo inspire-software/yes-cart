@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.yes.cart.service.order.impl;
+package org.yes.cart.bulkjob.order;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +22,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.order.OrderStateManager;
+import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
