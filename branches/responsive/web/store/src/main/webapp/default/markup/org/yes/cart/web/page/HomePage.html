@@ -113,28 +113,47 @@
             <wicket:container wicket:id="centralView">
                 [central view]
             </wicket:container>
-            <script>
-                if (document.URL.indexOf('/product/') > -1 || document.URL.indexOf('/sku/')  > -1) {
-
-                    document.getElementById('centralView').classList.add('mobile-grid-100');
-                    document.getElementById('centralView').classList.remove('mobile-grid-70');
-
-                }  else {
-
-                    document.getElementById('centralView').classList.add('mobile-grid-70');
-                    document.getElementById('centralView').classList.remove('mobile-grid-100');
-
-                }
-
-            </script>
         </div>
-        <div class="grid-10 hide-on-mobile grid-parent">
+        <div id="rightView" class="grid-10 hide-on-mobile grid-parent">
             <p>
                 <wicket:container wicket:id="newArrival">
                     [category new arrival and promo]
                 </wicket:container>
             </p>
         </div>
+        <script>
+
+            function endsWith(str, suffix) {
+                return str.indexOf(suffix, str.length - suffix.length) !== -1;
+            }
+
+            if (document.URL.indexOf('/product/') > -1 || document.URL.indexOf('/sku/')  > -1) {
+
+                document.getElementById('centralView').classList.add('mobile-grid-100');
+                document.getElementById('centralView').classList.remove('mobile-grid-70');
+
+            }  else {
+
+                document.getElementById('centralView').classList.add('mobile-grid-70');
+                document.getElementById('centralView').classList.remove('mobile-grid-100');
+
+            }
+
+            if (endsWith(document.URL, 'yes-shop/')) {
+
+                document.getElementById('centralView').classList.remove('mobile-grid-70');
+                document.getElementById('centralView').classList.add('mobile-grid-100');
+                document.getElementById('centralView').classList.remove('grid-70');
+                document.getElementById('centralView').classList.add('grid-80');
+
+                document.getElementById('rightView').classList.remove('grid-10');
+                document.getElementById('rightView').classList.add('hide-on-desktop');
+
+
+            }
+
+        </script>
+
     </div>
 
 
