@@ -19,4 +19,5 @@
 <properties>
     <entry key="shopping">Вернуться в магазин</entry>
     <entry key="faq">ЧАВО</entry>
+    <entry key="faqTitle">Часто задаваемые вопросы</entry>
 </properties>

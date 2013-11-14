@@ -39,16 +39,14 @@ public class ProductSorter extends BaseComponent {
     private static final String PRODUCT_SORT_BY_PRICE_ASC = "orderByPriceA";
     private static final String PRODUCT_SORT_BY_PRICE_DESC = "orderByPriceD";
 
-    private final String sortOrderActiveClass;
+
 
     /**
      * Construct product sorter.
      * @param id component id.
-     * @param sortOrderActiveLinkHtmlClass html class for active links
      */
-    public ProductSorter(final String id, final String sortOrderActiveLinkHtmlClass) {
+    public ProductSorter(final String id) {
         super(id);
-        sortOrderActiveClass = sortOrderActiveLinkHtmlClass;
     }
 
     /**
@@ -88,7 +86,7 @@ public class ProductSorter extends BaseComponent {
         params.add(sortOrder, sortField);
 
         final Link rez = links.newLink(id, params);
-        pagination.markSelectedSortLink(rez, sortOrderActiveClass, getPage().getPageParameters(), sortOrder, sortField);
+        pagination.markSelectedSortLink(rez, getPage().getPageParameters(), sortOrder, sortField);
         return rez;
     }
 }

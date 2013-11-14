@@ -20,4 +20,5 @@
 	<entry key="shopping">Обратно в магазин</entry>
 	<entry key="checkout">Оформляем покупку</entry>
 	<entry key="shoppingCart">Корзина</entry>
+    <entry key="emptyCart">Корзина пустая</entry>
 </properties>

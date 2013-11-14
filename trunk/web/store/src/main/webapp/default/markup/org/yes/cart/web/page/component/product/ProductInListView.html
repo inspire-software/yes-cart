@@ -19,64 +19,49 @@
 <wicket:panel>
 
 
-    <div class="sku-in-list">
+    <div class="grid-100 mobile-grid-100 grid-parent">
 
-        <div class="sku-in-list-row">
-                <div class="sku-column sku-in-list-row-grid_1">
-                    <p>
-                        <wicket:message key="sku.code">[sku.code:]</wicket:message>
-                    </p>
-                </div>
-                <div class="sku-column sku-in-list-row-grid_4">
-                    <p>
-                        <a wicket:id="productLinkSku">
-                            <span wicket:id="skuCode">[sku num]</span>
-                        </a>
-                    </p>
-                </div>
-                <div class="sku-column sku-in-list-row-grid_3">
-                    <p>
-                        <a wicket:id="addToCartLink" class="button orange">
-                            <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
-                        </a>
-                    </p>
-                </div>
-                <div class="sku-column sku-in-list-row-grid_2">
-                    <p>
-                        <wicket:container wicket:id="priceView">
-                            [price]
-                        </wicket:container>
-                    </p>
-                </div>
+        <div class="grid-100 mobile-grid-100" style="min-height: 65px; height: 65px; overflow: hidden;">
+            <p align="justify">
+                <a wicket:id="productLinkName" class="product-tittle">
+                    <span  wicket:id="name">[name]</span>
+                </a>
+            </p>
         </div>
 
-        <div class="sku-in-list-row">
-            <div class="sku-column sku-in-list-row-grid_5">
-                <p align="center">
-                    <a wicket:id="productLinkImage"  class="image-border">
-                        <img border="0" wicket:id="productDefaultImage"/>
-                    </a>
-                </p>
-            </div>
+        <div class="grid-100 mobile-grid-100" style="text-align: right;">
+            <a wicket:id="addToCartLink" class="button orange">
+                <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
+            </a>
         </div>
 
-        <div class="sku-in-list-row">
-            <div class="sku-column sku-in-list-row-grid_5 sku-in-list-name">
-                <p>
-                    <a wicket:id="productLinkName">
-                        <span wicket:id="name">[name]</span>
-                    </a>
-                </p>
-            </div>
+        <div class="grid-100 mobile-grid-100" style="text-align: right;">
+            <wicket:container wicket:id="priceView">
+                [price]
+            </wicket:container>
         </div>
 
-        <div class="sku-in-list-row">
-            <div class="sku-column sku-in-list-row-grid_5 sku-in-list-description">
-                <p align="justify">
-                    <span wicket:id="description">[description Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s]</span>
-                </p>
-            </div>
+        <div class="grid-100 mobile-grid-100" style="text-align: center;">
+            <a wicket:id="productLinkImage"  class="image-border">
+                <img border="1" wicket:id="productDefaultImage"/>
+            </a>
         </div>
+
+        <div class="grid-30 hide-on-mobile">
+            <wicket:message key="sku.code">[sku.code:]</wicket:message>
+        </div>
+        <div class="grid-70 hide-on-mobile">
+            <a wicket:id="productLinkSku" class="product-sku-code">
+                <span wicket:id="skuCode">[sku num]</span>
+            </a>
+        </div>
+
+        <div class="grid-100 mobile-grid-100" style="height: 120px; overflow: hidden;  margin-top: 5px; margin-bottom: 5px;">
+            <p align="justify" style="text-indent: 20px;">
+                <span wicket:id="description">[description Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s]</span>
+            </p>
+        </div>
+
 
     </div>
 

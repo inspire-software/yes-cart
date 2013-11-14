@@ -18,6 +18,7 @@ package org.yes.cart.web.page.component.customer.address;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -96,5 +97,17 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
 
     }
+
+
+    /**
+     * Get page title.
+     *
+     * @return page title
+     */
+    public IModel<String> getPageTitle() {
+        return new Model<String>(getLocalizer().getString("createEditAddress",this));
+    }
+
+
 
 }

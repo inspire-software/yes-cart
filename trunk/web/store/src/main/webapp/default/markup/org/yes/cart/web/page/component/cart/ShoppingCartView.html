@@ -19,90 +19,115 @@
 <wicket:panel>
 
     <form wicket:id="cartForm">
-		<div class="g864">
-				<div wicket:id="feedback">[feedpack panel]</div>
-		</div>
-		
-		<div class="g864">
-				<wicket:message key="productsInCart"> [products in cart] </wicket:message>
-		</div>
-		
-		<div class="g432">
-				<p><wicket:message key="product">[product]</wicket:message></p>
-		</div>
-		<div class="g144">
-				<p align="right"><wicket:message key="price">[price]</wicket:message></p>
-		</div>
-		<div class="g144">
-				<p align="right"><wicket:message key="qty">[qty]</wicket:message></p>
-		</div>
-		<div class="g144">
-				<p align="right"><wicket:message key="amountMsg">[amount]</wicket:message></p>
-		</div>
-		
-		
-        <table align="center" border="0">
+
+        <div class="grid-100 mobile-grid-100 grid-parent">
+            <div wicket:id="feedback">[feedpack panel]</div>
+        </div>
+
+        <div class="grid-100 mobile-grid-100 grid-parent">
+            <span class="middle-title"><wicket:message key="productsInCart"> [products in cart]</wicket:message></span>
+        </div>
+        <hr>
+
+        <div class="grid-100 mobile-grid-100 grid-parent" style="background-color: #bbbbbb;">
+            <div class="grid-40 mobile-grid-40 grid-parent">
+                <p class="small-title">
+                    <wicket:message key="product">[product]</wicket:message>
+                </p>
+            </div>
+            <div class="grid-20 mobile-grid-20 grid-parent">
+                <p class="small-title" align="right">
+                    <wicket:message key="price">[price]</wicket:message>
+                </p>
+            </div>
+            <div class="grid-20 mobile-grid-20 grid-parent">
+                <p class="small-title" align="right">
+                    <wicket:message key="qty">[qty]</wicket:message>
+                </p>
+            </div>
+            <div class="grid-20 mobile-grid-20 grid-parent">
+                <p class="small-title" align="right">
+                    <wicket:message key="amountMsg">[amount]</wicket:message>
+                </p>
+            </div>
+        </div>
+
+
+
+        <table align="center"  width="100%">
 
             <tr wicket:id="itemsList">
-			
-			<td>
-				<div class="g432">
-						<div class="g144">
-								<img border="0" wicket:id="defaultImage"/>
-							</div>
-							<div class="g216" style="margin-top : 20px;">
-								<a wicket:id="productLink">
-									<span wicket:id="name">[product name]</span>
-								</a>
-							</div>
-							<div class="g216"  style="margin-top : 20px;">	
-								<wicket:message key="skuNumber">
-									[sku code]
-								</wicket:message>
-								<span wicket:id="skunum">[sku number]</span>
-						</div>	
-				</div>
-				<div class="g144 cart-item-price">
-						<p align="right" style="margin-top : 30px;">
-							<wicket:container wicket:id="skuPriceView">
-								[sku price]
-							</wicket:container>
-						</p>
-				</div>
-				<div class="g144">
-						<p align="right" style="margin-top : 25px;">
-							<input wicket:id="quantity" type="text" style="width:30px"/>
-							<input wicket:id="quantityButton" type="submit" style="width:30px" value="Ok"/>
-							<br>
-							<a wicket:id="addOneLink" style="margin-right : 5px;" wicket:message="title:addOneLinkHint">
-								<wicket:message key="addOneLink">[add one]</wicket:message>
-							</a>
-							<a wicket:id="removeOneLink" style="margin-right : 5px;" wicket:message="title:removeOneLinkHint">
-								<wicket:message key="removeOneLink">[remove one]</wicket:message>
-							</a>
-							<a wicket:id="removeAllLink" style="margin-right : 5px;" wicket:message="title:removeAllLinkHint">
-								<wicket:message key="removeAllLink">[remove all]</wicket:message>
-							</a>
-						
-						</p>
-				</div>
-				<div class="g144">
-						<p align="right" style="margin-top : 30px;">
-							<wicket:container wicket:id="lineAmountView">
-								[line amount price]
-							</wicket:container>
-						</p>
-				</div>
-			</td>
-			
+
+                <td>
+
+                    <div class="grid-100 mobile-grid-100 grid-parent">
+                        <div class="grid-40 mobile-grid-40 grid-parent">
+                            <div class="grid-35 mobile-grid-35 grid-parent">
+                                <img border="0" wicket:id="defaultImage"/>
+                            </div>
+                            <div class="grid-65 mobile-grid-65 grid-parent">
+                                <div class="grid-100 mobile-grid-100 grid-parent">
+                                    <a wicket:id="productLink">
+                                        <span wicket:id="name">[product name]</span>
+                                    </a>
+                                </div>
+                                <div class="grid-100 mobile-grid-100 grid-parent">
+                                    <wicket:message key="skuNumber">
+                                        [sku code]
+                                    </wicket:message>
+                                    <span wicket:id="skunum">[sku number]</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="grid-20 mobile-grid-20 grid-parent">
+                            <p align="right" style="margin-top : 30px;">
+                                <wicket:container wicket:id="skuPriceView">
+                                    [sku price]
+                                </wicket:container>
+                            </p>
+                        </div>
+                        <div class="grid-20 mobile-grid-20 grid-parent">
+                            <p align="right" style="margin-top : 25px;">
+                                <input wicket:id="quantity" type="text" style="width:30px"/>
+                                <input wicket:id="quantityButton" type="submit" style="width:30px" value="Ok"/>
+                                <br>
+                                <a wicket:id="addOneLink" style="margin-right : 5px;"
+                                   wicket:message="title:addOneLinkHint">
+                                    <wicket:message key="addOneLink">[add one]</wicket:message>
+                                </a>
+                                <a wicket:id="removeOneLink" style="margin-right : 5px;"
+                                   wicket:message="title:removeOneLinkHint">
+                                    <wicket:message key="removeOneLink">[remove one]</wicket:message>
+                                </a>
+                                <a wicket:id="removeAllLink" style="margin-right : 5px;"
+                                   wicket:message="title:removeAllLinkHint">
+                                    <wicket:message key="removeAllLink">[remove all]</wicket:message>
+                                </a>
+
+                            </p>
+                        </div>
+                        <div class="grid-20 mobile-grid-20 grid-parent">
+                            <p align="right" style="margin-top : 30px;">
+                                <wicket:container wicket:id="lineAmountView">
+                                    [line amount price]
+                                </wicket:container>
+                            </p>
+                        </div>
+                    </div>
+                </td>
             </tr>
             <tr>
-                <td align="right">
-					<div class="cart-total">
-						<wicket:container wicket:id="subTotalView">
-							[sub total]
-						</wicket:container>
-					</div>
+                <td>
+                    <hr>
+                    <div class="grid-60 mobile-grid-60 grid-parent">
+                        <wicket:message key="amountMsg">[Amount]</wicket:message>
+                    </div>
+                    <div class="grid-40 mobile-grid-40 grid-parent" style="text-align: right;">
+                        <wicket:container wicket:id="subTotalView">
+                            [sub total]
+                        </wicket:container>
+                    </div>
                 </td>
             </tr>
         </table>

@@ -18,34 +18,51 @@
 <body>
 <wicket:panel>
 
-	<div style="clear:both;">
-		<div class="g72 m5">
-			<p>
-				<wicket:message key="quantity">[Quantity]</wicket:message>
-			</p>
-		</div>
-		<div class="g144 m5">
-			<p align="right">
-				<wicket:message key="price">[Price]</wicket:message>
-			</p>
-		</div>
-	</div>
-	
-    <div wicket:id="skusPriceTiers" style="clear:both;">
-		<div class="g72 m5">
-			<p align="right">
-				<span wicket:id="quantity">[quantity]</span>
-			</p>
-		</div>
-		<div class="g144 m5">
-			<p align="right">
-				<wicket:container wicket:id="priceView">
-					[price]
-				</wicket:container>
-			</p>
-		</div>
-	</div>
-	
+    <div>
+        <p>
+
+        <div class="grid-100 mobile-grid-100 grid-parent">
+            <div class="grid-50 mobile-grid-50 grid-parent">
+                <p align="justify" class="middle-title" style="text-indent: 20px; margin-right: 10pt;">
+                    <wicket:message key="descountRule">[Discount ]</wicket:message>
+                </p>
+            </div>
+            <div class="grid-50 mobile-grid-50 grid-parent">
+                <div class="grid-100 mobile-grid-100 grid-parent">
+                    <div class="grid-50 mobile-grid-50">
+                        <p align="right">
+                            <wicket:message key="quantity">[Quantity]</wicket:message>
+                        </p>
+                    </div>
+                    <div class="grid-50 mobile-grid-50">
+                        <p align="right">
+                            <wicket:message key="price">[Price]</wicket:message>
+                        </p>
+                    </div>
+                </div>
+                <hr>
+                <div class="grid-100 mobile-grid-100 grid-parent" wicket:id="skusPriceTiers">
+                    <div class="grid-50 mobile-grid-50">
+                        <p align="right">
+                            <span class="middle-title" wicket:id="quantity">[quantity]</span>
+                        </p>
+                    </div>
+                    <div class="grid-50 mobile-grid-50">
+                        <p align="right">
+                            <wicket:container wicket:id="priceView">
+                                [price]
+                            </wicket:container>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        </p>
+    </div>
+
+
 </wicket:panel>
 </body>
 </html>

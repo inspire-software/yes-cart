@@ -18,67 +18,86 @@
 <body>
 <wicket:panel>
 
-	<div class="g864 m5 menu"  style="border: solid 1px #d6d6d6;">
-		<p>
-			<span><wicket:message key="orderInfo">[orderInfo] </wicket:message></span>
-		</p>
-	</div>
-	
-	<div class="g144 m5">
-		<p>
-		<span class="table-title-in-form"><wicket:message key="orderNumHead">[order number]</wicket:message></span>
-		</p>
-	</div>
-	<div class="g144 m5">
-		<p>
-		<span class="table-title-in-form"><wicket:message key="orderDateHead">[order date]</wicket:message></span>
-		</p>
-	</div>
-	<div class="g144 m5">
-		<p>
-		<span class="table-title-in-form"><wicket:message key="orderStatusHead">[status]</wicket:message></span>
-		</p>
-	</div>
-	<div class="g288 m5">
-		<p>
-		<span class="table-title-in-form"><wicket:message key="orderItemsHead">[items in order]</wicket:message></span>
-		</p>
-	</div>
-	<div class="g144 m5">
-		<p>
-		<span class="table-title-in-form"><wicket:message key="orderAmountHead">[order amount]</wicket:message></span>
-		</p>
-	</div>
-	
-	<div style="clear:both;" wicket:id="orders">
-		<div class="g144 m5">
-			<p>
-				<span wicket:id="orderNum">[order number]</span>
-			</p>
-		</div>
-		<div class="g144 m5">
-			<p>
-				<span wicket:id="orderDate">[order date]</span>
-			</p>
-		</div>
-		<div class="g144 m5">
-			<p>
-				<span wicket:id="orderStatus">[status]</span>
-			</p>
-		</div>
-		<div class="g288 m5">
-			<p>
-				<span wicket:id="orderItems">[items in order]</span>
-			</p>
-		</div>
-		<div class="g144 m5">
-			<p>
-				<span wicket:id="orderAmount">[order amount]</span>
-			</p>
-		</div>
 
-	</div>
+    <div class="grid-100 mobile-grid-100 grid-parent" >
+        <div class="grid-50 mobile-grid-50">
+            <p>
+                <span  class="middle-title"><wicket:message key="orderInfo">[orderInfo] </wicket:message></span>
+            <hr>
+            </p>
+        </div>
+
+        <div class="grid-50 mobile-grid-50">
+            &nbsp;
+        </div>
+
+    </div>
+
+    <wicket:container wicket:id="orderInformation">
+            [Order info]
+    </wicket:container>
+
+
 
 </wicket:panel>
+
+<wicket:fragment wicket:id="orderInformationFragment">
+
+    <div class="grid-100 mobile-grid-100 grid-parent" style="background-color: #bbbbbb;">
+
+        <div class="grid-25 mobile-grid-25">
+            <p>
+                <span class="small-title"><wicket:message key="orderNumHead">[order number]</wicket:message></span>
+                <span class="small-title"><wicket:message key="orderDateHead">[order date]</wicket:message></span>
+            </p>
+        </div>
+        <div class="grid-15 mobile-grid-15">
+            <p>
+                <span class="small-title"><wicket:message key="orderStatusHead">[status]</wicket:message></span>
+            </p>
+        </div>
+        <div class="grid-40 mobile-grid-40">
+            <p>
+                <span class="small-title"><wicket:message key="orderItemsHead">[items in order]</wicket:message></span>
+            </p>
+        </div>
+        <div class="grid-20 mobile-grid-20" style="text-align: right">
+            <p>
+                <span class="small-title"><wicket:message key="orderAmountHead">[order amount]</wicket:message></span>
+            </p>
+        </div>
+
+    </div>
+
+    <div class="grid-100 mobile-grid-100 grid-parent" wicket:id="orders">
+        <div class="grid-25 mobile-grid-25">
+            <p>
+                <span wicket:id="orderNum" style="font-size: 90%">[order number]</span>
+            </p>
+            <p>
+                <span wicket:id="orderDate"  style="font-size: 90%">[order date]</span>
+            </p>
+        </div>
+        <div class="grid-15 mobile-grid-15">
+            <p>
+                <span wicket:id="orderStatus"  style="font-size: 90%">[status]</span>
+            </p>
+        </div>
+        <div class="grid-40 mobile-grid-40">
+            <p>
+                <span wicket:id="orderItems"  style="font-size: 90%">[items in order]</span>
+            </p>
+        </div>
+        <div class="grid-20 mobile-grid-20" style="text-align: right">
+            <p>
+                <span wicket:id="orderAmount"  style="font-size: 90%">[order amount]</span>
+            </p>
+        </div>
+
+    </div>
+
+
+</wicket:fragment>
+
 </body>
 </html>

@@ -16,30 +16,46 @@
 
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
-<wicket:head>
-    <wicket:link>
-        <script type="text/javascript" src="../../../../../../../js/s3Slider.js"></script>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('#slider1').s3Slider({
-                    timeOut: 4000
-                });
-            });
-        </script>
-    </wicket:link>
-</wicket:head>
+
 <wicket:panel>
-    <div id="slider1">
-        <ul wicket:id="products" id="slider1Content">
-            <li class="slider1Image">
-                <a wicket:id="productLinkImage"   class="image-border">
-                    <img wicket:id="productDefaultImage" hspace="5" vspace="5"/>
-                </a>
-                <span class="left"><strong>Title text 1</strong><br />Content text...</span>
-            </li>
-            <a wicket:id="productLinkName"><span wicket:id="name"/></a>
-        </ul>
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div id="featuredProducts" class="carousel">
+            <ul class="slides">
+                <li wicket:id="products"
+                    style="height: 260px;">
+                    <a wicket:id="productLinkImage" class="image-border">
+                        <img wicket:id="productDefaultImage"/>
+                    </a>
+
+                    <p align="center" style="height: 40px; overflow:hidden">
+                        <a wicket:id="productLinkName"><span wicket:id="name" style="text-overflow: ellipsis;">[product name]</span></a><br>
+                    </p>
+
+                    <p align="center">
+                        <wicket:container wicket:id="price">[product price]</wicket:container>
+                    </p>
+                </li>
+            </ul>
+
+        </div>
     </div>
+
+
+    <script type="text/javascript">
+        $(window).load(function () {
+            $('#featuredProducts').flexslider({
+                animation: "slide",
+                animationLoop: false,
+                controlNav: false,
+                slideshow: false,
+                itemWidth: 160,
+                itemMargin: 80,
+                minItems: 2,
+                maxItems: 5
+            });
+        });
+    </script>
 
 </wicket:panel>
 </body>

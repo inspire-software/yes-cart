@@ -84,7 +84,7 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
         final Map<Long, Map<String, BigDecimal>> qty = new HashMap<Long, Map<String, BigDecimal>>();
         for (final Fieldable field : fields) {
             final String[] value = field.stringValue().split("_");
-            final Long shopId = Long.valueOf(value[0]);
+            final Long shopId = new BigDecimal(value[0]).longValue();
             final String sku = value[1];
             final BigDecimal qtyValue = new BigDecimal(value[2]).movePointLeft(Constants.INVENTORY_SCALE);
             final Map<String, BigDecimal> skuQty;

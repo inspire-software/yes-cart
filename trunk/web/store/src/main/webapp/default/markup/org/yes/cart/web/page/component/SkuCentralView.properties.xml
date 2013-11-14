@@ -23,4 +23,5 @@
     <entry key="description">Description</entry>
     <entry key="details">Details</entry>
     <entry key="accessories">Accessories</entry>
+    <entry key="volumeDiscount">Volume Discount</entry>
 </properties>

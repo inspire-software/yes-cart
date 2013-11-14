@@ -16,7 +16,13 @@
 
 package org.yes.cart.web.page;
 
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartView;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
@@ -30,6 +36,7 @@ public class ShoppingCartPage extends AbstractWebPage {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String CART_VIEW = "shoppingCartView";
+    private final static String CHECKOUT_LINK = "checkoutLink";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
@@ -49,13 +56,33 @@ public class ShoppingCartPage extends AbstractWebPage {
         processCommands();
 
         addOrReplace(
-                new ShoppingCartView(CART_VIEW)
+                new FeedbackPanel(FEEDBACK)
+        ).addOrReplace(
+                new ShoppingCartView(CART_VIEW).setVisible(!ApplicationDirector.getShoppingCart().getCartItemList().isEmpty())
+        ).addOrReplace(
+                new BookmarkablePageLink<CheckoutPage>(CHECKOUT_LINK, CheckoutPage.class).setVisible(!ApplicationDirector.getShoppingCart().getCartItemList().isEmpty())
         ).addOrReplace(
                 new StandardFooter(FOOTER)
         ).addOrReplace(
                 new StandardHeader(HEADER)
         );
 
+        if (ApplicationDirector.getShoppingCart().getCartItemList().isEmpty()) {
+            info(getLocalizer().getString("emptyCart", this));
+        }
+
         super.onBeforeRender();
     }
+
+
+    /**
+     * Get page title.
+     *
+     * @return page title
+     */
+    public IModel<String> getPageTitle() {
+        return new Model<String>(getLocalizer().getString("shoppingCart", this));
+    }
+
+
 }

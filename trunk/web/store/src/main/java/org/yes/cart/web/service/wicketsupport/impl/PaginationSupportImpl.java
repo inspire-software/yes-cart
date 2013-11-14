@@ -34,16 +34,19 @@ public class PaginationSupportImpl implements PaginationSupport {
 
     /** {@inheritDoc} */
     @Override
-    public boolean isSortSelected(final PageParameters pageParameters, final String sortField, final String sortOrder) {
+    public boolean isSortSelected(final PageParameters pageParameters, final String sortOrder, final String sortField) {
         return WicketUtil.isSelectedProductSortOnPage(pageParameters, sortOrder, sortField);
     }
 
     /** {@inheritDoc} */
     @Override
-    public void markSelectedSortLink(final Link link, final String cssClass,
-                                     final PageParameters pageParameters, final String sortField, final String sortOrder) {
-        if (isSortSelected(pageParameters, sortField, sortOrder)) {
-            link.add(new AttributeModifier("class", cssClass));
+    public void markSelectedSortLink(final Link link,
+                                     final PageParameters pageParameters, final String sortOrder, final String sortField) {
+        if (isSortSelected(pageParameters, sortOrder, sortField)) {
+            link.add(new AttributeModifier("class", "sort-order-active"));
+        } else {
+            link.add(new AttributeModifier("class", "sort-order"));
+
         }
     }
 
@@ -55,10 +58,13 @@ public class PaginationSupportImpl implements PaginationSupport {
 
     /** {@inheritDoc} */
     @Override
-    public void markSelectedPageLink(final Link link, final String cssClass,
+    public void markSelectedPageLink(final Link link,
                                      final PageParameters pageParameters, final int pageIndex) {
         if (isPageSelected(pageParameters, pageIndex)) {
-            link.add(new AttributeModifier("class", cssClass));
+            link.add(new AttributeModifier("class", "nav-page-active"));
+        } else {
+            link.add(new AttributeModifier("class", "nav-page"));
+
         }
     }
 

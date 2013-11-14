@@ -36,6 +36,8 @@
 	<entry key="grandTotal">Grand</entry>
 	<entry key="grandTotalTax">tax</entry>
 	<entry key="grandTotalAmount">Amount</entry>
+
+    <entry key="order.verification">Verify order and choose payment method</entry>
 	
 
 	

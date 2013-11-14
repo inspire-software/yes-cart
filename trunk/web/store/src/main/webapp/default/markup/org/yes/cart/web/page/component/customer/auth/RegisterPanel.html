@@ -17,70 +17,55 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-	<form wicket:id="registerForm">
-	
-		<div <div style="clear:both;">
-			<p>
-				<div class="g360">
-						<wicket:message key="newUser">[new user]</wicket:message>
-				</div>			
-			</p>
-		</div>
-		
-		<div style="clear:both;">
-			<p>
-				<div class="g144">
-						<wicket:message key="email">[user email]</wicket:message>
-				</div>
-				<div class="g216">
-						<input type="text" wicket:id="email" style="width:200px"/>
-				</div>			
-			</p>
-		</div>
-		
-		<div style="clear:both;">
-			<p>
-				<div class="g144">
-						<wicket:message key="firstname">[first name]</wicket:message>
-				</div>
-				<div class="g216">
-						<input type="text" wicket:id="firstname" style="width:200px"/>
-				</div>			
-			</p>
-		</div>
-		
+    <form wicket:id="registerForm">
 
-		<div style="clear:both;">
-			<p>
-				<div class="g144">
-						<wicket:message key="lastname">[last name]</wicket:message>
-				</div>
-				<div class="g216">
-						<input type="text" wicket:id="lastname" style="width:200px"/>
-				</div>			
-			</p>
-		</div>
-		
-		<div style="clear:both;">
-			<p>
-				<div class="g144">
-						<wicket:message key="phone">[phone]</wicket:message>
-				</div>
-				<div class="g216">
-						<input type="text" wicket:id="phone" style="width:200px"/>
-				</div>
-			</p>
-		</div>
+        <div class="grid-100 mobile-grid-100">
+            <span class="middle-title"><wicket:message key="newUser">[new user]</wicket:message></span>
+        </div>
 
-		<div style="clear:both;">			
-			<div class="g360">
-				<p align="right">
-					<input type="submit" wicket:id="registerBtn" wicket:message="value:register"/>
-				</p>					
-			</div>			
-		</div>
+        <div class="grid-100 mobile-grid-100 grid-parent">
+            <div class="grid-33 mobile-grid-33">
+                <wicket:message key="email">[user email]</wicket:message>
+            </div>
+            <div class="grid-66 mobile-grid-66"  style="text-align: right">
+                <input type="text" wicket:id="email" style="width:100%"/>
+            </div>
+        </div>
 
-	</form>
+        <div class="grid-100 mobile-grid-100 grid-parent">
+            <div class="grid-33 mobile-grid-33">
+                <wicket:message key="firstname">[first name]</wicket:message>
+            </div>
+            <div class="grid-66 mobile-grid-66"  style="text-align: right">
+                <input type="text" wicket:id="firstname" style="width:100%"/>
+            </div>
+        </div>
+
+
+        <div class="grid-100 mobile-grid-100 grid-parent">
+            <div class="grid-33 mobile-grid-33">
+                <wicket:message key="lastname">[last name]</wicket:message>
+            </div>
+            <div class="grid-66 mobile-grid-66"  style="text-align: right">
+                <input type="text" wicket:id="lastname" style="width:100%"/>
+            </div>
+        </div>
+
+        <div class="grid-100 mobile-grid-100 grid-parent">
+            <div class="grid-33 mobile-grid-33">
+                <wicket:message key="phone">[phone]</wicket:message>
+            </div>
+            <div class="grid-66 mobile-grid-66"  style="text-align: right">
+                <input type="text" wicket:id="phone" style="width:100%"/>
+            </div>
+        </div>
+
+        <div class="grid-100 mobile-grid-100 grid-parent" style="text-align: right;">
+            <input type="submit" class="button orange" wicket:id="registerBtn" wicket:message="value:register"/>
+        </div>
+
+    </form>
+
 </wicket:panel>
 </body>
 </html>

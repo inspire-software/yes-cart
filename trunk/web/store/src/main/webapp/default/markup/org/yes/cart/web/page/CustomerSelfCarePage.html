@@ -18,195 +18,243 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
 <wicket:head>
+    <title wicket:id="pageTitle">[page title]</title>
+    <meta wicket:id="description" name="description" content=""/>
+    <meta wicket:id="keywords" name="keywords" content=""/>
+
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
     <wicket:link>
-        <link rel="stylesheet" type="text/css" href="../../../../../style/reset.css"/>
-        <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
-        <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
+
+        <script type="text/javascript" src="../../../../../js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/autoload.js"></script>
+        <!--[if lt IE 9]>
+        <script src="../../../../../js/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/demo.css"/>
+        <!--[if (gt IE 8) | (IEMobile)]><!-->
+        <link rel="stylesheet" href="../../../../../style/unsemantic-grid-responsive.css"/>
+        <!--<![endif]-->
+        <!--[if (lt IE 9) & (!IEMobile)]>
+        <link rel="stylesheet" href="../../../../../style/ie.css"/>
+        <![endif]-->
     </wicket:link>
-    <title><wicket:message key="selfCare">[selfCare]</wicket:message></title>
+
 </wicket:head>
 
 <body>
 
 
-<div class="mainpage">
+<div class="grid-container">
 
-    <span wicket:id="header">[header]</span>
-	
-    <div class="row">
-        <div class="column grid_16">
-			<ul class="menu">
-				<li>
-					<span><span><wicket:message key="selfCare">[selfCare]</wicket:message></span></span>				
-				</li>
-            </ul>            
+<span wicket:id="header">[header]</span>
+
+
+<div class="grid-100 mobile-grid-100 grid-parent">
+
+    <div class="grid-15 hide-on-mobile">
+        &nbsp;
+    </div>
+
+    <div class="grid-70 mobile-grid-100 grid-parent">
+        <span class="big-title"><wicket:message key="selfCare">[selfCare]</wicket:message></span>
+        <hr>
+    </div>
+
+
+    <div class="grid-15 hide-on-mobile">
+        &nbsp;
+    </div>
+</div>
+
+
+<div class="grid-100 mobile-grid-100 grid-parent" style="margin-top: 0px; margin-bottom: 0px;">
+
+    <div class="grid-15 hide-on-mobile">
+        &nbsp;
+    </div>
+
+    <div class="grid-70 mobile-grid-100 grid-parent">
+        <p>
+
+        <div wicket:id="feedback">[feedpack panel]</div>
+        </p>
+    </div>
+
+
+    <div class="grid-15 hide-on-mobile">
+        &nbsp;
+    </div>
+</div>
+
+
+<div class="grid-100 mobile-grid-100 grid-parent" style="margin-top: 20px">
+
+    <div class="grid-15 hide-on-mobile">
+        &nbsp;
+    </div>
+
+    <div class="grid-70 mobile-grid-100 grid-parent">
+        <p>
+            <wicket:container wicket:id="summaryView">
+                [summary info]
+            </wicket:container>
+        </p>
+    </div>
+
+    <div class="grid-15 hide-on-mobile">
+        &nbsp;
+    </div>
+</div>
+
+
+<div class="grid-100 mobile-grid-100 grid-parent" style="margin-top: 20px">
+
+    <div class="grid-15 hide-on-mobile">
+        &nbsp;
+    </div>
+
+    <div class="grid-70 mobile-grid-100 grid-parent">
+        <p>
+            <wicket:container wicket:id="attributesView">
+                [optional info]
+            </wicket:container>
+        </p>
+    </div>
+
+
+    <div class="grid-15 hide-on-mobile">
+        &nbsp;
+    </div>
+</div>
+
+<div class="grid-100 mobile-grid-100 grid-parent" style="margin-top: 20px">
+
+    <div class="grid-15 hide-on-mobile">
+        &nbsp;
+    </div>
+
+    <div class="grid-70 mobile-grid-100 grid-parent">
+        <p>
+            <wicket:container wicket:id="ordersView">
+                [list of orders]
+            </wicket:container>
+        </p>
+    </div>
+
+
+    <div class="grid-15 hide-on-mobile">
+        &nbsp;
+    </div>
+</div>
+
+<div class="grid-100 mobile-grid-100 grid-parent" style="margin-top: 20px">
+
+    <div class="grid-15 hide-on-mobile">
+        &nbsp;
+    </div>
+
+    <div class="grid-70 mobile-grid-100 grid-parent">
+        <p>
+            <wicket:container wicket:id="passwordView">
+                [change password]
+            </wicket:container>
+        </p>
+    </div>
+
+
+    <div class="grid-15 hide-on-mobile">
+        &nbsp;
+    </div>
+</div>
+
+
+<div class="grid-100 mobile-grid-100 grid-parent" style="margin-top: 20px">
+
+
+    <div class="grid-100 mobile-grid-100 grid-parent" style="margin-top: 20px">
+
+        <div class="grid-15 hide-on-mobile">
+            &nbsp;
+        </div>
+
+        <div class="grid-70 mobile-grid-100 grid-parent">
+            <p>
+
+            <div class="grid-100 mobile-grid-100 grid-parent">
+                <div class="grid-50 mobile-grid-50">
+                    <p>
+                            <span class="middle-title">
+                                <wicket:message key="addresses">
+                                    [addresses]
+                                </wicket:message>
+                            </span>
+                    </p>
+                    <hr>
+                </div>
+
+                <div class="grid-50 mobile-grid-50">
+                    &nbsp;
+                </div>
+
+            </div>
+            </p>
+        </div>
+
+
+        <div class="grid-15 hide-on-mobile">
+            &nbsp;
         </div>
     </div>
 
-    <div class="row">
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-	
-        <div class="grid_14 column">
-            <p>
-                <div wicket:id="feedback">[feedpack panel]</div>
-            </p>
-        </div>
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-		
-    </div>
 
-    <div class="row">
-	        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
+    <div class="grid-100 mobile-grid-100 grid-parent" style="margin-top: 20px">
+
+        <div class="grid-15 hide-on-mobile">
+            &nbsp;
         </div>
 
-        <div class="grid_14 column">
-            <p>
-                <wicket:container wicket:id="summaryView">
-                    [summary info]
-                </wicket:container>
-            </p>
-        </div>
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-		
-    </div>
-
-    <div class="row">
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-	
-        <div class="grid_14 column">
-            <p>
-                <wicket:container wicket:id="attributesView">
-                    [optional info]
-                </wicket:container>
-            </p>
-        </div>
-		
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-		
-    </div>
-
-    <div class="row">
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-	
-	
-        <div class="grid_14 column">
-            <p>
-                <wicket:container wicket:id="ordersView">
-                    [list of orders]
-                </wicket:container>
-            </p>
-        </div>
-		
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-		
-    </div>
-
-    <div class="row">
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-	
-        <div class="grid_14 column">
-            <p>
-                <wicket:container wicket:id="passwordView">
-                    [change password]
-                </wicket:container>
-            </p>
-        </div>
-		
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-		
-    </div>
-
-    <div class="row">
-	
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-	
-        <div class="grid_14 column">
+        <div class="grid-70 mobile-grid-100 grid-parent">
             <p>
                 <wicket:container wicket:id="shippingAddressesView">
                     [shipping address]
                 </wicket:container>
             </p>
         </div>
-		
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
+
+
+        <div class="grid-15 hide-on-mobile">
+            &nbsp;
         </div>
-	
     </div>
-	
-    <div class="row">
-	
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
+
+
+    <div class="grid-100 mobile-grid-100 grid-parent" style="margin-top: 20px">
+
+        <div class="grid-15 hide-on-mobile">
+            &nbsp;
         </div>
-	
-        <div class="grid_14 column">
+
+        <div class="grid-70 mobile-grid-100 grid-parent">
             <p>
                 <wicket:container wicket:id="billingAddressesView">
                     [billing address]
                 </wicket:container>
             </p>
         </div>
-		
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
+
+
+        <div class="grid-15 hide-on-mobile">
+            &nbsp;
         </div>
-	
     </div>
 
+</div>
 
-    <span wicket:id="footer">[footer]</span>
-	
+
+<span wicket:id="footer">[footer]</span>
 
 
 </div>

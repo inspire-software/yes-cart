@@ -17,13 +17,11 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-	<div class="row">
-        <div class="column grid_16">
+    <div class="grid-100 mobile-grid-100 grid-parent">
             <p align="center"><hr></p>
-		</div>
 	</div>
-    <div class="row">
-        <div class="column grid_4">
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-25 mobile-grid-50 grid-parent">
             <p>
                 <b><wicket:message key="profile">[Profile]</wicket:message></b><br>
 				<wicket:link>
@@ -38,7 +36,7 @@
 				</wicket:link>
             </p>
         </div>
-        <div class="column grid_4">
+        <div class="grid-25 hide-on-mobile grid-parent">
             <p>
 			    <b><wicket:message key="help">[Help]</wicket:message></b><br>
 				<wicket:link><a href="FaqPage.html"><span><wicket:message key="faq">[FAQ]</wicket:message></span></a></wicket:link><br>
@@ -47,7 +45,7 @@
 				<wicket:message key="call.center">[Call center]</wicket:message><br>
             </p>
         </div>
-        <div class="column grid_4">
+        <div class="grid-25 mobile-grid-50 grid-parent">
             <p>
 				<b><wicket:message key="about.shop">[About shop]</wicket:message></b><br>
                 <wicket:link><a href="ContactPage.html"><span><wicket:message key="contacts">[Contacts]</wicket:message></span></a></wicket:link><br>
@@ -55,54 +53,49 @@
 				<wicket:message key="location">[Location]</wicket:message><br>
             </p>
         </div>
-        <div class="column grid_4">
+        <div class="grid-25 hide-on-mobile grid-parent">
             <p>
 				<b><wicket:message key="platform">[Platform]</wicket:message></b><br>
 				<wicket:link>
-                    <img src="../../../../../../../style/yes-logo.png" border="0" width="220px"/>
+                    <img src="../../../../../../../image/yes-logo.png" border="0" width="220px"/>
                 </wicket:link>
 
 				
 				<a href="http://www.facebook.com/pages/Yes-Cart/426764944047166" class="image-border" target="_blank">
 					<wicket:link>
-						<img src="../../../../../../../style/f_logo.png" border="0" width="52px"/>
+						<img src="../../../../../../../image/f_logo.png" border="0" width="52px"/>
 					</wicket:link>
 				</a>
 				
 				<a href="https://plus.google.com/u/0/111193184651984424251/posts"  class="image-border" target="_blank">
 					<wicket:link>
-						<img src="../../../../../../../style/GooglePlus-512-Red.png" border="0" width="52px"/>
+						<img src="../../../../../../../image/GooglePlus-512-Red.png" border="0" width="52px"/>
 					</wicket:link>
 				</a>
 				
 				<a href="http://vk.com/yescart"  class="image-border" target="_blank">
 					<wicket:link>
-						<img src="../../../../../../../style/vk_logo.png" border="0" width="52px"/>
+						<img src="../../../../../../../image/vk_logo.png" border="0" width="52px"/>
 					</wicket:link>
 				</a>
 				
 				<a href="https://twitter.com/i/#!/search/?q=%23yescart&src=hash" class="image-border"  target="_blank">
 					<wicket:link>
-						<img src="../../../../../../../style/twitter-bird-white-on-blue.png" border="0" width="52px"/>
+						<img src="../../../../../../../image/twitter-bird-white-on-blue.png" border="0" width="52px"/>
 					</wicket:link>
 				</a>
-				
-				
-				
-				
-				
-				
-				
-				
             </p>
         </div>
     </div>
-	
-	<div class="row gr">
-        <div class="column grid_16 gr">
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
             <p align="center">&nbsp;</p>
-		</div>
 	</div>
+
+    <wicket:link>
+        <script type="text/javascript" src="../../../../../../../js/menu.js"></script>
+    </wicket:link>
+
 </wicket:panel>
 </body>
 </html>

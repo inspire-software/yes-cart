@@ -18,24 +18,25 @@
 <body>
 <wicket:panel>
     <form wicket:id="selectAddressForm">
-		
-	
+
+
         <div wicket:id="addressRadioGroup" >
-			<div class="g864 m5 menu"  style="border: solid 1px #d6d6d6;">
+            <div class="grid-100 mobile-grid-100  grid-parent">
 				<p>
-					<span wicket:id="addressTitle">[type dependend message]</span>
-					<a wicket:id="createLink">
+					<span class="small-title" wicket:id="addressTitle">[type dependend message]</span>
+					<a wicket:id="createLink" class="button gray">
 						<span><wicket:message key="create">[create]</wicket:message></span>
                     </a>
+                    <hr>
 				</p>
 			</div>
-            <div class="g864 m5" wicket:id="addressList" style="border: solid 1px #d6d6d6;">
-				<div class="g72 m5">
+            <div class="grid-100 mobile-grid-100  grid-parent" wicket:id="addressList">
+				<div class="grid-5 mobile-grid-5  grid-parent">
 					<p>
 						<input type="radio" wicket:id="addressRadio">
 					</p>
 				</div>
-				<div class="g576 m5">
+				<div class="grid-60 mobile-grid-50 grid-parent">
 					<p>
 						<span wicket:id="addrLine1">[line 1]</span>
 						<span wicket:id="addrLine2">[line 2]</span>
@@ -44,8 +45,8 @@
 						<span wicket:id="addrLine5">[line 5]</span>
 					</p>
 				</div>
-				 <div class="g216 m5">
-					<p>
+				 <div class="grid-35 mobile-grid-45 grid-parent">
+					<p style="text-align: right">
 						<a wicket:id="deleteLink" class="button gray">
 							<span><wicket:message key="delete">[delete]</wicket:message></span>
 						</a>
@@ -56,12 +57,12 @@
 				</div>
             </div>
         </div>
-		
+
     </form>
-	<div class="g864">
+	<div class="grid-100 mobile-grid-100  grid-parent">
 		<p>&nbsp;</p>
 	</div>
-	
+
 
 </wicket:panel>
 </body>

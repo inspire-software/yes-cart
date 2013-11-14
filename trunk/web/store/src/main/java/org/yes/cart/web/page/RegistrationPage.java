@@ -17,6 +17,8 @@
 package org.yes.cart.web.page;
 
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.page.component.customer.auth.RegisterPanel;
@@ -66,5 +68,15 @@ public class RegistrationPage  extends AbstractWebPage {
 
 
         super.onBeforeRender();
+    }
+
+
+    /**
+     * Get page title.
+     *
+     * @return page title
+     */
+    public IModel<String> getPageTitle() {
+        return new Model<String>(getLocalizer().getString("registraction",this));
     }
 }

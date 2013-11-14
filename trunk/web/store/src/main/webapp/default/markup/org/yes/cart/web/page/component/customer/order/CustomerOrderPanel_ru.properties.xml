@@ -35,6 +35,7 @@
 	<entry key="orderAmountHead">Сумма</entry>
 	
 	<entry key="orderInfo">Покупки</entry>
+    <entry key="noOrders">Order list is empty</entry>
 
 
 </properties>

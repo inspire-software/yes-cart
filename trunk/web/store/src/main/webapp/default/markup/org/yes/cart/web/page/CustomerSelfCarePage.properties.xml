@@ -19,5 +19,5 @@
 <properties>
 	<entry key="shopping">Back to shopping</entry>
 	<entry key="selfCare">Self care</entry>
-	
+    <entry key="addresses">Addresses</entry>
 </properties>
