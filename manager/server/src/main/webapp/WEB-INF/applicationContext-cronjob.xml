@@ -39,7 +39,7 @@
     <bean id="preOrderJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="preorderJob" />
         <!-- each 15 minute 0,15,30 and 45 -->
-        <property name="cronExpression" value="0 0/15 * * * ?" />
+        <property name="cronExpression" value="* 0/15 * * * ?" />
     </bean>
 
     <!-- ################################ Customer tagging  ################################################# -->
@@ -85,7 +85,7 @@
     <bean id="sendMailJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="sendMailJob" />
         <!-- each 10 minute 0,10,20,30,40,50 -->
-        <property name="cronExpression" value="0 0/10 * * * ?" />
+        <property name="cronExpression" value="* 0/10 * * * ?" />
     </bean>
 
     <!-- ################################ Scheduler  ####################################################### -->
