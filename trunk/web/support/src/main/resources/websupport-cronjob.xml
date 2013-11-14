@@ -43,7 +43,7 @@
     <bean id="reindexDiscontinuedProductsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="reindexDiscontinuedProductsJob" />
         <!-- at 5:00 am -->
-        <property name="cronExpression" value="0 0/1 * * * ?" />
+        <property name="cronExpression" value="0 0 5 * * ?" />
     </bean>
 
     <!-- ################################ Scheduler  ####################################################### -->
