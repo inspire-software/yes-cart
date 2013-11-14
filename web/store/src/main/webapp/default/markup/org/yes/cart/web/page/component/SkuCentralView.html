@@ -15,151 +15,161 @@
   -->
 
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<body>
 <wicket:head>
     <wicket:link>
-        <script type="text/javascript" src="../../../../../../js/sliding.form.js"></script>
+        <script src="../../../../../../js/easyResponsiveTabs.js" type="text/javascript"></script>
     </wicket:link>
 </wicket:head>
 
+<body>
+
+
 <wicket:panel>
 
-    <div class="column grid_10 menu sku-in-list-head">
-        <table width="96%" align="center">
-            <tr>
-                <td>
-                    <span wicket:id="name">[product or sku name]</span>
-                </td>
-                <td align="right">
-                    <wicket:message key="sku.code">[sku.code:]</wicket:message>
-                    <span wicket:id="skuCode">[sku num]</span>
-                </td>
-            </tr>
-        </table>
-    </div>
 
+    <div class="grid-100 mobile-grid-100 grid-parent">
 
-    <div class="sku">
+        <div class="grid-100 mobile-grid-100">
+            <span class="product-tittle" wicket:id="name">[product or sku name]</span>
+        </div>
 
-        <div class="sku-row">
-
-            <div class="sku-column sku-row-grid_5">
+        <div class="grid-40 mobile-grid-40 grid-parent">
+            <div class="grid-100 mobile-grid-100">
                 <wicket:container wicket:id="imageView">
                     [product image view]
                 </wicket:container>
             </div>
+            <div class="grid-100 mobile-grid-100 hide-on-mobile">
+                <span class="product-tittle" wicket:id="name2">[product or sku name]</span>
+            </div>
+        </div>
 
-            <div class="sku-column sku-row-grid_5 sku-item-info">
-                <div wicket:id="name2">[product or sku name 2]</div>
+        <div class="grid-60 mobile-grid-60 grid-parent">
+
+
+            <div class="grid-100 mobile-grid-100 grid-parent">
+                <div class="grid-40 mobile-grid-40">
+                    <wicket:message key="sku.code">[sku.code:]</wicket:message>
+                    <span wicket:id="skuCode">[sku num]</span>
+                </div>
+                <div class="grid-60 mobile-grid-60" style="text-align: right">
+                    <a wicket:id="addToCartLink" class="button big orange">
+                        <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
+                    </a>
+                </div>
             </div>
 
 
-            <div class="sku-column sku-row-grid_3 sku-item-info">
-                <a wicket:id="addToCartLink" class="button orange">
-                    <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
-                </a>
-            </div>
-            <div class="sku-column sku-row-grid_2 sku-item-info" style="padding-top:15px">
+            <div class="grid-100 mobile-grid-100" style="text-align: right">
                 <wicket:container wicket:id="priceView">
                     [price]
                 </wicket:container>
             </div>
 
 
-            <div class="sku-column sku-row-grid_5">
-                <wicket:container wicket:id="priceTiersView">
-                    [price tiers view]
-                </wicket:container>
-            </div>
-
-        </div>
-        <div class="sku-row">
-
-            <div class="sku-column sku-row-grid_10">
-
-
+            <div class="grid-100 mobile-grid-100">
                 <wicket:container wicket:id="skuList">
                     [product variation / sku list]
                 </wicket:container>
             </div>
 
-        </div>
 
-
-        <div class="sku-row">
-            <div class="sku-column sku-row-grid_10">
-                <div id="content">
-                    <div id="wrapper">
-                        <div id="navigation" style="display:none;">
-                            <ul>
-                                <li class="selected">
-                                    <a href="#">
-                                        <wicket:message key="description">[description]</wicket:message>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <wicket:message key="details">[details]</wicket:message>
-                                    </a>
-                                </li>
-                                <wicket:container wicket:id="accessoriesHeadContainer">
-                                       [attributes view]
-                                </wicket:container>
-                            </ul>
-                        </div>
-                        <div id="steps">
-                            <form id="formElem" name="formElem" action="#" method="post">
-                                <fieldset class="step">
-                                    <legend>
-                                        <wicket:message key="description">[description]</wicket:message>
-                                    </legend>
-                                    <div class="sku-tab">
-                                        <wicket:container wicket:id="description">
-                                            [product or sku description]
-                                        </wicket:container>
-                                    </div>
-                                </fieldset>
-                                <fieldset class="step">
-                                    <legend>
-                                        <wicket:message key="details">[details]</wicket:message>
-                                    </legend>
-                                    <div class="sku-tab">
-                                        <wicket:container wicket:id="skuAttrView">
-                                            [attributes view]
-                                        </wicket:container>
-                                    </div>
-                                </fieldset>
-                                 <wicket:container wicket:id="accessoriesBodyContainer">
-                                        [attributes view]
-                                 </wicket:container>
-                            </form>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
+
+    <div class="grid-100 mobile-grid-100" style="margin-top: 10px;">
+
+        <div id="horizontalTab">
+            <ul class="resp-tabs-list">
+                <li>
+                    <wicket:message key="description">[description]</wicket:message>
+                </li>
+                <li>
+                    <wicket:message key="details">[details]</wicket:message>
+                </li>
+                <wicket:container wicket:id="accessoriesHeadContainer">
+                    [attributes view]
+                </wicket:container>
+                <wicket:container wicket:id="volumeDiscountsHeadContainer">
+                    [attributes view]
+                </wicket:container>
+            </ul>
+            <div class="resp-tabs-container">
+                <div>
+                    <p align="justify" style="text-indent: 20px;">
+                        <wicket:container wicket:id="description">
+                            [product or sku description]
+                        </wicket:container>
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        <wicket:container wicket:id="skuAttrView">
+                            [attributes view]
+                        </wicket:container>
+                    </p>
+                </div>
+                <wicket:container wicket:id="accessoriesBodyContainer">
+                    [accessories]
+                </wicket:container>
+                <wicket:container wicket:id="priceTiersView">
+                    [price tiers view]
+                </wicket:container>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#horizontalTab').easyResponsiveTabs({
+                type: 'default', //Types: default, vertical, accordion
+                width: 'auto', //auto or any width like 600px
+                fit: true,   // 100% fit in a container
+                closed: 'accordion', // Start closed if in accordion view
+                activate: function (event) { // Callback function if tab is switched
+                    var $tab = $(this);
+                    var $info = $('#tabInfo');
+                    var $name = $('span', $info);
+
+                    $name.text($tab.text());
+
+                    $info.show();
+                }
+            });
+
+            $('#verticalTab').easyResponsiveTabs({
+                type: 'vertical',
+                width: 'auto',
+                fit: true
+            });
+        });
+    </script>
+
+
 </wicket:panel>
 
 
 <wicket:fragment wicket:id="accessoriesHead">
     <li>
-        <a href="#">
-            <wicket:message key="accessories">[accessories]</wicket:message>
-        </a>
+        <wicket:message key="accessories">[accessories]</wicket:message>
+    </li>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="volumeDiscountsHead">
+    <li>
+        <wicket:message key="volumeDiscount">[accessories]</wicket:message>
     </li>
 </wicket:fragment>
 
 <wicket:fragment wicket:id="accessoriesBody">
-    <fieldset class="step">
-        <legend>
-            <wicket:message key="accessories">[accessories]</wicket:message>
-        </legend>
-        <wicket:container wicket:id="accessoriesView">
-            [accessories]
-        </wicket:container>
-    </fieldset>
+    <div>
+        <p>
+            <wicket:container wicket:id="accessoriesView">
+                [accessories]
+            </wicket:container>
+        </p>
+    </div>
 </wicket:fragment>
 
 

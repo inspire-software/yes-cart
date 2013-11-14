@@ -19,59 +19,69 @@
 
 <wicket:head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+
+    <title wicket:id="pageTitle">[page title]</title>
+    <meta wicket:id="description" name="description" content=""/>
+    <meta wicket:id="keywords" name="keywords" content=""/>
+
+
     <wicket:link>
-        <link rel="stylesheet" type="text/css" href="../../../../../style/reset.css"/>
-        <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
-        <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
+
+        <script type="text/javascript" src="../../../../../js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/autoload.js"></script>
+        <!--[if lt IE 9]>
+        <script src="../../../../../js/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/demo.css"/>
+        <!--[if (gt IE 8) | (IEMobile)]><!-->
+        <link rel="stylesheet" href="../../../../../style/unsemantic-grid-responsive.css"/>
+        <!--<![endif]-->
+        <!--[if (lt IE 9) & (!IEMobile)]>
+        <link rel="stylesheet" href="../../../../../style/ie.css"/>
+        <![endif]-->
     </wicket:link>
-    <title>
-        <wicket:message key="orderPayment">[Order payment]</wicket:message>
-    </title>
 </wicket:head>
 
 <body>
 
-<div class="mainpage">
+<div class="grid-container">
 
-    <span wicket:id="header">[header]</span>
-	<div class="row">
-		<div class="column grid_16">
-			<p>
-				<wicket:message key="orderPayment">[Order payment]</wicket:message>
-			</p>	
-		</div>
-	</div>
-	
-	<div class="row">
-        <div class="column grid_1">
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <wicket:container wicket:id="header">
+            [header]
+        </wicket:container>
+    </div>
+
+
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>
         </div>
-        <div class="column grid_14">
-            <ul class="menu">
-				<li>
-                <wicket:link>
-                    <a href="HomePage.html">
-                        <span><wicket:message key="continueShopping"> [Shopping ]</wicket:message></span>
-                    </a>
-                </wicket:link>					
-				</li>
-            </ul>
-
+        <div class="grid-70 mobile-grid-100">
+            <p>
+                <span class="big-title"><wicket:message key="orderPayment">[Order payment]</wicket:message></span>
+                <hr>
+            </p>
         </div>
-        <div class="column grid_1">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>
         </div>
     </div>
-	
-    <div class="row">
-        <div class="column grid_1">
+
+
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-15 hide-on-mobile">
             &nbsp;
         </div>
-        <div class="column grid_14">
+        <div class="grid-70 mobile-grid-100">
             <span wicket:id="feedback"/>
             <p>
                 <wicket:container wicket:id="paymentResult">
@@ -79,7 +89,7 @@
                 </wicket:container>
             </p>
         </div>
-        <div class="column grid_1">
+        <div class="grid-15 hide-on-mobile">
             &nbsp;
         </div>
     </div>
@@ -117,10 +127,17 @@
     </span>
     <wicket:link>
 
+        <a href="HomePage.html">
+            <span><wicket:message key="continueShopping"> [Shopping ]</wicket:message></span>
+        </a>
+
         <a href="CustomerSelfCarePage.html">
             <wicket:message key="checkStatus">[check order status]</wicket:message>
         </a>
+
     </wicket:link>
+
+
 </wicket:fragment>
 
 </body>

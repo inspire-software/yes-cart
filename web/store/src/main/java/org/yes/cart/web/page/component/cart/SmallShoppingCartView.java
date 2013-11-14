@@ -18,9 +18,11 @@ package org.yes.cart.web.page.component.cart;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.misc.PluralFormService;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -28,6 +30,8 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
+
+import java.math.BigDecimal;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -39,6 +43,7 @@ public class SmallShoppingCartView extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String QTY_LABEL = "qtyLabel";
+    private static final String EMPTY_LABEL = "emptyCart";
     private static final String SUB_TOTAL_VIEW = "subTotal";
     private static final String CART_LINK = "cartLink";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
@@ -71,6 +76,10 @@ public class SmallShoppingCartView extends BaseComponent {
     protected void onBeforeRender() {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         final Integer itemsInCart = cart.getCartItemsCount();
+        final SkuPrice skuPrice = priceService.getGenericDao().getEntityFactory().getByIface(SkuPrice.class);
+        skuPrice.setRegularPrice(cart.getTotal().getSubTotal());
+        skuPrice.setCurrency(cart.getCurrencyCode());
+        skuPrice.setQuantity(BigDecimal.ONE);
 
         final String resourceKey = pluralFormService.getPluralForm(
                 cart.getCurrentLocale(),
@@ -88,18 +97,32 @@ public class SmallShoppingCartView extends BaseComponent {
 
         add(
                 new Label(
-                        QTY_LABEL,
-                        isCartEmpty()?
-                        new StringResourceModel("no.item", this, null, itemsInCart):
-                        new StringResourceModel(resourceKey, this, null, itemsInCart)
-                )
+                        EMPTY_LABEL,
+                        new StringResourceModel("no.item", this, null, itemsInCart)
+                ).setVisible(isCartEmpty())
         );
 
         add(
                 new BookmarkablePageLink<ShoppingCartPage>(
                         CART_LINK,
                         ShoppingCartPage.class
-                ).setVisible(!isCartEmpty())
+                )
+                        .add(
+                                new PriceView(
+                                        SUB_TOTAL_VIEW,
+                                        new Model<SkuPrice>(skuPrice),
+                                        true, false
+                                )
+                        )
+                        .add(
+                                new Label(
+                                        QTY_LABEL,
+                                        isCartEmpty()?
+                                                new StringResourceModel("no.item", this, null, itemsInCart):
+                                                new StringResourceModel(resourceKey, this, null, itemsInCart)
+                                )
+                        )
+                        .setVisible(!isCartEmpty())
         );
 
         super.onBeforeRender();

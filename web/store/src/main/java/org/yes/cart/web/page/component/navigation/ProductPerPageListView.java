@@ -79,15 +79,17 @@ public class ProductPerPageListView extends ListView<String> {
 
         final Label label = new Label(WebParametersKeys.QUANTITY, quantity);
 
-        if (selectedItemPerPage.equalsIgnoreCase(quantity)) {
-            label.add(new AttributeModifier("class", "items-per-page-active"));
-        }
-
         final LinksSupport links = ((AbstractWebPage) getPage()).getWicketSupportFacade().links();
+
         final PageParameters params = links.getFilteredCurrentParameters(pageParameters);
         params.set(WebParametersKeys.QUANTITY, quantity);
 
-        stringListItem.add(links.newLink(ITEMS_PER_PAGE, params).add(label));
+        stringListItem.add(
+                links.newLink(ITEMS_PER_PAGE, params)
+                        .add(label)
+                        .add(new AttributeModifier("class", selectedItemPerPage.equalsIgnoreCase(quantity)?"items-per-page-active":"items-per-page")
+                        )
+        );
 
     }
 

@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
@@ -56,6 +57,8 @@ public class CustomerOrderPanel extends BaseComponent {
     private final static String ORDER_STATE = "orderStatus";
     private final static String ORDER_ITEMS = "orderItems";
     private final static String ORDER_AMOUNT = "orderAmount";
+    private final static String ORDER_INFORMATION_FRAGMENT = "orderInformationFragment";
+    private final static String ORDER_INFORMATION = "orderInformation";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
@@ -110,27 +113,38 @@ public class CustomerOrderPanel extends BaseComponent {
         final List<CustomerOrder> orders = customerOrderService.findCustomerOrders(customer, null);
         Collections.sort(orders, new CustomerOrderComparator());
 
-        addOrReplace(
+        if (orders.isEmpty()) {
 
-                new ListView<CustomerOrder>(ORDER_LIST, orders) {
-                    protected void populateItem(final ListItem<CustomerOrder> customerOrderListItem) {
+            addOrReplace(
+                    new Label(ORDER_INFORMATION, getLocalizer().getString("noOrders", this))
+            );
 
-                        final CustomerOrder order = customerOrderListItem.getModelObject();
-                        customerOrderListItem
-                                .add(new Label(ORDER_NUM, order.getOrdernum()))
-                                .add(new Label(ORDER_DATE, dateFormat.format(order.getOrderTimestamp())))
-                                .add(new Label(ORDER_STATE, getLocalizer().getString(order.getOrderStatus(), this)))
-                                .add(new Label(ORDER_ITEMS, getItemsList(order)).setEscapeModelStrings(false))
-                                .add(new Label(ORDER_AMOUNT,
-                                        decimalFormat.format(
-                                                customerOrderPaymentService.getOrderAmount(order.getOrdernum())
-                                        ) + " " + order.getCurrency()
-                                ));
+        } else {
 
-                    }
-                }
+            addOrReplace(
+                    new Fragment(ORDER_INFORMATION, ORDER_INFORMATION_FRAGMENT, this)
+                            .add(
+                                    new ListView<CustomerOrder>(ORDER_LIST, orders) {
+                                        protected void populateItem(final ListItem<CustomerOrder> customerOrderListItem) {
 
-        );
+                                            final CustomerOrder order = customerOrderListItem.getModelObject();
+                                            customerOrderListItem
+                                                    .add(new Label(ORDER_NUM, order.getOrdernum()))
+                                                    .add(new Label(ORDER_DATE, dateFormat.format(order.getOrderTimestamp())))
+                                                    .add(new Label(ORDER_STATE, getLocalizer().getString(order.getOrderStatus(), this)))
+                                                    .add(new Label(ORDER_ITEMS, getItemsList(order)).setEscapeModelStrings(false))
+                                                    .add(new Label(ORDER_AMOUNT,
+                                                            decimalFormat.format(
+                                                                    customerOrderPaymentService.getOrderAmount(order.getOrdernum())
+                                                            ) + " " + order.getCurrency()
+                                                    ));
+
+                                        }
+                                    }
+                            )
+            );
+
+        }
 
 
         super.onBeforeRender();

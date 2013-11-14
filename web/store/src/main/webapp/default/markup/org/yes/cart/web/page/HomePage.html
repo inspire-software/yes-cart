@@ -23,12 +23,28 @@
     <meta wicket:id="description" name="description" content=""/>
     <meta wicket:id="keywords" name="keywords" content=""/>
 
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <wicket:link>
-        <link rel="stylesheet" type="text/css" href="../../../../../style/reset.css"/>
-        <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
-        <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
+
         <script type="text/javascript" src="../../../../../js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/autoload.js"></script>
+        <script type="text/javascript" src="../../../../../js/jquery.carouFredSel-6.2.1.js"></script>
+        <!--[if lt IE 9]>
+        <script src="../../../../../js/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/demo.css"/>
+        <!--[if (gt IE 8) | (IEMobile)]><!-->
+        <link rel="stylesheet" href="../../../../../style/unsemantic-grid-responsive.css"/>
+        <!--<![endif]-->
+        <!--[if (lt IE 9) & (!IEMobile)]>
+        <link rel="stylesheet" href="../../../../../style/ie.css"/>
+        <![endif]-->
+
+        <script type="text/javascript" src="../../../../../js/slimbox2.js"></script>
+        <link rel="stylesheet" href="../../../../../style/slimbox2.css" type="text/css" media="screen" />
+
     </wicket:link>
 
 
@@ -37,28 +53,46 @@
 <body>
 
 
-<div class="mainpage">
+<div class="grid-container">
 
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <wicket:container wicket:id="header">
+            [header]
+        </wicket:container>
+    </div>
 
-    <span wicket:id="header">[header]</span>
-
-
-
-    <div class="row">
-        <div class="column grid_16">
-            <wicket:container wicket:id="breadCrumbs">
-                [bread crumbs]
+    <div class="grid-100 hide-on-mobile grid-parent">
+        <div class="grid-100 hide-on-mobile">
+            <wicket:container wicket:id="featured">
+                [featured products]
             </wicket:container>
         </div>
     </div>
 
-    <div class="row">
-        <div class="column grid_4">
-            <p>
-                <wicket:container wicket:id="topCategories">
-                    [top categories]
-                </wicket:container>
-            </p>
+
+    <wicket:container wicket:id="breadCrumbs">
+        [bread crumbs]
+    </wicket:container>
+
+    <div class="hide-on-desktop mobile-grid-100 grid-parent" id="top-categories-mobile">
+        <wicket:container wicket:id="topCategories">
+            [top categories]
+        </wicket:container>
+    </div>
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-20 mobile-grid-30 grid-parent">
+            <div class="grid-100 hide-on-mobile grid-parent" id="top-categories-desktop">
+
+            </div>
+            <script>
+                var pMenu = document.getElementById("top-categories-mobile").innerHTML;
+                document.getElementById("top-categories-desktop").innerHTML = pMenu;
+                var all = document.getElementById("top-categories-desktop").getElementsByTagName('li');
+                for (var i = -1, l = all.length; ++i < l;) {
+                    all[i].style.cssFloat = "none";
+                }
+            </script>
             <p>
                 <wicket:container wicket:id="priceFilter">
                     [price filter]
@@ -75,21 +109,53 @@
                 </wicket:container>
             </p>
         </div>
-        <div class="column grid_10">
-            <p>
-                <wicket:container wicket:id="centralView">
-                    [switch language]
-                </wicket:container>
-            </p>
+        <div id="centralView" class="grid-70 mobile-grid-70 grid-parent">
+            <wicket:container wicket:id="centralView">
+                [central view]
+            </wicket:container>
         </div>
-        <div class="column grid_2">
+        <div id="rightView" class="grid-10 hide-on-mobile grid-parent">
             <p>
                 <wicket:container wicket:id="newArrival">
                     [category new arrival and promo]
                 </wicket:container>
             </p>
         </div>
+        <script>
+
+            function endsWith(str, suffix) {
+                return str.indexOf(suffix, str.length - suffix.length) !== -1;
+            }
+
+            if (document.URL.indexOf('/product/') > -1 || document.URL.indexOf('/sku/')  > -1) {
+
+                document.getElementById('centralView').classList.add('mobile-grid-100');
+                document.getElementById('centralView').classList.remove('mobile-grid-70');
+
+            }  else {
+
+                document.getElementById('centralView').classList.add('mobile-grid-70');
+                document.getElementById('centralView').classList.remove('mobile-grid-100');
+
+            }
+
+            if (endsWith(document.URL, 'yes-shop/')) {
+
+                document.getElementById('centralView').classList.remove('mobile-grid-70');
+                document.getElementById('centralView').classList.add('mobile-grid-100');
+                document.getElementById('centralView').classList.remove('grid-70');
+                document.getElementById('centralView').classList.add('grid-80');
+
+                document.getElementById('rightView').classList.remove('grid-10');
+                document.getElementById('rightView').classList.add('hide-on-desktop');
+
+
+            }
+
+        </script>
+
     </div>
+
 
     <span wicket:id="footer">[footer]</span>
 

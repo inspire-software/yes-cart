@@ -23,4 +23,5 @@
     <entry key="description">Описание</entry>
     <entry key="details">Детали</entry>
     <entry key="accessories">Аксессуары</entry>
+    <entry key="volumeDiscount">Оптовые скидки</entry>
 </properties>

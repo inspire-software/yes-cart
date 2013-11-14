@@ -158,8 +158,8 @@ public class ProductsCentralView extends AbstractCentralView {
             productDataView.setCurrentPage(0);
         }
 
-        add(new ProductSorter(SORTER, "sort-order-active"));
-        add(new URLPagingNavigator(PAGINATOR, productDataView, getPage().getPageParameters(), "page-active"));
+        add(new ProductSorter(SORTER));
+        add(new URLPagingNavigator(PAGINATOR, productDataView, getPage().getPageParameters()));
         add(new ProductPerPageListView(ITEMS_PER_PAGE_LIST, itemsPerPageValues, getPage().getPageParameters()));
         add(productDataView);
 

@@ -22,8 +22,12 @@
     <ul wicket:id="linkList" class="filternav">
         <li>
             <a wicket:id="link">
-                <span style="display: inline-block; width:184px;"                          wicket:id="linkName" >[attr value]</span>
-                <span style="display: inline-block; width:36px; align:right; text-align:right; " wicket:id="quantity">[qty]</span>
+                <div style="display:table; width:100%;">
+                    <div style="display:table-row">
+                        <div style="display:table-cell; text-align: left;"><span wicket:id="linkName" >[attr value]</span></div>
+                        <div style="display:table-cell; text-align: right;"><span wicket:id="quantity">[qty]</span></div>
+                    </div>
+                </div>
             </a>
         </li>
     </ul>

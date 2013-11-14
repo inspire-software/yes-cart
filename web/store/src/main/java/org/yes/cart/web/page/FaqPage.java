@@ -16,6 +16,8 @@
 
 package org.yes.cart.web.page;
 
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
@@ -49,4 +51,14 @@ public class FaqPage extends AbstractWebPage {
 
         super.onBeforeRender();
     }
+
+    /**
+     * Get page title.
+     *
+     * @return page title
+     */
+    public IModel<String> getPageTitle() {
+        return new Model<String>(getLocalizer().getString("faqTitle",this));
+    }
+
 }

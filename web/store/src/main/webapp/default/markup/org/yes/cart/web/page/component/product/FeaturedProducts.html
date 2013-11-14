@@ -15,16 +15,60 @@
   -->
 
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:head>
+    <!-- fire plugin onDocumentReady -->
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+
+                    $("#featuredProducts").carouFredSel(
+
+                            {
+                                responsive:true,
+                                width:'100%',
+                                scroll: {
+                                    items:2,
+                                    fx: "fade",
+                                    duration: 2000,
+                                    pauseOnHover: true
+                                },
+                                items:{
+                                    width:80,
+                                    height: 80,	//	optionally resize item-height
+                                    visible:{
+                                        min:2,
+                                        max:6
+                                    }
+                                }
+                            }
+                    );
+
+                }
+        );
+
+
+    </script>
+
+</wicket:head>
 <body>
 <wicket:panel>
-    <div wicket:id="products" class="featured">
-        <a wicket:id="productLinkImage"   class="image-border">
-            <img wicket:id="productDefaultImage" hspace="5" vspace="5"/>
-        </a>
-        <a wicket:id="productLinkName">
-            <span wicket:id="name"/>
-        </a>
+
+
+    <div class="list_carousel responsive grid-100 hide-on-mobile grid-parent">
+        <ul id="featuredProducts">
+            <li wicket:id="products">
+                <a wicket:id="productLinkImage" class="image-border">
+                    <img wicket:id="productDefaultImage"/>
+                </a>
+
+                <p align="center">
+                    <a wicket:id="productLinkName"><span wicket:id="name">[product name]</span></a>
+                </p>
+            </li>
+            <div class="clearfix"></div>
+        </ul>
     </div>
+
+
 </wicket:panel>
 </body>
 </html>

@@ -18,48 +18,51 @@
 <body>
 <wicket:panel>
     <form wicket:id="shippingForm">
-	
-		<div class="g864 m5 menu"  style="border: solid 1px #d6d6d6;">
-			<p>
-				<span><wicket:message key="carrier.select">[Select Carrier and SLA]</wicket:message></span>
-			</p>
-		</div>
-			
-			<div style="display:inline-block">
-			<div class="g216 m5">
-			<p>
-				<wicket:message key="carrier">[Carrier]</wicket:message>
-			</p>
-		</div>
-		<div class="g360 m5">
-			<p>
-				<select wicket:id="carrier" class="input-select"/>
-			</p>
-		</div>
-		<div class="g288 m5"><p>&nbsp;</p></div>
-			</div>
-        
-<div style="display:inline-block">
-        <div class="g216 m5">
+
+        <div class="grid-100 mobile-grid-100  grid-parent">
+            <p>
+                <span><wicket:message key="carrier.select">[Select Carrier and SLA]</wicket:message></span>
+            </p>
+        </div>
+
+        <div class="grid-100 mobile-grid-100  grid-parent">
+            <div class="grid-40 mobile-grid-40  grid-parent">
+                <p>
+                    <wicket:message key="carrier">[Carrier]</wicket:message>
+                </p>
+            </div>
+            <div class="grid-40 mobile-grid-40  grid-parent">
+                <p>
+                    <select wicket:id="carrier" class="input-select"/>
+                </p>
+            </div>
+            <div><p>&nbsp;</p></div>
+        </div>
+
+        <div class="grid-100 mobile-grid-100  grid-parent">
+            <div class="grid-40 mobile-grid-40  grid-parent">
                 <p>
                     <wicket:message key="carrierSla">[Carrier SLA]</wicket:message>
                 </p>
 
             </div>
-            <div class="g360 m5">
+            <div class="grid-40 mobile-grid-40  grid-parent">
                 <p>
                     <select wicket:id="carrierSla" class="input-select"/>
                 </p>
 
             </div>
-			<div class="g144 m5 ship-price"  style="  font-size:16px; margin-left: -60px;">
+            <div class="hide-on-desktop mobile-grid-80  grid-parent">
+                &nbsp;
+            </div>
+            <div class="grid-20 mobile-grid-20  grid-parent" style="text-align: right">
                 <p>&nbsp;
                     <wicket:container wicket:id="priceView">
                         [price]
                     </wicket:container>
                 </p>
-            </div>	
-		  </div>
+            </div>
+        </div>
     </form>
 </wicket:panel>
 </body>

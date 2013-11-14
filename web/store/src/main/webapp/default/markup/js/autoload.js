@@ -14,11 +14,11 @@
  *    limitations under the License.
  */
 
-// AUTOLOAD CODE BLOCK (MAY BE CHANGED OR REMOVED)
-if (!/android|iphone|ipod|series60|symbian|windows ce|blackberry/i.test(navigator.userAgent)) {
-	jQuery(function($) {
-		$("a[rel^='lightbox']").slimbox({/* Put custom options here */}, null, function(el) {
-			return (this == el) || ((this.rel.length > 8) && (this.rel == el.rel));
-		});
-	});
+var stl = 'border-bottom: solid 2px #EE7600;';
+var stlIE = 'solid 2px #EE7600';
+var attrName = 'border-bottom';
+
+function activeLinksetStyle(elem) {
+    elem.setAttribute('style', stl);
+    elem.style.setAttribute(attrName, stlIE);
 }

@@ -20,5 +20,6 @@
 	<entry key="shopping">Continue shopping</entry>
 	<entry key="checkout">Checkout</entry>
 	<entry key="shoppingCart">Cart</entry>
-	
+	<entry key="emptyCart">Cart is empty</entry>
+
 </properties>

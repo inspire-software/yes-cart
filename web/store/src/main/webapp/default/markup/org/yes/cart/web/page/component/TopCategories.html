@@ -17,13 +17,19 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <ul wicket:id="categoryList" class="vmenu">
-        <li>
+
+    <a class="toggleMenu2" href="#">
+        <wicket:message key="categories">[Categories]</wicket:message>
+    </a>
+
+    <ul class="topcatnav" >
+        <li wicket:id="categoryList">
             <a wicket:id="categoryLinkName">
                 <span wicket:id="categoryName">[sub category name]</span>
             </a>
         </li>
     </ul>
+
 </wicket:panel>
 </body>
 </html>

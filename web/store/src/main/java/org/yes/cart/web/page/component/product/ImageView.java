@@ -143,7 +143,7 @@ public class ImageView extends BaseComponent {
 
                     }
 
-                }
+                }.setVisible(filledImageAttributes.size() > 1)
         );
 
 

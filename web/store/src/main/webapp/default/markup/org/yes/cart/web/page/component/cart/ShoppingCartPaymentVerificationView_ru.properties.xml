@@ -35,7 +35,9 @@
 	
 	<entry key="grandTotal">Сумма</entry>
 	<entry key="grandTotalTax">в т.ч. НДС</entry>
-	<entry key="grandTotalAmount">Всего</entry>	
+	<entry key="grandTotalAmount">Всего</entry>
+
+    <entry key="order.verification">Проверте заказ и выберите метод оплаты</entry>
 
 
 </properties>

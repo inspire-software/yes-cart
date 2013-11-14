@@ -17,44 +17,96 @@
 <body>
 <wicket:panel>
 
-    <div class="row grhead">
-        <div class="column grid_2 grhead social">
-            <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.yes-cart.org&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:100px; height:21px;" allowTransparency="true"></iframe>
-        </div>
-        <div class="column grid_2 grhead social">
-            <div class="g-plusone" data-size="medium"></div>
-            <script type="text/javascript">
-                (function() {
-                    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                    po.src = 'https://apis.google.com/js/plusone.js';
-                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                })();
-            </script>
-        </div>
-        <div class="column grid_2 grhead social">
-            <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="yescart">Tweet</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-        </div>
-        <div class="column grid_7 grhead">
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        &nbsp;
+    </div>
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-25 hide-on-mobile">
             <p>
-                <wicket:container wicket:id="search">
-                    [search]
-                </wicket:container>
+                <wicket:link>
+                    <a href="HomePage.html">
+                        <wicket:link>
+                            <img src="../../../../../../../image/yes-logo.png" border="0"/>
+                        </wicket:link>
+                    </a>
+                </wicket:link>
             </p>
         </div>
-        <div class="column grid_3 grhead">
+
+        <div class="grid-50 mobile-grid-75" style="padding-top: 10px; padding-left: 0px; text-align: left;">
+            <wicket:container wicket:id="search">
+                [search]
+            </wicket:container>
+        </div>
+        <div class="grid-25 mobile-grid-25" style="padding-top: 10px; text-align: right;">
             <p align="right">
                 <wicket:container wicket:id="smallCart">
                     [small shopping cart]
                 </wicket:container>
             </p>
+            <p align="right">
+                <wicket:container wicket:id="logout">
+                    [logout language]
+                </wicket:container>
+            </p>
         </div>
+
+    </div>
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+
+        <div class="grid-40 hide-on-mobile grid-parent">
+            <div class="g-plusone" data-size="medium"></div>
+            <script type="text/javascript">
+                (function () {
+                    var po = document.createElement('script');
+                    po.type = 'text/javascript';
+                    po.async = true;
+                    po.src = 'https://apis.google.com/js/plusone.js';
+                    var s = document.getElementsByTagName('script')[0];
+                    s.parentNode.insertBefore(po, s);
+                })();
+            </script>
+            &nbsp;
+            <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="yescart">Tweet</a>
+            <script>!function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                if (!d.getElementById(id)) {
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = p + '://platform.twitter.com/widgets.js';
+                    fjs.parentNode.insertBefore(js, fjs);
+                }
+            }(document, 'script', 'twitter-wjs');</script>
+            &nbsp;
+            <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.yes-cart.org&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21"
+                    scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:110px; height:21px;"
+                    allowTransparency="true">
+
+            </iframe>
+        </div>
+
+        <div class="grid-60 mobile-grid-100 grid-parent" style="text-align: right;">
+
+            <div class="grid-60 mobile-grid-50 grid-parent">
+                <wicket:container wicket:id="language">
+                    [switch language]
+                </wicket:container>
+            </div>
+
+            <div class="grid-40 mobile-grid-50 grid-parent" style="text-align: right;">
+                <wicket:container wicket:id="currency">
+                    [switch currency]
+                </wicket:container>
+            </div>
+
+        </div>
+
+
     </div>
 
     <script>
-        var stl = 'border-bottom: solid 2px #EE7600;';
-        var stlIE = 'solid 2px #EE7600';
-        var attrName = 'border-bottom';
+
 
         function getCategoryId() {
             var urlPart = document.URL.split("/");
@@ -70,113 +122,99 @@
 
         }
 
-        function activeLinksetStyle(elem) {
-            elem.setAttribute('style', stl);
-            elem.style.setAttribute(attrName, stlIE);
-        }
+
     </script>
 
 
-    <div class="row">
-        <div class="column grid_16">
-            <ul class="menu">
-                <li><a id="sale" href="tag/sale" onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
-                        key="sale">[Sale]
-                </wicket:message></span></a></li>
-                <li><a id="specialoffer" href="tag/specialoffer"
-                       onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
-                        key="special.offer">[Special offer]
-                </wicket:message></span></a></li>
-                <li><a id="newarrival" href="tag/newarrival"
-                       onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
-                        key="new.arrivals">[New products]</wicket:message></span></a></li>
-                <li><a id="multisku" href="tag/multisku"
-                       onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
-                        key="demo.multisku">[Multi sku demo]</wicket:message></span></a></li>
-                <li><a id="preorder" href="tag/preorder"
-                       onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
-                        key="demo.preorder">[Pre-order sku demo]</wicket:message></span></a></li>
-                <li><a id="backorder" href="tag/backorder"
-                       onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
-                        key="demo.backorder">[Back order sku demo]</wicket:message></span></a></li>
-                <li><a id="always" href="tag/always"
-                       onclick="this.href = this.href + getCategoryId(); return true;"><span><wicket:message
-                        key="demo.always">[Always sku demo]
-                </wicket:message></span></a></li>
-                <li>
-                    <wicket:link>
-                        <a href="CustomerSelfCarePage.html"><span><wicket:message key="profile">[Profile]
-                        </wicket:message></span></a>
-                    </wicket:link>
-                </li>
-                <li>
-                    <wicket:link><a href="FaqPage.html"><span><wicket:message key="faq">[FAQ]
-                    </wicket:message></span></a></wicket:link>
-                </li>
-                <li>
-                    <wicket:link><a href="ContactPage.html"><span><wicket:message key="contacts">[Contacts]
-                    </wicket:message></span></a></wicket:link>
-                </li>
-            </ul>
-            <script>
-                if (document.URL.indexOf('tag/sale') > -1) {
-                    activeLinksetStyle(document.getElementById('sale'));
-                } else if (document.URL.indexOf('tag/specialoffer') > -1) {
-                    activeLinksetStyle(document.getElementById('specialoffer'));
-                } else if (document.URL.indexOf('tag/newarrival') > -1) {
-                    activeLinksetStyle(document.getElementById('newarrival'));
-                } else if (document.URL.indexOf('tag/multisku') > -1) {
-                    activeLinksetStyle(document.getElementById('multisku'));
-                } else if (document.URL.indexOf('tag/preorder') > -1) {
-                    activeLinksetStyle(document.getElementById('preorder'));
-                } else if (document.URL.indexOf('tag/backorder') > -1) {
-                    activeLinksetStyle(document.getElementById('backorder'));
-                } else if (document.URL.indexOf('tag/always') > -1) {
-                    activeLinksetStyle(document.getElementById('always'));
-                }
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <a class="toggleMenu" href="#">
+            <wicket:message key="menu">[Menu]</wicket:message>
+        </a>
+        <ul class="nav">
+            <li>
+                <a id="sale" href="tag/sale" onclick="this.href = this.href + getCategoryId(); return true;">
+                    <span><wicket:message key="sale">[Sale]</wicket:message></span>
+                </a>
+            </li>
+            <li>
+                <a id="specialoffer" href="tag/specialoffer"
+                   onclick="this.href = this.href + getCategoryId(); return true;">
+                    <span><wicket:message key="special.offer">[Special offer]</wicket:message></span>
+                </a>
+            </li>
+            <li>
+                <a id="newarrival" href="tag/newarrival"
+                   onclick="this.href = this.href + getCategoryId(); return true;">
+                    <span><wicket:message key="new.arrivals">[New products]</wicket:message></span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <wicket:message key="demo">[Demo]</wicket:message>
+                </a>
+                <ul>
+                    <li>
+                        <a id="multisku" href="tag/multisku"
+                           onclick="this.href = this.href + getCategoryId(); return true;">
+                            <span><wicket:message key="demo.multisku">[Multi sku demo]</wicket:message></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="preorder" href="tag/preorder"
+                           onclick="this.href = this.href + getCategoryId(); return true;">
+                            <span><wicket:message key="demo.preorder">[Pre-order sku demo]</wicket:message></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="backorder" href="tag/backorder"
+                           onclick="this.href = this.href + getCategoryId(); return true;">
+                            <span><wicket:message key="demo.backorder">[Back order sku demo]</wicket:message></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="always" href="tag/always"   onclick="this.href = this.href + getCategoryId(); return true;">
+                            <span><wicket:message key="demo.always">[Always sku demo]</wicket:message></span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
-            </script>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="column grid_4">
-            <p>
+            <li>
                 <wicket:link>
-                    <a href="HomePage.html">
-                        <wicket:link>
-                            <img src="../../../../../../../style/yes-logo.png" border="0"/>
-                        </wicket:link>
-                    </a>
+                    <a href="CustomerSelfCarePage.html"><span><wicket:message key="profile">[Profile]
+                    </wicket:message></span></a>
                 </wicket:link>
-            </p>
-        </div>
-        <div class="column grid_8">
-            <p>
-                <wicket:container wicket:id="featured">
-                    [featured products]
-                </wicket:container>
-            </p>
-        </div>
-        <div class="column grid_4">
-            <p align="right">
-                <wicket:container wicket:id="currency">
-                    [switch currency]
-                </wicket:container>
-            </p>
-            <p align="right">
-                <wicket:container wicket:id="language">
-                    [switch language]
-                </wicket:container>
-            </p>
-            <p align="right">
-                <wicket:container wicket:id="logout">
-                    [logout language]
-                </wicket:container>
-            </p>
-        </div>
+            </li>
+            <li>
+                <wicket:link><a href="FaqPage.html"><span><wicket:message key="faq">[FAQ]
+                </wicket:message></span></a></wicket:link>
+            </li>
+            <li>
+                <wicket:link><a href="ContactPage.html"><span><wicket:message key="contacts">[Contacts]
+                </wicket:message></span></a></wicket:link>
+            </li>
+        </ul>
+        <script>
+            if (document.URL.indexOf('tag/sale') > -1) {
+                activeLinksetStyle(document.getElementById('sale'));
+            } else if (document.URL.indexOf('tag/specialoffer') > -1) {
+                activeLinksetStyle(document.getElementById('specialoffer'));
+            } else if (document.URL.indexOf('tag/newarrival') > -1) {
+                activeLinksetStyle(document.getElementById('newarrival'));
+            } else if (document.URL.indexOf('tag/multisku') > -1) {
+                activeLinksetStyle(document.getElementById('multisku'));
+            } else if (document.URL.indexOf('tag/preorder') > -1) {
+                activeLinksetStyle(document.getElementById('preorder'));
+            } else if (document.URL.indexOf('tag/backorder') > -1) {
+                activeLinksetStyle(document.getElementById('backorder'));
+            } else if (document.URL.indexOf('tag/always') > -1) {
+                activeLinksetStyle(document.getElementById('always'));
+            }
+
+        </script>
     </div>
+
+
 
 </wicket:panel>
 </body>

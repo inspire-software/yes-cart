@@ -20,300 +20,339 @@
 <wicket:head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <wicket:link>
-        <link rel="stylesheet" type="text/css" href="../../../../../style/reset.css"/>
-        <link rel="stylesheet" type="text/css" href="../../../../../style/text.css"/>
-        <link rel="stylesheet" type="text/css" href="../../../../../style/1024_16_10_10.css"/>
+
+        <script type="text/javascript" src="../../../../../js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/autoload.js"></script>
+        <!--[if lt IE 9]>
+        <script src="../../../../../js/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/demo.css"/>
+        <!--[if (gt IE 8) | (IEMobile)]><!-->
+        <link rel="stylesheet" href="../../../../../style/unsemantic-grid-responsive.css"/>
+        <!--<![endif]-->
+        <!--[if (lt IE 9) & (!IEMobile)]>
+        <link rel="stylesheet" href="../../../../../style/ie.css"/>
+        <![endif]-->
     </wicket:link>
-    <title>
-        <wicket:message key="checkout">[Checkout]</wicket:message>
-    </title>
+    <title wicket:id="pageTitle">[page title]</title>
+    <meta wicket:id="description" name="description" content=""/>
+    <meta wicket:id="keywords" name="keywords" content=""/>
+
 </wicket:head>
 
 <body>
 
-<div class="mainpage">
+<div class="grid-container">
 
 
     <span wicket:id="header">[header]</span>
-    <div class="row">
-		
-        <div class="column grid_16">
-			<wicket:container wicket:id="navigation">
-                [step navigation panel]
+
+
+
+
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-15 hide-on-mobile">
+            <p>
+                &nbsp;
+            </p>
+        </div>
+        <div class="grid-70 mobile-grid-100 grid-parent">
+
+            <div class="grid-100 mobile-grid-100 grid-parent">
+                <span class="big-title">
+                    <wicket:message key="checkout">[Checkout]</wicket:message>
+                </span>
+            </div>
+
+            <hr>
+
+            <div class="grid-100 mobile-grid-100 grid-parent">
+                <wicket:container wicket:id="navigation">
+                    [step navigation panel]
+                </wicket:container>
+            </div>
+
+            <wicket:container wicket:id="googleCheckout">
+                [google checkout btn and form will be active if gc enabled]
             </wicket:container>
-			
-        </div>
-    </div>
-
-    
-
-    <div class="row">
-        <div class="column grid_1">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-        <div class="column grid_14">
-
-			<wicket:container wicket:id="googleCheckout">
-				[google checkout btn and form will be active if gc enabled]
-			</wicket:container>
 
         </div>
-        <div class="column grid_1">
+        <div class="grid-15 hide-on-mobile">
             <p>
                 &nbsp;
             </p>
         </div>
     </div>
 
-	
-	
-    <div class="row">
-        <div class="column grid_1">
-            
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-15 hide-on-mobile">
+            <p>
+                &nbsp;
+            </p>
         </div>
-        <div class="column grid_14">
+        <div class="grid-70 mobile-grid-100 grid-parent">
             <div wicket:id="feedback">[feedpack panel]</div>
         </div>
-		<div class="column grid_1">
-            
+        <div class="grid-15 hide-on-mobile">
+            <p>
+                &nbsp;
+            </p>
         </div>
     </div>
 
 
-    <div class="row">
-        <div class="column grid_1">
-            &nbsp;
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-15 hide-on-mobile">
+            <p>
+                &nbsp;
+            </p>
         </div>
-        <wicket:container wicket:id="content">
-            [current content]
-        </wicket:container>
-        <div class="column grid_1">
+        <div class="grid-70 mobile-grid-100 grid-parent">
+            <wicket:container wicket:id="content">
+                [current content]
+            </wicket:container>
+        </div>
+        <div class="grid-15 hide-on-mobile">
+            <p>
+                &nbsp;
+            </p>
         </div>
     </div>
 
     <span wicket:id="footer">[footer]</span>
 
 
-
 </div>
 
 
 <wicket:fragment wicket:id="addressFragment">
-	<div class="column grid_14">
-		<div class="g864 m5 menu"  style="border: solid 1px #d6d6d6;">
-			<p>
-				<span><wicket:message key="select.addr">[Address to use]</wicket:message></span>
-			</p>
-		</div>
-
-		
-		<p>
-			<form wicket:id="billingTheSameForm">
-				<input type="checkbox" wicket:id="billingTheSame">
-				<wicket:message key="billingAddrTheSame">[Billing address the same]</wicket:message>
-			</form>
-		</p>
-			
-		<wicket:container wicket:id="shippingAddress">
-			[Shipping address]
-		</wicket:container>	
-
-		<wicket:container wicket:id="billingAddress">
-			[Shipping address]
-		</wicket:container>			
-		
-		
-		
-		<div class="g864">
-			<p>
-				<wicket:link>
-                    <a href="?thp=true&amp;step=ship" class="button gray forward">
-                        <span><wicket:message key="shipmentStep">[Shipping method]</wicket:message></span>
-                    </a>
-                </wicket:link>
-			</p>
-		</div>
-		
-		
-	</div>
-    
-</wicket:fragment>
-
-
-
-<wicket:fragment wicket:id="threeStepNavigationFragment">
-    <ul class="menu">
-        <li>
+    <div class="grid-100 mobile-grid-100 grid-parent" style="margin-bottom: 10px">
+        <div class="grid-33 mobile-grid-33 grid-parent">
             <wicket:link>
                 <a href="?thp=true&amp;step=address">
-                    <span><wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message></span>
+                    <span class="active-checkout-step"><wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message></span>
                 </a>
             </wicket:link>
-        </li>
-        <li>
+        </div>
+        <div class="grid-33 mobile-grid-33 grid-parent">
             <wicket:link>
                 <a href="?thp=true&amp;step=ship">
                     <span><wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message></span>
                 </a>
             </wicket:link>
-        </li>
-        <li>
+        </div>
+        <div class="grid-33 mobile-grid-33 grid-parent">
             <wicket:link>
                 <a href="?thp=true&amp;step=payment">
                     <span><wicket:message key="paymentStep"> [Verification and Payment]</wicket:message></span>
                 </a>
             </wicket:link>
-        </li>
-    </ul>
+        </div>
+    </div>
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+
+        <div class="grid-100 mobile-grid-100">
+            <p>
+                <span><wicket:message key="select.addr">[Address to use]</wicket:message></span>
+            </p>
+        </div>
+
+        <div class="grid-100 mobile-grid-100">
+            <p>
+
+            <form wicket:id="billingTheSameForm">
+                <input type="checkbox" wicket:id="billingTheSame">
+                <wicket:message key="billingAddrTheSame">[Billing address the same]</wicket:message>
+            </form>
+            </p>
+        </div>
+
+
+        <div class="grid-100 mobile-grid-100 grid-parent">
+            <wicket:container wicket:id="shippingAddress">
+                [Shipping address]
+            </wicket:container>
+        </div>
+        <div class="grid-100 mobile-grid-100 grid-parent">
+            <wicket:container wicket:id="billingAddress">
+                [Shipping address]
+            </wicket:container>
+        </div>
+
+
+        <div class="grid-100 mobile-grid-100">
+            <p>
+                <wicket:link>
+                    <a href="?thp=true&amp;step=ship" class="button orange forward">
+                        <span><wicket:message key="shipmentStep">[Shipping method]</wicket:message></span>
+                    </a>
+                </wicket:link>
+            </p>
+        </div>
+
+
+    </div>
+
+</wicket:fragment>
+
+
+<wicket:fragment wicket:id="threeStepNavigationFragment">
+
 </wicket:fragment>
 
 
 <wicket:fragment wicket:id="fourStepNavigationFragment">
-
-    <ul class="menu">
-        <li>
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-25 mobile-grid-25 grid-parent">
             <wicket:link>
                 <a href="?thp=true&amp;step=login">
                     <span><wicket:message key="loginStep"> [Login Or Registration]</wicket:message></span>
                 </a>
             </wicket:link>
-        </li>
-        <li>
+        </div>
+    </div>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="loginFragment">
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-50 mobile-grid-100 grid-parent">
+            <wicket:container wicket:id="registerView">
+                [New user registration]
+            </wicket:container>
+        </div>
+        <div class="grid-50 mobile-grid-100 grid-parent">
+            <wicket:container wicket:id="loginView">
+                [Login for existing user]
+            </wicket:container>
+        </div>
+    </div>
+
+</wicket:fragment>
+
+
+<wicket:fragment wicket:id="shipmentFragment">
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-33 mobile-grid-33 grid-parent" style="margin-bottom: 10px">
             <wicket:link>
                 <a href="?thp=true&amp;step=address">
                     <span><wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message></span>
                 </a>
             </wicket:link>
-        </li>
-        <li>
+        </div>
+        <div class="grid-33 mobile-grid-33 grid-parent">
             <wicket:link>
                 <a href="?thp=true&amp;step=ship">
-                    <span><wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message></span>
+                    <span class="active-checkout-step"><wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message></span>
                 </a>
             </wicket:link>
-        </li>
-        <li>
+        </div>
+        <div class="grid-33 mobile-grid-33 grid-parent">
             <wicket:link>
                 <a href="?thp=true&amp;step=payment">
                     <span><wicket:message key="paymentStep"> [Verification and Payment]</wicket:message></span>
                 </a>
             </wicket:link>
-        </li>
-    </ul>
-
-
-</wicket:fragment>
-
-<wicket:fragment wicket:id="loginFragment">
-    <div class="column grid_7">
-        <wicket:container wicket:id="registerView">
-            [New user registration]
-        </wicket:container>
-    </div>
-    <div class="column grid_7">
-        <wicket:container wicket:id="loginView">
-            [Login for existing user]
-        </wicket:container>
+        </div>
     </div>
 
-</wicket:fragment>
 
 
-
-
-
-<wicket:fragment wicket:id="shipmentFragment">
-<div class="column grid_14">
-	<wicket:container wicket:id="shipmentView">
-        [Shipping address]
-    </wicket:container>
-	
-<div class="g864" style="display:inline-block">
-			<wicket:link>
-				<a href="?thp=true&amp;step=address"  class="button gray back">
-					<span><wicket:message key="addressStep">[Address]</wicket:message></span>
-				</a>
-			</wicket:link>
-			<wicket:link>
-				<a href="?thp=true&amp;step=payment" class="button gray forward">
-					<span><wicket:message key="paymentStep">[Verification and payment]</wicket:message></span>
-				</a>
-			</wicket:link>
-            
-        </div>	
-		
-	<div class="g864" style="display:inline-block">
-		&nbsp;
-	</div>
-
-</div>
-
-    
-
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-100 mobile-grid-100 grid-parent">
+            <wicket:container wicket:id="shipmentView">
+                [Shipping address]
+            </wicket:container>
+        </div>
+        <div class="grid-100 mobile-grid-100 grid-parent">
+            <wicket:link>
+                <a href="?thp=true&amp;step=address" class="button orange back">
+                    <span><wicket:message key="addressStep">[Address]</wicket:message></span>
+                </a>
+            </wicket:link>
+            <wicket:link>
+                <a href="?thp=true&amp;step=payment" class="button orange forward">
+                    <span><wicket:message key="paymentStep">[Verification and payment]</wicket:message></span>
+                </a>
+            </wicket:link>
+        </div>
+    </div>
 </wicket:fragment>
 
 <wicket:fragment wicket:id="paymentFragment">
-    <table>
-        <tr>
-            <td>
-                <wicket:container wicket:id="orderVerificationView">
-                    [Order verification]
-                </wicket:container>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="g864 m5 menu"  style="border: solid 1px #d6d6d6;">
-                    <p>
-                        <span><wicket:message key="select.payment">[Payment details heading]</wicket:message></span>
-                    </p>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <form wicket:id="paymentOptionsForm" class="payment-options-form">
-                    <table align="center">
-                        <tr>
-                            <td colspan="5" align="left">
-                                <input wicket:id="multipleDelivery" wicket:message="title:multipleDeliveryHint"
-                                       type="checkbox">
-                                <label wicket:id="multipleDeliveryLabel">[multiple delivery]</label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="5">
-                                <span><wicket:message key="paymentGatewayLabel">[Payment method]</wicket:message></span>
-                                <select class="input-select" wicket:id="paymentGateway"/>
-                            </td>
-                        </tr>
-                    </table>
-                </form>
-            </td>
-        </tr>
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-33 mobile-grid-33 grid-parent" style="margin-bottom: 10px">
+            <wicket:link>
+                <a href="?thp=true&amp;step=address">
+                    <span><wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message></span>
+                </a>
+            </wicket:link>
+
+        </div>
+        <div class="grid-33 mobile-grid-33 grid-parent">
+            <wicket:link>
+                <a href="?thp=true&amp;step=ship">
+                    <span><wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message></span>
+                </a>
+            </wicket:link>
+        </div>
+        <div class="grid-33 mobile-grid-33 grid-parent">
+            <wicket:link>
+                <a href="?thp=true&amp;step=payment">
+                    <span class="active-checkout-step"><wicket:message key="paymentStep"> [Verification and Payment]</wicket:message></span>
+                </a>
+            </wicket:link>
+        </div>
+    </div>
+
+    <div class="grid-100 mobile-grid-100  grid-parent">
+        <wicket:container wicket:id="orderVerificationView">
+            [Order verification]
+        </wicket:container>
+    </div>
+
+    <div class="grid-100 mobile-grid-100  grid-parent">
+        <p>
+            <span class="middle-title">
+                <wicket:message key="select.payment">[Payment details heading]</wicket:message>
+            </span>
+        </p>
+    </div>
 
 
-        <tr>
-            <td>
-                <div wicket:id="dynamicPaymentForm">[dynamic payment form]</div>
-            </td>
-        </tr>
+    <div class="grid-100 mobile-grid-100  grid-parent">
+        <form wicket:id="paymentOptionsForm" class="payment-options-form">
 
-        <tr><td>&nbsp;</td></tr>
-        <tr>
-            <td>
-                <wicket:link>
-                    <a href="?thp=true&amp;step=ship"  class="button gray back">
-                        <span><wicket:message key="shipmentStep">[Shipping method]</wicket:message></span>
-                    </a>
-                </wicket:link>
-            </td>
-        </tr>
-        <tr><td>&nbsp;</td></tr>
+            <div class="grid-100 mobile-grid-100 grid-parent">
+                <input wicket:id="multipleDelivery" wicket:message="title:multipleDeliveryHint"
+                       type="checkbox">
+                <label wicket:id="multipleDeliveryLabel">[multiple delivery]</label>
+            </div>
+            <div class="grid-100 mobile-grid-100  grid-parent">
+                <span><wicket:message key="paymentGatewayLabel">[Payment method]</wicket:message></span>
+                <select class="input-select" wicket:id="paymentGateway"/>
+            </div>
 
-    </table>
+
+        </form>
+    </div>
+
+    <div class="grid-100 mobile-grid-100  grid-parent">
+        <div wicket:id="dynamicPaymentForm">[dynamic payment form]</div>
+    </div>
+
+    <div class="grid-100 mobile-grid-100  grid-parent" style="margin-top: 20px; text-align: right;">
+        <wicket:link>
+            <a href="?thp=true&amp;step=ship" class="button orange back">
+                <span><wicket:message key="shipmentStep">[Shipping method]</wicket:message></span>
+            </a>
+        </wicket:link>
+    </div>
 </wicket:fragment>
 
 

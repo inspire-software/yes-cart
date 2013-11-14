@@ -17,14 +17,20 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <span wicket:id="qtyLabel">[quantity]</span>
-    <wicket:container wicket:id="subTotal">
-        [sub total]
-    </wicket:container>
-    <br>
+
+    <span wicket:id="emptyCart">[empty cart]</span>
+
+
     <a wicket:id="cartLink">
-        <wicket:message key="cart.detail">[cart detail]</wicket:message>
+
+        <span wicket:id="qtyLabel">[quantity]</span>
+
+        <wicket:container wicket:id="subTotal">
+            [sub total]
+        </wicket:container>
+
     </a>
+
 </wicket:panel>
 </body>
 </html>

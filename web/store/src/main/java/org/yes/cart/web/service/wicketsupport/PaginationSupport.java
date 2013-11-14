@@ -44,13 +44,11 @@ public interface PaginationSupport {
      * Marks link as selected by adding css class.
      *
      * @param link sorting link to check
-     * @param cssClass class to use for "class" attribute in markup (if this is selected link)
      * @param pageParameters current page parameters
      * @param sortField sorting field
      * @param sortOrder order of sorting (asc / desc)
      */
     void markSelectedSortLink(Link link,
-                              String cssClass,
                               PageParameters pageParameters, String sortField, String sortOrder);
 
     /**
@@ -67,12 +65,10 @@ public interface PaginationSupport {
      * Marks link as selected by adding css class.
      *
      * @param link sorting link to check
-     * @param cssClass class to use for "class" attribute in markup (if this is selected link)
      * @param pageParameters current page parameters
      * @param pageIndex index to check
      */
     void markSelectedPageLink(Link link,
-                              String cssClass,
                               PageParameters pageParameters, int pageIndex);
 
     /**

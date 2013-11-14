@@ -226,6 +226,8 @@ public class CheckoutPage extends AbstractWebPage {
     }
 
 
+
+
     /**
      * Resolve content by given current step.
      *

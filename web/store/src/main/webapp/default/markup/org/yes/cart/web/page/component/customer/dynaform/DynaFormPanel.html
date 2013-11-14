@@ -18,44 +18,53 @@
 <body>
 <wicket:panel>
 
-        <form wicket:id="form">
-			<div class="g864 m5 menu"  style="border: solid 1px #d6d6d6;">
-				<p>
-					<span><wicket:message key="customerAdditional">[additional info]</wicket:message></span>
-				</p>
-			</div>
+    <form wicket:id="form">
 
-			
-			<div style="clearclear:both;" wicket:id="fields">
-			
-				<div class="g144 m5">
-					<p>
-					<span wicket:id="name">[name]</span>
-					</p>
-				</div>
-				<div class="g720 m5" wicket:id="editor">
-					<p>[editor]</p>
-				</div>
-			</div>
-			
-			<div style="clearclear:both;">
-				<div class="g144 m5">
-					<p>
-					&nbsp;
-					</p>
-				</div>
-				<div class="g720 m5">
-					<p>
-					<a wicket:id="saveLink"  class="button gray">
+        <div class="grid-100 mobile-grid-100 grid-parent" >
+            <div class="grid-50 mobile-grid-50">
+                <p>
+                    <span  class="middle-title"><wicket:message key="customerAdditional">[additional info]</wicket:message></span>
+                <hr>
+                </p>
+            </div>
+
+            <div class="grid-50 mobile-grid-50">
+                &nbsp;
+            </div>
+
+        </div>
+
+
+        <div class="grid-100 mobile-grid-100 grid-parent" wicket:id="fields">
+
+            <div class="grid-30 mobile-grid-30">
+                <p>
+                    <span wicket:id="name">[name]</span>
+                </p>
+            </div>
+            <div class="grid-70 mobile-grid-70" wicket:id="editor">
+                <p>[editor]</p>
+            </div>
+        </div>
+
+        <div class="grid-100 mobile-grid-100 grid-parent">
+            <div class="grid-30 mobile-grid-30">
+                <p>
+                    &nbsp;
+                </p>
+            </div>
+            <div class="grid-70 mobile-grid-70">
+                <p>
+                    <a wicket:id="saveLink"  class="button gray">
 						<span>
 							<wicket:message key="save">[save]</wicket:message>
 						</span>
-					</a>
-					</p>
-				</div>	
-			</div>	
-			
-        </form>
+                    </a>
+                </p>
+            </div>
+        </div>
+
+    </form>
 
 
     <wicket:fragment wicket:id="booleanEditor">

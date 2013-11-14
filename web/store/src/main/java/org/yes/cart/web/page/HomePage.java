@@ -37,6 +37,7 @@ import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.PriceProductFilter;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
+import org.yes.cart.web.page.component.product.FeaturedProducts;
 import org.yes.cart.web.page.component.product.NewArrivalProducts;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -166,6 +167,12 @@ public class HomePage extends AbstractWebPage {
         add(
                 new StandardFooter(FOOTER)
         );
+
+        addOrReplace(
+                new FeaturedProducts("featured")
+        );
+
+
 
 
         super.onBeforeRender();
