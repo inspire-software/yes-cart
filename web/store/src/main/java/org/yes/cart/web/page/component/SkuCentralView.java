@@ -41,6 +41,7 @@ import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -118,6 +119,13 @@ public class SkuCentralView extends AbstractCentralView {
      * Product accessories body container name
      */
     private final static String ACCESSORIES_BODY = "accessoriesBody";
+    
+   /**
+     * Product accessories head container name
+     */
+    private final static String VOLUME_DISCOUNT_HEAD_CONTAINER = "volumeDiscountsHeadContainer";
+    private final static String VOLUME_DISCOUNT_HEAD = "volumeDiscountsHead";
+    private final static String VOLUME_DISCOUNT_BODY_CONTAINER = "priceTiersView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
@@ -191,8 +199,6 @@ public class SkuCentralView extends AbstractCentralView {
         add(
                 new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true, true)
         ).add(
-                new PriceTierView(PRICE_TIERS_VIEW, getSkuPrices())
-        ).add(
                 new SkuListView(SKU_LIST_VIEW, product.getSku(), sku, isProduct)
         ).add(
                 new Label(SKU_CODE_LABEL, sku.getCode())
@@ -248,8 +254,44 @@ public class SkuCentralView extends AbstractCentralView {
         }
 
 
+        if (isPriceTiersPresents()) {
+
+            add(
+                    new Fragment(VOLUME_DISCOUNT_HEAD_CONTAINER, VOLUME_DISCOUNT_HEAD, this)
+            ).add(
+                    new PriceTierView(VOLUME_DISCOUNT_BODY_CONTAINER, getSkuPrices())
+            );
+
+        } else {
+
+            add(
+                    new Label(VOLUME_DISCOUNT_HEAD_CONTAINER, "")
+            ).add(
+                    new Label(VOLUME_DISCOUNT_BODY_CONTAINER, "")
+            );
+        }
+
         super.onBeforeRender();
 
+    }
+
+
+    /**
+     * Check is product has several prices in current shop currency.
+     *
+     * @return true in case if product has several prices in current shop currency.
+     */
+    private boolean isPriceTiersPresents() {
+        boolean addPriceTier;
+        final String currency = ApplicationDirector.getShoppingCart().getCurrencyCode();
+        final List<SkuPrice> skuPricesInCurrentCurrency = new ArrayList<SkuPrice>();
+        for (SkuPrice skuPrice : getSkuPrices()) {
+            if (skuPrice.getCurrency().equals(currency)) {
+                skuPricesInCurrentCurrency.add(skuPrice);
+            }
+        }
+        addPriceTier = skuPricesInCurrentCurrency.size() > 1;
+        return addPriceTier;
     }
 
     private ObjectDecorator getDecorator() {

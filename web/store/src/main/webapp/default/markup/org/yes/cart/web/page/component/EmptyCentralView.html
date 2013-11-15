@@ -15,24 +15,74 @@
   -->
 
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:head>
+    <wicket:link>
+        <script src="../../../../../../js/unslider.js"></script>
+
+
+    </wicket:link>
+    <style type="text/css">
+        .banner { position: relative; overflow: auto; }
+        .banner li { list-style: none; height: 570px }
+        .banner ul li { float: left; }
+    </style>
+</wicket:head>
 <body>
 <wicket:panel>
-    <div class="column grid_10">
-        <p align="center">
 
-            Welcome to Yes-Cart demo store.<br/>
-            <ul>
-                This start page may contains:
-                <li>Promotions</li>
-                <li>Sale information</li>
-                <li>Discounts</li>
-                <li>Loyalty program</li>
-                <li>Etc</li>
+    <div class="grid-100 mobile-grid-100 grid-parent">
+
+        <div class="banner" style="margin: 0px; padding: 0px;">
+            <ul style="margin: 0px; padding: 0px;">
+                <li>
+                    <a href="/yes-shop/category/notebooks">
+                        <wicket:link>
+                            <img src="../../../../../../image/baner1.png">
+                        </wicket:link>
+                    </a>
+                </li>
+                <li>
+                    <a href="/yes-shop/category/scanners">
+                        <wicket:link>
+                            <img src="../../../../../../image/baner2.png">
+                        </wicket:link>
+                    </a>
+                </li>
+                <li>
+                    <a href="/yes-shop/category/mice">
+                        <wicket:link>
+                            <img src="../../../../../../image/baner3.png">
+                        </wicket:link>
+                    </a>
+                </li>
+                <li>
+                    <a href="/yes-shop/category/keyboards">
+                        <wicket:link>
+                            <img src="../../../../../../image/baner4.png">
+                        </wicket:link>
+                    </a>
+                </li>
+
             </ul>
-            You can easily customise this page according to your needs.
+        </div>
+        <script>
+            $(function() {
+                $('.banner').unslider(
+                        {
+                            speed: 500,               //  The speed to animate each slide (in milliseconds)
+                            delay: 5000,              //  The delay between slide animations (in milliseconds)
+                            complete: function() {},  //  A function that gets called after every slide animation
+                            keys: true,               //  Enable keyboard (left, right) arrow shortcuts
+                            dots: true,               //  Display dot navigation
+                            fluid: true              //  Support responsive design. May break non-responsive designs
+                        }
+                );
+            });
+        </script>
 
-        </p>
     </div>
+
+
 </wicket:panel>
 </body>
 </html>
