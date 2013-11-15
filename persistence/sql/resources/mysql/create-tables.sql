@@ -902,14 +902,14 @@
         EMAIL_RECEPIENTS varchar(512) not null,
         EMAIL_CC varchar(512),
         EMAIL_BCC varchar(512),
-        TEXT_VERSION clob,
-        HTML_VERSION clob,
+        TEXT_VERSION TEXT,
+        HTML_VERSION MEDIUMTEXT,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
-        primary key (PROMOTION_ID)
+        primary key (MAIL_ID)
     );
 
 
@@ -919,13 +919,13 @@
         MAIL_ID bigint not null default 0,
         RESOURCE_ID varchar(255),
         FILENAME varchar(255),
-        PART_DATA blob,
+        PART_DATA MEDIUMTEXT,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
-        primary key (PROMOTION_ID)
+        primary key (MAILPART_ID)
     );
 
 
@@ -1345,9 +1345,9 @@
     create index PROMO_ENABLED_FROM on TPROMOTION (ENABLED_FROM);
     create index PROMO_ENABLED_TO on TPROMOTION (ENABLED_TO);
 
-
-    alter table TMAILPART         add constraint FKMAILMAILPART
+    alter table TMAILPART
+        add index FK_MAIL(MAIL_ID)  ,
+        add constraint FKMAILMAILPART
         foreign key (MAIL_ID)
-        references TMAIL
-        on delete cascade;
+        references TMAIL(MAIL_ID)
 
