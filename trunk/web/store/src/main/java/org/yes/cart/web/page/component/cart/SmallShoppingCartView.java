@@ -86,14 +86,7 @@ public class SmallShoppingCartView extends BaseComponent {
                 itemsInCart,
                 pluralForms);
 
-        add(
-                new PriceView(
-                        SUB_TOTAL_VIEW,
-                        cart.getTotal().getSubTotal(),
-                        cart.getCurrencyCode(),
-                        true
-                ).setVisible(!isCartEmpty())
-        );
+
 
         add(
                 new Label(
