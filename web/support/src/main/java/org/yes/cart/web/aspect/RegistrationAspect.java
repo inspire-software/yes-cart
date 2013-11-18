@@ -135,7 +135,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
         registrationMessage.setPathToTemplateFolder(ApplicationDirector.getCurrentMailTemplateFolder());
 
-        registrationMessage.setTemplateName(newPerson ? "customerRegistered" : "customerChangePassword");
+        registrationMessage.setTemplateName(newPerson ? "customer-registered" : "customer-change-password");
 
         registrationMessage.setShopMailFrom(null); // will be used from properties at email template
 

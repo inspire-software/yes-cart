@@ -24,6 +24,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
+import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ProductService;
@@ -122,11 +123,14 @@ public class PaymentAspect extends BaseNotificationAspect {
         map.put(StandardMessageListener.SHOP, ApplicationDirector.getCurrentShop());
         map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
 
-        map.put(StandardMessageListener.TEMPLATE_NAME, "payment");
+        final PaymentGatewayFeature feature = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel()).getPaymentGatewayFeatures();
+        if (feature.isOnlineGateway()) {
+            map.put(StandardMessageListener.TEMPLATE_NAME, "payment");
+        } else {
+            map.put(StandardMessageListener.TEMPLATE_NAME, "order-new");
+        }
 
-        map.put(StandardMessageListener.PAYMENT_GATEWAY_FEATURE,
-                paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel()).getPaymentGatewayFeatures()
-        );
+        map.put(StandardMessageListener.PAYMENT_GATEWAY_FEATURE, feature);
 
 
 
@@ -169,7 +173,7 @@ public class PaymentAspect extends BaseNotificationAspect {
         map.put(StandardMessageListener.SHOP, ApplicationDirector.getCurrentShop());
         map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
 
-        map.put(StandardMessageListener.TEMPLATE_NAME, "shipmentComplete");
+        map.put(StandardMessageListener.TEMPLATE_NAME, "shipment-сomplete");
 
 
         sendNotification(map);
