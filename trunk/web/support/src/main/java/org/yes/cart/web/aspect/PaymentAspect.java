@@ -173,7 +173,7 @@ public class PaymentAspect extends BaseNotificationAspect {
         map.put(StandardMessageListener.SHOP, ApplicationDirector.getCurrentShop());
         map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
 
-        map.put(StandardMessageListener.TEMPLATE_NAME, "shipment-сomplete");
+        map.put(StandardMessageListener.TEMPLATE_NAME, "shipment-complete");
 
 
         sendNotification(map);
