@@ -1,1 +1,0 @@
-Order $root.ordernum at $shop.name was cancelled for $customer.firstname  $customer.email
