@@ -121,10 +121,13 @@ public class LinksSupportImpl implements LinksSupport {
     /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
-    public Link newChangeLocaleLink(final String linkId, final String language, final PageParameters pageParameters) {
+    public Link newChangeLocaleLink(final String linkId, final String language, final Class<? extends Page> pageClass, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_CHANGELOCALE, language);
-        return new BookmarkablePageLink(linkId, getHomePage(), params);
+        return new BookmarkablePageLink(
+                linkId,
+                pageClass==null?getHomePage():pageClass,
+                params);
     }
 
     /** {@inheritDoc} */

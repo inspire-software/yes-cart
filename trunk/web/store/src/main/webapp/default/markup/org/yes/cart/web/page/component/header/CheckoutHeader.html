@@ -1,0 +1,71 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        &nbsp;
+    </div>
+    <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="grid-25 mobile-grid-25">
+            <p>
+                <wicket:link>
+                    <a href="HomePage.html">
+                        <wicket:link>
+                            <img src="../../../../../../../image/yes-logo.png" border="0"/>
+                        </wicket:link>
+                    </a>
+                </wicket:link>
+            </p>
+        </div>
+
+        <div class="grid-50 mobile-grid-50 grid-parent" style="text-align: right; padding-top: 15px">
+
+            <div class="grid-60 mobile-grid-50 grid-parent">
+                <wicket:container wicket:id="language">
+                    [switch language]
+                </wicket:container>
+            </div>
+
+            <div class="grid-40 mobile-grid-50 grid-parent" style="text-align: right;">
+                <wicket:container wicket:id="currency">
+                    [switch currency]
+                </wicket:container>
+            </div>
+
+        </div>
+
+
+        <div class="grid-25 mobile-grid-25" style="padding-top: 10px; text-align: right;">
+            <p align="right">
+                <wicket:container wicket:id="smallCart">
+                    [small shopping cart]
+                </wicket:container>
+            </p>
+            <p align="right">
+                <wicket:container wicket:id="logout">
+                    [logout language]
+                </wicket:container>
+            </p>
+        </div>
+
+    </div>
+
+
+</wicket:panel>
+</body>
+</html>

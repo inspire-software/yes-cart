@@ -142,10 +142,11 @@ public interface LinksSupport {
      * @param linkId wicket link component id
      * @param language language to change to
      * @param pageParameters current request parameters that will be filtered and carried over to new link
+     * @param pageClass optional current page class
      *
      * @return bookmarkable content link
      */
-    Link newChangeLocaleLink(String linkId, String language, PageParameters pageParameters);
+    Link newChangeLocaleLink(String linkId, String language, final Class<? extends Page> pageClass,  PageParameters pageParameters);
 
     /**
      * @param linkId wicket link component id

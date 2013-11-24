@@ -175,12 +175,15 @@ ul.text-links .level-4 {
 
 .active-checkout-step {
     font-weight: bold;
-    color: #000000;
+    font-size: 18px;
+    color: #f5681c;
     margin-bottom: 5px;
     display: block;
 }
 
 .checkout-step {
+    font-weight: bold;
+    font-size: 18px;
     margin-top: 4px;
     margin-bottom: 5px;
     display: block;
