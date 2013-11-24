@@ -102,6 +102,7 @@ public class Language extends BaseComponent {
                     final Link pageLink = getWicketSupportFacade().links().newChangeLocaleLink(
                             LANGUAGE_LINK,
                             languageCode,
+                            getPage().getPageClass(),
                             basePageParameters);
 
                     final Label languageLabel = new Label(LANGUAGE_NAME, languageName);
