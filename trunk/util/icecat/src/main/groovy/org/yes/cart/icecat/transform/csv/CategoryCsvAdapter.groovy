@@ -37,8 +37,8 @@ class CategoryCsvAdapter {
         StringBuilder builder = new StringBuilder();
         builder.append("parent category id;guid;category name;EN;RU;description;EN;RU;keywords;EN;RU\n");
         categoryMap.values().each {
-            //builder.append('100;"')
-            builder.append(it.parentCategoryid).append(';"')
+            builder.append('100;"')
+            //builder.append(it.parentCategoryid).append(';"')
             builder.append(it.id).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor(null))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";"')
@@ -90,6 +90,7 @@ class CategoryCsvAdapter {
             //builder.append('100;"')
 
            if (allowOutput(it.id, hierarhyRoot)) {
+               //builder.append("100").append(';"')
                builder.append(it.parentCategoryid).append(';"')
                builder.append(it.id).append('";"')
                builder.append(Util.escapeCSV(it.getNameFor(null))).append('";"')

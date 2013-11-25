@@ -47,21 +47,27 @@ class ProductsAttributesCsvAdapter {
 
         productMap.values().each {
             def pp = it;
-            pp.product.productFeatures.values().each {
-                builder.append('"')
-                builder.append(pp.Product_ID_valid).append('";"')
-                builder.append(Util.escapeCSV(pp.Prod_ID)).append('";"') // SKU
-                builder.append(Util.escapeCSV(pp.Model_Name)).append('";"')
-                builder.append(it.feature.ID).append('";"') // code (same for product attr code)
-                if (it.Value != null && it.Value != '') {
-                    builder.append(Util.escapeCSV(it.Value)).append('";"')
-                } else {
-                    builder.append(Util.escapeCSV(it.getPresentationValueFor(defLang))).append('";"')
+            try {
+                pp.product.productFeatures.values().each {
+                    builder.append('"')
+                    builder.append(pp.Product_ID_valid).append('";"')
+                    builder.append(Util.escapeCSV(pp.Prod_ID)).append('";"') // SKU
+                    builder.append(Util.escapeCSV(pp.Model_Name)).append('";"')
+                    builder.append(it.feature.ID).append('";"') // code (same for product attr code)
+                    if (it.Value != null && it.Value != '') {
+                        builder.append(Util.escapeCSV(it.Value)).append('";"')
+                    } else {
+                        builder.append(Util.escapeCSV(it.getPresentationValueFor(defLang))).append('";"')
+                    }
+                    builder.append(Util.escapeCSV(it.getPresentationValueFor('en'))).append('";"')
+                    builder.append(Util.escapeCSV(it.getPresentationValueFor('ru'))).append('"\n')
+
                 }
-                builder.append(Util.escapeCSV(it.getPresentationValueFor('en'))).append('";"')
-                builder.append(Util.escapeCSV(it.getPresentationValueFor('ru'))).append('"\n')
+            }   catch (Exception e) {
+                e.printStackTrace();
 
             }
+
         }
         new File(filename).write(builder.toString(), 'UTF-8');
 

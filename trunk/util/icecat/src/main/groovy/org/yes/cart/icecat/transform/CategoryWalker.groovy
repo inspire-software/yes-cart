@@ -173,14 +173,20 @@ class CategoryWalker {
                 String lang = langs.get(i);
                 String langId = langsids.get(i);
                 String path = it.path.get(lang);
-                String productFile = cacheFolderName + path.substring(1 + path.lastIndexOf("/"));
+                try {
+                    String productFile = cacheFolderName + path.substring(1 + path.lastIndexOf("/"));
 
-                def FileInputStream prodis = new FileInputStream(productFile);
-                def handler = new ProductHandler(categoryMap, featureMap, it, lang, langId);
-                def reader = SAXParserFactory.newInstance().newSAXParser().XMLReader
-                reader.setContentHandler(handler)
-                reader.parse(new InputSource(prodis))
-                prodis.close();
+                    def FileInputStream prodis = new FileInputStream(productFile);
+                    def handler = new ProductHandler(categoryMap, featureMap, it, lang, langId);
+                    def reader = SAXParserFactory.newInstance().newSAXParser().XMLReader
+                    reader.setContentHandler(handler)
+                    reader.parse(new InputSource(prodis))
+                    prodis.close();
+
+                }   catch ( Exception e) {
+                    e.printStackTrace();
+
+                }
             }
         }
     }
@@ -190,21 +196,26 @@ class CategoryWalker {
         def authString = "$context.login:$context.pwd".getBytes().encodeBase64().toString()
         def cacheFolder = createPictureCacheFolder();
         productMap.values().each {
-            char idx = 'a';
+            try {
+                char idx = 'a';
 
-            println "Scanning pictures for: $it.Prod_ID with title $it.product.Title"
-            // images are the same, so it really is only upto file name in one language
-            String productName = it.product.Title.get(langs.get(0)).replace("_", "-").replace(" ", "-").replace("?", "-").replace(".", "-");
-            String skuCode = it.product.Prod_id;
+                println "Scanning pictures for: $it.Prod_ID with title $it.product.Title"
+                // images are the same, so it really is only upto file name in one language
+                String productName = it.product.Title.get(langs.get(0)).replace("_", "-").replace(" ", "-").replace("?", "-").replace(".", "-");
+                String skuCode = it.product.Prod_id;
 
-            downloadProductPicture(it.product.HighPic, authString, cacheFolder, idx++, productName, skuCode);
-            it.product.productPicture.each {
+                downloadProductPicture(it.product.HighPic, authString, cacheFolder, idx++, productName, skuCode);
+                it.product.productPicture.each {
 
-                //limit to 3 pictures only, because of import size
-                if (idx != 'd') {
-                    downloadProductPicture(it, authString, cacheFolder, idx++, productName, skuCode);
+                    //limit to 3 pictures only, because of import size
+                    if (idx != 'd') {
+                        downloadProductPicture(it, authString, cacheFolder, idx++, productName, skuCode);
+                    }
+
                 }
 
+            }   catch (Exception e) {
+                e.printStackTrace();
             }
 
         }
@@ -261,9 +272,15 @@ class CategoryWalker {
                 String cacheFolderName = createCacheFolder(dirs[i])
                 String lang = langs.get(i);
                 String path = it.path.get(lang);
-                String productFile = cacheFolderName + path.substring(1 + path.lastIndexOf("/"));
-                println("file: $productFile")
-                downloadSingleProduct(lang, productFile, authString, it)
+                try {
+                    String productFile = cacheFolderName + path.substring(1 + path.lastIndexOf("/"));
+                    println("file: $productFile")
+                    downloadSingleProduct(lang, productFile, authString, it)
+                }   catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+
             }
         }
     }

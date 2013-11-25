@@ -176,6 +176,7 @@
             <column-index>12</column-index>
             <field-type>FIELD</field-type>
             <name>availability</name>
+            <value-constant>1</value-constant>
         </column-descriptor>
 
         <!--featured-->
