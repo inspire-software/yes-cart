@@ -234,13 +234,27 @@ public class ImageFilter extends AbstractFilter implements Filter {
     File getImageFile(final String original, final String resized,
                       final String width, final String height) throws IOException {
         if (resized != null) {
-            File file = new File(resized);
-            if (!file.exists()) {
+
+            final File fileResized = new File(resized);
+
+            final File fileOrig = new File(original);
+
+            boolean resizedImageOutdated = isResizedImageOutdated(fileResized, fileOrig);
+
+            if (!fileResized.exists() || resizedImageOutdated) {
+
                 imageService.resizeImage(original, resized, width, height);
+
+
             }
-            return file;
+
+            return fileResized;
         }
         return new File(original);
+    }
+
+    boolean isResizedImageOutdated(final File fileResized, final File fileOrig) {
+        return fileOrig.lastModified() > fileResized.lastModified();
     }
 
 }
