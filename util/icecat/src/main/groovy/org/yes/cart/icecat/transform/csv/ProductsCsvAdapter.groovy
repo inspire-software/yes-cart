@@ -44,19 +44,28 @@ class ProductsCsvAdapter {
         builder.append("product guid;SKU code;model;brand;product type;barcode;name;EN;RU;description;EN;RU\n");
 
         productMap.values().each {
-            builder.append('"')
-            builder.append(it.Product_ID_valid).append('";"')
-            builder.append(Util.escapeCSV(it.Prod_ID)).append('";"') // SKU
-            builder.append(Util.escapeCSV(it.Model_Name)).append('";"')
-            builder.append(Util.escapeCSV(it.product.Supplier)).append('";"') // Brand
-            builder.append(Util.escapeCSV(it.categories.values().iterator().next().getNameFor(null))).append('";"') // Type is same as prime category
-            builder.append(it.product.EANCode == null ? '' : Util.escapeCSV(it.product.EANCode)).append('";"')
-            builder.append(Util.escapeCSV(it.product.getNameFor(this.defLang))).append('";"')
-            builder.append(Util.escapeCSV(it.product.getNameFor('en'))).append('";"')
-            builder.append(Util.escapeCSV(it.product.getNameFor('ru'))).append('";"')
-            builder.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor(this.defLang))).append('";"')
-            builder.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('en'))).append('";"')
-            builder.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('ru'))).append('"\n')
+            try {
+                StringBuilder builderTmp = new StringBuilder();
+                builderTmp.append('"')
+                builderTmp.append(it.Product_ID_valid).append('";"')
+                builderTmp.append(Util.escapeCSV(it.Prod_ID)).append('";"') // SKU
+                builderTmp.append(Util.escapeCSV(it.Model_Name)).append('";"')
+                builderTmp.append(Util.escapeCSV(it.product.Supplier)).append('";"') // Brand
+                builderTmp.append(Util.escapeCSV(it.categories.values().iterator().next().getNameFor(null))).append('";"') // Type is same as prime category
+                builderTmp.append(it.product.EANCode == null ? '' : Util.escapeCSV(it.product.EANCode)).append('";"')
+                builderTmp.append(Util.escapeCSV(it.product.getNameFor(this.defLang))).append('";"')
+                builderTmp.append(Util.escapeCSV(it.product.getNameFor('en'))).append('";"')
+                builderTmp.append(Util.escapeCSV(it.product.getNameFor('ru'))).append('";"')
+                builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor(this.defLang))).append('";"')
+                builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('en'))).append('";"')
+                builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('ru'))).append('"\n')
+                builder.append(builderTmp.toString());
+
+            }   catch (Exception e){
+                e.printStackTrace();
+
+            }
+
         }
         new File(filename).write(builder.toString(), 'UTF-8');
 
