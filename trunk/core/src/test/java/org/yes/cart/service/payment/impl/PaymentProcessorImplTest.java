@@ -62,6 +62,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     private CustomerService customerService;
     private ShopService shopService;
     private OrderStateManager orderStateManager;
+    private CarrierSlaService carrierSlaService;
 
     private WarehouseService warehouseService;
     private SkuWarehouseService skuWarehouseService;
@@ -76,6 +77,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         orderStateManager = (OrderStateManager) ctx().getBean(ServiceSpringKeys.ORDER_STATE_MANAGER);
+        carrierSlaService = (CarrierSlaService) ctx().getBean(ServiceSpringKeys.CARRIER_SLA_SERVICE);
 
         warehouseService = (WarehouseService) ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
         skuWarehouseService = (SkuWarehouseService) ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
@@ -85,7 +87,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     }
 
     /**
-     * Test, to prove, that one order with one devivery produce one AUTH operation
+     * Test, to prove, that one order with one delivery produce one AUTH operation
      *
      * @throws Exception in case of errors
      */
@@ -123,7 +125,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     }
 
     /**
-     * Test, to prove, that one order with one devivery produce one AUTH operation
+     * Test, to prove, that one order with one delivery produce one AUTH operation
      *
      * @throws Exception in case of errors
      */
@@ -194,7 +196,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
 
     /**
      * Test, to prove, that one order with two shipments produce one AUTH operation with failed status
-     * in case of erros on payment gateway.
+     * in case of errors on payment gateway.
      *
      * @throws Exception in case of errors
      */
@@ -313,6 +315,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         BigDecimal amountForTwoPayments;
         Customer customer = createCustomer();
         PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+        CarrierSla carrier = carrierSlaService.findById(1L); // carrier set by shopping cart
         CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(customer.getEmail()), false); //multiple delivery
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         CustomerOrderDelivery delivery0 = iter.next();
@@ -337,7 +340,8 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         } finally {
             paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().setSupportAuthorizePerShipment(true);
         }
-        assertEquals(amountForOnePayment, amountForTwoPayments);
+        // extra delivery adds extra shipping charge
+        assertEquals(amountForOnePayment.add(carrier.getPrice()), amountForTwoPayments);
     }
 
 
@@ -523,7 +527,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
 
     /**
      * Test to prove, that only one shopper can buy product with standard availability
-     * in case of concurrent shopping. The rest of shoppers get the exceptins.
+     * in case of concurrent shopping. The rest of shoppers get the exceptions.
      */
     @Test
     public void testMultipleShoppersOneItem() {
@@ -662,7 +666,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
 
 
     /**
-     * Bot sku with standard availability , but one of the has not qty on warehouse
+     * Both sku with standard availability , but one of the has not qty on warehouse
      *
      * @return cart
      */

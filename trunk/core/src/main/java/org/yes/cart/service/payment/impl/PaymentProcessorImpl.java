@@ -36,6 +36,7 @@ import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -162,7 +163,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         }
         throw new RuntimeException(
                 MessageFormat.format(
-                        "Payment gateway {0}  must suports authorize and/ authorize capture operations",
+                        "Payment gateway {0}  must supports authorize and/ authorize capture operations",
                         getPaymentGateway().getLabel()
                 )
         );
@@ -171,11 +172,11 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
     /**
      * Check is reverse auth operation available for given auth op.
-     * Auth can be reversed in case if op has not other syccessful operation.
+     * Auth can be reversed in case if op has not other successful operation.
      *
      * @param authToReverce order payment to check
      * @param checkRevAuth  set set of all operations with ok status.
-     * @return true if revrse operation can be performed.
+     * @return true if reverse operation can be performed.
      */
     boolean canPerformReverseAuth(final CustomerOrderPayment authToReverce, final List<CustomerOrderPayment> checkRevAuth) {
         final String shipmentNo = authToReverce.getOrderShipment();
@@ -192,7 +193,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
     /**
      * Reverse authorized payments. This can be when one of the payments from whole set is failed.
-     * Revese authorization will applyed to authorazed payments only
+     * Reverse authorization will applied to authorized payments only
      *
      * @param orderNum order with some authorized payments
      */
@@ -219,7 +220,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
                     String paymentResult = null;
                     try {
-                        payment = getPaymentGateway().reverseAuthorization(payment); //pass "original" to perform reverse autghorization.
+                        payment = getPaymentGateway().reverseAuthorization(payment); //pass "original" to perform reverse authorization.
                         paymentResult = payment.getPaymentProcessorResult();
                     } catch (Throwable th) {
                         paymentResult = Payment.PAYMENT_STATUS_FAILED;
@@ -240,7 +241,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     }
 
     /**
-     * Particular shimment is complete. Funds can be captured.
+     * Particular shipment is complete. Funds can be captured.
      * In case of multiple delivery and single payment, capture on last delivery.
      *
      * @param order               order
@@ -365,7 +366,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
             return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
         }
-        ShopCodeContext.getLog(this).warn("Can not payment cancelation on canceled order  {}",
+        ShopCodeContext.getLog(this).warn("Can not payment cancellation on canceled order  {}",
                 order.getOrdernum()
         );
         return Payment.PAYMENT_STATUS_FAILED;
@@ -377,7 +378,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      *
      * @param order                order
      * @param transactionOperation operation in term of payment processor
-     * @param forceSinglePaymentIn flag is true for authCapture operation, when paymeng gateway not supports several payments per
+     * @param forceSinglePaymentIn flag is true for authCapture operation, when payment gateway not supports several payments per
      *                             order
      * @return list of  payments with details
      */
@@ -399,7 +400,6 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         final List<Payment> rez = new ArrayList<Payment>();
         if (forceSinglePayment || !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment()) {
-            //TODO: YC-145 remove single payment per multiple delivery
             Payment payment = (Payment) SerializationUtils.clone(templatePayment);
             for (CustomerOrderDelivery delivery : order.getDelivery()) {
                 fillPayment(order, delivery, payment, true);
@@ -440,7 +440,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     }
 
     /**
-     * Calculate delivery amount according to shipment sla cost and items in patricular delivery.
+     * Calculate delivery amount according to shipment sla cost and items in particular delivery.
      *
      * @param order    order
      * @param delivery delivery
@@ -449,11 +449,36 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     private void fillPaymentAmount(final CustomerOrder order,
                                    final CustomerOrderDelivery delivery,
                                    final Payment payment) {
-        //TODO: YC-145 more sophisticated, include discount and free shipping per one and multiple delivery
-        //TODO: YC-145 need calculate at shopping cart !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         BigDecimal rez = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+        PaymentLine shipmentLine = null;
         for (PaymentLine paymentLine : payment.getOrderItems()) {
-            rez = rez.add(paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+            if (paymentLine.isShipment()) {
+                shipmentLine = paymentLine;
+            } else {
+                // unit price already includes item level promotions
+                rez = rez.add(paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+            }
+        }
+        if (order.isPromoApplied()) {
+            // work out the percentage of order level promotion per delivery
+
+            // work out the real sub total using item promotional prices
+            // DO NOT use the order.getListPrice() as this is the list price in catalog and we calculate
+            // promotions against sale price
+            BigDecimal orderTotalList = BigDecimal.ZERO;
+            for (final CustomerOrderDet detail : order.getOrderDetail()) {
+                orderTotalList = orderTotalList.add(detail.getQty().multiply(detail.getPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+            }
+
+            final BigDecimal orderTotal = order.getPrice();
+            // take the list price (sub total of items using list price)
+            final BigDecimal discount = orderTotalList.subtract(orderTotal).divide(orderTotalList, 10, RoundingMode.HALF_UP);
+            // scale delivery items total in accordance with order level discount percentage
+            rez = rez.multiply(BigDecimal.ONE.subtract(discount)).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        }
+        if (shipmentLine != null) {
+            // shipping price already includes shipping level promotions
+            rez = rez.add(shipmentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         }
         payment.setPaymentAmount(rez);
         payment.setOrderCurrency(order.getCurrency());
@@ -546,7 +571,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     }
 
     /**
-     * Is all shipments were compilted and given the last one, that completed.
+     * Is all shipments were completed and given the last one, that completed.
      *
      * @param order order
      * @return true in case if all shipments,
