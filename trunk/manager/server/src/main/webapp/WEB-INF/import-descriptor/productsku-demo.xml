@@ -27,7 +27,7 @@
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>productskunames(.*).csv(.*)</file-name-mask>
+        <file-name-mask>productnames(.*).csv(.*)</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
