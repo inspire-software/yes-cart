@@ -902,7 +902,7 @@
         EMAIL_RECEPIENTS varchar(512) not null,
         EMAIL_CC varchar(512),
         EMAIL_BCC varchar(512),
-        TEXT_VERSION TEXT,
+        TEXT_VERSION MEDIUMTEXT,
         HTML_VERSION MEDIUMTEXT,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
