@@ -52,6 +52,13 @@ class CategoryWalker {
     void collectData() {
 
         println("Parsing categories...")
+
+
+
+        def path =  "export/freexml.int/refs.xml";
+
+        loadFile(path);
+
         def FileInputStream refs = new FileInputStream("$context.dataDirectory/export/freexml.int/refs.xml");
         def handler = new CategoryHandler(context.categories, context.langId, context.langNames)
         def reader = SAXParserFactory.newInstance().newSAXParser().XMLReader
@@ -76,6 +83,7 @@ class CategoryWalker {
 
         def i = 0;
         for (String dir : Arrays.asList(context.productDir.split(','))) {
+            loadFile("export/freexml.int/$dir/index.html");
             println("index file: $context.dataDirectory/export/freexml.int/$dir/index.html")
             def indexes = new FileInputStream("$context.dataDirectory/export/freexml.int/$dir/index.html");
             productPointerHandler.lang = context.langNames.split(',')[i];
@@ -147,6 +155,24 @@ class CategoryWalker {
 
         println("All done...")
 
+    }
+
+    private void loadFile(String path) {
+        def File refsFile = new File("$context.dataDirectory/$path");
+        if (!refsFile.exists()) {
+
+            def authString = "$context.login:$context.pwd".getBytes().encodeBase64().toString();
+
+            println("Loading $context.url$path into " + refsFile.absolutePath);
+            def conn = "$context.url$path".toURL().openConnection();
+            new File(refsFile.getParent()).mkdirs();
+            refsFile.createNewFile();
+            def fos = new FileOutputStream(refsFile);
+
+            conn.setRequestProperty("Authorization", "Basic ${authString}");
+            fos << conn.getInputStream();
+
+        }
     }
 
 
