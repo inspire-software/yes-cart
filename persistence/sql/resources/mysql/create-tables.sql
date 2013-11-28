@@ -919,7 +919,7 @@
         MAIL_ID bigint not null default 0,
         RESOURCE_ID varchar(255),
         FILENAME varchar(255),
-        PART_DATA MEDIUMTEXT,
+        PART_DATA blob,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -1349,5 +1349,5 @@
         add index FK_MAIL(MAIL_ID)  ,
         add constraint FKMAILMAILPART
         foreign key (MAIL_ID)
-        references TMAIL(MAIL_ID)
+        references TMAIL(MAIL_ID);
 
