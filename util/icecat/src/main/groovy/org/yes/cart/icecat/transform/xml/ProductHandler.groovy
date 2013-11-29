@@ -93,7 +93,7 @@ class ProductHandler extends DefaultHandler {
             product.Pic500x500Height = attributes.getValue("Pic500x500Height");
             product.Pic500x500Size = attributes.getValue("Pic500x500Size");
             product.Pic500x500Width = attributes.getValue("Pic500x500Width");
-            product.Prod_id = attributes.getValue("Prod_id").replace("_", "-").replace(" ", "-").replace(".", "-").replace("?", "-"); //sku code
+            product.Prod_id = Util.normalize(attributes.getValue("Prod_id")); //sku code
             product.Quality = attributes.getValue("Quality");
             product.ReleaseDate = attributes.getValue("ReleaseDate");
             product.ThumbPic = attributes.getValue("ThumbPic");
