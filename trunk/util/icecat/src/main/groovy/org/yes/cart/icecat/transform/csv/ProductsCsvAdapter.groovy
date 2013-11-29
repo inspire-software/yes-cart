@@ -48,6 +48,7 @@ class ProductsCsvAdapter {
                 StringBuilder builderTmp = new StringBuilder();
                 builderTmp.append('"')
                 builderTmp.append(it.Product_ID_valid).append('";"')
+                it.Prod_ID = Util.normalize(it.Prod_ID);
                 builderTmp.append(Util.escapeCSV(it.Prod_ID)).append('";"') // SKU
                 builderTmp.append(Util.escapeCSV(it.Model_Name)).append('";"')
                 builderTmp.append(Util.escapeCSV(it.product.Supplier)).append('";"') // Brand

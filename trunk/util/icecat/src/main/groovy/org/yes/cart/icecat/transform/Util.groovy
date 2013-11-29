@@ -35,6 +35,14 @@ class Util {
     }
 
     /**
+     * @param raw text
+     * @return string without ; or ".
+     */
+    public static String normalize(String raw) {
+        return raw.replace("_", "-").replace(":", "az").replace(" ", "-").replace("?", "-").replace(".", "-");
+    }
+
+    /**
      * set localised value to a property if it is applicable.
      * So if:
      *   prop = name
