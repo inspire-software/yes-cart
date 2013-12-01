@@ -190,9 +190,12 @@ class ProductHandler extends DefaultHandler {
         if("Product" == qName  && !inProductRelated) {
 
             Category c = categoryMap.get(product.CategoryID);
-            if (c != null) {
-                c.product.put(product.ID, product);
-                println("Added product " + product.Prod_id + "[" + product.ID + "] with " + product.productFeatures.size() +  " features to category " + c.getNameFor('def'))
+            if (c != null ) {
+                if (!product.getNameFor("en").isEmpty()) {
+                    c.product.put(product.ID, product);
+                    println("Added product " + product.Prod_id + "[" + product.ID + "] with " + product.productFeatures.size() +  " features to category " + c.getNameFor('def'))
+
+                }
             }
 
         }

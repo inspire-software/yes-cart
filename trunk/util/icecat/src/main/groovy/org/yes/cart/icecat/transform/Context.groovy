@@ -60,7 +60,7 @@ class Context  {
 
     int limitPerBrand = 50;
 
-    long mindata =  20120101000000L;
+    long mindata =  20110101000000L;
 
     int productsPerCategoryLimit = 120;
 
