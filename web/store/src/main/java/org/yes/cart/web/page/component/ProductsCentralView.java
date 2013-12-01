@@ -62,6 +62,7 @@ public class ProductsCentralView extends AbstractCentralView {
      * Name of product view.
      */
     private static final String PAGINATOR = "paginator";
+    private static final String PAGINATOR2 = "paginator2";
     /**
      * Name of product view.
      */
@@ -160,6 +161,7 @@ public class ProductsCentralView extends AbstractCentralView {
 
         add(new ProductSorter(SORTER));
         add(new URLPagingNavigator(PAGINATOR, productDataView, getPage().getPageParameters()));
+        add(new URLPagingNavigator(PAGINATOR2, productDataView, getPage().getPageParameters()));
         add(new ProductPerPageListView(ITEMS_PER_PAGE_LIST, itemsPerPageValues, getPage().getPageParameters()));
         add(productDataView);
 

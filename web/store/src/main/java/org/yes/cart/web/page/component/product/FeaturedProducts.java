@@ -123,11 +123,11 @@ public class FeaturedProducts extends AbstractProductSearchResultList {
                 try {
                     return Integer.valueOf(av.getVal());
                 } catch (Exception ex) {
-                    return 5;
+                    return 7;
                 }
             }
         }
-        return 5;
+        return 15;
     }
 
 

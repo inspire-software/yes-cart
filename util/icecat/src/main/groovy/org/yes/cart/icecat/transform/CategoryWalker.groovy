@@ -225,10 +225,21 @@ class CategoryWalker {
             try {
                 char idx = 'a';
 
-                println "Scanning pictures for: $it.Prod_ID with title $it.product.Title"
+
                 // images are the same, so it really is only upto file name in one language
-                String productName = it.product.Title.get(langs.get(0)).replace("_", "-").replace(" ", "-").replace("?", "-").replace(".", "-");
+                String productName
+                if (it.product.Title == null || it.product.Title.get(langs.get(0)) == null || it.product.Title.get(langs.get(0)).length() ==0) {
+                    productName = "product";
+
+                } else {
+                    productName = it.product.Title.get(langs.get(0)).replace("_", "-").replace(" ", "-").replace("?", "-").replace(".", "-");
+                }
+
+                println "Scanning pictures for: $it.Prod_ID with title $productName"
+
                 String skuCode = it.product.Prod_id;
+
+
 
                 downloadProductPicture(it.product.HighPic, authString, cacheFolder, idx++, productName, skuCode);
                 it.product.productPicture.each {
@@ -255,6 +266,7 @@ class CategoryWalker {
 
             if (!(new File(productFile).exists())) {
                 try {
+                    //Thread.sleep(3000);
                     URLConnection conn = "$url".toURL().openConnection();
                     conn.setRequestProperty("Authorization", "Basic ${authString}")
                     InputStream input = conn.getInputStream()
@@ -299,9 +311,11 @@ class CategoryWalker {
                 String lang = langs.get(i);
                 String path = it.path.get(lang);
                 try {
-                    String productFile = cacheFolderName + path.substring(1 + path.lastIndexOf("/"));
-                    println("file: $productFile")
-                    downloadSingleProduct(lang, productFile, authString, it)
+                    if (path!= null) {
+                        String productFile = cacheFolderName + path.substring(1 + path.lastIndexOf("/"));
+                        println("file: $productFile")
+                        downloadSingleProduct(lang, productFile, authString, it)
+                    }
                 }   catch (Exception e) {
                     e.printStackTrace();
 
