@@ -36,6 +36,8 @@ import java.util.List;
  */
 public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavigationSupportImpl implements AttributeFilteredNavigationSupport {
 
+    private final AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
+
     public AttributeFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
                                                   final ProductService productService) {
         super(luceneQueryFactory, productService);
@@ -50,13 +52,13 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
                                                                        final String locale,
                                                                        final long productTypeId) {
 
-        final List<FilteredNavigationRecord> allNavigationRecords = getProductService().getDistinctAttributeValues(locale, productTypeId);
-
-        final AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
+        final List<FilteredNavigationRecord> allNavigationRecordsTemplates = getProductService().getDistinctAttributeValues(locale, productTypeId);
 
         final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
 
-        for (FilteredNavigationRecord record : allNavigationRecords) {
+        for (final FilteredNavigationRecord recordTemplate : allNavigationRecordsTemplates) {
+
+            final FilteredNavigationRecord record = recordTemplate.clone();
 
             if (!isAttributeAlreadyFiltered(query, ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD + ":" + record.getCode())) {
 

@@ -35,6 +35,8 @@ import java.util.List;
  */
 public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigationSupportImpl implements BrandFilteredNavigationSupport {
 
+    private final BrandSearchQueryBuilder queryBuilder = new BrandSearchQueryBuilder();
+
     public BrandFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
                                               final ProductService productService) {
         super(luceneQueryFactory, productService);
@@ -49,16 +51,16 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
                                                                        final String locale,
                                                                        final String recordName) {
 
-        final List<FilteredNavigationRecord> allNavigationRecords = getProductService().getDistinctBrands(locale, categories);
-
         final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
 
         if (!isAttributeAlreadyFiltered(query, ProductSearchQueryBuilder.BRAND_FIELD)) {
 
-            final BrandSearchQueryBuilder queryBuilder = new BrandSearchQueryBuilder();
+            final List<FilteredNavigationRecord> allNavigationRecordsTemplates = getProductService().getDistinctBrands(locale, categories);
 
-            for (FilteredNavigationRecord record : allNavigationRecords) {
-                BooleanQuery candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
+            for (final FilteredNavigationRecord recordTemplate : allNavigationRecordsTemplates) {
+
+                final FilteredNavigationRecord record = recordTemplate.clone();
+                final BooleanQuery candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
                         query,
                         queryBuilder.createQuery(categories, record.getValue())
                 );
