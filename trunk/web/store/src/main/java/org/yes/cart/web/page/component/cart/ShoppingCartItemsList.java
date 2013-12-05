@@ -132,11 +132,11 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
 
         cartItemListItem.add(
-                createAddOneSkuLink(skuCode)
+                createAddOneSkuLink(skuCode).setVisible(!cartItem.isGift())
         ).add(
-                createRemoveAllSkuLink(skuCode)
+                createRemoveAllSkuLink(skuCode).setVisible(!cartItem.isGift())
         ).add(
-                createRemoveOneSkuLink(skuCode)
+                createRemoveOneSkuLink(skuCode).setVisible(!cartItem.isGift())
         ).add(
                 new Label(SKU_NUM_LABEL, skuCode)
         ).add(
@@ -153,9 +153,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                 new Model<BigDecimal>(cartItem.getQty()));
 
         cartItemListItem.add(
-                quantity
+                quantity.setVisible(!cartItem.isGift())
         ).add(
-                createAddSeveralSkuButton(skuCode, quantity)
+                createAddSeveralSkuButton(skuCode, quantity).setVisible(!cartItem.isGift())
         );
 
 
