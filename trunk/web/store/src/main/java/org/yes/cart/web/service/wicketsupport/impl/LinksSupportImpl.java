@@ -33,8 +33,6 @@ import org.yes.cart.web.util.WicketUtil;
  */
 public class LinksSupportImpl implements LinksSupport {
 
-    private final ThreadLocal<Class<Page>> currentHomePage = new ThreadLocal<Class<Page>>();
-
     /** {@inheritDoc} */
     @Override
     public PageParameters getFilteredCurrentParameters(final PageParameters pageParameters) {
@@ -144,10 +142,7 @@ public class LinksSupportImpl implements LinksSupport {
 
     @SuppressWarnings("unchecked")
     private Class<Page> getHomePage() {
-        if (currentHomePage.get() == null) {
-            currentHomePage.set((Class<Page>) Application.get().getHomePage());
-        }
-        return currentHomePage.get();
+        return (Class<Page>) Application.get().getHomePage();
     }
 
     /*
