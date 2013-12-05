@@ -25,7 +25,7 @@ import org.yes.cart.domain.entity.Rankable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface FilteredNavigationRecord extends Rankable {
+public interface FilteredNavigationRecord extends Rankable, Cloneable {
 
     /**
      * Get attribute code.
@@ -142,5 +142,13 @@ public interface FilteredNavigationRecord extends Rankable {
      * @param type type of navigation record
      */
     void setType(final String type);
+
+    /**
+     * Filter nav record are cached but we want to set quantity counts
+     * therefore we need a copy of these to make sure we are not altering cached objects.
+     *
+     * @return clone
+     */
+    FilteredNavigationRecord clone();
 
 }

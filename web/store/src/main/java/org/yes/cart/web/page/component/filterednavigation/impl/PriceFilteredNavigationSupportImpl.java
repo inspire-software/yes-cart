@@ -50,6 +50,8 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
     private final PriceService priceService;
     private final PriceNavigation priceNavigation;
 
+    private final PriceSearchQueryBuilderImpl queryBuilder = new PriceSearchQueryBuilderImpl();
+
     public PriceFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
                                               final ProductService productService,
                                               final CategoryService categoryService,
@@ -75,30 +77,29 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
                                                                        final String locale,
                                                                        final String recordName) {
 
-        if (categoryId <= 0) {
-            return Collections.emptyList();
-        }
-        final Category category = categoryService.getById(categoryId);
-        if (category == null) {
-            return Collections.emptyList();
-        }
-        final PriceTierTree priceTierTree = category.getNavigationByPriceTree();
-        final boolean filteredNavigationByPriceAllowed = (category.getNavigationByPrice() == null || priceTierTree == null)
-                ? false : category.getNavigationByPrice();
+        final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
+        if (!isAttributeAlreadyFiltered(query, ProductSearchQueryBuilder.PRODUCT_PRICE_AMOUNT)) {
 
-        if (!filteredNavigationByPriceAllowed) {
-            return Collections.emptyList();
-        }
+            if (categoryId <= 0) {
+                return Collections.emptyList();
+            }
+            final Category category = categoryService.getById(categoryId);
+            if (category == null) {
+                return Collections.emptyList();
+            }
+            final PriceTierTree priceTierTree = category.getNavigationByPriceTree();
+            final boolean filteredNavigationByPriceAllowed = (category.getNavigationByPrice() == null || priceTierTree == null)
+                    ? false : category.getNavigationByPrice();
 
-        final Shop shop = shopService.getShopByCode(shopCode);
-        final List<FilteredNavigationRecord> allNavigationRecords = priceService.getPriceNavigationRecords(
+            if (!filteredNavigationByPriceAllowed) {
+                return Collections.emptyList();
+            }
+
+            final Shop shop = shopService.getShopByCode(shopCode);
+            final List<FilteredNavigationRecord> allNavigationRecords = priceService.getPriceNavigationRecords(
                     priceTierTree,
                     currency,
                     shop);
-
-        final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
-        if (!isAttributeAlreadyFiltered(query, ProductSearchQueryBuilder.PRODUCT_PRICE_AMOUNT)) {
-            PriceSearchQueryBuilderImpl queryBuilder = new PriceSearchQueryBuilderImpl();
 
             for (FilteredNavigationRecord record : allNavigationRecords) {
                 Pair<String, Pair<BigDecimal, BigDecimal>> priceNavigationRecord = priceNavigation.decomposePriceRequestParams(record.getValue());

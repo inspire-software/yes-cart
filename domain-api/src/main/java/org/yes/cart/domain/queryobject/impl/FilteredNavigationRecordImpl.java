@@ -200,6 +200,18 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public FilteredNavigationRecord clone() {
+        try {
+            return (FilteredNavigationRecord) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
+
     /** {@inheritDoc} */
     @Override
     public boolean equals(Object o) {
