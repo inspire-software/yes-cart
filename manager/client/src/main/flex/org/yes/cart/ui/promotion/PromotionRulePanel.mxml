@@ -100,12 +100,10 @@
 
             try {
 
-                if (entityIsNew) {
-                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "eligibilityCondition", eligibilityCondition, "text"));
-                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "promoActionContext", promoActionContext, "text"));
-                }
                 propertyWatchers.addItem(BindingUtils.bindProperty(eligibilityCondition, "text", _promotion, "eligibilityCondition"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(promoActionContext, "text", _promotion, "promoActionContext"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "eligibilityCondition", eligibilityCondition, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "promoActionContext", promoActionContext, "text"));
 
             } catch(e:Error) {
 

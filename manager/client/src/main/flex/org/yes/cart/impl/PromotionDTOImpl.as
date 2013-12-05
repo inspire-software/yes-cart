@@ -64,6 +64,8 @@ public class PromotionDTOImpl {
 
 
     public function PromotionDTOImpl() {
+        rank = 0;
+        enabled = false;
     }
 }
 }

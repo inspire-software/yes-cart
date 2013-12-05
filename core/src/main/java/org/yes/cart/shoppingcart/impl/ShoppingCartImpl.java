@@ -88,7 +88,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         items.clear();
         gifts.clear();
         orderInfo = null;
-        total = null;
+        total = new TotalImpl();
         modifiedTimestamp = System.currentTimeMillis();
     }
 

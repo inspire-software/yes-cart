@@ -191,7 +191,7 @@
             promotionDTOImpl.code = resourceManager.getString('PromotionManagementPanel', 'newPromo');
             promotionSelected = true;
 
-            initTabs(TAB_SUMMARY_IDX);
+            initTabs(promotionTabNavigator.selectedIndex);
         }
 
 
