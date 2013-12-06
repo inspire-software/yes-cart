@@ -22,6 +22,7 @@ import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.yes.cart.constants.AttributeGroupNames;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.adapter.impl.EntityFactoryToBeanFactoryAdaptor;
@@ -272,6 +273,12 @@ public class DtoProductSkuServiceImpl
         );
 
         ptList.addAll(images);
+
+        final List<AttributeDTO> mandatory = dtoAttributeService.findAvailableAttributesByGroupCodeStartsWith(
+                AttributeGroupNames.PRODUCT, AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX
+        );
+
+        ptList.addAll(mandatory);
 
 
         final List<AttrValueProductSkuDTO> full = new ArrayList<AttrValueProductSkuDTO>(ptList.size());

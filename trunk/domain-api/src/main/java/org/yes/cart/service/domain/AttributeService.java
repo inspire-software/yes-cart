@@ -105,12 +105,21 @@ public interface AttributeService extends GenericService<Attribute> {
     List<Attribute> getAvailableAttributesByProductTypeId(long productTypeId);
 
     /**
-     * Get the list of image attributes , that belong to product type.
+     * Get the list of image attributes , that belong to group code.
      *
      * @param attributeGroupCode     see AttributeGroup#code
      * @return list of attributes
      */
     List<Attribute> getAvailableImageAttributesByGroupCode(String attributeGroupCode);
+
+    /**
+     * Get the list of attributes , that belong to group code and start with given prefix.
+     *
+     * @param attributeGroupCode     see AttributeGroup#code
+     * @param codePrefix             see Attribute#code
+     * @return list of attributes
+     */
+    List<Attribute> getAvailableAttributesByGroupCodeStartsWith(String attributeGroupCode, String codePrefix);
 
 
     /**

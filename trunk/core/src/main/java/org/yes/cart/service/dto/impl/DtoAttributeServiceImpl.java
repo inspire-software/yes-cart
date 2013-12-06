@@ -132,6 +132,17 @@ public class DtoAttributeServiceImpl
     }
 
     /** {@inheritDoc}  */
+    public List<AttributeDTO> findAvailableAttributesByGroupCodeStartsWith(
+            final String attributeGroupCode,
+            final String codePrefix)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Attribute> attributes = ((AttributeService)service).getAvailableAttributesByGroupCodeStartsWith(attributeGroupCode, codePrefix);
+        final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attributes.size());
+        fillDTOs(attributes, attributesDTO);
+        return attributesDTO;
+    }
+
+    /** {@inheritDoc}  */
     public List<AttributeDTO> findAttributesWithMultipleValues(
             final String attributeGroupCode) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Attribute> attrs = ((AttributeService)service).findAttributesWithMultipleValues(attributeGroupCode);

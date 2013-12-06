@@ -93,6 +93,9 @@
     <cache name="attributeService-availableImageAttributesByGroupCode"      maxElementsInMemory="20" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="attributeService-availableAttributesByGroupCodeStartsWith"      maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
     <cache name="attributeService-allAttributeCodes"      maxElementsInMemory="1" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
