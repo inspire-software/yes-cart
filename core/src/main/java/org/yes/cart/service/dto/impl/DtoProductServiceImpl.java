@@ -24,6 +24,7 @@ import org.apache.commons.collections.Predicate;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.yes.cart.constants.AttributeGroupNames;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
@@ -315,6 +316,12 @@ public class DtoProductServiceImpl
         );
 
         ptList.addAll(images);
+
+        final List<AttributeDTO> mandatory = dtoAttributeService.findAvailableAttributesByGroupCodeStartsWith(
+                AttributeGroupNames.PRODUCT, AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX
+        );
+
+        ptList.addAll(mandatory);
 
         final List<AttrValueProductDTO> full = new ArrayList<AttrValueProductDTO>(ptList.size());
         for (int i = 0; i < ptList.size(); i++) {

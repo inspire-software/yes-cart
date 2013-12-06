@@ -2464,6 +2464,15 @@
        ]]>
     </query>
 
+    <query name="PRODUCTS.ATTRIBUTE.BY.GROUP.CODE.LIKE.CODE">
+          <![CDATA[
+       select attr
+       from  AttributeEntity attr
+            where attr.attributeGroup.code = ?1 and attr.code like ?2
+            order by attr.code
+       ]]>
+    </query>
+
 
     <query name="PRODUCT.ATTR.VALUE">
         <![CDATA[

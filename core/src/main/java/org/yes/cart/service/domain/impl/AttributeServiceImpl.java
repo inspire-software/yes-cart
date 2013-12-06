@@ -116,6 +116,14 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "attributeService-availableAttributesByGroupCodeStartsWith")
+    public List<Attribute> getAvailableAttributesByGroupCodeStartsWith(final String attributeGroupCode, final String codePrefix) {
+        return getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.GROUP.CODE.LIKE.CODE", attributeGroupCode, codePrefix + "%");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Cacheable(value = "attributeService-allAttributeCodes")
     public Set<String> getAllAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.UNIQUE");
@@ -193,6 +201,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /** {@inheritDoc} */
     @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
             "attributeService-availableImageAttributesByGroupCode",
+            "attributeService-availableAttributesByGroupCodeStartsWith",
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
@@ -206,6 +215,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /** {@inheritDoc} */
     @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
             "attributeService-availableImageAttributesByGroupCode",
+            "attributeService-availableAttributesByGroupCodeStartsWith",
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
@@ -219,6 +229,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /** {@inheritDoc} */
     @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
             "attributeService-availableImageAttributesByGroupCode",
+            "attributeService-availableAttributesByGroupCodeStartsWith",
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",

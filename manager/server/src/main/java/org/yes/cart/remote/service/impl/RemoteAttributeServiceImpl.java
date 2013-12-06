@@ -79,6 +79,13 @@ public class RemoteAttributeServiceImpl
     /**
      * {@inheritDoc}
      */
+    public List<AttributeDTO> findAvailableAttributesByGroupCodeStartsWith(final String attributeGroupCode, final String codePrefix) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoAttributeService) getGenericDTOService()).findAvailableAttributesByGroupCodeStartsWith(attributeGroupCode, codePrefix);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<AttributeDTO> findAttributesWithMultipleValues(final String attributeGroupCode)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return ((DtoAttributeService) getGenericDTOService()).findAttributesWithMultipleValues(attributeGroupCode);
