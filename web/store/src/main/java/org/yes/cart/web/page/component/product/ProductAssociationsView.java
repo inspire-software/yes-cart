@@ -17,9 +17,11 @@
 package org.yes.cart.web.page.component.product;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.RestartResponseException;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
+import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.util.ArrayList;
@@ -59,13 +61,17 @@ public class ProductAssociationsView extends AbstractProductSearchResultList {
     protected long getProductId() {
         final long productId;
         String productIdStr = getPage().getPageParameters().get(WebParametersKeys.PRODUCT_ID).toString();
-        if (productIdStr == null) {
-            long skuId = getPage().getPageParameters().get(WebParametersKeys.SKU_ID).toLong();
-            productId = productService.getSkuById(skuId).getProduct().getProductId();
-        } else {
-            productId = Long.valueOf(productIdStr);
+        try {
+            if (productIdStr == null) {
+                long skuId = getPage().getPageParameters().get(WebParametersKeys.SKU_ID).toLong();
+                productId = productService.getSkuById(skuId).getProduct().getProductId();
+            } else {
+                productId = Long.valueOf(productIdStr);
+            }
+            return productId;
+        } catch (Exception exp) {
+            throw new RestartResponseException(HomePage.class);
         }
-        return productId;
     }
 
     /**

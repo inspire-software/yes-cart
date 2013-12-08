@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
@@ -28,6 +29,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.price.PriceTierView;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.page.component.product.ImageView;
@@ -170,13 +172,23 @@ public class SkuCentralView extends AbstractCentralView {
         String skuId = getPage().getPageParameters().get(WebParametersKeys.SKU_ID).toString();
         if (skuId != null) {
             isProduct = false;
-            sku = productService.getSkuById(Long.valueOf(skuId));
-            product = sku.getProduct();
+            try {
+                final Long skuPK = Long.valueOf(skuId);
+                sku = productService.getSkuById(skuPK);
+                product = sku.getProduct();
+            } catch (Exception exp) {
+                throw new RestartResponseException(HomePage.class);
+            }
         } else if (productId != null) {
             isProduct = true;
-            product = productService.getProductById(Long.valueOf(productId), true);
-            final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), product);
-            sku = getDefault(product, pam);
+            try {
+                final Long prodPK = Long.valueOf(productId);
+                product = productService.getProductById(prodPK, true);
+                final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), product);
+                sku = getDefault(product, pam);
+            } catch (Exception exp) {
+                throw new RestartResponseException(HomePage.class);
+            }
         } else {
             throw new RuntimeException("Product or Sku id expected");
         }
