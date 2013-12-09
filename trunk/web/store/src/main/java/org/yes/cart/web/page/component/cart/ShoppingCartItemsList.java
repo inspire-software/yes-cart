@@ -73,6 +73,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
     private static final String PRODUCT_NAME_LABEL = "name";
     private static final String DEFAULT_IMAGE = "defaultImage";
     private static final String QUANTITY_TEXT = "quantity";
+    private static final String QUANTITY_TEXT_RO = "quantityRo";
 
 
     private static final String LINE_TOTAL_VIEW = "lineAmountView";
@@ -131,12 +132,14 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                 i18NWebSupport);
 
 
+        final boolean notGift = !cartItem.isGift();
+
         cartItemListItem.add(
-                createAddOneSkuLink(skuCode).setVisible(!cartItem.isGift())
+                createAddOneSkuLink(skuCode).setVisible(notGift)
         ).add(
-                createRemoveAllSkuLink(skuCode).setVisible(!cartItem.isGift())
+                createRemoveAllSkuLink(skuCode).setVisible(notGift)
         ).add(
-                createRemoveOneSkuLink(skuCode).setVisible(!cartItem.isGift())
+                createRemoveOneSkuLink(skuCode).setVisible(notGift)
         ).add(
                 new Label(SKU_NUM_LABEL, skuCode)
         ).add(
@@ -153,9 +156,11 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                 new Model<BigDecimal>(cartItem.getQty()));
 
         cartItemListItem.add(
-                quantity.setVisible(!cartItem.isGift())
-        ).add(
-                createAddSeveralSkuButton(skuCode, quantity).setVisible(!cartItem.isGift())
+                quantity.setVisible(notGift)
+        )
+        .add(new Label(QUANTITY_TEXT_RO, cartItem.getQty().toString()).setVisible(!notGift))
+        .add(
+                createAddSeveralSkuButton(skuCode, quantity).setVisible(notGift)
         );
 
 
