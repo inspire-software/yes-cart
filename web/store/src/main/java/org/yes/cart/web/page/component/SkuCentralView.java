@@ -175,7 +175,7 @@ public class SkuCentralView extends AbstractCentralView {
             try {
                 final Long skuPK = Long.valueOf(skuId);
                 sku = productService.getSkuById(skuPK);
-                product = sku.getProduct();
+                product = productService.getProductById(sku.getProduct().getProductId(), true);
             } catch (Exception exp) {
                 throw new RestartResponseException(HomePage.class);
             }
