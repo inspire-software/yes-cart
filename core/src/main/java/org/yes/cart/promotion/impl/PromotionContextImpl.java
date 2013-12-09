@@ -99,13 +99,13 @@ public class PromotionContextImpl implements PromotionContext {
     /** {@inheritDoc} */
     public void applyItemPromo(final Customer customer, final ShoppingCart cart) {
 
+        cart.removeItemPromotions(); // remove all gifts and promo prices
+
         final List<List<PromoTriplet>> itemPromoBuckets = promotionBuckets.get(Promotion.TYPE_ITEM);
 
         if (CollectionUtils.isEmpty(itemPromoBuckets)) {
             return;
         }
-
-        cart.removeItemPromotions(); // remove all gifts and promo prices
 
         for (final CartItem item : cart.getCartItemList()) {
 
@@ -204,12 +204,12 @@ public class PromotionContextImpl implements PromotionContext {
     private void applyBestValuePromotion(final List<List<PromoTriplet>> promoBuckets,
                                          final Map<String, Object> context) {
 
-        try {
-            List<PromoTriplet> bestValue = null;
-            BigDecimal bestDiscountValue = BigDecimal.ZERO;
+        List<PromoTriplet> bestValue = null;
+        BigDecimal bestDiscountValue = BigDecimal.ZERO;
 
-            for (final List<PromoTriplet> promoBucket : promoBuckets) {
+        for (final List<PromoTriplet> promoBucket : promoBuckets) {
 
+            try {
                 if (promoBucket.isEmpty()) {
                     continue;
                 }
@@ -243,23 +243,23 @@ public class PromotionContextImpl implements PromotionContext {
                     bestValue = applicable;
 
                 }
+            } catch (Exception exp) {
+                ShopCodeContext.getLog(this).error("Unable to apply promotions {}", promoBucket);
+                ShopCodeContext.getLog(this).error("Unable to apply promotions", exp);
+            }
+        }
+
+        if (CollectionUtils.isNotEmpty(bestValue)) {
+
+            for (final PromoTriplet promo : bestValue) {
+
+                context.put(PromotionCondition.VAR_ACTION_CONTEXT, promo.promotion.getPromoActionContext());
+                context.put(PromotionCondition.VAR_PROMOTION, promo.promotion);
+
+                promo.action.perform(context);
 
             }
 
-            if (CollectionUtils.isNotEmpty(bestValue)) {
-
-                for (final PromoTriplet promo : bestValue) {
-
-                    context.put(PromotionCondition.VAR_ACTION_CONTEXT, promo.promotion.getPromoActionContext());
-                    context.put(PromotionCondition.VAR_PROMOTION, promo.promotion);
-
-                    promo.action.perform(context);
-
-                }
-
-            }
-        } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error("Unable to apply promotions", exp);
         }
     }
 
