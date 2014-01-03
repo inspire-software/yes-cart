@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.support.entity.decorator.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
@@ -230,9 +231,26 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      * {@inheritDoc}
      */
     public String getDescription(final String locale) {
+
         final String desc = getAttributeValue(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
-        if (desc == null) {
-            return getDescription();
+
+        if (StringUtils.isBlank(desc)) {
+
+            if (StringUtils.isBlank(getDescription())) {
+                //failover to product description
+                final Pair<String, String> prodDesc = productService.getProductAttribute(
+                        locale, getProduct().getProductId(), 0L, AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
+                if (prodDesc == null || StringUtils.isBlank(prodDesc.getSecond())) {
+                    return getProduct().getDescription();
+                }
+                return prodDesc.getSecond();
+
+            } else {
+
+                return getDescription();
+
+            }
+
         }
         return desc;
     }
