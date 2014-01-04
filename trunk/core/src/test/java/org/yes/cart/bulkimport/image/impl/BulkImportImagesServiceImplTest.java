@@ -24,8 +24,10 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkimport.service.BulkImportImagesService;
+import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.impl.AttrValueEntityProduct;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.ProductService;
 
@@ -159,7 +161,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
             if (productSku.getCode().equals("SOBOT-BEER")) {
                 assertNull(productSku.getAttributeByCode("IMAGE0")); // at this point sku has no images
                 assertNull(productSku.getAttributeByCode("IMAGE1")); // at this point sku has no images
-                assertNull(productSku.getAttributeByCode("IMAGE2")); // at this point sku has no images
+                //assertNull(productSku.getAttributeByCode("IMAGE2")); // at this point sku has no images
             }
         }
 
@@ -239,11 +241,13 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
                 assertNotNull(product);
 
 
+                final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao = createContext().getBean("attrValueEntityProductDao", GenericDAO.class);
+
                 for (ProductSku productSku : product.getSku()) {
                     if (productSku.getCode().equals("SOBOT-BEER")) {
                         assertNotNull(productSku.getAttributeByCode("IMAGE2"));
-
                         assertEquals("im-image-file_SOBOT-BEER_c.jpeg", productSku.getAttributeByCode("IMAGE2").getVal());
+                        attrValueEntityProductDao.delete(productSku.getAttributeByCode("IMAGE2"));
                     }
                 }
 
