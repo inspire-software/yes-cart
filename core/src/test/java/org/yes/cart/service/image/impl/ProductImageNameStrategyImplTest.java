@@ -88,11 +88,11 @@ public class ProductImageNameStrategyImplTest extends BaseCoreDBTestCase {
         }
         assertTrue(expectation.isEmpty());
         assertEquals("code",
-                imageNameStrategy.getCode("seo_name_code_1.jpg"));
+                imageNameStrategy.getCode("seo_name_code_a.jpg"));
         assertEquals("code",
-                imageNameStrategy.getCode("_code_1.jpg"));
-        assertEquals("code",
-                imageNameStrategy.getCode("code_1.jpg"));
+                imageNameStrategy.getCode("_code_b.jpg"));
+        assertEquals(Constants.NO_IMAGE,
+                imageNameStrategy.getCode("code_c.jpg"));
         //test case to support file names without product or sku code
         assertEquals("SOBOT",
                 imageNameStrategy.getCode("sobot-picture.jpeg"));

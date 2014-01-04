@@ -68,9 +68,15 @@ public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl 
 
         if (StringUtils.isNotBlank(url)) {
 
-            if (url.indexOf('_') > -1) {
+            if (url.indexOf('_') > -1 && StringUtils.countMatches(url, "_") > 1) {
                 final String[] nameParts = url.split("_");
-                return nameParts[nameParts.length - 2];
+                final String candidate = nameParts[nameParts.length - 2];
+                if (nameParts[nameParts.length - 1].indexOf('.') == 1) {
+                    final char csuf = nameParts[nameParts.length - 1].charAt(0);
+                    if (csuf >= 'a' && csuf <= 'g') {
+                        return candidate;
+                    }
+                }
             }
 
             final String val = getFileNameWithoutPrefix(url);

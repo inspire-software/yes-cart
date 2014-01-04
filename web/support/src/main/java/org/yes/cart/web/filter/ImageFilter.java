@@ -36,13 +36,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Calendar;
 import java.util.Date;
 
 //import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 
 /**
- * ImageServet responsible for get product or brand images
+ * ImageServlet responsible for get product or brand images
  * in requested size. All url like
  * imgrevault/*.[jpg | gif | etc]?w=width&h=height
  * will be served by this class image will be resized if
@@ -120,7 +121,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
                                       final HttpServletResponse httpServletResponse) throws ServletException, IOException {
 
 
-        final String servetPath = httpServletRequest.getServletPath(); //this for filter
+        final String servetPath = URLDecoder.decode(httpServletRequest.getServletPath()); //this for filter
         //httpServletRequest.getPathInfo(); //this for servlet
 
         final String previousToken = httpServletRequest.getHeader(IF_NONE_MATCH);
