@@ -328,6 +328,8 @@
                                         popUp = ValueDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), clz, true));
                                         popUp.attributeGroup = outerDocument.attributeGroup;
                                         popUp.windowTitle = data.attributeDTO.name;
+                                        popUp.attributeCode = data.attributeDTO.code;
+
                                         popUp.code = outerDocument.entityCode;
                                         popUp.value = data.val;
                                         popUp.displayValues = data.displayVals;

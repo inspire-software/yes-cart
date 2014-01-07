@@ -100,6 +100,7 @@
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.util.DomainUtils;
+        import org.yes.cart.util.FileNameUtils;
 
         private static const THUMB_WIDTH:uint = 480;
         private static const THUMB_HEIGHT:uint = 480;
@@ -107,6 +108,7 @@
 
         private var _value:String;
         private var _oldValue:String;
+        private var _attributeCode:String;
         private var _windowTitle:String;
         private var _code:String;
         private var _attributeGroup:String;
@@ -202,6 +204,43 @@
             loadFileRef.load();
         }
 
+        private function ensureCorrectFileName(fileName:String, skuCode:String, attributImageCode:String):String {
+            if (skuCode != null && skuCode.length > 0) {
+
+                var newFileName:String;
+                if (code != null && code.length > 0) { // TO DO remove it after image service and image filter refactoring
+                    newFileName = FileNameUtils.getFileNameWithoutExtension(fileName)
+                            + "_"
+                            + code
+                            + "_"
+                            + getFileNameSuffix(attributImageCode)
+                            + "."
+                            + FileNameUtils.getFileExtension(fileName);
+                }
+                return newFileName;
+
+            }
+            return fileName;
+        }
+
+        private function getFileNameSuffix(attributImageCode:String):String {
+            switch (attributImageCode) {
+                case "IMAGE0" :
+                    return "a";
+                case "IMAGE1" :
+                    return "b";
+                case "IMAGE2" :
+                    return "c";
+                case "IMAGE3" :
+                    return "d";
+                case "IMAGE4" :
+                    return "e";
+                case "IMAGE5" :
+                    return "f";
+            }
+            return "";
+        }
+
 
         private function onImageFileDialogLoadComplete(e:Event):void {
             loadFileRef.removeEventListener(Event.COMPLETE, onImageFileDialogLoadComplete);
@@ -210,7 +249,7 @@
             loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onDataLoadComplete);
             loader.loadBytes(loadFileRef.data);
 
-            var modifiedName:String = loadFileRef.name;
+            var modifiedName:String = ensureCorrectFileName(loadFileRef.name, code, attributeCode);
             /*if (code != null && code.length > 0) { // TO DO remove it after image service and image filter refactoring
              modifiedName = FileNameUtils.getFileNameWithoutExtension(modifiedName) + "_" + code + "_a." + FileNameUtils.getFileExtension(modifiedName);
              } */
@@ -358,6 +397,14 @@
 
         }
 
+
+        public function get attributeCode():String {
+            return _attributeCode;
+        }
+
+        public function set attributeCode(value:String):void {
+            _attributeCode = value;
+        }
 
         private function onCreateResult(event:ResultEvent):void {
             // do nothing
