@@ -53,6 +53,7 @@
         private var _value:String;
         private var _displayValues:Object;
         private var _oldValue:String;
+        private var _attributeCode:String;
         private var _windowTitle:String;
         private var _code:String;
         private var _attributeGroup:String;
@@ -122,6 +123,14 @@
 
         public function set attributeGroup(value:String):void {
             _attributeGroup = value;
+        }
+
+        public function get attributeCode():String {
+            return _attributeCode;
+        }
+
+        public function set attributeCode(value:String):void {
+            _attributeCode = value;
         }
 
         public function setInformation(value:String):void {

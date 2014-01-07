@@ -35,9 +35,27 @@ public interface ValueDialog {
 
     function getButtonSave(): Button;
 
+    /**
+     * Product or sku code
+     */
     function get code():String;
 
+    /**
+     * Product or sku code
+     * @param value
+     */
     function set code(value:String):void;
+
+    /**
+     * Attribute code.
+     */
+    function get attributeCode():String;
+
+    /**
+     * Attribute code.
+     * @param value
+     */
+    function set attributeCode(value:String):void;
 
     function get attributeGroup():String;
 
