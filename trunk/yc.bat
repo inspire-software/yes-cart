@@ -186,9 +186,6 @@ rem Sub routines below this comment
     set LIBFILE=%YC_HOME%\env\setup\lib3rdparty\paypal\paypal_base.jar
     call %MVN% install:install-file -DgroupId=com.paypal -DartifactId=paypal-client -Dversion=5.1.1 -Dpackaging=jar -Dfile=%LIBFILE%
 
-    set LIBFILE=%YC_HOME%\env\setup\lib3rdparty\google.checkout\checkout-sdk-2.5.1.jar
-    call %MVN% install:install-file -DgroupId=com.google.checkout -DartifactId=checkout-sdk -Dversion=2.5.1 -Dpackaging=jar -Dfile=%LIBFILE%
-
     set LIBFILE=%YC_HOME%\env\setup\lib3rdparty\jai\mlibwrapper_jai.jar
     call %MVN% install:install-file -DgroupId=com.sun.media -DartifactId=mlibwrapper_jai -Dversion=1.1.3 -Dpackaging=jar -Dfile=%LIBFILE%
 

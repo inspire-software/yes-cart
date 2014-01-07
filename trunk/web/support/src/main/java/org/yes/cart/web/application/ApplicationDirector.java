@@ -138,14 +138,7 @@ public class ApplicationDirector implements ApplicationContextAware {
         shoppingCartThreadLocal.set(shoppingCart);
     }
 
-    /**
-     * Is Google checkout enabled.
-     *
-     * @return true if google checkout enabled.
-     */
-    public boolean isGoogleCheckoutEnabled() {
-        return systemService.isGoogleCheckoutEnabled();
-    }
+
 
 
     /**

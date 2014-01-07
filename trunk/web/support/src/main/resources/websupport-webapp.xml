@@ -56,12 +56,7 @@
         <constructor-arg index="3" ref="customerOrderService"/>
     </bean>
 
-    <!--CPOINT do you need google checkout ?-->
-    <bean id="googleCheckoutCallBackFilter" class="org.yes.cart.web.filter.payment.GoogleCheckoutCallBackFilter">
-        <constructor-arg index="0" ref="applicationDirector"/>
-        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
-        <constructor-arg index="2" ref="paymentModulesManager"/>
-    </bean>
+
 
     <!-- CPOINT do you need authorize net ? -->
     <bean id="anetPaymentCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
