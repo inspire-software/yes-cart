@@ -117,14 +117,7 @@ public class SystemServiceImpl implements SystemService {
         systemDao.saveOrUpdate(system);
     }
 
-    /**
-     * Is Google checkout enabled.
-     * @return    true if google checkout enabled.
-     */
-    public boolean isGoogleCheckoutEnabled() {
-        final String allGws = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
-        return StringUtils.isNotBlank(allGws) &&  allGws.contains("googleCheckoutPaymentGatewayLabel");
-    }
+
 
     /**
      * {@inheritDoc}

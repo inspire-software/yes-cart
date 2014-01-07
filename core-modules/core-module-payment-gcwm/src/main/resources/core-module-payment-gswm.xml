@@ -15,25 +15,9 @@
 
     <import resource="classpath*:payment-api.xml"/>
 
-    <bean id="googleNotificationPaymentDao" parent="txPayProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.payment.persistence.service.impl.PaymentModuleGenericDAOImpl">
-                <constructor-arg index="0" value="org.yes.cart.payment.persistence.entity.impl.GoogleNotificationHistoryEntity"/>
-                <property name="sessionFactory" ref="paySessionFactory"/>
-            </bean>
-        </property>
-    </bean>
 
-    <bean id="googleCheckoutPaymentGateway" class="org.yes.cart.payment.impl.GoogleCheckoutPaymentGatewayImpl" scope="prototype">
-        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
-    </bean>
 
-    <bean id="googleCheckoutPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
-        <property name="label" value="googleCheckoutPaymentGatewayLabel"/>
-        <property name="name" value="Google checkout Payment Gateway"/>
-        <property name="url" value="googleCheckoutPaymentGateway"/>
-        <property name="description" value="Google checkout Payment Gateway"/>
-    </bean>
+
 
 
     <bean id="liqPayPaymentGateway" class="org.yes.cart.payment.impl.LiqPayPaymentGatewayImpl" scope="prototype">
@@ -61,7 +45,6 @@
         <property name="gateways">
             <map>
                 <entry key="liqPayPaymentGateway" value-ref="liqPayPaymentGatewayDescriptor"/>
-                <entry key="googleCheckoutPaymentGateway" value-ref="googleCheckoutPaymentGatewayDescriptor"/>
             </map>
         </property>
     </bean>

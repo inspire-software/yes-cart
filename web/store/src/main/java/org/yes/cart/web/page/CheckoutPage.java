@@ -104,7 +104,6 @@ public class CheckoutPage extends AbstractWebPage {
 
     public static final String CONTENT_VIEW = "content";
     public static final String NAVIGATION_VIEW = "navigation";
-    public static final String GOOGLECHECKOUT_VIEW = "googleCheckout";
 
     public static final String PART_REGISTER_VIEW = "registerView";
     public static final String PART_LOGIN_VIEW = "loginView";
@@ -167,25 +166,18 @@ public class CheckoutPage extends AbstractWebPage {
         final String currentStep =
                 params.get(STEP).toString(threeStepsProcess ? STEP_ADDR : STEP_LOGIN);
 
-        Label googleCheckoutLabel = null;
 
-        if (STEP_PAY.equals(currentStep) || ApplicationDirector.getInstance().isGoogleCheckoutEnabled()) {
+        if (STEP_PAY.equals(currentStep) ) {
 
             final CustomerOrder customerOrder = customerOrderService.createFromCart(
                     ApplicationDirector.getShoppingCart(),
-                    ApplicationDirector.getInstance().isGoogleCheckoutEnabled()
-                            || !ApplicationDirector.getShoppingCart().getOrderInfo().isMultipleDelivery()
+                    !ApplicationDirector.getShoppingCart().getOrderInfo().isMultipleDelivery()
             );
 
-            if (ApplicationDirector.getInstance().isGoogleCheckoutEnabled()) {
-                googleCheckoutLabel = getGoogleCheckoutLabel(customerOrder);
-            }
 
         }
 
-        if (googleCheckoutLabel == null) {
-            googleCheckoutLabel = new Label(GOOGLECHECKOUT_VIEW, StringUtils.EMPTY);
-        }
+
 
 
         add(
@@ -193,8 +185,6 @@ public class CheckoutPage extends AbstractWebPage {
         ).add(
                 new Fragment(NAVIGATION_VIEW, threeStepsProcess ?
                         NAVIGATION_THREE_FRAGMENT : NAVIGATION_FOUR_FRAGMENT, this)
-        ).add(
-                googleCheckoutLabel.setVisible(ApplicationDirector.getInstance().isGoogleCheckoutEnabled())
         ).add(
                 getContent(currentStep)
         ).addOrReplace(
@@ -206,24 +196,7 @@ public class CheckoutPage extends AbstractWebPage {
 
     }
 
-    private Label getGoogleCheckoutLabel(final CustomerOrder customerOrder) {
 
-        final String htmlForm = getPaymentForm(
-                paymentModulesManager.getPaymentGateway("googleCheckoutPaymentGatewayLabel"),
-                customerOrder,
-                null);
-
-        final Label googleCheckoutLabel = new Label(
-                GOOGLECHECKOUT_VIEW,
-                htmlForm
-        );
-
-        googleCheckoutLabel
-                .setEscapeModelStrings(false);
-
-
-        return googleCheckoutLabel;
-    }
 
 
 
