@@ -54,6 +54,7 @@
         <constructor-arg index="1" ref="paymentModulesManager"/>
         <constructor-arg index="2" ref="paymentProcessor"/>
         <constructor-arg index="3" ref="customerOrderService"/>
+        <constructor-arg index="4" ref="paymentCallBackHandlerFacade"/>
     </bean>
 
 

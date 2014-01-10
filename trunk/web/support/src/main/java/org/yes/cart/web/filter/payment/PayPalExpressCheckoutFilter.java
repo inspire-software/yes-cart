@@ -20,17 +20,21 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.order.OrderException;
+import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.filter.AbstractFilter;
+import org.yes.cart.web.support.util.HttpUtil;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
@@ -57,6 +61,8 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
 
     private final CustomerOrderService customerOrderService;
 
+    private final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade;
+
     /**
      * Construct filter.
      *
@@ -64,15 +70,18 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
      * @param paymentModulesManager to find gateway by label.
      * @param paymentProcessor      payment processor.
      * @param customerOrderService  {@link CustomerOrderService}     to use
+     * @param paymentCallBackHandlerFacade handler.
      */
     public PayPalExpressCheckoutFilter(final ApplicationDirector applicationDirector,
                                        final PaymentModulesManager paymentModulesManager,
                                        final PaymentProcessor paymentProcessor,
-                                       final CustomerOrderService customerOrderService) {
+                                       final CustomerOrderService customerOrderService,
+                                       final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade) {
         super(applicationDirector);
         this.paymentModulesManager = paymentModulesManager;
         this.paymentProcessor = paymentProcessor;
         this.customerOrderService = customerOrderService;
+        this.paymentCallBackHandlerFacade = paymentCallBackHandlerFacade;
     }
 
     @Override
@@ -87,6 +96,8 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
         final PaymentGatewayExternalForm paymentGatewayExternalForm =
                 (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(
                         cart.getOrderInfo().getPaymentGatewayLabel());
+
+        final String paymentGatewayLabel = getFilterConfig().getInitParameter("paymentGatewayLabel");
 
         paymentProcessor.setPaymentGateway(paymentGatewayExternalForm);
 
@@ -119,8 +130,17 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
                     + '|'   + nvpCallResult.get("L_LONGMESSAGE0")
                     + '|'   + nvpCallResult.get("L_SEVERITYCODE0") ;
 
+        }
 
-            // TODO: YC-156  move order to failed state
+        try {
+
+            paymentCallBackHandlerFacade.handlePaymentCallback(nvpCallResult, paymentGatewayLabel);
+
+        } catch (OrderException e) {
+
+            ShopCodeContext.getLog(this).error("Transition failed during payment call back for " + paymentGatewayLabel
+                    + " payment gateway. Dump request " + HttpUtil.dumpRequest((HttpServletRequest) servletRequest), e);
+
         }
 
         ShopCodeContext.getLog(this).info("Pay pal filter user will be redirected to {}", redirectUrl);
