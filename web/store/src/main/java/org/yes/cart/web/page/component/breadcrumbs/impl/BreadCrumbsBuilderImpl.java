@@ -120,7 +120,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId, final List<Long> shopCategoryIds) {
         if (categoryId > 0l) {
             final Category category = categoryService.getById(categoryId);
-            if (categoryId != category.getParentId() && category.getParentId() > 0l) {
+            if (!category.isRoot()) {
                 categoriesCrumbs.add(
                         new Crumb("category", category.getName(),
                                 category.getDisplayName(), getCategoryLinkParameters(categoryId),
