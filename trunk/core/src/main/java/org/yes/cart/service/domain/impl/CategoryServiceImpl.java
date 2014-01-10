@@ -136,7 +136,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     public String getCategoryTemplateVariation(final Category category) {
         String variation = null;
         if (StringUtils.isBlank(category.getUitemplate())) {
-            if (category.getParentId() != category.getCategoryId()) {
+            if (!category.isRoot()) {
                 Category parentCategory =
                         proxy().findById(category.getParentId());
                 variation = getCategoryTemplateVariation(parentCategory);
@@ -227,7 +227,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         if (attrValue == null
                 ||
                 StringUtils.isBlank(attrValue.getVal())) {
-            if (category.getCategoryId() == category.getParentId()) {
+            if (category.isRoot()) {
                 rez = null; //root of hierarchy
             } else {
                 final Category parentCategory =
@@ -281,7 +281,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             }
         }
 
-        if (category.getCategoryId() == category.getParentId()) {
+        if (category.isRoot()) {
             return null; //root of hierarchy
         }
         final Category parentCategory =
@@ -443,7 +443,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
 
     private void addParent(final List<Category> categoryChain, final long categoryIdStopAt) {
         final Category cat = categoryChain.get(categoryChain.size() - 1);
-        if (cat.getParentId() != cat.getCategoryId()) {
+        if (!cat.isRoot()) {
             final Category parent = findById(cat.getParentId());
             if (parent != null) {
                 categoryChain.add(parent);

@@ -17,6 +17,7 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.search.annotations.*;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.xml.CategoryPriceNavigationXStreamProvider;
@@ -269,7 +270,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     private PriceTierTree priceTierTreeCache = null;
 
     public PriceTierTree getNavigationByPriceTree() {
-        if (priceTierTreeCache == null && getNavigationByPriceTiers() != null) {
+        if (priceTierTreeCache == null && StringUtils.isNotBlank(getNavigationByPriceTiers())) {
             priceTierTreeCache = xStreamProvider.fromXML(getNavigationByPriceTiers()); //This method like to eat CPU
         }
         return priceTierTreeCache;
@@ -279,6 +280,11 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     public void setNavigationByPriceTree(PriceTierTree tree) {
         setNavigationByPriceTiers(xStreamProvider.toXML(tree));
         this.priceTierTreeCache = tree;
+    }
+
+    @Override
+    public boolean isRoot() {
+        return (getParentId() == 0l || getParentId() == getCategoryId());
     }
 
     public String toString() {

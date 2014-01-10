@@ -102,7 +102,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     public String getContentTemplateVariation(final Category content) {
         String variation = null;
         if (StringUtils.isBlank(content.getUitemplate())) {
-            if (content.getParentId() != 0) {
+            if (!content.isRoot()) {
                 Category parentCategory =
                         proxy().getById(content.getParentId());
                 variation = proxy().getContentTemplateVariation(parentCategory);
@@ -197,7 +197,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         if (attrValue == null
                 ||
                 StringUtils.isBlank(attrValue.getVal())) {
-            if (content.getCategoryId() == content.getParentId()) {
+            if (content.isRoot()) {
                 rez = null; //root of hierarchy
             } else {
                 final Category parentCategory =
@@ -251,7 +251,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             }
         }
 
-        if (category.getCategoryId() == category.getParentId()) {
+        if (category.isRoot()) {
             return null; //root of hierarchy
         }
         final Category parentCategory =
@@ -379,7 +379,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
 
     private void addParent(final List<Category> categoryChain, final long categoryIdStopAt) {
         final Category cat = categoryChain.get(categoryChain.size() - 1);
-        if (cat.getParentId() != cat.getCategoryId()) {
+        if (!cat.isRoot()) {
             final Category parent = proxy().getById(cat.getParentId());
             if (parent != null) {
                 categoryChain.add(parent);

@@ -56,16 +56,16 @@ public interface Category extends Auditable, Attributable, Seoable  {
     void setCategoryId(long categoryId);
 
     /**
-     * Get parrent pk value.
+     * Get parent pk value.
      *
-     * @return parrent pk value.
+     * @return parent pk value.
      */
     long getParentId();
 
     /**
-     * Set parrent pk value.
+     * Set parent pk value.
      *
-     * @param parentId parrent pk value.
+     * @param parentId parent pk value.
      */
     void setParentId(long parentId);
 
@@ -279,6 +279,12 @@ public interface Category extends Auditable, Attributable, Seoable  {
      */
     void setNavigationByPriceTree(PriceTierTree tree);
 
+    /**
+     * This method check if current category is root of catalog or content root
+     *
+     * @return true if this category is root
+     */
+    boolean isRoot();
 
 }
 
