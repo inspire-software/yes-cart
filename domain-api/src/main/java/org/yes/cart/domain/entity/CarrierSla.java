@@ -58,12 +58,12 @@ import java.math.BigDecimal;
 public interface CarrierSla extends Auditable {
 
     /**
-     * External procedure delivery cost calcluation
+     * External procedure delivery cost calculation
      */
     String EXTERNAL = "E";
 
     /**
-     * Free delivery cost calcluation
+     * Free delivery cost calculation
      */
     String FREE = "R";
 
@@ -214,16 +214,16 @@ public interface CarrierSla extends Auditable {
     void setPriceNotLess(BigDecimal priceNotLess);
 
     /**
-     * Get minimal amount  for precent.
+     * Get minimal amount  for prrcent.
      *
-     * @return minimal amount  for precent.
+     * @return minimal amount  for percent.
      */
     BigDecimal getPercentNotLess();
 
     /**
-     * Set minimal amount  for precent.
+     * Set minimal amount  for percent.
      *
-     * @param percentNotLess minimal amount  for precent.
+     * @param percentNotLess minimal amount  for percent.
      */
     void setPercentNotLess(BigDecimal percentNotLess);
 
@@ -273,16 +273,16 @@ public interface CarrierSla extends Auditable {
 
 
     /**
-     * Get max deys delivery.
+     * Get max days delivery.
      *
-     * @return max deys delivery.
+     * @return max days delivery.
      */
     Integer getMaxDays();
 
     /**
-     * Set max deys delivery.
+     * Set max days delivery.
      *
-     * @param maxDays max deys delivery.
+     * @param maxDays max days delivery.
      */
     void setMaxDays(Integer maxDays);
 
@@ -297,7 +297,7 @@ public interface CarrierSla extends Auditable {
     /**
      * Set carrier.
      *
-     * @param carrier carrire.
+     * @param carrier carrier.
      */
     void setCarrier(Carrier carrier);
 

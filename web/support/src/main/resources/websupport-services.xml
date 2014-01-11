@@ -104,6 +104,11 @@
         <constructor-arg index="0" ref="promotionService"/>
     </bean>
 
+    <bean id="shippingServiceFacade" class="org.yes.cart.web.support.service.impl.ShippingServiceFacadeImpl">
+        <constructor-arg index="0" ref="carrierService"/>
+        <constructor-arg index="1" ref="carrierSlaService"/>
+    </bean>
+
     <!-- ############################ Facades for web end ####################################################### -->
 
 

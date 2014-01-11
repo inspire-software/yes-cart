@@ -40,7 +40,7 @@ public class CarrierSlaServiceImpl extends BaseGenericServiceImpl<CarrierSla> im
 
 
     /** {@inheritDoc} */
-    public CarrierSla finaByName(final String slaName) {
+    public CarrierSla findByName(final String slaName) {
         return getGenericDao().findSingleByCriteria(Restrictions.eq("name", slaName));
     }
 

@@ -27,8 +27,6 @@ import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.CarrierService;
-import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
@@ -40,6 +38,7 @@ import org.yes.cart.web.page.component.util.CarrierRenderer;
 import org.yes.cart.web.page.component.util.CarrierSlaRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
+import org.yes.cart.web.support.service.ShippingServiceFacade;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -58,15 +57,11 @@ public class ShippingView extends BaseComponent {
     private final static String PRICE_VIEW = "priceView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
-
-    @SpringBean(name = ServiceSpringKeys.CARRIER_SERVICE)
-    private CarrierService carrierService;
-
-    @SpringBean(name = ServiceSpringKeys.CARRIER_SLA_SERVICE)
-    private CarrierSlaService carrierSlaService;
-
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
     private CustomerServiceFacade customerServiceFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.SHIPPING_SERVICE_FACADE)
+    private ShippingServiceFacade shippingServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
@@ -84,23 +79,11 @@ public class ShippingView extends BaseComponent {
      */
     private void restoreCarrierSla(final List<Carrier> carriers) {
 
-        final Long slaId = ApplicationDirector.getShoppingCart().getCarrierSlaId();
+        final Pair<Carrier, CarrierSla> selection =
+                shippingServiceFacade.getCarrierSla(ApplicationDirector.getShoppingCart(), carriers);
 
-        setCarrier(null);
-        setCarrierSla(null);
-
-        if (slaId != null) {
-            carrierSlaService.findById(slaId);
-            for (Carrier carrier : carriers) {
-                for (CarrierSla carrierSla : carrier.getCarrierSla()) {
-                    if (slaId == carrierSla.getCarrierslaId()) {
-                        this.carrierSla = carrierSla;
-                        this.carrier = carrier;
-                        break;
-                    }
-                }
-            }
-        }
+        setCarrier(selection.getFirst());
+        setCarrierSla(selection.getSecond());
 
     }
 
@@ -114,11 +97,7 @@ public class ShippingView extends BaseComponent {
 
         super(id);
 
-        final List<Carrier> carriers = carrierService.findCarriers(
-                null, //TODO: V2 get from default shipping addr . probably not to limit , but put it first
-                null,
-                null,
-                ApplicationDirector.getShoppingCart().getCurrencyCode());
+        final List<Carrier> carriers = shippingServiceFacade.findCarriers(ApplicationDirector.getShoppingCart());
 
         restoreCarrierSla(carriers);
 
@@ -244,12 +223,11 @@ public class ShippingView extends BaseComponent {
                     new Label(PRICE_VIEW)
             );
         } else {
-            final CarrierSla carrierSla = carrierSlaService.findById(slaId);
             form.addOrReplace(
                     new PriceView(
                             PRICE_VIEW,
                             new Pair<BigDecimal, BigDecimal>(total.getDeliveryListCost(), total.getDeliveryCost()),
-                            carrierSla.getCurrency(),
+                            cart.getCurrencyCode(),
                             total.getAppliedDeliveryPromo(), true, true
                     )
             );
