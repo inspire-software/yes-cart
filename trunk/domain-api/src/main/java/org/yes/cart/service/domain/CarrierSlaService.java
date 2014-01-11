@@ -39,13 +39,19 @@ public interface CarrierSlaService extends GenericService<CarrierSla> {
      * Get sla by name. Sla name is unique
      * @param slaName given sla name.
      * @return {@link CarrierSla}
+     *
+     * @deprecated used only by Google Checkout which is now retired - remove this
      */
-    CarrierSla finaByName(final String slaName);
+    @Deprecated
+    CarrierSla findByName(final String slaName);
 
     /**
-     * Fin all sla for given currency.
-     * @param currency fiven currency.
+     * Find all sla for given currency.
+     * @param currency given currency.
      * @return   list of found currency
+     *
+     * @deprecated used only by Google Checkout which is now retired - remove this
      */
+    @Deprecated
     List<CarrierSla> findByCurrency(String currency);
 }
