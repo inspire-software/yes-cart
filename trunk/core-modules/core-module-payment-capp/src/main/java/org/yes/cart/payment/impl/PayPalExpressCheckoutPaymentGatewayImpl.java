@@ -201,7 +201,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      */
     public Map<String, String> getExpressCheckoutDetails(final String token) throws IOException {
 
-        Assert.notNull(token, "The pay pal tonek must  be not null");
+        Assert.notNull(token, "The pay pal token must  be not null");
 
         final StringBuilder stringBuilder = new StringBuilder();
 

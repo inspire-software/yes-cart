@@ -59,7 +59,10 @@ public class CustomerOrderPaymentServiceImpl
         BigDecimal rez = BigDecimal.ZERO;
         final List<CustomerOrderPayment> payments = findBy(orderNumber, null, null, null);
         for (CustomerOrderPayment payment : payments) {
-            if (payment.getTransactionOperation().equals("AUTH")) {
+            if (
+                    payment.getTransactionOperation().equals("AUTH")
+                    || payment.getTransactionOperation().equals("AUTH_CAPTURE")   //external processing of payment form
+                    ) {
                 // We have two payment records AUTH and CAPTURE for the same amount.
                 // Therefore we only need to sum up AUTH to get total payment value of the order.
                 rez = rez.add(payment.getPaymentAmount());
