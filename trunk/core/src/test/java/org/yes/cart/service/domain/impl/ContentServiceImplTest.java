@@ -49,14 +49,17 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetRootContent() {
-        Category rootContent = contentService.getRootContent(20L, false); //SHOIP2
+        Category rootContent = contentService.getRootContent(20L); //SHOIP2
         assertNotNull(rootContent);
         assertEquals(rootContent.getGuid(), "SHOIP2");
     }
 
     @Test
     public void testGetRootContentCreate() {
-        Category rootContent = contentService.getRootContent(10L, true); //SHOIP1
+        Category rootContent = contentService.getRootContent(10L); //SHOIP1
+        assertNull(rootContent);
+        contentService.createRootContent(10L);
+        rootContent = contentService.getRootContent(10L); //SHOIP1
         assertNotNull(rootContent);
         assertEquals(rootContent.getGuid(), "SHOIP1");
     }

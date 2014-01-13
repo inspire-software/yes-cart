@@ -77,7 +77,10 @@ public class DomainUtils {
      * @return true if this is root category
      */
     public static function isRootCategory(cat:Object):Boolean {
-        return cat != null && cat is CategoryDTOImpl && isPersistent(cat, 'categoryId') && cat['categoryId'] == cat['parentId'];
+        return cat != null
+                && cat is CategoryDTOImpl
+                && isPersistent(cat, 'categoryId')
+                && (cat['categoryId'] == cat['parentId'] || cat['parentId'] == 0);
     }
 
 

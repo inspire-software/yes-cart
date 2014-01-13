@@ -64,19 +64,23 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      * {@inheritDoc}
      */
     @Cacheable(value = "contentService-rootContent")
-    public Category getRootContent(final long shopId, final boolean createIfMissing) {
+    public Category getRootContent(final long shopId) {
         if (shopId <= 0) {
             throw new IllegalArgumentException("Shop must not be null or transient");
         }
-        final Category shopContentRoot = categoryDao.findSingleByNamedQuery("ROOTCONTENT.BY.SHOP.ID", shopId);
-        if (shopContentRoot == null && createIfMissing) {
-            final List<Object> shops = categoryDao.findQueryObjectByNamedQuery("SHOPCODE.BY.SHOP.ID", shopId);
-            if (shops != null && shops.size() == 1) {
-                return createContentRootForShop((String) shops.get(0));
-            }
-            throw new IllegalArgumentException("Unidentified shop id");
+        return categoryDao.findSingleByNamedQuery("ROOTCONTENT.BY.SHOP.ID", shopId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = "contentService-rootContent")
+    public Category createRootContent(final long shopId) {
+        final List<Object> shops = categoryDao.findQueryObjectByNamedQuery("SHOPCODE.BY.SHOP.ID", shopId);
+        if (shops != null && shops.size() == 1) {
+            return createContentRootForShop((String) shops.get(0));
         }
-        return shopContentRoot;
+        throw new IllegalArgumentException("Unidentified shop id");
     }
 
     private Category createContentRootForShop(final String shopcode) {
