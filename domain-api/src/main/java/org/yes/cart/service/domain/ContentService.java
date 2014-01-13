@@ -30,9 +30,20 @@ public interface ContentService extends GenericService<Category> {
     /**
      * Get the root content for shop.
      *
+     * @param shopId PK of shop
+     *
+     * @return root content (or null).
+     */
+    Category getRootContent(long shopId);
+
+    /**
+     * Create root content for shop.
+     *
+     * @param shopId PK of shop
+     *
      * @return root content.
      */
-    Category getRootContent(long shopId, final boolean createIfMissing);
+    Category createRootContent(final long shopId);
 
     /**
      * Get the "template variation" for given content with fail over to parent.

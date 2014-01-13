@@ -199,7 +199,10 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     }, allEntries = true)
     public Shop create(final Shop instance) {
         final Shop shop = super.create(instance);
-        contentService.getRootContent(shop.getShopId(), true);
+        final Category category = contentService.getRootContent(shop.getShopId());
+        if (category == null) {
+            contentService.createRootContent(shop.getShopId());
+        }
         return shop;
     }
 

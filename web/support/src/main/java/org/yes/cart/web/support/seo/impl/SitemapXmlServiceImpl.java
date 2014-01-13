@@ -111,7 +111,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
         xml.append("<!-- Content -->\n");
 
-        final Category root = contentService.getRootContent(shop.getShopId(), false);
+        final Category root = contentService.getRootContent(shop.getShopId());
         if (root != null) {
 
             final Set<Category> content = contentService.getChildContentRecursive(root.getId());

@@ -52,7 +52,7 @@
                 <prop key="handle">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="reservation*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <!-- Content special -->
-                <prop key="getRootContent">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="createRootContent">PROPAGATION_REQUIRED,-Throwable</prop>
                 <!-- Full text search -->
                 <prop key="fullTextSearchReindex">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="fullTextSearchPurge">PROPAGATION_REQUIRED,-Throwable</prop>
