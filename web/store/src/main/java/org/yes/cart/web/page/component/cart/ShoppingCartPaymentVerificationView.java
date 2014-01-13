@@ -30,18 +30,23 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.*;
-import org.yes.cart.shoppingcart.AmountCalculationStrategy;
+import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
 import org.yes.cart.web.support.service.AttributableImageService;
+import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Class responsible to show cart with delivery amount and taxes for verification before payments.
@@ -81,11 +86,8 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
     private static final String DEFAULT_IMAGE = "defaultImage";
     // ------------------------------------- MARKUP IDs END ------------------------------------ //
 
-    @SpringBean(name = StorefrontServiceSpringKeys.AMOUNT_CALCULATION_STRATEGY)
-    private AmountCalculationStrategy amountCalculationStrategy;
-
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
-    private CustomerOrderService customerOrderService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
+    private CheckoutServiceFacade checkoutServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
     private ProductSkuService productSkuService;
@@ -119,15 +121,11 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
         rootCategory = categoryService.getRootCategory();
 
-        final CustomerOrder customerOrder = customerOrderService.findByGuid(orderGuid);
-        final Total grandTotal = amountCalculationStrategy.calculate(customerOrder);
+        final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(orderGuid);
+        final Total grandTotal = checkoutServiceFacade.getOrderTotal(customerOrder);
 
         final String selectedLocale = getLocale().getLanguage();
-        final Set<String> allPromos = new HashSet<String>();
-
-        if (StringUtils.isNotBlank(customerOrder.getAppliedPromo())) {
-            allPromos.addAll(Arrays.asList(StringUtils.split(customerOrder.getAppliedPromo(), ',')));
-        }
+        final Set<String> allPromos = checkoutServiceFacade.getOrderPromoCodes(customerOrder);
 
         add(
                 new ListView<CustomerOrderDelivery>(DELIVERY_LIST, new ArrayList<CustomerOrderDelivery>(customerOrder.getDelivery()))
@@ -141,11 +139,9 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                         final List<CustomerOrderDeliveryDet> deliveryDet = new ArrayList<CustomerOrderDeliveryDet>(delivery.getDetail());
 
-                        final Total total = amountCalculationStrategy.calculate(customerOrder, delivery);
+                        final Total total = checkoutServiceFacade.getOrderDeliveryTotal(customerOrder, delivery);
 
-                        if (StringUtils.isNotBlank(delivery.getAppliedPromo())) {
-                            allPromos.addAll(Arrays.asList(StringUtils.split(delivery.getAppliedPromo(), ',')));
-                        }
+                        allPromos.addAll(checkoutServiceFacade.getOrderShippingPromoCodes(delivery));
 
                         customerOrderDeliveryListItem
                                 .add(
@@ -181,9 +177,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                         .multiply(det.getQty())
                                                         .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
-                                                if (StringUtils.isNotBlank(det.getAppliedPromo())) {
-                                                    allPromos.addAll(Arrays.asList(StringUtils.split(det.getAppliedPromo(), ',')));
-                                                }
+                                                allPromos.addAll(checkoutServiceFacade.getOrderItemPromoCodes(det));
 
                                                 customerOrderDeliveryDetListItem
                                                         .add(

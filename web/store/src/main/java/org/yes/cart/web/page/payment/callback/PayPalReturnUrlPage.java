@@ -27,9 +27,6 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
-import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
-import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
@@ -39,10 +36,11 @@ import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CheckoutServiceFacade;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,11 +78,8 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
     @SpringBean(name = ServiceSpringKeys.PAYMENT_CALLBACK_HANDLER)
     private PaymentCallBackHandlerFacade paymentCallBackHandlerFacade;
 
-    @SpringBean(name = ServiceSpringKeys.ORDER_PAYMENT_SERICE)
-    private CustomerOrderPaymentService customerOrderPaymentService;
-
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
-    private CustomerOrderService customerOrderService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
+    private CheckoutServiceFacade checkoutServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.PAYMENT_PROCESSOR)
     private PaymentProcessor paymentProcessor;
@@ -104,7 +99,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
 
         final String orderGuid = ApplicationDirector.getShoppingCart().getGuid();
 
-        final CustomerOrder customerOrder = customerOrderService.findByGuid(orderGuid);
+        final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(orderGuid);
 
         final PaymentGatewayExternalForm paymentGatewayExternalForm =
                 (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(
@@ -152,9 +147,9 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
                                         ApplicationDirector.getShoppingCart().getOrderInfo().getPaymentGatewayLabel()
                                 );
 
-                                final CustomerOrder customerOrder = customerOrderService.findByGuid(ApplicationDirector.getShoppingCart().getGuid());
+                                final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(ApplicationDirector.getShoppingCart().getGuid());
 
-                                if (isOk(customerOrder)) {
+                                if (checkoutServiceFacade.isOrderPaymentSuccessful(customerOrder)) {
 
                                     addOrReplace(
                                             new Label(
@@ -222,24 +217,6 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
         processCommands();
 
         super.onBeforeRender();
-
-    }
-
-    /**
-     * Get payment status from order.
-     * We expected one payment only.
-     *
-     * @param customerOrder given customer order.
-     * @return true in case of successful page
-     */
-    private boolean isOk(final CustomerOrder customerOrder) {
-
-        final List<CustomerOrderPayment> payments =
-                customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null);
-
-        return payments != null
-                && !payments.isEmpty()
-                && Payment.PAYMENT_STATUS_OK.equals(payments.get(0).getPaymentProcessorResult());
 
     }
 

@@ -38,7 +38,6 @@ import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
-import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.shoppingcart.*;
@@ -54,6 +53,7 @@ import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorModel;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
+import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.math.BigDecimal;
@@ -131,14 +131,11 @@ public class CheckoutPage extends AbstractWebPage {
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
     private CustomerServiceFacade customerServiceFacade;
 
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
-    private CustomerOrderService customerOrderService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
+    private CheckoutServiceFacade checkoutServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.PAYMENT_MODULES_MANAGER)
     private PaymentModulesManager paymentModulesManager;
-
-    @SpringBean(name = StorefrontServiceSpringKeys.AMOUNT_CALCULATION_STRATEGY)
-    private AmountCalculationStrategy amountCalculationStrategy;
 
     @SpringBean(name = ServiceSpringKeys.PAYMENT_PROCESSOR)
     private PaymentProcessor paymentProcessor;
@@ -169,15 +166,9 @@ public class CheckoutPage extends AbstractWebPage {
 
         if (STEP_PAY.equals(currentStep) ) {
 
-            final CustomerOrder customerOrder = customerOrderService.createFromCart(
-                    ApplicationDirector.getShoppingCart(),
-                    !ApplicationDirector.getShoppingCart().getOrderInfo().isMultipleDelivery()
-            );
-
+            checkoutServiceFacade.createFromCart(ApplicationDirector.getShoppingCart());
 
         }
-
-
 
 
         add(
@@ -286,7 +277,7 @@ public class CheckoutPage extends AbstractWebPage {
         final MarkupContainer rez = new Fragment(CONTENT_VIEW, PAYMENT_FRAGMENT, this);
         final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
         final OrderInfo orderInfo = shoppingCart.getOrderInfo();
-        final boolean showMultipleDelivery = customerOrderService.isOrderCanHasMultipleDeliveries(shoppingCart);
+        final boolean showMultipleDelivery = checkoutServiceFacade.isMultipleDeliveryAllowedForCart(shoppingCart);
         orderInfo.setPaymentGatewayLabel(null);
 
         rez
@@ -351,13 +342,13 @@ public class CheckoutPage extends AbstractWebPage {
                                             protected void onSelectionChanged(final PaymentGatewayDescriptor descriptor) {
 
                                                 final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel());
-                                                final CustomerOrder order = customerOrderService.findByGuid(shoppingCart.getGuid());
-                                                final Total total = amountCalculationStrategy.calculate(order);
+                                                final CustomerOrder order = checkoutServiceFacade.findByGuid(shoppingCart.getGuid());
+                                                final Total total = checkoutServiceFacade.getOrderTotal(order);
                                                 final BigDecimal grandTotal = total.getTotalAmount();
 
                                                 //pay pal express checkout gateway support
                                                 order.setPgLabel(descriptor.getLabel());
-                                                customerOrderService.update(order);
+                                                checkoutServiceFacade.update(order);
 
 
                                                 final String htmlForm = getPaymentForm(gateway, order, grandTotal);

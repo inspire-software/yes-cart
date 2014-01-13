@@ -118,4 +118,9 @@ public interface StorefrontServiceSpringKeys {
       */
      public String SHIPPING_SERVICE_FACADE = "shippingServiceFacade";
 
+     /**
+      * Checkout service facade
+      */
+     public String CHECKOUT_SERVICE_FACADE = "checkoutServiceFacade";
+
 }

@@ -33,8 +33,6 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
-import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderItemAllocationException;
@@ -45,6 +43,8 @@ import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
@@ -87,11 +87,8 @@ public class PaymentPage extends AbstractWebPage {
     @SpringBean(name = ServiceSpringKeys.PAYMENT_PROCESS_FACADE)
     private PaymentProcessFacade paymentProcessFacade;
 
-    @SpringBean(name = ServiceSpringKeys.ORDER_PAYMENT_SERICE)
-    private CustomerOrderPaymentService customerOrderPaymentService;
-
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
-    private CustomerOrderService customerOrderService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
+    private CheckoutServiceFacade checkoutServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
     private ProductSkuService productSkuService;
@@ -220,8 +217,7 @@ public class PaymentPage extends AbstractWebPage {
 
         error(getLocalizer().getString(NEGATIVE_PAYMENT_NOTES, this));
 
-        final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(
-                getOrderNumber(), null, null, null);
+        final List<CustomerOrderPayment> payments = checkoutServiceFacade.findPaymentRecordsByOrderNumber(getOrderNumber());
 
 
         return new Fragment(RESULT_CONTAINER, NEGATIVE_RESULT_FRAGMENT, this)
@@ -259,7 +255,7 @@ public class PaymentPage extends AbstractWebPage {
      */
     private String getOrderNumber() {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-        final CustomerOrder customerOrder = customerOrderService.findByGuid(cart.getGuid());
+        final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(cart.getGuid());
         return customerOrder.getOrdernum();
     }
 
