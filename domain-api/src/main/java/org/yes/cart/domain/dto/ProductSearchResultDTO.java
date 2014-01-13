@@ -19,6 +19,7 @@ package org.yes.cart.domain.dto;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -92,6 +93,36 @@ public interface ProductSearchResultDTO extends Identifiable {
      * @param description product description.
      */
     void setDescription(String description);
+
+    /**
+     * Get start of product availability.
+     * Null - product has not start date, means no limitation.
+     *
+     * @return start of product availability.
+     */
+    Date getAvailablefrom();
+
+    /**
+     * Set start of product availability.
+     *
+     * @param availablefrom start of product availability.
+     */
+    void setAvailablefrom(Date availablefrom);
+
+    /**
+     * Get end of product availability.
+     * Null - product has not end date, means no limitation.
+     *
+     * @return end of product availability.
+     */
+    Date getAvailableto();
+
+    /**
+     * Set end of product availability.
+     *
+     * @param availableto end of product availability.
+     */
+    void setAvailableto(Date availableto);
 
     /**
      * Set product availability. See ProductEntity fields for more details.

@@ -22,6 +22,7 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -39,6 +40,8 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private String displayName;
     private String description;
     private String displayDescription;
+    private Date availablefrom;
+    private Date availableto;
     private int availability;
     private Map<Long, Map<String, BigDecimal>> qtyOnWarehouse;
     private String defaultImage;
@@ -66,6 +69,26 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     /** {@inheritDoc} */
     public void setQtyOnWarehouse(final Map<Long, Map<String, BigDecimal>> qtyOnWarehouse) {
         this.qtyOnWarehouse = qtyOnWarehouse;
+    }
+
+    /** {@inheritDoc} */
+    public Date getAvailableto() {
+        return availableto;
+    }
+
+    /** {@inheritDoc} */
+    public void setAvailableto(final Date availableto) {
+        this.availableto = availableto;
+    }
+
+    /** {@inheritDoc} */
+    public Date getAvailablefrom() {
+        return availablefrom;
+    }
+
+    /** {@inheritDoc} */
+    public void setAvailablefrom(final Date availablefrom) {
+        this.availablefrom = availablefrom;
     }
 
     /** {@inheritDoc} */
