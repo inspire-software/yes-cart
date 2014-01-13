@@ -26,11 +26,12 @@ import org.slf4j.Logger;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ShopUrl;
-import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -56,8 +57,8 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
     private static final String ORDER_GUID = "orderGuid";     // correspond to  AuthorizeNetSimPaymentGatewayImpl
 
-    @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
-    private CustomerOrderService customerOrderService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
+    private CheckoutServiceFacade checkoutServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.SHOP_SERVICE)
     private ShopService shopService;
@@ -90,7 +91,7 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         log.info("#### orderGuid = " + orderGuid);
 
-        final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
+        final CustomerOrder order = checkoutServiceFacade.findByGuid(orderGuid);
 
         if (order == null) {
 
