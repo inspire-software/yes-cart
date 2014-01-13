@@ -33,6 +33,8 @@ public interface ProductSearchQueryBuilder {
 
     public final static String PRODUCT_CREATED_FIELD = "createdTimestamp"; //for projections only
     public final static String PRODUCT_FEATURED_FIELD = "featured"; //for projections only
+    public final static String PRODUCT_AVAILABILITY_FROM_FIELD = "availablefrom"; //for projections only
+    public final static String PRODUCT_AVAILABILITY_TO_FIELD = "availableto"; //for projections only
     public final static String PRODUCT_AVAILABILITY_FIELD = "availability"; //for projections only
     public final static String PRODUCT_QTY_FIELD = "qtyOnWarehouse"; //for projections only
     public final static String PRODUCT_DEFAULTIMAGE_FIELD = "defaultImage"; //for projections only

@@ -466,7 +466,9 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 ProductSearchQueryBuilder.PRODUCT_DEFAULTIMAGE_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_DESCRIPTION_ASIS_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD);
+                ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_FROM_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_TO_FIELD);
 
         final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.size());
         for (Object[] obj : searchRez) {
@@ -482,6 +484,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             dto.setDisplayName((String) obj[8]);
             dto.setDisplayDescription((String) obj[9]);
             dto.setFeatured(obj[10] != null && (Boolean) obj[10]);
+            dto.setAvailablefrom((Date) obj[11]);
+            dto.setAvailableto((Date) obj[12]);
             rez.add(dto);
         }
 

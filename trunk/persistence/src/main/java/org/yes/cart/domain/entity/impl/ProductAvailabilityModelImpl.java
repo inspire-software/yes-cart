@@ -44,6 +44,7 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
 
     public ProductAvailabilityModelImpl(final String defaultSku,
                                         final int availability,
+                                        final boolean availableNow,
                                         final Map<String, BigDecimal> inventoryQty) {
         this.defaultSku = defaultSku;
         perpetual = availability == Product.AVAILABILITY_ALWAYS;
@@ -69,7 +70,7 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
             inStock = false;
         }
 
-        available = inStock || (availability != Product.AVAILABILITY_STANDARD);
+        available = availableNow && (inStock || (availability != Product.AVAILABILITY_STANDARD));
     }
 
     /** {@inheritDoc} */

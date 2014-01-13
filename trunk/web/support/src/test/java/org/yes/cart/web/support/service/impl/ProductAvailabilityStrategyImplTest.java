@@ -296,6 +296,8 @@ public class ProductAvailabilityStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(warehouseService).getByShopId(shopId); will(returnValue(warehouses));
             allowing(sku).getProduct(); will(returnValue(product));
+            allowing(product).getAvailablefrom(); will(returnValue(null));
+            allowing(product).getAvailableto(); will(returnValue(null));
             allowing(product).getAvailability(); will(returnValue(availability));
             allowing(product).getDefaultSku(); will(returnValue(sku));
             allowing(sku).getCode(); will(returnValue(skuCode));
