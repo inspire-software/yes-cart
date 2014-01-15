@@ -130,7 +130,7 @@ public class AbstractWebPage extends WebPage {
 
         /*Label created = new Label(CREATED,"");
         created.add( new AttributeAppender("content", getCreated(), " "));
-        addOrReplace(created);*/ //TODO: V2
+        addOrReplace(created);*/ // TODO: YC-362
 
     }
 
