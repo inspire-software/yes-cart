@@ -40,46 +40,6 @@ public interface ShoppingContext extends Serializable {
      */
     void setCustomerEmail(String customerEmail);
 
-
-
-    /** Get shopper ip address */
-    String getResolvedIp();
-
-    /**
-     * Set shopper ip address  .
-     * @param resolvedIp resolved ip address.
-     */
-    void setResolvedIp(String resolvedIp);
-
-    /**
-     * Get last viewed sku codes.
-     *
-     * @return comma separated string of viewed skus.
-     */
-    String getLatestViewedSkus();
-
-    /**
-     * Set latest viewed sku codes.
-     *
-     * @param latestViewedSkus latest viewed skus.
-     */
-    void setLatestViewedSkus(String latestViewedSkus);
-
-
-    /**
-     * Get last viewed categories.
-     *
-     * @return comma separated string of category ids.
-     */
-    String getLatestViewedCategories();
-
-    /**
-     * Get last viewed categories.
-     *
-     * @param latestViewedCategories comma separated list of category ids.
-     */
-    void setLatestViewedCategories(String latestViewedCategories);
-
     /**
      * Get customer name.
      *
@@ -121,6 +81,59 @@ public interface ShoppingContext extends Serializable {
      * @param shopCode current shop code.
      */
     void setShopCode(String shopCode);
+
+
+    /**
+     * Get shopper ip address
+     *
+     * TODO: YC-361
+     *
+     * @return customer's IP
+     */
+    String getResolvedIp();
+
+    /**
+     * Set shopper ip address.
+     *
+     * TODO: YC-361
+     *
+     * @param resolvedIp resolved ip address.
+     */
+    void setResolvedIp(String resolvedIp);
+
+
+    /**
+     * Get last viewed sku codes.
+     *
+     * @return comma separated string of viewed skus.
+     */
+    String getLatestViewedSkus();
+
+    /**
+     * Set latest viewed sku codes.
+     *
+     * @param latestViewedSkus latest viewed skus.
+     */
+    void setLatestViewedSkus(String latestViewedSkus);
+
+
+    /**
+     * Get last viewed categories.
+     *
+     * TODO: YC-360
+     *
+     * @return comma separated string of category ids.
+     */
+    String getLatestViewedCategories();
+
+    /**
+     * Get last viewed categories.
+     *
+     * TODO: YC-360
+     *
+     * @param latestViewedCategories comma separated list of category ids.
+     */
+    void setLatestViewedCategories(String latestViewedCategories);
 
 
     /**
