@@ -107,8 +107,9 @@ public class CustomerSelfCarePage extends AbstractWebPage {
      */
     @Override
     protected void onBeforeRender() {
-        processCommands();
+        executeHttpPostedCommands();
         super.onBeforeRender();
+        persistCartIfNecessary();
     }
 
     /**

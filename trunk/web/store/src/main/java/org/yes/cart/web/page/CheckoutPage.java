@@ -306,7 +306,7 @@ public class CheckoutPage extends AbstractWebPage {
                                                         ApplicationDirector.getShoppingCart(),
                                                         (Map) Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, getModelObject().toString()));
                                                 super.onSelectionChanged();
-                                                processCommands();
+                                                persistCartIfNecessary();
                                                 setResponsePage(
                                                         CheckoutPage.class,
                                                         new PageParameters().set(
@@ -547,8 +547,9 @@ public class CheckoutPage extends AbstractWebPage {
     @Override
     protected void onBeforeRender() {
 
-        processCommands();
+        executeHttpPostedCommands();
         super.onBeforeRender();
+        persistCartIfNecessary();
 
     }
 

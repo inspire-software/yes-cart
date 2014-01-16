@@ -27,6 +27,8 @@ import org.springframework.util.StringUtils;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.HomePage;
@@ -45,6 +47,7 @@ import org.yes.cart.web.util.WicketUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -151,6 +154,10 @@ public class SkuCentralView extends AbstractCentralView {
     @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
     private ProductAvailabilityStrategy productAvailabilityStrategy;
 
+    @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
+    private ShoppingCartCommandFactory shoppingCartCommandFactory;
+
+
     private boolean isProduct;
     private Product product;
     private ProductSku sku;
@@ -192,6 +199,10 @@ public class SkuCentralView extends AbstractCentralView {
         } else {
             throw new RuntimeException("Product or Sku id expected");
         }
+
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, ApplicationDirector.getShoppingCart(), new HashMap<String, Object>() {{
+            put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, product);
+        }});
 
     }
 

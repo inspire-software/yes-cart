@@ -53,7 +53,7 @@ public class ShoppingCartPage extends AbstractWebPage {
     @Override
     protected void onBeforeRender() {
 
-        processCommands();
+        executeHttpPostedCommands();
 
         addOrReplace(
                 new FeedbackPanel(FEEDBACK)
@@ -72,6 +72,8 @@ public class ShoppingCartPage extends AbstractWebPage {
         }
 
         super.onBeforeRender();
+
+        persistCartIfNecessary();
     }
 
 

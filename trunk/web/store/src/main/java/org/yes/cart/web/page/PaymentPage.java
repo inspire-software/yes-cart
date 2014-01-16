@@ -167,7 +167,7 @@ public class PaymentPage extends AbstractWebPage {
     @Override
     protected void onBeforeRender() {
 
-        processCommands();
+        executeHttpPostedCommands();
 
 
         addOrReplace(
@@ -177,6 +177,8 @@ public class PaymentPage extends AbstractWebPage {
         );
 
         super.onBeforeRender();
+
+        persistCartIfNecessary();
     }
 
 

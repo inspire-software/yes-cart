@@ -79,9 +79,11 @@ public class ResultPage extends AbstractWebPage {
     @Override
     protected void onRender() {
 
-        processCommands();
+        executeHttpPostedCommands();
 
         super.onRender();
+
+        persistCartIfNecessary();
     }
 
     /**

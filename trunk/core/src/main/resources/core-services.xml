@@ -1130,6 +1130,10 @@
 
                 <bean id="logoutCmd" class="org.yes.cart.shoppingcart.impl.LogoutCommandImpl"/>
 
+                <bean id="viewSkuInternalCmd" class="org.yes.cart.shoppingcart.impl.ViewProductSkuInternalCommandImpl">
+                    <constructor-arg index="0" value="10"/>
+                </bean>
+
             </list>
         </constructor-arg>
     </bean>

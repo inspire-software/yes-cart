@@ -46,6 +46,7 @@ public interface ShoppingCartCommand extends Serializable {
 
     String CMD_CHANGECURRENCY = "changeCurrencyCmd";
     String CMD_CHANGELOCALE = "changeLocaleCmd";
+    String CMD_INTERNAL_VIEWSKU = "viewSkuInternalCmd";
 
     String CMD_CLEAN = "cleanCartCmd";
     String CMD_EXPIRE = "expireCartCmd";

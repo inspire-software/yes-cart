@@ -156,7 +156,8 @@ public class LoginPanel extends BaseComponent {
                     if (customer != null) {
                         getCustomerServiceFacade().resetPassword(ApplicationDirector.getCurrentShop(), customer);
                     }
-                    ((AbstractWebPage) getPage()).processCommands();
+                    ((AbstractWebPage) getPage()).executeHttpPostedCommands();
+                    ((AbstractWebPage) getPage()).persistCartIfNecessary();
 
                     if(isCheckout) {
                         //final String errorMessage =  new StringResourceModel(ALLOCATION_DETAIL, this, null, new Object [] {sku.getName(), sku.getCode() } ).getString()  ;
@@ -190,7 +191,8 @@ public class LoginPanel extends BaseComponent {
                                 final IAuthenticationStrategy strategy = getApplication().getSecuritySettings()
                                         .getAuthenticationStrategy();
                                 strategy.save(getEmail(), getPassword());
-                                ((AbstractWebPage) getPage()).processCommands();
+                                ((AbstractWebPage) getPage()).executeHttpPostedCommands();
+                                ((AbstractWebPage) getPage()).persistCartIfNecessary();
                                 if (!continueToOriginalDestination()) {
                                     setResponsePage(successfulPage, parameters);
                                 }

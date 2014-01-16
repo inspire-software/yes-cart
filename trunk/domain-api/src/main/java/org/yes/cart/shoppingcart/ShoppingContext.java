@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Responsible to hold shopping context data like viewed products and categories, security context, geo data and
@@ -107,14 +108,14 @@ public interface ShoppingContext extends Serializable {
      *
      * @return comma separated string of viewed skus.
      */
-    String getLatestViewedSkus();
+    List<String> getLatestViewedSkus();
 
     /**
      * Set latest viewed sku codes.
      *
      * @param latestViewedSkus latest viewed skus.
      */
-    void setLatestViewedSkus(String latestViewedSkus);
+    void setLatestViewedSkus(List<String> latestViewedSkus);
 
 
     /**
@@ -124,16 +125,16 @@ public interface ShoppingContext extends Serializable {
      *
      * @return comma separated string of category ids.
      */
-    String getLatestViewedCategories();
+    List<String> getLatestViewedCategories();
 
     /**
-     * Get last viewed categories.
+     * Set last viewed categories.
      *
      * TODO: YC-360
      *
      * @param latestViewedCategories comma separated list of category ids.
      */
-    void setLatestViewedCategories(String latestViewedCategories);
+    void setLatestViewedCategories(List<String> latestViewedCategories);
 
 
     /**
