@@ -39,6 +39,7 @@ import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.product.FeaturedProducts;
 import org.yes.cart.web.page.component.product.NewArrivalProducts;
+import org.yes.cart.web.page.component.product.RecentlyViewedProducts;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -102,7 +103,7 @@ public class HomePage extends AbstractWebPage {
     @Override
     protected void onBeforeRender() {
 
-        processCommands();
+        executeHttpPostedCommands();
 
         final String centralViewLabel = centralViewResolver.resolveMainPanelRendererLabel(mapParams);
 
@@ -152,6 +153,7 @@ public class HomePage extends AbstractWebPage {
         add(new BreadCrumbsView("breadCrumbs", categoryId, shopAllCategoriesIds));
 
 
+        add(new RecentlyViewedProducts("recentlyViewed"));
         add(new NewArrivalProducts("newArrival"));
 
         //add(new Carousel("featured"));
@@ -177,7 +179,7 @@ public class HomePage extends AbstractWebPage {
 
         super.onBeforeRender();
 
-
+        persistCartIfNecessary();
     }
 
     /**

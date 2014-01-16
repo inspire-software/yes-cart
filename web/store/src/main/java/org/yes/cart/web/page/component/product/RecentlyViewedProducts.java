@@ -16,17 +16,18 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.StringResourceModel;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
+import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.util.WicketUtil;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ import java.util.List;
  * Date: 9/18/11
  * Time: 11:45 AM
  */
-public class NewArrivalProducts extends AbstractProductSearchResultList {
+public class RecentlyViewedProducts extends AbstractProductSearchResultList {
 
 
     private List<ProductSearchResultDTO> products = null;
@@ -47,14 +48,14 @@ public class NewArrivalProducts extends AbstractProductSearchResultList {
      *
      * @param id component id.
      */
-    public NewArrivalProducts(final String id) {
+    public RecentlyViewedProducts(final String id) {
         super(id, true);
     }
 
     @Override
     protected void onBeforeRender() {
 
-        add(new Label("productsTitle", new StringResourceModel("new.arrivals", this, null)).setVisible(!getProductListToShow().isEmpty()));
+        add(new Label("productsTitle", new StringResourceModel("recently.viewed", this, null)).setVisible(!getProductListToShow().isEmpty()));
         super.onBeforeRender();
     }
 
@@ -62,14 +63,27 @@ public class NewArrivalProducts extends AbstractProductSearchResultList {
     @Override
     public List<ProductSearchResultDTO> getProductListToShow() {
         if (products == null) {
-            final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
 
-            final ProductsInCategoryQueryBuilderImpl inCat = new ProductsInCategoryQueryBuilderImpl();
+            List<String> productIds = ApplicationDirector.getShoppingCart().getShoppingContext().getLatestViewedSkus();
+            if (CollectionUtils.isNotEmpty(productIds)) {
+                final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
 
-            final BooleanQuery inCategory = inCat.createQuery(categoryId);
+                int limit = getProductsLimit(categoryId);
+                if (limit > productIds.size()) {
+                    limit = productIds.size();
+                } else {
+                    productIds = productIds.subList(productIds.size() - limit, productIds.size());
+                }
 
-            products = productService.getProductSearchResultDTOByQuery(inCategory, 0, getProductsLimit(categoryId),
-                    ProductSearchQueryBuilder.PRODUCT_CREATED_FIELD, true);
+                final ProductQueryBuilderImpl ftq = new ProductQueryBuilderImpl();
+                products = productService.getProductSearchResultDTOByQuery(
+                        ftq.createQuery(productIds), 0, limit, "code", false);
+
+            } else {
+
+                products = Collections.emptyList();
+            }
+
         }
         return products;
     }

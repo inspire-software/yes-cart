@@ -240,7 +240,8 @@ public class RegisterPanel extends BaseComponent {
 
                                 if (signIn(getEmail(), password)) {
 
-                                    ((AbstractWebPage) getPage()).processCommands();
+                                    ((AbstractWebPage) getPage()).executeHttpPostedCommands();
+                                    ((AbstractWebPage) getPage()).persistCartIfNecessary();
                                     setResponsePage(successfulPage, parameters);
 
                                 } else {

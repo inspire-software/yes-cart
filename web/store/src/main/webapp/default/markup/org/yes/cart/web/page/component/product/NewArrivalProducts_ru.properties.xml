@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
   ~
@@ -14,22 +15,7 @@
   ~    limitations under the License.
   -->
 
-<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<body>
-<wicket:panel>
-    <div wicket:id="productsTitle">[New]</div>
-    <div wicket:id="products" class="newarrival">
-        <p align="center" style="height: 85px; overflow:hidden">
-            <a wicket:id="productLinkImage"   class="image-border">
-                <img wicket:id="productDefaultImage"/>
-            </a>
-        </p>
-        <p align="center" style="height: 40px; overflow:hidden">
-            <a wicket:id="productLinkName">
-                <span wicket:id="name"/>
-            </a>
-        </p>
-    </div>
-</wicket:panel>
-</body>
-</html>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="new.arrivals">Новые</entry>
+</properties>

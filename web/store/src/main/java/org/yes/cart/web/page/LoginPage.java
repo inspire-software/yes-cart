@@ -67,9 +67,11 @@ public class LoginPage extends AbstractWebPage {
     @Override
     protected void onBeforeRender() {
 
-        processCommands();
+        executeHttpPostedCommands();
 
         super.onBeforeRender();
+
+        persistCartIfNecessary();
     }
 
     /**

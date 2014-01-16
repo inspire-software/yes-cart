@@ -135,9 +135,15 @@ public class AbstractWebPage extends WebPage {
     }
 
     /**
-     * {@inheritDoc}
+     * Executes Http commands that are posted via http and are available from
+     * this.getPageParameters() method. This method should be the first thing that
+     * is executed if a page is using shopping cart.
+     *
+     * This method DOES NOT persist the cart to cookies.
+     *
+     * This method should only be called once per page request.
      */
-    public void processCommands() {
+    public void executeHttpPostedCommands() {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
@@ -145,11 +151,7 @@ public class AbstractWebPage extends WebPage {
         getShoppingCartCommandFactory().execute(cart, (Map) WicketUtil.pageParametesAsMap(params));
 
         if (cart.isModified()) {
-            getShoppingCartPersister().persistShoppingCart(
-                    (HttpServletRequest) getRequest().getContainerRequest(),
-                    (HttpServletResponse) getResponse().getContainerResponse(),
-                    cart
-            );
+
             if (params.getNamedKeys().contains(ShoppingCartCommand.CMD_CHANGELOCALE)) {
                 getSession().setLocale(new Locale(cart.getCurrentLocale()));
             }
@@ -159,21 +161,36 @@ public class AbstractWebPage extends WebPage {
                 strategy.remove();
                 AuthenticatedWebSession.get().signOut();
             }
-        }
 
-        //wtf ??? super.onBeforeRender();
+        }
 
     }
 
     /**
-     * {@inheritDoc}
+     * Issue a call to cart persistence engine to save all updates to the cart.
+     * The persistence only occurs when cart is marked dirty.
+     */
+    public void persistCartIfNecessary() {
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        if (cart.isModified()) {
+            getShoppingCartPersister().persistShoppingCart(
+                    (HttpServletRequest) getRequest().getContainerRequest(),
+                    (HttpServletResponse) getResponse().getContainerResponse(),
+                    cart
+            );
+        }
+    }
+
+    /**
+     * @return shopping cart command factory
      */
     public ShoppingCartCommandFactory getShoppingCartCommandFactory() {
         return shoppingCartCommandFactory;
     }
 
     /**
-     * {@inheritDoc}
+     * @return shopping cart persister
      */
     public ShoppingCartPersister getShoppingCartPersister() {
         return shoppingCartPersister;

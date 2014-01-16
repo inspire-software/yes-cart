@@ -18,6 +18,8 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.shoppingcart.ShoppingContext;
 
+import java.util.List;
+
 /**
  *
  * Shopping context implementation.
@@ -30,13 +32,14 @@ public class ShoppingContextImpl implements ShoppingContext {
 
     private static final long serialVersionUID =  20110509L;
 
-    private String latestViewedSkus;
-    private String latestViewedCategories;
     private String customerName;
     private long shopId;
     private String shopCode;
-    private String resolvedIp;
     private String customerEmail;
+
+    private List<String> latestViewedSkus;
+    private List<String> latestViewedCategories;
+    private String resolvedIp;
 
     /** {@inheritDoc} */
     public String getCustomerEmail() {
@@ -56,8 +59,10 @@ public class ShoppingContextImpl implements ShoppingContext {
     }
 
     private void clearShopRelatedParameters() {
-        latestViewedSkus = null;
-        latestViewedCategories = null;
+        //we do not empty the cart on log off, so we really should not remove these as well then
+        //latestViewedSkus = null;
+        //latestViewedCategories = null;
+        resolvedIp = null;
     }
 
     /** {@inheritDoc} */
@@ -71,22 +76,22 @@ public class ShoppingContextImpl implements ShoppingContext {
     }
 
     /** {@inheritDoc} */
-    public String getLatestViewedSkus() {
+    public List<String> getLatestViewedSkus() {
         return latestViewedSkus;
     }
 
     /** {@inheritDoc} */
-    public void setLatestViewedSkus(final String latestViewedSkus) {
+    public void setLatestViewedSkus(final List<String> latestViewedSkus) {
         this.latestViewedSkus = latestViewedSkus;
     }
 
     /** {@inheritDoc} */
-    public String getLatestViewedCategories() {
+    public List<String> getLatestViewedCategories() {
         return latestViewedCategories;
     }
 
     /** {@inheritDoc} */
-    public void setLatestViewedCategories(final String latestViewedCategories) {
+    public void setLatestViewedCategories(final List<String> latestViewedCategories) {
         this.latestViewedCategories = latestViewedCategories;
     }
 
