@@ -27,7 +27,7 @@
             <mx:TextInput id="nameTextInput" width="300" />
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='displayName')">
-            <yci18n:i18nStringField id="displayNames"/>
+            <yci18n:i18nStringField id="displayNames" change="onDisplayNamesChange(event)"/>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='barCode')">
             <mx:TextInput id="barCodeTextInput" width="300"/>
@@ -90,6 +90,8 @@
     <mx:Script>
         <![CDATA[
         import com.hexagonstar.util.debug.Debug;
+
+        import mx.events.FlexEvent;
 
         import org.yes.cart.event.DtoEvent;
 
@@ -180,6 +182,10 @@
         private function productSkuChanged(event:PropertyChangeEvent):void {
             var validatorErrorArray:Array = Validator.validateAll(validatorArr);
             productSkuChangedFlag = (validatorErrorArray.length == 0);
+        }
+
+        private function onDisplayNamesChange(event:FlexEvent):void {
+            productSkuChanged(null);
         }
 
         private function saveProductsKU(event:MouseEvent):void {
