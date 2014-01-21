@@ -29,7 +29,7 @@
                 <mx:TextInput id="nameTextInput" width="300"/>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='displayName')">
-                <yci18n:i18nStringField id="displayNames"/>
+                <yci18n:i18nStringField id="displayNames" change="onDisplayNamesChange(event)"/>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='description')">
                 <mx:TextArea id="descriptionTextInput" width="300"/>
@@ -139,6 +139,7 @@
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
         import mx.controls.Alert;
+        import mx.events.FlexEvent;
         import mx.events.PropertyChangeEvent;
         import mx.utils.ObjectUtil;
 
@@ -160,6 +161,10 @@
             _productDTOImpl = value;
             allowChangeCode = DomainUtils.isPersistentPK(_productDTOImpl.productId);
             bindProperties();
+        }
+
+        private function onDisplayNamesChange(event:FlexEvent):void {
+            productDTOImplChanged = true;
         }
 
         private function saveProductChanges(event:MouseEvent):void {
