@@ -33,6 +33,7 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
@@ -592,7 +593,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     List<FilteredNavigationRecord> getSingleValueNavigationRecords(final String locale, final long productTypeId) {
         List<Object[]> list;
-        final Set<FilteredNavigationRecord> records = new HashSet<FilteredNavigationRecord>();
+        final Map<FilteredNavigationRecord, FilteredNavigationRecord> records = new HashMap<FilteredNavigationRecord, FilteredNavigationRecord>();
 
         final Map<String, Integer> singleNavAttrCodes = attributeService.getSingleNavigatableAttributeCodesByProductType(productTypeId);
         if (!singleNavAttrCodes.isEmpty()) {
@@ -606,7 +607,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                     "PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
             appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
         }
-        return new ArrayList<FilteredNavigationRecord>(records);
+        return new ArrayList<FilteredNavigationRecord>(records.values());
     }
 
 
@@ -650,7 +651,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     private static final I18NModel BLANK = new FailoverStringI18NModel(null, "-");
 
-    private void appendFilteredNavigationRecords(final Set<FilteredNavigationRecord> toAppendTo,
+    private void appendFilteredNavigationRecords(final Map<FilteredNavigationRecord, FilteredNavigationRecord> toAppendTo,
                                                  final String locale,
                                                  final List<Object[]> list,
                                                  final Map<String, I18NModel> attrNames,
@@ -661,18 +662,26 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             final I18NModel attrName = attrNames.containsKey(attrCode) ? attrNames.get(attrCode) : BLANK;
             final Integer attrRank = attrRanks.containsKey(attrCode) ? attrRanks.get(attrCode) : Integer.MAX_VALUE;
 
-            toAppendTo.add(
-                    new FilteredNavigationRecordImpl(
-                            attrName.getValue("-"),
-                            attrName.getValue(locale),
-                            attrCode,
-                            (String) objArray[1],
-                            new FailoverStringI18NModel((String) objArray[2], (String) objArray[1]).getValue(locale),
-                            0, // put zero initially as this this be populated by FT query
-                            attrRank,
-                            "S"
-                    )
+            final FilteredNavigationRecord fnr = new FilteredNavigationRecordImpl(
+                    attrName.getValue("-"),
+                    attrName.getValue(locale),
+                    attrCode,
+                    (String) objArray[1],
+                    new StringI18NModel((String) objArray[2]).getValue(locale),
+                    0, // put zero initially as this this be populated by FT query
+                    attrRank,
+                    "S"
             );
+
+            final FilteredNavigationRecord oldFnr = toAppendTo.get(fnr);
+            if (oldFnr == null) {
+                toAppendTo.put(fnr, fnr);
+            } else {
+                final String displayValue = oldFnr.getDisplayValue();
+                if (displayValue == null) {
+                    toAppendTo.put(fnr, fnr);
+                }
+            }
 
         }
     }
