@@ -81,7 +81,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             rez = customerService.getGenericDao().getEntityFactory().getByIface(Address.class);
             rez.setCustomer(customer);
             rez.setAddressType(addressType);
-            customer.getAddress().add(rez);
+            // customer.getAddress().add(rez); Must do this when we create address only!
 
             final AttrValueCustomer attrValue = customer.getAttributeByCode(AttributeNamesKeys.CUSTOMER_PHONE);
             rez.setFirstname(customer.getFirstname());
@@ -109,6 +109,8 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }, key = "#address.customer.email")
     public void createOrUpdate(final Address address) {
         if (address.getAddressId() == 0) {
+            // Need to add address to customer only just before the creation
+            address.getCustomer().getAddress().add(address);
             addressService.create(address);
         } else {
             addressService.update(address);
