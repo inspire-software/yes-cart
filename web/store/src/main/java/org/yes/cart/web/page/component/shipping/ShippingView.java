@@ -120,13 +120,28 @@ public class ShippingView extends BaseComponent {
                     Address billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
                     Address shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
 
-                    shippingAddressId = String.valueOf(shippingAddress.getAddressId());
+                    if (shippingAddress != null) { //normal case when we entered shipping address
 
-                    if (!cart.isSeparateBillingAddress() || billingAddress == null) {
-                        billingAddress = shippingAddress;
+                        shippingAddressId = String.valueOf(shippingAddress.getAddressId());
+
+                        if (!cart.isSeparateBillingAddress() || billingAddress == null) {
+                            billingAddress = shippingAddress;
+                        }
+                        billingAddressId = String.valueOf(billingAddress.getAddressId());
+
+                    } else if (billingAddress != null) { // exception use case when we only have billing address
+
+                        billingAddressId = String.valueOf(billingAddress.getAddressId());
+
+                        shippingAddress = billingAddress;
+
+                        shippingAddressId = String.valueOf(shippingAddress.getAddressId());
+
+                    } else { // should not happen as we check that we have at least one address before this step
+                    shippingAddressId = "";
+                    billingAddressId = "";
                     }
 
-                    billingAddressId = String.valueOf(billingAddress.getAddressId());
                 } else {
                     shippingAddressId = "";
                     billingAddressId = "";
