@@ -4,6 +4,7 @@ package org.yes.cart.payment.impl;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
+import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 
@@ -125,6 +126,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
                 "Everything is ok, Boss"
         );
         payment.setCardNumber("4111111111111111");
+        payment.setShopperIpAddress(getSingleValue(privateCallBackParameters.get(PaymentMiscParam.CLIENT_IP)));
 
         return payment;
     }

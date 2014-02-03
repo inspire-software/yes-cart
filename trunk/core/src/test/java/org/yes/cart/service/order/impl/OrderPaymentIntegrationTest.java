@@ -18,10 +18,14 @@ package org.yes.cart.service.order.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.payment.dto.PaymentMiscParam;
+import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
@@ -78,7 +82,11 @@ public class OrderPaymentIntegrationTest extends BaseCoreDBTestCase {
         assertEquals(1, customerOrder.getDelivery().size());
         assertEquals(1, customerOrder.getOrderDetail().size());
 
-        assertTrue(paymentProcessFacade.pay(cart, Collections.emptyMap()));
+        final Map params = new HashMap();
+        params.put(PaymentMiscParam.CLIENT_IP, "123.123.123.124");
+
+
+        assertTrue(paymentProcessFacade.pay(cart, params));
 
         final BigDecimal[] stockAfter = getStockAndReservationsForSku("CC_TEST1");
 
@@ -100,6 +108,7 @@ public class OrderPaymentIntegrationTest extends BaseCoreDBTestCase {
 
         final CustomerOrderService orderService = ctx().getBean("customerOrderService", CustomerOrderService.class);
         final PaymentProcessFacade paymentProcessFacade = ctx().getBean("paymentProcessFacade", PaymentProcessFacade.class);
+        final CustomerOrderPaymentService customerOrderPaymentService = ctx().getBean(ServiceSpringKeys.ORDER_PAYMENT_SERICE, CustomerOrderPaymentService.class);
 
         Customer customer = createCustomer("_payonline");
         assertFalse(customer.getAddress().isEmpty());
@@ -125,7 +134,18 @@ public class OrderPaymentIntegrationTest extends BaseCoreDBTestCase {
         assertEquals(1, customerOrder.getDelivery().size());
         assertEquals(1, customerOrder.getOrderDetail().size());
 
-        assertTrue(paymentProcessFacade.pay(cart, Collections.emptyMap()));
+        final Map params = new HashMap();
+        params.put(PaymentMiscParam.CLIENT_IP, "123.123.123.124");
+
+
+        assertTrue(paymentProcessFacade.pay(cart, params));
+
+
+        final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null);
+        assertEquals(1, payments.size());
+        final CustomerOrderPayment payment = payments.get(0);
+        assertEquals("123.123.123.124", payment.getShopperIpAddress());
+
 
         final BigDecimal[] stockAfter = getStockAndReservationsForSku("CC_TEST1");
 

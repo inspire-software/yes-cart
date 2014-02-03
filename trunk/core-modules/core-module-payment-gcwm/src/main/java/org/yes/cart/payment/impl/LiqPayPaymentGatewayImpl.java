@@ -10,6 +10,7 @@ import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
+import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.util.ShopCodeContext;
@@ -220,7 +221,9 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
      * {@inheritDoc}
      */
     public Payment createPaymentPrototype(final Map map) {
-        return new PaymentImpl();
+        final Payment payment = new PaymentImpl();
+        payment.setShopperIpAddress(getSingleValue(map.get(PaymentMiscParam.CLIENT_IP)));
+        return payment;
     }
 
     /**

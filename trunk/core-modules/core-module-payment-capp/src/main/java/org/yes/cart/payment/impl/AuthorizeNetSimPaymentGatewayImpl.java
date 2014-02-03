@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
+import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 
@@ -230,6 +231,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
                         + AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_response_reason_text"))
         );
         payment.setCardNumber(AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_account_number")));
+        payment.setShopperIpAddress(getSingleValue(privateCallBackParameters.get(PaymentMiscParam.CLIENT_IP)));
 
         return payment;
     }

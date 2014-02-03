@@ -74,6 +74,8 @@ public class PaymentImpl implements Payment {
 
     private String billingEmail;
 
+    private String shopperIpAddress;
+
 
     /**
      * Default constructor.
@@ -83,6 +85,19 @@ public class PaymentImpl implements Payment {
         paymentAmount = BigDecimal.ZERO;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public String getShopperIpAddress() {
+        return shopperIpAddress;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setShopperIpAddress(final String shopperIpAddress) {
+        this.shopperIpAddress = shopperIpAddress;
+    }
 
     /**
      * {@inheritDoc}

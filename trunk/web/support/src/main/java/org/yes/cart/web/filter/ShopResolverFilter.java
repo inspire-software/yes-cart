@@ -86,6 +86,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
         setDefaultValues(shop);
 
         ApplicationDirector.setCurrentShop(shop);
+        ApplicationDirector.setShopperIPAddress(getRemoteIpAddr(servletRequest));
         ShopCodeContext.setShopCode(shop.getCode());
         ShopCodeContext.setShopId(shop.getShopId()) ;
         //ApplicationDirector.setCurrentServletContext(servletContext);
@@ -94,6 +95,15 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
         return getModifiedRequest(servletRequest, shop);
 
+    }
+
+    private String getRemoteIpAddr(final ServletRequest servletRequest) {
+        final HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
+        String userIpAddress = httpRequest.getHeader("X-Forwarded-For");
+        if (userIpAddress == null) {
+            return httpRequest.getRemoteAddr();
+        }
+        return userIpAddress;
     }
 
     /**
