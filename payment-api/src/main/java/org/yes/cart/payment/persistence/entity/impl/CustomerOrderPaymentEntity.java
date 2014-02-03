@@ -56,8 +56,21 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     private String createdBy;
     private String updatedBy;
     private String guid;
+    private String shopperIpAddress;
 
+    /**
+     * {@inheritDoc}
+     */
+    public String getShopperIpAddress() {
+        return shopperIpAddress;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void setShopperIpAddress(final String shopperIpAddress) {
+        this.shopperIpAddress = shopperIpAddress;
+    }
 
     /**
      * {@inheritDoc}

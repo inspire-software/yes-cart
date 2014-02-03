@@ -42,6 +42,23 @@ public class ApplicationDirector implements ApplicationContextAware {
     private static ThreadLocal<Shop> shopThreadLocal = new ThreadLocal<Shop>();
     private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
     private static ThreadLocal<String> mailTemplatePathThreadLocal = new ThreadLocal<String>();
+    private static ThreadLocal<String> shopperIPAddressThreadLocal = new ThreadLocal<String>();
+
+    /**
+     * Get shopper ip address.
+     * @return shopper ip address
+     */
+    public static String getShopperIPAddress() {
+        return shopperIPAddressThreadLocal.get();
+    }
+
+    /**
+     * Set shopper ip address
+     * @param shopperIPAddress shopper ip address
+     */
+    public static void setShopperIPAddress(final String shopperIPAddress) {
+        shopperIPAddressThreadLocal.set(shopperIPAddress);
+    }
 
     /**
      * Get app director instance.

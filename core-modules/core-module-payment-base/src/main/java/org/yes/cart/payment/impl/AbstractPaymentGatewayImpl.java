@@ -3,6 +3,7 @@ package org.yes.cart.payment.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
@@ -76,6 +77,7 @@ public abstract class AbstractPaymentGatewayImpl implements PaymentGateway {
         payment.setCardExpireYear(getSingleValue(parametersMap.get("ccExpireYear")));
         payment.setCardCvv2Code(getSingleValue(parametersMap.get("ccSecCode")));
         payment.setCardType(getSingleValue(parametersMap.get("ccType")));
+        payment.setShopperIpAddress(getSingleValue(parametersMap.get(PaymentMiscParam.CLIENT_IP)));
 
 
         return payment;

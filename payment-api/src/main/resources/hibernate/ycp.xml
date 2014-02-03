@@ -51,6 +51,7 @@
 
         <property name="paymentProcessorResult" column="PP_REZCODE" type="java.lang.String" length="128" not-null="true"/>
         <property name="paymentProcessorBatchSettlement" column="PP_BATCH_SETTLEMENT" type="boolean" not-null="true"/>
+        <property name="shopperIpAddress" column="IPADDRESS" type="java.lang.String" length="64" not-null="false"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>

@@ -32,6 +32,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.order.OrderException;
@@ -49,6 +50,7 @@ import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -113,9 +115,14 @@ public class PaymentPage extends AbstractWebPage {
                 new FeedbackPanel(FEEDBACK));
 
         try {
+
+            final Map param =  WicketUtil.getHttpServletRequest().getParameterMap();
+
+            param.put(PaymentMiscParam.CLIENT_IP, ApplicationDirector.getShopperIPAddress());
+
             result = paymentProcessFacade.pay(
                         ApplicationDirector.getShoppingCart(),
-                        WicketUtil.getHttpServletRequest().getParameterMap()
+                        param
                     );
 
             if (result) {

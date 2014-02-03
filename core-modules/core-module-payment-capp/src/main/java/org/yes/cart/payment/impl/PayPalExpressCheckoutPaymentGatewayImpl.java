@@ -9,6 +9,7 @@ import org.springframework.util.Assert;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
+import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.util.ShopCodeContext;
@@ -393,6 +394,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
         payment.setTransactionRequestToken((String) parametersMap.get("TOKEN"));
         payment.setTransactionReferenceId((String) parametersMap.get("PAYERID"));
         payment.setTransactionAuthorizationCode((String) parametersMap.get("CORRELATIONID"));
+        payment.setShopperIpAddress(getSingleValue(parametersMap.get(PaymentMiscParam.CLIENT_IP)));
         return payment;
     }
 

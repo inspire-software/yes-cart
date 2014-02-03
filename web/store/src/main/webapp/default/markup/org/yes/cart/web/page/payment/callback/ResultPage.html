@@ -17,7 +17,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
- <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<wicket:head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <wicket:link>
         <link rel="stylesheet" type="text/css" href="../../../../../../../style/demo.css"/>
 
@@ -33,11 +34,12 @@
         <!--[if (lt IE 9) & (!IEMobile)]>
         <link rel="stylesheet" href="../../../../../../../style/ie.css"/>
         <![endif]-->
-
     </wicket:link>
-    <title>
-        <wicket:message key="pageTitle">[page title]</wicket:message>
-    </title>
+
+    <title wicket:id="pageTitle">[page title]</title>
+    <meta wicket:id="description" name="description" content=""/>
+    <meta wicket:id="keywords" name="keywords" content=""/>
+</wicket:head>
 
 <body>
 

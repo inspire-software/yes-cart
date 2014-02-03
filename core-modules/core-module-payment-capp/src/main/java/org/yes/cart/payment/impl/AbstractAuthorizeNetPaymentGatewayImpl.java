@@ -2,6 +2,7 @@ package org.yes.cart.payment.impl;
 
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.dto.PaymentLine;
 
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
@@ -125,7 +126,7 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractCap
         anetCustomer.setPhone(payment.getBillingAddress().getPhoneList());
         anetCustomer.setZipPostalCode(payment.getBillingAddress().getPostcode());
         anetCustomer.setState(payment.getBillingAddress().getStateCode());
-        //anetCustomer.setCustomerIP();// TODO: YC-144 pass from ip resolver
+        anetCustomer.setCustomerIP(payment.getShopperIpAddress());
         return anetCustomer;
     }
 
@@ -160,22 +161,21 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractCap
         order.setInvoiceNumber(payment.getOrderShipment());
         order.setPurchaseOrderNumber(payment.getOrderShipment());
         order.setTotalAmount(payment.getPaymentAmount());
+
         final List<net.authorize.data.OrderItem> itemsInDelivery = new ArrayList<net.authorize.data.OrderItem>(payment.getOrderItems().size());
-        /*int itemIdx = 1;   //TODO: YC-144 fix it low priority cant pass items information
         for (PaymentLine paymentLine : payment.getOrderItems()) {
             net.authorize.data.OrderItem item = net.authorize.data.OrderItem.createOrderItem();
             item.setItemId(paymentLine.getSkuCode());
             item.setItemName(paymentLine.getSkuName());
             item.setItemPrice(paymentLine.getUnitPrice());
-            item.setItemQuantity(paymentLine.getQty());
-            //item.setItemTaxable(); // CP
+            item.setItemQuantity(paymentLine.getQuantity());
+            //item.setItemTaxable(); // CPOINT
             itemsInDelivery.add(
                     item
             );
-            itemIdx++;
-        } */
+        }
         order.setOrderItems(itemsInDelivery);
-        //order.setShippingCharges(); // TODO: YC-144 is it need separately ? - potentially yes, in case of refund the shipping costs may be non refundable
+
         return order;
     }
 
