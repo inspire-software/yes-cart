@@ -75,6 +75,7 @@ public abstract class AbstractShippingPromotionAction extends AbstractPromotionA
                         MoneyUtils.ZERO,
                         MoneyUtils.ZERO,
                         MoneyUtils.ZERO,
+                        MoneyUtils.ZERO,
                         false,
                         null,
                         MoneyUtils.ZERO,

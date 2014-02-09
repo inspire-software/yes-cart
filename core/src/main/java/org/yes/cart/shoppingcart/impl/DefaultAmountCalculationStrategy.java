@@ -135,6 +135,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         final Total itemTotal = new TotalImpl(
                 sub.listPrice,
                 sub.salePrice,
+                sub.nonSalePrice,
                 sub.finalPrice,
                 orderPromoApplied,
                 appliedOrderPromo,
@@ -199,6 +200,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         return new TotalImpl(
                 tmp.getListSubTotal(),
                 tmp.getSaleSubTotal(),
+                tmp.getNonSaleSubTotal(),
                 tmp.getPriceSubTotal(),
                 tmp.isOrderPromoApplied(),
                 tmp.getAppliedOrderPromo(),
@@ -239,6 +241,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         return new TotalImpl(
                 tmp.getListSubTotal(),
                 tmp.getSaleSubTotal(),
+                tmp.getNonSaleSubTotal(),
                 tmp.getPriceSubTotal(),
                 tmp.isOrderPromoApplied(),
                 tmp.getAppliedOrderPromo(),
@@ -291,6 +294,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         final Total orderTotal = new TotalImpl(
                 deliveriesTotal.getListSubTotal(),
                 deliveriesTotal.getSaleSubTotal(),
+                deliveriesTotal.getNonSaleSubTotal(),
                 deliveriesTotal.getPriceSubTotal(),
                 orderPromoApplied,
                 appliedOrderPromo,
@@ -344,6 +348,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         return new TotalImpl(
                 sub.listPrice,
                 sub.salePrice,
+                sub.nonSalePrice,
                 sub.finalPrice,
                 orderPromoApplied,
                 appliedOrderPromo,
@@ -440,6 +445,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
         private BigDecimal listPrice = ZERO;
         private BigDecimal salePrice = ZERO;
+        private BigDecimal nonSalePrice = ZERO;
         private BigDecimal finalPrice = ZERO;
 
         private CartItemPrices() {
@@ -449,6 +455,9 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
             if (!MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO, cartItem.getQty())) {
                 if (cartItem.getListPrice() != null) {
                     this.listPrice = multiply(cartItem.getListPrice(), cartItem.getQty());
+                    if (cartItem.getSalePrice() == null || MoneyUtils.isFirstEqualToSecond(cartItem.getListPrice(), cartItem.getSalePrice())) {
+                        this.nonSalePrice = this.listPrice;
+                    }
                 }
                 if (cartItem.getSalePrice() != null) {
                     this.salePrice = multiply(cartItem.getSalePrice(), cartItem.getQty());
@@ -466,6 +475,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         public void add(final CartItemPrices prices) {
             this.listPrice = this.listPrice.add(prices.listPrice);
             this.salePrice = this.salePrice.add(prices.salePrice);
+            this.nonSalePrice = this.nonSalePrice.add(prices.nonSalePrice);
             this.finalPrice = this.finalPrice.add(prices.finalPrice);
         }
 
@@ -475,6 +485,10 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
         public BigDecimal getSalePrice() {
             return salePrice;
+        }
+
+        public BigDecimal getNonSalePrice() {
+            return nonSalePrice;
         }
 
         public BigDecimal getFinalPrice() {

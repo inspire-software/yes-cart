@@ -63,6 +63,7 @@ public class TotalImplTest {
                 BigDecimal.ONE,
                 BigDecimal.ONE,
                 BigDecimal.ONE,
+                BigDecimal.ONE,
                 false,
                 null,
                 BigDecimal.ONE,
@@ -82,6 +83,7 @@ public class TotalImplTest {
 
         assertEquals("1.00", total.getListSubTotal().toString());
         assertEquals("1.00", total.getSaleSubTotal().toString());
+        assertEquals("1.00", total.getNonSaleSubTotal().toString());
         assertEquals("1.00", total.getPriceSubTotal().toString());
         assertFalse(total.isOrderPromoApplied());
         assertNull(total.getAppliedOrderPromo());
@@ -108,6 +110,7 @@ public class TotalImplTest {
                 BigDecimal.ONE,
                 BigDecimal.ONE,
                 BigDecimal.ONE,
+                BigDecimal.ONE,
                 true,
                 "ABC",
                 BigDecimal.ONE,
@@ -127,6 +130,7 @@ public class TotalImplTest {
 
         assertEquals("1.00", total.getListSubTotal().toString());
         assertEquals("1.00", total.getSaleSubTotal().toString());
+        assertEquals("1.00", total.getNonSaleSubTotal().toString());
         assertEquals("1.00", total.getPriceSubTotal().toString());
         assertTrue(total.isOrderPromoApplied());
         assertEquals("ABC", total.getAppliedOrderPromo());
@@ -152,6 +156,7 @@ public class TotalImplTest {
         final Total itemTotal = new TotalImpl().add(new TotalImpl(
                 new BigDecimal("100"),
                 new BigDecimal("90"),
+                new BigDecimal("50"),
                 new BigDecimal("80"),
                 false,
                 null,
@@ -171,6 +176,7 @@ public class TotalImplTest {
         ));
 
         final Total orderTotal = itemTotal.add(new TotalImpl(
+                BigDecimal.ZERO,
                 BigDecimal.ZERO,
                 BigDecimal.ZERO,
                 BigDecimal.ZERO,
@@ -195,6 +201,7 @@ public class TotalImplTest {
                 BigDecimal.ZERO,
                 BigDecimal.ZERO,
                 BigDecimal.ZERO,
+                BigDecimal.ZERO,
                 false,
                 null,
                 BigDecimal.ZERO,
@@ -214,6 +221,7 @@ public class TotalImplTest {
 
         assertEquals("100.00", total.getListSubTotal().toString());
         assertEquals("90.00", total.getSaleSubTotal().toString());
+        assertEquals("50.00", total.getNonSaleSubTotal().toString());
         assertEquals("80.00", total.getPriceSubTotal().toString());
         assertTrue(total.isOrderPromoApplied());
         assertEquals("ORDER-5%,ANOTHER-5%", total.getAppliedOrderPromo());

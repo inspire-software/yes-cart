@@ -162,6 +162,8 @@
                         propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "shopCode", shopCode, "text"));
                         propertyWatchers.addItem(BindingUtils.bindProperty(currency, "text", _promotion, "currency"));
                         propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "currency", currency, "text"));
+                        preselectCombo(promoType, null);
+                        preselectCombo(promoAction, null);
                     } else {
                         propertyWatchers.addItem(BindingUtils.bindProperty(code, "text", _promotion, "code"));
                         propertyWatchers.addItem(BindingUtils.bindProperty(shopCode, "text", _promotion, "shopCode"));
@@ -205,6 +207,8 @@
                     }
                     _index++;
                 }
+                combo.selectedItem = null;
+                combo.selectedIndex = 0;
             }
 
             private function setPromoActionOptions(_selectedData:String):void {
@@ -215,6 +219,7 @@
                             { data:null, label:'' },
                             { data:'F', label:resourceManager.getString('PromotionManagementPanel', 'promoActionF') },
                             { data:'P', label:resourceManager.getString('PromotionManagementPanel', 'promoActionP') },
+                            { data:'S', label:resourceManager.getString('PromotionManagementPanel', 'promoActionS') },
                             { data:'G', label:resourceManager.getString('PromotionManagementPanel', 'promoActionG') },
                         ];
                         break;
