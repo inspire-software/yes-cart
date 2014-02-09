@@ -35,6 +35,7 @@ public class TotalImpl implements Total {
 
     private BigDecimal listSubTotal;
     private BigDecimal saleSubTotal;
+    private BigDecimal nonSaleSubTotal;
     private BigDecimal priceSubTotal;
     private boolean orderPromoApplied;
     private String appliedOrderPromo;
@@ -56,11 +57,12 @@ public class TotalImpl implements Total {
 
 
     public TotalImpl() {
-        this(ZERO, ZERO, ZERO, false, null, ZERO, ZERO, ZERO, ZERO, ZERO, false, null, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
+        this(ZERO, ZERO, ZERO, ZERO, false, null, ZERO, ZERO, ZERO, ZERO, ZERO, false, null, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
     }
 
     public TotalImpl(final BigDecimal listSubTotal,
                      final BigDecimal saleSubTotal,
+                     final BigDecimal nonSaleSubTotal,
                      final BigDecimal priceSubTotal,
                      final boolean orderPromoApplied,
                      final String appliedOrderPromo,
@@ -80,6 +82,7 @@ public class TotalImpl implements Total {
 
         this.listSubTotal = listSubTotal;
         this.saleSubTotal = saleSubTotal;
+        this.nonSaleSubTotal = nonSaleSubTotal;
         this.priceSubTotal = priceSubTotal;
         this.orderPromoApplied = orderPromoApplied;
         this.appliedOrderPromo = appliedOrderPromo;
@@ -107,6 +110,11 @@ public class TotalImpl implements Total {
     /** {@inheritDoc} */
     public BigDecimal getSaleSubTotal() {
         return saleSubTotal;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getNonSaleSubTotal() {
+        return nonSaleSubTotal;
     }
 
     /** {@inheritDoc} */
@@ -194,6 +202,7 @@ public class TotalImpl implements Total {
         final TotalImpl sum = new TotalImpl(
                 listSubTotal,
                 saleSubTotal,
+                nonSaleSubTotal,
                 priceSubTotal,
                 orderPromoApplied,
                 appliedOrderPromo,
@@ -213,6 +222,7 @@ public class TotalImpl implements Total {
 
         sum.listSubTotal = sum.listSubTotal.add(summand.getListSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         sum.saleSubTotal = sum.saleSubTotal.add(summand.getSaleSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        sum.nonSaleSubTotal = sum.nonSaleSubTotal.add(summand.getNonSaleSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         sum.priceSubTotal = sum.priceSubTotal.add(summand.getPriceSubTotal()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         sum.orderPromoApplied = sum.orderPromoApplied || summand.isOrderPromoApplied();
         sum.appliedOrderPromo = mergePromo(sum.appliedOrderPromo, summand.getAppliedOrderPromo());

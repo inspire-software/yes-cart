@@ -75,6 +75,7 @@ public abstract class AbstractOrderPromotionAction extends AbstractPromotionActi
                         MoneyUtils.ZERO,
                         MoneyUtils.ZERO,
                         MoneyUtils.ZERO,
+                        MoneyUtils.ZERO,
                         true,
                         promoCode,
                         orderAmountOff.negate(), // simple subtraction of base value
@@ -110,6 +111,7 @@ public abstract class AbstractOrderPromotionAction extends AbstractPromotionActi
                 context,
                 total.add(new TotalImpl(
                         listValue,
+                        MoneyUtils.ZERO,
                         MoneyUtils.ZERO,
                         MoneyUtils.ZERO,
                         true,

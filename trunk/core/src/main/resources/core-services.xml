@@ -472,6 +472,7 @@
                         <entry key="O">
                             <map>
                                 <entry key="P" value-ref="promoActionOrderDiscount"/>
+                                <entry key="S" value-ref="promoActionOrderNonSaleDiscount"/>
                                 <entry key="F" value-ref="promoActionOrderAmountOff"/>
                                 <entry key="G" value-ref="promoActionOrderGift"/>
                             </map>
@@ -485,6 +486,7 @@
                         <entry key="I">
                             <map>
                                 <entry key="P" value-ref="promoActionItemDiscount"/>
+                                <entry key="S" value-ref="promoActionItemNonSaleDiscount"/>
                                 <entry key="F" value-ref="promoActionItemAmountOff"/>
                                 <entry key="G" value-ref="promoActionItemGift"/>
                             </map>
@@ -502,6 +504,7 @@
     </bean>
 
     <bean id="promoActionItemDiscount" class="org.yes.cart.promotion.impl.action.ItemDiscountPromotionAction"/>
+    <bean id="promoActionItemNonSaleDiscount" class="org.yes.cart.promotion.impl.action.ItemNonSaleDiscountPromotionAction"/>
     <bean id="promoActionItemAmountOff" class="org.yes.cart.promotion.impl.action.ItemAmountOffPromotionAction"/>
     <bean id="promoActionItemGift" class="org.yes.cart.promotion.impl.action.ItemGiftPromotionAction">
         <constructor-arg index="0" ref="priceService"/>
@@ -509,6 +512,7 @@
     </bean>
 
     <bean id="promoActionOrderDiscount" class="org.yes.cart.promotion.impl.action.OrderDiscountPromotionAction"/>
+    <bean id="promoActionOrderNonSaleDiscount" class="org.yes.cart.promotion.impl.action.OrderNonSaleDiscountPromotionAction"/>
     <bean id="promoActionOrderAmountOff" class="org.yes.cart.promotion.impl.action.OrderAmountOffPromotionAction"/>
     <bean id="promoActionOrderGift" class="org.yes.cart.promotion.impl.action.OrderGiftPromotionAction">
         <constructor-arg index="0" ref="priceService"/>

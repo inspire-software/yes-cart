@@ -50,6 +50,15 @@ public interface Total extends Serializable {
     public BigDecimal getSaleSubTotal();
 
     /**
+     * Get subtotal of all items that do not have sale price.
+     * Non sale sub total shows total of items price using items without
+     * sale prices before any promotions applied.
+     *
+     * @return sale price subtotal.
+     */
+    public BigDecimal getNonSaleSubTotal();
+
+    /**
      * Get subtotal of all items final price.
      * Final item price total inclusive of all sale prices and
      * item level promotions.
