@@ -49,6 +49,7 @@ import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -117,13 +118,14 @@ public class PaymentPage extends AbstractWebPage {
         try {
 
             final Map param =  WicketUtil.getHttpServletRequest().getParameterMap();
-
-            param.put(PaymentMiscParam.CLIENT_IP, ApplicationDirector.getShopperIPAddress());
+            final Map mparam = new HashMap();
+            mparam.putAll(param);
+            mparam.put(PaymentMiscParam.CLIENT_IP, ApplicationDirector.getShopperIPAddress());
 
             result = paymentProcessFacade.pay(
-                        ApplicationDirector.getShoppingCart(),
-                        param
-                    );
+                    ApplicationDirector.getShoppingCart(),
+                    mparam
+            );
 
             if (result) {
                 addOrReplace(
