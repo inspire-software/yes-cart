@@ -113,6 +113,8 @@
         <constructor-arg index="0" ref="customerOrderService"/>
         <constructor-arg index="1" ref="amountCalculationStrategy"/>
         <constructor-arg index="2" ref="customerOrderPaymentService"/>
+        <constructor-arg index="3" ref="paymentProcessorFactory"/>
+        <constructor-arg index="4" ref="paymentModulesManager"/>
     </bean>
 
     <!-- ############################ Facades for web end ####################################################### -->

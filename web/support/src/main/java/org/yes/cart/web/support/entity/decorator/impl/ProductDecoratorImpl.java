@@ -96,7 +96,9 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
             final String defaultImageAttributeValue) {
 
         this.i18NWebSupport = i18NWebSupport;
-        BeanUtils.copyProperties(productEntity, this);
+        if (productEntity != null) {
+            BeanUtils.copyProperties(productEntity, this);
+        }
         this.httpServletContextPath = httpServletContextPath;
         this.defaultImageAttributeValue = defaultImageAttributeValue;
         if (withAttributes) {
@@ -149,7 +151,9 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
             final String defaultImageAttributeValue) {
 
         this.i18NWebSupport = i18NWebSupport;
-        BeanUtils.copyProperties(productEntity, this);
+        if (productEntity != null) {
+            BeanUtils.copyProperties(productEntity, this);
+        }
         this.httpServletContextPath = httpServletContextPath;
         this.defaultImageAttributeValue = defaultImageAttributeValue;
         if (withAttributes) {

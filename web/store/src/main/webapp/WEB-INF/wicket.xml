@@ -171,4 +171,12 @@
     </bean>
 
 
+    <bean id="breadCrumbsBuilder" class="org.yes.cart.web.page.component.breadcrumbs.impl.BreadCrumbsBuilderImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+        <constructor-arg index="1" ref="currencySymbolService"/>
+        <constructor-arg index="2" ref="priceNavigation"/>
+        <constructor-arg index="3" ref="attributeService"/>
+    </bean>
+
+
 </beans>

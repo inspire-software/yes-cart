@@ -6,15 +6,16 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.yes.cart.domain.dto.DtoPaymentGatewayInfo;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl;
 import org.yes.cart.service.payment.PaymentModulesManager;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -34,12 +35,15 @@ public class RemotePaymentModulesManagementServiceImplTest {
     public void testGetPaymentGateways0() throws Exception {
 
         paymentModulesManager = mockery.mock(PaymentModulesManager.class);
+        final PaymentGateway pg1 = mockery.mock(PaymentGateway.class, "pg1");
+        final PaymentGateway pg2 = mockery.mock(PaymentGateway.class, "pg2");
+
         mockery.checking(new Expectations() {{
             allowing(paymentModulesManager).getPaymentGatewaysDescriptors(false);
             will(
                     returnValue(
                             new ArrayList<PaymentGatewayDescriptor>() {{
-                                add(new PaymentGatewayDescriptorImpl("one", "one", "one", "one"));
+                                add(new PaymentGatewayDescriptorImpl("one", "one", "one"));
                             }}
                     )
             );
@@ -49,20 +53,24 @@ public class RemotePaymentModulesManagementServiceImplTest {
             will(
                     returnValue(
                             new ArrayList<PaymentGatewayDescriptor>() {{
-                                add(new PaymentGatewayDescriptorImpl("one", "one", "one", "one"));
-                                add(new PaymentGatewayDescriptorImpl("two", "two", "two", "two"));
+                                add(new PaymentGatewayDescriptorImpl("one", "one", "one"));
+                                add(new PaymentGatewayDescriptorImpl("two", "two", "two"));
                             }}
                     )
             );
         }});
         mockery.checking(new Expectations() {{
             allowing(paymentModulesManager).getPaymentGateway("one");
-            will( returnValue(  null     )       );
+            will( returnValue(  pg1     )       );
+            allowing(pg1).getName("ru");
+            will(returnValue("pg1 name"));
         }});
 
         mockery.checking(new Expectations() {{
             allowing(paymentModulesManager).getPaymentGateway("two");
-            will( returnValue(  null     )       );
+            will( returnValue(  pg2     )       );
+            allowing(pg2).getName("ru");
+            will(returnValue("pg2 name"));
         }});
 
         RemotePaymentModulesManagementServiceImpl service = new RemotePaymentModulesManagementServiceImpl(
@@ -73,15 +81,23 @@ public class RemotePaymentModulesManagementServiceImplTest {
         
         int cntActive = 0;
         int cntPassive = 0;
+        Map<String, DtoPaymentGatewayInfo> dts = new HashMap<String, DtoPaymentGatewayInfo>();
         for (DtoPaymentGatewayInfo dt : rez) {
             if (dt.isActive()) {
                 cntActive++;
             } else {
                 cntPassive++;
             }
+            dts.put(dt.getLabel(), dt);
         }
         assertEquals(1, cntActive);
         assertEquals(1, cntPassive);
+        assertTrue(dts.containsKey("one"));
+        assertEquals("pg1 name", dts.get("one").getName());
+        assertTrue(dts.get("one").isActive());
+        assertTrue(dts.containsKey("two"));
+        assertEquals("pg2 name", dts.get("two").getName());
+        assertFalse(dts.get("two").isActive());
 
     }
 
@@ -89,6 +105,9 @@ public class RemotePaymentModulesManagementServiceImplTest {
     public void testGetPaymentGateways1() throws Exception {
 
         paymentModulesManager = mockery.mock(PaymentModulesManager.class);
+        final PaymentGateway pg1 = mockery.mock(PaymentGateway.class, "pg1");
+        final PaymentGateway pg2 = mockery.mock(PaymentGateway.class, "pg2");
+
         mockery.checking(new Expectations() {{
             allowing(paymentModulesManager).getPaymentGatewaysDescriptors(false);
             will(
@@ -102,20 +121,24 @@ public class RemotePaymentModulesManagementServiceImplTest {
             will(
                     returnValue(
                             new ArrayList<PaymentGatewayDescriptor>() {{
-                                add(new PaymentGatewayDescriptorImpl("one", "one", "one", "one"));
-                                add(new PaymentGatewayDescriptorImpl("two", "two", "two", "two"));
+                                add(new PaymentGatewayDescriptorImpl("one", "one", "one"));
+                                add(new PaymentGatewayDescriptorImpl("two", "two", "two"));
                             }}
                     )
             );
         }});
         mockery.checking(new Expectations() {{
             allowing(paymentModulesManager).getPaymentGateway("one");
-            will( returnValue(  null     )       );
+            will( returnValue(  pg1     )       );
+            allowing(pg1).getName("ru");
+            will(returnValue("pg1 name"));
         }});
 
         mockery.checking(new Expectations() {{
             allowing(paymentModulesManager).getPaymentGateway("two");
-            will( returnValue(  null     )       );
+            will( returnValue(  pg2     )       );
+            allowing(pg2).getName("ru");
+            will(returnValue("pg2 name"));
         }});
 
         RemotePaymentModulesManagementServiceImpl service = new RemotePaymentModulesManagementServiceImpl(
@@ -126,16 +149,24 @@ public class RemotePaymentModulesManagementServiceImplTest {
         
         int cntActive = 0;
         int cntPassive = 0;
+        Map<String, DtoPaymentGatewayInfo> dts = new HashMap<String, DtoPaymentGatewayInfo>();
         for (DtoPaymentGatewayInfo dt : rez) {
             if (dt.isActive()) {
                 cntActive++;
             } else {
                 cntPassive++;
             }
+            dts.put(dt.getLabel(), dt);
         }
 
         assertEquals(0, cntActive);
         assertEquals(2, cntPassive);
+        assertTrue(dts.containsKey("one"));
+        assertEquals("pg1 name", dts.get("one").getName());
+        assertFalse(dts.get("one").isActive());
+        assertTrue(dts.containsKey("two"));
+        assertEquals("pg2 name", dts.get("two").getName());
+        assertFalse(dts.get("two").isActive());
 
     }
 

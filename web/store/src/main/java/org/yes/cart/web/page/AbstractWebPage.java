@@ -231,7 +231,7 @@ public class AbstractWebPage extends WebPage {
 
 
     /**
-     * Get opage description
+     * Get page description
      * @return description
      */
     public IModel<String> getDescription() {

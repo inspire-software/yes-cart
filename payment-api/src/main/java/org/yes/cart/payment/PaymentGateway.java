@@ -39,7 +39,14 @@ public interface PaymentGateway extends Serializable {
     String VOID_CAPTURE = "VOID_CAPTURE";   //void capture fund  operation
     String REFUND = "REFUND"; //return money back to client
 
-
+    /**
+     * Locale specific name for given payment gateway.
+     *
+     * @param locale     to get localized name
+     *
+     * @return localized name
+     */
+    String getName(String locale);
 
 
     /**
@@ -51,6 +58,7 @@ public interface PaymentGateway extends Serializable {
      * @param amount         amount payment , used for external payment processing
      * @param orderGuid order guid to restore real order after jumping of payment gateway sites.
      * @param payment payment details , only a few gateways require this parameter
+     *
      * @return html.
      */
     String getHtmlForm(String cardHolderName, String locale, BigDecimal amount, String currencyCode, String orderGuid, Payment payment);
@@ -147,7 +155,7 @@ public interface PaymentGateway extends Serializable {
 
     /**
      * Get unique payment gateway label. <b>Must</b> correspond to
-     * descriptor entry in configaration and vise versa
+     * descriptor entry in configuration and vise versa
      *
      * @return unique payment gateway label.
      */

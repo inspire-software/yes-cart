@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component.util;
 
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 
 /**
@@ -24,22 +25,22 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
  * Date: 15-Oct-2011
  * Time: 11:01:06 AM
  */
-public class PaymentGatewayDescriptorRenderer extends ChoiceRenderer<PaymentGatewayDescriptor> {
+public class PaymentGatewayDescriptorRenderer extends ChoiceRenderer<Pair<PaymentGatewayDescriptor, String>> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Object getDisplayValue(final PaymentGatewayDescriptor carrier) {
-        return carrier.getName();
+    public Object getDisplayValue(final Pair<PaymentGatewayDescriptor, String> pgd) {
+        return pgd.getSecond();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public String getIdValue(final PaymentGatewayDescriptor carrier, final int i) {
-        return String.valueOf(carrier.getLabel());
+    public String getIdValue(final Pair<PaymentGatewayDescriptor, String> pgd, final int i) {
+        return String.valueOf(pgd.getFirst().getLabel());
     }
 
 }

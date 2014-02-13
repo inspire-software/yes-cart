@@ -51,10 +51,9 @@
     <!--CPOINT do you need paypal express checkout ?-->
     <bean id="payPalExpressCheckoutFilter" class="org.yes.cart.web.filter.payment.PayPalExpressCheckoutFilter">
         <constructor-arg index="0" ref="applicationDirector"/>
-        <constructor-arg index="1" ref="paymentModulesManager"/>
-        <constructor-arg index="2" ref="paymentProcessor"/>
-        <constructor-arg index="3" ref="customerOrderService"/>
-        <constructor-arg index="4" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="1" ref="paymentProcessorFactory"/>
+        <constructor-arg index="2" ref="customerOrderService"/>
+        <constructor-arg index="3" ref="paymentCallBackHandlerFacade"/>
     </bean>
 
 
@@ -104,14 +103,6 @@
         <constructor-arg index="2" ref="productService"/>
         <constructor-arg index="3" ref="attributeService"/>
         <constructor-arg index="4" ref="luceneQueryFactory"/>
-    </bean>
-
-
-    <bean id="breadCrumbsBuilder" class="org.yes.cart.web.page.component.breadcrumbs.impl.BreadCrumbsBuilderImpl">
-        <constructor-arg index="0" ref="categoryService"/>
-        <constructor-arg index="1" ref="currencySymbolService"/>
-        <constructor-arg index="2" ref="priceNavigation"/>
-        <constructor-arg index="3" ref="attributeService"/>
     </bean>
 
     <bean id="attributeFilteredNavigationSupport" class="org.yes.cart.web.page.component.filterednavigation.impl.AttributeFilteredNavigationSupportImpl">

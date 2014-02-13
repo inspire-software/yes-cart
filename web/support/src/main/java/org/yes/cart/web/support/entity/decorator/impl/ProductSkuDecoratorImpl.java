@@ -86,8 +86,9 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
                                    final I18NWebSupport i18NWebSupport) {
         this.productService = productService;
         this.i18NWebSupport = i18NWebSupport;
-
-        BeanUtils.copyProperties(productSkuEntity, this);
+        if (productSkuEntity != null) {
+            BeanUtils.copyProperties(productSkuEntity, this);
+        }
         this.httpServletContextPath = httpServletContextPath;
         this.attributableImageService = attributableImageService;
         this.categoryService = categoryService;

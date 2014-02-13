@@ -31,6 +31,7 @@ import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
+import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
@@ -81,8 +82,8 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
     @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
     private CheckoutServiceFacade checkoutServiceFacade;
 
-    @SpringBean(name = ServiceSpringKeys.PAYMENT_PROCESSOR)
-    private PaymentProcessor paymentProcessor;
+    @SpringBean(name = ServiceSpringKeys.PAYMENT_PROCESSOR_FACTORY)
+    private PaymentProcessorFactory paymentProcessorFactory;
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
@@ -101,9 +102,10 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
 
         final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(orderGuid);
 
+        final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(ApplicationDirector.getShoppingCart().getOrderInfo().getPaymentGatewayLabel());
+
         final PaymentGatewayExternalForm paymentGatewayExternalForm =
-                (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(
-                        ApplicationDirector.getShoppingCart().getOrderInfo().getPaymentGatewayLabel());
+                (PaymentGatewayExternalForm) paymentProcessor.getPaymentGateway();
 
         paymentProcessor.setPaymentGateway(paymentGatewayExternalForm);
 

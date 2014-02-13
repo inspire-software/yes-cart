@@ -85,14 +85,9 @@
 
             <singlefile src="../core-modules/core-module-payment-base/src/main/resources/sql/derby/create-tables.sql" target="$INSTALL_PATH/derbydb/bin/pay-create-tables.sql" override="true"/>
 
-            <singlefile src="../core-modules/core-module-payment-base/src/main/resources/sql/payinitdata.sql" target="$INSTALL_PATH/derbydb/bin/base-payinitdata-en.sql" override="true"/>
-            <singlefile src="../core-modules/core-module-payment-capp/src/main/resources/sql/payinitdata.sql" target="$INSTALL_PATH/derbydb/bin/capp-payinitdata-en.sql" override="true"/>
-            <singlefile src="../core-modules/core-module-payment-gcwm/src/main/resources/sql/payinitdata.sql" target="$INSTALL_PATH/derbydb/bin/gcwm-payinitdata-en.sql" override="true"/>
-
-            <singlefile src="../core-modules/core-module-payment-base/src/main/resources/sql/payinitdata_ru.sql" target="$INSTALL_PATH/derbydb/bin/base-payinitdata-ru.sql" override="true"/>
-            <singlefile src="../core-modules/core-module-payment-capp/src/main/resources/sql/payinitdata_ru.sql" target="$INSTALL_PATH/derbydb/bin/capp-payinitdata-ru.sql" override="true"/>
-            <singlefile src="../core-modules/core-module-payment-gcwm/src/main/resources/sql/payinitdata_ru.sql" target="$INSTALL_PATH/derbydb/bin/gcwm-payinitdata-ru.sql" override="true"/>
-
+            <singlefile src="../core-modules/core-module-payment-base/src/main/resources/sql/payinitdata.sql" target="$INSTALL_PATH/derbydb/bin/base-payinitdata.sql" override="true"/>
+            <singlefile src="../core-modules/core-module-payment-capp/src/main/resources/sql/payinitdata.sql" target="$INSTALL_PATH/derbydb/bin/capp-payinitdata.sql" override="true"/>
+            <singlefile src="../core-modules/core-module-payment-gcwm/src/main/resources/sql/payinitdata.sql" target="$INSTALL_PATH/derbydb/bin/gcwm-payinitdata.sql" override="true"/>
 
             <executable targetfile="$INSTALL_PATH/yesbin/opendemostore.bat" />
             <executable targetfile="$INSTALL_PATH/yesbin/opendemostore" />

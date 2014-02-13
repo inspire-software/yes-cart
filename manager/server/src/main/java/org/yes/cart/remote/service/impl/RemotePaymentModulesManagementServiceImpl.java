@@ -92,25 +92,25 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
     public List<Pair<String, String>> getAllowedPaymentGateways(final String lang) {
         
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false);
-        return fillPaymentDescriptors(descriptors);
+        return fillPaymentDescriptors(descriptors, lang);
 
     }
 
     /** {@inheritDoc}*/
     public List<Pair<String, String>> getAvailablePaymentGateways(final String lang) {
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(true);
-        final List<Pair<String, String>> rez = fillPaymentDescriptors(descriptors);
+        final List<Pair<String, String>> rez = fillPaymentDescriptors(descriptors, lang);
         rez.removeAll(getAllowedPaymentGateways(lang));
         return rez;
     }
 
-    private List<Pair<String, String>> fillPaymentDescriptors(List<PaymentGatewayDescriptor> descriptors) {
+    private List<Pair<String, String>> fillPaymentDescriptors(List<PaymentGatewayDescriptor> descriptors, final String lang) {
         final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>(descriptors.size());
         for (PaymentGatewayDescriptor descr :  descriptors) {
             final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(descr.getLabel());
             final Pair<String, String> pairCandidate = new Pair<String, String>(
                     descr.getLabel(),
-                    descr.getName()
+                    paymentGateway.getName(lang)
             );
             rez.add(pairCandidate);
         }

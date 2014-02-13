@@ -20,19 +20,23 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.payment.PaymentModulesManager;
+import org.yes.cart.service.payment.PaymentProcessor;
+import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -44,13 +48,19 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     private final CustomerOrderService customerOrderService;
     private final AmountCalculationStrategy amountCalculationStrategy;
     private final CustomerOrderPaymentService customerOrderPaymentService;
+    private final PaymentProcessorFactory paymentProcessorFactory;
+    private final PaymentModulesManager paymentModulesManager;
 
     public CheckoutServiceFacadeImpl(final CustomerOrderService customerOrderService,
                                      final AmountCalculationStrategy amountCalculationStrategy,
-                                     final CustomerOrderPaymentService customerOrderPaymentService) {
+                                     final CustomerOrderPaymentService customerOrderPaymentService,
+                                     final PaymentProcessorFactory paymentProcessorFactory,
+                                     final PaymentModulesManager paymentModulesManager) {
         this.customerOrderService = customerOrderService;
         this.amountCalculationStrategy = amountCalculationStrategy;
         this.customerOrderPaymentService = customerOrderPaymentService;
+        this.paymentProcessorFactory = paymentProcessorFactory;
+        this.paymentModulesManager = paymentModulesManager;
     }
 
     /** {@inheritDoc} */
@@ -75,6 +85,50 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     @Override
     public List<CustomerOrderPayment> findPaymentRecordsByOrderNumber(final String orderNumber) {
         return customerOrderPaymentService.findBy(orderNumber, null, null, null);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Payment createPaymentToAuthorize(final CustomerOrder order) {
+
+        final String pgLabel = order.getPgLabel();
+        final PaymentProcessor processor = paymentProcessorFactory.create(pgLabel);
+        final PaymentGateway gateway = processor.getPaymentGateway();
+
+        if (gateway.getPaymentGatewayFeatures().isRequireDetails()) {
+            return processor.createPaymentsToAuthorize(
+                    order,
+                    true,
+                    Collections.EMPTY_MAP,
+                    PaymentGateway.AUTH
+            ).get(0);
+        }
+
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public PaymentGateway getOrderPaymentGateway(final CustomerOrder order) {
+
+        final String pgLabel = order.getPgLabel();
+        return paymentModulesManager.getPaymentGateway(pgLabel);
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<Pair<PaymentGatewayDescriptor, String>> getPaymentGatewaysDescriptors(final Shop shop, final ShoppingCart cart) {
+
+        final String lang = cart.getCurrentLocale();
+        final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false);
+        final List<Pair<PaymentGatewayDescriptor, String>> available = new ArrayList<Pair<PaymentGatewayDescriptor, String>>(descriptors.size());
+        for (final PaymentGatewayDescriptor descriptor : descriptors) {
+            final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel());
+            available.add(new Pair<PaymentGatewayDescriptor, String>(descriptor, gateway.getName(lang)));
+        }
+        return available;
+
     }
 
     /** {@inheritDoc} */

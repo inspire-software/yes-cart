@@ -42,42 +42,36 @@
 
     <bean id="cyberSourcePaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="cyberSourcePaymentGatewayLabel"/>
-        <property name="name" value="Cyber Source Payment Gateway"/>
         <property name="url" value="cyberSourcePaymentGateway"/>
         <property name="description" value="Cyber Source Payment Gateway"/>
     </bean>
 
     <bean id="authorizeNetAimPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="authorizeNetAimPaymentGatewayLabel"/>
-        <property name="name" value="Authorize.net advanced integration mode payment pateway"/>
         <property name="url" value="authorizeNetAimPaymentGateway"/>
         <property name="description" value="Authorize.net advanced integration mode payment pateway"/>
     </bean>
 
     <bean id="authorizeNetSimPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="authorizeNetSimPaymentGatewayLabel"/>
-        <property name="name" value="Authorize.net server integration mode payment pateway"/>
         <property name="url" value="authorizeNetSimPaymentGateway"/>
         <property name="description" value="Authorize.net server integration mode payment pateway"/>
     </bean>
 
     <bean id="payflowPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="payflowPaymentGatewayLabel"/>
-        <property name="name" value="Payflow payment pateway"/>
         <property name="url" value="payflowPaymentGateway"/>
         <property name="description" value="Payflow payment pateway"/>
     </bean>
 
     <bean id="payPalNvpPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="payPalNvpPaymentGatewayLabel"/>
-        <property name="name" value="Paypal nvp payment gateway"/>
         <property name="url" value="payPalNvpPaymentGateway"/>
         <property name="description" value="Paypal nvp payment gateway"/>
     </bean>
 
     <bean id="payPalExpressPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="payPalExpressPaymentGatewayLabel"/>
-        <property name="name" value="Paypal express checkout payment gateway"/>
         <property name="url" value="payPalExpressPaymentGateway"/>
         <property name="description" value="Paypal express checkout payment gateway"/>
     </bean>
@@ -85,7 +79,6 @@
     <bean id="cappPaymentModule" class="org.yes.cart.payment.impl.PaymentModuleCappSetImpl">
         <property name="descriptor">
             <bean class="org.yes.cart.payment.persistence.entity.impl.DescriptorImpl">
-                <property name="name" value="CAPP payment module"/>
                 <property name="label" value="cappPaymentModule"/>
                 <property name="description"
                           value="Cybersource, authorize net. paypal, pay flow payment module"/>

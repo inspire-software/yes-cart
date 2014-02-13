@@ -24,6 +24,7 @@ import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
+import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -55,9 +56,7 @@ import java.util.Map;
  */
 public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filter {
 
-    private final PaymentModulesManager paymentModulesManager;
-
-    private final PaymentProcessor paymentProcessor;
+    private final PaymentProcessorFactory paymentProcessorFactory;
 
     private final CustomerOrderService customerOrderService;
 
@@ -67,19 +66,16 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
      * Construct filter.
      *
      * @param applicationDirector   app director.
-     * @param paymentModulesManager to find gateway by label.
-     * @param paymentProcessor      payment processor.
+     * @param paymentProcessorFactory payment processor.
      * @param customerOrderService  {@link CustomerOrderService}     to use
      * @param paymentCallBackHandlerFacade handler.
      */
     public PayPalExpressCheckoutFilter(final ApplicationDirector applicationDirector,
-                                       final PaymentModulesManager paymentModulesManager,
-                                       final PaymentProcessor paymentProcessor,
+                                       final PaymentProcessorFactory paymentProcessorFactory,
                                        final CustomerOrderService customerOrderService,
                                        final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade) {
         super(applicationDirector);
-        this.paymentModulesManager = paymentModulesManager;
-        this.paymentProcessor = paymentProcessor;
+        this.paymentProcessorFactory = paymentProcessorFactory;
         this.customerOrderService = customerOrderService;
         this.paymentCallBackHandlerFacade = paymentCallBackHandlerFacade;
     }
@@ -93,13 +89,12 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
 
         final CustomerOrder customerOrder =  customerOrderService.findByGuid(orderGuid);
 
-        final PaymentGatewayExternalForm paymentGatewayExternalForm =
-                (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(
-                        cart.getOrderInfo().getPaymentGatewayLabel());
 
         final String paymentGatewayLabel = getFilterConfig().getInitParameter("paymentGatewayLabel");
 
-        paymentProcessor.setPaymentGateway(paymentGatewayExternalForm);
+        final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(paymentGatewayLabel);
+
+        final PaymentGatewayExternalForm paymentGatewayExternalForm = (PaymentGatewayExternalForm) paymentProcessor.getPaymentGateway();
 
         final Payment payment = paymentProcessor.createPaymentsToAuthorize(
                 customerOrder,

@@ -57,7 +57,7 @@ public interface PaymentModulesManager {
 
     /**
      * Get payment gateway by given pg label.
-     * @param paymentGatewayLabel gateway lable
+     * @param paymentGatewayLabel gateway label
      * @return list of payment gateways in module.
      */
     PaymentGateway getPaymentGateway(String paymentGatewayLabel);

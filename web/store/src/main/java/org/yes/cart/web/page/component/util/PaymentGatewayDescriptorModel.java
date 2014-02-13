@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.model.IDetachable;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 
 import java.util.List;
@@ -29,9 +30,9 @@ import java.util.List;
  * Date: 2/27/11
  * Time: 7:36 PM
  */
-public class PaymentGatewayDescriptorModel implements IModel<PaymentGatewayDescriptor> {
+public class PaymentGatewayDescriptorModel implements IModel<Pair<PaymentGatewayDescriptor, String>> {
 
-    private PaymentGatewayDescriptor paymentGatewayDescriptor;
+    private Pair<PaymentGatewayDescriptor, String> paymentGatewayDescriptor;
 
     private final PropertyModel<String> propertyModel;
 
@@ -40,12 +41,12 @@ public class PaymentGatewayDescriptorModel implements IModel<PaymentGatewayDescr
      * @param propertyModel property model
      * @param pgList list of available payment gateway descriptors
      */
-    public PaymentGatewayDescriptorModel(final PropertyModel<String> propertyModel, final List<PaymentGatewayDescriptor> pgList) {
+    public PaymentGatewayDescriptorModel(final PropertyModel<String> propertyModel, final List<Pair<PaymentGatewayDescriptor, String>> pgList) {
         this.propertyModel = propertyModel;
         final String singleSelectedKey = (String) propertyModel.getObject();
         if (StringUtils.isNotBlank(singleSelectedKey)) {
-            for (PaymentGatewayDescriptor pgd : pgList) {
-                if (singleSelectedKey.equals(pgd.getLabel())) {
+            for (Pair<PaymentGatewayDescriptor, String> pgd : pgList) {
+                if (singleSelectedKey.equals(pgd.getFirst().getLabel())) {
                     paymentGatewayDescriptor = pgd;
                     break;
                 }
@@ -56,19 +57,19 @@ public class PaymentGatewayDescriptorModel implements IModel<PaymentGatewayDescr
     /**
      * {@inheritDoc}
      */
-    public PaymentGatewayDescriptor getObject() {
+    public Pair<PaymentGatewayDescriptor, String> getObject() {
         return paymentGatewayDescriptor;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setObject(final PaymentGatewayDescriptor paymentGatewayDescriptor) {
+    public void setObject(final Pair<PaymentGatewayDescriptor, String> paymentGatewayDescriptor) {
         this.paymentGatewayDescriptor = paymentGatewayDescriptor;
         if (paymentGatewayDescriptor == null) {
             propertyModel.setObject(null);
         } else {
-            propertyModel.setObject(paymentGatewayDescriptor.getLabel());
+            propertyModel.setObject(paymentGatewayDescriptor.getFirst().getLabel());
         }
     }
 

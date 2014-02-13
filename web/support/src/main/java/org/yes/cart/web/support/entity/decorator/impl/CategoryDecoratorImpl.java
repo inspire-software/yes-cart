@@ -79,7 +79,9 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
         this.httpServletContextPath = httpServletContextPath;
         this.imageService = imageService;
         this.i18NWebSupport = i18NWebSupport;
-        BeanUtils.copyProperties(categoryEntity, this);
+        if (categoryEntity != null) {
+            BeanUtils.copyProperties(categoryEntity, this);
+        }
     }
 
     /**
