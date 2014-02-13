@@ -35,17 +35,15 @@ public class PaymentGatewayDescriptorImpl extends DescriptorImpl implements Paym
 
 
     /**
-     * Construct payment gateway descriptior.
+     * Construct payment gateway descriptor.
      *
-     * @param name        name
      * @param description description
      * @param label       label
      * @param url         url
      */
-    public PaymentGatewayDescriptorImpl(final String name,
-                                        final String description,
+    public PaymentGatewayDescriptorImpl(final String description,
                                         final String label, final String url) {
-        super(name, description, label);
+        super(description, label);
         this.url = url;
     }
 

@@ -383,7 +383,10 @@ public interface ServiceSpringKeys {
 
     /**
      * Prototype payment processor.
+     *
+     * @deprecated use PAYMENT_PROCESSOR_FACTORY as paymentProcessor has prototype scope and is not thread-safe
      */
+    @Deprecated
     String PAYMENT_PROCESSOR = "paymentProcessor";
 
     /**

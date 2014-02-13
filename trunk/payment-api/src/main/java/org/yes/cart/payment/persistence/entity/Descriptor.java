@@ -26,19 +26,6 @@ import java.io.Serializable;
 public interface Descriptor extends Serializable {
 
     /**
-     * Get name.
-     *
-     * @return name.
-     */
-    String getName();
-
-    /**
-     * @param name name
-     */
-    void setName(String name);
-
-
-    /**
      * Get label, unique id of payment gateway.
      *
      * @return label.

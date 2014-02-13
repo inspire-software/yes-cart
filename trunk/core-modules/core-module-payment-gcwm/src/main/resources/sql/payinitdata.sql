@@ -40,4 +40,13 @@ VALUES (455, 'liqPayPaymentGateway',
 , 'Payment method - card, liqpay', 'Payment method - card, liqpay');
 
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (456, 'liqPayPaymentGateway', 'name', 'LiqPay', 'Gateway name', 'Gateway name');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (457, 'liqPayPaymentGateway', 'name_en', 'LiqPay', 'Gateway name', 'Gateway name');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (458, 'liqPayPaymentGateway', 'name_ru', 'LiqPay', 'Название платежного шлюза', 'Название платежного шлюза');
+
 

@@ -23,10 +23,23 @@ public abstract class AbstractPaymentGatewayImpl implements PaymentGateway {
 
     private Collection<PaymentGatewayParameter> allParameters = null;
 
+    /**
+     * {@inheritDoc}
+     */
+    public String getName(final String locale) {
+        String pgName = getParameterValue("name_" + locale);
+        if (pgName == null) {
+            pgName = getParameterValue("name");
+        }
+        if (pgName == null) {
+            pgName = getLabel();
+        }
+        return pgName;
+    }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
                               final String currencyCode, final String orderGuid, final Payment payment) {
         return getHtmlForm(cardHolderName, locale);
@@ -40,7 +53,10 @@ public abstract class AbstractPaymentGatewayImpl implements PaymentGateway {
      * @return part of html form. 
      */
     protected String getHtmlForm(final String cardHolderName, final String locale) {
-        String htmlForm = getParameterValue("htmlForm");
+        String htmlForm = getParameterValue("htmlForm_" + locale);
+        if (htmlForm == null) {
+            htmlForm = getParameterValue("htmlForm");
+        }
         if (htmlForm != null) {
             return htmlForm.replace("@CARDHOLDERNAME@", cardHolderName);
         }

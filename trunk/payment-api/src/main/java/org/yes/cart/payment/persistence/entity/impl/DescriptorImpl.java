@@ -28,28 +28,9 @@ public class DescriptorImpl implements Descriptor {
 
     private static final long serialVersionUID = 20100714L;
 
-    protected String name;
     protected String description;
     protected String label;
 
-
-    /**
-     * Name.
-     *
-     * @return name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Name
-     *
-     * @param name name
-     */
-    public void setName(final String name) {
-        this.name = name;
-    }
 
     /**
      * Description.
@@ -90,12 +71,10 @@ public class DescriptorImpl implements Descriptor {
     /**
      * Construct descriptor.
      *
-     * @param name        name
      * @param description description
      * @param label       label
      */
-    public DescriptorImpl(final String name, final String description, final String label) {
-        this.name = name;
+    public DescriptorImpl(final String description, final String label) {
         this.description = description;
         this.label = label;
     }
@@ -104,7 +83,6 @@ public class DescriptorImpl implements Descriptor {
      * Default constructor.
      */
     public DescriptorImpl() {
-        this.name = null;
         this.description = null;
         this.label = null;
 

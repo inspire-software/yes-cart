@@ -32,6 +32,7 @@ public class PaymentGatewayParameterEntity extends DescriptorImpl implements Pay
     private static final long serialVersionUID = 20100714L;
 
     private long paymentGatewayParameterId;
+    private String name;
     private String value;
     protected String pgLabel;
     private Date createdTimestamp;

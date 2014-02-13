@@ -20,6 +20,22 @@ public abstract class AbstractGswmPaymentGatewayImpl implements PaymentGateway {
 
     private Collection<PaymentGatewayParameter> allParameters = null;
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getName(final String locale) {
+        String pgName = getParameterValue("name_" + locale);
+        if (pgName == null) {
+            pgName = getParameterValue("name");
+        }
+        if (pgName == null) {
+            pgName = getLabel();
+        }
+        return pgName;
+    }
+
+
     /**
      * {@inheritDoc}
      */

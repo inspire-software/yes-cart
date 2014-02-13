@@ -19,11 +19,17 @@ package org.yes.cart.web.support.service;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -75,6 +81,35 @@ public interface CheckoutServiceFacade {
      * @return all payment records
      */
     List<CustomerOrderPayment> findPaymentRecordsByOrderNumber(String orderNumber);
+
+    /**
+     * Create single payment to authorize for this order.
+     *
+     * @param order  order
+     *
+     * @return payment to process
+     */
+    Payment createPaymentToAuthorize(CustomerOrder order);
+
+    /**
+     * Get payment gateway for given order according to order.pgLabel.
+     *
+     * @param order order
+     *
+     * @return payment gateway
+     */
+    PaymentGateway getOrderPaymentGateway(CustomerOrder order);
+
+    /**
+     * Get list of payment gateway descriptors applicable for given shop and provided given cart.
+     *
+     * @param shop current shop (PG's may be shop specific)
+     * @param cart current cart (PG's may be delivery method specific)
+     *
+     * @return list of payment gateway descriptors and corresponding gateway name in correct locale
+     */
+    List<Pair<PaymentGatewayDescriptor, String>> getPaymentGatewaysDescriptors(Shop shop, ShoppingCart cart);
+
 
     /**
      * Check if payment made for given order has OK status.

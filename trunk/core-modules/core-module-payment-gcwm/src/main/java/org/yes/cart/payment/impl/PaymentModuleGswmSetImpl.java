@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class PaymentModuleGswmSetImpl  implements PaymentModule {
 
-     private Descriptor descriptor;
+    private Descriptor descriptor;
     private Map<String, PaymentGatewayDescriptor> gateways;
 
     /** {@inheritDoc} */

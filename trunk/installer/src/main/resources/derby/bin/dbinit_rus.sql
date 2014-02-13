@@ -8,9 +8,9 @@ run 'initdata.sql';
 disconnect;
 connect 'jdbc:derby://localhost:1527/yespay;create=true;unicode=true';
 run 'pay-create-tables.sql';
-run 'base-payinitdata-ru.sql';
-run 'capp-payinitdata-ru.sql';
-run 'gcwm-payinitdata-ru.sql';
+run 'base-payinitdata.sql';
+run 'capp-payinitdata.sql';
+run 'gcwm-payinitdata.sql';
 disconnect;
 exit;
 

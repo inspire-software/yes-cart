@@ -40,6 +40,20 @@ public interface PaymentGatewayParameter extends Serializable, Descriptor {
 
 
     /**
+     * Get name.
+     *
+     * @return name
+     */
+    String getName();
+
+    /**
+     * Set name.
+     *
+     * @param name name to set.
+     */
+    void setName(String name);
+
+    /**
      * Get value.
      *
      * @return value
