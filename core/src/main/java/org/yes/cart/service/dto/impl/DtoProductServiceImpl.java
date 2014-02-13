@@ -23,6 +23,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.CriteriaTuner;
@@ -66,6 +67,8 @@ public class DtoProductServiceImpl
     private final GenericService<Seo> seoGenericService;
 
     private final DtoAttributeService dtoAttributeService;
+    private final DtoAttributeGroupService dtoAttributeGroupService;
+    private final DtoEtypeService dtoEtypeService;
     private final DtoProductCategoryService dtoProductCategoryService;
     private final DtoProductSkuService dtoProductSkuService;
     private final GenericService<Attribute> attributeService;
@@ -86,10 +89,12 @@ public class DtoProductServiceImpl
     /**
      * IoC constructor.
      *
-     * @param productService     domain objects product service
      * @param dtoFactory         factory for creating DTO object instances
+     * @param productService     domain objects product service
      * @param adaptersRepository value converter repository
-     * @param imageService       {@link ImageService} to manipulate  related images.
+     * @param dtoAttributeGroupService
+     * @param dtoEtypeService
+     * @param imageService       {@link org.yes.cart.service.domain.ImageService} to manipulate  related images.
      */
     public DtoProductServiceImpl(
             final DtoFactory dtoFactory,
@@ -97,6 +102,8 @@ public class DtoProductServiceImpl
             final AdaptersRepository adaptersRepository,
             final GenericService<Seo> seoGenericService,
             final DtoAttributeService dtoAttributeService,
+            final DtoAttributeGroupService dtoAttributeGroupService,
+            final DtoEtypeService dtoEtypeService,
             final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao,
             final ImageService imageService,
             final DtoProductTypeAttrService dtoProductTypeAttrService,
@@ -104,6 +111,8 @@ public class DtoProductServiceImpl
             final DtoProductSkuService dtoProductSkuService,
             final LanguageService languageService) {
         super(dtoFactory, productService, adaptersRepository);
+        this.dtoAttributeGroupService = dtoAttributeGroupService;
+        this.dtoEtypeService = dtoEtypeService;
 
 
         this.dtoProductSkuService = dtoProductSkuService;
@@ -394,31 +403,48 @@ public class DtoProductServiceImpl
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, String> displayNames = new TreeMap<String, String>();
-        for (String lang : languageService.getSupportedLanguages()) {
-            displayNames.put(lang, attrName);
+        Attribute attribute = attributeService.findSingleByCriteria(Restrictions.eq("code", attrName));
+        if (attribute == null) {
+            attribute = attributeService.findSingleByCriteria(Restrictions.eq("name", attrName));
         }
 
+        AttributeDTO attrDto = null;
 
-        AttributeDTO attrDto = dtoFactory.getByIface(AttributeDTO.class);
-        attrDto.setName(attrName);
-        attrDto.setCode(attrName.replaceAll(" ", "-"));
-        attrDto.setDisplayNames(displayNames);
-        attrDto.setAllowfailover(true);
-        attrDto.setAttributegroupId(1003); //TODO fix me not constant but "PRODUCT" code
-        attrDto.setEtypeId(1000); //and me
+        if (attribute == null) {
 
-        attrDto = dtoAttributeService.create(attrDto);
+            final Map<String, String> displayNames = new TreeMap<String, String>();
+            for (String lang : languageService.getSupportedLanguages()) {
+                displayNames.put(lang, attrName);
+            }
+
+            final AttributeGroupDTO groupDTO = dtoAttributeGroupService.getAttributeGroupByCode(AttributeGroupNames.PRODUCT);
+            final Etype etype = (Etype) dtoEtypeService.getService().findSingleByCriteria(Restrictions.eq("businesstype", Etype.STRING_BUSINESS_TYPE));
+
+            attrDto = dtoFactory.getByIface(AttributeDTO.class);
+            attrDto.setName(attrName);
+            attrDto.setCode(attrName.replaceAll(" ", "-"));
+            attrDto.setDisplayNames(displayNames);
+            attrDto.setAllowfailover(true);
+            attrDto.setAttributegroupId(groupDTO.getAttributegroupId());
+            attrDto.setEtypeId(etype.getEtypeId());
+
+            attrDto = dtoAttributeService.create(attrDto);
 
 
-        ProductType productType = productService.findById(entityPk).getProducttype();
-        ProductTypeAttrDTO productTypeAttrDTO = dtoFactory.getByIface(ProductTypeAttrDTO.class);
-        productTypeAttrDTO.setAttributeDTO(attrDto);
-        productTypeAttrDTO.setProducttypeId(productType.getProducttypeId());
-        productTypeAttrDTO.setVisible(true);
-        productTypeAttrDTO.setNavigationType("S"); // TODO v2 "R" "S" Navigation type define as constant
-        productTypeAttrDTO = dtoProductTypeAttrService.create(productTypeAttrDTO);
+            ProductType productType = productService.findById(entityPk).getProducttype();
+            ProductTypeAttrDTO productTypeAttrDTO = dtoFactory.getByIface(ProductTypeAttrDTO.class);
+            productTypeAttrDTO.setAttributeDTO(attrDto);
+            productTypeAttrDTO.setProducttypeId(productType.getProducttypeId());
+            productTypeAttrDTO.setVisible(true);
+            productTypeAttrDTO.setNavigationType(ProductTypeAttr.NAVIGATION_TYPE_SINGLE);
+            dtoProductTypeAttrService.create(productTypeAttrDTO);
 
+        } else {
+
+            attrDto = dtoAttributeService.getById(attribute.getAttributeId());
+
+
+        }
 
         AttrValueProductDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductDTO.class);
         attrValueDTO.setAttributeDTO(attrDto);
