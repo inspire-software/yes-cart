@@ -68,7 +68,7 @@
         }
 
         private function onAttributeValueEditEnd(event:DataGridEvent):void {
-            if (event.reason == DataGridEventReason.CANCELLED) {
+            if (event.reason == DataGridEventReason.CANCELLED || event.rowIndex == -1) {
                 return; // Do not update cell.
             }
 
