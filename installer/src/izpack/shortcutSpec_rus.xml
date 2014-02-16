@@ -39,7 +39,7 @@
 
     <shortcut
             name="Документация по Yes-Cart"
-            target="$INSTALL_PATH\yesbin\opendoc.bat"
+            target="$INSTALL_PATH\yesbin\opendoc_rus.bat"
             commandLine=""
             workingDirectory="$INSTALL_PATH\yesbin"
             description="Открыть документации"
