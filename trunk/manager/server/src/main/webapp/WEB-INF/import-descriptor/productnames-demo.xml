@@ -175,8 +175,9 @@
         <column-descriptor>
             <column-index>12</column-index>
             <field-type>FIELD</field-type>
+            <data-type>INT</data-type>
             <name>availability</name>
-            <value-constant>1</value-constant>
+            <!--<value-constant>1</value-constant>-->
         </column-descriptor>
 
         <!--featured-->

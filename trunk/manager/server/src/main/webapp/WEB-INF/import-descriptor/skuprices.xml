@@ -72,5 +72,12 @@
             <name>quantity</name>
         </column-descriptor>
 
+        <column-descriptor>
+            <column-index>6</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>DECIMAL</data-type>
+            <name>salePrice</name>
+        </column-descriptor>
+
     </import-columns>
 </import-descriptor>
