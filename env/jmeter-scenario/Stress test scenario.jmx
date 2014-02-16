@@ -15,9 +15,9 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">10</stringProp>
+          <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">10</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <stringProp name="ThreadGroup.ramp_time">30</stringProp>
         <longProp name="ThreadGroup.start_time">1371537555000</longProp>
         <longProp name="ThreadGroup.end_time">1371537555000</longProp>
@@ -79,7 +79,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Contains welcome message" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="514415543">Welcome to Yes-Cart demo store</stringProp>
+              <stringProp name="-1396342996">banner</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -109,7 +109,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Contains sorting navigation" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-772811337">sku-in-list-head</stringProp>
+              <stringProp name="-1805753761">sort-order</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -118,7 +118,7 @@
           <hashTree/>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Does not have product divs" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1964582109">sku-in-list-row</stringProp>
+              <stringProp name="-1388950900">product-tittle</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -136,7 +136,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/yes-shop/category/notebooks/page/4</stringProp>
+          <stringProp name="HTTPSampler.path">/yes-shop/category/netbooks/page/4</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -148,7 +148,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has product divs" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1964582109">sku-in-list-row</stringProp>
+              <stringProp name="-1388950900">product-tittle</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -166,7 +166,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/yes-shop/category/notebooks/page/4/items/10/price/USD-1300-1500</stringProp>
+          <stringProp name="HTTPSampler.path">/yes-shop/category/netbooks/page/4/items/10/price/USD-1300-1500</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -178,7 +178,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has product divs" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1964582109">sku-in-list-row</stringProp>
+              <stringProp name="-1388950900">product-tittle</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -196,7 +196,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/yes-shop/category/notebooks/page/0/items/10/price/USD-1300-1500/sorta/name_sort</stringProp>
+          <stringProp name="HTTPSampler.path">/yes-shop/category/netbooks/page/0/items/10/price/USD-1300-1500/sorta/name_sort</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -208,7 +208,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has product divs" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1964582109">sku-in-list-row</stringProp>
+              <stringProp name="-1388950900">product-tittle</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -226,7 +226,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/yes-shop/category/notebooks/page/0/items/10/price/USD-1300-1500/brand/HP/sortd/sku.skuPrice</stringProp>
+          <stringProp name="HTTPSampler.path">/yes-shop/category/netbooks/page/0/items/10/price/USD-1300-1500/brand/HP/sortd/sku.skuPrice</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -238,7 +238,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has product divs" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1964582109">sku-in-list-row</stringProp>
+              <stringProp name="-1388950900">product-tittle</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -256,7 +256,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/yes-shop/category/notebooks/page/2/items/10/price/USD-1300-1500/brand/HP/sortd/sku.skuPrice</stringProp>
+          <stringProp name="HTTPSampler.path">/yes-shop/category/netbooks/page/2/items/10/price/USD-1300-1500/brand/HP/sortd/sku.skuPrice</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -268,7 +268,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has product divs" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1964582109">sku-in-list-row</stringProp>
+              <stringProp name="-1388950900">product-tittle</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -298,7 +298,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has product divs" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1964582109">sku-in-list-row</stringProp>
+              <stringProp name="-1388950900">product-tittle</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -316,7 +316,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/yes-shop/category/notebooks/query/Pavilion%20g6-1312sa%20Notebook%20PC</stringProp>
+          <stringProp name="HTTPSampler.path">/yes-shop/category/netbooks/query/Pavilion%20g6-1312sa%20Notebook%20PC</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -329,7 +329,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has product divs" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1964582109">sku-in-list-row</stringProp>
+              <stringProp name="-1805753761">sort-order</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -352,7 +352,7 @@
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">/yes-shop/category/notebooks/page/${__Random(0,4)}/price/USD-1300-1500</stringProp>
+            <stringProp name="HTTPSampler.path">/yes-shop/category/netbooks/page/${__Random(0,4)}/price/USD-1300-1500</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -365,7 +365,7 @@
           <hashTree>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has product divs" enabled="true">
               <collectionProp name="Asserion.test_strings">
-                <stringProp name="-1964582109">sku-in-list-row</stringProp>
+                <stringProp name="-1388950900">product-tittle</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
@@ -392,7 +392,7 @@
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">/yes-shop/category/notebooks/product/${RandomProductPK}</stringProp>
+            <stringProp name="HTTPSampler.path">/yes-shop/category/netbooks/product/${RandomProductPK}</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -405,7 +405,7 @@
           <hashTree>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has product info divs" enabled="true">
               <collectionProp name="Asserion.test_strings">
-                <stringProp name="-685400456">sku-item-info</stringProp>
+                <stringProp name="-1388950900">product-tittle</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
@@ -588,7 +588,7 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">10</stringProp>
+          <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <stringProp name="ThreadGroup.ramp_time">30</stringProp>
@@ -643,7 +643,7 @@
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">/yes-shop/category/notebooks/page/${__Random(0,4)}/price/USD-1300-1500</stringProp>
+            <stringProp name="HTTPSampler.path">/yes-shop/category/netbooks/page/${__Random(0,4)}/price/USD-1300-1500</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -656,7 +656,7 @@
           <hashTree>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has product divs" enabled="true">
               <collectionProp name="Asserion.test_strings">
-                <stringProp name="-1964582109">sku-in-list-row</stringProp>
+                <stringProp name="-1388950900">product-tittle</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
@@ -683,7 +683,7 @@
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">/yes-shop/category/notebooks/product/${RandomProductPK}</stringProp>
+            <stringProp name="HTTPSampler.path">/yes-shop/category/netbooks/product/${RandomProductPK}</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -696,7 +696,7 @@
           <hashTree>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has product info divs" enabled="true">
               <collectionProp name="Asserion.test_strings">
-                <stringProp name="-685400456">sku-item-info</stringProp>
+                <stringProp name="-1388950900">product-tittle</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
@@ -723,7 +723,7 @@
             <stringProp name="HTTPSampler.response_timeout"></stringProp>
             <stringProp name="HTTPSampler.protocol"></stringProp>
             <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-            <stringProp name="HTTPSampler.path">/yes-shop/category/notebooks/product/${RandomProductPK}/addToCartCmd/${SkuCode}/qty/1</stringProp>
+            <stringProp name="HTTPSampler.path">/yes-shop/category/netbooks/product/${RandomProductPK}/addToCartCmd/${SkuCode}/qty/1</stringProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -735,7 +735,7 @@
           <hashTree>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has product info divs" enabled="true">
               <collectionProp name="Asserion.test_strings">
-                <stringProp name="-685400456">sku-item-info</stringProp>
+                <stringProp name="-1388950900">product-tittle</stringProp>
               </collectionProp>
               <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
@@ -865,8 +865,15 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout: Registration form" enabled="true">
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-            <collectionProp name="Arguments.arguments"/>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value"></stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
           </elementProp>
           <stringProp name="HTTPSampler.domain"></stringProp>
           <stringProp name="HTTPSampler.port"></stringProp>
@@ -905,7 +912,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get registration form url" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">registerForm</stringProp>
-            <stringProp name="RegexExtractor.regex">(checkout.*registerForm)</stringProp>
+            <stringProp name="RegexExtractor.regex">(checkout.*registerView\-registerForm)</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">REGEX_CARTFORM_FAILED</stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -914,7 +921,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get registration form hidden id" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">RegFormID_HF</stringProp>
-            <stringProp name="RegexExtractor.regex">(id(.*)_hf_(.*))</stringProp>
+            <stringProp name="RegexExtractor.regex">(registerForma(.*)_hf_(.*))</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default"></stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -996,7 +1003,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get create address form" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">selectAddressForm</stringProp>
-            <stringProp name="RegexExtractor.regex">(checkout.*selectAddressForm)</stringProp>
+            <stringProp name="RegexExtractor.regex">(checkout.*shippingAddress\-selectAddressForm)</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">REGEX_CREATEADDRESSFPRM_FAILED</stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -1043,7 +1050,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get address form url" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">addressForm</stringProp>
-            <stringProp name="RegexExtractor.regex">(address.*addressForm.*addrType=S)</stringProp>
+            <stringProp name="RegexExtractor.regex">(/address.*Listener\-addressForm.*addrType=S)</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">REGEX_ADDRESSFORM_FAILED</stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -1131,7 +1138,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/yes-shop/${addressForm}</stringProp>
+          <stringProp name="HTTPSampler.path">/yes-shop${addressForm}</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -1153,7 +1160,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get shipping form url" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">shippingForm</stringProp>
-            <stringProp name="RegexExtractor.regex">(checkout.*shippingForm)</stringProp>
+            <stringProp name="RegexExtractor.regex">(checkout.*shipmentView\-shippingForm)</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">REGEX_SHIPPINGFORM_FAILED</stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -1162,7 +1169,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get carrier form hidden name" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">carrierHiddenName</stringProp>
-            <stringProp name="RegexExtractor.regex">(id..?_hf_.)</stringProp>
+            <stringProp name="RegexExtractor.regex">(shippingForm..?_hf_.)</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">REGEX_HIDDENFIELDNAME_FAILED</stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -1192,7 +1199,7 @@
             <stringProp name="RegexExtractor.regex">value.&quot;(.{1})</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">INVALID</stringProp>
-            <stringProp name="RegexExtractor.match_number">3</stringProp>
+            <stringProp name="RegexExtractor.match_number">2</stringProp>
           </RegexExtractor>
           <hashTree/>
         </hashTree>
@@ -1272,7 +1279,7 @@
             <stringProp name="RegexExtractor.regex">value.&quot;(.{1})</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">INVALID</stringProp>
-            <stringProp name="RegexExtractor.match_number">4</stringProp>
+            <stringProp name="RegexExtractor.match_number">3</stringProp>
           </RegexExtractor>
           <hashTree/>
         </hashTree>
@@ -1369,7 +1376,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get payment options form hidden field name" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">optionFormHiddenIdField</stringProp>
-            <stringProp name="RegexExtractor.regex">(id..?_hf_.)</stringProp>
+            <stringProp name="RegexExtractor.regex">(paymentOptionsForm..?_hf_.)</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">REGEX_HIDDENIDFILEDPAYMENTOPTIONFORM_FAILED</stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -1422,7 +1429,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: Has payment form" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1801839881">id=&quot;paymentDiv&quot;</stringProp>
+              <stringProp name="-303757574">payment-options-form</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -1441,7 +1448,7 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get payment options form hidden field name" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">optionFormHiddenIdField</stringProp>
-            <stringProp name="RegexExtractor.regex">(id..?_hf_.)</stringProp>
+            <stringProp name="RegexExtractor.regex">(paymentOptionsForm..?_hf_.)</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">REGEX_HIDDENIDFILEDPAYMENTOPTIONFORM_FAILED</stringProp>
             <stringProp name="RegexExtractor.match_number">1</stringProp>
@@ -1617,70 +1624,6 @@
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="StatGraphVisualizer" testclass="ResultCollector" testname="Aggregate Graph" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
-          <objProp>
-            <name>saveConfig</name>
-            <value class="SampleSaveConfiguration">
-              <time>true</time>
-              <latency>true</latency>
-              <timestamp>true</timestamp>
-              <success>true</success>
-              <label>true</label>
-              <code>true</code>
-              <message>true</message>
-              <threadName>true</threadName>
-              <dataType>true</dataType>
-              <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
-              <responseData>false</responseData>
-              <samplerData>false</samplerData>
-              <xml>false</xml>
-              <fieldNames>false</fieldNames>
-              <responseHeaders>false</responseHeaders>
-              <requestHeaders>false</requestHeaders>
-              <responseDataOnError>false</responseDataOnError>
-              <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
-              <assertionsResultsToSave>0</assertionsResultsToSave>
-              <bytes>true</bytes>
-            </value>
-          </objProp>
-          <stringProp name="filename"></stringProp>
-        </ResultCollector>
-        <hashTree/>
-        <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
-          <boolProp name="ResultCollector.error_logging">false</boolProp>
-          <objProp>
-            <name>saveConfig</name>
-            <value class="SampleSaveConfiguration">
-              <time>true</time>
-              <latency>true</latency>
-              <timestamp>true</timestamp>
-              <success>true</success>
-              <label>true</label>
-              <code>true</code>
-              <message>true</message>
-              <threadName>true</threadName>
-              <dataType>true</dataType>
-              <encoding>false</encoding>
-              <assertions>true</assertions>
-              <subresults>true</subresults>
-              <responseData>false</responseData>
-              <samplerData>false</samplerData>
-              <xml>false</xml>
-              <fieldNames>false</fieldNames>
-              <responseHeaders>false</responseHeaders>
-              <requestHeaders>false</requestHeaders>
-              <responseDataOnError>false</responseDataOnError>
-              <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
-              <assertionsResultsToSave>0</assertionsResultsToSave>
-              <bytes>true</bytes>
-            </value>
-          </objProp>
-          <stringProp name="filename"></stringProp>
-        </ResultCollector>
-        <hashTree/>
         <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
@@ -1717,6 +1660,70 @@
             </value>
           </objProp>
           <stringProp name="filename">/Users/denispavlov/Downloads/apache-jmeter-2.9/results.csv</stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>false</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
+        </ResultCollector>
+        <hashTree/>
+        <ResultCollector guiclass="StatGraphVisualizer" testclass="ResultCollector" testname="Aggregate Graph" enabled="true">
+          <boolProp name="ResultCollector.error_logging">false</boolProp>
+          <objProp>
+            <name>saveConfig</name>
+            <value class="SampleSaveConfiguration">
+              <time>true</time>
+              <latency>true</latency>
+              <timestamp>true</timestamp>
+              <success>true</success>
+              <label>true</label>
+              <code>true</code>
+              <message>true</message>
+              <threadName>true</threadName>
+              <dataType>true</dataType>
+              <encoding>false</encoding>
+              <assertions>true</assertions>
+              <subresults>true</subresults>
+              <responseData>false</responseData>
+              <samplerData>false</samplerData>
+              <xml>false</xml>
+              <fieldNames>false</fieldNames>
+              <responseHeaders>false</responseHeaders>
+              <requestHeaders>false</requestHeaders>
+              <responseDataOnError>false</responseDataOnError>
+              <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+              <assertionsResultsToSave>0</assertionsResultsToSave>
+              <bytes>true</bytes>
+            </value>
+          </objProp>
+          <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
       </hashTree>

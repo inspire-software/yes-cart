@@ -672,6 +672,7 @@
                         <value>productnames-demo.xml</value>
                         <value>productsku-demo.xml</value>
                         <value>productsattributes-demo.xml</value>
+                        <value>productskuattributes-demo.xml</value>
                         <value>skuinventory.xml</value>
                         <value>skuprices.xml</value>
                         <value>productcategorynames.xml</value>
