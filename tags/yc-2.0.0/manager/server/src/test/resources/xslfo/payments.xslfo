@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format">
+    <xsl:output method="xml" indent="yes"/>
+
+    <xsl:key name="currencyGroup" match="org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity"
+             use="concat(orderCurrency, transactionOperation, transactionGatewayLabel)"/>
+
+
+    <xsl:template match="/">
+        <fo:root font-family="Times">
+
+            <fo:layout-master-set>
+                <fo:simple-page-master master-name="A4-landscape"
+                                       page-height="21.0cm" page-width="29.7cm" margin="2cm">
+                    <fo:region-body margin-top="1cm" margin-bottom="1cm"/>
+                    <fo:region-before extent="1cm"/>
+                    <fo:region-after extent="1cm"/>
+                </fo:simple-page-master>
+            </fo:layout-master-set>
+
+            <fo:page-sequence master-reference="A4-landscape">
+
+                <fo:static-content flow-name="xsl-region-before">
+                    <fo:block text-align="left" font-weight="bold" font-size="16pt">
+                        <fo:external-graphic src="src/test/resources/xslfo/yes-logo.png" width="30mm"/>
+                        Payments
+                    </fo:block>
+                </fo:static-content>
+
+                <fo:static-content flow-name="xsl-region-after">
+                    <fo:block text-align="right">
+                        Page
+                        <fo:page-number/>
+                        of
+                        <fo:page-number-citation ref-id="end"/>
+                    </fo:block>
+                </fo:static-content>
+
+
+                <fo:flow flow-name="xsl-region-body">
+
+                    <xsl:if test="count(./yes-report/org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity) > 0">
+                        <fo:block border-before-width="2cm" border-width="1mm">
+                            <fo:table font-size="10pt" border-before-width="5cm">
+                                <fo:table-header>
+                                    <fo:table-row font-weight="bold" keep-together="always" keep-with-next="always">
+                                        <fo:table-cell border="solid 1px black" width="1cm" text-align="right">
+                                            <fo:block font-weight="bold">N</fo:block>
+                                        </fo:table-cell>
+                                        <fo:table-cell border="solid 1px black" width="1.5cm" text-align="right">
+                                            <fo:block font-weight="bold">Id</fo:block>
+                                        </fo:table-cell>
+                                        <fo:table-cell border="solid 1px black" width="2cm">
+                                            <fo:block font-weight="bold">Order</fo:block>
+                                        </fo:table-cell>
+                                        <fo:table-cell border="solid 1px black" width="2.2cm">
+                                            <fo:block font-weight="bold">Shipment</fo:block>
+                                        </fo:table-cell>
+                                        <fo:table-cell border="solid 1px black" width="3.5cm">
+                                            <fo:block font-weight="bold">Shopper</fo:block>
+                                        </fo:table-cell>
+                                        <fo:table-cell border="solid 1px black" width="1.5cm">
+                                            <fo:block font-weight="bold">Card</fo:block>
+                                            <fo:block font-weight="bold">data</fo:block>
+                                        </fo:table-cell>
+
+                                        <fo:table-cell border="solid 1px black" width="3.5cm">
+                                            <fo:block font-weight="bold">Operation</fo:block>
+                                        </fo:table-cell>
+
+                                        <fo:table-cell border="solid 1px black" width="3.5cm">
+                                            <fo:block font-weight="bold">Gateway</fo:block>
+                                            <fo:block font-weight="bold">info</fo:block>
+                                        </fo:table-cell>
+
+                                        <fo:table-cell border="solid 1px black" width="2.5cm">
+                                            <fo:block font-weight="bold">Date</fo:block>
+                                        </fo:table-cell>
+
+                                        <fo:table-cell border="solid 1px black" width="2cm">
+                                            <fo:block font-weight="bold">Settlement</fo:block>
+                                        </fo:table-cell>
+
+                                        <fo:table-cell border="solid 1px black" width="1cm">
+                                            <fo:block font-weight="bold">Curr</fo:block>
+                                            <fo:block font-weight="bold">ency</fo:block>
+                                        </fo:table-cell>
+
+                                        <fo:table-cell border="solid 1px black" text-align="right" width="1.5cm">
+                                            <fo:block font-weight="bold">Amount</fo:block>
+                                        </fo:table-cell>
+                                    </fo:table-row>
+                                </fo:table-header>
+
+                                <fo:table-body>
+
+                                    <xsl:for-each
+                                            select="//org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity[generate-id(.)=generate-id(key('currencyGroup', concat(orderCurrency, transactionOperation, transactionGatewayLabel))[1])]">
+                                        <xsl:sort select="orderCurrency"/>
+                                        <xsl:sort select="transactionOperation"/>
+                                        <xsl:sort select="transactionGatewayLabel"/>
+                                        <xsl:for-each
+                                                select="key('currencyGroup', concat(orderCurrency, transactionOperation, transactionGatewayLabel))">
+
+                                            <fo:table-row>
+                                                <fo:table-cell border="solid 1px black" text-align="right">
+                                                    <fo:block>
+                                                        <xsl:value-of select="position()"/>
+                                                    </fo:block>
+                                                </fo:table-cell>
+                                                <fo:table-cell border="solid 1px black" text-align="right">
+                                                    <fo:block>
+                                                        <xsl:value-of select="customerOrderPaymentId"/>
+                                                    </fo:block>
+                                                </fo:table-cell>
+                                                <fo:table-cell border="solid 1px black">
+                                                    <fo:block>
+                                                        <xsl:value-of select="orderNumber"/>
+                                                    </fo:block>
+                                                </fo:table-cell>
+                                                <fo:table-cell border="solid 1px black">
+                                                    <fo:block>
+                                                        <xsl:value-of select="orderShipment"/>
+                                                    </fo:block>
+                                                </fo:table-cell>
+                                                <fo:table-cell border="solid 1px black" text-align="right">
+                                                    <fo:block>
+                                                        <xsl:value-of select="cardHolderName"/>
+                                                    </fo:block>
+                                                </fo:table-cell>
+                                                <fo:table-cell border="solid 1px black" text-align="right">
+                                                    <fo:block>
+                                                        <xsl:value-of select="cardExpireMonth"/>/<xsl:value-of
+                                                            select="cardExpireYear"/>
+                                                    </fo:block>
+                                                    <fo:block>
+                                                        <xsl:value-of select="cardNumber"/>
+                                                    </fo:block>
+                                                </fo:table-cell>
+                                                <fo:table-cell border="solid 1px black">
+                                                    <fo:block>
+                                                        <xsl:value-of select="transactionOperation"/>
+                                                    </fo:block>
+                                                </fo:table-cell>
+                                                <fo:table-cell border="solid 1px black">
+                                                    <fo:block font-size="8pt">
+                                                        <xsl:value-of select="transactionGatewayLabel"/>
+                                                    </fo:block>
+                                                    <fo:block font-size="8pt">
+                                                        <xsl:value-of select="transactionOperationResultCode"/>
+                                                    </fo:block>
+                                                    <fo:block font-size="8pt">
+                                                        <xsl:value-of select="paymentProcessorResult"/>
+                                                    </fo:block>
+                                                </fo:table-cell>
+                                                <fo:table-cell border="solid 1px black">
+                                                    <fo:block>
+                                                        <xsl:value-of select="orderDate"/>
+                                                    </fo:block>
+                                                </fo:table-cell>
+                                                <fo:table-cell border="solid 1px black">
+                                                    <fo:block>
+                                                        <xsl:value-of select="paymentProcessorBatchSettlement"/>
+                                                    </fo:block>
+                                                </fo:table-cell>
+                                                <fo:table-cell border="solid 1px black">
+                                                    <fo:block>
+                                                        <xsl:value-of select="orderCurrency"/>
+                                                    </fo:block>
+                                                </fo:table-cell>
+                                                <fo:table-cell border="solid 1px black" text-align="right">
+                                                    <fo:block>
+                                                        <xsl:value-of select="format-number(paymentAmount, '##0.00')"/>
+                                                    </fo:block>
+                                                </fo:table-cell>
+
+                                            </fo:table-row>
+
+
+                                            <xsl:if test="position() = last()">
+                                                <fo:table-row>
+                                                    <fo:table-cell border="solid 1px black"
+                                                                   number-columns-spanned="11" font-weight="bold">
+                                                        <fo:block>Summary</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black" text-align="right"
+                                                                   font-weight="bold">
+                                                        <fo:block>
+                                                            <xsl:value-of
+                                                                    select="format-number(sum(
+                                                                key('currencyGroup', concat(orderCurrency, transactionOperation, transactionGatewayLabel))/paymentAmount
+                                                                ), '##0.00')"/>
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                </fo:table-row>
+                                                <fo:table-row>
+                                                    <fo:table-cell border="none"
+                                                                   number-columns-spanned="12" font-weight="bold">
+                                                        <fo:block><fo:leader /></fo:block>
+                                                    </fo:table-cell>
+                                                </fo:table-row>
+                                            </xsl:if>
+
+
+                                        </xsl:for-each>
+                                    </xsl:for-each>
+
+
+                                </fo:table-body>
+                            </fo:table>
+                        </fo:block>
+
+                        <fo:block>
+                        </fo:block>
+
+                    </xsl:if>
+                    <fo:block id="end"/>
+                </fo:flow>
+            </fo:page-sequence>
+        </fo:root>
+    </xsl:template>
+</xsl:stylesheet>

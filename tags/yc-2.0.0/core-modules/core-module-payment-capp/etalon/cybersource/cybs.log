@@ -1,0 +1,919 @@
+2011-05-14 16:58:47.756 pool-1-thread-1 FILESTART> CYBERSOURCE LOG FILE
+
+2011-05-14 16:58:47.757 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:58:47.757 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:58:47.763 pool-1-thread-1 REQUEST  > 
+item_1_unitPrice=15.01
+billTo_lastName=xxx
+billTo_country=US
+billTo_email=johnxxxxxxxxxxx.com
+item_2_unitPrice=13.99
+item_0_productSKU=skuCode1
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+shipTo_street1=713 xxxxxxxxxxxxxxxxxx 101
+item_1_productSKU=skuCode1
+purchaseTotals_grandTotalAmount=65.36
+card_expirationYear=xxxx
+card_cvNumber=xxx
+purchaseTotals_currency=USD
+item_0_productName=product sku 1. Three items in delivery 0
+shipTo_country=US
+shipTo_city=Los Angeles
+item_0_unitPrice=12.12
+billTo_postalCode=90031
+billTo_city=Los Angeles
+item_1_taxAmount=0.00
+ccAuthService_run=true
+billTo_street1=2684xxxxxxxxxxxxxxxxxx 208
+card_accountNumber=4111xxxxxxxx1111
+item_2_productSKU=4321
+shipTo_lastName=xxx
+card_expirationMonth=xx
+merchantID=iazarny
+billTo_state=CA
+businessRules_ignoreAVSResult=true
+shipTo_postalCode=90555
+clientLibraryVersion=5.0.2
+item_2_taxAmount=0.00
+item_2_productName=Next dey delivery
+item_1_productName=product sku 2. One item in delivery 0
+item_0_taxAmount=0.00
+shipTo_firstName=xxxx
+merchantReferenceCode=113b9898-93a8-4184-992b-9bb3ae1243f4-0
+billTo_firstName=xxxx
+card_cardType=xxx
+shipTo_state=CA
+
+2011-05-14 16:58:47.765 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:58:48.398 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:58:48.593 pool-1-thread-1 INFO     > Sending 3188 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:58:51.362 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:58:51.362 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:58:51.370 pool-1-thread-1 REPLY    > 
+ccAuthReply_cvCode=1
+ccAuthReply_amount=65.36
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxF2BC
+reasonCode=100
+decision=ACCEPT
+purchaseTotals_currency=USD
+ccAuthReply_reasonCode=100
+requestID=3053815250190008284282
+ccAuthReply_processorResponse=0
+ccAuthReply_authorizationCode=xx
+merchantReferenceCode=113b9898-93a8-4184-992b-9bb3ae1243f4-0
+ccAuthReply_authorizedDateTime=2011-05-14T13:58:45Z
+ccAuthReply_avsCode=1
+
+
+2011-05-14 16:58:51.436 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:58:51.437 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:58:51.439 pool-1-thread-1 REQUEST  > 
+item_1_unitPrice=13.99
+billTo_lastName=xxx
+billTo_country=US
+billTo_email=johnxxxxxxxxxxx.com
+item_0_productSKU=skuCode2
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+shipTo_street1=713 xxxxxxxxxxxxxxxxxx 101
+item_1_productSKU=4321
+purchaseTotals_grandTotalAmount=63.99
+card_expirationYear=xxxx
+card_cvNumber=xxx
+purchaseTotals_currency=USD
+item_0_productName=product sku 1. Two items in delivery 1
+shipTo_country=US
+shipTo_city=Los Angeles
+item_0_unitPrice=25.00
+billTo_postalCode=90031
+billTo_city=Los Angeles
+item_1_taxAmount=0.00
+ccAuthService_run=true
+billTo_street1=2684xxxxxxxxxxxxxxxxxx 208
+card_accountNumber=4111xxxxxxxx1111
+shipTo_lastName=xxx
+card_expirationMonth=xx
+merchantID=iazarny
+billTo_state=CA
+businessRules_ignoreAVSResult=true
+shipTo_postalCode=90555
+clientLibraryVersion=5.0.2
+item_1_productName=Next dey delivery
+item_0_taxAmount=0.00
+shipTo_firstName=xxxx
+merchantReferenceCode=113b9898-93a8-4184-992b-9bb3ae1243f4-1
+billTo_firstName=xxxx
+card_cardType=xxx
+shipTo_state=CA
+
+2011-05-14 16:58:51.440 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:58:51.466 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:58:51.470 pool-1-thread-1 INFO     > Sending 3057 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:58:52.608 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:58:52.609 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:58:52.614 pool-1-thread-1 REPLY    > 
+ccAuthReply_cvCode=1
+ccAuthReply_amount=63.99
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxFHI2
+reasonCode=100
+decision=ACCEPT
+purchaseTotals_currency=USD
+ccAuthReply_reasonCode=100
+requestID=3053815263190008284282
+ccAuthReply_processorResponse=0
+ccAuthReply_authorizationCode=xx
+merchantReferenceCode=113b9898-93a8-4184-992b-9bb3ae1243f4-1
+ccAuthReply_authorizedDateTime=2011-05-14T13:58:46Z
+ccAuthReply_avsCode=1
+
+
+2011-05-14 16:58:52.642 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:58:52.643 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:58:52.644 pool-1-thread-1 REQUEST  > 
+purchaseTotals_currency=USD
+clientLibraryVersion=5.0.2
+requestID=3053xxxxxxxxxxxxxx4282
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxF2BC
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+merchantReferenceCode=3053815250190008284282
+merchantID=iazarny
+ccAuthReversalService_authRequestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxF2BC
+purchaseTotals_grandTotalAmount=65.36
+ccAuthReversalService_run=true
+ccAuthReversalService_authRequestID=3053815250190008284282
+
+2011-05-14 16:58:52.645 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:58:52.663 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:58:52.666 pool-1-thread-1 INFO     > Sending 2591 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:58:54.397 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:58:54.399 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:58:54.403 pool-1-thread-1 REPLY    > 
+ccAuthReversalReply_reasonCode=100
+purchaseTotals_currency=USD
+ccAuthReversalReply_authorizationCode=xx
+requestID=3053815280590008284268
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx8BK0
+merchantReferenceCode=3053815250190008284282
+ccAuthReversalReply_amount=65.36
+ccAuthReversalReply_requestDateTime=2011-05-14T13:58:48Z
+reasonCode=100
+ccAuthReversalReply_processorResponse=0
+decision=ACCEPT
+
+
+2011-05-14 16:58:54.411 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:58:54.412 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:58:54.414 pool-1-thread-1 REQUEST  > 
+purchaseTotals_currency=USD
+clientLibraryVersion=5.0.2
+requestID=3053xxxxxxxxxxxxxx4282
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxFHI2
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+merchantReferenceCode=3053815263190008284282
+merchantID=iazarny
+ccAuthReversalService_authRequestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxFHI2
+purchaseTotals_grandTotalAmount=63.99
+ccAuthReversalService_run=true
+ccAuthReversalService_authRequestID=3053815263190008284282
+
+2011-05-14 16:58:54.415 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:58:54.427 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:58:54.430 pool-1-thread-1 INFO     > Sending 2591 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:58:55.583 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:58:55.584 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:58:55.589 pool-1-thread-1 REPLY    > 
+ccAuthReversalReply_reasonCode=100
+purchaseTotals_currency=USD
+ccAuthReversalReply_authorizationCode=xx
+requestID=3053815292670008284268
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXhdA
+merchantReferenceCode=3053815263190008284282
+ccAuthReversalReply_amount=63.99
+ccAuthReversalReply_requestDateTime=2011-05-14T13:58:49Z
+reasonCode=100
+ccAuthReversalReply_processorResponse=0
+decision=ACCEPT
+
+
+2011-05-14 16:58:56.616 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:58:56.617 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:58:56.626 pool-1-thread-1 REQUEST  > 
+item_1_unitPrice=15.01
+billTo_lastName=xxx
+billTo_country=US
+billTo_email=johnxxxxxxxxxxx.com
+item_2_unitPrice=13.99
+item_0_productSKU=skuCode1
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+shipTo_street1=713 xxxxxxxxxxxxxxxxxx 101
+item_1_productSKU=skuCode1
+purchaseTotals_grandTotalAmount=65.36
+card_expirationYear=xxxx
+card_cvNumber=xxx
+purchaseTotals_currency=USD
+item_0_productName=product sku 1. Three items in delivery 0
+shipTo_country=US
+shipTo_city=Los Angeles
+item_0_unitPrice=12.12
+billTo_postalCode=90031
+billTo_city=Los Angeles
+item_1_taxAmount=0.00
+ccAuthService_run=true
+billTo_street1=2684xxxxxxxxxxxxxxxxxx 208
+card_accountNumber=4111xxxxxxxx1111
+item_2_productSKU=4321
+shipTo_lastName=xxx
+card_expirationMonth=xx
+merchantID=iazarny
+billTo_state=CA
+businessRules_ignoreAVSResult=true
+shipTo_postalCode=90555
+clientLibraryVersion=5.0.2
+item_2_taxAmount=0.00
+item_2_productName=Next dey delivery
+item_1_productName=product sku 2. One item in delivery 0
+item_0_taxAmount=0.00
+shipTo_firstName=xxxx
+merchantReferenceCode=568b51ac-ffc9-4bee-9355-76df046a2940-0
+billTo_firstName=xxxx
+card_cardType=xxx
+shipTo_state=CA
+
+2011-05-14 16:58:56.628 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:58:56.639 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:58:56.642 pool-1-thread-1 INFO     > Sending 3188 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:58:58.292 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:58:58.292 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:58:58.297 pool-1-thread-1 REPLY    > 
+ccAuthReply_cvCode=1
+ccAuthReply_amount=65.36
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxhDsd
+reasonCode=100
+decision=ACCEPT
+purchaseTotals_currency=USD
+ccAuthReply_reasonCode=100
+requestID=3053815320330008284310
+ccAuthReply_processorResponse=0
+ccAuthReply_authorizationCode=xx
+merchantReferenceCode=568b51ac-ffc9-4bee-9355-76df046a2940-0
+ccAuthReply_authorizedDateTime=2011-05-14T13:58:52Z
+ccAuthReply_avsCode=1
+
+
+2011-05-14 16:58:58.310 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:58:58.310 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:58:58.312 pool-1-thread-1 REQUEST  > 
+item_1_unitPrice=13.99
+billTo_lastName=xxx
+billTo_country=US
+billTo_email=johnxxxxxxxxxxx.com
+item_0_productSKU=skuCode2
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+shipTo_street1=713 xxxxxxxxxxxxxxxxxx 101
+item_1_productSKU=4321
+purchaseTotals_grandTotalAmount=63.99
+card_expirationYear=xxxx
+card_cvNumber=xxx
+purchaseTotals_currency=USD
+item_0_productName=product sku 1. Two items in delivery 1
+shipTo_country=US
+shipTo_city=Los Angeles
+item_0_unitPrice=25.00
+billTo_postalCode=90031
+billTo_city=Los Angeles
+item_1_taxAmount=0.00
+ccAuthService_run=true
+billTo_street1=2684xxxxxxxxxxxxxxxxxx 208
+card_accountNumber=4111xxxxxxxx1111
+shipTo_lastName=xxx
+card_expirationMonth=xx
+merchantID=iazarny
+billTo_state=CA
+businessRules_ignoreAVSResult=true
+shipTo_postalCode=90555
+clientLibraryVersion=5.0.2
+item_1_productName=Next dey delivery
+item_0_taxAmount=0.00
+shipTo_firstName=xxxx
+merchantReferenceCode=568b51ac-ffc9-4bee-9355-76df046a2940-1
+billTo_firstName=xxxx
+card_cardType=xxx
+shipTo_state=CA
+
+2011-05-14 16:58:58.313 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:58:58.324 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:58:58.327 pool-1-thread-1 INFO     > Sending 3057 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:58:59.779 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:58:59.780 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:58:59.785 pool-1-thread-1 REPLY    > 
+ccAuthReply_cvCode=1
+ccAuthReply_amount=63.99
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxfXxf
+reasonCode=100
+decision=ACCEPT
+purchaseTotals_currency=USD
+ccAuthReply_reasonCode=100
+requestID=3053815334870008284282
+ccAuthReply_processorResponse=0
+ccAuthReply_authorizationCode=xx
+merchantReferenceCode=568b51ac-ffc9-4bee-9355-76df046a2940-1
+ccAuthReply_authorizedDateTime=2011-05-14T13:58:53Z
+ccAuthReply_avsCode=1
+
+
+2011-05-14 16:58:59.811 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:58:59.812 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:58:59.813 pool-1-thread-1 REQUEST  > 
+purchaseTotals_currency=USD
+ccCaptureService_authRequestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxhDsd
+clientLibraryVersion=5.0.2
+requestID=3053xxxxxxxxxxxxxx4310
+ccCaptureService_authRequestID=3053815320330008284310
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxhDsd
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+merchantReferenceCode=3053815320330008284310
+merchantID=iazarny
+purchaseTotals_grandTotalAmount=65.36
+ccCaptureService_run=true
+
+2011-05-14 16:58:59.814 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:58:59.825 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:58:59.831 pool-1-thread-1 INFO     > Sending 2576 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:01.022 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:01.022 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:01.028 pool-1-thread-1 REPLY    > 
+purchaseTotals_currency=USD
+requestID=3053815346680008284282
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx6UrB
+merchantReferenceCode=3053815320330008284310
+reasonCode=100
+ccCaptureReply_requestDateTime=2011-05-14T13:58:54Z
+ccCaptureReply_reconciliationID=3053815320330008284310
+ccCaptureReply_amount=65.36
+decision=ACCEPT
+ccCaptureReply_reasonCode=100
+
+
+2011-05-14 16:59:01.059 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:01.059 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:01.061 pool-1-thread-1 REQUEST  > 
+purchaseTotals_currency=USD
+ccCaptureService_authRequestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxfXxf
+clientLibraryVersion=5.0.2
+requestID=3053xxxxxxxxxxxxxx4282
+ccCaptureService_authRequestID=3053815334870008284282
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxfXxf
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+merchantReferenceCode=3053815334870008284282
+merchantID=iazarny
+purchaseTotals_grandTotalAmount=63.99
+ccCaptureService_run=true
+
+2011-05-14 16:59:01.062 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:01.073 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:01.075 pool-1-thread-1 INFO     > Sending 2576 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:02.808 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:02.809 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:02.814 pool-1-thread-1 REPLY    > 
+purchaseTotals_currency=USD
+requestID=3053815364790008284310
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxbkhm
+merchantReferenceCode=3053815334870008284282
+reasonCode=100
+ccCaptureReply_requestDateTime=2011-05-14T13:58:56Z
+ccCaptureReply_reconciliationID=3053815334870008284282
+ccCaptureReply_amount=63.99
+decision=ACCEPT
+ccCaptureReply_reasonCode=100
+
+
+2011-05-14 16:59:03.540 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:03.542 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:03.544 pool-1-thread-1 REQUEST  > 
+item_1_unitPrice=15.01
+billTo_lastName=xxx
+billTo_country=US
+billTo_email=johnxxxxxxxxxxx.com
+item_2_unitPrice=13.99
+item_0_productSKU=skuCode1
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+shipTo_street1=713 xxxxxxxxxxxxxxxxxx 101
+item_1_productSKU=skuCode1
+purchaseTotals_grandTotalAmount=65.36
+card_expirationYear=xxxx
+card_cvNumber=xxx
+purchaseTotals_currency=USD
+item_0_productName=product sku 1. Three items in delivery 0
+shipTo_country=US
+shipTo_city=Los Angeles
+item_0_unitPrice=12.12
+billTo_postalCode=90031
+billTo_city=Los Angeles
+item_1_taxAmount=0.00
+ccAuthService_run=true
+billTo_street1=2684xxxxxxxxxxxxxxxxxx 208
+card_accountNumber=4111xxxxxxxx1111
+item_2_productSKU=4321
+shipTo_lastName=xxx
+card_expirationMonth=xx
+merchantID=iazarny
+billTo_state=CA
+businessRules_ignoreAVSResult=true
+shipTo_postalCode=90555
+clientLibraryVersion=5.0.2
+item_2_taxAmount=0.00
+item_2_productName=Next dey delivery
+item_1_productName=product sku 2. One item in delivery 0
+item_0_taxAmount=0.00
+shipTo_firstName=xxxx
+merchantReferenceCode=a1fe100b-2cc9-4f71-a099-b587154dbfb5-0
+billTo_firstName=xxxx
+card_cardType=xxx
+shipTo_state=CA
+
+2011-05-14 16:59:03.545 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:03.555 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:03.557 pool-1-thread-1 INFO     > Sending 3188 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:05.003 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:05.004 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:05.009 pool-1-thread-1 REPLY    > 
+ccAuthReply_cvCode=1
+ccAuthReply_amount=65.36
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx2WQA
+reasonCode=100
+decision=ACCEPT
+purchaseTotals_currency=USD
+ccAuthReply_reasonCode=100
+requestID=3053815387150008284282
+ccAuthReply_processorResponse=0
+ccAuthReply_authorizationCode=xx
+merchantReferenceCode=a1fe100b-2cc9-4f71-a099-b587154dbfb5-0
+ccAuthReply_authorizedDateTime=2011-05-14T13:58:58Z
+ccAuthReply_avsCode=1
+
+
+2011-05-14 16:59:05.018 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:05.019 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:05.021 pool-1-thread-1 REQUEST  > 
+item_1_unitPrice=13.99
+billTo_lastName=xxx
+billTo_country=US
+billTo_email=johnxxxxxxxxxxx.com
+item_0_productSKU=skuCode2
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+shipTo_street1=713 xxxxxxxxxxxxxxxxxx 101
+item_1_productSKU=4321
+purchaseTotals_grandTotalAmount=63.99
+card_expirationYear=xxxx
+card_cvNumber=xxx
+purchaseTotals_currency=USD
+item_0_productName=product sku 1. Two items in delivery 1
+shipTo_country=US
+shipTo_city=Los Angeles
+item_0_unitPrice=25.00
+billTo_postalCode=90031
+billTo_city=Los Angeles
+item_1_taxAmount=0.00
+ccAuthService_run=true
+billTo_street1=2684xxxxxxxxxxxxxxxxxx 208
+card_accountNumber=4111xxxxxxxx1111
+shipTo_lastName=xxx
+card_expirationMonth=xx
+merchantID=iazarny
+billTo_state=CA
+businessRules_ignoreAVSResult=true
+shipTo_postalCode=90555
+clientLibraryVersion=5.0.2
+item_1_productName=Next dey delivery
+item_0_taxAmount=0.00
+shipTo_firstName=xxxx
+merchantReferenceCode=a1fe100b-2cc9-4f71-a099-b587154dbfb5-1
+billTo_firstName=xxxx
+card_cardType=xxx
+shipTo_state=CA
+
+2011-05-14 16:59:05.022 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:05.033 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:05.035 pool-1-thread-1 INFO     > Sending 3057 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:06.509 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:06.510 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:06.514 pool-1-thread-1 REPLY    > 
+ccAuthReply_cvCode=1
+ccAuthReply_amount=63.99
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxJ3TX
+reasonCode=100
+decision=ACCEPT
+purchaseTotals_currency=USD
+ccAuthReply_reasonCode=100
+requestID=3053815402150008284268
+ccAuthReply_processorResponse=0
+ccAuthReply_authorizationCode=xx
+merchantReferenceCode=a1fe100b-2cc9-4f71-a099-b587154dbfb5-1
+ccAuthReply_authorizedDateTime=2011-05-14T13:59:00Z
+ccAuthReply_avsCode=1
+
+
+2011-05-14 16:59:06.534 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:06.534 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:06.536 pool-1-thread-1 REQUEST  > 
+purchaseTotals_currency=USD
+ccCaptureService_authRequestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx2WQA
+clientLibraryVersion=5.0.2
+requestID=3053xxxxxxxxxxxxxx4282
+ccCaptureService_authRequestID=3053815387150008284282
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx2WQA
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+merchantReferenceCode=3053815387150008284282
+merchantID=iazarny
+purchaseTotals_grandTotalAmount=65.36
+ccCaptureService_run=true
+
+2011-05-14 16:59:06.537 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:06.547 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:06.550 pool-1-thread-1 INFO     > Sending 2576 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:07.749 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:07.750 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:07.754 pool-1-thread-1 REPLY    > 
+purchaseTotals_currency=USD
+requestID=3053815414160008284268
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxVXpE
+merchantReferenceCode=3053815387150008284282
+reasonCode=100
+ccCaptureReply_requestDateTime=2011-05-14T13:59:01Z
+ccCaptureReply_reconciliationID=3053815387150008284282
+ccCaptureReply_amount=65.36
+decision=ACCEPT
+ccCaptureReply_reasonCode=100
+
+
+2011-05-14 16:59:07.768 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:07.769 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:07.771 pool-1-thread-1 REQUEST  > 
+purchaseTotals_currency=USD
+ccCaptureService_authRequestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxJ3TX
+clientLibraryVersion=5.0.2
+requestID=3053xxxxxxxxxxxxxx4268
+ccCaptureService_authRequestID=3053815402150008284268
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxJ3TX
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+merchantReferenceCode=3053815402150008284268
+merchantID=iazarny
+purchaseTotals_grandTotalAmount=63.99
+ccCaptureService_run=true
+
+2011-05-14 16:59:07.772 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:07.782 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:07.784 pool-1-thread-1 INFO     > Sending 2576 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:09.673 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:09.673 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:09.677 pool-1-thread-1 REPLY    > 
+purchaseTotals_currency=USD
+requestID=3053815433550008284282
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxJQQf
+merchantReferenceCode=3053815402150008284268
+reasonCode=100
+ccCaptureReply_requestDateTime=2011-05-14T13:59:03Z
+ccCaptureReply_reconciliationID=3053815402150008284268
+ccCaptureReply_amount=63.99
+decision=ACCEPT
+ccCaptureReply_reasonCode=100
+
+
+2011-05-14 16:59:09.704 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:09.705 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:09.706 pool-1-thread-1 REQUEST  > 
+clientLibraryVersion=5.0.2
+requestID=3053xxxxxxxxxxxxxx4268
+voidService_run=true
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxVXpE
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+merchantReferenceCode=3053815414160008284268
+merchantID=iazarny
+voidService_voidRequestID=3053815414160008284268
+voidService_voidRequestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxVXpE
+
+2011-05-14 16:59:09.707 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:09.717 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:09.720 pool-1-thread-1 INFO     > Sending 2551 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:11.600 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:11.601 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:11.605 pool-1-thread-1 REPLY    > 
+purchaseTotals_currency=USD
+requestID=3053815453240008284268
+voidReply_amount=65.36
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXQKQ
+merchantReferenceCode=3053815414160008284268
+voidReply_requestDateTime=2011-05-14T13:59:05Z
+reasonCode=100
+voidReply_currency=usd
+decision=ACCEPT
+voidReply_reasonCode=100
+
+
+2011-05-14 16:59:11.614 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:11.614 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:11.616 pool-1-thread-1 REQUEST  > 
+clientLibraryVersion=5.0.2
+requestID=3053xxxxxxxxxxxxxx4282
+voidService_run=true
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxJQQf
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+merchantReferenceCode=3053815433550008284282
+merchantID=iazarny
+voidService_voidRequestID=3053815433550008284282
+voidService_voidRequestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxJQQf
+
+2011-05-14 16:59:11.616 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:11.626 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:11.628 pool-1-thread-1 INFO     > Sending 2551 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:13.343 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:13.344 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:13.348 pool-1-thread-1 REPLY    > 
+purchaseTotals_currency=USD
+requestID=3053815470790008284282
+voidReply_amount=63.99
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx9AZ/
+merchantReferenceCode=3053815433550008284282
+voidReply_requestDateTime=2011-05-14T13:59:07Z
+reasonCode=100
+voidReply_currency=usd
+decision=ACCEPT
+voidReply_reasonCode=100
+
+
+2011-05-14 16:59:13.988 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:13.989 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:13.991 pool-1-thread-1 REQUEST  > 
+item_1_unitPrice=15.01
+billTo_lastName=xxx
+billTo_country=US
+billTo_email=johnxxxxxxxxxxx.com
+item_2_unitPrice=13.99
+item_0_productSKU=skuCode1
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+shipTo_street1=713 xxxxxxxxxxxxxxxxxx 101
+item_1_productSKU=skuCode1
+purchaseTotals_grandTotalAmount=65.36
+card_expirationYear=xxxx
+card_cvNumber=xxx
+purchaseTotals_currency=USD
+item_0_productName=product sku 1. Three items in delivery 0
+shipTo_country=US
+shipTo_city=Los Angeles
+item_0_unitPrice=12.12
+billTo_postalCode=90031
+billTo_city=Los Angeles
+item_1_taxAmount=0.00
+ccAuthService_run=true
+billTo_street1=2684xxxxxxxxxxxxxxxxxx 208
+card_accountNumber=4111xxxxxxxx1111
+item_2_productSKU=4321
+shipTo_lastName=xxx
+card_expirationMonth=xx
+merchantID=iazarny
+billTo_state=CA
+businessRules_ignoreAVSResult=true
+shipTo_postalCode=90555
+clientLibraryVersion=5.0.2
+item_2_taxAmount=0.00
+item_2_productName=Next dey delivery
+item_1_productName=product sku 2. One item in delivery 0
+item_0_taxAmount=0.00
+shipTo_firstName=xxxx
+merchantReferenceCode=e686720e-59c8-43fa-a6ec-e088beef6de4-0
+billTo_firstName=xxxx
+card_cardType=xxx
+shipTo_state=CA
+
+2011-05-14 16:59:13.992 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:14.001 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:14.004 pool-1-thread-1 INFO     > Sending 3188 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:15.920 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:15.921 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:15.926 pool-1-thread-1 REPLY    > 
+ccAuthReply_cvCode=1
+ccAuthReply_amount=65.36
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxDEfu
+reasonCode=100
+decision=ACCEPT
+purchaseTotals_currency=USD
+ccAuthReply_reasonCode=100
+requestID=3053815496290008284282
+ccAuthReply_processorResponse=0
+ccAuthReply_authorizationCode=xx
+merchantReferenceCode=e686720e-59c8-43fa-a6ec-e088beef6de4-0
+ccAuthReply_authorizedDateTime=2011-05-14T13:59:09Z
+ccAuthReply_avsCode=1
+
+
+2011-05-14 16:59:15.943 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:15.943 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:15.947 pool-1-thread-1 REQUEST  > 
+item_1_unitPrice=13.99
+billTo_lastName=xxx
+billTo_country=US
+billTo_email=johnxxxxxxxxxxx.com
+item_0_productSKU=skuCode2
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+shipTo_street1=713 xxxxxxxxxxxxxxxxxx 101
+item_1_productSKU=4321
+purchaseTotals_grandTotalAmount=63.99
+card_expirationYear=xxxx
+card_cvNumber=xxx
+purchaseTotals_currency=USD
+item_0_productName=product sku 1. Two items in delivery 1
+shipTo_country=US
+shipTo_city=Los Angeles
+item_0_unitPrice=25.00
+billTo_postalCode=90031
+billTo_city=Los Angeles
+item_1_taxAmount=0.00
+ccAuthService_run=true
+billTo_street1=2684xxxxxxxxxxxxxxxxxx 208
+card_accountNumber=4111xxxxxxxx1111
+shipTo_lastName=xxx
+card_expirationMonth=xx
+merchantID=iazarny
+billTo_state=CA
+businessRules_ignoreAVSResult=true
+shipTo_postalCode=90555
+clientLibraryVersion=5.0.2
+item_1_productName=Next dey delivery
+item_0_taxAmount=0.00
+shipTo_firstName=xxxx
+merchantReferenceCode=e686720e-59c8-43fa-a6ec-e088beef6de4-1
+billTo_firstName=xxxx
+card_cardType=xxx
+shipTo_state=CA
+
+2011-05-14 16:59:15.949 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:15.958 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:15.961 pool-1-thread-1 INFO     > Sending 3057 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:17.253 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:17.253 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:17.255 pool-1-thread-1 REPLY    > 
+ccAuthReply_cvCode=1
+ccAuthReply_amount=63.99
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx+lfU
+reasonCode=100
+decision=ACCEPT
+purchaseTotals_currency=USD
+ccAuthReply_reasonCode=100
+requestID=3053815509600008284282
+ccAuthReply_processorResponse=0
+ccAuthReply_authorizationCode=xx
+merchantReferenceCode=e686720e-59c8-43fa-a6ec-e088beef6de4-1
+ccAuthReply_authorizedDateTime=2011-05-14T13:59:10Z
+ccAuthReply_avsCode=1
+
+
+2011-05-14 16:59:17.286 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:17.286 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:17.288 pool-1-thread-1 REQUEST  > 
+purchaseTotals_currency=USD
+ccCaptureService_authRequestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxDEfu
+clientLibraryVersion=5.0.2
+requestID=3053xxxxxxxxxxxxxx4282
+ccCaptureService_authRequestID=3053815496290008284282
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxDEfu
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+merchantReferenceCode=3053815496290008284282
+merchantID=iazarny
+purchaseTotals_grandTotalAmount=65.36
+ccCaptureService_run=true
+
+2011-05-14 16:59:17.289 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:17.297 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:17.301 pool-1-thread-1 INFO     > Sending 2576 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:18.776 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:18.777 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:18.781 pool-1-thread-1 REPLY    > 
+purchaseTotals_currency=USD
+requestID=3053815524430008284282
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxBG2q
+merchantReferenceCode=3053815496290008284282
+reasonCode=100
+ccCaptureReply_requestDateTime=2011-05-14T13:59:12Z
+ccCaptureReply_reconciliationID=3053815496290008284282
+ccCaptureReply_amount=65.36
+decision=ACCEPT
+ccCaptureReply_reasonCode=100
+
+
+2011-05-14 16:59:18.796 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:18.797 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:18.798 pool-1-thread-1 REQUEST  > 
+purchaseTotals_currency=USD
+ccCaptureService_authRequestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx+lfU
+clientLibraryVersion=5.0.2
+requestID=3053xxxxxxxxxxxxxx4282
+ccCaptureService_authRequestID=3053815509600008284282
+requestToken=Ahj7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx+lfU
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+merchantReferenceCode=3053815509600008284282
+merchantID=iazarny
+purchaseTotals_grandTotalAmount=63.99
+ccCaptureService_run=true
+
+2011-05-14 16:59:18.799 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:18.807 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:18.810 pool-1-thread-1 INFO     > Sending 2576 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:20.608 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:20.609 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:20.611 pool-1-thread-1 REPLY    > 
+purchaseTotals_currency=USD
+requestID=3053815543110008284310
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxKFeB
+merchantReferenceCode=3053815509600008284282
+reasonCode=100
+ccCaptureReply_requestDateTime=2011-05-14T13:59:14Z
+ccCaptureReply_reconciliationID=3053815509600008284282
+ccCaptureReply_amount=63.99
+decision=ACCEPT
+ccCaptureReply_reasonCode=100
+
+
+2011-05-14 16:59:20.638 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:20.638 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:20.640 pool-1-thread-1 REQUEST  > 
+purchaseTotals_currency=USD
+ccCreditService_captureRequestID=3053815524430008284282
+clientLibraryVersion=5.0.2
+ccCreditService_captureRequestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxBG2q
+requestID=3053xxxxxxxxxxxxxx4282
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxBG2q
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+merchantReferenceCode=3053815524430008284282
+merchantID=iazarny
+ccCreditService_run=true
+purchaseTotals_grandTotalAmount=65.36
+
+2011-05-14 16:59:20.641 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:20.654 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:20.656 pool-1-thread-1 INFO     > Sending 2635 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:22.440 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:22.440 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:22.442 pool-1-thread-1 REPLY    > 
+purchaseTotals_currency=USD
+ccCreditReply_reconciliationID=3053815524430008284282
+ccCreditReply_amount=65.36
+requestID=3053815560950008284268
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxkBB9
+ccCreditReply_requestDateTime=2011-05-14T13:59:16Z
+merchantReferenceCode=3053815524430008284282
+reasonCode=100
+ccCreditReply_reasonCode=100
+decision=ACCEPT
+
+
+2011-05-14 16:59:22.450 pool-1-thread-1 TRANSTART> =======================================
+2011-05-14 16:59:22.451 pool-1-thread-1 MERCHCFG > merchantID=iazarny, keysDirectory=src/test/resources/cskeys, sendToProduction=false, targetAPIVersion=1.28, keyFilename=(null), serverURL=(null), namespaceURI=(null), enableLog=true, logDirectory=target, logFilename=(null), logMaximumSize=10, useHttpClient=true, timeout=130
+2011-05-14 16:59:22.452 pool-1-thread-1 REQUEST  > 
+purchaseTotals_currency=USD
+ccCreditService_captureRequestID=3053815543110008284310
+clientLibraryVersion=5.0.2
+ccCreditService_captureRequestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxKFeB
+requestID=3053xxxxxxxxxxxxxx4310
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxKFeB
+clientEnvironment=Linux/2.6.35.12-90.fc14.x86_64/Sun Microsystems Inc./1.6.0_23
+clientLibrary=Java Basic
+merchantReferenceCode=3053815543110008284310
+merchantID=iazarny
+ccCreditService_run=true
+purchaseTotals_grandTotalAmount=63.99
+
+2011-05-14 16:59:22.453 pool-1-thread-1 INFO     > Signing request...
+2011-05-14 16:59:22.461 pool-1-thread-1 INFO     > Using HttpClient for connections.
+2011-05-14 16:59:22.463 pool-1-thread-1 INFO     > Sending 2635 bytes to https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor
+2011-05-14 16:59:24.081 pool-1-thread-1 INFO     > Reading response...
+2011-05-14 16:59:24.082 pool-1-thread-1 INFO     > Parsing response...
+2011-05-14 16:59:24.087 pool-1-thread-1 REPLY    > 
+purchaseTotals_currency=USD
+ccCreditReply_reconciliationID=3053815543110008284310
+ccCreditReply_amount=63.99
+requestID=3053815577320008284282
+requestToken=Ahj/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxzAib
+ccCreditReply_requestDateTime=2011-05-14T13:59:17Z
+merchantReferenceCode=3053815543110008284310
+reasonCode=100
+ccCreditReply_reasonCode=100
+decision=ACCEPT
+
