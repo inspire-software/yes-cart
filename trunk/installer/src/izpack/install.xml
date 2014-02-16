@@ -30,8 +30,8 @@
         <res id="userInputLang.xml" src="src/izpack/userInputLang_eng.xml"/>
         <res id="userInputLang.xml_rus" src="src/izpack/userInputLang_rus.xml"/>
 
-        <res id="ProcessPanel.Spec.xml" src="src/izpack/processPanelSpec.xml" />
-        <res id="ProcessPanel.Spec.xml_rus" src="src/izpack/processPanelSpec_rus.xml" />
+        <!--<res id="ProcessPanel.Spec.xml" src="src/izpack/processPanelSpec.xml" />-->
+        <!--<res id="ProcessPanel.Spec.xml_rus" src="src/izpack/processPanelSpec_rus.xml" />-->
 
         <res id="shortcutSpec.xml" src="src/izpack/shortcutSpec.xml"/>
         <res id="shortcutSpec.xml_rus" src="src/izpack/shortcutSpec_rus.xml"/>
@@ -56,7 +56,7 @@
             <validator classname="org.yes.cart.installer.WebServerConfigurationPanelValidator"/>
         </panel>
         <panel classname="InstallPanel"/>
-        <panel classname="ProcessPanel"/>
+        <!--<panel classname="ProcessPanel"/>-->
         <panel classname="ShortcutPanel"/>
         <panel classname="FinishPanel"/>
     </panels>
