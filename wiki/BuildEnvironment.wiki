@@ -3,4 +3,4 @@
 
 = Create build environment =
 
-Comprehensive guide to setting up the environment is [http://www.inspire-software.com/confluence/display/YC/From+source here]
+Comprehensive guide to setting up the environment is [http://www.inspire-software.com/confluence/display/YC2/From+source here]
