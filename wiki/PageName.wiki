@@ -2,4 +2,4 @@
 
 = Sample view of storefront =
 
-[http://www.inspire-software.com/confluence/download/attachments/10911983/yes-shop.jpg?version=1&modificationDate=1392043449000 Storefront]
+[http://www.inspire-software.com/confluence/download/attachments/10911983/yes-shop.jpg]
