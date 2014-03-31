@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<attr:EntityAttributeValuesManagementPanel
+           label="@Resource(bundle='ShopManagerApplication',key='attr.values')"
+           xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:attr="org.yes.cart.ui.attributes.*"
+           width="100%"
+           height="100%">
+
+    <mx:Script><![CDATA[
+        import mx.collections.ArrayCollection;
+        import mx.events.DataGridEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.constants.AttributeGroupNames;
+        import org.yes.cart.impl.AttrValueShopDTOImpl;
+        import org.yes.cart.impl.AttributeDTOImpl;
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.util.DomainUtils;
+
+        private var _shop:ShopDTOImpl;
+
+        public function get shop():ShopDTOImpl {
+            return _shop;
+        }
+
+        public function set shop(value:ShopDTOImpl):void {
+            if (_shop != null && value != null && _shop.shopId == value.shopId) {
+                return;
+            }
+            _shop = value;
+
+            this.attrValues.removeAll();
+            onEntitySet(AttributeGroupNames.SHOP);
+
+            if (_shop != null) {
+                remoteShopService.getEntityAttributes(_shop.shopId);
+            }
+        }
+
+        override protected function onValueAdded(selectedAttributeDTO:AttributeDTOImpl):void {
+            var shopAttr:AttrValueShopDTOImpl = new AttrValueShopDTOImpl();
+            shopAttr.attributeDTO = selectedAttributeDTO;
+            shopAttr.shopId = this._shop.shopId;
+            remoteShopService.createEntityAttributeValue(shopAttr);
+        }
+
+
+        override protected function onValueChanged(event:DataGridEvent, attrValue:Object, newValue:Object):void {
+            var shopAttr:AttrValueShopDTOImpl = attrValue as AttrValueShopDTOImpl;
+            shopAttr.val = String(newValue);
+            if (DomainUtils.isNewPK(shopAttr.attrvalueId)) {
+                remoteShopService.createEntityAttributeValue(shopAttr);
+            } else {
+                remoteShopService.updateEntityAttributeValue(shopAttr);
+            }
+        }
+
+        override protected function onValueDelete(selectedItem:Object):void {
+            this.attrValues.removeItemAt(this.attrValues.getItemIndex(selectedItem));
+            remoteShopService.deleteAttributeValue(selectedItem.attrvalueId);
+        }
+
+        /**
+         * Overwrite this method to allow different sibling panels to display different
+         * groups of attributes
+         *
+         * @param attr currently loaded (into this panel) attribute
+         * @return true to allow this attribute to be managed through this pannel
+         */
+        protected function allowManageAttribute(attr:AttrValueShopDTOImpl):Boolean {
+            return true; // manage all available attributes by default
+        }
+
+        private function onGetEntityAttributesResult(event:ResultEvent):void {
+            var attrs:ArrayCollection = event.result as ArrayCollection;
+            if (attrs != null) {
+                for each (var attr:AttrValueShopDTOImpl in attrs) {
+                    if (allowManageAttribute(attr)) {
+                        this.attrValues.addItem(attr);
+                    }
+                }
+            }
+        }
+
+        private function onCreateEntityAttributeValueResult(event:ResultEvent):void {
+            var shopAttr:AttrValueShopDTOImpl = event.result as AttrValueShopDTOImpl;
+            var index:int = -1;
+            for each (var old:AttrValueShopDTOImpl in this.attrValues) {
+                index++;
+                if (old.attributeDTO.attributeId == shopAttr.attributeDTO.attributeId) {
+                    break;
+                }
+            }
+            if (index != -1) {
+                this.attrValues.removeItemAt(index);
+                this.attrValues.addItemAt(shopAttr, index);
+            } else {
+                this.attrValues.addItem(shopAttr);
+            }
+        }
+
+        private function onUpdateEntityAttributeValueResult(event:ResultEvent):void {
+            var shopAttr:AttrValueShopDTOImpl = event.result as AttrValueShopDTOImpl;
+            var index:int = -1;
+            for each (var old:AttrValueShopDTOImpl in this.attrValues) {
+                index++;
+                if (old.attrvalueId == shopAttr.attrvalueId) {
+                    break;
+                }
+            }
+            if (index != -1) {
+                this.attrValues.removeItemAt(index);
+                this.attrValues.addItemAt(shopAttr, index);
+            }
+        }
+
+        private function onDeleteAttributeValueResult(event:ResultEvent):void {
+            // ok deleted
+        }
+        ]]></mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
+                     destination="remoteShopService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getEntityAttributes" name="getEntityAttributes"
+                   result="onGetEntityAttributesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="createEntityAttributeValue" name="createEntityAttributeValue"
+                   result="onCreateEntityAttributeValueResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateEntityAttributeValue" name="updateEntityAttributeValue"
+                   result="onUpdateEntityAttributeValueResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="deleteAttributeValue" name="deleteAttributeValue"
+                   result="onDeleteAttributeValueResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+</attr:EntityAttributeValuesManagementPanel>
