@@ -76,7 +76,7 @@
         }
 
 
-        override protected function onValueChanged(event:DataGridEvent, attrValue:Object, newValue:Object):void {
+        override public function onValueChanged(event:DataGridEvent, attrValue:Object, newValue:Object):void {
             var catAttr:AttrValueProductDTOImpl = attrValue as AttrValueProductDTOImpl;
             catAttr.val = String(newValue);
             if (DomainUtils.isNewPK(catAttr.attrvalueId)) {
@@ -115,16 +115,20 @@
 
         private function onCreateEntityAttributeValueResult(event:ResultEvent):void {
             var prodAttr:AttrValueProductDTOImpl = event.result as AttrValueProductDTOImpl;
-            var index:int = -1;
+            var _replace:AttrValueProductDTOImpl = null;
             for each (var old:AttrValueProductDTOImpl in this.attrValues) {
-                index++;
-                if (old.attributeDTO.attributeId == prodAttr.attributeDTO.attributeId) {
-                    break;
+                if (old.attrvalueId == prodAttr.attrvalueId) {
+                    _replace = old;
+                    break; // this is exact match by id so replace this one
+                } else if (old.attributeDTO.attributeId == prodAttr.attributeDTO.attributeId && DomainUtils.isNewPK(old.attrvalueId)) {
+                    _replace = old; // this is a candidate - but there can be multi values
                 }
             }
-            if (index != -1) {
-                this.attrValues.removeItemAt(index);
-                this.attrValues.addItemAt(prodAttr, index);
+
+            if (_replace != null) {
+                _replace.attrvalueId = prodAttr.attrvalueId;
+                _replace.val = prodAttr.val;
+                _replace.displayVals = prodAttr.displayVals;
             } else {
                 this.attrValues.addItem(prodAttr);
                 var idx:int = this.attrValues.length - 1;
@@ -137,18 +141,7 @@
         }
 
         private function onUpdateEntityAttributeValueResult(event:ResultEvent):void {
-            var prodAttr:AttrValueProductDTOImpl = event.result as AttrValueProductDTOImpl;
-            var index:int = -1;
-            for each (var old:AttrValueProductDTOImpl in this.attrValues) {
-                index++;
-                if (old.attrvalueId == prodAttr.attrvalueId) {
-                    break;
-                }
-            }
-            if (index != -1) {
-                this.attrValues.removeItemAt(index);
-                this.attrValues.addItemAt(prodAttr, index);
-            }
+            onCreateEntityAttributeValueResult(event);
         }
 
         private function onDeleteAttributeValueResult(event:ResultEvent):void {

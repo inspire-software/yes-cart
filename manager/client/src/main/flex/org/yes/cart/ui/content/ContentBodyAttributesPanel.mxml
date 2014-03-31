@@ -64,7 +64,7 @@
         }
 
 
-        override protected function onValueChanged(event:DataGridEvent, attrValue:Object, newValue:Object):void {
+        override public function onValueChanged(event:DataGridEvent, attrValue:Object, newValue:Object):void {
             var catAttr:AttrValueCategoryDTOImpl = attrValue as AttrValueCategoryDTOImpl;
             catAttr.val = String(newValue);
             remoteContentService.updateEntityAttributeValue(catAttr);
@@ -102,34 +102,32 @@
 
         private function onCreateEntityAttributeValueResult(event:ResultEvent):void {
             var catAttr:AttrValueCategoryDTOImpl = event.result as AttrValueCategoryDTOImpl;
-            var index:int = -1;
+            var _replace:AttrValueCategoryDTOImpl = null;
             for each (var old:AttrValueCategoryDTOImpl in this.attrValues) {
-                index++;
-                if (old.attributeDTO.code == catAttr.attributeDTO.code) {
-                    break;
+                if (old.attrvalueId == catAttr.attrvalueId) {
+                    _replace = old;
+                    break; // this is exact match by id so replace this one
+                } else if (old.attributeDTO.attributeId == catAttr.attributeDTO.attributeId && DomainUtils.isNewPK(old.attrvalueId)) {
+                    _replace = old; // this is a candidate - but there can be multi values
                 }
             }
-            if (index != -1) {
-                this.attrValues.removeItemAt(index);
-                this.attrValues.addItemAt(catAttr, index);
+            if (_replace != null) {
+                _replace.attrvalueId = catAttr.attrvalueId;
+                _replace.val = catAttr.val;
+                _replace.displayVals = catAttr.displayVals;
             } else {
                 this.attrValues.addItem(catAttr);
+                var idx:int = this.attrValues.length - 1;
+                if (idx >= 0) {
+                    valueDataGrid.selectedIndex = idx;
+                    valueDataGrid.validateNow();
+                    valueDataGrid.scrollToIndex(idx);
+                }
             }
         }
 
         private function onUpdateEntityAttributeValueResult(event:ResultEvent):void {
-            var catAttr:AttrValueCategoryDTOImpl = event.result as AttrValueCategoryDTOImpl;
-            var index:int = -1;
-            for each (var old:AttrValueCategoryDTOImpl in this.attrValues) {
-                index++;
-                if (old.attributeDTO.code == catAttr.attributeDTO.code) {
-                    break;
-                }
-            }
-            if (index != -1) {
-                this.attrValues.removeItemAt(index);
-                this.attrValues.addItemAt(catAttr, index);
-            }
+            onCreateEntityAttributeValueResult(event);
         }
 
         private function onDeleteAttributeValueResult(event:ResultEvent):void {

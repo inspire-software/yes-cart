@@ -29,11 +29,14 @@ import org.yes.cart.domain.dto.adapter.impl.EntityFactoryToBeanFactoryAdaptor;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProductSkuDTOImpl;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.entity.impl.AttrValueEntityProductSku;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.service.domain.GenericService;
+import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.dto.DtoAttributeService;
+import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
@@ -49,9 +52,9 @@ public class DtoProductSkuServiceImpl
         implements DtoProductSkuService {
 
 
-    private final ProductService productService;
+    private DtoProductService dtoProductService;
     private final DtoAttributeService dtoAttributeService;
-    private final GenericDAO<AttrValueEntityProductSku, Long> attrValueEntityProductSkuDao;
+    private final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao;
     private final Assembler attrValueAssembler;
     private final Assembler skuPriceAssembler;
     private final GenericService<Attribute> attributeService;
@@ -85,12 +88,11 @@ public class DtoProductSkuServiceImpl
             final DtoFactory dtoFactory,
             final ProductSkuService productSkuGenericService,
             final DtoAttributeService dtoAttributeService,
-            final GenericDAO<AttrValueEntityProductSku, Long> attrValueEntityProductSkuDao,
+            final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao,
             final AdaptersRepository adaptersRepository,
             final PriceService priceService,
             final GenericService<Seo> seoGenericService,
-            final ImageService imageService,
-            final ProductService productService) {
+            final ImageService imageService) {
         super(dtoFactory, productSkuGenericService, adaptersRepository);
 
         this.imageService = imageService;
@@ -108,7 +110,20 @@ public class DtoProductSkuServiceImpl
                 productSkuGenericService.getGenericDao().getEntityFactory().getImplClass(SkuPrice.class)
         );
         this.seoGenericService = seoGenericService;
-        this.productService = productService;
+    }
+
+    public DtoProductService getDtoProductService() {
+        if (dtoProductService == null) {
+            dtoProductService = lookupDtoProductService();
+        }
+        return dtoProductService;
+    }
+
+    /**
+     * @return Spring lookup method to prevent cyclic reference
+     */
+    public DtoProductService lookupDtoProductService() {
+        return null;
     }
 
     /**
@@ -257,15 +272,13 @@ public class DtoProductSkuServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final ProductSkuDTO sku = getById(entityPk);
-        final List<AttrValueProductSkuDTO> skuAttrs = new ArrayList<AttrValueProductSkuDTO>();
-        skuAttrs.addAll(sku.getAttributes());
+        final List<AttrValueProductSkuDTO> skuAttrs = new ArrayList<AttrValueProductSkuDTO>(sku.getAttributes());
 
-        final Product product = productService.getProductById(sku.getProductId());
-        final List<AttrValueProduct> productAttrs = new ArrayList<AttrValueProduct>();
-        productAttrs.addAll(product.getAttributes());
+        final ProductDTO product = getDtoProductService().getById(sku.getProductId());
+        final List<AttrValueProductDTO> productAttrs = new ArrayList<AttrValueProductDTO>(product.getAttributes());
 
         final List<AttributeDTO> ptList = dtoAttributeService.findAvailableAttributesByProductTypeId(
-                product.getProducttype().getProducttypeId()
+                product.getProductTypeDTO().getProducttypeId()
         );
 
         final List<AttributeDTO> images = dtoAttributeService.findAvailableImageAttributesByGroupCode(
@@ -280,53 +293,52 @@ public class DtoProductSkuServiceImpl
 
         ptList.addAll(mandatory);
 
+        // code to list as we may have multivalues
+        final Map<String, List<AttrValueProductDTO>> existingProductAttrValues = new HashMap<String, List<AttrValueProductDTO>>();
+        for (final AttrValueProductDTO value : productAttrs) {
+            final String attrCode = value.getAttributeDTO().getCode();
+            List<AttrValueProductDTO> codeValues = existingProductAttrValues.get(attrCode);
+            if (codeValues == null) {
+                codeValues = new ArrayList<AttrValueProductDTO>();
+                existingProductAttrValues.put(attrCode, codeValues);
+            }
+            codeValues.add(value);
+        }
+
+        final Set<String> existingSkuAttrValueCodes = new HashSet<String>();
+        for (final AttrValueProductSkuDTO value : skuAttrs) {
+            existingSkuAttrValueCodes.add(value.getAttributeDTO().getCode());
+        }
 
         final List<AttrValueProductSkuDTO> full = new ArrayList<AttrValueProductSkuDTO>(ptList.size());
-        for (int i = 0; i < ptList.size(); i++) {
-            final AttributeDTO available = ptList.get(i);
+        for (final AttributeDTO available : ptList) {
+            if (!existingSkuAttrValueCodes.contains(available.getCode())) {
 
-            final Iterator<AttrValueProductSkuDTO> valuesIt = skuAttrs.iterator();
-            boolean found = false;
-            while (valuesIt.hasNext()) {
-                final AttrValueProductSkuDTO value = valuesIt.next();
-                if (available.getCode().equals(value.getAttributeDTO().getCode())) {
-                    full.add(value);
-                    valuesIt.remove(); // remove from results
-                    found = true;
-                    break;
-                }
-            }
+                final List<AttrValueProductDTO> productValues = existingProductAttrValues.get(available.getCode());
+                if (productValues == null) {
 
-            final Iterator<AttrValueProduct> productValuesIt = productAttrs.iterator();
-            while (productValuesIt.hasNext()) {
-                final AttrValueProduct value = productValuesIt.next();
-                if (available.getCode().equals(value.getAttribute().getCode())) {
-                    if (!found) {
+                    // we do not have product nor sku values, so create blank
+                    final AttrValueProductSkuDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductSkuDTO.class);
+                    attrValueDTO.setAttributeDTO(available);
+                    attrValueDTO.setSkuId(entityPk);
+                    full.add(attrValueDTO);
 
+                } else {
+                    for (final AttrValueProductDTO prodValue : productValues) {
+
+                        // pre-fill sku value with product value so that we can easily see it
                         AttrValueProductSkuDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductSkuDTO.class);
                         attrValueDTO.setAttributeDTO(available);
                         attrValueDTO.setSkuId(entityPk);
-                        attrValueDTO.setVal(value.getVal());
+                        attrValueDTO.setVal(prodValue.getVal());
                         full.add(attrValueDTO);
 
-                        found = true;
                     }
-                    productValuesIt.remove();
-                    break;
                 }
             }
-
-            if (!found) {
-
-                AttrValueProductSkuDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductSkuDTO.class);
-                attrValueDTO.setAttributeDTO(available);
-                attrValueDTO.setSkuId(entityPk);
-                full.add(attrValueDTO);
-            }
-
         }
 
-        full.addAll(skuAttrs); // add all the rest (probably not part of this product type)
+        full.addAll(skuAttrs); // add all the rest values that are specified for this sku
 
         CollectionUtils.filter(
                 full,
@@ -337,7 +349,7 @@ public class DtoProductSkuServiceImpl
                 }
         );
 
-        Collections.sort(skuAttrs, new AttrValueDTOComparatorImpl());
+        Collections.sort(full, new AttrValueDTOComparatorImpl());
         return full;
     }
 
@@ -345,7 +357,7 @@ public class DtoProductSkuServiceImpl
      * {@inheritDoc}
      */
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) {
-        final AttrValueEntityProductSku attrValue = attrValueEntityProductSkuDao.findById(attrValueDTO.getAttrvalueId());
+        final AttrValueProductSku attrValue = attrValueEntityProductSkuDao.findById(attrValueDTO.getAttrvalueId());
         attrValueAssembler.assembleEntity(attrValueDTO, attrValue, getAdaptersRepository(), dtoFactory);
         attrValueEntityProductSkuDao.update(attrValue);
         return attrValueDTO;
@@ -356,12 +368,25 @@ public class DtoProductSkuServiceImpl
      * {@inheritDoc}
      */
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+
+        final Attribute atr = attributeService.findById(attrValueDTO.getAttributeDTO().getAttributeId());
+        final boolean multivalue = atr.isAllowduplicate();
+        final ProductSku productSku = service.findById(((AttrValueProductSkuDTO) attrValueDTO).getSkuId());
+        if (!multivalue) {
+            for (final AttrValueProductSku avp : productSku.getAttributes()) {
+                if (avp.getAttribute().getCode().equals(atr.getCode())) {
+                    // this is a duplicate, so need to update
+                    attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
+                    return updateEntityAttributeValue(attrValueDTO);
+                }
+            }
+        }
+
         AttrValueProductSku valueEntity = getEntityFactory().getByIface(AttrValueProductSku.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntity, getAdaptersRepository(), dtoFactory);
-        Attribute atr = attributeService.findById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntity.setAttribute(atr);
-        valueEntity.setProductSku(service.findById(((AttrValueProductSkuDTO) attrValueDTO).getSkuId()));
-        valueEntity = attrValueEntityProductSkuDao.create((AttrValueEntityProductSku) valueEntity);
+        valueEntity.setProductSku(productSku);
+        valueEntity = attrValueEntityProductSkuDao.create(valueEntity);
         attrValueDTO.setAttrvalueId(valueEntity.getAttrvalueId());
         return attrValueDTO;
 
@@ -371,7 +396,7 @@ public class DtoProductSkuServiceImpl
      * {@inheritDoc}
      */
     public long deleteAttributeValue(final long attributeValuePk) {
-        final AttrValueEntityProductSku attrValue = attrValueEntityProductSkuDao.findById(attributeValuePk);
+        final AttrValueProductSku attrValue = attrValueEntityProductSkuDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(attrValue.getAttribute().getEtype().getBusinesstype())) {
             imageService.deleteImage(attrValue.getVal());
         }

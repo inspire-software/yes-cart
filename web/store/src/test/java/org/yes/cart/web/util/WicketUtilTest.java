@@ -58,4 +58,18 @@ public class WicketUtilTest {
             assertFalse("val2".equals(val.toString()));
         }
     }
+
+
+    @Test
+    public void testConstructLatinStringValue() throws Exception {
+
+        assertEquals("color123", WicketUtil.constructLatinStringValue("color", "123"));
+        assertEquals("colorblue", WicketUtil.constructLatinStringValue("color", "blue"));
+        assertEquals("colorblue123", WicketUtil.constructLatinStringValue("color", "blue", "123"));
+        assertEquals("color10891080108510801081", WicketUtil.constructLatinStringValue("color", "синий"));
+        assertEquals("color10891080108510801081123", WicketUtil.constructLatinStringValue("color", "синий", "123"));
+        assertEquals("color910X1047910", WicketUtil.constructLatinStringValue("color", "\t\nXЗ\t\n"));
+
+    }
+
 }

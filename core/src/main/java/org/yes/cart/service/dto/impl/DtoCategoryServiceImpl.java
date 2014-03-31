@@ -317,11 +317,24 @@ public class DtoCategoryServiceImpl
      * @return created value
      */
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+
+        final Attribute atr = attributeService.findById(attrValueDTO.getAttributeDTO().getAttributeId());
+        final boolean multivalue = atr.isAllowduplicate();
+        final Category category = service.findById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId());
+        if (!multivalue) {
+            for (final AttrValueCategory avp : category.getAttributes()) {
+                if (avp.getAttribute().getCode().equals(atr.getCode())) {
+                    // this is a duplicate, so need to update
+                    attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
+                    return updateEntityAttributeValue(attrValueDTO);
+                }
+            }
+        }
+
         AttrValueCategory valueEntityCategory = getEntityFactory().getByIface(AttrValueCategory.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCategory, getAdaptersRepository(), dtoFactory);
-        Attribute atr = attributeService.findById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntityCategory.setAttribute(atr);
-        valueEntityCategory.setCategory(service.findById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId()));
+        valueEntityCategory.setCategory(category);
         valueEntityCategory = attrValueEntityCategoryDao.create((AttrValueEntityCategory) valueEntityCategory);
         attrValueDTO.setAttrvalueId(valueEntityCategory.getAttrvalueId());
         return attrValueDTO;

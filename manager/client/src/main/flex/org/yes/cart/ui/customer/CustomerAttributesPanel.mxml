@@ -67,13 +67,13 @@
         }
 
 
-        override protected function onValueChanged(event:DataGridEvent, attrValue:Object, newValue:Object):void {
-            var brandAttr:AttrValueCustomerDTOImpl = attrValue as AttrValueCustomerDTOImpl;
-            brandAttr.val = String(newValue);
-            if (DomainUtils.isNewPK(brandAttr.attrvalueId)) {
-                remoteCustomerService.createEntityAttributeValue(brandAttr);
+        override public function onValueChanged(event:DataGridEvent, attrValue:Object, newValue:Object):void {
+            var customerAttr:AttrValueCustomerDTOImpl = attrValue as AttrValueCustomerDTOImpl;
+            customerAttr.val = String(newValue);
+            if (DomainUtils.isNewPK(customerAttr.attrvalueId)) {
+                remoteCustomerService.createEntityAttributeValue(customerAttr);
             } else {
-                remoteCustomerService.updateEntityAttributeValue(brandAttr);
+                remoteCustomerService.updateEntityAttributeValue(customerAttr);
             }
         }
 
@@ -94,35 +94,34 @@
         }
 
         private function onCreateEntityAttributeValueResult(event:ResultEvent):void {
-            var brandAttr:AttrValueCustomerDTOImpl = event.result as AttrValueCustomerDTOImpl;
-            var index:int = -1;
+            var customerAttr:AttrValueCustomerDTOImpl = event.result as AttrValueCustomerDTOImpl;
+            var _replace:AttrValueCustomerDTOImpl = null;
             for each (var old:AttrValueCustomerDTOImpl in this.attrValues) {
-                index++;
-                if (old.attributeDTO.attributeId == brandAttr.attributeDTO.attributeId) {
-                    break;
+                if (old.attrvalueId == customerAttr.attrvalueId) {
+                    _replace = old;
+                    break; // this is exact match by id so replace this one
+                } else if (old.attributeDTO.attributeId == customerAttr.attributeDTO.attributeId && DomainUtils.isNewPK(old.attrvalueId)) {
+                    _replace = old; // this is a candidate - but there can be multi values
                 }
             }
-            if (index != -1) {
-                this.attrValues.removeItemAt(index);
-                this.attrValues.addItemAt(brandAttr, index);
+
+            if (_replace != null) {
+                _replace.attrvalueId = customerAttr.attrvalueId;
+                _replace.val = customerAttr.val;
+                _replace.displayVals = customerAttr.displayVals;
             } else {
-                this.attrValues.addItem(brandAttr);
+                this.attrValues.addItem(customerAttr);
+                var idx:int = this.attrValues.length - 1;
+                if (idx >= 0) {
+                    valueDataGrid.selectedIndex = idx;
+                    valueDataGrid.validateNow();
+                    valueDataGrid.scrollToIndex(idx);
+                }
             }
         }
 
         private function onUpdateEntityAttributeValueResult(event:ResultEvent):void {
-            var brandAttr:AttrValueCustomerDTOImpl = event.result as AttrValueCustomerDTOImpl;
-            var index:int = -1;
-            for each (var old:AttrValueCustomerDTOImpl in this.attrValues) {
-                index++;
-                if (old.attrvalueId == brandAttr.attrvalueId) {
-                    break;
-                }
-            }
-            if (index != -1) {
-                this.attrValues.removeItemAt(index);
-                this.attrValues.addItemAt(brandAttr, index);
-            }
+            onCreateEntityAttributeValueResult(event);
         }
 
         private function onDeleteAttributeValueResult(event:ResultEvent):void {
