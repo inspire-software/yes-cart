@@ -141,11 +141,24 @@ public class DtoBrandServiceImpl
 
     /** {@inheritDoc}*/
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+
+        final Attribute atr = ((GenericService<Attribute>)dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
+        final boolean multivalue = atr.isAllowduplicate();
+        final Brand brand = service.findById(((AttrValueBrandDTO) attrValueDTO).getBrandId());
+        if (!multivalue) {
+            for (final AttrValueBrand avp : brand.getAttributes()) {
+                if (avp.getAttribute().getCode().equals(atr.getCode())) {
+                    // this is a duplicate, so need to update
+                    attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
+                    return updateEntityAttributeValue(attrValueDTO);
+                }
+            }
+        }
+
         AttrValueBrand valueEntityBrand = getEntityFactory().getByIface(AttrValueBrand.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityBrand, getAdaptersRepository(), dtoFactory);
-        Attribute atr = ((GenericService<Attribute>)dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntityBrand.setAttribute(atr);
-        valueEntityBrand.setBrand(service.findById(((AttrValueBrandDTO) attrValueDTO).getBrandId()));
+        valueEntityBrand.setBrand(brand);
         valueEntityBrand = attrValueEntityBrandDao.create((AttrValueEntityBrand) valueEntityBrand);
         attrValueDTO.setAttrvalueId(valueEntityBrand.getAttrvalueId());
         return attrValueDTO;

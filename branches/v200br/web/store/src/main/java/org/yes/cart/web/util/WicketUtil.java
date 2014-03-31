@@ -242,4 +242,31 @@ public class WicketUtil {
     }
 
 
+    /**
+     * Construct string which only has Latin characters and digits. If values contain non latin characters or
+     * non digits then hex code is used for that character instead.
+     *
+     * E.g.
+     *  if values are "color", "blue" then "colorblue" will be result of this method.
+     *  if values are "color", "синий" then result is "colorblue".
+     *
+     * @param values array of string value
+     *
+     * @return latin characters and digits string
+     */
+    public static String constructLatinStringValue(final String ... values) {
+        final StringBuilder css = new StringBuilder();
+        for (final String value : values) {
+            for (final char c : value.toCharArray()) {
+                if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122)) {
+                    css.append(c);
+                } else {
+                    css.append((int) c);
+                }
+            }
+        }
+        return css.toString();
+    }
+
+
 }

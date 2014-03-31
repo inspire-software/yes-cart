@@ -123,18 +123,21 @@ public abstract class AbstractProductFilter extends BaseComponent {
      * @param records navigation records
      * @return list of pairs
      */
-    protected List<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>>
+    protected List<Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>>
                 adaptNavigationRecords(final List<FilteredNavigationRecord> records) {
         String head = StringUtils.EMPTY;
-        Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>> currentPair = null;
+        Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>> currentPair = null;
 
-        final List<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>> headValueList =
-                new ArrayList<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>>();
+        final List<Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>> headValueList =
+                new ArrayList<Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>>();
 
         for (FilteredNavigationRecord navigationRecord : records) {
             if (!navigationRecord.getName().equalsIgnoreCase(head)) {
-                currentPair = new Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>(
-                        (String) ObjectUtils.defaultIfNull(navigationRecord.getDisplayName(), navigationRecord.getName()),
+                currentPair = new Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>(
+                        new Pair<String, String>(
+                                navigationRecord.getCode(),
+                                (String) ObjectUtils.defaultIfNull(navigationRecord.getDisplayName(), navigationRecord.getName())
+                        ),
                         new ArrayList<Pair<Pair<String, Integer>, PageParameters>>());
                 headValueList.add(currentPair);
                 head = navigationRecord.getName();
@@ -182,13 +185,13 @@ public abstract class AbstractProductFilter extends BaseComponent {
     /** {@inheritDoc} */
     protected void onBeforeRender() {
         add(
-                new ListView<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>>(
+                new ListView<Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>>(
                         FILTERED_NAVIGATION_LIST,
                         adaptNavigationRecords(navigationRecords)) {
-                    protected void populateItem(ListItem<Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>>> pairListItem) {
-                        final Pair<String, List<Pair<Pair<String, Integer>, PageParameters>>> headValues = pairListItem.getModelObject();
+                    protected void populateItem(ListItem<Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>> pairListItem) {
+                        final Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>> headValues = pairListItem.getModelObject();
                         pairListItem.add(
-                                new BaseFilterView(FILTER, headValues.getFirst(), headValues.getSecond())
+                                new BaseFilterView(FILTER, headValues.getFirst().getFirst(), headValues.getFirst().getSecond(), headValues.getSecond())
                         );
                     }
                 }

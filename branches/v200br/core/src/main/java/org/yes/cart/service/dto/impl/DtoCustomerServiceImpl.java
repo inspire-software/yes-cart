@@ -173,11 +173,25 @@ public class DtoCustomerServiceImpl
      * {@inheritDoc}
      */
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+
+        final Attribute atr = ((AttributeService) dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
+        final boolean multivalue = atr.isAllowduplicate();
+        final Customer customer = service.findById(((AttrValueCustomerDTO) attrValueDTO).getCustomerId());
+        if (!multivalue) {
+            for (final AttrValueCustomer avp : customer.getAttributes()) {
+                if (avp.getAttribute().getCode().equals(atr.getCode())) {
+                    // this is a duplicate, so need to update
+                    attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
+                    return updateEntityAttributeValue(attrValueDTO);
+                }
+            }
+        }
+
+
         AttrValueCustomer valueEntityCustomer = getEntityFactory().getByIface(AttrValueCustomer.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCustomer, getAdaptersRepository(), dtoFactory);
-        Attribute atr =((AttributeService)dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntityCustomer.setAttribute(atr);
-        valueEntityCustomer.setCustomer(service.findById(((AttrValueCustomerDTO) attrValueDTO).getCustomerId()));
+        valueEntityCustomer.setCustomer(customer);
         valueEntityCustomer = attrValueEntityCustomerDao.create((AttrValueEntityCustomer) valueEntityCustomer);
         attrValueDTO.setAttrvalueId(valueEntityCustomer.getAttrvalueId());
         return attrValueDTO;

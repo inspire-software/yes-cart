@@ -613,8 +613,8 @@
                 <constructor-arg index="8" ref="imageService"/>
                 <constructor-arg index="9" ref="dtoProductTypeAttrService"/>
                 <constructor-arg index="10" ref="dtoProductCategoryService"/>
-                <constructor-arg index="11" ref="dtoProductSkuService"/>
-                <constructor-arg index="12" ref="languageService"/>
+                <constructor-arg index="11" ref="languageService"/>
+                <lookup-method name="lookupDtoProductSkuService" bean="dtoProductSkuService"/>
             </bean>
         </property>
     </bean>
@@ -630,7 +630,7 @@
                 <constructor-arg index="5" ref="priceService"/>
                 <constructor-arg index="6" ref="seoService"/>
                 <constructor-arg index="7" ref="imageService"/>
-                <constructor-arg index="8" ref="productService"/>
+                <lookup-method name="lookupDtoProductService" bean="dtoProductService"/>
             </bean>
         </property>
     </bean>

@@ -169,11 +169,24 @@ public class DtoShopServiceImpl
 
     /** {@inheritDoc}*/
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) {
+
+        final Attribute atr = ((GenericService<Attribute>) dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
+        final boolean multivalue = atr.isAllowduplicate();
+        final Shop shop = service.findById(((AttrValueShopDTO) attrValueDTO).getShopId());
+        if (!multivalue) {
+            for (final AttrValueShop avp : shop.getAttributes()) {
+                if (avp.getAttribute().getCode().equals(atr.getCode())) {
+                    // this is a duplicate, so need to update
+                    attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
+                    return updateEntityAttributeValue(attrValueDTO);
+                }
+            }
+        }
+
         AttrValueShop valueEntityShop = getEntityFactory().getByIface(AttrValueShop.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityShop, getAdaptersRepository(), dtoFactory);
-        Attribute atr = ((GenericService<Attribute>)dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
         valueEntityShop.setAttribute(atr);
-        valueEntityShop.setShop(service.findById(((AttrValueShopDTO) attrValueDTO).getShopId()));
+        valueEntityShop.setShop(shop);
         valueEntityShop = attrValueEntityShopDao.create((AttrValueEntityShop) valueEntityShop);
         attrValueDTO.setAttrvalueId(valueEntityShop.getAttrvalueId());
         return attrValueDTO;
