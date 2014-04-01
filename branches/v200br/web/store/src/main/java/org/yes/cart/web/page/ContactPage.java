@@ -21,6 +21,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
+import org.yes.cart.web.page.component.js.ServerSideJs;
 
 /**
  * User: igora Igor Azarny
@@ -47,6 +48,8 @@ public class ContactPage  extends AbstractWebPage {
                 new StandardFooter(FOOTER)
         ).add(
                 new StandardHeader(HEADER)
+        ).add(
+                new ServerSideJs("serverSideJs")
         );
 
         super.onBeforeRender();

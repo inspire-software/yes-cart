@@ -55,13 +55,25 @@ figure {
     margin-bottom: 20px;
 }
 
-a {
+a,a:active,a:link,a:visited {
+    color: #333333;
     text-decoration: none;
 }
 
-a:hover {
+a:hover, a.active-tag, a.active-page {
     text-decoration: underline;
     color: #f52f11;
+}
+
+
+a.button.orange {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+a.button.gray {
+    color: #333333;
+    text-decoration: none;
 }
 
 h1 {
@@ -196,10 +208,6 @@ ul.text-links .level-4 {
     text-transform: uppercase;
 }
 
-/** -------------------------- -------------- -------------------------------------*/
-a.active-category {
-    border-bottom: solid 2px #EE7600;
-}
 /** -------------------------- breadcrumbs -------------------------------------*/
 .breadcrumb {
     position: relative;
@@ -284,11 +292,17 @@ a.active-category {
     background: url('../image/breadcrumbImage.png') 100% -90px no-repeat;
 }
 
+.breadcrumb-container {
+    padding-right: 0px;
+    padding-left: 0px;
+    margin-bottom: 5px;
+}
+
 /** --------------------------------------------------------------------------- */
 
 .toggleMenu2 {
     display: none;
-    background: #707070;
+    background: #557799; /*335599;*/
     padding: 15px 10px;
     color: #fff;
     text-align: left;
@@ -301,10 +315,19 @@ a.active-category {
 .topcatnav {
     list-style: none;
     *zoom: 1;
-    background: #707070;
+    /* background: #557799; /*335599;*/
     /*background: #7980a9;*/
     margin-top: 0px;
     padding-left: 0px;
+
+    background-color: #557799; /* a5b8da; */
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#a5b8da), to(#7089b3));
+    background-image: -webkit-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -moz-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -ms-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -o-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: linear-gradient(to bottom, #a5b8da, #7089b3);
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#a5b8da, endColorstr=#7089b3);
 }
 
 .topcatnav:before,
@@ -327,20 +350,23 @@ a.active-category {
 
 .topcatnav a {
     padding: 10px 15px;
-    color: #fff;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+    color: #FFFFFF;
 }
 
 .topcatnav a:hover {
     padding: 10px 15px;
-    color: #f52f11;
+    color: #FFBB22;
+    font-style: normal;
 }
 
 /*wicket inactive link workaround*/
 .topcatnav li span span {
     padding: 10px 15px;
-    color: #fff;
-    font-style : normal;
+    font-style : italic;
     line-height: 40px;
+    color: #FFBB22;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
 }
 
 .topcatnav li {
@@ -361,6 +387,16 @@ a.active-category {
 
 .topcatnav > li > a {
     display: block;
+
+    background-color: #557799; /* a5b8da; */
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#a5b8da), to(#7089b3));
+    background-image: -webkit-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -moz-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -ms-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -o-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: linear-gradient(to bottom, #a5b8da, #7089b3);
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#a5b8da, endColorstr=#7089b3);
+
 }
 
 .topcatnav li  ul {
@@ -395,12 +431,19 @@ a.active-category {
     z-index: 200;
     border-top: 1px solid #ffffff;
 }
+
+a.active-category {
+    color: #FFBB22;
+    font-style: italic;
+    border-bottom: solid 2px #EE7600;
+}
+
 /* ------------------------------------------------------------------------------------- */
 
 
 .toggleMenu {
     display: none;
-    background: #707070;
+    background: #557799; /*335599;*/
     padding: 15px 10px;
     color: #fff;
     text-align: left;
@@ -412,9 +455,18 @@ a.active-category {
 .nav {
     list-style: none;
     *zoom: 1;
-    background: #707070;
+    /* background: #557799; /*335599;*/
     margin-top: 0px;
     padding-left: 0px;
+
+    background-color: #557799; /* a5b8da; */
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#a5b8da), to(#7089b3));
+    background-image: -webkit-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -moz-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -ms-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -o-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: linear-gradient(to bottom, #a5b8da, #7089b3);
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#a5b8da, endColorstr=#7089b3);
 }
 
 .nav:before,
@@ -435,25 +487,34 @@ a.active-category {
 
 }
 
-.nav a {
+.nav a.nav-link {
     padding: 10px 15px;
-    color: #ffffff;
-    border-right: 1px solid #dadada;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+    color: #FFFFFF;
+    border-right: 1px solid #7d99ca;
 }
 
-.nav a:hover {
-    padding: 10px 15px;
-    color: #f52f11;
-    border-right: 1px solid #dadada;
+.nav a.active-tag, .nav a.active-page {
+    color: #FFBB22;
+    text-decoration: underline;
+    font-style: italic;
 }
 
- /*wicket inactive link workaround*/
-.nav li span span {
+/*wicket inactive link workaround*/
+.nav span.nav-link {
     padding: 10px 15px;
-    color: #fff;
-    border-right: 1px solid #dadada;
-    font-style : normal;
+    color: #FFBB22;
+    font-style : italic;
     line-height: 40px;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+    border-right: 1px solid #7d99ca;
+}
+
+.nav a.nav-link:hover {
+    padding: 10px 15px;
+    color: #FFBB22;
+    font-style: normal;
+    border-right: 1px solid #7d99ca;
 }
 
 .nav li {
@@ -494,18 +555,38 @@ a.active-category {
 
 .nav li li a {
     display: block;
-    background: #808080;
     /*background: #8990b9;*/
     position: relative;
     z-index: 100;
-    border-top: 1px solid #ffffff;
+    border-top: 1px solid #7d99ca;
 
+    background-color: #557799; /* a5b8da; */
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#a5b8da), to(#7089b3));
+    background-image: -webkit-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -moz-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -ms-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -o-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: linear-gradient(to bottom, #a5b8da, #7089b3);
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#a5b8da, endColorstr=#7089b3);
 }
 
 .nav li li li a {
-    background: #909090;
     z-index: 200;
-    border-top: 1px solid #ffffff;
+    border-top: 1px solid #7d99ca;
+
+    background-color: #557799; /* a5b8da; */
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#a5b8da), to(#7089b3));
+    background-image: -webkit-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -moz-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -ms-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -o-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: linear-gradient(to bottom, #a5b8da, #7089b3);
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#a5b8da, endColorstr=#7089b3);
+
+}
+
+#top-categories-desktop li {
+    float: none;
 }
 
 @media screen and (max-width: 768px) {
@@ -561,6 +642,24 @@ a.active-category {
     text-decoration: underline;
 }
 
+.filternav-line {
+    display:table;
+    width:100%;
+}
+
+.filternav-row {
+    display:table-row;
+}
+
+.filternav-row-attr {
+    display:table-cell;
+    text-align: left;
+}
+
+.filternav-row-val {
+    display:table-cell;
+    text-align: right;
+}
 
 /* -- product, sku  ------------------------------------------------------------ */
 
@@ -1144,3 +1243,44 @@ h2.resp-accordion:first-child {
     font-size: 20px;
 
 }
+
+/* ---------------------  search classes ------------------------ */
+
+.search-input {
+    padding-right: 0px;
+    text-align: center;
+}
+
+.search-input input {
+    width: 95%;
+}
+
+.search-button {
+    text-align: right;
+    padding-left: 0px;
+    margin-right: 0px;
+}
+
+
+/* ---------------------  utility classes ------------------------ */
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-90p {
+    font-size: 90%;
+}
+
+.width-100p {
+    width: 100%;
+}
+

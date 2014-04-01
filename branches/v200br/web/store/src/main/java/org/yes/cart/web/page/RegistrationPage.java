@@ -24,6 +24,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.page.component.customer.auth.RegisterPanel;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
+import org.yes.cart.web.page.component.js.ServerSideJs;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -57,6 +58,8 @@ public class RegistrationPage  extends AbstractWebPage {
                 new StandardFooter(FOOTER)
         ).addOrReplace(
                 new StandardHeader(HEADER)
+        ).addOrReplace(
+                new ServerSideJs("serverSideJs")
         );
     }
 

@@ -34,6 +34,7 @@ import org.yes.cart.web.page.component.customer.password.PasswordPanel;
 import org.yes.cart.web.page.component.customer.summary.SummaryPanel;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
+import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
@@ -98,6 +99,8 @@ public class CustomerSelfCarePage extends AbstractWebPage {
                 new StandardFooter(FOOTER)
         ).add(
                 new StandardHeader(HEADER)
+        ).add(
+                new ServerSideJs("serverSideJs")
         );
 
     }

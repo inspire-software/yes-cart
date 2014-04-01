@@ -48,6 +48,7 @@ import org.yes.cart.web.page.component.customer.auth.LoginPanel;
 import org.yes.cart.web.page.component.customer.auth.RegisterPanel;
 import org.yes.cart.web.page.component.footer.CheckoutFooter;
 import org.yes.cart.web.page.component.header.CheckoutHeader;
+import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.page.component.shipping.ShippingView;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorModel;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorRenderer;
@@ -177,6 +178,8 @@ public class CheckoutPage extends AbstractWebPage {
                 new CheckoutFooter(FOOTER)
         ).addOrReplace(
                 new CheckoutHeader(HEADER)
+        ).add(
+                new ServerSideJs("serverSideJs")
         );
 
 

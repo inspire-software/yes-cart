@@ -19,28 +19,47 @@
 <wicket:panel>
 
         <script type="text/javascript">
-            function search() {
-                var aInput = document.getElementById("searchPhraze");
-                if (!isBlank(aInput.value)) {
-                    if ((window.location.href.lastIndexOf("/") == window.location.href.length - 1)) {
-                        window.location.href = window.location.href + 'query/' + aInput.value;
-                    } else {
-                        window.location.href = window.location.href + '/query/' + aInput.value;
+            $(document).ready(function() {
+
+                var isBlank = function isBlank(str) {
+                    return (!str || /^\s*$/.test(str));
+                };
+
+                var doSearch = function() {
+                    var _val = $('.jsSearchInput').val();
+                    if (!isBlank(_val)) {
+                        if (ctx.page.indexOf('HomePage') != -1) {
+                            if ((window.location.href.lastIndexOf("/") == window.location.href.length - 1)) {
+                                window.location.href = window.location.href + 'query/' + _val;
+                            } else {
+                                window.location.href = window.location.href + '/query/' + _val;
+                            }
+                        } else {
+                            window.location.href = ctx.root + '/query/' + _val;
+                        }
                     }
-                }
-            }
-            function isBlank(str) {
-                return (!str || /^\s*$/.test(str));
-            }
+                };
+
+                $('.jsSearchInput').keydown(function(event) {
+                    if (event.keyCode == 13) {
+                        event.preventDefault();
+                        doSearch();
+                    }
+                });
+
+                $('.jsSearchButton').click(function(event) {
+                    doSearch();
+                });
+
+            });
         </script>
 
     <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-80 mobile-grid-80 " style="padding-right: 0px; text-align: center;">
-            <input style="width: 95%" id="searchPhraze" type="text" class="searchInput" onkeydown="if(event.keyCode == 13 ) {search();}"/>
+        <div class="grid-80 mobile-grid-80 text-center search-input">
+            <input id="searchPhraze" type="text" class="jsSearchInput"/>
         </div>
-        <div class="grid-20 mobile-grid-20" style="text-align: right; padding-left: 0px; margin-right: 0px;">
-            <input type="button" wicket:message="value:search"
-                   onclick="search();"
+        <div class="grid-20 mobile-grid-20 search-button">
+            <input type="button" wicket:message="value:search" class="jsSearchButton"
                    src="images/layout/nav/search/nav-search-butt.jpg"/>
         </div>
     </div>

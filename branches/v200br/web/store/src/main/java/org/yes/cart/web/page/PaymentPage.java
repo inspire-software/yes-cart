@@ -44,6 +44,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
+import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
@@ -183,6 +184,8 @@ public class PaymentPage extends AbstractWebPage {
                 new StandardFooter(FOOTER)
         ).addOrReplace(
                 new StandardHeader(HEADER)
+        ).addOrReplace(
+                new ServerSideJs("serverSideJs")
         );
 
         super.onBeforeRender();
