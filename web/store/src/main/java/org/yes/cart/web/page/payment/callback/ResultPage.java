@@ -25,6 +25,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 
@@ -71,6 +72,10 @@ public class ResultPage extends AbstractWebPage {
                         "paymentResult",
                         getLocalizer().getString(isPaymentSuccessful ? "paymentWasOk" : "paymentWasFailed", this)
                 )
+        );
+
+        add(
+                new ServerSideJs("serverSideJs")
         );
 
 

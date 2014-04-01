@@ -31,45 +31,36 @@
         <div class="grid-100 mobile-grid-100 grid-parent hide-on-mobile" style="margin-top: 5px;">
             <div class="grid-20 mobile-grid-20" wicket:id="altImageList">
                 <a wicket:id="altImageRef"  class="example-image-link" rel="lightbox-alternatives">
-                    <img    onmouseout="onMouseOutAlternativeImage()"
-                            onmouseover="onMouseOverAlternativeImage(this)"
-                            wicket:id="altImage" align="center" class="example-image" />
+                    <img wicket:id="altImage" align="center" class="example-image jsAltImage" />
                 </a>
             </div>
         </div>
 
     </div>
 
-    <script>
+    <script type="text/javascript">
+        $(document).ready(function() {
 
-        var defaultImageUrl;
-        var defaultImageWidth;
-        var defaultImageHeight;
+            var _defaultImageUrl = $('#defaultImage').attr('src');
+            var _defaultImageWidth = /(w=)(\d{1,10})/.exec(_defaultImageUrl)[2];
+            var _defaultImageHeight = /(h=)(\d{1,10})/.exec(_defaultImageUrl)[2];
 
-        defaultImageUrl = document.getElementById("defaultImage").src;
-        var wRe = /(w=)(\d{1,10})/;
-        wRe.exec(defaultImageUrl)
-        defaultImageWidth = wRe.exec(defaultImageUrl)[2];
-        var hRe = /(h=)(\d{1,10})/;
-        hRe.exec(defaultImageUrl)
-        defaultImageHeight = wRe.exec(defaultImageUrl)[2];
+            $('.jsAltImage').each(function() {
 
-        function onMouseOutAlternativeImage() {
+                var _altImage = $(this);
 
-            document.getElementById("defaultImage").src = defaultImageUrl;
+                _altImage.mouseenter(function() {
+                    var _altImageUrl = _altImage.attr('src');
+                    _altImageUrl = _altImageUrl.substring(0, _altImageUrl.indexOf('?')) + "?w="+_defaultImageWidth+"&h="+_defaultImageHeight;
+                    $('#defaultImage').attr('src', _altImageUrl);
+                }).mouseleave(function() {
+                    $('#defaultImage').attr('src', _defaultImageUrl);
+                });
 
-        }
 
-        function onMouseOverAlternativeImage(altImage) {
+            })
 
-            var src = altImage.src;
-
-            src = src.substring(0, src.indexOf('?')) + "?w="+defaultImageWidth+"&h="+defaultImageHeight;
-
-            document.getElementById("defaultImage").src = src;
-
-        }
-
+        });
     </script>
 
 </wicket:panel>

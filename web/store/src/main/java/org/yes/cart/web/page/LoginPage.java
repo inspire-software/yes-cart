@@ -24,6 +24,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.page.component.customer.auth.LoginPanel;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
+import org.yes.cart.web.page.component.js.ServerSideJs;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -56,6 +57,8 @@ public class LoginPage extends AbstractWebPage {
                 new StandardFooter(FOOTER)
         ).add(
                 new StandardHeader(HEADER)
+        ).add(
+                new ServerSideJs("serverSideJs")
         );
 
 

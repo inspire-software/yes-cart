@@ -21,7 +21,6 @@ import org.yes.cart.web.page.component.Currency;
 import org.yes.cart.web.page.component.Language;
 import org.yes.cart.web.page.component.cart.SmallShoppingCartView;
 import org.yes.cart.web.page.component.customer.logout.LogoutPanel;
-import org.yes.cart.web.page.component.search.SearchView;
 
 /**
  * User: iazarny@yahoo.com

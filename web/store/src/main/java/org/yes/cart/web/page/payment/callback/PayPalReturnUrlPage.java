@@ -37,6 +37,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 
@@ -204,6 +205,10 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
             } else {
                 error(getLocalizer().getString("badStatus", this));
             }
+
+            add(
+                    new ServerSideJs("serverSideJs")
+            );
 
         } catch (IOException e) {
             ShopCodeContext.getLog(this).error("Cant call paypal gateway ", e);

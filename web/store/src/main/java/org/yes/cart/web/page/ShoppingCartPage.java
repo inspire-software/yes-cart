@@ -26,6 +26,7 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartView;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
+import org.yes.cart.web.page.component.js.ServerSideJs;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -65,6 +66,8 @@ public class ShoppingCartPage extends AbstractWebPage {
                 new StandardFooter(FOOTER)
         ).addOrReplace(
                 new StandardHeader(HEADER)
+        ).addOrReplace(
+                new ServerSideJs("serverSideJs")
         );
 
         if (ApplicationDirector.getShoppingCart().getCartItemList().isEmpty()) {
