@@ -22,7 +22,6 @@
     <wicket:link>
 
         <script type="text/javascript" src="../../../../../js/jquery.min.js"></script>
-        <script type="text/javascript" src="../../../../../js/autoload.js"></script>
         <!--[if lt IE 9]>
         <script src="../../../../../js/html5.js"></script>
         <![endif]-->
@@ -33,7 +32,9 @@
         <!--[if (lt IE 9) & (!IEMobile)]>
         <link rel="stylesheet" href="../../../../../style/ie.css"/>
         <![endif]-->
+        <script type="text/javascript" src="../../../../../js/yc.js"></script>
     </wicket:link>
+    <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
     <title wicket:id="pageTitle">[page title]</title>
     <meta wicket:id="description" name="description" content=""/>
     <meta wicket:id="keywords" name="keywords" content=""/>
@@ -345,7 +346,7 @@
         <div wicket:id="dynamicPaymentForm">[dynamic payment form]</div>
     </div>
 
-    <div class="grid-100 mobile-grid-100  grid-parent" style="margin-top: 20px; text-align: right;">
+    <div class="grid-100 mobile-grid-100  grid-parent text-right" style="margin-top: 20px;">
         <wicket:link>
             <a href="?thp=true&amp;step=ship" class="button orange back">
                 <span><wicket:message key="shipmentStep">[Shipping method]</wicket:message></span>

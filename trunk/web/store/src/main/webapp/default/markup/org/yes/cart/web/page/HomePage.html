@@ -30,7 +30,6 @@
     <wicket:link>
 
         <script type="text/javascript" src="../../../../../js/jquery.min.js"></script>
-        <script type="text/javascript" src="../../../../../js/autoload.js"></script>
         <script type="text/javascript" src="../../../../../js/jquery.carouFredSel-6.2.1.js"></script>
         <!--[if lt IE 9]>
         <script src="../../../../../js/html5.js"></script>
@@ -46,7 +45,10 @@
         <script type="text/javascript" src="../../../../../js/slimbox2.js"></script>
         <link rel="stylesheet" href="../../../../../style/slimbox2.css" type="text/css" media="screen" />
 
+        <script type="text/javascript" src="../../../../../js/yc.js"></script>
+
     </wicket:link>
+    <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
 
 
 </wicket:head>
@@ -86,13 +88,11 @@
             <div class="grid-100 hide-on-mobile grid-parent" id="top-categories-desktop">
 
             </div>
-            <script>
-                var pMenu = document.getElementById("top-categories-mobile").innerHTML;
-                document.getElementById("top-categories-desktop").innerHTML = pMenu;
-                var all = document.getElementById("top-categories-desktop").getElementsByTagName('li');
-                for (var i = -1, l = all.length; ++i < l;) {
-                    all[i].style.cssFloat = "none";
-                }
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    var pMenu = $("#top-categories-mobile").html();
+                    $("#top-categories-desktop").html(pMenu);
+                });
             </script>
             <p>
                 <wicket:container wicket:id="priceFilter">
@@ -123,7 +123,7 @@
                 [category new arrival and promo]
             </wicket:container>
         </div>
-        <script>
+        <script type="text/javascript">
 
             function endsWith(str, suffix) {
                 return str.indexOf(suffix, str.length - suffix.length) !== -1;

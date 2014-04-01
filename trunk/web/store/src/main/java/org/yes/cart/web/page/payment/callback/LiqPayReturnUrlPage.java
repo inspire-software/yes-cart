@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -43,6 +44,8 @@ public class LiqPayReturnUrlPage  extends AbstractWebPage {
                 new FeedbackPanel("feedback")
         ).add(
                 new Label("infoLabel", "Hi there " + HttpUtil.dumpRequest(WicketUtil.getHttpServletRequest()) )
+        ).add(
+                new ServerSideJs("serverSideJs")
         );
     }
 
