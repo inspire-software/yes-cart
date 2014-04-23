@@ -111,6 +111,9 @@
     <cache name="attributeService-attributeNamesByCodes"      maxElementsInMemory="5" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="attributeService-navigatableAttributeDisplayValue"   maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
 
 
 

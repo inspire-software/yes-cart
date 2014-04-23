@@ -174,12 +174,12 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         final Map<String, I18NModel> attributeCodeName = attributeService.getAllAttributeNames();
 
 
-        //This is attributive only filtered navigation from request
+        // This is attributive only filtered navigation from request
         final PageParameters attributesOnly = WicketUtil.getRetainedRequestParameters(
                 pageParameters,
                 allowedAttributeNames);
 
-        //Base hold category path from begining and accumulate all attributive navigation
+        // Base hold category path from beginning and accumulate all attributive navigation
         final PageParameters base = WicketUtil.getFilteredRequestParameters(
                 pageParameters,
                 allowedAttributeNames);
@@ -189,14 +189,15 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         base.remove(WebParametersKeys.SKU_ID);
 
         for (PageParameters.NamedPair namedPair : attributesOnly.getAllNamed()) {
+            final I18NModel displayValue = attributeService.getNavigatableAttributeDisplayValue(namedPair.getKey(), namedPair.getValue());
             navigationCrumbs.add(createFilteredNavigationCrumb(
-                    base, namedPair.getKey(), namedPair.getValue(), locale, pageParameters,
+                    base, namedPair.getKey(), namedPair.getValue(), displayValue, locale, pageParameters,
                     brandPrefix, pricePrefix, queryPrefix, tagPrefix, attributeCodeName));
         }
     }
 
     /**
-     * Create filtered navigation crubm with two links:
+     * Create filtered navigation crumb with two links:
      * <p/>
      * First - current position, that include the whole path before current.
      * example category/17/subcategory/156/price/100-200/currentkey/currentvalue
@@ -210,6 +211,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     private Crumb createFilteredNavigationCrumb(final PageParameters base,
                                                 final String key,
                                                 final String value,
+                                                final I18NModel displayValue,
                                                 final String locale,
                                                 final PageParameters pageParameters,
                                                 final String brandPrefix,
@@ -226,9 +228,9 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
         String linkName = getLinkNamePrefix(key, locale, brandPrefix, pricePrefix, queryPrefix, tagPrefix, attributeCodeName);
         if (StringUtils.isNotBlank(linkName)) {
-            linkName += "::" + getLinkName(key, value);
+            linkName += "::" + getLinkName(key, value, displayValue.getValue(locale));
         } else {
-            linkName = getLinkName(key, value);
+            linkName = getLinkName(key, value, displayValue.getValue(locale));
         }
 
         base.add(key, value);
@@ -257,7 +259,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         return name;
     }
 
-    private String getLinkName(final String key, final String value) {
+    private String getLinkName(final String key, final String value, final String displayValue) {
         if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(key)) {
             Pair<String, Pair<BigDecimal, BigDecimal>> pair = priceNavigation.decomposePriceRequestParams(value);
             return priceNavigation.composePriceRequestParams(
@@ -268,7 +270,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                     "..."
             );
         }
-        return value;
+        return displayValue;
     }
 
 

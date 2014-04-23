@@ -81,7 +81,7 @@ public class CacheDirectorImplTest {
 
         Set<Pair<String,String>> caches = cacheDirector.resolveCacheNames(CacheDirector.EntityOperation.CREATE, CacheDirector.EntityName.ATTRIBUTE);
 
-        assertEquals(10, caches.size());
+        assertEquals(11, caches.size());
 
         assertTrue(caches.contains(new Pair("attributeService-availableAttributesByProductTypeId", "all")));
         assertTrue(caches.contains(new Pair("attributeService-availableImageAttributesByGroupCode", "all")));
@@ -89,6 +89,7 @@ public class CacheDirectorImplTest {
         assertTrue(caches.contains(new Pair("attributeService-allAttributeCodes", "all")));
         assertTrue(caches.contains(new Pair("attributeService-allNavigatableAttributeCodes", "all")));
         assertTrue(caches.contains(new Pair("attributeService-singleNavigatableAttributeCodesByProductType", "all")));
+        assertTrue(caches.contains(new Pair("attributeService-navigatableAttributeDisplayValue", "all")));
         assertTrue(caches.contains(new Pair("attributeService-allAttributeNames", "all")));
         assertTrue(caches.contains(new Pair("attributeService-attributeNamesByCodes", "all")));
         assertTrue(caches.contains(new Pair("breadCrumbBuilder-breadCrumbs", "all")));
