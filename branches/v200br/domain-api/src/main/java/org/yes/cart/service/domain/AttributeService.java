@@ -46,6 +46,17 @@ public interface AttributeService extends GenericService<Attribute> {
     Set<String> getAllNavigatableAttributeCodes();
 
     /**
+     * Get navigatable attribute display value from given value.
+     *
+     *
+     * @param attrCode attribute code for which to lookup value
+     * @param value raw value used by search
+     *
+     * @return display value model for given raw value
+     */
+    I18NModel getNavigatableAttributeDisplayValue(String attrCode, String value);
+
+    /**
      * Get all single value navigatable attribute codes for product type.
      *
      * @param productTypeId product type

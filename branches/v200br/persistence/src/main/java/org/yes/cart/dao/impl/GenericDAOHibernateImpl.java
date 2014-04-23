@@ -325,9 +325,33 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
+    public List<Object> findQueryObjectRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
+        setQueryParameters(query, parameters);
+        query.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+        return query.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
     public List<Object[]> findQueryObjectsByNamedQuery(final String namedQueryName, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         setQueryParameters(query, parameters);
+        return query.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public List<Object[]> findQueryObjectsRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
+        setQueryParameters(query, parameters);
+        query.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
         return query.list();
     }
 
@@ -360,11 +384,11 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     @SuppressWarnings("unchecked")
     public List<T> findRangeByNamedQuery(final String namedQueryName,
-                                         final int firtsResult,
+                                         final int firstResult,
                                          final int maxResults,
                                          final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
-        query.setFirstResult(firtsResult);
+        query.setFirstResult(firstResult);
         query.setMaxResults(maxResults);
         setQueryParameters(query, parameters);
         return query.list();
