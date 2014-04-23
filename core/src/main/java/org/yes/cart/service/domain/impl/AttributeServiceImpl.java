@@ -165,6 +165,30 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         return map;
     }
 
+    @Cacheable(value = "attributeService-navigatableAttributeDisplayValue")
+    public I18NModel getNavigatableAttributeDisplayValue(final String attrCode, final String value) {
+
+        final List<Object> productDV = attributeDao.findQueryObjectRangeByNamedQuery(
+                "PRODUCT.ATTRIBUTE.DISPLAYVALUES.BY.VALUE", 0, 1, attrCode, value);
+
+        if (productDV == null || productDV.isEmpty()) {
+            // No product value, try SKU
+            final List<Object> productSkuDV = attributeDao.findQueryObjectRangeByNamedQuery(
+                    "PRODUCTSKU.ATTRIBUTE.DISPLAYVALUES.BY.VALUE", 0, 1, attrCode, value);
+
+            if (productSkuDV == null || productSkuDV.isEmpty()) {
+                // no values at all - fail safe to raw
+                return new FailoverStringI18NModel(null, value);
+            }
+
+            // SKU attribute value
+            return new FailoverStringI18NModel((String) productSkuDV.get(0), value);
+
+        }
+        // product attribute value
+        return new FailoverStringI18NModel((String) productDV.get(0), value);
+    }
+
     @Cacheable(value = "attributeService-allAttributeNames")
     public Map<String, I18NModel> getAllAttributeNames() {
         Map<String, I18NModel> result = new HashMap<String, I18NModel>();
@@ -205,6 +229,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
+            "attributeService-navigatableAttributeDisplayValue",
             "attributeService-attributeNamesByCodes",
             "attributeService-allAttributeNames"},
              allEntries = true)
@@ -219,6 +244,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
+            "attributeService-navigatableAttributeDisplayValue",
             "attributeService-attributeNamesByCodes",
             "attributeService-allAttributeNames"},
             allEntries = true)
@@ -233,6 +259,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
+            "attributeService-navigatableAttributeDisplayValue",
             "attributeService-attributeNamesByCodes",
             "attributeService-allAttributeNames"},
             allEntries = true)

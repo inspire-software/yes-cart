@@ -78,6 +78,10 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="attributeService-navigatableAttributeDisplayValue"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="attributeService-allAttributeNames"/>
             <constructor-arg index="1" value="all"/>
         </bean>

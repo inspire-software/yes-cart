@@ -2420,6 +2420,22 @@
        ]]>
     </query>
 
+    <query name="PRODUCT.ATTRIBUTE.DISPLAYVALUES.BY.VALUE">
+        <![CDATA[
+       select a.displayVal
+       from   AttrValueEntityProduct a
+            where a.attribute.code = ?1 and a.val = ?2
+       ]]>
+    </query>
+
+    <query name="PRODUCTSKU.ATTRIBUTE.DISPLAYVALUES.BY.VALUE">
+        <![CDATA[
+       select a.displayVal
+       from   AttrValueEntityProductSku a
+            where a.attribute.code = ?1 and a.val = ?2
+       ]]>
+    </query>
+
     <query name="PRODUCTS.ATTRIBUTE.VALUES.BY.CODE.PRODUCTTYPEID">
         <![CDATA[
        select distinct a.val
