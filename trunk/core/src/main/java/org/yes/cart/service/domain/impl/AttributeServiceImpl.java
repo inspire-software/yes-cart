@@ -22,6 +22,7 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.i18n.impl.NonI18NModel;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeGroupService;
 import org.yes.cart.service.domain.AttributeService;
@@ -178,7 +179,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
 
             if (productSkuDV == null || productSkuDV.isEmpty()) {
                 // no values at all - fail safe to raw
-                return new FailoverStringI18NModel(null, value);
+                return new NonI18NModel(value);
             }
 
             // SKU attribute value

@@ -15,7 +15,8 @@
   -    limitations under the License.
   -->
 
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="500" height="400"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*" layout="absolute"
+                width="600" height="500"
                 title="@Resource(bundle='ProductTypeManagementPanel',key='productTypeAttr')"
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)"
@@ -23,9 +24,9 @@
 
 
     <mx:VBox width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingBottom="2" paddingTop="2">
-        <mx:TabBar id="currencyTabBar" itemClick="currencySelected(event)"
-                   dataProvider="{currencyViewStack}"/>
-        <mx:ViewStack id="currencyViewStack" width="100%" height="100%" creationPolicy="all">
+        <mx:TabBar id="rangesTabBar" itemClick="rangeTabSelected(event)"
+                   dataProvider="{rangesViewStack}"/>
+        <mx:ViewStack id="rangesViewStack" width="100%" height="100%" creationPolicy="all">
             <mx:VBox label="@Resource(bundle='ProductTypeManagementPanel',key='ranges')" width="100%" height="100%"
                      paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
                 <mx:HBox paddingTop="5" width="100%">
@@ -36,7 +37,7 @@
                             />
                     <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationDeleteRow')"
                                toolTip="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationDeleteRowHint')"
-                               enabled="{xmlNode != null}"
+                               enabled="{removeRowEnabled}"
                                click="deleteSelectedNavRangeRow(event)"
                             />
                 </mx:HBox>
@@ -48,6 +49,9 @@
                         <mx:DataGridColumn dataField="to" headerText="@Resource(bundle='ProductTypeManagementPanel',key='valueTo')"/>
                     </mx:columns>
                 </mx:DataGrid>
+                <mx:HBox paddingTop="5" width="100%">
+                    <yci18n:i18nStringField id="displayNames" change="onDisplayNamesChange(event)" enabled="{editDisplayNamesEnabled}"/>
+                </mx:HBox>
             </mx:VBox>
             <mx:VBox label="XML" width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
                 <mx:TextArea id="rawXML" x="0" y="0" width="100%" height="100%"/>
@@ -60,8 +64,9 @@
                    click="PopUpManager.removePopUp(this)"/>
     </mx:ControlBar>
 
-    <mx:Boolean id="addCurrencyEnabled">true</mx:Boolean>
     <mx:Boolean id="addRowEnabled">true</mx:Boolean>
+    <mx:Boolean id="removeRowEnabled">false</mx:Boolean>
+    <mx:Boolean id="editDisplayNamesEnabled">false</mx:Boolean>
 
 
     <mx:Script><![CDATA[
@@ -75,6 +80,7 @@
         import mx.core.UIComponent;
         import mx.events.DataGridEvent;
         import mx.events.DataGridEventReason;
+        import mx.events.FlexEvent;
         import mx.events.ItemClickEvent;
         import mx.events.ListEvent;
         import mx.managers.PopUpManager;
@@ -87,14 +93,19 @@
         private var xml:XML;
         private var gridXml:XMLList;
 
+        public var displayNamesValues:Object = {};
+
         public function init():void {
             internalInit();
-            currencyTabBar.selectedIndex = 0;
+            rangesTabBar.selectedIndex = 0;
+            this.displayNames.setSourceObject(this, 'displayNamesValues');
         }
 
-        private function currencySelected(event:ItemClickEvent):void {
-            xmlNode = null; // disable to delete
+        private function rangeTabSelected(event:ItemClickEvent):void {
+            removeRowEnabled = false;
+            editDisplayNamesEnabled = false;
             addRowEnabled = (event.label != "XML");
+            xmlNode = null;
             if (event.label == "XML") {
                 xml = getGridXml();
                 if (rawXML != null) {
@@ -126,8 +137,10 @@
                 xmlNode = null;
                 xml.ranges.range = gridXml.copy();
                 rangesGrid.dataProvider = gridXml;
-                currencyTabBar.selectedIndex = 0;
-                currencyViewStack.selectedIndex = 0;
+                rangesTabBar.selectedIndex = 0;
+                rangesViewStack.selectedIndex = 0;
+                editDisplayNamesEnabled = false;
+                removeRowEnabled = false;
             }
         }
 
@@ -146,7 +159,7 @@
          * @return price navigation xml string
          */
         public function getXmlString():String {
-            var idx:int = currencyTabBar.selectedIndex;
+            var idx:int = rangesTabBar.selectedIndex;
             if (idx == 1) {
                 return rawXML.text;
             }
@@ -160,8 +173,8 @@
                     xml = <range-list>
                         <ranges>
                             <range>
-                                <from>from</from>
-                                <to>to</to>
+                                <from>1</from>
+                                <to>2</to>
                             </range>
                         </ranges>
                     </range-list>;
@@ -180,7 +193,21 @@
         }
 
         private function onXmlNodeSelected(event:ListEvent):void {
-            xmlNode = event.currentTarget.selectedItem;
+            var _xmlNode:XML = event.currentTarget.selectedItem;
+            editDisplayNamesEnabled = _xmlNode != null;
+            removeRowEnabled = _xmlNode != null;
+
+            this.displayNamesValues = {};
+            if (editDisplayNamesEnabled) {
+                xmlNode = _xmlNode;
+                this.displayNamesValues = {};
+                if (xmlNode.hasOwnProperty('i18n')) {
+                    for each (var fromDisplay:XML in xmlNode['i18n'].display) {
+                        this.displayNamesValues[fromDisplay.lang.toString()] = fromDisplay.value.toString();
+                    }
+                }
+            }
+            this.displayNames.setSourceObject(this, 'displayNamesValues');
         }
 
         protected function onItemEditEnd(event:DataGridEvent):void {
@@ -195,12 +222,57 @@
             xml.appendChild(gridXml.copy());
             xml.appendChild(
                     <range>
-                        <from>from</from>
-                        <to>to</to>
+                        <from>1</from>
+                        <to>2</to>
                     </range>);
             gridXml = new XMLList(xml.range);
             rangesGrid.dataProvider = gridXml;
 
+        }
+
+        private function onDisplayNamesChange(event:FlexEvent):void {
+
+            onDisplayNamesChangeInternal(event, 'i18n', displayNamesValues);
+
+        }
+
+        private function onDisplayNamesChangeInternal(event:FlexEvent, nodeName:String, nodeValues:Object):void {
+
+            var _xmlNode:XML = xmlNode;
+
+            if (editDisplayNamesEnabled && _xmlNode != null) {
+
+                var xmlStr:String = '<' + nodeName + '>';
+                for (var lang:String in nodeValues) {
+                    if (isLocaleProp(lang)) {
+                        xmlStr += '<display><lang>' + lang + '</lang><value>' + nodeValues[lang] + '</value></display>';
+                    }
+                }
+                xmlStr += '</' + nodeName + '>';
+
+                if (_xmlNode.hasOwnProperty(nodeName)) {
+                    for each (var display:XML in _xmlNode[nodeName].display) {
+                        deleteNode(display);
+                    }
+                } else {
+                    _xmlNode.appendChild(new XML('<' + nodeName + '/>'))
+                }
+                _xmlNode[nodeName] = new XML(xmlStr);
+
+            }
+
+            xml.ranges.range = gridXml.copy();
+
+        }
+
+
+        private function isLocaleProp(prop:String):Boolean {
+            /*
+             * simple hack to only use locale properties, since
+             * flex has other internal properties (like mx_internal_id)
+             * which we do not want to mess with.
+             */
+            return prop.length <= 6;
         }
         ]]>
     </mx:Script>

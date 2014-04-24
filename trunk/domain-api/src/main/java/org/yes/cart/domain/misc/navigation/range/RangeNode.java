@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.misc.navigation.range;
 
+import java.util.List;
+
 /**
  * Hi and lo values for filtered navigation.
  * <p/>
@@ -45,5 +47,14 @@ public interface RangeNode {
      */
     void setTo(String string);
 
+    /**
+     * @return from range
+     */
+    List<DisplayValue> getI18n();
+
+    /**
+     * @param value from range
+     */
+    void setI18n(List<DisplayValue> value);
 
 }

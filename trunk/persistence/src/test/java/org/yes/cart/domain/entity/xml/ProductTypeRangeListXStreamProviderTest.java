@@ -17,10 +17,12 @@
 package org.yes.cart.domain.entity.xml;
 
 import org.junit.Test;
+import org.yes.cart.domain.misc.navigation.range.DisplayValue;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.stream.xml.XStreamProvider;
 
 import java.io.File;
+import java.util.List;
 import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
@@ -46,6 +48,14 @@ public class ProductTypeRangeListXStreamProviderTest {
 
         assertEquals("0.10", (rl.getRanges().get(0)).getFrom());
         assertEquals("1.00", (rl.getRanges().get(0)).getTo());
+
+        final List<DisplayValue> i18n = (rl.getRanges().get(0)).getI18n();
+        assertNotNull(i18n);
+        assertEquals(2, i18n.size());
+        assertEquals("en", i18n.get(0).getLang());
+        assertEquals("100 g - 1 kg", i18n.get(0).getValue());
+        assertEquals("ru", i18n.get(1).getLang());
+        assertEquals("100 g - 1 kg ru", i18n.get(1).getValue());
 
         final String xmlStr = provider.toXML(rl);
 

@@ -43,9 +43,23 @@
     </xs:complexType>
 
     <xs:complexType name="RangeType">
-        <xs:sequence>
+        <xs:all>
             <xs:element name="from" type="xs:string"/>
             <xs:element name="to" type="xs:string"/>
+            <xs:element name="i18n" type="DisplayValuesType" minOccurs="0"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="DisplayValuesType">
+        <xs:sequence>
+            <xs:element name="display" type="DisplayValueType" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DisplayValueType">
+        <xs:sequence>
+            <xs:element name="lang" type="xs:string"/>
+            <xs:element name="value" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

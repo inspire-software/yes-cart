@@ -18,13 +18,16 @@ package org.yes.cart.domain.entity.bridge;
 
 import org.junit.Test;
 import org.yes.cart.domain.entity.xml.ProductTypeRangeListXStreamProvider;
+import org.yes.cart.domain.misc.navigation.range.DisplayValue;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
+import org.yes.cart.domain.misc.navigation.range.impl.DisplayValueImpl;
 import org.yes.cart.domain.misc.navigation.range.impl.RangeListImpl;
 import org.yes.cart.domain.misc.navigation.range.impl.RangeNodeImpl;
 import org.yes.cart.stream.xml.XStreamProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -74,6 +77,9 @@ public class RangeListImplTest {
         RangeList rangeList = new RangeListImpl();
         List<RangeNode> nodes = new ArrayList<RangeNode>();
         nodes.add(new RangeNodeImpl("0.001", "0.999"));
+        nodes.get(0).setI18n(new ArrayList<DisplayValue>(Arrays.asList(
+                (DisplayValue) new DisplayValueImpl("en", "from val")
+        )));
         nodes.add(new RangeNodeImpl("1.000", "1.999"));
         nodes.add(new RangeNodeImpl("2.000", "2.999"));
         nodes.add(new RangeNodeImpl("3.000", "3.999"));

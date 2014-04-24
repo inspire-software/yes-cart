@@ -30,7 +30,7 @@ public class FailoverStringI18NModelTest {
 
     @Test
     public void testStringNull() throws Exception {
-        final I18NModel model = new FailoverStringI18NModel(null, null);
+        final I18NModel model = new FailoverStringI18NModel((String) null, null);
         assertNotNull(model.getAllValues());
         assertTrue(model.getAllValues().isEmpty());
     }
