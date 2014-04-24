@@ -33,8 +33,10 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.i18n.impl.NonI18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.navigation.range.DisplayValue;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -631,13 +633,16 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             RangeList rangeList = entry.getRangeList();
             if (rangeList != null && rangeList.getRanges() != null) {
                 for (RangeNode node : rangeList.getRanges()) {
+
+                    final Map<String, String> i18n = getRangeValueDisplayNames(node.getI18n());
+
                     records.add(
                             new FilteredNavigationRecordImpl(
                                     entry.getAttribute().getName(),
-                                    new FailoverStringI18NModel(entry.getAttribute().getDisplayName(), entry.getAttribute().getName()).getValue(locale),
+                                    getAttributeNameRepresentation(locale, entry),
                                     entry.getAttribute().getCode(),
-                                    node.getFrom() + '-' + node.getTo(),
-                                    node.getFrom() + '-' + node.getTo(),
+                                    getRangeValueRepresentation(node.getFrom(), node.getTo()),
+                                    getRangeDisplayValueRepresentation(locale, i18n, node.getFrom(), node.getTo()),
                                     0, // put zero initially as this this be populated by FT query
                                     entry.getRank(),
                                     "R"
@@ -649,7 +654,35 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return records;
     }
 
-    private static final I18NModel BLANK = new FailoverStringI18NModel(null, "-");
+    private String getAttributeNameRepresentation(final String locale, final ProductTypeAttr entry) {
+        return new FailoverStringI18NModel(entry.getAttribute().getDisplayName(), entry.getAttribute().getName()).getValue(locale);
+    }
+
+    private String getRangeValueRepresentation(final String from, final String to) {
+        return from + '-' + to;
+    }
+
+    private String getRangeDisplayValueRepresentation(final String locale, final Map<String, String> display, final String from, final String to) {
+        final I18NModel toI18n = new StringI18NModel(display);
+        final String localName = toI18n.getValue(locale);
+        if (StringUtils.isBlank(localName)) {
+            return getRangeValueRepresentation(from, to);
+        }
+        return localName;
+    }
+
+    private Map<String, String> getRangeValueDisplayNames(final List<DisplayValue> displayValues) {
+
+        final Map<String, String> display = new HashMap<String, String>();
+        if (displayValues != null) {
+            for (final DisplayValue dv :displayValues) {
+                display.put(dv.getLang(), dv.getValue());
+            }
+        }
+        return display;
+    }
+
+    private static final I18NModel BLANK = new NonI18NModel("-");
 
     private void appendFilteredNavigationRecords(final Map<FilteredNavigationRecord, FilteredNavigationRecord> toAppendTo,
                                                  final String locale,

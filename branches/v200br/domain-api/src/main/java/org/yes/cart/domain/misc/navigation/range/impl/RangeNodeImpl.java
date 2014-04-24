@@ -16,7 +16,10 @@
 
 package org.yes.cart.domain.misc.navigation.range.impl;
 
+import org.yes.cart.domain.misc.navigation.range.DisplayValue;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
+
+import java.util.List;
 
 /**
  * Value range implementation.
@@ -29,6 +32,7 @@ public class RangeNodeImpl implements RangeNode {
 
     private String from;
     private String to;
+    private List<DisplayValue> i18n;
 
     /** {@inheritDoc} */
     public String getFrom() {
@@ -50,11 +54,21 @@ public class RangeNodeImpl implements RangeNode {
         this.to = to;
     }
 
+    /** {@inheritDoc} */
+    public List<DisplayValue> getI18n() {
+        return i18n;
+    }
+
+    /** {@inheritDoc} */
+    public void setI18n(final List<DisplayValue> fromDisplay) {
+        this.i18n = fromDisplay;
+    }
+
     /**
      * Construct value range. Default constructor
      */
     public RangeNodeImpl() {
-	super();
+	    super();
     }
 
     /**

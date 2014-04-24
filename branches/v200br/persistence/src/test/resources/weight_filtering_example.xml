@@ -20,6 +20,16 @@
         <range>
             <from>0.10</from>
             <to>1.00</to>
+            <i18n>
+                <display>
+                    <lang>en</lang>
+                    <value>100 g - 1 kg</value>
+                </display>
+                <display>
+                    <lang>ru</lang>
+                    <value>100 g - 1 kg ru</value>
+                </display>
+            </i18n>
         </range>
         <range>
             <from>1.00</from>
