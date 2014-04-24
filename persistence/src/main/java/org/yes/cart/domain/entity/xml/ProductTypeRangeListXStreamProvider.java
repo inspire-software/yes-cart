@@ -18,8 +18,10 @@ package org.yes.cart.domain.entity.xml;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import org.yes.cart.domain.misc.navigation.range.DisplayValue;
 import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
+import org.yes.cart.domain.misc.navigation.range.impl.DisplayValueImpl;
 import org.yes.cart.domain.misc.navigation.range.impl.RangeListImpl;
 import org.yes.cart.domain.misc.navigation.range.impl.RangeNodeImpl;
 import org.yes.cart.stream.xml.XStreamProvider;
@@ -55,10 +57,15 @@ public class ProductTypeRangeListXStreamProvider implements XStreamProvider<Rang
     private XStream provide() {
         if (this.xStream == null) {
             XStream xStream = new XStream(new DomDriver());
-            xStream.alias("range-list", RangeListImpl.class);
+
             xStream.addDefaultImplementation(ArrayList.class, List.class);
             xStream.addDefaultImplementation(RangeNodeImpl.class, RangeNode.class);
-            xStream.alias("range", RangeNodeImpl.class);
+            xStream.addDefaultImplementation(DisplayValueImpl.class, DisplayValue.class);
+
+            xStream.alias("range-list", RangeListImpl.class);
+            xStream.alias("range", RangeNode.class);
+            xStream.alias("display", DisplayValue.class);
+
             this.xStream = xStream;
         }
         return this.xStream;
