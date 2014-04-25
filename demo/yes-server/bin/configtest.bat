@@ -15,21 +15,44 @@ rem See the License for the specific language governing permissions and
 rem limitations under the License.
 
 rem ---------------------------------------------------------------------------
-rem Append to CLASSPATH
-rem
-rem $Id: cpappend.bat 562770 2007-08-04 22:13:58Z markt $
+rem Configuration test script for the CATALINA Server
 rem ---------------------------------------------------------------------------
 
-rem Process the first argument
-if ""%1"" == """" goto end
-set CLASSPATH=%CLASSPATH%;%1
-shift
+setlocal
 
-rem Process the remaining arguments
+rem Guess CATALINA_HOME if not defined
+set "CURRENT_DIR=%cd%"
+if not "%CATALINA_HOME%" == "" goto gotHome
+set "CATALINA_HOME=%CURRENT_DIR%"
+if exist "%CATALINA_HOME%\bin\catalina.bat" goto okHome
+cd ..
+set "CATALINA_HOME=%cd%"
+cd "%CURRENT_DIR%"
+:gotHome
+if exist "%CATALINA_HOME%\bin\catalina.bat" goto okHome
+echo The CATALINA_HOME environment variable is not defined correctly
+echo This environment variable is needed to run this program
+goto end
+:okHome
+
+set "EXECUTABLE=%CATALINA_HOME%\bin\catalina.bat"
+
+rem Check that target executable exists
+if exist "%EXECUTABLE%" goto okExec
+echo Cannot find "%EXECUTABLE%"
+echo This file is needed to run this program
+goto end
+:okExec
+
+rem Get remaining unshifted command line arguments and save them in the
+set CMD_LINE_ARGS=
 :setArgs
-if ""%1"" == """" goto doneSetArgs
-set CLASSPATH=%CLASSPATH% %1
+if ""%1""=="""" goto doneSetArgs
+set CMD_LINE_ARGS=%CMD_LINE_ARGS% %1
 shift
 goto setArgs
 :doneSetArgs
+
+call "%EXECUTABLE%" configtest %CMD_LINE_ARGS%
+
 :end

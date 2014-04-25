@@ -14,11 +14,13 @@ rem WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 rem See the License for the specific language governing permissions and
 rem limitations under the License.
 
-if "%OS%" == "Windows_NT" setlocal
 rem ---------------------------------------------------------------------------
 rem Start/Stop Script for the CATALINA Server
 rem
 rem Environment Variable Prerequisites
+rem
+rem   Do not set the variables in this script. Instead put them into a script
+rem   setenv.bat in CATALINA_BASE/bin to keep your customizations separate.
 rem
 rem   CATALINA_HOME   May point at your Catalina "build" directory.
 rem
@@ -27,7 +29,11 @@ rem                   of a Catalina installation.  If not present, resolves to
 rem                   the same directory that CATALINA_HOME points to.
 rem
 rem   CATALINA_OPTS   (Optional) Java runtime options used when the "start",
-rem                   or "run" command is executed.
+rem                   "run" or "debug" command is executed.
+rem                   Include here and not in JAVA_OPTS all options, that should
+rem                   only be used by Tomcat itself, not by the stop process,
+rem                   the version command etc.
+rem                   Examples are heap size, GC logging, JMX ports etc.
 rem
 rem   CATALINA_TMPDIR (Optional) Directory path location of temporary directory
 rem                   the JVM should use (java.io.tmpdir).  Defaults to
@@ -37,14 +43,19 @@ rem   JAVA_HOME       Must point at your Java Development Kit installation.
 rem                   Required to run the with the "debug" argument.
 rem
 rem   JRE_HOME        Must point at your Java Runtime installation.
-rem                   Defaults to JAVA_HOME if empty.
+rem                   Defaults to JAVA_HOME if empty. If JRE_HOME and JAVA_HOME
+rem                   are both set, JRE_HOME is used.
 rem
-rem   JAVA_OPTS       (Optional) Java runtime options used when the "start",
-rem                   "stop", or "run" command is executed.
+rem   JAVA_OPTS       (Optional) Java runtime options used when any command
+rem                   is executed.
+rem                   Include here and not in CATALINA_OPTS all options, that
+rem                   should be used by Tomcat and also by the stop process,
+rem                   the version command etc.
+rem                   Most options should go into CATALINA_OPTS.
 rem
 rem   JAVA_ENDORSED_DIRS (Optional) Lists of of semi-colon separated directories
-rem                   containing some jars in order to allow replacement of APIs 
-rem                   created outside of the JCP (i.e. DOM and SAX from W3C). 
+rem                   containing some jars in order to allow replacement of APIs
+rem                   created outside of the JCP (i.e. DOM and SAX from W3C).
 rem                   It can also be used to update the XML parser implementation.
 rem                   Defaults to $CATALINA_HOME/endorsed.
 rem
@@ -70,7 +81,7 @@ rem   LOGGING_CONFIG  (Optional) Override Tomcat's logging config file
 rem                   Example (all one line)
 rem                   set LOGGING_CONFIG="-Djava.util.logging.config.file=%CATALINA_BASE%\conf\logging.properties"
 rem
-rem   LOGGING_MANAGER (Optional) Override Tomcat's logging manager 
+rem   LOGGING_MANAGER (Optional) Override Tomcat's logging manager
 rem                   Example (all one line)
 rem                   set LOGGING_MANAGER="-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager"
 rem
@@ -78,11 +89,24 @@ rem   TITLE           (Optional) Specify the title of Tomcat window. The default
 rem                   TITLE is Tomcat if it's not specified.
 rem                   Example (all one line)
 rem                   set TITLE=Tomcat.Cluster#1.Server#1 [%DATE% %TIME%]
-rem
-rem
-rem
-rem $Id: catalina.bat 1146097 2011-07-13 15:25:05Z markt $
 rem ---------------------------------------------------------------------------
+
+setlocal
+
+rem Suppress Terminate batch job on CTRL+C
+if not ""%1"" == ""run"" goto mainEntry
+if "%TEMP%" == "" goto mainEntry
+if exist "%TEMP%\%~nx0.run" goto mainEntry
+echo Y>"%TEMP%\%~nx0.run"
+if not exist "%TEMP%\%~nx0.run" goto mainEntry
+echo Y>"%TEMP%\%~nx0.Y"
+call "%~f0" %* <"%TEMP%\%~nx0.Y"
+rem Use provided errorlevel
+set RETVAL=%ERRORLEVEL%
+del /Q "%TEMP%\%~nx0.Y" >NUL 2>&1
+exit /B %RETVAL%
+:mainEntry
+del /Q "%TEMP%\%~nx0.run" >NUL 2>&1
 
 rem Guess CATALINA_HOME if not defined
 set "CURRENT_DIR=%cd%"
@@ -93,6 +117,7 @@ cd ..
 set "CATALINA_HOME=%cd%"
 cd "%CURRENT_DIR%"
 :gotHome
+
 if exist "%CATALINA_HOME%\bin\catalina.bat" goto okHome
 echo The CATALINA_HOME environment variable is not defined correctly
 echo This environment variable is needed to run this program
@@ -122,27 +147,28 @@ echo Cannot find "%CATALINA_HOME%\bin\setclasspath.bat"
 echo This file is needed to run this program
 goto end
 :okSetclasspath
-set "BASEDIR=%CATALINA_HOME%"
 call "%CATALINA_HOME%\bin\setclasspath.bat" %1
 if errorlevel 1 goto end
 
-if not "%CATALINA_TMPDIR%" == "" goto gotTmpdir
-set "CATALINA_TMPDIR=%CATALINA_BASE%\temp"
-:gotTmpdir
-
-rem Add tomcat-juli.jar and bootstrap.jar to classpath
-rem tomcat-juli.jar can be over-ridden per instance
+rem Add on extra jar file to CLASSPATH
 rem Note that there are no quotes as we do not want to introduce random
 rem quotes into the CLASSPATH
 if "%CLASSPATH%" == "" goto emptyClasspath
 set "CLASSPATH=%CLASSPATH%;"
 :emptyClasspath
-if "%CATALINA_BASE%" == "%CATALINA_HOME%" goto juliClasspathHome
+set "CLASSPATH=%CLASSPATH%%CATALINA_HOME%\bin\bootstrap.jar"
+
+if not "%CATALINA_TMPDIR%" == "" goto gotTmpdir
+set "CATALINA_TMPDIR=%CATALINA_BASE%\temp"
+:gotTmpdir
+
+rem Add tomcat-juli.jar to classpath
+rem tomcat-juli.jar can be over-ridden per instance
 if not exist "%CATALINA_BASE%\bin\tomcat-juli.jar" goto juliClasspathHome
-set "CLASSPATH=%CLASSPATH%%CATALINA_BASE%\bin\tomcat-juli.jar;%CATALINA_HOME%\bin\bootstrap.jar"
+set "CLASSPATH=%CLASSPATH%;%CATALINA_BASE%\bin\tomcat-juli.jar"
 goto juliClasspathDone
 :juliClasspathHome
-set "CLASSPATH=%CLASSPATH%%CATALINA_HOME%\bin\bootstrap.jar"
+set "CLASSPATH=%CLASSPATH%;%CATALINA_HOME%\bin\tomcat-juli.jar"
 :juliClasspathDone
 
 if not "%LOGGING_CONFIG%" == "" goto noJuliConfig
@@ -198,6 +224,7 @@ if ""%1"" == ""debug"" goto doDebug
 if ""%1"" == ""run"" goto doRun
 if ""%1"" == ""start"" goto doStart
 if ""%1"" == ""stop"" goto doStop
+if ""%1"" == ""configtest"" goto doConfigTest
 if ""%1"" == ""version"" goto doVersion
 
 echo Usage:  catalina ( commands ... )
@@ -210,6 +237,7 @@ echo   run -security     Start in the current window with security manager
 echo   start             Start Catalina in a separate window
 echo   start -security   Start in a separate window with security manager
 echo   stop              Stop Catalina
+echo   configtest        Run a basic syntax check on server.xml
 echo   version           What version of tomcat are you running?
 goto end
 
@@ -233,13 +261,8 @@ goto execCmd
 
 :doStart
 shift
-if not "%OS%" == "Windows_NT" goto noTitle
 if "%TITLE%" == "" set TITLE=Tomcat
 set _EXECJAVA=start "%TITLE%" %_RUNJAVA%
-goto gotTitle
-:noTitle
-set _EXECJAVA=start %_RUNJAVA%
-:gotTitle
 if not ""%1"" == ""-security"" goto execCmd
 shift
 echo Using Security Manager
@@ -249,6 +272,12 @@ goto execCmd
 :doStop
 shift
 set ACTION=stop
+set CATALINA_OPTS=
+goto execCmd
+
+:doConfigTest
+shift
+set ACTION=configtest
 set CATALINA_OPTS=
 goto execCmd
 
