@@ -19,20 +19,62 @@ import mx.controls.Button;
 
 public interface ValueDialog {
 
+    /**
+     * Attribute value
+     */
     function get value():String;
 
+    /**
+     * Attribute value
+     *
+     * @param value value
+     */
     function set value(value:String):void;
 
+    /**
+     * Attribute value type (etype.businessname)
+     */
+    function get valueTypeName():String;
+
+    /**
+     * Attribute value type (etype.businessname)
+     *
+     * @param value value
+     */
+    function set valueTypeName(value:String):void;
+
+    /**
+     * Attribute display value
+     */
     function get displayValues():Object;
 
+    /**
+     * Attribute display value
+     *
+     * @param value value
+     */
     function set displayValues(value:Object):void;
 
+    /**
+     * Pop up window title
+     */
     function get windowTitle():String;
 
+    /**
+     * Pop up window title
+     *
+     * @param value value
+     */
     function set windowTitle(value:String):void;
 
+    /**
+     * Old value
+     */
     function get oldValue():String;
 
+    /**
+     * Pop up window save button
+     */
     function getButtonSave(): Button;
 
     /**
@@ -42,7 +84,8 @@ public interface ValueDialog {
 
     /**
      * Product or sku code
-     * @param value
+     *
+     * @param value value
      */
     function set code(value:String):void;
 
@@ -53,14 +96,28 @@ public interface ValueDialog {
 
     /**
      * Attribute code.
-     * @param value
+     *
+     * @param value value
      */
     function set attributeCode(value:String):void;
 
+    /**
+     * Attribute group
+     */
     function get attributeGroup():String;
 
+    /**
+     * Attribute group
+     *
+     * @param value value
+     */
     function set attributeGroup(value:String):void;
 
+    /**
+     * Additional information about value.
+     *
+     * @param value value
+     */
     function setInformation(value:String):void;
 
 

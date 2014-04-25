@@ -129,8 +129,8 @@
         private var newAttrValuePopUp:AttributeValueQuickCreateDialog;
 
         /**
-         * Create new product attribute and his value for product.
-         * Attribute code will have name with space chaned to hyphen.
+         * Create new product attribute and its value for product.
+         * Attribute code will have name with space chained to hyphen.
          * Localized names for supported locales will be created as name.
          * Product type must be specified.
          * @param event
@@ -318,6 +318,8 @@
                                     import org.yes.cart.ui.attributes.valuedialog.HTMLEditorDialog;
 
                                     import org.yes.cart.ui.attributes.valuedialog.ImageDialog;
+                                    import org.yes.cart.ui.attributes.valuedialog.SimpleBooleanDialog;
+                                    import org.yes.cart.ui.attributes.valuedialog.SimpleTextAreaDialog;
                                     import org.yes.cart.ui.attributes.valuedialog.SimpleTextDialog;
                                     import org.yes.cart.ui.attributes.valuedialog.ValueDialog;
 
@@ -337,6 +339,8 @@
                                         popUp.code = outerDocument.entityCode;
                                         popUp.value = data.val;
                                         popUp.displayValues = data.displayVals;
+                                        popUp.valueTypeName = data.attributeDTO.etypeName;
+
                                         var btnSave:Button = popUp.getButtonSave();
                                         if (popUp is SimpleTextDialog && !outerDocument.isLocalizationEnabled(popUp)) {
 
@@ -397,6 +401,10 @@
                                             return ImageDialog;
                                         } else if (data.attributeDTO.etypeName.indexOf("HTML") > -1) {
                                             return HTMLEditorDialog;
+                                        } else if (data.attributeDTO.etypeName.indexOf("CommaSeparatedList") > -1) {
+                                            return SimpleTextAreaDialog;
+                                        } else if (data.attributeDTO.etypeName.indexOf("Boolean") > -1) {
+                                            return SimpleBooleanDialog;
                                         }
 
                                         return SimpleTextDialog;
