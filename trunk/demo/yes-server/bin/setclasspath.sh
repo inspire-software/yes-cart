@@ -16,16 +16,19 @@
 # limitations under the License.
 
 # -----------------------------------------------------------------------------
-#  Set CLASSPATH and Java options
-#
-#  $Id: setclasspath.sh 795037 2009-07-17 10:52:16Z markt $
+#  Set JAVA_HOME or JRE_HOME if not already set, ensure any provided settings
+#  are valid and consistent with the selected start-up options and set up the
+#  endorsed directory.
 # -----------------------------------------------------------------------------
 
 # Make sure prerequisite environment variables are set
 if [ -z "$JAVA_HOME" -a -z "$JRE_HOME" ]; then
-  # Bugzilla 37284 (reviewed).
   if $darwin; then
-    if [ -d "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home" ]; then
+    # Bugzilla 54390
+    if [ -x '/usr/libexec/java_home' ] ; then
+      export JAVA_HOME=`/usr/libexec/java_home`
+    # Bugzilla 37284 (reviewed).
+    elif [ -d "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home" ]; then
       export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home"
     fi
   else
@@ -73,40 +76,11 @@ if [ "$1" = "debug" ] ; then
     fi
   fi
 fi
-if [ -z "$BASEDIR" ]; then
-  echo "The BASEDIR environment variable is not defined"
-  echo "This environment variable is needed to run this program"
-  exit 1
-fi
-if [ ! -x "$BASEDIR"/bin/setclasspath.sh ]; then
-  if $os400; then
-    # -x will Only work on the os400 if the files are:
-    # 1. owned by the user
-    # 2. owned by the PRIMARY group of the user
-    # this will not work if the user belongs in secondary groups
-    eval
-  else
-    echo "The BASEDIR environment variable is not defined correctly"
-    echo "This environment variable is needed to run this program"
-    exit 1
-  fi
-fi
 
 # Don't override the endorsed dir if the user has set it previously
 if [ -z "$JAVA_ENDORSED_DIRS" ]; then
   # Set the default -Djava.endorsed.dirs argument
-  JAVA_ENDORSED_DIRS="$BASEDIR"/endorsed
-fi
-
-# OSX hack to CLASSPATH
-JIKESPATH=
-if [ `uname -s` = "Darwin" ]; then
-  OSXHACK="/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Classes"
-  if [ -d "$OSXHACK" ]; then
-    for i in "$OSXHACK"/*.jar; do
-      JIKESPATH="$JIKESPATH":"$i"
-    done
-  fi
+  JAVA_ENDORSED_DIRS="$CATALINA_HOME"/endorsed
 fi
 
 # Set standard commands for invoking Java.

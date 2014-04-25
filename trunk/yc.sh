@@ -302,8 +302,9 @@ prepare_demo_pkg() {
     echo " done...                                        ";
 
     echo " Creating zip package...                        ";
-    rm -f $YC_HOME/yescart.zip
-    zip -r --exclude=*.svn* $YC_HOME/yescart.zip $YC_HOME/demo
+    cd $YC_HOME;
+    rm -f yescart.zip
+    zip -r --exclude=*.svn* yescart.zip ./demo
     echo " done...                                        ";
     echo "                                                ";
     echo "================================================";
