@@ -28,6 +28,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.ContentService;
+import org.yes.cart.service.domain.ContentServiceTemplateSupport;
 
 import java.util.*;
 
@@ -43,21 +44,51 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
 
     private final GenericDAO<Shop, Long> shopDao;
 
+    private final ContentServiceTemplateSupport templateSupport;
+
     /**
      * Construct service to manage categories
      *
      * @param categoryDao     category dao to use
      * @param shopCategoryDao shop category dao to use
      * @param shopDao         shop dao
+     * @param templateSupport template support
      */
     public ContentServiceImpl(
             final GenericDAO<Category, Long> categoryDao,
             final GenericDAO<ShopCategory, Long> shopCategoryDao,
-            final GenericDAO<Shop, Long> shopDao) {
+            final GenericDAO<Shop, Long> shopDao,
+            final ContentServiceTemplateSupport templateSupport) {
         super(categoryDao);
         this.categoryDao = categoryDao;
         this.shopCategoryDao = shopCategoryDao;
         this.shopDao = shopDao;
+        this.templateSupport = templateSupport;
+
+        this.templateSupport.registerFunction("include", new ContentServiceTemplateSupport.FunctionProvider() {
+            @Override
+            public Object doAction(final Object... params) {
+
+                if (params != null && params.length == 3) {
+
+                    final String uri = String.valueOf(params[0]);
+
+                    final Long contentId = proxy().findContentIdBySeoUri(uri);
+
+                    if (contentId != null) {
+                        final String locale = String.valueOf(params[1]);
+                        final Map<String, Object> context = (Map<String, Object>) params[2];
+
+
+                        return proxy().getDynamicContentBody(contentId, locale, context);
+
+                    }
+
+                }
+
+                return "";
+            }
+        });
     }
 
     /**
@@ -169,6 +200,23 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             return content.toString();
         }
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDynamicContentBody(final long contentId, final String locale, final Map<String, Object> context) {
+
+        final String rawContent = proxy().getContentBody(contentId, locale);
+
+        if (rawContent != null) {
+
+            return this.templateSupport.processTemplate(rawContent, locale, context);
+
+        }
+
+        return "";
     }
 
     /**

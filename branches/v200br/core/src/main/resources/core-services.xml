@@ -95,12 +95,15 @@
         </property>
     </bean>
 
+    <bean id="groovyContentServiceTemplateSupport" class="org.yes.cart.service.domain.impl.ContentServiceTemplateSupportGroovyImpl"/>
+
     <bean id="contentService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.ContentServiceImpl">
                 <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
                 <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopCategoryDao"/>
                 <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+                <constructor-arg type="org.yes.cart.service.domain.ContentServiceTemplateSupport" ref="groovyContentServiceTemplateSupport"/>
                 <lookup-method name="getSelf" bean="contentService"/>
             </bean>
         </property>

@@ -37,6 +37,7 @@ public class StandardFooter extends BaseComponent {
     protected void onBeforeRender() {
 
         addOrReplace(getWicketSupportFacade().links().newContentLink("licenseLink", "license"));
+        addOrReplace(getWicketSupportFacade().links().newContentLink("siteMapLink", "sitemap"));
         super.onBeforeRender();
     }
 }
