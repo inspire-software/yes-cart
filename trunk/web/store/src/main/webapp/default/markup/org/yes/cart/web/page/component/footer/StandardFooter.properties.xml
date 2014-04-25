@@ -30,5 +30,6 @@
 	<entry key="order.history">Order history</entry>
 	<entry key="location">Location</entry>
 	<entry key="licence.info">Licences</entry>
+	<entry key="sitemap.info">Site map</entry>
 	<entry key="cart">View cart</entry>
 </properties>

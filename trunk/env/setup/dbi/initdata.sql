@@ -260,6 +260,44 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
     See the License for the specific language governing permissions and
     limitations under the License.
 </pre>',10001,'12011_CAV');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10002, 10000, 0, 'Sitemap', 'Dynamic Content Site Map Page','dynocontent', 'Sitemap','sitemap');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12012,'CONTENT_BODY_en_1','
+<p>This page demonstrates dynamic content features</p>
+
+<p>Links:
+<ul>
+  <li><a href="${contentURL(''license'')}">License page (content link)</a></li>
+  <li><a href="${categoryURL(''netbooks'')}">Notebooks (category link)</a></li>
+  <li><a href="${URL('''')}">Home (plain link)</a></li>
+</ul>
+</p>
+
+<p>Dynamic variable: ${datetime}</p>
+
+<p>Dynamic include:</p>
+
+${include(''license'')}
+
+
+',10002,'12012_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12013,'CONTENT_BODY_ru_1','
+<p>Данная страница демонстрирует использование динамического контента</p>
+
+<p>Ссылки:
+<ul>
+  <li><a href="${contentURL(''license'')}">Страница Лицензии (ссылка на контент)</a></li>
+  <li><a href="${categoryURL(''netbooks'')}">Категория "Ноутбуки" (ссылка на категорию)</a></li>
+  <li><a href="${URL('''')}">Домашняя страничка (простая ссылка)</a></li>
+</ul>
+</p>
+
+<p>Динамическая переменная: ${datetime}</p>
+
+<p>Динамическая вставка суб-контента:</p>
+
+${include(''license'')}
+
+',10002,'12013_CAV');
 
 
 INSERT INTO TROLE (ROLE_ID, GUID, CODE, DESCRIPTION) VALUES (1, 'ROLE_SMADMIN',         'ROLE_SMADMIN', 'System admin');

@@ -30,5 +30,6 @@
 	<entry key="order.history">История заказов</entry>
 	<entry key="location">Расположение</entry>
 	<entry key="licence.info">Лицензии</entry>
-	<entry key="cart">Покупки</entry>
+    <entry key="sitemap.info">Карта сайта</entry>
+    <entry key="cart">Покупки</entry>
 </properties>

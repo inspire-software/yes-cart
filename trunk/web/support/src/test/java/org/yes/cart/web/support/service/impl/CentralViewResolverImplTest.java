@@ -20,10 +20,7 @@ import org.apache.lucene.search.Query;
 import org.junit.Test;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
-import org.yes.cart.service.domain.impl.AttributeServiceImpl;
-import org.yes.cart.service.domain.impl.CategoryServiceImpl;
-import org.yes.cart.service.domain.impl.ContentServiceImpl;
-import org.yes.cart.service.domain.impl.ProductServiceImpl;
+import org.yes.cart.service.domain.impl.*;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
@@ -64,7 +61,7 @@ public class CentralViewResolverImplTest {
                         return null;
                     }
                 },
-                new ContentServiceImpl(null, null, null) {
+                new ContentServiceImpl(null, null, null, new ContentServiceTemplateSupportGroovyImpl()) {
                     @Override
                     public String getContentTemplate(final long categoryId) {
                         if (categoryId == 888L) {

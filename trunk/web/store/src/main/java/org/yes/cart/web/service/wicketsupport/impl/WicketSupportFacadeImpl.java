@@ -16,9 +16,11 @@
 
 package org.yes.cart.web.service.wicketsupport.impl;
 
+import org.yes.cart.service.domain.ContentServiceTemplateSupport;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 
 /**
  * User: denispavlov
@@ -29,11 +31,21 @@ public class WicketSupportFacadeImpl implements WicketSupportFacade {
 
     private final LinksSupport linksSupport;
     private final PaginationSupport paginationSupport;
+    private final ContentServiceTemplateSupport templateSupport;
 
     public WicketSupportFacadeImpl(final LinksSupport linksSupport,
-                                   final PaginationSupport paginationSupport) {
+                                   final PaginationSupport paginationSupport,
+                                   final ContentServiceTemplateSupport templateSupport) {
         this.linksSupport = linksSupport;
         this.paginationSupport = paginationSupport;
+        this.templateSupport = templateSupport;
+
+        this.templateSupport.registerFunction("contentURL", new WicketUrlTemplateFunctionProviderImpl(WebParametersKeys.CONTENT_ID));
+        this.templateSupport.registerFunction("categoryURL", new WicketUrlTemplateFunctionProviderImpl(WebParametersKeys.CATEGORY_ID));
+        this.templateSupport.registerFunction("productURL", new WicketUrlTemplateFunctionProviderImpl(WebParametersKeys.PRODUCT_ID));
+        this.templateSupport.registerFunction("skuURL", new WicketUrlTemplateFunctionProviderImpl(WebParametersKeys.SKU_ID));
+        this.templateSupport.registerFunction("URL", new WicketUrlTemplateFunctionProviderImpl());
+
     }
 
     /** {@inheritDoc} */
