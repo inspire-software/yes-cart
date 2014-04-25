@@ -85,6 +85,8 @@
         import mx.controls.Alert;
 
         import mx.controls.Text;
+        import mx.graphics.codec.IImageEncoder;
+        import mx.graphics.codec.PNGEncoder;
 
         import org.yes.cart.constants.AttributeGroupNames;
         import org.yes.cart.constants.Constants;
@@ -107,6 +109,7 @@
 
 
         private var _value:String;
+        private var _valueTypeName:String;
         private var _oldValue:String;
         private var _attributeCode:String;
         private var _windowTitle:String;
@@ -124,8 +127,12 @@
         private function init():void {
             this.title = windowTitle;
 
+            initialiseValidator();
         }
 
+        private function initialiseValidator():void {
+            // No validator by default as this is a specialised editor for image values only
+        }
 
         public function get dataReadyCallbackFunction():Function {
             return _dataReadyCallbackFunction;
@@ -138,16 +145,59 @@
         private function onSaveImageClick(evt:MouseEvent):void {
             if (imageBodyHasChanges) {
                 //Save image when it really changed.
-                var encoder:JPEGEncoder = new JPEGEncoder(); //TODO: YC-152 resolve the encoder by file extension
-                var rawBytes:ByteArray = encoder.encode(bitmapData);
-                remoteImageService.addImageToRepository(value, code, rawBytes, resolveImageStorage(attributeGroup));
-
+                value = storeImageOnServer(value, code, bitmapData, resolveImageStorage(attributeGroup));
 
             } else {
                 updateImageSeoData();
             }
         }
 
+        /**
+         * Sends the image byte array to the server and returns the name for the file that was used.
+         *
+         * @param filename original filename
+         * @param attrCode attribute code
+         * @param bitmapData image data
+         * @param imgPath image path
+         *
+         * @return file name that will be associated with this image
+         */
+        private function storeImageOnServer(filename:String, attrCode:String, bitmapData:BitmapData, imgPath:String):String {
+
+            var _name:String = filename;
+            var _ext:String = 'jpg';
+            if (filename.lastIndexOf('.') > -1) {
+                var _pos:int = filename.lastIndexOf('.');
+                _name = filename.substr(0, _pos).toLowerCase();
+                _ext = filename.substr(_pos + 1).toLowerCase();
+            }
+
+            var _filename:String;
+
+            /*
+                Determine correct encoder so that image has better quality and make sure the extension is correct
+                for the image service on the server.
+             */
+            var _encoder:IImageEncoder;
+            switch(_ext) {
+                case 'png':
+                    _encoder = new PNGEncoder();
+                    _filename = _name + '.png';
+                    break;
+                case 'jpg':
+                case 'jpeg':
+                default:
+                    _encoder = new JPEGEncoder();
+                    _filename = _name + '.jpeg';
+                    break;
+            }
+
+            var _rawBytes:ByteArray = _encoder.encode(bitmapData);
+
+            remoteImageService.addImageToRepository(_filename, attrCode, _rawBytes, imgPath);
+
+            return _filename;
+        }
 
         private function updateImageSeoData():void {
 
@@ -182,7 +232,7 @@
 
         private function resolveImageStorage(attrGroupName:String):String {
             if (AttributeGroupNames.CATEGORY == attrGroupName) {
-                return Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN;
+                return Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN;
             } else if (AttributeGroupNames.BRAND == attrGroupName) {
                 return Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN;
             } else if (AttributeGroupNames.PRODUCT == attrGroupName) {
@@ -404,6 +454,14 @@
 
         public function set attributeCode(value:String):void {
             _attributeCode = value;
+        }
+
+        public function get valueTypeName():String {
+            return _valueTypeName;
+        }
+
+        public function set valueTypeName(value:String):void {
+            _valueTypeName = value;
         }
 
         private function onCreateResult(event:ResultEvent):void {

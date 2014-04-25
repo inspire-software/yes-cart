@@ -28,7 +28,7 @@
             />
     <mx:Form width="100%">
         <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
-            <mx:TextArea width="400" height="120" id="valueTextInput"/>
+            <mx:CheckBox id="valueTextInput" change="onValueChanged(event)"/>
         </mx:FormItem>
     </mx:Form>
     <mx:ControlBar width="100%" horizontalAlign="right">
@@ -44,7 +44,6 @@
 
 
     <mx:Script><![CDATA[
-        import mx.binding.utils.BindingUtils;
         import mx.managers.PopUpManager;
 
         private var _value:String;
@@ -58,9 +57,7 @@
 
         private function init():void {
 
-            BindingUtils.bindProperty(valueTextInput, "text", this, "value");
-
-            BindingUtils.bindProperty(this, "value", valueTextInput, "text");
+            valueTextInput.selected = _value == 'true';
 
             this.title = windowTitle;
 
@@ -69,7 +66,7 @@
         }
 
         private function initialiseValidator():void {
-            // No validator by default as this is a specialised editor for long text values only
+            // No validator by default as this is a specialised editor for boolean values only
         }
 
         public function getButtonSave():Button {
@@ -141,6 +138,10 @@
 
         public function set valueTypeName(value:String):void {
             _valueTypeName = value;
+        }
+
+        private function onValueChanged(event:Event):void {
+            _value = valueTextInput.selected ? 'true' : 'false';
         }
         ]]>
     </mx:Script>

@@ -58,6 +58,7 @@
         import mx.managers.PopUpManager;
 
         private var _value:String;
+        private var _valueTypeName:String;
         private var _oldValue:String;
         private var _attributeCode:String;
         private var _windowTitle:String;
@@ -78,11 +79,14 @@
 
             this.title = windowTitle;
 
-
-            //TODO: YC-153 here add RE validator
-
+            initialiseValidator();
 
         }
+
+        private function initialiseValidator():void {
+            // No validator by default as this is a specialised editor for HTML text values only
+        }
+
 
         private function bindInput(control:Object, prop:String):void {
             if (_cw1 != null) {
@@ -121,7 +125,7 @@
             if (value == null) {
                 return null;
             }
-            return value.replace(/\<TEXTFORMAT([^>]*)>/gi,"").replace(/\<\/TEXTFORMAT>/gi,"");
+            return value.replace(/\<TEXTFORMAT([^>]*)>/gi, "").replace(/\<\/TEXTFORMAT>/gi, "");
         }
 
         public function set value(value:String):void {
@@ -164,6 +168,14 @@
 
         public function set attributeCode(value:String):void {
             _attributeCode = value;
+        }
+
+        public function get valueTypeName():String {
+            return _valueTypeName;
+        }
+
+        public function set valueTypeName(value:String):void {
+            _valueTypeName = value;
         }
 
         private function onModeSelectClick(event:ItemClickEvent):void {
