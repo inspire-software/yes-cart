@@ -423,9 +423,10 @@ rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITS
     call copy %YC_HOME%/env/sampledata/demo-data/icecat/import/import-EN,RU-img.zip %YC_HOME%/demo/import-data/
     echo  done...
 
-    echo  Creating zip package...                        
-    call del /Q %YC_HOME%\yescart.zip
-    call zip -r --exclude=*.svn* %YC_HOME%\yescart.zip %YC_HOME%\demo
+    echo  Creating zip package...
+    call cd %YC_HOME%
+    call del /Q yescart.zip
+    call zip -r --exclude=*.svn* yescart.zip .\demo
     echo  done...                                        
     echo.                                                 
     echo ================================================
