@@ -28,14 +28,14 @@
             />
     <mx:Form width="100%">
         <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
-            <mx:TextInput width="400" id="valueTextInput"/>
+            <mx:TextInput width="400" id="valueTextInput" change="onInputChange(event)"/>
         </mx:FormItem>
         <mx:FormItem id="displayValFormItem" label="@Resource(bundle='AttributesManagementPanel',key='displayValue')">
             <yci18n:i18nStringField id="displayVal"/>
         </mx:FormItem>
     </mx:Form>
     <mx:ControlBar width="100%" horizontalAlign="right">
-        <mx:Button id="btnSave"
+        <mx:Button id="btnSave" enabled="{saveEnabled}"
                    width="94"
                    label="@Resource(bundle='AttributesManagementPanel',key='save')"/>
         <mx:Button id="btnCancel"
@@ -45,12 +45,17 @@
                 />
     </mx:ControlBar>
 
+    <mx:Boolean id="saveEnabled">true</mx:Boolean>
+    <mx:String id="validationRegExp">.</mx:String>
+    <mx:RegExpValidator id="validator" source="{valueTextInput}" property="text" flags="g" expression="{validationRegExp}"/>
 
     <mx:Script><![CDATA[
         import mx.binding.utils.BindingUtils;
+        import mx.events.ValidationResultEvent;
         import mx.managers.PopUpManager;
 
         private var _value:String;
+        private var _valueTypeName:String;
         private var _displayValues:Object;
         private var _oldValue:String;
         private var _attributeCode:String;
@@ -67,11 +72,47 @@
 
             this.title = windowTitle;
 
-
-            //TODO: YC-153 here add RE validator
-
+            initialiseValidator();
 
         }
+
+        private function initialiseValidator():void {
+
+            var _valType:String = _valueTypeName;
+
+            /*
+                The following types are OOTB provided in initial.sql
+
+                    String              - .
+                    URI                 - . (no validation as we may have relative urls and complex use of numbers and letters as well as parameters)
+                    URL                 - . (no validation as we may have relative urls and complex use of numbers and letters as well as parameters)
+                    Image               - handled by ImageDialog.mxml
+                    CommaSeparatedList  - handled by SimpleTextAreaDialog.mxml
+                    Float               - ^([0-9]*)\.?([0-9]+)$
+                    Integer             - ^[0-9]+$
+                    Phone               - ^[\+]?[\(\)0-9\- ]+$
+                    Boolean             - handled by SimpleBooleanDialog.mxml
+                    Date                - ^[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?$
+                    Email               - ^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$
+                    HTML                - handled by HTMLEditorDialog.mxml
+
+             */
+
+            if (_valType != null) {
+                if (_valType.indexOf('Integer') > -1) {
+                    validationRegExp = '^[0-9]+$';
+                } else if (_valType.indexOf('Float') > -1) {
+                    validationRegExp = '^([0-9]*)\.?([0-9]+)$';
+                } else if (_valType.indexOf('Phone') > -1) {
+                    validationRegExp = '^[\+]?[\(\)0-9\- ]+$';
+                } else if (_valType.indexOf('Email') > -1) {
+                    validationRegExp = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$';
+                } else if (_valType.indexOf('Date') > -1) {
+                    validationRegExp = '^[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?$';
+                }
+            }
+        }
+
 
         public function getButtonSave():Button {
             return this.btnSave;
@@ -135,6 +176,18 @@
 
         public function setInformation(value:String):void {
             infoLabel.text = value;
+        }
+
+        public function get valueTypeName():String {
+            return _valueTypeName;
+        }
+
+        public function set valueTypeName(value:String):void {
+            _valueTypeName = value;
+        }
+
+        private function onInputChange(event:Event):void {
+            saveEnabled = validator.validate().type == ValidationResultEvent.VALID;
         }
         ]]>
     </mx:Script>
