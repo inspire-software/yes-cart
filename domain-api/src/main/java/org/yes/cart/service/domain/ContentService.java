@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.Category;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -109,6 +110,18 @@ public interface ContentService extends GenericService<Category> {
      * @return body or null if none exists for this locale or if content is not available
      */
     String getContentBody(long contentId, String locale);
+
+    /**
+     * Get content body for a particular content.
+     * See CONTENT_BODY setting.
+     *
+     * @param contentId content id
+     * @param locale locale to get body for
+     * @param context runtime content passed from web module (e.g. current category, product, shopping cart etc)
+     *
+     * @return body or null if none exists for this locale or if content is not available
+     */
+    String getDynamicContentBody(long contentId, String locale, Map<String, Object> context);
 
 
     /**

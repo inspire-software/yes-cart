@@ -226,6 +226,7 @@ public class HomePage extends AbstractWebPage {
                 put(CentralViewLabel.SKU, SkuCentralView.class);
                 put(CentralViewLabel.SEARCH_LIST, ProductsCentralView.class);
                 put(CentralViewLabel.CONTENT, ContentCentralView.class);
+                put(CentralViewLabel.DYNOCONTENT, DynoContentCentralView.class);
                 put(CentralViewLabel.CATEGORY, EmptyCentralView.class);
                 put(CentralViewLabel.DEFAULT, EmptyCentralView.class);
             }};
@@ -248,7 +249,7 @@ public class HomePage extends AbstractWebPage {
 
         Class<? extends AbstractCentralView> clz = rendererPanelMap.get(rendererLabel);
         try {
-            if (categoryId != 0 && clz != ContentCentralView.class) { //check is this category allowed to open in this shop
+            if (categoryId != 0 && clz != ContentCentralView.class && clz != DynoContentCentralView.class) { //check is this category allowed to open in this shop
 
                 final Shop shop = ApplicationDirector.getCurrentShop();
                 if (!shopService.getShopCategoriesIds(shop.getShopId()).contains(categoryId)) {
