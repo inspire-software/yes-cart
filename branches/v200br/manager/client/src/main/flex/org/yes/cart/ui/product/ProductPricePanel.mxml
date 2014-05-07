@@ -322,7 +322,8 @@
             var selectedPrice:String = storeCurrencyComboBox.selectedItem as String;
             if (shopDTOImpl != null && selectedPrice != null) {
                 for each (var sku:ProductSkuDTOImpl in allProductSkus) {
-                    Debug.trace("DEBUG ProductPricePanel sku is:" + sku);
+                    Debug.trace("DEBUG ProductPricePanel sku code is:" + (sku != null ?
+                            sku.code : "null"));
                     for each (var priceCandidate:SkuPriceDTOImpl in sku.price) {
                         Debug.trace("DEBUG ProductPricePanel priceCandidate is:" + priceCandidate);
                         if (shopDTOImpl.shopId == priceCandidate.shopId
@@ -368,7 +369,8 @@
             Debug.trace("TRACE ProductPricePanel valueEditEnd ");
 
             var skuPriceDto:SkuPriceDTOImpl = DataGrid(event.target).dataProvider[event.rowIndex];
-            Debug.trace("TRACE ProductPricePanel valueEditEnd skuPriceDto = " + skuPriceDto);
+            Debug.trace("TRACE ProductPricePanel valueEditEnd skuPriceDto code = " + (skuPriceDto != null ?
+                    skuPriceDto.code : "null"));
             remoteProductSkuService.updateSkuPrice(skuPriceDto);
 
             Debug.trace("TRACE ProductPricePanel update call performed ");

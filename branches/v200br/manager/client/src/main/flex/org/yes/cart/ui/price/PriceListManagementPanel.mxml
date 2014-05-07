@@ -358,7 +358,7 @@
             Debug.trace("TRACE ProductPricePanel valueEditEnd ");
 
             var skuPriceDto:PriceListDTOImpl = DataGrid(event.target).dataProvider[event.rowIndex];
-            Debug.trace("TRACE ProductPricePanel valueEditEnd skuPriceDto = " + skuPriceDto);
+            Debug.trace("TRACE ProductPricePanel valueEditEnd skuPriceDto code = " + skuPriceDto.skuCode);
             remotePriceListService.updatePrice(skuPriceDto);
 
             Debug.trace("TRACE ProductPricePanel update call performed ");
@@ -398,7 +398,7 @@
 
             if (createPriceDialog != null) {
                 var price:PriceListDTOImpl = createPriceDialog.skuPrice;
-                Debug.trace("INFO sku price to update is " + price);
+                Debug.trace("INFO sku price id to update is " + price.skuPriceId);
                 remotePriceListService.updatePrice(price);
                 createPriceDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdatePriceSaveClick);
                 PopUpManager.removePopUp(createPriceDialog);

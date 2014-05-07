@@ -85,7 +85,8 @@
             categorySelected = this.categoryTree.selectedItem != null && !DomainUtils.isRootCategory(this.categoryTree.selectedItem);
             categoryOrRootSelected = this.categoryTree.selectedItem != null;
             categorySelectedAndChanged = categorySelected && this.categoryTree.selectedItem.changed;
-            Debug.trace("Selected category dto id is :" + this.categoryTree.selectedItem);
+            Debug.trace("Selected category dto name is :" + (this.categoryTree.selectedItem != null ?
+                    this.categoryTree.selectedItem.name : "null"));
             unbindAll();
             if (categorySelected) {
                 this.selectedCategoryDTOImpl = this.categoryTree.selectedItem as CategoryDTOImpl;

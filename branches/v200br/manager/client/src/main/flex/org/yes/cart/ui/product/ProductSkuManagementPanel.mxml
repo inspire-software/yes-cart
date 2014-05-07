@@ -94,7 +94,8 @@
             if (!skuSelected) {
                 return;
             }
-            Debug.trace("INFO ProductSkuManagementPanel selected sku is " + selectedSku);
+            Debug.trace("INFO ProductSkuManagementPanel selected sku code is " + (selectedSku != null ?
+                    selectedSku.code : "null"));
             switch (idx) {
 
                 case TAB_SUMMARY_IDX:
@@ -121,7 +122,8 @@
         }
 
         private function attrTabSelected():void {
-            Debug.trace("INFO attrs tab selected, selected productSku is " + selectedSku);
+            Debug.trace("INFO attrs tab selected, selected productSku code is " + (selectedSku != null ?
+                    selectedSku.code : "null"));
             if (skuSelected && this.selectedSku != null) {
                 skuAttributesTab.productSku = this.selectedSku;
             } else {
@@ -130,7 +132,8 @@
         }
 
         private function imageTabSelected():void {
-            Debug.trace("INFO image tab selected, selected productSku is " + selectedSku);
+            Debug.trace("INFO image tab selected, selected productSku code is " + (selectedSku != null ?
+                    selectedSku.code : "null"));
             if (skuSelected && this.selectedSku != null) {
                 skuImagesTab.productSku = this.selectedSku;
             } else {

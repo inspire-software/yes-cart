@@ -72,7 +72,8 @@
             if (categorySelected) {
                 selectedCategoryDTOImpl = categoryTree.selectedItem as CategoryDTOImpl;
             }
-            Debug.trace("Selected category dto id is :" + selectedCategoryDTOImpl);
+            Debug.trace("Selected category dto name is :" + (selectedCategoryDTOImpl != null ?
+                    selectedCategoryDTOImpl.name : "null"));
         }
 
         protected function onRpcMethodFault(event:FaultEvent):void {
