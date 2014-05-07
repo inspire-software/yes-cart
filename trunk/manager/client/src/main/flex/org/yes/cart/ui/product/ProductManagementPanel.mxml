@@ -359,7 +359,8 @@
         }
 
         private function imageTabSelected():void {
-            Debug.trace("INFO image tab selected, selected product is " + productDTOImpl);
+            Debug.trace("INFO image tab selected, selected product code is " + (productDTOImpl != null ?
+                    productDTOImpl.code : "null"));
             if (productSelected && this.productDTOImpl != null) {
                 imageTab.product = this.productDTOImpl;
             } else {
@@ -368,7 +369,8 @@
         }
 
         private function attrTabSelected():void {
-            Debug.trace("INFO attr tab selected, selected product is " + productDTOImpl);
+            Debug.trace("INFO attr tab selected, selected product code is " + (productDTOImpl != null ?
+                    productDTOImpl.code : "null"));
             if (productSelected && this.productDTOImpl != null) {
                 attrTab.product = this.productDTOImpl;
             } else {
@@ -377,7 +379,8 @@
         }
 
         private function skuTabSelected():void {
-            Debug.trace("INFO skuTabSelected, selected product is " + productDTOImpl);
+            Debug.trace("INFO skuTabSelected, selected product code is " + (productDTOImpl != null ?
+                    productDTOImpl.code : "null"));
             skuTab.removeAllChildren();
             var productSkuManagementPanel:ProductSkuManagementPanel = new ProductSkuManagementPanel();
             productSkuManagementPanel.product = productDTOImpl;
@@ -385,12 +388,14 @@
         }
 
         private function associationsTabSelected():void {
-            Debug.trace("INFO associationsTabSelected, selected product is " + productDTOImpl);
+            Debug.trace("INFO associationsTabSelected, selected product code is " + (productDTOImpl != null ?
+                    productDTOImpl.code : "null"));
             productAssociationsPanel.productId = productDTOImpl.productId;
         }
 
         private function categoriesTabSelected():void {
-            Debug.trace("INFO categoriesTabSelected, selected product is " + productDTOImpl);
+            Debug.trace("INFO categoriesTabSelected, selected product code is " + (productDTOImpl != null ?
+                    productDTOImpl.code : "null"));
             categoryTab.removeAllChildren();
             var productCategoriesPanel:ProductCategoriesPanel = new ProductCategoriesPanel();
             productCategoriesPanel.productId = productDTOImpl.productId;
@@ -399,7 +404,8 @@
         }
 
         private function priceTabSelected():void {
-            Debug.trace("INFO priceTabSelected, selected product is " + productDTOImpl);
+            Debug.trace("INFO priceTabSelected, selected product code is " + (productDTOImpl != null ?
+                    productDTOImpl.code : "null"));
             pricePanel.product = productDTOImpl;
         }
 
@@ -480,10 +486,12 @@
         private function onSummaryUpdateClick(event:DtoEvent):void {
             productDTOImpl = event.dto as ProductDTOImpl;
             if (DomainUtils.isNewPK(productDTOImpl.productId)) {
-                Debug.trace("INFO ProductManagementPanel product will be created " + productDTOImpl);
+                Debug.trace("INFO ProductManagementPanel product will be created " + (productDTOImpl != null ?
+                        productDTOImpl.code : "null"));
                 remoteProductService.create(productDTOImpl);
             } else {
-                Debug.trace("INFO ProductManagementPanel product will be updated " + productDTOImpl);
+                Debug.trace("INFO ProductManagementPanel product will be updated " + (productDTOImpl != null ?
+                        productDTOImpl.code : "null"));
                 remoteProductService.update(productDTOImpl);
             }
         }

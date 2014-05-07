@@ -62,12 +62,12 @@
             this.availableSelected = this.categoryTree.selectedItem != null &&
                     !DomainUtils.isRootCategory(this.categoryTree.selectedItem) &&
                     !isCategoryAlreadyAssigned(this.categoryTree.selectedItem);
-            Debug.trace("Selected to assing category dto id is :" + this.categoryTree.selectedItem);
+            Debug.trace("Selected to assign category dto id is :" + this.categoryTree.selectedItem.categoryId);
         }
 
         private function onCategoryToUnassignSelected(event:ListEvent):void {
             this.assignedSelected = this.assignedCategoriesList.selectedItem != null;
-            Debug.trace("Selected to unassing category dto id is :" + this.assignedCategoriesList.selectedItem);
+            Debug.trace("Selected to unassign category dto id is :" + this.assignedCategoriesList.selectedItem.categoryId);
 
         }
 
