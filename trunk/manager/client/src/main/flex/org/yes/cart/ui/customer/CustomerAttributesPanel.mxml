@@ -52,6 +52,7 @@
             _customer = value;
 
             this.attrValues.removeAll();
+            this.attrValues.refresh(); // this helps with index exception in removeAll caused by grid component sorting
             onEntitySet(AttributeGroupNames.CUSTOMER);
 
             if (_customer != null) {
@@ -78,8 +79,12 @@
         }
 
         override protected function onValueDelete(selectedItem:Object):void {
-            this.attrValues.removeItemAt(this.attrValues.getItemIndex(selectedItem));
-            remoteCustomerService.deleteAttributeValue(selectedItem.attrvalueId);
+            var pk:Number = selectedItem != null ? selectedItem.attrvalueId : 0;
+            if (!isNaN(pk) && pk > 0) {
+                remoteCustomerService.deleteAttributeValue(selectedItem.attrvalueId);
+                selectedItem.attrvalueId = Number.NaN;
+                selectedItem.val = null;
+            }
         }
 
         private function onGetEntityAttributesResult(event:ResultEvent):void {

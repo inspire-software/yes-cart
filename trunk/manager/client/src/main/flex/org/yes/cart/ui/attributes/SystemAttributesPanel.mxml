@@ -66,8 +66,12 @@
 
         override protected function onValueDelete(selectedItem:Object):void {
             /* Not supported for now
-             this.attrValues.removeItemAt(this.attrValues.getItemIndex(selectedItem));
-             remoteBrandService.deleteAttributeValue(selectedItem.attrvalueId);
+             var pk:Number = selectedItem != null ? selectedItem.attrvalueId : 0;
+             if (!isNaN(pk) && pk > 0) {
+                remoteService.deleteAttributeValue(selectedItem.attrvalueId);
+                selectedItem.attrvalueId = Number.NaN;
+                selectedItem.val = null;
+             }
              */
         }
 
