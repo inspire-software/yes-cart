@@ -204,10 +204,12 @@
         }
 
         private function onRemoveAttributeValueConfirm(event:CloseEvent):void {
-            if (canDelete && this.valueDataGrid.selectedItem != null) {
-                Debug.trace("INFO delete attribute value " + this.valueDataGrid.selectedItem.val);
-                canDelete = false;
-                onValueDelete(this.valueDataGrid.selectedItem);
+            if (event.detail == Alert.OK) {
+                if (canDelete && this.valueDataGrid.selectedItem != null) {
+                    Debug.trace("INFO delete attribute value " + this.valueDataGrid.selectedItem.val);
+                    canDelete = false;
+                    onValueDelete(this.valueDataGrid.selectedItem);
+                }
             }
         }
 
