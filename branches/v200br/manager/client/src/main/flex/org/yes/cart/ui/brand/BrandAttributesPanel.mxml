@@ -47,6 +47,7 @@
             _brand = value;
 
             this.attrValues.removeAll();
+            this.attrValues.refresh(); // this helps with index exception in removeAll caused by grid component sorting
             onEntitySet(AttributeGroupNames.BRAND);
 
             if (_brand != null) {
@@ -73,8 +74,12 @@
         }
 
         override protected function onValueDelete(selectedItem:Object):void {
-            this.attrValues.removeItemAt(this.attrValues.getItemIndex(selectedItem));
-            remoteBrandService.deleteAttributeValue(selectedItem.attrvalueId);
+            var pk:Number = selectedItem != null ? selectedItem.attrvalueId : 0;
+            if (!isNaN(pk) && pk > 0) {
+                remoteBrandService.deleteAttributeValue(selectedItem.attrvalueId);
+                selectedItem.attrvalueId = Number.NaN;
+                selectedItem.val = null;
+            }
         }
 
         /**
@@ -82,7 +87,7 @@
          * groups of attributes
          *
          * @param attr currently loaded (into this panel) attribute
-         * @return true to allow this attribute to be managed through this pannel
+         * @return true to allow this attribute to be managed through this panel
          */
         protected function allowManageAttribute(attr:AttrValueBrandDTOImpl):Boolean {
             return true; // manage all available attributes by default
