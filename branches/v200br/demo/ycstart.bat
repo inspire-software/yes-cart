@@ -38,7 +38,7 @@ echo ================================================
 echo  Starting Tomcat Server                         
 echo ================================================
 
-set JAVA_OPTS="-Xmx768m -Xms512m -XX:MaxPermSize=256m"
+set JAVA_OPTS=-Xms512m -Xmx768m -XX:MaxPermSize=256m
 start "yes-server" cmd /K startup.bat
 
 cd %RUNDIR%
