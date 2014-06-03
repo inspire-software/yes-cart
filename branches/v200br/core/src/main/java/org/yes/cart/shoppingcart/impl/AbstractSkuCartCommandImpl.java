@@ -183,4 +183,14 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
     public ProductService getProductService() {
         return productService;
     }
+
+    /**
+     * Get shop service.
+     *
+     * @return shop service
+     */
+    public ShopService getShopService() {
+        return shopService;
+    }
+
 }

@@ -89,7 +89,7 @@ public interface LinksSupport {
      * @param linkId wicket link component id
      * @param productRef product PK or SEO URI
      *
-     * @return bookmarkable content link
+     * @return bookmarkable product link
      */
     Link newProductLink(String linkId, Object productRef);
 
@@ -98,7 +98,7 @@ public interface LinksSupport {
      * @param productRef product PK or SEO URI
      * @param pageParameters current request parameters that will be filtered and carried over to new link
      *
-     * @return bookmarkable content link
+     * @return bookmarkable product link
      */
     Link newProductLink(String linkId, Object productRef, PageParameters pageParameters);
 
@@ -106,7 +106,7 @@ public interface LinksSupport {
      * @param linkId wicket link component id
      * @param productRef product PK or URI
      *
-     * @return bookmarkable content link
+     * @return bookmarkable product link
      */
     Link newProductSkuLink(String linkId, Object productRef);
 
@@ -115,7 +115,7 @@ public interface LinksSupport {
      * @param productRef product PK or URI
      * @param pageParameters current request parameters that will be filtered and carried over to new link
      *
-     * @return bookmarkable content link
+     * @return bookmarkable product link
      */
     Link newProductSkuLink(String linkId, Object productRef, PageParameters pageParameters);
 
@@ -125,16 +125,38 @@ public interface LinksSupport {
      * @param quantity quantity to add
      * @param pageParameters current request parameters that will be filtered and carried over to new link
      *
-     * @return bookmarkable content link
+     * @return bookmarkable link
      */
     Link newAddToCartLink(String linkId, String skuCode, String quantity, PageParameters pageParameters);
 
+    /**
+     * @param linkId wicket link component id
+     * @param skuCode SKU to add to cart
+     * @param quantity quantity to add
+     * @param wishList wish list type
+     * @param tags wish list tags
+     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     *
+     * @return bookmarkable link
+     */
+    Link newAddToWishListLink(String linkId, String skuCode, String quantity, String wishList, String tags, PageParameters pageParameters);
+
+    /**
+     * @param linkId wicket link component id
+     * @param skuCode SKU to add to cart
+     * @param itemId wish list item pk
+     * @param target target page
+     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     *
+     * @return bookmarkable link
+     */
+    Link newRemoveFromWishListLink(String linkId, String skuCode, Long itemId, Class<Page> target, PageParameters pageParameters);
 
     /**
      * @param linkId wicket link component id
      * @param pageParameters current request parameters that will be filtered and carried over to new link
      *
-     * @return bookmarkable content link
+     * @return bookmarkable link
      */
     Link newLogOffLink(String linkId, PageParameters pageParameters);
 
@@ -144,7 +166,7 @@ public interface LinksSupport {
      * @param pageParameters current request parameters that will be filtered and carried over to new link
      * @param pageClass optional current page class
      *
-     * @return bookmarkable content link
+     * @return bookmarkable link
      */
     Link newChangeLocaleLink(String linkId, String language, final Class<? extends Page> pageClass,  PageParameters pageParameters);
 
@@ -153,7 +175,7 @@ public interface LinksSupport {
      * @param currency currency to change to
      * @param pageParameters current request parameters that will be filtered and carried over to new link
      * @param pageClass optional current page class
-     * @return bookmarkable content link
+     * @return bookmarkable link
      */
     Link newChangeCurrencyLink(String linkId, String currency, final Class<? extends Page> pageClass, PageParameters pageParameters);
 

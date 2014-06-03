@@ -139,43 +139,70 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
         }
 
 
-        add(
-                new ListView<ProductSearchResultDTO>(PRODUCT_LIST, getProductListToShow()) {
-                    protected void populateItem(ListItem<ProductSearchResultDTO> listItem) {
+        addOrReplace(
+                new ListView<ProductSearchResultDTO>(PRODUCT_LIST, getProductListToShow())
+                {
+                    protected void populateItem(ListItem<ProductSearchResultDTO> listItem)
+                    {
 
-                        final ProductSearchResultDTO prod = listItem.getModelObject();
-
-                        final String[] size = getThumbnailImageSize(category);
-
-                        final String width = size[0];
-                        final String height = size[1];
-
-                        final LinksSupport links = getWicketSupportFacade().links();
-
-                        final String prodName = prod.getName(selectedLocale);
-
-                        listItem.add(
-                                links.newProductLink(PRODUCT_LINK_IMAGE, prod.getId(), getPage().getPageParameters())
-                                .add(
-                                        new ContextImage(PRODUCT_IMAGE, getDefaultImage(prod, width, height))
-                                                .add(new AttributeModifier(HTML_WIDTH, width))
-                                                .add(new AttributeModifier(HTML_HEIGHT, height))
-                                                .add(new AttributeModifier(HTML_TITLE, prodName))
-                                                .add(new AttributeModifier(HTML_ALT, prodName))
-                                )
-                        );
-                        listItem.add(
-                                links.newProductLink(PRODUCT_NAME_LINK, prod.getId(), getPage().getPageParameters())
-                                        .add(new Label(NAME, prodName).setEscapeModelStrings(false))
-                                        .setVisible(nameLinkVisible)
-                        );
+                        onBeforeRenderPopulateListItem(listItem, selectedLocale, category);
                     }
+
 
                 }
         );
 
+        onBeforeRenderSetVisibility();
+
         super.onBeforeRender();
     }
+
+    /**
+     * Extension hook to set visibility flag of this component.
+     */
+    protected void onBeforeRenderSetVisibility() {
+
+        setVisible(!getProductListToShow().isEmpty());
+
+    }
+
+    /**
+     * Extension hook for list item data population.
+     *
+     * @param listItem list item
+     * @param selectedLocale locale
+     * @param category current category
+     */
+    protected void onBeforeRenderPopulateListItem(final ListItem<ProductSearchResultDTO> listItem, final String selectedLocale, final Category category)
+    {
+        final ProductSearchResultDTO prod = listItem.getModelObject();
+
+        final String[] size = getThumbnailImageSize(category);
+
+        final String width = size[0];
+        final String height = size[1];
+
+        final LinksSupport links = getWicketSupportFacade().links();
+
+        final String prodName = prod.getName(selectedLocale);
+
+        listItem.add(
+                links.newProductLink(PRODUCT_LINK_IMAGE, prod.getId(), getPage().getPageParameters())
+                        .add(
+                                new ContextImage(PRODUCT_IMAGE, getDefaultImage(prod, width, height))
+                                        .add(new AttributeModifier(HTML_WIDTH, width))
+                                        .add(new AttributeModifier(HTML_HEIGHT, height))
+                                        .add(new AttributeModifier(HTML_TITLE, prodName))
+                                        .add(new AttributeModifier(HTML_ALT, prodName))
+                        )
+        );
+        listItem.add(
+                links.newProductLink(PRODUCT_NAME_LINK, prod.getId(), getPage().getPageParameters())
+                        .add(new Label(NAME, prodName).setEscapeModelStrings(false))
+                        .setVisible(nameLinkVisible)
+        );
+    }
+
 
     /**
      * {@inheritDoc}
@@ -210,15 +237,5 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
                 thumbnailSize
         );
     }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isVisible() {
-        return super.isVisible() && !getProductListToShow().isEmpty();
-    }
-
 
 }

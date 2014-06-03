@@ -17,18 +17,22 @@
 package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.CustomerWishListService;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -41,13 +45,16 @@ import java.util.Map;
 public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
     private final CustomerService customerService;
+    private final CustomerWishListService customerWishListService;
     private final AttributeService attributeService;
     private final PassPhrazeGenerator phrazeGenerator;
 
     public CustomerServiceFacadeImpl(final CustomerService customerService,
+                                     final CustomerWishListService customerWishListService,
                                      final AttributeService attributeService,
                                      final PassPhrazeGenerator phrazeGenerator) {
         this.customerService = customerService;
+        this.customerWishListService = customerWishListService;
         this.attributeService = attributeService;
         this.phrazeGenerator = phrazeGenerator;
     }
@@ -60,6 +67,42 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     /** {@inheritDoc} */
     public Customer getCustomerByEmail(final String email) {
         return customerService.getCustomerByEmail(email);
+    }
+
+    /** {@inheritDoc} */
+    public List<CustomerWishList> getCustomerWishListByEmail(final String email, final String type, final String... tags) {
+
+        final List<CustomerWishList> allItems = customerWishListService.getWishListByCustomerEmail(email);
+
+        final List<CustomerWishList> filtered = new ArrayList<CustomerWishList>();
+        for (final CustomerWishList item : allItems) {
+
+            if (type != null && !type.equals(item.getWlType())) {
+                continue;
+            }
+
+            if (tags != null && tags.length > 0) {
+                final String itemTagStr = item.getTag();
+                if (StringUtils.isNotBlank(itemTagStr)) {
+                    boolean noTag = true;
+                    final List<String> itemTags = Arrays.asList(StringUtils.split(itemTagStr, ' '));
+                    for (final String tag : tags) {
+                        if (itemTags.contains(tag)) {
+                            noTag = false;
+                            break;
+                        }
+                    }
+                    if (noTag) {
+                        continue;
+                    }
+                }
+            }
+
+            filtered.add(item);
+
+        }
+
+        return filtered;
     }
 
     /** {@inheritDoc} */

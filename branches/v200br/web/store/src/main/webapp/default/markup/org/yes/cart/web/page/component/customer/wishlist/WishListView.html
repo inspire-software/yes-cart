@@ -1,0 +1,53 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+    <div class="grid-50 mobile-grid-50">
+        <p>
+            <a name="wishlist" class="middle-title"><wicket:message key="wishlist.items">[Wish List]</wicket:message></a>
+            <hr/>
+        </p>
+    </div>
+    <div class="grid-100 mobile-grid-100">
+        <div wicket:id="products" class="grid-25 mobile-grid-50">
+            <p align="center" style="height: 85px; overflow:hidden">
+                <a wicket:id="productLinkImage"   class="image-border">
+                    <img wicket:id="productDefaultImage"/>
+                </a>
+            </p>
+            <p align="center" style="height: 40px; overflow:hidden">
+                <a wicket:id="productLinkName">
+                    <span wicket:id="name"/>
+                </a>
+            </p>
+            <p align="center" style="min-height: 40px;">
+                <a wicket:id="addToCardFromWishListLink" class="button big orange">
+                    <span wicket:id="addToCardFromWishListLinkLabel"/>
+                </a>
+            </p>
+            <p align="center" style="min-height: 40px;">
+                <a wicket:id="removeFromWishListLink" class="button gray">
+                    <span wicket:id="removeFromWishListLinkLabel"/>
+                </a>
+            </p>
+        </div>
+    </div>
+    <div wicket:id="noProducts" class="grid-70 mobile-grid-100">[no products]</div>
+</wicket:panel>
+</body>
+</html>

@@ -18,6 +18,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 	<entry key="add.to.cart">В корзину</entry>
+    <entry key="add.to.wishlist">В пожелания</entry>
     <entry key="preorder.cart">Резерв</entry>
     <entry key="sku.code">Код</entry>
     <entry key="description">Описание</entry>

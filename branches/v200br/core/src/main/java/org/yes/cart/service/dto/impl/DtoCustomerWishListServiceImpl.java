@@ -71,6 +71,6 @@ public class DtoCustomerWishListServiceImpl
     /** {@inheritDoc} */
     public List<CustomerWishListDTO> getByCustomerId(final long customerId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return getDTOs(((CustomerWishListService)service).getByCustomerId(customerId));
+        return getDTOs(((CustomerWishListService)service).findWishListByCustomerId(customerId));
     }
 }

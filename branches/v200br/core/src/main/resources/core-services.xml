@@ -1110,6 +1110,23 @@
                 <bean id="setPgLabelCmd" class="org.yes.cart.shoppingcart.impl.SetPaymentGatewayLabelCommandImpl"/>
 
 
+                <bean id="addToWishListCmd" class="org.yes.cart.shoppingcart.impl.AddSkuToWishListEventCommandImpl">
+                    <constructor-arg index="0" ref="priceService"/>
+                    <constructor-arg index="1" ref="productService"/>
+                    <constructor-arg index="2" ref="shopService"/>
+                    <constructor-arg index="3" ref="customerService"/>
+                    <constructor-arg index="4" ref="customerWishListService"/>
+                </bean>
+
+                <bean id="removeFromWishListCmd" class="org.yes.cart.shoppingcart.impl.RemoveSkuFromWishListEventCommandImpl">
+                    <constructor-arg index="0" ref="priceService"/>
+                    <constructor-arg index="1" ref="productService"/>
+                    <constructor-arg index="2" ref="shopService"/>
+                    <constructor-arg index="3" ref="customerService"/>
+                    <constructor-arg index="4" ref="customerWishListService"/>
+                </bean>
+
+
                 <bean id="addToCartCmd" class="org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl">
                     <constructor-arg index="0" ref="priceService"/>
                     <constructor-arg index="1" ref="productService"/>

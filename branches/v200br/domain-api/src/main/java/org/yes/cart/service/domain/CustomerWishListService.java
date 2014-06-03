@@ -28,12 +28,20 @@ import java.util.List;
 public interface CustomerWishListService extends GenericService<CustomerWishList> {
 
     /**
-     * Get customer credit cards.
+     * Get customer wish list items.
      *
      * @param customerId customer id
-     * @return list of cards.
+     * @return wish list.
      */
-    List<CustomerWishList> getByCustomerId(long customerId);
+    List<CustomerWishList> findWishListByCustomerId(long customerId);
+
+    /**
+     * Get customer wish list items.
+     *
+     * @param email customer email
+     * @return wish list
+     */
+    List<CustomerWishList> getWishListByCustomerEmail(String email);
 
 
 }

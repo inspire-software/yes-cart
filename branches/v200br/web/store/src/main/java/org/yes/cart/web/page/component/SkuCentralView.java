@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -25,13 +26,23 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.util.StringUtils;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.*;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.domain.entity.Association;
+import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductAvailabilityModel;
+import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.domain.entity.Seoable;
+import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductAssociationService;
+import org.yes.cart.service.domain.ProductAvailabilityStrategy;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.price.PriceTierView;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.page.component.product.ImageView;
@@ -74,9 +85,21 @@ public class SkuCentralView extends AbstractCentralView {
      */
     private final static String ADD_TO_CART_LINK = "addToCartLink";
     /**
+     * Add single item to wish list
+     */
+    private final static String ADD_TO_WISHLIST_LINK = "addToWishListLink";
+    /**
+     * Add single item to wish list
+     */
+    private final static String LOGIN_LINK = "addToWishListLink";
+    /**
      * Add single item to cart label
      */
     private final static String ADD_TO_CART_LINK_LABEL = "addToCartLinkLabel";
+    /**
+     * Add single item to cart label
+     */
+    private final static String ADD_TO_WISHLIST_LINK_LABEL = "addToWishListLinkLabel";
 
     /**
      * Product sku code
@@ -184,7 +207,7 @@ public class SkuCentralView extends AbstractCentralView {
                 sku = productService.getSkuById(skuPK);
                 product = productService.getProductById(sku.getProduct().getProductId(), true);
             } catch (Exception exp) {
-                throw new RestartResponseException(HomePage.class);
+                throw new RestartResponseException(Application.get().getHomePage());
             }
         } else if (productId != null) {
             isProduct = true;
@@ -194,7 +217,7 @@ public class SkuCentralView extends AbstractCentralView {
                 final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), product);
                 sku = getDefault(product, pam);
             } catch (Exception exp) {
-                throw new RestartResponseException(HomePage.class);
+                throw new RestartResponseException(Application.get().getHomePage());
             }
         } else {
             throw new RuntimeException("Product or Sku id expected");
@@ -241,9 +264,17 @@ public class SkuCentralView extends AbstractCentralView {
                                 getLocalizer().getString("add.to.cart", this) :
                                 getLocalizer().getString("preorder.cart", this)))
                         .setVisible(pam.isAvailable())
-        ).add(
+        );
+
+        add(
+                getWicketSupportFacade().links().newAddToWishListLink(ADD_TO_WISHLIST_LINK, sku.getCode(), null, null, null, getPage().getPageParameters())
+                        .add(new Label(ADD_TO_WISHLIST_LINK_LABEL, getLocalizer().getString("add.to.wishlist", this)))
+        );
+
+        add(
                 new SkuAttributesView(SKU_ATTR_VIEW, sku, isProduct)
-        ).add(
+        );
+        add(
                 new ImageView(PRODUCT_IMAGE_VIEW, decorator)
         );
 
