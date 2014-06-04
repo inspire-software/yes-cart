@@ -16,10 +16,11 @@
 
 package org.yes.cart.domain.entity;
 
+import java.math.BigDecimal;
+
 /**
- * TODO: V2 nice to have scheduler, that perform old wish list items clean up
  * <p/>
- * Shopper wish list item. Also reponsible to notification sheduling.
+ * Shopper wish list item. Also responsible to notification scheduling.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -34,6 +35,11 @@ public interface CustomerWishList extends Auditable {
     String REMIND_WHEN_PRICE_CHANGED = "P";
 
     String REMIND_WHEN_WILL_BE_IN_PROMO = "R";
+
+
+    String PRIVATE = "P";
+
+    String SHARED = "S";
 
     /**
      * Primary key value.
@@ -78,19 +84,77 @@ public interface CustomerWishList extends Auditable {
     void setCustomer(Customer customer);
 
     /**
-     * Get type of wsih list item.
+     * Get type of wish list item.
      *
-     * @return type of wsih list item
+     * @return type of wish list item
      */
     String getWlType();
 
     /**
-     * Set type of wsih list item
+     * Set type of wish list item
      *
-     * @param wlType type of wsih list item to set.
+     * @param wlType type of wish list item to set.
      */
     void setWlType(final String wlType);
 
+    /**
+     * Defines visibility for this item. (i.e. can other customer view it?)
+     *
+     * @return visibility type
+     */
+    String getVisibility();
+
+    /**
+     * Defines visibility for this item. (i.e. can other customer view it?)
+     *
+     * @param  visibility type
+     */
+    void setVisibility(String visibility);
+
+    /**
+     * Get the space separated product tags. For example
+     * wedding, alwayswanted etc.
+     *
+     * This tags should be used to separate items into wish list groups.
+     *
+     * @return space separated items tags
+     */
+    String getTag();
+
+    /**
+     * Set space separated product tags.
+     *
+     * @param tag space separated product tags.
+     */
+    void setTag(String tag);
+
+    /**
+     * Quantity in wish list.
+     *
+     * @return quantity of sku
+     */
+    BigDecimal getQuantity();
+
+    /**
+     * Quantity in wish list.
+     *
+     * @param quantity quantity of sku
+     */
+    void setQuantity(BigDecimal quantity);
+
+    /**
+     * Price for this item when it was added to the wish list.
+     *
+     * @return price of sku
+     */
+    BigDecimal getRegularPriceWhenAdded();
+
+    /**
+     * Price for this item when it was added to the wish list.
+     *
+     * @param listPriceWhenAdded price of sku
+     */
+    void setRegularPriceWhenAdded(BigDecimal listPriceWhenAdded);
 
 }
 

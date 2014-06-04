@@ -17,12 +17,9 @@
 
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-	<entry key="shopping">Вернуться в магазин</entry>
-	<entry key="selfCare">Персональная страница</entry>
-    <entry key="customerSummary">Основная информация</entry>
-    <entry key="customerAdditional">Дополнительная информация</entry>
-    <entry key="orderInfo">Покупки</entry>
-    <entry key="password">Пароль</entry>
-    <entry key="wishlist">Список пожеланий</entry>
-    <entry key="addresses">Адресная книга</entry>
+    <entry key="wishlist.items">Список пожеланий</entry>
+    <entry key="wishlist.no.items">Список пожеланий пуст. Вы можете его пополнить нажав кнопку "В пожелания" на страницах товаров.</entry>
+    <entry key="add.to.cart">В корзину (${0})</entry>
+    <entry key="preorder.cart">Заказать (${0})</entry>
+    <entry key="remove.from.wishlist">Убрать из списка</entry>
 </properties>

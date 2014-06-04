@@ -35,6 +35,11 @@
                         <entry key="default" value="org.yes.cart.web.page.LoginPage"/>
                     </map>
                 </entry>
+                <entry key="/wishlistadd">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.component.customer.wishlist.WishListItemAddPage"/>
+                    </map>
+                </entry>
                 <entry key="/cart">
                     <map>
                         <entry key="default" value="org.yes.cart.web.page.ShoppingCartPage"/>
@@ -146,12 +151,14 @@
         <property name="cmdKeys">
             <list>
                 <value>addToCartCmd</value>
+                <value>addToWishListCmd</value>
                 <value>changeCurrencyCmd</value>
                 <value>changeLocaleCmd</value>
                 <value>cleanCartCmd</value>
                 <value>expireCartCmd</value>
                 <value>loginCmd</value>
                 <value>logoutCmd</value>
+                <value>removeFromWishListCmd</value>
                 <value>removeAllSkuCmd</value>
                 <value>removeOneSkuCmd</value>
                 <value>setBillingAddressSeparateCmd</value>

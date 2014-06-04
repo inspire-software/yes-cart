@@ -17,7 +17,7 @@
 
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-    <entry key="profile">Личный кабинет</entry>
+    <entry key="profile">Личный кабинет / Список пожеланий</entry>
     <entry key="faq">ЧАВО</entry>
     <entry key="contacts">Контакты</entry>
     <entry key="site.map">Карта сайта</entry>

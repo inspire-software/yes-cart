@@ -1813,6 +1813,30 @@
             </column>
         </property>
 
+        <property name="visibility" type="string" length="1">
+            <column name="VISIBILITY" default="'P'" length="1">
+                <comment>P-private, S-shared</comment>
+            </column>
+        </property>
+
+        <property name="tag" type="string" length="255">
+            <column name="TAG">
+                <comment>
+                    Set of space separated promotion tags
+                </comment>
+            </column>
+        </property>
+
+        <property name="quantity" type="java.math.BigDecimal" not-null="true">
+            <column name="QTY" not-null="true">
+                <comment>Quantity of SKU.</comment>
+            </column>
+        </property>
+        <property name="regularPriceWhenAdded" type="java.math.BigDecimal" not-null="true">
+            <column name="REGULAR_PRICE_WHEN_ADDED" not-null="true">
+                <comment>Regular price when this item was added</comment>
+            </column>
+        </property>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -2917,8 +2941,15 @@
 
     <query name="WISHLIST.BY.CUSTOMER">
         <![CDATA[
-            select a from CustomerWishListEntity a
-                where a.customer.customerId = ?1
+            select w from CustomerWishListEntity w
+                where w.customer.customerId = ?1
+        ]]>
+    </query>
+
+    <query name="WISHLIST.BY.CUSTOMER.EMAIL">
+        <![CDATA[
+            select w from CustomerWishListEntity w
+                where w.customer.email = ?1
         ]]>
     </query>
 

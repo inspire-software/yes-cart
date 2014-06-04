@@ -32,6 +32,7 @@ import org.yes.cart.web.page.component.customer.dynaform.DynaFormPanel;
 import org.yes.cart.web.page.component.customer.order.CustomerOrderPanel;
 import org.yes.cart.web.page.component.customer.password.PasswordPanel;
 import org.yes.cart.web.page.component.customer.summary.SummaryPanel;
+import org.yes.cart.web.page.component.customer.wishlist.WishListView;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
@@ -57,6 +58,7 @@ public class CustomerSelfCarePage extends AbstractWebPage {
     private final static String SHIPPING_ADDR_PANEL = "shippingAddressesView";
     private final static String BILLING_ADDR_PANEL = "billingAddressesView";
     private final static String ORDERS_PANEL = "ordersView";
+    private final static String WISHLIST_PANEL = "wishlistView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
@@ -74,34 +76,24 @@ public class CustomerSelfCarePage extends AbstractWebPage {
         final String email = ApplicationDirector.getShoppingCart().getCustomerEmail();
         final Customer customer;
         if (StringUtils.hasLength(email)) {
-            customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getShoppingCart().getCustomerEmail());
+            customer = customerServiceFacade.getCustomerByEmail(email);
         } else {
             customer = null;
         }
 
         final Model<Customer> customerModel = new Model<Customer>(customer);
 
-        add(
-                new FeedbackPanel(FEEDBACK)
-        ).add(
-                new PasswordPanel(PASSWORD_PANEL, customerModel)
-        ).add(
-                new ManageAddressesView(SHIPPING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_SHIPING, false)
-        ).add(
-                new ManageAddressesView(BILLING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_BILLING, false)
-        ).add(
-                new DynaFormPanel(ATTR_PANEL, customerModel)
-        ).add(
-                new SummaryPanel(SUMMARY_PANEL, customerModel)
-        ).add(
-                new CustomerOrderPanel(ORDERS_PANEL, customerModel)
-        ).add(
-                new StandardFooter(FOOTER)
-        ).add(
-                new StandardHeader(HEADER)
-        ).add(
-                new ServerSideJs("serverSideJs")
-        );
+        add(new FeedbackPanel(FEEDBACK));
+        add(new PasswordPanel(PASSWORD_PANEL, customerModel));
+        add(new ManageAddressesView(SHIPPING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_SHIPING, false));
+        add(new ManageAddressesView(BILLING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_BILLING, false));
+        add(new DynaFormPanel(ATTR_PANEL, customerModel));
+        add(new SummaryPanel(SUMMARY_PANEL, customerModel));
+        add(new CustomerOrderPanel(ORDERS_PANEL, customerModel));
+        add(new WishListView(WISHLIST_PANEL).setVisible(customer != null));
+        add(new StandardFooter(FOOTER));
+        add(new StandardHeader(HEADER));
+        add(new ServerSideJs("serverSideJs"));
 
     }
 

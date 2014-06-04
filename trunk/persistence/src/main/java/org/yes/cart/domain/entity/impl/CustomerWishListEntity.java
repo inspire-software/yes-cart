@@ -20,6 +20,7 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.ProductSku;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -35,6 +36,11 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     private ProductSku skus;
     private Customer customer;
     private String wlType;
+    private String visibility;
+    private String tag;
+    private BigDecimal quantity;
+    private BigDecimal regularPriceWhenAdded;
+
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -67,6 +73,38 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
 
     public void setWlType(String wlType) {
         this.wlType = wlType;
+    }
+
+    public String getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(final String visibility) {
+        this.visibility = visibility;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(final String tag) {
+        this.tag = tag;
+    }
+
+    public BigDecimal getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(final BigDecimal quantity) {
+        this.quantity = quantity;
+    }
+
+    public BigDecimal getRegularPriceWhenAdded() {
+        return regularPriceWhenAdded;
+    }
+
+    public void setRegularPriceWhenAdded(final BigDecimal regularPriceWhenAdded) {
+        this.regularPriceWhenAdded = regularPriceWhenAdded;
     }
 
     public Date getCreatedTimestamp() {

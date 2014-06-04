@@ -18,6 +18,7 @@ package org.yes.cart.web.application;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.wicket.IRequestCycleProvider;
+import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
@@ -36,7 +37,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.theme.WicketPagesMounter;
 import org.yes.cart.web.theme.WicketResourceMounter;
 
@@ -91,7 +91,7 @@ public class StorefrontApplication
     /**
      * @see org.apache.wicket.Application#getHomePage()
      */
-    public Class<HomePage> getHomePage() {
+    public Class<Page> getHomePage() {
         return homePageProvider.get();
     }
 
