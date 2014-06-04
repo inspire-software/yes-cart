@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.web.page.component.customer.wishlist.WishListItemAddPage;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
@@ -110,6 +111,32 @@ public class LinksSupportImpl implements LinksSupport {
     /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
+    public Link newAddToWishListLink(final String linkId, final String skuCode, final String quantity, final String wishList, final String tags, final PageParameters pageParameters) {
+        final PageParameters params = getFilteredCurrentParameters(pageParameters);
+        params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST, skuCode);
+        params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_QTY, quantity != null ? quantity : "1");
+        params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TYPE, wishList != null ? wishList : "W");
+        if (tags != null) {
+            params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TAGS, tags);
+        } else {
+            params.remove(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TAGS);
+        }
+        return new BookmarkablePageLink(linkId, WishListItemAddPage.class, params);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @SuppressWarnings("unchecked")
+    public Link newRemoveFromWishListLink(final String linkId, final String skuCode, final Long itemId, final Class<Page> target, final PageParameters pageParameters) {
+        final PageParameters params = getFilteredCurrentParameters(pageParameters);
+        params.set(ShoppingCartCommand.CMD_REMOVEFROMWISHLIST, skuCode);
+        params.set(ShoppingCartCommand.CMD_REMOVEFROMWISHLIST_P_ID, itemId);
+        return new BookmarkablePageLink(linkId, target, params);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @SuppressWarnings("unchecked")
     public Link newLogOffLink(final String linkId, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
@@ -144,6 +171,7 @@ public class LinksSupportImpl implements LinksSupport {
     private Class<Page> getHomePage() {
         return (Class<Page>) Application.get().getHomePage();
     }
+
 
     /*
      * Generate bookmarkable link for current shop home page. This covers all pa

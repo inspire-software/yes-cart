@@ -287,6 +287,11 @@
 
 
 
+    <cache name="customerWishListService-wishListByCustomerEmail"   maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+
     <cache name="shopService-shopByCode"      maxElementsInMemory="10" overflowToDisk="false"
            eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 

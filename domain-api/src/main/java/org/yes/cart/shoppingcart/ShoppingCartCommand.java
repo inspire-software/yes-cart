@@ -29,6 +29,13 @@ import java.util.Map;
  */
 public interface ShoppingCartCommand extends Serializable {
 
+    String CMD_ADDTOWISHLIST = "addToWishListCmd";
+    String CMD_ADDTOWISHLIST_P_TYPE = "type";
+    String CMD_ADDTOWISHLIST_P_TAGS = "tags";
+    String CMD_ADDTOWISHLIST_P_QTY = "qty";
+    String CMD_REMOVEFROMWISHLIST = "removeFromWishListCmd";
+    String CMD_REMOVEFROMWISHLIST_P_ID = "i";
+
     String CMD_ADDTOCART = "addToCartCmd";
     String CMD_ADDTOCART_P_QTY = "qty";
     String CMD_REMOVEALLSKU = "removeAllSkuCmd";

@@ -95,8 +95,9 @@
 
     <bean id="customerServiceFacade" class="org.yes.cart.web.support.service.impl.CustomerServiceFacadeImpl">
         <constructor-arg index="0" ref="customerService"/>
-        <constructor-arg index="1" ref="attributeService"/>
-        <constructor-arg index="2" ref="passPhraseGenerator"/>
+        <constructor-arg index="1" ref="customerWishListService"/>
+        <constructor-arg index="2" ref="attributeService"/>
+        <constructor-arg index="3" ref="passPhraseGenerator"/>
 
     </bean>
 

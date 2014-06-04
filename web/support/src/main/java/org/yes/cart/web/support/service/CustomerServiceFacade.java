@@ -18,6 +18,7 @@ package org.yes.cart.web.support.service;
 
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.Shop;
 
 import java.util.List;
@@ -60,6 +61,17 @@ public interface CustomerServiceFacade {
      * @return customer object or null
      */
     Customer getCustomerByEmail(String email);
+
+    /**
+     * Find customer wish list by email.
+     *
+     * @param email customer email
+     * @param type wish list items type (optional)
+     * @param tags tags (optional)
+     *
+     * @return wish list for customer that contains items of specified type with specified tags
+     */
+    List<CustomerWishList> getCustomerWishListByEmail(String email, String type, String ... tags);
 
     /**
      * Reset password to given user and send generated password via email.

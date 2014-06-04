@@ -17,11 +17,11 @@
 package org.yes.cart.web.page.component.product;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class ProductAssociationsView extends AbstractProductSearchResultList {
             }
             return productId;
         } catch (Exception exp) {
-            throw new RestartResponseException(HomePage.class);
+            throw new RestartResponseException(Application.get().getHomePage());
         }
     }
 

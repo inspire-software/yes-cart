@@ -28,6 +28,7 @@ import org.yes.cart.service.domain.CustomerWishListService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -70,8 +71,11 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
         customerWishList.setCustomer(customer);
         customerWishList.setSkus(skus.iterator().next());
         customerWishList.setWlType(CustomerWishList.REMIND_WHEN_PRICE_CHANGED);
+        customerWishList.setVisibility(CustomerWishList.PRIVATE);
+        customerWishList.setQuantity(BigDecimal.ONE);
+        customerWishList.setRegularPriceWhenAdded(BigDecimal.ZERO);
         service.create(customerWishList);
-        List<CustomerWishList> list = service.getByCustomerId(customer.getCustomerId());
+        List<CustomerWishList> list = service.findWishListByCustomerId(customer.getCustomerId());
         assertEquals(1, list.size());
     }
 }
