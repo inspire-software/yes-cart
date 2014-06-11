@@ -41,6 +41,7 @@
         private var TAB_SUMMARY_IDX:int = 0;
         private var TAB_CONDITION_IDX:int = 1;
         private var TAB_TAGS_IDX:int = 2;
+        private var TAB_COUPONS_IDX:int = 3;
 
 
         [Bindable]
@@ -52,7 +53,7 @@
                 { data:'O', label:resourceManager.getString('PromotionManagementPanel', 'promoTypeO') },
                 { data:'S', label:resourceManager.getString('PromotionManagementPanel', 'promoTypeS') },
                 { data:'I', label:resourceManager.getString('PromotionManagementPanel', 'promoTypeI') },
-                { data:'C', label:resourceManager.getString('PromotionManagementPanel', 'promoTypeC') }
+                { data:'C', label:resourceManager.getString('PromotionManagementPanel', 'promoTypeC') },
             ];
             actionFilterValue.dataProvider = [
                 { data:null, label:'' },
@@ -64,7 +65,7 @@
             enabledFilterValue.dataProvider = [
                 { data:null, label:'' },
                 { data:true, label:'+' },
-                { data:true, label:'-' }
+                { data:false, label:'-' }
             ];
         }
 
@@ -78,27 +79,28 @@
 
         private function initTabs(tabIdx:int):void {
             if (promotionSelected) {
-                Debug.trace("INFO promtoionTabNavigator.selectedIndex is :" + tabIdx);
+                Debug.trace("INFO promotionTabNavigator.selectedIndex is :" + tabIdx);
+
+                promotionSummary.label = promotionDTOImpl.code;
+
                 switch (tabIdx) {
 
 
                     case TAB_SUMMARY_IDX:
-                    {
                         summaryTabSelected();
                         break;
-                    }
 
                     case TAB_CONDITION_IDX:
-                    {
                         conditionTabSelected();
                         break;
-                    }
 
                     case TAB_TAGS_IDX:
-                    {
                         tagsTabSelected();
                         break;
-                    }
+
+                    case TAB_COUPONS_IDX:
+                        couponsTabSelected();
+                        break;
 
 
                 }
@@ -127,6 +129,11 @@
         private function tagsTabSelected():void {
             Debug.trace("INFO Promotion tags tab selected for promotion id" + promotionDTOImpl.promotionId);
             promotionTags.promotion = promotionDTOImpl;
+        }
+
+        private function couponsTabSelected():void {
+            Debug.trace("INFO Promotion coupons tab selected for promotion id" + promotionDTOImpl.promotionId);
+            promotionCoupons.promotion = promotionDTOImpl;
         }
 
         private function onApplyFilterClick(event:MouseEvent):void {
@@ -339,6 +346,7 @@
             <promo:PromotionSummaryPanel id="promotionSummary" updateCallback="onPromotionUpdate"/>
             <promo:PromotionRulePanel id="promotionRule" updateCallback="onPromotionUpdate"/>
             <promo:PromotionTagsPanel id="promotionTags" updateCallback="onPromotionUpdate"/>
+            <promo:PromotionCouponsPanel id="promotionCoupons"/>
 
         </mx:TabNavigator>
 

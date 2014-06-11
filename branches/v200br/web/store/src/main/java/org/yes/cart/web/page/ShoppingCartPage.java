@@ -22,11 +22,14 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.*;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartView;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
+
+import java.io.Serializable;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -55,6 +58,18 @@ public class ShoppingCartPage extends AbstractWebPage {
     protected void onBeforeRender() {
 
         executeHttpPostedCommands();
+
+        final PageParameters params = getPageParameters();
+        final StringValue checkoutError = params.get("e");
+        if (!checkoutError.isEmpty()) {
+
+           if ("ec".equals(checkoutError.toString())) {
+                warn(getLocalizer().getString("order.error.coupon.invalid", this, new Model<Object[]>(new Object[] { params.get("ec").toString() })));
+           } else {
+                error(getLocalizer().getString("order.error.general", this));
+           }
+
+        }
 
         addOrReplace(
                 new FeedbackPanel(FEEDBACK)

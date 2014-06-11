@@ -16,20 +16,20 @@
 
 package org.yes.cart.service.order.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.ProductSkuService;
-import org.yes.cart.service.order.OrderAssembler;
-import org.yes.cart.service.order.OrderNumberGenerator;
+import org.yes.cart.service.domain.PromotionCouponService;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
-import java.text.MessageFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -41,32 +41,35 @@ public class OrderAssemblerImpl implements OrderAssembler {
     private final OrderNumberGenerator orderNumberGenerator;
     private final GenericDAO<Customer, Long> customerDao;
     private final EntityFactory entityFactory;
-    private final GenericDAO<Shop, Long> shopDao;
+    private final ShopService shopService;
     private final ProductSkuService productSkuService;
-    private final String addressFormat;
+    private final OrderAddressFormatter addressFormatter;
+    private final PromotionCouponService promotionCouponService;
 
     /**
      * Create order assembler.
      *
      * @param orderNumberGenerator order number generator
      * @param customerDao          customer dao to get customer from email
-     * @param shopDao              shop dao
+     * @param shopService          shop service
      * @param productSkuService    product sku service
-     * @param addressFormat        format string to create address in one string from {@link Address} entity.
+     * @param addressFormatter        format string to create address in one string from {@link org.yes.cart.domain.entity.Address} entity.
+     * @param promotionCouponService coupon service
      */
     public OrderAssemblerImpl(
             final OrderNumberGenerator orderNumberGenerator,
             final GenericDAO<Customer, Long> customerDao,
-            final GenericDAO<Shop, Long> shopDao,
+            final ShopService shopService,
             final ProductSkuService productSkuService,
-            final String addressFormat
-    ) {
+            final OrderAddressFormatter addressFormatter,
+            final PromotionCouponService promotionCouponService) {
+        this.promotionCouponService = promotionCouponService;
         this.entityFactory = customerDao.getEntityFactory();
         this.orderNumberGenerator = orderNumberGenerator;
         this.customerDao = customerDao;
-        this.shopDao = shopDao;
+        this.shopService = shopService;
         this.productSkuService = productSkuService;
-        this.addressFormat = addressFormat;
+        this.addressFormatter = addressFormatter;
     }
 
     /**
@@ -75,7 +78,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * @param shoppingCart given shopping cart
      * @return not persisted but filled with data order
      */
-    public CustomerOrder assembleCustomerOrder(final ShoppingCart shoppingCart) {
+    public CustomerOrder assembleCustomerOrder(final ShoppingCart shoppingCart) throws OrderAssemblyException {
         return assembleCustomerOrder(shoppingCart, false);
     }
 
@@ -83,9 +86,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * Create and fill {@link CustomerOrder} from   from {@link ShoppingCart}.
      *
      * @param shoppingCart given shopping cart
+     * @param temp         if set to true then order number is not generated and coupon usage is not created
+     *
      * @return not persisted but filled with data order
      */
-    public CustomerOrder assembleCustomerOrder(final ShoppingCart shoppingCart, final boolean temp) {
+    public CustomerOrder assembleCustomerOrder(final ShoppingCart shoppingCart, final boolean temp) throws OrderAssemblyException {
 
         final CustomerOrder customerOrder = entityFactory.getByIface(CustomerOrder.class);
 
@@ -104,12 +109,50 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setPromoApplied(shoppingCart.getTotal().isOrderPromoApplied());
         customerOrder.setAppliedPromo(shoppingCart.getTotal().getAppliedOrderPromo());
 
+        // sets shop from cache
+        customerOrder.setShop(shopService.getById(shoppingCart.getShoppingContext().getShopId()));
+
         if (!temp) {
             customerOrder.setOrdernum(orderNumberGenerator.getNextOrderNumber());
-            customerOrder.setShop(shopDao.findById(shoppingCart.getShoppingContext().getShopId()));
+            fillCoupons(customerOrder, shoppingCart);
         }
 
         return customerOrder;
+    }
+
+    /**
+     * Add coupons information.
+     *
+     * @param customerOrder order to fill
+     * @param shoppingCart  cart
+     */
+    private void fillCoupons(final CustomerOrder customerOrder, final ShoppingCart shoppingCart) throws OrderAssemblyException {
+
+        if (!shoppingCart.getCoupons().isEmpty()) {
+
+            final List<String> appliedCouponCodes = shoppingCart.getAppliedCoupons();
+
+            if (!appliedCouponCodes.isEmpty()) {
+                for (final String code : appliedCouponCodes) {
+
+                    final PromotionCoupon coupon = promotionCouponService.findValidPromotionCoupon(code, shoppingCart.getCustomerEmail());
+                    if (coupon == null) {
+                        throw new CouponCodeInvalidException(code);
+                    }
+
+                    final PromotionCouponUsage usage = customerDao.getEntityFactory().getByIface(PromotionCouponUsage.class);
+                    usage.setCoupon(coupon);
+                    usage.setCustomerEmail(shoppingCart.getCustomerEmail());
+                    usage.setCustomerOrder(customerOrder);
+
+                    customerOrder.getCoupons().add(usage);
+
+                    promotionCouponService.updateUsage(coupon, 1);
+
+                }
+            }
+
+        }
     }
 
     /**
@@ -201,24 +244,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * Format given address to string.
      *
      * @param defaultAddress given address
-     * @return formated address
+     * @return formatted address
      */
-    public String formatAddress(final Address defaultAddress) {
-        if (defaultAddress != null) {
+    private String formatAddress(final Address defaultAddress) {
 
-            return MessageFormat.format(
-                    addressFormat,
-                    StringUtils.defaultString(defaultAddress.getAddrline1()),
-                    StringUtils.defaultString(defaultAddress.getAddrline2()),
-                    StringUtils.defaultString(defaultAddress.getPostcode()),
-                    StringUtils.defaultString(defaultAddress.getCity()),
-                    StringUtils.defaultString(defaultAddress.getCountryCode()),
-                    StringUtils.defaultString(defaultAddress.getStateCode()),
-                    StringUtils.defaultString(defaultAddress.getFirstname()),
-                    StringUtils.defaultString(defaultAddress.getLastname()),
-                    StringUtils.defaultString(defaultAddress.getPhoneList())
-            );
-        }
-        return StringUtils.EMPTY;
+        return addressFormatter.formatAddress(defaultAddress);
+
     }
 }

@@ -20,5 +20,8 @@
 	<entry key="shopping">Обратно в магазин</entry>
 	<entry key="checkout">Оформляем покупку</entry>
 	<entry key="shoppingCart">Корзина</entry>
-    <entry key="emptyCart">Корзина пустая</entry>
+    <entry key="emptyCart">Корзина пуста</entry>
+    <entry key="order.error.general">Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.</entry>
+    <entry key="order.error.coupon.invalid">Промо-код '${0}' не может быть применен. Пожалуйста удалите его из корзины.</entry>
+
 </properties>

@@ -22,15 +22,19 @@ import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.PromotionCouponUsage;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.service.order.DeliveryAssembler;
 import org.yes.cart.service.order.OrderAssembler;
+import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -53,15 +57,18 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
     private final CustomerOrderPaymentService customerOrderPaymentService;
 
+    private final PromotionCouponService promotionCouponService;
+
     /**
      * Construct order service.
      *
      * @param customerOrderDao customer order dao.
+     * @param customerDao customer dao to use
+     * @param customerOrderDeliveryDao to get deliveries, awiting for inventory
      * @param orderAssembler order assembler
      * @param deliveryAssembler delivery assembler
-     * @param customerDao customer dao to use
      * @param customerOrderPaymentService to calculate order amount payments.
-     * @param customerOrderDeliveryDao to get deliveries, awiting for inventory
+     * @param promotionCouponService coupon service
      */
     public CustomerOrderServiceImpl(
             final GenericDAO<CustomerOrder, Long> customerOrderDao,
@@ -70,7 +77,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             final GenericDAO<CustomerOrderDelivery, Long> customerOrderDeliveryDao,
             final OrderAssembler orderAssembler,
             final DeliveryAssembler deliveryAssembler,
-            final CustomerOrderPaymentService customerOrderPaymentService) {
+            final CustomerOrderPaymentService customerOrderPaymentService,
+            final PromotionCouponService promotionCouponService) {
         super(customerOrderDao);
         this.orderAssembler = orderAssembler;
         this.deliveryAssembler = deliveryAssembler;
@@ -78,6 +86,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         this.customerOrderPaymentService = customerOrderPaymentService;
         this.genericDao = genericDao;
         this.customerOrderDeliveryDao = customerOrderDeliveryDao;
+        this.promotionCouponService = promotionCouponService;
     }
 
     /**
@@ -169,15 +178,20 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
-    public boolean isOrderCanHasMultipleDeliveries(final ShoppingCart shoppingCart) {
-        final CustomerOrder order = orderAssembler.assembleCustomerOrder(shoppingCart, false);
-        return deliveryAssembler.isOrderCanHasMultipleDeliveries(order);
+    public boolean isOrderMultipleDeliveriesAllowed(final ShoppingCart shoppingCart) {
+        try {
+            final CustomerOrder order = orderAssembler.assembleCustomerOrder(shoppingCart, true); // Must be temp assembly, we are just checking not persisting
+            return deliveryAssembler.isOrderMultipleDeliveriesAllowed(order);
+        } catch (OrderAssemblyException e) {
+            return false;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
-    public CustomerOrder createFromCart(final ShoppingCart shoppingCart, final boolean onePhysicalDelivery) {
+    public CustomerOrder createFromCart(final ShoppingCart shoppingCart, final boolean onePhysicalDelivery)
+            throws OrderAssemblyException {
         final CustomerOrder customerOrderToDelete = getGenericDao().findSingleByCriteria(
                 Restrictions.eq("cartGuid", shoppingCart.getGuid())
         );
@@ -192,6 +206,14 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
                                 customerOrderToDelete.getOrderStatus()
                         )
                 );
+            }
+
+            final Collection<PromotionCouponUsage> couponUsages = customerOrderToDelete.getCoupons();
+
+            for (final PromotionCouponUsage usage : couponUsages) {
+
+                promotionCouponService.updateUsage(usage.getCoupon(), -1);
+
             }
 
             getGenericDao().delete(customerOrderToDelete);

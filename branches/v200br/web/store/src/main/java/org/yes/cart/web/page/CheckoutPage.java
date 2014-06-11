@@ -19,6 +19,7 @@ package org.yes.cart.web.page;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -29,6 +30,8 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.https.RequireHttps;
+import org.apache.wicket.request.handler.PageProvider;
+import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -40,7 +43,10 @@ import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
+import org.yes.cart.service.order.CouponCodeInvalidException;
+import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.shoppingcart.*;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartPaymentVerificationView;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
@@ -110,6 +116,9 @@ public class CheckoutPage extends AbstractWebPage {
     public static final String PART_REGISTER_VIEW = "registerView";
     public static final String PART_LOGIN_VIEW = "loginView";
 
+    public static final String ERROR = "e";
+    public static final String ERROR_COUPON = "ec";
+
     public static final String STEP = "step";
 
     public static final String STEP_LOGIN = "login";
@@ -162,8 +171,32 @@ public class CheckoutPage extends AbstractWebPage {
 
         if (STEP_PAY.equals(currentStep) ) {
 
-            checkoutServiceFacade.createFromCart(ApplicationDirector.getShoppingCart());
+            try {
+                checkoutServiceFacade.createFromCart(ApplicationDirector.getShoppingCart());
+            } catch (CouponCodeInvalidException invalidCoupon) {
 
+                ShopCodeContext.getLog(this).error(invalidCoupon.getMessage(), invalidCoupon);
+
+                throw new RestartResponseException(
+                        new PageProvider(
+                                ShoppingCartPage.class,
+                                new PageParameters()
+                                        .set(ERROR, ERROR_COUPON)
+                                        .set(ERROR_COUPON, invalidCoupon.getCoupon())
+                        ), RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT
+                );
+
+            } catch (OrderAssemblyException assembly) {
+
+                ShopCodeContext.getLog(this).error(assembly.getMessage(), assembly);
+
+                throw new RestartResponseException(
+                        new PageProvider(
+                                ShoppingCartPage.class,
+                                new PageParameters().set(ERROR, "1")
+                        ), RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT
+                );
+            }
         }
 
 

@@ -7,3 +7,4 @@ ORD100F;SHOIP;EUR;O;F;100 off on orders over 1000;;;shoppingCartItemTotal.priceS
 ORD150F;SHOIP;EUR;O;F;150 off on orders over 1500;;;shoppingCartItemTotal.priceSubTotal > 1500;150;false;true;0;
 SHIP50P;SHOIP;EUR;S;P;50% off shipping for orders over 250;;;shoppingCartOrderTotal.subTotal > 250;100;true;true;0;
 SHIPFREE;SHOIP;EUR;S;P;free shipping for orders over 500;;;shoppingCartOrderTotal.subTotal > 500;100;false;true;0;
+COUPON1;SHOIP;EUR;P;P;10% off with coupons;;;;10;false;true;0;

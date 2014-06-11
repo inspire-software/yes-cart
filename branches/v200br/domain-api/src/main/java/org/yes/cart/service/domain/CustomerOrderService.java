@@ -20,6 +20,7 @@ import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
@@ -103,7 +104,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @param onePhysicalDelivery true if need to create one physical delivery.
      * @return created order.
      */
-    CustomerOrder createFromCart(ShoppingCart shoppingCart, boolean onePhysicalDelivery);
+    CustomerOrder createFromCart(ShoppingCart shoppingCart, boolean onePhysicalDelivery) throws OrderAssemblyException;
 
     /**
      * Find created order by cart guid.
@@ -119,7 +120,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @param shoppingCart cart to  check
      * @return true if order can be with several physical deliveries
      */
-    boolean isOrderCanHasMultipleDeliveries(ShoppingCart shoppingCart);
+    boolean isOrderMultipleDeliveriesAllowed(ShoppingCart shoppingCart);
 
 
 }

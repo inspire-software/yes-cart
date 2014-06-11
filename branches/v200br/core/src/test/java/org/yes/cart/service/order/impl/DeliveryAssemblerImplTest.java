@@ -59,7 +59,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testGetDeliveryGroups() {
+    public void testGetDeliveryGroups() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart1(customer.getEmail());
@@ -136,7 +136,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testAssembleCustomerOrder() {
+    public void testAssembleCustomerOrder() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart7(customer.getEmail());

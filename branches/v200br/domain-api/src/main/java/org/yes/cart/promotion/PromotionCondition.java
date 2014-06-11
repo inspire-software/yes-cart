@@ -31,6 +31,7 @@ public interface PromotionCondition extends Serializable {
 
     String VAR_ACTION_CONTEXT = "actionContext";
     String VAR_PROMOTION = "promotion";
+    String VAR_PROMOTION_CODE = "promotionCode";
     String VAR_REGISTERED = "registered";
     String VAR_CUSTOMER = "customer";
     String VAR_CUSTOMER_TAGS = "customerTags";

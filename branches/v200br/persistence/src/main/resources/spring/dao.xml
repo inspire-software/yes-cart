@@ -136,6 +136,8 @@
                 <entry key="org.yes.cart.domain.entity.SeoImage" value="org.yes.cart.domain.entity.impl.SeoImageEntity"/>
 
                 <entry key="org.yes.cart.domain.entity.Promotion" value="org.yes.cart.domain.entity.impl.PromotionEntity"/>
+                <entry key="org.yes.cart.domain.entity.PromotionCoupon" value="org.yes.cart.domain.entity.impl.PromotionCouponEntity"/>
+                <entry key="org.yes.cart.domain.entity.PromotionCouponUsage" value="org.yes.cart.domain.entity.impl.PromotionCouponUsageEntity"/>
 
                 <entry key="org.yes.cart.domain.entity.Shop" value="org.yes.cart.domain.entity.impl.ShopEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopAdvPlace" value="org.yes.cart.domain.entity.impl.ShopAdvPlaceEntity"/>
@@ -446,6 +448,18 @@
 
     <bean id="promotionDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.PromotionEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="promotionCouponDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.PromotionCouponEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="promotionCouponUsageDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.PromotionCouponUsageEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>

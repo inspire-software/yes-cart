@@ -28,6 +28,7 @@ import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
@@ -188,14 +189,14 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
     /** {@inheritDoc} */
     @Override
-    public CustomerOrder createFromCart(final ShoppingCart shoppingCart) {
+    public CustomerOrder createFromCart(final ShoppingCart shoppingCart) throws OrderAssemblyException {
         return customerOrderService.createFromCart(shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean isMultipleDeliveryAllowedForCart(final ShoppingCart shoppingCart) {
-        return customerOrderService.isOrderCanHasMultipleDeliveries(shoppingCart);
+        return customerOrderService.isOrderMultipleDeliveriesAllowed(shoppingCart);
     }
 
     /** {@inheritDoc} */

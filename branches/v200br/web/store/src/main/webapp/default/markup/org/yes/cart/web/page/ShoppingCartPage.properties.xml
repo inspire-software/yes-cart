@@ -21,5 +21,7 @@
 	<entry key="checkout">Checkout</entry>
 	<entry key="shoppingCart">Cart</entry>
 	<entry key="emptyCart">Cart is empty</entry>
+	<entry key="order.error.general">An error occurred while trying to create your order. Please try again.</entry>
+	<entry key="order.error.coupon.invalid">Coupon '${0}' is no longer valid please remove it from the cart.</entry>
 
 </properties>

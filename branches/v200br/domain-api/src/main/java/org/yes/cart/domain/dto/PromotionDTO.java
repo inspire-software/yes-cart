@@ -186,6 +186,19 @@ public interface PromotionDTO extends Identifiable {
      */
     void setDisplayDescriptions(Map<String, String> names);
 
+
+    /**
+     * @return flag that denotes if this promotion is triggered by
+     *         a coupon code.
+     */
+    boolean isCouponTriggered();
+
+    /**
+     * @param couponTriggered flag that denotes if this promotion is
+     *                        triggered by a coupon code.
+     */
+    void setCouponTriggered(boolean couponTriggered);
+
     /**
      * @return flag that denotes if this promotion can be applied
      *         in conjunction with other "canBeCombined" promotions.

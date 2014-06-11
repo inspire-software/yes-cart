@@ -255,6 +255,15 @@ public interface CustomerOrder extends Auditable {
      */
     void setMultipleShipmentOption(boolean multipleShipmentOption);
 
+    /**
+     * @return coupons used with this order
+     */
+    Collection<PromotionCouponUsage> getCoupons();
+
+    /**
+     * @param coupons coupons used with this order
+     */
+    void setCoupons(Collection<PromotionCouponUsage> coupons);
 
     /**
      * Get collection of order details, i.e. items

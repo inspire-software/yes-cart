@@ -109,15 +109,14 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
 
         final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart);
         if (giftValue != null) {
-            final Promotion promotion = getPromotion(context);
 
             // add gift and set its price, we assume gift are in whole units
             final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(itemTotal.getPriceSubTotal())).setScale(0, RoundingMode.HALF_UP).setScale(2);
-            cart.addGiftToCart(ctx.getSubject(), giftQty, promotion.getCode());
+            cart.addGiftToCart(ctx.getSubject(), giftQty, getPromotionCode(context));
             final BigDecimal minimal = MoneyUtils.minPositive(giftValue.getSalePriceForCalculation(), giftValue.getRegularPrice());
             cart.setGiftPrice(ctx.getSubject(), minimal, giftValue.getRegularPrice());
 
-            addListValue(context, promotion.getCode(), giftValue.getRegularPrice().multiply(giftQty).setScale(2, RoundingMode.HALF_UP));
+            addListValue(context, giftValue.getRegularPrice().multiply(giftQty).setScale(2, RoundingMode.HALF_UP));
         }
     }
 

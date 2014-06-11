@@ -19,6 +19,7 @@ package org.yes.cart.web.page.component.cart;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.TextField;
@@ -44,6 +45,7 @@ import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
+import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
@@ -94,6 +96,10 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
 
     private final Category rootCategory;
+
+
+    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_SUPPORT_FACADE)
+    private WicketSupportFacade wicketSupportFacade;
 
     @SpringBean(name = StorefrontServiceSpringKeys.I18N_SUPPORT)
     private I18NWebSupport i18NWebSupport;
@@ -212,7 +218,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                 if (NumberUtils.isNumber(qty) /*&& NumberUtils.toInt(qty) >= 1*/) {
                     qtyField.setConvertedInput(new BigDecimal(qty).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
                     setResponsePage(
-                            ShoppingCartPage.class,
+                            getPage().getPageClass(),
                             new PageParameters()
                                     .add(ShoppingCartCommand.CMD_SETQTYSKU, skuCode)
                                     .add(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, qty)
@@ -252,9 +258,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
     private BookmarkablePageLink createAddOneSkuLink(final String skuCode) {
         final PageParameters paramsMap = new PageParameters();
         paramsMap.set(ShoppingCartCommand.CMD_ADDTOCART, skuCode);
-        return new BookmarkablePageLink<ShoppingCartPage>(
+        return new BookmarkablePageLink<Page>(
                 ADD_ONE_LINK,
-                ShoppingCartPage.class,
+                getPage().getPageClass(),
                 paramsMap
         );
     }
@@ -268,9 +274,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
     private BookmarkablePageLink createRemoveOneSkuLink(final String skuCode) {
         final PageParameters paramsMap = new PageParameters();
         paramsMap.set(ShoppingCartCommand.CMD_REMOVEONESKU, skuCode);
-        return new BookmarkablePageLink<ShoppingCartPage>(
+        return new BookmarkablePageLink<Page>(
                 REMOVE_ONE_LINK,
-                ShoppingCartPage.class,
+                getPage().getPageClass(),
                 paramsMap
         );
     }
@@ -285,9 +291,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
     private BookmarkablePageLink createRemoveAllSkuLink(final String skuCode) {
         final PageParameters paramsMap = new PageParameters();
         paramsMap.set(ShoppingCartCommand.CMD_REMOVEALLSKU, skuCode);
-        return new BookmarkablePageLink<ShoppingCartPage>(
+        return new BookmarkablePageLink<Page>(
                 REMOVE_ALL_LINK,
-                ShoppingCartPage.class,
+                getPage().getPageClass(),
                 paramsMap
         );
     }

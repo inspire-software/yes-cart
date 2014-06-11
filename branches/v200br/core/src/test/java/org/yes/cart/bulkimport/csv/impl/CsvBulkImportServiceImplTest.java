@@ -575,13 +575,24 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             dt = System.currentTimeMillis();
             bulkImportService.doImport(createContext("src/test/resources/import/promotionnames.xml", listener, importedFilesSet));
             final long promos = System.currentTimeMillis() - dt;
-            System.out.println("   8 promotions in " + promos + "millis (~" + (promos / 8) + " per item)");
+            System.out.println("   9 promotions in " + promos + "millis (~" + (promos / 9) + " per item)");
 
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPROMOTION  ");
             rs.next();
             long cntPromotions = rs.getLong(1);
             rs.close();
-            assertEquals(8L + cntBeforePromotion, cntPromotions);   // 3 new
+            assertEquals(9L + cntBeforePromotion, cntPromotions);   // 9 new
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/promotioncouponnames.xml", listener, importedFilesSet));
+            final long promocoupons = System.currentTimeMillis() - dt;
+            System.out.println("   3 promotion coupons in " + promocoupons + "millis (~" + (promocoupons / 3) + " per item)");
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPROMOTIONCOUPON  ");
+            rs.next();
+            long cntPromotionCoupons = rs.getLong(1);
+            rs.close();
+            assertEquals(3L + cntBeforePromotion, cntPromotionCoupons);   // 3 new
 
             mockery.assertIsSatisfied();
 
@@ -593,7 +604,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
                     "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
                     "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY", "TCATEGORYATTRVALUE",
                     "TPRODTYPEATTRVIEWGROUP" ,
-                    "TSHOPCATEGORY", "TPROMOTION"
+                    "TSHOPCATEGORY", "TPROMOTION", "TPROMOTIONCOUPON"
             });
         }
 

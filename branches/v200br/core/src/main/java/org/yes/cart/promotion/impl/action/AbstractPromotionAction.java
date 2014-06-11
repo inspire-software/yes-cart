@@ -69,6 +69,18 @@ public abstract class AbstractPromotionAction implements PromotionAction {
     }
 
     /**
+     * Get promotion code (This may not be promotion.code as it can contain extra data.
+     * e.g. coupons).
+     *
+     * @param context evaluation context
+     *
+     * @return promotion code
+     */
+    protected String getPromotionCode(final Map<String, Object> context) {
+        return (String) context.get(PromotionCondition.VAR_PROMOTION_CODE);
+    }
+
+    /**
      * Get customer object.
      *
      * @param context evaluation context

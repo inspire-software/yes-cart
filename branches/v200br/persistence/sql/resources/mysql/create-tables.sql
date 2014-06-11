@@ -884,6 +884,7 @@
         DESCRIPTION varchar(100),
         DISPLAYDESCRIPTION longtext,
         TAG varchar(255),
+        COUPON_TRIGGERED bit not null,
         CAN_BE_COMBINED bit not null,
         ENABLED bit not null,
         ENABLED_FROM datetime,
@@ -894,6 +895,36 @@
         UPDATED_BY varchar(64),
         GUID varchar(36) not null unique,
         primary key (PROMOTION_ID)
+    );
+
+
+    create table TPROMOTIONCOUPON (
+        PROMOTIONCOUPON_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        CODE varchar(255) not null unique,
+        PROMOTION_ID bigint not null,
+        USAGE_LIMIT integer default 1,
+        USAGE_LIMIT_PER_CUSTOMER integer default 1,
+        USAGE_COUNT integer default 0,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        primary key (PROMOTIONCOUPON_ID)
+    );
+
+
+    create table TPROMOTIONCOUPONUSAGE (
+        PROMOTIONCOUPONUSAGE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        CUSTOMER_EMAIL varchar(255) not null,
+        COUPON_ID bigint not null,
+        CUSTOMERORDER_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        primary key (PROMOTIONCOUPONUSAGE_ID)
     );
 
 
@@ -1348,6 +1379,26 @@
     create index PROMO_ENABLED on TPROMOTION (ENABLED);
     create index PROMO_ENABLED_FROM on TPROMOTION (ENABLED_FROM);
     create index PROMO_ENABLED_TO on TPROMOTION (ENABLED_TO);
+
+
+    alter table TPROMOTIONCOUPON
+        add index FK_PROMO_COUPON (PROMOTION_ID),
+        add constraint FK_PROMO_COUPON
+        foreign key (PROMOTION_ID)
+        references TPROMOTION (PROMOTION_ID);
+
+    alter table TPROMOTIONCOUPONUSAGE
+        add index FK_COUPON_USAGE (COUPON_ID),
+        add constraint FK_COUPON_USAGE
+        foreign key (COUPON_ID)
+        references TPROMOTIONCOUPON (PROMOTIONCOUPON_ID);
+
+    alter table TPROMOTIONCOUPONUSAGE
+        add index FK_ORD_COUPON_USAGE (CUSTOMERORDER_ID),
+        add constraint FK_ORD_COUPON_USAGE
+        foreign key (CUSTOMERORDER_ID)
+        references TCUSTOMERORDER (CUSTOMERORDER_ID) on delete cascade;
+
 
     alter table TMAILPART
         add index FK_MAIL(MAIL_ID)  ,

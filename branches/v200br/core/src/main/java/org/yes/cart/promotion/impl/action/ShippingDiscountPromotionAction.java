@@ -50,13 +50,13 @@ public class ShippingDiscountPromotionAction extends AbstractShippingPromotionAc
     public void perform(final Map<String, Object> context) {
         final BigDecimal discount = getDiscountValue(getRawPromotionActionContext(context));
         if (MoneyUtils.isFirstBiggerThanSecond(discount, BigDecimal.ZERO)) {
-            final Promotion promotion = getPromotion(context);
+
             final Total cartItemTotal = getOrderTotal(context);
 
             // calculate discount relative to sale price
             BigDecimal saleDiscount = cartItemTotal.getDeliveryListCost().multiply(discount);
 
-            subtractPromotionValue(context, promotion.getCode(), saleDiscount);
+            subtractPromotionValue(context, saleDiscount);
 
         }
     }

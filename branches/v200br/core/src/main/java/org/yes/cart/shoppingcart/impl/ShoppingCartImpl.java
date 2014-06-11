@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Shopping cart default implementation.
@@ -39,6 +41,7 @@ public class ShoppingCartImpl implements ShoppingCart {
 
     private List<CartItemImpl> items = new ArrayList<CartItemImpl>();
     private List<CartItemImpl> gifts = new ArrayList<CartItemImpl>();
+    private Set<String> coupons = new TreeSet<String>();
 
     private String guid = java.util.UUID.randomUUID().toString();
 
@@ -87,6 +90,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         guid = java.util.UUID.randomUUID().toString();
         items.clear();
         gifts.clear();
+        coupons.clear();
         orderInfo = null;
         total = new TotalImpl();
         modifiedTimestamp = System.currentTimeMillis();
@@ -236,9 +240,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         boolean removed = getGifts().isEmpty();
         getGifts().clear();
 
-        final Iterator<CartItemImpl> it = getItems().iterator();
-        while (it.hasNext()) {
-            final CartItemImpl item = it.next();
+        for (final CartItemImpl item : getItems()) {
             if (item.isPromoApplied()) {
                 // reinstate sale price
                 removed = true;
@@ -290,6 +292,74 @@ public class ShoppingCartImpl implements ShoppingCart {
             return true;
         }
         return false;
+    }
+
+    /** {@inheritDoc} */
+    public List<String> getCoupons() {
+        return Collections.unmodifiableList(new ArrayList<String>(coupons));
+    }
+
+    /** {@inheritDoc} */
+    public List<String> getAppliedCoupons() {
+
+        final List<String> all = new ArrayList<String>(coupons);
+        final List<String> applied = new ArrayList<String>();
+
+        if (!all.isEmpty()) {
+            checkCouponPromoApplied(total.getAppliedOrderPromo(), all, applied);
+            checkCouponPromoApplied(total.getAppliedDeliveryPromo(), all, applied);
+        }
+
+        if (!all.isEmpty()) {
+            for (final CartItem item : getItems()) {
+                if (all.isEmpty()) {
+                    break;
+                }
+                final String appliedPromo = item.getAppliedPromo();
+                checkCouponPromoApplied(appliedPromo, all, applied);
+            }
+        }
+
+        if (!all.isEmpty()) {
+            for (final CartItem gift : getGifts()) {
+                if (all.isEmpty()) {
+                    break;
+                }
+                final String appliedPromo = gift.getAppliedPromo();
+                checkCouponPromoApplied(appliedPromo, all, applied);
+            }
+        }
+
+        return applied;
+    }
+
+    private void checkCouponPromoApplied(final String appliedPromo, final List<String> all, final List<String> applied) {
+        if (appliedPromo != null) {
+            for (final String promo : StringUtils.split(appliedPromo, ',')) {
+                final Iterator<String> enteredIt = all.iterator();
+                while (enteredIt.hasNext()) {
+                    final String entered = enteredIt.next();
+                    if (promo.endsWith(":" + entered)) { // format of coupon promo is PROMOCODE:COUPON
+                        applied.add(entered);
+                        enteredIt.remove();
+                        break;
+                    }
+                }
+                if (all.isEmpty()) {
+                    break;
+                }
+            }
+        }
+    }
+
+    /** {@inheritDoc} */
+    public boolean addCoupon(final String coupon) {
+        return coupons.add(coupon);
+    }
+
+    /** {@inheritDoc} */
+    public boolean removeCoupon(final String coupon) {
+        return coupons.remove(coupon);
     }
 
     /** {@inheritDoc} */

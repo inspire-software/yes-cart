@@ -172,6 +172,8 @@
                         setPromoActionOptions(_promotion.promoType);
                         preselectCombo(promoAction, _promotion.promoAction);
                     }
+                    propertyWatchers.addItem(BindingUtils.bindProperty(couponTriggered, "selected", _promotion, "couponTriggered"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "couponTriggered", couponTriggered, "selected"));
                     propertyWatchers.addItem(BindingUtils.bindProperty(canBeCombined, "selected", _promotion, "canBeCombined"));
                     propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "canBeCombined", canBeCombined, "selected"));
                     propertyWatchers.addItem(BindingUtils.bindProperty(promoRank, "text", _promotion, "rank"));
@@ -220,14 +222,14 @@
                             { data:'F', label:resourceManager.getString('PromotionManagementPanel', 'promoActionF') },
                             { data:'P', label:resourceManager.getString('PromotionManagementPanel', 'promoActionP') },
                             { data:'S', label:resourceManager.getString('PromotionManagementPanel', 'promoActionS') },
-                            { data:'G', label:resourceManager.getString('PromotionManagementPanel', 'promoActionG') },
+                            { data:'G', label:resourceManager.getString('PromotionManagementPanel', 'promoActionG') }
                         ];
                         break;
                     case 'S':
                         promoAction.dataProvider = [
                             { data:null, label:'' },
                             { data:'F', label:resourceManager.getString('PromotionManagementPanel', 'promoActionF') },
-                            { data:'P', label:resourceManager.getString('PromotionManagementPanel', 'promoActionP') },
+                            { data:'P', label:resourceManager.getString('PromotionManagementPanel', 'promoActionP') }
                         ];
                         break;
                     case 'C':
@@ -276,6 +278,9 @@
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='promoAction')">
                 <mx:ComboBox id="promoAction" enabled="{entityIsNew}" width="150" change="onChangeAction(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='couponTriggered')">
+                <mx:CheckBox id="couponTriggered" enabled="{entityIsNew}" change="onChange(event)"/>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='canBeCombined')">
                 <mx:CheckBox id="canBeCombined" change="onChange(event)"/>
