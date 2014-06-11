@@ -167,6 +167,7 @@
                 <value>setShopIdCmd</value>
                 <value>setQuantityToCartCmd</value>
                 <value>sku</value>
+                <value>wla</value>
             </list>
         </property>
     </bean>
