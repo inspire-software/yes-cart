@@ -150,9 +150,10 @@ public class WishListView extends AbstractProductSearchResultList {
                     for (final ProductSearchResultDTO uniqueProduct : uniqueProducts) {
 
                         if (uniqueProduct.getId() == item.getSkus().getProduct().getProductId()) {
-
-                            wishListProducts.add(uniqueProduct);
-                            wishListDataByProduct.put(uniqueProduct, item);
+                            final ProductSearchResultDTO copy = uniqueProduct.copy();
+                            copy.setDefaultSkuCode(item.getSkus().getCode());
+                            wishListProducts.add(copy);
+                            wishListDataByProduct.put(copy, item);
 
                         }
 
@@ -188,8 +189,6 @@ public class WishListView extends AbstractProductSearchResultList {
 
         final ProductSearchResultDTO product = listItem.getModel().getObject();
         final CustomerWishList itemData = wishListDataByProduct.get(product);
-
-        product.setDefaultSkuCode(itemData.getSkus().getCode());
 
         final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), product);
 

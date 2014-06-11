@@ -54,7 +54,7 @@ public class WishListItemAddPage extends AbstractWebPage {
             targetParams.set(WebParametersKeys.SKU_ID, sku.getSkuId());
 
         }
-
+        targetParams.set(WebParametersKeys.WISHLIST_ITEM_ADDED, skuCode);
         throw new RestartResponseException(Application.get().getHomePage(), targetParams);
 
     }

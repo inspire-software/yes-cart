@@ -1284,3 +1284,23 @@ h2.resp-accordion:first-child {
     width: 100%;
 }
 
+/* --------------------------------------------- */
+
+.modal-message {
+    position:   absolute;
+    z-index:    1000;
+    left:       50%;
+    top:        25%;
+}
+
+.modal-message-inner {
+    position:   relative;
+    left:       -50%;
+    border: 5px solid #333;
+    background-color: #fff;
+    padding: 10px 10px 10px 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+

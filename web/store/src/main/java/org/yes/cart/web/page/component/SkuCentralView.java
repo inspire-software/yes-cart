@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.util.StringUtils;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -55,6 +56,7 @@ import org.yes.cart.web.support.entity.decorator.ObjectDecorator;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.util.WicketUtil;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -324,6 +326,13 @@ public class SkuCentralView extends AbstractCentralView {
                     new Label(VOLUME_DISCOUNT_BODY_CONTAINER, "")
             );
         }
+
+        final String wishListSkuAdded = getPage().getPageParameters().get(WebParametersKeys.WISHLIST_ITEM_ADDED).toString(null);
+        final boolean wishListAdded = wishListSkuAdded != null;
+        add(new Label("jsWishListItemAddedMsg", new StringResourceModel("wish.list.item.added", this, new Model<Serializable>(new Object[] {wishListSkuAdded})))
+                .setVisible(wishListAdded));
+        add(new Label("jsWishListItemAdded", "<script type=\"text/javascript\"> $(document).ready(function() {ctx.showModalWindow($('.jsWishListItemAddedMsg'));});</script>")
+                .setVisible(wishListAdded).setEscapeModelStrings(false));
 
         super.onBeforeRender();
 
