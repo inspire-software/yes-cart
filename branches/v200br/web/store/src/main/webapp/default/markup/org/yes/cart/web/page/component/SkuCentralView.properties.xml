@@ -19,6 +19,7 @@
 <properties>
 	<entry key="add.to.cart">Add to cart</entry>
 	<entry key="add.to.wishlist">Add to wishlist</entry>
+    <entry key="wish.list.item.added">Product ${0} added to wish list. You can view wish list in your profile.</entry>
     <entry key="preorder.cart">Preorder</entry>
     <entry key="sku.code">Code</entry>
     <entry key="description">Description</entry>

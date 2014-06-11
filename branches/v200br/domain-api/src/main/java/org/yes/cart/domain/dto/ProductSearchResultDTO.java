@@ -210,4 +210,11 @@ public interface ProductSearchResultDTO extends Identifiable {
      */
     void setFeatured(Boolean featured);
 
+    /**
+     * Creates copy of this object
+     *
+     * @return copy
+     */
+    ProductSearchResultDTO copy();
+
 }
