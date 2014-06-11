@@ -1,7 +1,8 @@
 var ctx = {
     url: document.URL,
     root: '/yes-shop', /* This is how it appears from WicketUtil.getHttpServletRequest().getContextPath(). */
-    page: 'HomePage'
+    page: 'HomePage',
+    showModalWindow: function(){}
 };
 
 $(document).ready(function() {
@@ -37,6 +38,23 @@ $(document).ready(function() {
         }
     });
 
+    // create modal message
+    var createModalMsg = function(node) {
+        var _inner = $('<div class="modal-message-inner"/>');
+        _inner.append(node);
+        var _outer = $('<div class="modal-message"/>');
+        _outer.append(_inner);
+        return _outer;
+    };
 
+    ctx.showModalWindow = function(node) {
+        var _msgNode = createModalMsg(node.html());
+        $('body').append(_msgNode);
+        setTimeout(function () {
+            _msgNode.fadeOut(1000, function(){
+                _msgNode.remove();
+            });
+        }, 2500);
+    };
 });
 

@@ -205,4 +205,23 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     public void setFeatured(final Boolean featured) {
         this.featured = featured;
     }
+
+    /** {@inheritDoc} */
+    public ProductSearchResultDTO copy() {
+        final ProductSearchResultDTOImpl copy = new ProductSearchResultDTOImpl();
+        copy.setId(this.getId());
+        copy.setCode(this.getCode());
+        copy.setDefaultSkuCode(this.getDefaultSkuCode());
+        copy.setName(this.getName());
+        copy.setDisplayName(this.getDisplayName());
+        copy.setDescription(this.getDescription());
+        copy.setDisplayDescription(this.getDisplayDescription());
+        copy.setAvailablefrom(this.getAvailablefrom());
+        copy.setAvailableto(this.getAvailableto());
+        copy.setAvailability(this.getAvailability());
+        copy.setQtyOnWarehouse(this.getQtyOnWarehouse());
+        copy.setDefaultImage(this.getDefaultImage());
+        copy.setFeatured(this.getFeatured());
+        return copy;
+    }
 }

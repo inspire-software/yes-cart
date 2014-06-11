@@ -19,6 +19,7 @@
 <properties>
 	<entry key="add.to.cart">В корзину</entry>
     <entry key="add.to.wishlist">В пожелания</entry>
+    <entry key="wish.list.item.added">Товар ${0} добавлен в пожелания. Увидеть лист пожеланий Вы можете в Вашем профиле.</entry>
     <entry key="preorder.cart">Резерв</entry>
     <entry key="sku.code">Код</entry>
     <entry key="description">Описание</entry>
