@@ -36,26 +36,16 @@ public interface OrderAssembler {
      * @param shoppingCart given shopping cart
      * @return order
      */
-    CustomerOrder assembleCustomerOrder(ShoppingCart shoppingCart);
+    CustomerOrder assembleCustomerOrder(ShoppingCart shoppingCart) throws OrderAssemblyException;
 
     /**
      * Create and fill {@link CustomerOrder} from given {@link ShoppingCart}.
      *
      * @param shoppingCart given shopping cart
-     * @param temp         true if not all data need to be filled
+     * @param temp         if set to true then order number is not generated and coupon usage is not created
      * @return order
      */
-    CustomerOrder assembleCustomerOrder(ShoppingCart shoppingCart, boolean temp);
-
-    /**
-     *
-     * Format given address to string.
-     *
-     * @param defaultAddress given address
-     * @return formated address
-     */
-    String formatAddress(Address defaultAddress);
-
+    CustomerOrder assembleCustomerOrder(ShoppingCart shoppingCart, boolean temp) throws OrderAssemblyException;
 
 
 }

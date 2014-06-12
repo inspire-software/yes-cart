@@ -48,7 +48,7 @@ public class PaymentOkOrderEventHandlerImplTest extends AbstractEventHandlerImpl
     }
 
     @Test
-    public void testHandle() throws OrderException {
+    public void testHandle() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         CustomerOrder customerOrder = orderService.createFromCart(getStdCard(customer.getEmail()), false);

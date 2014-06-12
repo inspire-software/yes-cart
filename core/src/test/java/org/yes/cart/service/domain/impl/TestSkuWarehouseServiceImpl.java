@@ -396,7 +396,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
 
     @Test
-    public void testPushOrdersAwaitingForInventory() throws OrderException {
+    public void testPushOrdersAwaitingForInventory() throws Exception {
 
         Customer cust = createCustomer();
 

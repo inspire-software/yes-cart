@@ -152,12 +152,14 @@
             <list>
                 <value>addToCartCmd</value>
                 <value>addToWishListCmd</value>
+                <value>addCouponCmd</value>
                 <value>changeCurrencyCmd</value>
                 <value>changeLocaleCmd</value>
                 <value>cleanCartCmd</value>
                 <value>expireCartCmd</value>
                 <value>loginCmd</value>
                 <value>logoutCmd</value>
+                <value>removeCouponCmd</value>
                 <value>removeFromWishListCmd</value>
                 <value>removeAllSkuCmd</value>
                 <value>removeOneSkuCmd</value>

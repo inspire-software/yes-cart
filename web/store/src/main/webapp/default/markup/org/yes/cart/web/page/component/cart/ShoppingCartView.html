@@ -131,6 +131,33 @@
                     </div>
                 </td>
             </tr>
+            <tr wicket:id="couponsList">
+                <td>
+                    <div class="grid-100 mobile-grid-100 grid-parent">
+                        <div class="grid-50 mobile-grid-50" wicket:id="couponsListItem">
+                            [sub total]
+                        </div>
+                        <div class="grid-50 mobile-grid-50">
+                            <a wicket:id="couponsListItemRemoveLink" class="button gray">
+                                <wicket:message key="removeCouponCodeLabel">[Amount]</wicket:message>
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="grid-100 mobile-grid-100 grid-parent">
+                        <div class="grid-50 mobile-grid-50">
+                            <input type="text" wicket:id="couponInput" class="width-100p"/>
+                        </div>
+
+                        <div class="grid-50 mobile-grid-50">
+                            <input type="submit" class="button gray" wicket:id="addCouponBtn" wicket:message="value:addCouponButtonLabel"/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
         </table>
     </form>
 </wicket:panel>

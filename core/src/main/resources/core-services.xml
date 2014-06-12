@@ -414,6 +414,7 @@
                 <constructor-arg index="4"  ref="orderAssembler"/>
                 <constructor-arg index="5"  ref="deliveryAssembler"/>
                 <constructor-arg index="6"  ref="customerOrderPaymentService"/>
+                <constructor-arg index="7"  ref="promotionCouponService"/>
             </bean>
         </property>
     </bean>
@@ -454,6 +455,21 @@
         </property>
     </bean>
 
+    <bean id="promotionCouponService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.PromotionCouponServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="promotionCouponDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="promotionDao"/>
+                <constructor-arg index="2">
+                    <bean id="promotionCouponCodeGenerator" class="org.yes.cart.promotion.impl.PromotionCouponCodeGeneratorImpl">
+                        <!-- CPOINT - generates 10 characters alpha num coupon codes -->
+                        <constructor-arg index="0" value="10"/>
+                    </bean>
+                </constructor-arg>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="promotionService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.PromotionServiceImpl">
@@ -463,6 +479,10 @@
     </bean>
 
     <bean id="promotionConditionParser" class="org.yes.cart.promotion.impl.GroovyPromotionConditionParser"/>
+
+    <bean id="bestValuePromotionApplicationStrategy" class="org.yes.cart.promotion.impl.BestValuePromotionApplicationStrategyImpl">
+        <constructor-arg index="0" ref="promotionCouponService"/>
+    </bean>
 
     <bean id="promotionContextFactory" parent="txProxyTemplate">
         <property name="target">
@@ -501,7 +521,25 @@
                         </entry>
                     </map>
                 </constructor-arg>
+                <constructor-arg index="4" ref="bestValuePromotionApplicationStrategy"/>
                 <lookup-method name="getSelf" bean="promotionContextFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="promotionCouponContext" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.promotion.impl.PromotionCouponContextImpl">
+                <constructor-arg index="0" ref="promotionCouponService"/>
+                <constructor-arg index="1" ref="promotionConditionParser"/>
+                <constructor-arg index="2">
+                    <map>
+                        <entry key="P" value-ref="promoActionOrderDiscount"/>
+                        <entry key="S" value-ref="promoActionOrderNonSaleDiscount"/>
+                        <entry key="F" value-ref="promoActionOrderAmountOff"/>
+                    </map>
+                </constructor-arg>
+                <constructor-arg index="3" ref="bestValuePromotionApplicationStrategy"/>
             </bean>
         </property>
     </bean>
@@ -936,6 +974,16 @@
         </property>
     </bean>
 
+    <bean id="dtoPromotionCouponService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoPromotionCouponServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="promotionCouponService"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
 
     <bean id="dtoInterfaceToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
         <constructor-arg>
@@ -996,6 +1044,7 @@
                 <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>
 
                 <entry key="org.yes.cart.domain.dto.PromotionDTO"        value="org.yes.cart.domain.dto.impl.PromotionDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.PromotionCouponDTO"  value="org.yes.cart.domain.dto.impl.PromotionCouponDTOImpl"/>
 
             </map>
         </constructor-arg>
@@ -1127,6 +1176,11 @@
                 </bean>
 
 
+                <bean id="addCouponCmd" class="org.yes.cart.shoppingcart.impl.AddCouponEventCommandImpl"/>
+
+                <bean id="removeCouponCmd" class="org.yes.cart.shoppingcart.impl.RemoveCouponEventCommandImpl"/>
+
+
                 <bean id="addToCartCmd" class="org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl">
                     <constructor-arg index="0" ref="priceService"/>
                     <constructor-arg index="1" ref="productService"/>
@@ -1185,25 +1239,30 @@
         <constructor-arg index="0" ref="customerOrderDao"/>
     </bean>
 
+    <bean id="orderAddressFormatter" class="org.yes.cart.service.order.impl.DefaultOrderAddressFormatterImpl">
+        <constructor-arg index="0" value="{0} {1} {2} {3} {4} {5} {6} {7} {8}"/>
+        <!-- Address format
+        0 - address line 1
+        1 - address line 2
+        2 - post(zip) code
+        3 - city
+        4 - country code
+        5 - county/state/province/area code
+        6 - first name
+        7 - last name
+        8 - contact phone(s) as string
+        -->
+    </bean>
+
     <bean id="orderAssembler" parent="txProxyTemplate">
         <property name="target">
             <bean  class="org.yes.cart.service.order.impl.OrderAssemblerImpl">
                 <constructor-arg index="0" ref="orderNumberGenerator"/>
                 <constructor-arg index="1" ref="customerDao"/>
-                <constructor-arg index="2" ref="shopDao"/>
+                <constructor-arg index="2" ref="shopService"/>
                 <constructor-arg index="3" ref="productSkuService"/>
-                <constructor-arg index="4" value="{0} {1} {2} {3} {4} {5} {6} {7} {8}"/>
-                <!-- Address format
-                0 - address line 1
-                1 - address line 2
-                2 - post(zip) code
-                3 - city
-                4 - country code
-                5 - county/state/province/area code
-                6 - first name
-                7 - last name
-                8 - contact phone(s) as string
-                -->
+                <constructor-arg index="4" ref="orderAddressFormatter"/>
+                <constructor-arg index="5" ref="promotionCouponService"/>
             </bean>
         </property>
     </bean>

@@ -66,6 +66,8 @@ public class PromotionDTOImpl implements PromotionDTO {
     @DtoField(value = "displayDescription", converter = "i18nStringConverter")
     private Map<String, String> displayDescriptions;
 
+    @DtoField(value = "couponTriggered", readOnly = true)
+    private boolean couponTriggered;
     @DtoField(value = "canBeCombined", readOnly = true)
     private boolean canBeCombined;
     @DtoField(value = "enabled")
@@ -208,6 +210,16 @@ public class PromotionDTOImpl implements PromotionDTO {
     /** {@inheritDoc} */
     public void setDisplayDescriptions(final Map<String, String> displayDescriptions) {
         this.displayDescriptions = displayDescriptions;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isCouponTriggered() {
+        return couponTriggered;
+    }
+
+    /** {@inheritDoc} */
+    public void setCouponTriggered(final boolean couponTriggered) {
+        this.couponTriggered = couponTriggered;
     }
 
     /** {@inheritDoc} */

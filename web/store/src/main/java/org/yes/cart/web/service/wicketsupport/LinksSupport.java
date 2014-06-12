@@ -152,6 +152,29 @@ public interface LinksSupport {
      */
     Link newRemoveFromWishListLink(String linkId, String skuCode, Long itemId, Class<Page> target, PageParameters pageParameters);
 
+
+    /**
+     * @param linkId wicket link component id
+     * @param coupon coupon code
+     * @param target target page
+     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     *
+     * @return bookmarkable link
+     */
+    Link newAddCouponLink(String linkId, String coupon, Class<Page> target, PageParameters pageParameters);
+
+
+    /**
+     * @param linkId wicket link component id
+     * @param coupon coupon code
+     * @param target target page
+     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     *
+     * @return bookmarkable link
+     */
+    Link newRemoveCouponLink(String linkId, String coupon, Class<Page> target, PageParameters pageParameters);
+
+
     /**
      * @param linkId wicket link component id
      * @param pageParameters current request parameters that will be filtered and carried over to new link

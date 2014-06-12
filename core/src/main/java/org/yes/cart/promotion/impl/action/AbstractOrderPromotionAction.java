@@ -54,13 +54,13 @@ public abstract class AbstractOrderPromotionAction extends AbstractPromotionActi
     /**
      * Subtract amount from the sub total to reflect promotion being applied.
      *
-     * @param promoCode promo code
+     * @param context evaluation context
      * @param amount amount off
      */
     protected void subtractPromotionValue(final Map<String, Object> context,
-                                          final String promoCode,
                                           final BigDecimal amount) {
 
+        final String promoCode = getPromotionCode(context);
         final Total total = getTotal(context);
         final BigDecimal orderAmountOff;
         if (MoneyUtils.isFirstBiggerThanSecond(amount, total.getSubTotal())) {
@@ -98,13 +98,13 @@ public abstract class AbstractOrderPromotionAction extends AbstractPromotionActi
     /**
      * Add amount to the list price total to reflect promotion being applied.
      *
-     * @param promoCode promo code
+     * @param context evaluation context
      * @param listValue list value added by this promotion
      */
     protected void addListValue(final Map<String, Object> context,
-                                final String promoCode,
                                 final BigDecimal listValue) {
 
+        final String promoCode = getPromotionCode(context);
         final Total total = getTotal(context);
 
         setTotal(

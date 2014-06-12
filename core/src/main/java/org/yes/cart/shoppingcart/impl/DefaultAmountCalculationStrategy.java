@@ -380,7 +380,6 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         final CartItemPrices prices = new CartItemPrices();
         if (items != null) {
             for (CartItem cartItem : items) {
-                // TODO: YC-303 apply item level promotions
                 final CartItemPrices price = new CartItemPrices(cartItem);
                 prices.add(price);
             }

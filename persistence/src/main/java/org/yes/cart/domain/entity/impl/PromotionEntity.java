@@ -49,6 +49,7 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
     private String description;
     private String displayDescription;
 
+    private boolean couponTriggered;
     private boolean canBeCombined;
     private boolean enabled;
     private Date enabledFrom;
@@ -174,6 +175,14 @@ public class PromotionEntity implements Promotion, java.io.Serializable {
 
     public void setDisplayDescription(final String displayDescription) {
         this.displayDescription = displayDescription;
+    }
+
+    public boolean isCouponTriggered() {
+        return couponTriggered;
+    }
+
+    public void setCouponTriggered(final boolean couponTriggered) {
+        this.couponTriggered = couponTriggered;
     }
 
     public boolean isCanBeCombined() {

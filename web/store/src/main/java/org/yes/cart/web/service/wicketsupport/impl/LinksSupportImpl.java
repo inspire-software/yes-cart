@@ -136,6 +136,22 @@ public class LinksSupportImpl implements LinksSupport {
 
     /** {@inheritDoc} */
     @Override
+    public Link newAddCouponLink(final String linkId, final String coupon, final Class<Page> target, final PageParameters pageParameters) {
+        final PageParameters params = getFilteredCurrentParameters(pageParameters);
+        params.set(ShoppingCartCommand.CMD_ADDCOUPON, coupon);
+        return new BookmarkablePageLink(linkId, target, params);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Link newRemoveCouponLink(final String linkId, final String coupon, final Class<Page> target, final PageParameters pageParameters) {
+        final PageParameters params = getFilteredCurrentParameters(pageParameters);
+        params.set(ShoppingCartCommand.CMD_REMOVECOUPON, coupon);
+        return new BookmarkablePageLink(linkId, target, params);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     @SuppressWarnings("unchecked")
     public Link newLogOffLink(final String linkId, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);

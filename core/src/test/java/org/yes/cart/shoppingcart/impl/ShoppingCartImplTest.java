@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -163,4 +164,60 @@ public class ShoppingCartImplTest {
         assertEquals("Index of removed should be -1", -1, cart.indexOfProductSku("sku02"));
     }
 
+    @Test
+    public void testAddCoupons() throws Exception {
+
+        cart.addCoupon("ABC");
+
+        List<String> coupons, applied;
+
+        coupons = cart.getCoupons();
+        assertNotNull(coupons);
+        assertEquals(1, coupons.size());
+        assertEquals("ABC", coupons.get(0));
+
+        applied = cart.getAppliedCoupons();
+        assertNotNull(applied);
+        assertEquals(0, applied.size());
+
+        cart.addCoupon("CDE");
+
+        coupons = cart.getCoupons();
+        assertNotNull(coupons);
+        assertEquals(2, coupons.size());
+        assertEquals("ABC", coupons.get(0));
+        assertEquals("CDE", coupons.get(1));
+
+        applied = cart.getAppliedCoupons();
+        assertNotNull(applied);
+        assertEquals(0, applied.size());
+
+        cart.addGiftToCart("gift-001", BigDecimal.ONE, "PROMO-001:ABC");
+
+        applied = cart.getAppliedCoupons();
+        assertNotNull(applied);
+        assertEquals(1, applied.size());
+        assertEquals("ABC", applied.get(0));
+
+        cart.addGiftToCart("gift-002", BigDecimal.ONE, "PROMO-001:CDE");
+
+        applied = cart.getAppliedCoupons();
+        assertNotNull(applied);
+        assertEquals(2, applied.size());
+        assertEquals("ABC", applied.get(0));
+        assertEquals("CDE", applied.get(1));
+
+        cart.removeItemPromotions();
+
+        coupons = cart.getCoupons();
+        assertNotNull(coupons);
+        assertEquals(2, coupons.size());
+        assertEquals("ABC", coupons.get(0));
+        assertEquals("CDE", coupons.get(1));
+
+        applied = cart.getAppliedCoupons();
+        assertNotNull(applied);
+        assertEquals(0, applied.size());
+
+    }
 }
