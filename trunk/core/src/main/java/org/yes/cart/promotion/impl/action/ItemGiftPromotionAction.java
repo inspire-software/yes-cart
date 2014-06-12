@@ -116,7 +116,7 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
             cart.setGiftPrice(ctx.getSubject(), minimal, giftValue.getRegularPrice());
             // update current cart item with promotion details but do not alter its price as we
             // can have cumulative promotions
-            cart.setProductSkuPromotion(cartItem.getProductSkuCode(), cartItem.getPrice(), promotion.getCode());
+            cart.setProductSkuPromotion(cartItem.getProductSkuCode(), cartItem.getPrice(), getPromotionCode(context));
         }
     }
 

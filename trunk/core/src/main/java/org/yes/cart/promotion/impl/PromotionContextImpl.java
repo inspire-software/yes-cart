@@ -19,17 +19,12 @@ package org.yes.cart.promotion.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Promotion;
-import org.yes.cart.promotion.PromotionAction;
-import org.yes.cart.promotion.PromotionCondition;
-import org.yes.cart.promotion.PromotionContext;
+import org.yes.cart.promotion.*;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.shoppingcart.impl.TotalImpl;
-import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -40,13 +35,15 @@ import java.util.*;
 public class PromotionContextImpl implements PromotionContext {
 
     private final String shopCode;
+    private final PromotionApplicationStrategy strategy;
     private final Date timestamp = new Date();
 
     private final Map<String, List<List<PromoTriplet>>> promotionBuckets = new HashMap<String, List<List<PromoTriplet>>>();
     private final Map<String, PromoTriplet> promotionByCode = new HashMap<String, PromoTriplet>();
 
-    public PromotionContextImpl(final String shopCode) {
+    public PromotionContextImpl(final String shopCode, final PromotionApplicationStrategy strategy) {
         this.shopCode = shopCode;
+        this.strategy = strategy;
     }
 
     /**
@@ -60,7 +57,7 @@ public class PromotionContextImpl implements PromotionContext {
                              final PromotionCondition condition,
                              final PromotionAction action) {
 
-        final PromoTriplet promo = new PromoTriplet(promotion, condition, action);
+        final PromoTriplet promo = new PromoTripletImpl(promotion, condition, action);
 
         promotionByCode.put(promotion.getCode(), promo);
 
@@ -117,7 +114,7 @@ public class PromotionContextImpl implements PromotionContext {
                 put(PromotionCondition.VAR_CART_ITEM, item);
             }};
 
-            applyBestValuePromotion(itemPromoBuckets, context);
+            applyPromotions(itemPromoBuckets, context);
 
         }
 
@@ -141,7 +138,7 @@ public class PromotionContextImpl implements PromotionContext {
             put(PromotionCondition.VAR_TMP_TOTAL, new TotalImpl().add(itemTotal));
         }};
 
-        applyBestValuePromotion(orderPromoBuckets, context);
+        applyPromotions(orderPromoBuckets, context);
 
         return (Total) context.get(PromotionCondition.VAR_TMP_TOTAL);
 
@@ -165,7 +162,7 @@ public class PromotionContextImpl implements PromotionContext {
             put(PromotionCondition.VAR_TMP_TOTAL, new TotalImpl().add(orderTotal));
         }};
 
-        applyBestValuePromotion(orderPromoBuckets, context);
+        applyPromotions(orderPromoBuckets, context);
 
         return (Total) context.get(PromotionCondition.VAR_TMP_TOTAL);
     }
@@ -189,111 +186,15 @@ public class PromotionContextImpl implements PromotionContext {
             put(PromotionCondition.VAR_CART, cart);
         }};
 
-        applyBestValuePromotion(tagPromoBuckets, context);
+        applyPromotions(tagPromoBuckets, context);
 
     }
 
-    /*
-    * Test all applicable promotions for best cumulative discount value and apply it
-    * to given context.
-    *
-    * CPOINT - best deal is the industry standard since provide customer with lowest
-    *          price possible. However there are use cases when we want alternative
-    *          promotion strategy - e.g. by priority.
-    */
-    private void applyBestValuePromotion(final List<List<PromoTriplet>> promoBuckets,
-                                         final Map<String, Object> context) {
+    private void applyPromotions(final List<List<PromoTriplet>> promoBuckets,
+                                 final Map<String, Object> context) {
 
-        List<PromoTriplet> bestValue = null;
-        BigDecimal bestDiscountValue = BigDecimal.ZERO;
+        strategy.applyPromotions(promoBuckets, context);
 
-        for (final List<PromoTriplet> promoBucket : promoBuckets) {
-
-            try {
-                if (promoBucket.isEmpty()) {
-                    continue;
-                }
-
-                final List<PromoTriplet> applicable = new ArrayList<PromoTriplet>(promoBucket.size());
-
-                BigDecimal discountValue = BigDecimal.ZERO;
-
-                for (final PromoTriplet promo : promoBucket) {
-
-                    context.put(PromotionCondition.VAR_ACTION_CONTEXT, promo.promotion.getPromoActionContext());
-                    context.put(PromotionCondition.VAR_PROMOTION, promo.promotion);
-
-                    final boolean eligible = promo.condition.isEligible(context);
-
-                    if (eligible) {
-                        final BigDecimal pdisc = promo.action.testDiscountValue(context);
-                        if (MoneyUtils.isFirstBiggerThanSecond(pdisc, BigDecimal.ZERO)) {
-                            // only if we get some discount from test this promo qualifies to be applicable
-                            applicable.add(promo);
-                            // cumulative discount value is total value in percent relative to sale price
-                            discountValue = discountValue.add(pdisc);
-                        }
-                    }
-
-                }
-
-                if (!applicable.isEmpty() && MoneyUtils.isFirstBiggerThanSecond(discountValue, bestDiscountValue)) {
-
-                    bestDiscountValue = discountValue;
-                    bestValue = applicable;
-
-                }
-            } catch (Exception exp) {
-                ShopCodeContext.getLog(this).error("Unable to apply promotions {}", promoBucket);
-                ShopCodeContext.getLog(this).error("Unable to apply promotions", exp);
-            }
-        }
-
-        if (CollectionUtils.isNotEmpty(bestValue)) {
-
-            for (final PromoTriplet promo : bestValue) {
-
-                context.put(PromotionCondition.VAR_ACTION_CONTEXT, promo.promotion.getPromoActionContext());
-                context.put(PromotionCondition.VAR_PROMOTION, promo.promotion);
-
-                promo.action.perform(context);
-
-            }
-
-        }
-    }
-
-    private static class PromoTriplet {
-
-        private final Promotion promotion;
-        private final PromotionCondition condition;
-        private final PromotionAction action;
-
-        private PromoTriplet(final Promotion promotion,
-                             final PromotionCondition condition,
-                             final PromotionAction action) {
-            this.promotion = promotion;
-            this.condition = condition;
-            this.action = action;
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            final PromoTriplet that = (PromoTriplet) o;
-
-            return promotion.getPromotionId() == that.promotion.getPromotionId();
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public int hashCode() {
-            final long id = promotion.getPromotionId();
-            return (int) (id ^ (id >>> 32));
-        }
     }
 
 }

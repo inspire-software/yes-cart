@@ -44,7 +44,7 @@ import java.io.FileOutputStream;
 public abstract class AbstractTestDAO  {
 
     // Do not enable dump unless this is necessary as it is very slow.
-    private static final boolean ENABLED_DUMPS = true;
+    private static final boolean ENABLED_DUMPS = false;
 
     private ApplicationContext ctx;
     private SessionFactory sessionFactory;

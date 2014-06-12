@@ -169,6 +169,18 @@ public interface Promotion extends Auditable, Codable, Taggable {
     void setDisplayDescription(String displayDescription);
 
     /**
+     * @return flag that denotes if this promotion is triggered by
+     *         a coupon code.
+     */
+    boolean isCouponTriggered();
+
+    /**
+     * @param couponTriggered flag that denotes if this promotion is
+     *                        triggered by a coupon code.
+     */
+    void setCouponTriggered(boolean couponTriggered);
+
+    /**
      * @return flag that denotes if this promotion can be applied
      *         in conjunction with other "canBeCombined" promotions.
      */

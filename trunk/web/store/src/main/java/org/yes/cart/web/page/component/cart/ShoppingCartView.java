@@ -16,10 +16,16 @@
 
 package org.yes.cart.web.page.component.cart;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -39,7 +45,9 @@ public class ShoppingCartView extends BaseComponent {
     private static final String SUB_TOTAL_VIEW = "subTotalView";
     private static final String ITEMS_LIST = "itemsList";
     private static final String CART_FORM = "cartForm";
-
+    private static final String COUPON_LIST = "couponsList";
+    private static final String COUPON_CODE_INPUT = "couponInput";
+    private static final String COUPON_CODE_ADD_BTN = "addCouponBtn";
 
     private static final String DELIVERY_COST_LABEL = "deliveryCost";
     private static final String TAX_LABEL = "tax";
@@ -66,19 +74,45 @@ public class ShoppingCartView extends BaseComponent {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         final Total total = cart.getTotal();
 
-        addOrReplace(
-                new Form(CART_FORM).addOrReplace(
-                        new ShoppingCartItemsList(ITEMS_LIST, ApplicationDirector.getShoppingCart().getCartItemList())
-                ).addOrReplace(
-                        new FeedbackPanel(FEEDBACK)
-                ).addOrReplace(
-                        new PriceView(
-                                SUB_TOTAL_VIEW,
-                                new Pair<BigDecimal, BigDecimal>(total.getListSubTotal(), total.getSubTotal()),
-                                cart.getCurrencyCode(),
-                                total.getAppliedOrderPromo(), true, true)
-                )
+        final Form cartForm = new Form(CART_FORM);
+
+        cartForm.addOrReplace(new ShoppingCartItemsList(ITEMS_LIST, cart.getCartItemList()));
+        cartForm.addOrReplace(new FeedbackPanel(FEEDBACK));
+        cartForm.addOrReplace(
+                new PriceView(
+                        SUB_TOTAL_VIEW,
+                        new Pair<BigDecimal, BigDecimal>(total.getListSubTotal(), total.getSubTotal()),
+                        cart.getCurrencyCode(),
+                        total.getAppliedOrderPromo(), true, true)
         );
+
+        cartForm.addOrReplace(new ShoppingCartCouponsList(COUPON_LIST, cart.getCoupons(), cart.getAppliedCoupons()));
+
+        final TextField<String> couponCode = new TextField<String>(COUPON_CODE_INPUT, new Model<String>());
+        cartForm.addOrReplace(couponCode);
+
+        cartForm.addOrReplace(new Button(COUPON_CODE_ADD_BTN) {
+            @Override
+            public void onSubmit() {
+
+                final String code = couponCode.getModelObject();
+
+                if (StringUtils.isNotBlank(code)) {
+
+                    setResponsePage(
+                            getPage().getPageClass(),
+                            new PageParameters()
+                                    .add(ShoppingCartCommand.CMD_ADDCOUPON, code)
+                    );
+
+                } else {
+                    error(getLocalizer().getString("noemptycoupons", this, "Need non empty coupon code"));
+                }
+            }
+        });
+
+
+        addOrReplace(cartForm);
 
     }
 

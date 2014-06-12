@@ -39,22 +39,25 @@ public class PromotionContextFactoryImpl implements PromotionContextFactory {
     private final PromotionService promotionService;
     private final PromotionConditionParser promotionConditionParser;
     private final Map<String, Map<String, PromotionAction>> promotionActionMap;
+    private final PromotionApplicationStrategy strategy;
 
     public PromotionContextFactoryImpl(final ShopService shopService,
                                        final PromotionService promotionService,
                                        final PromotionConditionParser promotionConditionParser,
-                                       final Map<String, Map<String, PromotionAction>> promotionActionMap) {
+                                       final Map<String, Map<String, PromotionAction>> promotionActionMap,
+                                       final PromotionApplicationStrategy strategy) {
         this.shopService = shopService;
         this.promotionService = promotionService;
         this.promotionConditionParser = promotionConditionParser;
         this.promotionActionMap = promotionActionMap;
+        this.strategy = strategy;
     }
 
     /** {@inheritDoc} */
     @Cacheable(value = "promotionService-factoryGetInstance")
     public PromotionContext getInstance(final String shopCode, final String currency) {
 
-        final PromotionContextImpl ctx = new PromotionContextImpl(shopCode);
+        final PromotionContextImpl ctx = new PromotionContextImpl(shopCode, strategy);
         final List<Promotion> active = promotionService.getPromotionsByShopCode(shopCode, currency, true);
         for (final Promotion promotion : active) {
             final PromotionCondition condition = promotionConditionParser.parse(promotion);

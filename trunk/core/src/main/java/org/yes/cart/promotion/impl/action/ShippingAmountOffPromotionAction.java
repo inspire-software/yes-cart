@@ -64,9 +64,8 @@ public class ShippingAmountOffPromotionAction extends AbstractShippingPromotionA
     public void perform(final Map<String, Object> context) {
         final BigDecimal amountOff = getAmountValue(getRawPromotionActionContext(context));
         if (MoneyUtils.isFirstBiggerThanSecond(amountOff, BigDecimal.ZERO)) {
-            final Promotion promotion = getPromotion(context);
 
-            subtractPromotionValue(context, promotion.getCode(), amountOff);
+            subtractPromotionValue(context, amountOff);
 
         }
     }

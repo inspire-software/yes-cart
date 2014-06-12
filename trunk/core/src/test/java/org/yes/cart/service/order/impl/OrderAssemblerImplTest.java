@@ -46,7 +46,7 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testAssembleCustomerOrder() {
+    public void testAssembleCustomerOrder() throws Exception {
         Customer customer = createCustomer();
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);

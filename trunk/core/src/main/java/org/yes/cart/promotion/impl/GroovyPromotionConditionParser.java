@@ -17,6 +17,7 @@
 package org.yes.cart.promotion.impl;
 
 import groovy.lang.GroovyClassLoader;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.PromotionCondition;
@@ -110,7 +111,11 @@ public class GroovyPromotionConditionParser implements PromotionConditionParser 
      * be inside the eligibility condition
      */
     void appendBody(final StringBuilder script, final String body) {
-        script.append(body);
+        if (StringUtils.isBlank(body)) {
+            script.append("return true;\n");
+        } else {
+            script.append(body);
+        }
     }
 
     /*

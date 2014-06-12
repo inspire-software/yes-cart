@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -30,7 +31,7 @@ import java.util.Date;
  * Date: 13-10-11
  * Time: 12:03 PM
  */
-public interface PromotionContext {
+public interface PromotionContext extends Serializable {
 
     /**
      * @return shop code

@@ -57,7 +57,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testHandlePaymentCallback() throws OrderException {
+    public void testHandlePaymentCallback() throws Exception {
         Customer customer = createCustomer();
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);

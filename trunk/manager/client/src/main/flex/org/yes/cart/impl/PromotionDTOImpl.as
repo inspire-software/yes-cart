@@ -40,6 +40,8 @@ public class PromotionDTOImpl {
 
     public var promoAction:String;
 
+    public var couponTriggered:Boolean;
+
     public var canBeCombined:Boolean;
 
     public var eligibilityCondition:String;

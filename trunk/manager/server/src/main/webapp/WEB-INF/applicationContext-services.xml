@@ -646,6 +646,7 @@
                         <value>carriernames.xml</value>
                         <value>carrierslanames.xml</value>
                         <value>promotionnames.xml</value>
+                        <value>promotioncouponnames.xml</value>
                     </list>
                 </entry>
                 <entry key="YC DEMO: IceCat Catalog">
@@ -707,6 +708,7 @@
                     <list>
                         <value>skuprices.xml</value>
                         <value>promotionnames.xml</value>
+                        <value>promotioncouponnames.xml</value>
                     </list>
                 </entry>
                 <entry key="IMAGES ONLY">
@@ -812,9 +814,23 @@
             <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="findByParameters" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="findByParameters" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remotePromotionCouponService" class="org.yes.cart.remote.service.impl.RemotePromotionCouponServiceImpl">
+        <constructor-arg index="0" ref="dtoPromotionCouponService"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getCouponsByPromotionId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
         </security:intercept-methods>
     </bean>
 

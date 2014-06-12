@@ -42,5 +42,12 @@
     <entry key="skuNumber">Номер</entry>
     <entry key="productsInCart">Товары в корзине</entry>
 
+    <entry key="removeCouponCodeLabel">Убрать промо-код</entry>
+    <entry key="addCouponButtonLabel">Добавить промо-код</entry>
+
+    <entry key="appliedPromoCode">${0} [применен]</entry>
+    <entry key="pendingPromoCode">${0} [не применен]</entry>
+    <entry key="noemptycoupons">Введите пожалуйста промо-код</entry>
+
 
 </properties>

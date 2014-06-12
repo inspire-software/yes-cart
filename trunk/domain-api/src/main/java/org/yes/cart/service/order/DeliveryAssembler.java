@@ -56,7 +56,7 @@ public interface DeliveryAssembler {
      * @param onePhysicalDelivery true if need to create one physical delivery.
      * @return order with attached deliveries
      */
-    CustomerOrder assembleCustomerOrder(CustomerOrder order, ShoppingCart shoppingCart, boolean onePhysicalDelivery);
+    CustomerOrder assembleCustomerOrder(CustomerOrder order, ShoppingCart shoppingCart, boolean onePhysicalDelivery) throws OrderAssemblyException;
 
     /**
      * Is order can be with multiple deliveries.
@@ -64,7 +64,7 @@ public interface DeliveryAssembler {
      * @param order given order
      * @return true in case if order can has multiple physical deliveries.
      */
-    boolean isOrderCanHasMultipleDeliveries(CustomerOrder order);
+    boolean isOrderMultipleDeliveriesAllowed(CustomerOrder order);
 
 
 }

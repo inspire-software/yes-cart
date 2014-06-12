@@ -123,7 +123,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
-        assertFalse(customerOrderService.isOrderCanHasMultipleDeliveries(shoppingCart));
+        assertFalse(customerOrderService.isOrderMultipleDeliveriesAllowed(shoppingCart));
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
         assertEquals(2, order.getDelivery().size());
     }

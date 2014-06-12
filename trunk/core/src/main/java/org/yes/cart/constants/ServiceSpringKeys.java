@@ -431,4 +431,9 @@ public interface ServiceSpringKeys {
      */
     String DTO_PROMOTION_SERVICE = "dtoPromotionService";
 
+    /**
+     * {@link org.yes.cart.service.dto.DtoPromotionCouponService}
+     */
+    String DTO_PROMOTION_COUPON_SERVICE = "dtoPromotionCouponService";
+
 }

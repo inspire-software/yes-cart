@@ -81,6 +81,7 @@ public class DtoPromotionServiceImpl
         iface.setEligibilityCondition(instance.getEligibilityCondition());
         iface.setPromoActionContext(instance.getPromoActionContext());
         iface.setCanBeCombined(instance.isCanBeCombined());
+        iface.setCouponTriggered(instance.isCouponTriggered());
 
         iface = service.create(iface);
         return getById(iface.getId());

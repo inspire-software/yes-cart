@@ -54,13 +54,13 @@ public abstract class AbstractShippingPromotionAction extends AbstractPromotionA
     /**
      * Subtract amount from the sub total to reflect promotion being applied.
      *
-     * @param promoCode promo code
+     * @param context evaluation context
      * @param amount amount off
      */
     protected void subtractPromotionValue(final Map<String, Object> context,
-                                          final String promoCode,
                                           final BigDecimal amount) {
 
+        final String promoCode = getPromotionCode(context);
         final Total total = getTotal(context);
         final BigDecimal orderAmountOff;
         if (MoneyUtils.isFirstBiggerThanSecond(amount, total.getDeliveryCost())) {

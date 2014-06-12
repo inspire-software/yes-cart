@@ -530,7 +530,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
      * in case of concurrent shopping. The rest of shoppers get the exceptions.
      */
     @Test
-    public void testMultipleShoppersOneItem() {
+    public void testMultipleShoppersOneItem() throws Exception {
         //Create several customers, each of them has the one product in
         //hos cart, but only one item is available
         final int customerQty = 10;

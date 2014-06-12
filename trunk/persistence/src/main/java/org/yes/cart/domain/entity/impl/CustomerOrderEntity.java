@@ -17,10 +17,7 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.CustomerOrderDet;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -55,6 +52,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private Shop shop;
     private Collection<CustomerOrderDet> orderDetail = new ArrayList<CustomerOrderDet>(0);
     private Collection<CustomerOrderDelivery> delivery = new ArrayList<CustomerOrderDelivery>(0);
+    private Collection<PromotionCouponUsage> coupons = new ArrayList<PromotionCouponUsage>(0);
     private String billingAddress;
     private String shippingAddress;
     private boolean multipleShipmentOption;
@@ -139,6 +137,14 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     public void setShop(Shop shop) {
         this.shop = shop;
+    }
+
+    public Collection<PromotionCouponUsage> getCoupons() {
+        return coupons;
+    }
+
+    public void setCoupons(Collection<PromotionCouponUsage> coupons) {
+        this.coupons = coupons;
     }
 
     public Collection<CustomerOrderDet> getOrderDetail() {

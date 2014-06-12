@@ -1893,6 +1893,11 @@
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
 
+        <bag name="coupons" inverse="true" cascade="all" lazy="false">
+            <key><column name="CUSTOMERORDER_ID" not-null="true"/></key>
+            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.PromotionCouponUsageEntity"/>
+        </bag>
+
         <bag name="orderDetail" inverse="true" cascade="all" lazy="false">
             <key><column name="CUSTOMERORDER_ID" not-null="true"/></key>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.CustomerOrderDetEntity"/>
@@ -2203,6 +2208,7 @@
             </column>
         </property>
 
+        <property name="couponTriggered" column="COUPON_TRIGGERED" type="boolean" length="1" not-null="true"/>
         <property name="canBeCombined" column="CAN_BE_COMBINED" type="boolean" length="1" not-null="true"/>
         <property name="enabled" column="ENABLED" type="boolean" length="1" not-null="true" index="PROMO_ENABLED"/>
 
@@ -2217,6 +2223,57 @@
 
     </class>
 
+    <class name="org.yes.cart.domain.entity.impl.PromotionCouponEntity" table="TPROMOTIONCOUPON">
+        <id name="promotioncouponId" type="long" column="PROMOTIONCOUPON_ID">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="code" column="CODE" type="string" length="255" not-null="true" unique-key="COUPON_CODE"/>
+
+        <many-to-one name="promotion" class="org.yes.cart.domain.entity.impl.PromotionEntity" foreign-key="FK_PROMO_COUPON">
+            <column name="PROMOTION_ID" not-null="true"/>
+        </many-to-one>
+
+        <property name="usageLimit" column="USAGE_LIMIT" type="int" not-null="true"/>
+        <property name="usageLimitPerCustomer" column="USAGE_LIMIT_PER_CUSTOMER" type="int" not-null="true"/>
+        <property name="usageCount" column="USAGE_COUNT" type="int" not-null="true"/>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+
+    </class>
+
+    <class name="org.yes.cart.domain.entity.impl.PromotionCouponUsageEntity" table="TPROMOTIONCOUPONUSAGE">
+        <id name="promotioncouponusageId" type="long" column="PROMOTIONCOUPONUSAGE_ID">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" not-null="true"/>
+
+        <many-to-one name="coupon" class="org.yes.cart.domain.entity.impl.PromotionCouponEntity" foreign-key="FK_COUPON_USAGE">
+            <column name="COUPON_ID" not-null="true"/>
+        </many-to-one>
+
+        <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.impl.CustomerOrderEntity" foreign-key="FK_ORD_COUPON_USAGE">
+            <column name="CUSTOMERORDER_ID" not-null="true"/>
+        </many-to-one>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+
+    </class>
 
 
     <query name="SHOP.BY.URL">
@@ -3036,6 +3093,45 @@
             order by p.enabledFrom asc, p.enabledTo asc, p.rank asc, p.promotionId asc
         ]]>
     </query>
+
+    <query name="COUPONS.BY.PROMOTION.ID">
+        <![CDATA[
+            select c from PromotionCouponEntity c
+            where c.promotion.promotionId = ?1
+            order by c.code asc
+        ]]>
+    </query>
+
+    <query name="ENABLED.COUPON.BY.CODE">
+        <![CDATA[
+            select c from PromotionCouponEntity c
+            where c.code = ?1 and c.promotion.enabled = ?2 and c.usageLimit > c.usageCount
+                and (c.promotion.enabledFrom < ?3 OR c.promotion.enabledFrom IS NULL)
+                and (c.promotion.enabledTo > ?4 OR c.promotion.enabledTo IS NULL)
+        ]]>
+    </query>
+
+    <query name="COUPON.USAGE.BY.ID.AND.EMAIL">
+        <![CDATA[
+            select count(c.id) from PromotionCouponUsageEntity c
+            where c.coupon.promotioncouponId = ?1 and c.customerEmail = ?2
+        ]]>
+    </query>
+
+    <query name="COUPON.USAGE.BY.COUPON.ID">
+        <![CDATA[
+            select count(c.promotioncouponusageId) from PromotionCouponUsageEntity c
+            where c.coupon.promotioncouponId = ?1
+        ]]>
+    </query>
+
+    <query name="PROMOTION.ID.AND.CODE.BY.COUPON.CODE">
+        <![CDATA[
+            select new org.yes.cart.domain.misc.Pair(c.promotion.promotionId, c.promotion.code) from PromotionCouponEntity c
+            where c.code = ?1
+        ]]>
+    </query>
+
 
     <query name="OLDEST.MAIL">
         <![CDATA[

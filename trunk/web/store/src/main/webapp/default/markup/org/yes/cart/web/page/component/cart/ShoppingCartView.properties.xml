@@ -40,6 +40,12 @@
     <entry key="skuNumber">SKU code</entry>
     <entry key="productsInCart">Items in cart</entry>
 
+    <entry key="removeCouponCodeLabel">Remove coupon</entry>
+    <entry key="addCouponButtonLabel">Add coupon</entry>
+
+    <entry key="appliedPromoCode">${0} [applied]</entry>
+    <entry key="pendingPromoCode">${0} [not applied]</entry>
+    <entry key="noemptycoupons">Please enter coupon code</entry>
 
 
 </properties>

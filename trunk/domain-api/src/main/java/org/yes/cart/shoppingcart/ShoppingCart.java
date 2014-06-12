@@ -171,6 +171,25 @@ public interface ShoppingCart extends Serializable {
      */
     int getCartItemsCount();
 
+    /**
+     * @return coupon codes added to this cart
+     */
+    List<String> getCoupons();
+
+    /**
+     * @return coupon codes that triggered promotion
+     */
+    List<String> getAppliedCoupons();
+
+    /**
+     * @param coupon coupon code
+     */
+    boolean addCoupon(String coupon);
+
+    /**
+     * @param coupon remove coupon from the cart
+     */
+    boolean removeCoupon(String coupon);
 
     /**
      * Get current currency from shopping cart.

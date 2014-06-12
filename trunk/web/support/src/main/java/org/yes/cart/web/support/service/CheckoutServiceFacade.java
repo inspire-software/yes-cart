@@ -25,6 +25,7 @@ import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
+import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
@@ -156,7 +157,7 @@ public interface CheckoutServiceFacade {
      *
      * @return created order.
      */
-    CustomerOrder createFromCart(ShoppingCart shoppingCart);
+    CustomerOrder createFromCart(ShoppingCart shoppingCart) throws OrderAssemblyException;
 
     /**
      * Determine if multiple delivery option should be allowed for this cart.

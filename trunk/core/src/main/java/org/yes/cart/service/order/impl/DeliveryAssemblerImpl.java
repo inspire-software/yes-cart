@@ -25,6 +25,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryAssembler;
+import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.MoneyUtils;
 
@@ -87,7 +88,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      */
     public CustomerOrder assembleCustomerOrder(final CustomerOrder order,
                                                final ShoppingCart shoppingCart,
-                                               final boolean onePhysicalDelivery) {
+                                               final boolean onePhysicalDelivery) throws OrderAssemblyException {
 
 
         final Map<String, List<CustomerOrderDet>> groups = getDeliveryGroups(order, onePhysicalDelivery);
@@ -190,7 +191,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      * @param order given order
      * @return true in case if order can has multiple physical deliveries.
      */
-    public boolean isOrderCanHasMultipleDeliveries(final CustomerOrder order) {
+    public boolean isOrderMultipleDeliveriesAllowed(final CustomerOrder order) {
 
         final Map<String, List<CustomerOrderDet>> deliveryGroups = getDeliveryGroups(order, false);
 
