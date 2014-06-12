@@ -137,6 +137,12 @@
             <name>rank</name>
         </column-descriptor>
 
+        <column-descriptor>
+            <column-index>13</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>couponTriggered</name>
+        </column-descriptor>
 
     </import-columns>
 </import-descriptor>
