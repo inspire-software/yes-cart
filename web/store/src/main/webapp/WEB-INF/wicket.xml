@@ -168,6 +168,8 @@
                 <value>setMultipleDeliveryCmd</value>
                 <value>setShopIdCmd</value>
                 <value>setQuantityToCartCmd</value>
+                <value>qty</value>
+                <value>type</value>
                 <value>sku</value>
                 <value>wla</value>
             </list>
