@@ -113,5 +113,10 @@ public class Currency extends BaseComponent {
         super.onBeforeRender();
     }
 
+    public boolean isVisible() {
+        return !(ApplicationDirector.getCurrentShop().getSupportedCurrenciesAsList() == null
+                || ApplicationDirector.getCurrentShop().getSupportedCurrenciesAsList().size() <= 1);
+
+    }
 
 }
