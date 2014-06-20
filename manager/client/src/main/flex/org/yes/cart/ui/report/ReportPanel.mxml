@@ -32,6 +32,7 @@
         import mx.controls.DateField;
         import mx.controls.TextInput;
         import mx.core.UIComponent;
+        import mx.events.CloseEvent;
         import mx.events.ValidationResultEvent;
         import mx.rpc.AsyncResponder;
         import mx.rpc.events.FaultEvent;
@@ -187,13 +188,15 @@
          * Save report to disk.
          * @param event  mouse event
          */
-        private function onDownloadReportClick(event:MouseEvent):void {
-            //http://forums.adobe.com/message/3614898
-            new FileReference().save(
-                    pdf,
-                    reportName
-            );
-            pdf = null;
+        private function onDownloadReportClick(event:CloseEvent):void {
+            if (event.detail == Alert.YES) { //save
+                //http://forums.adobe.com/message/3614898
+                new FileReference().save(
+                        pdf,
+                        reportName
+                );
+                pdf = null;
+            }
         }
 
         /**
@@ -234,7 +237,8 @@
             pdf = ByteArray(event.result);
             Alert.show(
                     resourceManager.getString("ReportPanel", "reportReadyToSave"),
-                    resourceManager.getString("ReportPanel", "info"));
+                    resourceManager.getString("ReportPanel", "info"),
+                    Alert.YES | Alert.NO, null, onDownloadReportClick, null, Alert.NO);
         }
         ]]>
     </mx:Script>
@@ -269,9 +273,6 @@
 
                 <mx:Button visible="{reportComboBox.selectedItem != null}" click="onCreateReportButtonClick(event)"
                            id="okBtn" label="@Resource(bundle='ReportPanel',key='ok')"/>
-
-                <mx:Button visible="{pdf != null}" click="onDownloadReportClick(event)"
-                           id="saveBtn" label="@Resource(bundle='ReportPanel',key='save')"/>
 
             </mx:ControlBar>
 
