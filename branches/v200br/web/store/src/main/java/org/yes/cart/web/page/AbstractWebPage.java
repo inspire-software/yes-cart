@@ -17,6 +17,9 @@
 package org.yes.cart.web.page;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Application;
+import org.apache.wicket.Component;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -26,11 +29,15 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
+import org.slf4j.Logger;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -41,9 +48,7 @@ import org.yes.cart.web.util.WicketUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -132,7 +137,26 @@ public class AbstractWebPage extends WebPage {
         created.add( new AttributeAppender("content", getCreated(), " "));
         addOrReplace(created);*/ // TODO: YC-362
 
+        if (!isPageStateless() && Application.get().getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
+            determineStatefulComponent();
+        }
+
     }
+
+    private void determineStatefulComponent() {
+        final List<String> statefulComponentIds = new ArrayList<String>();
+        this.visitChildren(Component.class, new IVisitor<Component, Object>() {
+            @Override
+            public void component(final Component object, final IVisit<Object> objectIVisit) {
+                if (!object.isStateless()) {
+                    statefulComponentIds.add(object.getMarkupId());
+                }
+            }
+        });
+        final Logger log = ShopCodeContext.getLog(this);
+        log.warn("Page {} is stateful because of the following components: {}", getClass().getCanonicalName(), statefulComponentIds);
+    }
+
 
     /**
      * Executes Http commands that are posted via http and are available from

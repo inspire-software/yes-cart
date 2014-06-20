@@ -17,7 +17,9 @@
 package org.yes.cart.web.page.component.customer.dynaform;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Application;
 import org.apache.wicket.Component;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
@@ -103,8 +105,8 @@ public class DynaFormPanel extends BaseComponent {
 
             @Override
             protected void onSubmit() {
-                final Logger log = ShopCodeContext.getLog(this);
-                if (log.isDebugEnabled()) {
+                if (Application.get().getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
+                    final Logger log = ShopCodeContext.getLog(this);
                     log.debug(
                             MessageFormat.format(
                                     "Attributes will be updated for customer [{0}]",
