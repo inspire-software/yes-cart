@@ -952,7 +952,7 @@
 
             var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
             var reportName:String = "deliveryReport" + orderDto.ordernum + ".pdf";
-            if (event.detail == Alert.YES) { //csave
+            if (event.detail == Alert.YES) { //save
                 //http://forums.adobe.com/message/3614898
                 new FileReference().save(
                         pdf,

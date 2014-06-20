@@ -149,9 +149,14 @@
 
             var data:ByteArray = event.result as ByteArray;
 
-            var fileReference:FileReference = new FileReference();
-            fileReference.save(data, _promotion.code + "-coupons.csv");
-
+            Alert.show(resourceManager.getString('PromotionManagementPanel', 'downloadCouponCsv', [ _promotion.code ]),
+                    resourceManager.getString('ShopManagerApplication', 'info'),
+                    Alert.YES | Alert.NO, this, function(event:CloseEvent):void {
+                if (event.detail == Alert.YES) {
+                    var fileReference:FileReference = new FileReference();
+                    fileReference.save(data, _promotion.code + "-coupons.csv");
+                }
+            }, null, Alert.NO);
 
         }
         ]]></mx:Script>
