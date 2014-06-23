@@ -17,7 +17,7 @@
 package org.yes.cart.web.page.payment.callback;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.StringResourceModel;
@@ -139,7 +139,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
             final Label infoLabel = new Label(INFO_LABEL);
 
             add(
-                    new Form(FORM) {
+                    new StatelessForm(FORM) {
 
                         @Override
                         protected void onSubmit() {

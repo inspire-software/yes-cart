@@ -17,7 +17,7 @@
 package org.yes.cart.web.page.component.customer.auth;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
@@ -27,7 +27,7 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
  * Date: 10/16/11
  * Time: 3:29 PM
  */
-public class BaseAuthForm extends Form {
+public class BaseAuthForm extends StatelessForm {
 
     protected static final int MIN_LEN = 6;
     protected static final int MAX_LEN = 256;
