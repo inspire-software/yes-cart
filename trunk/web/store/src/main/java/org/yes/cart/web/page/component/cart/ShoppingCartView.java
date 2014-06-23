@@ -19,6 +19,7 @@ package org.yes.cart.web.page.component.cart;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
@@ -74,7 +75,7 @@ public class ShoppingCartView extends BaseComponent {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         final Total total = cart.getTotal();
 
-        final Form cartForm = new Form(CART_FORM);
+        final Form cartForm = new StatelessForm(CART_FORM);
 
         cartForm.addOrReplace(new ShoppingCartItemsList(ITEMS_LIST, cart.getCartItemList()));
         cartForm.addOrReplace(new FeedbackPanel(FEEDBACK));

@@ -19,6 +19,7 @@ package org.yes.cart.web.page.component.shipping;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -101,7 +102,7 @@ public class ShippingView extends BaseComponent {
 
         restoreCarrierSla(carriers);
 
-        final Form form = new Form(SHIPPING_FORM);
+        final Form form = new StatelessForm(SHIPPING_FORM);
 
         final DropDownChoice<CarrierSla> carrierSlaChoice = new DropDownChoice<CarrierSla>(
                 CARRIER_SLA_LIST,
