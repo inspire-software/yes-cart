@@ -16,10 +16,12 @@
 
 package org.yes.cart.web.page.component.customer.auth;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -47,6 +49,7 @@ public class LoginPanel extends BaseComponent {
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String EMAIL_INPUT = "email";
     private static final String PASSWORD_INPUT = "password";
+    private static final String RESTORE_PASSWORD_HIDDEN = "restorePassword";
     private static final String RESTORE_PASSWORD_BUTTON = "restorePasswordBtn";
     private static final String LOGIN_BUTTON = "loginBtn";
     private static final String REGISTRATION_LINK = "registrationLink";
@@ -93,6 +96,7 @@ public class LoginPanel extends BaseComponent {
 
         private String email;
         private String password;
+        private String restorePassword;
 
         public String getEmail() {
             return email;
@@ -108,6 +112,14 @@ public class LoginPanel extends BaseComponent {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public String getRestorePassword() {
+            return restorePassword;
+        }
+
+        public void setRestorePassword(final String restorePassword) {
+            this.restorePassword = restorePassword;
         }
 
         /**
@@ -147,11 +159,13 @@ public class LoginPanel extends BaseComponent {
                     passwordTextField
             );
 
+            add(new HiddenField<Boolean>(RESTORE_PASSWORD_HIDDEN));
+
             final Button sendNewPasswordBtn = new Button(RESTORE_PASSWORD_BUTTON) {
 
                 @Override
                 public void onSubmit() {
-                    final String email = getEmail();
+                    final String email = getRestorePassword();
                     final Customer customer = getCustomerServiceFacade().getCustomerByEmail(email);
                     if (customer != null) {
                         getCustomerServiceFacade().resetPassword(ApplicationDirector.getCurrentShop(), customer);
@@ -159,22 +173,17 @@ public class LoginPanel extends BaseComponent {
                     ((AbstractWebPage) getPage()).executeHttpPostedCommands();
                     ((AbstractWebPage) getPage()).persistCartIfNecessary();
 
-                    if(isCheckout) {
-                        //final String errorMessage =  new StringResourceModel(ALLOCATION_DETAIL, this, null, new Object [] {sku.getName(), sku.getCode() } ).getString()  ;
-                        info(new StringResourceModel("emailSent", this, null, new Object[] {email}).getString());
-                        emailInput.getModel().setObject(email);
-
-                    } else {
-                        setResponsePage(Application.get().getHomePage());
-                    }
+                    info(new StringResourceModel("emailSent", this, null, new Object[] {email}).getString());
+                    emailInput.getModel().setObject(email);
+                    setRestorePassword(null);
 
                 }
 
 
             };
 
-            sendNewPasswordBtn.setDefaultFormProcessing(false)
-                    .setVisible(false);
+
+            sendNewPasswordBtn.setDefaultFormProcessing(false);
 
             add(
                     sendNewPasswordBtn
@@ -199,15 +208,14 @@ public class LoginPanel extends BaseComponent {
                             } else {
                                 final String email = getEmail();
                                 if (isCustomerExists(email)) {
-                                    sendNewPasswordBtn.setVisible(true);
-                                    //emailInput.setEnabled(false);
+                                    setRestorePassword(email);
 
                                     error(new StringResourceModel("tryToRestore", this, null, new Object[] {email}).getString());
 
                                 } else {
-                                    sendNewPasswordBtn.setVisible(false);
-                                    //emailInput.setEnabled(true);
-                                    error(getLocalizer().getString("registration", this));
+                                    setRestorePassword(null);
+
+                                    error(getLocalizer().getString("customerNotExists", this));
                                 }
                             }
                         }
@@ -218,9 +226,15 @@ public class LoginPanel extends BaseComponent {
         }
 
 
+        @Override
+        protected void onBeforeRender() {
 
+            final boolean showResend = StringUtils.isNotBlank(getRestorePassword());
 
+            get(RESTORE_PASSWORD_BUTTON).setVisible(showResend);
 
+            super.onBeforeRender();
+        }
     }
 
 
