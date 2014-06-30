@@ -77,9 +77,11 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     @Cacheable(value = "customerService-customerByEmail")
     public Customer getCustomerByEmail(final String email) {
         Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("email", email));
-        Hibernate.initialize(customer.getAttributes());
-        for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
-            Hibernate.initialize(attrValueCustomer.getAttribute().getEtype());
+        if (customer != null) {
+            Hibernate.initialize(customer.getAttributes());
+            for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
+                Hibernate.initialize(attrValueCustomer.getAttribute().getEtype());
+            }
         }
         return customer;
     }
