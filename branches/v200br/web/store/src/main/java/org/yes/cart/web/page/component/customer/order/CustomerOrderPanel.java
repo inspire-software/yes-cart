@@ -38,6 +38,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -110,8 +111,7 @@ public class CustomerOrderPanel extends BaseComponent {
         final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.US);
         final DecimalFormat decimalFormat = new DecimalFormat(Constants.MONEY_FORMAT, formatSymbols);
 
-        final List<CustomerOrder> orders = customerOrderService.findCustomerOrders(customer, null);
-        Collections.sort(orders, new CustomerOrderComparator());
+        final List<CustomerOrder> orders = getValidCustomerOrderInChronologicalOrder(customer);
 
         if (orders.isEmpty()) {
 
@@ -148,6 +148,26 @@ public class CustomerOrderPanel extends BaseComponent {
 
 
         super.onBeforeRender();
+    }
+
+    private List<CustomerOrder> getValidCustomerOrderInChronologicalOrder(final Customer customer) {
+
+        // all in DB
+        final List<CustomerOrder> orders = customerOrderService.findCustomerOrders(customer, null);
+
+        // remove temporary orders
+        final Iterator<CustomerOrder> ordersIt = orders.iterator();
+        while (ordersIt.hasNext()) {
+            final CustomerOrder order = ordersIt.next();
+            if (CustomerOrder.ORDER_STATUS_NONE.equals(order.getOrderStatus())) {
+                ordersIt.remove();
+            }
+        }
+
+        // sort
+        Collections.sort(orders, new CustomerOrderComparator());
+
+        return orders;
     }
 
 }
