@@ -28,12 +28,11 @@ import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.service.image.ImageNameStrategyResolver;
+import org.yes.cart.util.ShopCodeContext;
 
-import javax.media.jai.*;
-import javax.media.jai.operator.ScaleDescriptor;
+import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.RenderedImage;
-import java.awt.image.renderable.ParameterBlock;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -52,15 +51,14 @@ public class ImageServiceImpl
     private final String allowedSizes;
 
     private final boolean cropToFit;
+    private final int forceCropToFitOnSize;
 
-    private final double colorR;
-    private final double colorG;
-    private final double colorB;
+    private final Color defaultBorder;
+    private final Color alphaBorder = new Color(0, 0, 0, 0);
 
     private final ImageNameStrategyResolver imageNameStrategyResolver;
 
     private final GenericDAO<SeoImage, Long> seoImageDao;
-    private final RenderingHints renderingHints;
 
 
     /**
@@ -77,91 +75,114 @@ public class ImageServiceImpl
      *                      This is useful for those who wish to have images that fill
      *                      all space dedicated for image without having border around
      *                      the image. For those who wish images of products in the middle
-     *                      e.g. as it is in YC demo better to set this to false.
+     * @param forceCropToFitOnSize forcefully use cropping if scale is below given size
+     *                             This option is very useful for small thumbs (<100px)
+     *                             as you really cannot see much with added padding for
+     *                             panoramic or tall images
      */
     public ImageServiceImpl(
             final GenericDAO<SeoImage, Long> seoImageDao,
             final ImageNameStrategyResolver imageNameStrategyResolver,
             final String allowedSizes,
-            final double borderColorR,
-            final double borderColorG,
-            final double borderColorB,
-            final boolean cropToFit) {
+            final int borderColorR,
+            final int borderColorG,
+            final int borderColorB,
+            final boolean cropToFit, final int forceCropToFitOnSize) {
 
         super(seoImageDao);
 
         this.seoImageDao = seoImageDao;
         this.imageNameStrategyResolver = imageNameStrategyResolver;
         this.allowedSizes = allowedSizes;
-        this.colorR = borderColorR;
-        this.colorG = borderColorG;
-        this.colorB = borderColorB;
-        this.renderingHints = new RenderingHints(
-                RenderingHints.KEY_RENDERING,
-                RenderingHints.VALUE_RENDER_QUALITY
-        );
-        // When scaling has rounding errors which leaves blank edges this setting will force JAI to
-        // copy adjacent pixels instead of zero fill (which is default that leaves a black border)
-        this.renderingHints.put(JAI.KEY_BORDER_EXTENDER, BorderExtender.createInstance(BorderExtender.BORDER_COPY));
+        defaultBorder = new Color(borderColorR, borderColorG, borderColorB);
+
         this.cropToFit = cropToFit;
+        this.forceCropToFitOnSize = forceCropToFitOnSize;
     }
 
-
     /**
-     * Resize given image file to requested width and height.
-     * @param original path to original image
-     * @param resized path to resized image
-     * @param width new requested width
-     * @param height new requested height
+     * {@inheritDoc}
      */
     public void resizeImage(
             final String original,
             final String resized,
             final String width,
             final String height) {
+        resizeImage(original, resized, width, height, cropToFit);
+    }
 
-        PlanarImage image = JAI.create("fileload", original);
+    /**
+     * {@inheritDoc}
+     */
+    public void resizeImage(
+            final String original,
+            final String resized,
+            final String width,
+            final String height,
+            final boolean cropToFit) {
 
-        createFolder(resized);
+        try {
 
-        RenderedImage imageRef = image;
+            createFolder(resized);
 
-        int x = NumberUtils.toInt(width);
-        int y = NumberUtils.toInt(height);
-        int originalX = image.getWidth();
-        int originalY = image.getHeight();
+            final BufferedImage originalImg = ImageIO.read(new File(original));
+            final String codec = getCodecFromFilename(original);
+            final boolean supportsAlpha = hasAlphaSupport(codec);
 
-        RenderedOp cropOp = null;
-        if (cropToFit) {
-            // crop the original to best fit of target size
-            cropOp = cropImageToCenter(imageRef, x, y, originalX, originalY);
-            imageRef = cropOp.getAsBufferedImage();
-        }
+            int x = NumberUtils.toInt(width);
+            int y = NumberUtils.toInt(height);
+            int originalX = originalImg.getWidth();
+            int originalY = originalImg.getHeight();
 
-        originalX = imageRef.getWidth();
-        originalY = imageRef.getHeight();
+            boolean doCropToFit = cropToFit || x < forceCropToFitOnSize || y < forceCropToFitOnSize;
 
-        // resize to target dimensions
-        RenderedOp resizeOp = resizeImage(imageRef, x, y, originalX, originalY);
-        imageRef = resizeOp.getAsBufferedImage();
+            final int imageType = supportsAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
 
-        int xNew = imageRef.getWidth();
-        int yNew = imageRef.getHeight();
+            final Image resizedImg;
+//            final BufferedImage resizedImg;
+            final int padX, padY;
+            if (doCropToFit) {
+                // crop the original to best fit of target size
+                int[] cropDims = cropImageToCenter(x, y, originalX, originalY);
+                padX = 0;
+                padY = 0;
 
-        int lPad = (x - xNew) / 2;
-        int rPad = x - xNew - lPad;
-        int tPad = (y - yNew) / 2;
-        int bPad = y - yNew - tPad;
+                final BufferedImage croppedImg = originalImg.getSubimage(cropDims[0], cropDims[1], cropDims[2], cropDims[3]);
+                resizedImg = croppedImg.getScaledInstance(x, y, Image.SCALE_SMOOTH);
 
-        // add padding if it needs
-        RenderedOp paddedOp = addPadding(imageRef, tPad, rPad, bPad, lPad);
+//                final BufferedImage croppedImg = originalImg.getSubimage(cropDims[0], cropDims[1], cropDims[2], cropDims[3]);
+//                resizedImg = new BufferedImage(y, x, imageType);
+//                Graphics2D graphics = resizedImg.createGraphics();
+//                graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+//                graphics.drawImage(croppedImg, 0, 0, x, y, null);
+            } else {
+                int[] scaleDims = scaleImageToCenter(x, y, originalX, originalY);
+                padX = scaleDims[0];
+                padY = scaleDims[1];
 
-        JAI.create("filestore", paddedOp.getAsBufferedImage(), resized, getCodecFromFilename(original));
+                resizedImg = originalImg.getScaledInstance(scaleDims[2], scaleDims[3], Image.SCALE_SMOOTH);
 
-        paddedOp.dispose();
-        resizeOp.dispose();
-        if (cropToFit) {
-            cropOp.dispose();
+//                resizedImg = new BufferedImage(scaleDims[3], scaleDims[2], imageType);
+//                Graphics2D graphics = resizedImg.createGraphics();
+//                graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+//                graphics.drawImage(originalImg, 0, 0, scaleDims[2], scaleDims[3], null);
+            }
+
+            // base canvas
+            final BufferedImage resizedImgFinal = new BufferedImage(x, y, imageType);
+
+            // fill base color
+            final Graphics2D graphics = resizedImgFinal.createGraphics();
+            graphics.setPaint(supportsAlpha ? alphaBorder : defaultBorder);
+            graphics.fillRect(0, 0, x, y);
+
+            // insert scaled image
+            graphics.drawImage(resizedImg, padX, padY, null);
+
+            ImageIO.write(resizedImgFinal, codec, new File(resized));
+
+        } catch (Exception exp) {
+            ShopCodeContext.getLog(this).error("Unable to resize image " + original, exp);
         }
 
     }
@@ -185,60 +206,60 @@ public class ImageServiceImpl
         return ext;
     }
 
-
-    private RenderedOp addPadding(final RenderedImage image, final int tPad, final int rPad, final int bPad, final int lPad) {
-        ParameterBlock borderParams = new ParameterBlock();
-        borderParams.addSource(image);
-        borderParams.add(lPad); //left pad
-        borderParams.add(rPad); //right pad
-        borderParams.add(tPad); //top pad
-        borderParams.add(bPad); //bottom pad
-        double fill[] = {colorR, colorG, colorB};
-        borderParams.add(new BorderExtenderConstant(fill));//type
-
-        return JAI.create("border", borderParams);
+    /**
+     * Check if image codec supports alpha channel.
+     *
+     * FIXME: simple check based on codec name
+     *
+     * @param codec code
+     * @return true if alpha is supported
+     */
+    private boolean hasAlphaSupport(final String codec) {
+        return "png".equals(codec);
     }
 
-    private RenderedOp cropImageToCenter(final RenderedImage image, final int targetX, final int targetY, final int originalX, final int originalY) {
+    int[] cropImageToCenter(final int targetX, final int targetY, final int originalX, final int originalY) {
 
         // calculate crop so that we can scale to fit
-        BigDecimal sourceRatio = new BigDecimal(originalX).divide(new BigDecimal(originalY), 10, BigDecimal.ROUND_UP);
-        BigDecimal targetRatio = new BigDecimal(targetX).divide(new BigDecimal(targetY), 10, BigDecimal.ROUND_UP);
+        BigDecimal sourceRatio = new BigDecimal(originalX).divide(new BigDecimal(originalY), 10, BigDecimal.ROUND_HALF_UP);
+        BigDecimal targetRatio = new BigDecimal(targetX).divide(new BigDecimal(targetY), 10, BigDecimal.ROUND_HALF_UP);
         final int cropWidth, cropHeight, cropX, cropY;
         if (sourceRatio.compareTo(targetRatio) < 0) { // need to crop by height
             cropWidth = originalX;
-            cropHeight = new BigDecimal(originalY).divide((targetRatio.divide(sourceRatio, 10, BigDecimal.ROUND_UP)), 0, BigDecimal.ROUND_UP).intValue();
+            cropHeight = new BigDecimal(originalY).divide((targetRatio.divide(sourceRatio, 10, BigDecimal.ROUND_HALF_UP)), 0, BigDecimal.ROUND_HALF_UP).intValue();
             cropX = 0;
             cropY = (originalY - cropHeight) / 2;
         } else { // need to crop by width
             cropHeight = originalY;
-            cropWidth = new BigDecimal(originalX).divide((sourceRatio.divide(targetRatio, 10, BigDecimal.ROUND_UP)), 0, BigDecimal.ROUND_UP).intValue();
+            cropWidth = new BigDecimal(originalX).divide((sourceRatio.divide(targetRatio, 10, BigDecimal.ROUND_HALF_UP)), 0, BigDecimal.ROUND_HALF_UP).intValue();
             cropX = (originalX - cropWidth) / 2;
             cropY = 0;
         }
 
-
-        ParameterBlock cropParams = new ParameterBlock();
-        cropParams.addSource(image);
-        cropParams.add(Float.valueOf(cropX)); // X
-        cropParams.add(Float.valueOf(cropY)); // Y
-        cropParams.add(Float.valueOf(cropWidth)); // width
-        cropParams.add(Float.valueOf(cropHeight)); // height
-
-        return JAI.create("crop", cropParams);
+        return new int[] { cropX, cropY, cropWidth, cropHeight };
 
     }
 
-    private RenderedOp resizeImage(final RenderedImage image, final int targetX, final int targetY, final int originalX, final int originalY) {
+    int[] scaleImageToCenter(final int targetX, final int targetY, final int originalX, final int originalY) {
 
-        final BigDecimal xScale = new BigDecimal(targetX).divide(new BigDecimal(originalX), 10, BigDecimal.ROUND_UP);
-        final BigDecimal yScale = new BigDecimal(targetY).divide(new BigDecimal(originalY), 10, BigDecimal.ROUND_UP);
-        final float scale = xScale.min(yScale).floatValue();
+        final BigDecimal xScale = new BigDecimal(targetX).divide(new BigDecimal(originalX), 10, BigDecimal.ROUND_HALF_UP);
+        final BigDecimal yScale = new BigDecimal(targetY).divide(new BigDecimal(originalY), 10, BigDecimal.ROUND_HALF_UP);
 
-        return ScaleDescriptor.create(
-                image, scale, scale, 0f, 0f,
-                Interpolation.getInstance(Interpolation.INTERP_BILINEAR), //Interpolation.INTERP_BILINEAR to resize down , bicubic to scale up
-                renderingHints);
+        final int scaleWidth, scaleHeight, padX, padY;
+        if (xScale.compareTo(yScale) < 0) { // need to scale by height
+            scaleWidth = targetX;
+            scaleHeight = new BigDecimal(originalY).multiply(xScale).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+            padX = 0;
+            padY = (targetY - scaleHeight) / 2;
+        } else { // need to scale by width
+            scaleHeight = targetY;
+            scaleWidth = new BigDecimal(originalX).multiply(yScale).setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+            padX = (targetX - scaleWidth) / 2;
+            padY = 0;
+        }
+
+        return new int[] { padX, padY, scaleWidth, scaleHeight };
+
     }
 
 

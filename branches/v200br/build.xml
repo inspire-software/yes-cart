@@ -82,8 +82,6 @@
                   arg="install:install-file -DgroupId=paypal.payflow -DartifactId=payflow-client -Dversion=4.31 -Dpackaging=jar -Dfile=payflow.jar"/>
         <exec-mvn dir="{basedir}/env/setup/lib3rdparty/paypal"
                   arg="install:install-file -DgroupId=com.paypal -DartifactId=paypal-client -Dversion=5.1.1 -Dpackaging=jar -Dfile=paypal_base.jar"/>
-        <exec-mvn dir="{basedir}/env/setup/lib3rdparty/jai"
-                  arg="install:install-file -DgroupId=com.sun.media -DartifactId=mlibwrapper_jai -Dversion=1.1.3 -Dpackaging=jar -Dfile=mlibwrapper_jai.jar"/>
 
     </target>
 
