@@ -1,7 +1,24 @@
+/*
+ * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.payment.impl;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.Assert;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
@@ -103,11 +120,11 @@ public class PaymentProcessorSurrogate {
                 payment.setTransactionOperationResultMessage(th.getMessage());
 
             } finally {
-                final CustomerOrderPayment customerOrderPayment = new CustomerOrderPaymentEntity();
+                final CustomerOrderPayment authCaptureOrderPayment = new CustomerOrderPaymentEntity();
                 //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                BeanUtils.copyProperties(payment, customerOrderPayment); //from PG object to persisted
-                customerOrderPayment.setPaymentProcessorResult(paymentResult);
-                customerOrderPaymentService.create(customerOrderPayment);
+                BeanUtils.copyProperties(payment, authCaptureOrderPayment); //from PG object to persisted
+                authCaptureOrderPayment.setPaymentProcessorResult(paymentResult);
+                customerOrderPaymentService.create(authCaptureOrderPayment);
             }
 
         }
@@ -141,13 +158,13 @@ public class PaymentProcessorSurrogate {
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setTransactionOperationResultMessage(th.getMessage());
                 } finally {
-                    final CustomerOrderPayment customerOrderPayment = new CustomerOrderPaymentEntity();
+                    final CustomerOrderPayment authOrderPayment = new CustomerOrderPaymentEntity();
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                    BeanUtils.copyProperties(payment, customerOrderPayment); //from PG object to persisted
-                    customerOrderPayment.setPaymentProcessorResult(paymentResult);
-                    customerOrderPaymentService.create(customerOrderPayment);
+                    BeanUtils.copyProperties(payment, authOrderPayment); //from PG object to persisted
+                    authOrderPayment.setPaymentProcessorResult(paymentResult);
+                    customerOrderPaymentService.create(authOrderPayment);
                     if (Payment.PAYMENT_STATUS_FAILED.equals(paymentResult)) {
-                        reverseAuthorizatios(order.getOrdernum());
+                        reverseAuthorizations(order.getOrdernum());
                         return Payment.PAYMENT_STATUS_FAILED;
                     }
                 }
@@ -192,7 +209,7 @@ public class PaymentProcessorSurrogate {
      *
      * @param orderNum order with some authorized payments
      */
-    public void reverseAuthorizatios(final String orderNum) {
+    public void reverseAuthorizations(final String orderNum) {
         if (getPaymentGateway().getPaymentGatewayFeatures().isSupportReverseAuthorization()) {
             final List<CustomerOrderPayment> paymentsToRevAuth = customerOrderPaymentService.findBy(
                     orderNum,
@@ -300,13 +317,13 @@ public class PaymentProcessorSurrogate {
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setTransactionOperationResultMessage(th.getMessage());
                     ShopCodeContext.getLog(this).error("Cannot capture " + payment, th);
-                    th.printStackTrace();
+
                 } finally {
-                    final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
+                    final CustomerOrderPayment captureOrderPayment = new CustomerOrderPaymentEntity();
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                    BeanUtils.copyProperties(payment, authReversedOrderPayment); //from PG object to persisted
-                    authReversedOrderPayment.setPaymentProcessorResult(paymentResult);
-                    customerOrderPaymentService.create(authReversedOrderPayment);
+                    BeanUtils.copyProperties(payment, captureOrderPayment); //from PG object to persisted
+                    captureOrderPayment.setPaymentProcessorResult(paymentResult);
+                    customerOrderPaymentService.create(captureOrderPayment);
                 }
                 if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
                     wasError = true;
@@ -334,7 +351,7 @@ public class PaymentProcessorSurrogate {
             paymentsToRollBack.addAll(
                     customerOrderPaymentService.findBy(order.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE));
 
-            reverseAuthorizatios(order.getOrdernum());
+            reverseAuthorizations(order.getOrdernum());
 
             for (CustomerOrderPayment customerOrderPayment : paymentsToRollBack) {
                 Payment payment = null;
@@ -363,11 +380,11 @@ public class PaymentProcessorSurrogate {
                     );
                     wasError = true;
                 } finally {
-                    final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
+                    final CustomerOrderPayment captureReversedOrderPayment = new CustomerOrderPaymentEntity();
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                    BeanUtils.copyProperties(payment, authReversedOrderPayment); //from PG object to persisted
-                    authReversedOrderPayment.setPaymentProcessorResult(paymentResult);
-                    customerOrderPaymentService.create(authReversedOrderPayment);
+                    BeanUtils.copyProperties(payment, captureReversedOrderPayment); //from PG object to persisted
+                    captureReversedOrderPayment.setPaymentProcessorResult(paymentResult);
+                    customerOrderPaymentService.create(captureReversedOrderPayment);
                 }
                 if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
                     wasError = true;
@@ -378,11 +395,8 @@ public class PaymentProcessorSurrogate {
 
             return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
         }
-        ShopCodeContext.getLog(this).warn(
-                MessageFormat.format(
-                        "Can not payment cancellation on canceled order  {0}",
-                        order.getOrdernum()
-                )
+        ShopCodeContext.getLog(this).warn("Can refund canceled order  {}",
+                order.getOrdernum()
         );
         return Payment.PAYMENT_STATUS_FAILED;
     }
@@ -404,6 +418,7 @@ public class PaymentProcessorSurrogate {
             final Map params,
             final String transactionOperation) {
 
+        Assert.notNull(order, "Customer order expected");
 
         final boolean forceSinglePayment = forceSinglePaymentIn || params.containsKey("forceSinglePayment");
 
@@ -503,10 +518,11 @@ public class PaymentProcessorSurrogate {
     private void fillPaymentShipment(final CustomerOrder order, final CustomerOrderDelivery delivery, final Payment payment) {
         payment.getOrderItems().add(
                 new PaymentLineImpl(
-                        String.valueOf(delivery.getCarrierSla().getCarrierslaId()),
-                        new FailoverStringI18NModel(
-                                delivery.getCarrierSla().getDisplayName(),
-                                delivery.getCarrierSla().getName()).getValue(order.getLocale()),
+                        delivery.getCarrierSla() == null ? "N/A" : String.valueOf(delivery.getCarrierSla().getCarrierslaId()),
+                        delivery.getCarrierSla() == null ? "No SLA" :
+                                new FailoverStringI18NModel(
+                                        delivery.getCarrierSla().getDisplayName(),
+                                        delivery.getCarrierSla().getName()).getValue(order.getLocale()),
                         BigDecimal.ONE,
                         delivery.getPrice(),
                         BigDecimal.ZERO,
@@ -543,34 +559,41 @@ public class PaymentProcessorSurrogate {
                                          final String transactionOperation,
                                          final String transactionGatewayLabel) {
 
+        final Customer customer = order.getCustomer();
 
-        Address shippingAddr = order.getCustomer().getDefaultAddress(Address.ADDR_TYPE_SHIPING);
-        Address billingAddr = order.getCustomer().getDefaultAddress(Address.ADDR_TYPE_BILLING);
+        if (customer != null) {
 
-        if (billingAddr == null) {
-            billingAddr = shippingAddr;
+            Address shippingAddr = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+            Address billingAddr = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
+
+            if (billingAddr == null) {
+                billingAddr = shippingAddr;
+            }
+
+            if (billingAddr != null) {
+                PaymentAddress addr = new PaymentAddressImpl();
+                BeanUtils.copyProperties(billingAddr, addr);
+                templatePayment.setBillingAddress(addr);
+            }
+
+            if (shippingAddr != null) {
+                PaymentAddress addr = new PaymentAddressImpl();
+                BeanUtils.copyProperties(shippingAddr, addr);
+                templatePayment.setShippingAddress(addr);
+            }
+
+            templatePayment.setBillingAddressString(order.getBillingAddress());
+            templatePayment.setShippingAddressString(order.getShippingAddress());
+
+            templatePayment.setBillingEmail(customer.getEmail());
+
         }
 
-        if (billingAddr != null) {
-            PaymentAddress addr = new PaymentAddressImpl();
-            BeanUtils.copyProperties(billingAddr, addr);
-            templatePayment.setBillingAddress(addr);
-        }
-
-        if (shippingAddr != null) {
-            PaymentAddress addr = new PaymentAddressImpl();
-            BeanUtils.copyProperties(shippingAddr, addr);
-            templatePayment.setShippingAddress(addr);
-        }
-
-        templatePayment.setBillingAddressString(order.getBillingAddress());
-        templatePayment.setShippingAddressString(order.getShippingAddress());
 
         templatePayment.setOrderDate(order.getOrderTimestamp());
         templatePayment.setOrderCurrency(order.getCurrency());
+        templatePayment.setOrderLocale(order.getLocale());
         templatePayment.setOrderNumber(order.getOrdernum());
-
-        templatePayment.setBillingEmail(order.getCustomer().getEmail());
 
         templatePayment.setTransactionOperation(transactionOperation);
         templatePayment.setTransactionGatewayLabel(transactionGatewayLabel);

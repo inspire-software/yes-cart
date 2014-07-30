@@ -1,4 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
 <dataset>
   <TCUSTOMERORDERPAYMENT CUSTOMERORDERPAYMENT_ID="1" CARD_EXPIRY_MONTH="02" CARD_EXPIRY_YEAR="2016" CARD_HOLDER_NAME="JOHN DOU" CARD_NUMBER="1111" CARD_TYPE="Visa" CREATED_BY="user unknown" CREATED_TIMESTAMP="2011-12-13 10:17:06.323" GUID="8dc4284b-6b08-4f6d-b8b1-b8468db2a6ac" ORDER_CURRENCY="USD" ORDER_DATE="2011-12-13 10:17:03.799" ORDER_NUMBER="1d72c955-701d-46dd-9c21-9ac87201872e" ORDER_SHIPMENT_NUMBER="1d72c955-701d-46dd-9c21-9ac87201872e-0" ORDER_DELIVERY_AMOUNT="65.36" PP_BATCH_SETTLEMENT="false" PP_REZCODE="Ok" TRAN_AUTH_CODE="V35A1D7E5C68" TRAN_PAYMENT_GATEWAY="payflowPaymentGateway" TRAN_PAYMENT_OP="AUTH" TRAN_PAYMENT_REZCODE="0" TRAN_PAYMENT_REZMSG="Approved Approved" TRAN_REFERENCE_ID="5079AB70305123871B5F3049A95AD49B" UPDATED_BY="user unknown" UPDATED_TIMESTAMP="2011-12-13 10:17:06.323"/>
   <TCUSTOMERORDERPAYMENT CUSTOMERORDERPAYMENT_ID="2" CARD_EXPIRY_MONTH="02" CARD_EXPIRY_YEAR="2016" CARD_HOLDER_NAME="JOHN DOU" CARD_NUMBER="1111" CARD_TYPE="Visa" CREATED_BY="user unknown" CREATED_TIMESTAMP="2011-12-13 10:17:08.064" GUID="e6230c0f-61d4-4481-97b8-ac0adc4d06b5" ORDER_CURRENCY="USD" ORDER_DATE="2011-12-13 10:17:03.799" ORDER_NUMBER="1d72c955-701d-46dd-9c21-9ac87201872e" ORDER_SHIPMENT_NUMBER="1d72c955-701d-46dd-9c21-9ac87201872e-1" ORDER_DELIVERY_AMOUNT="63.99" PP_BATCH_SETTLEMENT="false" PP_REZCODE="Ok" TRAN_AUTH_CODE="V34A1D7E5C71" TRAN_PAYMENT_GATEWAY="payflowPaymentGateway" TRAN_PAYMENT_OP="AUTH" TRAN_PAYMENT_REZCODE="0" TRAN_PAYMENT_REZMSG="Approved Approved" TRAN_REFERENCE_ID="5FC56BA0AE36C2D6F238AEC73C2CD3A8" UPDATED_BY="user unknown" UPDATED_TIMESTAMP="2011-12-13 10:17:08.064"/>

@@ -1,4 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
 <dataset>
   <TCUSTOMERORDERPAYMENT CUSTOMERORDERPAYMENT_ID="1" CARD_EXPIRY_MONTH="02" CARD_EXPIRY_YEAR="2016" CARD_HOLDER_NAME="JOHN DOU" CARD_NUMBER="0027" CARD_TYPE="Visa" CREATED_BY="user unknown" CREATED_TIMESTAMP="2011-05-11 22:52:10.29" GUID="887e5eb1-ffeb-411e-9e00-452aaaed5121" ORDER_CURRENCY="USD" ORDER_DATE="2011-05-11 22:52:05.259" ORDER_NUMBER="87abc22a-90f3-46e6-871b-acba0b7f9d4d" ORDER_SHIPMENT_NUMBER="87abc22a-90f3-46e6-871b-acba0b7f9d4d-0" ORDER_DELIVERY_AMOUNT="65.36" PP_BATCH_SETTLEMENT="false" PP_REZCODE="Ok" TRAN_AUTH_CODE="NFZ1WH" TRAN_PAYMENT_GATEWAY="authorizeNetAimPaymentGateway" TRAN_PAYMENT_OP="AUTH" TRAN_PAYMENT_REZCODE="1" TRAN_PAYMENT_REZMSG="This transaction has been approved. " TRAN_REFERENCE_ID="2159853227" UPDATED_BY="user unknown" UPDATED_TIMESTAMP="2011-05-11 22:52:10.29"/>
   <TCUSTOMERORDERPAYMENT CUSTOMERORDERPAYMENT_ID="2" CARD_EXPIRY_MONTH="02" CARD_EXPIRY_YEAR="2016" CARD_HOLDER_NAME="JOHN DOU" CARD_NUMBER="0027" CARD_TYPE="Visa" CREATED_BY="user unknown" CREATED_TIMESTAMP="2011-05-11 22:52:14.17" GUID="7b4c3f57-adb6-4c9c-b8f8-18d2430563eb" ORDER_CURRENCY="USD" ORDER_DATE="2011-05-11 22:52:05.259" ORDER_NUMBER="87abc22a-90f3-46e6-871b-acba0b7f9d4d" ORDER_SHIPMENT_NUMBER="87abc22a-90f3-46e6-871b-acba0b7f9d4d-1" ORDER_DELIVERY_AMOUNT="63.99" PP_BATCH_SETTLEMENT="false" PP_REZCODE="Ok" TRAN_AUTH_CODE="XZJTWP" TRAN_PAYMENT_GATEWAY="authorizeNetAimPaymentGateway" TRAN_PAYMENT_OP="AUTH" TRAN_PAYMENT_REZCODE="1" TRAN_PAYMENT_REZMSG="This transaction has been approved. " TRAN_REFERENCE_ID="2159853228" UPDATED_BY="user unknown" UPDATED_TIMESTAMP="2011-05-11 22:52:14.17"/>

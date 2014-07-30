@@ -1,11 +1,24 @@
+/*
+ * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.payment.impl;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import org.apache.commons.codec.digest.DigestUtils;
+import com.liqpay.LiqPay;
 import org.apache.commons.lang.SerializationUtils;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.security.crypto.codec.Base64;
+import org.slf4j.Logger;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
@@ -18,7 +31,8 @@ import org.yes.cart.util.ShopCodeContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.text.MessageFormat;
+import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,8 +47,8 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
-            false, false, false, true,
-            true, false,
+            false, false, true, true,
+            true, true,
             null,
             false, false
     );
@@ -62,7 +76,11 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
      * {@inheritDoc}
      */
     public String getPostActionUrl() {
-        return getParameterValue(LP_POST_URL);
+        final String url = getParameterValue(LP_POST_URL);
+        if (url.endsWith("/")) {
+            return url + "pay";
+        }
+        return url + "/pay";
     }
 
     /**
@@ -77,10 +95,38 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
      */
     public String restoreOrderGuid(final Map privateCallBackParameters) {
 
-        final LiqPayResponce liqPayResponce = getLiqPayResponce(privateCallBackParameters);
+        if (privateCallBackParameters != null) {
 
-        if (liqPayResponce != null) {
-            return liqPayResponce.getOrder_id();
+            final LiqPay api = getLiqPayAPI();
+
+            final String privateKey = getParameterValue(LP_MERCHANT_KEY);
+            final String publicKey = getParameterValue(LP_MERCHANT_ID);
+
+            final String amount = (String) privateCallBackParameters.get("amount");
+            final String currency = (String) privateCallBackParameters.get("currency");
+            final String description = (String) privateCallBackParameters.get("description");
+            final String order_id = (String) privateCallBackParameters.get("order_id");
+            final String type = (String) privateCallBackParameters.get("type");
+            final String sender_phone = (String) privateCallBackParameters.get("sender_phone");
+            final String status = (String) privateCallBackParameters.get("status");
+            final String transaction_id = (String) privateCallBackParameters.get("transaction_id");
+            final String signature = (String) privateCallBackParameters.get("signature");
+
+            final String validSignature = api.str_to_sign(privateKey +
+                    amount  +
+                    currency +
+                    publicKey +
+                    order_id +
+                    type +
+                    description  +
+                    status +
+                    transaction_id +
+                    sender_phone);
+
+            if (signature.equals(validSignature)) {
+                return order_id;
+            }
+
         }
 
         return null;
@@ -90,13 +136,54 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
-    public boolean isSuccess(final Map<String, String> nvpCallResult) {
+    public boolean isSuccess(final Map<String, String> liqPayCallResult) {
 
-        final LiqPayResponce liqPayResponce = getLiqPayResponce(nvpCallResult);
+        String statusRes = null;
 
-        ShopCodeContext.getLog(this).info("LiqPayPaymentGatewayImpl#isSuccess {}", liqPayResponce);
+        if (liqPayCallResult != null) {
 
-        return liqPayResponce != null && "success".equalsIgnoreCase(liqPayResponce.getStatus());
+            final LiqPay api = getLiqPayAPI();
+
+            final String privateKey = getParameterValue(LP_MERCHANT_KEY);
+            final String publicKey = getParameterValue(LP_MERCHANT_ID);
+
+            final String amount = liqPayCallResult.get("amount");
+            final String currency = liqPayCallResult.get("currency");
+            final String description = liqPayCallResult.get("description");
+            final String order_id = liqPayCallResult.get("order_id");
+            final String type = liqPayCallResult.get("type");
+            final String sender_phone = liqPayCallResult.get("sender_phone");
+            final String status = liqPayCallResult.get("status");
+            final String transaction_id = liqPayCallResult.get("transaction_id");
+            final String signature = liqPayCallResult.get("signature");
+
+            final String validSignature = api.str_to_sign(privateKey +
+                    amount  +
+                    currency +
+                    publicKey +
+                    order_id +
+                    type +
+                    description  +
+                    status +
+                    transaction_id +
+                    sender_phone);
+
+            if (signature.equals(validSignature)) {
+                statusRes = status;
+            }
+
+        }
+
+
+        final boolean success = statusRes != null &&
+                ("success".equalsIgnoreCase(statusRes)
+                  || "wait_secure".equalsIgnoreCase(statusRes)
+                  || "sandbox".equalsIgnoreCase(statusRes));
+
+
+        ShopCodeContext.getLog(this).info("LiqPayPaymentGatewayImpl#isSuccess {}, {}", statusRes, liqPayCallResult);
+
+        return success;
 
     }
 
@@ -105,7 +192,12 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
      * {@inheritDoc}
      */
     public void handleNotification(HttpServletRequest request, HttpServletResponse response) {
-        ;
+
+    }
+
+
+    private LiqPay getLiqPayAPI() {
+        return new LiqPay(getParameterValue(LP_MERCHANT_ID), getParameterValue(LP_MERCHANT_KEY), getParameterValue(LP_POST_URL));
     }
 
     /**
@@ -114,43 +206,21 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
                               final String currencyCode, final String orderGuid, final Payment payment) {
 
+        final LiqPay api = getLiqPayAPI();
 
-        final String operationXml = MessageFormat.format(
-                getXmlTemplate(),
-                getParameterValue(LP_MERCHANT_ID),
-                getParameterValue(LP_RESULT_URL),
-                getParameterValue(LP_SERVER_URL),
-                orderGuid,
-                "" + amount,
-                currencyCode,
-                getDescription(payment),
-                payment == null ? "" : payment.getBillingAddress() == null ? "" : StringUtils.defaultIfEmpty(payment.getBillingAddress().getPhoneList(), ""),
-                getParameterValue(LP_PAYWAY_URL)
-        );
+        final HashMap<String, String> params = new HashMap<String, String>();
+        params.put("amount", amount.setScale(2, RoundingMode.HALF_UP).toPlainString());
+        params.put("currency", currencyCode);
+        params.put("description", getDescription(payment));
+        params.put("order_id", payment.getOrderNumber());
+        params.put("result_url", getParameterValue(LP_RESULT_URL));
+        params.put("server_url", getParameterValue(LP_SERVER_URL));
+        params.put("type", "buy");
+        params.put("pay_way", getParameterValue(LP_PAYWAY_URL));
+        params.put("formDataOnly", "formDataOnly"); // YC specific
 
-        ShopCodeContext.getLog(this).info(" Raw liqpay xml [ {} ]", operationXml);
+        return api.cnb_form(params);
 
-        final String merchantKey = getParameterValue(LP_MERCHANT_KEY);
-        final String sign = createSignatire(merchantKey + operationXml + merchantKey);
-
-
-        return getHiddenFiled("operation_xml", new String(Base64.encode(operationXml.getBytes())))
-                + getHiddenFiled("signature", sign);
-    }
-
-
-    /**
-     * Create signatore for given xml.
-     *
-     * @param xmlToSign xml to sign.
-     * @return signed xml.
-     */
-    private String createSignatire(final String xmlToSign) {
-        return new String(
-                Base64.encode(
-                        DigestUtils.sha(xmlToSign)
-                )
-        ).trim();
     }
 
     /**
@@ -161,14 +231,13 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
      */
     private String getDescription(final Payment payment) {
         final StringBuilder stringBuilder = new StringBuilder();
-        if (payment != null) {
-            for (PaymentLine line : payment.getOrderItems()) {
-                stringBuilder.append(line.getSkuName());
-                stringBuilder.append(" x ");
-                stringBuilder.append(line.getQuantity());
-                stringBuilder.append("\n");
-            }
+        for (PaymentLine line : payment.getOrderItems()) {
+            stringBuilder.append(line.getSkuCode().replace("\"","&quot;"));
+            stringBuilder.append(" x ");
+            stringBuilder.append(line.getQuantity());
+            stringBuilder.append(", ");
         }
+        stringBuilder.append(payment.getBillingEmail());
         return stringBuilder.toString();
     }
 
@@ -214,6 +283,23 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
      * {@inheritDoc}
      */
     public Payment refund(final Payment payment) {
+
+        final LiqPay api = getLiqPayAPI();
+
+        final HashMap params = new HashMap();
+        params.put("order_id", payment.getOrderNumber());
+
+        boolean success = false;
+        try {
+            final HashMap res = api.api("payment/refund", params);
+            success = "ok".equals(res.get("result"));
+        } catch (Exception exp) {
+            final Logger log = ShopCodeContext.getLog(this);
+            log.error("LiqPayPaymentGatewayImpl#refund failed for {}", payment.getOrderNumber());
+            log.error("LiqPayPaymentGatewayImpl#refund failed cause:", exp);
+        }
+        payment.setTransactionOperation(REFUND);
+        payment.setPaymentProcessorResult(success ? Payment.PAYMENT_STATUS_OK : Payment.PAYMENT_STATUS_FAILED);
         return payment;
     }
 
@@ -238,85 +324,6 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
      */
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return paymentGatewayFeature;
-    }
-
-    /**
-     * Get {@link XStream}  .
-     *
-     * @return {@link XStream} instance.
-     */
-    private XStream getXStream() {
-        XStream xStream = new XStream(new DomDriver());
-        xStream.alias("response", LiqPayResponce.class);
-        return xStream;
-    }
-
-
-    /**
-     * Get the {@link LiqPayResponce} from request parameter map.
-     *
-     * @param nvpCallResult request parameter map
-     * @return {@link LiqPayResponce}.
-     */
-    private LiqPayResponce getLiqPayResponce(final Map<String, String> nvpCallResult) {
-
-        final String operationXmlEncoded = nvpCallResult.get("operation_xml");
-
-        final String signatureEncoded = nvpCallResult.get("signature");
-
-        if (StringUtils.isNotBlank(operationXmlEncoded)) {
-
-            final String merchantKey = getParameterValue(LP_MERCHANT_KEY);
-
-            final String operationXml = new String(Base64.decode(operationXmlEncoded.getBytes()));
-
-            final String signToCheck = createSignatire(merchantKey + operationXml + merchantKey);
-
-            if (signToCheck.equals(signatureEncoded)) {
-
-                return (LiqPayResponce) getXStream().fromXML(operationXml);
-
-            } else {
-                ShopCodeContext.getLog(this).error(
-                        MessageFormat.format(
-                                "Calculated signature {0} not correspond to provided  {1} for xml {2}. Req. params {3}",
-                                signToCheck,
-                                signatureEncoded,
-                                operationXml,
-                                dump(nvpCallResult))
-
-                );
-            }
-
-        } else {
-            ShopCodeContext.getLog(this).error("Cant get operation_xml. " + dump(nvpCallResult));
-        }
-        return null;
-
-    }
-
-    private final String xmlTemplate =
-            "<request>\n" +
-                    "      <version>1.2</version>\n" +
-                    "      <merchant_id>{0}</merchant_id>\n" +
-                    "      <result_url>{1}</result_url>\n" +
-                    "      <server_url>{2}</server_url>\n" +
-                    "      <order_id>{3}</order_id>\n" +
-                    "      <amount>{4}</amount>\n" +
-                    "      <currency>{5}</currency>\n" +
-                    "      <description>{6}</description>\n" +
-                    "      <default_phone>{7}</default_phone>\n" +
-                    "      <pay_way>{8}</pay_way>\n" +
-                    "      <goods_id>1234</goods_id>\n" +
-                    "</request>";
-
-    /**
-     * Get xml template .
-     *
-     * @return xml template
-     */
-    String getXmlTemplate() {
-        return xmlTemplate;
     }
 
 }

@@ -20,6 +20,7 @@ package org.yes.cart.payment.service.impl;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
@@ -60,8 +61,8 @@ public class CustomerOrderPaymentServiceImpl
         final List<CustomerOrderPayment> payments = findBy(orderNumber, null, null, null);
         for (CustomerOrderPayment payment : payments) {
             if (
-                    payment.getTransactionOperation().equals("AUTH")
-                    || payment.getTransactionOperation().equals("AUTH_CAPTURE")   //external processing of payment form
+                    payment.getTransactionOperation().equals(PaymentGateway.AUTH)
+                    || payment.getTransactionOperation().equals(PaymentGateway.AUTH_CAPTURE)   //external processing of payment form
                     ) {
                 // We have two payment records AUTH and CAPTURE for the same amount.
                 // Therefore we only need to sum up AUTH to get total payment value of the order.

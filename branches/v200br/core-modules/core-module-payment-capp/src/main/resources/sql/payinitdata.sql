@@ -72,7 +72,7 @@ VALUES (112, 'cyberSourcePaymentGateway',
 , 'Proxy password', 'Proxy password');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (113, 'cyberSourcePaymentGateway', 'name', 'CyberSource', 'Gateway name', 'Gateway name');
+VALUES (113, 'cyberSourcePaymentGateway', 'name', 'CyberSource', 'Gateway name (default)', 'Gateway name (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (114, 'cyberSourcePaymentGateway',
@@ -133,11 +133,11 @@ VALUES (114, 'cyberSourcePaymentGateway',
     </tr>
 </table>
 '
-, 'Part of html form', 'Part of html form, that display when user select this gateway to pay');
+, 'Part of html form (default)', 'Part of html form, that display when user select this gateway to pay (default)');
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (115, 'cyberSourcePaymentGateway', 'name_en', 'CyberSource', 'Gateway name', 'Gateway name');
+VALUES (115, 'cyberSourcePaymentGateway', 'name_en', 'CyberSource', 'Gateway name (EN)', 'Gateway name (EN)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (116, 'cyberSourcePaymentGateway',
@@ -198,10 +198,10 @@ VALUES (116, 'cyberSourcePaymentGateway',
     </tr>
 </table>
 '
-, 'Part of html form', 'Part of html form, that display when user select this gateway to pay');
+, 'Part of html form (EN)', 'Part of html form, that display when user select this gateway to pay (EN)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (117, 'cyberSourcePaymentGateway', 'name_ru', 'CyberSource', 'Название платежного шлюза', 'Название платежного шлюза');
+VALUES (117, 'cyberSourcePaymentGateway', 'name_ru', 'CyberSource', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (118, 'cyberSourcePaymentGateway',
@@ -262,7 +262,7 @@ VALUES (118, 'cyberSourcePaymentGateway',
     </tr>
 </table>
 '
-, 'Часть HTML формы для оплаты', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа');
+, 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
 
 
 
@@ -286,7 +286,7 @@ VALUES (122, 'authorizeNetAimPaymentGateway',
 , 'Transaction key', 'Transaction key');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (123, 'authorizeNetAimPaymentGateway', 'name', 'Authorize.net AIM', 'Gateway name', 'Gateway name');
+VALUES (123, 'authorizeNetAimPaymentGateway', 'name', 'Authorize.net AIM', 'Gateway name (default)', 'Gateway name (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (124, 'authorizeNetAimPaymentGateway',
@@ -338,10 +338,10 @@ VALUES (124, 'authorizeNetAimPaymentGateway',
     </tr>
 </table>
 '
-, 'Part of html form', 'Part of html form, that display when user select this gateway to pay');
+, 'Part of html form (default)', 'Part of html form, that display when user select this gateway to pay (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (125, 'authorizeNetAimPaymentGateway', 'name_en', 'Authorize.net AIM', 'Gateway name', 'Gateway name');
+VALUES (125, 'authorizeNetAimPaymentGateway', 'name_en', 'Authorize.net AIM', 'Gateway name (EN)', 'Gateway name (EN)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (126, 'authorizeNetAimPaymentGateway',
@@ -393,10 +393,10 @@ VALUES (126, 'authorizeNetAimPaymentGateway',
     </tr>
 </table>
 '
-, 'Part of html form', 'Part of html form, that display when user select this gateway to pay');
+, 'Part of html form (EN)', 'Part of html form, that display when user select this gateway to pay (EN)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (127, 'authorizeNetAimPaymentGateway', 'name_ru', 'Authorize.net AIM', 'Название платежного шлюза', 'Название платежного шлюза');
+VALUES (127, 'authorizeNetAimPaymentGateway', 'name_ru', 'Authorize.net AIM', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (128, 'authorizeNetAimPaymentGateway',
@@ -448,7 +448,7 @@ VALUES (128, 'authorizeNetAimPaymentGateway',
     </tr>
 </table>
 '
-, 'Часть HTML формы для оплаты', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа');
+, 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
 
 
 
@@ -551,7 +551,7 @@ VALUES (155, 'payflowPaymentGateway',
 , 'Partner', 'Partner');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (156, 'payflowPaymentGateway', 'name', 'PayPal Payflow', 'Gateway name', 'Gateway name');
+VALUES (156, 'payflowPaymentGateway', 'name', 'PayPal Payflow', 'Gateway name (default)', 'Gateway name (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (157, 'payflowPaymentGateway',
@@ -607,10 +607,10 @@ VALUES (157, 'payflowPaymentGateway',
     </tr>
 </table>
 '
-, 'Part of html form', 'Part of html form, that display when user select this gateway to pay');
+, 'Part of html form (default)', 'Part of html form, that display when user select this gateway to pay (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (158, 'payflowPaymentGateway', 'name_en', 'PayPal Payflow', 'Gateway name', 'Gateway name');
+VALUES (158, 'payflowPaymentGateway', 'name_en', 'PayPal Payflow', 'Gateway name (EN)', 'Gateway name (EN)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (159, 'payflowPaymentGateway',
@@ -666,11 +666,11 @@ VALUES (159, 'payflowPaymentGateway',
     </tr>
 </table>
 '
-, 'Part of html form', 'Part of html form, that display when user select this gateway to pay');
+, 'Part of html form (EN)', 'Part of html form, that display when user select this gateway to pay (EN)');
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (160, 'payflowPaymentGateway', 'name_en', 'PayPal Payflow', 'Название платежного шлюза', 'Название платежного шлюза');
+VALUES (160, 'payflowPaymentGateway', 'name_ru', 'PayPal Payflow', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -727,7 +727,7 @@ VALUES (161, 'payflowPaymentGateway',
     </tr>
 </table>
 '
-, 'Часть HTML формы для оплаты', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа');
+, 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
 
 
 
@@ -762,7 +762,7 @@ VALUES (175, 'payPalNvpPaymentGateway',
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (176, 'payPalNvpPaymentGateway', 'name', 'PayPal NVP', 'Gateway name', 'Gateway name');
+VALUES (176, 'payPalNvpPaymentGateway', 'name', 'PayPal NVP', 'Gateway name (default)', 'Gateway name (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (177, 'payPalNvpPaymentGateway',
@@ -809,10 +809,10 @@ VALUES (177, 'payPalNvpPaymentGateway',
     </tr>
 </table>
 '
-, 'Part of html form', 'Part of html form, that display when user select this gateway to pay');
+, 'Part of html form (default)', 'Part of html form, that display when user select this gateway to pay (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (178, 'payPalNvpPaymentGateway', 'name_en', 'PayPal NVP', 'Gateway name', 'Gateway name');
+VALUES (178, 'payPalNvpPaymentGateway', 'name_en', 'PayPal NVP', 'Gateway name (EN)', 'Gateway name (EN)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (179, 'payPalNvpPaymentGateway',
@@ -859,11 +859,11 @@ VALUES (179, 'payPalNvpPaymentGateway',
     </tr>
 </table>
 '
-, 'Part of html form', 'Part of html form, that display when user select this gateway to pay');
+, 'Part of html form (EN)', 'Part of html form, that display when user select this gateway to pay (EN)');
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (180, 'payPalNvpPaymentGateway', 'name_ru', 'PayPal NVP',  'Название платежного шлюза', 'Название платежного шлюза');
+VALUES (180, 'payPalNvpPaymentGateway', 'name_ru', 'PayPal NVP',  'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (181, 'payPalNvpPaymentGateway',
@@ -910,7 +910,7 @@ VALUES (181, 'payPalNvpPaymentGateway',
     </tr>
 </table>
 '
-, 'Часть HTML формы для оплаты', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа');
+, 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
 
 
 
@@ -960,13 +960,13 @@ VALUES (207, 'authorizeNetSimPaymentGateway',
 , 'SIM test request flag', 'SIM test request flag');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (208, 'authorizeNetSimPaymentGateway', 'name', 'Authorize.net SIM', 'Gateway name', 'Gateway name');
+VALUES (208, 'authorizeNetSimPaymentGateway', 'name', 'Authorize.net SIM', 'Gateway name (default)', 'Gateway name (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (209, 'authorizeNetSimPaymentGateway', 'name_en', 'Authorize.net SIM', 'Gateway name', 'Gateway name');
+VALUES (209, 'authorizeNetSimPaymentGateway', 'name_en', 'Authorize.net SIM', 'Gateway name (EN)', 'Gateway name (EN)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (210, 'authorizeNetSimPaymentGateway', 'name_ru', 'Authorize.net SIM', 'Название платежного шлюза', 'Название платежного шлюза');
+VALUES (210, 'authorizeNetSimPaymentGateway', 'name_ru', 'Authorize.net SIM', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
 
 
 
@@ -1028,12 +1028,12 @@ VALUES (227, 'payPalExpressPaymentGateway',
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (228, 'payPalExpressPaymentGateway', 'name', 'PayPal Express', 'Gateway name', 'Gateway name');
+VALUES (228, 'payPalExpressPaymentGateway', 'name', 'PayPal Express', 'Gateway name (default)', 'Gateway name (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (229, 'payPalExpressPaymentGateway', 'name_en', 'PayPal Express', 'Gateway name', 'Gateway name');
+VALUES (229, 'payPalExpressPaymentGateway', 'name_en', 'PayPal Express', 'Gateway name (EN)', 'Gateway name (EN)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (230, 'payPalExpressPaymentGateway', 'name_ru', 'PayPal Express', 'Название платежного шлюза', 'Название платежного шлюза');
+VALUES (230, 'payPalExpressPaymentGateway', 'name_ru', 'PayPal Express', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
 
 

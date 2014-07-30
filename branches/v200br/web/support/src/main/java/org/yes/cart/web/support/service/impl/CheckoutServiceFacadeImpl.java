@@ -150,8 +150,8 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
         for (final CustomerOrderPayment payment : payments) {
             // AUTH or AUTH_CAPTURE for full order amount with successful result
             if (
-                    (payment.getTransactionOperation().equals("AUTH")
-                            || payment.getTransactionOperation().equals("AUTH_CAPTURE"))
+                    (payment.getTransactionOperation().equals(PaymentGateway.AUTH)
+                            || payment.getTransactionOperation().equals(PaymentGateway.AUTH_CAPTURE))
                     && (customerOrder.getPrice().compareTo(payment.getPaymentAmount()) == 0)
                     && Payment.PAYMENT_STATUS_OK.equals(payment.getPaymentProcessorResult())
                     ) {
