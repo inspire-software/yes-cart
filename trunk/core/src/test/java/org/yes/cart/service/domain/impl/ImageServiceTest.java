@@ -90,7 +90,7 @@ public class ImageServiceTest {
             allowing(seoImageDao).findByCriteria(with(any(Criterion.class)));
             will(returnValue(null));
         }});
-        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false);
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50);
     }
 
     @Test

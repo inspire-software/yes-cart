@@ -27,6 +27,7 @@ import java.io.IOException;
  * Time: 11:13:01
  */
 public interface ImageService extends GenericService<SeoImage> {
+
     /**
      * Resize given file to requested width and height
      *
@@ -36,6 +37,22 @@ public interface ImageService extends GenericService<SeoImage> {
      * @param height   requested height
      */
     void resizeImage(String original, String resized, String width, String height);
+
+    /**
+     * Resize given file to requested width and height
+     *
+     * @param original      path to original image
+     * @param resized       path to resized image
+     * @param width         requested width
+     * @param height        requested height
+     * @param cropToFit     setting this to true will crop the image to proper ratio
+     *                      prior to scaling so that scaled image fills all the space.
+     *                      This is useful for those who wish to have images that fill
+     *                      all space dedicated for image without having border around
+     *                      the image. For those who wish images of products in the middle
+     *                      e.g. as it is in YC demo better to set this to false.
+     */
+    void resizeImage(String original, String resized, String width, String height, boolean cropToFit);
 
     /**
      * Is given image size allowed check.
