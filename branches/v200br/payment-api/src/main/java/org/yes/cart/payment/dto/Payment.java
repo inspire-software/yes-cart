@@ -44,9 +44,9 @@ public interface Payment extends Serializable {
 
 
     /**
-     * Get delivery amount, incuding delivery price.
+     * Get delivery amount, including delivery price.
      *
-     * @return devilevry amount.
+     * @return delivery amount.
      */
     BigDecimal getPaymentAmount();
 
@@ -149,14 +149,14 @@ public interface Payment extends Serializable {
      *
      * @return issue card number.
      */
-    String getCardIsuueNumber();
+    String getCardIssueNumber();
 
     /**
      * Set  issue card number.
      *
      * @param cardIsuueNumber issue card number.
      */
-    void setCardIsuueNumber(final String cardIsuueNumber);
+    void setCardIssueNumber(final String cardIsuueNumber);
 
     /**
      * Get cvv2 card number.

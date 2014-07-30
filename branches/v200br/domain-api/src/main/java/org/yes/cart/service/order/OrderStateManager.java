@@ -59,6 +59,7 @@ public interface OrderStateManager {
     String EVT_PAYMENT_OK = "evt.payment.ok";                // online payment ok
     String EVT_PROCESS_ALLOCATION = "evt.process.allocation";        // reserve qunatity on warehouse
     String EVT_CANCEL = "evt.order.cancel";              // simply cancel event for non confirmed orders and old orders in none state
+    String EVT_CANCEL_NEW_WITH_REFUND = "evt.new.order.cancel.refund";       // cancel event with refund for not yet reserved.
     String EVT_CANCEL_WITH_REFUND = "evt.order.cancel.refund";       // cancel event with refund and credit quantity.
     String EVT_PROCESS_TIME_WAIT = "evt.process.date.wait";         // wait till date
     String EVT_PROCESS_INVENTORY_WAIT = "evt.process.inventory.wait";    // wait till available quantity state

@@ -30,18 +30,18 @@ import org.yes.cart.util.ShopCodeContext;
 /**
  * Cancel order transition with funds return.
  * This class responsible for two things:
- * 1. perform fund retuns to cutomers card,
- * 2. credit quantity on warehouse , that belong to shop.
- * For quantity credit alway will be used first warehouse
+ * 1. perform refund to customers card,
+ * 2. credit quantity on warehouse, that belongs to shop.
+ * For quantity credit always will be used first warehouse
  * <p/>
  * Funds return can be performed via 2 types of operations:
  * 1. Void capture - in case if capture was not settled,
  * usually up to 24 hours after capture, but depends from payment gateway
  * 2. Credit - in case if funds was settled
  * <p/>
- * This transition can be pefrormed by operator/call center request
- * when after funds capture. No sence to give cancel
- * posibility to shopper.
+ * This transition can be performed by operator/call center request
+ * when after funds capture. No sense to give cancel
+ * possibility to shopper.
  * <p/>
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
