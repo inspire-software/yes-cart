@@ -224,9 +224,9 @@
                     Background RGB color for re-sized picture. When picture is scaled this is the border
                     color around the picture where it does not fill all the space
                 -->
-                <constructor-arg type="double" value="255"/>
-                <constructor-arg type="double" value="255"/>
-                <constructor-arg type="double" value="255"/>
+                <constructor-arg type="int" value="255"/>
+                <constructor-arg type="int" value="255"/>
+                <constructor-arg type="int" value="255"/>
                 <!--
                     cropToFit setting this to true will crop the image to proper ratio prior to scaling
                     so that scaled image fills all the space. This is useful for those who wish to have
@@ -235,6 +235,12 @@
                     to set this to false.
                 -->
                 <constructor-arg type="boolean" value="false"/>
+                <!--
+                    forceCropToFitOnSize forcefully use cropping if scale is below given size.
+                    This option is very useful for small thumbs (<100px), as you really cannot see much with
+                    added padding for panoramic or tall images.
+                -->
+                <constructor-arg type="int" value="100"/>
             </bean>
         </property>
     </bean>
