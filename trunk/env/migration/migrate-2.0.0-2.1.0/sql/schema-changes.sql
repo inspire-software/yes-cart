@@ -143,7 +143,7 @@ alter table TPROMOTIONCOUPONUSAGE
 
 
 --
--- YC-XXX missing Issue number on payment table
+-- YC-388 missing Issue number on payment table
 --
 
 alter table TCUSTOMERORDERPAYMENT add column CARD_ISSUE_NUMBER varchar(4);

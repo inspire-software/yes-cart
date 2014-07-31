@@ -27,9 +27,8 @@ import org.yes.cart.service.mail.MailComposer;
 import java.util.HashSet;
 import java.util.List;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -51,15 +50,13 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         final List<Mail> mail = mailService.findAll();
         assertEquals(1, mail.size());
         final Mail email = mail.get(0);
-        assertThat(email.getHtmlVersion(),
-                allOf(containsString("neWpaSswOrd"),
-                        containsString("neWpaSswOrd"),
-                        containsString("Bender"),
-                        containsString("Rodrigez"),
-                        containsString("Gadget universe"),
-                        containsString("somegadget.com")));
-        assertThat(email.getFrom(), is("noreply@shop.com"));
-        assertThat(email.getSubject(), is("Password has been changed"));
+        assertTrue(email.getHtmlVersion().contains("neWpaSswOrd"));
+        assertTrue(email.getHtmlVersion().contains("Bender"));
+        assertTrue(email.getHtmlVersion().contains("Rodrigez"));
+        assertTrue(email.getHtmlVersion().contains("Gadget universe"));
+        assertTrue(email.getHtmlVersion().contains("somegadget.com"));
+        assertEquals(email.getFrom(), "noreply@shop.com");
+        assertEquals(email.getSubject(), "Password has been changed");
     }
 
     private RegistrationMessage createRegistrationMessage() {

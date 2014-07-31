@@ -19,5 +19,8 @@
 <properties>
 
     <entry key="pageTitle">Результат платежа</entry>
+    <entry key="order.error.cancelled">Заказ отменен. Возможная причина - это ошибка при оплате, либо недостаточное кол-во товара на складе</entry>
+    <entry key="order.error.not.found">Заказ не найден</entry>
+    <entry key="order.success">Заказ успешно оформлен</entry>
 
 </properties>

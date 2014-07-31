@@ -142,8 +142,24 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
         final List<CustomerOrderPayment> payments =
                 customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null);
-        return (payments != null && !payments.isEmpty()
-                && Payment.PAYMENT_STATUS_OK.equals(payments.get(0).getPaymentProcessorResult()));
+
+        if (payments == null || payments.isEmpty()) {
+            return false;
+        }
+
+        for (final CustomerOrderPayment payment : payments) {
+            // AUTH or AUTH_CAPTURE for full order amount with successful result
+            if (
+                    (payment.getTransactionOperation().equals("AUTH")
+                            || payment.getTransactionOperation().equals("AUTH_CAPTURE"))
+                    && (customerOrder.getPrice().compareTo(payment.getPaymentAmount()) == 0)
+                    && Payment.PAYMENT_STATUS_OK.equals(payment.getPaymentProcessorResult())
+                    ) {
+                return true;
+            }
+        }
+
+        return false;
 
     }
 
