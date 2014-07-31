@@ -108,11 +108,13 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 payment.setTransactionOperationResultMessage(th.getMessage());
 
             } finally {
-                final CustomerOrderPayment customerOrderPayment = new CustomerOrderPaymentEntity();
+                final CustomerOrderPayment authCaptureOrderPayment = new CustomerOrderPaymentEntity();
                 //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                BeanUtils.copyProperties(payment, customerOrderPayment); //from PG object to persisted
-                customerOrderPayment.setPaymentProcessorResult(paymentResult);
-                customerOrderPaymentService.create(customerOrderPayment);
+                BeanUtils.copyProperties(payment, authCaptureOrderPayment); //from PG object to persisted
+                authCaptureOrderPayment.setPaymentProcessorResult(paymentResult);
+                // FIXME: YC-390 we assume that funds are settled, but this is not guaranteed
+                authCaptureOrderPayment.setPaymentProcessorBatchSettlement(Payment.PAYMENT_STATUS_OK.equals(paymentResult));
+                customerOrderPaymentService.create(authCaptureOrderPayment);
             }
 
         }
@@ -146,11 +148,11 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
                     payment.setTransactionOperationResultMessage(th.getMessage());
                 } finally {
-                    final CustomerOrderPayment customerOrderPayment = new CustomerOrderPaymentEntity();
+                    final CustomerOrderPayment authOrderPayment = new CustomerOrderPaymentEntity();
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                    BeanUtils.copyProperties(payment, customerOrderPayment); //from PG object to persisted
-                    customerOrderPayment.setPaymentProcessorResult(paymentResult);
-                    customerOrderPaymentService.create(customerOrderPayment);
+                    BeanUtils.copyProperties(payment, authOrderPayment); //from PG object to persisted
+                    authOrderPayment.setPaymentProcessorResult(paymentResult);
+                    customerOrderPaymentService.create(authOrderPayment);
                     if (Payment.PAYMENT_STATUS_FAILED.equals(paymentResult)) {
                         reverseAuthorizations(order.getOrdernum());
                         return Payment.PAYMENT_STATUS_FAILED;
@@ -290,11 +292,13 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     ShopCodeContext.getLog(this).error("Cannot capture " + payment, th);
 
                 } finally {
-                    final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
+                    final CustomerOrderPayment captureOrderPayment = new CustomerOrderPaymentEntity();
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                    BeanUtils.copyProperties(payment, authReversedOrderPayment); //from PG object to persisted
-                    authReversedOrderPayment.setPaymentProcessorResult(paymentResult);
-                    customerOrderPaymentService.create(authReversedOrderPayment);
+                    BeanUtils.copyProperties(payment, captureOrderPayment); //from PG object to persisted
+                    captureOrderPayment.setPaymentProcessorResult(paymentResult);
+                    // FIXME: YC-390 we assume that funds are settled, but this is not guaranteed
+                    captureOrderPayment.setPaymentProcessorBatchSettlement(Payment.PAYMENT_STATUS_OK.equals(paymentResult));
+                    customerOrderPaymentService.create(captureOrderPayment);
                 }
                 if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
                     wasError = true;
@@ -336,6 +340,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                         payment = getPaymentGateway().refund(payment);
                         paymentResult = payment.getPaymentProcessorResult();
                     } else {
+                        // FIXME: YC-390 We set PaymentProcessorBatchSettlement == true for AUTH_CAPTURE and CAPTURE, so void may never happen
+                        //        however voiding capture is far less use case than a refund
                         //void
                         payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
                         payment = getPaymentGateway().voidCapture(payment);
@@ -351,11 +357,11 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     );
                     wasError = true;
                 } finally {
-                    final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
+                    final CustomerOrderPayment captureReversedOrderPayment = new CustomerOrderPaymentEntity();
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                    BeanUtils.copyProperties(payment, authReversedOrderPayment); //from PG object to persisted
-                    authReversedOrderPayment.setPaymentProcessorResult(paymentResult);
-                    customerOrderPaymentService.create(authReversedOrderPayment);
+                    BeanUtils.copyProperties(payment, captureReversedOrderPayment); //from PG object to persisted
+                    captureReversedOrderPayment.setPaymentProcessorResult(paymentResult);
+                    customerOrderPaymentService.create(captureReversedOrderPayment);
                 }
                 if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
                     wasError = true;
@@ -366,7 +372,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
             return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
         }
-        ShopCodeContext.getLog(this).warn("Can not payment cancellation on canceled order  {}",
+        ShopCodeContext.getLog(this).warn("Can refund canceled order  {}",
                 order.getOrdernum()
         );
         return Payment.PAYMENT_STATUS_FAILED;
@@ -377,6 +383,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      * Create list of payment to authorize.
      *
      * @param order                order
+     * @param params
      * @param transactionOperation operation in term of payment processor
      * @param forceSinglePaymentIn flag is true for authCapture operation, when payment gateway not supports several payments per
      *                             order
@@ -482,6 +489,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
         }
         payment.setPaymentAmount(rez);
         payment.setOrderCurrency(order.getCurrency());
+        payment.setOrderLocale(order.getLocale());
     }
 
     private void fillPaymentShipment(final CustomerOrder order, final CustomerOrderDelivery delivery, final Payment payment) {

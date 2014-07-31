@@ -20,7 +20,7 @@ package org.yes.cart.payment.persistence.entity;
 import java.io.Serializable;
 
 /**
- * Payment gateway configuratin parameters like merchantid, url, supported currencies, is it enabled etc.
+ * Payment gateway configuration parameters like merchantId, url, supported currencies, is it enabled etc.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011

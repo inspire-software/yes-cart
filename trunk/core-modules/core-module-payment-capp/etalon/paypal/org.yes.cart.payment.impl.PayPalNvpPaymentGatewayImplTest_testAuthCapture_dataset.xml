@@ -1,4 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
 <dataset>
   <TCUSTOMERORDERPAYMENT CUSTOMERORDERPAYMENT_ID="1" CARD_EXPIRY_MONTH="02" CARD_EXPIRY_YEAR="2016" CARD_HOLDER_NAME="JOHN DOU" CARD_NUMBER="0435" CARD_TYPE="Visa" CREATED_BY="user unknown" CREATED_TIMESTAMP="2011-05-11 22:51:56.89" GUID="96bd662f-926c-4c67-a8ac-ebef7346b5e7" ORDER_CURRENCY="USD" ORDER_DATE="2011-05-11 22:51:53.703" ORDER_NUMBER="b7d9cbc5-97a6-4b37-a9fa-9bc90d631d94" ORDER_SHIPMENT_NUMBER="b7d9cbc5-97a6-4b37-a9fa-9bc90d631d94-0" ORDER_DELIVERY_AMOUNT="65.36" PP_BATCH_SETTLEMENT="false" PP_REZCODE="Ok" TRAN_AUTH_CODE="4SP1638413270561G" TRAN_PAYMENT_GATEWAY="payPalNvpPaymentGateway" TRAN_PAYMENT_OP="AUTH_CAPTURE" TRAN_REFERENCE_ID="4SP1638413270561G" UPDATED_BY="user unknown" UPDATED_TIMESTAMP="2011-05-11 22:51:56.89"/>
   <TCUSTOMERORDERPAYMENT CUSTOMERORDERPAYMENT_ID="2" CARD_EXPIRY_MONTH="02" CARD_EXPIRY_YEAR="2016" CARD_HOLDER_NAME="JOHN DOU" CARD_NUMBER="0435" CARD_TYPE="Visa" CREATED_BY="user unknown" CREATED_TIMESTAMP="2011-05-11 22:52:00.647" GUID="66856316-4ff7-466b-8bb6-6a27f8b6fab5" ORDER_CURRENCY="USD" ORDER_DATE="2011-05-11 22:51:53.703" ORDER_NUMBER="b7d9cbc5-97a6-4b37-a9fa-9bc90d631d94" ORDER_SHIPMENT_NUMBER="b7d9cbc5-97a6-4b37-a9fa-9bc90d631d94-1" ORDER_DELIVERY_AMOUNT="63.99" PP_BATCH_SETTLEMENT="false" PP_REZCODE="Ok" TRAN_AUTH_CODE="4E027292A7215603F" TRAN_PAYMENT_GATEWAY="payPalNvpPaymentGateway" TRAN_PAYMENT_OP="AUTH_CAPTURE" TRAN_REFERENCE_ID="4E027292A7215603F" UPDATED_BY="user unknown" UPDATED_TIMESTAMP="2011-05-11 22:52:00.647"/>

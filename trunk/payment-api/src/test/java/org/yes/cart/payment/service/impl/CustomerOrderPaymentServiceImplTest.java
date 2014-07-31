@@ -17,6 +17,7 @@
 package org.yes.cart.payment.service.impl;
 
 import org.junit.Test;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
@@ -44,10 +45,10 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
         assertEquals(1, service.findBy(null, null, null, null).size());
         assertEquals("5678", service.findBy(null, null, null, null).get(0).getCardNumber());
         assertEquals(1, service.findBy(null, null, Payment.PAYMENT_STATUS_OK, null).size());
-        assertEquals(1, service.findBy(null, null, null, "AUTH").size());
+        assertEquals(1, service.findBy(null, null, null, PaymentGateway.AUTH).size());
         assertEquals(1, service.findBy("123-45", null, null, null).size());
         assertEquals(1, service.findBy(null, "123-45-0", null, null).size());
-        assertEquals(1, service.findBy("123-45", "123-45-0", Payment.PAYMENT_STATUS_OK, "AUTH").size());
+        assertEquals(1, service.findBy("123-45", "123-45-0", Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
     }
 
     @Test
@@ -75,7 +76,7 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
         payment.setTransactionAuthorizationCode("0987654321");
         payment.setTransactionGatewayLabel("testPg");
-        payment.setTransactionOperation("AUTH");
+        payment.setTransactionOperation(PaymentGateway.AUTH);
         payment.setTransactionOperationResultCode("100");
         payment.setTransactionOperationResultMessage("Ok");
         payment.setTransactionReferenceId("123-45-0");

@@ -520,9 +520,9 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         //cancel order
         assertEquals(Payment.PAYMENT_STATUS_OK, paymentProcessor.cancelOrder(customerOrder));
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.VOID_CAPTURE).size());
+                customerOrder.getOrdernum(), delivery0.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.REFUND).size());
         assertEquals(1, customerOrderPaymentService.findBy(
-                customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.VOID_CAPTURE).size());
+                customerOrder.getOrdernum(), delivery1.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, PaymentGateway.REFUND).size());
     }
 
     /**
