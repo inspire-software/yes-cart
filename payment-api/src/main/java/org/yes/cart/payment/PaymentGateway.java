@@ -143,7 +143,7 @@ public interface PaymentGateway extends Serializable {
 
     /**
      * Create payment prototype from given map.
-     * In case of external form processing return value must be complettely filled , because  #authorizeCapture
+     * In case of external form processing return value must be completely filled , because  #authorizeCapture
      * will simple return given argument
      *
      * @param map given map of parameters, from http request. Each Payment gateway know how to

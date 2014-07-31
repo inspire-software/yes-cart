@@ -1,7 +1,22 @@
+/*
+ * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.payment.impl;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.liqpay.LiqPay;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.yes.cart.payment.dto.Payment;
@@ -25,16 +40,20 @@ public class LiqPayPaymentGatewayImplTest extends TestCase {
     @Test
     public void testGetHtmlForm() throws Exception {
 
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put(LiqPayPaymentGatewayImpl.LP_MERCHANT_ID, "00001");
+        params.put(LiqPayPaymentGatewayImpl.LP_MERCHANT_KEY, "secret");
+        params.put(LiqPayPaymentGatewayImpl.LP_PAYWAY_URL, "card");
+        params.put(LiqPayPaymentGatewayImpl.LP_SERVER_URL, "http://mydomain.com/callback");
+        params.put(LiqPayPaymentGatewayImpl.LP_RESULT_URL, "http://mydomain.com/result");
+
+
         final LiqPayPaymentGatewayImpl gatewayImpl = new LiqPayPaymentGatewayImpl() {
-            @Override
-            String getXmlTemplate() {
-                return "xml";
-            }
 
             @Override
             public String getParameterValue(String valueLabel) {
-                if ("LP_MERCHANT_KEY".endsWith(valueLabel)) {
-                    return "signature";
+                if (params.containsKey(valueLabel)) {
+                    return params.get(valueLabel);
                 }
                 return "";
             }
@@ -46,18 +65,27 @@ public class LiqPayPaymentGatewayImplTest extends TestCase {
                 BigDecimal.TEN.setScale(2),
                 "USD",
                 "234-1324-1324-1324sdf-sdf",
-                createTesPayment()
+                createTestPayment()
 
         );
 
-        assertTrue("Xml body must be present", htmlFormPart.contains("eG1s"));
-        assertTrue("Signature must be present", htmlFormPart.contains("Lg7KbFKVh0aLNq7auqzqRaERFks="));
+        assertEquals(htmlFormPart,
+                "<input type=\"hidden\" name=\"amount\" value=\"10.00\" />\n" +
+                "<input type=\"hidden\" name=\"server_url\" value=\"http://mydomain.com/callback\" />\n" +
+                "<input type=\"hidden\" name=\"description\" value=\"code2 x 1, bob@doe.com\" />\n" +
+                "<input type=\"hidden\" name=\"pay_way\" value=\"card\" />\n" +
+                "<input type=\"hidden\" name=\"result_url\" value=\"http://mydomain.com/result\" />\n" +
+                "<input type=\"hidden\" name=\"public_key\" value=\"00001\" />\n" +
+                "<input type=\"hidden\" name=\"type\" value=\"buy\" />\n" +
+                "<input type=\"hidden\" name=\"order_id\" value=\"1234\" />\n" +
+                "<input type=\"hidden\" name=\"signature\" value=\"IO534oPTqpiGNeNWN3rfn2uwpug=\" />\n" +
+                "<input type=\"hidden\" name=\"currency\" value=\"USD\" />\n");
 
 
     }
 
 
-    private Payment createTesPayment() {
+    private Payment createTestPayment() {
 
         final List<PaymentLine> orderItems = new ArrayList<PaymentLine>() {{
             add(new PaymentLineImpl("code2", "name2", BigDecimal.ONE, BigDecimal.TEN, BigDecimal.ZERO, false));
@@ -66,9 +94,11 @@ public class LiqPayPaymentGatewayImplTest extends TestCase {
 
         final Payment payment = new PaymentImpl();
 
+        payment.setOrderNumber("1234");
         payment.setOrderItems(orderItems);
         payment.setOrderCurrency("USD");
         payment.setOrderLocale("en");
+        payment.setBillingEmail("bob@doe.com");
 
         return payment;
 
@@ -76,50 +106,54 @@ public class LiqPayPaymentGatewayImplTest extends TestCase {
 
 
     @Test
-    public void testUmramshalLiqResponce() throws Exception {
-        final String xml = "<response>\n" +
-                "      <version>1.2</version>\n" +
-                "      <merchant_id>2134</merchant_id>\n" +
-                "      <order_id>ORDER_123456</order_id>\n" +
-                "      <amount>1.01</amount>\n" +
-                "      <currency>UAH</currency>\n" +
-                "      <description>Comment</description>\n" +
-                "      <status>success</status>\n" +
-                "      <code>42</code>\n" +
-                "      <transaction_id>31</transaction_id>\n" +
-                "      <pay_way>card</pay_way>\n" +
-                "      <sender_phone>+3801234567890</sender_phone>\n" +
-                "      <goods_id>1234</goods_id>\n" +
-                "      <pays_count>5</pays_count>\n" +
-                "</response>";
-        final LiqPayResponce liqPayResponce = (LiqPayResponce) getXStream().fromXML(xml);
+    public void testIsSuccess() {
 
-        assertEquals("1.2", liqPayResponce.getVersion());
-        assertEquals("2134", liqPayResponce.getMerchant_id());
-        assertEquals("ORDER_123456", liqPayResponce.getOrder_id());
-        assertEquals("1.01", liqPayResponce.getAmount());
-        assertEquals("UAH", liqPayResponce.getCurrency());
-        assertEquals("Comment", liqPayResponce.getDescription());
-        assertEquals("success", liqPayResponce.getStatus());
-        assertEquals("42", liqPayResponce.getCode());
-        assertEquals("31", liqPayResponce.getTransaction_id());
-        assertEquals("card", liqPayResponce.getPay_way());
-        assertEquals("+3801234567890", liqPayResponce.getSender_phone());
-        assertEquals("1234", liqPayResponce.getGoods_id());
-        assertEquals("5", liqPayResponce.getPays_count());
+
+        testIsSuccessWithStatus("success", true);
+        testIsSuccessWithStatus("wait_secure", true);
+        testIsSuccessWithStatus("sandbox", true);
+        testIsSuccessWithStatus("failure", false);
+        testIsSuccessWithStatus("zxcvzxcvzxcv", false);
 
 
     }
 
-    @Test
-    public void testIsSuccess() {
+    private void testIsSuccessWithStatus(final String status, final boolean expectedOk) {
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put(LiqPayPaymentGatewayImpl.LP_MERCHANT_ID, "00001");
+        params.put(LiqPayPaymentGatewayImpl.LP_MERCHANT_KEY, "secret");
+        params.put(LiqPayPaymentGatewayImpl.LP_PAYWAY_URL, "card");
+        params.put(LiqPayPaymentGatewayImpl.LP_SERVER_URL, "http://mydomain.com/callback");
+        params.put(LiqPayPaymentGatewayImpl.LP_RESULT_URL, "http://mydomain.com/result");
+
+        final String privateKey = "secret";
+        final String publicKey = "00001";
+        final String amount = "10.00";
+        final String currency = "EUR";
+        final String description = "My products";
+        final String order_id = "ORDER-001";
+        final String type = "buy";
+        final String sender_phone = "+380 44 123 1212";
+        final String transaction_id = "TRANS-0001";
+
+        final String validSignature = new LiqPay(publicKey, privateKey).str_to_sign(privateKey +
+                amount  +
+                currency +
+                publicKey +
+                order_id +
+                type +
+                description  +
+                status +
+                transaction_id +
+                sender_phone);
+
 
         final LiqPayPaymentGatewayImpl gatewayImpl = new LiqPayPaymentGatewayImpl() {
 
             @Override
             public String getParameterValue(String valueLabel) {
-                if ("LP_MERCHANT_KEY".endsWith(valueLabel)) {
-                    return "JMkUT6En0uglRAKCK7STlFA7HLk1g6Xk75Wpdf9ogarpET";
+                if (params.containsKey(valueLabel)) {
+                    return params.get(valueLabel);
                 }
                 return "";
             }
@@ -127,40 +161,25 @@ public class LiqPayPaymentGatewayImplTest extends TestCase {
 
         Map<String, String> callBackresult = new HashMap<String, String>() {{
 
-            put("operation_xml", "PHJlc3BvbnNlPgogIDxhY3Rpb24+cmVzdWx0X3VybDwvYWN0aW9uPgogIDxhbW91bnQ+MC4xODwv\n" +
-                    "YW1vdW50PgogIDxjdXJyZW5jeT5VQUg8L2N1cnJlbmN5PgogIDxkZXNjcmlwdGlvbj48L2Rlc2Ny\n" +
-                    "aXB0aW9uPgogIDxtZXJjaGFudF9pZD5pNjg0MDY4NTU5MjwvbWVyY2hhbnRfaWQ+CiAgPG9yZGVy\n" +
-                    "X2lkPjhjOWJjNTllLWRhNjEtNGM4Mi1iMzg0LTc0NTk5NjFiNzMxYjwvb3JkZXJfaWQ+CiAgPHBh\n" +
-                    "eV93YXk+Y2FyZDwvcGF5X3dheT4KICA8c2VuZGVyX3Bob25lPiszODA5NzgxNTkxMTI8L3NlbmRl\n" +
-                    "cl9waG9uZT4KICA8c3RhdHVzPmZhaWx1cmU8L3N0YXR1cz4KICA8dHJhbnNhY3Rpb25faWQ+MTUz\n" +
-                    "NDc4MjI8L3RyYW5zYWN0aW9uX2lkPgogIDx2ZXJzaW9uPjEuMjwvdmVyc2lvbj4KPC9yZXNwb25z\n" +
-                    "ZT4K");
-            put("signature", "8n+xpiaBia9i4AsxSo+X5AbC68U=");
-
+            put("amount", amount);
+            put("currency", currency);
+            put("order_id", order_id);
+            put("type", type);
+            put("description", description);
+            put("status", status);
+            put("transaction_id", transaction_id);
+            put("sender_phone", sender_phone);
+            put("signature", "IO534oPTqpiGNeNWN3rfn2uwpug=");
 
         }};
 
         assertFalse(gatewayImpl.isSuccess(callBackresult));
 
 
-        callBackresult = new HashMap<String, String>() {{
-
-            put("operation_xml", "PHJlc3BvbnNlPgogIDxhY3Rpb24+cmVzdWx0X3VybDwvYWN0aW9uPgogIDxhbW91bnQ+MC4xODwvYW1vdW50PgogIDxjdXJyZW5jeT5VQUg8L2N1cnJlbmN5PgogIDxkZXNjcmlwdGlvbj48L2Rlc2NyaXB0aW9uPgogIDxtZXJjaGFudF9pZD5pNjg0MDY4NTU5MjwvbWVyY2hhbnRfaWQ+CiAgPG9yZGVyX2lkPjhjOWJjNTllLWRhNjEtNGM4Mi1iMzg0LTc0NTk5NjFiNzMxYjwvb3JkZXJfaWQ+CiAgPHBheV93YXk+Y2FyZDwvcGF5X3dheT4KICA8c2VuZGVyX3Bob25lPiszODA5NzgxNTkxMTI8L3NlbmRlcl9waG9uZT4KICA8c3RhdHVzPnN1Y2Nlc3M8L3N0YXR1cz4KICA8dHJhbnNhY3Rpb25faWQ+MTUzNDc4MjI8L3RyYW5zYWN0aW9uX2lkPgogIDx2ZXJzaW9uPjEuMjwvdmVyc2lvbj4KPC9yZXNwb25zZT4K");
-            put("signature", "xjK6QZJ6RXwVGNFcKxxkvep4DZ8=");
+        callBackresult.put("signature", validSignature);
 
 
-        }};
-
-        assertTrue(gatewayImpl.isSuccess(callBackresult));
-
-
-    }
-
-
-    private XStream getXStream() {
-        XStream xStream = new XStream(new DomDriver());
-        xStream.alias("response", LiqPayResponce.class);
-        return xStream;
+        assertEquals(expectedOk, gatewayImpl.isSuccess(callBackresult));
     }
 
 

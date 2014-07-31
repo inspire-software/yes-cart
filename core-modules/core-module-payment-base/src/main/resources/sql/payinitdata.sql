@@ -1,5 +1,5 @@
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (50, 'testPaymentGateway', 'name', 'Test Payment Gateway', 'Gateway name', 'Gateway name');
+VALUES (50, 'testPaymentGateway', 'name', 'Test Payment Gateway', 'Gateway name (default)', 'Gateway name (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (51, 'testPaymentGateway', 'htmlForm',
@@ -38,10 +38,10 @@ VALUES (51, 'testPaymentGateway', 'htmlForm',
         <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
     </tr>
 </table>'
-, 'Part of html form', 'Part of html form, that display when user select this gateway to pay');
+, 'Part of html form (default)', 'Part of html form, that display when user select this gateway to pay');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (52, 'testPaymentGateway', 'name_en', 'Test Payment Gateway', 'Gateway name', 'Gateway name');
+VALUES (52, 'testPaymentGateway', 'name_en', 'Test Payment Gateway', 'Gateway name (EN)', 'Gateway name (EN)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (53, 'testPaymentGateway', 'htmlForm_en',
@@ -80,10 +80,10 @@ VALUES (53, 'testPaymentGateway', 'htmlForm_en',
         <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
     </tr>
 </table>'
-, 'Part of html form', 'Part of html form, that display when user select this gateway to pay');
+, 'Part of html form (EN)', 'Part of html form, that display when user select this gateway to pay');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (54, 'testPaymentGateway', 'name_ru', 'Тестовый Платежный Шлюз', 'Название платежного шлюза', 'Название платежного шлюза');
+VALUES (54, 'testPaymentGateway', 'name_ru', 'Тестовый Платежный Шлюз', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (55, 'testPaymentGateway', 'htmlForm_ru',
@@ -122,14 +122,14 @@ VALUES (55, 'testPaymentGateway', 'htmlForm_ru',
         <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
     </tr>
 </table>'
-, 'Часть HTML формы для оплаты', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа');
+, 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (60, 'courierPaymentGateway', 'name', 'Payment via courier', 'Gateway name', 'Gateway name');
+VALUES (60, 'courierPaymentGateway', 'name', 'Payment via courier', 'Gateway name (default)', 'Gateway name (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (61, 'courierPaymentGateway', 'name_en', 'Payment via courier', 'Gateway name', 'Gateway name');
+VALUES (61, 'courierPaymentGateway', 'name_en', 'Payment via courier', 'Gateway name (EN)', 'Gateway name (EN)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (62, 'courierPaymentGateway', 'name_ru', 'Оплата курьеру', 'Название платежного шлюза', 'Название платежного шлюза');
+VALUES (62, 'courierPaymentGateway', 'name_ru', 'Оплата курьеру', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');

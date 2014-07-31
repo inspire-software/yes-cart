@@ -22,6 +22,7 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
@@ -90,7 +91,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
         final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null);
         assertNotNull(payments);
         assertEquals(payments.size(), 1);
-        assertEquals("AUTH_CAPTURE", payments.get(0).getTransactionOperation());
+        assertEquals(PaymentGateway.AUTH_CAPTURE, payments.get(0).getTransactionOperation());
         assertEquals("1", payments.get(0).getTransactionOperationResultCode());
 
     }
@@ -129,9 +130,9 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
         final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null);
         assertNotNull(payments);
         assertEquals(payments.size(), 2);
-        assertEquals("AUTH_CAPTURE", payments.get(0).getTransactionOperation());
+        assertEquals(PaymentGateway.AUTH_CAPTURE, payments.get(0).getTransactionOperation());
         assertEquals("1", payments.get(0).getTransactionOperationResultCode());
-        assertEquals("VOID_CAPTURE", payments.get(1).getTransactionOperation());
+        assertEquals(PaymentGateway.REFUND, payments.get(1).getTransactionOperation());
         assertEquals("1", payments.get(1).getTransactionOperationResultCode());
 
 

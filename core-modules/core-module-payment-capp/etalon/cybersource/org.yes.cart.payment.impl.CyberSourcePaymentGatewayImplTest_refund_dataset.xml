@@ -1,4 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
 <dataset>
   <TCUSTOMERORDERPAYMENT CUSTOMERORDERPAYMENT_ID="1" CARD_EXPIRY_MONTH="02" CARD_EXPIRY_YEAR="2016" CARD_HOLDER_NAME="JOHN DOU" CARD_NUMBER="1111" CARD_TYPE="Visa" CREATED_BY="user unknown" CREATED_TIMESTAMP="2011-05-14 16:59:15.929" GUID="ad0ee741-db7e-4bf0-8d8e-4102fa79d929" ORDER_CURRENCY="USD" ORDER_DATE="2011-05-14 16:59:13.969" ORDER_NUMBER="e686720e-59c8-43fa-a6ec-e088beef6de4" ORDER_SHIPMENT_NUMBER="e686720e-59c8-43fa-a6ec-e088beef6de4-0" ORDER_DELIVERY_AMOUNT="65.36" PP_BATCH_SETTLEMENT="false" PP_REZCODE="Ok" TRAN_AUTH_CODE="3053815496290008284282" TRAN_PAYMENT_GATEWAY="cyberSourcePaymentGateway" TRAN_PAYMENT_OP="AUTH" TRAN_PAYMENT_REZCODE="100" TRAN_PAYMENT_REZMSG="Successful transaction." TRAN_REFERENCE_ID="3053815496290008284282" TRAN_REQUEST_TOKEN="Ahj77wSRSxhoLCK6V3j0JJv1eLjBMBTfq8XGCekDcxAjdDJpJlXR6TEH8CciljDQWEV0rvHoDEfu" UPDATED_BY="user unknown" UPDATED_TIMESTAMP="2011-05-14 16:59:15.929"/>
   <TCUSTOMERORDERPAYMENT CUSTOMERORDERPAYMENT_ID="2" CARD_EXPIRY_MONTH="02" CARD_EXPIRY_YEAR="2016" CARD_HOLDER_NAME="JOHN DOU" CARD_NUMBER="1111" CARD_TYPE="Visa" CREATED_BY="user unknown" CREATED_TIMESTAMP="2011-05-14 16:59:17.271" GUID="3e839083-13ab-40bf-b5c7-035543b5003b" ORDER_CURRENCY="USD" ORDER_DATE="2011-05-14 16:59:13.969" ORDER_NUMBER="e686720e-59c8-43fa-a6ec-e088beef6de4" ORDER_SHIPMENT_NUMBER="e686720e-59c8-43fa-a6ec-e088beef6de4-1" ORDER_DELIVERY_AMOUNT="63.99" PP_BATCH_SETTLEMENT="false" PP_REZCODE="Ok" TRAN_AUTH_CODE="3053815509600008284282" TRAN_PAYMENT_GATEWAY="cyberSourcePaymentGateway" TRAN_PAYMENT_OP="AUTH" TRAN_PAYMENT_REZCODE="100" TRAN_PAYMENT_REZMSG="Successful transaction." TRAN_REFERENCE_ID="3053815509600008284282" TRAN_REQUEST_TOKEN="Ahj77wSRSxhoRFit/FD0JJv1eLjBQBTfq8XGCmkDcf4jdDJpJlXR6TEH8CciljDQiLFb+KHo+lfU" UPDATED_BY="user unknown" UPDATED_TIMESTAMP="2011-05-14 16:59:17.271"/>

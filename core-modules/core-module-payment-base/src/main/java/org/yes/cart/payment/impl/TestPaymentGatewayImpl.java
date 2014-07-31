@@ -1,3 +1,19 @@
+/*
+ * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.payment.impl;
 
 
@@ -34,7 +50,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     public static final String REFUND_FAIL = "REFUND_FAIL";
 
     public static final String AUTH_EXCEPTION = "AUTH_EXCEPTION";
-    public static final String AUTH_EXCEPTION_NO = "AUTH_EXCEPTION_NO"; //prefix to expection on payment no
+    public static final String AUTH_EXCEPTION_NO = "AUTH_EXCEPTION_NO"; //prefix to exception on payment no
     public static final String REVERSE_AUTH_EXCEPTION = "REVERSE_AUTH_EXCEPTION";
     public static final String CAPTURE_EXCEPTION = "CAPTURE_EXCEPTION";
     public static final String AUTH_CAPTURE_EXCEPTION = "AUTH_CAPTURE_EXCEPTION";
@@ -43,7 +59,13 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
 
 
     private static int authNum;
-    private PaymentGatewayFeature paymentGatewayFeature;
+    private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+            true, true, true, true,
+            true, true, true, false,
+            true, false,
+            null,
+            true, true
+    );
 
 
 
@@ -88,18 +110,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
     /**
      * {@inheritDoc}
      */
-    public synchronized PaymentGatewayFeature getPaymentGatewayFeatures() {
-
-        if (paymentGatewayFeature == null) {
-            paymentGatewayFeature = new PaymentGatewayFeatureImpl(
-                    true, true, true, true,
-                    true, true, true, false,
-                    true, false,
-                    null,
-                    true, true
-            );
-        }
-
+    public PaymentGatewayFeature getPaymentGatewayFeatures() {
         return paymentGatewayFeature;
     }
 

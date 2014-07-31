@@ -154,9 +154,9 @@ public interface Payment extends Serializable {
     /**
      * Set  issue card number.
      *
-     * @param cardIsuueNumber issue card number.
+     * @param cardIssueNumber issue card number.
      */
-    void setCardIssueNumber(final String cardIsuueNumber);
+    void setCardIssueNumber(final String cardIssueNumber);
 
     /**
      * Get cvv2 card number.

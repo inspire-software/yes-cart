@@ -30,7 +30,7 @@ VALUES (453, 'liqPayPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (454, 'liqPayPaymentGateway',
 'LP_POST_URL',
-'https://www.liqpay.com/?do=clickNbuy'
+'https://www.liqpay.com/api/'
 , 'Form post url', 'Form post url');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -41,12 +41,12 @@ VALUES (455, 'liqPayPaymentGateway',
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (456, 'liqPayPaymentGateway', 'name', 'LiqPay', 'Gateway name', 'Gateway name');
+VALUES (456, 'liqPayPaymentGateway', 'name', 'LiqPay', 'Gateway name (default)', 'Gateway name (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (457, 'liqPayPaymentGateway', 'name_en', 'LiqPay', 'Gateway name', 'Gateway name');
+VALUES (457, 'liqPayPaymentGateway', 'name_en', 'LiqPay', 'Gateway name (EN)', 'Gateway name (EN)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (458, 'liqPayPaymentGateway', 'name_ru', 'LiqPay', 'Название платежного шлюза', 'Название платежного шлюза');
+VALUES (458, 'liqPayPaymentGateway', 'name_ru', 'LiqPay', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
 
 
