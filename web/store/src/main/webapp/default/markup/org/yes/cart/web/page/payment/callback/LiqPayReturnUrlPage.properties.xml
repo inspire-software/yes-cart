@@ -19,5 +19,8 @@
 <properties>
 
     <entry key="pageTitle">Payment result</entry>
+    <entry key="order.error.cancelled">Order was cancelled. This maybe due to payment failure or insufficient stock</entry>
+    <entry key="order.error.not.found">Order not found</entry>
+    <entry key="order.success">Order successfully placed</entry>
 
 </properties>

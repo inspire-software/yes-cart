@@ -16,13 +16,21 @@
 
 package org.yes.cart.web.page.payment.callback;
 
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.js.ServerSideJs;
-import org.yes.cart.web.support.util.HttpUtil;
-import org.yes.cart.web.util.WicketUtil;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CheckoutServiceFacade;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -32,6 +40,9 @@ import org.yes.cart.web.util.WicketUtil;
 public class LiqPayReturnUrlPage  extends AbstractWebPage {
 
 
+    @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
+    private CheckoutServiceFacade checkoutServiceFacade;
+
     /**
      * Construct page.
      *
@@ -40,14 +51,40 @@ public class LiqPayReturnUrlPage  extends AbstractWebPage {
     public LiqPayReturnUrlPage(final PageParameters params) {
         super(params);
 
-        add(
-                new FeedbackPanel("feedback")
-        ).add(
-                new Label("infoLabel", "Hi there " + HttpUtil.dumpRequest(WicketUtil.getHttpServletRequest()) )
-        ).add(
-                new ServerSideJs("serverSideJs")
-        );
+        add(new FeedbackPanel("feedback"));
+        add(new ServerSideJs("serverSideJs"));
     }
 
+    @Override
+    protected void onBeforeRender() {
+        executeHttpPostedCommands();
 
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        if (cart != null && StringUtils.isNotBlank(cart.getGuid())) {
+            final CustomerOrder order = checkoutServiceFacade.findByGuid(cart.getGuid());
+            if (order != null) {
+                if (CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus())) {
+                    error(getLocalizer().getString("order.error.cancelled", this));
+                } else {
+                    if (checkoutServiceFacade.isOrderPaymentSuccessful(order)) {
+                        info(getLocalizer().getString("order.success", this));
+                    }
+                }
+                getShoppingCartCommandFactory().execute(cart,
+                        (Map) Collections.singletonMap(
+                                ShoppingCartCommand.CMD_CLEAN,
+                                ShoppingCartCommand.CMD_CLEAN
+                        ));
+
+            } else {
+                error(getLocalizer().getString("order.error.not.found", this));
+            }
+        } else {
+            error(getLocalizer().getString("order.error.not.found", this));
+        }
+
+        super.onBeforeRender();
+
+        persistCartIfNecessary();
+    }
 }
