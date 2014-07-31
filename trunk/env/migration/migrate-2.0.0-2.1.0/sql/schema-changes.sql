@@ -140,3 +140,10 @@ alter table TPROMOTIONCOUPONUSAGE
 --         foreign key (CUSTOMERORDER_ID)
 --         references TCUSTOMERORDER
 --         on delete cascade;
+
+
+--
+-- YC-XXX missing Issue number on payment table
+--
+
+alter table TCUSTOMERORDERPAYMENT add column CARD_ISSUE_NUMBER varchar(4);

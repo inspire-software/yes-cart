@@ -23,6 +23,7 @@ import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderException;
+import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
@@ -69,37 +70,82 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
         if (StringUtils.isNotBlank(orderGuid)) {
 
-            final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
+            try {
+                handleNewOrderToPending(parameters, orderGuid, log);
+            } catch (OrderItemAllocationException oiae) {
+                handleNewOrderToCancelWithRefund(parameters, orderGuid, log);
+            }
 
-            if (order == null) {
+        }
+    }
 
-                if (log.isWarnEnabled()) {
-                    log.warn("Can not get order with guid {}", orderGuid);
-                }
+    private void handleNewOrderToCancelWithRefund(final Map parameters, final String orderGuid, final Logger log) throws OrderException {
+
+        final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
+
+        if (order == null) {
+
+            if (log.isWarnEnabled()) {
+                log.warn("Can not get order with guid {}", orderGuid);
+            }
+
+        } else {
+
+            if (CustomerOrder.ORDER_STATUS_NONE.endsWith(order.getOrderStatus())) {
+
+                // Pending event handler will check for payment and will cancel reservation if required
+                OrderEvent orderEvent = new OrderEventImpl(
+                        OrderStateManager.EVT_CANCEL_NEW_WITH_REFUND,
+                        order,
+                        null,
+                        parameters
+                );
+
+                // Pending may throw exception during reservation, which happens prior payment saving - need another status? and extra flow?
+                boolean rez = orderStateManager.fireTransition(orderEvent);
+
+                log.info("Order state transition performed for {} . Result is {}", orderGuid, rez);
+
+                customerOrderService.update(order);
 
             } else {
+                log.warn("Order with guid {} not in NONE state, but {}", orderGuid, order.getOrderStatus());
+            }
 
-                if (CustomerOrder.ORDER_STATUS_NONE.endsWith(order.getOrderStatus())) {
+        }
+    }
 
-                    boolean paymentWasOk = getPaymentGateway(paymentGatewayLabel).isSuccess(parameters);
+    private void handleNewOrderToPending(final Map parameters, final String orderGuid, final Logger log) throws OrderException {
 
-                    OrderEvent orderEvent = new OrderEventImpl(
-                            paymentWasOk ? OrderStateManager.EVT_PENDING : OrderStateManager.EVT_CANCEL,
-                            order,
-                            null,
-                            parameters
-                    );
+        final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
 
-                    boolean rez = orderStateManager.fireTransition(orderEvent);
+        if (order == null) {
 
-                    log.info("Order state transition performed for {} . Result is {}", orderGuid, rez);
+            if (log.isWarnEnabled()) {
+                log.warn("Can not get order with guid {}", orderGuid);
+            }
 
-                    customerOrderService.update(order);
+        } else {
 
-                } else {
-                    log.warn("Order with guid {} not in NONE state, but {}", orderGuid, order.getOrderStatus());
-                }
+            if (CustomerOrder.ORDER_STATUS_NONE.endsWith(order.getOrderStatus())) {
 
+                // Pending event handler will check for payment and will cancel reservation if required
+                OrderEvent orderEvent = new OrderEventImpl(
+                        OrderStateManager.EVT_PENDING,
+                        order,
+                        null,
+                        parameters
+                );
+
+                // Pending may throw exception during reservation, which happens prior payment saving - need another status? and extra flow?
+                boolean rez = orderStateManager.fireTransition(orderEvent);
+
+                log.info("Order state transition performed for {} . Result is {}", orderGuid, rez);
+
+                customerOrderService.update(order);
+
+            } else {
+                log.warn("Order with guid {} not in NONE state, but {}", orderGuid, order.getOrderStatus());
             }
 
         }

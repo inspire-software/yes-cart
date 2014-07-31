@@ -39,7 +39,7 @@ public class PaymentImpl implements Payment {
     private String cardNumber; // is 4 last digits will be enough to store ?
     private String cardExpireYear;
     private String cardExpireMonth;
-    private String cardIsuueNumber;
+    private String cardIssueNumber;
     private String cardCvv2Code;
     private Date cardStartDate;
 
@@ -215,15 +215,15 @@ public class PaymentImpl implements Payment {
     /**
      * {@inheritDoc}
      */
-    public String getCardIsuueNumber() {
-        return cardIsuueNumber;
+    public String getCardIssueNumber() {
+        return cardIssueNumber;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setCardIsuueNumber(final String cardIsuueNumber) {
-        this.cardIsuueNumber = cardIsuueNumber;
+    public void setCardIssueNumber(final String cardIssueNumber) {
+        this.cardIssueNumber = cardIssueNumber;
     }
 
     /**

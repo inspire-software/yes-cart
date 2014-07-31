@@ -96,7 +96,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
             final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(orderEvent.getCustomerOrder().getPgLabel());
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
                 if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams()))) {
-                    //payment was ok, so quantity oh warehouses will be decreased
+                    //payment was ok, so quantity on warehouses will be decreased
                     getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_PAYMENT_OK, orderEvent.getCustomerOrder()));
                 } else {
                     //in case of bad payment reserved product quantity will be returned from reservation

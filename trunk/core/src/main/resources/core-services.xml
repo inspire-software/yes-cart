@@ -1456,6 +1456,15 @@
         </property>
     </bean>
 
+    <!-- Cancel new with refund -->
+    <bean id="cancelNewOrderWithRefundOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.CancelNewOrderWithRefundOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+            </bean>
+        </property>
+    </bean>
+
 
 
     <bean id="orderStateManager" class="org.yes.cart.service.order.impl.OrderStateManagerImpl">
@@ -1476,6 +1485,7 @@
                 <entry key="evt.release.to.shipment"       value-ref="releaseToShipmentOrderEventHandler"/>
                 <entry key="evt.shipment.complete"         value-ref="shipmentCompleteOrderEventHandler"/>
                 <entry key="evt.order.cancel.refund"       value-ref="cancelOrderWithRefundOrderEventHandler"/>
+                <entry key="evt.new.order.cancel.refund"   value-ref="cancelNewOrderWithRefundOrderEventHandler"/>
             </map>
         </constructor-arg>
         <constructor-arg index="1">
