@@ -152,7 +152,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     customerOrderPayment.setPaymentProcessorResult(paymentResult);
                     customerOrderPaymentService.create(customerOrderPayment);
                     if (Payment.PAYMENT_STATUS_FAILED.equals(paymentResult)) {
-                        reverseAuthorizatios(order.getOrdernum());
+                        reverseAuthorizations(order.getOrdernum());
                         return Payment.PAYMENT_STATUS_FAILED;
                     }
                 }
@@ -197,7 +197,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      *
      * @param orderNum order with some authorized payments
      */
-    public void reverseAuthorizatios(final String orderNum) {
+    public void reverseAuthorizations(final String orderNum) {
         if (getPaymentGateway().getPaymentGatewayFeatures().isSupportReverseAuthorization()) {
             final List<CustomerOrderPayment> paymentsToRevAuth = customerOrderPaymentService.findBy(
                     orderNum,
@@ -322,7 +322,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
             paymentsToRollBack.addAll(
                     customerOrderPaymentService.findBy(order.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE));
 
-            reverseAuthorizatios(order.getOrdernum());
+            reverseAuthorizations(order.getOrdernum());
 
             for (CustomerOrderPayment customerOrderPayment : paymentsToRollBack) {
                 Payment payment = null;

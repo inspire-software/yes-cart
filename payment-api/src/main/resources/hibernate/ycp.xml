@@ -30,6 +30,7 @@
         <property name="cardType" column="CARD_TYPE" length="64"  type="java.lang.String"/>
         <property name="cardHolderName" column="CARD_HOLDER_NAME" length="128"  type="java.lang.String"/>
         <property name="cardNumber" column="CARD_NUMBER" length="4"  type="java.lang.String"/>
+        <property name="cardIssueNumber" column="CARD_ISSUE_NUMBER" length="4"  type="java.lang.String"/>
 
         <property name="cardExpireYear" column="CARD_EXPIRY_YEAR" length="4"  type="java.lang.String"/>
         <property name="cardExpireMonth" column="CARD_EXPIRY_MONTH" length="2"  type="java.lang.String"/>

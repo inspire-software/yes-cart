@@ -425,7 +425,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
 
 
     private String cardNumber;
-    private String cardIsuueNumber;
+    private String cardIssueNumber;
 
 
     /**
@@ -461,14 +461,14 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
      * {@inheritDoc}
      */
     public String getCardIssueNumber() {
-        return cardIsuueNumber;
+        return cardIssueNumber;
     }
 
     /**
      * {@inheritDoc}
      */
     public void setCardIssueNumber(final String cardIssueNumber) {
-        this.cardIsuueNumber = cardIssueNumber;
+        this.cardIssueNumber = cardIssueNumber;
     }
 
 

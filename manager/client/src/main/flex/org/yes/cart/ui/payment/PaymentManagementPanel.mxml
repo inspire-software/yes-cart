@@ -93,7 +93,7 @@
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardHolderName') ,item.cardHolderName);
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardNumber') ,item.cardNumber);
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardExpired') ,item.cardExpireMonth + "/" + item.cardExpireYear);
-            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardIsuueNumber') ,item.cardIsuueNumber) + "\n";
+            toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'cardIssueNumber') ,item.cardIssueNumber) + "\n";
 
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'orderNumber') ,item.orderNumber);
             toolTip = addLine(toolTip,  resourceManager.getString('PaymentManagementPanel', 'orderDate') ,item.orderDate);
