@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.application;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -23,6 +24,11 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Storefront  director class responsible for data caching,
@@ -40,6 +46,7 @@ public class ApplicationDirector implements ApplicationContextAware {
     private static ApplicationDirector applicationDirector;
 
     private static ThreadLocal<Shop> shopThreadLocal = new ThreadLocal<Shop>();
+    private static ThreadLocal<List<String>> currentThemeChainThreadLocal = new ThreadLocal<List<String>>();
     private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
     private static ThreadLocal<String> mailTemplatePathThreadLocal = new ThreadLocal<String>();
     private static ThreadLocal<String> shopperIPAddressThreadLocal = new ThreadLocal<String>();
@@ -117,15 +124,36 @@ public class ApplicationDirector implements ApplicationContextAware {
         return shopThreadLocal.get();
     }
 
+    private static final String[] DEFAULT = new String[] { "default" };
+
     /**
      * @return current shop's theme
      */
-    public static String getCurrentTheme() {
-        final Shop shop = shopThreadLocal.get();
-        if (shop == null) {
-            return "default";
+    public static List<String> getCurrentThemeChain() {
+        List<String> chain = currentThemeChainThreadLocal.get();
+        if (chain == null) {
+
+            final Shop shop = shopThreadLocal.get();
+            if (shop == null) {
+                chain = Arrays.asList(DEFAULT);
+            } else {
+                final String themeCfg = shop.getFspointer();
+                if (StringUtils.isBlank(themeCfg)) {
+                    chain = Arrays.asList(DEFAULT);
+                } else if (themeCfg.indexOf(';') == -1) {
+                    chain = Arrays.asList(themeCfg);
+                } else {
+                    chain = new ArrayList<String>(Arrays.asList(StringUtils.split(shop.getFspointer(), ';')));
+                    if (!chain.contains(DEFAULT[0])) {
+                        chain.add(DEFAULT[0]);
+                    }
+                }
+            }
+            currentThemeChainThreadLocal.set(chain);
+
         }
-        return shop.getFspointer();
+        return chain;
+
     }
 
     /**
@@ -153,6 +181,17 @@ public class ApplicationDirector implements ApplicationContextAware {
      */
     public static void setShoppingCart(final ShoppingCart shoppingCart) {
         shoppingCartThreadLocal.set(shoppingCart);
+    }
+
+    /**
+     * Clear thread locals at the end of the request
+     */
+    public static void clear() {
+        shopThreadLocal.set(null);
+        shoppingCartThreadLocal.set(null);
+        mailTemplatePathThreadLocal.set(null);
+        shopperIPAddressThreadLocal.set(null);
+        currentThemeChainThreadLocal.set(null);
     }
 
 

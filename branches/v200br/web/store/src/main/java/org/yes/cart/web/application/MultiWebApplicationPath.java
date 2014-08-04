@@ -84,42 +84,83 @@ public class MultiWebApplicationPath   implements IResourcePath {
         }
     }
 
+    private static final String RESOURCE_EXTENSION = "properties.xml";
+
     /**
      *
      * @see org.apache.wicket.util.file.IResourceFinder#find(Class, String)
      */
     public IResourceStream find(final Class<?> clazz, final String pathname)
     {
-        Iterator<Folder> foldersIter = folders.iterator();
-        while (foldersIter.hasNext())  {
-            Folder folder = foldersIter.next();
-            final File file = new File(folder, pathname);
-            if (file.exists()) {
-                return new FileResourceStream(file);
+        final Logger log = ShopCodeContext.getLog(this);
+
+        if (!folders.isEmpty()) {
+            for (final Folder folder : folders) {
+                final File file = new File(folder, pathname);
+                if (file.exists()) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Retrieving file resource: {}", file.getAbsolutePath());
+                    }
+                    return new FileResourceStream(file);
+                }
             }
         }
 
-        final Logger log = ShopCodeContext.getLog(this);
+        if (!webappPaths.isEmpty()) {
+            for (final String path : webappPaths) {
+                try {
+                    final URL url = servletContext.getResource(path + pathname);
+                    if (url != null) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Retrieving web resource: {}{}", path, pathname);
+                        }
 
-        Iterator<String> webappPathsIter = webappPaths.iterator();
-        while (webappPathsIter.hasNext()) {
-            String path = webappPathsIter.next();
-            try {
-                final URL url = servletContext.getResource(path + pathname);
-                if (url != null) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Retrieving resource: " + path + pathname);
+                        return new UrlResourceStream(url);
                     }
-
-                    return new UrlResourceStream(url);
-                }
-                if (log.isDebugEnabled()) {
-                    log.debug("Lookup resource: " + path + pathname);
+                    if (log.isDebugEnabled()) {
+                        log.debug("Lookup resource: {}{}", path, pathname);
+                    }
+                } catch (Exception ex) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("File couldn't be found: {}{}", path, pathname);
+                    }
                 }
             }
-            catch (Exception ex)  {
-                if (log.isDebugEnabled()) {
-                    log.debug("File couldn't be found: " + path + pathname);
+        }
+
+        if (pathname.endsWith(RESOURCE_EXTENSION)) {
+            if (!folders.isEmpty()) {
+                for (final Folder folder : folders) {
+                    final File file = new File(folder, getShopResourceFile(pathname));
+                    if (file.exists()) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Retrieving file resource: {}", file.getAbsolutePath());
+                        }
+                        return new FileResourceStream(file);
+                    }
+                }
+            }
+
+            if (!webappPaths.isEmpty()) {
+                for (final String path : webappPaths) {
+                    final String resourceName = getShopResourceFile(pathname);
+                    try {
+                        final URL url = servletContext.getResource(path + resourceName);
+                        if (url != null) {
+                            if (log.isDebugEnabled()) {
+                                log.debug("Retrieving web resource: {}{}", path, resourceName);
+                            }
+
+                            return new UrlResourceStream(url);
+                        }
+                        if (log.isDebugEnabled()) {
+                            log.debug("Lookup resource: {}{}", path, resourceName);
+                        }
+                    } catch (Exception ex) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("File couldn't be found: {}{}", path, resourceName);
+                        }
+                    }
                 }
             }
         }
@@ -127,12 +168,30 @@ public class MultiWebApplicationPath   implements IResourcePath {
         return null;
     }
 
+    /*
+     *  Master resource file should be located in /markup directory of theme and should be named shop[_locale].properties.xml
+     *  E.g. shop_en.properties.xml for English.
+     */
+    String getShopResourceFile(final String pathname) {
+        int filenamePos = pathname.lastIndexOf('/');
+        if (filenamePos == -1) {
+            filenamePos = 0;
+        }
+        int localePos = pathname.substring(filenamePos).indexOf('_');
+        if (localePos == -1) {
+            localePos = pathname.length() - RESOURCE_EXTENSION.length() - 1;
+        } else {
+            localePos += filenamePos;
+        }
+        return "shop" + pathname.substring(localePos);
+    }
+
     /**
      * @see java.lang.Object#toString()
      */
     @Override
     public String toString()  {
-        return "[folders = " + StringList.valueOf(folders) + ", webapppaths: " +
+        return "[folders = " + StringList.valueOf(folders) + ", webappPaths: " +
             StringList.valueOf(webappPaths) + "]";
     }
 

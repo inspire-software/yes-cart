@@ -76,6 +76,16 @@ public class ShopCodeContext {
 
 
     /**
+     * Clear thread locals at the end of the request
+     */
+    public static void clear() {
+        shopId.set(0L);
+        shopCode.set("DEFAULT");
+    }
+
+
+
+    /**
      * This is a faster way to get loggers since we keep references in a concurrent
      * hash map as opposed to synchronised look ups offered by slf4j API.
      *
