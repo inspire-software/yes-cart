@@ -241,6 +241,15 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    public CustomerOrder findByOrderNumber(final String orderNumber) {
+        return getGenericDao().findSingleByCriteria(
+                Restrictions.eq("ordernum", orderNumber)
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void delete(final CustomerOrder instance) {
         for (CustomerOrderDelivery delivery : instance.getDelivery()) {
             this.genericDao.delete(delivery);
