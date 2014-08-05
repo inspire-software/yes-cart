@@ -117,6 +117,23 @@
     </filter>
 
     <filter>
+        <filter-name>liqPayNoRefundCallBackFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>paymentGatewayLabel</param-name>
+            <param-value>liqPayNoRefundPaymentGatewayLabel</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowedIPs</param-name>
+            <param-value></param-value>
+        </init-param>
+    </filter>
+
+    <filter>
         <filter-name>anetPaymentCallBackFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
         <init-param>
@@ -201,20 +218,24 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <filter-mapping>
-        <filter-name>shoppingCartFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
+    <!--
+        Shop resolver filter must be before cart filter,
+        because we need to know what shop we are in
+    -->
     <filter-mapping>
         <filter-name>shopResolverFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <filter-mapping>
+        <filter-name>shoppingCartFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 
     <!--
-    Liq Pay call back filter.
-    For security reason change default mapping.
+        Liq Pay call back filter.
+        For security reason change default mapping.
     -->
     <filter-mapping>
         <filter-name>liqPayCallBackFilter</filter-name>
@@ -222,8 +243,17 @@
     </filter-mapping>
 
     <!--
-    Authorize net call back filter.
-    For security reason change default mapping.
+        Liq Pay call back filter.
+        For security reason change default mapping.
+    -->
+    <filter-mapping>
+        <filter-name>liqPayNoRefundCallBackFilter</filter-name>
+        <url-pattern>/liqpaynrcallback</url-pattern>
+    </filter-mapping>
+
+    <!--
+        Authorize net call back filter.
+        For security reason change default mapping.
     -->
     <filter-mapping>
         <filter-name>anetPaymentCallBackFilter</filter-name>
@@ -231,8 +261,8 @@
     </filter-mapping>
 
     <!--
-    Paypal express checkout call back filter.
-    For security reason change default mapping.
+        Paypal express checkout call back filter.
+        For security reason change default mapping.
     -->
     <filter-mapping>
         <filter-name>payPalExpressCheckoutFilter</filter-name>
@@ -241,7 +271,9 @@
 
 
 
-    <!-- product, sku and brand images filter -->
+    <!--
+        product, sku and brand images filter
+    -->
     <filter-mapping>
         <filter-name>imageFilter</filter-name>
         <url-pattern>/imgvault/*</url-pattern>

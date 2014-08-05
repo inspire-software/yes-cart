@@ -101,7 +101,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
                         parameters
                 );
 
-                // Pending may throw exception during reservation, which happens prior payment saving - need another status? and extra flow?
+                // For cancellation of new orders we only need to refund potentially successful payments, no reservations were made yet
                 boolean rez = orderStateManager.fireTransition(orderEvent);
 
                 log.info("Order state transition performed for {} . Result is {}", orderGuid, rez);

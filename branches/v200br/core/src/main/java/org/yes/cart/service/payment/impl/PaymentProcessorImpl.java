@@ -363,7 +363,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     captureReversedOrderPayment.setPaymentProcessorResult(paymentResult);
                     customerOrderPaymentService.create(captureReversedOrderPayment);
                 }
-                if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
+                if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult) &&
+                        !Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED.equals(paymentResult)) {
                     wasError = true;
                 }
 
