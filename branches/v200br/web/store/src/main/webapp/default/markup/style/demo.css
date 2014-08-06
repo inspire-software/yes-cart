@@ -452,6 +452,27 @@ a.active-category {
     width: 97%;
 }
 
+a.toggleMenu,a.toggleMenu2 {
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+    color: #FFFFFF;
+    border-right: 1px solid #7d99ca;
+
+    background-color: #557799; /* a5b8da; */
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#a5b8da), to(#7089b3));
+    background-image: -webkit-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -moz-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -ms-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: -o-linear-gradient(top, #a5b8da, #7089b3);
+    background-image: linear-gradient(to bottom, #a5b8da, #7089b3);
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#a5b8da, endColorstr=#7089b3);
+}
+
+a.toggleMenu:hover,a.toggleMenu2:hover {
+    color: #FFBB22;
+    font-style: normal;
+    border-right: 1px solid #7d99ca;
+}
+
 .nav {
     list-style: none;
     *zoom: 1;
