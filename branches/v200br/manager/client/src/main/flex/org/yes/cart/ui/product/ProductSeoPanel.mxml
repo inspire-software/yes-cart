@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*" width="100%" height="100%">
+
+
+    <mx:ArrayCollection id="productAvailability"/>
+
+    <mx:HBox>
+        <mx:Form width="100%">
+
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='uri')">
+                <mx:TextInput id="uriNameTextInput" width="300"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='title')">
+                <mx:TextInput id="titleNameTextInput" width="300"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="">
+                <yci18n:i18nStringField id="displayTitleNames" change="onDisplayNamesChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='metakeywords')">
+                <mx:TextInput id="metakeywordsNameTextInput" width="300"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="">
+                <yci18n:i18nStringField id="displayMetakeywords" change="onDisplayNamesChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='metadescription')">
+                <mx:TextInput id="metadescriptionNameTextInput" width="300"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="">
+                <yci18n:i18nStringField id="displayMetadescriptions" change="onDisplayNamesChange(event)"/>
+            </mx:FormItem>
+
+            <mx:FormItem width="100%">
+                <mx:Button width="150"
+                           enabled="{productDTOImplChanged}"
+                           label="@Resource(bundle='ProductManagementPanel',key='save')"
+                           toolTip="@Resource(bundle='ProductManagementPanel',key='saveHint')"
+                           click="saveProductChanges(event)"/>
+
+            </mx:FormItem>
+
+        </mx:Form>
+
+    </mx:HBox>
+
+
+
+    <mx:ArrayCollection id="propertyWatchers"/>
+
+    <mx:Boolean id="allowChangeCode">false</mx:Boolean>
+    <mx:Boolean id="productDTOImplChanged">false</mx:Boolean>
+
+    <mx:Script><![CDATA[
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.controls.Alert;
+        import mx.events.FlexEvent;
+        import mx.events.PropertyChangeEvent;
+
+        import org.yes.cart.event.DtoEvent;
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.util.DataModelUtils;
+        import org.yes.cart.util.DomainUtils;
+
+        [Bindable]
+        private var _productDTOImpl:ProductDTOImpl;
+
+        public function get productDTOImpl():ProductDTOImpl {
+            return _productDTOImpl;
+        }
+
+        public function set productDTOImpl(value:ProductDTOImpl):void {
+            unbindProperties();
+            _productDTOImpl = value;
+            allowChangeCode = DomainUtils.isPersistentPK(_productDTOImpl.productId);
+            bindProperties();
+        }
+
+        private function onDisplayNamesChange(event:FlexEvent):void {
+            productDTOImplChanged = true;
+        }
+
+        private function saveProductChanges(event:MouseEvent):void {
+            dispatchEvent(new DtoEvent(DtoEvent.UPDATE, _productDTOImpl));
+            productDTOImplChanged = false;
+        }
+
+        private function unbindProperties():void {
+            for each (var watcher:ChangeWatcher in propertyWatchers) {
+                watcher.unwatch();
+            }
+            propertyWatchers.removeAll();
+            displayTitleNames.setSourceObject(null, null);
+            displayMetakeywords.setSourceObject(null, null);
+            displayMetadescriptions.setSourceObject(null, null);
+        }
+
+        private function bindProperties():void {
+
+
+            try {
+
+                displayTitleNames.setSourceObject(this._productDTOImpl, 'displayTitles');
+                displayMetakeywords.setSourceObject(this._productDTOImpl, 'displayMetakeywords');
+                displayMetadescriptions.setSourceObject(this._productDTOImpl, 'displayMetadescriptions');
+
+                propertyWatchers.addItem(BindingUtils.bindProperty(uriNameTextInput, "text", _productDTOImpl, "uri"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(titleNameTextInput, "text", _productDTOImpl, "title"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(metakeywordsNameTextInput, "text", _productDTOImpl, "metakeywords"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(metadescriptionNameTextInput, "text", _productDTOImpl, "metadescription"));
+
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "uri", uriNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "title", titleNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "metakeywords", metakeywordsNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "metadescription", metadescriptionNameTextInput, "text"));
+
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "uri", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "title", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "metakeywords", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "metadescription", onProductDTOChanged));
+
+            } catch (e:Error) {
+
+                Alert.show("" + e.toString());
+
+            }
+
+
+        }
+
+        private function onProductDTOChanged(event:PropertyChangeEvent):void {
+            productDTOImplChanged = true;
+        }
+        ]]></mx:Script>
+
+</mx:VBox>

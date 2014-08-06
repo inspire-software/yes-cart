@@ -410,12 +410,6 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="seoDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
-        <constructor-arg><value>org.yes.cart.domain.entity.impl.SeoEntity</value></constructor-arg>
-        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
     <bean id="shopCategoryDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopCategoryEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>

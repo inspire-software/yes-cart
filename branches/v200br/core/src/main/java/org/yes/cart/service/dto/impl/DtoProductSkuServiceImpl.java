@@ -59,7 +59,6 @@ public class DtoProductSkuServiceImpl
     private final Assembler skuPriceAssembler;
     private final GenericService<Attribute> attributeService;
     private final PriceService priceService;
-    private final GenericService<Seo> seoGenericService;
     private final ImageService imageService;
 
 
@@ -91,7 +90,6 @@ public class DtoProductSkuServiceImpl
             final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao,
             final AdaptersRepository adaptersRepository,
             final PriceService priceService,
-            final GenericService<Seo> seoGenericService,
             final ImageService imageService) {
         super(dtoFactory, productSkuGenericService, adaptersRepository);
 
@@ -109,7 +107,6 @@ public class DtoProductSkuServiceImpl
                 dtoFactory.getImplClass(SkuPriceDTO.class),
                 productSkuGenericService.getGenericDao().getEntityFactory().getImplClass(SkuPrice.class)
         );
-        this.seoGenericService = seoGenericService;
     }
 
     public DtoProductService getDtoProductService() {

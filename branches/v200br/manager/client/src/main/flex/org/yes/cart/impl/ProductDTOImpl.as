@@ -41,13 +41,19 @@ public class ProductDTOImpl {
 
     public var productCategoryDTOs:ArrayCollection; //of ProductCategoryDTOImpl
 
-    public var   uri:String;
+    public var uri:String;
 
-    public var  title:String;
+    public var title:String;
 
-    public var  metakeywords:String;
+    public var metakeywords:String;
 
-    public var  metadescription:String;
+    public var metadescription:String;
+
+    public var displayTitles:Object;
+
+    public var displayMetakeywords:Object;
+
+    public var displayMetadescriptions:Object;
 
     public var name:String;
 

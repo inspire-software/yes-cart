@@ -15,31 +15,41 @@
   -    limitations under the License.
   -->
 
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*"
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)"
                 implements="org.yes.cart.ui.attributes.valuedialog.ValueDialog"
                 layout="vertical"
                 creationComplete="init();">
 
-    <mx:Canvas id="imageView"
-               width="480"
-               height="480"
-               borderColor="#CCCCCC"
-               borderStyle="solid"/>
+    <mx:HBox>
+        <mx:Canvas id="imageView"
+                   width="480"
+                   height="480"
+                   borderColor="#CCCCCC"
+                   borderStyle="solid"/>
 
-    <mx:Form x="0" y="0" width="100%">
-        <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
-            <mx:TextInput width="310" id="valueTextInput"/>
-        </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='altText')">
-            <mx:TextInput width="310" id="altTextInput"/>
-        </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='title')">
-            <mx:TextInput width="310" id="titleTextInput"/>
-        </mx:FormItem>
+        <mx:Form x="0" y="0" width="400">
+            <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
+                <mx:TextInput width="250" id="valueTextInput"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='altText')">
+                <mx:TextInput width="250" id="altTextInput"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="">
+                <yci18n:i18nStringField id="displayAlts"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='title')">
+                <mx:TextInput width="250" id="titleTextInput"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="">
+                <yci18n:i18nStringField id="displayTitles"/>
+            </mx:FormItem>
+        </mx:Form>
+    </mx:HBox>
 
-    </mx:Form>
     <mx:ControlBar width="100%" horizontalAlign="right">
         <mx:Button id="btnLoad"
                    label="@Resource(bundle='AttributesManagementPanel',key='loadImage')"
@@ -147,8 +157,11 @@
                 //Save image when it really changed.
                 value = storeImageOnServer(value, code, bitmapData, resolveImageStorage(attributeGroup));
 
-            } else {
+            } else if (valueTextInput.text != null && valueTextInput.text.length > 0) {
+
                 updateImageSeoData();
+
+                dataReadyCallbackFunction(null);
             }
         }
 
@@ -356,6 +369,8 @@
             } else {
                 //nothing to do this is a new image
                 seoImage = new SeoImageDTOImpl();
+                displayAlts.setSourceObject(seoImage, 'displayAlts');
+                displayTitles.setSourceObject(seoImage, 'displayTitles');
 
             }
 
@@ -432,6 +447,7 @@
             var text:Text = new Text();
             text.text = resourceManager.getString('AttributesManagementPanel', 'loadImageFailed');
             imageView.addChild(text);
+            remoteImageService.getSeoImage(value);
 
         }
 
@@ -444,6 +460,8 @@
             }
             titleTextInput.text = seoImage.title;
             altTextInput.text = seoImage.alt;
+            displayAlts.setSourceObject(seoImage, 'displayAlts');
+            displayTitles.setSourceObject(seoImage, 'displayTitles');
 
         }
 

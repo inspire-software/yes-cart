@@ -19,13 +19,15 @@ package org.yes.cart.impl {
 [RemoteClass(alias="org.yes.cart.domain.dto.impl.SeoImageDTOImpl")]
 public class SeoImageDTOImpl {
 
-    public var  seoImageId:Number;
+    public var seoImageId:Number;
 
-    public var  imageName:String;
+    public var imageName:String;
 
-    public var  alt:String;
+    public var alt:String;
+    public var displayAlts:Object;
 
     public var title:String;
+    public var displayTitles:Object;
 
     public function SeoImageDTOImpl() {
     }

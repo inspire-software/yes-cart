@@ -20,6 +20,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.SeoImageDTO;
 
+import java.util.Map;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -41,6 +43,13 @@ public class SeoImageDTOImpl implements SeoImageDTO {
 
     @DtoField(value = "title")
     private String title;
+
+    @DtoField(value = "displayAlt", converter = "i18nStringConverter")
+    private Map<String, String> displayAlts;
+
+    @DtoField(value = "displayTitle", converter = "i18nStringConverter")
+    private Map<String, String> displayTitles;
+
 
     /** {@inheritDoc}*/
     public long getSeoImageId() {
@@ -78,6 +87,16 @@ public class SeoImageDTOImpl implements SeoImageDTO {
     }
 
     /** {@inheritDoc}*/
+    public Map<String, String> getDisplayAlts() {
+        return displayAlts;
+    }
+
+    /** {@inheritDoc}*/
+    public void setDisplayAlts(final Map<String, String> displayAlts) {
+        this.displayAlts = displayAlts;
+    }
+
+    /** {@inheritDoc}*/
     public String getTitle() {
         return title;
     }
@@ -85,6 +104,16 @@ public class SeoImageDTOImpl implements SeoImageDTO {
     /** {@inheritDoc}*/
     public void setTitle(final String title) {
         this.title = title;
+    }
+
+    /** {@inheritDoc}*/
+    public Map<String, String> getDisplayTitles() {
+        return displayTitles;
+    }
+
+    /** {@inheritDoc}*/
+    public void setDisplayTitles(final Map<String, String> displayTitles) {
+        this.displayTitles = displayTitles;
     }
 
     @Override

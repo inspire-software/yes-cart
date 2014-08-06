@@ -15,7 +15,7 @@
   -    limitations under the License.
   -->
 
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*"
          creationComplete="init();"
          width="100%" height="100%"
          paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
@@ -46,26 +46,32 @@
          */
         private function init():void {
 
-            BindingUtils.bindProperty(codeTextInput, "text", this._shopDTOImpl, "code");
-            BindingUtils.bindProperty(titleNameTextInput, "text", this._shopDTOImpl, "title");
-            BindingUtils.bindProperty(metakeywordsNameTextInput, "text", this._shopDTOImpl, "metakeywords");
-            BindingUtils.bindProperty(metadescriptionNameTextInput, "text", this._shopDTOImpl, "metadescription");
+            clearWatchers();
 
-            BindingUtils.bindProperty(nameTextInput, "text", this._shopDTOImpl, "name");
+            displayTitleNames.setSourceObject(this._shopDTOImpl, 'displayTitles');
+            displayMetakeywords.setSourceObject(this._shopDTOImpl, 'displayMetakeywords');
+            displayMetadescriptions.setSourceObject(this._shopDTOImpl, 'displayMetadescriptions');
 
-            BindingUtils.bindProperty(descriptionTextInput, "text", this._shopDTOImpl, "description");
-            BindingUtils.bindProperty(fspointerTextInput, "text", this._shopDTOImpl, "fspointer");
-            BindingUtils.bindProperty(imgpointerTextInput, "text", this._shopDTOImpl, "imageVaultFolder");
+            changeWatchers.addItem(BindingUtils.bindProperty(codeTextInput, "text", this._shopDTOImpl, "code"));
+            changeWatchers.addItem(BindingUtils.bindProperty(titleNameTextInput, "text", this._shopDTOImpl, "title"));
+            changeWatchers.addItem(BindingUtils.bindProperty(metakeywordsNameTextInput, "text", this._shopDTOImpl, "metakeywords"));
+            changeWatchers.addItem(BindingUtils.bindProperty(metadescriptionNameTextInput, "text", this._shopDTOImpl, "metadescription"));
 
-            BindingUtils.bindProperty(this._shopDTOImpl, "code", codeTextInput, "text");
-            BindingUtils.bindProperty(this._shopDTOImpl, "title", titleNameTextInput, "text");
-            BindingUtils.bindProperty(this._shopDTOImpl, "metakeywords", metakeywordsNameTextInput, "text");
-            BindingUtils.bindProperty(this._shopDTOImpl, "metadescription", metadescriptionNameTextInput, "text");
+            changeWatchers.addItem(BindingUtils.bindProperty(nameTextInput, "text", this._shopDTOImpl, "name"));
 
-            BindingUtils.bindProperty(this._shopDTOImpl, "name", nameTextInput, "text");
-            BindingUtils.bindProperty(this._shopDTOImpl, "description", descriptionTextInput, "text");
-            BindingUtils.bindProperty(this._shopDTOImpl, "fspointer", fspointerTextInput, "text");
-            BindingUtils.bindProperty(this._shopDTOImpl, "imageVaultFolder", imgpointerTextInput, "text");
+            changeWatchers.addItem(BindingUtils.bindProperty(descriptionTextInput, "text", this._shopDTOImpl, "description"));
+            changeWatchers.addItem(BindingUtils.bindProperty(fspointerTextInput, "text", this._shopDTOImpl, "fspointer"));
+            changeWatchers.addItem(BindingUtils.bindProperty(imgpointerTextInput, "text", this._shopDTOImpl, "imageVaultFolder"));
+
+            changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "code", codeTextInput, "text"));
+            changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "title", titleNameTextInput, "text"));
+            changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "metakeywords", metakeywordsNameTextInput, "text"));
+            changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "metadescription", metadescriptionNameTextInput, "text"));
+
+            changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "name", nameTextInput, "text"));
+            changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "description", descriptionTextInput, "text"));
+            changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "fspointer", fspointerTextInput, "text"));
+            changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "imageVaultFolder", imgpointerTextInput, "text"));
 
             newStoreFlag = DomainUtils.isNewPK(this._shopDTOImpl.shopId);
             codeTextInput.enabled = newStoreFlag;
@@ -74,13 +80,16 @@
 
         }
 
-        private function initWatchers():void {
+        private function clearWatchers():void {
             if (changeWatchers != null) {
                 for each (var cw:ChangeWatcher in changeWatchers) {
                     cw.unwatch();
                 }
                 changeWatchers.removeAll();
             }
+        }
+
+        private function initWatchers():void {
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "code", dtoChanged));
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "title", dtoChanged));
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "metakeywords", dtoChanged));
@@ -176,13 +185,26 @@
             <mx:TextInput id="titleNameTextInput" width="300"/>
         </mx:FormItem>
         <mx:FormItem width="100%"
+                     label="">
+            <yci18n:i18nStringField id="displayTitleNames" change="dtoChanged(null)"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
                      label="@Resource(bundle='ProductManagementPanel',key='metakeywords')">
             <mx:TextInput id="metakeywordsNameTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="">
+            <yci18n:i18nStringField id="displayMetakeywords" change="dtoChanged(null)"/>
         </mx:FormItem>
         <mx:FormItem width="100%"
                      label="@Resource(bundle='ProductManagementPanel',key='metadescription')">
             <mx:TextInput id="metadescriptionNameTextInput" width="300"/>
         </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="">
+            <yci18n:i18nStringField id="displayMetadescriptions" change="dtoChanged(null)"/>
+        </mx:FormItem>
+
 
     </mx:Form>
     <mx:ControlBar horizontalAlign="left">

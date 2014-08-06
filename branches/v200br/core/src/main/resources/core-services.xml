@@ -300,13 +300,6 @@
     </bean>
 
 
-    <bean id="seoService" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.service.domain.impl.SeoServiceImpl">
-                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="seoDao"/>
-            </bean>
-        </property>
-    </bean>
 
 
     <bean id="shopCategoryService" parent="txProxyTemplate">
@@ -652,15 +645,14 @@
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="productService"/>
                 <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
-                <constructor-arg index="3" ref="seoService"/>
-                <constructor-arg index="4" ref="dtoAttributeService"/>
-                <constructor-arg index="5" ref="dtoAttributeGroupService"/>
-                <constructor-arg index="6" ref="dtoEtypeService"/>
-                <constructor-arg index="7" ref="attrValueEntityProductDao"/>
-                <constructor-arg index="8" ref="imageService"/>
-                <constructor-arg index="9" ref="dtoProductTypeAttrService"/>
-                <constructor-arg index="10" ref="dtoProductCategoryService"/>
-                <constructor-arg index="11" ref="languageService"/>
+                <constructor-arg index="3" ref="dtoAttributeService"/>
+                <constructor-arg index="4" ref="dtoAttributeGroupService"/>
+                <constructor-arg index="5" ref="dtoEtypeService"/>
+                <constructor-arg index="6" ref="attrValueEntityProductDao"/>
+                <constructor-arg index="7" ref="imageService"/>
+                <constructor-arg index="8" ref="dtoProductTypeAttrService"/>
+                <constructor-arg index="9" ref="dtoProductCategoryService"/>
+                <constructor-arg index="10" ref="languageService"/>
                 <lookup-method name="lookupDtoProductSkuService" bean="dtoProductSkuService"/>
             </bean>
         </property>
@@ -675,8 +667,7 @@
                 <constructor-arg index="3" ref="attrValueEntityProductSkuDao"/>
                 <constructor-arg index="4" ref="dtoAssemblerAdaptersRepository"/>
                 <constructor-arg index="5" ref="priceService"/>
-                <constructor-arg index="6" ref="seoService"/>
-                <constructor-arg index="7" ref="imageService"/>
+                <constructor-arg index="6" ref="imageService"/>
                 <lookup-method name="lookupDtoProductService" bean="dtoProductService"/>
             </bean>
         </property>

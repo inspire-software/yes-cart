@@ -43,7 +43,6 @@
         import mx.rpc.events.ResultEvent;
         import mx.utils.ObjectUtil;
 
-        import org.yes.cart.event.DtoEvent;
         import org.yes.cart.impl.CategoryDTOImpl;
         import org.yes.cart.impl.ProductCategoryDTOImpl;
         import org.yes.cart.impl.ProductDTOImpl;
@@ -56,9 +55,10 @@
         import org.yes.cart.util.DomainUtils;
 
         private var TAB_SUMMARY_IDX:int = 0;
-        private var TAB_PRODUCTS_IDX:int = 1;
-        private var TAB_IMAGE_IDX:int = 2;
-        private var TAB_ATTRIB_IDX:int = 3;
+        private var TAB_SEO_IDX:int = 1;
+        private var TAB_PRODUCTS_IDX:int = 2;
+        private var TAB_IMAGE_IDX:int = 3;
+        private var TAB_ATTRIB_IDX:int = 4;
 
 
         [Bindable]
@@ -82,7 +82,8 @@
             categorySelectedAndChanged = categorySelected && this.categoryTree.selectedItem.changed;
             Debug.trace("Selected category dto name is :" + (this.categoryTree.selectedItem != null ?
                     this.categoryTree.selectedItem.name : "null"));
-            unbindAll();
+            unbindMain();
+            unbindSeo();
             if (categorySelected) {
                 this.selectedCategoryDTOImpl = this.categoryTree.selectedItem as CategoryDTOImpl;
                 initTabs(categoryTabNavigator.selectedIndex);
@@ -94,7 +95,7 @@
         }
 
         private function summaryTabSelected():void {
-            unbindAll();
+            unbindMain();
 
             if (categorySelected && categoryTree.selectedItem != null) {
 
@@ -106,7 +107,15 @@
                     categoryProductTypeClearButton.visible =
                             DataModelUtils.selectCombo(categoryProductTypeComboBox, categoryTree.selectedItem, 'productTypeId', 'producttypeId');
                 }
-                bingCategoryData();
+                bingCategoryDataMain();
+            }
+        }
+
+        private function seoTabSelected():void {
+            unbindSeo();
+
+            if (categorySelected && categoryTree.selectedItem != null) {
+                bingCategoryDataSeo();
             }
         }
 
@@ -126,12 +135,17 @@
                     break;
                 }
 
+                case TAB_SEO_IDX:
+                {
+                    seoTabSelected();
+                    break;
+                }
+
                 case TAB_PRODUCTS_IDX:
                 {
                     assignedProductsTabSelected();
                     break;
                 }
-
 
                 case TAB_IMAGE_IDX:
                 {
@@ -149,27 +163,38 @@
 
         }
 
-        private function unbindAll():void {
+        private function unbindMain():void {
             for (var i:int = 0; i < categoryPropertyChangeWatchers.length; i++) {
                 var cw:ChangeWatcher = ChangeWatcher(categoryPropertyChangeWatchers.getItemAt(i));
                 cw.unwatch();
             }
             categoryPropertyChangeWatchers.removeAll();
-            displayNames.setSourceObject(null, null);
+            if (displayNames != null) {
+                displayNames.setSourceObject(null, null);
+            }
 
             categoryProductTypeComboBox.removeEventListener(Event.CHANGE, onCategoryProductTypeChanged);
-
         }
 
-        private function bingCategoryData():void {
+        private function unbindSeo():void {
+            for (var i:int = 0; i < categoryPropertyChangeWatchers.length; i++) {
+                var cw:ChangeWatcher = ChangeWatcher(categoryPropertyChangeWatchers.getItemAt(i));
+                cw.unwatch();
+            }
+            categoryPropertyChangeWatchers.removeAll();
+
+            if (displayTitleNames != null) {
+                displayTitleNames.setSourceObject(null, null);
+                displayMetakeywords.setSourceObject(null, null);
+                displayMetadescriptions.setSourceObject(null, null);
+            }
+        }
+
+        private function bingCategoryDataMain():void {
 
             displayNames.setSourceObject(this.selectedCategoryDTOImpl, 'displayNames');
 
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryNameTextInput, "text", this.selectedCategoryDTOImpl, "name"));
-            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(uriNameTextInput, "text", this.selectedCategoryDTOImpl, "uri"));
-            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(titleNameTextInput, "text", this.selectedCategoryDTOImpl, "title"));
-            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(metakeywordsNameTextInput, "text", this.selectedCategoryDTOImpl, "metakeywords"));
-            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(metadescriptionNameTextInput, "text", this.selectedCategoryDTOImpl, "metadescription"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryDescriptionTextInput, "text", this.selectedCategoryDTOImpl, "description"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryTemplateTextInput, "text", this.selectedCategoryDTOImpl, "uitemplate"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryRankTextInput, "text", this.selectedCategoryDTOImpl, "rank"));
@@ -180,10 +205,6 @@
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryFNByPriceCheckBox, "selected", this.selectedCategoryDTOImpl, "navigationByPrice"));
 
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "name", categoryNameTextInput, "text"));
-            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "uri", uriNameTextInput, "text"));
-            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "title", titleNameTextInput, "text"));
-            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "metakeywords", metakeywordsNameTextInput, "text"));
-            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "metadescription", metadescriptionNameTextInput, "text"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "description", categoryDescriptionTextInput, "text"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "uitemplate", categoryTemplateTextInput, "text"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "rank", categoryRankTextInput, "text"));
@@ -197,10 +218,6 @@
 
             // if (!saveBtnVisible) {
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "name", categoryDtoChanged));
-            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "uri", categoryDtoChanged));
-            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "title", categoryDtoChanged));
-            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "metakeywords", categoryDtoChanged));
-            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "metadescription", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "description", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "uitemplate", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "rank", categoryDtoChanged));
@@ -210,6 +227,31 @@
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "navigationByBrand", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "navigationByPrice", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "productTypeId", categoryDtoChanged));
+            // }
+
+        }
+
+        private function bingCategoryDataSeo():void {
+
+            displayTitleNames.setSourceObject(this.selectedCategoryDTOImpl, 'displayTitles');
+            displayMetakeywords.setSourceObject(this.selectedCategoryDTOImpl, 'displayMetakeywords');
+            displayMetadescriptions.setSourceObject(this.selectedCategoryDTOImpl, 'displayMetadescriptions');
+
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(uriNameTextInput, "text", this.selectedCategoryDTOImpl, "uri"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(titleNameTextInput, "text", this.selectedCategoryDTOImpl, "title"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(metakeywordsNameTextInput, "text", this.selectedCategoryDTOImpl, "metakeywords"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(metadescriptionNameTextInput, "text", this.selectedCategoryDTOImpl, "metadescription"));
+
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "uri", uriNameTextInput, "text"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "title", titleNameTextInput, "text"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "metakeywords", metakeywordsNameTextInput, "text"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "metadescription", metadescriptionNameTextInput, "text"));
+
+            // if (!saveBtnVisible) {
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "uri", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "title", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "metakeywords", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "metadescription", categoryDtoChanged));
             // }
 
         }
@@ -320,7 +362,8 @@
                 newCategory.changed = true;
 
                 selectedCategoryDTOImpl.addChild(newCategory);
-                unbindAll();
+                unbindMain();
+                unbindSeo();
                 categoryTree.expandItem(selectedCategoryDTOImpl, false);
                 categoryTree.validateNow();
                 categoryTree.expandItem(selectedCategoryDTOImpl, true);
@@ -521,7 +564,8 @@
         private function onRemoveCategoriesResult(event:ResultEvent):void {
             this.categorySelected = false;
             this.categorySelectedAndChanged = false;
-            this.unbindAll();
+            this.unbindMain();
+            this.unbindSeo();
             this.selectedCategoryDTOImpl = null;
             remoteCategoryService.getAll();
             Alert.show(
@@ -733,6 +777,22 @@
                                         </mx:HBox>
                                     </mx:FormItem>
 
+                                </mx:Form>
+                                <mx:ControlBar horizontalAlign="right" width="400">
+                                    <mx:Button id="saveBtn"
+                                               enabled="{categorySelectedAndChanged}"
+                                               click="onSaveCategoryChangesClick(event)"
+                                               label="@Resource(bundle='CategoryManagementPanel',key='save')"
+                                               toolTip="@Resource(bundle='CategoryManagementPanel',key='saveHint')"/>
+                                </mx:ControlBar>
+                            </mx:VBox>
+                        </mx:Canvas>
+
+                        <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='seo')" x="0"
+                                   y="0" width="100%" height="100%" id="seoInfoPanel">
+                            <mx:VBox width="100%" height="100%">
+                                <mx:Form>
+
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='uri')">
                                         <mx:TextInput id="uriNameTextInput" width="300"/>
@@ -742,18 +802,29 @@
                                         <mx:TextInput id="titleNameTextInput" width="300"/>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
+                                                 label="">
+                                        <yci18n:i18nStringField id="displayTitleNames" change="onDisplayNamesChange(event)"/>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='metakeywords')">
                                         <mx:TextInput id="metakeywordsNameTextInput" width="300"/>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="">
+                                        <yci18n:i18nStringField id="displayMetakeywords" change="onDisplayNamesChange(event)"/>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='metadescription')">
                                         <mx:TextInput id="metadescriptionNameTextInput" width="300"/>
                                     </mx:FormItem>
-
+                                    <mx:FormItem width="100%"
+                                                 label="">
+                                        <yci18n:i18nStringField id="displayMetadescriptions" change="onDisplayNamesChange(event)"/>
+                                    </mx:FormItem>
 
                                 </mx:Form>
                                 <mx:ControlBar horizontalAlign="right" width="400">
-                                    <mx:Button id="saveBtn"
+                                    <mx:Button id="saveBtn2"
                                                enabled="{categorySelectedAndChanged}"
                                                click="onSaveCategoryChangesClick(event)"
                                                label="@Resource(bundle='CategoryManagementPanel',key='save')"

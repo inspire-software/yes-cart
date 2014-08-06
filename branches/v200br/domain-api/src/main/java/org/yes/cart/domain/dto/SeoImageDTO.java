@@ -18,6 +18,8 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.Map;
+
 /**
  * Image SEO DTO interface.
  * <p/>
@@ -41,6 +43,7 @@ public interface SeoImageDTO extends Identifiable {
      */
     void setImageName(String imageName);
 
+
     /**
      * Get alternative text.
      *
@@ -57,6 +60,20 @@ public interface SeoImageDTO extends Identifiable {
     void setAlt(String alt);
 
     /**
+     * Display alt.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayAlts();
+
+    /**
+     * Set display alt
+     *
+     * @param alts localised locale => name pairs
+     */
+    void setDisplayAlts(Map<String, String> alts);
+
+    /**
      * Get image title.
      *
      * @return image title
@@ -69,6 +86,20 @@ public interface SeoImageDTO extends Identifiable {
      * @param title
      */
     void setTitle(String title);
+
+    /**
+     * Display title.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayTitles();
+
+    /**
+     * Set display title
+     *
+     * @param titles localised locale => name pairs
+     */
+    void setDisplayTitles(Map<String, String> titles);
 
     /**
      * Get pk value.
