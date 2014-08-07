@@ -218,20 +218,15 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!--
-        Shop resolver filter must be before cart filter,
-        because we need to know what shop we are in
-    -->
-    <filter-mapping>
-        <filter-name>shopResolverFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
     <filter-mapping>
         <filter-name>shoppingCartFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <filter-mapping>
+        <filter-name>shopResolverFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <!--
         Liq Pay call back filter.
