@@ -93,6 +93,12 @@
                                               productAvailability="{productAvailability}"
                                               creationComplete="initSummaryPanelListeners()"/>
                 </mx:Canvas>
+                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='seo')"
+                           width="100%"
+                           height="100%">
+                    <prod:ProductSeoPanel id="seoPanel"
+                                          creationComplete="initSeoPanelListeners()"/>
+                </mx:Canvas>
                 <prod:ProductImageAttributesPanel id="imageTab" />
                 <prod:ProductNonImageAttributesPanel id="attrTab" canCreate="true"/>
                 <mx:Canvas id="skuTab" label="@Resource(bundle='ProductManagementPanel',key='skuTab')" width="100%"
@@ -195,13 +201,14 @@
         import mx.rpc.events.ResultEvent;
 
         private var TAB_SUMMARY_IDX:int = 0;
-        private var TAB_IMAGE_IDX:int = 1;
-        private var TAB_ATTR_IDX:int = 2;
-        private var TAB_SKU_IDX:int = 3;
-        private var TAB_PRICE_IDX:int = 4;
-        private var TAB_ASSOCIATION_IDX:int = 5;
-        private var TAB_CATEGORY_IDX:int = 6;
-        private var TAB_WAREHOUSE_IDX:int = 7;
+        private var TAB_SEO_IDX:int = 1;
+        private var TAB_IMAGE_IDX:int = 2;
+        private var TAB_ATTR_IDX:int = 3;
+        private var TAB_SKU_IDX:int = 4;
+        private var TAB_PRICE_IDX:int = 5;
+        private var TAB_ASSOCIATION_IDX:int = 6;
+        private var TAB_CATEGORY_IDX:int = 7;
+        private var TAB_WAREHOUSE_IDX:int = 8;
 
 
         [Bindable]
@@ -312,6 +319,11 @@
                     summaryTabSelected();
                     break;
                 }
+                case TAB_SEO_IDX:
+                {
+                    seoTabSelected();
+                    break;
+                }
                 case TAB_IMAGE_IDX:
                 {
                     imageTabSelected();
@@ -356,6 +368,10 @@
 
         private function summaryTabSelected():void {
             summaryPanel.productDTOImpl = ProductDTOImpl(CloneUtil.clone(productDTOImpl));
+        }
+
+        private function seoTabSelected():void {
+            seoPanel.productDTOImpl = ProductDTOImpl(CloneUtil.clone(productDTOImpl));
         }
 
         private function imageTabSelected():void {
@@ -481,6 +497,10 @@
 
         private function initSummaryPanelListeners():void {
             summaryPanel.addEventListener(DtoEvent.UPDATE, onSummaryUpdateClick);
+        }
+
+        private function initSeoPanelListeners():void {
+            seoPanel.addEventListener(DtoEvent.UPDATE, onSummaryUpdateClick);
         }
 
         private function onSummaryUpdateClick(event:DtoEvent):void {

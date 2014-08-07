@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.AttrValueShop;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -66,6 +67,16 @@ public class ShopDTOImpl implements ShopDTO {
 
     @DtoField(value = "seo.metadescription", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
     private String metadescription;
+
+    @DtoField(value = "seo.displayTitle", converter = "i18nStringConverter")
+    private Map<String, String> displayTitles;
+
+    @DtoField(value = "seo.displayMetakeywords", converter = "i18nStringConverter")
+    private Map<String, String> displayMetakeywords;
+
+    @DtoField(value = "seo.displayMetadescription", converter = "i18nStringConverter")
+    private Map<String, String> displayMetadescriptions;
+
 
     @DtoCollection(
             value="attributes",
@@ -195,6 +206,20 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    public Map<String, String> getDisplayTitles() {
+        return displayTitles;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDisplayTitles(final Map<String, String> displayTitles) {
+        this.displayTitles = displayTitles;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getMetakeywords() {
         return metakeywords;
     }
@@ -209,6 +234,20 @@ public class ShopDTOImpl implements ShopDTO {
     /**
      * {@inheritDoc}
      */
+    public Map<String, String> getDisplayMetakeywords() {
+        return displayMetakeywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDisplayMetakeywords(final Map<String, String> displayMetakeywords) {
+        this.displayMetakeywords = displayMetakeywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getMetadescription() {
         return metadescription;
     }
@@ -218,6 +257,20 @@ public class ShopDTOImpl implements ShopDTO {
      */
     public void setMetadescription(final String metadescription) {
         this.metadescription = metadescription;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, String> getDisplayMetadescriptions() {
+        return displayMetadescriptions;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDisplayMetadescriptions(final Map<String, String> displayMetadescriptions) {
+        this.displayMetadescriptions = displayMetadescriptions;
     }
 
     /** {@inheritDoc}*/

@@ -31,7 +31,9 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
 
     private String imageName;
     private String alt;
+    private String displayAlt;
     private String title;
+    private String displayTitle;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -59,12 +61,28 @@ public class SeoImageEntity implements org.yes.cart.domain.entity.SeoImage, java
         this.alt = alt;
     }
 
+    public String getDisplayAlt() {
+        return displayAlt;
+    }
+
+    public void setDisplayAlt(final String displayAlt) {
+        this.displayAlt = displayAlt;
+    }
+
     public String getTitle() {
         return this.title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDisplayTitle() {
+        return displayTitle;
+    }
+
+    public void setDisplayTitle(final String displayTitle) {
+        this.displayTitle = displayTitle;
     }
 
     public Date getCreatedTimestamp() {

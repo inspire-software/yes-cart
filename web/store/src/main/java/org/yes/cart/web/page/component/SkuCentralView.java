@@ -420,50 +420,9 @@ public class SkuCentralView extends AbstractCentralView {
         );
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    public IModel<String> getPageTitle() {
-        final Seoable seoable = isProduct ? product : sku;
-        if (seoable != null) {
-            Seo seo = seoable.getSeo();
-            if (seo != null && StringUtils.hasText(seo.getTitle())) {
-                return new Model<String>(seo.getTitle());
-            }
-        }
-        return null;
+    @Override
+    protected Seoable getSeoObject() {
+        return isProduct ? product : sku;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public IModel<String> getDescription() {
-        final Seoable seoable = isProduct ? product : sku;
-        if (seoable != null) {
-            Seo seo = seoable.getSeo();
-            if (seo != null && StringUtils.hasText(seo.getMetadescription())) {
-                return new Model<String>(seo.getMetadescription());
-            }
-        }
-        return null;
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public IModel<String> getKeywords() {
-        final Seoable seoable = isProduct ? product : sku;
-        if (seoable != null) {
-            Seo seo = seoable.getSeo();
-            if (seo != null && StringUtils.hasText(seo.getMetakeywords())) {
-                return new Model<String>(seo.getMetakeywords());
-            }
-        }
-        return null;
-
-    }
-
 
 }

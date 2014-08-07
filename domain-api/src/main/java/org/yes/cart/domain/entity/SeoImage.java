@@ -55,6 +55,21 @@ public interface SeoImage extends Auditable {
     void setAlt(String alt);
 
     /**
+     * Get alternative text.
+     *
+     * @return alternative text
+     */
+    String getDisplayAlt();
+
+
+    /**
+     * Set alternative text.
+     *
+     * @param alt alternative text
+     */
+    void setDisplayAlt(String alt);
+
+    /**
      * Get image title.
      *
      * @return image title
@@ -67,6 +82,20 @@ public interface SeoImage extends Auditable {
      * @param title image title.
      */
     void setTitle(String title);
+
+    /**
+     * Get image title.
+     *
+     * @return image title
+     */
+    String getDisplayTitle();
+
+    /**
+     * Set image title.
+     *
+     * @param title image title.
+     */
+    void setDisplayTitle(String title);
 
     /**
      * Get pk value.

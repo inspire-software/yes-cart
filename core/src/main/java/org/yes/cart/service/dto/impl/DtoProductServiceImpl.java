@@ -63,7 +63,6 @@ public class DtoProductServiceImpl
 
     private final ProductService productService;
     private final DtoFactory dtoFactory;
-    private final GenericService<Seo> seoGenericService;
 
     private final DtoAttributeService dtoAttributeService;
     private final DtoAttributeGroupService dtoAttributeGroupService;
@@ -99,7 +98,6 @@ public class DtoProductServiceImpl
             final DtoFactory dtoFactory,
             final GenericService<Product> productService,
             final AdaptersRepository adaptersRepository,
-            final GenericService<Seo> seoGenericService,
             final DtoAttributeService dtoAttributeService,
             final DtoAttributeGroupService dtoAttributeGroupService,
             final DtoEtypeService dtoEtypeService,
@@ -125,7 +123,6 @@ public class DtoProductServiceImpl
                 "availabilityDto2Availability",
                 "productTypeDTO2ProductType");
 */
-        this.seoGenericService = seoGenericService;
         this.dtoAttributeService = dtoAttributeService;
 
 

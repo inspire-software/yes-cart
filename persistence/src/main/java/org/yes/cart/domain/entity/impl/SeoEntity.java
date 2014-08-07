@@ -27,8 +27,11 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
 
     private String uri;
     private String title;
+    private String displayTitle;
     private String metakeywords;
+    private String displayMetakeywords;
     private String metadescription;
+    private String displayMetadescription;
 
     public SeoEntity() {
     }
@@ -50,12 +53,28 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
         this.title = title;
     }
 
+    public String getDisplayTitle() {
+        return displayTitle;
+    }
+
+    public void setDisplayTitle(final String displayTitle) {
+        this.displayTitle = displayTitle;
+    }
+
     public String getMetakeywords() {
         return this.metakeywords;
     }
 
     public void setMetakeywords(String metakeywords) {
         this.metakeywords = metakeywords;
+    }
+
+    public String getDisplayMetakeywords() {
+        return displayMetakeywords;
+    }
+
+    public void setDisplayMetakeywords(final String displayMetakeywords) {
+        this.displayMetakeywords = displayMetakeywords;
     }
 
     public String getMetadescription() {
@@ -66,6 +85,13 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
         this.metadescription = metadescription;
     }
 
+    public String getDisplayMetadescription() {
+        return displayMetadescription;
+    }
+
+    public void setDisplayMetadescription(final String displayMetadescription) {
+        this.displayMetadescription = displayMetadescription;
+    }
 }
 
 

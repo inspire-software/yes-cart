@@ -202,3 +202,48 @@ VALUES (468, 'liqPayNoRefundPaymentGateway', 'name_ru', 'LiqPay (Без возв
 
 UPDATE TSYSTEMATTRVALUE SET VAL = 'testPaymentGatewayLabel,courierPaymentGatewayLabel,cyberSourcePaymentGatewayLabel,authorizeNetAimPaymentGatewayLabel,authorizeNetSimPaymentGatewayLabel,payflowPaymentGatewayLabel,payPalNvpPaymentGatewayLabel,payPalExpressPaymentGatewayLabel,liqPayPaymentGatewayLabel,liqPayNoRefundPaymentGatewayLabel' WHERE ATTRVALUE_ID = 1012;
 
+
+
+
+--
+-- YC-398 i18n support for SEO objects
+--
+
+alter table TSEOIMAGE add column DISPLAY_ALT longtext;
+alter table TSEOIMAGE add column DISPLAY_TITLE longtext;
+
+alter table TCATEGORY add column DISPLAY_METAKEYWORDS longtext;
+alter table TCATEGORY add column DISPLAY_METADESCRIPTION longtext;
+alter table TCATEGORY add column DISPLAY_TITLE longtext;
+
+alter table TPRODUCT add column DISPLAY_METAKEYWORDS longtext;
+alter table TPRODUCT add column DISPLAY_METADESCRIPTION longtext;
+alter table TPRODUCT add column DISPLAY_TITLE longtext;
+
+alter table TSKU add column DISPLAY_METAKEYWORDS longtext;
+alter table TSKU add column DISPLAY_METADESCRIPTION longtext;
+alter table TSKU add column DISPLAY_TITLE longtext;
+
+alter table TSHOP add column DISPLAY_METAKEYWORDS longtext;
+alter table TSHOP add column DISPLAY_METADESCRIPTION longtext;
+alter table TSHOP add column DISPLAY_TITLE longtext;
+
+-- Derby uses varchar(4000)
+-- alter table TSEOIMAGE add column DISPLAY_ALT  varchar(4000);
+-- alter table TSEOIMAGE add column DISPLAY_TITLE  varchar(4000);
+--
+-- alter table TCATEGORY add column DISPLAY_METAKEYWORDS varchar(4000);
+-- alter table TCATEGORY add column DISPLAY_METADESCRIPTION  varchar(4000);
+-- alter table TCATEGORY add column DISPLAY_TITLE  varchar(4000);
+--
+-- alter table TPRODUCT add column DISPLAY_METAKEYWORDS varchar(4000);
+-- alter table TPRODUCT add column DISPLAY_METADESCRIPTION  varchar(4000);
+-- alter table TPRODUCT add column DISPLAY_TITLE  varchar(4000);
+--
+-- alter table TSKU add column DISPLAY_METAKEYWORDS varchar(4000);
+-- alter table TSKU add column DISPLAY_METADESCRIPTION  varchar(4000);
+-- alter table TSKU add column DISPLAY_TITLE  varchar(4000);
+--
+-- alter table TSHOP add column DISPLAY_METAKEYWORDS varchar(4000);
+-- alter table TSHOP add column DISPLAY_METADESCRIPTION  varchar(4000);
+-- alter table TSHOP add column DISPLAY_TITLE  varchar(4000);
