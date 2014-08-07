@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
@@ -111,6 +112,16 @@ public class AbstractWebPage extends WebPage {
                             ShoppingCartCommand.CMD_CHANGELOCALE,
                             getSession().getLocale().getLanguage()
                     ));
+        }
+        if (StringUtils.isBlank(cart.getCurrencyCode())) {
+            final List<String> supported = ApplicationDirector.getCurrentShop().getSupportedCurrenciesAsList();
+            if (CollectionUtils.isNotEmpty(supported)) {
+                getShoppingCartCommandFactory().execute(cart,
+                        (Map) Collections.singletonMap(
+                                ShoppingCartCommand.CMD_CHANGECURRENCY,
+                                supported.get(0)
+                        ));
+            }
         }
         // reinstate the current cart language as our session is transient
         getSession().setLocale(new Locale(cart.getCurrentLocale()));
