@@ -40,6 +40,7 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.theme.WicketPagesMounter;
 import org.yes.cart.web.theme.WicketResourceMounter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -248,9 +249,10 @@ public class StorefrontApplication
         if (multiWebApplicationPath == null) { //first request to this shop, lets create a resolver
             multiWebApplicationPath = new MultiWebApplicationPath(getServletContext());
 
-            multiWebApplicationPath.add(ApplicationDirector.getCurrentTheme() + "/markup");  // shop specific markup folder
-            multiWebApplicationPath.add("default/markup"); // default place to search resource
-            // TODO: v2 shop specific failover stacks with multiple themes?
+            final List<String> themesChain = ApplicationDirector.getCurrentThemeChain();
+            for (final String theme : themesChain) {
+                multiWebApplicationPath.add(theme + "/markup");  // shop specific markup folder
+            }
 
             resourceResolvers.put(ShopCodeContext.getShopCode(), multiWebApplicationPath);
         }

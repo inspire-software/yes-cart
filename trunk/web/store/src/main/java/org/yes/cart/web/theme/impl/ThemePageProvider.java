@@ -16,13 +16,14 @@
 
 package org.yes.cart.web.theme.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.util.ClassProvider;
 import org.apache.wicket.util.IProvider;
+import org.springframework.util.Assert;
 import org.yes.cart.web.application.ApplicationDirector;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +37,10 @@ public class ThemePageProvider extends ClassProvider<IRequestablePage> {
 
     public ThemePageProvider(final Map<String, Class<IRequestablePage>> pages) {
         super(null);
+
+        Assert.notEmpty(pages, "Must have pages mapping");
+        Assert.isTrue(pages.containsKey("default"), "Must have mapping for default theme");
+
         for (final Map.Entry<String, Class<IRequestablePage>> entry : pages.entrySet()) {
             this.pages.put(entry.getKey(), ClassProvider.of(entry.getValue()));
         }
@@ -43,10 +48,12 @@ public class ThemePageProvider extends ClassProvider<IRequestablePage> {
 
     /** {@inheritDoc} */
     public Class<IRequestablePage> get() {
-        String theme = ApplicationDirector.getCurrentTheme();
-        if (StringUtils.isEmpty(theme) || !this.pages.containsKey(theme)) {
-            theme = "default";
+        List<String> themeChain = ApplicationDirector.getCurrentThemeChain();
+        for (final String theme : themeChain) {
+            if (this.pages.containsKey(theme)) {
+                return this.pages.get(theme).get();
+            }
         }
-        return this.pages.get(theme).get();
+        return this.pages.get("default").get();
     }
 }
