@@ -24,6 +24,7 @@ import org.springframework.util.StringUtils;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.domain.entity.Seoable;
 import org.yes.cart.service.domain.CategoryService;
 
 /**
@@ -98,44 +99,96 @@ public abstract class AbstractCentralView extends BaseComponent {
      * @return page title
      */
     public IModel<String> getPageTitle() {
-        if (getCategory() != null) {
-            Seo seo = getCategory().getSeo();
-            if (seo != null && StringUtils.hasText(seo.getTitle())) {
-                return new Model<String>(seo.getTitle());
+        final Seoable seoable = getSeoObject();
+        if (seoable != null) {
+            final String lang = getLocale().getLanguage();
+            final String title = getPageTitle(seoable.getSeo(), lang);
+            if (title != null) {
+                return new Model<String>(title);
             }
         }
         return null;
     }
+
+
+    protected String getPageTitle(final Seo seo, final String language) {
+        if (seo != null) {
+            final String title = getI18NSupport().getFailoverModel(seo.getDisplayTitle(), seo.getTitle()).getValue(language);
+            if (org.apache.commons.lang.StringUtils.isNotBlank(title)) {
+                return title;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Hook for subclasses to utilise Seo mechanism
+     *
+     * @return main seo object for given page
+     */
+    protected Seoable getSeoObject() {
+        return getCategory();
+    }
+
 
     /**
      * Get opage description
      * @return description
      */
     public IModel<String> getDescription() {
-        if (getCategory() != null) {
-            Seo seo = getCategory().getSeo();
-            if (seo != null && StringUtils.hasText(seo.getMetadescription())) {
-                return new Model<String>(seo.getMetadescription());
+        final Seoable seoable = getSeoObject();
+        if (seoable != null) {
+            final String lang = getLocale().getLanguage();
+            final String title = getDescription(seoable.getSeo(), lang);
+            if (title != null) {
+                return new Model<String>(title);
             }
         }
         return null;
 
     }
+
+
+    protected String getDescription(final Seo seo, final String language) {
+        if (seo != null) {
+            final String desc = getI18NSupport().getFailoverModel(seo.getDisplayMetadescription(), seo.getMetadescription()).getValue(language);
+            if (org.apache.commons.lang.StringUtils.isNotBlank(desc)) {
+                return desc;
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Get keywords.
      * @return keywords
      */
     public IModel<String> getKeywords() {
-        if (getCategory() != null) {
-            Seo seo = getCategory().getSeo();
-            if (seo != null && StringUtils.hasText(seo.getMetakeywords())) {
-                return new Model<String>(seo.getMetakeywords());
+        final Seoable seoable = getSeoObject();
+        if (seoable != null) {
+            final String lang = getLocale().getLanguage();
+            final String title = getKeywords(seoable.getSeo(), lang);
+            if (title != null) {
+                return new Model<String>(title);
             }
         }
         return null;
 
     }
+
+
+
+    protected String getKeywords(final Seo seo, final String language) {
+        if (seo != null) {
+            final String desc = getI18NSupport().getFailoverModel(seo.getDisplayMetakeywords(), seo.getMetakeywords()).getValue(language);
+            if (org.apache.commons.lang.StringUtils.isNotBlank(desc)) {
+                return desc;
+            }
+        }
+        return null;
+    }
+
 
 
 }

@@ -16,7 +16,7 @@
   -->
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:prod="org.yes.cart.ui.product.*"
-           xmlns:seo="org.yes.cart.ui.seo.*" width="100%" height="100%">
+           width="100%" height="100%">
 
     <mx:Script>
 		<![CDATA[
@@ -24,35 +24,25 @@
 
         import mx.core.FlexGlobals;
 
-        import org.yes.cart.constants.AttributeGroupNames;
         import org.yes.cart.event.DtoEvent;
-        import org.yes.cart.impl.AttrValueProductSkuDTOImpl;
-        import org.yes.cart.impl.AttributeDTOImpl;
         import org.yes.cart.impl.ProductDTOImpl;
         import org.yes.cart.impl.ProductSkuDTOImpl;
-        import org.yes.cart.impl.SeoDTOImpl;
         import org.yes.cart.util.DomainUtils;
-        import org.yes.cart.util.UpdateTarget;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-        import org.yes.cart.ui.attributes.EntityAttributeValuesManagementPanel;
-        import org.yes.cart.ui.seo.SeoPanel;
 
-        import flash.events.MouseEvent;
 
-        import mx.collections.ArrayCollection;
         import mx.controls.Alert;
         import mx.events.CloseEvent;
         import mx.events.IndexChangedEvent;
         import mx.events.ListEvent;
         import mx.managers.PopUpManager;
-        import mx.rpc.AsyncResponder;
-        import mx.rpc.AsyncToken;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
         private var TAB_SUMMARY_IDX:int = 0;
-        private var TAB_IMAGE_IDX:int = 1;
-        private var TAB_ATTR_IDX:int = 2;
+        private var TAB_SEO_IDX:int = 1;
+        private var TAB_IMAGE_IDX:int = 2;
+        private var TAB_ATTR_IDX:int = 3;
 
 
         private var _product:ProductDTOImpl;
@@ -104,6 +94,12 @@
                     break;
                 }
 
+                case TAB_SEO_IDX:
+                {
+                    skuSeoTabSelect();
+                    break;
+                }
+
                 case TAB_IMAGE_IDX:
                 {
                     imageTabSelected();
@@ -145,6 +141,10 @@
 
         private function skuSummaryTabSelect():void {
             skuSummaryPanel.productSku = selectedSku;
+        }
+
+        private function skuSeoTabSelect():void {
+            skuSeoPanel.productSku = selectedSku;
         }
 
         private function onCreateSkuClick(event:MouseEvent):void {
@@ -210,6 +210,10 @@
 
         private function initSummaryPanelListeners():void {
             skuSummaryPanel.addEventListener(DtoEvent.UPDATE, onSummaryUpdateClick);
+        }
+
+        private function initSeoPanelListeners():void {
+            skuSeoPanel.addEventListener(DtoEvent.UPDATE, onSummaryUpdateClick);
         }
 
         private function onSummaryUpdateClick(event:DtoEvent):void {
@@ -286,6 +290,10 @@
             <mx:Canvas label="@Resource(bundle='ProductSkuManagementPanel',key='summary')" width="100%" height="100%">
                 <prod:ProductSkuSummaryPanel id="skuSummaryPanel"
                                              creationComplete="initSummaryPanelListeners()"/>
+            </mx:Canvas>
+            <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='seo')" width="100%" height="100%">
+                <prod:ProductSkuSeoPanel id="skuSeoPanel"
+                                             creationComplete="initSeoPanelListeners()"/>
             </mx:Canvas>
             <prod:ProductSkuImageAttributesPanel id="skuImagesTab"/>
             <prod:ProductSkuNonImageAttributesPanel id="skuAttributesTab"/>

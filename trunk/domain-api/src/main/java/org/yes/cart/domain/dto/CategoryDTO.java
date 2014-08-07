@@ -297,6 +297,20 @@ public interface CategoryDTO extends Identifiable {
     void setTitle(String title);
 
     /**
+     * Display titles.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayTitles();
+
+    /**
+     * Set display titles
+     *
+     * @param titles localised locale => name pairs
+     */
+    void setDisplayTitles(Map<String, String> titles);
+
+    /**
      * Get meta key words.
      * @return meta key words
      */
@@ -309,6 +323,22 @@ public interface CategoryDTO extends Identifiable {
      */
     void setMetakeywords(String metakeywords);
 
+
+    /**
+     * Display metakeywords.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayMetakeywords();
+
+    /**
+     * Set display metakeywords
+     *
+     * @param metakeywords localised locale => name pairs
+     */
+    void setDisplayMetakeywords(Map<String, String> metakeywords);
+
+
     /**
      * Get seo description
      * @return seo description.
@@ -320,5 +350,22 @@ public interface CategoryDTO extends Identifiable {
      * @param metadescription description to use
      */
     void setMetadescription(String metadescription);
+
+
+
+    /**
+     * Display metadescription.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayMetadescriptions();
+
+    /**
+     * Set display metadescription
+     *
+     * @param metadescription localised locale => name pairs
+     */
+    void setDisplayMetadescriptions(Map<String, String> metadescription);
+
 
 }

@@ -1,0 +1,155 @@
+<?xml version="1.0" ?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:yci18n="org.yes.cart.ui.i18n.*" width="100%" height="100%"
+           creationComplete="onInitPanel()">
+
+    <mx:Form x="0" y="0">
+        <mx:FormItem width="100%"
+                     label="@Resource(bundle='ProductManagementPanel',key='uri')">
+            <mx:TextInput id="uriNameTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="@Resource(bundle='ProductManagementPanel',key='title')">
+            <mx:TextInput id="titleNameTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="">
+            <yci18n:i18nStringField id="displayTitleNames" change="onDisplayNamesChange(event)"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="@Resource(bundle='ProductManagementPanel',key='metakeywords')">
+            <mx:TextInput id="metakeywordsNameTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="">
+            <yci18n:i18nStringField id="displayMetakeywords" change="onDisplayNamesChange(event)"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="@Resource(bundle='ProductManagementPanel',key='metadescription')">
+            <mx:TextInput id="metadescriptionNameTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%"
+                     label="">
+            <yci18n:i18nStringField id="displayMetadescriptions" change="onDisplayNamesChange(event)"/>
+        </mx:FormItem>
+
+        <mx:FormItem>
+            <mx:Button
+                enabled="{productSkuChangedFlag}"
+                label="@Resource(bundle='ProductSkuManagementPanel',key='save')"
+                toolTip="@Resource(bundle='ProductSkuManagementPanel',key='saveHint')"
+                click="saveProductsKU(event)"/>
+        </mx:FormItem>
+    </mx:Form>
+
+    <mx:Boolean id="productSkuChangedFlag">false</mx:Boolean>
+
+    <mx:ArrayCollection id="propertyWatchers"/>
+
+    <mx:Script>
+        <![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.events.FlexEvent;
+        import mx.events.PropertyChangeEvent;
+        import mx.validators.Validator;
+
+        import org.yes.cart.event.DtoEvent;
+        import org.yes.cart.impl.ProductSkuDTOImpl;
+
+        [Bindable]
+        private var _productSku:ProductSkuDTOImpl;
+
+        public function get productSku():ProductSkuDTOImpl {
+            return _productSku;
+        }
+
+        public function set productSku(value:ProductSkuDTOImpl):void {
+            if (_productSku != null && value != null && _productSku.skuId == value.skuId) {
+                return;
+            }
+            unbindProperties();
+            _productSku = value;
+            bindProperties();
+        }
+
+        private var validatorArr:Array;
+
+        private function onInitPanel():void {
+            validatorArr = [ ];
+        }
+
+        private function unbindProperties():void {
+            for each (var watcher:ChangeWatcher in propertyWatchers) {
+                watcher.unwatch();
+            }
+            propertyWatchers.removeAll();
+            displayTitleNames.setSourceObject(null, null);
+            displayMetakeywords.setSourceObject(null, null);
+            displayMetadescriptions.setSourceObject(null, null);
+        }
+
+        private function bindProperties():void {
+
+            if (_productSku != null) {
+                Debug.trace("INFO ProductSkuSummaryPanel rebind begin");
+
+                displayTitleNames.setSourceObject(this._productSku, 'displayTitles');
+                displayMetakeywords.setSourceObject(this._productSku, 'displayMetakeywords');
+                displayMetadescriptions.setSourceObject(this._productSku, 'displayMetadescriptions');
+
+                propertyWatchers.addItem(BindingUtils.bindProperty(uriNameTextInput, "text", _productSku, "uri"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(titleNameTextInput, "text", _productSku, "title"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(metakeywordsNameTextInput, "text", _productSku, "metakeywords"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(metadescriptionNameTextInput, "text", _productSku, "metadescription"));
+
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "uri", uriNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "title", titleNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "metakeywords", metakeywordsNameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "metadescription", metadescriptionNameTextInput, "text"));
+
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "uri", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "title", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "metakeywords", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "metadescription", productSkuChanged));
+
+                Debug.trace("INFO ProductSkuSummaryPanel rebind end");
+
+            }
+
+        }
+
+        private function productSkuChanged(event:PropertyChangeEvent):void {
+            var validatorErrorArray:Array = Validator.validateAll(validatorArr);
+            productSkuChangedFlag = (validatorErrorArray.length == 0);
+        }
+
+        private function onDisplayNamesChange(event:FlexEvent):void {
+            productSkuChanged(null);
+        }
+
+        private function saveProductsKU(event:MouseEvent):void {
+            dispatchEvent(new DtoEvent(DtoEvent.UPDATE, _productSku));
+            productSkuChangedFlag = false;
+        }
+        ]]>
+</mx:Script>
+</mx:Canvas>

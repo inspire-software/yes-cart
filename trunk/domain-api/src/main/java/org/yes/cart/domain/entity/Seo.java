@@ -55,6 +55,20 @@ public interface Seo {
     void setTitle(String title);
 
     /**
+     * Get title.
+     *
+     * @return title.
+     */
+    String getDisplayTitle();
+
+    /**
+     * Set title.
+     *
+     * @param title title
+     */
+    void setDisplayTitle(String title);
+
+    /**
      * Get meta keywords.
      *
      * @return meta keywords
@@ -69,6 +83,20 @@ public interface Seo {
     void setMetakeywords(String metakeywords);
 
     /**
+     * Get meta keywords.
+     *
+     * @return meta keywords
+     */
+    String getDisplayMetakeywords();
+
+    /**
+     * Set meta keywords
+     *
+     * @param metakeywords meta keywords
+     */
+    void setDisplayMetakeywords(String metakeywords);
+
+    /**
      * Get meta description.
      *
      * @return meta description
@@ -81,6 +109,20 @@ public interface Seo {
      * @param metadescription meta description.
      */
     void setMetadescription(String metadescription);
+
+    /**
+     * Get meta description.
+     *
+     * @return meta description
+     */
+    String getDisplayMetadescription();
+
+    /**
+     * Set meta description.
+     *
+     * @param metadescription meta description.
+     */
+    void setDisplayMetadescription(String metadescription);
 
 }
 

@@ -43,13 +43,19 @@ public class CategoryDTOImpl {
 
     public var availableto:Date ;
 
-    public var   uri:String;
+    public var uri:String;
 
-    public var  title:String;
+    public var title:String;
 
-    public var  metakeywords:String;
+    public var metakeywords:String;
 
-    public var  metadescription:String;
+    public var metadescription:String;
+
+    public var displayTitles:Object;
+
+    public var displayMetakeywords:Object;
+
+    public var displayMetadescriptions:Object;
 
 
     public var navigationByAttributes:Boolean ;

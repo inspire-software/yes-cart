@@ -33,6 +33,8 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.entity.Seo;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -246,11 +248,25 @@ public class AbstractWebPage extends WebPage {
      * @return page title
      */
     public IModel<String> getPageTitle() {
-        if (ApplicationDirector.getCurrentShop().getSeo() != null
-                && StringUtils.isNotBlank(ApplicationDirector.getCurrentShop().getSeo().getTitle())) {
-            return new Model<String>(ApplicationDirector.getCurrentShop().getSeo().getTitle());
+        final Shop shop = ApplicationDirector.getCurrentShop();
+        if (shop.getSeo() != null) {
+            final String lang = getLocale().getLanguage();
+            final String title = getPageTitle(shop.getSeo(), lang);
+            if (title != null) {
+                return new Model<String>(title);
+            }
         }
-        return new Model<String>(ApplicationDirector.getCurrentShop().getName());
+        return new Model<String>(shop.getName());
+    }
+
+    protected String getPageTitle(final Seo seo, final String language) {
+        if (seo != null) {
+            final String title = getI18NSupport().getFailoverModel(seo.getDisplayTitle(), seo.getTitle()).getValue(language);
+            if (StringUtils.isNotBlank(title)) {
+                return title;
+            }
+        }
+        return null;
     }
 
 
@@ -259,9 +275,23 @@ public class AbstractWebPage extends WebPage {
      * @return description
      */
     public IModel<String> getDescription() {
-        if (ApplicationDirector.getCurrentShop().getSeo() != null
-                && StringUtils.isNotBlank(ApplicationDirector.getCurrentShop().getSeo().getMetadescription())) {
-            return new Model<String>(ApplicationDirector.getCurrentShop().getSeo().getMetadescription());
+        final Shop shop = ApplicationDirector.getCurrentShop();
+        if (shop.getSeo() != null) {
+            final String lang = getLocale().getLanguage();
+            final String title = getDescription(shop.getSeo(), lang);
+            if (title != null) {
+                return new Model<String>(title);
+            }
+        }
+        return null;
+    }
+
+    protected String getDescription(final Seo seo, final String language) {
+        if (seo != null) {
+            final String desc = getI18NSupport().getFailoverModel(seo.getDisplayMetadescription(), seo.getMetadescription()).getValue(language);
+            if (StringUtils.isNotBlank(desc)) {
+                return desc;
+            }
         }
         return null;
     }
@@ -271,9 +301,13 @@ public class AbstractWebPage extends WebPage {
      * @return keywords
      */
     public IModel<String> getKeywords() {
-        if (ApplicationDirector.getCurrentShop().getSeo() != null
-                && StringUtils.isNotBlank(ApplicationDirector.getCurrentShop().getSeo().getMetakeywords())) {
-            return new Model<String>(ApplicationDirector.getCurrentShop().getSeo().getMetakeywords());
+        final Shop shop = ApplicationDirector.getCurrentShop();
+        if (shop.getSeo() != null) {
+            final String lang = getLocale().getLanguage();
+            final String title = getKeywords(shop.getSeo(), lang);
+            if (title != null) {
+                return new Model<String>(title);
+            }
         }
         return null;
     }
@@ -285,4 +319,14 @@ public class AbstractWebPage extends WebPage {
     public IModel<String> getCreated() {
         return new Model<String>(new Date().toString());
     }
+    protected String getKeywords(final Seo seo, final String language) {
+        if (seo != null) {
+            final String desc = getI18NSupport().getFailoverModel(seo.getDisplayMetakeywords(), seo.getMetakeywords()).getValue(language);
+            if (StringUtils.isNotBlank(desc)) {
+                return desc;
+            }
+        }
+        return null;
+    }
+
 }

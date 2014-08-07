@@ -31,6 +31,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.entity.decorator.Depictable;
+import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
@@ -101,6 +102,7 @@ public class ImageView extends BaseComponent {
 
         final String defaultImageRelativePath = depictable.getDefaultImage(width, height);
 
+        final String lang = getLocale().getLanguage();
 
         add(
 
@@ -112,7 +114,7 @@ public class ImageView extends BaseComponent {
                                                         new AttributeModifier(HTML_WIDTH, width),
                                                         new AttributeModifier(HTML_HEIGHT, height)
                                                 ),
-                                        getSeoImage(filledImageAttributes, depictable.getDefaultImageAttributeName()))
+                                        getSeoImage(filledImageAttributes, depictable.getDefaultImageAttributeName()), lang)
 
                         )
 
@@ -136,7 +138,7 @@ public class ImageView extends BaseComponent {
                                                                         new AttributeModifier(HTML_WIDTH, tumbWidth),
                                                                         new AttributeModifier(HTML_HEIGHT, tumbHeight)
                                                                 ),
-                                                        getSeoImage(filledImageAttributes, pair.getFirst()))
+                                                        getSeoImage(filledImageAttributes, pair.getFirst()), lang)
 
                                         )
                         );
@@ -150,12 +152,17 @@ public class ImageView extends BaseComponent {
         super.onBeforeRender();
     }
 
-    private Component createSeoImage(final Component component, final SeoImage seoImage) {
+    private Component createSeoImage(final Component component, final SeoImage seoImage, final String lang) {
         if (seoImage != null) {
+
+            final I18NWebSupport i18n = getI18NSupport();
+
             component.add(
-                    new AttributeModifier(HTML_ALT, seoImage.getAlt()),
-                    new AttributeModifier(HTML_TITLE, seoImage.getTitle())
-            ); //TODO: V2 need to add image long description <img longdesc="URL">
+                    new AttributeModifier(HTML_ALT,
+                            i18n.getFailoverModel(seoImage.getDisplayAlt(), seoImage.getAlt()).getValue(lang)),
+                    new AttributeModifier(HTML_TITLE,
+                            i18n.getFailoverModel(seoImage.getDisplayTitle(), seoImage.getTitle()).getValue(lang))
+            );
 
         }
         return component;

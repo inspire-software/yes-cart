@@ -914,6 +914,9 @@
             <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
             <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
             <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
+            <property name="displayTitle" type="string" column="DISPLAY_TITLE" length="4000" not-null="false"/>
+            <property name="displayMetakeywords" type="string" column="DISPLAY_METAKEYWORDS" length="4000" not-null="false"/>
+            <property name="displayMetadescription" type="string" column="DISPLAY_METADESCRIPTION" length="4000" not-null="false"/>
         </component>
 
         <set name="productCategory" inverse="false" lazy="true" cascade="all">
@@ -1081,6 +1084,9 @@
             <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
             <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
             <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
+            <property name="displayTitle" type="string" column="DISPLAY_TITLE" length="4000" not-null="false"/>
+            <property name="displayMetakeywords" type="string" column="DISPLAY_METAKEYWORDS" length="4000" not-null="false"/>
+            <property name="displayMetadescription" type="string" column="DISPLAY_METADESCRIPTION" length="4000" not-null="false"/>
         </component>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -1179,6 +1185,9 @@
             <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
             <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
             <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
+            <property name="displayTitle" type="string" column="DISPLAY_TITLE" length="4000" not-null="false"/>
+            <property name="displayMetakeywords" type="string" column="DISPLAY_METAKEYWORDS" length="4000" not-null="false"/>
+            <property name="displayMetadescription" type="string" column="DISPLAY_METADESCRIPTION" length="4000" not-null="false"/>
         </component>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -1439,6 +1448,9 @@
             <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
             <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
             <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
+            <property name="displayTitle" type="string" column="DISPLAY_TITLE" length="4000" not-null="false"/>
+            <property name="displayMetakeywords" type="string" column="DISPLAY_METAKEYWORDS" length="4000" not-null="false"/>
+            <property name="displayMetadescription" type="string" column="DISPLAY_METADESCRIPTION" length="4000" not-null="false"/>
         </component>
 
 
@@ -2156,15 +2168,12 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="imageName" type="string" length="255" not-null="false" index="IMAGE_NAME_IDX">
-            <column name="IMAGE_NAME" length="255"/>
-        </property>
-        <property name="alt" type="string" length="255" not-null="false">
-            <column name="ALT" length="255"/>
-        </property>
-        <property name="title" type="string" length="255" not-null="false">
-            <column name="TITLE" length="255"/>
-        </property>
+        <property name="imageName" column="IMAGE_NAME" type="string" length="255" not-null="false" index="IMAGE_NAME_IDX"/>
+        <property name="alt" column="ALT" type="string" length="255" not-null="false"/>
+        <property name="title" column="TITLE" type="string" length="255" not-null="false"/>
+
+        <property name="displayAlt" column="DISPLAY_ALT"  not-null="false" type="string" length="4000"/>
+        <property name="displayTitle" column="DISPLAY_TITLE"  not-null="false" type="string" length="4000"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>

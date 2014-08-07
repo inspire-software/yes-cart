@@ -40,13 +40,19 @@ public class ProductSkuDTOImpl {
 
     public var attributes:ArrayCollection;
 
-    public var   uri:String;
+    public var uri:String;
 
-    public var  title:String;
+    public var title:String;
 
-    public var  metakeywords:String;
+    public var metakeywords:String;
 
-    public var  metadescription:String;
+    public var metadescription:String;
+
+    public var displayTitles:Object;
+
+    public var displayMetakeywords:Object;
+
+    public var displayMetadescriptions:Object;
 
 
     public var price:ArrayCollection;

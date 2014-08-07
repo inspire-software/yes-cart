@@ -104,7 +104,14 @@ public class ProductDTOImpl implements ProductDTO {
     @DtoField(value = "seo.metadescription", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
     private String metadescription;
 
+    @DtoField(value = "seo.displayTitle", converter = "i18nStringConverter")
+    private Map<String, String> displayTitles;
 
+    @DtoField(value = "seo.displayMetakeywords", converter = "i18nStringConverter")
+    private Map<String, String> displayMetakeywords;
+
+    @DtoField(value = "seo.displayMetadescription", converter = "i18nStringConverter")
+    private Map<String, String> displayMetadescriptions;
 
 
     @DtoCollection(
@@ -349,6 +356,20 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    public Map<String, String> getDisplayTitles() {
+        return displayTitles;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDisplayTitles(final Map<String, String> displayTitles) {
+        this.displayTitles = displayTitles;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getMetakeywords() {
         return metakeywords;
     }
@@ -363,6 +384,20 @@ public class ProductDTOImpl implements ProductDTO {
     /**
      * {@inheritDoc}
      */
+    public Map<String, String> getDisplayMetakeywords() {
+        return displayMetakeywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDisplayMetakeywords(final Map<String, String> displayMetakeywords) {
+        this.displayMetakeywords = displayMetakeywords;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getMetadescription() {
         return metadescription;
     }
@@ -372,6 +407,20 @@ public class ProductDTOImpl implements ProductDTO {
      */
     public void setMetadescription(final String metadescription) {
         this.metadescription = metadescription;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, String> getDisplayMetadescriptions() {
+        return displayMetadescriptions;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDisplayMetadescriptions(final Map<String, String> displayMetadescriptions) {
+        this.displayMetadescriptions = displayMetadescriptions;
     }
 
     @Override
