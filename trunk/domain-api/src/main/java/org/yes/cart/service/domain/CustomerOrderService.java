@@ -115,6 +115,14 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
     CustomerOrder findByGuid(String shoppingCartGuid);
 
     /**
+     * Find created order by order number.
+     *
+     * @param orderNumber order number
+     * @return created order.
+     */
+    CustomerOrder findByOrderNumber(String orderNumber);
+
+    /**
      * Is order can be with multiple deliveries.
      *
      * @param shoppingCart cart to  check

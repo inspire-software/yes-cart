@@ -72,13 +72,13 @@ public class LiqPayPaymentGatewayImplTest extends TestCase {
         assertEquals(htmlFormPart,
                 "<input type=\"hidden\" name=\"amount\" value=\"10.00\" />\n" +
                 "<input type=\"hidden\" name=\"server_url\" value=\"http://mydomain.com/callback\" />\n" +
-                "<input type=\"hidden\" name=\"description\" value=\"code2 x 1, bob@doe.com\" />\n" +
+                "<input type=\"hidden\" name=\"description\" value=\"code2 x 1, bob@doe.com, 1234\" />\n" +
                 "<input type=\"hidden\" name=\"pay_way\" value=\"card\" />\n" +
                 "<input type=\"hidden\" name=\"result_url\" value=\"http://mydomain.com/result\" />\n" +
                 "<input type=\"hidden\" name=\"public_key\" value=\"00001\" />\n" +
                 "<input type=\"hidden\" name=\"type\" value=\"buy\" />\n" +
-                "<input type=\"hidden\" name=\"order_id\" value=\"1234\" />\n" +
-                "<input type=\"hidden\" name=\"signature\" value=\"IO534oPTqpiGNeNWN3rfn2uwpug=\" />\n" +
+                "<input type=\"hidden\" name=\"order_id\" value=\"234-1324-1324-1324sdf-sdf\" />\n" +
+                "<input type=\"hidden\" name=\"signature\" value=\"p5wT9l3BB3XxwRnyVLOQNX8LFvQ=\" />\n" +
                 "<input type=\"hidden\" name=\"currency\" value=\"USD\" />\n");
 
 

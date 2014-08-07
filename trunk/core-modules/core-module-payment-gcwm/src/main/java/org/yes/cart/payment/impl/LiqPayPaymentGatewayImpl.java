@@ -102,15 +102,15 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
             final String privateKey = getParameterValue(LP_MERCHANT_KEY);
             final String publicKey = getParameterValue(LP_MERCHANT_ID);
 
-            final String amount = (String) privateCallBackParameters.get("amount");
-            final String currency = (String) privateCallBackParameters.get("currency");
-            final String description = (String) privateCallBackParameters.get("description");
-            final String order_id = (String) privateCallBackParameters.get("order_id");
-            final String type = (String) privateCallBackParameters.get("type");
-            final String sender_phone = (String) privateCallBackParameters.get("sender_phone");
-            final String status = (String) privateCallBackParameters.get("status");
-            final String transaction_id = (String) privateCallBackParameters.get("transaction_id");
-            final String signature = (String) privateCallBackParameters.get("signature");
+            final String amount = getSingleValue(privateCallBackParameters.get("amount"));
+            final String currency = getSingleValue(privateCallBackParameters.get("currency"));
+            final String description = getSingleValue(privateCallBackParameters.get("description"));
+            final String order_id = getSingleValue(privateCallBackParameters.get("order_id"));
+            final String type = getSingleValue(privateCallBackParameters.get("type"));
+            final String sender_phone = getSingleValue(privateCallBackParameters.get("sender_phone"));
+            final String status = getSingleValue(privateCallBackParameters.get("status"));
+            final String transaction_id = getSingleValue(privateCallBackParameters.get("transaction_id"));
+            final String signature = getSingleValue(privateCallBackParameters.get("signature"));
 
             final String validSignature = api.str_to_sign(privateKey +
                     amount  +
@@ -212,7 +212,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
         params.put("amount", amount.setScale(2, RoundingMode.HALF_UP).toPlainString());
         params.put("currency", currencyCode);
         params.put("description", getDescription(payment));
-        params.put("order_id", payment.getOrderNumber());
+        params.put("order_id", orderGuid);
         params.put("result_url", getParameterValue(LP_RESULT_URL));
         params.put("server_url", getParameterValue(LP_SERVER_URL));
         params.put("type", "buy");
@@ -232,12 +232,18 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
     private String getDescription(final Payment payment) {
         final StringBuilder stringBuilder = new StringBuilder();
         for (PaymentLine line : payment.getOrderItems()) {
-            stringBuilder.append(line.getSkuCode().replace("\"","&quot;"));
-            stringBuilder.append(" x ");
-            stringBuilder.append(line.getQuantity());
-            stringBuilder.append(", ");
+            if (line.isShipment()) {
+                stringBuilder.append(line.getSkuName().replace("\"","")).append(", ");
+            } else {
+                stringBuilder.append(line.getSkuCode().replace("\"",""));
+                stringBuilder.append(" x ");
+                stringBuilder.append(line.getQuantity());
+                stringBuilder.append(", ");
+            }
         }
         stringBuilder.append(payment.getBillingEmail());
+        stringBuilder.append(", ");
+        stringBuilder.append(payment.getOrderNumber());
         return stringBuilder.toString();
     }
 
@@ -287,7 +293,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
         final LiqPay api = getLiqPayAPI();
 
         final HashMap params = new HashMap();
-        params.put("order_id", payment.getOrderNumber());
+        params.put("order_id", payment.getTransactionAuthorizationCode()); // this is populated in prototype when we capture
 
         boolean success = false;
         try {
@@ -308,6 +314,19 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
      */
     public Payment createPaymentPrototype(final Map map) {
         final Payment payment = new PaymentImpl();
+        if (map.containsKey("signature")) {
+            payment.setPaymentAmount(new BigDecimal(getSingleValue(map.get("amount"))));
+            payment.setOrderCurrency(getSingleValue(map.get("currency")));
+            payment.setTransactionReferenceId(getSingleValue(map.get("transaction_id")));
+            payment.setTransactionAuthorizationCode(getSingleValue(map.get("order_id"))); // this is order guid - we need it for refunds
+            final String status = getSingleValue(map.get("status"));
+            final boolean success = status != null &&
+                    ("success".equalsIgnoreCase(status)
+                            || "wait_secure".equalsIgnoreCase(status)
+                            || "sandbox".equalsIgnoreCase(status));
+            payment.setPaymentProcessorResult(success ? Payment.PAYMENT_STATUS_OK : Payment.PAYMENT_STATUS_FAILED);
+        }
+
         payment.setShopperIpAddress(getSingleValue(map.get(PaymentMiscParam.CLIENT_IP)));
         return payment;
     }
