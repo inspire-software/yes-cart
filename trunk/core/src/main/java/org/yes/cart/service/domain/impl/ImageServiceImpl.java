@@ -346,11 +346,11 @@ public class ImageServiceImpl
     /**
      * Check is given file name present on disk and create new if necessary.
      * @param fileName given file name
-     * @return sequental file name.
+     * @return sequential file name.
      */
     String createRepositoryUniqueName(final String fileName) {
-        File destinationFile = new File(fileName);
-        while(destinationFile.exists()) {
+        final File destinationFile = new File(fileName);
+        if (destinationFile.exists()) {
             final String newFileName = createRollingFileName(fileName);
             return createRepositoryUniqueName(newFileName);
         }
@@ -358,29 +358,40 @@ public class ImageServiceImpl
     }
 
     /**
-     * Create new sequental file name, which will have _seqnumber before file extension.
+     * Create new sequential file name, which will have _seqnumber before file extension.
      * Example /tmp/file.txt -> /tmp/file_1.txt
      *  /tmp/file_1.txt -> /tmp/file_2.txt
-     * @param fileName given file name
-     * @return sequental file name.
+     * @param fullFileName given file name
+     * @return sequential file name.
      */
-    String createRollingFileName(final String fileName) {
-        Assert.notNull(fileName, "file name must be not null");
-        int idx = fileName.lastIndexOf(".");
-        final String [] fileParts;
-        if (idx == -1) {
-            fileParts =  new String [] {fileName};
+    String createRollingFileName(final String fullFileName) {
+        Assert.notNull(fullFileName, "file name must be not null");
+        final int posExt = fullFileName.lastIndexOf('.');
+        final String fileName;
+        final String fileExt;
+        if (posExt == -1) {
+            fileName = fullFileName;
+            fileExt = "";
         } else {
-            fileParts =  new String [2];
-            fileParts[0] = fileName.substring(0, idx);
-            fileParts[1] = fileName.substring(idx + 1);
+            fileName = fullFileName.substring(0, posExt);
+            fileExt = fullFileName.substring(posExt); // including '.'
         }
-        final String [] numberSequence = fileParts[0].split("_");
-        int seq = 1;
-        if (NumberUtils.isDigits(numberSequence[numberSequence.length-1])) {
-            seq = NumberUtils.toInt(numberSequence[numberSequence.length-1]) + 1 ;
+        final int posSuffix = fileName.lastIndexOf('_');
+        final String mainPart;
+        final String suffix;
+        if (posSuffix == -1) {
+            mainPart = fileName;
+            suffix = "";
+        } else {
+            mainPart = fileName.substring(0, posSuffix);
+            suffix = fileName.substring(posSuffix + 1); // excluding '_'
         }
-        return numberSequence[0] + "_" + seq + ( fileParts.length>1? "." +  fileParts[fileParts.length-1] : "");
+        if (NumberUtils.isDigits(suffix)) {
+            return mainPart + "_" + (NumberUtils.toInt(suffix) + 1) + fileExt;
+        } else if (suffix.length() > 0) {
+            return mainPart + "_" + suffix + "_1" + fileExt;
+        }
+        return mainPart + "_1" + fileExt;
     }
 
     /** {@inheritDoc} */
