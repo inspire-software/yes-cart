@@ -143,6 +143,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      * {@inheritDoc}
      */
     public Payment refund(final Payment payment) {
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
         return payment;
     }
 

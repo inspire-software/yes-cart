@@ -70,6 +70,12 @@
         <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
     </bean>
 
+    <!-- CPOINT do you need liq pay ? -->
+    <bean id="liqPayNoRefundCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
+    </bean>
+
     <!-- ################################### filter delegates end ################################### -->
 
     <!-- ################################### cart persistence start ################################# -->
