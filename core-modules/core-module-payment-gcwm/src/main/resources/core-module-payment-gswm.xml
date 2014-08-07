@@ -46,6 +46,16 @@
         <property name="description" value="Liq Pay Payment Gateway"/>
     </bean>
 
+    <bean id="liqPayNoRefundPaymentGateway" class="org.yes.cart.payment.impl.LiqPayNoRefundPaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
+    <bean id="liqPayNoRefundPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="liqPayNoRefundPaymentGatewayLabel"/>
+        <property name="url" value="liqPayNoRefundPaymentGateway"/>
+        <property name="description" value="Liq Pay Payment Gateway (Refund API disabled)"/>
+    </bean>
+
 
 
     <bean id="gswmPaymentModule" class="org.yes.cart.payment.impl.PaymentModuleGswmSetImpl">
@@ -59,6 +69,7 @@
         <property name="gateways">
             <map>
                 <entry key="liqPayPaymentGateway" value-ref="liqPayPaymentGatewayDescriptor"/>
+                <entry key="liqPayNoRefundPaymentGateway" value-ref="liqPayNoRefundPaymentGatewayDescriptor"/>
             </map>
         </property>
     </bean>

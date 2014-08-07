@@ -41,6 +41,10 @@ public interface Payment extends Serializable {
      * Payment ok.
      */
     String PAYMENT_STATUS_OK = "Ok";
+    /**
+     * Payment cannot be performed and requires manual processing.
+     */
+    String PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED = "Manual processing required";
 
 
     /**
