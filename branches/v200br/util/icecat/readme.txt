@@ -29,11 +29,11 @@ HOW TO:
       ...
 
 2. Download refs.xml from icecat.biz into $ROOT/export/freexml.int/:
-wget --user=[username] --ask-password http://data.icecat.biz/export/freexml.int/refs.xml
+wget --user=[username] --ask-password http://data.icecat.biz/export/freexml/refs.xml
 
-3. Download index.html for each desired language into $ROOT/export/freexml.int/[LANG]:
-wget --user=[username] --ask-password http://data.icecat.biz/export/freexml.int/EN/
-wget --user=[username] --ask-password http://data.icecat.biz/export/freexml.int/RU/
+3. Download index.html for each desired language into $ROOT/export/freexml/[LANG]:
+wget --user=[username] --ask-password http://data.icecat.biz/export/freexml/EN/
+wget --user=[username] --ask-password http://data.icecat.biz/export/freexml/RU/
 etc...
 
 4. Run the Transform class
@@ -46,5 +46,10 @@ java -Xmx700m -XX:MaxPermSize=256m org.yes.cart.icecat.transform.Transform
 * all product data being downloaded into $ROOT/export/freexml.int/xmlcache/[product lang]
 * all pictures being downloaded into $ROOT/export/freexml.int/pictcache/
 * generation of csv files in $ROOT/export/freexml.int/csvresult/
+
+5.a Resizing images so that import is not too large:
+Mac OSX: make copy of all downloaded images and navigate to directory with copies in terminal and run: sips -Z 640 *.jpg
+Source: http://lifehacker.com/5962420/batch-resize-images-quickly-in-the-os-x-terminal
+(see that link there are also some suggestions for linux and win)
 
 6. Zip up the contents of pictcache and csvresult and use import section in YUM (Yes cart Update Manager) to import the data.

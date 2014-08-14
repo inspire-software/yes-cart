@@ -40,12 +40,12 @@ class Category {
     String UNCATID;
     String visible;
 
-    Map<String, String> description = new HashMap<String, String>();
-    Map<String, String> keywords = new HashMap<String, String>();
-    Map<String, String> name = new HashMap<String, String>();
+    Map<String, String> description = new TreeMap<String, String>();
+    Map<String, String> keywords = new TreeMap<String, String>();
+    Map<String, String> name = new TreeMap<String, String>();
 
     List<ProductPointer> productPointer = new ArrayList<ProductPointer>();
-    Map<String, Product> product = new HashMap<String, Product>();
+    Map<String, Product> product = new TreeMap<String, Product>();
 
     List<CategoryFeatureGroup> categoryFeatureGroup = new ArrayList<CategoryFeatureGroup>();
 

@@ -53,8 +53,6 @@ class CategoryWalker {
 
         println("Parsing categories...")
 
-
-
         def path =  "export/freexml.int/refs.xml";
 
         loadFile(path, path);
@@ -79,6 +77,7 @@ class CategoryWalker {
 
         println("Parsing product indexes...")
         def productPointerHandler = new ProductPointerHandler(handler.categoryMap, context.mindata, context.productsPerCategoryLimit);
+        productPointerHandler.allLangs = Arrays.asList(context.langNames.split(','));
         def productReadeReader = SAXParserFactory.newInstance().newSAXParser().XMLReader
 
         def i = 0;
@@ -92,7 +91,33 @@ class CategoryWalker {
             i++
         }
 
-        println("Added " + productPointerHandler.productMap.size() + " products to categories...")
+        int langCount = context.productDir.split(',').length;
+        List<String> ppToRemove = new ArrayList<String>();
+        for (ProductPointer pp : productPointerHandler.productMap.values()) {
+            for (int ii = 0; ii < langCount; ii++) {
+                String checkLang = context.langNames.split(',')[ii];
+                if (pp.path.size() == langCount - 1 && !pp.path.containsKey("uk")) {
+                    // if UK is missing
+                    pp.path.put("uk", pp.path.get("ru"));
+                }
+                if (pp.path.size() < langCount - 1) {
+                    for (Category cat : pp.categories.values()) {
+                        cat.productPointer.remove(pp);
+                    }
+                    ppToRemove.add(pp.Product_ID);
+                    println("Product $pp.Product_ID does not have path for $checkLang ... removing")
+                    break;
+                }
+            }
+        }
+        for (String ppId : ppToRemove) {
+            productPointerHandler.productMap.remove(ppId);
+        }
+
+        println("Added " + productPointerHandler.productMap.size() + " products to all categories...")
+        for (Category cat : handler.categoryMap.values()) {
+            println("Added " + cat.productPointer.size() + " products to category $cat.id ...");
+        }
 
         println("Download product data...")
         //check the cache and download product's xml if need
@@ -150,6 +175,9 @@ class CategoryWalker {
         println("Generating productsattributes.csv")
         new ProductsAttributesCsvAdapter(productPointerHandler.productMap, context.langNames.split(',')[0]).toCsvFile("$rootDir/productsattributes.csv");
 
+        println("Generating productskunames.csv")
+        new ProductsSkuCsvAdapter(productPointerHandler.productMap, context.langNames.split(',')[0]).toCsvFile("$rootDir/productskunames.csv");
+
         // Main warehouse is part of initial data
         // new File("$rootDir/warehouse.csv").write("Ware house code;name;description\nMain;Main warehouse;Main warehouse", 'UTF-8');
 
@@ -199,6 +227,21 @@ class CategoryWalker {
                 String lang = langs.get(i);
                 String langId = langsids.get(i);
                 String path = it.path.get(lang);
+                String langUsed = lang;
+                /* Hack: Ukrainian version of icecat has many missing values, try to use RU for it */
+                if (path == null && lang == "uk") {
+                    println("No path for $it.Product_ID in $lang trying ru ");
+                    path = it.path.get("ru");
+                    langUsed = "ru";
+                }
+                /* eof hack */
+                if (path == null) { // failsafe
+                    println("No path for $it.Product_ID in $lang trying en ");
+                    path = it.path.get("en");
+                    langUsed = "en";
+                }
+                println("Path for $it.Product_ID in $lang is $path (lang used: $langUsed)");
+
                 try {
                     String productFile = cacheFolderName + path.substring(1 + path.lastIndexOf("/"));
 
@@ -210,8 +253,8 @@ class CategoryWalker {
                     prodis.close();
 
                 }   catch ( Exception e) {
+                    println("Failed parsing products for language: $lang, id: $langId, path: $path ");
                     e.printStackTrace();
-
                 }
             }
         }
@@ -222,37 +265,40 @@ class CategoryWalker {
         def authString = "$context.login:$context.pwd".getBytes().encodeBase64().toString()
         def cacheFolder = createPictureCacheFolder();
         productMap.values().each {
-            try {
-                char idx = 'a';
+            if (it.product != null) { // if we reached limit all pointers will be null
 
+                try {
 
-                // images are the same, so it really is only upto file name in one language
-                String productName
-                if (it.product.Title == null || it.product.Title.get(langs.get(0)) == null || it.product.Title.get(langs.get(0)).length() ==0) {
-                    productName = "product";
+                    char idx = 'a';
 
-                } else {
-                    productName = it.product.Title.get(langs.get(0)).replace("_", "-").replace(" ", "-").replace("?", "-").replace(".", "-");
-                }
+                    // product name is used in file name so need en only
+                    String productName
+                    if (it.product.Title == null || it.product.Title.get('en') == null || it.product.Title.get('en').length() ==0) {
+                        productName = "product";
 
-                println "Scanning pictures for: $it.Prod_ID with title $productName"
-
-                String skuCode = it.product.Prod_id;
-
-
-
-                downloadProductPicture(it.product.HighPic, authString, cacheFolder, idx++, productName, skuCode);
-                it.product.productPicture.each {
-
-                    //limit to 3 pictures only, because of import size
-                    if (idx != 'd') {
-                        downloadProductPicture(it, authString, cacheFolder, idx++, productName, skuCode);
+                    } else {
+                        productName = Util.normalize(it.product.Title.get('en'));
                     }
 
-                }
+                    println "Scanning pictures for: $it.Prod_ID with title $productName"
 
-            }   catch (Exception e) {
-                e.printStackTrace();
+                    String skuCode = it.product.Prod_id;
+
+
+
+                    downloadProductPicture(it.product.HighPic, authString, cacheFolder, idx++, productName, skuCode);
+                    it.product.productPicture.each {
+
+                        //limit to 3 pictures only, because of import size
+                        if (idx < 'd') {
+                            downloadProductPicture(it, authString, cacheFolder, idx++, productName, skuCode);
+                        }
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
         }
@@ -304,6 +350,9 @@ class CategoryWalker {
 
     private def downloadProducts(Map<String, ProductPointer> productMap,
                                  List<String> dirs, List<String> langs) {
+
+        List<ProductPointer> toRemove = new ArrayList<ProductPointer>();
+
         def authString = "$context.login:$context.pwd".getBytes().encodeBase64().toString()
         productMap.values().each {
             for (int i = 0; i < dirs.size(); i++) {
@@ -319,10 +368,20 @@ class CategoryWalker {
                 }   catch (Exception e) {
                     e.printStackTrace();
 
+                    toRemove.add(it); // remove those for which download failed in any language
+                    break;
                 }
 
             }
         }
+
+        for (ProductPointer pp : toRemove) {
+            productMap.remove(pp.Prod_ID);
+            for (Category cat : pp.categories.values()) {
+                cat.productPointer.remove(pp);
+            }
+        }
+
     }
 
 

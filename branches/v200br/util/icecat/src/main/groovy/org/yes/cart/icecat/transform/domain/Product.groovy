@@ -41,7 +41,7 @@ class Product {
     String LowPicHeight;
     String LowPicSize;
     String LowPicWidth;
-    Map<String, String> Name = new HashMap<String, String>();
+    Map<String, String> Name = new TreeMap<String, String>();
     String Pic500x500;
     String Pic500x500Height;
     String Pic500x500Size;
@@ -51,20 +51,20 @@ class Product {
     String ReleaseDate;
     String ThumbPic;
     String ThumbPicSize;
-    Map<String, String> Title = new HashMap<String, String>();
+    Map<String, String> Title = new TreeMap<String, String>();
 
     String CategoryID;
     String CategoryName;
 
     String EANCode;
 
-    Map<String, ProductFeature> productFeatures = new HashMap<String, ProductFeature>();
+    Map<String, ProductFeature> productFeatures = new TreeMap<String, ProductFeature>();
     List<String> relatedProduct = new ArrayList<String>();
     Set<String> relatedCategories = new HashSet<String>();
 
 
-    Map<String, String> ShortSummaryDescription = new HashMap<String, String>();
-    Map<String, String> LongSummaryDescription = new HashMap<String, String>();
+    Map<String, String> ShortSummaryDescription = new TreeMap<String, String>();
+    Map<String, String> LongSummaryDescription = new TreeMap<String, String>();
     List<String> productPicture = new ArrayList<String>();
 
     String Supplier;

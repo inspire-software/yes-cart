@@ -37,9 +37,9 @@ class CategoryFeaturesListHandler extends DefaultHandler {
     final Map<String, Category> categoryMap;
     final List<String> langIdFilter;
     final List<String> langFilter;
-    final Map<String, Feature> featureMap = new HashMap<String, Feature>();
+    final Map<String, Feature> featureMap = new TreeMap<String, Feature>();
 
-    final Map<String, CategoryFeatureGroup> groupMap = new HashMap<String, CategoryFeatureGroup>();
+    final Map<String, CategoryFeatureGroup> groupMap = new TreeMap<String, CategoryFeatureGroup>();
 
     boolean allowWork = false;
     Category category = null;

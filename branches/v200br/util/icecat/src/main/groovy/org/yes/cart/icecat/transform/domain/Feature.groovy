@@ -39,7 +39,7 @@ import org.yes.cart.icecat.transform.Util
      String Searchable;
      String Use_Dropdown_Input;
 
-     Map<String, String> name = new HashMap<String, String>();
+     Map<String, String> name = new TreeMap<String, String>();
 
      public String getNameFor(String lang) {
          def name = Util.getLocalisedValue(this, "name", lang);

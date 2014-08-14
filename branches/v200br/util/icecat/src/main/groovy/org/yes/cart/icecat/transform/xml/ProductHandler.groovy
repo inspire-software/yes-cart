@@ -56,7 +56,7 @@ class ProductHandler extends DefaultHandler {
         if ("ProductRelated" == qName) {
             inProductRelated = true
             String catId = attributes.getValue("Category_ID");
-            if (this.categoryMap.containsKey(catId)) {
+            if (catId != null && this.categoryMap.containsKey(catId)) {
                 product.relatedCategories.add(catId)
             }
 
@@ -193,7 +193,7 @@ class ProductHandler extends DefaultHandler {
             if (c != null ) {
                 if (!product.getNameFor("en").isEmpty()) {
                     c.product.put(product.ID, product);
-                    println("Added product " + product.Prod_id + "[" + product.ID + "] with " + product.productFeatures.size() +  " features to category " + c.getNameFor('def'))
+                    println("Added product " + product.Prod_id + "[" + product.ID + "] with " + product.productFeatures.size() +  " features to category " + c.getNameFor('en'))
 
                 }
             }
