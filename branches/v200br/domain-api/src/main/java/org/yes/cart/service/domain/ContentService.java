@@ -115,6 +115,17 @@ public interface ContentService extends GenericService<Category> {
      * Get content body for a particular content.
      * See CONTENT_BODY setting.
      *
+     * @param contentUri content URI
+     * @param locale locale to get body for
+     *
+     * @return body or null if none exists for this locale or if content is not available
+     */
+    String getContentBody(String contentUri, String locale);
+
+    /**
+     * Get content body for a particular content.
+     * See CONTENT_BODY setting.
+     *
      * @param contentId content id
      * @param locale locale to get body for
      * @param context runtime content passed from web module (e.g. current category, product, shopping cart etc)
@@ -122,6 +133,18 @@ public interface ContentService extends GenericService<Category> {
      * @return body or null if none exists for this locale or if content is not available
      */
     String getDynamicContentBody(long contentId, String locale, Map<String, Object> context);
+
+    /**
+     * Get content body for a particular content.
+     * See CONTENT_BODY setting.
+     *
+     * @param contentUri content URI
+     * @param locale locale to get body for
+     * @param context runtime content passed from web module (e.g. current category, product, shopping cart etc)
+     *
+     * @return body or null if none exists for this locale or if content is not available
+     */
+    String getDynamicContentBody(String contentUri, String locale, Map<String, Object> context);
 
 
     /**
