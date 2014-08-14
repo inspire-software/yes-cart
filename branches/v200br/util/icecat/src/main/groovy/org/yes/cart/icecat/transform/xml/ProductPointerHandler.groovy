@@ -145,7 +145,7 @@ class ProductPointerHandler extends DefaultHandler {
                 productPointer.Updated= attributes.getValue("Updated");
                 productPointer.Quality= attributes.getValue("Quality");
                 productPointer.Supplier_id= attributes.getValue("Supplier_id")
-                productPointer.Prod_ID = attributes.getValue("Prod_ID")
+                productPointer.Prod_ID = Util.normalize(attributes.getValue("Prod_ID"));
                 productPointer.On_Market = attributes.getValue("On_Market")
                 productPointer.Model_Name = Util.maxLength(attributes.getValue("Model_Name"), 255);
                 productPointer.Product_View= attributes.getValue("Product_View");
