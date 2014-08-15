@@ -416,8 +416,8 @@ rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITS
 
     echo  Copy demo import data...
     call copy "%YC_HOME%\env\sampledata\demo-data\yc\import\import.zip" "%YC_HOME%\demo\import-data\"
-    call copy "%YC_HOME%\env\sampledata\demo-data\icecat\import\import-EN,RU.zip" "%YC_HOME%\demo\import-data\"
-    call copy "%YC_HOME%\env\sampledata\demo-data\icecat\import\import-EN,RU-img.zip" "%YC_HOME%\demo\import-data\"
+    call copy "%YC_HOME%\env\sampledata\demo-data\icecat\import\import-EN,UK,RU.zip" "%YC_HOME%\demo\import-data\"
+    call copy "%YC_HOME%\env\sampledata\demo-data\icecat\import\import-EN,UK,RU-img.zip" "%YC_HOME%\demo\import-data\"
     echo  done...
 
     echo  Creating zip package...

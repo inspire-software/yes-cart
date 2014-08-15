@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="148c69f3-1bf7-4e64-bac5-230704034774" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductInventoryCsvAdapter.groovy" afterPath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductInventoryCsvAdapter.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductPricesCsvAdapter.groovy" afterPath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductPricesCsvAdapter.groovy" />
-    </list>
+    <list default="true" readonly="true" id="148c69f3-1bf7-4e64-bac5-230704034774" name="Default" comment="" />
     <ignored path="icecat-downloader.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
