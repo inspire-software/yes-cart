@@ -35,7 +35,7 @@ class CategoryCsvAdapter {
     public toCsvFile(String filename) {
 
         StringBuilder builder = new StringBuilder();
-        builder.append("parent category id;guid;category name;EN;RU;UK;description;EN;RU;UK;keywords;EN;RU;UK\n");
+        builder.append("parent category id;guid;category name;EN;RU;UK;description;EN;RU;UK;uri;keywords;EN;RU;UK\n");
         categoryMap.values().each {
             builder.append('100;"')
             //builder.append(it.parentCategoryid).append(';"')
@@ -48,6 +48,7 @@ class CategoryCsvAdapter {
             builder.append(Util.escapeCSV(it.getDescriptionFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getDescriptionFor('ru'))).append('";"')
             builder.append(Util.escapeCSV(it.getDescriptionFor('uk'))).append('";"')
+            builder.append(it.getURI()).append('";"')
             builder.append(Util.escapeCSV(it.getKeywordsFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getKeywordsFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getKeywordsFor('ru'))).append('";"')

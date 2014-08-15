@@ -1549,8 +1549,8 @@
                 <constructor-arg index="0" ref="genericDao"/>
                 <constructor-arg index="1" ref="attributeService"/>
                 <constructor-arg index="2" ref="imageService"/>
-                <constructor-arg index="3" value="_([.[^_]]*)_[a-z]\.jpe?g$"/>
-                <constructor-arg index="4" value="(.*)\.jpe?g"/>
+                <constructor-arg index="3" value="_([.[^_]]*)_[a-z]\.(jpe?g|png)$"/>
+                <constructor-arg index="4" value="(.*)\.(jpe?g|png)"/>
             </bean>
         </property>
     </bean>
