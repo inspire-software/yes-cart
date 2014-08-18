@@ -107,7 +107,7 @@ public class ShoppingCartView extends BaseComponent {
                     );
 
                 } else {
-                    error(getLocalizer().getString("noemptycoupons", this, "Need non empty coupon code"));
+                    error(getLocalizer().getString("noEmptyCoupons", this, "Need non empty coupon code"));
                 }
             }
         });

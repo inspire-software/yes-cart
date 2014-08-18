@@ -18,5 +18,301 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
     <!-- All global properties should go here -->
-    <entry key="build.version">YC - 2.1.0</entry>
+    <entry key="buildVersion">YC - 2.1.0</entry>
+    <entry key="home">Home</entry>
+    <entry key="continueShopping">Continue shopping</entry>
+    <entry key="brand">Brand</entry>
+    <entry key="price">Price</entry>
+    <entry key="qty">Quantity</entry>
+    <entry key="login">Login</entry>
+    <entry key="registration">Registration</entry>
+    <entry key="save">Save</entry>
+    <entry key="email">E-mail</entry>
+    <entry key="password">Password</entry>
+    <entry key="firstname">First name</entry>
+    <entry key="lastname">Last name</entry>
+    <entry key="customerAdditional">Additional information</entry>
+    <entry key="faq">FAQ</entry>
+    <entry key="contacts">Contacts</entry>
+    <entry key="profile">Profile / Wish list</entry>
+    <entry key="sale">Sale</entry>
+    <entry key="newArrivals">New arrivals</entry>
+    <entry key="addToCart">Add to cart</entry>
+    <entry key="preorderCart">Preorder</entry>
+    <entry key="skuCode">Code</entry>
+
+    <!-- CheckoutPage -->
+    <entry key="addressStep">Billing &amp; Shipping Address</entry>
+    <entry key="shipMethodStep">Shipping Method</entry>
+    <entry key="paymentStep">Verification and Payment</entry>
+    <entry key="loginStep">Login</entry>
+    <entry key="billingAddrTheSame">Billing address the same as shipping</entry>
+    <entry key="shipmentStep">Shipment method</entry>
+    <entry key="paymentStep">Payment</entry>
+    <entry key="paymentGatewayLabel">Payment method</entry>
+    <entry key="multipleDeliveryLabel">Multiple delivery</entry>
+    <entry key="multipleDeliveryHint">This order may have several delivery</entry>
+    <entry key="paymentSubmit">Pay</entry>
+    <entry key="checkoutTitle">Checkout</entry>
+    <entry key="selectAddr">Provide shipping and billing addresses</entry>
+    <entry key="selectPayment">Payment</entry>
+
+    <!-- ContactPage -->
+    <entry key="contact">Contact information</entry>
+
+    <!-- CustomerSelfCarePage -->
+    <entry key="selfCare">Self care</entry>
+    <entry key="customerSummary">Mandatory information</entry>
+    <entry key="orderInfo">Orders</entry>
+    <entry key="wishlist">Wish list</entry>
+    <entry key="addresses">Address book</entry>
+
+    <!-- FaqPage -->
+    <entry key="faqTitle">Frequently Asked Question(s)</entry>
+
+    <!-- HomePage -->
+
+    <!-- LoginPage -->
+
+    <!-- PaymentPage -->
+    <entry key="orderPayment">Order Payment</entry>
+    <entry key="negativePaymentNotes">Order payment failed</entry>
+    <entry key="positivePaymentNotes">Order payment was ok </entry>
+    <entry key="checkStatus">Check order status</entry>
+    <entry key="negativeItemAllocationNotes">Sorry. Item quantity {0} with code {1} cannot be allocated on warehouse. Try to buy similar product</entry>
+
+    <!-- RegistrationPage -->
+
+    <!-- ShoppingCartPage -->
+    <entry key="checkout">Checkout</entry>
+    <entry key="shoppingCart">Cart</entry>
+    <entry key="emptyCart">Cart is empty</entry>
+    <entry key="orderErrorGeneral">An error occurred while trying to create your order. Please try again.</entry>
+    <entry key="orderErrorCouponInvalid">Coupon '${0}' is no longer valid please remove it from the cart.</entry>
+
+    <!-- COMPONENTS -->
+    <!-- BreadCrumbsView -->
+    <entry key="query">Search</entry>
+    <entry key="sale">Sale</entry>
+    <entry key="specialoffer">Special offer</entry>
+    <entry key="newarrival">New arrivals</entry>
+    <entry key="multisku">Demo: multi-sku</entry>
+    <entry key="preorder">Demo: preorder</entry>
+    <entry key="backorder">Demo: backorder</entry>
+    <entry key="always">Demo: always</entry>
+
+    <!-- ShoppingCartPaymentVerificationView -->
+    <entry key="productName">Product</entry>
+    <entry key="amount">Amount</entry>
+    <entry key="deliveryNum">Delivery number</entry>
+    <entry key="deliverySubTotal">Delivery sub total</entry>
+    <entry key="deliverySubTotalTax">Delivery tax</entry>
+    <entry key="deliverySubTotalAmount">Delivery amount</entry>
+    <entry key="deliveryCost">Delivery cost</entry>
+    <entry key="deliveryCostTax">tax</entry>
+    <entry key="deliveryCostAmount">Amount</entry>
+    <entry key="grandTotal">Grand</entry>
+    <entry key="grandTotalTax">tax</entry>
+    <entry key="grandTotalAmount">Amount</entry>
+    <entry key="orderVerification">Verify order and choose payment method</entry>
+
+    <!-- ShoppingCartView -->
+    <entry key="product">Product</entry>
+    <entry key="amountMsg">Amount</entry>
+    <entry key="addOneLink">+1</entry>
+    <entry key="removeOneLink">-1</entry>
+    <entry key="removeAllLink">X</entry>
+    <entry key="addOneLinkHint">Add one item</entry>
+    <entry key="removeOneLinkHint">Remove one item</entry>
+    <entry key="removeAllLinkHint">Remove all items</entry>
+    <entry key="nonZeroDigits">Please, input valid items quantity</entry>
+    <entry key="skuNumber">SKU code</entry>
+    <entry key="productsInCart">Items in cart</entry>
+    <entry key="removeCouponCodeLabel">Remove coupon</entry>
+    <entry key="addCouponButtonLabel">Add coupon</entry>
+    <entry key="appliedPromoCode">${0} [applied]</entry>
+    <entry key="pendingPromoCode">${0} [not applied]</entry>
+    <entry key="noEmptyCoupons">Please enter coupon code</entry>
+
+    <!-- SmallShoppingCartView -->
+    <entry key="itemForm0">{0} item in cart</entry>
+    <entry key="itemForm1">{0} items in cart</entry>
+    <entry key="noItem">Cart is empty</entry>
+
+    <!-- CreateEditAddressPage -->
+    <entry key="firstName">First name</entry>
+    <entry key="lastName">Last name</entry>
+    <entry key="line1">Address line 1</entry>
+    <entry key="line2">Address line 2</entry>
+    <entry key="city">City</entry>
+    <entry key="country">Country</entry>
+    <entry key="state">State</entry>
+    <entry key="postcode">Post code</entry>
+    <entry key="phoneList">Phones</entry>
+    <entry key="create">Save</entry>
+    <entry key="cancel">Cancel</entry>
+    <entry key="createEditAddress">Manage address</entry>
+
+    <!-- ManageAddressesView -->
+    <entry key="create">Create</entry>
+    <entry key="delete">Delete</entry>
+    <entry key="edit">Edit</entry>
+    <entry key="addressTypeS">Shipping address</entry>
+    <entry key="addressTypeB">Billing address</entry>
+
+    <!-- LoginPanel -->
+    <entry key="wrongPassword">Wrong password</entry>
+    <entry key="customerNotExists">Unknown user. Register please</entry>
+    <entry key="existingUser">Existing shopper</entry>
+    <entry key="restorePassword">Restore password</entry>
+    <entry key="signIn">Sign In</entry>
+    <entry key="tryToRestore">Try to restore password. It will be send to your email {0}</entry>
+    <entry key="emailSent">New password was sent to {0}. Check email please.</entry>
+
+    <!-- RegisterPanel -->
+    <entry key="newUser">New customer</entry>
+    <entry key="register">Register</entry>
+    <entry key="phone">Phone</entry>
+    <entry key="customerExists">Customer already registered.</entry>
+    <entry key="canNotRegister">Sorry. Some problem. Our administrators try to solve temporally problems.</entry>
+
+    <!-- LogoutPanel -->
+    <entry key="logoffLabel">Logoff</entry>
+    <entry key="logoffTitle">${name} click here to logoff from your account</entry>
+
+    <!-- CustomerOrderPanel -->
+    <!-- order statuses from CustomerOrder interface -->
+    <entry key="os.none">-</entry>
+    <entry key="os.pending">Pending</entry>
+    <entry key="os.waiting">Wait for confirmation</entry>
+    <entry key="os.in.progress">In progress</entry>
+    <entry key="os.cancelled">Cancelled</entry>
+    <entry key="os.partially.shipped">Shipped partially</entry>
+    <entry key="os.completed">Completed</entry>
+
+    <entry key="orderNumHead">Num</entry>
+    <entry key="orderDateHead">Date</entry>
+    <entry key="orderStatusHead">Status</entry>
+    <entry key="orderItemsHead">Product</entry>
+    <entry key="orderAmountHead">Sum</entry>
+    <entry key="orderInfo">Orders</entry>
+    <entry key="noOrders">There is no order history to display.</entry>
+
+    <!-- PasswordPanel -->
+    <entry key="changePassword">New password will be send to you email after "Change password" click</entry>
+    <entry key="changePasswordBtn">Change password</entry>
+    <entry key="newPasswordSent">New password sent</entry>
+
+    <!-- SummaryPanel -->
+    <entry key="customerSummary">Mandatory information</entry>
+    <entry key="profileUpdated">Customer profile updated</entry>
+
+    <!-- WishListView -->
+    <entry key="wishlistItems">Wish list</entry>
+    <entry key="wishlistNoItems">There are no items in your wish list. You can them by clicking "Add to Wishlist" button on product pages.</entry>
+    <entry key="addToCartWlBtn">Add to cart (${0})</entry>
+    <entry key="preorderCartWlBtn">Preorder (${0})</entry>
+    <entry key="removeFromWishlist">Remove item</entry>
+
+    <!-- StandardFooter, CheckoutFooter -->
+    <entry key="profile">Profile</entry>
+    <entry key="siteMap">Site map</entry>
+    <entry key="help">Help</entry>
+    <entry key="platform">Platform</entry>
+    <entry key="callCenter">Call center</entry>
+    <entry key="returnPolicy">Return policy</entry>
+    <entry key="orderGuide">Order guide</entry>
+    <entry key="orderHistory">Order history</entry>
+    <entry key="location">Location</entry>
+    <entry key="licenceInfo">Licences</entry>
+    <entry key="cart">View cart</entry>
+    <entry key="sitemapInfo">Site map</entry>
+
+    <!-- StandardHeader -->
+    <entry key="specialOffer">Special offer</entry>
+    <entry key="demoMultiSku">Multi-sku</entry>
+    <entry key="demoPreorder">Preorder</entry>
+    <entry key="demoBackorder">Backorder</entry>
+    <entry key="demoAlways">Always</entry>
+    <entry key="menu">Menu</entry>
+    <entry key="demo">Demo</entry>
+
+    <!-- ProductSorter -->
+    <entry key="sort">Sort</entry>
+    <entry key="byName">by name</entry>
+    <entry key="byPrice">by price</entry>
+
+    <!-- PriceTierView -->
+    <entry key="priceTierLabel">Price of one item</entry>
+    <entry key="descountRule">Buy more than one item and get discount</entry>
+
+    <!-- PriceView -->
+    <entry key="savePercent">Discount {0}%</entry>
+
+    <!-- RecentlyViewedProducts -->
+    <entry key="recentlyViewed">Viewed</entry>
+
+    <!-- SearchView -->
+    <entry key="search">Search</entry>
+
+    <!-- ShippingView -->
+    <entry key="carrier">Carrier</entry>
+    <entry key="carrierSla">Shipping method</entry>
+    <entry key="carrierSelect">Select carrier and shipping method</entry>
+
+    <!-- Currency -->
+    <entry key="currency">Currency</entry>
+
+    <!-- Language -->
+    <entry key="language">Language</entry>
+
+    <!-- ProductsCentralView -->
+    <entry key="items">Items</entry>
+
+    <!-- SkuCentralView -->
+    <entry key="addToWishlist">Add to wishlist</entry>
+    <entry key="wishListItemAdded">Product ${0} added to wish list. You can view wish list in your profile.</entry>
+    <entry key="description">Description</entry>
+    <entry key="details">Details</entry>
+    <entry key="accessories">Accessories</entry>
+    <entry key="volumeDiscount">Volume Discount</entry>
+
+    <!-- TopCategories -->
+    <entry key="categories">Categories</entry>
+
+    <!-- PAYMENT GATEWAYS -->
+    <!-- AuthorizeNetSimPaymentOkPage -->
+    <entry key="pageTitle">Payment was successful</entry>
+    <entry key="paymentWasOk">Payment was successful</entry>
+
+    <!-- ResultPage -->
+    <entry key="resultPageTitle">Payment result</entry>
+    <entry key="paymentWasFailed">Payment was failed</entry>
+    <entry key="paymentResult">Payment result</entry>
+
+    <!-- LiqPayReturnUrlPage -->
+    <entry key="liqPayPageTitle">Payment result</entry>
+    <entry key="orderErrorCancelled">Order was cancelled. This maybe due to payment failure or insufficient stock</entry>
+    <entry key="orderErrorNotFound">Order not found</entry>
+    <entry key="orderSuccess">Order successfully placed</entry>
+
+    <!-- PayPalReturnUrlPage -->
+    <entry key="payPalPageTitle">Payment with pay pal</entry>
+    <entry key="pay">Confirm</entry>
+    <entry key="paymentFailed">Payment was failed</entry>
+    <entry key="badStatus">Your status was not verified on pay pal or can not get the payment details</entry>
+    <entry key="confirmPayment">
+        <![CDATA[
+                    Payment amount is {0} {1}. Confirm payment to contnue.
+                     ]]>
+    </entry>
+    <entry key="paymentOk">
+        <![CDATA[
+                    The payment was successful. Order number {0} .
+                    Check order status on <a href="selfcare">this page</a>.
+                    <br>
+                    <a href=".">Continue shopping !</a>.
+               ]]>
+    </entry>
+
 </properties>

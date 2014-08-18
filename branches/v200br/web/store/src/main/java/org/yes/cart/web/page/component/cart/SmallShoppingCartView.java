@@ -49,9 +49,9 @@ public class SmallShoppingCartView extends BaseComponent {
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     private static final String [] pluralForms = new String [] {
-            "item.form0",
-            "item.form1",
-            "item.form2"
+            "itemForm0",
+            "itemForm1",
+            "itemForm2"
     };
 
     @SpringBean(name = ServiceSpringKeys.PRICE_SERVICE)
@@ -91,7 +91,7 @@ public class SmallShoppingCartView extends BaseComponent {
         add(
                 new Label(
                         EMPTY_LABEL,
-                        new StringResourceModel("no.item", this, null, itemsInCart)
+                        new StringResourceModel("noItem", this, null, itemsInCart)
                 ).setVisible(isCartEmpty())
         );
 
@@ -111,7 +111,7 @@ public class SmallShoppingCartView extends BaseComponent {
                                 new Label(
                                         QTY_LABEL,
                                         isCartEmpty()?
-                                                new StringResourceModel("no.item", this, null, itemsInCart):
+                                                new StringResourceModel("noItem", this, null, itemsInCart):
                                                 new StringResourceModel(resourceKey, this, null, itemsInCart)
                                 )
                         )

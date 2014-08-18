@@ -55,7 +55,7 @@ public class RecentlyViewedProducts extends AbstractProductSearchResultList {
     @Override
     protected void onBeforeRender() {
 
-        add(new Label("productsTitle", new StringResourceModel("recently.viewed", this, null)).setVisible(!getProductListToShow().isEmpty()));
+        add(new Label("productsTitle", new StringResourceModel("recentlyViewed", this, null)).setVisible(!getProductListToShow().isEmpty()));
         super.onBeforeRender();
     }
 

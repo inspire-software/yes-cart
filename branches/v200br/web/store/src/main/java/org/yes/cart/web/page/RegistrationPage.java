@@ -81,6 +81,6 @@ public class RegistrationPage  extends AbstractWebPage {
      * @return page title
      */
     public IModel<String> getPageTitle() {
-        return new Model<String>(getLocalizer().getString("registraction",this));
+        return new Model<String>(getLocalizer().getString("registration",this));
     }
 }
