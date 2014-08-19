@@ -22,6 +22,7 @@ package org.yes.cart.icecat.transform.csv
 
 import org.yes.cart.icecat.transform.domain.ProductPointer
 import org.yes.cart.icecat.transform.Util
+import org.yes.cart.icecat.transform.domain.Product
 
 /**
  * User: denispavlov
@@ -33,6 +34,8 @@ class ProductsCsvAdapter {
     Map<String, ProductPointer> productMap;
     String defLang;
 
+    Random rand = new Random();
+
     ProductsCsvAdapter(final Map<String, ProductPointer> productMap, final String defLang) {
         this.productMap = productMap
         this.defLang = defLang
@@ -41,7 +44,7 @@ class ProductsCsvAdapter {
     public toCsvFile(String filename) {
 
         StringBuilder builder = new StringBuilder();
-        builder.append("product guid;SKU code;model;brand;product type;barcode;name;EN;RU;description;EN;RU\n");
+        builder.append("product guid;SKU code;model;brand;product type;barcode;name;EN;RU;UK;description;EN;RU;UK;availability;featured;tag\n");
 
         productMap.values().each {
             try {
@@ -49,18 +52,22 @@ class ProductsCsvAdapter {
                     StringBuilder builderTmp = new StringBuilder();
                     builderTmp.append('"')
                     builderTmp.append(it.Product_ID_valid).append('";"')
-                    it.Prod_ID = Util.normalize(it.Prod_ID);
                     builderTmp.append(Util.escapeCSV(it.Prod_ID)).append('";"') // SKU
                     builderTmp.append(Util.escapeCSV(it.Model_Name)).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.Supplier)).append('";"') // Brand
-                    builderTmp.append(Util.escapeCSV(it.categories.values().iterator().next().getNameFor(null))).append('";"') // Type is same as prime category
+                    builderTmp.append(Util.escapeCSV(it.categories.values().iterator().next().getNameFor('en'))).append('";"') // Type is same as prime category
                     builderTmp.append(it.product.EANCode == null ? '' : Util.escapeCSV(it.product.EANCode)).append('";"')
-                    builderTmp.append(Util.escapeCSV(it.product.getNameFor(this.defLang))).append('";"')
+                    builderTmp.append(Util.escapeCSV(it.product.getNameFor('en'))).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.getNameFor('en'))).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.getNameFor('ru'))).append('";"')
-                    builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor(this.defLang))).append('";"')
+                    builderTmp.append(Util.escapeCSV(it.product.getNameFor('uk'))).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('en'))).append('";"')
-                    builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('ru'))).append('"\n')
+                    builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('en'))).append('";"')
+                    builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('ru'))).append('";"')
+                    builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('uk'))).append('";')
+                    builderTmp.append(it.Availability).append(';')
+                    builderTmp.append(it.Featured).append(';"')
+                    builderTmp.append(it.Tags).append('"\n')
                     builder.append(builderTmp.toString());
                 }
 
@@ -74,4 +81,5 @@ class ProductsCsvAdapter {
         new File(filename).write(builder.toString(), 'UTF-8');
 
     }
+
 }

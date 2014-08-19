@@ -186,7 +186,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentBody"/* , key = "content.getCategoryId()"*/)
+    @Cacheable(value = "contentService-contentBody")
     public String getContentBody(final long contentId, final String locale) {
         final String attributeKey = "CONTENT_BODY_" + locale + "_%";
         final List<Object> bodyList = categoryDao.findQueryObjectByNamedQuery("CONTENTBODY.BY.CONTENTID", contentId, attributeKey, new Date());
@@ -199,7 +199,19 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             }
             return content.toString();
         }
-        return null;
+        return "";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "contentService-contentBody")
+    public String getContentBody(final String contentUri, final String locale) {
+        final Long id = findContentIdBySeoUri(contentUri);
+        if (id != null) {
+            return proxy().getContentBody(id, locale);
+        }
+        return "";
     }
 
     /**
@@ -210,7 +222,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
 
         final String rawContent = proxy().getContentBody(contentId, locale);
 
-        if (rawContent != null) {
+        if (StringUtils.isNotBlank(rawContent)) {
 
             return this.templateSupport.processTemplate(rawContent, locale, context);
 
@@ -222,7 +234,24 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentAttributeRecursive"/* , key = "content.getCategoryId()"*/)
+    @Override
+    public String getDynamicContentBody(final String contentUri, final String locale, final Map<String, Object> context) {
+
+        final String rawContent = proxy().getContentBody(contentUri, locale);
+
+        if (StringUtils.isNotBlank(rawContent)) {
+
+            return this.templateSupport.processTemplate(rawContent, locale, context);
+
+        }
+
+        return "";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "contentService-contentAttributeRecursive")
     public String getContentAttributeRecursive(final String locale, final Category content, final String attributeName, final String defaultValue) {
         final String value = getContentAttributeRecursive(locale, content, attributeName);
         if (value == null) {

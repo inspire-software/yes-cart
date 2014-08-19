@@ -135,9 +135,9 @@ public class AbstractWebPage extends WebPage {
         keywords.add( new AttributeAppender("content", getKeywords(), " "));
         addOrReplace(keywords);
 
-        Label created = new Label(CREATED,"");
+        /*Label created = new Label(CREATED,"");
         created.add( new AttributeAppender("content", getCreated(), " "));
-        addOrReplace(created);
+        addOrReplace(created);*/ // TODO: YC-362
 
         if (!isPageStateless() && Application.get().getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
             determineStatefulComponent();
@@ -312,13 +312,7 @@ public class AbstractWebPage extends WebPage {
         return null;
     }
 
-    /**
-     * Get created date time.
-     * @return page created
-     */
-    public IModel<String> getCreated() {
-        return new Model<String>(new Date().toString());
-    }
+
     protected String getKeywords(final Seo seo, final String language) {
         if (seo != null) {
             final String desc = getI18NSupport().getFailoverModel(seo.getDisplayMetakeywords(), seo.getMetakeywords()).getValue(language);

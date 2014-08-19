@@ -37,13 +37,14 @@ class AttributeCsvAdapter {
     public toCsvFile(String filename) {
 
         StringBuilder builder = new StringBuilder();
-        builder.append("group code;code;name;EN;RU;mandatory;searchable\n");
+        builder.append("group code;code;name;EN;RU;UK;mandatory;searchable\n");
         featureMap.values().each {
             builder.append('"PRODUCT";"')
             builder.append(it.ID).append('";"')
-            builder.append(Util.escapeCSV(it.getNameFor(null))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";"')
-            builder.append(Util.escapeCSV(it.getNameFor('ru'))).append('";')
+            builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";"')
+            builder.append(Util.escapeCSV(it.getNameFor('ru'))).append('";"')
+            builder.append(Util.escapeCSV(it.getNameFor('uk'))).append('";')
             builder.append(it.Mandatory != null && it.Mandatory ? "true" : "false").append(";")
             builder.append(it.Searchable != null && it.Searchable ? "true" : "false").append("\n")
         }

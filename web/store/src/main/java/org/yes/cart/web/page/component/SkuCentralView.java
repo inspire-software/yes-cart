@@ -21,25 +21,12 @@ import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.util.StringUtils;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Association;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductAvailabilityModel;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.Seo;
-import org.yes.cart.domain.entity.Seoable;
-import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.domain.PriceService;
-import org.yes.cart.service.domain.ProductAssociationService;
-import org.yes.cart.service.domain.ProductAvailabilityStrategy;
-import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.domain.entity.*;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
@@ -263,14 +250,14 @@ public class SkuCentralView extends AbstractCentralView {
         add(
                 getWicketSupportFacade().links().newAddToCartLink(ADD_TO_CART_LINK, sku.getCode(), null, getPage().getPageParameters())
                         .add(new Label(ADD_TO_CART_LINK_LABEL, pam.isInStock() || pam.isPerpetual() ?
-                                getLocalizer().getString("add.to.cart", this) :
-                                getLocalizer().getString("preorder.cart", this)))
+                                getLocalizer().getString("addToCart", this) :
+                                getLocalizer().getString("preorderCart", this)))
                         .setVisible(pam.isAvailable())
         );
 
         add(
                 getWicketSupportFacade().links().newAddToWishListLink(ADD_TO_WISHLIST_LINK, sku.getCode(), null, null, null, getPage().getPageParameters())
-                        .add(new Label(ADD_TO_WISHLIST_LINK_LABEL, getLocalizer().getString("add.to.wishlist", this)))
+                        .add(new Label(ADD_TO_WISHLIST_LINK_LABEL, getLocalizer().getString("addToWishlist", this)))
         );
 
         add(
@@ -329,7 +316,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         final String wishListSkuAdded = getPage().getPageParameters().get(WebParametersKeys.WISHLIST_ITEM_ADDED).toString(null);
         final boolean wishListAdded = wishListSkuAdded != null;
-        add(new Label("jsWishListItemAddedMsg", new StringResourceModel("wish.list.item.added", this, new Model<Serializable>(new Object[] {wishListSkuAdded})))
+        add(new Label("jsWishListItemAddedMsg", new StringResourceModel("wishListItemAdded", this, new Model<Serializable>(new Object[] {wishListSkuAdded})))
                 .setVisible(wishListAdded));
         add(new Label("jsWishListItemAdded", "<script type=\"text/javascript\"> $(document).ready(function() {ctx.showModalWindow($('.jsWishListItemAddedMsg'));});</script>")
                 .setVisible(wishListAdded).setEscapeModelStrings(false));

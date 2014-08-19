@@ -62,13 +62,22 @@
         <column-descriptor>
             <column-index>3</column-index>
             <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>uk</language>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>4</column-index>
+            <field-type>FIELD</field-type>
             <name>description</name>
             <value-regex>(.{0,1000})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>4</column-index>
+            <column-index>5</column-index>
             <field-type>FIELD</field-type>
             <name>displayDescription</name>
             <language>en</language>
@@ -77,7 +86,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>5</column-index>
+            <column-index>6</column-index>
             <field-type>FIELD</field-type>
             <name>displayDescription</name>
             <language>ru</language>
@@ -86,28 +95,37 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>6</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>BOOLEAN</data-type>
-            <name>worldwide</name>
-        </column-descriptor>
-
-        <column-descriptor>
             <column-index>7</column-index>
             <field-type>FIELD</field-type>
-            <data-type>BOOLEAN</data-type>
-            <name>country</name>
+            <name>displayDescription</name>
+            <language>uk</language>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
             <column-index>8</column-index>
             <field-type>FIELD</field-type>
             <data-type>BOOLEAN</data-type>
-            <name>state</name>
+            <name>worldwide</name>
         </column-descriptor>
 
         <column-descriptor>
             <column-index>9</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>country</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>10</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>state</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>11</column-index>
             <field-type>FIELD</field-type>
             <data-type>BOOLEAN</data-type>
             <name>local</name>

@@ -238,18 +238,18 @@ VALUES (118, 'cyberSourcePaymentGateway',
     <tr>
         <td>Срок действия</td>
         <td><select name="ccExpireMonth" class="paymentnormalfield">
-            <option value="01">01 - January</option>
-            <option value="02">02 - February</option>
-            <option value="03">03 - March</option>
-            <option value="04">04 - April</option>
-            <option value="05">05 - May</option>
-            <option value="06">06 - June</option>
-            <option value="07">07 - July</option>
-            <option value="08">08 - August</option>
-            <option value="09">09 - September</option>
-            <option value="10">10 - October</option>
-            <option value="11">11 - November</option>
-            <option value="12">12 - December</option>
+            <option value="01">01 - январь</option>
+            <option value="02">02 - февраль</option>
+            <option value="03">03 - март</option>
+            <option value="04">04 - апрель</option>
+            <option value="05">05 - май</option>
+            <option value="06">06 - июнь</option>
+            <option value="07">07 - июль</option>
+            <option value="08">08 - август</option>
+            <option value="09">09 - сентябрь</option>
+            <option value="10">10 - октябрь</option>
+            <option value="11">11 - ноябрь</option>
+            <option value="12">12 - декабрь</option>
         </select> <select name="ccExpireYear" class="paymentshortfield">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
@@ -264,6 +264,69 @@ VALUES (118, 'cyberSourcePaymentGateway',
 '
 , 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (119, 'cyberSourcePaymentGateway', 'name_uk', 'CyberSource', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (1199, 'cyberSourcePaymentGateway',
+'htmlForm_uk',
+'
+<table>
+    <tr>
+        <td>Тип карти</td>
+        <td><select name="ccType" class="paymentlongfield">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="Eurocard">Eurocard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Carte Blanche">Carte Blanche</option>
+            <option value="JCB">JCB</option>
+            <option value="EnRoute">EnRoute</option>
+            <option value="Maestro (UK Domestic), Solo">Maestro (UK Domestic), Solo</option>
+            <option value="Delta">Delta</option>
+            <option value="Visa Electron">Visa Electron</option>
+            <option value="Dankort">Dankort</option>
+            <option value="JAL">JAL</option>
+            <option value="Laser">Laser</option>
+            <option value="Carte Bleue">Carte Bleue</option>
+            <option value="Carta Si">Carta Si</option>
+            <option value="UATP">UATP</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Номер карти</td>
+        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
+    </tr>
+    <tr>
+        <td>Термін дії</td>
+        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            <option value="01">01 - січень</option>
+            <option value="02">02 - лютий</option>
+            <option value="03">03 - березень</option>
+            <option value="04">04 - квітень</option>
+            <option value="05">05 - травень</option>
+            <option value="06">06 - червень</option>
+            <option value="07">07 - липень</option>
+            <option value="08">08 - серпень</option>
+            <option value="09">09 - вересень</option>
+            <option value="10">10 - жовтень</option>
+            <option value="11">11 - листопад</option>
+            <option value="12">12 - грудень</option>
+        </select> <select name="ccExpireYear" class="paymentshortfield">
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Код безпеки</td>
+        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
+    </tr>
+</table>
+'
+, 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 
 
 
@@ -424,18 +487,18 @@ VALUES (128, 'authorizeNetAimPaymentGateway',
     <tr>
         <td>Срок действия</td>
         <td><select name="ccExpireMonth" class="paymentnormalfield">
-            <option value="01">01 - January</option>
-            <option value="02">02 - February</option>
-            <option value="03">03 - March</option>
-            <option value="04">04 - April</option>
-            <option value="05">05 - May</option>
-            <option value="06">06 - June</option>
-            <option value="07">07 - July</option>
-            <option value="08">08 - August</option>
-            <option value="09">09 - September</option>
-            <option value="10">10 - October</option>
-            <option value="11">11 - November</option>
-            <option value="12">12 - December</option>
+            <option value="01">01 - январь</option>
+            <option value="02">02 - февраль</option>
+            <option value="03">03 - март</option>
+            <option value="04">04 - апрель</option>
+            <option value="05">05 - май</option>
+            <option value="06">06 - июнь</option>
+            <option value="07">07 - июль</option>
+            <option value="08">08 - август</option>
+            <option value="09">09 - сентябрь</option>
+            <option value="10">10 - октябрь</option>
+            <option value="11">11 - ноябрь</option>
+            <option value="12">12 - декабрь</option>
         </select> <select name="ccExpireYear" class="paymentshortfield">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
@@ -449,6 +512,61 @@ VALUES (128, 'authorizeNetAimPaymentGateway',
 </table>
 '
 , 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (129, 'authorizeNetAimPaymentGateway', 'name_uk', 'Authorize.net AIM', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (130, 'authorizeNetAimPaymentGateway',
+'htmlForm_uk',
+'
+<table>
+    <tr>
+        <td>Тип карти</td>
+        <td><select name="ccType" class="paymentlongfield">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Номер карти</td>
+        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
+    </tr>
+    <tr>
+        <td>Термін дії</td>
+        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            <option value="01">01 - січень</option>
+            <option value="02">02 - лютий</option>
+            <option value="03">03 - березень</option>
+            <option value="04">04 - квітень</option>
+            <option value="05">05 - травень</option>
+            <option value="06">06 - червень</option>
+            <option value="07">07 - липень</option>
+            <option value="08">08 - серпень</option>
+            <option value="09">09 - вересень</option>
+            <option value="10">10 - жовтень</option>
+            <option value="11">11 - листопад</option>
+            <option value="12">12 - грудень</option>
+        </select> <select name="ccExpireYear" class="paymentshortfield">
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Код безпеки</td>
+        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
+    </tr>
+</table>
+'
+, 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 
 
 
@@ -703,18 +821,18 @@ VALUES (161, 'payflowPaymentGateway',
     <tr>
         <td>Срок действия</td>
         <td><select name="ccExpireMonth" class="paymentnormalfield">
-            <option value="01">01 - Январь</option>
-            <option value="02">02 - Февраль</option>
-            <option value="03">03 - Март</option>
-            <option value="04">04 - Апрель</option>
-            <option value="05">05 - Май</option>
-            <option value="06">06 - Июнь</option>
-            <option value="07">07 - Июль</option>
-            <option value="08">08 - Август</option>
-            <option value="09">09 - Сентябрь</option>
-            <option value="10">10 - Октябрь</option>
-            <option value="11">11 - Ноябрь</option>
-            <option value="12">12 - Декабрь</option>
+            <option value="01">01 - январь</option>
+            <option value="02">02 - февраль</option>
+            <option value="03">03 - март</option>
+            <option value="04">04 - апрель</option>
+            <option value="05">05 - май</option>
+            <option value="06">06 - июнь</option>
+            <option value="07">07 - июль</option>
+            <option value="08">08 - август</option>
+            <option value="09">09 - сентябрь</option>
+            <option value="10">10 - октябрь</option>
+            <option value="11">11 - ноябрь</option>
+            <option value="12">12 - декабрь</option>
         </select> <select name="ccExpireYear" class="paymentshortfield">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
@@ -730,6 +848,66 @@ VALUES (161, 'payflowPaymentGateway',
 , 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
 
 
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (162, 'payflowPaymentGateway', 'name_uk', 'PayPal Payflow', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (163, 'payflowPaymentGateway',
+'htmlForm_uk',
+'
+<table>
+    <tr>
+        <td>Ім''я на картці</td>
+        <td><input type="text" class="paymentlongfield" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+    </tr>
+    <tr>
+        <td>Тип карти</td>
+        <td><select name="ccType" class="paymentlongfield">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Номер карти</td>
+        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
+    </tr>
+    <tr>
+        <td>Термін дії</td>
+        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            <option value="01">01 - січень</option>
+            <option value="02">02 - лютий</option>
+            <option value="03">03 - березень</option>
+            <option value="04">04 - квітень</option>
+            <option value="05">05 - травень</option>
+            <option value="06">06 - червень</option>
+            <option value="07">07 - липень</option>
+            <option value="08">08 - серпень</option>
+            <option value="09">09 - вересень</option>
+            <option value="10">10 - жовтень</option>
+            <option value="11">11 - листопад</option>
+            <option value="12">12 - грудень</option>
+        </select> <select name="ccExpireYear" class="paymentshortfield">
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Код безпеки</td>
+        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
+    </tr>
+</table>
+'
+, 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 
 
 
@@ -913,6 +1091,56 @@ VALUES (181, 'payPalNvpPaymentGateway',
 , 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
 
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (182, 'payPalNvpPaymentGateway', 'name_uk', 'PayPal NVP',  'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (183, 'payPalNvpPaymentGateway',
+'htmlForm_uk',
+'
+<table>
+    <tr>
+        <td>Тип карти</td>
+        <td><select name="ccType" class="paymentlongfield">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Номер карти</td>
+        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
+    </tr>
+    <tr>
+        <td>Термін дії</td>
+        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            <option value="01">01 - січень</option>
+            <option value="02">02 - лютий</option>
+            <option value="03">03 - березень</option>
+            <option value="04">04 - квітень</option>
+            <option value="05">05 - травень</option>
+            <option value="06">06 - червень</option>
+            <option value="07">07 - липень</option>
+            <option value="08">08 - серпень</option>
+            <option value="09">09 - вересень</option>
+            <option value="10">10 - жовтень</option>
+            <option value="11">11 - листопад</option>
+            <option value="12">12 - грудень</option>
+        </select> <select name="ccExpireYear" class="paymentshortfield">
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Код безпеки</td>
+        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
+    </tr>
+</table>
+'
+, 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
+
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -967,6 +1195,9 @@ VALUES (209, 'authorizeNetSimPaymentGateway', 'name_en', 'Authorize.net SIM', 'G
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (210, 'authorizeNetSimPaymentGateway', 'name_ru', 'Authorize.net SIM', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (211, 'authorizeNetSimPaymentGateway', 'name_uk', 'Authorize.net SIM', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
 
 
 
@@ -1035,5 +1266,8 @@ VALUES (229, 'payPalExpressPaymentGateway', 'name_en', 'PayPal Express', 'Gatewa
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (230, 'payPalExpressPaymentGateway', 'name_ru', 'PayPal Express', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (231, 'payPalExpressPaymentGateway', 'name_uk', 'PayPal Express', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
 
 

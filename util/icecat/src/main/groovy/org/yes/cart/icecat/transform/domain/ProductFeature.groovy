@@ -30,7 +30,7 @@ import org.yes.cart.icecat.transform.Util
  class ProductFeature {
 
      String Value
-     Map<String,String> PresentationValue = new HashMap<String, String>();
+     Map<String,String> PresentationValue = new TreeMap<String, String>();
      Feature feature
 
      public String getPresentationValueFor(String lang) {

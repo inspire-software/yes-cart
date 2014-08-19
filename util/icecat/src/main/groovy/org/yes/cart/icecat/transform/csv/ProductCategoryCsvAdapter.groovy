@@ -46,7 +46,7 @@ class ProductCategoryCsvAdapter {
                 builder.append(pp.Product_ID_valid).append('";"')
                 builder.append(Util.escapeCSV(pp.Model_Name)).append('";"')
                 builder.append(cat.id).append('";"')
-                builder.append(Util.escapeCSV(cat.getNameFor('def'))).append('"\n')
+                builder.append(Util.escapeCSV(cat.getNameFor('en'))).append('"\n')
             }
         }
         new File(filename).write(builder.toString(), 'UTF-8');

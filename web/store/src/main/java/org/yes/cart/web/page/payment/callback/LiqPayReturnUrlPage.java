@@ -64,10 +64,10 @@ public class LiqPayReturnUrlPage  extends AbstractWebPage {
             final CustomerOrder order = checkoutServiceFacade.findByGuid(cart.getGuid());
             if (order != null) {
                 if (CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus())) {
-                    error(getLocalizer().getString("order.error.cancelled", this));
+                    error(getLocalizer().getString("orderErrorCancelled", this));
                 } else {
                     if (checkoutServiceFacade.isOrderPaymentSuccessful(order)) {
-                        info(getLocalizer().getString("order.success", this));
+                        info(getLocalizer().getString("orderSuccess", this));
                     }
                 }
                 getShoppingCartCommandFactory().execute(cart,
@@ -77,10 +77,10 @@ public class LiqPayReturnUrlPage  extends AbstractWebPage {
                         ));
 
             } else {
-                error(getLocalizer().getString("order.error.not.found", this));
+                error(getLocalizer().getString("orderErrorNotFound", this));
             }
         } else {
-            error(getLocalizer().getString("order.error.not.found", this));
+            error(getLocalizer().getString("orderErrorNotFound", this));
         }
 
         super.onBeforeRender();

@@ -31,6 +31,16 @@ import org.yes.cart.icecat.transform.Util
  */
 class Category {
 
+    static Map<String, String> URI_MAP = new HashMap<String, String>() {{
+        put("151", "notebooks");
+        put("195", "mice");
+        put("194", "keyboards");
+        put("153", "pc");
+        put("932", "data-storage");
+        put("156", "servers");
+        put("897", "tablet-pc");
+    }};
+
     String parentCategoryid;
     String id;
     String lowPic;
@@ -40,14 +50,22 @@ class Category {
     String UNCATID;
     String visible;
 
-    Map<String, String> description = new HashMap<String, String>();
-    Map<String, String> keywords = new HashMap<String, String>();
-    Map<String, String> name = new HashMap<String, String>();
+    Map<String, String> description = new TreeMap<String, String>();
+    Map<String, String> keywords = new TreeMap<String, String>();
+    Map<String, String> name = new TreeMap<String, String>();
 
     List<ProductPointer> productPointer = new ArrayList<ProductPointer>();
-    Map<String, Product> product = new HashMap<String, Product>();
+    Map<String, Product> product = new TreeMap<String, Product>();
 
     List<CategoryFeatureGroup> categoryFeatureGroup = new ArrayList<CategoryFeatureGroup>();
+
+    public String getURI() {
+        String uri = URI_MAP.get(id);
+        if (uri == null) {
+            return id;
+        }
+        return uri;
+    }
 
     public String getNameFor(String lang) {
         def name = Util.getLocalisedValue(this, "name", lang);

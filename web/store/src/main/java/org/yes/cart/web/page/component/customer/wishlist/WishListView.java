@@ -113,7 +113,7 @@ public class WishListView extends AbstractProductSearchResultList {
 
         showRemoveLink = ApplicationDirector.getShoppingCart().getCustomerEmail().equals(customerEmail.getObject());
 
-        addOrReplace(new Label("noProducts", new StringResourceModel("wishlist.no.items", this, null)).setVisible(getProductListToShow().isEmpty()));
+        addOrReplace(new Label("noProducts", new StringResourceModel("wishlistNoItems", this, null)).setVisible(getProductListToShow().isEmpty()));
         super.onBeforeRender();
     }
 
@@ -200,14 +200,14 @@ public class WishListView extends AbstractProductSearchResultList {
         listItem.add(
                 links.newAddToCartLink("addToCardFromWishListLink", product.getDefaultSkuCode(), qty, params)
                         .add(new Label("addToCardFromWishListLinkLabel", pam.isInStock() || pam.isPerpetual() ?
-                                getLocalizer().getString("add.to.cart", this, new Model<Serializable>(new String[] { qty })) :
-                                getLocalizer().getString("preorder.cart", this, new Model<Serializable>(new String[] { qty }))))
+                                getLocalizer().getString("addToCartWlBtn", this, new Model<Serializable>(new String[] { qty })) :
+                                getLocalizer().getString("preorderCartWlBtn", this, new Model<Serializable>(new String[] { qty }))))
                         .setVisible(pam.isAvailable())
         );
 
         listItem.add(
                 links.newRemoveFromWishListLink("removeFromWishListLink", product.getDefaultSkuCode(), itemData.getCustomerwishlistId(), (Class) getPage().getClass(), null)
-                        .add(new Label("removeFromWishListLinkLabel", getLocalizer().getString("remove.from.wishlist", this))
+                        .add(new Label("removeFromWishListLinkLabel", getLocalizer().getString("removeFromWishlist", this))
                                 .setVisible(showRemoveLink))
         );
 

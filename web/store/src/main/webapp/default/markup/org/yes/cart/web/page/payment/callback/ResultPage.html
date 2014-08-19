@@ -20,6 +20,7 @@
 <wicket:head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <meta name="google-site-verification" content="rHZLga_ppoOy7iVYFQgRVDZOLa7fuT7cGs2t8TY4m6c" />
+    <meta name="robots" content="noindex" />
     <wicket:link>
         <script type="text/javascript" src="../../../../../../../js/jquery.min.js"></script>
         <!--[if lt IE 9]>
@@ -39,8 +40,6 @@
     <title wicket:id="pageTitle">[page title]</title>
     <meta wicket:id="description" name="description" content=""/>
     <meta wicket:id="keywords" name="keywords" content=""/>
-    <meta wicket:id="created" name="date" content=""/>
-
 </wicket:head>
 
 <body>
@@ -50,7 +49,7 @@
 
     <div class="grid-100 mobile-grid-100 grid-parent">
             <p>
-                <wicket:message key="pageTitle">[page title]</wicket:message>
+                <wicket:message key="resultPageTitle">[page title]</wicket:message>
             </p>
     </div>
 
@@ -83,7 +82,7 @@
         <div class="grid-70 mobile-grid-100 grid-parent">
             <p>
                 <wicket:link>
-                    <a href="HomePage.html">
+                    <a href="HomePage.html" rel="bookmark">
                         <wicket:message key="home"> [Login Or Registration]</wicket:message>
                     </a>
                 </wicket:link>
