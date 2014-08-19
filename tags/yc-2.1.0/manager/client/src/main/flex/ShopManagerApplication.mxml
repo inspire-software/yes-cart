@@ -1,0 +1,999 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+                xmlns:controls="controls.*"
+                usePreloader="true"
+                layout="absolute"
+                minWidth="800"
+                minHeight="600"
+                creationComplete="init();"
+                creationCompleteEffect="Zoom">
+
+    <mx:Script>
+		<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.collections.ArrayCollection;
+
+        import mx.controls.Alert;
+        import mx.controls.Text;
+        import mx.core.Container;
+        import mx.core.IVisualElement;
+        import mx.events.IndexChangedEvent;
+        import mx.messaging.channels.SecureAMFChannel;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+        import mx.utils.URLUtil;
+
+        import org.yes.cart.filter.InventoryFilter;
+        import org.yes.cart.filter.PriceListFilter;
+
+        import org.yes.cart.impl.AddressDTOImpl;
+        import org.yes.cart.impl.AssociationDTOImpl;
+        import org.yes.cart.impl.AttrValueBrandDTOImpl;
+        import org.yes.cart.impl.AttrValueCategoryDTOImpl;
+        import org.yes.cart.impl.AttrValueCustomerDTOImpl;
+        import org.yes.cart.impl.AttrValueProductSkuDTOImpl;
+        import org.yes.cart.impl.AttrValueShopDTOImpl;
+        import org.yes.cart.impl.AttrValueSystemDTOImpl;
+        import org.yes.cart.impl.AttributeDTOImpl;
+        import org.yes.cart.impl.BrandDTOImpl;
+        import org.yes.cart.impl.CarrierDTOImpl;
+        import org.yes.cart.impl.CarrierSlaDTOImpl;
+        import org.yes.cart.impl.CategoryDTOImpl;
+        import org.yes.cart.impl.CustomerDTOImpl;
+        import org.yes.cart.impl.CustomerOrderDTOImpl;
+        import org.yes.cart.impl.CustomerOrderDeliveryDTOImpl;
+        import org.yes.cart.impl.CustomerOrderDeliveryDetailDTOImpl;
+        import org.yes.cart.impl.InventoryDTOImpl;
+        import org.yes.cart.impl.JobStatusImpl;
+        import org.yes.cart.impl.PriceListDTOImpl;
+        import org.yes.cart.impl.ProdTypeAttributeViewGroupDTOImpl;
+        import org.yes.cart.impl.ProductAssociationDTOImpl;
+        import org.yes.cart.impl.ProductCategoryDTOImpl;
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.ProductSkuDTOImpl;
+        import org.yes.cart.impl.ProductTypeAttrDTOImpl;
+        import org.yes.cart.impl.ProductTypeDTOImpl;
+        import org.yes.cart.impl.PromotionCouponDTOImpl;
+        import org.yes.cart.impl.PromotionDTOImpl;
+        import org.yes.cart.impl.SeoDTOImpl;
+        import org.yes.cart.impl.SeoImageDTOImpl;
+
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.impl.ShopExchangeRateDTOImpl;
+        import org.yes.cart.impl.ShopUrlDTOImpl;
+        import org.yes.cart.impl.SkuPriceDTOImpl;
+        import org.yes.cart.impl.SkuWarehouseDTOImpl;
+        import org.yes.cart.impl.StateDTOImpl;
+        import org.yes.cart.impl.WarehouseDTOImpl;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.attributes.AttributesManagementPanel;
+        import org.yes.cart.ui.attributes.SystemAttributesPanel;
+        import org.yes.cart.ui.brand.BrandManagementPanel;
+        import org.yes.cart.ui.bulkimport.BulkImportPanel;
+        import org.yes.cart.ui.carrier.CarrierManagementPanel;
+        import org.yes.cart.ui.category.CategoryManagementPanel;
+        import org.yes.cart.ui.content.ContentManagementPanel;
+        import org.yes.cart.ui.customer.CustomerManagementPanel;
+        import org.yes.cart.ui.location.LocationManagementPanel;
+        import org.yes.cart.ui.monitoring.ClusterPanel;
+        import org.yes.cart.ui.monitoring.MonitoringPanel;
+        import org.yes.cart.ui.order.OrdersManagementPanel;
+        import org.yes.cart.ui.payment.PaymentGateConfigManagementPanel;
+        import org.yes.cart.ui.payment.PaymentManagementPanel;
+        import org.yes.cart.ui.price.PriceListManagementPanel;
+        import org.yes.cart.ui.product.ProductManagementPanel;
+        import org.yes.cart.ui.producttype.ProductTypeManagementPanel;
+        import org.yes.cart.ui.promotion.PromotionManagementPanel;
+        import org.yes.cart.ui.reindex.ReindexPanel;
+        import org.yes.cart.ui.report.ReportPanel;
+        import org.yes.cart.ui.role.RoleManagementPanel;
+        import org.yes.cart.ui.store.StoresManagementPanel;
+        import org.yes.cart.ui.tools.QueryPanel;
+        import org.yes.cart.ui.user.UserManagementPanel;
+        import org.yes.cart.ui.warehouse.InventoryManagementPanel;
+        import org.yes.cart.ui.warehouse.WarehouseManagementPanel;
+
+        private var shopManagerGlobal:ShopManagerGlobal;
+
+        private const contentMenu:int = 2;
+        private const storeMenu:int = 7;
+
+        private var currentIndex:Number;
+        private var shops:Object;
+
+        private var panelCache:Object = {};
+
+        public function init():void {
+            currentState = "loginState";
+
+            /*
+             * Registering RMI classes by hand is more robust than annotations, since annotations
+             * only work if DTO class is directly referenced in components (i.e. imported).
+             * With this mapping it is not necessary.
+             */
+            registerClassAlias("org.yes.cart.domain.dto.impl.AddressDTOImpl", AddressDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AssociationDTOImpl", AssociationDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttributeDTOImpl", AttributeDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueBrandDTOImpl", AttrValueBrandDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl", AttrValueCategoryDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl", AttrValueCustomerDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueProductSkuDTOImpl", AttrValueProductSkuDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueShopDTOImpl", AttrValueShopDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.AttrValueSystemDTOImpl", AttrValueSystemDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.BrandDTOImpl", BrandDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CarrierDTOImpl", CarrierDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CarrierSlaDTOImpl", CarrierSlaDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CategoryDTOImpl", CategoryDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CustomerDTOImpl", CustomerDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl", CustomerOrderDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl", CustomerOrderDeliveryDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl", CustomerOrderDeliveryDetailDTOImpl);
+            registerClassAlias("org.yes.cart.service.async.model.impl.JobStatusImpl", JobStatusImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl", ProdTypeAttributeViewGroupDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl", ProductAssociationDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProductCategoryDTOImpl", ProductCategoryDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProductDTOImpl", ProductDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProductSkuDTOImpl", ProductSkuDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProductTypeAttrDTOImpl", ProductTypeAttrDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ProductTypeDTOImpl", ProductTypeDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.SeoDTOImpl", SeoDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.SeoImageDTOImpl", SeoImageDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ShopDTOImpl", ShopDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ShopUrlDTOImpl", ShopUrlDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.ShopExchangeRateDTOImpl", ShopExchangeRateDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.SkuPriceDTOImpl", SkuPriceDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.PriceListDTOImpl", PriceListDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.SkuWarehouseDTOImpl", SkuWarehouseDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.InventoryDTOImpl", InventoryDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.StateDTOImpl", StateDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.WarehouseDTOImpl", WarehouseDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.PromotionDTOImpl", PromotionDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.PromotionCouponDTOImpl", PromotionCouponDTOImpl);
+
+            registerClassAlias("org.yes.cart.service.dto.support.impl.InventoryFilterImpl", InventoryFilter);
+            registerClassAlias("org.yes.cart.service.dto.support.impl.PriceListFilterImpl", PriceListFilter);
+
+
+            channelSet.removeChannel(myamf);
+            var url:String;
+            if (this.url && (this.url.indexOf("file:/") != -1 )) { //local connection
+                // When running standalone (e.g. from IDEA) make sure transport-guarantee is NONE in web.xml
+                url = "http://localhost:8080/yes-manager/spring/amf";
+                myamf = new AMFChannel("myamf", url);
+            } else if (this.url && (this.url.indexOf("http:/") != -1 )) {
+                url = "http://{server.name}:{server.port}/yes-manager/spring/amf";
+                myamf = new AMFChannel("myamf", url);
+            } else {
+                url = "https://{server.name}:{server.port}/yes-manager/spring/amf";
+                myamf = new SecureAMFChannel("myamf", url);
+            }
+
+            ShopManagerGlobal.instance.url = url;
+
+
+            channelSet.addChannel(myamf);
+
+            // If there is troubles with channels uncomment this to see the url
+            // Also make sure crossdomain.xml is accessible at the root
+            // Alert.show("URL is '" + this.url + "', url is '" + url + "', channel is '" + myamf.url + "'");
+
+        }
+
+
+        private function cheatLogin():void {
+            username.text = "admin@yes-cart.com";
+            password.text = "1234567";
+            login();
+        }
+
+        private function login():void {
+
+            currentState = "inProgressState";
+            ShopManagerGlobal.instance.username = username.text;
+
+            ShopManagerGlobal.instance.password = password.text;
+
+            var token:AsyncToken = channelSet.login(
+                    username.text,
+                    password.text);
+            token.addResponder(new AsyncResponder(loginResult, loginFault));
+        }
+
+        private function loginResult(event:ResultEvent, token:AsyncToken):void {
+            ShopManagerGlobal.instance.amfChannel = myamf;
+            ShopManagerGlobal.instance.channelSet = channelSet;
+            currentState = "userAuthenticated";
+            /*This call pass  the password to flex session, because after new spring security impossible to
+             * get user credentials using FlexContext.getUserPrincipal()).getCredentials() on java side.*/
+            remoteFlexSupportService.setSessionInfo("pwd", password.text);
+
+        }
+
+        private function loginFault(event:FaultEvent, token:AsyncToken):void {
+            invalidLogin = true;
+            currentState = "loginState";
+            var msg:String = resourceManager.getString('ShopManagerApplication', 'loginFailedMsg',
+                    [ ShopManagerGlobal.instance.url, ShopManagerGlobal.instance.username, event.fault.message ]);
+            var title:String = resourceManager.getString('ShopManagerApplication', 'loginFailedTitle');
+            Debug.trace(msg);
+            Alert.show(msg, title);
+
+        }
+
+        private function showMainPanelSection(section:IVisualElement):void {
+            for each (var child:IVisualElement in mainPanel.getChildren()) {
+                child.visible = false;
+                child.includeInLayout = false;
+            }
+            section.includeInLayout = true;
+            section.visible = true;
+        }
+
+        private function onReindexClick(event:MouseEvent):void {
+            setFontWeight(reindexBtn);
+            if (!panelCache.hasOwnProperty('ReindexPanel')) {
+                panelCache['ReindexPanel'] = new ReindexPanel();
+                mainPanel.addChild(panelCache['ReindexPanel']);
+            }
+            showMainPanelSection(panelCache['ReindexPanel']);
+
+        }
+
+        private function onConfigurePaymentGatewayClick(event:MouseEvent):void {
+            setFontWeight(paymengwBtn);
+            if (!panelCache.hasOwnProperty('PaymentGateConfigManagementPanel')) {
+                panelCache['PaymentGateConfigManagementPanel'] = new PaymentGateConfigManagementPanel();
+                mainPanel.addChild(panelCache['PaymentGateConfigManagementPanel']);
+            }
+            showMainPanelSection(panelCache['PaymentGateConfigManagementPanel']);
+        }
+
+        private function onReportClick(event:MouseEvent):void {
+            setFontWeight(reportBtn);
+            if (!panelCache.hasOwnProperty('ReportPanel')) {
+                panelCache['ReportPanel'] = new ReportPanel();
+                mainPanel.addChild(panelCache['ReportPanel']);
+            }
+            showMainPanelSection(panelCache['ReportPanel']);
+        }
+
+        private function onHelpClick(event:MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('ShopManagerApplication', 'revLabel') + resourceManager.getString('ShopManagerApplication', 'rev') + "\n" +
+                            resourceManager.getString('ShopManagerApplication', 'revDateLabel') + resourceManager.getString('ShopManagerApplication', 'revDate') + "\n" +
+                            resourceManager.getString('ShopManagerApplication', 'buildDateLabel') + resourceManager.getString('ShopManagerApplication', 'buildDate') + "\n",
+                    resourceManager.getString('ShopManagerApplication', 'info')
+            );
+        }
+
+        private function onHelpURLClick(event:MouseEvent):void {
+            navigateToURL(new URLRequest("http://www.yes-cart.org"), "_help");
+        }
+
+        private function onImportClick(event:MouseEvent):void {
+            setFontWeight(importBtn);
+            if (!panelCache.hasOwnProperty('BulkImportPanel')) {
+                var panel:BulkImportPanel = new BulkImportPanel();
+                panel.importCompletedListener = function():void {
+                    // Need to clear all panels to prevent "old" data in panels
+                    panelCache = {};
+                    panelCache['BulkImportPanel'] = panel;
+                };
+                panelCache['BulkImportPanel'] = panel;
+                mainPanel.addChild(panelCache['BulkImportPanel']);
+            }
+            showMainPanelSection(panelCache['BulkImportPanel']);
+        }
+
+        private function onLocationManagementClick(event:MouseEvent):void {
+            setFontWeight(locationsBtn);
+            if (!panelCache.hasOwnProperty('LocationManagementPanel')) {
+                panelCache['LocationManagementPanel'] = new LocationManagementPanel();
+                mainPanel.addChild(panelCache['LocationManagementPanel']);
+            }
+            showMainPanelSection(panelCache['LocationManagementPanel']);
+        }
+
+        private function onCarriersManagementClick(event:MouseEvent):void {
+            setFontWeight(carriersBtn);
+            if (!panelCache.hasOwnProperty('CarrierManagementPanel')) {
+                panelCache['CarrierManagementPanel'] = new CarrierManagementPanel();
+                mainPanel.addChild(panelCache['CarrierManagementPanel']);
+            }
+            showMainPanelSection(panelCache['CarrierManagementPanel']);
+        }
+
+        private function onAttributesManagementClick(event:MouseEvent):void {
+            setFontWeight(attributesBtn);
+            if (!panelCache.hasOwnProperty('AttributesManagementPanel')) {
+                panelCache['AttributesManagementPanel'] = new AttributesManagementPanel();
+                mainPanel.addChild(panelCache['AttributesManagementPanel']);
+            }
+            showMainPanelSection(panelCache['AttributesManagementPanel']);
+        }
+
+        private function onUserManagementClick(event:MouseEvent):void {
+            setFontWeight(userBtn);
+            if (!panelCache.hasOwnProperty('UserManagementPanel')) {
+                panelCache['UserManagementPanel'] = new UserManagementPanel();
+                mainPanel.addChild(panelCache['UserManagementPanel']);
+            }
+            showMainPanelSection(panelCache['UserManagementPanel']);
+        }
+
+        private function onRoleManagementClick(event:MouseEvent):void {
+            setFontWeight(rolesBtn);
+            if (!panelCache.hasOwnProperty('RoleManagementPanel')) {
+                panelCache['RoleManagementPanel'] = new RoleManagementPanel();
+                mainPanel.addChild(panelCache['RoleManagementPanel']);
+            }
+            showMainPanelSection(panelCache['RoleManagementPanel']);
+        }
+
+        private function onStoreManagementClick(event:MouseEvent):void {
+            setFontWeight(event.target as LinkButton);
+
+            var shop:ShopDTOImpl = this.shops[(event.target as LinkButton).id];
+            var key:String = 'StoresManagementPanel' + shop.code;
+            if (!panelCache.hasOwnProperty(key)) {
+                var panel:StoresManagementPanel = new StoresManagementPanel();
+                panel.shopDTOImpl = shop;
+                panel.title = shop.name;
+                panelCache[key] = panel;
+                mainPanel.addChild(panelCache[key]);
+            }
+            showMainPanelSection(panelCache[key]);
+        }
+
+        private function onContentManagementClick(event:MouseEvent):void {
+            setFontWeight(event.target as LinkButton);
+
+            var shop:ShopDTOImpl = this.shops[(event.target as LinkButton).id];
+            var key:String = 'ContentManagementPanel' + shop.code;
+            if (!panelCache.hasOwnProperty(key)) {
+                var panel:ContentManagementPanel = new ContentManagementPanel();
+                panel.shopDTOImpl = shop;
+                panelCache[key] = panel;
+                mainPanel.addChild(panelCache[key]);
+            }
+            showMainPanelSection(panelCache[key]);
+        }
+
+        private function onNewStoreClick(event:MouseEvent):void {
+            setFontWeight(event.target as LinkButton);
+            if (panelCache.hasOwnProperty('StoresManagementPanel')) {
+                mainPanel.removeChild(panelCache['StoresManagementPanel']);
+            }
+            var newShop:ShopDTOImpl = new ShopDTOImpl();
+            var panel:StoresManagementPanel = new StoresManagementPanel();
+            panel.shopDTOImpl = newShop;
+            panel.newShopCallBack = function(shop:ShopDTOImpl):void {
+                shops['shop_' + shop.shopId] = shop;
+                onInitStoresButtons(storesButtons, 'storesBtn', onStoreManagementClick);
+            };
+            panelCache['StoresManagementPanel'] = panel;
+            mainPanel.addChild(panelCache['StoresManagementPanel']);
+            showMainPanelSection(panelCache['StoresManagementPanel']);
+        }
+
+        private function onWarehouseManagementClick(event:MouseEvent):void {
+            setFontWeight(warehouseBtn);
+            if (!panelCache.hasOwnProperty('WarehouseManagementPanel')) {
+                panelCache['WarehouseManagementPanel'] = new WarehouseManagementPanel();
+                mainPanel.addChild(panelCache['WarehouseManagementPanel']);
+            }
+            showMainPanelSection(panelCache['WarehouseManagementPanel']);
+        }
+
+        private function onCategoryManagementClick(event:MouseEvent):void {
+            setFontWeight(categoryBtn);
+            if (!panelCache.hasOwnProperty('CategoryManagementPanel')) {
+                panelCache['CategoryManagementPanel'] = new CategoryManagementPanel();
+                mainPanel.addChild(panelCache['CategoryManagementPanel']);
+            }
+            showMainPanelSection(panelCache['CategoryManagementPanel']);
+        }
+
+        private function onBrandManagementClick(event:MouseEvent):void {
+            setFontWeight(brandBtn);
+            if (!panelCache.hasOwnProperty('BrandManagementPanel')) {
+                panelCache['BrandManagementPanel'] = new BrandManagementPanel();
+                mainPanel.addChild(panelCache['BrandManagementPanel']);
+            }
+            showMainPanelSection(panelCache['BrandManagementPanel']);
+        }
+
+        private function onPreferencesClick(event:MouseEvent):void {
+            setFontWeight(prefsBtn);
+            if (!panelCache.hasOwnProperty('SystemAttributesPanel')) {
+                panelCache['SystemAttributesPanel'] = new SystemAttributesPanel();
+                mainPanel.addChild(panelCache['SystemAttributesPanel']);
+            }
+            showMainPanelSection(panelCache['SystemAttributesPanel']);
+        }
+
+        private function onQueryDataClick(event:MouseEvent):void {
+            setFontWeight(sqlBtn);
+            if (!panelCache.hasOwnProperty('QueryPanel')) {
+                panelCache['QueryPanel'] = new QueryPanel();
+                mainPanel.addChild(panelCache['QueryPanel']);
+            }
+            showMainPanelSection(panelCache['QueryPanel']);
+        }
+
+        private function onMonitoringClick(event:MouseEvent):void {
+            setFontWeight(monitoringBtn);
+            if (!panelCache.hasOwnProperty('MonitoringPanel')) {
+                panelCache['MonitoringPanel'] = new MonitoringPanel();
+                mainPanel.addChild(panelCache['MonitoringPanel']);
+            }
+            showMainPanelSection(panelCache['MonitoringPanel']);
+        }
+
+        private function onClusterClick(event:MouseEvent):void {
+            setFontWeight(clusterBtn);
+            if (!panelCache.hasOwnProperty('ClusterPanel')) {
+                panelCache['ClusterPanel'] = new ClusterPanel();
+                mainPanel.addChild(panelCache['ClusterPanel']);
+            }
+            showMainPanelSection(panelCache['ClusterPanel']);
+        }
+
+        private function onProductTypesManagementClick(event:MouseEvent):void {
+            setFontWeight(productTypesBtn);
+            if (!panelCache.hasOwnProperty('ProductTypeManagementPanel')) {
+                panelCache['ProductTypeManagementPanel'] = new ProductTypeManagementPanel();
+                mainPanel.addChild(panelCache['ProductTypeManagementPanel']);
+            }
+            showMainPanelSection(panelCache['ProductTypeManagementPanel']);
+        }
+
+        private function onProductManagementClick(event:MouseEvent):void {
+            setFontWeight(productsBtn);
+            if (!panelCache.hasOwnProperty('ProductManagementPanel')) {
+                panelCache['ProductManagementPanel'] = new ProductManagementPanel();
+                mainPanel.addChild(panelCache['ProductManagementPanel']);
+            }
+            showMainPanelSection(panelCache['ProductManagementPanel']);
+        }
+
+        private function onPriceManagementClick(event:MouseEvent):void {
+            setFontWeight(pricesBtn);
+            if (!panelCache.hasOwnProperty('PriceListManagementPanel')) {
+                panelCache['PriceListManagementPanel'] = new PriceListManagementPanel();
+                mainPanel.addChild(panelCache['PriceListManagementPanel']);
+            }
+            showMainPanelSection(panelCache['PriceListManagementPanel']);
+        }
+
+        private function onPromotionsManagementClick(event:MouseEvent):void {
+            setFontWeight(promoBtn);
+            if (!panelCache.hasOwnProperty('PromotionManagementPanel')) {
+                panelCache['PromotionManagementPanel'] = new PromotionManagementPanel();
+                mainPanel.addChild(panelCache['PromotionManagementPanel']);
+            }
+            showMainPanelSection(panelCache['PromotionManagementPanel']);
+        }
+
+        private function onCustomerManagementClick(event:MouseEvent):void {
+            setFontWeight(customersBtn);
+            if (!panelCache.hasOwnProperty('CustomerManagementPanel')) {
+                panelCache['CustomerManagementPanel'] = new CustomerManagementPanel();
+                mainPanel.addChild(panelCache['CustomerManagementPanel']);
+            }
+            showMainPanelSection(panelCache['CustomerManagementPanel']);
+        }
+
+        private function onOrderManagementClick(event:MouseEvent):void {
+            setFontWeight(ordersBtn);
+            if (!panelCache.hasOwnProperty('OrdersManagementPanel')) {
+                panelCache['OrdersManagementPanel'] = new OrdersManagementPanel();
+                mainPanel.addChild(panelCache['OrdersManagementPanel']);
+            }
+            showMainPanelSection(panelCache['OrdersManagementPanel']);
+        }
+
+        private function userNameOrPasswordChanged(event:Event):void {
+            loginButtonEnabled = (username.text != null && username.text.length > 5)
+                    && (password.text != null && password.text.length > 6);
+        }
+
+        private function setFontWeight(src:LinkButton):void {
+
+            for each (var child:Object in  mainAccordion.getChildren()) {
+                if (child is Canvas) {
+                    var cnv:Canvas = child as Canvas;
+                    Debug.trace("len 2 =" + cnv.getChildren().length);
+                    for each(var vbox:Object in cnv.getChildren()) {
+                        if (vbox is VBox) {
+                            for each(var linkBtn:Object in (vbox as VBox).getChildren()) {
+                                if (linkBtn is LinkButton) {
+                                    (linkBtn as LinkButton).setStyle("fontWeight", "normal");
+                                    (linkBtn as LinkButton).setStyle("fontSize", "12");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            src.setStyle("fontSize", "14");
+            src.setStyle("fontWeight", "bold");
+
+        }
+
+
+        private function onInventoryManagementClick(event:MouseEvent):void {
+            setFontWeight(inventoryBtn);
+            if (!panelCache.hasOwnProperty('InventoryManagementPanel')) {
+                panelCache['InventoryManagementPanel'] = new InventoryManagementPanel();
+                mainPanel.addChild(panelCache['InventoryManagementPanel']);
+            }
+            showMainPanelSection(panelCache['InventoryManagementPanel']);
+        }
+
+        private function onPaymentsManagementClick(event:MouseEvent):void {
+            setFontWeight(paymentsBtn);
+            if (!panelCache.hasOwnProperty('PaymentManagementPanel')) {
+                panelCache['PaymentManagementPanel'] = new PaymentManagementPanel();
+                mainPanel.addChild(panelCache['PaymentManagementPanel']);
+            }
+            showMainPanelSection(panelCache['PaymentManagementPanel']);
+        }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGetAllShopsResult(event:ResultEvent):void {
+
+            this.shops = {};
+            for each (var shop:ShopDTOImpl in event.result) {
+                this.shops['shop_' + shop.shopId] = shop;
+            }
+
+            if (this.currentIndex == storeMenu) {
+                this.onInitStoresButtons(storesButtons, 'storesBtn', onStoreManagementClick);
+            } else if (this.currentIndex == contentMenu) {
+                this.onInitStoresButtons(contentButtons, '-', onContentManagementClick);
+            }
+
+        }
+
+        private function onInitStoresButtons(buttonBox:Container, createButtonId:String, clickFunction:Function):void {
+            var tempArray:ArrayCollection = new ArrayCollection(buttonBox.getChildren());
+            for each (var oldShopButton:Object in tempArray) {
+                if (oldShopButton is LinkButton) {
+                    var oldButton:LinkButton = oldShopButton as LinkButton;
+                    if (oldButton.id == createButtonId) {
+                        continue; // do not remove the create button
+                    }
+                    oldButton.removeEventListener(MouseEvent.CLICK, clickFunction);
+                    buttonBox.removeChild(oldButton);
+                }
+            }
+
+            var storeButtonIndex:int = 1; // 0th is the spacer
+            for (var shopId:String in this.shops) {
+                var shop:ShopDTOImpl = this.shops[shopId];
+                var shopButton:LinkButton = new LinkButton();
+                shopButton.label = shop.name + ' (' + shop.code + ')';
+                shopButton.id = shopId;
+                shopButton.addEventListener(MouseEvent.CLICK, clickFunction);
+                shopButton.percentWidth = 100;
+                buttonBox.addChildAt(shopButton, storeButtonIndex++);
+            }
+
+        }
+
+        private function onMainAccordionChange(event:IndexChangedEvent):void {
+            this.currentIndex = event.newIndex;
+            if (event.newIndex == storeMenu || event.newIndex == contentMenu) {
+                remoteShopService.getAll(); // reload buttons
+            }
+        }
+        ]]>
+	</mx:Script>
+
+    <mx:Boolean id="invalidLogin">false</mx:Boolean>
+    <mx:Boolean id="loginButtonEnabled">false</mx:Boolean>
+
+    <mx:AMFChannel xmlns:mx="http://www.adobe.com/2006/mxml"
+                   id="myamf"/>
+
+    <mx:ChannelSet id="channelSet" channels="{[myamf]}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteFlexSupportService"
+                     destination="remoteFlexSupportService"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
+                     destination="remoteShopService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllShops" name="getAll"
+                   result="onGetAllShopsResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+
+    </mx:RemoteObject>
+
+
+    <mx:states>
+        <mx:State name="inProgressState">
+            <mx:RemoveChild target="{loginPanel}"/>
+            <mx:AddChild>
+                <mx:target>
+                    <mx:Box width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" id="inProgress">
+                        <controls:Spinner id="spinner" size="75" numTicks="20" tickWidth="5" speed="1000"
+                                          fadeSpeed="800" tickColor="#0066FF"/>
+                    </mx:Box>
+                </mx:target>
+            </mx:AddChild>
+        </mx:State>
+        <mx:State name="loginState">
+            <mx:RemoveChild target="{mainFrame}"/>
+            <mx:RemoveChild target="{inProgress}"/>
+            <mx:AddChild>
+                <mx:target>
+                    <!-- Login Form -->
+                    <mx:VBox horizontalAlign="center" verticalAlign="middle" height="100%" width="100%" id="loginPanel">
+                        <mx:HBox horizontalAlign="center" verticalAlign="middle" height="100%" width="100%">
+                            <mx:Panel title="@Resource(bundle='ShopManagerApplication',key='loginFormTitle')">
+                                <mx:Label text="@Resource(bundle='ShopManagerApplication',key='loginFormInvalidUser')"
+                                          includeInLayout="{invalidLogin}" visible="{invalidLogin}"/>
+                                <mx:Form defaultButton="{loginButton}">
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='ShopManagerApplication',key='loginFormUsername')">
+                                        <mx:TextInput id="username" change="userNameOrPasswordChanged(event)"/>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='ShopManagerApplication',key='loginFormPassword')">
+                                        <mx:TextInput id="password" displayAsPassword="true"
+                                                      change="userNameOrPasswordChanged(event)"/>
+                                    </mx:FormItem>
+                                </mx:Form>
+                                <mx:ControlBar horizontalAlign="right">
+                                    <mx:Button id="loginButton"
+                                               label="@Resource(bundle='ShopManagerApplication',key='loginFormLogin')"
+                                               enabled="{loginButtonEnabled}"
+                                               click="login()"/>
+                                    <mx:Button id="cheatLoginButton"
+                                               label="Cheat"
+                                               enabled="true"
+                                               click="cheatLogin()"/>
+                                </mx:ControlBar>
+                            </mx:Panel>
+                        </mx:HBox>
+                    </mx:VBox>
+                </mx:target>
+            </mx:AddChild>
+        </mx:State>
+        <mx:State name="userAuthenticated">
+            <mx:RemoveChild target="{inProgress}"/>
+            <mx:AddChild>
+                <mx:target>
+                    <!-- The main frame -->
+                    <mx:VBox id="mainFrame" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" height="100%" width="100%">
+                        <mx:HDividedBox width="100%" height="100%">
+                            <mx:Accordion id="mainAccordion" width="230" height="100%" change="onMainAccordionChange(event)">
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='customerService')"
+                                           width="100%" height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="ordersBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='orders')"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='ordersHint')"
+                                                       click="onOrderManagementClick(event);"
+                                                />
+                                        <mx:LinkButton width="100%" id="paymentsBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='payment')"
+                                                       click="onPaymentsManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='paymentHint')"
+                                                />
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="customersBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='customers')"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='customersHint')"
+                                                       click="onCustomerManagementClick(event);"
+                                                />
+                                    </mx:VBox>
+                                </mx:Canvas>
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='catalogManagement')"
+                                           toolTip="@Resource(bundle='ShopManagerApplication',key='catalogManagement')"
+                                           width="100%" height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="productsBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='products')"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='productsHint')"
+                                                       click="onProductManagementClick(event)"
+                                                />
+                                        <mx:LinkButton width="100%" id="categoryBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='categories')"
+                                                       click="onCategoryManagementClick(event)"
+                                                />
+                                        <mx:LinkButton width="100%" id="brandBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='brands')"
+                                                       click="onBrandManagementClick(event)"
+                                                />
+
+                                    </mx:VBox>
+                                </mx:Canvas>
+
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='content')" width="100%"
+                                           height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%" id="contentButtons">
+                                        <mx:Spacer height="10"/>
+
+                                    </mx:VBox>
+                                </mx:Canvas>
+
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='marketing')"
+                                           width="100%" height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="pricesBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='productPrices')"
+                                                       click="onPriceManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='productPricesHint')"
+                                                />
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="promoBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='promotions')"
+                                                       click="onPromotionsManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='promotionsHint')"
+                                                />
+
+                                        <!--
+                                          <mx:Spacer height="10"/>
+                                          <mx:LinkButton width="100%" enabled="false" id="catalogPromo"
+                                                          label="@Resource(bundle='ShopManagerApplication',key='catalogPromotion')"
+                                                          click="setFontWeight(catalogPromo); Alert.show('TODO: V2')"
+                                                          toolTip="@Resource(bundle='ShopManagerApplication',key='catalogPromotionyHint')"
+                                                   />
+                                           <mx:LinkButton width="100%" enabled="false" id="cartPromo"
+                                                          label="@Resource(bundle='ShopManagerApplication',key='cartPromotion')"
+                                                          click="setFontWeight(cartPromo); Alert.show('TODO V2')"
+                                                          toolTip="@Resource(bundle='ShopManagerApplication',key='cartPromotionHint')"
+                                                   />
+                                           <mx:LinkButton width="100%" enabled="false" id="dynamicAdvBtn"
+                                                          label="@Resource(bundle='ShopManagerApplication',key='targetedAdvertizement')"
+                                                          click="setFontWeight(dynamicAdvBtn); Alert.show('TODO V2')"
+                                                          toolTip="@Resource(bundle='ShopManagerApplication',key='targetedAdvertizementHint')"
+                                                   />
+                                           <mx:LinkButton width="100%" enabled="false" id="dynamicMediaBtn"
+                                                          label="@Resource(bundle='ShopManagerApplication',key='advertisingMedia')"
+                                                          click="setFontWeight(dynamicMediaBtn); Alert.show('TODO V2')"
+                                                          toolTip="@Resource(bundle='ShopManagerApplication',key='advertisingMediaHint')"
+                                                   />
+                                           <mx:Spacer height="10"/>
+                                           <mx:LinkButton width="100%" enabled="false" id="couponsBtn"
+                                                          label="@Resource(bundle='ShopManagerApplication',key='coupons')"
+                                                          click="setFontWeight(couponsBtn); Alert.show('TODO V2')"
+                                                          toolTip="@Resource(bundle='ShopManagerApplication',key='couponsHint')"
+                                                   /> -->
+                                    </mx:VBox>
+                                </mx:Canvas>
+
+
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='inventoryManagement')"
+                                           width="100%" height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="warehouseBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='warehouses')"
+                                                       click="onWarehouseManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='warehousesHint')"
+                                                />
+                                        <mx:LinkButton width="100%" id="inventoryBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='inventory')"
+                                                       click="onInventoryManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='inventoryHint')"
+                                                />
+                                    </mx:VBox>
+
+
+                                </mx:Canvas>
+
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='reporting')"
+                                           width="100%" height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:Spacer height="10"/>
+
+                                        <mx:LinkButton id="reportBtn" width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='reports')"
+                                                       click="onReportClick(event)"/>
+
+
+                                        <!--
+                         <mx:LinkButton width="100%" id="repoSalesBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoSales')"
+                                        click="setFontWeight(repoSalesBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoTaxBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoTax')"
+                                        click="setFontWeight(repoTaxBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoAbandonedCartBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoAbandonedCart')"
+                                        click="setFontWeight(repoAbandonedCartBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoBestViewvedPRodBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoBestViewvedPRod')"
+                                        click="setFontWeight(repoBestViewvedPRodBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoBestPurchasedBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoBestPurchased')"
+                                        click="setFontWeight(repoBestPurchasedBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoLowStockBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoLowStock')"
+                                        click="setFontWeight(repoLowStockBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoSerachTermsBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoSerachTerms')"
+                                        click="setFontWeight(repoSerachTermsBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoProdReviewBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoProdReview')"
+                                        click="setFontWeight(repoProdReviewBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoCouponBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoCoupon')"
+                                        click="setFontWeight(repoCouponBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoSalesRefundedBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoSalesRefunded')"
+                                        click="setFontWeight(repoSalesRefundedBtn); Alert.show('TODO');"/>
+                         <mx:LinkButton width="100%" id="repoBestCustomerBtn"
+                                        label="@Resource(bundle='ShopManagerApplication',key='repoBestCustomer')"
+                                        click="setFontWeight(repoBestCustomerBtn); Alert.show('TODO');"/>
+                                        -->
+                                    </mx:VBox>
+
+                                </mx:Canvas>
+
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='shipping')"
+                                           width="100%" height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="carriersBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='carrier')"
+                                                       click="onCarriersManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='carrierHint')"
+                                                />
+
+                                        <mx:LinkButton width="100%" id="locationsBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='location')"
+                                                       click="onLocationManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='locationHint')"
+                                                />
+                                    </mx:VBox>
+
+
+                                </mx:Canvas>
+
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='stores')" width="100%"
+                                           height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%" id="storesButtons">
+                                        <mx:Spacer height="10"/>
+
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="storesBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='newStore')"
+                                                       click="onNewStoreClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='newStoresHint')"
+                                                />
+                                    </mx:VBox>
+                                </mx:Canvas>
+
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='employees')"
+                                           width="100%" height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="userBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='userManagement')"
+                                                       click="onUserManagementClick(event)"/>
+                                        <mx:LinkButton width="100%" id="rolesBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='roleManagement')"
+                                                       click="onRoleManagementClick(event)"/>
+                                    </mx:VBox>
+                                </mx:Canvas>
+
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='system')" width="100%"
+                                           height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="productTypesBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='productTypes')"
+                                                       click="onProductTypesManagementClick(event)"
+                                                />
+                                        <mx:LinkButton width="100%" id="attributesBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='attributes')"
+                                                       click="onAttributesManagementClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='attributesHint')"
+                                                />
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="importBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='import')"
+                                                       click="onImportClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='importHint')"
+                                                />
+                                        <mx:LinkButton width="100%" id="reindexBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='reindex')"
+                                                       click="onReindexClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='reindexHint')"
+                                                />
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="paymengwBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='paymetgwCfg')"
+                                                       click="onConfigurePaymentGatewayClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='paymetgwCfgHint')"
+                                                />
+
+
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton id="prefsBtn" width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='sysprefs')"
+                                                       click="onPreferencesClick(event)"/>
+
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton id="sqlBtn" width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='query')"
+                                                       click="onQueryDataClick(event)"/>
+
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton id="monitoringBtn" width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='monitoring')"
+                                                       click="onMonitoringClick(event)"/>
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton id="clusterBtn" width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='cluster')"
+                                                       click="onClusterClick(event)"/>
+
+                                    </mx:VBox>
+                                </mx:Canvas>
+
+
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='help')"
+                                           width="100%" height="100%">
+                                    <mx:VBox x="0" y="0" height="100%" width="100%">
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='about')"
+                                                       click="onHelpClick(event)"
+                                                />
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='help')"
+                                                       click="onHelpURLClick(event)"
+                                                />
+
+                                    </mx:VBox>
+                                </mx:Canvas>
+
+                            </mx:Accordion>
+                            <mx:Canvas id="mainPanel" width="100%" height="100%"/>
+                        </mx:HDividedBox>
+                    </mx:VBox>
+                </mx:target>
+            </mx:AddChild>
+        </mx:State>
+    </mx:states>
+
+</mx:Application>

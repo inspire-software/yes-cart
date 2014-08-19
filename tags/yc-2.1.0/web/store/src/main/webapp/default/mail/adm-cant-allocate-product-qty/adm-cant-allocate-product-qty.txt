@@ -1,0 +1,3 @@
+Cant allocate sku $sku.code $sku.name quantity
+in order $root.ordernum at $shop.name
+for $customer.firstname $customer.lastname $customer.email
