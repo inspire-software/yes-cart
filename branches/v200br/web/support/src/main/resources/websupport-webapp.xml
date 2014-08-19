@@ -33,7 +33,6 @@
     <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
         <constructor-arg index="0" ref="applicationDirector"/>
         <constructor-arg index="1" ref="systemService"/>
-        <constructor-arg index="2" ref="shoppingCartCommandFactory"/>
     </bean>
 
     <bean id="imageFilter" class="org.yes.cart.web.filter.ImageFilter">
@@ -46,6 +45,7 @@
         <constructor-arg index="0" ref="applicationDirector"/>
         <constructor-arg index="1" ref="cookieTuplizerPool"/>
         <constructor-arg index="2" ref="amountCalculationStrategy"/>
+        <constructor-arg index="3" ref="shoppingCartCommandFactory"/>
     </bean>
 
     <!--CPOINT do you need paypal express checkout ?-->
