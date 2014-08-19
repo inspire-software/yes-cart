@@ -249,6 +249,10 @@
                                     <include>ru_RU/ShopManagerApplication.swf</include>
                                     <include>ru_RU/swfobject.js</include>
                                     <include>ru_RU/history/**</include>
+                                    <include>uk_UK/ShopManagerApplication.html</include>
+                                    <include>uk_UK/ShopManagerApplication.swf</include>
+                                    <include>uk_UK/swfobject.js</include>
+                                    <include>uk_UK/history/**</include>
                                 </includes>
                             </resource>
                         </webResources>
