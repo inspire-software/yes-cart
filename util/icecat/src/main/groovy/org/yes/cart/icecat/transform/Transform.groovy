@@ -57,65 +57,69 @@ package org.yes.cart.icecat.transform
 
              def line;
 
-             println("Input data directory [$ctx.dataDirectory]  ")
+             println("Input data directory [default: $ctx.dataDirectory]  ")
              line = it.readLine();
              if (line != "") {
                  ctx.dataDirectory = line
              }
+             println("data directory: $ctx.dataDirectory");
 
-
-             println("Input http url [$ctx.url]  ");
+             println("Input http url [default: $ctx.url]  ");
              line = it.readLine();
              if (line != "") {
                  ctx.url = line;
              }
+             println("http url: $ctx.url");
 
-
-             println("Input login for $ctx.url ");
+             //println("Input login for $ctx.url ");
              //ctx.login = it.readLine();
              
-             println("Input password for $ctx.url");
+             //println("Input password for $ctx.url");
              //ctx.pwd = it.readLine();
 
-             println("Input language id [$ctx.langId] (8 - RU, 9 - EN, see refs.xml for other ids)" );
+             println("Input language id [default: $ctx.langId] (8 - RU, 9 - EN, 25 - UK, see refs.xml for other ids)" );
              line = it.readLine();
              if (line != "") {
                  ctx.langId = line
              }
              ctx.langId += ",1"  // default language for blank values fallback
+             println("language id: $ctx.langId");
 
-             println("Input language names [$ctx.langNames] (ru,en, exactly as they are mapped in storefront locale)" );
+             println("Input language names [default: $ctx.langNames] (ru,en,uk exactly as they are mapped in storefront locale)" );
              line = it.readLine();
              if (line != "") {
                  ctx.langNames = line
              }
              ctx.langNames += ",def" // default language for blank values fallback
+             println("language names: $ctx.langNames");
 
-             println("Input product lang directory [$ctx.productDir]. This will be used to get index.html" );
+             println("Input product lang directory [default: $ctx.productDir]. This will be used to get index.html last one is for default" );
              line = it.readLine();
              if (line != "") {
                  ctx.productDir = line;
              }
+             println("product lang directory: $ctx.productDir" );
 
-
-             println("Input comma separated category id list [$ctx.categories]");
+             println("Input comma separated category id list [default: $ctx.categories]");
              line = it.readLine();
              if (line != "") {
                  ctx.categories = line;
              }
+             println("comma separated category id list: $ctx.categories");
 
-
-             println("Input product updated min time [$ctx.mindata] ");
+             println("Input product updated min time [default: $ctx.mindata] ");
              line = it.readLine();
              if (line != "") {
                  ctx.mindata = line.toLong();
              }
+             println("product updated min time: $ctx.mindata");
 
-             println("Input products per category limit [$ctx.productsPerCategoryLimit]");
+             println("Input products per category limit [default: $ctx.productsPerCategoryLimit]");
              line = it.readLine();
              if (line != "") {
                  ctx.productsPerCategoryLimit  = line.toInteger();
              }
+             println("products per category limit: $ctx.productsPerCategoryLimit");
 
          }
 

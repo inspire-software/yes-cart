@@ -25,7 +25,7 @@ package org.yes.cart.icecat.transform
  */
 class Context  {
     
-    String dataDirectory = "c:\\icecat";
+    String dataDirectory = "/development/projects/java/yc-v200br/env/sampledata/demo-data/icecat";
 
     String url = "http://data.icecat.biz/";
 
@@ -33,21 +33,23 @@ class Context  {
 
     String pwd = "sharpevil77";
 
-    String langId = "9,8";
+    //  9 - EN, 8 - RU, 25 - UK, see refs.xml for other ids - seems like icecat's UK products have no equivalents in RU or EN
+    // we get better localization results
+    String langId = "25,8,9";
 
-    String langNames = "en,ru";
+    String langNames = "uk,ru,en";
 
-    String productDir = "EN,RU";
+    String productDir = "UK,RU,EN";
 
     //String categories = "151,1296,942,803,788,195,194,197,943,196,191,192,378,153,381,932,156,375,1373,897";
-    String categories = "151,195,194,197,153,932,156,897";
+    String categories = "151,195,194,153,932,156,897";
     /*
     * 151 - laptop
     * 195 - mouse
     * 194 - keyboard
     * 197 - scanners
     * 153 - PC
-    * 932 - data storae
+    * 932 - data storage
     * 156 - servers
     * 897 - tablet pc
     *
@@ -60,9 +62,12 @@ class Context  {
 
     int limitPerBrand = 50;
 
-    long mindata =  20110101000000L;
+    long mindata =  20130101000000L;
 
-    int productsPerCategoryLimit = 120;
+    // We need to have sync between all langs in IceCat, so some entries will only be partial and cleaned up
+    // So this 600 is not going to be 600 per category in the end after clean up but it prevents scanning full
+    // IceCat catalog with data size in TB
+    int productsPerCategoryLimit = 600;
 
 
 

@@ -66,7 +66,7 @@ class ProductTypeAttributeCsvAdapter {
             for (CategoryFeatureGroup cfg : it.categoryFeatureGroup) {
                 for(Feature feature : cfg.featureList) {
                     features.put(feature.ID, feature);
-                    featureTypes.put(feature, it.getNameFor(null));
+                    featureTypes.put(feature, it.getNameFor('en'));
                 }
             }
         }
@@ -79,7 +79,7 @@ class ProductTypeAttributeCsvAdapter {
             builder.append(it.ID).append('";"')
             builder.append(Util.escapeCSV(featureTypes.get(it))).append('";"')
             builder.append(it.ID).append('";"')
-            builder.append(Util.escapeCSV(it.getNameFor(null))).append('";')
+            builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";')
             builder.append(navigableMap.containsKey(it.ID) ? "true" : "false").append(";")
             if (rangeMap.containsKey(it.ID)) {
                 builder.append('"R";"').append(rangeMap.get(it.ID)).append('"\n')

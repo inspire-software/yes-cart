@@ -32,7 +32,7 @@ import org.yes.cart.icecat.transform.Util
      String ID;
      String No;
      String FeatureGroup_ID;
-     Map<String, String> name = new HashMap<String, String>();
+     Map<String, String> name = new TreeMap<String, String>();
 
      List<Feature> featureList = new ArrayList<Feature>();
 

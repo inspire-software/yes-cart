@@ -36,7 +36,7 @@ class CategoryHandler extends DefaultHandler {
 
     boolean allowAddToCategoryList = false;
 
-    Map<String, Category> categoryMap = new HashMap<String, Category>();
+    Map<String, Category> categoryMap = new TreeMap<String, Category>();
     List<String> categoryIdFiler;
     List<String> langIdFilter;
     List<String> langFilter;

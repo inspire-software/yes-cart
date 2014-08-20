@@ -13,21 +13,7 @@
       <entry name="!?*.kt" />
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
-    <annotationProcessing>
-      <profile default="true" name="Default" enabled="false">
-        <processorPath useClasspath="true" />
-      </profile>
-      <profile default="false" name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
-        <module name="icecat-downloader" />
-      </profile>
-    </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="icecat-downloader" target="1.6" />
-    </bytecodeTargetLevel>
+    <annotationProcessing enabled="false" useClasspath="true" />
   </component>
   <component name="CopyrightManager" default="">
     <module2copyright />
@@ -38,6 +24,10 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
+  </component>
+  <component name="IdProvider" IDEtalkID="00A2839E2261F6BBE80AD20F99722EC3" />
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-target 1.6" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
@@ -172,7 +162,10 @@
       <module fileurl="file://$PROJECT_DIR$/icecat-downloader.iml" filepath="$PROJECT_DIR$/icecat-downloader.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
+  <component name="ProjectResources">
+    <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="SvnBranchConfigurationManager">
@@ -347,22 +340,6 @@
         <root url="jar://$MAVEN_REPOSITORY$/org/sonatype/gshell/gshell-io/2.4/gshell-io-2.4-sources.jar!/" />
       </SOURCES>
     </library>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.7</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
   </component>
 </project>
 

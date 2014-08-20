@@ -39,7 +39,7 @@ class Util {
      * @return string without ; or ".
      */
     public static String normalize(String raw) {
-        return raw.replace("_", "-").replace("/", "A").replace(":", "Z").replace(" ", "-").replace("?", "-").replace(".", "-");
+        return raw.replace("_", "-").replace("/", "A").replace(":", "Z").replace(" ", "-").replace("?", "-").replace(".", "-").replace("#", "-");
     }
 
     /**
@@ -84,8 +84,19 @@ class Util {
      * @return value in required language or in default
      */
     public static String getLocalisedValue(Object obj, String prop, String lang) {
+        if (lang == null) {
+            return null;
+        }
         def val = obj."$prop".get(lang);
         if (val == null) {
+            /* Hack: Ukrainian version of icecat has many missing values, try to use RU for it */
+            if (lang == "uk") {
+                val = obj."$prop".get("ru");
+                if (val != null) {
+                    return val;
+                }
+            }
+            /* eof hack */
             val = obj."$prop".get("def");
         }
         if (val == null) {

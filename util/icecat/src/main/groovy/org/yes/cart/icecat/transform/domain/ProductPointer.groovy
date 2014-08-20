@@ -29,7 +29,12 @@ package org.yes.cart.icecat.transform.domain
  */
 class ProductPointer {
 
-    Map<String, String> path = new HashMap<String, String>();
+    static String AVAILABILITY_STANDARD = "1";
+    static String AVAILABILITY_PREORDER = "2";
+    static String AVAILABILITY_BACKORDER = "4";
+    static String AVAILABILITY_ALWAYS = "8";
+
+    Map<String, String> path = new TreeMap<String, String>();
     String Product_ID;
     String Product_ID_valid;
     String Updated;
@@ -47,11 +52,18 @@ class ProductPointer {
 
     Product product;
 
-    Map<String, BigDecimal> inventory = new HashMap<String, BigDecimal>();
-    Map<String, Map<String, BigDecimal>> prices = new HashMap<String, Map<String, BigDecimal>>();
+
+    String Availability = AVAILABILITY_STANDARD;
+    String Featured = "0";
+    String Tags = "";
+    Boolean SpecialOffer = false;
+    Boolean Sale = false;
+    Boolean NewArrival = false;
+    Map<String, BigDecimal> inventory = new TreeMap<String, BigDecimal>();
+    Map<String, Map<String, BigDecimal>> prices = new TreeMap<String, Map<String, BigDecimal>>();
 
 
-    Map<String, Category> categories = new HashMap<String, Category>();
+    Map<String, Category> categories = new TreeMap<String, Category>();
 
     @Override
     public String toString() {
