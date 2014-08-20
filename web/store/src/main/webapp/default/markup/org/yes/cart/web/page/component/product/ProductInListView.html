@@ -23,14 +23,14 @@
 
         <div class="grid-100 mobile-grid-100" style="min-height: 65px; height: 65px; overflow: hidden;">
             <p align="justify">
-                <a wicket:id="productLinkName" class="product-tittle">
+                <a wicket:id="productLinkName" class="product-tittle" rel="bookmark">
                     <span  wicket:id="name">[name]</span>
                 </a>
             </p>
         </div>
 
         <div class="grid-100 mobile-grid-100 text-right">
-            <a wicket:id="addToCartLink" class="button orange">
+            <a wicket:id="addToCartLink" class="button orange" rel="nofollow">
                 <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
             </a>
         </div>
@@ -42,7 +42,7 @@
         </div>
 
         <div class="grid-100 mobile-grid-100 text-center">
-            <a wicket:id="productLinkImage"  class="image-border">
+            <a wicket:id="productLinkImage"  class="image-border" rel="bookmark">
                 <img border="1" wicket:id="productDefaultImage"/>
             </a>
         </div>
@@ -51,7 +51,7 @@
             <wicket:message key="sku.code">[sku.code:]</wicket:message>
         </div>
         <div class="grid-70 hide-on-mobile">
-            <a wicket:id="productLinkSku" class="product-sku-code">
+            <a wicket:id="productLinkSku" class="product-sku-code" rel="bookmark">
                 <span wicket:id="skuCode">[sku num]</span>
             </a>
         </div>

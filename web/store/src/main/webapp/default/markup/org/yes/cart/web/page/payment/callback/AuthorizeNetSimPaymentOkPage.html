@@ -16,12 +16,13 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<head>
+<wicket:head>
 
     <title wicket:id="pageTitle">[page title]</title>
     <meta wicket:id="description" name="description" content=""/>
     <meta wicket:id="keywords" name="keywords" content=""/>
     <meta wicket:id="created" name="date" content=""/>
+    <meta name="robots" content="noindex" />
 
     <script wicket:id="redirectJavaScript" type="text/javascript">
         [redirectJs]
@@ -29,7 +30,7 @@
     <noscript>
         <meta wicket:id="metaRefresh" http-equiv="refresh" content=""> <!-- Without JavaScript -->  </meta>
     </noscript>
-</head>
+</wicket:head>
 <body>
 <a wicket:id="redirectLink">
     <span>
