@@ -48,7 +48,7 @@
         INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL, DISPLAYVAL)
         VALUES (0,
         (SELECT p.SKU_ID FROM TSKU p WHERE p.GUID = '{product}'),
-        '{GUID}', '{attribute}','{val}','en#~#{displayValEn}#~#ru#~#{displayValRu}')
+        '{GUID}', '{attribute}','{val}','en#~#{displayValEn}#~#ru#~#{displayValRu}#~#uk#~#{displayValUk}')
     </insert-sql>
 
 
@@ -91,7 +91,7 @@
             <field-type>FIELD</field-type>
             <name>displayValEn</name>
             <language>en</language>
-            <value-regex>(.{0,1900})(.*)</value-regex>
+            <value-regex>(.{0,1300})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
@@ -101,7 +101,17 @@
             <field-type>FIELD</field-type>
             <name>displayValRu</name>
             <language>ru</language>
-            <value-regex>(.{0,1900})(.*)</value-regex>
+            <value-regex>(.{0,1300})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- Attr UK value -->
+        <column-descriptor>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayValUk</name>
+            <language>uk</language>
+            <value-regex>(.{0,1300})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 

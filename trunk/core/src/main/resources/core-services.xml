@@ -1503,6 +1503,7 @@
             <map>
                 <entry key="en" value="Eng"/>
                 <entry key="ru" value="&#x0420;&#x0443;&#x0441;"/>
+                <entry key="uk" value="&#x0423;&#x043A;&#x0440;"/>
             </map>
         </constructor-arg>
         <constructor-arg index="1">
@@ -1512,6 +1513,7 @@
                         <!-- by convention the 0th element is the default language -->
                         <value>en</value>
                         <value>ru</value>
+                        <value>uk</value>
                     </list>
                 </entry>
                 <entry key="SHOP10">
@@ -1519,6 +1521,7 @@
                         <!-- by convention the 0th element is the default language -->
                         <value>en</value>
                         <value>ru</value>
+                        <value>uk</value>
                     </list>
                 </entry>
             </map>

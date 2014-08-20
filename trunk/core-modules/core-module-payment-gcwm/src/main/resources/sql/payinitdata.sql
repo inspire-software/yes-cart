@@ -49,6 +49,9 @@ VALUES (457, 'liqPayPaymentGateway', 'name_en', 'LiqPay', 'Gateway name (EN)', '
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (458, 'liqPayPaymentGateway', 'name_ru', 'LiqPay', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (459, 'liqPayPaymentGateway', 'name_uk', 'LiqPay', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
 
 
 
@@ -101,3 +104,5 @@ VALUES (467, 'liqPayNoRefundPaymentGateway', 'name_en', 'LiqPay (No Refund)', 'G
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (468, 'liqPayNoRefundPaymentGateway', 'name_ru', 'LiqPay (Без возвратов)', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (469, 'liqPayNoRefundPaymentGateway', 'name_uk', 'LiqPay (Без повернень)', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');

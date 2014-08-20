@@ -247,3 +247,356 @@ alter table TSHOP add column DISPLAY_TITLE longtext;
 -- alter table TSHOP add column DISPLAY_METAKEYWORDS varchar(4000);
 -- alter table TSHOP add column DISPLAY_METADESCRIPTION  varchar(4000);
 -- alter table TSHOP add column DISPLAY_TITLE  varchar(4000);
+
+
+
+--
+--  YC-393	Improve approach to i18n property files in wicket (adding UK support)
+--
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11014,  'CATEGORY_DESCRIPTION_uk', 'CATEGORY_DESCRIPTION_uk',  0,  NULL,  'Опис Категорії (uk)',
+  'Опис Категорії Українською (uk)',  1011, 1002);
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11080,  'CONTENT_BODY_uk_1', 'CONTENT_BODY_uk_1',  0,  NULL,  'Текст контенту (uk)',
+  'Текст контенту Українською (uk). 1-ші 4000 символів.',  1011, 1002);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11081,  'CONTENT_BODY_uk_2', 'CONTENT_BODY_uk_2',  0,  NULL,  'Текст контенту (uk)',
+  'Текст контенту Українською (uk). 2-гі 4000 символів.',  1011, 1002);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11022,  'PRODUCT_DESCRIPTION_uk', 'PRODUCT_DESCRIPTION_uk',  0,  NULL,  'Опис Продукту (uk)',  'Опис Продукту Українською (uk)',  1011, 1003);
+
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12014,'CONTENT_BODY_uk_1','<pre>Copyright 2009 Igor Azarnyi, Denys Pavlov
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        <a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+</pre>',10001,'12014_CAV');
+
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12015,'CONTENT_BODY_uk_1','
+<p>Дана сторінка демонструє використання динамічного контенту</p>
+
+<p>Посилання:
+<ul>
+  <li><a href="${contentURL(''license'')}">Сторінка Ліцензії (посилання на контент)</a></li>
+  <li><a href="${categoryURL(''netbooks'')}">Категорія "Ноутбуки" (посилання на категорію)</a></li>
+  <li><a href="${URL('''')}">Домашня сторінка (просте посилання)</a></li>
+</ul>
+</p>
+
+<p>Динамічна змінна: ${datetime}</p>
+
+<p>Динамічна вставка суб-контенту:</p>
+
+${include(''license'')}
+
+',10002,'12015_CAV');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (459, 'liqPayPaymentGateway', 'name_uk', 'LiqPay', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (469, 'liqPayNoRefundPaymentGateway', 'name_uk', 'LiqPay (Без повернень)', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (119, 'cyberSourcePaymentGateway', 'name_uk', 'CyberSource', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (1199, 'cyberSourcePaymentGateway',
+'htmlForm_uk',
+'
+<table>
+    <tr>
+        <td>Тип карти</td>
+        <td><select name="ccType" class="paymentlongfield">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="Eurocard">Eurocard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Carte Blanche">Carte Blanche</option>
+            <option value="JCB">JCB</option>
+            <option value="EnRoute">EnRoute</option>
+            <option value="Maestro (UK Domestic), Solo">Maestro (UK Domestic), Solo</option>
+            <option value="Delta">Delta</option>
+            <option value="Visa Electron">Visa Electron</option>
+            <option value="Dankort">Dankort</option>
+            <option value="JAL">JAL</option>
+            <option value="Laser">Laser</option>
+            <option value="Carte Bleue">Carte Bleue</option>
+            <option value="Carta Si">Carta Si</option>
+            <option value="UATP">UATP</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Номер карти</td>
+        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
+    </tr>
+    <tr>
+        <td>Термін дії</td>
+        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            <option value="01">01 - січень</option>
+            <option value="02">02 - лютий</option>
+            <option value="03">03 - березень</option>
+            <option value="04">04 - квітень</option>
+            <option value="05">05 - травень</option>
+            <option value="06">06 - червень</option>
+            <option value="07">07 - липень</option>
+            <option value="08">08 - серпень</option>
+            <option value="09">09 - вересень</option>
+            <option value="10">10 - жовтень</option>
+            <option value="11">11 - листопад</option>
+            <option value="12">12 - грудень</option>
+        </select> <select name="ccExpireYear" class="paymentshortfield">
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Код безпеки</td>
+        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
+    </tr>
+</table>
+'
+, 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (129, 'authorizeNetAimPaymentGateway', 'name_uk', 'Authorize.net AIM', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (130, 'authorizeNetAimPaymentGateway',
+'htmlForm_uk',
+'
+<table>
+    <tr>
+        <td>Тип карти</td>
+        <td><select name="ccType" class="paymentlongfield">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Номер карти</td>
+        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
+    </tr>
+    <tr>
+        <td>Термін дії</td>
+        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            <option value="01">01 - січень</option>
+            <option value="02">02 - лютий</option>
+            <option value="03">03 - березень</option>
+            <option value="04">04 - квітень</option>
+            <option value="05">05 - травень</option>
+            <option value="06">06 - червень</option>
+            <option value="07">07 - липень</option>
+            <option value="08">08 - серпень</option>
+            <option value="09">09 - вересень</option>
+            <option value="10">10 - жовтень</option>
+            <option value="11">11 - листопад</option>
+            <option value="12">12 - грудень</option>
+        </select> <select name="ccExpireYear" class="paymentshortfield">
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Код безпеки</td>
+        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
+    </tr>
+</table>
+'
+, 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (162, 'payflowPaymentGateway', 'name_uk', 'PayPal Payflow', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (163, 'payflowPaymentGateway',
+'htmlForm_uk',
+'
+<table>
+    <tr>
+        <td>Ім''я на картці</td>
+        <td><input type="text" class="paymentlongfield" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+    </tr>
+    <tr>
+        <td>Тип карти</td>
+        <td><select name="ccType" class="paymentlongfield">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="JCB">JCB</option>
+            <option value="Enroute">Enroute</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+            <option value="Diners Club">Diners Club</option>
+            <option value="Optima">Optima</option>
+            <option value="Novus">Novus</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Номер карти</td>
+        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
+    </tr>
+    <tr>
+        <td>Термін дії</td>
+        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            <option value="01">01 - січень</option>
+            <option value="02">02 - лютий</option>
+            <option value="03">03 - березень</option>
+            <option value="04">04 - квітень</option>
+            <option value="05">05 - травень</option>
+            <option value="06">06 - червень</option>
+            <option value="07">07 - липень</option>
+            <option value="08">08 - серпень</option>
+            <option value="09">09 - вересень</option>
+            <option value="10">10 - жовтень</option>
+            <option value="11">11 - листопад</option>
+            <option value="12">12 - грудень</option>
+        </select> <select name="ccExpireYear" class="paymentshortfield">
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Код безпеки</td>
+        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
+    </tr>
+</table>
+'
+, 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
+
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (182, 'payPalNvpPaymentGateway', 'name_uk', 'PayPal NVP',  'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (183, 'payPalNvpPaymentGateway',
+'htmlForm_uk',
+'
+<table>
+    <tr>
+        <td>Тип карти</td>
+        <td><select name="ccType" class="paymentlongfield">
+            <option value="Visa">Visa</option>
+            <option value="MasterCard">MasterCard</option>
+            <option value="American Express">American Express</option>
+            <option value="Discover">Discover</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Номер карти</td>
+        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
+    </tr>
+    <tr>
+        <td>Термін дії</td>
+        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            <option value="01">01 - січень</option>
+            <option value="02">02 - лютий</option>
+            <option value="03">03 - березень</option>
+            <option value="04">04 - квітень</option>
+            <option value="05">05 - травень</option>
+            <option value="06">06 - червень</option>
+            <option value="07">07 - липень</option>
+            <option value="08">08 - серпень</option>
+            <option value="09">09 - вересень</option>
+            <option value="10">10 - жовтень</option>
+            <option value="11">11 - листопад</option>
+            <option value="12">12 - грудень</option>
+        </select> <select name="ccExpireYear" class="paymentshortfield">
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Код безпеки</td>
+        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
+    </tr>
+</table>
+'
+, 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (211, 'authorizeNetSimPaymentGateway', 'name_uk', 'Authorize.net SIM', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (231, 'payPalExpressPaymentGateway', 'name_uk', 'PayPal Express', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (56, 'testPaymentGateway', 'name_uk', 'Тестовий Платіжний Шлюз', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (57, 'testPaymentGateway', 'htmlForm_uk',
+'<table>
+    <tr>
+        <td>Ім''я на картці</td>
+        <td><input type="text" class="paymentlongfield" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+    </tr>
+    <tr>
+        <td>Номер карти</td>
+        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
+    </tr>
+    <tr>
+        <td>Термін дії</td>
+        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            <option value="01">01 - січень</option>
+            <option value="02">02 - лютий</option>
+            <option value="03">03 - березень</option>
+            <option value="04">04 - квітень</option>
+            <option value="05">05 - травень</option>
+            <option value="06">06 - червень</option>
+            <option value="07">07 - липень</option>
+            <option value="08">08 - серпень</option>
+            <option value="09">09 - вересень</option>
+            <option value="10">10 - жовтень</option>
+            <option value="11">11 - листопад</option>
+            <option value="12">12 - грудень</option>
+        </select> <select name="ccExpireYear" class="paymentshortfield">
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Код безпеки</td>
+        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
+    </tr>
+</table>'
+, 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (63, 'courierPaymentGateway', 'name_uk', 'Оплата кур''єру', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');

@@ -126,6 +126,49 @@ VALUES (55, 'testPaymentGateway', 'htmlForm_ru',
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (56, 'testPaymentGateway', 'name_uk', 'Тестовий Платіжний Шлюз', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (57, 'testPaymentGateway', 'htmlForm_uk',
+'<table>
+    <tr>
+        <td>Ім''я на картці</td>
+        <td><input type="text" class="paymentlongfield" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+    </tr>
+    <tr>
+        <td>Номер карти</td>
+        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
+    </tr>
+    <tr>
+        <td>Термін дії</td>
+        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            <option value="01">01 - січень</option>
+            <option value="02">02 - лютий</option>
+            <option value="03">03 - березень</option>
+            <option value="04">04 - квітень</option>
+            <option value="05">05 - травень</option>
+            <option value="06">06 - червень</option>
+            <option value="07">07 - липень</option>
+            <option value="08">08 - серпень</option>
+            <option value="09">09 - вересень</option>
+            <option value="10">10 - жовтень</option>
+            <option value="11">11 - листопад</option>
+            <option value="12">12 - грудень</option>
+        </select> <select name="ccExpireYear" class="paymentshortfield">
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+        </select></td>
+    </tr>
+    <tr>
+        <td>Код безпеки</td>
+        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
+    </tr>
+</table>'
+, 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (60, 'courierPaymentGateway', 'name', 'Payment via courier', 'Gateway name (default)', 'Gateway name (default)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -133,3 +176,6 @@ VALUES (61, 'courierPaymentGateway', 'name_en', 'Payment via courier', 'Gateway 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (62, 'courierPaymentGateway', 'name_ru', 'Оплата курьеру', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (63, 'courierPaymentGateway', 'name_uk', 'Оплата кур''єру', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');

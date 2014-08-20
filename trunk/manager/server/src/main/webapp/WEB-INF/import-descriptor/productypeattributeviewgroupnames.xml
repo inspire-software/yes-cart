@@ -81,9 +81,18 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-        <!-- attributes code list -->
         <column-descriptor>
             <column-index>5</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>uk</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- attributes code list -->
+        <column-descriptor>
+            <column-index>6</column-index>
             <field-type>FIELD</field-type>
             <name>attrCodeList</name>
             <value-regex>(.{0,4000})(.*)</value-regex>
