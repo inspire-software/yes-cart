@@ -74,19 +74,6 @@
     </filter>
 
     <filter>
-        <filter-name>shoppingCartFilter</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-        <init-param>
-            <param-name>targetFilterLifecycle</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <init-param>
-            <param-name>excludePattern</param-name>
-            <param-value>(services/(backdoor|cachedirector))|(imgvault/)|(wicket/resource/)</param-value>
-        </init-param>
-    </filter>
-
-    <filter>
         <filter-name>shopResolverFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
         <init-param>
@@ -96,6 +83,19 @@
         <init-param>
             <param-name>excludePattern</param-name>
             <param-value>services/(backdoor|cachedirector)</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>shoppingCartFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>excludePattern</param-name>
+            <param-value>(services/(backdoor|cachedirector))|(imgvault/)|(wicket/resource/)</param-value>
         </init-param>
     </filter>
 
@@ -219,12 +219,12 @@
     </filter-mapping>
 
     <filter-mapping>
-        <filter-name>shoppingCartFilter</filter-name>
+        <filter-name>shopResolverFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
-        <filter-name>shopResolverFilter</filter-name>
+        <filter-name>shoppingCartFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 

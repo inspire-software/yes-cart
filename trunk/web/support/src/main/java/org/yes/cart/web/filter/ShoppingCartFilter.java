@@ -18,8 +18,11 @@ package org.yes.cart.web.filter;
 
 
 import org.springframework.aop.target.CommonsPoolTargetSource;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.shoppingcart.impl.WebShoppingCartImpl;
@@ -32,6 +35,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Shopping cart  filter responsible to restore shopping cart from cookies, if it possible.
@@ -47,19 +51,24 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
     private final AmountCalculationStrategy calculationStrategy;
 
+    private final ShoppingCartCommandFactory cartCommandFactory;
+
 
     /**
-     * @param tuplizerPool        pool of tuplizer to manage cookie to object to cookie transformation
      * @param applicationDirector app director.
+     * @param tuplizerPool        pool of tuplizer to manage cookie to object to cookie transformation
      * @param calculationStrategy calculation strategy
+     * @param cartCommandFactory  cart command factory
      */
     public ShoppingCartFilter(
             final ApplicationDirector applicationDirector,
             final CommonsPoolTargetSource tuplizerPool,
-            final AmountCalculationStrategy calculationStrategy) {
+            final AmountCalculationStrategy calculationStrategy,
+            final ShoppingCartCommandFactory cartCommandFactory) {
         super(applicationDirector);
         this.tuplizerPool = tuplizerPool;
         this.calculationStrategy = calculationStrategy;
+        this.cartCommandFactory = cartCommandFactory;
     }
 
 
@@ -84,6 +93,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
                 ShopCodeContext.getLog(this).warn("Cart not restored from cookies");
             }
             cart.initialise(calculationStrategy);
+            setDefaultValuesIfNecessary(ApplicationDirector.getCurrentShop(), cart);
             ApplicationDirector.setShoppingCart(cart);
 
         } catch (Exception e) {
@@ -100,6 +110,27 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
         return request;
     }
+
+
+    /**
+     * Set default values. Mostly for new cart.
+     *
+     * @param shop shop
+     * @param cart cart
+     */
+    private void setDefaultValuesIfNecessary(final Shop shop, final ShoppingCart cart) {
+
+        if (cart.getCurrencyCode() == null && shop != null) { // new cart only may satisfy this condition
+
+            cartCommandFactory.execute(cart, new HashMap<String, Object>() {{
+                put(ShoppingCartCommand.CMD_SETSHOP, shop.getShopId());
+                put(ShoppingCartCommand.CMD_CHANGECURRENCY, shop.getDefaultCurrency());
+            }});
+
+        }
+
+    }
+
 
 
     /**
