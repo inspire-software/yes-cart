@@ -93,7 +93,9 @@
         <mxmlc file="${basedir}/src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
             <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
             <source-path path-element="${FLEX_HOME}/frameworks"/>
-            <locale>uk</locale>
+            <!-- On windows using uk locale breaks the build, so we decided to leave core messages in ru_RU -->
+            <!-- Change this to uk if you have support for ukrainian language in your SDK -->
+            <locale>ru_RU</locale>
         </mxmlc>
         <copy file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/uk_UK/ShopManagerApplication.swf"/>
         <delete file="${basedir}/src/main/flex/ShopManagerApplication.swf"/>
