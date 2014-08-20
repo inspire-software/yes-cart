@@ -376,7 +376,7 @@ class CategoryWalker {
         }
 
         for (ProductPointer pp : toRemove) {
-            productMap.remove(pp.Prod_ID);
+            productMap.remove(pp.Product_ID);
             for (Category cat : pp.categories.values()) {
                 cat.productPointer.remove(pp);
             }
