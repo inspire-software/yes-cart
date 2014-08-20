@@ -34,7 +34,7 @@
     </target>
 
 
-    <target name="build_ru"  description="Build russian swf">
+    <target name="build_ru"  description="Build Russian swf">
         <delete>
             <fileset dir="src/main/flex" includes="**/*.properties"/>
         </delete>
@@ -66,7 +66,40 @@
         <delete file="${basedir}/src/main/flex/ShopManagerApplication.swf"/>
     </target>
 
-    <target name="build_en"  description="Build english swf">
+
+    <target name="build_uk"  description="Build Ukrainian swf">
+        <delete>
+            <fileset dir="src/main/flex" includes="**/*.properties"/>
+        </delete>
+
+
+        <!-- copy ukrainian localization files -->
+        <copy todir="src/main/flex" flatten="true">
+            <fileset dir="src/main/resources/uk_UK"/>
+        </copy>
+
+        <exec executable="subWCRev" osfamily="windows">
+          <arg value="src/main/resources/uk_UK"/>
+          <arg value="src/main/resources/uk_UK/ShopManagerApplication.properties"/>
+          <arg value="src/main/flex/ShopManagerApplication.properties"/>
+        </exec>
+
+        <exec executable="svnwcrev" osfamily="unix">
+          <arg value="src/main/resources/uk_UK"/>
+          <arg value="src/main/resources/uk_UK/ShopManagerApplication.properties"/>
+          <arg value="src/main/flex/ShopManagerApplication.properties"/>
+        </exec>
+
+        <mxmlc file="${basedir}/src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
+            <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+            <source-path path-element="${FLEX_HOME}/frameworks"/>
+            <locale>uk</locale>
+        </mxmlc>
+        <copy file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/uk_UK/ShopManagerApplication.swf"/>
+        <delete file="${basedir}/src/main/flex/ShopManagerApplication.swf"/>
+    </target>
+
+    <target name="build_en"  description="Build English swf">
         <delete>
             <fileset dir="src/main/flex" includes="**/*.properties"/>
         </delete>
@@ -76,6 +109,7 @@
         <copy todir="src/main/flex" flatten="true">
             <fileset dir="src/main/resources/en_US"/>
         </copy>
+
         <exec executable="subWCRev"  osfamily="windows">
           <arg value="src/main/resources/en_US"/>
           <arg value="src/main/resources/en_US/ShopManagerApplication.properties"/>
@@ -96,7 +130,7 @@
     </target>
 
 
-   <target name="build" depends="build_en, build_ru" description="Build all swf">
+   <target name="build" depends="build_en, build_uk, build_ru" description="Build all swf">
 
     </target>
 
@@ -105,7 +139,7 @@
 
                 height="100%"
                 width="100%"
-                title="Welcome to Shop Manager (Russian)"
+                title="YUM (ru)"
                 file="ShopManagerApplication.html"
                 bgcolor="#E5E4E2"
                 application="app"
@@ -117,12 +151,29 @@
                 output="target/ru_RU"/>
     </target>
 
+    <target name="wrapper_uk">
+        <html-wrapper
+
+                height="100%"
+                width="100%"
+                title="YUM (uk)"
+                file="ShopManagerApplication.html"
+                bgcolor="#E5E4E2"
+                application="app"
+                swf="ShopManagerApplication"
+                version-major="10"
+                version-minor="0"
+                version-revision="0"
+                history="true"
+                output="target/uk_UK"/>
+    </target>
+
     <target name="wrapper_en">
         <html-wrapper
 
                 height="100%"
                 width="100%"
-                title="Welcome to Shop Manager (English)"
+                title="YUM (en)"
                 file="ShopManagerApplication.html"
                 bgcolor="#E5E4E2"
                 application="app"
@@ -135,7 +186,7 @@
     </target>
 
 
-    <target name="wrapper" depends="wrapper_ru, wrapper_en"/>
+    <target name="wrapper" depends="wrapper_en, wrapper_uk, wrapper_ru"/>
 
     <target name="info">
 	<tstamp prefix="end">
