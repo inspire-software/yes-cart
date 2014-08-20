@@ -105,11 +105,11 @@
             <executable targetfile="$INSTALL_PATH/yesbin/stopcart" />
         </pack>
         <pack name="Yes Cart Manager Server" required="no">
-            <description>Yes-Cart admin aplication</description>
+            <description>Yes-Cart admin application</description>
             <file src="target/izpack/yes-manager.war" targetdir="$INSTALL_PATH/webapps"/>
         </pack>
         <pack name="Yes Cart StoreFront" required="no">
-            <description>Demo storefornt based on Yes-Cart platform</description>
+            <description>Demo storefront based on Yes-Cart platform</description>
 
             <file src="target/izpack/yes-shop.war" targetdir="$INSTALL_PATH/webapps/yes-shop" unpack="true"/>
 
