@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" readonly="true" id="148c69f3-1bf7-4e64-bac5-230704034774" name="Default" comment="" />
+    <list default="true" readonly="true" id="148c69f3-1bf7-4e64-bac5-230704034774" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/icecat-downloader.iws" afterPath="$PROJECT_DIR$/icecat-downloader.iws" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" afterPath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/Util.groovy" afterPath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/Util.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/CategoryCsvAdapter.groovy" afterPath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/CategoryCsvAdapter.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductTypeAttributeCsvAdapter.groovy" afterPath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductTypeAttributeCsvAdapter.groovy" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/domain/Category.groovy" afterPath="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/domain/Category.groovy" />
+    </list>
     <ignored path="icecat-downloader.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,7 +26,7 @@
   </component>
   <component name="DebuggerManager">
     <line_breakpoints>
-      <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="121" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
+      <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="355" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -32,7 +39,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="352" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
+      <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="361" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -45,7 +52,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="358" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
+      <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="362" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -58,20 +65,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="359" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
-        <option name="ENABLED" value="true" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="false" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="" />
-        <option name="LOG_MESSAGE" value="" />
-      </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="363" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
+      <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="366" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -85,6 +79,45 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
       <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="228" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="325" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="131" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="false" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" line="336" class="org.yes.cart.icecat.transform.CategoryWalker" package="org.yes.cart.icecat.transform">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -138,55 +171,37 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ProductHandler.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/xml/ProductHandler.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="95" column="39" selection-start="3736" selection-end="3736" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProductsCsvAdapter.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductsCsvAdapter.groovy">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="63" selection-start="1773" selection-end="1780" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CategoryWalker.groovy" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="CategoryWalker.groovy" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="378" column="43" selection-start="15995" selection-end="15995" vertical-scroll-proportion="0.0">
+            <state line="322" column="39" selection-start="14075" selection-end="14085" vertical-scroll-proportion="0.5954774">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProductPointerHandler.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/xml/ProductPointerHandler.groovy">
+      <file leaf-file-name="readme.txt" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/readme.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="147" column="88" selection-start="6679" selection-end="6679" vertical-scroll-proportion="0.0">
+            <state line="50" column="120" selection-start="2251" selection-end="2268" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Product.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/domain/Product.groovy">
+      <file leaf-file-name="ProductTypeAttributeCsvAdapter.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductTypeAttributeCsvAdapter.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="48" column="18" selection-start="1220" selection-end="1227" vertical-scroll-proportion="0.0">
+            <state line="50" column="17" selection-start="2135" selection-end="2139" vertical-scroll-proportion="-8.230769">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProductsAttributesCsvAdapter.groovy" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductsAttributesCsvAdapter.groovy">
+      <file leaf-file-name="Context.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/Context.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="60" column="88" selection-start="2222" selection-end="2222" vertical-scroll-proportion="0.0">
+            <state line="54" column="0" selection-start="1390" selection-end="1551" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -210,10 +225,28 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ProductPricesCsvAdapter.groovy" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ProductPricesCsvAdapter.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductPricesCsvAdapter.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="50" column="45" selection-start="1500" selection-end="1500" vertical-scroll-proportion="0.48958334">
+            <state line="50" column="45" selection-start="1500" selection-end="1500" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CategoryCsvAdapter.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/CategoryCsvAdapter.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="50" column="38" selection-start="2115" selection-end="2115" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Category.groovy" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/domain/Category.groovy">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="66" column="19" selection-start="1874" selection-end="1874" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -222,7 +255,7 @@
       <file leaf-file-name="Util.groovy" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/Util.groovy">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="87" column="24" selection-start="2889" selection-end="2889" vertical-scroll-proportion="0.0">
+            <state line="41" column="71" selection-start="1224" selection-end="1224" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -240,20 +273,20 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductCategoryCsvAdapter.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductsAttributesCsvAdapter.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductTypeAttributeCsvAdapter.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductTypeCsvAdapter.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductTypeViewGroupCsvAdapter.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/domain/Category.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/Util.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/CategoryCsvAdapter.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/xml/ProductHandler.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/Context.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductsCsvAdapter.groovy" />
-        <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/xml/ProductPointerHandler.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductsSkuCsvAdapter.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductInventoryCsvAdapter.groovy" />
         <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductPricesCsvAdapter.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/domain/Category.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/CategoryCsvAdapter.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/Util.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductTypeAttributeCsvAdapter.groovy" />
+        <option value="$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy" />
       </list>
     </option>
   </component>
@@ -302,16 +335,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -466,6 +489,16 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="PackagesPane">
         <subPane />
       </pane>
@@ -513,6 +546,23 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method>
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -539,23 +589,6 @@
       <envs />
       <properties />
       <listeners />
-      <method>
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="BuildArtifacts" enabled="false" />
         <option name="Make" enabled="true" />
@@ -695,13 +728,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1440" height="874" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32934928" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40239045" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38778222" sideWeight="0.49712643" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3306773" sideWeight="0.49784482" order="7" side_tool="true" content_ui="tabs" />
@@ -714,11 +746,12 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297414" sideWeight="0.6706507" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="JProfiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28663793" sideWeight="0.49402392" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.5059761" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28663793" sideWeight="0.64010626" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35989377" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40239045" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -778,114 +811,98 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductTypeViewGroupCsvAdapter.groovy">
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/AttributeCsvAdapter.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="51" column="64" selection-start="1796" selection-end="1796" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="28" column="6" selection-start="848" selection-end="848" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/domain/Category.groovy">
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/xml/ProductHandler.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="36" selection-start="1505" selection-end="1505" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="95" column="39" selection-start="3736" selection-end="3736" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/CategoryCsvAdapter.groovy">
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductsCsvAdapter.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="81" column="0" selection-start="3093" selection-end="3093" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="54" column="63" selection-start="1773" selection-end="1780" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductCategoryCsvAdapter.groovy">
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/xml/ProductPointerHandler.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="50" selection-start="1697" selection-end="1697" vertical-scroll-proportion="0.0">
+        <state line="147" column="88" selection-start="6679" selection-end="6679" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/domain/Product.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="18" selection-start="1220" selection-end="1227" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductsAttributesCsvAdapter.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="60" column="88" selection-start="2222" selection-end="2222" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductsSkuCsvAdapter.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="41" selection-start="2010" selection-end="2010" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductInventoryCsvAdapter.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="41" selection-start="1390" selection-end="1390" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductPricesCsvAdapter.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="45" selection-start="1500" selection-end="1500" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/Context.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="0" selection-start="1448" selection-end="1448" vertical-scroll-proportion="0.0">
+        <state line="54" column="0" selection-start="1390" selection-end="1551" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/AttributeCsvAdapter.groovy">
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/CategoryCsvAdapter.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="6" selection-start="848" selection-end="848" vertical-scroll-proportion="0.0">
+        <state line="50" column="38" selection-start="2115" selection-end="2115" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductsAttributesCsvAdapter.groovy">
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/domain/Category.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="88" selection-start="2222" selection-end="2222" vertical-scroll-proportion="0.0">
+        <state line="66" column="19" selection-start="1874" selection-end="1874" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/Util.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="87" column="24" selection-start="2889" selection-end="2889" vertical-scroll-proportion="0.0">
+        <state line="41" column="71" selection-start="1224" selection-end="1224" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/domain/Product.groovy">
+    <entry file="file://$PROJECT_DIR$/readme.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="18" selection-start="1220" selection-end="1227" vertical-scroll-proportion="0.0">
+        <state line="50" column="120" selection-start="2251" selection-end="2268" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductsCsvAdapter.groovy">
+    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductTypeAttributeCsvAdapter.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="63" selection-start="1773" selection-end="1780" vertical-scroll-proportion="0.0">
+        <state line="50" column="17" selection-start="2135" selection-end="2139" vertical-scroll-proportion="-8.230769">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/CategoryWalker.groovy">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="378" column="43" selection-start="15995" selection-end="15995" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/xml/ProductPointerHandler.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="147" column="88" selection-start="6679" selection-end="6679" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/xml/ProductHandler.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="95" column="39" selection-start="3736" selection-end="3736" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductsSkuCsvAdapter.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="41" selection-start="2010" selection-end="2010" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductInventoryCsvAdapter.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="41" selection-start="1390" selection-end="1390" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/groovy/org/yes/cart/icecat/transform/csv/ProductPricesCsvAdapter.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="45" selection-start="1500" selection-end="1500" vertical-scroll-proportion="0.48958334">
+        <state line="322" column="39" selection-start="14075" selection-end="14085" vertical-scroll-proportion="0.5954774">
           <folding />
         </state>
       </provider>
