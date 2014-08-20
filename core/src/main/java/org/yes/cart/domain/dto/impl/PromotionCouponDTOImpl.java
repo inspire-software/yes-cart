@@ -20,9 +20,6 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.PromotionCouponDTO;
 
-import java.util.Date;
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 13-10-22

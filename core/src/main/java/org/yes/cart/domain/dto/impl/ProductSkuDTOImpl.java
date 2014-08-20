@@ -22,7 +22,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueProductSkuDTO;
 import org.yes.cart.domain.dto.ProductSkuDTO;
 import org.yes.cart.domain.dto.SkuPriceDTO;
-import org.yes.cart.domain.dto.matcher.impl.AttrValueProductSkuMatcher;
+import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.dto.matcher.impl.SkuPriceMatcher;
 import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
@@ -103,7 +103,7 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
             entityGenericType = AttrValueProductSku.class,
             entityCollectionClass = ArrayList.class,
             dtoCollectionClass = ArrayList.class,
-            dtoToEntityMatcher = AttrValueProductSkuMatcher.class,
+            dtoToEntityMatcher = IdentifiableMatcher.class,
             readOnly = true
     )
     private Collection<AttrValueProductSkuDTO> attributes;

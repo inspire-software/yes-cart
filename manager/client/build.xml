@@ -45,13 +45,13 @@
             <fileset dir="src/main/resources/ru_RU"/>
         </copy>
 
-        <exec executable="subWCRev" osfamily="windows">
+        <exec executable="subWCRev" osfamily="windows" failifexecutionfails="false">
           <arg value="src/main/resources/ru_RU"/>
           <arg value="src/main/resources/ru_RU/ShopManagerApplication.properties"/>
           <arg value="src/main/flex/ShopManagerApplication.properties"/>
         </exec>
 
-        <exec executable="svnwcrev" osfamily="unix">
+        <exec executable="svnwcrev" osfamily="unix" failifexecutionfails="false">
           <arg value="src/main/resources/ru_RU"/>
           <arg value="src/main/resources/ru_RU/ShopManagerApplication.properties"/>
           <arg value="src/main/flex/ShopManagerApplication.properties"/>
@@ -78,13 +78,13 @@
             <fileset dir="src/main/resources/uk_UK"/>
         </copy>
 
-        <exec executable="subWCRev" osfamily="windows">
+        <exec executable="subWCRev" osfamily="windows" failifexecutionfails="false">
           <arg value="src/main/resources/uk_UK"/>
           <arg value="src/main/resources/uk_UK/ShopManagerApplication.properties"/>
           <arg value="src/main/flex/ShopManagerApplication.properties"/>
         </exec>
 
-        <exec executable="svnwcrev" osfamily="unix">
+        <exec executable="svnwcrev" osfamily="unix" failifexecutionfails="false">
           <arg value="src/main/resources/uk_UK"/>
           <arg value="src/main/resources/uk_UK/ShopManagerApplication.properties"/>
           <arg value="src/main/flex/ShopManagerApplication.properties"/>
@@ -111,13 +111,13 @@
         <copy todir="src/main/flex" flatten="true">
             <fileset dir="src/main/resources/en_US"/>
         </copy>
-
-        <exec executable="subWCRev"  osfamily="windows">
+        
+        <exec executable="subWCRev"  osfamily="windows" failifexecutionfails="false">
           <arg value="src/main/resources/en_US"/>
           <arg value="src/main/resources/en_US/ShopManagerApplication.properties"/>
           <arg value="src/main/flex/ShopManagerApplication.properties"/>
         </exec>
-        <exec executable="svnwcrev"  osfamily="unix">
+        <exec executable="svnwcrev"  osfamily="unix" failifexecutionfails="false">
           <arg value="src/main/resources/en_US"/>
           <arg value="src/main/resources/en_US/ShopManagerApplication.properties"/>
           <arg value="src/main/flex/ShopManagerApplication.properties"/>

@@ -21,7 +21,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueCategoryDTO;
 import org.yes.cart.domain.dto.CategoryDTO;
-import org.yes.cart.domain.dto.matcher.impl.AttrValueCategoryMatcher;
+import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.AttrValueCategory;
 
 import java.util.*;
@@ -110,7 +110,7 @@ public class CategoryDTOImpl implements CategoryDTO {
             entityGenericType = AttrValueCategory.class,
             entityCollectionClass = HashSet.class,
             dtoCollectionClass = HashSet.class,
-            dtoToEntityMatcher = AttrValueCategoryMatcher.class,
+            dtoToEntityMatcher = IdentifiableMatcher.class,
             readOnly = true
     )
     private Set<AttrValueCategoryDTO> attributes;

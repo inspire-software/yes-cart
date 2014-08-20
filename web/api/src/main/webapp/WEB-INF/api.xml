@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="roInterfaceToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
+        <constructor-arg>
+            <map>
+                <!--<entry key="org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO" value="org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.SkuPriceDTO" value="org.yes.cart.domain.dto.impl.SkuPriceDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.PriceListDTO" value="org.yes.cart.domain.dto.impl.PriceListDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ManagerDTO" value="org.yes.cart.domain.dto.impl.ManagerDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.RoleDTO" value="org.yes.cart.domain.dto.impl.RoleDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.AttributeGroupDTO" value="org.yes.cart.domain.dto.impl.AttributeGroupDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.AttributeRO" value="org.yes.cart.domain.ro.AttributeRO"/>
+                <!--<entry key="org.yes.cart.domain.dto.EtypeDTO" value="org.yes.cart.domain.dto.impl.EtypeDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ShopDTO" value="org.yes.cart.domain.dto.impl.ShopDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ShopUrlDTO" value="org.yes.cart.domain.dto.impl.ShopUrlDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ShopExchangeRateDTO" value="org.yes.cart.domain.dto.impl.ShopExchangeRateDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.CategoryRO" value="org.yes.cart.domain.ro.CategoryRO"/>
+                <!--<entry key="org.yes.cart.domain.dto.BrandDTO" value="org.yes.cart.domain.dto.impl.BrandDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ProductTypeDTO" value="org.yes.cart.domain.dto.impl.ProductTypeDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ProductTypeAttrDTO" value="org.yes.cart.domain.dto.impl.ProductTypeAttrDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ProductCategoryDTO" value="org.yes.cart.domain.dto.impl.ProductCategoryDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ProductDTO" value="org.yes.cart.domain.dto.impl.ProductDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ProductSearchResultDTO" value="org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.AttrValueCategoryRO" value="org.yes.cart.domain.ro.AttrValueCategoryRO"/>
+                <!--<entry key="org.yes.cart.domain.dto.AttrValueCustomerDTO" value="org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.CustomerDTO" value="org.yes.cart.domain.dto.impl.CustomerDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.CustomerCardDTO" value="org.yes.cart.domain.dto.impl.CustomerCardDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.CustomerWishListDTO" value="org.yes.cart.domain.dto.impl.CustomerWishListDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.AttrValueProductDTO" value="org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.AttrValueProductSkuDTO"-->
+                       <!--value="org.yes.cart.domain.dto.impl.AttrValueProductSkuDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.AttrValueBrandDTO" value="org.yes.cart.domain.dto.impl.AttrValueBrandDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.AttrValueShopDTO" value="org.yes.cart.domain.dto.impl.AttrValueShopDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.AttrValueSystemDTO" value="org.yes.cart.domain.dto.impl.AttrValueSystemDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.WarehouseDTO" value="org.yes.cart.domain.dto.impl.WarehouseDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ShopWarehouseDTO" value="org.yes.cart.domain.dto.impl.ShopWarehouseDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ShopCategoryDTO" value="org.yes.cart.domain.dto.impl.ShopCategoryDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.SkuWarehouseDTO" value="org.yes.cart.domain.dto.impl.SkuWarehouseDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.InventoryDTO" value="org.yes.cart.domain.dto.impl.InventoryDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.SeoImageDTO" value="org.yes.cart.domain.dto.impl.SeoImageDTOImpl"/>-->
+
+                <!--<entry key="org.yes.cart.domain.dto.AssociationDTO" value="org.yes.cart.domain.dto.impl.AssociationDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.ProductAssociationDTO"  value="org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl"/>-->
+
+                <!--<entry key="org.yes.cart.domain.dto.AddressDTO"  value="org.yes.cart.domain.dto.impl.AddressDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.CarrierDTO"  value="org.yes.cart.domain.dto.impl.CarrierDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.CarrierSlaDTO"  value="org.yes.cart.domain.dto.impl.CarrierSlaDTOImpl"/>-->
+
+                <!--<entry key="org.yes.cart.domain.dto.CountryDTO"  value="org.yes.cart.domain.dto.impl.CountryDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.StateDTO"  value="org.yes.cart.domain.dto.impl.StateDTOImpl"/>-->
+
+                <!--<entry key="org.yes.cart.domain.entity.Seo"  value="org.yes.cart.domain.entity.impl.SeoEntity"/>-->
+
+                <!--<entry key="org.yes.cart.domain.dto.CustomerOrderDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>-->
+
+                <!--<entry key="org.yes.cart.domain.dto.PromotionDTO"        value="org.yes.cart.domain.dto.impl.PromotionDTOImpl"/>-->
+                <!--<entry key="org.yes.cart.domain.dto.PromotionCouponDTO"  value="org.yes.cart.domain.dto.impl.PromotionCouponDTOImpl"/>-->
+
+            </map>
+        </constructor-arg>
+    </bean>
+
+
+    <bean id="roAssemblerAdaptersRepository"
+          class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
+        <constructor-arg>
+            <map>
+                <!--<entry key="bigDecimalToFloat" value-ref="bigDecimalToFloat"/>-->
+                <!--<entry key="brandDTO2Brand" value-ref="brandDTO2Brand"/>-->
+                <!--<entry key="productTypeDTO2ProductType" value-ref="productTypeDTO2ProductType"/>-->
+                <!--<entry key="productId2Product" value-ref="productId2Product"/>-->
+                <!--<entry key="skuId2Sku" value-ref="skuId2Sku"/>-->
+                <!--<entry key="shopId2Shop" value-ref="shopId2Shop"/>-->
+                <!--<entry key="warehouseId2Warehouse" value-ref="warehouseId2Warehouse"/>-->
+                <!--<entry key="carrierId2Carrier" value-ref="carrierId2Carrier"/>-->
+                <!--<entry key="associationDTO2Association" value-ref="associationDTO2Association"/>-->
+                <!--<entry key="producttypeId2ProductType" value-ref="producttypeId2ProductType"/>-->
+
+                <!--<entry key="attributeDTO2Attribute" value-ref="attributeDTO2Attribute"/>-->
+
+                <entry key="i18nStringConverter" value-ref="i18nStringConverter"/>
+
+            </map>
+        </constructor-arg>
+    </bean>
+
+</beans>

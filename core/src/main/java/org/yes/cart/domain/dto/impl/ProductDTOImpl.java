@@ -21,8 +21,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoParent;
 import org.yes.cart.domain.dto.*;
-import org.yes.cart.domain.dto.matcher.impl.AttrValueProductMatcher;
-import org.yes.cart.domain.dto.matcher.impl.ProductCategoryMatcher;
+import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.ProductCategory;
 
@@ -75,7 +74,7 @@ public class ProductDTOImpl implements ProductDTO {
             entityGenericType = ProductCategory.class,
             entityCollectionClass = HashSet.class,
             dtoCollectionClass = HashSet.class,
-            dtoToEntityMatcher = ProductCategoryMatcher.class,
+            dtoToEntityMatcher = IdentifiableMatcher.class,
             readOnly = true
     )
     private Set<ProductCategoryDTO> productCategoryDTOs;
@@ -120,7 +119,7 @@ public class ProductDTOImpl implements ProductDTO {
             entityGenericType = AttrValueProduct.class,
             entityCollectionClass = ArrayList.class,
             dtoCollectionClass = ArrayList.class,
-            dtoToEntityMatcher = AttrValueProductMatcher.class,
+            dtoToEntityMatcher = IdentifiableMatcher.class,
             readOnly = true
     )
     private Collection<AttrValueProductDTO> attributes;
