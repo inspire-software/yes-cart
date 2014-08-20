@@ -43,7 +43,7 @@ class ProductInventoryCsvAdapter {
             def pp = it;
             it.inventory.each {
                 builder.append('"')
-                builder.append(pp.Prod_ID).append('";"')
+                builder.append(pp.Product_ID_valid).append('";"')
                 builder.append(Util.escapeCSV(pp.Model_Name)).append('";"')
                 builder.append(it.key).append('";')
                 builder.append(it.value).append('\n')

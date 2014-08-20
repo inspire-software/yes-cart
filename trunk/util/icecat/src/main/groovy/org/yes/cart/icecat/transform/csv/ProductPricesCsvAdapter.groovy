@@ -22,6 +22,7 @@ package org.yes.cart.icecat.transform.csv
 
 import org.yes.cart.icecat.transform.domain.ProductPointer
 import org.yes.cart.icecat.transform.Util
+import java.math.RoundingMode
 
 /**
  * User: denispavlov
@@ -39,7 +40,7 @@ class ProductPricesCsvAdapter {
     public toCsvFile(String filename) {
 
         StringBuilder builder = new StringBuilder();
-        builder.append("sku code;model;shop code;currency;list price;tier\n");
+        builder.append("sku code;model;shop code;currency;list price;tier;sale price\n");
 
         productMap.values().each {
             def pp = it;
@@ -47,12 +48,19 @@ class ProductPricesCsvAdapter {
                 def sh = it;
                 sh.value.each {
                     builder.append('"')
-                    builder.append(pp.Prod_ID).append('";"')
+                    builder.append(pp.Product_ID_valid).append('";"')
                     builder.append(Util.escapeCSV(pp.Model_Name)).append('";"')
                     builder.append(sh.key).append('";"')
                     builder.append(it.key).append('";')    // currency
                     builder.append(it.value).append(';') // price
-                    builder.append('1\n') // tier
+                    builder.append('1;') // tier
+                    if (pp.SpecialOffer) {
+                        builder.append(it.value.multiply(new BigDecimal("0.8").setScale(2, RoundingMode.HALF_EVEN))).append('\n') // sale price
+                    } else if (pp.Sale) {
+                        builder.append(it.value.multiply(new BigDecimal("0.9").setScale(2, RoundingMode.HALF_EVEN))).append('\n') // sale price
+                    } else {
+                        builder.append('\n') // sale price
+                    }
                 }
             }
         }
