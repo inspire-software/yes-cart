@@ -52,7 +52,7 @@ class ProductsCsvAdapter {
                     StringBuilder builderTmp = new StringBuilder();
                     builderTmp.append('"')
                     builderTmp.append(it.Product_ID_valid).append('";"')
-                    builderTmp.append(Util.escapeCSV(it.Product_ID_valid)).append('";"') // SKU
+                    builderTmp.append(Util.escapeCSV(it.Prod_ID)).append('";"') // SKU
                     builderTmp.append(Util.escapeCSV(it.Model_Name)).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.Supplier)).append('";"') // Brand
                     builderTmp.append(Util.escapeCSV(it.categories.values().iterator().next().getNameFor('en'))).append('";"') // Type is same as prime category
