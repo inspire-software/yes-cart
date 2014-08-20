@@ -33,6 +33,7 @@
     <modules>
         <module>support</module>
         <module>store</module>
+        <module>api</module>
     </modules>
 
 </project>

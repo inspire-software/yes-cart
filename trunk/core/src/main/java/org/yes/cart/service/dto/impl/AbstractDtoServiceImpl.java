@@ -49,6 +49,23 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
 
     private final AdaptersRepository adaptersRepository;
 
+
+    /**
+     * Construct base remote service.
+     * @param dtoFactory {@link DtoFactory}
+     * @param service {@link org.yes.cart.service.domain.GenericService}
+     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     */
+    public AbstractDtoServiceImpl(final DtoFactory dtoFactory,
+                                  final GenericService<IFACE> service,
+                                  final AdaptersRepository adaptersRepository) {
+        this.dtoFactory = dtoFactory;
+        this.service = service;
+        this.assembler = DTOAssembler.newAssembler(getDtoImpl(), getEntityIFace());
+        this.adaptersRepository = adaptersRepository;
+    }
+
+
     /** {@inheritDoc}*/
     public GenericService<IFACE> getService() {
         return service;
@@ -120,21 +137,6 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
             assembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
             dtos.add(dto);
         }
-    }
-
-    /**
-     * Construct base remote service.
-     * @param dtoFactory {@link DtoFactory}
-     * @param service {@link org.yes.cart.service.domain.GenericService}
-     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
-     */
-    public AbstractDtoServiceImpl(final DtoFactory dtoFactory,
-                                  final GenericService<IFACE> service,
-                                  final AdaptersRepository adaptersRepository) {
-        this.dtoFactory = dtoFactory;
-        this.service = service;
-        this.assembler = DTOAssembler.newAssembler(getDtoImpl(), getEntityIFace());
-        this.adaptersRepository = adaptersRepository;
     }
 
     /**

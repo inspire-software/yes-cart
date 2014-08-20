@@ -1,0 +1,84 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<Context path="/yes-api" crossContext="true" >
+
+<!--
+    <Resource name="mail/Session"
+              auth="Container"
+              type="javax.mail.Session"
+              username="yourusername"
+              password="yourpassword"
+              mail.debug="true"
+              mail.user="yourusername"
+              mail.password="yourpassword"
+              mail.transport.protocol="smtp"
+              mail.smtp.host="your.smtphost.com"
+              mail.smtp.auth="true"
+              mail.smtp.port="25"
+              mail.smtp.starttls.enable="true"/>
+-->
+
+    <Resource name="jdbc/yespayjndi"
+                  auth="Container"
+                  scope="Shareable"
+                  type="javax.sql.DataSource"
+                  maxActive="1000"
+                  maxIdle="30"
+                  maxWait="10000"
+                  removeAbandoned="true"
+                  username="${db.config.yespay.login}"
+                  password="${db.config.yespay.password}"
+                  driverClassName="${db.config.yespay.driver}"
+                  url="${db.config.yespay.url}"
+                  minEvictableIdleTimeMillis="864000000"
+            />
+
+
+
+    <Resource name="jdbc/yesjndi"
+              auth="Container"
+              scope="Shareable"
+              type="javax.sql.DataSource"
+              maxActive="100"
+              maxIdle="30"
+              maxWait="10000"
+              removeAbandoned="true"
+              username="${db.config.yes.login}"
+              password="${db.config.yes.password}"
+              driverClassName="${db.config.yes.driver}"
+              url="${db.config.yes.url}"
+              minEvictableIdleTimeMillis="864000000"
+                />
+
+
+
+    <Realm className="org.apache.catalina.realm.DataSourceRealm" debug="4"
+        digest="MD5"
+        localDataSource="true"
+        dataSourceName="jdbc/yesjndi"
+        userTable="TMANAGER"
+        userNameCol="email"
+        userCredCol="password"
+        userRoleTable="TMANAGERROLE"
+        roleNameCol="code"/>
+
+    <Parameter name="NODE_ID" value="YES1" override="false"/>
+    <Parameter name="BACKDOOR_URI" value="http://localhost:8080/yes-api/services/backdoor" override="false"/>
+    <Parameter name="CACHEDIRECTOR_URI" value="http://localhost:8080/yes-api/services/cachedirector" override="false"/>
+
+</Context>
+

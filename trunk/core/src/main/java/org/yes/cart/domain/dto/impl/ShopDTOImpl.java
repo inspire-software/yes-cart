@@ -21,7 +21,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueShopDTO;
 import org.yes.cart.domain.dto.ShopDTO;
-import org.yes.cart.domain.dto.matcher.impl.AttrValueShopMatcher;
+import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.AttrValueShop;
 
 import java.util.ArrayList;
@@ -84,7 +84,7 @@ public class ShopDTOImpl implements ShopDTO {
             entityGenericType = AttrValueShop.class,
             entityCollectionClass = ArrayList.class,
             dtoCollectionClass = ArrayList.class,
-            dtoToEntityMatcher = AttrValueShopMatcher.class,
+            dtoToEntityMatcher = IdentifiableMatcher.class,
             readOnly = true
     )
     private Collection<AttrValueShopDTO> attributes;

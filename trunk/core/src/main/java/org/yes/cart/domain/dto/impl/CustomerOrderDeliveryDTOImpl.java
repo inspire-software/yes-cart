@@ -20,7 +20,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
-import org.yes.cart.domain.dto.matcher.impl.CustomerOrderDeliveryDetailMatcher;
+import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 
 import java.math.BigDecimal;
@@ -102,7 +102,7 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
             entityGenericType =  CustomerOrderDeliveryDet.class,
             entityCollectionClass = ArrayList.class,
             dtoCollectionClass = ArrayList.class,
-            dtoToEntityMatcher = CustomerOrderDeliveryDetailMatcher.class,
+            dtoToEntityMatcher = IdentifiableMatcher.class,
             readOnly = true
     )
     private Collection<CustomerOrderDeliveryDetailDTO> detail;

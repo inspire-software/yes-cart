@@ -247,14 +247,14 @@ public interface AttributeDTO extends Identifiable {
      * Get the comma separated  [key-]value data or
      * service , that provide data in case if start from protocol,
      *
-     * @return comma separated coices.
+     * @return comma separated choices.
      */
     String getChoiceData();
 
     /**
-     * Set comma separated coices.
+     * Set comma separated choices.
      *
-     * @param choiceData comma separated coices.
+     * @param choiceData comma separated choices.
      */
     void setChoiceData(String choiceData);
 

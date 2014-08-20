@@ -21,7 +21,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueBrandDTO;
 import org.yes.cart.domain.dto.BrandDTO;
-import org.yes.cart.domain.dto.matcher.impl.AttrValueBrandMatcher;
+import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.AttrValueBrand;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class BrandDTOImpl implements BrandDTO {
             entityGenericType = AttrValueBrand.class,
             entityCollectionClass = ArrayList.class,
             dtoCollectionClass = ArrayList.class,
-            dtoToEntityMatcher = AttrValueBrandMatcher.class,
+            dtoToEntityMatcher = IdentifiableMatcher.class,
             readOnly = true
             )
     private Collection<AttrValueBrandDTO> attributes;
