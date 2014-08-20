@@ -54,7 +54,7 @@ public class NewArrivalProducts extends AbstractProductSearchResultList {
     @Override
     protected void onBeforeRender() {
 
-        add(new Label("productsTitle", new StringResourceModel("new.arrivals", this, null)).setVisible(!getProductListToShow().isEmpty()));
+        add(new Label("productsTitle", new StringResourceModel("newArrivals", this, null)).setVisible(!getProductListToShow().isEmpty()));
         super.onBeforeRender();
     }
 

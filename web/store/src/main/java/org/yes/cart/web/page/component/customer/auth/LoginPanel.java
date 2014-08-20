@@ -210,6 +210,7 @@ public class LoginPanel extends BaseComponent {
                                 if (isCustomerExists(email)) {
                                     setRestorePassword(email);
 
+                                    error(getLocalizer().getString("wrongPassword", this));
                                     error(new StringResourceModel("tryToRestore", this, null, new Object[] {email}).getString());
 
                                 } else {

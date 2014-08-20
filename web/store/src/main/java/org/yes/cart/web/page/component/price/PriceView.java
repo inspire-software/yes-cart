@@ -205,7 +205,7 @@ public class PriceView extends BaseComponent {
 
 
         addOrReplace(
-                new Label(SAVE_LABEL, new StringResourceModel("save.percent", this, null, new Object[] { savePercent }))
+                new Label(SAVE_LABEL, new StringResourceModel("savePercent", this, null, new Object[] { savePercent }))
                         .setVisible(showSave)
                         .add(new AttributeModifier(HTML_CLASS, "sale-price-save"))
         );
