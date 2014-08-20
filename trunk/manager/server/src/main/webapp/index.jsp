@@ -32,11 +32,14 @@
     }
 
     var redirectToPage = "ShopManagerApplication.html";
-    document.write('<p align="center"><a href="ru_RU/'+redirectToPage+'">Старт</a></p>');
-    document.write('<p align="center"><a href="en_US/'+redirectToPage+'">Start</a></p>');
+    document.write('<p align="center"><a href="uk_UK/'+redirectToPage+'">Старт Українська</a></p>');
+    document.write('<p align="center"><a href="en_US/'+redirectToPage+'">Start English</a></p>');
+    document.write('<p align="center"><a href="ru_RU/'+redirectToPage+'">Старт Русский</a></p>');
 
-    if(browserLanguage == "ru" || browserLanguage == "ua" || browserLanguage == "be") {
+    if(browserLanguage == "ru" || browserLanguage == "be") {
         redirectToPage = "ru_RU/" + redirectToPage;
+    } else if(browserLanguage == "ua") {
+        redirectToPage = "uk_UK/" + redirectToPage;
     } else {
         redirectToPage = "en_US/" + redirectToPage;
     }
