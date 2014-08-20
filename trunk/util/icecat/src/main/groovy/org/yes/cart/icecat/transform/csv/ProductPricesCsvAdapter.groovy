@@ -48,7 +48,7 @@ class ProductPricesCsvAdapter {
                 def sh = it;
                 sh.value.each {
                     builder.append('"')
-                    builder.append(pp.Product_ID_valid).append('";"')
+                    builder.append(pp.Prod_ID).append('";"')
                     builder.append(Util.escapeCSV(pp.Model_Name)).append('";"')
                     builder.append(sh.key).append('";"')
                     builder.append(it.key).append('";')    // currency
