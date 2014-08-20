@@ -149,8 +149,8 @@ public class ProductInListView extends BaseComponent {
 
         add(links.newAddToCartLink(ADD_TO_CART_LINK, skuPam.getFirstAvailableSkuCode(), null, getPage().getPageParameters())
                         .add(new Label(ADD_TO_CART_LINK_LABEL, skuPam.isInStock() || skuPam.isPerpetual() ?
-                                getLocalizer().getString("add.to.cart", this) :
-                                getLocalizer().getString("preorder.cart", this)))
+                                getLocalizer().getString("addToCart", this) :
+                                getLocalizer().getString("preorderCart", this)))
                         .setVisible(skuPam.isAvailable())
         );
 

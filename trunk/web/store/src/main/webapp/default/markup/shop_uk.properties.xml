@@ -18,5 +18,299 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
     <!-- All global properties should go here -->
-    <entry key="build.version">YC - 2.1.0</entry>
+    <entry key="buildVersion">YC - 2.1.0</entry>
+    <entry key="home">Головна</entry>
+    <entry key="continueShopping">За новими покупками</entry>
+    <entry key="brand">Виробник</entry>
+    <entry key="price">Ціна</entry>
+    <entry key="qty">Кількість</entry>
+    <entry key="login">Вхід</entry>
+    <entry key="registration">Реєстрація</entry>
+    <entry key="save">Зберегти</entry>
+    <entry key="email">E-mail</entry>
+    <entry key="password">Пароль</entry>
+    <entry key="firstname">Ім'я</entry>
+    <entry key="lastname">Прізвище</entry>
+    <entry key="customerAdditional">Додаткова інформація</entry>
+    <entry key="faq">Часті запитання</entry>
+    <entry key="contacts">Контакти</entry>
+    <entry key="profile">Особистий кабінет / Список побажань</entry>
+    <entry key="sale">Розпродаж</entry>
+    <entry key="newArrivals">Нові надходження</entry>
+    <entry key="addToCart">В кошик</entry>
+    <entry key="preorderCart">Резерв</entry>
+    <entry key="skuCode">Код</entry>
+
+    <!-- CheckoutPage -->
+    <entry key="addressStep">Адреса для рахунку та доставки</entry>
+    <entry key="shipMethodStep">Спосіб доставки</entry>
+    <entry key="paymentStep">Перевірка та оплата</entry>
+    <entry key="loginStep">Вхід</entry>
+    <entry key="billingAddrTheSame">Однакова адреса для доставки і виставлення рахунку</entry>
+    <entry key="shipmentStep">Доставка</entry>
+    <entry key="paymentStep">Оплата</entry>
+    <entry key="paymentGatewayLabel">Спосіб оплати</entry>
+    <entry key="multipleDeliveryLabel">Множинна доставка</entry>
+    <entry key="multipleDeliveryHint">Це замовлення може бути доставлене частинами</entry>
+    <entry key="paymentSubmit">Сплатити</entry>
+    <entry key="checkoutTitle">Оформлення покупки</entry>
+    <entry key="selectAddr">Вкажіть адресу для доставки і рахунку</entry>
+    <entry key="selectPayment">Оплата</entry>
+
+    <!-- ContactPage -->
+    <entry key="contact">Контактна інформація</entry>
+
+    <!-- CustomerSelfCarePage -->
+    <entry key="selfCare">Особиста сторінка</entry>
+    <entry key="customerSummary">Загальна інформація</entry>
+    <entry key="orderInfo">Покупки</entry>
+    <entry key="wishlist">Список побажань</entry>
+    <entry key="addresses">Адресна книга</entry>
+
+    <!-- FaqPage -->
+    <entry key="faqTitle">Часті запитання</entry>
+
+    <!-- HomePage -->
+
+    <!-- LoginPage -->
+
+    <!-- PaymentPage -->
+    <entry key="orderPayment">Оплата замовлення</entry>
+    <entry key="negativePaymentNotes">Оплата пройшла невдало</entry>
+    <entry key="positivePaymentNotes">Оплата пройшла успішно</entry>
+    <entry key="checkStatus">Перевірити статус замовлення</entry>
+    <entry key="negativeItemAllocationNotes">Недостатня кількість  {0}, код {1} на складах. Спробуйте купити схожий товар. Приносимо вибачення</entry>
+
+    <!-- RegistrationPage -->
+
+    <!-- ShoppingCartPage -->
+    <entry key="checkout">Оформити покупку</entry>
+    <entry key="shoppingCart">Кошик</entry>
+    <entry key="emptyCart">Кошик порожній</entry>
+    <entry key="orderErrorGeneral">Сталася помилка при створені Вашого замовлення. Спробуйте ще раз.</entry>
+    <entry key="orderErrorCouponInvalid">Промо-код '${0}' не може бути прийнятий. Будь-ласка видаліть його із кошика.</entry>
+
+    <!-- COMPONENTS -->
+    <!-- BreadCrumbsView -->
+    <entry key="query">Пошук</entry>
+    <entry key="specialoffer">Спеціальна пропозиція</entry>
+    <entry key="newarrival">Нові надходження</entry>
+    <entry key="multisku">Демо: мульти-sku</entry>
+    <entry key="preorder">Демо: очікуються</entry>
+    <entry key="backorder">Демо: по замовленню</entry>
+    <entry key="always">Демо: завжди</entry>
+
+    <!-- ShoppingCartPaymentVerificationView -->
+    <entry key="productName">Товар</entry>
+    <entry key="amount">Всього</entry>
+    <entry key="deliveryNum">Номер доставки</entry>
+    <entry key="deliverySubTotal">Разом доставка</entry>
+    <entry key="deliverySubTotalTax">в т.ч. ПДВ</entry>
+    <entry key="deliverySubTotalAmount">Всього</entry>
+    <entry key="deliveryCost">Доставка</entry>
+    <entry key="deliveryCostTax">в т.ч. ПДВ</entry>
+    <entry key="deliveryCostAmount">Всього</entry>
+    <entry key="grandTotal">Сума</entry>
+    <entry key="grandTotalTax">в т.ч. ПДВ</entry>
+    <entry key="grandTotalAmount">Всього</entry>
+    <entry key="orderVerification">Перевірте замовлення та виберіть спосіб оплати</entry>
+
+    <!-- ShoppingCartView -->
+    <entry key="product">Найменування</entry>
+    <entry key="amountMsg">Всього</entry>
+    <entry key="addOneLink">+1</entry>
+    <entry key="removeOneLink">-1</entry>
+    <entry key="removeAllLink">X</entry>
+    <entry key="addOneLinkHint">Додати один</entry>
+    <entry key="removeOneLinkHint">Видалити один</entry>
+    <entry key="removeAllLinkHint">Видалити усі</entry>
+    <entry key="nonZeroDigits">Введіть позитивне ціле число</entry>
+    <entry key="skuNumber">Номер</entry>
+    <entry key="productsInCart">Товари у кошику</entry>
+    <entry key="removeCouponCodeLabel">Видалити промо-код</entry>
+    <entry key="addCouponButtonLabel">Додати промо-код</entry>
+    <entry key="appliedPromoCode">${0} [застосований]</entry>
+    <entry key="pendingPromoCode">${0} [не застосований]</entry>
+    <entry key="noEmptyCoupons">Введіть будь-ласка промо-код</entry>
+
+    <!-- SmallShoppingCartView -->
+    <entry key="itemForm0">{0} товар</entry>
+    <entry key="itemForm1">{0} товара</entry>
+    <entry key="itemForm2">{0} товарів</entry>
+    <entry key="noItem">Кошик порожній</entry>
+
+    <!-- CreateEditAddressPage -->
+    <entry key="firstName">Ім'я</entry>
+    <entry key="lastName">Прізвище</entry>
+    <entry key="line1">Рядок адреси 1</entry>
+    <entry key="line2">Рядок адреси 2</entry>
+    <entry key="city">Місто</entry>
+    <entry key="country">Країна</entry>
+    <entry key="state">Область</entry>
+    <entry key="postcode">Індекс</entry>
+    <entry key="phoneList">Телефони</entry>
+    <entry key="create">Зберегти</entry>
+    <entry key="cancel">Скасувати</entry>
+    <entry key="createEditAddress">Адреса</entry>
+
+    <!-- ManageAddressesView -->
+    <entry key="create">Додати</entry>
+    <entry key="delete">Видалити</entry>
+    <entry key="edit">Редагувати</entry>
+    <entry key="addressTypeS">Адреса доставки</entry>
+    <entry key="addressTypeB">Адреса для рахунку</entry>
+
+    <!-- LoginPanel -->
+    <entry key="wrongPassword">Невірний пароль</entry>
+    <entry key="customerNotExists">E-mail не зареєстрований. Пройдіть процедуру реєстрації.</entry>
+    <entry key="restorePassword">Відновити пароль</entry>
+    <entry key="signIn">Вхід</entry>
+    <entry key="tryToRestore">Натисніть "Відновити пароль" і він буде висланий на Ваш e-mail {0}</entry>
+    <entry key="emailSent">Новий пароль відправлено на пошту {0}</entry>
+
+    <!-- RegisterPanel -->
+    <entry key="newUser">Новий покупець</entry>
+    <entry key="register">Реєстрація</entry>
+    <entry key="phone">Телефон</entry>
+    <entry key="customerExists">Користувач з таким e-mail вже зареєстрований</entry>
+    <entry key="canNotRegister">Неможливо зареєструвати</entry>
+
+    <!-- LogoutPanel -->
+    <entry key="logoffLabel">Вийти</entry>
+    <entry key="logoffTitle">${name} натисніть тут, щоб вийти з Вашої особистої сторінки</entry>
+
+    <!-- CustomerOrderPanel -->
+    <!-- order statuses from CustomerOrder interface -->
+    <entry key="os.none">-</entry>
+    <entry key="os.pending">Підготовка</entry>
+    <entry key="os.waiting">Необхідне підтвердження</entry>
+    <entry key="os.in.progress">Виконується</entry>
+    <entry key="os.cancelled">Скасований</entry>
+    <entry key="os.partially.shipped">Частково виконаний</entry>
+    <entry key="os.completed">Виконаний</entry>
+
+    <entry key="orderNumHead">Номер</entry>
+    <entry key="orderDateHead">Дата</entry>
+    <entry key="orderStatusHead">Статус</entry>
+    <entry key="orderItemsHead">Товар</entry>
+    <entry key="orderAmountHead">Сума</entry>
+    <entry key="orderInfo">Покупки</entry>
+    <entry key="noOrders">Немає записів в історії замовлень.</entry>
+
+    <!-- PasswordPanel -->
+    <entry key="changePassword">Політика безпеки магазину - тільки автоматично згенерований пароль. Новий пароль буде висланий на Ваш email після натискання кнопки "Змінити пароль"</entry>
+    <entry key="changePasswordBtn">Змінити пароль</entry>
+    <entry key="newPasswordSent">Новий пароль відправленний на email</entry>
+
+    <!-- SummaryPanel -->
+    <entry key="customerSummary">Загальна інформація</entry>
+    <entry key="profileUpdated">Особиста сторінка оновлена</entry>
+
+    <!-- WishListView -->
+    <entry key="wishlistItems">Список побажань</entry>
+    <entry key="wishlistNoItems">Список побажань порожній. Ви можете його поповнити натиснувши кнопку "До побажань" на сторінці товару.</entry>
+    <entry key="addToCartWlBtn">В кошик (${0})</entry>
+    <entry key="preorderCartWlBtn">Замовити (${0})</entry>
+    <entry key="removeFromWishlist">Видалити зі списку</entry>
+
+    <!-- StandardFooter, CheckoutFooter -->
+    <entry key="siteMap">Карта сайту</entry>
+    <entry key="help">Довідка</entry>
+    <entry key="platform">Платформа</entry>
+    <entry key="callCenter">Служба підтримки</entry>
+    <entry key="returnPolicy">Повернення товару</entry>
+    <entry key="orderGuide">Як замовити</entry>
+    <entry key="orderHistory">Історія замовлень</entry>
+    <entry key="location">Розташування</entry>
+    <entry key="licenceInfo">Ліцензії</entry>
+    <entry key="cart">Покупки</entry>
+    <entry key="sitemapInfo">Карта сайту</entry>
+
+    <!-- StandardHeader -->
+    <entry key="specialOffer">Спеціальна пропозиція</entry>
+    <entry key="demoMultiSku">Мульти-sku</entry>
+    <entry key="demoPreorder">Очікуються</entry>
+    <entry key="demoBackorder">По замовленню</entry>
+    <entry key="demoAlways">Завжди</entry>
+    <entry key="menu">Меню</entry>
+    <entry key="demo">Демо</entry>
+
+    <!-- ProductSorter -->
+    <entry key="sort">Сортувати:</entry>
+    <entry key="byName">ім'я</entry>
+    <entry key="byPrice">ціна</entry>
+
+    <!-- PriceTierView -->
+    <entry key="priceTierLabel">Ціна за одиницю</entry>
+    <entry key="descountRule">Купуючи більше однієї одиниці товару, ви отримуєте знижку. Чим більше однотипних товарів Ви купуєте, тим більше знижка</entry>
+
+    <!-- PriceView -->
+    <entry key="savePercent">Знижка {0}%</entry>
+
+    <!-- RecentlyViewedProducts -->
+    <entry key="recentlyViewed">Переглянуті</entry>
+
+    <!-- SearchView -->
+    <entry key="search">Пошук</entry>
+
+    <!-- ShippingView -->
+    <entry key="carrier">Перевізник</entry>
+    <entry key="carrierSla">Спосіб доставки</entry>
+    <entry key="carrierSelect">Виберіть перевізника та спосіб доставки</entry>
+
+    <!-- Currency -->
+    <entry key="currency">Валюта</entry>
+
+    <!-- Language -->
+    <entry key="language">Мова</entry>
+
+    <!-- ProductsCentralView -->
+    <entry key="items">Товарів</entry>
+
+    <!-- SkuCentralView -->
+    <entry key="addToWishlist">До побажань</entry>
+    <entry key="wishListItemAdded">Товар ${0} доданий до побажань. Переглянути список побажань Ви можете у Вашому профілі.</entry>
+    <entry key="description">Опис</entry>
+    <entry key="details">Деталі</entry>
+    <entry key="accessories">Аксесуари</entry>
+    <entry key="volumeDiscount">Оптові знижки</entry>
+
+    <!-- TopCategories -->
+    <entry key="categories">Каталог</entry>
+
+    <!-- PAYMENT GATEWAYS -->
+    <!-- AuthorizeNetSimPaymentOkPage -->
+    <entry key="paymentWasOk">Платіж пройшов успішно</entry>
+    <entry key="pageTitle">Платіж пройшов успішно</entry>
+
+    <!-- ResultPage -->
+    <entry key="resultPageTitle">Результат оплати</entry>
+    <entry key="paymentWasFailed">Оплата не відбулася</entry>
+    <entry key="paymentResult">Результат оплати</entry>
+
+    <!-- LiqPayReturnUrlPage -->
+    <entry key="liqPayPageTitle">Результат платежу</entry>
+    <entry key="orderErrorCancelled">Замовлення скасовано. Можлива причина - це помилка при оплаті, або недостатня кількість товару на складі</entry>
+    <entry key="orderErrorNotFound">Замовлення не знайдене</entry>
+    <entry key="orderSuccess">Замовлення успішно оформлене</entry>
+
+    <!-- PayPalReturnUrlPage -->
+    <entry key="payPalPageTitle">Платіж через pay pal</entry>
+    <entry key="pay">Підтвердити</entry>
+    <entry key="paymentFailed">Оплата не відбулася</entry>
+    <entry key="badStatus">Ваш статус не підтверджений на pay pal або неможливо отримати інформацію про оплату</entry>
+    <entry key="confirmPayment">
+        <![CDATA[
+                    Сума платежу {0} {1}. Підтвердіть оплату для продовження.
+               ]]>
+    </entry>
+    <entry key="paymentOk">
+        <![CDATA[
+                    Оплата пройшла успішно. Номер замовлення {0}.
+                    Статус можна перевірити <a href="selfcare">на цій сторінці</a>.
+                     <br>
+                    <a href=".">За новими покупками !</a>.
+               ]]>
+    </entry>
+
 </properties>

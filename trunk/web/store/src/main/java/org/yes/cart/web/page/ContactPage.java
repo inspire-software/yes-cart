@@ -44,6 +44,7 @@ public class ContactPage  extends AbstractWebPage {
      */
     protected void onBeforeRender() {
 
+        executeHttpPostedCommands();
         add(
                 new StandardFooter(FOOTER)
         ).add(
@@ -53,6 +54,7 @@ public class ContactPage  extends AbstractWebPage {
         );
 
         super.onBeforeRender();
+        persistCartIfNecessary();
     }
 
     /**

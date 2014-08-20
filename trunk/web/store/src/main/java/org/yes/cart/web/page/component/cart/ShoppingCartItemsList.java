@@ -42,7 +42,6 @@ import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.page.AbstractWebPage;
-import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
@@ -227,7 +226,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
                 } else {
                     qtyField.setConvertedInput(BigDecimal.ONE.setScale(Constants.DEFAULT_SCALE));
-                    error(getLocalizer().getString("nonzerodigits", this, "Need positive integer value"));
+                    error(getLocalizer().getString("nonZeroDigits", this, "Need positive integer value"));
                 }
             }
         };

@@ -18,5 +18,299 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
     <!-- All global properties should go here -->
-    <entry key="build.version">YC - 2.1.0</entry>
+    <entry key="buildVersion">YC - 2.1.0</entry>
+    <entry key="home">Главная</entry>
+    <entry key="continueShopping">За новыми покупками</entry>
+    <entry key="brand">Производитель</entry>
+    <entry key="price">Цена</entry>
+    <entry key="qty">Количество</entry>
+    <entry key="login">Вход</entry>
+    <entry key="registration">Регистрация</entry>
+    <entry key="save">Сохранить</entry>
+    <entry key="email">E-mail</entry>
+    <entry key="password">Пароль</entry>
+    <entry key="firstname">Имя</entry>
+    <entry key="lastname">Фамилия</entry>
+    <entry key="customerAdditional">Дополнительная информация</entry>
+    <entry key="faq">ЧАВО</entry>
+    <entry key="contacts">Контакты</entry>
+    <entry key="profile">Личный кабинет / Список пожеланий</entry>
+    <entry key="sale">Распродажа</entry>
+    <entry key="newArrivals">Новые послупления</entry>
+    <entry key="addToCart">В корзину</entry>
+    <entry key="preorderCart">Резерв</entry>
+    <entry key="skuCode">Код</entry>
+
+    <!-- CheckoutPage -->
+    <entry key="addressStep">Адреса для счета и доставки</entry>
+    <entry key="shipMethodStep">Метод доставки</entry>
+    <entry key="paymentStep">Проверка и оплата</entry>
+    <entry key="loginStep">Вход</entry>
+    <entry key="billingAddrTheSame">Одинаковый адрес доставки и выставления счета</entry>
+    <entry key="shipmentStep">Доставка</entry>
+    <entry key="paymentStep">Оплата</entry>
+    <entry key="paymentGatewayLabel">Метод оплаты</entry>
+    <entry key="multipleDeliveryLabel">Множественная доставка</entry>
+    <entry key="multipleDeliveryHint">Этот заказ может быть доставлен по частям</entry>
+    <entry key="paymentSubmit">Оплатить</entry>
+    <entry key="checkoutTitle">Оформление покупки</entry>
+    <entry key="selectAddr">Укажите адреса для доставки и счета</entry>
+    <entry key="selectPayment">Оплата</entry>
+
+    <!-- ContactPage -->
+    <entry key="contact">Контактная информация</entry>
+
+    <!-- CustomerSelfCarePage -->
+    <entry key="selfCare">Персональная страница</entry>
+    <entry key="customerSummary">Основная информация</entry>
+    <entry key="orderInfo">Покупки</entry>
+    <entry key="wishlist">Список пожеланий</entry>
+    <entry key="addresses">Адресная книга</entry>
+
+    <!-- FaqPage -->
+    <entry key="faqTitle">Часто задаваемые вопросы</entry>
+
+    <!-- HomePage -->
+
+    <!-- LoginPage -->
+
+    <!-- PaymentPage -->
+    <entry key="orderPayment">Оплата заказа</entry>
+    <entry key="negativePaymentNotes">Оплата произведена неудачно</entry>
+    <entry key="positivePaymentNotes">Оплата произведена успешно</entry>
+    <entry key="checkStatus">Проверить статус заказа</entry>
+    <entry key="negativeItemAllocationNotes">Недостаточное количество  {0}, код {1} на складах. Попробуйте купить схожий продукт. Приносим свои извинения</entry>
+
+    <!-- RegistrationPage -->
+
+    <!-- ShoppingCartPage -->
+    <entry key="checkout">Оформляем покупку</entry>
+    <entry key="shoppingCart">Корзина</entry>
+    <entry key="emptyCart">Корзина пуста</entry>
+    <entry key="orderErrorGeneral">Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.</entry>
+    <entry key="orderErrorCouponInvalid">Промо-код '${0}' не может быть применен. Пожалуйста удалите его из корзины.</entry>
+
+    <!-- COMPONENTS -->
+    <!-- BreadCrumbsView -->
+    <entry key="query">Поиск</entry>
+    <entry key="specialoffer">Специальное предложение</entry>
+    <entry key="newarrival">Новые поступления</entry>
+    <entry key="multisku">Демо: мульти-sku</entry>
+    <entry key="preorder">Демо: ожидаемые</entry>
+    <entry key="backorder">Демо: заказные</entry>
+    <entry key="always">Демо: всегда</entry>
+
+    <!-- ShoppingCartPaymentVerificationView -->
+    <entry key="productName">Продукт</entry>
+    <entry key="amount">Всего</entry>
+    <entry key="deliveryNum">Номер доставки</entry>
+    <entry key="deliverySubTotal">Итого по доставке</entry>
+    <entry key="deliverySubTotalTax">в т.ч. НДС</entry>
+    <entry key="deliverySubTotalAmount">Всего</entry>
+    <entry key="deliveryCost">Доставка</entry>
+    <entry key="deliveryCostTax">в т.ч. НДС</entry>
+    <entry key="deliveryCostAmount">Всего</entry>
+    <entry key="grandTotal">Сумма</entry>
+    <entry key="grandTotalTax">в т.ч. НДС</entry>
+    <entry key="grandTotalAmount">Всего</entry>
+    <entry key="orderVerification">Проверьте заказ и выберите метод оплаты</entry>
+
+    <!-- ShoppingCartView -->
+    <entry key="product">Изделие</entry>
+    <entry key="amountMsg">Всего</entry>
+    <entry key="addOneLink">+1</entry>
+    <entry key="removeOneLink">-1</entry>
+    <entry key="removeAllLink">X</entry>
+    <entry key="addOneLinkHint">Добавить один</entry>
+    <entry key="removeOneLinkHint">Удалить один</entry>
+    <entry key="removeAllLinkHint">Удалить все</entry>
+    <entry key="nonZeroDigits">Введите положительное целое количество</entry>
+    <entry key="skuNumber">Номер</entry>
+    <entry key="productsInCart">Товары в корзине</entry>
+    <entry key="removeCouponCodeLabel">Убрать промо-код</entry>
+    <entry key="addCouponButtonLabel">Добавить промо-код</entry>
+    <entry key="appliedPromoCode">${0} [применен]</entry>
+    <entry key="pendingPromoCode">${0} [не применен]</entry>
+    <entry key="noEmptyCoupons">Введите пожалуйста промо-код</entry>
+
+    <!-- SmallShoppingCartView -->
+    <entry key="itemForm0">{0} продукт</entry>
+    <entry key="itemForm1">{0} продукта</entry>
+    <entry key="itemForm2">{0} продуктов</entry>
+    <entry key="noItem">Пустая корзина</entry>
+
+    <!-- CreateEditAddressPage -->
+    <entry key="firstName">Имя</entry>
+    <entry key="lastName">Фамилия</entry>
+    <entry key="line1">Строка адреса 1</entry>
+    <entry key="line2">Строка адреса 2</entry>
+    <entry key="city">Город</entry>
+    <entry key="country">Страна</entry>
+    <entry key="state">Область</entry>
+    <entry key="postcode">Индекс</entry>
+    <entry key="phoneList">Телефоны</entry>
+    <entry key="create">Сохранить</entry>
+    <entry key="cancel">Отменить</entry>
+    <entry key="createEditAddress">Адрес</entry>
+
+    <!-- ManageAddressesView -->
+    <entry key="create">Создать</entry>
+    <entry key="delete">Удалить</entry>
+    <entry key="edit">Редактировать</entry>
+    <entry key="addressTypeS">Адрес доставки</entry>
+    <entry key="addressTypeB">Адрес для счета</entry>
+
+    <!-- LoginPanel -->
+    <entry key="wrongPassword">Неправильный пароль</entry>
+    <entry key="customerNotExists">Email не зарегистрирован. Пройдите процедуру регистрации.</entry>
+    <entry key="restorePassword">Восстановить пароль</entry>
+    <entry key="signIn">Вход</entry>
+    <entry key="tryToRestore">Нажмите "восстановить пароль" и он будет выслан Вам на почту {0}</entry>
+    <entry key="emailSent">Новый пароль был выслан на почту {0}</entry>
+
+    <!-- RegisterPanel -->
+    <entry key="newUser">Новый покупатель</entry>
+    <entry key="register">Регистрация</entry>
+    <entry key="phone">Телефон</entry>
+    <entry key="customerExists">Такой покупатель уже зарегистрирован</entry>
+    <entry key="canNotRegister">Невозможно зарегистрировать. </entry>
+
+    <!-- LogoutPanel -->
+    <entry key="logoffLabel">Выйти</entry>
+    <entry key="logoffTitle">${name} нажмите здесь, чтобы выйти из Вашей учетной записи</entry>
+
+    <!-- CustomerOrderPanel -->
+    <!-- order statuses from CustomerOrder interface -->
+    <entry key="os.none">-</entry>
+    <entry key="os.pending">Подготовка</entry>
+    <entry key="os.waiting">Необходимо подтверждение</entry>
+    <entry key="os.in.progress">Выполняется</entry>
+    <entry key="os.cancelled">Отменен</entry>
+    <entry key="os.partially.shipped">Частично выполнен</entry>
+    <entry key="os.completed">Выполнен</entry>
+
+    <entry key="orderNumHead">Номер</entry>
+    <entry key="orderDateHead">Дата</entry>
+    <entry key="orderStatusHead">Статус</entry>
+    <entry key="orderItemsHead">Товар</entry>
+    <entry key="orderAmountHead">Сумма</entry>
+    <entry key="orderInfo">Покупки</entry>
+    <entry key="noOrders">Нет записей в истории заказов.</entry>
+
+    <!-- PasswordPanel -->
+    <entry key="changePassword">Политика безопасности магазина - только автоматически сгенерированный пароль. Новый пароль будет выслан по почте после нажатия кнопки "Сменить пароль"</entry>
+    <entry key="changePasswordBtn">Сменить пароль</entry>
+    <entry key="newPasswordSent">Новый пароль выслан на почту</entry>
+
+    <!-- SummaryPanel -->
+    <entry key="customerSummary">Основная информация</entry>
+    <entry key="profileUpdated">Профиль покупателя обновлен</entry>
+
+    <!-- WishListView -->
+    <entry key="wishlistItems">Список пожеланий</entry>
+    <entry key="wishlistNoItems">Список пожеланий пуст. Вы можете его пополнить нажав кнопку "В пожелания" на страницах товаров.</entry>
+    <entry key="addToCartWlBtn">В корзину (${0})</entry>
+    <entry key="preorderCartWlBtn">Заказать (${0})</entry>
+    <entry key="removeFromWishlist">Убрать из списка</entry>
+
+    <!-- StandardFooter, CheckoutFooter -->
+    <entry key="siteMap">Карта сайта</entry>
+    <entry key="help">Справка</entry>
+    <entry key="platform">Платформа</entry>
+    <entry key="callCenter">Служба поддержки</entry>
+    <entry key="returnPolicy">Возврат товара</entry>
+    <entry key="orderGuide">Как заказать</entry>
+    <entry key="orderHistory">История заказов</entry>
+    <entry key="location">Расположение</entry>
+    <entry key="licenceInfo">Лицензии</entry>
+    <entry key="cart">Покупки</entry>
+    <entry key="sitemapInfo">Карта сайта</entry>
+
+    <!-- StandardHeader -->
+    <entry key="specialOffer">Специальное предложение</entry>
+    <entry key="demoMultiSku">Мульти-sku</entry>
+    <entry key="demoPreorder">Ожидаемые</entry>
+    <entry key="demoBackorder">Заказные</entry>
+    <entry key="demoAlways">Всегда</entry>
+    <entry key="menu">Меню</entry>
+    <entry key="demo">Демо</entry>
+
+    <!-- ProductSorter -->
+    <entry key="sort">Сортировать:</entry>
+    <entry key="byName">имя</entry>
+    <entry key="byPrice">цена</entry>
+
+    <!-- PriceTierView -->
+    <entry key="priceTierLabel">Цена за единицу</entry>
+    <entry key="descountRule">Покупая более одной единицы товара, вы получаете скидку. Чем больше однотипных товаров Вы покупаете, тем больше скидка</entry>
+
+    <!-- PriceView -->
+    <entry key="savePercent">Скидка {0}%</entry>
+
+    <!-- RecentlyViewedProducts -->
+    <entry key="recentlyViewed">Просмотренные</entry>
+
+    <!-- SearchView -->
+    <entry key="search">Поиск</entry>
+
+    <!-- ShippingView -->
+    <entry key="carrier">Перевозчик</entry>
+    <entry key="carrierSla">Метод доставки</entry>
+    <entry key="carrierSelect">Выберите перевозчика и метод доставки</entry>
+
+    <!-- Currency -->
+    <entry key="currency">Валюта</entry>
+
+    <!-- Language -->
+    <entry key="language">Язык</entry>
+
+    <!-- ProductsCentralView -->
+    <entry key="items">Продуктов</entry>
+
+    <!-- SkuCentralView -->
+    <entry key="addToWishlist">В пожелания</entry>
+    <entry key="wishListItemAdded">Товар ${0} добавлен в пожелания. Увидеть лист пожеланий Вы можете в Вашем профиле.</entry>
+    <entry key="description">Описание</entry>
+    <entry key="details">Детали</entry>
+    <entry key="accessories">Аксессуары</entry>
+    <entry key="volumeDiscount">Оптовые скидки</entry>
+
+    <!-- TopCategories -->
+    <entry key="categories">Каталог</entry>
+
+    <!-- PAYMENT GATEWAYS -->
+    <!-- AuthorizeNetSimPaymentOkPage -->
+    <entry key="paymentWasOk">Платеж прошел успешно</entry>
+    <entry key="pageTitle">Платеж прошел успешно</entry>
+
+    <!-- ResultPage -->
+    <entry key="resultPageTitle">Результат оплаты</entry>
+    <entry key="paymentWasFailed">Оплата не состоялась</entry>
+    <entry key="paymentResult">Результат оплаты</entry>
+
+    <!-- LiqPayReturnUrlPage -->
+    <entry key="liqPayPageTitle">Результат платежа</entry>
+    <entry key="orderErrorCancelled">Заказ отменен. Возможная причина - это ошибка при оплате, либо недостаточное кол-во товара на складе</entry>
+    <entry key="orderErrorNotFound">Заказ не найден</entry>
+    <entry key="orderSuccess">Заказ успешно оформлен</entry>
+
+    <!-- PayPalReturnUrlPage -->
+    <entry key="payPalPageTitle">Платеж через pay pal</entry>
+    <entry key="pay">Подтвердить</entry>
+    <entry key="paymentFailed">Оплата не состоялась</entry>
+    <entry key="badStatus">Ваш статус не подтвержден на pay pal или невозможно получить информацию об оплате</entry>
+    <entry key="confirmPayment">
+        <![CDATA[
+                    Сумма платежа {0} {1}. Подтвердите оплату для продолжения.
+               ]]>
+    </entry>
+    <entry key="paymentOk">
+        <![CDATA[
+                    Оплата прошла успешно. Номер заказа {0}.
+                    Статус можно проверить <a href="selfcare">на этой странице</a>.
+                     <br>
+                    <a href=".">За новыми покупками !</a>.
+               ]]>
+    </entry>
+
 </properties>
