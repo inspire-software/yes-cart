@@ -84,9 +84,18 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-        <!-- Content -->
         <column-descriptor>
             <column-index>6</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>uk</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- Content -->
+        <column-descriptor>
+            <column-index>7</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
@@ -107,7 +116,7 @@
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
-                        <column-index>6</column-index>
+                        <column-index>7</column-index>
                         <field-type>FIELD</field-type>
                         <name>val</name>
                         <value-regex>(.{0,4000})(.*)</value-regex>
@@ -118,7 +127,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>6</column-index>
+            <column-index>8</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
@@ -139,7 +148,7 @@
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
-                        <column-index>6</column-index>
+                        <column-index>8</column-index>
                         <field-type>FIELD</field-type>
                         <name>val</name>
                         <value-regex>(.{4000})(.{0,4000})(.*)</value-regex>
@@ -150,7 +159,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>7</column-index>
+            <column-index>9</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
@@ -171,7 +180,7 @@
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
-                        <column-index>7</column-index>
+                        <column-index>9</column-index>
                         <field-type>FIELD</field-type>
                         <name>val</name>
                         <value-regex>(.{0,4000})(.*)</value-regex>
@@ -182,7 +191,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>7</column-index>
+            <column-index>10</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
@@ -203,7 +212,71 @@
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
-                        <column-index>7</column-index>
+                        <column-index>10</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                        <value-regex>(.{4000})(.{0,4000})(.*)</value-regex>
+                        <value-regex-group>2</value-regex-group>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>11</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
+                <import-directory/>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_BODY_uk_1';
+                    INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_BODY_uk_1', 'CONTENT_BODY_uk_1','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>11</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                        <value-regex>(.{0,4000})(.*)</value-regex>
+                        <value-regex-group>1</value-regex-group>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>12</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
+                <import-directory/>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_BODY_uk_2';
+                    INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_BODY_uk_2', 'CONTENT_BODY_uk_2','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>12</column-index>
                         <field-type>FIELD</field-type>
                         <name>val</name>
                         <value-regex>(.{4000})(.{0,4000})(.*)</value-regex>

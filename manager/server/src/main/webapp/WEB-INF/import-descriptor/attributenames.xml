@@ -86,6 +86,15 @@
         <column-descriptor>
             <column-index>5</column-index>
             <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>uk</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>6</column-index>
+            <field-type>FIELD</field-type>
             <data-type>BOOLEAN</data-type>
             <name>mandatory</name>
         </column-descriptor>

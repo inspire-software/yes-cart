@@ -90,6 +90,15 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
+        <column-descriptor>
+            <column-index>9</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>uk</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
         <!--  bar code -->
         <column-descriptor>
             <column-index>5</column-index>
@@ -101,7 +110,7 @@
         
         <!-- Description -->
         <column-descriptor>
-            <column-index>9</column-index>
+            <column-index>10</column-index>
             <field-type>FIELD</field-type>
             <name>description</name>
             <value-regex>(.{0,4000})(.*)</value-regex>
@@ -109,7 +118,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>10</column-index>
+            <column-index>11</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
@@ -131,7 +140,7 @@
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
-                        <column-index>10</column-index>
+                        <column-index>11</column-index>
                         <field-type>FIELD</field-type>
                         <name>val</name>
                     </column-descriptor>
@@ -140,7 +149,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>11</column-index>
+            <column-index>12</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
@@ -162,7 +171,38 @@
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
-                        <column-index>11</column-index>
+                        <column-index>12</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>13</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
+                <import-directory/>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    DELETE FROM TPRODUCTSKUATTRVALUE
+                        WHERE GUID = '{masterObjectId}_SKUDESC_uk';
+                    INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL)
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_uk', 'PRODUCT_DESCRIPTION_uk','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>13</column-index>
                         <field-type>FIELD</field-type>
                         <name>val</name>
                     </column-descriptor>
