@@ -21,9 +21,6 @@ import org.slf4j.Logger;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.request.HttpServletRequestWrapper;
@@ -33,7 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 
 /**
@@ -51,16 +47,12 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
     private ServletContext servletContext;
 
-    private final ShoppingCartCommandFactory cartCommandFactory;
-
 
     public ShopResolverFilter(
             final ApplicationDirector applicationDirector,
-            final SystemService systemService,
-            final ShoppingCartCommandFactory cartCommandFactory) {
+            final SystemService systemService) {
         super(applicationDirector);
         this.systemService = systemService;
-        this.cartCommandFactory = cartCommandFactory;
     }
 
     /**
@@ -83,8 +75,6 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
             return null;
         }
 
-        setDefaultValues(shop);
-
         ApplicationDirector.setCurrentShop(shop);
         ApplicationDirector.setShopperIPAddress(getRemoteIpAddr(servletRequest));
         ShopCodeContext.setShopCode(shop.getCode());
@@ -105,26 +95,6 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
         }
         return userIpAddress;
     }
-
-    /**
-     * Set default values. Mostly for new cart.
-     * @param shop shop
-     */
-    private void setDefaultValues(final Shop shop) {
-
-        final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
-        if (shoppingCart != null) { // this may happen if shoppingCart filter is not assigned to this url pattern
-            if (shoppingCart.getCurrencyCode() == null) { // new cart only may satisfy this condition
-
-                cartCommandFactory.execute(shoppingCart, new HashMap<String, Object>() {{
-                    put(ShoppingCartCommand.CMD_SETSHOP, shop.getShopId());
-                    put(ShoppingCartCommand.CMD_CHANGECURRENCY, shop.getDefaultCurrency());
-                }});
-
-            }
-        }
-    }
-
 
 
     /**
