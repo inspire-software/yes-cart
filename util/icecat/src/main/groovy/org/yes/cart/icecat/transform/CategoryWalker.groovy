@@ -286,12 +286,12 @@ class CategoryWalker {
 
 
 
-                    downloadProductPicture(it.product.HighPic, authString, cacheFolder, idx++, productName, skuCode);
+                    idx += downloadProductPicture(it.product.HighPic, authString, cacheFolder, idx, productName, skuCode);
                     it.product.productPicture.each {
 
                         //limit to 3 pictures only, because of import size
                         if (idx < 'd') {
-                            downloadProductPicture(it, authString, cacheFolder, idx++, productName, skuCode);
+                            idx += downloadProductPicture(it, authString, cacheFolder, (char) idx, productName, skuCode);
                         }
 
                     }
@@ -321,18 +321,21 @@ class CategoryWalker {
                     input.close();
                     output.close();
                     println "Downloaded $url into $productFile"
-
+                    return 1;
                 } catch (FileNotFoundException e) {
                     println "File $url not exists on remote server, skipped"
+                    return 0;
                 }
 
 
             } else {
                 println "Skipped $url"
+                return 1;
             }
 
         } catch (Exception e) {
             println "cant download $url, because of $e.message"
+            return 0;
         }
     }
 

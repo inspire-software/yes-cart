@@ -46,7 +46,9 @@ class ProductTypeAttributeCsvAdapter {
             "2196"  :  10,     // 2196;Processor family;Processor family;Семейство процессоров;
             "5"     :  20,     // 5;Processor clock speed;Processor clock speed;Тактовая частота процессора;
             "1120"  : 300,     // 1120;Optical drive type;Optical drive type;Тип оптического привода;
-            "46"    : 400      // 46;Color;Color;Цвет;
+            "46"    : 400,     // 46;Color;Color;Цвет;
+            "7861"  : 401,     // 7861;Internal RAM
+            "5741"  : 402      // 5741;Keyboard dimensions
     ];
 
     def rangeMap = [
@@ -59,7 +61,7 @@ class ProductTypeAttributeCsvAdapter {
 
     public toCsvFile(String filename) {
 
-        Map<String, Feature> features = new HashMap();
+        Map<String, Feature> features = new TreeMap<String, Feature>();
         Map<String, Feature> featureTypes = new HashMap();
 
         categoryMap.values().each {
@@ -76,7 +78,7 @@ class ProductTypeAttributeCsvAdapter {
         builder.append("guid;product type;attribute code;attribute name;filter nav;nav type;range nav;\n");
         features.values().each {
             builder.append('"')
-            builder.append(it.ID).append('";"')
+            builder.append(it.ID).append('-').append(Util.escapeCSV(featureTypes.get(it))).append('";"')
             builder.append(Util.escapeCSV(featureTypes.get(it))).append('";"')
             builder.append(it.ID).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";')
