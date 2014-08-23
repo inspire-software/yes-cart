@@ -21,7 +21,13 @@ import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.ro.TokenRO;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.support.shoppingcart.ShoppingCartPersister;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,15 +39,15 @@ import java.util.List;
 public class AbstractApiController {
 
 
-    private final DtoFactory dtoFactory;
-    private final AdaptersRepository adaptersRepository;
-
     @Autowired
-    public AbstractApiController(@Qualifier("roInterfaceToClassFactory") final DtoFactory dtoFactory,
-                                 @Qualifier("roAssemblerAdaptersRepository") final AdaptersRepository adaptersRepository) {
-        this.dtoFactory = dtoFactory;
-        this.adaptersRepository = adaptersRepository;
-    }
+    @Qualifier("roInterfaceToClassFactory")
+    private DtoFactory dtoFactory;
+    @Autowired
+    @Qualifier("roAssemblerAdaptersRepository")
+    private AdaptersRepository adaptersRepository;
+    @Autowired
+    @Qualifier("shoppingCartPersister")
+    private ShoppingCartPersister shoppingCartPersister;
 
     /**
      * Generic mapping method.
@@ -80,6 +86,30 @@ public class AbstractApiController {
             return dto;
         }
         return null;
+    }
+
+    /**
+     * Retrieve current cart.
+     *
+     * @return cart object
+     */
+    protected ShoppingCart getCurrentCart() {
+        return ApplicationDirector.getShoppingCart();
+    }
+
+    /**
+     * Generate token ro for current state of the cart.
+     *
+     * @return token
+     */
+    protected TokenRO persistShoppingCart(HttpServletRequest request, HttpServletResponse response) {
+
+        final ShoppingCart cart = getCurrentCart();
+
+        shoppingCartPersister.persistShoppingCart(request, response, cart);
+
+        return new TokenRO(cart.getGuid());
+
     }
 
 
