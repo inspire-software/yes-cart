@@ -62,7 +62,9 @@ public class AuthenticationController extends AbstractApiController  {
         if (customer != null) {
             if (this.customerServiceFacade.authenticate(loginRO.getUsername(), loginRO.getPassword())) {
 
-                executeLoginCommand(getCurrentCart(), customer);
+                executeLoginCommand(customer);
+
+                persistShoppingCart(request, response);
 
                 return new AuthenticationResultRO(
                         customer.getFirstname() + " " + customer.getLastname(),
@@ -75,6 +77,25 @@ public class AuthenticationController extends AbstractApiController  {
 
         return new AuthenticationResultRO("USER_FAILED");
     }
+
+
+    @RequestMapping(value = "/logout")
+    public @ResponseBody AuthenticationResultRO logout(final HttpServletRequest request,
+                                                       final HttpServletResponse response) {
+
+        final ShoppingCart cart = getCurrentCart();
+
+        if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
+
+            executeLogoutCommand();
+            persistShoppingCart(request, response);
+
+        }
+
+        return new AuthenticationResultRO("LOGOUT_SUCCESS");
+
+    }
+
 
     private static final Pattern EMAIL =
             Pattern.compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)",
@@ -140,15 +161,25 @@ public class AuthenticationController extends AbstractApiController  {
     /**
      * Execute login command.
      *
-     * @param shoppingCart shopping cart
      * @param customer     customer.
      */
-    protected void executeLoginCommand(final ShoppingCart shoppingCart, final Customer customer) {
-        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, shoppingCart,
+    protected void executeLoginCommand(final Customer customer) {
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, getCurrentCart(),
                 new HashMap<String, Object>() {{
                     put("email", customer.getEmail());
                     put("name", customer.getFirstname() + " " + customer.getLastname());
                     put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
+                }}
+        );
+    }
+
+    /**
+     * Execute logout command.
+     */
+    protected void executeLogoutCommand() {
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, getCurrentCart(),
+                new HashMap<String, Object>() {{
+                    put(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
                 }}
         );
     }
