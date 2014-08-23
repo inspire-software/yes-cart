@@ -105,7 +105,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                             for (final Map.Entry<String, Integer> cntNode : cnt.entrySet()) {
                                 final String nodeUri = cntNode.getKey();
                                 final Integer nodeCnt = cntNode.getValue();
-                                if (nodeCnt < 0) {
+                                if (nodeCnt < 0 || (lastPositive.containsKey(nodeUri) && lastPositive.get(nodeUri) > nodeCnt)) {
                                     // this node finished
                                     state.append(nodeUri).append(": ").append(lastPositive.get(nodeUri)).append(" ... finished\n");
                                 } else {
@@ -141,7 +141,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
     boolean isIndexingInProgress(Map<String, Integer> cnt) {
         for (final Integer cntNode : cnt.values()) {
-            if (cntNode >= 0) {
+            if (cntNode != null && cntNode >= 0) {
                 return true;
             }
         }

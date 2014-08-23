@@ -149,7 +149,7 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
                 }
 
             } catch (Exception e) {
-                reindexResult.put(yesNode.getNodeId(), null);
+                reindexResult.put(yesNode.getNodeId(), -1);
                 if (LOG.isErrorEnabled()) {
                     LOG.error("Cannot reindex product [" + productPk + "],  url ["
                             + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()

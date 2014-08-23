@@ -16,15 +16,12 @@
 
 package org.yes.cart.web.service.rest;
 
-import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.ro.CategoryListRO;
 import org.yes.cart.domain.ro.CategoryRO;
@@ -33,6 +30,8 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.seo.BookmarkService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -46,39 +45,38 @@ import java.util.Set;
 @RequestMapping("/category")
 public class CategoryController extends AbstractApiController {
 
-    private final ShopService shopService;
-    private final CategoryService categoryService;
-    private final BookmarkService bookmarkService;
-
     @Autowired
-    public CategoryController(@Qualifier("roInterfaceToClassFactory") final DtoFactory dtoFactory,
-                              @Qualifier("roAssemblerAdaptersRepository") final AdaptersRepository adaptersRepository,
-                              final ShopService shopService,
-                              final CategoryService categoryService,
-                              final BookmarkService bookmarkService) {
-        super(dtoFactory, adaptersRepository);
-        this.shopService = shopService;
-        this.categoryService = categoryService;
-        this.bookmarkService = bookmarkService;
-    }
+    private ShopService shopService;
+    @Autowired
+    private CategoryService categoryService;
+    @Autowired
+    private BookmarkService bookmarkService;
+
 
     @RequestMapping("/top")
-    public @ResponseBody List<CategoryRO> listRoot() {
+    public @ResponseBody List<CategoryRO> listRoot(final HttpServletRequest request,
+                                                   final HttpServletResponse response) {
 
+        persistShoppingCart(request, response);
         final List<Category> categories = categoryService.getTopLevelCategories(ShopCodeContext.getShopId());
         return map(categories, CategoryRO.class, Category.class);
 
     }
 
     @RequestMapping(value = "/top", headers={ "Accept=application/xml" })
-    public @ResponseBody CategoryListRO listRootXML() {
+    public @ResponseBody CategoryListRO listRootXML(final HttpServletRequest request,
+                                                    final HttpServletResponse response) {
 
-        return new CategoryListRO(listRoot());
+        return new CategoryListRO(listRoot(request, response));
 
     }
 
     @RequestMapping("/view/{id}")
-    public @ResponseBody CategoryRO viewCategory(@PathVariable(value = "id") final String category) {
+    public @ResponseBody CategoryRO viewCategory(@PathVariable(value = "id") final String category,
+                                                 final HttpServletRequest request,
+                                                 final HttpServletResponse response) {
+
+        persistShoppingCart(request, response);
 
         final Set<Long> catIds = shopService.getShopCategoriesIds(ShopCodeContext.getShopId());
         final long categoryId = resolveId(category);
@@ -93,7 +91,11 @@ public class CategoryController extends AbstractApiController {
     }
 
     @RequestMapping("/list/{id}")
-    public @ResponseBody List<CategoryRO> listCategory(@PathVariable(value = "id") final String category) {
+    public @ResponseBody List<CategoryRO> listCategory(@PathVariable(value = "id") final String category,
+                                                       final HttpServletRequest request,
+                                                       final HttpServletResponse response) {
+
+        persistShoppingCart(request, response);
 
         final Set<Long> catIds = shopService.getShopCategoriesIds(ShopCodeContext.getShopId());
         final long categoryId = resolveId(category);
@@ -108,9 +110,11 @@ public class CategoryController extends AbstractApiController {
     }
 
     @RequestMapping(value = "/list/{id}", headers={ "Accept=application/xml" })
-    public @ResponseBody CategoryListRO listCategoryXML(@PathVariable(value = "id") final String category) {
+    public @ResponseBody CategoryListRO listCategoryXML(@PathVariable(value = "id") final String category,
+                                                        final HttpServletRequest request,
+                                                        final HttpServletResponse response) {
 
-        return new CategoryListRO(listCategory(category));
+        return new CategoryListRO(listCategory(category, request, response));
 
     }
 
