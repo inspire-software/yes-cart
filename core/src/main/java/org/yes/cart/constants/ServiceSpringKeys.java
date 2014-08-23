@@ -38,6 +38,10 @@ public interface ServiceSpringKeys {
      * {@link org.yes.cart.service.domain.ShopService} bean key.
      */
     String SHOP_SERVICE = "shopService";
+    /**
+     * {@link org.yes.cart.service.domain.ShoppingCartStateService} bean key.
+     */
+    String SHOPPING_CART_STATE_SERVICE = "shoppingCartStateService";
 
     /**
      * {@link org.yes.cart.service.domain.ShopUrlService} bean key.

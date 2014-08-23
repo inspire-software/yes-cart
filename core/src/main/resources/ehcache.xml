@@ -507,5 +507,11 @@
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
+    <cache name="web.shoppingCart"
+           maxElementsInMemory="5000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="864000"/>
+
 
 </ehcache>

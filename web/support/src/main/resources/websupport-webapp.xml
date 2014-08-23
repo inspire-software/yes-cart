@@ -43,7 +43,7 @@
 
     <bean id="shoppingCartFilter" class="org.yes.cart.web.filter.ShoppingCartFilter">
         <constructor-arg index="0" ref="applicationDirector"/>
-        <constructor-arg index="1" ref="cookieTuplizerPool"/>
+        <constructor-arg index="1" ref="tuplizerPool"/>
         <constructor-arg index="2" ref="amountCalculationStrategy"/>
         <constructor-arg index="3" ref="shoppingCartCommandFactory"/>
     </bean>
@@ -80,24 +80,103 @@
 
     <!-- ################################### cart persistence start ################################# -->
 
-    <bean id="cookieTuplizer" class="org.yes.cart.web.support.util.cookie.impl.CookieTuplizerImpl"
+    <bean id="cookieTuplizer" class="org.yes.cart.web.support.shoppingcart.cookiedriven.impl.CookieTuplizerImpl"
           scope="prototype">
         <constructor-arg index="0" value="CHANGE_PASSWORD_ON_PRODUCTION"/>
         <constructor-arg index="1" value="2048"/>
         <constructor-arg index="2" value="DES"/>
         <constructor-arg index="3" value="DES/ECB/PKCS5Padding"/>
+        <constructor-arg index="4" value="yc"/>
+        <constructor-arg index="5" value="864000"/>
+        <constructor-arg index="6" value="/"/>
+        <constructor-arg index="7" value="8192"/>
     </bean>
 
     <bean id="cookieTuplizerPool" class="org.springframework.aop.target.CommonsPoolTargetSource">
         <property name="targetBeanName" value="cookieTuplizer"/>
-        <property name="maxSize" value="10"/>
         <property name="maxIdle" value="10"/>
         <property name="minIdle" value="5"/>
     </bean>
 
-    <bean id="shoppingCartPersister" class="org.yes.cart.web.support.util.cookie.impl.ShoppingCartPersisterImpl">
-        <constructor-arg index="0" ref="cookieTuplizer"/>
+    <bean id="cookieShoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterImpl">
+        <constructor-arg index="0" ref="cookieTuplizerPool"/>
     </bean>
+
+
+    <bean id="headerTuplizer" class="org.yes.cart.web.support.shoppingcart.headerdriven.impl.HeaderTuplizerImpl"
+          scope="prototype">
+        <constructor-arg index="0" value="CHANGE_PASSWORD_ON_PRODUCTION"/>
+        <constructor-arg index="1" value="256"/>
+        <constructor-arg index="2" value="DES"/>
+        <constructor-arg index="3" value="DES/ECB/PKCS5Padding"/>
+        <constructor-arg index="4" value="x-yc-"/>
+        <constructor-arg index="5" value="8192"/>
+    </bean>
+
+    <bean id="headerTuplizerPool" class="org.springframework.aop.target.CommonsPoolTargetSource">
+        <property name="targetBeanName" value="headerTuplizer"/>
+        <property name="maxIdle" value="10"/>
+        <property name="minIdle" value="5"/>
+    </bean>
+
+    <bean id="headerShoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterImpl">
+        <constructor-arg index="0" ref="headerTuplizerPool"/>
+    </bean>
+
+    <bean id="cartRepository" class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.ResilientCartRepositoryImpl">
+        <constructor-arg index="0" ref="shoppingCartStateService"/>
+        <constructor-arg index="1">
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.CartUpdateProcessorImpl">
+                        <constructor-arg index="0" ref="shoppingCartStateService"/>
+                        <constructor-arg index="1" ref="shoppingCartCommandFactory"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="2" value="21600"/>
+        <constructor-arg index="3" ref="cacheManager"/>
+        <!--<constructor-arg index="4">-->
+            <!--<bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">-->
+                <!--<description>-->
+                    <!--Thread pool (1) for cart persistence so that we do not slow down the response.-->
+                    <!--We only need one thread for this as we only anticipate one thread to be-->
+                    <!--performing the updates to cart states.-->
+                <!--</description>-->
+                <!--<property name="corePoolSize" value="1"/>-->
+                <!--<property name="maxPoolSize" value="1"/>-->
+            <!--</bean>-->
+        <!--</constructor-arg>-->
+    </bean>
+
+    <bean id="tokenTuplizer" class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.TokenTuplizerImpl"
+          scope="prototype">
+        <constructor-arg index="0" ref="cartRepository"/>
+        <constructor-arg index="1" value="yc"/>
+        <constructor-arg index="2" value="864000"/>
+        <constructor-arg index="3" value="/"/>
+    </bean>
+
+    <bean id="tokenTuplizerPool" class="org.springframework.aop.target.CommonsPoolTargetSource">
+        <property name="targetBeanName" value="tokenTuplizer"/>
+        <property name="maxIdle" value="10"/>
+        <property name="minIdle" value="5"/>
+    </bean>
+
+    <bean id="tokenShoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterImpl">
+        <constructor-arg index="0" ref="tokenTuplizerPool"/>
+    </bean>
+
+    <!-- Decorators for default tuplizers and persisters -->
+    <bean id="tuplizerPool" class="org.yes.cart.web.support.shoppingcart.impl.TuplizerPoolDecoratorImpl">
+        <constructor-arg index="0" ref="tokenTuplizerPool"/>
+    </bean>
+
+    <bean id="shoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterDecoratorImpl">
+        <constructor-arg index="0" ref="tokenShoppingCartPersister"/>
+    </bean>
+
 
     <!-- ################################### cart persistence end ################################### -->
 

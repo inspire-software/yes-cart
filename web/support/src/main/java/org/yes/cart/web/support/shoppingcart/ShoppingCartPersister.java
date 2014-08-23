@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.util.cookie;
+package org.yes.cart.web.support.shoppingcart;
 
 import org.yes.cart.shoppingcart.ShoppingCart;
 
@@ -31,7 +31,7 @@ public interface ShoppingCartPersister {
     /**
      * Persist shopping cart to cookie.
      * @param httpServletRequest request.
-     * @param httpServletResponse responce
+     * @param httpServletResponse response
      * @param shoppingCart shopping cart
      */
     void persistShoppingCart(HttpServletRequest httpServletRequest,

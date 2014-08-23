@@ -14,33 +14,31 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.util.cookie;
+package org.yes.cart.web.support.shoppingcart;
 
 /**
- * Exception to denote that Cookies cannot be converted to object.
+ * Exception to denote that Object cannot be converted to cookies.
  * <p/>
  * User: dogma
  * Date: 2011-May-17
  * Time: 3:22:09 PM
  */
-public class UnableToObjectizeCookieException extends Exception {
+public class CartTuplizationException extends Exception {
 
     private static final long serialVersionUID = 20100116L;
 
-    public UnableToObjectizeCookieException() {
+    public CartTuplizationException() {
     }
 
-    public UnableToObjectizeCookieException(final String message) {
+    public CartTuplizationException(final String message) {
         super(message);
     }
 
-    public UnableToObjectizeCookieException(final String message, final Throwable cause) {
+    public CartTuplizationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public UnableToObjectizeCookieException(final Throwable cause) {
+    public CartTuplizationException(final Throwable cause) {
         super(cause);
     }
-
 }
-

@@ -21,6 +21,7 @@ import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
+import java.io.Externalizable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +32,15 @@ import java.util.TreeSet;
 
 /**
  * Shopping cart default implementation.
+ *
+ * Shopping cart is a high performance class since it represent current application state
+ * with respect to the user.
+ *
+ * YC uses CartTuplizers that allow to Serialize it into byte stream and then package to
+ * allow preserving state (e.g. in response cookies, headers or persistent storage).
+ * In order to make this process maximum efficient we use Externalization for all object
+ * hierarchy of shopping cart implementation.
+ *
  * User: dogma
  * Date: Jan 15, 2011
  * Time: 10:39:12 PM

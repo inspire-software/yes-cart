@@ -550,7 +550,7 @@
 
     <bean id="productIndexExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <description>
-            Thread pool (1,max int) forproduct indexing since they may be slow.
+            Thread pool (1,max int) for product indexing since they may be slow.
         </description>
     </bean>
 

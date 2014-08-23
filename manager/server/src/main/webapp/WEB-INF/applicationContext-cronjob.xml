@@ -36,8 +36,27 @@
     <bean id="preOrderJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="preorderJob" />
         <!-- each 15 minute 0,15,30 and 45 -->
-        <property name="cronExpression" value="* 0/15 * * * ?" />
+        <property name="cronExpression" value="0 0/15 * * * ?" />
     </bean>
+
+    <!-- ################################ Abandon shopping cart clean up  ################################### -->
+
+    <bean name="abandonedShoppingCartJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobName" value="Abandoned Shopping Cart State Clean Up" />
+                <entry key="job" value-ref="bulkAbandonedShoppingCartProcessor" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="abandonedShoppingCartJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="abandonedShoppingCartJob" />
+        <!-- at 2:30 am -->
+        <property name="cronExpression" value="0 30 2 * * ?" />
+    </bean>
+
 
     <!-- ################################ Customer tagging  ################################################# -->
 
@@ -65,7 +84,7 @@
         <constructor-arg index="2" ref="mailSender"/>
         <constructor-arg index="3" ref="systemService"/>
         <constructor-arg index="4" ref="runtimeAttributeService"/>
-        <property name="delayBetweenEmailsMs" value="10000"/>
+        <property name="delayBetweenEmailsMs" value="1000"/>
         <property name="cycleExceptionsThreshold" value="3"/>
     </bean>
 
@@ -82,7 +101,7 @@
     <bean id="sendMailJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="sendMailJob" />
         <!-- each 10 minute 0,10,20,30,40,50 -->
-        <property name="cronExpression" value="* 0/10 * * * ?" />
+        <property name="cronExpression" value="0 0/10 * * * ?" />
     </bean>
 
     <!-- ################################ Scheduler  ####################################################### -->
@@ -91,6 +110,7 @@
         <property name="triggers">
             <list>
                 <ref bean="preOrderJobCronTrigger" />
+                <ref bean="abandonedShoppingCartJobCronTrigger" />
                 <ref bean="customerTagJobCronTrigger" />
                 <ref bean="sendMailJobCronTrigger" />
             </list>
