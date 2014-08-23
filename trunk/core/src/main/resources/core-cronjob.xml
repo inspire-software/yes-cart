@@ -55,5 +55,14 @@
         </property>
     </bean>
 
+    <bean id="bulkAbandonedShoppingCartProcessor" parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.shoppingcart.BulkAbandonedShoppingCartProcessorImpl">
+                <constructor-arg index="0" ref="shoppingCartStateService"/>
+                <property name="abandonedTimeoutDays" value="30"/> <!-- CPOINT -->
+            </bean>
+        </property>
+    </bean>
+
 </beans>
         

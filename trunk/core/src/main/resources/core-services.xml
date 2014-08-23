@@ -66,6 +66,15 @@
     </bean>
 
 
+    <bean id="shoppingCartStateService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ShoppingCartStateServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shoppingCartStateDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
     <bean id="shopUrlService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.ShopUrlServiceImpl">

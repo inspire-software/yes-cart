@@ -14,15 +14,15 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.util.cookie.impl;
+package org.yes.cart.web.support.shoppingcart.impl;
 
+import org.springframework.aop.TargetSource;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.support.util.cookie.CookieTuplizer;
-import org.yes.cart.web.support.util.cookie.ShoppingCartPersister;
-import org.yes.cart.web.support.util.cookie.UnableToCookielizeObjectException;
+import org.yes.cart.web.support.shoppingcart.CartTuplizationException;
+import org.yes.cart.web.support.shoppingcart.CartTuplizer;
+import org.yes.cart.web.support.shoppingcart.ShoppingCartPersister;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.MessageFormat;
@@ -34,15 +34,16 @@ import java.text.MessageFormat;
  */
 public class ShoppingCartPersisterImpl implements ShoppingCartPersister {
 
-    private final CookieTuplizer cookieTuplizer;
+    private final TargetSource tuplizerPool;
+
 
     /**
      * Construct shopping cart persister phaze listener
      *
-     * @param cookieTuplizer tuplizer to use
+     * @param tuplizerPool        pool of tuplizer to manage cookie to object to cookie transformation
      */
-    public ShoppingCartPersisterImpl(final CookieTuplizer cookieTuplizer) {
-        this.cookieTuplizer = cookieTuplizer;
+    public ShoppingCartPersisterImpl(final TargetSource tuplizerPool) {
+        this.tuplizerPool = tuplizerPool;
     }
 
 
@@ -52,14 +53,27 @@ public class ShoppingCartPersisterImpl implements ShoppingCartPersister {
     public void persistShoppingCart(final HttpServletRequest httpServletRequest,
                                     final HttpServletResponse httpServletResponse,
                                     final ShoppingCart shoppingCart) {
-        final Cookie[] oldCookies = httpServletRequest.getCookies();
+
+        CartTuplizer tuplizer = null;
         try {
-            final Cookie[] cookies = cookieTuplizer.toCookies(oldCookies, shoppingCart);
-            for (Cookie cookie : cookies) {
-                httpServletResponse.addCookie(cookie);
+
+            tuplizer = (CartTuplizer) tuplizerPool.getTarget();
+            try {
+                tuplizer.tuplize(httpServletRequest, httpServletResponse, shoppingCart);
+            } catch (CartTuplizationException e) {
+                ShopCodeContext.getLog(this).error(MessageFormat.format("Unable to create cookies from {0} cart", shoppingCart), e);
             }
-        } catch (UnableToCookielizeObjectException e) {
-            ShopCodeContext.getLog(this).error(MessageFormat.format("Unable to create cookies from {0} cart", shoppingCart), e);
+
+        } catch (Exception e) {
+            ShopCodeContext.getLog(this).error("Can process request", e);
+        } finally {
+            if (tuplizer != null) {
+                try {
+                    tuplizerPool.releaseTarget(tuplizer);
+                } catch (Exception e) {
+                    ShopCodeContext.getLog(this).error("Can return object to pool ", e);
+                }
+            }
         }
 
     }

@@ -978,6 +978,21 @@
     );
 
 
+    create table TSHOPPINGCARTSTATE (
+        TSHOPPINGCARTSTATE_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        CART_STATE varbinary(16384),
+        CUSTOMER_EMAIL varchar(255),
+        primary key (TSHOPPINGCARTSTATE_ID)
+    );
+
+
+
 	create table HIBERNATE_UNIQUE_KEYS (
          value integer 
     );
@@ -1412,6 +1427,11 @@
         add constraint FK_ORD_COUPON_USAGE
         foreign key (CUSTOMERORDER_ID)
         references TCUSTOMERORDER (CUSTOMERORDER_ID) on delete cascade;
+
+
+    create index PROMOTIONCOUPONUSAGE_EMAIL on TPROMOTIONCOUPONUSAGE (CUSTOMER_EMAIL);
+
+    create index SHOPPINGCARTSTATE_EMAIL on TSHOPPINGCARTSTATE (CUSTOMER_EMAIL);
 
 
     alter table TMAILPART

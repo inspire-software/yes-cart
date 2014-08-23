@@ -2267,7 +2267,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" not-null="true"/>
+        <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" not-null="true" index="PROMOTIONCOUPONUSAGE_EMAIL"/>
 
         <many-to-one name="coupon" class="org.yes.cart.domain.entity.impl.PromotionCouponEntity" foreign-key="FK_COUPON_USAGE">
             <column name="COUPON_ID" not-null="true"/>
@@ -2276,6 +2276,27 @@
         <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.impl.CustomerOrderEntity" foreign-key="FK_ORD_COUPON_USAGE">
             <column name="CUSTOMERORDER_ID" not-null="true"/>
         </many-to-one>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+
+    </class>
+
+
+    <class name="org.yes.cart.domain.entity.impl.ShoppingCartStateEntity" table="TSHOPPINGCARTSTATE">
+        <id name="shoppingCartStateId" type="long" column="TSHOPPINGCARTSTATE_ID">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPPINGCARTSTATE_GUID" not-null="true"/>
+        <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" index="SHOPPINGCARTSTATE_EMAIL"/>
+        <property name="state" column="CART_STATE" type="byte[]" length="255" not-null="true"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -2308,6 +2329,26 @@
        select co.shop from CustomerOrderEntity co where co.ordernum  = ?1
        ]]>
     </query>
+
+
+    <query name="SHOPPINGCARTSTATE.BY.GUID">
+        <![CDATA[
+       select scs from ShoppingCartStateEntity scs where scs.guid  = ?1
+       ]]>
+    </query>
+
+    <query name="SHOPPINGCARTSTATE.BY.EMAIL">
+        <![CDATA[
+       select scs from ShoppingCartStateEntity scs where scs.customerEmail  = ?1
+       ]]>
+    </query>
+
+    <query name="SHOPPINGCARTSTATE.BY.LASTMODIFIED">
+        <![CDATA[
+       select scs from ShoppingCartStateEntity scs where scs.updatedTimestamp < ?1 OR scs.updatedTimestamp IS NULL
+       ]]>
+    </query>
+
 
     <query name="TOPCATEGORIES.BY.SHOPID">
         <![CDATA[

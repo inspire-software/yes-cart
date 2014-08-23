@@ -17,17 +17,17 @@
 package org.yes.cart.web.filter;
 
 
-import org.springframework.aop.target.CommonsPoolTargetSource;
+import org.springframework.aop.TargetSource;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.shoppingcart.impl.WebShoppingCartImpl;
-import org.yes.cart.web.support.util.cookie.CookieTuplizer;
-import org.yes.cart.web.support.util.cookie.UnableToObjectizeCookieException;
+import org.yes.cart.web.support.shoppingcart.CartDetuplizationException;
+import org.yes.cart.web.support.shoppingcart.CartTuplizer;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
@@ -46,8 +46,7 @@ import java.util.HashMap;
  */
 public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
-    //private final CookieTuplizer tuplizer;
-    private final CommonsPoolTargetSource tuplizerPool;
+    private final TargetSource tuplizerPool;
 
     private final AmountCalculationStrategy calculationStrategy;
 
@@ -60,11 +59,10 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
      * @param calculationStrategy calculation strategy
      * @param cartCommandFactory  cart command factory
      */
-    public ShoppingCartFilter(
-            final ApplicationDirector applicationDirector,
-            final CommonsPoolTargetSource tuplizerPool,
-            final AmountCalculationStrategy calculationStrategy,
-            final ShoppingCartCommandFactory cartCommandFactory) {
+    public ShoppingCartFilter(final ApplicationDirector applicationDirector,
+                              final TargetSource tuplizerPool,
+                              final AmountCalculationStrategy calculationStrategy,
+                              final ShoppingCartCommandFactory cartCommandFactory) {
         super(applicationDirector);
         this.tuplizerPool = tuplizerPool;
         this.calculationStrategy = calculationStrategy;
@@ -81,15 +79,16 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        CookieTuplizer tuplizer = null;
+        CartTuplizer tuplizer = null;
         try {
-            tuplizer = (CookieTuplizer) tuplizerPool.getTarget();
-            ShoppingCart cart = new WebShoppingCartImpl();
+            tuplizer = (CartTuplizer) tuplizerPool.getTarget();
+            ShoppingCart cart = new ShoppingCartImpl();
             try {
-                cart = tuplizer.toObject(
-                        httpRequest.getCookies(),
-                        cart);
-            } catch (UnableToObjectizeCookieException e) {
+                ShoppingCart restored = tuplizer.detuplize(httpRequest);
+                if (restored != null) {
+                    cart = restored;
+                }
+            } catch (CartDetuplizationException e) {
                 ShopCodeContext.getLog(this).warn("Cart not restored from cookies");
             }
             cart.initialise(calculationStrategy);
