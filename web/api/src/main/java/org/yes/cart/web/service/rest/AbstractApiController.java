@@ -106,7 +106,11 @@ public class AbstractApiController {
 
         final ShoppingCart cart = getCurrentCart();
 
-        shoppingCartPersister.persistShoppingCart(request, response, cart);
+        if (cart.isModified()) {
+
+            shoppingCartPersister.persistShoppingCart(request, response, cart);
+
+        }
 
         return new TokenRO(cart.getGuid());
 

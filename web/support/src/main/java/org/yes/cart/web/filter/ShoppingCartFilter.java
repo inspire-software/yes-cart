@@ -82,7 +82,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
         CartTuplizer tuplizer = null;
         try {
             tuplizer = (CartTuplizer) tuplizerPool.getTarget();
-            ShoppingCart cart = new ShoppingCartImpl();
+            ShoppingCart cart = null;
             try {
                 ShoppingCart restored = tuplizer.detuplize(httpRequest);
                 if (restored != null) {
@@ -90,6 +90,9 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
                 }
             } catch (CartDetuplizationException e) {
                 ShopCodeContext.getLog(this).warn("Cart not restored from cookies");
+            }
+            if (cart == null) {
+                cart = new ShoppingCartImpl();
             }
             cart.initialise(calculationStrategy);
             setDefaultValuesIfNecessary(ApplicationDirector.getCurrentShop(), cart);

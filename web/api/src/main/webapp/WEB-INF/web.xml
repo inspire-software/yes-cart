@@ -180,12 +180,12 @@
     </filter-mapping>
 
     <filter-mapping>
-        <filter-name>shoppingCartFilter</filter-name>
+        <filter-name>shopResolverFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
     <filter-mapping>
-        <filter-name>shopResolverFilter</filter-name>
+        <filter-name>shoppingCartFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
