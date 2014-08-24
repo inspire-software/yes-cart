@@ -106,11 +106,8 @@ public class AbstractApiController {
 
         final ShoppingCart cart = getCurrentCart();
 
-        if (cart.isModified()) {
-
-            shoppingCartPersister.persistShoppingCart(request, response, cart);
-
-        }
+        // ALWAYS persist as we are using token based persistence and we need it in REST response
+        shoppingCartPersister.persistShoppingCart(request, response, cart);
 
         return new TokenRO(cart.getGuid());
 
