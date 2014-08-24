@@ -109,6 +109,7 @@ public class TokenTuplizerImpl implements CartTuplizer {
 
         final Cookie cookie = createNewCookie(tuplizerSetting.key, token, tuplizerSetting.expiry, tuplizerSetting.path);
         httpServletResponse.addCookie(cookie);
+        httpServletResponse.addHeader(tuplizerSetting.key, token);
 
     }
 
