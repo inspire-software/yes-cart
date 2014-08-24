@@ -23,18 +23,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.ro.BreadcrumbRO;
 import org.yes.cart.domain.ro.CategoryListRO;
 import org.yes.cart.domain.ro.CategoryRO;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.util.DomainApiUtil;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.seo.BookmarkService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -78,14 +78,16 @@ public class CategoryController extends AbstractApiController {
 
         persistShoppingCart(request, response);
 
-        final Set<Long> catIds = shopService.getShopCategoriesIds(ShopCodeContext.getShopId());
         final long categoryId = resolveId(category);
 
-        if (categoryId > 0L && catIds.contains(categoryId)) {
+        if (categoryIsVisibleInShop(categoryId)) {
 
-            return map(categoryService.getById(categoryId), CategoryRO.class, Category.class);
+            final CategoryRO cat = map(categoryService.getById(categoryId), CategoryRO.class, Category.class);
+            cat.setBreadcrumbs(generateBreadcrumbs(cat.getCategoryId()));
+            return cat;
 
         }
+
         return null;
 
     }
@@ -97,12 +99,21 @@ public class CategoryController extends AbstractApiController {
 
         persistShoppingCart(request, response);
 
-        final Set<Long> catIds = shopService.getShopCategoriesIds(ShopCodeContext.getShopId());
         final long categoryId = resolveId(category);
 
-        if (categoryId > 0L && catIds.contains(categoryId)) {
+        if (categoryIsVisibleInShop(categoryId)) {
 
-            return map(categoryService.getChildCategories(categoryId), CategoryRO.class, Category.class);
+            final List<CategoryRO> cats = map(categoryService.getChildCategories(categoryId), CategoryRO.class, Category.class);
+            if (cats.size() > 0) {
+
+                final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cats.get(0).getCategoryId());
+                for (final CategoryRO cat : cats) {
+                    cat.setBreadcrumbs(crumbs);
+                }
+
+            }
+
+            return cats;
 
         }
         return new ArrayList<CategoryRO>();
@@ -126,6 +137,59 @@ public class CategoryController extends AbstractApiController {
         }
         final String categoryIdStr = bookmarkService.getCategoryForURI(category);
         return NumberUtils.toLong(categoryIdStr, 0L);
+    }
+
+    private boolean categoryIsVisibleInShop(long categoryId) {
+
+        if (categoryId > 0L) {
+
+            final Set<Long> catIds = shopService.getShopCategoriesIds(getCurrentCart().getShoppingContext().getShopId());
+
+            Category cat = categoryService.getById(categoryId);
+
+            final Date now = new Date();
+
+            while (cat != null
+                    && DomainApiUtil.isObjectAvailableNow(true, cat.getAvailablefrom(), cat.getAvailableto(), now)
+                    && cat.getId() != cat.getParentId()) { // while enabled and not reached root
+
+                if (catIds.contains(categoryId)) {
+
+                    return true;
+
+                }
+                cat = categoryService.getById(cat.getParentId());
+
+            }
+
+        }
+        return false;
+    }
+
+    private List<BreadcrumbRO> generateBreadcrumbs(final long categoryId) {
+
+        final List<Category> categories = categoryService.getTopLevelCategories(getCurrentCart().getShoppingContext().getShopId());
+        final List<Long> topCatIds = new ArrayList<Long>();
+        for (final Category cat : categories) {
+            topCatIds.add(cat.getId());
+        }
+
+        Category cat = categoryService.getById(categoryId);
+
+        final List<BreadcrumbRO> crumbs = new ArrayList<BreadcrumbRO>();
+        while (!topCatIds.contains(cat.getId())) {
+
+            cat = categoryService.getById(cat.getParentId());
+
+            final BreadcrumbRO crumb = map(cat, BreadcrumbRO.class, Category.class);
+            crumbs.add(crumb);
+
+        }
+
+        Collections.reverse(crumbs);
+
+        return crumbs;
+
     }
 
 }

@@ -136,12 +136,10 @@ public class ResilientCartRepositoryImpl implements CartRepository {
 
     void storeAsynchronously(final ShoppingCart shoppingCart) {
 
-        final Runnable doStore = createRunnable(shoppingCart, ShopCodeContext.getShopCode(), ShopCodeContext.getShopId());
-
         if (taskExecutor == null) {
-            doStore.run();
+            createRunnable(shoppingCart, null, null).run();
         } else {
-            taskExecutor.execute(doStore);
+            taskExecutor.execute(createRunnable(shoppingCart, ShopCodeContext.getShopCode(), ShopCodeContext.getShopId()));
         }
     }
 
@@ -150,8 +148,10 @@ public class ResilientCartRepositoryImpl implements CartRepository {
             @Override
             public void run() {
 
-                ShopCodeContext.setShopCode(sccCode);
-                ShopCodeContext.setShopId(sccId);
+                if (sccCode != null) {
+                    ShopCodeContext.setShopCode(sccCode);
+                    ShopCodeContext.setShopId(sccId);
+                }
 
                 try {
 

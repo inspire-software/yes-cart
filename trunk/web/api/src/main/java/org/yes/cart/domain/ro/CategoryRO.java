@@ -26,6 +26,7 @@ import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
@@ -121,8 +122,7 @@ public class CategoryRO implements Serializable {
     )
     private Set<AttrValueCategoryRO> attributes;
 
-
-    private List<CategoryRO> children;
+    private List<BreadcrumbRO> breadcrumbs = Collections.EMPTY_LIST;
 
     @XmlElement(name = "product-type-name")
     public String getProductTypeName() {
@@ -131,14 +131,6 @@ public class CategoryRO implements Serializable {
 
     public void setProductTypeName(final String productTypeName) {
         this.productTypeName = productTypeName;
-    }
-
-    public List<CategoryRO> getChildren() {
-        return children;
-    }
-
-    public void setChildren(final List<CategoryRO> children) {
-        this.children = children;
     }
 
     @XmlAttribute(name = "category-id")
@@ -157,6 +149,16 @@ public class CategoryRO implements Serializable {
 
     public void setParentId(final long parentId) {
         this.parentId = parentId;
+    }
+
+    @XmlElementWrapper(name = "breadcrumbs")
+    @XmlElement(name = "breadcrumb")
+    public List<BreadcrumbRO> getBreadcrumbs() {
+        return breadcrumbs;
+    }
+
+    public void setBreadcrumbs(final List<BreadcrumbRO> breadcrumbs) {
+        this.breadcrumbs = breadcrumbs;
     }
 
     public int getRank() {
