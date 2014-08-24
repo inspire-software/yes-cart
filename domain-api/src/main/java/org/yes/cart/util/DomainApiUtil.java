@@ -19,6 +19,7 @@ package org.yes.cart.util;
 import org.yes.cart.domain.entity.AttrValue;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -59,6 +60,37 @@ public class DomainApiUtil {
             }
         }
         return null;
+    }
+
+    /**
+     * Check availability of an object.
+     *
+     * @param enabled flag for on/off switch
+     * @param availableFrom availability start (or null)
+     * @param availableTo availability finish (or null)
+     * @param now time now
+     *
+     * @return true if object is available given provided settings
+     */
+    public static boolean isObjectAvailableNow(final boolean enabled,
+                                               final Date availableFrom,
+                                               final Date availableTo,
+                                               final Date now) {
+
+        if (!enabled) {
+            return false;
+        }
+
+        if (availableFrom != null && now.before(availableFrom)) {
+            return false;
+        }
+
+        if (availableTo != null && now.after(availableTo)) {
+            return false;
+        }
+
+        return true;
+
     }
 
     private DomainApiUtil() {
