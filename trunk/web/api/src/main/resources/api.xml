@@ -38,6 +38,7 @@
                 <!--<entry key="org.yes.cart.domain.dto.ShopExchangeRateDTO" value="org.yes.cart.domain.dto.impl.ShopExchangeRateDTOImpl"/>-->
                 <entry key="org.yes.cart.domain.ro.BreadcrumbRO" value="org.yes.cart.domain.ro.BreadcrumbRO"/>
                 <entry key="org.yes.cart.domain.ro.CategoryRO" value="org.yes.cart.domain.ro.CategoryRO"/>
+                <entry key="org.yes.cart.domain.ro.ContentRO" value="org.yes.cart.domain.ro.ContentRO"/>
                 <!--<entry key="org.yes.cart.domain.dto.BrandDTO" value="org.yes.cart.domain.dto.impl.BrandDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.ProductTypeDTO" value="org.yes.cart.domain.dto.impl.ProductTypeDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.ProductTypeAttrDTO" value="org.yes.cart.domain.dto.impl.ProductTypeAttrDTOImpl"/>-->
@@ -109,6 +110,10 @@
 
             </map>
         </constructor-arg>
+    </bean>
+
+    <bean id="apiSupportFacade" class="org.yes.cart.web.service.apisupport.impl.ApiSupportFacadeImpl">
+        <constructor-arg index="0" ref="groovyContentServiceTemplateSupport"/>
     </bean>
 
 </beans>
