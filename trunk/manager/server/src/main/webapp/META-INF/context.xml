@@ -30,8 +30,7 @@
               password="${db.config.yespay.password}"
               driverClassName="${db.config.yespay.driver}"
               url="${db.config.yespay.url}"
-              minEvictableIdleTimeMillis="864000000"
-            />
+              minEvictableIdleTimeMillis="864000000"/>
 
 
 
@@ -47,23 +46,24 @@
               password="${db.config.yes.password}"
               driverClassName="${db.config.yes.driver}"
               url="${db.config.yes.url}"
-              minEvictableIdleTimeMillis="864000000"
-            />
+              minEvictableIdleTimeMillis="864000000"/>
 
 
-    <Realm className="org.apache.catalina.realm.DataSourceRealm" debug="4"
-        digest="MD5"
-        localDataSource="true"
-        dataSourceName="jdbc/yesjndi"
-        userTable="TMANAGER"
-        userNameCol="email"
-        userCredCol="password"
-        userRoleTable="TMANAGERROLE"
-        roleNameCol="code"/>
+    <Realm className="org.apache.catalina.realm.DataSourceRealm"
+           debug="4"
+           digest="MD5"
+           localDataSource="true"
+           dataSourceName="jdbc/yesjndi"
+           userTable="TMANAGER"
+           userNameCol="email"
+           userCredCol="password"
+           userRoleTable="TMANAGERROLE"
+           roleNameCol="code"/>
 
     <Parameter name="NODE_ID" value="YUM" override="false"/>
     <Parameter name="BACKDOOR_URI" value="yum" override="false"/>
     <Parameter name="CACHEDIRECTOR_URI" value="yum" override="false"/>
+    <Parameter name="LUCENE_INDEX_DISABLED" value="true" override="false"/>
 
 </Context>
 

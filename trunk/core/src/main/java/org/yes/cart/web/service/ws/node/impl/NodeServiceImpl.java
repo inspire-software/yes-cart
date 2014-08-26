@@ -211,16 +211,31 @@ public class NodeServiceImpl implements NodeService, ServletContextAware {
                 configuration.get(CACHEDIRECTOR_URI)
         );
 
+        final String bdUri = configuration.get(BACKDOOR_URI);
+        final String cdUri = configuration.get(CACHEDIRECTOR_URI);
+        final String luceneDisabled = configuration.get(LUCENE_INDEX_DISABLED);
+        final String luceneDisabledValue = luceneDisabled != null ?
+                Boolean.valueOf(luceneDisabled).toString() : Boolean.FALSE.toString();
+        configuration.put(LUCENE_INDEX_DISABLED, luceneDisabledValue);
+
         final String backdoorKey = AttributeNamesKeys.System.SYSTEM_BACKDOOR_URI_PREFIX + "_" + node.getNodeId();
         final String cacheDirectorKey = AttributeNamesKeys.System.SYSTEM_CACHEDIRECTOR_URI_PREFIX + "_" + node.getNodeId();
+        final String luceneDisabledKey = AttributeNamesKeys.System.SYSTEM_LUCENE_INDEX_DISABLED_PREFIX + "_" + node.getNodeId();
 
-        runtimeAttributeService.create(backdoorKey, "SYSTEM", "URI");
-        runtimeAttributeService.create(cacheDirectorKey, "SYSTEM", "URI");
+        try {
+            runtimeAttributeService.create(backdoorKey, "SYSTEM", "URI");
+            runtimeAttributeService.create(cacheDirectorKey, "SYSTEM", "URI");
+            runtimeAttributeService.create(luceneDisabledKey, "SYSTEM", "Boolean");
 
-        systemService.updateAttributeValue(backdoorKey, configuration.get(BACKDOOR_URI));
-        systemService.updateAttributeValue(cacheDirectorKey, configuration.get(CACHEDIRECTOR_URI));
+            systemService.updateAttributeValue(backdoorKey, bdUri);
+            systemService.updateAttributeValue(cacheDirectorKey, cdUri);
+            systemService.updateAttributeValue(luceneDisabledKey, luceneDisabledValue);
 
-        log.info("Loading configuration for node {}... success", node.getNodeId());
+            log.info("Loading configuration for node {}... success", node.getNodeId());
+
+        } catch (Exception exp) {
+            log.error("Saving configuration for node {}... failed", node.getNodeId());
+        }
     }
 
 }

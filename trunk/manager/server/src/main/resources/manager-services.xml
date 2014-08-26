@@ -767,7 +767,9 @@
     </bean>
 
 
-    <import resource="report.xml"/>
+    <import resource="manager-report.xml"/>
+
+    <import resource="classpath*:payment-persistence.xml"/>
     <import resource="classpath*:payment-api.xml"/>
 
 
@@ -838,8 +840,8 @@
     </bean>
 
 
-    <import resource="applicationContext-tools.xml"/>
-    <import resource="applicationContext-cronjob.xml"/>
+    <import resource="manager-tools.xml"/>
+    <import resource="manager-cronjob.xml"/>
 
 </beans>
         

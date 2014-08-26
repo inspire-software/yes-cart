@@ -20,12 +20,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="websupport-persistence.xml"/>
-    <import resource="websupport-services.xml"/>
-    <import resource="websupport-cluster-persistence.xml"/>
-    <import resource="websupport-cluster.xml"/>
-    <import resource="websupport-tools.xml"/>
-    <import resource="websupport-cronjob.xml"/>
-    <import resource="websupport-storefront.xml"/>
+    <bean id="dataSourceSec" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/yesjndi"/>
+        <property name="lookupOnStartup" value="true"/>
+        <property name="cache" value="true"/>
+        <property name="proxyInterface" value="javax.sql.DataSource"/>
+    </bean>
 
 </beans>

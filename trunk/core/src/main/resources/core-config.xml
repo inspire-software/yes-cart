@@ -28,38 +28,13 @@
 			               http://www.springframework.org/schema/cache
 			               http://www.springframework.org/schema/cache/spring-cache.xsd">
 
+
     <cache:annotation-driven />
-
-
-    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-        <property name="jndiName" value="java:comp/env/jdbc/yesjndi"/>
-        <property name="lookupOnStartup" value="true"/>
-        <property name="cache" value="true"/>
-        <property name="proxyInterface" value="javax.sql.DataSource"/>
-    </bean>
-
-
-
-    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-
     <aop:aspectj-autoproxy/>
-
-    <!--
-        <bean id="autoProxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
-            <property name="proxyTargetClass"><value>true</value></property>
-        </bean>
-    -->
-
-
     <context:annotation-config/>
+
     <context:component-scan base-package="org.yes"/>
 
-    <import resource="classpath*:spring/dao.xml"/>
     <import resource="core-services.xml"/>
-
-
 
 </beans>

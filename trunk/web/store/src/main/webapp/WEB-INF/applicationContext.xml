@@ -35,8 +35,11 @@
 
     <aop:aspectj-autoproxy/>
 
+    <import resource="classpath*:core-config.xml"/>
+    <import resource="classpath*:core-persistence.xml"/>
+    <import resource="classpath*:core-services.xml"/>
     <import resource="classpath*:websupport-webapp.xml"/>
-    <import resource="modules.xml"/>
-    <import resource="wicket.xml"/>
+    <import resource="classpath*:payment-modules.xml"/>
+    <import resource="classpath*:wicket.xml"/>
 
 </beans>

@@ -60,6 +60,11 @@ public interface AttributeNamesKeys {
          */
         String SYSTEM_CACHEDIRECTOR_URI_PREFIX = "SYSTEM_CACHEDIRECTOR_URI";
         /**
+         * Default lucene index disabled setting.
+         * Real example of attribute would be: SYSTEM_LUCENE_DISABLED_PREFIX_YES0
+         */
+        String SYSTEM_LUCENE_INDEX_DISABLED_PREFIX = "SYSTEM_LUCENE_DISABLED_PREFIX";
+        /**
          * Size of the log tail in characters to show in YUM.
          */
         String IMPORT_JOB_LOG_SIZE = "IMPORT_JOB_LOG_SIZE";

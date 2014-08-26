@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="applicationDirector" class="org.yes.cart.web.application.ApplicationDirector"/>
+
+    <!-- ################################### filter delegates begin ################################### -->
+
+    <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="systemService"/>
+    </bean>
+
+    <bean id="imageFilter" class="org.yes.cart.web.filter.ImageFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="imageService"/>
+        <constructor-arg index="2" ref="systemService"/>
+    </bean>
+
+    <bean id="shoppingCartFilter" class="org.yes.cart.web.filter.ShoppingCartFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="tuplizerPool"/>
+        <constructor-arg index="2" ref="amountCalculationStrategy"/>
+        <constructor-arg index="3" ref="shoppingCartCommandFactory"/>
+    </bean>
+
+    <!--CPOINT do you need paypal express checkout ?-->
+    <bean id="payPalExpressCheckoutFilter" class="org.yes.cart.web.filter.payment.PayPalExpressCheckoutFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="paymentProcessorFactory"/>
+        <constructor-arg index="2" ref="customerOrderService"/>
+        <constructor-arg index="3" ref="paymentCallBackHandlerFacade"/>
+    </bean>
+
+
+
+    <!-- CPOINT do you need authorize net ? -->
+    <bean id="anetPaymentCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
+    </bean>
+
+    <!-- CPOINT do you need liq pay ? -->
+    <bean id="liqPayCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
+    </bean>
+
+    <!-- CPOINT do you need liq pay ? -->
+    <bean id="liqPayNoRefundCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
+    </bean>
+
+    <!-- ################################### filter delegates end ################################### -->
+
+    <!-- ################################### cart persistence start ################################# -->
+
+    <bean id="cookieTuplizer" class="org.yes.cart.web.support.shoppingcart.cookiedriven.impl.CookieTuplizerImpl"
+          scope="prototype">
+        <constructor-arg index="0" value="CHANGE_PASSWORD_ON_PRODUCTION"/>
+        <constructor-arg index="1" value="2048"/>
+        <constructor-arg index="2" value="DES"/>
+        <constructor-arg index="3" value="DES/ECB/PKCS5Padding"/>
+        <constructor-arg index="4" value="yc"/>
+        <constructor-arg index="5" value="864000"/>
+        <constructor-arg index="6" value="/"/>
+        <constructor-arg index="7" value="8192"/>
+    </bean>
+
+    <bean id="cookieTuplizerPool" class="org.springframework.aop.target.CommonsPoolTargetSource">
+        <property name="targetBeanName" value="cookieTuplizer"/>
+        <property name="maxIdle" value="10"/>
+        <property name="minIdle" value="5"/>
+    </bean>
+
+    <bean id="cookieShoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterImpl">
+        <constructor-arg index="0" ref="cookieTuplizerPool"/>
+    </bean>
+
+
+    <bean id="headerTuplizer" class="org.yes.cart.web.support.shoppingcart.headerdriven.impl.HeaderTuplizerImpl"
+          scope="prototype">
+        <constructor-arg index="0" value="CHANGE_PASSWORD_ON_PRODUCTION"/>
+        <constructor-arg index="1" value="256"/>
+        <constructor-arg index="2" value="DES"/>
+        <constructor-arg index="3" value="DES/ECB/PKCS5Padding"/>
+        <constructor-arg index="4" value="x-yc-"/>
+        <constructor-arg index="5" value="8192"/>
+    </bean>
+
+    <bean id="headerTuplizerPool" class="org.springframework.aop.target.CommonsPoolTargetSource">
+        <property name="targetBeanName" value="headerTuplizer"/>
+        <property name="maxIdle" value="10"/>
+        <property name="minIdle" value="5"/>
+    </bean>
+
+    <bean id="headerShoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterImpl">
+        <constructor-arg index="0" ref="headerTuplizerPool"/>
+    </bean>
+
+    <bean id="cartRepository" class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.ResilientCartRepositoryImpl">
+        <constructor-arg index="0" ref="shoppingCartStateService"/>
+        <constructor-arg index="1">
+            <bean parent="txProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.CartUpdateProcessorImpl">
+                        <constructor-arg index="0" ref="shoppingCartStateService"/>
+                        <constructor-arg index="1" ref="shoppingCartCommandFactory"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="2" value="21600"/>
+        <constructor-arg index="3" ref="cacheManager"/>
+        <!--<constructor-arg index="4">-->
+            <!--<bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">-->
+                <!--<description>-->
+                    <!--Thread pool (1) for cart persistence so that we do not slow down the response.-->
+                    <!--We only need one thread for this as we only anticipate one thread to be-->
+                    <!--performing the updates to cart states.-->
+                <!--</description>-->
+                <!--<property name="corePoolSize" value="1"/>-->
+                <!--<property name="maxPoolSize" value="1"/>-->
+            <!--</bean>-->
+        <!--</constructor-arg>-->
+    </bean>
+
+    <bean id="tokenTuplizer" class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.TokenTuplizerImpl"
+          scope="prototype">
+        <constructor-arg index="0" ref="cartRepository"/>
+        <constructor-arg index="1" value="yc"/>
+        <constructor-arg index="2" value="864000"/>
+        <constructor-arg index="3" value="/"/>
+    </bean>
+
+    <bean id="tokenTuplizerPool" class="org.springframework.aop.target.CommonsPoolTargetSource">
+        <property name="targetBeanName" value="tokenTuplizer"/>
+        <property name="maxIdle" value="10"/>
+        <property name="minIdle" value="5"/>
+    </bean>
+
+    <bean id="tokenShoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterImpl">
+        <constructor-arg index="0" ref="tokenTuplizerPool"/>
+    </bean>
+
+    <!-- Decorators for default tuplizers and persisters -->
+    <bean id="tuplizerPool" class="org.yes.cart.web.support.shoppingcart.impl.TuplizerPoolDecoratorImpl">
+        <constructor-arg index="0" ref="tokenTuplizerPool"/>
+    </bean>
+
+    <bean id="shoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterDecoratorImpl">
+        <constructor-arg index="0" ref="tokenShoppingCartPersister"/>
+    </bean>
+
+
+    <!-- ################################### cart persistence end ################################### -->
+
+    <!-- ################################### presentation layer support start ####################### -->
+
+    <bean id="centralViewResolver" class="org.yes.cart.web.support.service.impl.CentralViewResolverImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+        <constructor-arg index="1" ref="contentService"/>
+        <constructor-arg index="2" ref="productService"/>
+        <constructor-arg index="3" ref="attributeService"/>
+        <constructor-arg index="4" ref="luceneQueryFactory"/>
+    </bean>
+
+    <bean id="attributeFilteredNavigationSupport" class="org.yes.cart.web.page.component.filterednavigation.impl.AttributeFilteredNavigationSupportImpl">
+        <constructor-arg index="0" ref="luceneQueryFactory"/>
+        <constructor-arg index="1" ref="productService"/>
+    </bean>
+
+    <bean id="brandFilteredNavigationSupport" class="org.yes.cart.web.page.component.filterednavigation.impl.BrandFilteredNavigationSupportImpl">
+        <constructor-arg index="0" ref="luceneQueryFactory"/>
+        <constructor-arg index="1" ref="productService"/>
+    </bean>
+
+    <bean id="priceFilteredNavigationSupport" class="org.yes.cart.web.page.component.filterednavigation.impl.PriceFilteredNavigationSupportImpl">
+        <constructor-arg index="0" ref="luceneQueryFactory"/>
+        <constructor-arg index="1" ref="productService"/>
+        <constructor-arg index="2" ref="categoryService"/>
+        <constructor-arg index="3" ref="shopService"/>
+        <constructor-arg index="4" ref="priceService"/>
+        <constructor-arg index="5" ref="priceNavigation"/>
+    </bean>
+
+    <bean id="currencySymbolService" class="org.yes.cart.web.support.service.impl.CurrencySymbolServiceImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="ALL" value="&#x4c;&#x65;&#x6b;"/>
+                <entry key="AFN" value="&#x60b;"/>
+                <entry key="ANG" value="&#x192;"/>
+                <entry key="ARS" value="&#x24;"/>
+                <entry key="AUD" value="&#x24;"/>
+                <entry key="AWG" value="&#x192;"/>
+                <entry key="AZN" value="&#x43c;&#x430;&#x43d;"/>
+                <entry key="BAM" value="&#x4b;&#x4d;"/>
+                <entry key="BBD" value="&#x24;"/>
+                <entry key="BGN" value="&#x43b;&#x432;"/>
+                <entry key="BND" value="&#x24;"/>
+                <entry key="BOB" value="&#x24;&#x62;"/>
+                <entry key="BRL" value="&#x52;&#x24;"/>
+                <entry key="BSD" value="&#x24;"/>
+                <entry key="BWP" value="&#x50;"/>
+                <entry key="BYR" value="&#x70;&#x2e;"/>
+                <entry key="BZD" value="&#x42;&#x5a;&#x24;"/>
+                <entry key="CAD" value="&#x24;"/>
+                <entry key="CHF" value="&#x43;&#x48;&#x46;"/>
+                <entry key="CLP" value="&#x24;"/>
+                <entry key="CNY" value="&#xa5;"/>
+                <entry key="COP" value="&#x24;"/>
+                <entry key="CRC" value="&#x20a1;"/>
+                <entry key="CUP" value="&#x20b1;"/>
+                <entry key="CZK" value="&#x4b;&#x10d;"/>
+                <entry key="DKK" value="&#x6b;&#x72;"/>
+                <entry key="DOP" value="&#x52;&#x44;&#x24;"/>
+                <entry key="EEK" value="&#x6b;&#x72;"/>
+                <entry key="EGP" value="&#xa3;"/>
+                <entry key="EUR" value="&#x20ac;"/>
+                <entry key="FJD" value="&#x24;"/>
+                <entry key="FKP" value="&#xa3;"/>
+                <entry key="GBP" value="&#xa3;"/>
+                <entry key="GGP" value="&#xa3;"/>
+                <entry key="GHC" value="&#xa2;"/>
+                <entry key="GIP" value="&#xa3;"/>
+                <entry key="GTQ" value="&#x51;"/>
+                <entry key="GYD" value="&#x24;"/>
+                <entry key="HKD" value="&#x24;"/>
+                <entry key="HNL" value="&#x4c;"/>
+                <entry key="HRK" value="&#x6b;&#x6e;"/>
+                <entry key="HUF" value="&#x46;&#x74;"/>
+                <entry key="IDR" value="&#x52;&#x70;"/>
+                <entry key="ILS" value="&#x20aa;"/>
+                <entry key="IMP" value="&#xa3;"/>
+                <entry key="INR" value="&#x20a8;"/>
+                <entry key="IRR" value="&#xfdfc;"/>
+                <entry key="ISK" value="&#x6b;&#x72;"/>
+                <entry key="JEP" value="&#xa3;"/>
+                <entry key="JMD" value="&#x4a;&#x24;"/>
+                <entry key="JPY" value="&#xa5;"/>
+                <entry key="KGS" value="&#x43b;&#x432;"/>
+                <entry key="KHR" value="&#x17db;"/>
+                <entry key="KPW" value="&#x20a9;"/>
+                <entry key="KRW" value="&#x20a9;"/>
+                <entry key="KYD" value="&#x24;"/>
+                <entry key="KZT" value="&#x43b;&#x432;"/>
+                <entry key="LAK" value="&#x20ad;"/>
+                <entry key="LBP" value="&#xa3;"/>
+                <entry key="LKR" value="&#x20a8;"/>
+                <entry key="LRD" value="&#x24;"/>
+                <entry key="LTL" value="&#x4c;&#x74;"/>
+                <entry key="LVL" value="&#x4c;&#x73;"/>
+                <entry key="MKD" value="&#x434;&#x435;&#x43d;"/>
+                <entry key="MNT" value="&#x20ae;"/>
+                <entry key="MUR" value="&#x20a8;"/>
+                <entry key="MXN" value="&#x24;"/>
+                <entry key="MYR" value="&#x52;&#x4d;"/>
+                <entry key="MZN" value="&#x4d;&#x54;"/>
+                <entry key="NAD" value="&#x24;"/>
+                <entry key="NGN" value="&#x20a6;"/>
+                <entry key="NIO" value="&#x43;&#x24;"/>
+                <entry key="NOK" value="&#x6b;&#x72;"/>
+                <entry key="NPR" value="&#x20a8;"/>
+                <entry key="NZD" value="&#x24;"/>
+                <entry key="OMR" value="&#xfdfc;"/>
+                <entry key="PAB" value="&#x42;&#x2f;&#x2e;"/>
+                <entry key="PEN" value="&#x53;&#x2f;&#x2e;"/>
+                <entry key="PHP" value="&#x50;&#x68;&#x70;"/>
+                <entry key="PKR" value="&#x20a8;"/>
+                <entry key="PLN" value="&#x7a;&#x142;"/>
+                <entry key="PYG" value="&#x47;&#x73;"/>
+                <entry key="QAR" value="&#xfdfc;"/>
+                <entry key="RON" value="&#x6c;&#x65;&#x69;"/>
+                <entry key="RSD" value="&#x414;&#x438;&#x43d;&#x2e;"/>
+                <entry key="RUB" value="&#x440;&#x443;&#x431;"/>
+                <entry key="SAR" value="&#xfdfc;"/>
+                <entry key="SBD" value="&#x24;"/>
+                <entry key="SCR" value="&#x20a8;"/>
+                <entry key="SEK" value="&#x6b;&#x72;"/>
+                <entry key="SGD" value="&#x24;"/>
+                <entry key="SHP" value="&#xa3;"/>
+                <entry key="SOS" value="&#x53;"/>
+                <entry key="SRD" value="&#x24;"/>
+                <entry key="SVC" value="&#x24;"/>
+                <entry key="SYP" value="&#xa3;"/>
+                <entry key="THB" value="&#xe3f;"/>
+                <entry key="TRL" value="&#x20a4;"/>
+                <entry key="TRY" value="&#x54;&#x4c;"/>
+                <entry key="TTD" value="&#x54;&#x54;&#x24;"/>
+                <entry key="TVD" value="&#x24;"/>
+                <entry key="TWD" value="&#x4e;&#x54;&#x24;"/>
+                <entry key="UAH" value="&#1075;&#1088;&#1085;."/>
+                <!-- not all browser support &#x20b4; -->
+                <entry key="USD" value="&#x24;"/>
+                <entry key="UYU" value="&#x24;&#x55;"/>
+                <entry key="UZS" value="&#x43b;&#x432;"/>
+                <entry key="VEF" value="&#x42;&#x73;"/>
+                <entry key="VND" value="&#x20ab;"/>
+                <entry key="XCD" value="&#x24;"/>
+                <entry key="YER" value="&#xfdfc;"/>
+                <entry key="ZAR" value="&#x52;"/>
+                <entry key="ZWD" value="&#x5a;&#x24;"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+
+    <bean id="bookmarkService" class="org.yes.cart.web.support.seo.impl.BookmarkServiceImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+        <constructor-arg index="1" ref="contentService"/>
+        <constructor-arg index="2" ref="productService"/>
+        <constructor-arg index="3" ref="cacheManager"/>
+    </bean>
+
+    <bean id="sitemapXmlService" class="org.yes.cart.web.support.seo.impl.SitemapXmlServiceImpl">
+        <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1" ref="categoryService"/>
+        <constructor-arg index="2" ref="contentService"/>
+        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="4" ref="languageService"/>
+    </bean>
+
+    <bean id="i18nSupport" class="org.yes.cart.web.support.i18n.impl.I18NWebSupportImpl"/>
+
+    <bean id="decoratorFacade" class="org.yes.cart.web.support.entity.decorator.impl.DecoratorFacadeImpl">
+        <constructor-arg index="0" ref="imageService"/>
+        <constructor-arg index="1" ref="categoryImageService"/>
+        <constructor-arg index="2" ref="attributableImageService"/>
+        <constructor-arg index="3" ref="attributableImageService"/>
+        <constructor-arg index="4" ref="categoryService"/>
+        <constructor-arg index="5" ref="productService"/>
+        <constructor-arg index="6" ref="bookmarkService"/>
+        <constructor-arg index="7" ref="cacheManager"/>
+    </bean>
+
+    <!-- ################################### presentation layer support end ######################### -->
+
+</beans>

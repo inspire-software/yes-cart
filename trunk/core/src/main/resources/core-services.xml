@@ -25,6 +25,7 @@
 
     <cache:annotation-driven />
 
+    <import resource="classpath*:dao.xml"/>
     <import resource="cache-config.xml"/>
     <import resource="core-cronjob.xml"/>
 

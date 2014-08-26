@@ -20,7 +20,26 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="dao.xml"/>
-    <import resource="persistence.xml"/>
+
+    <!-- #################################  message consumers begin ######################################-->
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${yum.mail.host}"/>
+        <property name="port" value="${yum.mail.port}"/>
+        <property name="username" value="${yum.mail.username}"/>
+        <property name="password" value="${yum.mail.password}"/>
+        <property name="javaMailProperties">
+            <props>
+                <!-- Use SMTP-AUTH to authenticate to SMTP server -->
+                <!--<prop key="mail.smtp.auth">true</prop>-->
+                <!-- Use TLS to encrypt communication with SMTP server -->
+                <prop key="mail.smtp.starttls.enable">${yum.mail.smtp.starttls.enable}</prop>
+            </props>
+        </property>
+    </bean>
+
+
+
+    <!-- #################################  message consumers end ######################################-->
 
 </beans>
