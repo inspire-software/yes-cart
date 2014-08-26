@@ -33,6 +33,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ObjectUtil;
 import org.yes.cart.web.service.ws.BackdoorService;
+import org.yes.cart.web.service.ws.node.NodeService;
 import org.yes.cart.web.service.ws.node.WarmUpService;
 
 import javax.jws.WebService;
@@ -63,6 +64,8 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
     private CacheManager cacheManager;
 
     private WarmUpService warmUpService;
+
+    private NodeService nodeService;
 
     /*
      * Once a product is reindexed we need to flush all cached information
@@ -106,11 +109,20 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
         warmUpService.warmUp();
     }
 
+    Boolean isLuceneIndexDisabled() {
+        return Boolean.TRUE.toString().equals(nodeService.getConfiguration().get(NodeService.LUCENE_INDEX_DISABLED));
+    }
+
     /**
      * {@inheritDoc}
      */
     public int reindexAllProducts() {
-        final int count = productService.reindexProducts();
+        final int count;
+        if (isLuceneIndexDisabled()) {
+            count = -1; // signifies job's done
+        } else {
+            count = productService.reindexProducts();
+        }
         flushCache();
         return count;
     }
@@ -119,7 +131,12 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
      * {@inheritDoc}
      */
     public int reindexProduct(final long productPk) {
-        final int count = productService.reindexProduct(productPk);
+        final int count;
+        if (isLuceneIndexDisabled()) {
+            count = 0;
+        } else {
+            count = productService.reindexProduct(productPk);
+        }
         flushCache();
         return count;
     }
@@ -128,7 +145,12 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
      * {@inheritDoc}
      */
     public int reindexProductSku(final long productPk) {
-        final int count = productService.reindexProductSku(productPk);
+        final int count;
+        if (isLuceneIndexDisabled()) {
+            count = 0;
+        } else {
+            count = productService.reindexProductSku(productPk);
+        }
         flushCache();
         return count;
     }
@@ -137,7 +159,12 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
      * {@inheritDoc}
      */
     public int reindexProductSkuCode(final String productCode) {
-        final int count = productService.reindexProductSku(productCode);
+        final int count;
+        if (isLuceneIndexDisabled()) {
+            count = 0;
+        } else {
+            count = productService.reindexProductSku(productCode);
+        }
         flushCache();
         return count;
     }
@@ -146,12 +173,18 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
      * {@inheritDoc}
      */
     public int reindexProducts(final long[] productPks) {
-        int rez = 0;
-        for (long pk : productPks) {
-            rez += productService.reindexProduct(pk);
+        final int count;
+        if (isLuceneIndexDisabled()) {
+            count = 0;
+        } else {
+            int rez = 0;
+            for (long pk : productPks) {
+                rez += productService.reindexProduct(pk);
+            }
+            count = rez;
         }
         flushCache();
-        return rez;
+        return count;
     }
 
     /**
@@ -250,7 +283,16 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
     }
 
     /**
-     * IoC. Set product service.
+     * IoC. node service
+     *
+     * @param nodeService node service to use
+     */
+    public void setNodeService(final NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
+
+    /**
+     * IoC. Set warn up service.
      *
      * @param warmUpService warm up service to use.
      */

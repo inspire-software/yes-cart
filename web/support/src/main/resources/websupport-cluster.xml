@@ -64,6 +64,7 @@
                 <property name="productService" ref="productService"/>
                 <property name="cacheManager" ref="cacheManager"/>
                 <property name="warmUpService" ref="warmUpService"/>
+                <property name="nodeService" ref="nodeService"/>
             </bean>
         </property>
     </bean>

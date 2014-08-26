@@ -49,6 +49,7 @@
 
 
     <import resource="classpath*:core-config.xml"/>
+    <import resource="classpath*:core-services.xml"/>
 
     <import resource="classpath*:payment-api.xml"/>
     <import resource="classpath*:core-module-payment-base.xml"/>
@@ -58,7 +59,7 @@
 
     <bean id="applicationDirector" class="org.yes.cart.web.application.ApplicationDirector"/>
 
-    <import resource="../../../../support/src/test/resources/test-ds.xml"/>
+    <import resource="persistence.xml"/>
 
     <!-- #################################  message consumers end ######################################-->
 

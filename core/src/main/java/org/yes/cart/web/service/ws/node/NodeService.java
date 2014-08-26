@@ -36,6 +36,8 @@ public interface NodeService {
     String BACKDOOR_URI = "BACKDOOR_URI";
     /** Backdoor URI context parameter */
     String CACHEDIRECTOR_URI = "CACHEDIRECTOR_URI";
+    /** Lucene index disabled (use to suppress indexing jobs if yes-shop and yes-api on the same Servlet container) */
+    String LUCENE_INDEX_DISABLED = "LUCENE_INDEX_DISABLED";
 
     /**
      * Current node identification. This should be set in the

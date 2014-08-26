@@ -33,19 +33,18 @@
 -->
 
     <Resource name="jdbc/yespayjndi"
-                  auth="Container"
-                  scope="Shareable"
-                  type="javax.sql.DataSource"
-                  maxActive="1000"
-                  maxIdle="30"
-                  maxWait="10000"
-                  removeAbandoned="true"
-                  username="${db.config.yespay.login}"
-                  password="${db.config.yespay.password}"
-                  driverClassName="${db.config.yespay.driver}"
-                  url="${db.config.yespay.url}"
-                  minEvictableIdleTimeMillis="864000000"
-            />
+              auth="Container"
+              scope="Shareable"
+              type="javax.sql.DataSource"
+              maxActive="1000"
+              maxIdle="30"
+              maxWait="10000"
+              removeAbandoned="true"
+              username="${db.config.yespay.login}"
+              password="${db.config.yespay.password}"
+              driverClassName="${db.config.yespay.driver}"
+              url="${db.config.yespay.url}"
+              minEvictableIdleTimeMillis="864000000"/>
 
 
 
@@ -61,24 +60,25 @@
               password="${db.config.yes.password}"
               driverClassName="${db.config.yes.driver}"
               url="${db.config.yes.url}"
-              minEvictableIdleTimeMillis="864000000"
-                />
+              minEvictableIdleTimeMillis="864000000"/>
 
 
 
-    <Realm className="org.apache.catalina.realm.DataSourceRealm" debug="4"
-        digest="MD5"
-        localDataSource="true"
-        dataSourceName="jdbc/yesjndi"
-        userTable="TMANAGER"
-        userNameCol="email"
-        userCredCol="password"
-        userRoleTable="TMANAGERROLE"
-        roleNameCol="code"/>
+    <Realm className="org.apache.catalina.realm.DataSourceRealm"
+           debug="4"
+           digest="MD5"
+           localDataSource="true"
+           dataSourceName="jdbc/yesjndi"
+           userTable="TMANAGER"
+           userNameCol="email"
+           userCredCol="password"
+           userRoleTable="TMANAGERROLE"
+           roleNameCol="code"/>
 
     <Parameter name="NODE_ID" value="YES1" override="false"/>
     <Parameter name="BACKDOOR_URI" value="http://localhost:8080/yes-api/services/backdoor" override="false"/>
     <Parameter name="CACHEDIRECTOR_URI" value="http://localhost:8080/yes-api/services/cachedirector" override="false"/>
+    <Parameter name="LUCENE_INDEX_DISABLED" value="true" override="false"/>
 
 </Context>
 

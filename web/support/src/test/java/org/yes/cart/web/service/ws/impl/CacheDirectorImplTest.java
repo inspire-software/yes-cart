@@ -16,13 +16,13 @@
 package org.yes.cart.web.service.ws.impl;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
-import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.service.ws.CacheDirector;
@@ -40,35 +40,16 @@ import static junit.framework.Assert.*;
  * Date: 8/19/13
  * Time: 4:16 PM
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:testApplicationContext.xml")
 public class CacheDirectorImplTest {
 
-    private GenericXmlApplicationContext context;
+    @Autowired
+    private ApplicationContext context;
     private CacheDirectorImpl cacheDirector;
-
-    @BeforeClass
-    public static void initInitialContext() {
-
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("test-ds.xml");
-        SimpleNamingContextBuilder builder = new SimpleNamingContextBuilder();
-        builder.bind("java:comp/env/jdbc/yesjndi", applicationContext.getBean("dataSource"));
-        builder.bind("java:comp/env/jdbc/yespayjndi", applicationContext.getBean("payDataSource"));
-        try {
-            builder.activate();
-        } catch (NamingException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-    }
-
-
 
     @Before
     public void setUp() throws NamingException {
-
-        context = new GenericXmlApplicationContext();
-        context.load("file:src/test/resources/testApplicationContext.xml");
-        context.refresh();
-
 
         cacheDirector = new CacheDirectorImpl();
         cacheDirector.setEntityOperationCache((Map<String, Map<String, Set<Pair<String,String>>>>) context.getBean("evictionConfig"));

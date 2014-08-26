@@ -42,7 +42,7 @@ public class NodeImpl implements Node {
         this.nodeId = nodeId;
         this.backdoorUri = backdoorUri;
         this.cacheManagerUri = cacheManagerUri;
-        this.yum = nodeId.startsWith("YUM");
+        this.yum = nodeId != null && nodeId.startsWith("YUM");
     }
 
 

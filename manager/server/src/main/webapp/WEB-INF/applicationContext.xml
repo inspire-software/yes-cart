@@ -120,22 +120,7 @@
 
     <!-- #################################  message consumers begin ######################################-->
 
-    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="${yum.mail.host}"/>
-        <property name="port" value="${yum.mail.port}"/>
-        <property name="username" value="${yum.mail.username}"/>
-        <property name="password" value="${yum.mail.password}"/>
-        <property name="javaMailProperties">
-            <props>
-                <!-- Use SMTP-AUTH to authenticate to SMTP server -->
-                <!--<prop key="mail.smtp.auth">true</prop>-->
-                <!-- Use TLS to encrypt communication with SMTP server -->
-                <prop key="mail.smtp.starttls.enable">${yum.mail.smtp.starttls.enable}</prop>
-            </props>
-        </property>
-    </bean>
-
-
+    <import resource="classpath*:manager-mailconfig.xml"/>
 
     <!-- #################################  message consumers end ######################################-->
 
@@ -168,16 +153,15 @@
     <bean id="productReindexer" class="org.yes.cart.domain.entityindexer.impl.EmptyProductIndexerImpl"/>
 
 
-
     <import resource="classpath*:core-config.xml"/>
+    <import resource="classpath*:core-persistence.xml"/>
+    <import resource="classpath*:core-services.xml"/>
 
+    <import resource="classpath*:payment-persistence.xml"/>
     <import resource="classpath*:payment-api.xml"/>
     <import resource="classpath*:core-module-payment-base.xml"/>
     <import resource="classpath*:core-module-payment-capp.xml"/>
     <import resource="classpath*:core-module-payment-gswm.xml"/>
-
-
-
 
 
 </beans>

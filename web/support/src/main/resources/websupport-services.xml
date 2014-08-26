@@ -36,6 +36,7 @@
     <aop:aspectj-autoproxy/>
 
     <import resource="classpath*:core-config.xml"/>
+    <import resource="classpath*:core-services.xml"/>
 
     <bean id="productReindexer" class="org.yes.cart.domain.entityindexer.impl.ProductIndexerImpl">
         <constructor-arg index="0" ref="productDao"/>
