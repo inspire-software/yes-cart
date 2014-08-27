@@ -16,44 +16,36 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.authentication.IAuthenticationStrategy;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 import java.util.Map;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * Wicket logout command that invokes Wicket session invalidation.
+ *
+ * User: denispavlov
+ * Date: 27/08/2014
+ * Time: 00:21
  */
-public class LogoutCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
+public class WicketLogoutCommandImpl extends LogoutCommandImpl {
 
-    private static final long serialVersionUID = 20101025L;
+    private static final long serialVersionUID = 20101026L;
 
-    /**
-     * Construct command.
-     *
-     * @param registry shopping cart command registry
-     */
-    public LogoutCommandImpl(final ShoppingCartCommandRegistry registry) {
+    public WicketLogoutCommandImpl(final ShoppingCartCommandRegistry registry) {
         super(registry);
     }
 
-    /**
-     * @return command key
-     */
-    public String getCmdKey() {
-        return CMD_LOGOUT;
-    }
-
-    /** {@inheritDoc} */
     @Override
     public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
-        if (parameters.containsKey(getCmdKey())) {
-            shoppingCart.getShoppingContext().clearContext();
-            recalculate(shoppingCart);
-            markDirty(shoppingCart);
+        super.execute(shoppingCart, parameters);
+        if (shoppingCart.getLogonState() == ShoppingCart.NOT_LOGGED && parameters.containsKey(getCmdKey())) {
+            final IAuthenticationStrategy strategy = Application.get().getSecuritySettings().getAuthenticationStrategy();
+            strategy.remove();
+            AuthenticatedWebSession.get().signOut();
         }
     }
 }

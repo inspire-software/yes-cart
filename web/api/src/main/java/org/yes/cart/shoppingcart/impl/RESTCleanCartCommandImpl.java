@@ -17,42 +17,34 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.web.support.shoppingcart.tokendriven.CartRepository;
 
 import java.util.Map;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * User: denispavlov
+ * Date: 26/08/2014
+ * Time: 22:18
  */
-public class LogoutCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
+public class RESTCleanCartCommandImpl extends CleanCartCommandImpl {
 
-    private static final long serialVersionUID = 20101025L;
+    private static final long serialVersionUID = 20101026L;
 
-    /**
-     * Construct command.
-     *
-     * @param registry shopping cart command registry
-     */
-    public LogoutCommandImpl(final ShoppingCartCommandRegistry registry) {
+    private final CartRepository cartRepository;
+
+    public RESTCleanCartCommandImpl(final ShoppingCartCommandRegistry registry,
+                                    final CartRepository cartRepository) {
         super(registry);
-    }
-
-    /**
-     * @return command key
-     */
-    public String getCmdKey() {
-        return CMD_LOGOUT;
+        this.cartRepository = cartRepository;
     }
 
     /** {@inheritDoc} */
     @Override
     public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
-            shoppingCart.getShoppingContext().clearContext();
-            recalculate(shoppingCart);
+            cartRepository.evictShoppingCart(shoppingCart);
+            shoppingCart.clean();
             markDirty(shoppingCart);
         }
     }

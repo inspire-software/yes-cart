@@ -62,34 +62,17 @@ public class StorefrontWebSession extends AuthenticatedWebSession {
      * {@inheritDoc}
      */
     public boolean authenticate(final String username, final String password) {
-        if (customerServiceFacade.authenticate(username, password)) {
-            executeLoginCommand(
-                    ApplicationDirector.getShoppingCart(),
-                    customerServiceFacade.getCustomerByEmail(username));
-            return true;
-        }
-        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGOUT, ApplicationDirector.getShoppingCart(),
-                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT));
-        return false;
-    }
-
-
-    /**
-     * Execute login command.
-     *
-     * @param shoppingCart shopping cart
-     * @param customer     customer.
-     */
-    protected void executeLoginCommand(final ShoppingCart shoppingCart, final Customer customer) {
-        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, shoppingCart,
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, cart,
                 new HashMap<String, Object>() {{
-                    put("email", customer.getEmail());
-                    put("name", customer.getFirstname() + " " + customer.getLastname());
+                    put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, username);
+                    put(ShoppingCartCommand.CMD_LOGIN_P_PASS, password);
                     put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
                 }}
         );
-    }
 
+        return cart.getLogonState() == ShoppingCart.LOGGED_IN;
+    }
 
     /**
      * {@inheritDoc}

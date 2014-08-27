@@ -48,8 +48,8 @@ public class LoginCommandImplTest extends BaseCoreDBTestCase {
         assertEquals(ShoppingCart.NOT_LOGGED, shoppingCart.getLogonState());
         Map<String, String> params = new HashMap<String, String>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customer.getEmail());
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
-        params.put(LoginCommandImpl.CMD_LOGIN, "1");
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
+        params.put(ShoppingCartCommand.CMD_LOGIN, "1");
         commands.execute(shoppingCart, (Map) params);
         assertEquals(ShoppingCart.LOGGED_IN, shoppingCart.getLogonState());
     }

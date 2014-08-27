@@ -16,44 +16,41 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.wicket.Session;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
+import java.util.Locale;
 import java.util.Map;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * Wicket change locale command invokes Wicket specific settings for current locale.
+ *
+ * User: denispavlov
+ * Date: 27/08/2014
+ * Time: 00:29
  */
-public class LogoutCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
+public class WicketChangeLocaleCartCommandImpl extends ChangeLocaleCartCommandImpl {
 
-    private static final long serialVersionUID = 20101025L;
+    private static final long serialVersionUID = 20101026L;
 
     /**
-     * Construct command.
+     * Wicket command.
      *
      * @param registry shopping cart command registry
      */
-    public LogoutCommandImpl(final ShoppingCartCommandRegistry registry) {
+    public WicketChangeLocaleCartCommandImpl(final ShoppingCartCommandRegistry registry) {
         super(registry);
-    }
-
-    /**
-     * @return command key
-     */
-    public String getCmdKey() {
-        return CMD_LOGOUT;
     }
 
     /** {@inheritDoc} */
     @Override
     public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
-        if (parameters.containsKey(getCmdKey())) {
-            shoppingCart.getShoppingContext().clearContext();
-            recalculate(shoppingCart);
-            markDirty(shoppingCart);
+        // current locale may be null if it is new cart
+        final String locale = shoppingCart.getCurrentLocale();
+        super.execute(shoppingCart, parameters);
+        if (parameters.containsKey(getCmdKey()) && !shoppingCart.getCurrentLocale().equals(locale)) {
+            Session.get().setLocale(new Locale(shoppingCart.getCurrentLocale()));
         }
     }
 }

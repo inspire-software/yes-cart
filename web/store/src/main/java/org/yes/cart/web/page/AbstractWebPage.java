@@ -20,8 +20,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.authentication.IAuthenticationStrategy;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -175,20 +173,6 @@ public class AbstractWebPage extends WebPage {
 
         final PageParameters params = getPageParameters();
         getShoppingCartCommandFactory().execute(cart, (Map) WicketUtil.pageParametesAsMap(params));
-
-        if (cart.isModified()) {
-
-            if (params.getNamedKeys().contains(ShoppingCartCommand.CMD_CHANGELOCALE)) {
-                getSession().setLocale(new Locale(cart.getCurrentLocale()));
-            }
-            if (params.getNamedKeys().contains(ShoppingCartCommand.CMD_LOGOUT)) {
-                // Need to remove user from wicket auth
-                final IAuthenticationStrategy strategy = getApplication().getSecuritySettings().getAuthenticationStrategy();
-                strategy.remove();
-                AuthenticatedWebSession.get().signOut();
-            }
-
-        }
 
     }
 

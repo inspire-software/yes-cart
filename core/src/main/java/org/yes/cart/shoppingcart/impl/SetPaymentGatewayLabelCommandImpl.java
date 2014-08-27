@@ -18,6 +18,7 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 import java.util.Map;
 
@@ -33,6 +34,14 @@ public class SetPaymentGatewayLabelCommandImpl extends AbstractCartCommandImpl  
 
     private static final long serialVersionUID = 20111106L;
 
+    /**
+     * Construct command.
+     *
+     * @param registry shopping cart command registry
+     */
+    public SetPaymentGatewayLabelCommandImpl(final ShoppingCartCommandRegistry registry) {
+        super(registry);
+    }
 
     /**
     * @return command key

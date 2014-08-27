@@ -155,9 +155,6 @@ public class ResilientCartRepositoryImpl implements CartRepository {
 
                 try {
 
-                    final String cartGuid = shoppingCart.getGuid();
-                    final String customerEmail = shoppingCart.getCustomerEmail();
-
                     // Update process potentially can merge the cart with other stored states (e.g. when user logs in)
                     cartUpdateProcessor.updateShoppingCart(shoppingCart);
                     // So we re-save it in cache
@@ -171,12 +168,15 @@ public class ResilientCartRepositoryImpl implements CartRepository {
         };
     }
 
-
     /** {@inheritDoc} */
     @Override
-    public void evictAll() {
+    public void evictShoppingCart(final ShoppingCart shoppingCart) {
 
-        CART_CACHE.clear();
+        CART_CACHE.evict(shoppingCart.getGuid());
+        final ShoppingCartState state = shoppingCartStateService.findByGuid(shoppingCart.getGuid());
+        if (state != null) {
+            shoppingCartStateService.delete(state);
+        }
 
     }
 

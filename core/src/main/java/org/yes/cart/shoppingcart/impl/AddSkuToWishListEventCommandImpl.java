@@ -28,6 +28,7 @@ import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -52,12 +53,23 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
     private final CustomerService customerService;
     private final CustomerWishListService customerWishListService;
 
-    public AddSkuToWishListEventCommandImpl(final PriceService priceService,
+    /**
+     * Construct sku command.
+     *
+     * @param registry shopping cart command registry
+     * @param priceService price service
+     * @param productService product service
+     * @param shopService shop service
+     * @param customerService customer service
+     * @param customerWishListService customer wish list service
+     */
+    public AddSkuToWishListEventCommandImpl(final ShoppingCartCommandRegistry registry,
+                                            final PriceService priceService,
                                             final ProductService productService,
                                             final ShopService shopService,
                                             final CustomerService customerService,
                                             final CustomerWishListService customerWishListService) {
-        super(priceService, productService, shopService);
+        super(registry, priceService, productService, shopService);
         this.customerService = customerService;
         this.customerWishListService = customerWishListService;
     }

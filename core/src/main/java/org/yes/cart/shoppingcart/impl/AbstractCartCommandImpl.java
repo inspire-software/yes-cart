@@ -18,6 +18,7 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -26,6 +27,16 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
  */
 public abstract class AbstractCartCommandImpl implements ShoppingCartCommand {
 
+    private int priority = 0;
+
+    /**
+     * Construct command.
+     *
+     * @param registry shopping cart command registry
+     */
+    protected AbstractCartCommandImpl(final ShoppingCartCommandRegistry registry) {
+        registry.registerCommand(this);
+    }
 
     /**
      * Recalculate shopping cart.
@@ -44,4 +55,19 @@ public abstract class AbstractCartCommandImpl implements ShoppingCartCommand {
     protected void markDirty(final ShoppingCart shoppingCart) {
         shoppingCart.markDirty();
     }
+
+    /** {@inheritDoc} */
+    public int getPriority() {
+        return priority;
+    }
+
+    /**
+     * IoC priority for command.
+     *
+     * @param priority see {@link #getPriority()}
+     */
+    public void setPriority(final int priority) {
+        this.priority = priority;
+    }
+
 }

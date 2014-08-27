@@ -16,6 +16,7 @@
 package org.yes.cart.web.page.component.customer.logout;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
@@ -81,6 +82,7 @@ public class LogoutPanel  extends BaseComponent {
 
     /** {@inheritDoc} */
     public boolean isVisible() {
-        return ShoppingCart.LOGGED_IN == ApplicationDirector.getShoppingCart().getLogonState();
+        return ShoppingCart.LOGGED_IN == ApplicationDirector.getShoppingCart().getLogonState()
+                && AuthenticatedWebSession.get().isSignedIn();
     }
 }

@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Map;
@@ -31,6 +32,15 @@ import java.util.Map;
 public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20100313L;
+
+    /**
+     * Construct command.
+     *
+     * @param registry shopping cart command registry
+     */
+    public SetCarrierSlaCartCommandImpl(final ShoppingCartCommandRegistry registry) {
+        super(registry);
+    }
 
     /**
      * @return command key
