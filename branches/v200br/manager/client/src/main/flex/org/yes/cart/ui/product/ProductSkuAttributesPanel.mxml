@@ -109,7 +109,7 @@
             var prodAttr:AttrValueProductSkuDTOImpl = event.result as AttrValueProductSkuDTOImpl;
             var _replace:AttrValueProductSkuDTOImpl = null;
             for each (var old:AttrValueProductSkuDTOImpl in this.attrValues) {
-                if (old.attrvalueId == prodAttr.attrvalueId) {
+                if (DomainUtils.isPersistentPK(old.attrvalueId) && old.attrvalueId == prodAttr.attrvalueId) {
                     _replace = old;
                     break; // this is exact match by id so replace this one
                 } else if (old.attributeDTO.attributeId == prodAttr.attributeDTO.attributeId && DomainUtils.isNewPK(old.attrvalueId)) {

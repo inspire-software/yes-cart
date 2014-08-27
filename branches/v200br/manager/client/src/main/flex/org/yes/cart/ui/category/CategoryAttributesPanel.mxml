@@ -108,7 +108,7 @@
             var catAttr:AttrValueCategoryDTOImpl = event.result as AttrValueCategoryDTOImpl;
             var _replace:AttrValueCategoryDTOImpl = null;
             for each (var old:AttrValueCategoryDTOImpl in this.attrValues) {
-                if (old.attrvalueId == catAttr.attrvalueId) {
+                if (DomainUtils.isPersistentPK(old.attrvalueId) && old.attrvalueId == catAttr.attrvalueId) {
                     _replace = old;
                     break; // this is exact match by id so replace this one
                 } else if (old.attributeDTO.attributeId == catAttr.attributeDTO.attributeId && DomainUtils.isNewPK(old.attrvalueId)) {
