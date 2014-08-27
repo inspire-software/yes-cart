@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 import java.util.Map;
 
@@ -28,6 +29,15 @@ import java.util.Map;
 public class ChangeLocaleCartCommandImpl  extends AbstractCartCommandImpl {
 
     private static final long serialVersionUID = 20110625L;
+
+    /**
+     * Construct command.
+     *
+     * @param registry shopping cart command registry
+     */
+    public ChangeLocaleCartCommandImpl(final ShoppingCartCommandRegistry registry) {
+        super(registry);
+    }
 
     /** {@inheritDoc} */
     public String getCmdKey() {

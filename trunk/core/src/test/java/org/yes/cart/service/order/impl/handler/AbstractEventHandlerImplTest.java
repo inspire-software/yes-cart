@@ -62,7 +62,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customerEmail);
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
 
         params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
         params.put(ShoppingCartCommand.CMD_SETSHOP, "10");

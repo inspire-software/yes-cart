@@ -21,6 +21,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 import java.util.Map;
 
@@ -35,7 +36,15 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
 
     private final ShopService shopService;
 
-    public SetShopCartCommandImpl(final ShopService shopService) {
+    /**
+     * Construct command.
+     *
+     * @param registry shopping cart command registry
+     * @param shopService shop service
+     */
+    public SetShopCartCommandImpl(final ShoppingCartCommandRegistry registry,
+                                  final ShopService shopService) {
+        super(registry);
         this.shopService = shopService;
     }
 

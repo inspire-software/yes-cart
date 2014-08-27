@@ -18,8 +18,12 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 import java.util.*;
 
@@ -28,11 +32,19 @@ import java.util.*;
  * Date: 16/01/2014
  * Time: 18:04
  */
-public class ViewProductSkuInternalCommandImpl implements ShoppingCartCommand {
+public class ViewProductSkuInternalCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private final int maxProductHistory;
 
-    public ViewProductSkuInternalCommandImpl(final int maxProductHistory) {
+    /**
+     * Construct sku command.
+     *
+     * @param registry shopping cart command registry
+     * @param maxProductHistory max product history to keep
+     */
+    public ViewProductSkuInternalCommandImpl(final ShoppingCartCommandRegistry registry,
+                                             final int maxProductHistory) {
+        super(registry);
         this.maxProductHistory = maxProductHistory;
     }
 

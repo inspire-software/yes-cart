@@ -350,7 +350,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         Map<String, String> params = new HashMap<String, String>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customerEmail);
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 

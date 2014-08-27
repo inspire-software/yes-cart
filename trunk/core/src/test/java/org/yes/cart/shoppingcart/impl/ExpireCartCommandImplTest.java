@@ -49,7 +49,7 @@ public class ExpireCartCommandImplTest extends BaseCoreDBTestCase {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customer.getEmail());
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
         params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
         commands.execute(shoppingCart, (Map) params);
         assertNotNull(shoppingCart.getCustomerEmail());

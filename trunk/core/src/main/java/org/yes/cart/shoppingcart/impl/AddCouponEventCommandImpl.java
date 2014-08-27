@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 import java.util.Map;
 
@@ -30,6 +31,15 @@ import java.util.Map;
 public class AddCouponEventCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20101026L;
+
+    /**
+     * Construct command.
+     *
+     * @param registry shopping cart command registry
+     */
+    public AddCouponEventCommandImpl(final ShoppingCartCommandRegistry registry) {
+        super(registry);
+    }
 
     /**
      * {@inheritDoc}

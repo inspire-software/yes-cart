@@ -62,7 +62,7 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_EXPIRE = "expireCartCmd";
     String CMD_LOGIN = "loginCmd";
     String CMD_LOGIN_P_EMAIL = "email";
-    String CMD_LOGIN_P_NAME = "name";
+    String CMD_LOGIN_P_PASS = "password";
     String CMD_LOGOUT = "logoutCmd";
 
 
@@ -78,5 +78,12 @@ public interface ShoppingCartCommand extends Serializable {
      * @return command key
      */
     String getCmdKey();
+
+    /**
+     * Priority for determining the order in which bulk commands are executed.
+     *
+     * @return 0 - first priority to max int - last priority
+     */
+    int getPriority();
 
 }

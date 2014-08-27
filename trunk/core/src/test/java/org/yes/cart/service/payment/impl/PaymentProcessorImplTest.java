@@ -45,6 +45,7 @@ import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -60,6 +61,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     private CustomerOrderPaymentService customerOrderPaymentService;
     private AddressService addressService;
     private CustomerService customerService;
+    private HashHelper hashHelper;
     private ShopService shopService;
     private OrderStateManager orderStateManager;
     private CarrierSlaService carrierSlaService;
@@ -75,6 +77,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean(ServiceSpringKeys.ORDER_PAYMENT_SERICE);
         addressService = (AddressService) ctx().getBean(ServiceSpringKeys.ADDRESS_SERVICE);
         customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
+        hashHelper = (HashHelper) ctx().getBean("hashHelper");
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         orderStateManager = (OrderStateManager) ctx().getBean(ServiceSpringKeys.ORDER_STATE_MANAGER);
         carrierSlaService = (CarrierSlaService) ctx().getBean(ServiceSpringKeys.CARRIER_SLA_SERVICE);
@@ -596,7 +599,12 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         customer.setEmail(UUID.randomUUID().toString() + "jd@domain.com");
         customer.setFirstname("John");
         customer.setLastname("Dou");
-        customer.setPassword("rawpassword");
+        try {
+            final String passw = hashHelper.getHash("rawpassword");
+            customer.setPassword(passw);
+        } catch (Exception exp) {
+            fail("Unable to generate password hash");
+        }
         customer = customerService.create(customer, shopService.getById(10L));
         assertTrue(customer.getCustomerId() > 0);
         Address address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
@@ -687,7 +695,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customerEmail);
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
         params.put(ShoppingCartCommand.CMD_LOGIN, "1");
         params.put(ShoppingCartCommand.CMD_SETSHOP, "10");
         params.put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");

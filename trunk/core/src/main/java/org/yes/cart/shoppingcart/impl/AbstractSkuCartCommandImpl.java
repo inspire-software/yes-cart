@@ -26,6 +26,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -54,14 +55,16 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
     /**
      * Construct abstract sku command.
      *
+     * @param registry shopping cart command registry
      * @param priceService price service
      * @param productService product service
      * @param shopService shop service
      */
-    public AbstractSkuCartCommandImpl(final PriceService priceService,
+    public AbstractSkuCartCommandImpl(final ShoppingCartCommandRegistry registry,
+                                      final PriceService priceService,
                                       final ProductService productService,
                                       final ShopService shopService) {
-        super();
+        super(registry);
         this.priceService = priceService;
         this.productService = productService;
         this.shopService = shopService;

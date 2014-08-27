@@ -28,6 +28,9 @@
 
     <import resource="persistence.xml"/>
     <import resource="core-services.xml"/>
+    <import resource="core-services-commands.xml"/>
+
+    <import resource="core-aspects.xml"/>
 
     <import resource="classpath*:test-payment-api.xml"/>
     <import resource="classpath*:test-core-module-payment-base.xml"/>

@@ -14,40 +14,20 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.shoppingcart.tokendriven;
-
-import org.yes.cart.shoppingcart.ShoppingCart;
+package org.yes.cart.shoppingcart;
 
 /**
  * User: denispavlov
- * Date: 21/08/2014
- * Time: 19:27
+ * Date: 26/08/2014
+ * Time: 16:44
  */
-public interface CartRepository {
+public interface ShoppingCartCommandRegistry {
 
     /**
-     * Retrieve shopping cart using token.
+     * Register shopping cart commands.
      *
-     * @param token token
-     *
-     * @return cart object
+     * @param shoppingCartCommand command to register
      */
-    ShoppingCart getShoppingCart(String token);
-
-    /**
-     * Store shopping cart.
-     *
-     * @param shoppingCart shopping cart
-     *
-     * @return token for later retrieval
-     */
-    String storeShoppingCart(ShoppingCart shoppingCart);
-
-    /**
-     * Evict shopping cart.
-     *
-     * @param shoppingCart shopping cart
-     */
-    void evictShoppingCart(ShoppingCart shoppingCart);
+    void registerCommand(final ShoppingCartCommand shoppingCartCommand);
 
 }

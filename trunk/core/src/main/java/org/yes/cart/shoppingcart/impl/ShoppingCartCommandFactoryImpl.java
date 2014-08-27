@@ -19,10 +19,10 @@ package org.yes.cart.shoppingcart.impl;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.util.ShopCodeContext;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * .
@@ -32,23 +32,42 @@ import java.util.Map;
  * Time: 5:29:32 PM
  *
  */
-public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactory {
+public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactory, ShoppingCartCommandRegistry {
 
     private static final long serialVersionUID = 20100122L;
 
-    private final ShoppingCartCommand[] commands;
+    private ShoppingCartCommand[] commands;
     private final Map<String, ShoppingCartCommand> commandByKey = new HashMap<String, ShoppingCartCommand>();
 
-    /**
-     * IoC constructor.
-     *
-     * @param commands configured commands
-     */
-    public ShoppingCartCommandFactoryImpl(final List<ShoppingCartCommand> commands) {
-        this.commands = commands.toArray(new ShoppingCartCommand[commands.size()]);
-        for (final ShoppingCartCommand command : commands) {
+    /** {@inheritDoc} */
+    @Override
+    public void registerCommand(final ShoppingCartCommand command) {
+
+        final ShoppingCartCommand mapped = commandByKey.get(command.getCmdKey());
+        if (mapped != command) {
+            if (mapped != null) {
+                ShopCodeContext.getLog(this).warn("Replacing command impl for: {} with {}", command.getCmdKey(), command);
+            } else {
+                ShopCodeContext.getLog(this).info("Adding command impl for: {} with {}", command.getCmdKey(), command);
+            }
             commandByKey.put(command.getCmdKey(), command);
+            commands = remapCommandChain(commandByKey.values());
         }
+    }
+
+    ShoppingCartCommand[] remapCommandChain(final Collection<ShoppingCartCommand> commands) {
+        final List<ShoppingCartCommand> ordered = new ArrayList<ShoppingCartCommand>(commands);
+        Collections.sort(ordered, new Comparator<ShoppingCartCommand>() {
+            @Override
+            public int compare(final ShoppingCartCommand cmd1, final ShoppingCartCommand cmd2) {
+                final int rez = cmd1.getPriority() - cmd2.getPriority();
+                if (rez == 0) {
+                    return -1;
+                }
+                return rez;
+            }
+        });
+        return ordered.toArray(new ShoppingCartCommand[ordered.size()]);
     }
 
     /** {@inheritDoc} */
@@ -75,4 +94,9 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
         return null;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public int getPriority() {
+        return 0;
+    }
 }
