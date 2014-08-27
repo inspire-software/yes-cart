@@ -34,6 +34,7 @@
         import org.yes.cart.impl.AttributeDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.util.DomainUtils;
+        import org.yes.cart.util.DomainUtils;
 
         public function init():void {
 
@@ -101,7 +102,7 @@
             var sysAttr:AttrValueSystemDTOImpl = event.result as AttrValueSystemDTOImpl;
             var _replace:AttrValueSystemDTOImpl = null;
             for each (var old:AttrValueSystemDTOImpl in this.attrValues) {
-                if (old.attrvalueId == sysAttr.attrvalueId) {
+                if (DomainUtils.isPersistentPK(old.attrvalueId) && old.attrvalueId == sysAttr.attrvalueId) {
                     _replace = old;
                     break; // this is exact match by id so replace this one
                 } else if (old.attributeDTO.attributeId == sysAttr.attributeDTO.attributeId && DomainUtils.isNewPK(old.attrvalueId)) {

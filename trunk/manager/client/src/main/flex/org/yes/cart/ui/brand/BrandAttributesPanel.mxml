@@ -108,7 +108,7 @@
             var brandAttr:AttrValueBrandDTOImpl = event.result as AttrValueBrandDTOImpl;
             var _replace:AttrValueBrandDTOImpl = null;
             for each (var old:AttrValueBrandDTOImpl in this.attrValues) {
-                if (old.attrvalueId == brandAttr.attrvalueId) {
+                if (DomainUtils.isPersistentPK(old.attrvalueId) && old.attrvalueId == brandAttr.attrvalueId) {
                     _replace = old;
                     break; // this is exact match by id so replace this one
                 } else if (old.attributeDTO.attributeId == brandAttr.attributeDTO.attributeId && DomainUtils.isNewPK(old.attrvalueId)) {

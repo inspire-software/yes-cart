@@ -108,7 +108,7 @@
             var shopAttr:AttrValueShopDTOImpl = event.result as AttrValueShopDTOImpl;
             var _replace:AttrValueShopDTOImpl = null;
             for each (var old:AttrValueShopDTOImpl in this.attrValues) {
-                if (old.attrvalueId == shopAttr.attrvalueId) {
+                if (DomainUtils.isPersistentPK(old.attrvalueId) && old.attrvalueId == shopAttr.attrvalueId) {
                     _replace = old;
                     break; // this is exact match by id so replace this one
                 } else if (old.attributeDTO.attributeId == shopAttr.attributeDTO.attributeId && DomainUtils.isNewPK(old.attrvalueId)) {
