@@ -25,10 +25,8 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Storefront  director class responsible for data caching,
@@ -50,6 +48,8 @@ public class ApplicationDirector implements ApplicationContextAware {
     private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
     private static ThreadLocal<String> mailTemplatePathThreadLocal = new ThreadLocal<String>();
     private static ThreadLocal<String> shopperIPAddressThreadLocal = new ThreadLocal<String>();
+
+    private static final Map<String, List<String>> chainCache = new ConcurrentHashMap<String, List<String>>();
 
     /**
      * Get shopper ip address.
@@ -124,7 +124,8 @@ public class ApplicationDirector implements ApplicationContextAware {
         return shopThreadLocal.get();
     }
 
-    private static final String[] DEFAULT = new String[] { "default" };
+    private static final String DEFAULT_THEME = "default";
+    private static final List<String> DEFAULT_CHAIN = Arrays.asList(DEFAULT_THEME);
 
     /**
      * @return current shop's theme
@@ -135,18 +136,34 @@ public class ApplicationDirector implements ApplicationContextAware {
 
             final Shop shop = shopThreadLocal.get();
             if (shop == null) {
-                chain = Arrays.asList(DEFAULT);
+                chain = DEFAULT_CHAIN;
             } else {
                 final String themeCfg = shop.getFspointer();
-                if (StringUtils.isBlank(themeCfg)) {
-                    chain = Arrays.asList(DEFAULT);
-                } else if (themeCfg.indexOf(';') == -1) {
-                    chain = Arrays.asList(themeCfg);
-                } else {
-                    chain = new ArrayList<String>(Arrays.asList(StringUtils.split(shop.getFspointer(), ';')));
-                    if (!chain.contains(DEFAULT[0])) {
-                        chain.add(DEFAULT[0]);
+                if (themeCfg != null) {
+
+                    final List<String> cached = chainCache.get(themeCfg);
+                    if (cached == null) {
+                        if (StringUtils.isBlank(themeCfg)) {
+                            chain = DEFAULT_CHAIN;
+                        } else if (themeCfg.indexOf(';') == -1) {
+                            final List<String> tmpChain = new ArrayList<String>(Arrays.asList(themeCfg));
+                            if (!tmpChain.contains(DEFAULT_THEME)) {
+                                tmpChain.add(DEFAULT_THEME);
+                            }
+                            chain = Collections.unmodifiableList(tmpChain);
+                        } else {
+                            final List<String> tmpChain = new ArrayList<String>(Arrays.asList(StringUtils.split(shop.getFspointer(), ';')));
+                            if (!tmpChain.contains(DEFAULT_THEME)) {
+                                tmpChain.add(DEFAULT_THEME);
+                            }
+                            chain = Collections.unmodifiableList(tmpChain);
+                        }
+                        chainCache.put(themeCfg, chain);
+                    } else {
+                        chain = cached;
                     }
+                } else {
+                    chain = DEFAULT_CHAIN;
                 }
             }
             currentThemeChainThreadLocal.set(chain);
