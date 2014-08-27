@@ -23,17 +23,22 @@
            height="100%">
 
     <mx:Script><![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
         import mx.collections.ArrayCollection;
         import mx.controls.dataGridClasses.DataGridColumn;
         import mx.events.DataGridEvent;
         import mx.events.ListEvent;
         import mx.rpc.events.ResultEvent;
 
+        import org.osmf.logging.Log;
+
         import org.yes.cart.constants.AttributeGroupNames;
         import org.yes.cart.impl.AttrValueCategoryDTOImpl;
         import org.yes.cart.impl.AttributeDTOImpl;
         import org.yes.cart.impl.CategoryDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.util.DomainUtils;
         import org.yes.cart.util.DomainUtils;
 
         private var _category:CategoryDTOImpl;
@@ -105,10 +110,7 @@
             var catAttr:AttrValueCategoryDTOImpl = event.result as AttrValueCategoryDTOImpl;
             var _replace:AttrValueCategoryDTOImpl = null;
             for each (var old:AttrValueCategoryDTOImpl in this.attrValues) {
-                if (old.attrvalueId == catAttr.attrvalueId) {
-                    _replace = old;
-                    break; // this is exact match by id so replace this one
-                } else if (old.attributeDTO.attributeId == catAttr.attributeDTO.attributeId && DomainUtils.isNewPK(old.attrvalueId)) {
+                if (old.attributeDTO.code == catAttr.attributeDTO.code && DomainUtils.isNewPK(old.attrvalueId)) {
                     _replace = old; // this is a candidate - but there can be multi values
                 }
             }

@@ -102,7 +102,7 @@
             var customerAttr:AttrValueCustomerDTOImpl = event.result as AttrValueCustomerDTOImpl;
             var _replace:AttrValueCustomerDTOImpl = null;
             for each (var old:AttrValueCustomerDTOImpl in this.attrValues) {
-                if (old.attrvalueId == customerAttr.attrvalueId) {
+                if (DomainUtils.isPersistentPK(old.attrvalueId) && old.attrvalueId == customerAttr.attrvalueId) {
                     _replace = old;
                     break; // this is exact match by id so replace this one
                 } else if (old.attributeDTO.attributeId == customerAttr.attributeDTO.attributeId && DomainUtils.isNewPK(old.attrvalueId)) {
