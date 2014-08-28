@@ -21,6 +21,29 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
+    <bean id="wicketMarkupCache" class="org.yes.cart.web.application.MultiMakupEhCacheProvider">
+        <constructor-arg index="0" ref="cacheManager"/>
+        <constructor-arg index="1" value="web.wicket-wicketMarkupCache"/>
+    </bean>
+
+    <bean id="wicketMarkupKeyCache" class="org.yes.cart.web.application.MultiMakupEhCacheProvider">
+        <constructor-arg index="0" ref="cacheManager"/>
+        <constructor-arg index="1" value="web.wicket-wicketMarkupKeyCache"/>
+    </bean>
+
+    <!--
+        Internal implementation of MultiMarkupCache is Wicket application specific
+        so it has to be setup as prototype and provided by lookup method in factory.
+     -->
+    <bean id="wicketMultiMarkupCache" class="org.yes.cart.web.application.MultiMarkupCache" scope="prototype">
+        <constructor-arg index="0" ref="wicketMarkupCache"/>
+        <constructor-arg index="1" ref="wicketMarkupKeyCache"/>
+    </bean>
+
+    <bean id="wicketMultiMarkupFactory" class="org.yes.cart.web.application.MultiMarkupFactory">
+        <lookup-method name="getNewInstance" bean="wicketMultiMarkupCache"/>
+    </bean>
+
     <bean id="wicketPagesMounter" class="org.yes.cart.web.theme.impl.WicketPagesMounterImpl">
         <constructor-arg index="0" ref="seoBookmarkablePageParametersEncoder"/>
         <constructor-arg index="1">

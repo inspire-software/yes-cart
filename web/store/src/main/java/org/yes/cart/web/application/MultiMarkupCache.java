@@ -18,7 +18,9 @@ package org.yes.cart.web.application;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.IMarkupCacheKeyProvider;
+import org.apache.wicket.markup.Markup;
 import org.apache.wicket.markup.MarkupCache;
+import org.springframework.security.util.FieldUtils;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -30,9 +32,34 @@ public class MultiMarkupCache extends MarkupCache {
     /** The markup cache key provider used by MarkupCache */
     private IMarkupCacheKeyProvider multiMarkupCacheKeyProvider;
 
-
+    /**
+     * Default Wicket implementation that can be used as POJO.
+     *
+     * Uses Wicket default implementation with concurrent hash map.
+     */
     public MultiMarkupCache() {
         super();
+    }
+
+    /**
+     * Custom implementation designed to be used with Spring IoC, so that we
+     * can inject the required caches (e.g. Ehcache).
+     *
+     * @param markupCache cache to use for markup
+     * @param markupKeyCache cache to use for markup cache keys
+     */
+    public MultiMarkupCache(final ICache<String, Markup> markupCache,
+                            final ICache<String, String> markupKeyCache) {
+        super();
+        /**
+         * MarkupCache invokes same method ({@link #newCacheImplementation()}) for both
+         * field therefor it is very unreliable to depend on the order of execution.
+         *
+         * Instead we use reflection to inject the caches so that we know for sure that we are
+         * using the right implementation for the right fields.
+         */
+        FieldUtils.setProtectedFieldValue("markupCache", this, markupCache);
+        FieldUtils.setProtectedFieldValue("markupKeyCache", this, markupKeyCache);
     }
 
     /**

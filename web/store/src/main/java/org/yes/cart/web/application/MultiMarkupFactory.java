@@ -29,13 +29,30 @@ public class MultiMarkupFactory extends MarkupFactory {
     private MultiMarkupCache multiMarkupCache;
 
     /**
+     * POJO factory that creates a new instance every time
+     */
+    public MultiMarkupFactory() {
+        //
+    }
+
+    /**
      * {@inheritDoc}
      */
     public IMarkupCache getMarkupCache() {
         if (multiMarkupCache == null) {
-            multiMarkupCache = new MultiMarkupCache();
+            multiMarkupCache = getNewInstance();
         }
         return multiMarkupCache;
+    }
+
+    /**
+     * Hook for Spring Ioc lookup method. MultiMarkupCache is Wicket application specific
+     * so it has to be setup as prototype and provided by lookup method.
+     *
+     * @return instance
+     */
+    public MultiMarkupCache getNewInstance() {
+        return new MultiMarkupCache();
     }
 
     /**
