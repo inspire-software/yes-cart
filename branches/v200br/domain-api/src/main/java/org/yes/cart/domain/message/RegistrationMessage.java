@@ -21,7 +21,7 @@ import java.util.Set;
 
 /**
  * Registration message. Used for user or customer notification in case of registration
- * or password reset
+ * or password reset.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011

@@ -38,8 +38,8 @@ public interface DtoImageService extends GenericDTOService<SeoImageDTO> {
      * @param fullFileName  full path to image file.
      * @param code          product or sku code.
      * @param imgBody       image as byte array.
-     * @param storagePrefix optional storage prefix {@see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN}
-     *                      or {@see Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN}. If parameter not provider the product
+     * @param storagePrefix optional storage prefix see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN
+     *                      or Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN. If parameter not provider the product
      *                      image storage will be used.
      * @param pathToRepository path to repository.
      * @return file name in image vault. may be different from original
@@ -58,8 +58,8 @@ public interface DtoImageService extends GenericDTOService<SeoImageDTO> {
      * @param fullFileName  full path to image file.
      * @param code          product or sku code.
      * @param imgBody       image as byte array.
-     * @param storagePrefix optional storage prefix {@see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN}
-     *                      or {@see Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN}. If parameter not provider the product
+     * @param storagePrefix optional storage prefix see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN
+     *                      or Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN. If parameter not provider the product
      *                      image storage will be used.
      * @return file name in image vault. may be different from original
      * @throws java.io.IOException in case of any I/O errors

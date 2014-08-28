@@ -31,7 +31,7 @@ import org.yes.cart.service.dto.DtoImageService;
 import java.io.IOException;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -44,9 +44,9 @@ public class DtoImageServiceImpl
     /**
      * Construct base remote service.
      *
-     * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
-     * @param seoImageGenericService                  {@link org.yes.cart.service.domain.GenericService}
-     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     * @param dtoFactory             {@link org.yes.cart.domain.dto.factory.DtoFactory}
+     * @param seoImageGenericService {@link org.yes.cart.service.domain.GenericService}
+     * @param adaptersRepository     {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoImageServiceImpl(final DtoFactory dtoFactory,
                                final GenericService<SeoImage> seoImageGenericService,
@@ -59,9 +59,9 @@ public class DtoImageServiceImpl
      * {@inheritDoc}
      */
     public String addImageToRepository(final String fullFileName,
-                                        final String code,
-                                        final byte[] imgBody,
-                                        final String storagePrefix) throws IOException {
+                                       final String code,
+                                       final byte[] imgBody,
+                                       final String storagePrefix) throws IOException {
         return imageService.addImageToRepository(fullFileName, code, imgBody, storagePrefix, StringUtils.EMPTY);
     }
 
@@ -69,28 +69,29 @@ public class DtoImageServiceImpl
      * Add the given file to image repository.
      * Used from UI to
      *
-     * @param fullFileName full path to image file.
-     * @param code         product or sku code.
-     * @param imgBody      image as byte array.
-     * @param storagePrefix optional storage prefix {@see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN}
-     * or {@see Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN}. If parameter not provider the product image storage will be used.
+     * @param fullFileName     full path to image file.
+     * @param code             product or sku code.
+     * @param imgBody          image as byte array.
+     * @param storagePrefix    optional storage prefix see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN
+     *                         or Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN. If parameter not provider the product image storage will be used.
      * @param pathToRepository path to repository
      * @return true if file was added successfully
      * @throws java.io.IOException in case of any I/O errors
      */
     public String addImageToRepository(final String fullFileName,
-                                        final String code,
-                                        final byte[] imgBody,
-                                        final String storagePrefix,
-                                        final String pathToRepository) throws IOException {
+                                       final String code,
+                                       final byte[] imgBody,
+                                       final String storagePrefix,
+                                       final String pathToRepository) throws IOException {
         return imageService.addImageToRepository(fullFileName, code, imgBody, storagePrefix, pathToRepository);
     }
 
     /**
      * Read product or sku image into byte array.
      *
-     * @param fileName file name from attribute
-     * @param code     product or sku code
+     * @param fileName      file name from attribute
+     * @param code          product or sku code
+     * @param storagePrefix storage prefix
      * @return byte array
      * @throws java.io.IOException in case of any I/O errors
      */
@@ -101,8 +102,8 @@ public class DtoImageServiceImpl
     /**
      * Read product or sku image into byte array.
      *
-     * @param fileName file name from attribute
-     * @param code     product or sku code
+     * @param fileName         file name from attribute
+     * @param code             product or sku code
      * @param pathToRepository path to repository
      * @return byte array
      * @throws java.io.IOException in case of any I/O errors
@@ -113,6 +114,7 @@ public class DtoImageServiceImpl
 
     /**
      * Get {@link SeoImageDTO} by given file name.
+     *
      * @param imageFileName fiven file name.
      * @return instance of {@link SeoImageDTO} or null if not found.
      */
@@ -125,7 +127,6 @@ public class DtoImageServiceImpl
         }
         return null;
     }
-
 
 
     /**

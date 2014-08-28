@@ -36,8 +36,8 @@ public interface ShopExchangeRateDTO extends Identifiable {
     long getShopexchangerateId();
 
     /**
-     * Set primary key
-     * @param shopexchangerateId
+     * Set primary key.
+     * @param shopexchangerateId pk to set.
      */
     void setShopexchangerateId(long shopexchangerateId);
 
@@ -59,7 +59,7 @@ public interface ShopExchangeRateDTO extends Identifiable {
 
     /**
      * Set to currency.
-     * @param toCurrency
+     * @param toCurrency target currency
      */
     void setToCurrency(String toCurrency);
 
@@ -70,13 +70,13 @@ public interface ShopExchangeRateDTO extends Identifiable {
 
     /**
      * Get shop id.
-     * @param shopId
+     * @param shopId shop id.
      */
     void setShopId(long shopId);
 
     /**
      * Get exchange rate between two currencies.
-     * @return
+     * @return exchange rate
      */
     BigDecimal getRate();
 

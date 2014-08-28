@@ -60,7 +60,7 @@ public interface AttributeGroup extends Auditable, Codable {
     /**
      * Get attribute group name.
      *
-     * @return
+     * @return   group name
      */
     String getName();
 
@@ -74,7 +74,7 @@ public interface AttributeGroup extends Auditable, Codable {
     /**
      * Get attribute group description.
      *
-     * @return
+     * @return  group description
      */
     String getDescription();
 
@@ -88,7 +88,7 @@ public interface AttributeGroup extends Auditable, Codable {
     /**
      * Get list of slave attributes
      *
-     * @return
+     * @return  list of slave attributes
      */
     Set<Attribute> getAttributes();
 

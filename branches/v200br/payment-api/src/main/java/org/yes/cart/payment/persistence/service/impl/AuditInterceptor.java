@@ -16,7 +16,6 @@
 
 package org.yes.cart.payment.persistence.service.impl;
 
-import com.sun.corba.se.spi.ior.Identifiable;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
@@ -153,8 +152,6 @@ public class AuditInterceptor extends EmptyInterceptor {
             line.append(operation);
             line.append(",");
             line.append(entity.getClass().getSimpleName());
-            line.append(",");
-            line.append(((entity instanceof Identifiable) ? ((Identifiable) entity).getId() : "N/A"));
             line.append(",");
             line.append(user);
             LOG.info(line.toString());

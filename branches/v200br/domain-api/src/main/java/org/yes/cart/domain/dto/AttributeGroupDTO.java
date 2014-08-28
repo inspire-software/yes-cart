@@ -58,7 +58,7 @@ public interface AttributeGroupDTO extends Identifiable {
     /**
      * Get attribute group name.
      *
-     * @return
+     * @return name of group
      */
     String getName();
 
@@ -72,7 +72,7 @@ public interface AttributeGroupDTO extends Identifiable {
     /**
      * Get attribute group description.
      *
-     * @return
+     * @return   group description
      */
     String getDescription();
 

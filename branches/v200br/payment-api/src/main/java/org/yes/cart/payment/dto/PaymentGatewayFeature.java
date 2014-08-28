@@ -145,17 +145,19 @@ public interface PaymentGatewayFeature extends Serializable {
     void setAdditionalFeatures(final String additionalFeatures);
 
     /**
-     * {@inheritDoc }
+     * Get online gateway flag. Online gw examples - paypal, authorize.net, etc. Offline - bank payment or courier.
+     * @return true if payment gateway online.
      */
     boolean isOnlineGateway();
 
     /**
-     * {@inheritDoc }
+     * Set flat in case of online gateway.
+     * @param onlineGateway given flag.
      */
     void setOnlineGateway(boolean onlineGateway);
 
     /**
-     * Is deen to pass details in case of html for constrcution
+     * Is need to pass details in case of html to construct it.
      * @return   true in case if need provide detail info
      */
      boolean isRequireDetails();
@@ -167,7 +169,7 @@ public interface PaymentGatewayFeature extends Serializable {
     void setRequireDetails(boolean requireDetails);
 
     /**
-     *
+     * Is gateway has capture more capability.
      * @return true in case if pgw support amount capture more that authorized before.
      */
     boolean isSupportCaptureMore() ;
@@ -179,14 +181,14 @@ public interface PaymentGatewayFeature extends Serializable {
     void setSupportCaptureMore(boolean supportCaptureMore);
 
     /**
-     *
+     * Get capture less flag.
      * @return true in case if pgw support amount capture less that authorized before.
      */
     boolean isSupportCaptureLess();
 
     /**
      * Set capture less flag.
-     * @param supportCaptureLess
+     * @param supportCaptureLess capture less flag.
      */
     void setSupportCaptureLess(boolean supportCaptureLess);
 

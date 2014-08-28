@@ -22,7 +22,8 @@ import org.yes.cart.domain.message.RegistrationMessage;
 import java.util.Set;
 
 /**
- * {@inheritDoc}
+ * Registration message. Used for user or customer notification in case of registration
+ * or password reset.
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54

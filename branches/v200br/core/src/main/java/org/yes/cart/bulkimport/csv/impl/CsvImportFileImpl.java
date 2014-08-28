@@ -53,70 +53,70 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public char getColumnDelimiter() {
         return columnDelimiter;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setColumnDelimiter(char columnDelimiter) {
         this.columnDelimiter = columnDelimiter;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public char getTextQualifier() {
         return textQualifier;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setTextQualifier(char textQualifier) {
         this.textQualifier = textQualifier;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public boolean isIgnoreFirstLine() {
         return ignoreFirstLine;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setIgnoreFirstLine(boolean ignoreFirstLine) {
         this.ignoreFirstLine = ignoreFirstLine;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getFileNameMask() {
         return fileNameMask;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setFileNameMask(String fileNameMask) {
         this.fileNameMask = fileNameMask;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getFileEncoding() {
         return fileEncoding;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setFileEncoding(String fileEncoding) {
         this.fileEncoding = fileEncoding;

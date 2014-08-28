@@ -463,7 +463,9 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     }
 
     /**
-     * {@inheritDoc}
+     * Transform given collecion of categories to set of category id.
+     * @param categories categories.
+     * @return set of category id.
      */
     public Set<Long> transform(final Collection<Category> categories) {
         final Set<Long> result = new LinkedHashSet<Long>(categories.size());

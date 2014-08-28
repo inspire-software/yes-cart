@@ -442,7 +442,7 @@ public interface Payment extends Serializable {
 
 
     /**
-     * Get address.
+     * Get billing address.
      *
      * @return address.
      */
@@ -458,13 +458,13 @@ public interface Payment extends Serializable {
 
     /**
      * Get ip address of shopper.
-     * @return
+     * @return shopper ip address.
      */
     String getShopperIpAddress();
 
     /**
-     * Set shopper id address.
-     * @param shopperIpAddress
+     * Set shopper id address (or proxy server before shopper).
+     * @param shopperIpAddress  ip address of shopper,
      */
     void setShopperIpAddress( String shopperIpAddress);
 

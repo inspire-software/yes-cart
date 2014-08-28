@@ -25,14 +25,17 @@ package org.yes.cart.payment.exception;
 public class PaymentException extends RuntimeException {
 
     /**
-     * {@inheritDoc}
+     * Construct payment exception with given message.
+     * @param message - given message
      */
     public PaymentException(final String message) {
         super(message);
     }
 
     /**
-     * {@inheritDoc}
+     * Construct payment exception with given message and cause.
+     * @param message - given message
+     * @param cause - cause of exception
      */
     public PaymentException(final String message, final Throwable cause) {
         super(message, cause);

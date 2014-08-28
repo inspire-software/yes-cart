@@ -73,14 +73,16 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     }
 
     /**
-     * {@inheritDoc}
+     * Get payment card type , for example visa, mastercard, etc.
+     * @return payment card type
      */
     public String getCardType() {
         return this.cardType;
     }
 
     /**
-     * {@inheritDoc}
+     * Set payment card type.
+     * @param cardType payment card type
      */
     public void setCardType(final String cardType) {
         this.cardType = cardType;

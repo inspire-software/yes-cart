@@ -88,7 +88,7 @@ public class AbstractImportService {
         }
 
         /**
-         * {@inheritDoc
+         * {@inheritDoc}
          */
         public boolean accept(final File dir, final String name) {
             return (name != null) && this.pattern.matcher(name).matches();

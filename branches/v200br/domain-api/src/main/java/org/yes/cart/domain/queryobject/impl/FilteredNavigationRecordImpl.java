@@ -46,112 +46,112 @@ public class FilteredNavigationRecordImpl implements FilteredNavigationRecord, S
     private String type;
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getCode() {
         return code;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setCode(final String code) {
         this.code = code;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getValue() {
         return value;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setValue(final String value) {
         this.value = value;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public int getCount() {
         return count;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setCount(final int itemsCount) {
         this.count = itemsCount;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setName(final String name) {
         this.name = name;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getName() {
         return name;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getDisplayName() {
         return displayName;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public int getRank() {
         return rank;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setRank(final int rank) {
         this.rank = rank;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getType() {
         return type;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setType(final String type) {
         this.type = type;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getDisplayValue() {
         return displayValue;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setDisplayValue(final String displayValue) {
         this.displayValue = displayValue;

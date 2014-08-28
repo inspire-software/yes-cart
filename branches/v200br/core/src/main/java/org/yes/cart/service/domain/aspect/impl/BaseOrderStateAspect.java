@@ -15,14 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * Base class for order aspects.
- *
+ * <p/>
  * User: iazarny@yahoo.com
  * Date: 10/20/12
  * Time: 11:07 AM
  */
-public abstract class BaseOrderStateAspect extends  BaseNotificationAspect  {
+public abstract class BaseOrderStateAspect extends BaseNotificationAspect {
 
     private ServletContext servletContext;
 
@@ -43,7 +42,7 @@ public abstract class BaseOrderStateAspect extends  BaseNotificationAspect  {
      * @param emailsAddresses   set of email addresses
      * @param params            additional params
      */
-    protected void fillNotificationParameters(final OrderEvent orderEvent, final String emailTemplateName, final Map<String,Object> params, final String... emailsAddresses) {
+    protected void fillNotificationParameters(final OrderEvent orderEvent, final String emailTemplateName, final Map<String, Object> params, final String... emailsAddresses) {
 
         if (StringUtils.isNotBlank(emailTemplateName)) {
 
@@ -86,27 +85,30 @@ public abstract class BaseOrderStateAspect extends  BaseNotificationAspect  {
             }
 
 
-
         }
 
 
     }
-        /**
-        * Create email and sent it.
-        *
-        * @param orderEvent       given order event
-        * @param emailTempateName optional email tempate name
-        * @param emailsAddresses  set of email addresses
-        */
+
+    /**
+     * Create email and sent it.
+     *
+     * @param orderEvent       given order event
+     * @param emailTempateName optional email tempate name
+     * @param emailsAddresses  set of email addresses
+     */
     protected void fillNotificationParameters(final OrderEvent orderEvent, final String emailTempateName, final String... emailsAddresses) {
 
-        fillNotificationParameters( orderEvent, emailTempateName, null, emailsAddresses);
+        fillNotificationParameters(orderEvent, emailTempateName, null, emailsAddresses);
 
     }
 
 
-
-    /** {@inheritDoc} */
+    /**
+     * Set servlet context.
+     *
+     * @param servletContext servlet context.
+     */
     public void setServletContext(final ServletContext servletContext) {
         this.servletContext = servletContext;
     }

@@ -59,7 +59,6 @@ public interface ImageNameStrategy {
      * @param fileName file name without the full path
      * @param code     product or sku  code
      * @return full name with path to file.
-     * @depricated
      */
     String getFullFileNamePath(String fileName, String code);
 
@@ -71,7 +70,6 @@ public interface ImageNameStrategy {
      * @param width    image width
      * @param height   image height
      * @return full name with path to file.
-     * @depricated
      */
     String getFullFileNamePath(String fileName, String code, String width, String height);
 

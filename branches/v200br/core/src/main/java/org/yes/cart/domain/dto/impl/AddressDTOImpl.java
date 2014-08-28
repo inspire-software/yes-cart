@@ -109,7 +109,10 @@ public class AddressDTOImpl implements AddressDTO {
         return customerId;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Set customer id.
+     * @param customerId customer id.
+     */
     public void setCustomerId(final long customerId) {
         this.customerId = customerId;
     }

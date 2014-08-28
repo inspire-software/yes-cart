@@ -197,7 +197,8 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
 
 
     /**
-     * {@inheritDoc}
+     * Set service to get parameters.
+     * @param paymentGatewayParameterService given service to use.
      */
     public void setPaymentGatewayParameterService(
             final PaymentGatewayParameterService paymentGatewayParameterService) {

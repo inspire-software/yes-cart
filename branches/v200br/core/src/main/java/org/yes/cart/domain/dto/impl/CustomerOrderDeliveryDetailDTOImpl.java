@@ -76,12 +76,18 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     private String deliveryStatusLabel;
 
 
-    /** {@inheritDoc} */
+    /**
+     * Get line total.
+     * @return total.
+     */
     public BigDecimal getLineTotal() {
         return lineTotal;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Set total.
+     * @param lineTotal total.
+     */
     public void setLineTotal(final BigDecimal lineTotal) {
         this.lineTotal = lineTotal;
     }

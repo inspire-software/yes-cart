@@ -102,328 +102,328 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     private String appliedPromo;
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}}
      */
     public BigDecimal getAmount() {
         return amount;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setAmount(final BigDecimal amount) {
         this.amount = amount;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public BigDecimal getPrice() {
         return price;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setPrice(final BigDecimal price) {
         this.price = price;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public BigDecimal getListPrice() {
         return listPrice;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setListPrice(final BigDecimal listPrice) {
         this.listPrice = listPrice;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public boolean isPromoApplied() {
         return promoApplied;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setPromoApplied(final boolean promoApplied) {
         this.promoApplied = promoApplied;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getAppliedPromo() {
         return appliedPromo;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setAppliedPromo(final String appliedPromo) {
         this.appliedPromo = appliedPromo;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public long getCustomerorderId() {
         return customerorderId;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc}}
      */
     public long getId() {
         return customerorderId;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setCustomerorderId(final long customerorderId) {
         this.customerorderId = customerorderId;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getOrdernum() {
         return ordernum;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setOrdernum(final String ordernum) {
         this.ordernum = ordernum;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getPgLabel() {
         return pgLabel;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setPgLabel(final String pgLabel) {
         this.pgLabel = pgLabel;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getBillingAddress() {
         return billingAddress;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setBillingAddress(final String billingAddress) {
         this.billingAddress = billingAddress;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getShippingAddress() {
         return shippingAddress;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setShippingAddress(final String shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getCartGuid() {
         return cartGuid;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setCartGuid(final String cartGuid) {
         this.cartGuid = cartGuid;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getCurrency() {
         return currency;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setCurrency(final String currency) {
         this.currency = currency;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getOrderMessage() {
         return orderMessage;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setOrderMessage(final String orderMessage) {
         this.orderMessage = orderMessage;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getOrderStatus() {
         return orderStatus;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setOrderStatus(final String orderStatus) {
         this.orderStatus = orderStatus;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public boolean isMultipleShipmentOption() {
         return multipleShipmentOption;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setMultipleShipmentOption(final boolean multipleShipmentOption) {
         this.multipleShipmentOption = multipleShipmentOption;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public Date getOrderTimestamp() {
         return orderTimestamp;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setOrderTimestamp(final Date orderTimestamp) {
         this.orderTimestamp = orderTimestamp;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getEmail() {
         return email;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setEmail(final String email) {
         this.email = email;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getFirstname() {
         return firstname;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setFirstname(final String firstname) {
         this.firstname = firstname;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getLastname() {
         return lastname;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setLastname(final String lastname) {
         this.lastname = lastname;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getMiddlename() {
         return middlename;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setMiddlename(final String middlename) {
         this.middlename = middlename;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public long getCustomerId() {
         return customerId;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setCustomerId(final long customerId) {
         this.customerId = customerId;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public long getShopId() {
         return shopId;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public void setShopId(final long shopId) {
         this.shopId = shopId;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */ public String getCode() {
         return code;
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */ public void setCode(final String code) {
         this.code = code;
     }

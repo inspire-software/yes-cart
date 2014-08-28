@@ -182,7 +182,7 @@ public interface CustomerOrderPayment extends Auditable {
     /**
      * Set transaction reference id.
      *
-     * @param transactionReferenceId
+     * @param transactionReferenceId  external reference id of transaction.
      */
     void setTransactionReferenceId(String transactionReferenceId);
 
@@ -227,7 +227,7 @@ public interface CustomerOrderPayment extends Auditable {
     /**
      * Set label of paymeng gataway.
      *
-     * @param transactionGatewayLabel label of paymeng gataway.
+     * @param transactionGatewayLabel label of payment gataway.
      */
     void setTransactionGatewayLabel(String transactionGatewayLabel);
 
@@ -340,13 +340,13 @@ public interface CustomerOrderPayment extends Auditable {
 
     /**
      * Get ip address of shopper.
-     * @return
+     * @return ip address of shopper.
      */
     String getShopperIpAddress();
 
     /**
      * Set shopper id address.
-     * @param shopperIpAddress
+     * @param shopperIpAddress ip address of shopper.
      */
     void setShopperIpAddress( String shopperIpAddress);
 
