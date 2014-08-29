@@ -45,11 +45,12 @@ public class NavigationUtil {
     }
 
     /**
-     * Get the filtered request parameters, that not contains given set of request parameter names
+     * Get the filtered request parameters, that not contains given set of request parameter names.
+     * see NavigationUtil#getRetainedRequestParameters(Map, java.util.Collection) oposite opetation
      *
      * @param parameters original request parameters
      * @return new filtered {@link LinkedHashMap}
-     * @see NavigationUtil#getRetainedRequestParameters(Map, java.util.Collection) oposite opetation
+     *
      */
     public static LinkedHashMap getFilteredRequestParameters(final Map<String, ?> parameters) {
 

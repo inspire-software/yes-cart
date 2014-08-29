@@ -105,10 +105,11 @@ public abstract class AbstractGswmPaymentGatewayImpl implements PaymentGateway {
         return null;
 
     }
-    
+
 
     /**
-     * {@inheritDoc}
+     * Set parameter service.
+     * @param paymentGatewayParameterService service to use.
      */
     public void setPaymentGatewayParameterService(
             final PaymentGatewayParameterService paymentGatewayParameterService) {

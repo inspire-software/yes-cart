@@ -43,14 +43,30 @@ public class URLPagingNavigator   extends PagingNavigator {
 
 
     /**
-     * {@inheritDoc}
+     * Constructor.
+     *
+     * @param s
+     *            See Component
+     * @param iPageable
+     *            The pageable component the page links are referring to.
+     * @param pageParameters
+     *           page parameters
      */
     public URLPagingNavigator(final String s, final IPageable iPageable, final PageParameters pageParameters) {
         this(s, iPageable, null, pageParameters);
     }
 
     /**
-     * {@inheritDoc}
+     * Constructor.
+     *
+     * @param s
+     *            See Component
+     * @param iPageable
+     *            The pageable component the page links are referring to.
+     * @param iPagingLabelProvider
+     *            The label provider for the link text.
+     * @param pageParameters
+     *           page parameters
      */
     public URLPagingNavigator(final String s,
                               final IPageable iPageable,

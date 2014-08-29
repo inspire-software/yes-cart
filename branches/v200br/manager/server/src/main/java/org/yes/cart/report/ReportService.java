@@ -77,7 +77,7 @@ public interface ReportService {
      * @param objectList list of object for report
      * @param lang       given lang to roduce report.
      * @return true in case if report was generated successfuly.
-     * @
+     *
      */
     byte[] produceReport(String lang, String reportId, List<Object> objectList) throws Exception;
 

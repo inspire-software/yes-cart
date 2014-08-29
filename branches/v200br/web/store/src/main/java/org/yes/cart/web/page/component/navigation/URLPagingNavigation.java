@@ -36,7 +36,14 @@ public class URLPagingNavigation extends PagingNavigation {
 
 
     /**
-     * {@inheritDoc}
+     * Constructor.
+     *
+     * @param s
+     *            See Component
+     * @param iPageable
+     *            The underlying pageable component to navigate
+     * @param iPagingLabelProvider
+     *            The label provider for the text that the links should be displaying.
      */
     public URLPagingNavigation(final String s, final IPageable iPageable, final IPagingLabelProvider iPagingLabelProvider) {
         super(s, iPageable, iPagingLabelProvider);

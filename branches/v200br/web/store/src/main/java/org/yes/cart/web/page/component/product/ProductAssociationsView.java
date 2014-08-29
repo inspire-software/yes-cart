@@ -75,7 +75,7 @@ public class ProductAssociationsView extends AbstractProductSearchResultList {
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public List<ProductSearchResultDTO> getProductListToShow() {
         if (associatedProductList == null) {

@@ -42,7 +42,7 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String getCurrencySymbol(final String currencyCode) {
         final String symbols = currencyCodeSymbol.get(currencyCode);
@@ -53,7 +53,7 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public List<Pair<String, String>> getCurrencyToDisplayAsList(final String curensiesListString) {
         if (StringUtils.isNotBlank(curensiesListString)) {
@@ -70,7 +70,7 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public  Map<String, String> getCurrencyToDisplayAsMap(final String curensiesListString){
         if (StringUtils.isNotBlank(curensiesListString)) {

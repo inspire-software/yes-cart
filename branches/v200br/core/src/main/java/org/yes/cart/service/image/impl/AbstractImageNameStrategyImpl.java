@@ -29,7 +29,7 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
 
 
     /**
-     * Get the image path prefix ended with {@see File#separator}
+     * Get the image path prefix ended with File#separator.
      */
     protected abstract String getPathPrefix();
 
