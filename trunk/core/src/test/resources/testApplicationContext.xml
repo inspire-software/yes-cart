@@ -27,6 +27,7 @@
     <aop:aspectj-autoproxy/>
 
     <import resource="persistence.xml"/>
+    <import resource="io.xml"/>
     <import resource="core-services.xml"/>
     <import resource="core-services-commands.xml"/>
 

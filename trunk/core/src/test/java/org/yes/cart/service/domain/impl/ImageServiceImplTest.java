@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.SeoImageDTO;
 import org.yes.cart.domain.entity.SeoImage;
@@ -27,6 +28,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.dto.DtoImageService;
 
+import java.io.File;
 import java.util.UUID;
 
 import static junit.framework.Assert.assertEquals;
@@ -50,7 +52,7 @@ public class ImageServiceImplTest  extends BaseCoreDBTestCase {
     public void setUp() {
         dtoService = (DtoImageService) ctx().getBean(ServiceSpringKeys.DTO_IMAGE_SERVICE);
         imageService = (ImageService) ctx().getBean(ServiceSpringKeys.IMAGE_SERVICE);
-        imageName = "tesiImageName" + UUID.randomUUID().toString() + ".jpeg";
+        imageName = "testImageName" + UUID.randomUUID().toString() + ".jpeg";
         try {
             dtoService.create(getDto());
         } catch (Exception e) {
@@ -62,7 +64,7 @@ public class ImageServiceImplTest  extends BaseCoreDBTestCase {
     private SeoImageDTO getDto() throws UnableToCreateInstanceException, UnmappedInterfaceException {
         SeoImageDTO dto = dtoService.getNew();
         dto.setAlt("alt");
-        dto.setImageName(imageName);
+        dto.setImageName(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN + imageName);
         dto.setTitle("title");
         return dto;
     }
@@ -70,7 +72,7 @@ public class ImageServiceImplTest  extends BaseCoreDBTestCase {
     @Test
     public void testCropImageToCenter() throws Exception {
 
-        final ImageServiceImpl srv = new ImageServiceImpl(null, null, "", 0, 0, 0, true, 0);
+        final ImageServiceImpl srv = new ImageServiceImpl(null, null, "", 0, 0, 0, true, 0, null);
 
         final int[] croppedExactEven = srv.cropImageToCenter(100, 100, 100, 100);
         assertNotNull(croppedExactEven);
@@ -109,7 +111,7 @@ public class ImageServiceImplTest  extends BaseCoreDBTestCase {
     @Test
     public void testScaleImageToCenter() throws Exception {
 
-        final ImageServiceImpl srv = new ImageServiceImpl(null, null, "", 0, 0, 0, true, 50);
+        final ImageServiceImpl srv = new ImageServiceImpl(null, null, "", 0, 0, 0, true, 50, null);
 
         final int[] scaledExactEven = srv.scaleImageToCenter(100, 100, 100, 100);
         assertNotNull(scaledExactEven);
@@ -220,21 +222,13 @@ public class ImageServiceImplTest  extends BaseCoreDBTestCase {
                 "src/test/resources/imgresize/resize-200x150.png",
                 "target/test/resources/imgresize/resize-200x150-to-80x80-crop.png", "80", "80", true);
 
-//        imageService.resizeImage(
-//                "src/test/resources/imgresize/Fabric_0565-81206_a.jpg",
-//                "target/test/resources/imgresize/Fabric_0565-81206_a-to-80x80-scale.jpg", "344", "231", false);
-//
-//        imageService.resizeImage(
-//                "src/test/resources/imgresize/Fabric_0565-81206_a.jpg",
-//                "target/test/resources/imgresize/Fabric_0565-81206_a-to-80x80-crop.jpg", "344", "231", true);
-
     }
 
 
     @Test
     public void testCreateRollingFileName() throws Exception {
 
-        final ImageServiceImpl srv = new ImageServiceImpl(null, null, "", 0, 0, 0, true, 0);
+        final ImageServiceImpl srv = new ImageServiceImpl(null, null, "", 0, 0, 0, true, 0, null);
 
         // no extension
         assertEquals("filenameNoExt_1", srv.createRollingFileName("filenameNoExt"));
@@ -258,15 +252,16 @@ public class ImageServiceImplTest  extends BaseCoreDBTestCase {
 
     @Test
     public void testDeleteImage() throws Exception {
-        imageService.deleteImage(imageName);
-        SeoImage seoImage = imageService.getSeoImage(imageName);
+        imageService.deleteImage(imageName,
+                Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "file:" + File.separator + File.separator + new File("target/imgrepo").getAbsolutePath() + File.separator);
+        SeoImage seoImage = imageService.getSeoImage(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN + imageName);
         assertNull("Found image with name " + imageName, seoImage);
 
     }
 
     @Test
     public void testGetSeoImage() throws Exception {
-        SeoImage seoImage = imageService.getSeoImage(imageName);
+        SeoImage seoImage = imageService.getSeoImage(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN + imageName);
         assertNotNull("Cannot find image with name " + imageName, seoImage);
     }
     

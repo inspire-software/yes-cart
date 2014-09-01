@@ -16,9 +16,10 @@
 
 package org.yes.cart.service.image.impl;
 
-import org.yes.cart.constants.Constants;
+import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.AttrValueCategory;
 
-import java.io.File;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -27,21 +28,41 @@ import java.io.File;
  */
 public class CategoryImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
 
-    private final static String PATH_PREFIX = Constants.CATEGOTY_IMAGE_FILE_PREFIX + File.separator;
+    private final GenericDAO<AttrValueCategory, Long> attrValueEntityCategoryDao;
 
     /**
-     * {@inheritDoc}
+     * Construct image name strategy
+     *
+     * @param urlPath URL path that identifies this strategy
+     * @param relativeInternalRootDirectory  internal image relative path root directory without {@see File#separator}. E.g. "category"
+     * @param attrValueCategoryDao           category attributes dao
      */
-    protected String getPathPrefix() {
-        return PATH_PREFIX;
+    public CategoryImageNameStrategyImpl(final String urlPath,
+                                         final String relativeInternalRootDirectory,
+                                         final GenericDAO<AttrValueCategory, Long> attrValueCategoryDao) {
+        super(urlPath, relativeInternalRootDirectory);
+        this.attrValueEntityCategoryDao = attrValueCategoryDao;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getCode(final String fileName) {
+    protected String resolveObjectCodeInternal(final String url) {
+
+        final String val = resolveFileName(url);
+
+        final Object[] uriAndGuid = attrValueEntityCategoryDao.findSingleByNamedQuery("CATEGORY.URI.AND.GUID.BY.IMAGE.NAME", val);
+
+        if (uriAndGuid != null && uriAndGuid.length == 2) {
+            if (uriAndGuid[0] instanceof String) {
+                return (String) uriAndGuid[0];
+            } else if (uriAndGuid[1] instanceof String) {
+                return (String) uriAndGuid[1];
+            }
+        }
+
         return null;
-    }
 
+    }
 
 }

@@ -207,7 +207,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         try {
             dumpDataBase("x2x2xx_products", new String[]{"TPRODUCT"});
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         assertFalse(rezLimit.isEmpty());
         assertEquals(2, rezLimit.size());

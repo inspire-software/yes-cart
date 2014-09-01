@@ -162,6 +162,7 @@ public class StandardMessageListener implements Runnable {
                 mailComposer.composeMessage(
                         mail,
                         (String) map.get(SHOP_CODE),
+                        // TODO: YC-416 Unify all mail templates into a separate module
                         (String) map.get(TEMPLATE_FOLDER),
                         (String) map.get(TEMPLATE_NAME),
                         fromEmail,
@@ -177,6 +178,7 @@ public class StandardMessageListener implements Runnable {
                         MessageFormat.format(
                                 "Cant compose or send email template {0} folder {1} to {2}",
                                 (String) map.get(TEMPLATE_NAME),
+                                // TODO: YC-416 Unify all mail templates into a separate module
                                 (String) map.get(TEMPLATE_FOLDER),
                                 (String) map.get(CUSTOMER_EMAIL)
                         ),

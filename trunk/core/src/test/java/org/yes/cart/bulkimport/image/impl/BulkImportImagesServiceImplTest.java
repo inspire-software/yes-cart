@@ -234,7 +234,7 @@ public class BulkImportImagesServiceImplTest extends BaseCoreDBTestCase {
                         new File("src/test/resources/import/im-image-file_SOBOT-BEER_c.jpeg"),
                         listener,
                         new HashSet<String>(),
-                        "");
+                        "file:" + File.separator + File.separator + "target" + File.separator);
 
                 clearCache();
                 product = productService.getProductById(10000L, true);

@@ -46,14 +46,14 @@ public class CsvFileReaderImpl implements CsvFileReader {
      * {@inheritDoc}
      */
     public void open(final String csvFileName,
-                     final char columnDelimeter,
+                     final char columnDelimiter,
                      final char textQualifier,
                      final String encoding,
                      final boolean ignoreFirstLine) throws FileNotFoundException, UnsupportedEncodingException {
 
         fileInputStream = new FileInputStream(csvFileName);
         inputStreamReader = new InputStreamReader(fileInputStream, encoding);
-        csvReader = new CSVReader(new BufferedReader(inputStreamReader), columnDelimeter, textQualifier);
+        csvReader = new CSVReader(new BufferedReader(inputStreamReader), columnDelimiter, textQualifier);
         this.ignoreFirstLine = ignoreFirstLine;
         this.rowsRead = 0;
     }

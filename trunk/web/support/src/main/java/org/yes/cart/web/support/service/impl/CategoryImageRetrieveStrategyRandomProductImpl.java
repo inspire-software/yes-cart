@@ -44,10 +44,10 @@ public class CategoryImageRetrieveStrategyRandomProductImpl implements CategoryI
     private final String attributeCode;
 
     /**
-     * Construct category image retreive strategy
+     * Construct category image retrieve strategy
      *
      * @param productService product service to get random product in category.
-     * @param attributeCode attribu code.
+     * @param attributeCode attribute code.
      */
     public CategoryImageRetrieveStrategyRandomProductImpl(
             final ProductService productService,

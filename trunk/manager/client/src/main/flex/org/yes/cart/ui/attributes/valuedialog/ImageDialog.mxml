@@ -31,7 +31,8 @@
 
         <mx:Form x="0" y="0" width="400">
             <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
-                <mx:TextInput width="250" id="valueTextInput"/>
+                <!-- Make this line editable false to make sure users do not mess with file name -->
+                <mx:TextInput width="250" id="valueTextInput" editable="false"/>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='altText')">
                 <mx:TextInput width="250" id="altTextInput"/>
@@ -99,15 +100,11 @@
         import mx.graphics.codec.PNGEncoder;
 
         import org.yes.cart.constants.AttributeGroupNames;
-        import org.yes.cart.constants.Constants;
         import org.yes.cart.impl.SeoImageDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
-        import mx.binding.utils.BindingUtils;
         import mx.graphics.codec.JPEGEncoder;
         import mx.managers.PopUpManager;
-        import mx.rpc.AsyncResponder;
-        import mx.rpc.AsyncToken;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
 
@@ -116,6 +113,11 @@
 
         private static const THUMB_WIDTH:uint = 480;
         private static const THUMB_HEIGHT:uint = 480;
+
+        private static const IMAGE_URL_MAP:Object = {};
+        IMAGE_URL_MAP[AttributeGroupNames.CATEGORY] = "/imgvault/category/";
+        IMAGE_URL_MAP[AttributeGroupNames.BRAND]    = "/imgvault/brand/";
+        IMAGE_URL_MAP[AttributeGroupNames.PRODUCT]  = "/imgvault/product/";
 
 
         private var _value:String;
@@ -207,7 +209,7 @@
 
             var _rawBytes:ByteArray = _encoder.encode(bitmapData);
 
-            remoteImageService.addImageToRepository(_filename, attrCode, _rawBytes, imgPath);
+            remoteImageService.addImageToRepository(_filename, attrCode, _rawBytes, imgPath, null);
 
             return _filename;
         }
@@ -218,7 +220,7 @@
                 seoImage = new SeoImageDTOImpl();
             }
 
-            seoImage.imageName = value;
+            seoImage.imageName = resolveImageStorage(attributeGroup) + value;
             seoImage.alt = altTextInput.text;
             seoImage.title = titleTextInput.text;
             if (DomainUtils.isNewPK(seoImage.seoImageId)) {
@@ -243,14 +245,12 @@
 
         }
 
+
         private function resolveImageStorage(attrGroupName:String):String {
-            if (AttributeGroupNames.CATEGORY == attrGroupName) {
-                return Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN;
-            } else if (AttributeGroupNames.BRAND == attrGroupName) {
-                return Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN;
-            } else if (AttributeGroupNames.PRODUCT == attrGroupName) {
+            if (IMAGE_URL_MAP.hasOwnProperty(attrGroupName)) {
+                return IMAGE_URL_MAP[attrGroupName];
             }
-            return null;
+            return "";
 
         }
 
@@ -267,41 +267,32 @@
             loadFileRef.load();
         }
 
-        private function ensureCorrectFileName(fileName:String, skuCode:String, attributImageCode:String):String {
-            if (skuCode != null && skuCode.length > 0) {
+        private function ensureCorrectFileName(fileName:String, objectCode:String, attributeImageCode:String):String {
+            if (objectCode != null && objectCode.length > 0) {
 
-                var newFileName:String;
-                if (code != null && code.length > 0) { // TO DO remove it after image service and image filter refactoring
-                    newFileName = FileNameUtils.getFileNameWithoutExtension(fileName)
+                if (fileName.indexOf("_" + objectCode + "_") == -1) {
+                    return FileNameUtils.getFileNameWithoutExtension(fileName)
                             + "_"
                             + code
                             + "_"
-                            + getFileNameSuffix(attributImageCode)
+                            + getFileNameSuffix(attributeImageCode)
                             + "."
                             + FileNameUtils.getFileExtension(fileName);
                 }
-                return newFileName;
 
             }
             return fileName;
         }
 
-        private function getFileNameSuffix(attributImageCode:String):String {
-            switch (attributImageCode) {
-                case "IMAGE0" :
-                    return "a";
-                case "IMAGE1" :
-                    return "b";
-                case "IMAGE2" :
-                    return "c";
-                case "IMAGE3" :
-                    return "d";
-                case "IMAGE4" :
-                    return "e";
-                case "IMAGE5" :
-                    return "f";
+        private function getFileNameSuffix(attributeImageCode:String):String {
+
+            var tailingDigit:RegExp = /^([^\d]*)(\d+)$/g;
+            var match:Array = tailingDigit.exec(attributeImageCode);
+            if (match != null && match.length >= 3) {
+                return String.fromCharCode('a'.charCodeAt(0) + Number(match[2]));
             }
-            return "";
+            return "a";
+
         }
 
 
@@ -364,7 +355,7 @@
 
             if (value != null && value.length > 0) {
                 //get the existing image and image seo information
-                remoteImageService.getImageAsByteArray(value, code, resolveImageStorage(attributeGroup));
+                remoteImageService.getImageAsByteArray(value, code, resolveImageStorage(attributeGroup), null);
 
             } else {
                 //nothing to do this is a new image
@@ -435,7 +426,7 @@
             var loader:Loader = new Loader();
             loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onDataLoadComplete);
             loader.loadBytes(ba);
-            remoteImageService.getSeoImage(value);
+            remoteImageService.getSeoImage(resolveImageStorage(attributeGroup) + value);
 
 
         }
@@ -447,7 +438,7 @@
             var text:Text = new Text();
             text.text = resourceManager.getString('AttributesManagementPanel', 'loadImageFailed');
             imageView.addChild(text);
-            remoteImageService.getSeoImage(value);
+            remoteImageService.getSeoImage(resolveImageStorage(attributeGroup) + value);
 
         }
 

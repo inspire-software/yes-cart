@@ -68,7 +68,7 @@ public interface BulkImportImagesService extends ImportService {
      *
      * @param file          file to import
      * @param statusListener error report
-     * @param importedFiles add file to this set if imported it successfuly imported.
+     * @param importedFiles add file to this set if imported it successfully imported.
      * @param pathToRepository path to image vault
      */
     void doImport(

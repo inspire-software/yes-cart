@@ -29,7 +29,6 @@ import org.yes.cart.util.ShopCodeContext;
 import javax.servlet.ServletContext;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -65,6 +64,7 @@ public class MultiWebApplicationPath   implements IResourcePath {
      */
     public void add(String path)
     {
+        // TODO: YC-420 Unify all themes into a separate module  (IOProvider)
         final Folder folder = new Folder(path);
         if (folder.exists())
         {

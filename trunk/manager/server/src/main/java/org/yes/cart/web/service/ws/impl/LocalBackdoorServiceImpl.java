@@ -17,10 +17,6 @@
 package org.yes.cart.web.service.ws.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.domain.ProductService;
@@ -28,9 +24,6 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ObjectUtil;
 import org.yes.cart.web.service.ws.BackdoorService;
 
-import javax.servlet.ServletContext;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,15 +33,11 @@ import java.util.List;
  * Date: 7/10/13
  * Time: 10:52 PM
  */
-public class LocalBackdoorServiceImpl implements BackdoorService, ApplicationContextAware, ServletContextAware {
+public class LocalBackdoorServiceImpl implements BackdoorService {
 
     private static final long serialVersionUID = 20130820L;
 
     private ProductService productService;
-
-    private ApplicationContext applicationContext;
-
-    private ServletContext servletContext;
 
     /**
      * {@inheritDoc}
@@ -192,32 +181,4 @@ public class LocalBackdoorServiceImpl implements BackdoorService, ApplicationCon
         return productService.getGenericDao();
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getImageVaultPath() throws IOException {
-
-        /*final File ycsimg = new File(applicationContext.getResource("WEB-INF").getFile().getAbsolutePath()
-                + File.separator + ".." + File.separator + ".." + File.separator + "yes-shop"
-                + File.separator + "default" + File.separator + "imagevault" + File.separator); */
-
-        final File ycsimg = new File(servletContext.getRealPath("/default/imagevault/"));
-
-        return ycsimg.getAbsolutePath();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setServletContext(final ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
 }

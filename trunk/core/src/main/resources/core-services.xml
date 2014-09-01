@@ -194,24 +194,67 @@
 
 
     <!--     #############################   Image section begin   #############################    -->
-    <bean id="categoryImageNameStrategy" class="org.yes.cart.service.image.impl.CategoryImageNameStrategyImpl"/>
+
+    <bean id="categoryImageNameStrategy" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.service.image.impl.CategoryImageNameStrategyImpl">
+                <constructor-arg index="0" value="/imgvault/category/"/>
+                <constructor-arg index="1" value="category"/>
+                <constructor-arg index="2" ref="attrValueEntityCategoryDao"/>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="resolveObjectCode">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
 
 
     <bean id="productImageNameStrategy" parent="txProxyTemplate">
         <property name="target">
             <bean  class="org.yes.cart.service.image.impl.ProductImageNameStrategyImpl">
-                <constructor-arg index="0" ref="attrValueEntityProductSkuDao"/>
-                <constructor-arg index="1" ref="attrValueEntityProductDao"/>
+                <constructor-arg index="0" value="/imgvault/product/"/>
+                <constructor-arg index="1" value="product"/>
+                <constructor-arg index="2" ref="attrValueEntityProductSkuDao"/>
+                <constructor-arg index="3" ref="attrValueEntityProductDao"/>
             </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="resolveObjectCode">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
         </property>
     </bean>
 
-    <bean id="brandImageNameStrategy" class="org.yes.cart.service.image.impl.BrandImageNameStrategyImpl"/>
+    <bean id="brandImageNameStrategy" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.service.image.impl.BrandImageNameStrategyImpl">
+                <constructor-arg index="0" value="/imgvault/brand/"/>
+                <constructor-arg index="1" value="brand"/>
+                <constructor-arg index="2" ref="attrValueEntityBrandDao"/>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="resolveObjectCode">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
 
     <bean id="imageNameStrategyResolver" class="org.yes.cart.service.image.impl.ImageNameStrategyResolverImpl">
-        <constructor-arg index="0" ref="brandImageNameStrategy"/>
-        <constructor-arg index="1" ref="categoryImageNameStrategy"/>
-        <constructor-arg index="2" ref="productImageNameStrategy"/>
+        <constructor-arg index="0" ref="productImageNameStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <ref bean="categoryImageNameStrategy"/>
+                <ref bean="brandImageNameStrategy"/>
+                <ref bean="productImageNameStrategy"/>
+            </list>
+        </constructor-arg>
     </bean>
 
     <!--
@@ -251,6 +294,10 @@
                     added padding for panoramic or tall images.
                 -->
                 <constructor-arg type="int" value="100"/>
+                <!--
+                    IO operations abstraction
+                 -->
+                <constructor-arg type="org.yes.cart.stream.io.IOProvider" ref="ioProviderFactory"/>
             </bean>
         </property>
     </bean>
@@ -619,6 +666,7 @@
                 <constructor-arg index="5" ref="attrValueEntityCategoryDao"/>
                 <constructor-arg index="6" ref="imageService"/>
                 <constructor-arg index="7" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="8" ref="systemService"/>
             </bean>
         </property>
     </bean>
@@ -633,6 +681,7 @@
                 <constructor-arg index="4" ref="attrValueEntityCategoryDao"/>
                 <constructor-arg index="5" ref="imageService"/>
                 <constructor-arg index="6" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="7" ref="systemService"/>
             </bean>
         </property>
     </bean>
@@ -662,7 +711,8 @@
                 <constructor-arg index="7" ref="imageService"/>
                 <constructor-arg index="8" ref="dtoProductTypeAttrService"/>
                 <constructor-arg index="9" ref="dtoProductCategoryService"/>
-                <constructor-arg index="10" ref="languageService"/>
+                <constructor-arg index="10" ref="systemService"/>
+                <constructor-arg index="11" ref="languageService"/>
                 <lookup-method name="lookupDtoProductSkuService" bean="dtoProductSkuService"/>
             </bean>
         </property>
@@ -678,6 +728,7 @@
                 <constructor-arg index="4" ref="dtoAssemblerAdaptersRepository"/>
                 <constructor-arg index="5" ref="priceService"/>
                 <constructor-arg index="6" ref="imageService"/>
+                <constructor-arg index="7" ref="systemService"/>
                 <lookup-method name="lookupDtoProductService" bean="dtoProductService"/>
             </bean>
         </property>
@@ -707,6 +758,7 @@
                 <constructor-arg index="4" ref="attrValueEntityShopDao"/>
                 <constructor-arg index="5" ref="imageService"/>
                 <constructor-arg index="6" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="7" ref="systemService"/>
             </bean>
         </property>
     </bean>
@@ -755,6 +807,7 @@
                 <constructor-arg index="3" ref="attrValueEntityBrandDao"/>
                 <constructor-arg index="4" ref="imageService"/>
                 <constructor-arg index="5" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="6" ref="systemService"/>
             </bean>
         </property>
     </bean>

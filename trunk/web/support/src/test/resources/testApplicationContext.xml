@@ -49,6 +49,7 @@
 
 
     <import resource="classpath*:core-config.xml"/>
+    <import resource="classpath*:core-io.xml"/>
     <import resource="classpath*:core-services.xml"/>
     <import resource="classpath*:core-services-commands.xml"/>
 

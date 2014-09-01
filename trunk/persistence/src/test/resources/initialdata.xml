@@ -171,6 +171,8 @@
                 ALLOWDUPLICATE="0" ALLOWFAILOVER="0"/>
 
 
+    <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1007" GUID="CATEGORY_IMAGE" CODE="CATEGORY_IMAGE" MANDATORY="0" NAME="Category image" ETYPE_ID="1003"
+                ATTRIBUTEGROUP_ID="1002" ALLOWDUPLICATE="0" ALLOWFAILOVER="0"/>
     <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1005" GUID="CATEGORY_IMAGE_RETRIEVE_STRATEGY" CODE="CATEGORY_IMAGE_RETRIEVE_STRATEGY"
                 MANDATORY="0" NAME="Category image retrieve strategy [ATTRIBUTE RANDOM_PRODUCT]" ETYPE_ID="1000"
                 ATTRIBUTEGROUP_ID="1002" ALLOWDUPLICATE="0" ALLOWFAILOVER="0"/>
@@ -266,21 +268,15 @@
                       SYSTEM_ID="100"/>
 
 
-    <TSHOP VERSION="0" SHOP_ID="10" GUID="SHOIP1" CODE="SHOIP1" NAME="Gadget universe" DESCRIPTION="Gadget universe shop" FSPOINTER="gadget"
-           IMGVAULT="gadget/imagevault"/>
-    <TSHOP VERSION="0" SHOP_ID="20" GUID="SHOIP2" CODE="SHOIP2" NAME="Mobile universe" DESCRIPTION="Mobile universe shop" FSPOINTER="mobile"
-           IMGVAULT="mobile/imagevault"/>
-    <TSHOP VERSION="0" SHOP_ID="30" GUID="SHOIP3" CODE="SHOIP3" NAME="Game universe" DESCRIPTION="Game universe shop" FSPOINTER="game"
-           IMGVAULT="game/imagevault"/>
+    <TSHOP VERSION="0" SHOP_ID="10" GUID="SHOIP1" CODE="SHOIP1" NAME="Gadget universe" DESCRIPTION="Gadget universe shop" FSPOINTER="gadget"/>
+    <TSHOP VERSION="0" SHOP_ID="20" GUID="SHOIP2" CODE="SHOIP2" NAME="Mobile universe" DESCRIPTION="Mobile universe shop" FSPOINTER="mobile"/>
+    <TSHOP VERSION="0" SHOP_ID="30" GUID="SHOIP3" CODE="SHOIP3" NAME="Game universe" DESCRIPTION="Game universe shop" FSPOINTER="game"/>
     <TSHOP VERSION="0" SHOP_ID="40" GUID="SHOIP4" CODE="SHOIP4" NAME="Shop without assigned categories"
-           DESCRIPTION="Shop without assigned categories used in test" FSPOINTER="/dev/none"
-           IMGVAULT="none/imagevault"/>
+           DESCRIPTION="Shop without assigned categories used in test" FSPOINTER="/dev/none"/>
     <TSHOP VERSION="0" SHOP_ID="50" GUID="SHOIP5" CODE="SHOIP5" NAME="Shop with limited assigned categories"
-           DESCRIPTION="Shop with limited assigned categories used in test" FSPOINTER="/dev/none"
-           IMGVAULT="none/imagevault"/>
+           DESCRIPTION="Shop with limited assigned categories used in test" FSPOINTER="/dev/none"/>
     <TSHOP VERSION="0" SHOP_ID="60" GUID="JEWEL_SHOP" CODE="JEWEL_SHOP" NAME="To pass bulk import test"
-           DESCRIPTION="Shop with limited assigned categories used in test" FSPOINTER="/dev/none"
-           IMGVAULT="none/imagevault"/>
+           DESCRIPTION="Shop with limited assigned categories used in test" FSPOINTER="/dev/none"/>
 
 
     <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="10" VAL="EUR,UAH,RUB" GUID="10_TSHOPATTRVALUE" CODE="CURRENCY" SHOP_ID="10"/>
@@ -425,8 +421,11 @@
 
     <TCATEGORY VERSION="0" CATEGORY_ID="313" GUID="313"  PARENT_ID="312" RANK="0" NAME="For CC_TEST products" DESCRIPTION="" UITEMPLATE=""/>
 
+    <TCATEGORYATTRVALUE VERSION="0" ATTRVALUE_ID="31301" GUID="31301_TCATEGORYATTRVALUE" CODE="CATEGORY_IMAGE_RETRIEVE_STRATEGY" VAL="ATTRIBUTE" CATEGORY_ID="313"/>
+    <TCATEGORYATTRVALUE VERSION="0" ATTRVALUE_ID="31302" GUID="31302_TCATEGORYATTRVALUE" CODE="CATEGORY_IMAGE" VAL="category.jpeg" CATEGORY_ID="313"/>
 
-    <!-- category to shop passignment -->
+
+    <!-- category to shop assignment -->
     <!--Gadget world -->
     <TSHOPCATEGORY VERSION="0" SHOPCATEGORY_ID="100" GUID="100"  RANK="10" SHOP_ID="10" CATEGORY_ID="101"/>
     <TSHOPCATEGORY VERSION="0" SHOPCATEGORY_ID="101" GUID="101"  RANK="20" SHOP_ID="10" CATEGORY_ID="106"/>
@@ -500,6 +499,8 @@
     <TBRAND VERSION="0" BRAND_ID="104" NAME="Samsung" GUID="Samsung" DESCRIPTION="Samsung"/>
     <TBRAND VERSION="0" BRAND_ID="105" NAME="cc tests" GUID="cc tests" DESCRIPTION="cart and command tests"/>
     <TBRAND VERSION="0" BRAND_ID="106" NAME="PreorderCompany" GUID="PreorderCompany" DESCRIPTION="For preorder products"/>
+
+    <TBRANDATTRVALUE VERSION="0" ATTRVALUE_ID="106" GUID="106_TBRANDATTRVALUE" CODE="BRAND_IMAGE" VAL="brand.jpeg" BRAND_ID="106"/>
 
 
     <!-- products -->

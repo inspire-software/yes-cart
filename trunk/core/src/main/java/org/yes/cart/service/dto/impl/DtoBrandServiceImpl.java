@@ -20,6 +20,7 @@ import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.constants.AttributeGroupNames;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.AttrValueBrandDTO;
 import org.yes.cart.domain.dto.AttrValueDTO;
@@ -36,6 +37,7 @@ import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoBrandService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
@@ -57,24 +59,28 @@ public class DtoBrandServiceImpl
     private final DtoAttributeService dtoAttributeService;
     private final GenericDAO<AttrValueEntityBrand, Long> attrValueEntityBrandDao;
     private final ImageService imageService;
+    private final SystemService systemService;
 
 
     /**
      * Construct base remote service.
      *
-     * @param dtoFactory    {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param brandGenericService       {@link org.yes.cart.service.domain.GenericService}
+     * @param dtoFactory    {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param dtoAttributeService dto attribute service
      * @param attrValueEntityBrandDao attribute value service
-     * @param imageService {@link ImageService} to manipulate  related images.
+     * @param imageService {@link org.yes.cart.service.domain.ImageService} to manipulate  related images.
+     * @param systemService system service
      */
     public DtoBrandServiceImpl(final GenericService<Brand> brandGenericService,
                                final DtoFactory dtoFactory,
                                final DtoAttributeService dtoAttributeService,
                                final GenericDAO<AttrValueEntityBrand, Long> attrValueEntityBrandDao,
                                final ImageService imageService,
-                               final AdaptersRepository adaptersRepository) {
+                               final AdaptersRepository adaptersRepository,
+                               final SystemService systemService) {
         super(dtoFactory, brandGenericService, adaptersRepository);
+        this.systemService = systemService;
         this.attrValueAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(AttrValueBrandDTO.class),
                 brandGenericService.getGenericDao().getEntityFactory().getImplClass(AttrValueBrand.class)
@@ -170,7 +176,8 @@ public class DtoBrandServiceImpl
     public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityBrand valueEntityBrand = attrValueEntityBrandDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityBrand.getAttribute().getEtype().getBusinesstype())) {
-            imageService.deleteImage(valueEntityBrand.getVal());
+            imageService.deleteImage(valueEntityBrand.getVal(),
+                    Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
         }
         attrValueEntityBrandDao.delete(valueEntityBrand);
         return valueEntityBrand.getBrand().getBrandId();

@@ -301,7 +301,7 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productImageNameStrategyService-productCode"/>
+            <constructor-arg index="0" value="imageNameStrategy-resolveObjectCode"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>

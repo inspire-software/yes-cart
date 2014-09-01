@@ -61,7 +61,6 @@
 
             changeWatchers.addItem(BindingUtils.bindProperty(descriptionTextInput, "text", this._shopDTOImpl, "description"));
             changeWatchers.addItem(BindingUtils.bindProperty(fspointerTextInput, "text", this._shopDTOImpl, "fspointer"));
-            changeWatchers.addItem(BindingUtils.bindProperty(imgpointerTextInput, "text", this._shopDTOImpl, "imageVaultFolder"));
 
             changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "code", codeTextInput, "text"));
             changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "title", titleNameTextInput, "text"));
@@ -71,7 +70,6 @@
             changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "name", nameTextInput, "text"));
             changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "description", descriptionTextInput, "text"));
             changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "fspointer", fspointerTextInput, "text"));
-            changeWatchers.addItem(BindingUtils.bindProperty(this._shopDTOImpl, "imageVaultFolder", imgpointerTextInput, "text"));
 
             newStoreFlag = DomainUtils.isNewPK(this._shopDTOImpl.shopId);
             codeTextInput.enabled = newStoreFlag;
@@ -97,7 +95,6 @@
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "name", dtoChanged));
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "description", dtoChanged));
             changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "fspointer", dtoChanged));
-            changeWatchers.addItem(ChangeWatcher.watch(this._shopDTOImpl, "imageVaultFolder", dtoChanged));
         }
 
         public function dtoChanged(event:PropertyChangeEvent):void {
@@ -175,10 +172,6 @@
         <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='themeLocation')">
             <mx:TextInput id="fspointerTextInput" width="300"/>
         </mx:FormItem>
-        <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='imagesLocation')">
-            <mx:TextInput id="imgpointerTextInput" width="300"/>
-        </mx:FormItem>
-
 
         <mx:FormItem width="100%"
                      label="@Resource(bundle='ProductManagementPanel',key='title')">

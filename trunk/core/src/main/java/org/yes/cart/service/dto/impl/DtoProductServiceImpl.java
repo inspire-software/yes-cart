@@ -26,6 +26,7 @@ import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
@@ -37,10 +38,7 @@ import org.yes.cart.exception.ObjectNotFoundException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnableToWrapObjectException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.GenericService;
-import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ProductTypeAttrService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.*;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
@@ -81,6 +79,8 @@ public class DtoProductServiceImpl
     private final Assembler attrValueAssembler;
     private final ImageService imageService;
 
+    private final SystemService systemService;
+
     private final LanguageService languageService;
 
 
@@ -90,9 +90,10 @@ public class DtoProductServiceImpl
      * @param dtoFactory         factory for creating DTO object instances
      * @param productService     domain objects product service
      * @param adaptersRepository value converter repository
-     * @param dtoAttributeGroupService
-     * @param dtoEtypeService
+     * @param dtoAttributeGroupService attribute group service
+     * @param dtoEtypeService    etype service
      * @param imageService       {@link org.yes.cart.service.domain.ImageService} to manipulate  related images.
+     * @param systemService      system service
      */
     public DtoProductServiceImpl(
             final DtoFactory dtoFactory,
@@ -105,12 +106,14 @@ public class DtoProductServiceImpl
             final ImageService imageService,
             final DtoProductTypeAttrService dtoProductTypeAttrService,
             final DtoProductCategoryService dtoProductCategoryService,
+            final SystemService systemService,
             final LanguageService languageService) {
         super(dtoFactory, productService, adaptersRepository);
         this.dtoAttributeGroupService = dtoAttributeGroupService;
         this.dtoEtypeService = dtoEtypeService;
 
         this.imageService = imageService;
+        this.systemService = systemService;
 
 
         this.productService = (ProductService) productService;
@@ -483,7 +486,8 @@ public class DtoProductServiceImpl
     public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueProduct attrValue = attrValueEntityProductDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(attrValue.getAttribute().getEtype().getBusinesstype())) {
-            imageService.deleteImage(attrValue.getVal());
+            imageService.deleteImage(attrValue.getVal(),
+                    Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
         }
         attrValueEntityProductDao.delete(attrValue);
         return attrValue.getProduct().getProductId();

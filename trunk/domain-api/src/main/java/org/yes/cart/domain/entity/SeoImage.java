@@ -26,16 +26,16 @@ package org.yes.cart.domain.entity;
 public interface SeoImage extends Auditable {
 
     /**
-     * Get image name.
+     * Get image name (including image name strategy mapping).
      *
-     * @return image name.
+     * @return image name (including image name strategy mapping).
      */
     String getImageName();
 
     /**
-     * Set image name.
+     * Set image name (including image name strategy mapping).
      *
-     * @param imageName image name.
+     * @param imageName image name (including image name strategy mapping).
      */
     void setImageName(String imageName);
 

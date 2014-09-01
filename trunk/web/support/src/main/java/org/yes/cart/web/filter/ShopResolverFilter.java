@@ -80,6 +80,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
         ShopCodeContext.setShopCode(shop.getCode());
         ShopCodeContext.setShopId(shop.getShopId());
         //ApplicationDirector.setCurrentServletContext(servletContext);
+        // TODO: YC-416 Unify all mail templates into a separate module
         ApplicationDirector.setCurrentMailTemplateFolder(servletContext.getRealPath(shop.getMailFolder()) + File.separator);
 
 

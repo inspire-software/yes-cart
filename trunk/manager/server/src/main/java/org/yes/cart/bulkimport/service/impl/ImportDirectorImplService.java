@@ -40,6 +40,7 @@ import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.utils.impl.ZipUtils;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 import org.yes.cart.web.service.ws.node.NodeService;
@@ -74,9 +75,9 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private ApplicationContext applicationContext;
 
-    private final RemoteBackdoorService remoteBackdoorService;
-
     private final NodeService nodeService;
+
+    private final SystemService systemService;
 
     private final ZipUtils zipUtils;
 
@@ -89,28 +90,27 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      * @param pathToImportFolder      path to use.
      * @param productService          product service
      * @param executor                async executor
-     * @param remoteBackdoorService   backdoor service
      * @param nodeService             node service
+     * @param systemService           system service
      * @param zipUtils                zip algorithm
      */
-    public ImportDirectorImplService(
-            final Map<String, List<String>> importDescriptors,
-            final String pathToArchiveFolder,
-            final String pathToImportDescriptors,
-            final String pathToImportFolder,
-            final ProductService productService,
-            final TaskExecutor executor,
-            final RemoteBackdoorService remoteBackdoorService,
-            final NodeService nodeService,
-            final ZipUtils zipUtils) {
+    public ImportDirectorImplService(final Map<String, List<String>> importDescriptors,
+                                     final String pathToArchiveFolder,
+                                     final String pathToImportDescriptors,
+                                     final String pathToImportFolder,
+                                     final ProductService productService,
+                                     final TaskExecutor executor,
+                                     final NodeService nodeService,
+                                     final SystemService systemService,
+                                     final ZipUtils zipUtils) {
         super(executor);
         this.pathToImportDescriptors = pathToImportDescriptors;
         this.pathToArchiveFolder = pathToArchiveFolder;
         this.pathToImportFolder = pathToImportFolder;
         this.importDescriptors = importDescriptors;
         this.productService = productService;
-        this.remoteBackdoorService = remoteBackdoorService;
         this.nodeService = nodeService;
+        this.systemService = systemService;
         this.zipUtils = zipUtils;
 
     }
@@ -144,16 +144,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
         final AsyncContext flex = new AsyncFlexContextImpl(param);
 
-        final String imgVault;
-        try {
-            // TODO: YC-237 We take the first path available for now - this needs to be refactored
-            final Map<String, String> path = remoteBackdoorService.getImageVaultPath(flex);
-            final String firstAvailable = path.values().iterator().next();
-            imgVault = firstAvailable + File.separator;
-        } catch (IOException ioe) {
-            LOG.error("Unable to get image vault path", ioe);
-            throw new IllegalStateException("Unable to get image vault path");
-        }
+        final String imgVault = systemService.getImageRepositoryDirectory();
 
         // Max char of report to UI since it will get huge and simply will crash the UI, not to mention traffic cost.
         final int logSize = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE));
@@ -166,7 +157,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                     put(JobContextKeys.IMPORT_FILE, fileName);
                     put(JobContextKeys.IMPORT_FILE_SET, new HashSet<String>());
                     put(JobContextKeys.IMPORT_DIRECTORY_ROOT, getOsAwarePath(pathToImportFolder));
-                    put(JobContextKeys.IMAGE_VAULT_PATH, getOsAwarePath(imgVault));
+                    put(JobContextKeys.IMAGE_VAULT_PATH, imgVault);
                     putAll(flex.getAttributes());
                 }}));
     }

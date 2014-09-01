@@ -137,7 +137,7 @@ public abstract class AbstractGswmPaymentGatewayImpl implements PaymentGateway {
     /**
      * {@inheritDoc}
      */
-    protected String getHiddenFiled(final String fieldName, final Object value) {
+    protected String getHiddenField(final String fieldName, final Object value) {
         return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
     }
 

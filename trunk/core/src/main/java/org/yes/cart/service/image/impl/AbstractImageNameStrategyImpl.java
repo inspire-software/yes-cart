@@ -16,6 +16,9 @@
 
 package org.yes.cart.service.image.impl;
 
+import org.apache.commons.lang.StringUtils;
+import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.service.image.ImageNameStrategy;
 
 import java.io.File;
@@ -27,25 +30,73 @@ import java.io.File;
  */
 public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy {
 
+    private final String urlPath;
+    private final String relativeInternalRootDirectory;
 
     /**
-     * Get the image path prefix ended with {@see File#separator}
-     */
-    protected abstract String getPathPrefix();
-
-
-    /**
-     * Get the file name from url with particular prefix.
-     * Prefix - part of path to image repository and depends from
-     * partucular strategy. i.e.
-     * category will return /category/
-     * brand woll return /brand/
+     * Construct image name strategy
      *
-     * @param url fiven url
-     * @return image file name.
+     * @param urlPath URL path that identifies this strategy
+     * @param relativeInternalRootDirectory  internal image relative path root directory without {@see File#separator}. E.g. "category"
      */
-    public String getFileName(final String url) {
+    protected AbstractImageNameStrategyImpl(final String urlPath,
+                                            final String relativeInternalRootDirectory) {
+        this.urlPath = urlPath;
+        this.relativeInternalRootDirectory = relativeInternalRootDirectory + File.separator;
+    }
 
+    /** {@inheritDoc} */
+    public String getUrlPath() {
+        return urlPath;
+    }
+
+    /** {@inheritDoc} */
+    public String getRelativeInternalRootDirectory() {
+        return relativeInternalRootDirectory;
+    }
+
+    /**
+     * Image strategy specific resolution of object if extraction from the url failed.
+     *
+     * @param url url
+     *
+     * @return object code (or null)
+     */
+    protected abstract String resolveObjectCodeInternal(final String url);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "imageNameStrategy-resolveObjectCode")
+    public String resolveObjectCode(final String url) {
+
+        if (StringUtils.isNotBlank(url)) {
+
+            if (url.indexOf('_') > -1 && StringUtils.countMatches(url, "_") > 1) {
+                final String[] nameParts = url.split("_");
+                final String candidate = nameParts[nameParts.length - 2];
+                if (nameParts[nameParts.length - 1].indexOf('.') == 1) {
+                    final char csuf = nameParts[nameParts.length - 1].charAt(0);
+                    if (csuf >= 'a' && csuf <= 'g') {
+                        return candidate;
+                    }
+                }
+            }
+
+            final String code = resolveObjectCodeInternal(url);
+            if (code != null) {
+                return code;
+            }
+
+        }
+
+        return Constants.NO_IMAGE;
+    }
+
+    /** {@inheritDoc} */
+    public String resolveFileName(final String url) {
+
+        // We only use File class to reuse native filename resolution mechanism
         final File file = new File(url);
         String fileName = file.getName();
         int idx = fileName.indexOf('?');
@@ -55,49 +106,16 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
         return fileName;
     }
 
-    /**
-     * Get the file name from url.
-     *
-     * @param url fiven url
-     * @return image file name.
-     */
-
-    protected String getFileNameWithoutPrefix(final String url) {
-
-        final File file = new File(url);
-        String fileName = file.getName();
-        int idx = fileName.indexOf('?');
-        if (idx > -1) {
-            fileName = fileName.substring(0, idx);
-        }
-        return fileName;
-
+    /** {@inheritDoc} */
+    public String resolveRelativeInternalFileNamePath(final String fileName, final String code) {
+        return resolveRelativeInternalFileNamePath(fileName, code, null, null);
     }
 
 
-    /**
-     * Get the file name in image repository.
-     *
-     * @param fileName file name without the full path
-     * @param code     product code
-     * @return full name with path to file.
-     */
-    public String getFullFileNamePath(final String fileName, final String code) {
-        return getFullFileNamePath(fileName, code, null, null);
-    }
-
-
-    /**
-     * Get the file name of resized in image repository.
-     *
-     * @param fileName file name without the full path
-     * @param code     product code
-     * @param width    image width
-     * @param height   image height
-     * @return full name with path to file.
-     */
-    public String getFullFileNamePath(final String fileName, final String code, final String width, final String height) {
+    /** {@inheritDoc} */
+    public String resolveRelativeInternalFileNamePath(final String fileName, final String code, final String width, final String height) {
         final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(relativeInternalRootDirectory);
         if (width != null) {
             stringBuilder.append(width);
             stringBuilder.append('x');
@@ -111,7 +129,6 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
             stringBuilder.append(File.separator);
         }
 
-        stringBuilder.append(getPathPrefix());
         stringBuilder.append(fileName);
         return stringBuilder.toString();
     }

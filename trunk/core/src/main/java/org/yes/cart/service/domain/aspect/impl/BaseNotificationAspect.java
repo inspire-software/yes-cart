@@ -60,7 +60,7 @@ public abstract class BaseNotificationAspect {
      * Fill all passed parameters into message map.
      *
      * @param pjp {@link org.aspectj.lang.ProceedingJoinPoint}
-     * @param map contxt map
+     * @param map context map
      */
     protected void fillParameters(final ProceedingJoinPoint pjp, final HashMap<String, Object> map) {
         if (pjp.getArgs() != null) {

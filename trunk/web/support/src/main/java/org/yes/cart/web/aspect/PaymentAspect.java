@@ -118,6 +118,7 @@ public class PaymentAspect extends BaseNotificationAspect {
         map.put(StandardMessageListener.CUSTOMER_EMAIL, customerOrder.getCustomer().getEmail());
         map.put(StandardMessageListener.RESULT, rez);
         map.put(StandardMessageListener.ROOT, customerOrder);
+        // TODO: YC-416 Unify all mail templates into a separate module
         map.put(StandardMessageListener.TEMPLATE_FOLDER, ApplicationDirector.getCurrentMailTemplateFolder());
 
         map.put(StandardMessageListener.SHOP, ApplicationDirector.getCurrentShop());
@@ -168,6 +169,7 @@ public class PaymentAspect extends BaseNotificationAspect {
         map.put(StandardMessageListener.CUSTOMER_EMAIL, customerOrder.getCustomer().getEmail());
         map.put(StandardMessageListener.RESULT, rez);
         map.put(StandardMessageListener.ROOT, customerOrder);
+        // TODO: YC-416 Unify all mail templates into a separate module
         map.put(StandardMessageListener.TEMPLATE_FOLDER, ApplicationDirector.getCurrentMailTemplateFolder());
 
         map.put(StandardMessageListener.SHOP, ApplicationDirector.getCurrentShop());

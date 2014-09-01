@@ -625,7 +625,6 @@
         NAME varchar(64) not null,
         DESCRIPTION longtext,
         FSPOINTER longtext not null comment 'Point to jsps',
-        IMGVAULT longtext not null comment 'Point to image repository',
         URI varchar(255),
         TITLE varchar(255),
         METAKEYWORDS varchar(255),

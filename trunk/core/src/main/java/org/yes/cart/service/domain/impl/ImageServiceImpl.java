@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
@@ -28,14 +26,16 @@ import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.service.image.ImageNameStrategyResolver;
+import org.yes.cart.stream.io.IOProvider;
 import org.yes.cart.util.ShopCodeContext;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Image service to resize and store resized image.
@@ -60,6 +60,8 @@ public class ImageServiceImpl
 
     private final GenericDAO<SeoImage, Long> seoImageDao;
 
+    private final IOProvider ioProvider;
+
 
     /**
      * Construct image service.
@@ -78,22 +80,24 @@ public class ImageServiceImpl
      * @param forceCropToFitOnSize forcefully use cropping if scale is below given size
      *                             This option is very useful for small thumbs (<100px)
      *                             as you really cannot see much with added padding for
-     *                             panoramic or tall images
+     * @param ioProvider IO provider
      */
-    public ImageServiceImpl(
-            final GenericDAO<SeoImage, Long> seoImageDao,
-            final ImageNameStrategyResolver imageNameStrategyResolver,
-            final String allowedSizes,
-            final int borderColorR,
-            final int borderColorG,
-            final int borderColorB,
-            final boolean cropToFit, final int forceCropToFitOnSize) {
+    public ImageServiceImpl(final GenericDAO<SeoImage, Long> seoImageDao,
+                            final ImageNameStrategyResolver imageNameStrategyResolver,
+                            final String allowedSizes,
+                            final int borderColorR,
+                            final int borderColorG,
+                            final int borderColorB,
+                            final boolean cropToFit,
+                            final int forceCropToFitOnSize,
+                            final IOProvider ioProvider) {
 
         super(seoImageDao);
 
         this.seoImageDao = seoImageDao;
         this.imageNameStrategyResolver = imageNameStrategyResolver;
         this.allowedSizes = allowedSizes;
+        this.ioProvider = ioProvider;
         defaultBorder = new Color(borderColorR, borderColorG, borderColorB);
 
         this.cropToFit = cropToFit;
@@ -103,30 +107,28 @@ public class ImageServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void resizeImage(
-            final String original,
-            final String resized,
-            final String width,
-            final String height) {
-        resizeImage(original, resized, width, height, cropToFit);
+    public byte[] resizeImage(final String filename,
+                              final byte[] content,
+                              final String width,
+                              final String height) {
+        return resizeImage(filename, content, width, height, cropToFit);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void resizeImage(
-            final String original,
-            final String resized,
-            final String width,
-            final String height,
-            final boolean cropToFit) {
+    public byte[] resizeImage(final String filename,
+                              final byte[] content,
+                              final String width,
+                              final String height,
+                              final boolean cropToFit) {
 
         try {
 
-            createFolder(resized);
+            final InputStream bis = new ByteArrayInputStream(content);
 
-            final BufferedImage originalImg = ImageIO.read(new File(original));
-            final String codec = getCodecFromFilename(original);
+            final BufferedImage originalImg = ImageIO.read(bis);
+            final String codec = getCodecFromFilename(filename);
             final boolean supportsAlpha = hasAlphaSupport(codec);
 
             int x = NumberUtils.toInt(width);
@@ -179,11 +181,17 @@ public class ImageServiceImpl
             // insert scaled image
             graphics.drawImage(resizedImg, padX, padY, null);
 
-            ImageIO.write(resizedImgFinal, codec, new File(resized));
+            final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+            ImageIO.write(resizedImgFinal, codec, bos);
+
+            return bos.toByteArray();
 
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error("Unable to resize image " + original, exp);
+            ShopCodeContext.getLog(this).error("Unable to resize image " + content, exp);
         }
+
+        return new byte[0];
 
     }
 
@@ -262,28 +270,6 @@ public class ImageServiceImpl
 
     }
 
-
-    /**
-     * Create folder(s) to store scaled image.
-     *
-     * @param fullPath full file name of scaled image
-     * @return true if folder created
-     */
-    private boolean createFolder(final String fullPath) {
-        int idx = fullPath.lastIndexOf(File.separator);
-        if (idx == -1) {
-            idx = fullPath.lastIndexOf('/');
-            if (idx == -1) {
-                idx = fullPath.lastIndexOf('\\');
-            }
-        }
-
-        final String dirs = fullPath.substring(0, idx);
-
-        File dir = new File(dirs);
-        return dir.mkdirs();
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -298,48 +284,88 @@ public class ImageServiceImpl
         return isSizeAllowed(width + "x" + height);
     }
 
-    /**
-     * Get the image name strategy.
-     *
-     * @return image name strategy
-     */
+    /** {@inheritDoc} */
     public ImageNameStrategy getImageNameStrategy(final String url) {
         return imageNameStrategyResolver.getImageNameStrategy(url);
     }
 
-    /**
-     * Add the given file to image repository during bulk import.
-     * At this momen only product images can be imported.
-     *
-     * @param fullFileName full path to image file.
-     * @param code         product or sku code.
-     * @return true if file was added successfully
-     */
+    /** {@inheritDoc} */
+    public byte[] resizeImage(final String original,
+                              final String resized,
+                              final String width,
+                              final String height) {
+        return resizeImage(original, resized, width, height, cropToFit);
+    }
+
+    /** {@inheritDoc} */
+    public byte[] resizeImage(final String original,
+                              final String resized,
+                              final String width,
+                              final String height,
+                              final boolean cropToFit) {
+
+        try {
+            final Map<String, Object> ctx = Collections.EMPTY_MAP;
+
+            if (resized != null) {
+
+                final boolean resizedIsNewer = ioProvider.isNewerThan(resized, original, ctx);
+
+                if (!resizedIsNewer) {
+
+                    final byte[] originalContent = ioProvider.read(original, ctx);
+                    final byte[] resizedContent = resizeImage(original, originalContent, width, height);
+
+                    if (resizedContent.length > 0) {
+                        ioProvider.write(resized, resizedContent, ctx);
+                    }
+
+                    return resizedContent;
+                }
+
+                return ioProvider.read(resized, ctx);
+            }
+            return ioProvider.read(original, ctx);
+
+        } catch (IOException ioe) {
+            ShopCodeContext.getLog(this).error("Unable to resize image {} to {}", original, resized);
+            ShopCodeContext.getLog(this).error(ioe.getMessage(), ioe);
+            return new byte[0];
+        }
+    }
+
+    /** {@inheritDoc} */
+    public boolean isImageInRepository(final String fullFileName,
+                                       final String code,
+                                       final String storagePrefix,
+                                       final String pathToRepository) {
+
+        final ImageNameStrategy strategy = getImageNameStrategy(storagePrefix);
+        final String filename = strategy.resolveFileName(fullFileName);
+
+        String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(filename, code);
+
+        return ioProvider.exists(pathInRepository, Collections.EMPTY_MAP);
+
+    }
+
+    /** {@inheritDoc} */
     public String addImageToRepository(final String fullFileName,
-                                        final String code,
-                                        final String pathToRepository) throws IOException {
-        File file = new File(fullFileName);
-        String pathInRepository = pathToRepository + getImageNameStrategy(StringUtils.EMPTY).getFullFileNamePath(file.getName(), code);
-        File destinationFile = new File(createRepositoryUniqueName(pathInRepository));
-        FileUtils.copyFile(file, destinationFile);
-        return destinationFile.getName();
-    }
+                                       final String code,
+                                       final byte[] imgBody,
+                                       final String storagePrefix,
+                                       final String pathToRepository) throws IOException {
 
-    /** {@inheritDoc} */
-    public String addImageToRepository(final String fullFileName, final String code,
-                                        final byte[] imgBody, final String storagePrefix) throws IOException {
-        return addImageToRepository(fullFileName, code, imgBody, storagePrefix, StringUtils.EMPTY);
-    }
+        final ImageNameStrategy strategy = getImageNameStrategy(storagePrefix);
+        final String filename = strategy.resolveFileName(fullFileName);
 
-    /** {@inheritDoc} */
-    public String addImageToRepository(final String fullFileName, final String code,
-                                        final byte[] imgBody, final String storagePrefix,
-                                        final String pathToRepository) throws IOException {
-        File file = new File(fullFileName);
-        String pathInRepository = pathToRepository + getImageNameStrategy(storagePrefix).getFullFileNamePath(file.getName(), code);
-        File destinationFile = new File(createRepositoryUniqueName(pathInRepository));
-        FileUtils.writeByteArrayToFile(destinationFile, imgBody);
-        return destinationFile.getName();
+        String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(filename, code);
+
+        final String uniqueName = createRepositoryUniqueName(pathInRepository, ioProvider);
+
+        ioProvider.write(uniqueName, imgBody, Collections.EMPTY_MAP);
+
+        return strategy.resolveFileName(uniqueName);
     }
 
 
@@ -348,11 +374,10 @@ public class ImageServiceImpl
      * @param fileName given file name
      * @return sequential file name.
      */
-    String createRepositoryUniqueName(final String fileName) {
-        final File destinationFile = new File(fileName);
-        if (destinationFile.exists()) {
+    String createRepositoryUniqueName(final String fileName, final IOProvider ioProvider) {
+        if (ioProvider.exists(fileName, Collections.EMPTY_MAP)) {
             final String newFileName = createRollingFileName(fileName);
-            return createRepositoryUniqueName(newFileName);
+            return createRepositoryUniqueName(newFileName, ioProvider);
         }
         return fileName;
     }
@@ -399,20 +424,36 @@ public class ImageServiceImpl
                                    final String code,
                                    final String storagePrefix,
                                    final String pathToRepository) throws IOException {
-        final File file = new File(fileName);
-        String pathInRepository = pathToRepository + getImageNameStrategy(storagePrefix).getFullFileNamePath(file.getName(), code);
-        File destinationFile = new File(pathInRepository);
-        return FileUtils.readFileToByteArray(destinationFile);
+
+        final ImageNameStrategy strategy = getImageNameStrategy(storagePrefix);
+        final String file = strategy.resolveFileName(fileName);
+        String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(file, code);
+
+        return ioProvider.read(pathInRepository, Collections.EMPTY_MAP);
+
     }
 
     /** {@inheritDoc}*/
-    public boolean deleteImage(final String imageFileName) {
-        final SeoImage seoImage = getSeoImage(imageFileName);
+    public boolean deleteImage(final String imageFileName,
+                               final String storagePrefix,
+                               final String pathToRepository) {
+
+        final SeoImage seoImage = getSeoImage(storagePrefix + imageFileName);
         if (seoImage != null) {
             getGenericDao().delete(seoImage);
         }
-        final File file = new File(imageFileName);
-        return file.delete();
+
+        final ImageNameStrategy strategy = getImageNameStrategy(storagePrefix);
+        final String file = strategy.resolveFileName(imageFileName);
+        final String code = strategy.resolveObjectCode(imageFileName);
+        String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(file, code);
+
+        try {
+            ioProvider.delete(pathInRepository, Collections.EMPTY_MAP);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     /**

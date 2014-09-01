@@ -63,3 +63,11 @@
 
     create index SHOPPINGCARTSTATE_EMAIL on TSHOPPINGCARTSTATE (CUSTOMER_EMAIL);
 
+
+--
+-- YC-150 RemoteImageServiceImpl addImageToRepository path resolution review
+-- YC-237 Image vault resolution
+--
+
+UPDATE TSYSTEMATTRVALUE SET VAL = 'context://default/imagevault' WHERE CODE = 'SYSTEM_IMAGE_VAULT';
+ALTER TABLE TSHOP DROP COLUMN IMGVAULT;

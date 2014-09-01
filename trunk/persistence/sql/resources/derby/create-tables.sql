@@ -651,7 +651,6 @@
         NAME varchar(64) not null,
         DESCRIPTION varchar(4000),
         FSPOINTER varchar(4000) not null,
-        IMGVAULT varchar(4000) not null,
         URI varchar(255),
         TITLE varchar(255),
         METAKEYWORDS varchar(255),

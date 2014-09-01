@@ -103,14 +103,9 @@ public interface Constants {
     String WIDTH = "w";
 
 
-    String CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN = "/imgvault/category/";
-    String BRAND_IMAGE_REPOSITORY_URL_PATTERN = "/imgvault/brand/";
-    String PRODUCT_IMAGE_REPOSITORY_URL_PATTERN = "/imgvault/";
-
-
-    String CATEGOTY_IMAGE_FILE_PREFIX = "category";
-    String BRAND_IMAGE_FILE_PREFIX = "brand";
-
+    String CATEGORY_IMAGE_REPOSITORY_URL_PATTERN    = "/imgvault/category/";
+    String BRAND_IMAGE_REPOSITORY_URL_PATTERN       = "/imgvault/brand/";
+    String PRODUCT_IMAGE_REPOSITORY_URL_PATTERN     = "/imgvault/product/";
 
     /**
      * Items quantity on page. In case if default value in root category not set
