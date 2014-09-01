@@ -18,7 +18,6 @@ package org.yes.cart.domain.ro;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -28,8 +27,8 @@ import java.util.Map;
 @XmlRootElement(name = "authentication-result")
 public class AuthenticationResultRO {
 
-    private boolean success;
-    private String error;
+    private boolean authenticated;
+    private String code;
     private String greeting;
     private TokenRO tokenRO;
 
@@ -39,11 +38,11 @@ public class AuthenticationResultRO {
     /**
      * Failure constructor.
      *
-     * @param error error code
+     * @param code error code
      */
-    public AuthenticationResultRO(final String error) {
-        this.success = false;
-        this.error = error;
+    public AuthenticationResultRO(final String code) {
+        this.authenticated = false;
+        this.code = code;
     }
 
 
@@ -54,25 +53,25 @@ public class AuthenticationResultRO {
      * @param token token
      */
     public AuthenticationResultRO(final String greeting, final TokenRO token) {
-        this.success = true;
+        this.authenticated = true;
         this.greeting = greeting;
         this.tokenRO = token;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public boolean isAuthenticated() {
+        return authenticated;
     }
 
-    public void setSuccess(final boolean success) {
-        this.success = success;
+    public void setAuthenticated(final boolean authenticated) {
+        this.authenticated = authenticated;
     }
 
-    public String getError() {
-        return error;
+    public String getCode() {
+        return code;
     }
 
-    public void setError(final String error) {
-        this.error = error;
+    public void setCode(final String code) {
+        this.code = code;
     }
 
     public String getGreeting() {

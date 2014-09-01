@@ -38,7 +38,6 @@ import java.util.List;
  */
 public class AbstractApiController {
 
-
     @Autowired
     @Qualifier("roInterfaceToClassFactory")
     private DtoFactory dtoFactory;
