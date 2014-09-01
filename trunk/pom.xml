@@ -21,7 +21,7 @@
     <groupId>org.yes</groupId>
     <artifactId>yes-cart</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>2.2.0-SNAPSHOT</version>
     <name>Yes Cart</name>
     <url>http://code.google.com/p/yes-cart/</url>
     <modules>
