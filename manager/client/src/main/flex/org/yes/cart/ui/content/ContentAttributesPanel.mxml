@@ -45,6 +45,7 @@
                 return;
             }
             _category = value;
+            entityCode = value != null ? value.uri != null ? value.uri : String(value.categoryId) : null;
 
             this.attrValues.removeAll();
             this.attrValues.refresh(); // this helps with index exception in removeAll caused by grid component sorting

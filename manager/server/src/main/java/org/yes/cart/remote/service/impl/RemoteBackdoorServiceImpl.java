@@ -32,7 +32,6 @@ import org.yes.cart.web.service.ws.client.WsClientFactory;
 import org.yes.cart.web.service.ws.node.NodeService;
 import org.yes.cart.web.service.ws.node.dto.Node;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -453,43 +452,6 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
          }
          return evicts;
 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Map<String, String> getImageVaultPath(final AsyncContext context) throws IOException {
-
-         // TODO: need to have a better way for this - ATM we assume we are on the same FS!!!
-         // TODO: potentially we need either dedicated server for images or we need to transfer images via WS
-
-         final Map<String, String> paths = new HashMap<String, String>();
-         for (final Node yesNode : nodeService.getYesNodes()) {
-             try {
-                 final WsClientFactory<BackdoorService> factory =
-                         getBackdoorService(context, yesNode.getBackdoorUri(),
-                                 AttributeNamesKeys.System.SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS);
-
-                 BackdoorService service = factory.getService();
-                 try {
-                    paths.put(yesNode.getNodeId(), service.getImageVaultPath());
-                 } finally {
-                     factory.release(service);
-                     service = null;
-                 }
-
-             } catch (Exception e) {
-                 paths.put(yesNode.getNodeId(), null);
-                 if (LOG.isErrorEnabled()) {
-                     LOG.error("Cannot get image vault path,  url ["
-                             + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
-                             + "] . Will try next one, if exists",
-                             e);
-                 }
-             }
-
-         }
-         return paths;
     }
 
     private WsClientFactory<BackdoorService> getBackdoorService(final AsyncContext context,

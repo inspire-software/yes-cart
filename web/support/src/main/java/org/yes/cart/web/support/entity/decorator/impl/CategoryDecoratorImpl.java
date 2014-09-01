@@ -18,6 +18,7 @@ package org.yes.cart.web.support.entity.decorator.impl;
 
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.domain.entity.impl.CategoryEntity;
@@ -191,7 +192,7 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
      * {@inheritDoc}
      */
     public SeoImage getSeoImage(final String fileName) {
-        return imageService.getSeoImage(fileName);
+        return imageService.getSeoImage(Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN + fileName);
     }
 
     /** {@inheritDoc} */

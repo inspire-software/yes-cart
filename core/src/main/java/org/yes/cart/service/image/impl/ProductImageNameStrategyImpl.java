@@ -16,12 +16,9 @@
 
 package org.yes.cart.service.image.impl;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.impl.AttrValueEntityProduct;
-import org.yes.cart.domain.entity.impl.AttrValueEntityProductSku;
+import org.yes.cart.domain.entity.AttrValueProduct;
+import org.yes.cart.domain.entity.AttrValueProductSku;
 
 
 /**
@@ -36,68 +33,42 @@ import org.yes.cart.domain.entity.impl.AttrValueEntityProductSku;
  */
 public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
 
-    private final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao;
-    private final GenericDAO<AttrValueEntityProductSku, Long> attrValueEntityProductSkuDao;
+    private final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao;
+    private final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao;
 
 
     /**
      * Construct image name strategy.
      *
-     * @param attrValueEntityProductSkuDao product sku attributes  dao
-     * @param attrValueEntityProductDao    product attributes dao
+     * @param urlPath URL path that identifies this strategy
+     * @param relativeInternalRootDirectory  internal image relative path root directory without {@see File#separator}. E.g. "product"
+     * @param attrValueProductSkuDao         product sku attributes  dao
+     * @param attrValueProductDao            product attributes dao
      */
-    public ProductImageNameStrategyImpl(
-            final GenericDAO<AttrValueEntityProductSku, Long> attrValueEntityProductSkuDao,
-            final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao) {
-        this.attrValueEntityProductSkuDao = attrValueEntityProductSkuDao;
-        this.attrValueEntityProductDao = attrValueEntityProductDao;
+    public ProductImageNameStrategyImpl(final String urlPath,
+                                        final String relativeInternalRootDirectory,
+                                        final GenericDAO<AttrValueProductSku, Long> attrValueProductSkuDao,
+                                        final GenericDAO<AttrValueProduct, Long> attrValueProductDao) {
+        super(urlPath, relativeInternalRootDirectory);
+        this.attrValueEntityProductSkuDao = attrValueProductSkuDao;
+        this.attrValueEntityProductDao = attrValueProductDao;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected String getPathPrefix() {
-        return StringUtils.EMPTY;
-    }
+    protected String resolveObjectCodeInternal(final String url) {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "productImageNameStrategyService-productCode")
-    public String getCode(final String url) {
+        final String val = resolveFileName(url);
 
-        if (StringUtils.isNotBlank(url)) {
-
-            if (url.indexOf('_') > -1 && StringUtils.countMatches(url, "_") > 1) {
-                final String[] nameParts = url.split("_");
-                final String candidate = nameParts[nameParts.length - 2];
-                if (nameParts[nameParts.length - 1].indexOf('.') == 1) {
-                    final char csuf = nameParts[nameParts.length - 1].charAt(0);
-                    if (csuf >= 'a' && csuf <= 'g') {
-                        return candidate;
-                    }
-                }
-            }
-
-            final String val = getFileNameWithoutPrefix(url);
-
-            final String productCode =
-                    attrValueEntityProductDao.findSingleByNamedQuery("PRODUCT.CODE.BY.IMAGE.NAME", val);
-            if (productCode != null) {
-                return productCode;
-            }
-
-            final String skuCode =
-                    attrValueEntityProductSkuDao.findSingleByNamedQuery("SKU.CODE.BY.IMAGE.NAME", val);
-            if (skuCode != null) {
-                return skuCode;
-            }
-
-
+        final String productCode =
+                attrValueEntityProductDao.findSingleByNamedQuery("PRODUCT.CODE.BY.IMAGE.NAME", val);
+        if (productCode != null) {
+            return productCode;
         }
 
+        return attrValueEntityProductSkuDao.findSingleByNamedQuery("SKU.CODE.BY.IMAGE.NAME", val);
 
-        return Constants.NO_IMAGE;
     }
 
 }

@@ -169,6 +169,8 @@ public interface Shop extends Auditable, Seoable, Codable {
     boolean isB2ProfileActive();
 
     /**
+     * TODO: YC-420 Unify all themes into a separate module
+     * TODO: This is standard directory - no need for this getter
      * Get markup folder. @see fspointer for more details.
      * @return folder with markup.
      */
@@ -176,6 +178,8 @@ public interface Shop extends Auditable, Seoable, Codable {
 
 
     /**
+     * TODO: YC-416 Unify all mail templates into a separate module
+     * TODO: This is standard directory - no need for this getter
      * Get mail folder.
      * @return folder with mail
      */
@@ -186,18 +190,6 @@ public interface Shop extends Auditable, Seoable, Codable {
      * @return  default shop url
      */
     String getDefaultShopUrl();
-
-    /**
-     * Get image vauld  folder. @see fspointer for more details.
-     * @return folder with markup.
-     */
-    String getImageVaultFolder();
-
-    /**
-     * Set image value folder for shop.
-     * @param imageVaultFolder  image repository folder
-     */
-    void setImageVaultFolder(String imageVaultFolder);
 
 
     /**

@@ -240,7 +240,7 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
     }
 
 
-    protected String getHiddenFiled(final String fieldName, final Object value) {
+    protected String getHiddenField(final String fieldName, final Object value) {
         return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
     }
 

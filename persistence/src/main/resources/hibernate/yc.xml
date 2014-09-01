@@ -1411,13 +1411,6 @@
                 </comment>
             </column>
         </property>
-        <property name="imageVaultFolder" length="4000" type="string">
-            <column name="IMGVAULT" length="4000" not-null="true">
-                <comment>
-                    Point to image repository
-                </comment>
-            </column>
-        </property>
         <set name="shopUrl" inverse="true" lazy="false" cascade="all">
             <key>
                 <column name="SHOP_ID" not-null="true"/>
@@ -2993,6 +2986,20 @@
             from SkuWarehouseEntity sw
             where sw.warehouse.warehouseId IN (?2)
             and sw.sku.product.productId = ?1
+        ]]>
+    </query>
+
+    <query name="BRAND.NAME.AND.GUID.BY.IMAGE.NAME">
+        <![CDATA[
+            select a.brand.name, a.brand.guid from AttrValueEntityBrand a
+            where a.val = ?1
+        ]]>
+    </query>
+
+    <query name="CATEGORY.URI.AND.GUID.BY.IMAGE.NAME">
+        <![CDATA[
+            select a.category.seoInternal.uri, a.category.guid from AttrValueEntityCategory a
+            where a.val = ?1
         ]]>
     </query>
 

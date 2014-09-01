@@ -121,6 +121,7 @@ public class ManagerRegistrationAspect  extends BaseNotificationAspect implement
         registrationMessage.setFirstname(manager.getFirstname());
         registrationMessage.setLastname(manager.getLastname());
         registrationMessage.setPassword(generatedPassword);
+        // TODO: YC-416 Unify all mail templates into a separate module
         registrationMessage.setPathToTemplateFolder(servletContext.getRealPath("/default/mail") + File.separator);
 
         registrationMessage.setTemplateName("adm-passwd");

@@ -129,7 +129,7 @@ public interface Category extends Auditable, Attributable, Seoable  {
     /**
      * Get category description.
      *
-     * @return category decription.
+     * @return category description.
      */
     String getDescription();
 
@@ -148,9 +148,9 @@ public interface Category extends Auditable, Attributable, Seoable  {
     String getUitemplate();
 
     /**
-     * Set category UI template varioantion.
+     * Set category UI template variation.
      *
-     * @param uitemplate template varioantion.
+     * @param uitemplate template variation.
      */
     void setUitemplate(String uitemplate);
 
@@ -201,7 +201,7 @@ public interface Category extends Auditable, Attributable, Seoable  {
     /**
      * Get all product assigned to category.
      *
-     * @return set of products assigden to category.
+     * @return set of products assigned to category.
      */
     Set<ProductCategory> getProductCategory();
 

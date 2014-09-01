@@ -77,7 +77,6 @@ public class ShopDAOTest extends AbstractTestDAO {
                 shop.setName("test shop");
                 shop.setDescription("test shop description");
                 shop.setFspointer("/yescart/data");
-                shop.setImageVaultFolder("/yescart/data/imgvault");
                 ShopUrl url;
                 url = new ShopUrlEntity();
                 url.setUrl(URL1);

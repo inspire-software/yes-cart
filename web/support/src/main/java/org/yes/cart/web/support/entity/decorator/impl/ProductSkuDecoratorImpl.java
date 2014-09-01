@@ -201,7 +201,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      * {@inheritDoc}
      */
     public SeoImage getSeoImage(final String fileName) {
-        return imageService.getSeoImage(fileName);
+        return imageService.getSeoImage(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN + fileName);
     }
 
 

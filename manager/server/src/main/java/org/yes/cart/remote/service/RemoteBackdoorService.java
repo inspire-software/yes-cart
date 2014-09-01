@@ -21,7 +21,6 @@ import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.async.model.AsyncContext;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -142,15 +141,5 @@ public interface RemoteBackdoorService {
      * @param name name of cache to evict
      */
     Map<String, Boolean> evictCache(AsyncContext context, String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
-    /**
-     * Get real path to image vault on shop application. Need to allow have different web  context for yes-shop.
-     *
-     * @param context web service context
-     * @return  real path to image vault
-     * @throws IOException    in case of io error.
-     */
-    Map<String, String> getImageVaultPath(AsyncContext context) throws IOException;
-
 
 }

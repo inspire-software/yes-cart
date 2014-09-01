@@ -62,6 +62,7 @@ public abstract class BaseOrderStateAspect extends  BaseNotificationAspect  {
                 map.put(StandardMessageListener.CUSTOMER_EMAIL, emailAddr);
                 map.put(StandardMessageListener.RESULT, true);
                 map.put(StandardMessageListener.ROOT, customerOrder);
+                // TODO: YC-416 Unify all mail templates into a separate module
                 map.put(StandardMessageListener.TEMPLATE_FOLDER, servletContext.getRealPath(customerOrder.getShop().getMailFolder()) + File.separator);
                 map.put(StandardMessageListener.SHOP, customerOrder.getShop());
                 map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());

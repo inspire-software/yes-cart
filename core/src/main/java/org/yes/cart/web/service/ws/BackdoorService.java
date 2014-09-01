@@ -124,13 +124,4 @@ public interface BackdoorService {
     @WebResult(name = "queryResult")
     List<Object[]> luceneQuery(String query);
 
-
-    /**
-     * Get image vault path.
-     * @return  image vault path
-     */
-    @WebMethod
-    @WebResult(name = "imageVaultPath")
-    String getImageVaultPath() throws IOException;
-
 }

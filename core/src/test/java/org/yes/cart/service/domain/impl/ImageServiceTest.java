@@ -16,25 +16,30 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.io.FileUtils;
 import org.dbunit.util.Base64;
 import org.hibernate.criterion.Criterion;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.SeoImage;
-import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.service.image.ImageNameStrategyResolver;
 import org.yes.cart.service.image.impl.ProductImageNameStrategyImpl;
+import org.yes.cart.stream.io.IOProvider;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -53,12 +58,17 @@ public class ImageServiceTest {
     private Mockery mockery = new JUnit4Mockery();
     private ImageNameStrategyResolver imageNameStrategyResolver = mockery.mock(ImageNameStrategyResolver.class);
     private ImageServiceImpl imageService;
-    private SystemService systemService = mockery.mock(SystemService.class);
-    private GenericDAO<SeoImage, Long> seoImageDao = mockery.mock(GenericDAO.class);
-    private ProductImageNameStrategyImpl productImageNameStrategy = new ProductImageNameStrategyImpl(null, null);
+    private IOProvider ioProvider = mockery.mock(IOProvider.class);
+    private GenericDAO<SeoImage, Long> seoImageDao = mockery.mock(GenericDAO.class, "seoImageDao");
+    private GenericDAO<AttrValueProduct, Long> productDao = mockery.mock(GenericDAO.class, "productDao");
+    private ImageNameStrategy imageNameStrategy = new ProductImageNameStrategyImpl(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "product", null, productDao);
+
 
     @Test
     public void testCreateRollingFileName() throws Exception {
+
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, ioProvider);
+
         assertEquals("/tmp/file_1", imageService.createRollingFileName("/tmp/file"));
         assertEquals("/tmp/file_1.txt", imageService.createRollingFileName("/tmp/file.txt"));
         assertEquals("/tmp/file_1.txt", imageService.createRollingFileName("/tmp/file_0.txt"));
@@ -72,33 +82,32 @@ public class ImageServiceTest {
     @Test
     public void testCreateRepositoryUniqueName() throws Exception {
 
-        File temp = File.createTempFile("pattern", ".suffix");
-        String newFileName = imageService.createRepositoryUniqueName(temp.getAbsolutePath());
-        assertTrue (!temp.getAbsolutePath().equals(newFileName));
-        assertTrue (newFileName, newFileName.contains("_1.suffix"));
-    }
-
-
-    @Before
-    @SuppressWarnings("unchecked")
-    public void setUp() {
         mockery.checking(new Expectations() {{
-            allowing(imageNameStrategyResolver).getImageNameStrategy(StringUtils.EMPTY);
-            will(returnValue(productImageNameStrategy));
-            allowing(systemService).getImageRepositoryDirectory();
-            will(returnValue("target/test/resources/imgrepo/"));
-            allowing(seoImageDao).findByCriteria(with(any(Criterion.class)));
-            will(returnValue(null));
+            allowing(ioProvider).exists(with(equal("path/to/some/file/pattern.suffix")), with(any(Map.class))); will(returnValue(true));
+            allowing(ioProvider).exists(with(equal("path/to/some/file/pattern_1.suffix")), with(any(Map.class))); will(returnValue(true));
+            allowing(ioProvider).exists(with(equal("path/to/some/file/pattern_2.suffix")), with(any(Map.class))); will(returnValue(false));
         }});
-        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50);
+
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, ioProvider);
+
+        String newFileName = imageService.createRepositoryUniqueName("path/to/some/file/pattern.suffix", ioProvider);
+        assertEquals(newFileName, "path/to/some/file/pattern_2.suffix");
+
     }
 
     @Test
-    public void testResizeImageJPEG() {
-        String originalFileName = "src/test/resources/imgrepo/a/arbuz/speli_arbuz_arbuz_a.jpeg";
-        String desctinationFileName = "target/test/resources/imgrepo/50x150/a/arbuz/speli_arbuz_arbuz_a.jpeg";
-        imageService.resizeImage(originalFileName, desctinationFileName, "50", "150");
-        assertTrue((new File(desctinationFileName).exists()));
+    public void testResizeImageJPEG() throws Exception {
+
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, ioProvider);
+
+
+        final String originalFileName = "src/test/resources/imgrepo/a/arbuz/speli_arbuz_arbuz_a.jpeg";
+        final String destinationFileName = "target/test/resources/imgrepo/50x150/a/arbuz/speli_arbuz_arbuz_a.jpeg";
+        final byte[] content = FileUtils.readFileToByteArray(new File(originalFileName));
+        final byte[] resized = imageService.resizeImage("speli_arbuz_arbuz_a.jpeg", content, "50", "150");
+        assertNotNull(resized);
+        assertTrue(resized.length > 0);
+        FileUtils.writeByteArrayToFile(new File(destinationFileName), resized);
     }
 
     /**
@@ -106,43 +115,143 @@ public class ImageServiceTest {
      * See private RenderedOp resizeImage(final RenderedImage image, final BigDecimal scale)
      */
     @Test
-    public void testResizeImageJPEG2() {
-        String originalFileName = "src/test/resources/imgrepo/C/C01-00002-7B/C01-00002-7B_a.jpeg";
-        String desctinationFileName = "target/test/resources/imgrepo/200x200/C/C01-00002-7B/C01-00002-7B_a.jpeg";
-        imageService.resizeImage(originalFileName, desctinationFileName, "200", "200");
-        assertTrue((new File(desctinationFileName).exists()));
+    public void testResizeImageJPEG2() throws Exception {
+
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, ioProvider);
+
+        final String originalFileName = "src/test/resources/imgrepo/C/C01-00002-7B/C01-00002-7B_a.jpeg";
+        final String destinationFileName = "target/test/resources/imgrepo/200x200/C/C01-00002-7B/C01-00002-7B_a.jpeg";
+        final byte[] content = FileUtils.readFileToByteArray(new File(originalFileName));
+        final byte[] resized = imageService.resizeImage("C01-00002-7B_a.jpeg", content, "200", "200");
+        assertNotNull(resized);
+        assertTrue(resized.length > 0);
+        FileUtils.writeByteArrayToFile(new File(destinationFileName), resized);
     }
 
     @Test
-    public void testResizeImagePNG() {
-        String originalFileName = "src/test/resources/imgrepo/a/aron/aron_a.png";
-        String desctinationFileName = "target/test/resources/imgrepo/50x150/a/aron/aron_a.png";
-        imageService.resizeImage(originalFileName, desctinationFileName, "50", "150");
-        assertTrue((new File(desctinationFileName).exists()));
+    public void testResizeImagePNG() throws Exception {
+
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, ioProvider);
+
+        final String originalFileName = "src/test/resources/imgrepo/a/aron/aron_a.png";
+        final String destinationFileName = "target/test/resources/imgrepo/50x150/a/aron/aron_a.png";
+        final byte[] content = FileUtils.readFileToByteArray(new File(originalFileName));
+        final byte[] resized = imageService.resizeImage("aron_a.png", content, "50", "150");
+        assertNotNull(resized);
+        assertTrue(resized.length > 0);
+        FileUtils.writeByteArrayToFile(new File(destinationFileName), resized);
     }
 
     @Test
     public void testAddImageToRepository() throws Exception {
-        String tmpFileName = "target/test/resources/some-seo-image-name_PRODUCT1.jpeg";
+
+        mockery.checking(new Expectations() {{
+            allowing(imageNameStrategyResolver).getImageNameStrategy(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN);
+            will(returnValue(imageNameStrategy));
+        }});
+
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, new IOProvider() {
+            @Override
+            public boolean supports(final String uri) {
+                return true;
+            }
+
+            @Override
+            public boolean exists(final String uri, final Map<String, Object> context) {
+                return new File(uri).exists();
+            }
+
+            @Override
+            public boolean isNewerThan(final String uriToCheck, final String uriToCheckAgainst, final Map<String, Object> context) {
+                return false;
+            }
+
+            @Override
+            public byte[] read(final String uri, final Map<String, Object> context) throws IOException {
+                return FileUtils.readFileToByteArray(new File(uri));
+            }
+
+            @Override
+            public void write(final String uri, final byte[] content, final Map<String, Object> context) throws IOException {
+                FileUtils.writeByteArrayToFile(new File(uri), content);
+            }
+
+            @Override
+            public void delete(final String uri, final Map<String, Object> context) throws IOException {
+                assertTrue(new File(uri).delete());
+            }
+        });
+
+        final String tmpFileName = "target/test/resources/some-seo-image-name_PRODUCT1.jpeg";
         byte[] image = Base64.decode(BASE64_ENCODED_JPEG_0);
-        imageService.addImageToRepository(tmpFileName, "PRODUCT1", image, StringUtils.EMPTY);
-        File destination = new File("P/PRODUCT1/some-seo-image-name_PRODUCT1.jpeg");
-        assertTrue(destination.exists());
+        final String save1 = imageService.addImageToRepository(tmpFileName, "PRODUCT1", image, Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "target/");
+        final File destination1 = new File("target/product/P/PRODUCT1/" + save1);
+        assertTrue(destination1.exists());
+        assertTrue("At least some info must be in the file" , destination1.length() > 1000);
         image = Base64.decode(BASE64_ENCODED_JPEG_1);
-        imageService.addImageToRepository(tmpFileName, "PRODUCT1", image, StringUtils.EMPTY);
-        assertTrue("At least some info must be in the file" , destination.length() > 1000);
+        final String save2 = imageService.addImageToRepository(tmpFileName, "PRODUCT1", image, Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "target/");
+        final File destination2 = new File("target/product/P/PRODUCT1/" + save2);
+        assertTrue(destination2.exists());
+        assertTrue("At least some info must be in the file" , destination2.length() > 1000);
+        assertFalse(save1.equals(save2));
     }
 
     @Test
     public void testDeleteImage() throws Exception {
-        String tmpFileName = "target/test/resources/some-seo-image-name_PRODUCT2.jpeg";
+
+        mockery.checking(new Expectations() {{
+            allowing(imageNameStrategyResolver).getImageNameStrategy(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN);
+            will(returnValue(imageNameStrategy));
+            allowing(seoImageDao).findByCriteria(with(any(Criterion.class)));
+            will(returnValue(null));
+            allowing(productDao).findSingleByNamedQuery(with(equal("PRODUCT.CODE.BY.IMAGE.NAME")), with(any(String.class)));
+            will(returnValue("PRODUCT2"));
+        }});
+
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, new IOProvider() {
+            @Override
+            public boolean supports(final String uri) {
+                return true;
+            }
+
+            @Override
+            public boolean exists(final String uri, final Map<String, Object> context) {
+                return new File(uri).exists();
+            }
+
+            @Override
+            public boolean isNewerThan(final String uriToCheck, final String uriToCheckAgainst, final Map<String, Object> context) {
+                return false;
+            }
+
+            @Override
+            public byte[] read(final String uri, final Map<String, Object> context) throws IOException {
+                return FileUtils.readFileToByteArray(new File(uri));
+            }
+
+            @Override
+            public void write(final String uri, final byte[] content, final Map<String, Object> context) throws IOException {
+                FileUtils.writeByteArrayToFile(new File(uri), content);
+            }
+
+            @Override
+            public void delete(final String uri, final Map<String, Object> context) throws IOException {
+                assertTrue(new File(uri).delete());
+            }
+        });
+
+        final String tmpFileName = "target/test/resources/some-seo-image-name_PRODUCT2.jpeg";
+
         byte[] image = Base64.decode(BASE64_ENCODED_JPEG_0);
-        imageService.addImageToRepository(tmpFileName, "PRODUCT2", image, StringUtils.EMPTY);
-        File destination = new File("P/PRODUCT2/some-seo-image-name_PRODUCT2.jpeg");
-        assertTrue(destination.exists());
+        final String saved1 = imageService.addImageToRepository(tmpFileName, "PRODUCT2", image, Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "target/");
+        final File destination1 = new File("target/product/P/PRODUCT2/" + saved1);
+        assertTrue(destination1.exists());
+
         image = Base64.decode(BASE64_ENCODED_JPEG_1);
-        imageService.addImageToRepository(tmpFileName, "PRODUCT2", image, StringUtils.EMPTY);
-        assertTrue(imageService.deleteImage(destination.getPath()));
-        assertFalse(destination.exists());
+        final String saved2 = imageService.addImageToRepository(tmpFileName, "PRODUCT2", image, Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "target/");
+        final File destination2 = new File("target/product/P/PRODUCT2/" + saved2);
+        assertTrue(imageService.deleteImage(destination2.getName(), Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "target/"));
+        assertTrue(destination1.exists());
+        assertFalse(destination2.exists());
     }
 }

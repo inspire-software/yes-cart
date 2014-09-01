@@ -19,6 +19,7 @@ package org.yes.cart.service.image.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.service.image.ImageNameStrategy;
 
@@ -39,15 +40,18 @@ public class BrandImageNameStrategyImplTest extends BaseCoreDBTestCase {
         super.setUp();
     }
 
+
     @Test
-    public void testGetFileName() {
-        assertEquals("1261644759_627724_russkaya-magiya.jpg",
-                imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg"));
-        assertEquals("1261644759_627724_russkaya-magiya.jpg",
-                imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4"));
-        assertEquals("1261644759_627724_russkaya-magiya.jpg",
-                imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4"));
-        assertEquals("1261644759_627724_russkaya-magiya.jpg",
-                imageNameStrategy.getFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4~!@#$%^&*()_+"));
+    public void testGetCodeFromActualObject() {
+
+        //test case to support file names without brand name code
+        assertEquals("PreorderCompany", imageNameStrategy.resolveObjectCode("brand.jpeg"));
+        assertEquals("PreorderCompany", imageNameStrategy.resolveObjectCode("imgvault/brand/brand.jpeg"));
+        assertEquals("PreorderCompany", imageNameStrategy.resolveObjectCode("imgvault/brand/brand.jpeg?w=10&h=4"));
+
+        // test that inexistent are resolved to no image
+        assertEquals(Constants.NO_IMAGE, imageNameStrategy.resolveObjectCode("imgvault/brand/unknown-brand.jpeg"));
+
     }
+
 }

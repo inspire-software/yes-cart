@@ -38,8 +38,6 @@ import org.yes.cart.web.service.ws.node.WarmUpService;
 
 import javax.jws.WebService;
 import javax.servlet.ServletContext;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -51,15 +49,11 @@ import java.util.List;
  */
 @WebService(endpointInterface = "org.yes.cart.web.service.ws.BackdoorService",
         serviceName = "BackdoorService")
-public class BackdoorServiceImpl implements BackdoorService, ApplicationContextAware, ServletContextAware {
+public class BackdoorServiceImpl implements BackdoorService {
 
     private static final long serialVersionUID = 20130820L;
 
     private ProductService productService;
-
-    private ApplicationContext applicationContext;
-
-    private ServletContext servletContext;
 
     private CacheManager cacheManager;
 
@@ -323,32 +317,4 @@ public class BackdoorServiceImpl implements BackdoorService, ApplicationContextA
         return productService.getGenericDao();
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getImageVaultPath() throws IOException {
-
-        /*final File ycsimg = new File(applicationContext.getResource("WEB-INF").getFile().getAbsolutePath()
-                + File.separator + ".." + File.separator + ".." + File.separator + "yes-shop"
-                + File.separator + "default" + File.separator + "imagevault" + File.separator); */
-
-        final File ycsimg = new File(servletContext.getRealPath("/default/imagevault/"));
-
-        return ycsimg.getAbsolutePath();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setServletContext(final ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
 }

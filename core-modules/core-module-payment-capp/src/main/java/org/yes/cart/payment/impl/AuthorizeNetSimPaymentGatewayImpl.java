@@ -195,27 +195,27 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
 
 
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getHiddenFiled("x_login", apiLoginId));
-        stringBuilder.append(getHiddenFiled("x_fp_sequence", x_fp_sequence));
-        stringBuilder.append(getHiddenFiled("x_fp_timestamp", x_fp_timestamp));
-        stringBuilder.append(getHiddenFiled("x_fp_hash", x_fp_hash));
-        stringBuilder.append(getHiddenFiled("x_version", "3.1"));
-        stringBuilder.append(getHiddenFiled("x_method", "CC"));
-        stringBuilder.append(getHiddenFiled("x_type", "AUTH_CAPTURE"));
-        stringBuilder.append(getHiddenFiled("x_amount", amountString));
-        stringBuilder.append(getHiddenFiled("x_show_form", "payment_form"));
-        stringBuilder.append(getHiddenFiled("x_test_request", getParameterValue(AN_TEST_REQUEST)));
+        stringBuilder.append(getHiddenField("x_login", apiLoginId));
+        stringBuilder.append(getHiddenField("x_fp_sequence", x_fp_sequence));
+        stringBuilder.append(getHiddenField("x_fp_timestamp", x_fp_timestamp));
+        stringBuilder.append(getHiddenField("x_fp_hash", x_fp_hash));
+        stringBuilder.append(getHiddenField("x_version", "3.1"));
+        stringBuilder.append(getHiddenField("x_method", "CC"));
+        stringBuilder.append(getHiddenField("x_type", "AUTH_CAPTURE"));
+        stringBuilder.append(getHiddenField("x_amount", amountString));
+        stringBuilder.append(getHiddenField("x_show_form", "payment_form"));
+        stringBuilder.append(getHiddenField("x_test_request", getParameterValue(AN_TEST_REQUEST)));
 
 
         //not mandatory parameters
-        stringBuilder.append(getHiddenFiled("x_invoice_num", StringUtils.substring(orderGuid.replace("-", ""), 20))); // limit to 20 chast lenght
-        stringBuilder.append(getHiddenFiled("x_description", StringUtils.defaultString(getParameterValue(AN_DESCRIPTION))));
+        stringBuilder.append(getHiddenField("x_invoice_num", StringUtils.substring(orderGuid.replace("-", ""), 20))); // limit to 20 chast lenght
+        stringBuilder.append(getHiddenField("x_description", StringUtils.defaultString(getParameterValue(AN_DESCRIPTION))));
 
 
-        stringBuilder.append(getHiddenFiled("x_relay_response", "TRUE"));
+        stringBuilder.append(getHiddenField("x_relay_response", "TRUE"));
 
 
-        stringBuilder.append(getHiddenFiled(ORDER_GUID, orderGuid));  // this will be bypassed via payment gateway to restore it latter
+        stringBuilder.append(getHiddenField(ORDER_GUID, orderGuid));  // this will be bypassed via payment gateway to restore it latter
 
 
         return stringBuilder.toString();

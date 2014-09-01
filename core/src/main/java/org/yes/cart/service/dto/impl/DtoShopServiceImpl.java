@@ -32,10 +32,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityShop;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.GenericService;
-import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
@@ -60,7 +57,7 @@ public class DtoShopServiceImpl
     private final DtoAttributeService dtoAttributeService;
     private final GenericDAO<AttrValueEntityShop, Long> attrValueEntityShopDao;
     private final ImageService imageService;
-
+    private final SystemService systemService;
 
 
     public DtoShopServiceImpl(
@@ -70,10 +67,12 @@ public class DtoShopServiceImpl
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityShop, Long> attrValueEntityShopDao,
             final ImageService imageService,
-            final AdaptersRepository adaptersRepository) {
+            final AdaptersRepository adaptersRepository,
+            final SystemService systemService) {
         super(dtoFactory, shopService, adaptersRepository);
 
         this.customerService = customerService;
+        this.systemService = systemService;
 
         this.attrValueAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(AttrValueShopDTO.class),
@@ -198,7 +197,7 @@ public class DtoShopServiceImpl
     public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityShop valueEntityShop = attrValueEntityShopDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityShop.getAttribute().getEtype().getBusinesstype())) {
-            imageService.deleteImage(valueEntityShop.getVal());
+            imageService.deleteImage(valueEntityShop.getVal(), "", systemService.getImageRepositoryDirectory());
         }
         attrValueEntityShopDao.delete(valueEntityShop);
         return valueEntityShop.getShop().getShopId();

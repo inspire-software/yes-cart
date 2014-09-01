@@ -37,6 +37,7 @@
 
     <import resource="classpath*:core-config.xml"/>
     <import resource="classpath*:core-persistence.xml"/>
+    <import resource="classpath*:core-io.xml"/>
     <import resource="classpath*:core-services.xml"/>
     <import resource="classpath*:store-services-commands.xml"/>
     <import resource="classpath*:websupport-webapp.xml"/>

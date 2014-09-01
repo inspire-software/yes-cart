@@ -284,7 +284,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      * {@inheritDoc}
      */
     public SeoImage getSeoImage(final String fileName) {
-        return imageService.getSeoImage(fileName);
+        return imageService.getSeoImage(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN + fileName);
     }
 
     /**

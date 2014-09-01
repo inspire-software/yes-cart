@@ -43,7 +43,7 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
     private DtoFactory dtoFactory;
     private DtoCategoryService dtoService;
     private DtoAttributeService dtoAttrService;
-    public static final int QTY = 7;
+    public static final int QTY = 8;
 
     @Before
     public void setUp() {

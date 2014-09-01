@@ -31,7 +31,7 @@ public class CategoryImageRetrieveStrategyAttributeImpl implements CategoryImage
     private final String attributeCode;
 
     /**
-     * Construct image retreive strategy
+     * Construct image retrieve strategy
      *
      * @param attributeCode attribute name
      */
@@ -56,7 +56,7 @@ public class CategoryImageRetrieveStrategyAttributeImpl implements CategoryImage
      * @return image repository url pattern
      */
     public String getImageRepositoryUrlPattern() {
-        return Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN;
+        return Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN;
     }
 
     /** {@inheritDoc} */

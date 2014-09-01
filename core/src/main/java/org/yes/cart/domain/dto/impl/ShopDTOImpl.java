@@ -50,9 +50,6 @@ public class ShopDTOImpl implements ShopDTO {
     @DtoField(value = "fspointer")
     private String fspointer;
 
-    @DtoField(value = "imageVaultFolder")
-    private String imageVaultFolder;
-
     @DtoField(value = "shopId", readOnly = true)
     private long shopId;
 
@@ -158,20 +155,6 @@ public class ShopDTOImpl implements ShopDTO {
      */
     public void setShopId(final long shopId) {
         this.shopId = shopId;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getImageVaultFolder() {
-        return imageVaultFolder;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setImageVaultFolder(final String imageVaultFolder) {
-        this.imageVaultFolder = imageVaultFolder;
     }
 
 
@@ -290,7 +273,6 @@ public class ShopDTOImpl implements ShopDTO {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", fspointer='" + fspointer + '\'' +
-                ", imageVaultFolder='" + imageVaultFolder + '\'' +
                 ", shopId=" + shopId +
                 '}';
     }

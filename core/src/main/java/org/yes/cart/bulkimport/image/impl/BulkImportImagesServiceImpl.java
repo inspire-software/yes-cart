@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.image.impl;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -56,7 +57,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
 
     private final String regExp;
 
-    private final String filePatterntRegExp;
+    private final String filePatternRegExp;
 
     /**
      * Construct bilk import service.
@@ -70,13 +71,13 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
                                        final AttributeService attributeService,
                                        final ImageService imageService,
                                        final String regExp,
-                                       final String filePatterntRegExp) {
+                                       final String filePatternRegExp) {
         this.genericDAO = genericDAO;
         this.attributeService = attributeService;
         this.imageService = imageService;
         this.regExp = regExp;
         this.pattern = Pattern.compile(regExp);
-        this.filePatterntRegExp = filePatterntRegExp;
+        this.filePatternRegExp = filePatternRegExp;
     }
 
     /**
@@ -98,7 +99,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
         LOG.info(info);
         File[] files = getFilesToImport(
                 importFolder,
-                filePatterntRegExp,
+                filePatternRegExp,
                 fileName);
         if (files != null) {
             info = MessageFormat.format(
@@ -126,7 +127,7 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
      *
      * @param file          file to import
      * @param statusListener error report
-     * @param importedFiles add file to this set if imported it successfuly imported.
+     * @param importedFiles add file to this set if imported it successfully imported.
      * @param pathToRepository path to image vault
      */
     public void doImport(final File file, final JobStatusListener statusListener, final Set<String> importedFiles, final String pathToRepository) {
@@ -140,7 +141,12 @@ public class BulkImportImagesServiceImpl extends AbstractImportService implement
             if (importRezult) {
                 try {
 
-                    String newFileName = imageService.addImageToRepository(file.getAbsolutePath(), code, pathToRepository);
+                    String newFileName = imageService.addImageToRepository(
+                            file.getName(),
+                            code,
+                            FileUtils.readFileToByteArray(file),
+                            Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, // TODO: YC-404 this should come from the image import descriptor
+                            pathToRepository);
                     final String info = MessageFormat.format(
                             "image {0} {1} added to image repository", file.getAbsolutePath(), newFileName);
                     statusListener.notifyMessage(info);
