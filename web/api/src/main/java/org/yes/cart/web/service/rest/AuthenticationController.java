@@ -18,6 +18,7 @@ package org.yes.cart.web.service.rest;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.ro.AuthenticationResultRO;
 import org.yes.cart.domain.ro.LoginRO;
 import org.yes.cart.domain.ro.RegisterRO;
+import org.yes.cart.domain.ro.TokenRO;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
@@ -44,6 +46,7 @@ import java.util.regex.Pattern;
  * Time: 14:46
  */
 @Controller
+@RequestMapping("/auth")
 public class AuthenticationController extends AbstractApiController  {
 
     @Autowired
@@ -52,7 +55,97 @@ public class AuthenticationController extends AbstractApiController  {
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
 
-    @RequestMapping(value = "/login", method = RequestMethod.PUT)
+    @RequestMapping(
+            value = "/check",
+            method = RequestMethod.PUT,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody AuthenticationResultRO check(final HttpServletRequest request,
+                                                      final HttpServletResponse response) {
+
+        final ShoppingCart cart = getCurrentCart();
+
+        switch (cart.getLogonState()) {
+            case ShoppingCart.LOGGED_IN:
+                return new AuthenticationResultRO(
+                    cart.getCustomerName(),
+                    new TokenRO(cart.getGuid()));
+            case ShoppingCart.SESSION_EXPIRED:
+                final AuthenticationResultRO auth = new AuthenticationResultRO(
+                        cart.getCustomerName(),
+                        new TokenRO(cart.getGuid()));
+                auth.setAuthenticated(false);
+                auth.setCode("SESSION_EXPIRED");
+                return auth;
+            case ShoppingCart.NOT_LOGGED:
+            default:
+                return new AuthenticationResultRO("AUTH_FAILED");
+
+        }
+
+    }
+
+    /**
+     * Interface: PUT /yes-api/rest/login
+     *
+     *
+     * Login interface that allows to authenticate user cart. The token for the authenticated cart is
+     * returned back as response header and also as a cookie.
+     *
+     *
+     * Parameters for login PUT operation
+     * ==================================
+     * JSON example:
+     * {
+     *    "username": "bob11@bob.com",
+     *    "password": "bBuyM-6-"
+     * }
+     *
+     * XML example:
+     * &lt;login&gt;
+     *    &lt;username&gt;bob11@bob.com&lt;/username&gt;
+     *    &lt;password&gt;bBuyM-6-&lt;/password&gt;
+     * &lt;/login&gt;
+     *
+     * Output
+     * ======
+     *
+     * JSON example (Accept=application/json):
+     * {
+     *    "success" : true,
+     *    "greeting" : "Bob Doe",
+     *    "tokenRO" : {
+     *        "uuid" : "1db8def2-21e0-44d2-aeb0-56baae761129"
+     *    },
+     *    "error" : null
+     * }
+     *
+     * XML example (Accept=application/xml):
+     * &lt;authentication-result&gt;
+     *    &lt;greeting&gt;Bob Doe&lt;/greeting&gt;
+     *    &lt;success&gt;true&lt;/success&gt;
+     *    &lt;token&gt;
+     *       &lt;uuid&gt;1db8def2-21e0-44d2-aeb0-56baae761129&lt;/uuid&gt;
+     *    &lt;/token&gt;
+     * &lt;/authentication-result&gt;
+     *
+     * Error codes
+     * ===========
+     * USER_FAILED      - user does not exist
+     * AUTH_FAILED      - user exists but credentials are not valid
+     *
+     *
+     * @param loginRO login parameters (see examples above)
+     * @param request request
+     * @param response response
+     *
+     * @return authentication result
+     */
+    @RequestMapping(
+            value = "/login",
+            method = RequestMethod.PUT,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
     public @ResponseBody AuthenticationResultRO login(final @RequestBody LoginRO loginRO,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
@@ -79,7 +172,55 @@ public class AuthenticationController extends AbstractApiController  {
     }
 
 
-    @RequestMapping(value = "/logout")
+    /**
+     * Interface: GET /yes-api/rest/logout
+     *
+     *
+     * Logout interface that allows to de-authenticate user cart. The token for the authenticated cart is
+     * returned back as response header and also as a cookie.
+     *
+     *
+     * Parameters for login PUT operation
+     * ==================================
+     * NONE
+     *
+     * Output
+     * ======
+     *
+     * JSON example (Accept=application/json):
+     * {
+     *    "success" : true,
+     *    "greeting" : "Bob Doe",
+     *    "tokenRO" : {
+     *        "uuid" : "1db8def2-21e0-44d2-aeb0-56baae761129"
+     *    },
+     *    "error" : null
+     * }
+     *
+     * XML example (Accept=application/xml):
+     * &lt;authentication-result&gt;
+     *    &lt;greeting&gt;Bob Doe&lt;/greeting&gt;
+     *    &lt;success&gt;true&lt;/success&gt;
+     *    &lt;token&gt;
+     *       &lt;uuid&gt;1db8def2-21e0-44d2-aeb0-56baae761129&lt;/uuid&gt;
+     *    &lt;/token&gt;
+     * &lt;/authentication-result&gt;
+     *
+     * Error codes
+     * ===========
+     * LOGOUT_SUCCESS   - if logout was successful
+     *
+     *
+     * @param request request
+     * @param response response
+     *
+     * @return authentication result
+     */
+    @RequestMapping(
+            value = "/logout",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
     public @ResponseBody AuthenticationResultRO logout(final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
@@ -101,7 +242,12 @@ public class AuthenticationController extends AbstractApiController  {
             Pattern.compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)",
             Pattern.CASE_INSENSITIVE);
 
-    @RequestMapping(value = "/register", method = RequestMethod.PUT)
+    @RequestMapping(
+            value = "/register",
+            method = RequestMethod.PUT,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+            consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
     public @ResponseBody AuthenticationResultRO register(final @RequestBody RegisterRO registerRO,
                                                          final HttpServletRequest request,
                                                          final HttpServletResponse response) {

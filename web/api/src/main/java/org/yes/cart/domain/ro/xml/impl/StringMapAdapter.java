@@ -30,20 +30,20 @@ import java.util.Map;
  * Date: 20/08/2014
  * Time: 10:56
  */
-public class I18nMapAdapter extends XmlAdapter<I18nMapAdapter.AdaptedMap, Map<String, String>> {
+public class StringMapAdapter extends XmlAdapter<StringMapAdapter.AdaptedMap, Map<String, String>> {
 
-    @XmlType(name = "i18n-map")
+    @XmlType(name = "string-map")
     public static class AdaptedMap {
 
         public List<Entry> entry = new ArrayList<Entry>();
 
     }
 
-    @XmlType(name = "value")
+    @XmlType(name = "entry")
     public static class Entry {
 
-        @XmlAttribute(name = "lang")
-        public String language;
+        @XmlAttribute(name = "key")
+        public String key;
 
         @XmlValue
         public String value;
@@ -55,7 +55,7 @@ public class I18nMapAdapter extends XmlAdapter<I18nMapAdapter.AdaptedMap, Map<St
         if (adaptedMap != null && adaptedMap.entry != null && !adaptedMap.entry.isEmpty()) {
             Map<String, String> map = new HashMap<String, String>();
             for(Entry entry : adaptedMap.entry) {
-                map.put(entry.language, entry.value);
+                map.put(entry.key, entry.value);
             }
             return map;
         }
@@ -68,7 +68,7 @@ public class I18nMapAdapter extends XmlAdapter<I18nMapAdapter.AdaptedMap, Map<St
             AdaptedMap adaptedMap = new AdaptedMap();
             for(Map.Entry<String, String> mapEntry : map.entrySet()) {
                 Entry entry = new Entry();
-                entry.language = mapEntry.getKey();
+                entry.key = mapEntry.getKey();
                 entry.value = mapEntry.getValue();
                 adaptedMap.entry.add(entry);
             }

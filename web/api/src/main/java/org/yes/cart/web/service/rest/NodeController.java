@@ -17,8 +17,10 @@
 package org.yes.cart.web.service.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.ro.NodeRO;
 import org.yes.cart.util.ShopCodeContext;
@@ -32,13 +34,17 @@ import org.yes.cart.web.service.ws.node.dto.Node;
  */
 @Controller
 @RequestMapping("/node")
-public class NodeController {
+public class NodeController extends AbstractApiController {
 
     @Autowired
     private NodeService nodeService;
 
 
-    @RequestMapping(value = "/")
+    @RequestMapping(
+            value = "",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
     public @ResponseBody NodeRO index() {
 
         final Node node = nodeService.getCurrentNode();

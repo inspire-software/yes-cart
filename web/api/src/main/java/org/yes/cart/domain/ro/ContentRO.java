@@ -37,8 +37,8 @@ import java.util.*;
  * Time: 23:44
  */
 @Dto
-@XmlRootElement(name = "category")
-public class CategoryRO implements Serializable {
+@XmlRootElement(name = "content")
+public class ContentRO implements Serializable {
 
     private static final long serialVersionUID = 20100717L;
 
@@ -50,12 +50,6 @@ public class CategoryRO implements Serializable {
 
     @DtoField(value = "rank")
     private int rank;
-
-    @DtoField(value = "productType.producttypeId", readOnly = true)
-    private Long productTypeId;
-
-    @DtoField(value = "productType.name", readOnly = true)
-    private String productTypeName;
 
     @DtoField(value = "name")
     private String name;
@@ -96,20 +90,6 @@ public class CategoryRO implements Serializable {
     @DtoField(value = "seo.displayMetadescription", converter = "i18nStringConverter")
     private Map<String, String> displayMetadescriptions;
 
-
-    @DtoField(value = "navigationByAttributes")
-    private Boolean navigationByAttributes;
-
-    @DtoField(value = "navigationByBrand")
-    private Boolean navigationByBrand;
-
-    @DtoField(value = "navigationByPrice")
-    private Boolean navigationByPrice;
-
-    @DtoField(value = "navigationByPriceTiers")
-    private String navigationByPriceTiers;
-
-
     @DtoCollection(
             value = "attributes",
             dtoBeanKey = "org.yes.cart.domain.ro.AttrValueCategoryRO",
@@ -121,15 +101,17 @@ public class CategoryRO implements Serializable {
     )
     private Set<AttrValueCategoryRO> attributes;
 
+    private String contentBody;
+
     private List<BreadcrumbRO> breadcrumbs = Collections.EMPTY_LIST;
 
-    @XmlElement(name = "product-type-name")
-    public String getProductTypeName() {
-        return productTypeName;
+    @XmlElement(name = "content-body")
+    public String getContentBody() {
+        return contentBody;
     }
 
-    public void setProductTypeName(final String productTypeName) {
-        this.productTypeName = productTypeName;
+    public void setContentBody(final String contentBody) {
+        this.contentBody = contentBody;
     }
 
     @XmlAttribute(name = "category-id")
@@ -166,15 +148,6 @@ public class CategoryRO implements Serializable {
 
     public void setRank(final int rank) {
         this.rank = rank;
-    }
-
-    @XmlAttribute(name = "product-type-id")
-    public Long getProductTypeId() {
-        return productTypeId;
-    }
-
-    public void setProductTypeId(final Long productTypeId) {
-        this.productTypeId = productTypeId;
     }
 
     public String getName() {
@@ -225,43 +198,6 @@ public class CategoryRO implements Serializable {
 
     public void setAvailableto(final Date availableto) {
         this.availableto = availableto;
-    }
-
-
-    @XmlAttribute(name = "navigation-by-attributes")
-    public Boolean getNavigationByAttributes() {
-        return navigationByAttributes;
-    }
-
-    public void setNavigationByAttributes(final Boolean navigationByAttributes) {
-        this.navigationByAttributes = navigationByAttributes;
-    }
-
-    @XmlAttribute(name = "navigation-by-brand")
-    public Boolean getNavigationByBrand() {
-        return navigationByBrand;
-    }
-
-    public void setNavigationByBrand(final Boolean navigationByBrand) {
-        this.navigationByBrand = navigationByBrand;
-    }
-
-    @XmlAttribute(name = "navigation-by-price")
-    public Boolean getNavigationByPrice() {
-        return navigationByPrice;
-    }
-
-    public void setNavigationByPrice(final Boolean navigationByPrice) {
-        this.navigationByPrice = navigationByPrice;
-    }
-
-    @XmlElement(name = "navigation-by-price-tiers")
-    public String getNavigationByPriceTiers() {
-        return navigationByPriceTiers;
-    }
-
-    public void setNavigationByPriceTiers(final String navigationByPriceTiers) {
-        this.navigationByPriceTiers = navigationByPriceTiers;
     }
 
     @XmlElement(name = "attribute-value")

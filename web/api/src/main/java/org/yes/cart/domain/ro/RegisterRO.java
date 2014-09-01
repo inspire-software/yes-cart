@@ -16,7 +16,12 @@
 
 package org.yes.cart.domain.ro;
 
+import org.yes.cart.domain.ro.xml.impl.StringMapAdapter;
+
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -30,6 +35,18 @@ public class RegisterRO {
     private String firstname;
     private String lastname;
     private String phone;
+    private Map<String, String> custom;
+
+    @XmlJavaTypeAdapter(StringMapAdapter.class)
+    @XmlElement(name = "custom")
+    public Map<String, String> getCustom() {
+        return custom;
+    }
+
+    public void setCustom(final Map<String, String> custom) {
+        this.custom = custom;
+    }
+
 
     public String getEmail() {
         return email;

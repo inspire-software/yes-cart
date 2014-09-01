@@ -18,9 +18,11 @@ package org.yes.cart.web.service.rest;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.ro.BreadcrumbRO;
@@ -29,7 +31,6 @@ import org.yes.cart.domain.ro.CategoryRO;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.DomainApiUtil;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.seo.BookmarkService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,25 +54,47 @@ public class CategoryController extends AbstractApiController {
     private BookmarkService bookmarkService;
 
 
-    @RequestMapping("/top")
-    public @ResponseBody List<CategoryRO> listRoot(final HttpServletRequest request,
-                                                   final HttpServletResponse response) {
+    private List<CategoryRO> listRootInternal() {
 
-        persistShoppingCart(request, response);
-        final List<Category> categories = categoryService.getTopLevelCategories(ShopCodeContext.getShopId());
+        final List<Category> categories = categoryService.getTopLevelCategories(getCurrentCart().getShoppingContext().getShopId());
         return map(categories, CategoryRO.class, Category.class);
 
     }
 
-    @RequestMapping(value = "/top", headers={ "Accept=application/xml" })
-    public @ResponseBody CategoryListRO listRootXML(final HttpServletRequest request,
-                                                    final HttpServletResponse response) {
 
-        return new CategoryListRO(listRoot(request, response));
+    @RequestMapping(
+            value = "/top",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public @ResponseBody List<CategoryRO> listRoot(final HttpServletRequest request,
+                                                   final HttpServletResponse response) {
+
+        persistShoppingCart(request, response);
+
+        return listRootInternal();
 
     }
 
-    @RequestMapping("/view/{id}")
+    @RequestMapping(
+            value = "/top",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_XML_VALUE
+    )
+    public @ResponseBody CategoryListRO listRootXML(final HttpServletRequest request,
+                                                    final HttpServletResponse response) {
+
+        persistShoppingCart(request, response);
+
+        return new CategoryListRO(listRootInternal());
+
+    }
+
+    @RequestMapping(
+            value = "/view/{id}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
     public @ResponseBody CategoryRO viewCategory(@PathVariable(value = "id") final String category,
                                                  final HttpServletRequest request,
                                                  final HttpServletResponse response) {
@@ -92,12 +115,7 @@ public class CategoryController extends AbstractApiController {
 
     }
 
-    @RequestMapping("/list/{id}")
-    public @ResponseBody List<CategoryRO> listCategory(@PathVariable(value = "id") final String category,
-                                                       final HttpServletRequest request,
-                                                       final HttpServletResponse response) {
-
-        persistShoppingCart(request, response);
+    private List<CategoryRO> listCategoryInternal(final String category) {
 
         final long categoryId = resolveId(category);
 
@@ -117,15 +135,35 @@ public class CategoryController extends AbstractApiController {
 
         }
         return new ArrayList<CategoryRO>();
+    }
+
+    @RequestMapping(
+            value = "/list/{id}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public @ResponseBody List<CategoryRO> listCategory(@PathVariable(value = "id") final String category,
+                                                       final HttpServletRequest request,
+                                                       final HttpServletResponse response) {
+
+        persistShoppingCart(request, response);
+
+        return listCategoryInternal(category);
 
     }
 
-    @RequestMapping(value = "/list/{id}", headers={ "Accept=application/xml" })
+    @RequestMapping(
+            value = "/list/{id}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_XML_VALUE
+    )
     public @ResponseBody CategoryListRO listCategoryXML(@PathVariable(value = "id") final String category,
                                                         final HttpServletRequest request,
                                                         final HttpServletResponse response) {
 
-        return new CategoryListRO(listCategory(category, request, response));
+        persistShoppingCart(request, response);
+
+        return new CategoryListRO(listCategoryInternal(category));
 
     }
 
