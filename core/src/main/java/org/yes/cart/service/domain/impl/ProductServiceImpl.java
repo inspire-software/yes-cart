@@ -25,7 +25,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.CollectionUtils;
-import org.yes.cart.constants.Constants;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
@@ -118,7 +118,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Cacheable(value = "productService-defaultImage")
     public String getDefaultImage(final Long productId) {
-        final Map<Long, String> images = proxy().getAllProductsAttributeValues(Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME);
+        final Map<Long, String> images = proxy().getAllProductsAttributeValues(AttributeNamesKeys.Product.PRODUCT_DEFAULT_IMAGE_ATTR_NAME);
         return images.get(productId);
     }
 

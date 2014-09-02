@@ -16,10 +16,9 @@
 
 package org.yes.cart.service.image.impl;
 
+import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueCategory;
-
-import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -33,14 +32,12 @@ public class CategoryImageNameStrategyImpl extends AbstractImageNameStrategyImpl
     /**
      * Construct image name strategy
      *
-     * @param urlPath URL path that identifies this strategy
      * @param relativeInternalRootDirectory  internal image relative path root directory without {@see File#separator}. E.g. "category"
      * @param attrValueCategoryDao           category attributes dao
      */
-    public CategoryImageNameStrategyImpl(final String urlPath,
-                                         final String relativeInternalRootDirectory,
+    public CategoryImageNameStrategyImpl(final String relativeInternalRootDirectory,
                                          final GenericDAO<AttrValueCategory, Long> attrValueCategoryDao) {
-        super(urlPath, relativeInternalRootDirectory);
+        super(Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory);
         this.attrValueEntityCategoryDao = attrValueCategoryDao;
     }
 

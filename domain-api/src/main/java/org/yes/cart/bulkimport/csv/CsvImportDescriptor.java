@@ -33,7 +33,7 @@ public interface CsvImportDescriptor extends ImportDescriptor {
 
 
     /**
-     * Get the import file decription.
+     * Get the import file description.
      *
      * @return {@link CsvImportFile}
      */

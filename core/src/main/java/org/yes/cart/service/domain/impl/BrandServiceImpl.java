@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.hibernate.Hibernate;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.service.domain.BrandService;
@@ -35,4 +36,19 @@ public class BrandServiceImpl extends BaseGenericServiceImpl<Brand> implements B
         super(brandDao);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Brand findByNameOrGuid(final String nameOrGuid) {
+
+        Brand brand = getGenericDao().findSingleByNamedQuery("BRAND.BY.NAME", nameOrGuid);
+        if (brand == null) {
+            brand = getGenericDao().findSingleByNamedQuery("BRAND.BY.GUID", nameOrGuid);
+        }
+        if (brand != null) {
+            Hibernate.initialize(brand.getAttributes());
+        }
+        return brand;
+
+    }
 }

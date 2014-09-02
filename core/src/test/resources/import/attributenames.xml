@@ -19,8 +19,6 @@
 
     <entity-type>org.yes.cart.domain.entity.Attribute</entity-type>
 
-    <import-directory>src/test/resources/import</import-directory>
-
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
         <file-name-mask>attributenames.csv</file-name-mask>

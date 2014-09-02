@@ -17,6 +17,7 @@
 package org.yes.cart.bulkimport.service.impl;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -24,12 +25,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.TaskExecutor;
-import org.yes.cart.bulkimport.service.BulkImportImagesService;
-import org.yes.cart.bulkimport.service.BulkImportService;
+import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.service.ImportDirectorService;
+import org.yes.cart.bulkimport.service.ImportService;
 import org.yes.cart.bulkimport.service.model.JobContextDecoratorImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
@@ -41,18 +41,20 @@ import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.stream.xml.XStreamProvider;
 import org.yes.cart.utils.impl.ZipUtils;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 import org.yes.cart.web.service.ws.node.NodeService;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Import Director class to perform import via {@link BulkImportService}
+ * Import Director class to perform import via {@link ImportService}
  * collect imported files and move it to archive folder.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
@@ -81,12 +83,15 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private final ZipUtils zipUtils;
 
+    private XStreamProvider<ImportDescriptor> importDescriptorXStreamProvider;
+
+
     /**
      * Construct the import director
      *
      * @param importDescriptors       import descriptors
-     * @param pathToArchiveFolder     path to archive folder.
      * @param pathToImportDescriptors path to use.
+     * @param pathToArchiveFolder     path to archive folder.
      * @param pathToImportFolder      path to use.
      * @param productService          product service
      * @param executor                async executor
@@ -95,8 +100,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      * @param zipUtils                zip algorithm
      */
     public ImportDirectorImplService(final Map<String, List<String>> importDescriptors,
-                                     final String pathToArchiveFolder,
                                      final String pathToImportDescriptors,
+                                     final String pathToArchiveFolder,
                                      final String pathToImportFolder,
                                      final ProductService productService,
                                      final TaskExecutor executor,
@@ -123,18 +128,12 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      */
     public void doImportInternal(final JobContext context) throws IOException {
         doDataImport(context);
-        doImageImport(context);
         moveImportFilesToArchive((Set<String>) context.getAttribute(JobContextKeys.IMPORT_FILE_SET));
     }
 
     /** {@inheritDoc} */
     public JobStatus getImportStatus(final String token) {
         return getStatus(token);
-    }
-
-    /** {@inheritDoc} */
-    public String doImport(final String descriptorGroup, final boolean async) {
-        return doImport(descriptorGroup, null, async);
     }
 
     /** {@inheritDoc} */
@@ -156,8 +155,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                     put(JobContextKeys.IMPORT_DESCRIPTOR_GROUP, descriptorGroup);
                     put(JobContextKeys.IMPORT_FILE, fileName);
                     put(JobContextKeys.IMPORT_FILE_SET, new HashSet<String>());
-                    put(JobContextKeys.IMPORT_DIRECTORY_ROOT, getOsAwarePath(pathToImportFolder));
                     put(JobContextKeys.IMAGE_VAULT_PATH, imgVault);
+                    put(JobContextKeys.IMPORT_DIRECTORY_ROOT, pathToImportFolder);
                     putAll(flex.getAttributes());
                 }}));
     }
@@ -207,11 +206,6 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         };
     }
 
-    private void doImageImport(final JobContext context) throws IOException {
-        final BulkImportImagesService bulkImportImagesService = getNewBulkImportImagesService();
-        bulkImportImagesService.doImport(context);
-    }
-
     private void doDataImport(final JobContext context) throws IOException {
         final List<String> descriptors = importDescriptors.get(context.getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_GROUP));
         if (descriptors == null) {
@@ -219,11 +213,23 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         }
         for (final String descriptor : descriptors) {
             final Resource res = applicationContext.getResource("WEB-INF/" + pathToImportDescriptors + "/" + descriptor);
-            final BulkImportService bulkImportService = getNewBulkImportService();
+
+            final ImportDescriptor descriptorObject = getImportDescriptorFromXML(res.getInputStream());
+            final String pathToImportRootDirectory = context.getAttribute(JobContextKeys.IMPORT_DIRECTORY_ROOT);
+            if (StringUtils.isNotBlank(pathToImportRootDirectory)) {
+                descriptorObject.setImportDirectory(pathToImportRootDirectory);
+            }
+
             final JobContext dataJob = new JobContextDecoratorImpl(context, new HashMap<String, Object>() {{
-                put(JobContextKeys.IMPORT_DESCRIPTOR_PATH, res.getFile().getAbsolutePath());
+                put(JobContextKeys.IMPORT_DESCRIPTOR, descriptorObject);
+                put(JobContextKeys.IMPORT_DESCRIPTOR_NAME, descriptor);
             }});
-            bulkImportService.doImport(dataJob);
+
+            if ("IMAGE".equals(descriptorObject.getEntityType())) {
+                getNewBulkImportImagesService().doImport(dataJob);
+            } else {
+                getNewBulkImportService().doImport(dataJob);
+            }
         }
     }
 
@@ -277,21 +283,49 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     /**
      * {@inheritDoc}
      */
+    public String getImportDirectory() {
+        return pathToImportFolder;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getArchiveDirectory() {
+        return pathToArchiveFolder;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+
+    /**
+     * IoC. XStream provider for import descriptor files.
+     *
+     * @param importDescriptorXStreamProvider xStream provider
+     */
+    public void setImportDescriptorXStreamProvider(final XStreamProvider importDescriptorXStreamProvider) {
+        this.importDescriptorXStreamProvider = importDescriptorXStreamProvider;
+    }
+
+    protected ImportDescriptor getImportDescriptorFromXML(InputStream is) {
+        return importDescriptorXStreamProvider.fromXML(is);
     }
 
     /**
      * @return IoC prototype instance
      */
-    public BulkImportService getNewBulkImportService() {
+    public ImportService getNewBulkImportService() {
         return null;
     }
 
     /**
      * @return IoC prototype instance
      */
-    public BulkImportImagesService getNewBulkImportImagesService() {
+    public ImportService getNewBulkImportImagesService() {
         return null;
     }
 }

@@ -19,8 +19,6 @@
 
     <entity-type>org.yes.cart.domain.entity.Shop</entity-type>
 
-    <import-directory></import-directory>
-
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
         <file-name-mask>shop(.*).csv(.*)</file-name-mask>
@@ -72,7 +70,6 @@
 
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.ShopUrl</entity-type>
-                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding/>
                     <file-name-mask/>

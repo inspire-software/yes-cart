@@ -19,8 +19,6 @@
 
     <entity-type>org.yes.cart.domain.entity.Category</entity-type>
 
-    <import-directory>src/test/resources/import</import-directory>
-
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
         <file-name-mask>contentnames.csv</file-name-mask>
@@ -100,7 +98,6 @@
             <name/>
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
-                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
                     <file-name-mask/>
@@ -132,7 +129,6 @@
             <name/>
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
-                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
                     <file-name-mask/>
@@ -164,7 +160,6 @@
             <name/>
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
-                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
                     <file-name-mask/>
@@ -196,7 +191,6 @@
             <name/>
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
-                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
                     <file-name-mask/>
@@ -228,7 +222,6 @@
             <name/>
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
-                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
                     <file-name-mask/>
@@ -260,7 +253,6 @@
             <name/>
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
-                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
                     <file-name-mask/>

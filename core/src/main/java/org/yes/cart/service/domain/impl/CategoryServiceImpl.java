@@ -504,6 +504,18 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    public Category findCategoryIdBySeoUriOrGuid(final String seoUriOrGuid) {
+
+        final Category category = getGenericDao().findSingleByNamedQuery("CATEGORY.BY.SEO.URI", seoUriOrGuid);
+        if (category == null) {
+            return getGenericDao().findSingleByNamedQuery("CATEGORY.BY.GUID", seoUriOrGuid);
+        }
+        return category;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<Category> findByProductId(final long productId) {
         return categoryDao.findByNamedQuery(
                 "CATEGORIES.BY.PRODUCTID",

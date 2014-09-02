@@ -18,6 +18,7 @@ package org.yes.cart.remote.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yes.cart.bulkimport.service.ImportDirectorService;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.remote.service.RemoteUploadService;
 
@@ -36,16 +37,18 @@ public class RemoteUploadServiceImpl implements RemoteUploadService {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoteUploadServiceImpl.class);
 
+    private final ImportDirectorService importDirectorService;
+
+    public RemoteUploadServiceImpl(final ImportDirectorService importDirectorService) {
+        this.importDirectorService = importDirectorService;
+    }
+
     /**
      * {@inheritDoc}
      */
     public String upload(final byte[] bytes, final String fileName) throws IOException {
 
-        final String folderPath = System.getProperty("java.io.tmpdir")
-                + File.separator
-                + "yes-cart"
-                + File.separator
-                + Constants.IMPORT_FOLDER;
+        final String folderPath = importDirectorService.getImportDirectory();
 
         final File folder = new File(folderPath);
         folder.mkdirs();

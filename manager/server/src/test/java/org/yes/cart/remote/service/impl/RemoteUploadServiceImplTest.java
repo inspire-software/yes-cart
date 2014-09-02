@@ -16,9 +16,14 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.yes.cart.bulkimport.service.ImportDirectorService;
 
 import java.io.File;
+import java.util.UUID;
 
 import static org.junit.Assert.assertTrue;
 
@@ -27,13 +32,21 @@ import static org.junit.Assert.assertTrue;
  * Date: 10/12/11
  * Time: 18:33
  */
-public class RemoteUploadServiceImplTest2 {
+public class RemoteUploadServiceImplTest {
+
+    private Mockery mockery = new JUnit4Mockery();
 
     @Test
     public void testUpload() throws Exception {
 
-        RemoteUploadServiceImpl remoteUploadService = new RemoteUploadServiceImpl();
-        String fullFileName = remoteUploadService.upload("some bytes".getBytes(), "filename.txt");
+        final ImportDirectorService importDirectorService = mockery.mock(ImportDirectorService.class);
+
+        mockery.checking(new Expectations() {{
+            one(importDirectorService).getImportDirectory(); will(returnValue(new File("target/uploadtest").getAbsolutePath()));
+        }});
+
+        RemoteUploadServiceImpl remoteUploadService = new RemoteUploadServiceImpl(importDirectorService);
+        String fullFileName = remoteUploadService.upload("some bytes".getBytes(), "filename" + UUID.randomUUID().toString() + ".txt");
         File file = new File(fullFileName);
         assertTrue(file.exists());
 

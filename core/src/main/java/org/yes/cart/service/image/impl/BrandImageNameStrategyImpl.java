@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.image.impl;
 
+import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueBrand;
 
@@ -33,14 +34,12 @@ public class BrandImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
     /**
      * Construct image name strategy
      *
-     * @param urlPath URL path that identifies this strategy
      * @param relativeInternalRootDirectory  internal image relative path root directory without {@see File#separator}. E.g. "brand"
      * @param attrValueBrandDao              brand attribute dao
      */
-    public BrandImageNameStrategyImpl(final String urlPath,
-                                      final String relativeInternalRootDirectory,
+    public BrandImageNameStrategyImpl(final String relativeInternalRootDirectory,
                                       final GenericDAO<AttrValueBrand, Long> attrValueBrandDao) {
-        super(urlPath, relativeInternalRootDirectory);
+        super(Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory);
         this.attrValueBrandDao = attrValueBrandDao;
     }
 

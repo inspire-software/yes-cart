@@ -16,7 +16,7 @@
 
 package org.yes.cart.bulkimport.service.impl;
 
-import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
+import org.yes.cart.bulkimport.model.ImportDescriptor;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -31,13 +31,13 @@ import java.util.regex.Pattern;
  */
 public class AbstractImportService {
 
-    protected File[] getFilesToImport(final CsvImportDescriptor importDescriptor, final String fileName) {
+    protected File[] getFilesToImport(final ImportDescriptor importDescriptor, final String fileName) {
         return getFilesToImport(importDescriptor.getImportDirectory(),
                 importDescriptor.getImportFileDescriptor().getFileNameMask(),
                 fileName);
     }
 
-    protected File[] getFilesToImport(final String importFolder, final String fileMaskRe, final String fileName) {
+    private File[] getFilesToImport(final String importFolder, final String fileMaskRe, final String fileName) {
         final FilenameFilter filenameFilter =
                 new AbstractImportService.RegexPatternFilenameFilter(fileMaskRe);
         final File importDirectory = new File(importFolder);
@@ -51,7 +51,7 @@ public class AbstractImportService {
      * @param fileName optional file name
      * @return the filtered file array
      */
-    protected File[] filterFiles(final File[] toFilter, final String fileName) {
+    private File[] filterFiles(final File[] toFilter, final String fileName) {
         if (fileName != null && toFilter != null) {
             final File fileAsFilter = new File(fileName);
             for (File file : toFilter) {

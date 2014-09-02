@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.hibernate.Hibernate;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
@@ -103,7 +104,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
      */
     @Cacheable(value = "attributeService-availableAttributesByProductTypeId")
     public List<Attribute> getAvailableAttributesByProductTypeId(final long productTypeId) {
-        return getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID", productTypeId);
+        return initBeforeCache(getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID", productTypeId));
     }
 
     /**
@@ -111,7 +112,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
      */
     @Cacheable(value = "attributeService-availableImageAttributesByGroupCode")
     public List<Attribute> getAvailableImageAttributesByGroupCode(final String attributeGroupCode) {
-        return getGenericDao().findByNamedQuery("PRODUCTS.IMAGE.ATTRIBUTE.BY.GROUP.CODE", attributeGroupCode);
+        return initBeforeCache(getGenericDao().findByNamedQuery("PRODUCTS.IMAGE.ATTRIBUTE.BY.GROUP.CODE", attributeGroupCode));
     }
 
     /**
@@ -119,7 +120,20 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
      */
     @Cacheable(value = "attributeService-availableAttributesByGroupCodeStartsWith")
     public List<Attribute> getAvailableAttributesByGroupCodeStartsWith(final String attributeGroupCode, final String codePrefix) {
-        return getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.GROUP.CODE.LIKE.CODE", attributeGroupCode, codePrefix + "%");
+        return initBeforeCache(getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.GROUP.CODE.LIKE.CODE", attributeGroupCode, codePrefix + "%"));
+    }
+
+    /*
+     * Need to initialise attributes that we put into cache.
+     */
+    private List<Attribute> initBeforeCache(final List<Attribute> dbList) {
+        if (dbList != null) {
+            for (final Attribute attr : dbList) {
+                Hibernate.initialize(attr.getEtype());
+                Hibernate.initialize(attr.getAttributeGroup());
+            }
+        }
+        return dbList;
     }
 
     /**

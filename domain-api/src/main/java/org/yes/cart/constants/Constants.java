@@ -81,17 +81,6 @@ public interface Constants {
      */
     String NO_IMAGE = "noimage.jpeg";
 
-    /**
-     * Default image attribute name.
-     */
-    String PRODUCT_IMAGE_ATTR_NAME_PREFIX = "IMAGE";
-
-
-    /**
-     * Default image attribute name.
-     */
-    String PRODUCT_DEFAULT_IMAGE_ATTR_NAME = PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0";
-
 
     /**
      * Image height.
@@ -115,15 +104,5 @@ public interface Constants {
 
 
     long ROOT_CATEGORY_ID = 100L;
-
-
-    String IMPORT_FOLDER = "import";
-    String ARCHIVE_FOLDER = "archive";
-
-
-
-
-    long DEFAULT_EXPIRATION_TIMEOUT = 3L; //minutes
-
 
 }
