@@ -198,9 +198,8 @@
     <bean id="categoryImageNameStrategy" parent="txProxyTemplate">
         <property name="target">
             <bean  class="org.yes.cart.service.image.impl.CategoryImageNameStrategyImpl">
-                <constructor-arg index="0" value="/imgvault/category/"/>
-                <constructor-arg index="1" value="category"/>
-                <constructor-arg index="2" ref="attrValueEntityCategoryDao"/>
+                <constructor-arg index="0" value="category"/>
+                <constructor-arg index="1" ref="attrValueEntityCategoryDao"/>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -215,10 +214,9 @@
     <bean id="productImageNameStrategy" parent="txProxyTemplate">
         <property name="target">
             <bean  class="org.yes.cart.service.image.impl.ProductImageNameStrategyImpl">
-                <constructor-arg index="0" value="/imgvault/product/"/>
-                <constructor-arg index="1" value="product"/>
-                <constructor-arg index="2" ref="attrValueEntityProductSkuDao"/>
-                <constructor-arg index="3" ref="attrValueEntityProductDao"/>
+                <constructor-arg index="0" value="product"/>
+                <constructor-arg index="1" ref="attrValueEntityProductSkuDao"/>
+                <constructor-arg index="2" ref="attrValueEntityProductDao"/>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -232,9 +230,8 @@
     <bean id="brandImageNameStrategy" parent="txProxyTemplate">
         <property name="target">
             <bean  class="org.yes.cart.service.image.impl.BrandImageNameStrategyImpl">
-                <constructor-arg index="0" value="/imgvault/brand/"/>
-                <constructor-arg index="1" value="brand"/>
-                <constructor-arg index="2" ref="attrValueEntityBrandDao"/>
+                <constructor-arg index="0" value="brand"/>
+                <constructor-arg index="1" ref="attrValueEntityBrandDao"/>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -1520,19 +1517,42 @@
             <bean  class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl" scope="prototype">
                 <property name="genericDAO" ref="genericDao"/>
                 <property name="extendedConversionService" ref="extendedConversionService"/>
-                <property name="importDescriptorXStreamProvider" ref="importDescriptorXStreamProvider"/>
             </bean>
         </property>
     </bean>
 
-    <bean id="bulkImportImageService" parent="txProxyTemplate">
+    <bean id="categoryImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.CategoryImageImportDomainObjectStrategyImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+        <constructor-arg index="1" ref="attributeService"/>
+    </bean>
+
+    <bean id="brandImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.BrandImageImportDomainObjectStrategyImpl">
+        <constructor-arg index="0" ref="brandService"/>
+        <constructor-arg index="1" ref="attributeService"/>
+    </bean>
+
+    <bean id="productImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductImageImportDomainObjectStrategyImpl">
+        <constructor-arg index="0" ref="productService"/>
+        <constructor-arg index="1" ref="attributeService"/>
+    </bean>
+
+    <bean id="productSkuImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductSkuImageImportDomainObjectStrategyImpl">
+        <constructor-arg index="0" ref="productSkuService"/>
+        <constructor-arg index="1" ref="attributeService"/>
+    </bean>
+
+    <bean id="imagesBulkImportService" parent="txProxyTemplate">
         <property name="target">
-            <bean  class="org.yes.cart.bulkimport.image.impl.BulkImportImagesServiceImpl" scope="prototype">
-                <constructor-arg index="0" ref="genericDao"/>
-                <constructor-arg index="1" ref="attributeService"/>
-                <constructor-arg index="2" ref="imageService"/>
-                <constructor-arg index="3" value="_([.[^_]]*)_[a-z]\.(jpe?g|png)$"/>
-                <constructor-arg index="4" value="(.*)\.(jpe?g|png)"/>
+            <bean  class="org.yes.cart.bulkimport.image.impl.ImagesBulkImportServiceImpl" scope="prototype">
+                <constructor-arg index="0" ref="imageService"/>
+                <constructor-arg index="1">
+                    <array>
+                        <ref bean="productImageImportDomainObjectStrategy"/>
+                        <ref bean="productSkuImageImportDomainObjectStrategy"/>
+                        <ref bean="categoryImageImportDomainObjectStrategy"/>
+                        <ref bean="brandImageImportDomainObjectStrategy"/>
+                    </array>
+                </constructor-arg>
             </bean>
         </property>
     </bean>

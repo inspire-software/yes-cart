@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  *
- * Import Director class to perform import via {@link org.yes.cart.bulkimport.service.BulkImportService}
+ * Import Director class to perform import via {@link org.yes.cart.bulkimport.service.ImportService}
  *   collect imported files and move it to archive folder.
 
  * User: Igor Azarny iazarny@yahoo.com
@@ -37,13 +37,18 @@ public interface ImportDirectorService {
     List<String> getImportGroups();
 
     /**
-     * Perform bulk import.
-     * @param descriptorGroup descriptor group marker
-     * @param async if true then perform asynchronous import
-     * @return status object token
+     * Absolute path to import directory.
+     *
+     * @return path to import
      */
-    String doImport(String descriptorGroup, boolean async);
+    String getImportDirectory();
 
+    /**
+     * Absolute path to archive directory.
+     *
+     * @return path to archive
+     */
+    String getArchiveDirectory();
 
     /**
      * Perform bulk import.

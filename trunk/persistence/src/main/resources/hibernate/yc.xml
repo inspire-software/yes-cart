@@ -2806,6 +2806,12 @@
        ]]>
     </query>
 
+    <query name="CATEGORY.BY.GUID">
+        <![CDATA[
+                  select c from CategoryEntity c  where c.guid = ?1
+       ]]>
+    </query>
+
     <query name="CATEGORY.BY.SEO.URI">
         <![CDATA[
                   select c from CategoryEntity c  where c.seoInternal.uri = ?1
@@ -2884,6 +2890,12 @@
     <query name="BRAND.BY.NAME">
         <![CDATA[
                  select b from BrandEntity b  where b.name =?1
+        ]]>
+    </query>
+
+    <query name="BRAND.BY.GUID">
+        <![CDATA[
+                 select b from BrandEntity b  where b.guid =?1
         ]]>
     </query>
 

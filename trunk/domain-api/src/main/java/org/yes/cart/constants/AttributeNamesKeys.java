@@ -179,6 +179,14 @@ public interface AttributeNamesKeys {
          */
         String PRODUCT_DESCRIPTION_PREFIX = "PRODUCT_DESCRIPTION_";
 
+        /**
+         * Default image attribute name.
+         */
+        String PRODUCT_IMAGE_ATTR_NAME_PREFIX = "IMAGE";
+        /**
+         * Default image attribute name.
+         */
+        String PRODUCT_DEFAULT_IMAGE_ATTR_NAME = PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0";
     }
 
     interface Shop {
@@ -187,6 +195,15 @@ public interface AttributeNamesKeys {
          * Admin email in particular shop.
          */
         String SHOP_ADMIN_EMAIL = "SHOP_ADMIN_EMAIL";
+
+    }
+
+    interface Brand {
+
+        /**
+         * Default Brand image.
+         */
+        String BRAND_IMAGE = "BRAND_IMAGE";
 
     }
 
@@ -200,9 +217,6 @@ public interface AttributeNamesKeys {
      * Supported by shop currencies.
      */
     String SUPPORTED_CURRENCIES = "CURRENCY";
-
-
-    String BRAND_IMAGE = "BRAND_IMAGE";
 
 
     /**

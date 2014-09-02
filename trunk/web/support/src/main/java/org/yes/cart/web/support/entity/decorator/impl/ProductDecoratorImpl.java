@@ -41,12 +41,12 @@ import java.util.*;
 public class ProductDecoratorImpl extends ProductEntity implements ProductDecorator, Serializable {
 
     private final static List<String> attrNames = new ArrayList<String>() {{
-        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
-        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "1");
-        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "2");
-        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "3");
-        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "4");
-        add(Constants.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "5");
+        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
+        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "1");
+        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "2");
+        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "3");
+        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "4");
+        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "5");
     }};
 
     final static  String [] defaultSize =
@@ -277,7 +277,7 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      * {@inheritDoc}
      */
     public String getDefaultImageAttributeName() {
-        return Constants.PRODUCT_DEFAULT_IMAGE_ATTR_NAME;
+        return AttributeNamesKeys.Product.PRODUCT_DEFAULT_IMAGE_ATTR_NAME;
     }
 
     /**

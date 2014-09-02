@@ -541,6 +541,7 @@
     </bean>
 
     <bean id="remoteUploadService" class="org.yes.cart.remote.service.impl.RemoteUploadServiceImpl">
+        <constructor-arg index="0" ref="bulkImportService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="upload" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
@@ -681,6 +682,15 @@
                         <value>productcategorynames.xml</value>
                     </list>
                 </entry>
+                <entry key="YC DEMO: Product images (IceCat)">
+                    <!--
+                        This is the same as regular product and SKU image import but separate
+                        directory starting with YC DEMO makes it explicit to "new" users.
+                      -->
+                    <list>
+                        <value>productimages.xml</value>
+                    </list>
+                </entry>
                 <entry key="Catalog import (Categories and attribute definitions)">
                     <list>
                         <value>brandnames.xml</value>
@@ -713,19 +723,27 @@
                         <value>promotioncouponnames.xml</value>
                     </list>
                 </entry>
-                <entry key="IMAGES ONLY">
-                    <!--
-                        Images are always scanned so if we have no descriptor it is image
-                        only import
-                      -->
-                    <list/>
-                </entry>
                 <entry key="Content">
                     <!--
                         Content import to upload static content for shops.
                     -->
                     <list>
                         <value>contentnames.xml</value>
+                    </list>
+                </entry>
+                <entry key="Images: Products and SKU">
+                    <list>
+                        <value>productimages.xml</value>
+                    </list>
+                </entry>
+                <entry key="Images: Category and Content">
+                    <list>
+                        <value>categoryimages.xml</value>
+                    </list>
+                </entry>
+                <entry key="Images: Brands">
+                    <list>
+                        <value>brandimages.xml</value>
                     </list>
                 </entry>
                 <entry key="Shops and Warehouses">
@@ -737,8 +755,8 @@
                 </entry>
             </map>
         </constructor-arg>
-        <constructor-arg index="1" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'archive'}"/>
-        <constructor-arg index="2" value="import-descriptor"/>
+        <constructor-arg index="1" value="import-descriptor"/>
+        <constructor-arg index="2" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'archive'}"/>
         <constructor-arg index="3" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'import'}"/>
         <constructor-arg index="4" ref="productService"/>
         <constructor-arg index="5" ref="bulkImportExecutor"/>
@@ -749,9 +767,10 @@
                 <constructor-arg index="0" value="Cp866"/>       <!--CPOINT-->
             </bean>
         </constructor-arg>
+        <property name="importDescriptorXStreamProvider" ref="importDescriptorXStreamProvider"/>
 
         <lookup-method name="getNewBulkImportService" bean="csvBulkImportService"/>
-        <lookup-method name="getNewBulkImportImagesService" bean="bulkImportImageService"/>
+        <lookup-method name="getNewBulkImportImagesService" bean="imagesBulkImportService"/>
 
 
         <flex:remoting-destination/>

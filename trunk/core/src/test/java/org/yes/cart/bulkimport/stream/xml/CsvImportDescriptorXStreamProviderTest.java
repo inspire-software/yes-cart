@@ -45,7 +45,7 @@ public class CsvImportDescriptorXStreamProviderTest {
 
         assertNotNull(desc);
         assertEquals("org.yes.cart.domain.entity.Attribute", desc.getEntityType());
-        assertEquals("src/test/resources/import", desc.getImportDirectory());
+        assertNull(desc.getImportDirectory());
         assertNotNull(desc.getImportFileDescriptor());
 
         assertEquals("UTF-8", desc.getImportFileDescriptor().getFileEncoding());

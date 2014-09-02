@@ -61,7 +61,12 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
             xStream.alias("import-descriptor", CsvImportDescriptorImpl.class);
             xStream.addDefaultImplementation(CsvImportDescriptorImpl.class, ImportDescriptor.class);
             xStream.aliasField("entity-type", CsvImportDescriptorImpl.class, "entityType");
-            xStream.aliasField("import-directory", CsvImportDescriptorImpl.class, "importDirectory");
+            /*
+                "import-directory" is resolved by the ImportDirectorService and set programmatically, sice we
+                have dependency on uploading mechanism and also some import directory internals.
+                Therefore we leave this property to internals (not config)
+             */
+            // xStream.aliasField("import-directory", CsvImportDescriptorImpl.class, "importDirectory");
             xStream.aliasField("select-sql", CsvImportDescriptorImpl.class, "selectSql");
             xStream.aliasField("insert-sql", CsvImportDescriptorImpl.class, "insertSql");
 

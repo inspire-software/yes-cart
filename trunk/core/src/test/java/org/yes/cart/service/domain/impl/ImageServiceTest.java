@@ -61,7 +61,7 @@ public class ImageServiceTest {
     private IOProvider ioProvider = mockery.mock(IOProvider.class);
     private GenericDAO<SeoImage, Long> seoImageDao = mockery.mock(GenericDAO.class, "seoImageDao");
     private GenericDAO<AttrValueProduct, Long> productDao = mockery.mock(GenericDAO.class, "productDao");
-    private ImageNameStrategy imageNameStrategy = new ProductImageNameStrategyImpl(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "product", null, productDao);
+    private ImageNameStrategy imageNameStrategy = new ProductImageNameStrategyImpl("product", null, productDao);
 
 
     @Test

@@ -19,8 +19,6 @@
 
     <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
 
-    <import-directory></import-directory>
-
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
         <file-name-mask>productskuattributes(.*).csv(.*)</file-name-mask>

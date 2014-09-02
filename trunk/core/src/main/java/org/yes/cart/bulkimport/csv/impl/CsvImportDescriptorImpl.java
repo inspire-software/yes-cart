@@ -107,7 +107,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
      * Set the {@link org.yes.cart.bulkimport.model.ImportFile}
      * for more detals.
      *
-     * @param importFileDescriptor import file decriptor.
+     * @param importFileDescriptor import file descriptor.
      */
     protected void setImportFileDescriptor(CsvImportFile importFileDescriptor) {
         this.importFileDescriptor = importFileDescriptor;
