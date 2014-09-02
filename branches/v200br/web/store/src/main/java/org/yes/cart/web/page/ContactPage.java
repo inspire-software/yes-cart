@@ -46,7 +46,13 @@ public class ContactPage  extends AbstractWebPage {
 
         executeHttpPostedCommands();
         add(
-                new StandardFooter(FOOTER)
+                new StandardFooter(FOOTER){
+                    @Override
+                    public String getVariation() {
+                        return getLocale().getLanguage();
+                    }
+                }
+
         ).add(
                 new StandardHeader(HEADER)
         ).add(
