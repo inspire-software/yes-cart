@@ -352,6 +352,20 @@
     <cache name="customerService-customerByEmail" maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="themeService-themeChainByShopId" maxElementsInMemory="20" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="themeService-markupChainByShopId" maxElementsInMemory="20" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="themeService-mailTemplateChainByShopId" maxElementsInMemory="20" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="themeService-mailTemplate" maxElementsInMemory="300" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="themeService-mailResource" maxElementsInMemory="300" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <!-- ############################################# hibernate entity cache #######################################-->
 

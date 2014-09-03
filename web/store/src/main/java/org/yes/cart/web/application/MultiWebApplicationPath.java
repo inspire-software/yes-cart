@@ -16,10 +16,7 @@
 
 package org.yes.cart.web.application;
 
-import org.apache.wicket.util.file.File;
-import org.apache.wicket.util.file.Folder;
 import org.apache.wicket.util.file.IResourcePath;
-import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.UrlResourceStream;
 import org.apache.wicket.util.string.StringList;
@@ -41,9 +38,6 @@ public class MultiWebApplicationPath   implements IResourcePath {
     /** The list of urls in the path */
     private final List<String> webappPaths = new ArrayList<String>();
 
-    /** The list of folders in the path */
-    private final List<Folder> folders = new ArrayList<Folder>();
-
     /** The web apps servlet context */
     private final ServletContext servletContext;
 
@@ -64,24 +58,15 @@ public class MultiWebApplicationPath   implements IResourcePath {
      */
     public void add(String path)
     {
-        // TODO: YC-420 Unify all themes into a separate module  (IOProvider)
-        final Folder folder = new Folder(path);
-        if (folder.exists())
+        if (!path.startsWith("/"))
         {
-            folders.add(folder);
+            path = "/" + path;
         }
-        else
+        if (!path.endsWith("/"))
         {
-            if (!path.startsWith("/"))
-            {
-                path = "/" + path;
-            }
-            if (!path.endsWith("/"))
-            {
-                path += "/";
-            }
-            webappPaths.add(path);
+            path += "/";
         }
+        webappPaths.add(path);
     }
 
     private static final String RESOURCE_EXTENSION = "properties.xml";
@@ -92,21 +77,10 @@ public class MultiWebApplicationPath   implements IResourcePath {
      */
     public IResourceStream find(final Class<?> clazz, final String pathname)
     {
-        final Logger log = ShopCodeContext.getLog(this);
-
-        if (!folders.isEmpty()) {
-            for (final Folder folder : folders) {
-                final File file = new File(folder, pathname);
-                if (file.exists()) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Retrieving file resource: {}", file.getAbsolutePath());
-                    }
-                    return new FileResourceStream(file);
-                }
-            }
-        }
-
         if (!webappPaths.isEmpty()) {
+
+            final Logger log = ShopCodeContext.getLog(this);
+
             for (final String path : webappPaths) {
                 try {
                     final URL url = servletContext.getResource(path + pathname);
@@ -126,22 +100,8 @@ public class MultiWebApplicationPath   implements IResourcePath {
                     }
                 }
             }
-        }
+            if (pathname.endsWith(RESOURCE_EXTENSION)) {
 
-        if (pathname.endsWith(RESOURCE_EXTENSION)) {
-            if (!folders.isEmpty()) {
-                for (final Folder folder : folders) {
-                    final File file = new File(folder, getShopResourceFile(pathname));
-                    if (file.exists()) {
-                        if (log.isDebugEnabled()) {
-                            log.debug("Retrieving file resource: {}", file.getAbsolutePath());
-                        }
-                        return new FileResourceStream(file);
-                    }
-                }
-            }
-
-            if (!webappPaths.isEmpty()) {
                 for (final String path : webappPaths) {
                     final String resourceName = getShopResourceFile(pathname);
                     try {
@@ -191,8 +151,7 @@ public class MultiWebApplicationPath   implements IResourcePath {
      */
     @Override
     public String toString()  {
-        return "[folders = " + StringList.valueOf(folders) + ", webappPaths: " +
-            StringList.valueOf(webappPaths) + "]";
+        return "[theme chain = " + StringList.valueOf(webappPaths) + "]";
     }
 
 }

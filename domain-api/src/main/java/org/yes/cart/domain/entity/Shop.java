@@ -178,14 +178,6 @@ public interface Shop extends Auditable, Seoable, Codable {
 
 
     /**
-     * TODO: YC-416 Unify all mail templates into a separate module
-     * TODO: This is standard directory - no need for this getter
-     * Get mail folder.
-     * @return folder with mail
-     */
-    String getMailFolder();
-
-    /**
      * Get default shop url. localhost will never be return.
      * @return  default shop url
      */

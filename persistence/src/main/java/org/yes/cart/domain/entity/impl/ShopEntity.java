@@ -268,17 +268,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return markupFolder;
     }
 
-    private String mailFolder = null;
-
-    public String getMailFolder() {
-        if (mailFolder == null) {
-            synchronized (this) {
-                mailFolder = "/" + fspointer + "/mail";
-            }
-        }
-        return mailFolder;
-    }
-
     public String getDefaultShopUrl() {
         for (ShopUrl shopUrl : getShopUrl()) {
             if (shopUrl.getUrl().endsWith("localhost") || shopUrl.getUrl().contains("127.0.0.1")) {

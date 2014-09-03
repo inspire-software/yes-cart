@@ -8,9 +8,8 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.service.order.OrderEvent;
+import org.yes.cart.service.theme.ThemeService;
 
-import javax.servlet.ServletContext;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,17 +21,20 @@ import java.util.Map;
  * Date: 10/20/12
  * Time: 11:07 AM
  */
-public abstract class BaseOrderStateAspect extends  BaseNotificationAspect  {
+public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
 
-    private ServletContext servletContext;
+    private final ThemeService themeService;
 
     /**
      * Construct base notification aspect class.
      *
-     * @param taskExecutor to use
+     * @param taskExecutor async executor to use
+     * @param themeService theme resolution
      */
-    public BaseOrderStateAspect(final TaskExecutor taskExecutor) {
+    public BaseOrderStateAspect(final TaskExecutor taskExecutor,
+                                final ThemeService themeService) {
         super(taskExecutor);
+        this.themeService = themeService;
     }
 
     /**
@@ -62,11 +64,11 @@ public abstract class BaseOrderStateAspect extends  BaseNotificationAspect  {
                 map.put(StandardMessageListener.CUSTOMER_EMAIL, emailAddr);
                 map.put(StandardMessageListener.RESULT, true);
                 map.put(StandardMessageListener.ROOT, customerOrder);
-                // TODO: YC-416 Unify all mail templates into a separate module
-                map.put(StandardMessageListener.TEMPLATE_FOLDER, servletContext.getRealPath(customerOrder.getShop().getMailFolder()) + File.separator);
+                map.put(StandardMessageListener.TEMPLATE_FOLDER, themeService.getMailTemplateChainByShopId(customerOrder.getShop().getShopId()));
                 map.put(StandardMessageListener.SHOP, customerOrder.getShop());
                 map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
                 map.put(StandardMessageListener.TEMPLATE_NAME, emailTemplateName);
+                map.put(StandardMessageListener.LOCALE, customerOrder.getLocale());
 
                 if (orderEvent.getCustomerOrderDelivery() != null) {
                     final CustomerOrderDelivery delivery = orderEvent.getCustomerOrderDelivery();
@@ -103,13 +105,6 @@ public abstract class BaseOrderStateAspect extends  BaseNotificationAspect  {
 
         fillNotificationParameters( orderEvent, emailTempateName, null, emailsAddresses);
 
-    }
-
-
-
-    /** {@inheritDoc} */
-    public void setServletContext(final ServletContext servletContext) {
-        this.servletContext = servletContext;
     }
 
 }
