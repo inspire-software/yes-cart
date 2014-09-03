@@ -1297,12 +1297,21 @@ h2.resp-accordion:first-child {
     text-align: left;
 }
 
+.text-justify {
+    text-align: justify;
+}
+
 .text-90p {
     font-size: 90%;
 }
 
 .width-100p {
     width: 100%;
+}
+
+ul.list li{
+    list-style: circle;
+    margin-left: 30px;
 }
 
 /* --------------------------------------------- */
@@ -1325,3 +1334,8 @@ h2.resp-accordion:first-child {
     border-radius: 5px;
 }
 
+/* ------------------- social ------------------- */
+
+.a2a_kit{
+    margin-top: 15px;
+}
