@@ -53,6 +53,11 @@
                         <entry key="default" value="org.yes.cart.web.page.HomePage"/>
                     </map>
                 </entry>
+                <entry key="/ajaxatb">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.AjaxAtbPage"/>
+                    </map>
+                </entry>
                 <entry key="/login">
                     <map>
                         <entry key="default" value="org.yes.cart.web.page.LoginPage"/>
@@ -131,6 +136,7 @@
         <constructor-arg index="3">
             <list>
                 <value>/</value>
+                <value>/ajaxatb</value>
                 <value>/cart</value>
             </list>
         </constructor-arg>
