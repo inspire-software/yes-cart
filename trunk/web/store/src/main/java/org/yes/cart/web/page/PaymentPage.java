@@ -123,40 +123,29 @@ public class PaymentPage extends AbstractWebPage {
             mparam.putAll(param);
             mparam.put(PaymentMiscParam.CLIENT_IP, ApplicationDirector.getShopperIPAddress());
 
-            result = paymentProcessFacade.pay(
-                    ApplicationDirector.getShoppingCart(),
-                    mparam
-            );
+            final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
-            if (result) {
-                addOrReplace(
-                        createPositiveResultFragment()
-                );
+            if (cart.getCartItemsCount() > 0) {
+                result = paymentProcessFacade.pay(cart, mparam);
+                if (result) {
+                    addOrReplace(createPositiveResultFragment());
 
-            }   else {
-                addOrReplace(
-                        createNegativePaymentResultFragment()
-                );
+                } else {
+                    addOrReplace(createNegativePaymentResultFragment());
+                }
+            } else {
+               addOrReplace(createNeutralResultFragment());
             }
 
 
         } catch (OrderItemAllocationException e) {
 
-
-            addOrReplace(
-                    createNegativeItemAllocationResultFragment(e.getProductSkuCode())
-            );
-
+            addOrReplace(createNegativeItemAllocationResultFragment(e.getProductSkuCode()));
             result = false;
 
         } catch (OrderException e) {
 
-
-
-            addOrReplace(
-                    createNegativePaymentResultFragment()
-            );
-
+            addOrReplace(createNegativePaymentResultFragment());
             result = false;
         }
 
@@ -257,6 +246,15 @@ public class PaymentPage extends AbstractWebPage {
      */
     private MarkupContainer createPositiveResultFragment() {
         info(getLocalizer().getString(POSITIVE_PAYMENT_NOTES, this));
+        return new Fragment(RESULT_CONTAINER, POSITIVE_RESULT_FRAGMENT, this);
+    }
+
+
+    /**
+     * Neutral result (e.g. if someone changes locale on this page - then there is nothing to check).
+     * @return neutral result fragment.
+     */
+    private MarkupContainer createNeutralResultFragment() {
         return new Fragment(RESULT_CONTAINER, POSITIVE_RESULT_FRAGMENT, this);
     }
 

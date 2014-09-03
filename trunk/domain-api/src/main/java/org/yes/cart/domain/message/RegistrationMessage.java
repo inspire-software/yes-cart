@@ -17,6 +17,7 @@
 package org.yes.cart.domain.message;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,16 +30,60 @@ import java.util.Set;
  */
 public interface RegistrationMessage extends Serializable {
 
+    /**
+     * Email or the person registered.
+     *
+     * @return email
+     */
     String getEmail();
 
+    /**
+     * Email or the person registered.
+     *
+     * @param email email
+     */
     void setEmail(String email);
 
+    /**
+     * Registration shop PK.
+     *
+     * @return shop PK
+     */
     long getShopId();
 
+    /**
+     * Registration shop PK.
+     *
+     * @param shopId shop PK
+     */
     void setShopId(long shopId);
 
+    /**
+     * Locale used when registering.
+     *
+     * @return locale
+     */
+    String getLocale();
+
+    /**
+     * Locale used when registering.
+     *
+     * @param locale locale
+     */
+    void setLocale(String locale);
+
+    /**
+     * Password for new account.
+     *
+     * @return password
+     */
     String getPassword();
 
+    /**
+     * Password for new account.
+     *
+     * @param password password
+     */
     void setPassword(String password);
 
     /**
@@ -72,15 +117,17 @@ public interface RegistrationMessage extends Serializable {
     /**
      * Get path to template folder.
      * Example /some/path/shop/mailtemplates/ must hold folders with concrete templates
+     *
      * @return path to template folder.
      */
-    String getPathToTemplateFolder();
+    List<String> getMailTemplatePathChain();
 
     /**
      * Set path to template folder.
-     * @param pathToTemplateFolder  path to template folder.
+     *
+     * @param mailTemplatePathChain  path to template folder.
      */
-    public void setPathToTemplateFolder(String pathToTemplateFolder);
+    public void setMailTemplatePathChain(List<String> mailTemplatePathChain);
 
 
     /**

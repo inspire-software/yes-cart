@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.mail.impl;
 
+import org.apache.commons.io.IOUtils;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -24,22 +25,17 @@ import org.junit.runner.RunWith;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.yes.cart.domain.entity.Mail;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.impl.MailEntity;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.service.mail.MailComposer;
+import org.yes.cart.service.mail.MailTemplateResourcesProvider;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -52,16 +48,13 @@ import static org.junit.Assert.*;
 public class MailComposerImplTest {
 
     private Mockery mockery = new JUnit4Mockery();
-    private SystemService systemService = mockery.mock(SystemService.class);
-    private ShopService shopService = mockery.mock(ShopService.class);
-    private Shop shop = mockery.mock(Shop.class);
 
     @Test
     public void testMerge$style() throws ClassNotFoundException, IOException {
         String template = "$name lives...somewhere in time.";
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("name", "Bender");
-        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null);
         String result = mailComposer.merge(template, model);
         assertEquals("Bender lives...somewhere in time.", result);
     }
@@ -69,7 +62,7 @@ public class MailComposerImplTest {
     @Test
     public void testMergeJspStyle() throws ClassNotFoundException, IOException {
         String template = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
-        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null);
         String result = mailComposer.merge(template, createModel());
         assertEquals("Bender lives in theme park with blackjack poetess ", result);
     }
@@ -77,14 +70,14 @@ public class MailComposerImplTest {
     @Test
     public void testMergeGroovyStyle() throws ClassNotFoundException, IOException {
         String template = "<% def deliverySum = 1.23456789; deliverySum = deliverySum.setScale(2, BigDecimal.ROUND_HALF_UP); out.print(deliverySum); %>";
-        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null);
         String result = mailComposer.merge(template, createModel());
         assertEquals("1.23", result);
     }
 
     @Test
     public void testGetResourcesId() throws ClassNotFoundException {
-        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null);
         //'cid:identifier1234' "cid:id" 'cid:ident' "cid:identifier5678"
         List<String> rez = mailComposer.getResourcesId("'cid:identifier1234' \"cid:id\" 'cid:ident' \"cid:identifier5678\"");
         assertEquals(4, rez.size());
@@ -92,23 +85,6 @@ public class MailComposerImplTest {
         assertEquals("id", rez.get(1));
         assertEquals("ident", rez.get(2));
         assertEquals("identifier5678", rez.get(3));
-    }
-
-    @Test
-    public void getPathToTemplate() throws ClassNotFoundException {
-        mockery.checking(new Expectations() {{
-            // allowing(systemService).getMailResourceDirectory();
-            // will(returnValue("/a/b/c/"));
-            allowing(shopService).getShopByCode("SHOIP1");
-            will(returnValue(shop));
-            allowing(shop).getMailFolder();
-            will(returnValue("/a/b/c/default/"));
-        }});
-        MailComposerImpl mailComposer = new MailComposerImpl(systemService, shopService);
-        assertEquals(("/a/b/c/default" + File.separator + "priceReduced" + File.separator).replace("\\", "/"),
-                (mailComposer.getPathToTemplate("SHOIP1", "priceReduced")).replace("\\", "/"));
-
-        mockery.assertIsSatisfied();
     }
 
     @Test
@@ -120,8 +96,8 @@ public class MailComposerImplTest {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
         String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
-        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, createModel());
+        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "en", "test", createModel());
         assertTrue(helper.isMultipart());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
@@ -144,8 +120,8 @@ public class MailComposerImplTest {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
         String htmlTemplate = null;
-        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, createModel());
+        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "en", "test", createModel());
         assertTrue(helper.isMultipart());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
@@ -167,8 +143,8 @@ public class MailComposerImplTest {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         String textTemplate = null;
         String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
-        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, null, createModel());
+        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "en", "test", createModel());
         assertTrue(helper.isMultipart());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
@@ -180,20 +156,33 @@ public class MailComposerImplTest {
 
     @Test
     public void testComposeMimeMessageInternalFullIntegration() throws MessagingException, IOException, ClassNotFoundException {
+
+        final MailTemplateResourcesProvider mailTemplateResourcesProvider = mockery.mock(MailTemplateResourcesProvider.class);
+
         mockery.checking(new Expectations() {{
-            allowing(systemService).getMailResourceDirectory();
-            will(returnValue("src/test/resources/mailtemplates/"));
+            one(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "en", "imtest", ".txt");
+            will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.txt")), "UTF-8")));
+            one(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "en", "imtest", ".html");
+            will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.html")), "UTF-8")));
+            one(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "en", "imtest", ".properties");
+            will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.properties")), "UTF-8")));
+            one(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "en", "imtest", "test.gif");
+            will(returnValue(IOUtils.toByteArray(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/resources/test.gif")))));
+            one(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "en", "imtest", "test.jpeg");
+            will(returnValue(IOUtils.toByteArray(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/resources/test.jpeg")))));
         }});
+
         // of course you would use DI in any real-world cases
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setHost("localhost");
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        MailComposer mailComposer = new MailComposerImpl(systemService, null);
+        MailComposerImpl mailComposer = new MailComposerImpl(mailTemplateResourcesProvider);
         mailComposer.composeMessage(
                 message,
                 null,
-                "src/test/resources/mailtemplates/default/",
+                "en",
+                Arrays.asList("default/mail/"),
                 "imtest",
                 "test@localhost.lo",
                 "to@somedomain.com",
@@ -233,8 +222,8 @@ public class MailComposerImplTest {
         sender.setHost("localhost");
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-        mailComposer.composeMessage(helper, textTemplate, null, null, map);
+        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        mailComposer.composeMessage(helper, textTemplate, null, Collections.EMPTY_LIST, "en", "test", map);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
         String str = byteArrayOutputStream.toString("UTF-8");
@@ -249,8 +238,8 @@ public class MailComposerImplTest {
         final Mail mail = new MailEntity();
         String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
         String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
-        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-        mailComposer.composeMessage(mail, textTemplate, htmlTemplate, null, createModel());
+        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        mailComposer.composeMessage(mail, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "en", "test", createModel());
 
         String strTxt = mail.getTextVersion();
         assertNotNull(strTxt);
@@ -269,8 +258,8 @@ public class MailComposerImplTest {
         final Mail mail = new MailEntity();
         String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
         String htmlTemplate = null;
-        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-        mailComposer.composeMessage(mail, textTemplate, htmlTemplate, null, createModel());
+        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        mailComposer.composeMessage(mail, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "en", "test", createModel());
 
         String strTxt = mail.getTextVersion();
         assertNotNull(strTxt);
@@ -288,8 +277,8 @@ public class MailComposerImplTest {
         final Mail mail = new MailEntity();
         String textTemplate = null;
         String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
-        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
-        mailComposer.composeMessage(mail, textTemplate, htmlTemplate, null, createModel());
+        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        mailComposer.composeMessage(mail, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "en", "test", createModel());
 
 
         String strTxt = mail.getTextVersion();
@@ -301,16 +290,29 @@ public class MailComposerImplTest {
 
     @Test
     public void testComposeMailEntityInternalFullIntegration() throws MessagingException, IOException, ClassNotFoundException {
+
+        final MailTemplateResourcesProvider mailTemplateResourcesProvider = mockery.mock(MailTemplateResourcesProvider.class);
+
         mockery.checking(new Expectations() {{
-            allowing(systemService).getMailResourceDirectory();
-            will(returnValue("src/test/resources/mailtemplates/"));
+            one(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "en", "imtest", ".txt");
+            will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.txt")), "UTF-8")));
+            one(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "en", "imtest", ".html");
+            will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.html")), "UTF-8")));
+            one(mailTemplateResourcesProvider).getTemplate(Arrays.asList("default/mail/"), "en", "imtest", ".properties");
+            will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/imtest.properties")), "UTF-8")));
+            one(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "en", "imtest", "test.gif");
+            will(returnValue(IOUtils.toByteArray(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/resources/test.gif")))));
+            one(mailTemplateResourcesProvider).getResource(Arrays.asList("default/mail/"), "en", "imtest", "test.jpeg");
+            will(returnValue(IOUtils.toByteArray(new FileInputStream(new File("src/test/resources/mailtemplates/default/imtest/resources/test.jpeg")))));
         }});
+
         final Mail mail = new MailEntity();
-        MailComposer mailComposer = new MailComposerImpl(systemService, null);
+        MailComposerImpl mailComposer = new MailComposerImpl(mailTemplateResourcesProvider);
         mailComposer.composeMessage(
                 mail,
                 "SHOP10",
-                "src/test/resources/mailtemplates/default/",
+                "en",
+                Arrays.asList("default/mail/"),
                 "imtest",
                 "test@localhost.lo",
                 "to@somedomain.com",
@@ -353,7 +355,7 @@ public class MailComposerImplTest {
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        MailComposerImpl mailComposer = new MailComposerImpl(null, null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null);
         mailComposer.convertMessage(mail, message);
 
         assertTrue(helper.isMultipart());

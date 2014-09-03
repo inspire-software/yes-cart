@@ -215,7 +215,10 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "shopService-shopCategories",
             "shopService-shopCategoriesIds",
             "shopService-shopWarehouses",
-            "shopService-shopWarehousesIds"
+            "shopService-shopWarehousesIds",
+            "themeService-themeChainByShopId",
+            "themeService-markupChainByShopId",
+            "themeService-mailTemplateChainByShopId"
     }, allEntries = true)
     public Shop update(Shop instance) {
         return super.update(instance);
@@ -230,7 +233,10 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "shopService-shopCategories",
             "shopService-shopCategoriesIds",
             "shopService-shopWarehouses",
-            "shopService-shopWarehousesIds"
+            "shopService-shopWarehousesIds",
+            "themeService-themeChainByShopId",
+            "themeService-markupChainByShopId",
+            "themeService-mailTemplateChainByShopId"
     }, allEntries = true)
     public void delete(Shop instance) {
         super.delete(instance);

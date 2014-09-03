@@ -19,6 +19,7 @@ package org.yes.cart.domain.message.impl;
 
 import org.yes.cart.domain.message.RegistrationMessage;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,10 +32,11 @@ public class RegistrationMessageImpl implements RegistrationMessage {
 
     private static final long serialVersionUID = 20100824L;
 
-    private long    shopId = 0L;
-    private String  shopCode;
-    private String  shopName;
-    private String  shopMailFrom;
+    private long   shopId = 0L;
+    private String locale;
+    private String shopCode;
+    private String shopName;
+    private String shopMailFrom;
     private Set<String> shopUrl;
 
 
@@ -42,7 +44,7 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     private String firstname;
     private String lastname;
     private String password;
-    private String pathToTemplateFolder;
+    private List<String> mailTemplatePathChain;
     private String templateName;
 
 
@@ -57,13 +59,13 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     }
 
     /** {@inheritDoc} */
-    public String getPathToTemplateFolder() {
-        return pathToTemplateFolder;
+    public List<String> getMailTemplatePathChain() {
+        return mailTemplatePathChain;
     }
 
     /** {@inheritDoc} */
-    public void setPathToTemplateFolder(final String pathToTemplateFolder) {
-        this.pathToTemplateFolder = pathToTemplateFolder;
+    public void setMailTemplatePathChain(final List<String> mailTemplatePathChain) {
+        this.mailTemplatePathChain = mailTemplatePathChain;
     }
 
     /** {@inheritDoc} */
@@ -104,6 +106,16 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     /** {@inheritDoc} */
     public void setPassword(final String password) {
         this.password = password;
+    }
+
+    /** {@inheritDoc} */
+    public String getLocale() {
+        return locale;
+    }
+
+    /** {@inheritDoc} */
+    public void setLocale(final String locale) {
+        this.locale = locale;
     }
 
     /** {@inheritDoc} */
@@ -163,7 +175,7 @@ public class RegistrationMessageImpl implements RegistrationMessage {
                 ", email='" + email + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
-                ", pathToTemplateFolder='" + pathToTemplateFolder + '\'' +
+                ", pathToTemplateFolder='" + mailTemplatePathChain + '\'' +
                 ", templateName='" + templateName + '\'' +
                 '}';
     }

@@ -22,7 +22,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.ProductSku;
@@ -31,6 +30,7 @@ import org.yes.cart.service.domain.*;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderItemAllocationException;
+import org.yes.cart.service.theme.ThemeService;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -44,7 +44,7 @@ import java.util.Map;
  * Time: 12:21 AM
  */
 @Aspect
-public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect implements ServletContextAware {
+public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
     private static final Logger LOG = LoggerFactory.getLogger(OrderStateChangeListenerAspect.class);
 
@@ -73,10 +73,11 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect implem
                                           final CustomerService customerService,
                                           final CustomerOrderService customerOrderService,
                                           final ShopService shopService,
+                                          final ThemeService themeService,
                                           final ProductSkuService productSkuService,
                                           final Map<String, String> shopperTemplates,
                                           final Map<String, String> adminTemplates) {
-        super(taskExecutor);
+        super(taskExecutor, themeService);
         this.mailService = mailService;
         this.mailComposer = mailComposer;
         this.customerService = customerService;

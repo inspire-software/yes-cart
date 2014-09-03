@@ -1177,16 +1177,16 @@
     </bean>
 
 
+    <!-- ############################# ExtendedConversionService ################################# -->
 
-
-
-    <!-- ########################################### ExtendedConversionService ################################# -->
     <bean id="extendedConversionService" class="org.yes.cart.utils.impl.ExtendedConversionService"/>
 
+    <!-- ########################################### Mail ######################################## -->
+
+    <bean id="mailTemplateResourcesProvider" class="org.yes.cart.service.mail.impl.MailTemplateResourcesProviderImpl"/>
 
     <bean id="mailComposer" class="org.yes.cart.service.mail.impl.MailComposerImpl">
-        <constructor-arg index="0" ref="systemService"/>
-        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="0" ref="mailTemplateResourcesProvider"/>
     </bean>
 
     <!-- ############################# Shopping Cart Commands and Events ######################### -->
@@ -1467,6 +1467,10 @@
     </bean>
 
     <!-- ############################################ misc ####################################### -->
+
+    <bean id="themeService" class="org.yes.cart.service.theme.impl.ThemeServiceImpl">
+        <constructor-arg index="0" ref="shopService"/>
+    </bean>
 
     <bean id="pluralFormService" class="org.yes.cart.service.misc.impl.PluralFormServiceImpl"/>
 

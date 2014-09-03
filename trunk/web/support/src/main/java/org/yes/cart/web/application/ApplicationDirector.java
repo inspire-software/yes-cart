@@ -46,7 +46,6 @@ public class ApplicationDirector implements ApplicationContextAware {
     private static ThreadLocal<Shop> shopThreadLocal = new ThreadLocal<Shop>();
     private static ThreadLocal<List<String>> currentThemeChainThreadLocal = new ThreadLocal<List<String>>();
     private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
-    private static ThreadLocal<String> mailTemplatePathThreadLocal = new ThreadLocal<String>();
     private static ThreadLocal<String> shopperIPAddressThreadLocal = new ThreadLocal<String>();
 
     private static final Map<String, List<String>> chainCache = new ConcurrentHashMap<String, List<String>>();
@@ -94,25 +93,6 @@ public class ApplicationDirector implements ApplicationContextAware {
     public Shop getShopByDomainName(final String serverDomainName) {
         return shopService.getShopByDomainName(serverDomainName);
     }
-
-    /**
-     * Get current mail template folder.
-     *
-     * @return current mail template folder.
-     */
-    public static String getCurrentMailTemplateFolder() {
-        return mailTemplatePathThreadLocal.get();
-    }
-
-    /**
-     * Set current mail template folder.
-     *
-     * @param currentMailTemplateFolder current mail template folder.
-     */
-    public static void setCurrentMailTemplateFolder(final String currentMailTemplateFolder) {
-        mailTemplatePathThreadLocal.set(currentMailTemplateFolder);
-    }
-
 
 
     /**
@@ -206,7 +186,6 @@ public class ApplicationDirector implements ApplicationContextAware {
     public static void clear() {
         shopThreadLocal.set(null);
         shoppingCartThreadLocal.set(null);
-        mailTemplatePathThreadLocal.set(null);
         shopperIPAddressThreadLocal.set(null);
         currentThemeChainThreadLocal.set(null);
     }

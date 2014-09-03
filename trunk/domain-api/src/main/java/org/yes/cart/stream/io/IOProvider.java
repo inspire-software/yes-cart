@@ -32,9 +32,9 @@ public interface IOProvider {
     /**
      * Simple check to determine if IOProvider supports given URI.
      *
-     * @param uri uri to perfrom read/write operation on.
+     * @param uri uri to perform read/write operation on.
      *
-     * @return true if this IOprovider capable of handling given uri
+     * @return true if this IO provider capable of handling given uri
      */
     boolean supports(String uri);
 
