@@ -37,6 +37,7 @@ import org.yes.cart.web.page.component.product.ImageView;
 import org.yes.cart.web.page.component.product.ProductAssociationsView;
 import org.yes.cart.web.page.component.product.SkuAttributesView;
 import org.yes.cart.web.page.component.product.SkuListView;
+import org.yes.cart.web.page.component.social.AddAnyButton;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.ObjectDecorator;
@@ -89,7 +90,10 @@ public class SkuCentralView extends AbstractCentralView {
      * Add single item to cart label
      */
     private final static String ADD_TO_WISHLIST_LINK_LABEL = "addToWishListLinkLabel";
-
+    /**
+     * AddToAny social button
+     */
+    private final static String SOCIAL_ADD_TO_ANY_BUTTON = "addToAnyButton";
     /**
      * Product sku code
      */
@@ -243,7 +247,8 @@ public class SkuCentralView extends AbstractCentralView {
                 new Label(PRODUCT_NAME_LABEL2, decorator.getName(selectedLocale))
         ).add(
                 new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false)
-        );
+        ).add(
+                new AddAnyButton(SOCIAL_ADD_TO_ANY_BUTTON, product));
 
         final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), sku);
 
