@@ -38,7 +38,7 @@
     <entry key="sale">Розпродаж</entry>
     <entry key="newArrivals">Нові надходження</entry>
     <entry key="addToCart">В кошик</entry>
-    <entry key="preorderCart">Резерв</entry>
+    <entry key="preorderCart">Замовити</entry>
     <entry key="skuCode">Код</entry>
 
     <!-- CheckoutPage -->
