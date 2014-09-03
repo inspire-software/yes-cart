@@ -33,12 +33,12 @@ public class LocalFileSystemIOProviderImplTest {
 
 
     private void assertOsSpecificPathMatch(final String expected, final String actual) {
-        final Pattern pattern = Pattern.compile("^(([a-zA-Z]{1}:" + expected + ")||(" + expected + "))$");
+        final Pattern pattern = Pattern.compile("^(([a-zA-Z]{1}:" + expected.replace("\\", "\\\\") + ")||(" + expected.replace("\\", "\\\\") + "))$");
         assertTrue("Path '" + actual + "' does not match '" + expected + "'", pattern.matcher(actual).matches());
     }
 
     private void assertOsSpecificPathNoMatch(final String expected, final String actual) {
-        final Pattern pattern = Pattern.compile("^(([a-zA-Z]{1}:" + expected + ")||(" + expected + "))$");
+        final Pattern pattern = Pattern.compile("^(([a-zA-Z]{1}:" + expected.replace("\\", "\\\\") + ")||(" + expected.replace("\\", "\\\\") + "))$");
         assertFalse("Path '" + actual + "' does not match '" + expected + "'", pattern.matcher(actual).matches());
     }
 
