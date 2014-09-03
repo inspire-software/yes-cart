@@ -41,6 +41,9 @@
     <entry key="preorderCart">Preorder</entry>
     <entry key="skuCode">Code</entry>
 
+    <!-- AjaxAtbPage -->
+    <entry key="itemAdded">item {0} successfully added to the cart</entry>
+
     <!-- CheckoutPage -->
     <entry key="addressStep">Billing &amp; Shipping Address</entry>
     <entry key="shipMethodStep">Shipping Method</entry>

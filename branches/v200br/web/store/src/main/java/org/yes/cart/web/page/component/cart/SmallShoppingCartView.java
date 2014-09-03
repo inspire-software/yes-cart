@@ -17,7 +17,7 @@
 package org.yes.cart.web.page.component.cart;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -30,6 +30,7 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
+import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
 
@@ -77,6 +78,7 @@ public class SmallShoppingCartView extends BaseComponent {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         final Integer itemsInCart = cart.getCartItemsCount();
         final SkuPrice skuPrice = priceService.getGenericDao().getEntityFactory().getByIface(SkuPrice.class);
+        final String linkTarget = getLinkTarget();
         skuPrice.setRegularPrice(cart.getTotal().getSubTotal());
         skuPrice.setCurrency(cart.getCurrencyCode());
         skuPrice.setQuantity(BigDecimal.ONE);
@@ -96,9 +98,9 @@ public class SmallShoppingCartView extends BaseComponent {
         );
 
         add(
-                new BookmarkablePageLink<ShoppingCartPage>(
+                new ExternalLink(
                         CART_LINK,
-                        ShoppingCartPage.class
+                        linkTarget
                 )
                         .add(
                                 new PriceView(
@@ -119,6 +121,14 @@ public class SmallShoppingCartView extends BaseComponent {
         );
 
         super.onBeforeRender();
+    }
+
+    private String getLinkTarget() {
+
+        if (getPage() instanceof ShoppingCartPage) {
+            return WicketUtil.getHttpServletRequest().getContextPath() + "/checkout";
+        }
+        return WicketUtil.getHttpServletRequest().getContextPath() + "/cart";
     }
 
     /**

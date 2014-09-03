@@ -41,6 +41,9 @@
     <entry key="preorderCart">Замовити</entry>
     <entry key="skuCode">Код</entry>
 
+    <!-- AjaxAtbPage -->
+    <entry key="itemAdded">товар {0} успішно додано до кошика</entry>
+
     <!-- CheckoutPage -->
     <entry key="addressStep">Адреса для рахунку та доставки</entry>
     <entry key="shipMethodStep">Спосіб доставки</entry>

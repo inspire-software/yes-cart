@@ -41,6 +41,9 @@
     <entry key="preorderCart">Резерв</entry>
     <entry key="skuCode">Код</entry>
 
+    <!-- AjaxAtbPage -->
+    <entry key="itemAdded">продукт {0} успешно добавлен в корзину</entry>
+
     <!-- CheckoutPage -->
     <entry key="addressStep">Адреса для счета и доставки</entry>
     <entry key="shipMethodStep">Метод доставки</entry>
