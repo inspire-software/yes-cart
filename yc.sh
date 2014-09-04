@@ -37,7 +37,7 @@ show_help() {
     echo "  i3rd      - setup necessary artifacts 3rd     ";
     echo "              party artifacts for maven         ";
     echo "                                                ";
-    echo "  cpclient  - copy swf (from target) to webapps ";
+    echo "  cpres     - copy extra resources to webapps   ";
     echo "                                                ";
     echo "  dbimysql  - initialise db for mysql           ";
     echo "                                                ";
@@ -82,14 +82,23 @@ add_mvn_extra_dep() {
 
 }
 
-cp_client_to_webapp() {
+cp_resources_to_webapp() {
 
     echo "================================================";
-    echo " Copy SWF client to webapps                     ";
+    echo " Copy resources to webapps                      ";
     echo "================================================";
 
-    echo " copying... $YC_HOME/manager/client/target/ShopManagerApplication.swf";
-    cp $YC_HOME/manager/client/target/ShopManagerApplication.swf  $YC_HOME/manager/server/src/main/webapp/ShopManagerApplication.swf
+    echo " copying resources... manager/server";
+    cd $YC_HOME/manager/server
+    $MVN validate -Ptemplates
+
+    echo " copying resources... web/store";
+    cd $YC_HOME/web/store
+    $MVN validate -Ptemplates
+
+    echo " copying resources... web/api";
+    cd $YC_HOME/web/api
+    $MVN validate -Ptemplates
 
 }
 
@@ -323,10 +332,10 @@ then
         add_mvn_extra_dep;
         cd $RUNDIR
         exit 0;
-    elif [ $1 = "cpclient" ];
+    elif [ $1 = "cpres" ];
     then
         cd $YC_HOME
-        cp_client_to_webapp;
+        cp_resources_to_webapp;
         cd $RUNDIR
         exit 0;
     elif [ $1 = "dbimysql" ];
