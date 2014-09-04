@@ -211,6 +211,55 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>templates</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <artifactId>maven-resources-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>copy-mail-themes</id>
+                                    <phase>validate</phase>
+                                    <goals>
+                                        <goal>copy-resources</goal>
+                                    </goals>
+                                    <configuration>
+                                        <outputDirectory>${basedir}/target/yes-manager</outputDirectory>
+                                        <resources>
+                                            <resource>
+                                                <directory>${basedir}/../../theme/mail/src/main/resources</directory>
+                                            </resource>
+                                        </resources>
+                                    </configuration>
+                                </execution>
+                                <execution>
+                                    <id>copy-client-swf</id>
+                                    <phase>validate</phase>
+                                    <goals>
+                                        <goal>copy-resources</goal>
+                                    </goals>
+                                    <configuration>
+                                        <outputDirectory>${basedir}/target/yes-manager</outputDirectory>
+                                        <resources>
+                                            <resource>
+                                                <directory>${basedir}/../client/target</directory>
+                                                <includes>
+                                                    <include>en_US/**</include>
+                                                    <include>ru_RU/**</include>
+                                                    <include>uk_UK/**</include>
+                                                </includes>
+                                            </resource>
+                                        </resources>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
     </profiles>
 
     <build>
@@ -218,10 +267,8 @@
 
         <pluginManagement>
             <plugins>
-
                 <plugin>
                     <artifactId>maven-war-plugin</artifactId>
-
                     <configuration>
                         <!--<resourceEncoding>${project.build.sourceEncoding}</resourceEncoding>-->
                         <nonFilteredFileExtensions>
@@ -238,22 +285,17 @@
                                 </includes>
                             </resource>
                             <resource>
-                                <filtering>true</filtering>
+                                <filtering>false</filtering>
                                 <directory>../client/target</directory>
                                 <includes>
-                                    <include>en_US/ShopManagerApplication.html</include>
-                                    <include>en_US/ShopManagerApplication.swf</include>
-                                    <include>en_US/swfobject.js</include>
-                                    <include>en_US/history/**</include>
-                                    <include>ru_RU/ShopManagerApplication.html</include>
-                                    <include>ru_RU/ShopManagerApplication.swf</include>
-                                    <include>ru_RU/swfobject.js</include>
-                                    <include>ru_RU/history/**</include>
-                                    <include>uk_UK/ShopManagerApplication.html</include>
-                                    <include>uk_UK/ShopManagerApplication.swf</include>
-                                    <include>uk_UK/swfobject.js</include>
-                                    <include>uk_UK/history/**</include>
+                                    <include>en_US/**</include>
+                                    <include>ru_RU/**</include>
+                                    <include>uk_UK/**</include>
                                 </includes>
+                            </resource>
+                            <resource>
+                                <filtering>false</filtering>
+                                <directory>../../theme/mail/src/main/resources</directory>
                             </resource>
                         </webResources>
                         <!-- web.xml is added to the project by other means, and shouldn't be packaged by default -->
