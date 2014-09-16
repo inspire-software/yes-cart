@@ -26,7 +26,9 @@ import org.yes.cart.remote.service.RemoteCustomerOrderService;
 import org.yes.cart.report.ReportService;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.dto.GenericDTOService;
+import org.yes.cart.service.federation.FederationFacade;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -39,18 +41,43 @@ public class RemoteCustomerOrderServiceImpl
         extends AbstractRemoteService<CustomerOrderDTO>
         implements RemoteCustomerOrderService {
 
+    private static final Result AUTH_ERROR = new Result("OR-1000", "Auth failed");
+
     private final ReportService reportService;
+    private final FederationFacade federationFacade;
 
     /**
      * Construct remote service
      *
      * @param customerOrderDTOGenericDTOService
      *         dto serivese to use.
+     * @param federationFacade
      */
     public RemoteCustomerOrderServiceImpl(final GenericDTOService<CustomerOrderDTO> customerOrderDTOGenericDTOService,
-                                          final ReportService reportService) {
+                                          final ReportService reportService,
+                                          final FederationFacade federationFacade) {
         super(customerOrderDTOGenericDTOService);
         this.reportService = reportService;
+        this.federationFacade = federationFacade;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<CustomerOrderDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<CustomerOrderDTO> all = super.getAll();
+        federationFacade.applyFederationFilter(all, CustomerOrderDTO.class);
+        return all;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public CustomerOrderDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (federationFacade.isManageable(id, CustomerOrderDTO.class)) {
+            return super.getById(id);
+        }
+        return null;
     }
 
     /**
@@ -66,7 +93,7 @@ public class RemoteCustomerOrderServiceImpl
             final Date toDate,
             final String orderNum
     ) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return ((DtoCustomerOrderService) getGenericDTOService()).findCustomerOrdersByCriteria(
+        final List<CustomerOrderDTO> orders = ((DtoCustomerOrderService) getGenericDTOService()).findCustomerOrdersByCriteria(
                 customerId,
                 firstName,
                 lastName,
@@ -76,6 +103,8 @@ public class RemoteCustomerOrderServiceImpl
                 toDate,
                 orderNum
         );
+        federationFacade.applyFederationFilter(orders, CustomerOrderDTO.class);
+        return orders;
     }
 
     /**
@@ -83,7 +112,10 @@ public class RemoteCustomerOrderServiceImpl
      */
     public List<CustomerOrderDeliveryDetailDTO> findDeliveryDetailsByOrderNumber(final String orderNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryDetailsByOrderNumber(orderNum);
+        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
+            return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryDetailsByOrderNumber(orderNum);
+        }
+        return Collections.emptyList();
     }
 
 
@@ -91,40 +123,58 @@ public class RemoteCustomerOrderServiceImpl
      * {@inheritDoc}
      */
     public Result updateOrderSetConfirmed(String orderNum) {
-        return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetConfirmed(orderNum);
+        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
+            return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetConfirmed(orderNum);
+        }
+        return AUTH_ERROR;
     }
 
     /**
      * {@inheritDoc}
      */
     public Result updateOrderSetCancelled(final String orderNum) {
-        return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetCancelled(orderNum);
+        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
+            return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetCancelled(orderNum);
+        }
+        return AUTH_ERROR;
     }
 
     /** {@inheritDoc} */
-    public Result updateExternalDelieryRefNo(String orderNum, String deliveryNum, String newRefNo) {
-        return ((DtoCustomerOrderService) getGenericDTOService()).updateExternalDelieryRefNo(orderNum,  deliveryNum,  newRefNo) ;
+    public Result updateExternalDeliveryRefNo(String orderNum, String deliveryNum, String newRefNo) {
+        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
+            return ((DtoCustomerOrderService) getGenericDTOService()).updateExternalDeliveryRefNo(orderNum, deliveryNum, newRefNo) ;
+        }
+        return AUTH_ERROR;
     }
 
     /** {@inheritDoc} */
     public Result updateDeliveryStatus(final String orderNum, final String deliveryNum,
                                        final String currentStatus, final String destinationStatus) {
 
-        return ((DtoCustomerOrderService) getGenericDTOService())
+        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
+            return ((DtoCustomerOrderService) getGenericDTOService())
                 .updateDeliveryStatus(orderNum, deliveryNum, currentStatus, destinationStatus);
+        }
+        return AUTH_ERROR;
 
     }
 
     /** {@inheritDoc} */
     public List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryByOrderNumber(orderNum);
+        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
+            return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryByOrderNumber(orderNum);
+        }
+        return Collections.emptyList();
     }
 
     /** {@inheritDoc} */
     public List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum, final String deliveryNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryByOrderNumber(orderNum, deliveryNum);
+        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
+            return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryByOrderNumber(orderNum, deliveryNum);
+        }
+        return Collections.emptyList();
     }
 
 
@@ -132,10 +182,13 @@ public class RemoteCustomerOrderServiceImpl
     /** {@inheritDoc} */
     public byte[] produceDeliveryReport(final String reportLang, final String orderNum, final String deliveryNum)
             throws Exception {
+        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
 
-        List rez =  findDeliveryByOrderNumber(orderNum, deliveryNum);
+            List rez =  findDeliveryByOrderNumber(orderNum, deliveryNum);
 
-        return reportService.produceReport(reportLang, "reportDelivery", rez);
+            return reportService.produceReport(reportLang, "reportDelivery", rez);
+        }
+        return new byte[0];
 
     }
 

@@ -115,9 +115,9 @@ public interface CustomerOrderPayment extends Auditable {
     void setOrderDate(Date orderDate);
 
     /**
-     * Get payment amount, incuding delivery price.
+     * Get payment amount, including delivery price.
      *
-     * @return devilevry amount.
+     * @return delivery amount.
      */
     BigDecimal getPaymentAmount();
 
@@ -172,7 +172,7 @@ public interface CustomerOrderPayment extends Auditable {
     void setOrderShipment(String orderShipment);
 
     /**
-     * Get transaction reference id. Ref id set by payment gateway. In out case it will be eq to delivery nimber
+     * Get transaction reference id. Ref id set by payment gateway. In out case it will be eq to delivery number
      * if PG does not set value.
      *
      * @return reference id
@@ -187,8 +187,8 @@ public interface CustomerOrderPayment extends Auditable {
     void setTransactionReferenceId(String transactionReferenceId);
 
     /**
-     * Get transaction request token. Request token than can be used as reference in pair oreation like
-     * authorize - capture or authorize - reverce authorization.
+     * Get transaction request token. Request token than can be used as reference in pair operation like
+     * authorize - capture or authorize - reverse authorization.
      * Often correspond to reference id.
      *
      * @return transaction request token.

@@ -59,6 +59,25 @@ public class RemoteCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
+    public List<CustomerDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<CustomerDTO> all = super.getAll();
+        federationFacade.applyFederationFilter(all, CustomerDTO.class);
+        return all;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public CustomerDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (federationFacade.isManageable(id, CustomerDTO.class)) {
+            return super.getById(id);
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<CustomerDTO> findCustomer(final String email,
                                           final String firstname,
                                           final String lastname,
@@ -114,7 +133,10 @@ public class RemoteCustomerServiceImpl
      */
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoCustomerService.getEntityAttributes(entityPk);
+        if (federationFacade.isManageable(entityPk, CustomerDTO.class)) {
+            return dtoCustomerService.getEntityAttributes(entityPk);
+        }
+        return Collections.emptyList();
     }
 
     /**

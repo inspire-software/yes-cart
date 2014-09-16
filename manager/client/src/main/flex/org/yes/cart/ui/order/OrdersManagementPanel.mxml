@@ -43,7 +43,7 @@
                    result="onUpdateDeliveryStatusResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
-        <mx:method id="updateExternalDelieryRefNo" name="updateExternalDelieryRefNo"
+        <mx:method id="updateExternalDeliveryRefNo" name="updateExternalDeliveryRefNo"
                    result="onUpdateDeliveryExternalRefNoResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
@@ -450,7 +450,7 @@
                      */
                     protected function onValueChanged(event:DataGridEvent, сustomerOrderDeliveryDTO:Object, newValue:Object):void {
 
-                        remoteCustomerOrderService.updateExternalDelieryRefNo(
+                        remoteCustomerOrderService.updateExternalDeliveryRefNo(
                                 сustomerOrderDeliveryDTO.ordernum,
                                 сustomerOrderDeliveryDTO.deliveryNum,
                                 newValue
@@ -987,7 +987,7 @@
          * @param event event with result
          */
         private function onUpdateDeliveryExternalRefNoResult(event:ResultEvent):void {
-            if (remoteCustomerOrderService.updateExternalDelieryRefNo.lastResult.errorCode != "0") {
+            if (remoteCustomerOrderService.updateExternalDeliveryRefNo.lastResult.errorCode != "0") {
                 Alert.show(
                         resourceManager.getString('CustomerOrderPanel', event.result.localizationKey, event.result.localizedMessageParameters),
                         resourceManager.getString('Common', 'error')
