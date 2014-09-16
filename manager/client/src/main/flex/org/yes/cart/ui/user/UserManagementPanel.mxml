@@ -15,7 +15,7 @@
   -    limitations under the License.
   -->
 
-<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:user="org.yes.cart.ui.user.*"
           title="@Resource(bundle='UserManagementPanel',key='users')"
           width="100%"
           height="100%"
@@ -23,9 +23,12 @@
           paddingLeft="2" paddingRight="2" paddingBottom="5">
     <mx:Script>
 		<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
         import mx.controls.Alert;
         import mx.core.FlexGlobals;
         import mx.events.CloseEvent;
+        import mx.events.IndexChangedEvent;
         import mx.events.ListEvent;
         import mx.managers.PopUpManager;
         import mx.rpc.events.FaultEvent;
@@ -56,6 +59,9 @@
             userSelected = this.usersDataGrid.selectedItem != null;
             if (userSelected) {
                 readRoles(this.usersDataGrid.selectedItem.email);
+                if (userTabNavigator.selectedIndex == TAB_SHOP_IDX) {
+                    shopTabSelected();
+                }
             }
         }
 
@@ -116,7 +122,8 @@
             remoteUserManagementService.addUser(
                     newPopUp.email.text,
                     newPopUp.firstName.text,
-                    newPopUp.lastName.text
+                    newPopUp.lastName.text,
+                    newPopUp.shopCode.text
             );
         }
 
@@ -263,6 +270,43 @@
                 (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOn');
             }
         }
+
+        private var TAB_SHOP_IDX:int = 1;
+
+        private function onTabClick(event:IndexChangedEvent):void {
+            initTabs(event.newIndex);
+        }
+
+
+        private function initTabs(tabIdx:int):void {
+            if (userSelected) {
+                Debug.trace("INFO customerTabNavigator.selectedIndex is :" + tabIdx);
+                switch (tabIdx) {
+
+
+                    case TAB_SHOP_IDX:
+                    {
+                        shopTabSelected();
+                        break;
+                    }
+
+                }
+            }
+
+        }
+
+        private function shopTabSelected():void {
+            var selectedUser:Object = this.usersDataGrid.selectedItem;
+
+            if (this.userSelected && selectedUser != null) {
+                Debug.trace("INFO Customer's shop for customer id" + selectedUser.email);
+                var panel:UserShopPanel = new UserShopPanel();
+                panel.userId = selectedUser.email;
+                userShops.removeAllChildren();
+                userShops.addChild(panel);
+            }
+        }
+
         ]]>
     </mx:Script>
 
@@ -363,45 +407,57 @@
 
 		</mx:VBox>
 
-        <mx:Grid width="100%" height="50%" id="rolesDetailPanel"  visible="{userSelected}" >
-            <mx:GridRow width="100%" height="5%">
-                <mx:GridItem width="45%" height="100%">
-                    <mx:Label text="@Resource(bundle='UserManagementPanel',key='availableRoles')"/>
-                </mx:GridItem>
-                <mx:GridItem width="10%" height="100%">
-                </mx:GridItem>
-                <mx:GridItem width="45%" height="100%">
-                    <mx:Label text="@Resource(bundle='UserManagementPanel',key='appliedRoles')"/>
-                </mx:GridItem>
-            </mx:GridRow>
+        <mx:TabNavigator id="userTabNavigator" change="onTabClick(event);" width="100%" height="100%"
+                         visible="{userSelected}">
 
-            <mx:GridRow width="100%" height="95%">
-                <mx:GridItem  width="44%" height="100%">
-                    <mx:List itemClick="onAvailableRolesItemClick(event)"
-                             doubleClickEnabled="true"
-                             itemDoubleClick="onGrantOneRoleClick(event)"
-                             id="availableRolesList" width="100%" height="100%"  labelField="code">
+            <mx:Canvas  label="@Resource(bundle='UserManagementPanel',key='availableRoles')"
+                        width="100%" height="100%">
+                <mx:Grid width="100%" height="50%" id="rolesDetailPanel"  visible="{userSelected}" >
 
-                    </mx:List>
-                </mx:GridItem>
-                <mx:GridItem width="12%" height="100%">
-                    <mx:VBox height="100%" width="100%" horizontalAlign="center" verticalAlign="middle">
+                    <mx:GridRow width="100%" height="5%">
+                        <mx:GridItem width="45%" height="100%">
+                            <mx:Label text="@Resource(bundle='UserManagementPanel',key='availableRoles')"/>
+                        </mx:GridItem>
+                        <mx:GridItem width="10%" height="100%">
+                        </mx:GridItem>
+                        <mx:GridItem width="45%" height="100%">
+                            <mx:Label text="@Resource(bundle='UserManagementPanel',key='appliedRoles')"/>
+                        </mx:GridItem>
+                    </mx:GridRow>
 
-                        <mx:Button width="60" enabled="{grantOneEnabled}" click="onGrantOneRoleClick(event)" label="@Resource(bundle='UserManagementPanel',key='grantOneRole')"/>
-                        <mx:Button width="60" enabled="{revokeOneEnabled}" click="onRevokeOneRoleClick(event)" label="@Resource(bundle='UserManagementPanel',key='revokeOneRole')"/>
+                    <mx:GridRow width="100%" height="95%">
+                        <mx:GridItem  width="44%" height="100%">
+                            <mx:List itemClick="onAvailableRolesItemClick(event)"
+                                     doubleClickEnabled="true"
+                                     itemDoubleClick="onGrantOneRoleClick(event)"
+                                     id="availableRolesList" width="100%" height="100%"  labelField="code">
 
-                    </mx:VBox>
-                </mx:GridItem>
-                <mx:GridItem width="44%" height="100%">
-                    <mx:List itemClick="onAssigedRolesItemClick(event)"
-                             doubleClickEnabled="true"
-                             itemDoubleClick="onRevokeOneRoleClick(event)"
-                             id="assignedRolesList" width="100%" height="100%" labelField="code">
+                            </mx:List>
+                        </mx:GridItem>
+                        <mx:GridItem width="12%" height="100%">
+                            <mx:VBox height="100%" width="100%" horizontalAlign="center" verticalAlign="middle">
 
-                    </mx:List>
-                </mx:GridItem>
-            </mx:GridRow>
-        </mx:Grid>
+                                <mx:Button width="60" enabled="{grantOneEnabled}" click="onGrantOneRoleClick(event)" label="@Resource(bundle='UserManagementPanel',key='grantOneRole')"/>
+                                <mx:Button width="60" enabled="{revokeOneEnabled}" click="onRevokeOneRoleClick(event)" label="@Resource(bundle='UserManagementPanel',key='revokeOneRole')"/>
+
+                            </mx:VBox>
+                        </mx:GridItem>
+                        <mx:GridItem width="44%" height="100%">
+                            <mx:List itemClick="onAssigedRolesItemClick(event)"
+                                     doubleClickEnabled="true"
+                                     itemDoubleClick="onRevokeOneRoleClick(event)"
+                                     id="assignedRolesList" width="100%" height="100%" labelField="code">
+
+                            </mx:List>
+                        </mx:GridItem>
+                    </mx:GridRow>
+                </mx:Grid>
+            </mx:Canvas>
+
+            <mx:Canvas id="userShops" label="@Resource(bundle='CustomerManagementPanel',key='customerShops')"
+                       width="100%" height="100%"/>
+
+        </mx:TabNavigator>
     </mx:VDividedBox>
 
 </mx:Panel>

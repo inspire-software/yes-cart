@@ -51,16 +51,16 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testAddUser() throws Exception {
         int numberOfAllManagers = managementService.getManagers(null, null, null).size();
-        managementService.addUser("bender@futurama.com", "Bender", "Rodríguez");
-        managementService.addUser("optimus.prime@transformers.com", "Optimus", "Prime");
-        managementService.addUser("megatron.beast@transformers.com", "Megatron", "Beast");
+        managementService.addUser("bender@futurama.com", "Bender", "Rodríguez", "SHOIP1");
+        managementService.addUser("optimus.prime@transformers.com", "Optimus", "Prime", "SHOIP1");
+        managementService.addUser("megatron.beast@transformers.com", "Megatron", "Beast", "SHOIP1");
         assertEquals(3, managementService.getManagers(null, null, null).size() - numberOfAllManagers);
     }
 
     @Test
     public void testDeleteUser() throws Exception {
         int numberOfAllManagers = managementService.getManagers(null, null, null).size();
-        managementService.addUser("bender2@futurama.com", "Bender2", "Rodriguez2");
+        managementService.addUser("bender2@futurama.com", "Bender2", "Rodriguez2", "SHOIP1");
         assertEquals(1, managementService.getManagers(null, null, null).size() - numberOfAllManagers);
         managementService.deleteUser("bender2@futurama.com");
         assertEquals(0, managementService.getManagers(null, null, null).size() - numberOfAllManagers);
@@ -68,7 +68,7 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testUpdateUser() throws Exception {
-        managementService.addUser("bender3@futurama.com", "Bender3", "Rodriguez3");
+        managementService.addUser("bender3@futurama.com", "Bender3", "Rodriguez3", "SHOIP1");
         assertEquals(1, managementService.getManagers("bender3@futurama.com", null, null).size());
         managementService.updateUser("bender3@futurama.com", "Bender3", "Rodríguez3");
         assertEquals("Rodríguez3", managementService.getManagers("bender3@futurama.com", null, null).get(0).getLastName());
@@ -76,7 +76,7 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testResetPassword() throws Exception {
-        managementService.addUser("bender4@futurama.com", "Bender4", "Rodríguez4");
+        managementService.addUser("bender4@futurama.com", "Bender4", "Rodríguez4", "SHOIP1");
         String pwdHash = managerService.findAll().get(0).getPassword();
         assertNotNull("password can not be null ", pwdHash);
         assertTrue("password can not be empty ", pwdHash.length() > 0);
@@ -89,9 +89,9 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testGetManagers() throws Exception {
-        managementService.addUser("bender5@futurama.com", "Bender5", "Rodríguez");
-        managementService.addUser("optimus.prime5@transformers.com", "Optimus", "Prime5");
-        managementService.addUser("megatron.beast5@transformers.com", "Megatron", "Beast");
+        managementService.addUser("bender5@futurama.com", "Bender5", "Rodríguez", "SHOIP1");
+        managementService.addUser("optimus.prime5@transformers.com", "Optimus", "Prime5", "SHOIP1");
+        managementService.addUser("megatron.beast5@transformers.com", "Megatron", "Beast", "SHOIP1");
         assertEquals(3, managementService.getManagers("5", null, null).size());
         List<ManagerDTO> rez;
         rez = managementService.getManagers("asd", null, "");
@@ -140,7 +140,7 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
-                    managementService.addUser("bende11r@futurama.com", "Bender", "Rodríguez");
+                    managementService.addUser("bende11r@futurama.com", "Bender", "Rodríguez", "SHOIP1");
                     managementService.addRole("ROLE_CCC", null);
                     managementService.grantRole("bende11r@futurama.com", "ROLE_CCC");
                     assertEquals("ROLE_CCC", managementService.getAssignedManagerRoles("bende11r@futurama.com").get(0).getCode());
@@ -162,7 +162,7 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
-                    managementService.addUser("bender12@futurama.com", "Bender", "Rodríguez");
+                    managementService.addUser("bender12@futurama.com", "Bender", "Rodríguez", "SHOIP1");
                     managementService.addRole("ROLE_VVV", null);
                     managementService.grantRole("bender12@futurama.com", "ROLE_VVV");
                     assertEquals("ROLE_VVV", managementService.getAssignedManagerRoles("bender12@futurama.com").get(0).getCode());
@@ -187,7 +187,7 @@ public class UserManagementServiceImplTezt extends BaseCoreDBTestCase {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
                 try {
-                    managementService.addUser("bender13@futurama.com", "Bender", "Rodríguez");
+                    managementService.addUser("bender13@futurama.com", "Bender", "Rodríguez", "SHOIP1");
                     managementService.addRole("ROLE_AAA", null);
                     managementService.grantRole("bender13@futurama.com", "ROLE_AAA");
                     assertEquals("ROLE_AAA", managementService.getAssignedManagerRoles("bender13@futurama.com").get(0).getCode());

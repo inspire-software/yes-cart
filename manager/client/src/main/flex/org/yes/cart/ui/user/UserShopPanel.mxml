@@ -23,20 +23,17 @@
     <mx:Script><![CDATA[
         import mx.collections.ArrayCollection;
         import mx.controls.Alert;
-        import mx.rpc.AsyncResponder;
-        import mx.rpc.AsyncToken;
         import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.impl.ShopDTOImpl;
-
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
-        public var customerId:Number;
+        public var userId:String;
 
         public function init():void {
 
-            remoteCustomerService.getAssignedShop(customerId);
-            remoteCustomerService.getAvailableShop(customerId);
+            remoteUserManagementService.getAssignedManagerShops(userId);
+            remoteUserManagementService.getAvailableManagerShops(userId);
 
         }
 
@@ -95,7 +92,7 @@
         private function onAvailableShopClick(event:MouseEvent):void {
             var _shop:ShopDTOImpl = availableShopList.selectedItem as ShopDTOImpl;
             if (_shop != null) {
-                remoteCustomerService.grantShop(customerId, _shop.code);
+                remoteUserManagementService.grantShop(userId, _shop.code);
             }
         }
 
@@ -106,14 +103,13 @@
         private function onAssignedShopClick(event:MouseEvent):void {
             var _shop:ShopDTOImpl = assignedShopList.selectedItem as ShopDTOImpl;
             if (_shop != null) {
-                remoteCustomerService.revokeShop(customerId, _shop.code);
+                remoteUserManagementService.revokeShop(userId, _shop.code);
             }
         }
 
         private function onAssignedShopDblClick(event:MouseEvent):void {
             onAssignedShopClick(event);
         }
-
         ]]>
     </mx:Script>
 
@@ -122,16 +118,16 @@
     <mx:ArrayCollection id="assignedShop"/>
 
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteCustomerService"
-                     destination="remoteCustomerService"
+    <mx:RemoteObject showBusyCursor="true" id="remoteUserManagementService"
+                     destination="remoteUserManagementService"
                      result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
                      fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-        <mx:method id="getAvailableShop" name="getAvailableShop"
+        <mx:method id="getAvailableManagerShops" name="getAvailableManagerShops"
                    result="onGetAvailableShop(event)"/>
 
-        <mx:method id="getAssignedShop" name="getAssignedShop"
+        <mx:method id="getAssignedManagerShops" name="getAssignedManagerShops"
                    result="onGetAssignedShop(event)"/>
 
         <mx:method id="grantShop" name="grantShop"

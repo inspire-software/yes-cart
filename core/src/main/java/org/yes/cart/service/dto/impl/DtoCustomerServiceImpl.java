@@ -22,16 +22,11 @@ import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.dto.AttrValueCustomerDTO;
-import org.yes.cart.domain.dto.AttrValueDTO;
-import org.yes.cart.domain.dto.AttributeDTO;
-import org.yes.cart.domain.dto.CustomerDTO;
+import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.CustomerDTOImpl;
-import org.yes.cart.domain.entity.AttrValueCustomer;
-import org.yes.cart.domain.entity.Attribute;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.dto.impl.ShopDTOImpl;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCustomer;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -62,6 +57,8 @@ public class DtoCustomerServiceImpl
     private final GenericDAO<Shop, Long> shopDao;
 
     private final Assembler attrValueAssembler;
+
+    private final Assembler shopAssembler;
 
     private final PassPhrazeGenerator passPhrazeGenerator;
 
@@ -99,7 +96,7 @@ public class DtoCustomerServiceImpl
         this.attrValueAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(AttrValueCustomerDTO.class),
                 service.getGenericDao().getEntityFactory().getImplClass(AttrValueCustomer.class));
-
+        shopAssembler = DTOAssembler.newAssembler(ShopDTOImpl.class, Shop.class);
 
     }
 
@@ -268,6 +265,83 @@ public class DtoCustomerServiceImpl
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ShopDTO> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        List<ShopDTO> rez = new ArrayList<ShopDTO>();
+        for (CustomerShop customerShop : getService().findById(customerId).getShops()) {
+            final ShopDTO shopDTO = dtoFactory.getByIface(ShopDTO.class);
+            shopAssembler.assembleDto(shopDTO, customerShop.getShop(), getAdaptersRepository(), dtoFactory);
+            rez.add(shopDTO);
+        }
+        return rez;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ShopDTO> getAvailableShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Shop> all = shopDao.findAll();
+        final List<ShopDTO> assigned = getAssignedShop(customerId);
+        final List<ShopDTO> available = new ArrayList<ShopDTO>(all.size());
+        for (final Shop shop : all) {
+            boolean match = false;
+            for (final ShopDTO existing : assigned) {
+                if (shop.getShopId() == existing.getShopId()) {
+                    match = true;
+                }
+            }
+            if (!match) {
+                final ShopDTO shopDTO = dtoFactory.getByIface(ShopDTO.class);
+                shopAssembler.assembleDto(shopDTO, shop, getAdaptersRepository(), dtoFactory);
+                available.add(shopDTO);
+            }
+        }
+        return available;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void grantShop(final long customerId, final String shopCode) {
+
+        final Customer customer = getService().findById(customerId);
+        final Collection<CustomerShop> assigned = customer.getShops();
+        for (final CustomerShop shop : assigned) {
+            if (shop.getShop().getCode().equals(shopCode)) {
+                return;
+            }
+        }
+        final Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.CODE", shopCode);
+        if (shop != null) {
+            final CustomerShop customerShop = shopDao.getEntityFactory().getByIface(CustomerShop.class);
+            customerShop.setCustomer(customer);
+            customerShop.setShop(shop);
+            assigned.add(customerShop);
+        }
+        getService().update(customer);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void revokeShop(final long customerId, final String shopCode) {
+
+        final Customer customer = getService().findById(customerId);
+        final Iterator<CustomerShop> assigned = customer.getShops().iterator();
+        while (assigned.hasNext()) {
+            final CustomerShop shop = assigned.next();
+            if (shop.getShop().getCode().equals(shopCode)) {
+                assigned.remove();
+                getService().update(customer);
+            }
+        }
+
     }
 
 }

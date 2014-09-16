@@ -37,23 +37,32 @@
         <flex:secured/>
     </flex:message-broker>
 
+    <import resource="manager-federation.xml"/>
+
     <!--    ROLE_SMADMIN    ROLE_SMSHOPADMIN    ROLE_SMWAREHOUSEADMIN    ROLE_SMCALLCENTER    -->
 
     <bean id="remoteUserManagementService" class="org.yes.cart.remote.service.impl.RemoteManagementServiceImpl">
         <constructor-arg index="0" ref="userManagementService"/>
+        <constructor-arg index="1" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
-            <security:protect method="addUser" access="ROLE_SMADMIN"/>
-            <security:protect method="getManagers" access="ROLE_SMADMIN"/>
-            <security:protect method="updateUser" access="ROLE_SMADMIN"/>
+            <security:protect method="addUser" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getManagers" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAssignedManagerRoles" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAvailableManagerRoles" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAssignedManagerShops" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAvailableManagerShops" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateUser" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="resetPassword"
                               access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="deleteUser" access="ROLE_SMADMIN"/>
             <security:protect method="addRole" access="ROLE_SMADMIN"/>
             <security:protect method="updateRole" access="ROLE_SMADMIN"/>
             <security:protect method="deleteRole" access="ROLE_SMADMIN"/>
-            <security:protect method="grantRole" access="ROLE_SMADMIN"/>
-            <security:protect method="revokeRole" access="ROLE_SMADMIN"/>
+            <security:protect method="grantRole" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="revokeRole" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="grantShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="revokeShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
         </security:intercept-methods>
 
     </bean>
@@ -209,6 +218,7 @@
 
     <bean id="remoteCustomerService" class="org.yes.cart.remote.service.impl.RemoteCustomerServiceImpl">
         <constructor-arg index="0" ref="dtoCustomerService"/>
+        <constructor-arg index="1" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
@@ -216,6 +226,11 @@
             <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="findCustomer" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="remoteResetPassword" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+
+            <security:protect method="getAvailableShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAssignedShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="grantShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="revokeShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
 
             <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>

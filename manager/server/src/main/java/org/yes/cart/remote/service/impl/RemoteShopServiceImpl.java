@@ -72,14 +72,6 @@ public class RemoteShopServiceImpl
         return ((DtoShopService) getGenericDTOService()).getShopDtoByDomainName(serverDomainName);
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<ShopDTO> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return ((DtoShopService) getGenericDTOService()).getAssignedShop(customerId);
-    }
-
     /**
      * {@inheritDoc}
      */

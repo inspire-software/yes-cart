@@ -18,6 +18,7 @@ package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ManagerDTO;
 import org.yes.cart.domain.dto.RoleDTO;
+import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -39,19 +40,21 @@ public interface ManagementService {
     /**
      * Add new user.
      *
+     *
      * @param userId    user email
      * @param firstName first name
      * @param lastName  last name
+     * @param shopCode  shop code for this user
      * @throws java.io.UnsupportedEncodingException
      *          in case of bad encoding
      * @throws java.security.NoSuchAlgorithmException
-     *          in case of bad algoritm
+     *          in case of bad algorithm
      */
-    void addUser(String userId, String firstName, String lastName)
+    void addUser(String userId, String firstName, String lastName, String shopCode)
             throws NoSuchAlgorithmException, UnsupportedEncodingException;
 
     /**
-     * Get the list of managers by given filtring citeria.
+     * Get the list of managers by given filtering criteria.
      *
      * @param emailFilter     optional email filter
      * @param firstNameFilter optional first name filter
@@ -93,6 +96,32 @@ public interface ManagementService {
     List<RoleDTO> getAvailableManagerRoles(String userId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Get the assigned to manager shops
+     *
+     * @param userId user email
+     * @return list of assigned shops
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration error
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case if some problems with reflection
+     */
+    List<ShopDTO> getAssignedManagerShops(String userId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get the available to manager roles. Mean all roles minus assigned.
+     *
+     * @param userId user email
+     * @return list of available roles
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration error
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case if some problems with reflection
+     */
+    List<ShopDTO> getAvailableManagerShops(String userId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 
     /**
      * Update user names by given user id.
@@ -125,17 +154,17 @@ public interface ManagementService {
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case of entity to dto mapping errors
      * @throws org.yes.cart.exception.UnmappedInterfaceException
-     *          in case of caonfig errors
+     *          in case of config errors
      */
     List<RoleDTO> getRolesList() throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Add new role.
      *
-     * @param role       role
-     * @param decription role description
+     * @param role        role
+     * @param description role description
      */
-    void addRole(String role, String decription);
+    void addRole(String role, String description);
 
     /**
      * Update role description.
@@ -167,5 +196,21 @@ public interface ManagementService {
      * @param role   role
      */
     void revokeRole(String userId, String role);
+
+    /**
+     * Grant given shop to user
+     *
+     * @param userId user id
+     * @param shopCode  shop
+     */
+    void grantShop(String userId, String shopCode);
+
+    /**
+     * Revoke shop from user.
+     *
+     * @param userId user id
+     * @param shopCode  shop
+     */
+    void revokeShop(String userId, String shopCode);
 
 }

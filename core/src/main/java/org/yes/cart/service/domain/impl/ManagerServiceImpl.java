@@ -20,6 +20,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Manager;
+import org.yes.cart.domain.entity.ManagerShop;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ManagerService;
 
@@ -47,7 +48,12 @@ public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implemen
 
     /** {@inheritDoc } */
     public Manager create(final Manager manager, final Shop shop) {
-        //TODO: V2 assign to manage particular shop
+        if (shop != null) {
+            final ManagerShop managerShop = getGenericDao().getEntityFactory().getByIface(ManagerShop.class);
+            managerShop.setManager(manager);
+            managerShop.setShop(shop);
+            manager.getShops().add(managerShop);
+        }
         return super.create(manager);
     }
 
