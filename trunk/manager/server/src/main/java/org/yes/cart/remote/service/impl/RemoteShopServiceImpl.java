@@ -22,8 +22,10 @@ import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteShopService;
 import org.yes.cart.service.dto.DtoShopService;
+import org.yes.cart.service.federation.FederationFacade;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,13 +37,37 @@ public class RemoteShopServiceImpl
         extends AbstractRemoteService<ShopDTO>
         implements RemoteShopService {
 
+    private final FederationFacade federationFacade;
+
     /**
      * Construct remote service.
      *
      * @param dtoShopService dto service to use.
+     * @param federationFacade
      */
-    public RemoteShopServiceImpl(final DtoShopService dtoShopService) {
+    public RemoteShopServiceImpl(final DtoShopService dtoShopService,
+                                 final FederationFacade federationFacade) {
         super(dtoShopService);
+        this.federationFacade = federationFacade;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ShopDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<ShopDTO> all = super.getAll();
+        federationFacade.applyFederationFilter(all, ShopDTO.class);
+        return all;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ShopDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (federationFacade.isManageable(id, ShopDTO.class)) {
+            return super.getById(id);
+        }
+        return null;
     }
 
     /**
@@ -55,14 +81,19 @@ public class RemoteShopServiceImpl
      * {@inheritDoc}
      */
     public String getSupportedCurrencies(final long shopId) {
-        return ((DtoShopService) getGenericDTOService()).getSupportedCurrencies(shopId);
+        if (federationFacade.isManageable(shopId, ShopDTO.class)) {
+            return ((DtoShopService) getGenericDTOService()).getSupportedCurrencies(shopId);
+        }
+        return null;
     }
 
     /**
      * {@inheritDoc}
      */
     public void updateSupportedCurrencies(final long shopId, final String currencies) {
-        ((DtoShopService) getGenericDTOService()).updateSupportedCurrencies(shopId, currencies);
+        if (federationFacade.isManageable(shopId, ShopDTO.class)) {
+            ((DtoShopService) getGenericDTOService()).updateSupportedCurrencies(shopId, currencies);
+        }
     }
 
     /**
@@ -76,7 +107,10 @@ public class RemoteShopServiceImpl
      * {@inheritDoc}
      */
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return ((DtoShopService) getGenericDTOService()).getEntityAttributes(entityPk);
+        if (federationFacade.isManageable(entityPk, ShopDTO.class)) {
+            return ((DtoShopService) getGenericDTOService()).getEntityAttributes(entityPk);
+        }
+        return Collections.emptyList();
     }
 
     /**

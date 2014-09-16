@@ -42,12 +42,29 @@
         <constructor-arg index="1" ref="dtoCustomerService"/>
     </bean>
 
+    <bean id="customerOrderFederationFilter" class="org.yes.cart.service.federation.impl.CustomerOrderFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1" ref="dtoCustomerOrderService"/>
+    </bean>
+
+    <bean id="customerOrderPaymentFederationFilter" class="org.yes.cart.service.federation.impl.CustomerOrderPaymentFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1" ref="dtoCustomerOrderService"/>
+    </bean>
+
+    <bean id="shopFederationFilter" class="org.yes.cart.service.federation.impl.ShopFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+    </bean>
+
     <bean id="federationFacade" class="org.yes.cart.service.federation.impl.FederationFacadeImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1">
             <map>
                 <entry key="org.yes.cart.domain.dto.ManagerDTO" value-ref="managerFederationFilter"/>
                 <entry key="org.yes.cart.domain.dto.CustomerDTO" value-ref="customerFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDTO" value-ref="customerOrderFederationFilter"/>
+                <entry key="org.yes.cart.payment.persistence.entity.CustomerOrderPayment" value-ref="customerOrderPaymentFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.ShopDTO" value-ref="shopFederationFilter"/>
             </map>
         </constructor-arg>
     </bean>

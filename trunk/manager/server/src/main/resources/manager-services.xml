@@ -108,6 +108,7 @@
 
     <bean id="remoteShopService" class="org.yes.cart.remote.service.impl.RemoteShopServiceImpl">
         <constructor-arg index="0" ref="dtoShopService"/>
+        <constructor-arg index="1" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN"/>
@@ -513,6 +514,7 @@
     <bean id="remoteCustomerOrderService" class="org.yes.cart.remote.service.impl.RemoteCustomerOrderServiceImpl">
         <constructor-arg index="0" ref="dtoCustomerOrderService"/>
         <constructor-arg index="1" ref="remoteReportService"/>
+        <constructor-arg index="2" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
@@ -522,7 +524,7 @@
             <security:protect method="findDeliveryDetailsByOrderNumber" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="findDeliveryByOrderNumber" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="updateDeliveryStatus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="updateExternalDelieryRefNo" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="updateExternalDeliveryRefNo" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="updateOrderSetCancelled" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="updateOrderSetConfirmed" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
         </security:intercept-methods>
@@ -831,6 +833,7 @@
     <bean id="remotePaymentModulesManagementService" class="org.yes.cart.remote.service.impl.RemotePaymentModulesManagementServiceImpl">
         <constructor-arg index="0" ref="paymentModulesManager"/>
         <constructor-arg index="1" ref="customerOrderPaymentService"/>
+        <constructor-arg index="2" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="getAllowedPaymentGateways" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>

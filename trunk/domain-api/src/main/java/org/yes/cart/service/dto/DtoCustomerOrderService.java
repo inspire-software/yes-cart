@@ -68,7 +68,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * @param newRefNo    new reference number
      * @return result object
      */
-    Result updateExternalDelieryRefNo(String orderNum, String deliveryNum, String newRefNo);
+    Result updateExternalDeliveryRefNo(String orderNum, String deliveryNum, String newRefNo);
 
 
     /**

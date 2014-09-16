@@ -188,7 +188,7 @@ public class DtoCustomerOrderServiceImpl
     /**
      * {@inheritDoc}
      */
-    public Result updateExternalDelieryRefNo(final String orderNum, final String deliveryNum, final String newRefNo) {
+    public Result updateExternalDeliveryRefNo(final String orderNum, final String deliveryNum, final String newRefNo) {
 
         final CustomerOrder order = getService().findSingleByCriteria(Restrictions.eq("ordernum", orderNum));
 

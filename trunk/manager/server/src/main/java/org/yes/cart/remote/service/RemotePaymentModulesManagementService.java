@@ -101,7 +101,7 @@ public interface RemotePaymentModulesManagementService {
 
     /**
      * Find all payments by given parameters.
-     * All parameters are optional, but at leasn one must be present. Please verify this fact on UI.
+     * All parameters are optional, but at least one must be present. Please verify this fact on UI.
      *
      * @param orderNumber            given order number. optional
      * @param fromDate from date
