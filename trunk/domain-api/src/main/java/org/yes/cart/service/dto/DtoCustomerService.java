@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.CustomerDTO;
+import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -68,5 +69,38 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
      * @param tags        tags to update
      */
     void updateCustomerTags(CustomerDTO customerDTO, String tags);
+
+
+
+    /**
+     * Get shop, which is assigned to customer.
+     * @param customerId customer id
+     * @return list of shops
+     */
+    List<ShopDTO> getAssignedShop(long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get shop, which is assigned to customer.
+     * @param customerId customer id
+     * @return list of shops
+     */
+    List<ShopDTO> getAvailableShop(long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Grant given shop to user
+     *
+     * @param customerId user id
+     * @param shopCode  shop
+     */
+    void grantShop(long customerId, String shopCode);
+
+    /**
+     * Revoke shop from user.
+     *
+     * @param customerId user id
+     * @param shopCode  shop
+     */
+    void revokeShop(long customerId, String shopCode);
+
 
 }

@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.entity;
 
+import java.util.Collection;
+
 /**
  * Managers table hold login, password and names
  * <p/>
@@ -26,80 +28,24 @@ package org.yes.cart.domain.entity;
  */
 public interface Manager extends RegisteredPerson, Auditable {
 
+
     /**
-     * Get person id.
+     * Get assigned shops.
      *
-     * @return customer email.
+     * @return shops
      */
-    String getEmail();
+    Collection<ManagerShop> getShops();
 
     /**
-     * Set customer email
+     * Set assigned shops.
      *
-     * @param email email
+     * @param shops shops
      */
-    void setEmail(String email);
-
-    /**
-     * Get first name.
-     *
-     * @return first name
-     */
-    String getFirstname();
-
-    /**
-     * Set first name
-     *
-     * @param firstname value to set
-     */
-    void setFirstname(String firstname);
-
-    /**
-     * Get last name.
-     *
-     * @return last name
-     */
-    String getLastname();
-
-    /**
-     * Set last name
-     *
-     * @param lastname value to set
-     */
-    void setLastname(String lastname);
-
-    /**
-     * Get middle name
-     *
-     * @return middle name
-     */
-    String getMiddlename();
-
-    /**
-     * Set middle name
-     *
-     * @param middlename value to set
-     */
-    void setMiddlename(String middlename);
+    void setShops(Collection<ManagerShop> shops);
 
 
     /**
-     * Get password.
-     *
-     * @return password.
-     */
-    String getPassword();
-
-    /**
-     * Set password.
-     *
-     * @param password new password.
-     */
-    void setPassword(String password);
-
-
-    /**
-     * Primapy key.
+     * Primary key.
      *
      * @return pk value.
      */

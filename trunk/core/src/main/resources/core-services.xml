@@ -994,9 +994,10 @@
                 <constructor-arg index="0" type="org.yes.cart.service.domain.ManagerService" ref="managerService"/>
                 <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="managerRoleDao"/>
                 <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="roleDao"/>
-                <constructor-arg index="3" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
-                <constructor-arg index="4" ref="dtoAssemblerAdaptersRepository"/>
-                <constructor-arg index="5" ref="passPhraseGenerator"/>
+                <constructor-arg index="3" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
+                <constructor-arg index="4" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="5" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="6" ref="passPhraseGenerator"/>
             </bean>
         </property>
     </bean>

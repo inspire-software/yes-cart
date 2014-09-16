@@ -152,6 +152,7 @@
                 <entry key="org.yes.cart.domain.entity.Manager" value="org.yes.cart.domain.entity.impl.ManagerEntity"/>
                 <entry key="org.yes.cart.domain.entity.Role" value="org.yes.cart.domain.entity.impl.RoleEntity"/>
                 <entry key="org.yes.cart.domain.entity.ManagerRole" value="org.yes.cart.domain.entity.impl.ManagerRoleEntity"/>
+                <entry key="org.yes.cart.domain.entity.ManagerShop" value="org.yes.cart.domain.entity.impl.ManagerShopEntity"/>
 
                 <entry key="org.yes.cart.domain.entity.ShoppingCartState" value="org.yes.cart.domain.entity.impl.ShoppingCartStateEntity"/>
 

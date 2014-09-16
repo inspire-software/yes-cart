@@ -18,13 +18,18 @@ package org.yes.cart.remote.service.impl;
 
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.CustomerDTO;
+import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteCustomerService;
 import org.yes.cart.service.dto.DtoCustomerService;
 import org.yes.cart.service.dto.GenericDTOService;
+import org.yes.cart.service.federation.FederationFacade;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -36,14 +41,18 @@ public class RemoteCustomerServiceImpl
         implements RemoteCustomerService {
 
     private final DtoCustomerService dtoCustomerService;
+    private final FederationFacade federationFacade;
 
     /**
      * Construct service to manage the users.
      *
      * @param customerDTOGenericService dto service to use
+     * @param federationFacade
      */
-    public RemoteCustomerServiceImpl(final GenericDTOService<CustomerDTO> customerDTOGenericService) {
+    public RemoteCustomerServiceImpl(final GenericDTOService<CustomerDTO> customerDTOGenericService,
+                                     final FederationFacade federationFacade) {
         super(customerDTOGenericService);
+        this.federationFacade = federationFacade;
         dtoCustomerService = (DtoCustomerService) customerDTOGenericService;
     }
 
@@ -56,21 +65,27 @@ public class RemoteCustomerServiceImpl
                                           final String middlename,
                                           final String tag)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoCustomerService.findCustomer(email, firstname, lastname, middlename, tag);
+        final List<CustomerDTO> customers = dtoCustomerService.findCustomer(email, firstname, lastname, middlename, tag);
+        federationFacade.applyFederationFilter(customers, CustomerDTO.class);
+        return customers;
     }
 
     /**
      * {@inheritDoc}
      */
     public void remoteResetPassword(final CustomerDTO customer, final long shopId) {
-        dtoCustomerService.remoteResetPassword(customer, shopId);
+        if (federationFacade.isManageable(customer.getCustomerId(), CustomerDTO.class)) {
+            dtoCustomerService.remoteResetPassword(customer, shopId);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void updateCustomerTags(final CustomerDTO customerDTO, final String tags) {
-        dtoCustomerService.updateCustomerTags(customerDTO, tags);
+        if (federationFacade.isManageable(customerDTO.getCustomerId(), CustomerDTO.class)) {
+            dtoCustomerService.updateCustomerTags(customerDTO, tags);
+        }
     }
 
     /**
@@ -108,4 +123,70 @@ public class RemoteCustomerServiceImpl
     public AttrValueDTO createAndBindAttrVal(long entityPk, String attrName, String attrValue) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ShopDTO> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (federationFacade.isManageable(customerId, CustomerDTO.class)) {
+            final List<ShopDTO> assigned = dtoCustomerService.getAssignedShop(customerId);
+
+            if (!federationFacade.isCurrentUserSystemAdmin()) { // restrict other managers
+                final Set<Long> currentAssignedIds = federationFacade.getAccessibleShopIdsByCurrentManager();
+                final Iterator<ShopDTO> availableIt = assigned.iterator();
+                while (availableIt.hasNext()) {
+                    final ShopDTO shop = availableIt.next();
+                    if (!currentAssignedIds.contains(shop.getShopId())) {
+                        availableIt.remove();
+                    }
+                }
+            }
+            return assigned;
+        }
+        return Collections.emptyList();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ShopDTO> getAvailableShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (federationFacade.isManageable(customerId, CustomerDTO.class)) {
+
+            final List<ShopDTO> available = dtoCustomerService.getAvailableShop(customerId);
+
+            if (!federationFacade.isCurrentUserSystemAdmin()) { // restrict other managers
+                final Set<Long> currentAssignedIds = federationFacade.getAccessibleShopIdsByCurrentManager();
+                final Iterator<ShopDTO> availableIt = available.iterator();
+                while (availableIt.hasNext()) {
+                    final ShopDTO shop = availableIt.next();
+                    if (!currentAssignedIds.contains(shop.getShopId())) {
+                        availableIt.remove();
+                    }
+                }
+            }
+            return available;
+        }
+        return Collections.emptyList();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void grantShop(final long customerId, final String shopCode) {
+        if (federationFacade.isManageable(customerId, CustomerDTO.class)
+                && federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
+            dtoCustomerService.grantShop(customerId, shopCode);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void revokeShop(final long customerId, final String shopCode) {
+        if (federationFacade.isManageable(customerId, CustomerDTO.class)
+                && federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
+            dtoCustomerService.revokeShop(customerId, shopCode);
+        }
+    }
+
 }

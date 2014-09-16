@@ -37,6 +37,11 @@
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
         <property name="password" length="255" type="java.lang.String" column="PASSWORD" not-null="true"/>
 
+        <bag name="shops" inverse="true" lazy="true" cascade="all,delete-orphan" >
+            <key column="MANAGER_ID" on-delete="cascade"/>
+            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ManagerShopEntity"/>
+        </bag>
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -85,7 +90,34 @@
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36"  unique-key="MANAGER_ROLE_GUID" not-null="true"/>
     </class>
-	    
+
+    <class name="org.yes.cart.domain.entity.impl.ManagerShopEntity" table="TMANAGERSHOP">
+        <id name="managerShopId" column="MANAGERSHOP_ID" type="long">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <many-to-one name="manager" class="org.yes.cart.domain.entity.impl.ManagerEntity" foreign-key="FK_MS_MANAGER">
+            <column name="MANAGER_ID" not-null="true"/>
+        </many-to-one>
+
+        <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_MS_SHOP">
+            <column name="SHOP_ID" not-null="true"/>
+        </many-to-one>
+
+
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36" unique-key="MANAGERSHOP_GUID" not-null="true"/>
+
+    </class>
+
 
     <!--
     Warnings:
@@ -1750,8 +1782,8 @@
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.AddressEntity"/>
         </bag>
 
-        <bag name="shops" inverse="true" lazy="true" cascade="all" >
-            <key column="CUSTOMER_ID" not-null="true" on-delete="cascade"/>
+        <bag name="shops" inverse="true" lazy="true" cascade="all,delete-orphan" >
+            <key column="CUSTOMER_ID" on-delete="cascade"/>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.CustomerShopEntity"/>
         </bag>
 

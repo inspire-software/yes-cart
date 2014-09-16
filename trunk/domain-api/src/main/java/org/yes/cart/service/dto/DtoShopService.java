@@ -56,16 +56,8 @@ public interface DtoShopService extends GenericDTOService<ShopDTO>, GenericAttrV
 
     /**
      * Get shop by server domain name.
-     * @param serverDomainName given domain nanme.
+     * @param serverDomainName given domain name.
      * @return shop dto if found otherwise null.
      */
     ShopDTO getShopDtoByDomainName(String serverDomainName);
-
-
-    /**
-     * Gt shope, which assigned to customer.
-     * @param customerId customer id
-     * @return list of shops
-     */
-    List<ShopDTO> getAssignedShop(long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 }

@@ -37,10 +37,7 @@ import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -114,16 +111,6 @@ public class DtoShopServiceImpl
         final ShopDTO dto = (ShopDTO) dtoFactory.getByIface(getDtoIFace());
         getAssembler().assembleDto(dto, shop, getAdaptersRepository(), getDtoFactory());
         return dto;
-    }
-
-    /** {@inheritDoc} */
-    public List<ShopDTO> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        List<Shop> rez = new ArrayList<Shop>();
-        for (CustomerShop customerShop : customerService.findById(customerId).getShops()) {
-            rez.add(customerShop.getShop());
-        }
-        return getDTOs(rez);
-
     }
 
     /** {@inheritDoc} */

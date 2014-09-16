@@ -446,6 +446,20 @@
         primary key (MANAGERROLE_ID)
     ) comment='Hold roles list' ;
 
+
+    create table TMANAGERSHOP (
+        MANAGERSHOP_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        MANAGER_ID bigint not null,
+        SHOP_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (MANAGERSHOP_ID)
+    ) ;
+
     create table TPRODTYPEATTRVIEWGROUP (
         PRODTYPEATTRIBUTEGROUP_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
@@ -1439,3 +1453,15 @@
         foreign key (MAIL_ID)
         references TMAIL(MAIL_ID);
 
+
+    alter table TMANAGERSHOP
+        add index FK_MS_SHOP (SHOP_ID),
+        add constraint FK_MS_SHOP
+        foreign key (SHOP_ID)
+        references TSHOP (SHOP_ID);
+
+    alter table TMANAGERSHOP
+        add index FK_MS_MANAGER (MANAGER_ID),
+        add constraint FK_MS_MANAGER
+        foreign key (MANAGER_ID)
+        references TMANAGER (MANAGER_ID)         on delete cascade;

@@ -17,78 +17,43 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.yes.cart.domain.entity.Manager;
 import org.yes.cart.domain.entity.ManagerShop;
+import org.yes.cart.domain.entity.Shop;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
-/**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 27 0ct 2012
- * Time: 9:10 AM
- */
-public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.io.Serializable {
+public class ManagerShopEntity implements ManagerShop, java.io.Serializable {
 
-    private long managerId;
+    private long managerShopId;
     private long version;
 
-    private Collection<ManagerShop> shops = new ArrayList<ManagerShop>(0);
-
-    private String email;
-    private String firstname;
-    private String lastname;
-    private String middlename;
-    private String password;
+    private Manager manager;
+    private Shop shop;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
     private String updatedBy;
     private String guid;
 
-    public ManagerEntity() {
+    public ManagerShopEntity() {
     }
 
 
-
-    public String getEmail() {
-        return this.email;
+    public Manager getManager() {
+        return this.manager;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setManager(Manager manager) {
+        this.manager = manager;
     }
 
-    public String getFirstname() {
-        return this.firstname;
+    public Shop getShop() {
+        return this.shop;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return this.lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getMiddlename() {
-        return this.middlename;
-    }
-
-    public void setMiddlename(String middlename) {
-        this.middlename = middlename;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 
     public Date getCreatedTimestamp() {
@@ -131,16 +96,17 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
         this.guid = guid;
     }
 
-    public long getManagerId() {
-        return this.managerId;
+    public long getManagerShopId() {
+        return this.managerShopId;
     }
+
 
     public long getId() {
-        return this.managerId;
+        return this.managerShopId;
     }
 
-    public void setManagerId(long managerId) {
-        this.managerId = managerId;
+    public void setManagerShopId(long managerShopId) {
+        this.managerShopId = managerShopId;
     }
 
     public long getVersion() {
@@ -149,14 +115,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
 
     public void setVersion(final long version) {
         this.version = version;
-    }
-
-    public Collection<ManagerShop> getShops() {
-        return this.shops;
-    }
-
-    public void setShops(Collection<ManagerShop> shops) {
-        this.shops = shops;
     }
 }
 

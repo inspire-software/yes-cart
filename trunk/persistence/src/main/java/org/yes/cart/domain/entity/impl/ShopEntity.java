@@ -213,7 +213,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         if (currencies != null) {
             return Arrays.asList(currencies.split(","));
         }
-        return null;
+        return Collections.emptyList();
     }
 
 
