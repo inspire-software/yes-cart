@@ -48,7 +48,7 @@ public interface ServiceLocator {
      * @param iface service interface
      * @param seriveUrl service url to find
      * @param loginName login name to service
-     * @param password  passwrd to service
+     * @param password  password to service
      * @throws RuntimeException in case if service can not be instantiated  or  founded
      * @return service instance.
      */

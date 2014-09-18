@@ -16,6 +16,7 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
@@ -41,17 +42,14 @@ public class RemoteCustomerOrderServiceImpl
         extends AbstractRemoteService<CustomerOrderDTO>
         implements RemoteCustomerOrderService {
 
-    private static final Result AUTH_ERROR = new Result("OR-1000", "Auth failed");
-
     private final ReportService reportService;
     private final FederationFacade federationFacade;
 
     /**
      * Construct remote service
      *
-     * @param customerOrderDTOGenericDTOService
-     *         dto serivese to use.
-     * @param federationFacade
+     * @param customerOrderDTOGenericDTOService dto service to use.
+     * @param federationFacade federation facade
      */
     public RemoteCustomerOrderServiceImpl(final GenericDTOService<CustomerOrderDTO> customerOrderDTOGenericDTOService,
                                           final ReportService reportService,
@@ -76,8 +74,9 @@ public class RemoteCustomerOrderServiceImpl
     public CustomerOrderDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         if (federationFacade.isManageable(id, CustomerOrderDTO.class)) {
             return super.getById(id);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
-        return null;
     }
 
     /**
@@ -125,8 +124,9 @@ public class RemoteCustomerOrderServiceImpl
     public Result updateOrderSetConfirmed(String orderNum) {
         if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
             return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetConfirmed(orderNum);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
-        return AUTH_ERROR;
     }
 
     /**
@@ -135,16 +135,18 @@ public class RemoteCustomerOrderServiceImpl
     public Result updateOrderSetCancelled(final String orderNum) {
         if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
             return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetCancelled(orderNum);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
-        return AUTH_ERROR;
     }
 
     /** {@inheritDoc} */
     public Result updateExternalDeliveryRefNo(String orderNum, String deliveryNum, String newRefNo) {
         if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
             return ((DtoCustomerOrderService) getGenericDTOService()).updateExternalDeliveryRefNo(orderNum, deliveryNum, newRefNo) ;
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
-        return AUTH_ERROR;
     }
 
     /** {@inheritDoc} */
@@ -154,8 +156,9 @@ public class RemoteCustomerOrderServiceImpl
         if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
             return ((DtoCustomerOrderService) getGenericDTOService())
                 .updateDeliveryStatus(orderNum, deliveryNum, currentStatus, destinationStatus);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
-        return AUTH_ERROR;
 
     }
 
@@ -187,8 +190,9 @@ public class RemoteCustomerOrderServiceImpl
             List rez =  findDeliveryByOrderNumber(orderNum, deliveryNum);
 
             return reportService.produceReport(reportLang, "reportDelivery", rez);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
-        return new byte[0];
 
     }
 

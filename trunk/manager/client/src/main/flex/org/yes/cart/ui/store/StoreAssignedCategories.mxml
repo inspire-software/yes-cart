@@ -15,7 +15,7 @@
   -    limitations under the License.
   -->
 
-<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:controls="controls.*"
            width="100%" height="100%"
            creationComplete="init();"
@@ -28,8 +28,10 @@
         import com.hexagonstar.util.debug.Debug;
 
         import mx.collections.ArrayCollection;
+        import mx.core.FlexGlobals;
 
         import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
         import mx.rpc.AsyncResponder;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
@@ -39,10 +41,12 @@
         import org.yes.cart.impl.ShopDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.ui.CategoryTreeDescriptor;
+        import org.yes.cart.ui.category.CategoryCreateDialog;
         import org.yes.cart.util.DomainUtils;
 
         public var shopDto:ShopDTOImpl;
 
+        private var newCategoryPopUp:CategoryCreateDialog;
 
         private function init():void {
             remoteCategoryService.getAll();
@@ -62,12 +66,14 @@
             this.availableSelected = this.categoryTree.selectedItem != null &&
                     !DomainUtils.isRootCategory(this.categoryTree.selectedItem) &&
                     !isCategoryAlreadyAssigned(this.categoryTree.selectedItem);
-            Debug.trace("Selected to assign category dto id is :" + this.categoryTree.selectedItem.categoryId);
+            Debug.trace("Selected to assign category dto id is :" +
+                    (this.availableSelected ? this.categoryTree.selectedItem.categoryId : 'none'));
         }
 
         private function onCategoryToUnassignSelected(event:ListEvent):void {
             this.assignedSelected = this.assignedCategoriesList.selectedItem != null;
-            Debug.trace("Selected to unassign category dto id is :" + this.assignedCategoriesList.selectedItem.categoryId);
+            Debug.trace("Selected to unassign category dto id is :" +
+                    (this.assignedSelected ? this.assignedCategoriesList.selectedItem.categoryId : 'none'));
 
         }
 
@@ -126,6 +132,34 @@
             this.assignedSelected = false;
             remoteCategoryService.getAllByShopId(shopDto.shopId);
         }
+
+        private function onCreateNewCategoryClick(event:MouseEvent):void {
+            newCategoryPopUp = CategoryCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CategoryCreateDialog, true));
+            newCategoryPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onCreateNewCategorySaveClick);
+            PopUpManager.centerPopUp(newCategoryPopUp);
+        }
+
+
+        private function onCreateNewCategorySaveClick(event:Event):void {
+            if (newCategoryPopUp != null) {
+                var newCategory:CategoryDTOImpl = new CategoryDTOImpl();
+                newCategory.name = newCategoryPopUp.categoryName.text;
+
+                newCategoryPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewCategoryClick);
+                PopUpManager.removePopUp(newCategoryPopUp);
+                newCategoryPopUp = null;
+
+                onCategorySelected(null);
+                onCategoryToUnassignSelected(null);
+
+                remoteCategoryService.createForShop(newCategory, shopDto.shopId);
+            }
+        }
+
+        private function onCreateForShopResult(event:ResultEvent):void {
+            init();
+        }
+
         ]]>
 
    </mx:Script>
@@ -146,44 +180,54 @@
         <mx:method id="unassignFromShop" name="unassignFromShop"
                    result="onUnAssignFromShopResult(event)"
                    fault="onRpcMethodFault(event)"/>
+        <mx:method id="createForShop" name="createForShop"
+                   result="onCreateForShopResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
 
     <mx:Boolean id="availableSelected">false</mx:Boolean>
     <mx:Boolean id="assignedSelected">false</mx:Boolean>
 
-
-    <mx:VBox height="100%" width="45%">
-        <mx:Label text="@Resource(bundle='StoresManagementPanel',key='availableCategories')"/>
-        <mx:Tree height="100%" width="100%" id="categoryTree"
-                 labelField="name"
-                 doubleClickEnabled="true"
-                 itemDoubleClick="onAssignCategoryClick(event)"
-                 itemClick="onCategorySelected(event)"
+    <mx:HBox  width="100%">
+        <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='addCategory')"
+                   toolTip="@Resource(bundle='CategoryManagementPanel',key='addCategoryHint')"
+                   click="onCreateNewCategoryClick(event)"
                 />
-    </mx:VBox>
-    <mx:VBox width="10%" height="100%" verticalAlign="middle" horizontalAlign="center">
-        <mx:Button label="@Resource(bundle='StoresManagementPanel',key='assign')"
-                   toolTip="@Resource(bundle='StoresManagementPanel',key='assignHint')"
-                   width="70" id="assignCategoryBtn"
-                   enabled="{availableSelected}"
-                   click="onAssignCategoryClick(event);"
-                />
-        <mx:Button
-                label="@Resource(bundle='StoresManagementPanel',key='unassign')"
-                toolTip="@Resource(bundle='StoresManagementPanel',key='unassignHint')"
-                width="70" id="unassignCategoryBtn"
-                enabled="{assignedSelected}"
-                click="onUnassignCategoryClick(event);"
-                />
-    </mx:VBox>
-    <mx:VBox width="45%" height="100%">
-        <mx:Label text="@Resource(bundle='StoresManagementPanel',key='assignedCategories')"/>
-        <mx:List height="100%" width="100%" id="assignedCategoriesList"
-                 labelField="name"
-                 doubleClickEnabled="true"
-                 itemDoubleClick="onUnassignCategoryClick(event)"
-                 itemClick="onCategoryToUnassignSelected(event);"
-                />
-    </mx:VBox>
-</mx:HBox>
+    </mx:HBox>
+    <mx:HBox width="100%" height="100%">
+        <mx:VBox height="100%" width="45%">
+            <mx:Label text="@Resource(bundle='StoresManagementPanel',key='availableCategories')"/>
+            <mx:Tree height="100%" width="100%" id="categoryTree"
+                     labelField="name"
+                     doubleClickEnabled="true"
+                     itemDoubleClick="onAssignCategoryClick(event)"
+                     itemClick="onCategorySelected(event)"
+                    />
+        </mx:VBox>
+        <mx:VBox width="10%" height="100%" verticalAlign="middle" horizontalAlign="center">
+            <mx:Button label="@Resource(bundle='StoresManagementPanel',key='assign')"
+                       toolTip="@Resource(bundle='StoresManagementPanel',key='assignHint')"
+                       width="70" id="assignCategoryBtn"
+                       enabled="{availableSelected}"
+                       click="onAssignCategoryClick(event);"
+                    />
+            <mx:Button
+                    label="@Resource(bundle='StoresManagementPanel',key='unassign')"
+                    toolTip="@Resource(bundle='StoresManagementPanel',key='unassignHint')"
+                    width="70" id="unassignCategoryBtn"
+                    enabled="{assignedSelected}"
+                    click="onUnassignCategoryClick(event);"
+                    />
+        </mx:VBox>
+        <mx:VBox width="45%" height="100%">
+            <mx:Label text="@Resource(bundle='StoresManagementPanel',key='assignedCategories')"/>
+            <mx:List height="100%" width="100%" id="assignedCategoriesList"
+                     labelField="name"
+                     doubleClickEnabled="true"
+                     itemDoubleClick="onUnassignCategoryClick(event)"
+                     itemClick="onCategoryToUnassignSelected(event);"
+                    />
+        </mx:VBox>
+    </mx:HBox>
+</mx:VBox>

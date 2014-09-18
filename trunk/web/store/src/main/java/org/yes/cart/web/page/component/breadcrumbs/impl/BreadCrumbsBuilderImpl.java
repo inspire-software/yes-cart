@@ -78,7 +78,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     public List<Crumb> getBreadCrumbs(final String locale,
                                       final long categoryId,
                                       final PageParameters pageParameters,
-                                      final List<Long> shopCategoryIds,
+                                      final Set<Long> shopCategoryIds,
                                       final String brandPrefix,
                                       final String pricePrefix,
                                       final String queryPrefix,
@@ -101,7 +101,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         return navigationCrumbs;
     }
 
-    private List<Crumb> getCategoriesCrumbs(final long categoryId, final List<Long> shopCategoryIds) {
+    private List<Crumb> getCategoriesCrumbs(final long categoryId, final Set<Long> shopCategoryIds) {
         final List<Crumb> categoriesCrumbs = new ArrayList<Crumb>();
         if (categoryId > 0) {
             fillCategories(categoriesCrumbs, categoryId, shopCategoryIds);
@@ -117,7 +117,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
      * @param categoriesCrumbs the crumbs list
      * @param categoryId       the current category id
      */
-    private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId, final List<Long> shopCategoryIds) {
+    private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId, final Set<Long> shopCategoryIds) {
         if (categoryId > 0l) {
             final Category category = categoryService.getById(categoryId);
             if (!category.isRoot()) {
@@ -150,9 +150,12 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
      * @param category given category
      * @return page parameter for point to parent.
      */
-    private PageParameters getRemoveCategoryLinkParameters(final Category category, final List<Long> shopCategoryIds) {
+    private PageParameters getRemoveCategoryLinkParameters(final Category category, final Set<Long> shopCategoryIds) {
         if (shopCategoryIds.contains(category.getParentId())) {
-            return getCategoryLinkParameters(category.getParentId());
+            final Category parent = categoryService.getById(category.getParentId());
+            if (parent != null && !parent.isRoot()) {
+                return getCategoryLinkParameters(category.getParentId());
+            }
         }
         return new PageParameters();
     }

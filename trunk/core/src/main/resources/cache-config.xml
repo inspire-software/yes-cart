@@ -219,6 +219,14 @@
             <constructor-arg index="0" value="contentService-contentHasSubcontent"/>
             <constructor-arg index="1" value="all"/>
         </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-shopContentIds"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-shopAllCategoriesIds"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
     </util:set>
 
     <util:set id="CategoryCreate">
@@ -546,11 +554,15 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="shopService-shopCategories"/>
+            <constructor-arg index="0" value="shopService-shopCategoriesIds"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="shopService-shopCategoriesIds"/>
+            <constructor-arg index="0" value="shopService-shopContentIds"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-shopAllCategoriesIds"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">

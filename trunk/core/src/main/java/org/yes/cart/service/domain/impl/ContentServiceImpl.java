@@ -481,7 +481,9 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             "contentService-childContent",
             "contentService-childContentRecursive",
             "contentService-byId",
-            "contentService-contentHasSubcontent"
+            "contentService-contentHasSubcontent",
+            "shopService-shopContentIds",
+            "shopService-shopAllCategoriesIds"
 
     },allEntries = true)
     public Category create(Category instance) {
@@ -502,7 +504,9 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             "contentService-childContent",
             "contentService-childContentRecursive",
             "contentService-byId",
-            "contentService-contentHasSubcontent"
+            "contentService-contentHasSubcontent",
+            "shopService-shopContentIds",
+            "shopService-shopAllCategoriesIds"
     }, allEntries = true)
     public Category update(Category instance) {
         return super.update(instance);
@@ -522,7 +526,9 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             "contentService-childContent",
             "contentService-childContentRecursive",
             "contentService-byId",
-            "contentService-contentHasSubcontent"
+            "contentService-contentHasSubcontent",
+            "shopService-shopContentIds",
+            "shopService-shopAllCategoriesIds"
     }, allEntries = true)
     public void delete(Category instance) {
         super.delete(instance);

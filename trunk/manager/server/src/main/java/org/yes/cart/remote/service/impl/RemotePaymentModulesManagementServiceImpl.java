@@ -52,7 +52,7 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
     /**
      * Create remote payment gateway manager service.
      * @param paymentModulesManager service to use.
-     * @param federationFacade
+     * @param federationFacade federation facade
      */
     public RemotePaymentModulesManagementServiceImpl(
             final PaymentModulesManager paymentModulesManager,
@@ -166,7 +166,7 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
 
     /**
      * Find all payments by given parameters.
-     * All parameters are optional, but at leasn one must be present. Please verify this fact on UI.
+     * All parameters are optional, but at least one must be present. Please verify this fact on UI.
      *
      * @param orderNumber            given order number. optional
      * @param fromDate from date

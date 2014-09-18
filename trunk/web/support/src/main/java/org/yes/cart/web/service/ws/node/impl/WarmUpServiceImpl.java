@@ -116,8 +116,11 @@ public class WarmUpServiceImpl implements WarmUpService {
             // Used in SKU commands
             final Shop cachedShop = shopService.getById(shop.getShopId());
             // Used for navigation and determination of current category belonging to current shop
-            shopService.getShopCategories(cachedShop.getShopId());
             shopService.getShopCategoriesIds(cachedShop.getShopId());
+            // Used for navigation and determination of current content belonging to current shop
+            shopService.getShopContentIds(cachedShop.getShopId());
+            // Used for navigation and determination of current category or content belonging to current shop
+            shopService.getShopAllCategoriesIds(cachedShop.getShopId());
         }
     }
 }

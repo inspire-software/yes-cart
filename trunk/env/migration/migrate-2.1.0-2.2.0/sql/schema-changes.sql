@@ -128,3 +128,8 @@ ALTER TABLE TSHOP DROP COLUMN IMGVAULT;
 --         foreign key (MANAGER_ID)
 --         references TMANAGER         on delete cascade;
 
+--
+--  YC-395 Federated environment for YUM
+--
+
+INSERT INTO TROLE (ROLE_ID, GUID, CODE, DESCRIPTION) VALUES (5, 'ROLE_SMCONTENTADMIN',  'ROLE_SMCONTENTADMIN', 'Content manager');

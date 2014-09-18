@@ -144,7 +144,7 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
     }
 
     /**
-     * Work around promlem with wicket param values, when it can return
+     * Work around problem with wicket param values, when it can return
      * parameter value as string or as array of strings with single value.
      * This behavior depends from url encoding strategy
      * @param param parameters

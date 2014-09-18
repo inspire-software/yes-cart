@@ -16,6 +16,7 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -43,7 +44,7 @@ public class RemoteShopServiceImpl
      * Construct remote service.
      *
      * @param dtoShopService dto service to use.
-     * @param federationFacade
+     * @param federationFacade federation facade
      */
     public RemoteShopServiceImpl(final DtoShopService dtoShopService,
                                  final FederationFacade federationFacade) {
@@ -66,8 +67,20 @@ public class RemoteShopServiceImpl
     public ShopDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         if (federationFacade.isManageable(id, ShopDTO.class)) {
             return super.getById(id);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
-        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ShopDTO update(final ShopDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (federationFacade.isManageable(instance.getShopId(), ShopDTO.class)) {
+            return super.update(instance);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
+        }
     }
 
     /**
@@ -83,8 +96,9 @@ public class RemoteShopServiceImpl
     public String getSupportedCurrencies(final long shopId) {
         if (federationFacade.isManageable(shopId, ShopDTO.class)) {
             return ((DtoShopService) getGenericDTOService()).getSupportedCurrencies(shopId);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
-        return null;
     }
 
     /**
@@ -93,6 +107,8 @@ public class RemoteShopServiceImpl
     public void updateSupportedCurrencies(final long shopId, final String currencies) {
         if (federationFacade.isManageable(shopId, ShopDTO.class)) {
             ((DtoShopService) getGenericDTOService()).updateSupportedCurrencies(shopId, currencies);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
     }
 
