@@ -29,6 +29,7 @@ import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.dto.GenericDTOService;
 import org.yes.cart.service.federation.FederationFacade;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -63,7 +64,7 @@ public class RemoteCustomerOrderServiceImpl
      * {@inheritDoc}
      */
     public List<CustomerOrderDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CustomerOrderDTO> all = super.getAll();
+        final List<CustomerOrderDTO> all = new ArrayList<CustomerOrderDTO>(super.getAll());
         federationFacade.applyFederationFilter(all, CustomerOrderDTO.class);
         return all;
     }
@@ -92,7 +93,7 @@ public class RemoteCustomerOrderServiceImpl
             final Date toDate,
             final String orderNum
     ) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CustomerOrderDTO> orders = ((DtoCustomerOrderService) getGenericDTOService()).findCustomerOrdersByCriteria(
+        final List<CustomerOrderDTO> orders = new ArrayList<CustomerOrderDTO>(((DtoCustomerOrderService) getGenericDTOService()).findCustomerOrdersByCriteria(
                 customerId,
                 firstName,
                 lastName,
@@ -101,7 +102,7 @@ public class RemoteCustomerOrderServiceImpl
                 fromDate,
                 toDate,
                 orderNum
-        );
+        ));
         federationFacade.applyFederationFilter(orders, CustomerOrderDTO.class);
         return orders;
     }

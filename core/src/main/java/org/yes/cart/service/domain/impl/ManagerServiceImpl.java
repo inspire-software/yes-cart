@@ -34,7 +34,7 @@ import java.util.List;
 public class ManagerServiceImpl extends BaseGenericServiceImpl<Manager> implements ManagerService {
 
     /**
-     * Create service to magane the administrative of web shop
+     * Create service to manage the administrative of web shop
      * @param genericDao dao to use
      */
     public ManagerServiceImpl(final GenericDAO<Manager, Long> genericDao) {

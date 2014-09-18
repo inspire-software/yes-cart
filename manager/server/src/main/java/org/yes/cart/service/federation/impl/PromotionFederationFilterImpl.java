@@ -16,16 +16,13 @@
 
 package org.yes.cart.service.federation.impl;
 
-import org.yes.cart.domain.dto.CustomerOrderDTO;
+import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.dto.ShopDTO;
-import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
-import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -33,11 +30,11 @@ import java.util.Set;
  * Date: 16/09/2014
  * Time: 14:27
  */
-public class ShopFederationFilterImpl implements FederationFilter {
+public class PromotionFederationFilterImpl implements FederationFilter {
 
     private final ShopFederationStrategy shopFederationStrategy;
 
-    public ShopFederationFilterImpl(final ShopFederationStrategy shopFederationStrategy) {
+    public PromotionFederationFilterImpl(final ShopFederationStrategy shopFederationStrategy) {
         this.shopFederationStrategy = shopFederationStrategy;
     }
 
@@ -45,13 +42,13 @@ public class ShopFederationFilterImpl implements FederationFilter {
      * {@inheritDoc}
      */
     public void applyFederationFilter(final Collection list, final Class objectType) {
-        final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
+        final Set<String> manageableShopIds = shopFederationStrategy.getAccessibleShopCodesByCurrentManager();
 
-        final Iterator<ShopDTO> shopIt = list.iterator();
-        while (shopIt.hasNext()) {
-            final ShopDTO shop = shopIt.next();
-            if (!manageableShopIds.contains(shop.getShopId())) {
-                shopIt.remove();
+        final Iterator<PromotionDTO> promoIt = list.iterator();
+        while (promoIt.hasNext()) {
+            final PromotionDTO promo = promoIt.next();
+            if (!manageableShopIds.contains(promo.getShopCode())) {
+                promoIt.remove();
             }
         }
     }
@@ -60,10 +57,6 @@ public class ShopFederationFilterImpl implements FederationFilter {
      * {@inheritDoc}
      */
     public boolean isManageable(final Object object, final Class objectType) {
-        if (object instanceof Long) {
-            final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
-            return manageableShopIds.contains(object);
-        }
         final Set<String> manageableShopIds = shopFederationStrategy.getAccessibleShopCodesByCurrentManager();
         return manageableShopIds.contains(object);
     }

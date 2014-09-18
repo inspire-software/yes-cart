@@ -66,6 +66,13 @@ public class FederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    public Set<String> getAccessibleShopCodesByCurrentManager() {
+        return shopFederationStrategy.getAccessibleShopCodesByCurrentManager();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<ShopDTO> getAccessibleShopsByCurrentManager() {
         return shopFederationStrategy.getAccessibleShopsByCurrentManager();
     }

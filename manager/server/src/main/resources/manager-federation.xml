@@ -18,18 +18,13 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:flex="http://www.springframework.org/schema/flex"
-       xmlns:security="http://www.springframework.org/schema/security"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/flex
-                           http://www.springframework.org/schema/flex/spring-flex-1.5.xsd
-                           http://www.springframework.org/schema/security
-                           http://www.springframework.org/schema/security/spring-security.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
     <bean id="shopFederationStrategy" class="org.yes.cart.service.federation.impl.ShopFederationStrategyImpl">
         <constructor-arg index="0" ref="userManagementService"/>
+        <constructor-arg index="1" ref="cacheManager"/>
     </bean>
 
     <bean id="managerFederationFilter" class="org.yes.cart.service.federation.impl.ManagerFederationFilterImpl">
@@ -61,6 +56,10 @@
         <constructor-arg index="1" ref="shopService"/>
     </bean>
 
+    <bean id="promotionFederationFilter" class="org.yes.cart.service.federation.impl.PromotionFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+    </bean>
+
     <bean id="federationFacade" class="org.yes.cart.service.federation.impl.FederationFacadeImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1">
@@ -71,6 +70,7 @@
                 <entry key="org.yes.cart.payment.persistence.entity.CustomerOrderPayment" value-ref="customerOrderPaymentFederationFilter"/>
                 <entry key="org.yes.cart.domain.dto.ShopDTO" value-ref="shopFederationFilter"/>
                 <entry key="org.yes.cart.domain.dto.CategoryDTO" value-ref="categoryFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.PromotionDTO" value-ref="promotionFederationFilter"/>
             </map>
         </constructor-arg>
     </bean>

@@ -47,6 +47,11 @@ public interface FederationFacade {
     Set<Long> getAccessibleShopIdsByCurrentManager();
 
     /**
+     * @return set of PK's of shops to which current manager has access
+     */
+    Set<String> getAccessibleShopCodesByCurrentManager();
+
+    /**
      * @return set of shops to which current manager has access
      */
     List<ShopDTO> getAccessibleShopsByCurrentManager();

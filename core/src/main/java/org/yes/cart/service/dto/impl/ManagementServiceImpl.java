@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.cache.annotation.CacheEvict;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ManagerDTO;
 import org.yes.cart.domain.dto.RoleDTO;
@@ -379,6 +380,11 @@ public class ManagementServiceImpl implements ManagementService {
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "yum.shopFederationStrategy-shop",
+            "yum.shopFederationStrategy-shopId",
+            "yum.shopFederationStrategy-shopCode"
+    }, key = "#userId")
     public void grantShop(final String userId, final String shopCode) {
         final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
         final Collection<ManagerShop> assigned = manager.getShops();
@@ -400,6 +406,11 @@ public class ManagementServiceImpl implements ManagementService {
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "yum.shopFederationStrategy-shop",
+            "yum.shopFederationStrategy-shopId",
+            "yum.shopFederationStrategy-shopCode"
+    }, key = "#userId")
     public void revokeShop(final String userId, final String shopCode) {
         final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
         final Iterator<ManagerShop> assigned = manager.getShops().iterator();
