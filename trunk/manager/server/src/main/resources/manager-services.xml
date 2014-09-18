@@ -287,6 +287,7 @@
 
     <bean id="remotePriceListService" class="org.yes.cart.remote.service.impl.RemotePriceListServiceImpl">
         <constructor-arg index="0" ref="dtoPriceListService"/>
+        <constructor-arg index="1" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="getShops" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
@@ -853,6 +854,7 @@
 
     <bean id="remotePromotionService" class="org.yes.cart.remote.service.impl.RemotePromotionServiceImpl">
         <constructor-arg index="0" ref="dtoPromotionService"/>
+        <constructor-arg index="1" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -867,6 +869,8 @@
 
     <bean id="remotePromotionCouponService" class="org.yes.cart.remote.service.impl.RemotePromotionCouponServiceImpl">
         <constructor-arg index="0" ref="dtoPromotionCouponService"/>
+        <constructor-arg index="1" ref="dtoPromotionService"/>
+        <constructor-arg index="2" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>

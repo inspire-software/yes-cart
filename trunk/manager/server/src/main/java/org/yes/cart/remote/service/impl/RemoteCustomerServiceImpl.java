@@ -27,10 +27,7 @@ import org.yes.cart.service.dto.DtoCustomerService;
 import org.yes.cart.service.dto.GenericDTOService;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -61,7 +58,7 @@ public class RemoteCustomerServiceImpl
      * {@inheritDoc}
      */
     public List<CustomerDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CustomerDTO> all = super.getAll();
+        final List<CustomerDTO> all = new ArrayList<CustomerDTO>(super.getAll());
         federationFacade.applyFederationFilter(all, CustomerDTO.class);
         return all;
     }
@@ -86,7 +83,7 @@ public class RemoteCustomerServiceImpl
                                           final String middlename,
                                           final String tag)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CustomerDTO> customers = dtoCustomerService.findCustomer(email, firstname, lastname, middlename, tag);
+        final List<CustomerDTO> customers = new ArrayList<CustomerDTO>(dtoCustomerService.findCustomer(email, firstname, lastname, middlename, tag));
         federationFacade.applyFederationFilter(customers, CustomerDTO.class);
         return customers;
     }

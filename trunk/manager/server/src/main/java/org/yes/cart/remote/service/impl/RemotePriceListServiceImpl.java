@@ -16,6 +16,7 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.PriceListDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -23,7 +24,10 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemotePriceListService;
 import org.yes.cart.service.dto.DtoPriceListsService;
 import org.yes.cart.service.dto.support.PriceListFilter;
+import org.yes.cart.service.federation.FederationFacade;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,34 +38,54 @@ import java.util.List;
 public class RemotePriceListServiceImpl implements RemotePriceListService {
 
     private final DtoPriceListsService dtoPriceListsService;
+    private final FederationFacade federationFacade;
 
-    public RemotePriceListServiceImpl(final DtoPriceListsService dtoPriceListsService) {
+    public RemotePriceListServiceImpl(final DtoPriceListsService dtoPriceListsService,
+                                      final FederationFacade federationFacade) {
         this.dtoPriceListsService = dtoPriceListsService;
+        this.federationFacade = federationFacade;
     }
 
     /** {@inheritDoc} */
     public List<ShopDTO> getShops() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoPriceListsService.getShops();
+        final List<ShopDTO> shops = new ArrayList<ShopDTO>(dtoPriceListsService.getShops());
+        federationFacade.applyFederationFilter(shops, ShopDTO.class);
+        return shops;
     }
 
     /** {@inheritDoc} */
     public List<String> getShopCurrencies(final ShopDTO shop) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoPriceListsService.getShopCurrencies(shop);
+        if (federationFacade.isManageable(shop.getShopId(), ShopDTO.class)) {
+            return dtoPriceListsService.getShopCurrencies(shop);
+        }
+        return Collections.emptyList();
     }
 
     /** {@inheritDoc} */
     public List<PriceListDTO> getPriceList(final PriceListFilter filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoPriceListsService.getPriceList(filter);
+        if (filter.getShop() != null && federationFacade.isManageable(filter.getShop().getShopId(), ShopDTO.class)) {
+            return dtoPriceListsService.getPriceList(filter);
+        }
+        return Collections.emptyList();
     }
 
     /** {@inheritDoc} */
     public PriceListDTO createPrice(final PriceListDTO price) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoPriceListsService.createPrice(price);
+        if (price.getShopCode() != null && federationFacade.isManageable(price.getShopCode(), ShopDTO.class)) {
+            return dtoPriceListsService.createPrice(price);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
+        }
+
     }
 
     /** {@inheritDoc} */
     public PriceListDTO updatePrice(final PriceListDTO price) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoPriceListsService.updatePrice(price);
+        if (price.getShopCode() != null && federationFacade.isManageable(price.getShopCode(), ShopDTO.class)) {
+            return dtoPriceListsService.updatePrice(price);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
+        }
     }
 
     /** {@inheritDoc} */

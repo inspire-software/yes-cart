@@ -542,4 +542,21 @@
            overflowToDisk="false"
            eternal="true"/>
 
+    <!-- ############################################# YUM cache #######################################-->
+
+    <cache name="yum.shopFederationStrategy-shop"
+           maxElementsInMemory="0"
+           overflowToDisk="false"
+           eternal="true"/>
+
+    <cache name="yum.shopFederationStrategy-shopId"
+           maxElementsInMemory="0"
+           overflowToDisk="false"
+           eternal="true"/>
+
+    <cache name="yum.shopFederationStrategy-shopCode"
+           maxElementsInMemory="0"
+           overflowToDisk="false"
+           eternal="true"/>
+
 </ehcache>

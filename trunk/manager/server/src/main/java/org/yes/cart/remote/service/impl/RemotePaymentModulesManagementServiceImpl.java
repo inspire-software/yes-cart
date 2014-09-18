@@ -185,13 +185,13 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
             final String paymentGateway
     ) {
 
-        final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(
+        final List<CustomerOrderPayment> payments = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
                 orderNumber,
                 fromDate,
                 tillDate,
                 lastCardDigits,
                 cardHolderName,
-                paymentGateway);
+                paymentGateway));
 
         federationFacade.applyFederationFilter(payments, CustomerOrderPayment.class);
         return payments;

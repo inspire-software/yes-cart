@@ -25,6 +25,7 @@ import org.yes.cart.remote.service.RemoteShopService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.federation.FederationFacade;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +57,7 @@ public class RemoteShopServiceImpl
      * {@inheritDoc}
      */
     public List<ShopDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<ShopDTO> all = super.getAll();
+        final List<ShopDTO> all = new ArrayList<ShopDTO>(super.getAll());
         federationFacade.applyFederationFilter(all, ShopDTO.class);
         return all;
     }

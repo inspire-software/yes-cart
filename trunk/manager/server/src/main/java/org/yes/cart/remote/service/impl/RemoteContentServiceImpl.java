@@ -26,6 +26,7 @@ import org.yes.cart.remote.service.RemoteContentService;
 import org.yes.cart.service.dto.DtoContentService;
 import org.yes.cart.service.federation.FederationFacade;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -93,7 +94,7 @@ public class RemoteContentServiceImpl
      * {@inheritDoc}
      */
     public List<CategoryDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CategoryDTO> all = super.getAll();
+        final List<CategoryDTO> all = new ArrayList<CategoryDTO>(super.getAll());
         federationFacade.applyFederationFilter(all, CategoryDTO.class);
         return all;
     }

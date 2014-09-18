@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.federation.impl;
 
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.domain.dto.ShopDTO;
@@ -36,9 +38,17 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
 
     private final ManagementService managementService;
 
+    private final Cache USER_ACCESS_CACHE_SHOP;
+    private final Cache USER_ACCESS_CACHE_SHOP_ID;
+    private final Cache USER_ACCESS_CACHE_SHOP_CODE;
 
-    public ShopFederationStrategyImpl(final ManagementService managementService) {
+
+    public ShopFederationStrategyImpl(final ManagementService managementService,
+                                      final CacheManager cacheManager) {
         this.managementService = managementService;
+        USER_ACCESS_CACHE_SHOP = cacheManager.getCache("yum.shopFederationStrategy-shop");
+        USER_ACCESS_CACHE_SHOP_ID = cacheManager.getCache("yum.shopFederationStrategy-shopId");
+        USER_ACCESS_CACHE_SHOP_CODE = cacheManager.getCache("yum.shopFederationStrategy-shopCode");
     }
 
 
@@ -62,48 +72,79 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
         if (isCurrentUserSystemAdmin()) {
             return true;
         }
-        try {
-            final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
-            final List<ShopDTO> currentAssigned = managementService.getAssignedManagerShops(currentManager);
-            for (final ShopDTO shop : currentAssigned) {
-                if (shop.getCode().equals(shopCode)) {
-                    return true;
-                }
-            }
-        } catch (Exception exp) {
-            // nothing
-        }
-        return false;
+        final Set<String> currentAssigned = getAccessibleShopCodesByCurrentManager();
+        return currentAssigned.contains(shopCode);
     }
 
     /**
      * {@inheritDoc}
      */
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
-        try {
-            final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
-            final List<ShopDTO> currentAssigned = managementService.getAssignedManagerShops(currentManager);
-            final Set<Long> currentAssignedIds = new HashSet<Long>();
-            for (final ShopDTO shop : currentAssigned) {
-                currentAssignedIds.add(shop.getShopId());
+        final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
+        Set<Long> currentAssignedIds = getValueWrapper(USER_ACCESS_CACHE_SHOP_ID.get(currentManager));
+        if (currentAssignedIds == null) {
+            try {
+                final List<ShopDTO> currentAssigned = getAccessibleShopsByCurrentManager();
+                final Set<Long> tmpCurrentAssignedIds = new HashSet<Long>();
+                for (final ShopDTO shop : currentAssigned) {
+                    tmpCurrentAssignedIds.add(shop.getShopId());
+                }
+                currentAssignedIds = Collections.unmodifiableSet(tmpCurrentAssignedIds);
+            } catch (Exception exp) {
+                currentAssignedIds = Collections.emptySet();
             }
-            return currentAssignedIds;
-        } catch (Exception exp) {
-            return Collections.emptySet();
         }
+        return currentAssignedIds;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Set<String> getAccessibleShopCodesByCurrentManager() {
+        final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
+        Set<String> currentAssignedCodes = getValueWrapper(USER_ACCESS_CACHE_SHOP_CODE.get(currentManager));
+        if (currentAssignedCodes == null) {
+            try {
+                final List<ShopDTO> currentAssigned = getAccessibleShopsByCurrentManager();
+                final Set<String> tmpCurrentAssignedCodes = new HashSet<String>();
+                for (final ShopDTO shop : currentAssigned) {
+                    tmpCurrentAssignedCodes.add(shop.getCode());
+                }
+                currentAssignedCodes = Collections.unmodifiableSet(tmpCurrentAssignedCodes);
+            } catch (Exception exp) {
+                currentAssignedCodes = Collections.emptySet();
+            }
+            USER_ACCESS_CACHE_SHOP_CODE.put(currentManager, currentAssignedCodes);
+        }
+        return currentAssignedCodes;
     }
 
     /**
      * {@inheritDoc}
      */
     public List<ShopDTO> getAccessibleShopsByCurrentManager() {
-        try {
-            final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
-            return managementService.getAssignedManagerShops(currentManager);
-        } catch (Exception exp) {
-            return Collections.emptyList();
+
+        final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<ShopDTO> shops = getValueWrapper(USER_ACCESS_CACHE_SHOP.get(currentManager));
+        if (shops == null) {
+            try {
+                shops = Collections.unmodifiableList(managementService.getAssignedManagerShops(currentManager));
+            } catch (Exception exp) {
+                shops = Collections.emptyList();
+            }
+            USER_ACCESS_CACHE_SHOP.put(currentManager, shops);
         }
+        return shops;
     }
+
+
+    private <T> T getValueWrapper(final Cache.ValueWrapper wrapper) {
+        if (wrapper != null) {
+            return (T) wrapper.get();
+        }
+        return null;
+    }
+
 
 
 }

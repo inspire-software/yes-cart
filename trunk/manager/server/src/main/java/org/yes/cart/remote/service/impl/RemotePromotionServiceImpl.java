@@ -16,14 +16,19 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.PromotionDTO;
+import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemotePromotionService;
 import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.service.dto.GenericDTOService;
+import org.yes.cart.service.federation.FederationFacade;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -33,10 +38,13 @@ import java.util.List;
 public class RemotePromotionServiceImpl extends AbstractRemoteService<PromotionDTO>
         implements RemotePromotionService {
 
-    private DtoPromotionService dtoPromotionService;
+    private final DtoPromotionService dtoPromotionService;
+    private final FederationFacade federationFacade;
 
-    public RemotePromotionServiceImpl(final GenericDTOService<PromotionDTO> promotionDTOGenericDTOService) {
+    public RemotePromotionServiceImpl(final GenericDTOService<PromotionDTO> promotionDTOGenericDTOService,
+                                      final FederationFacade federationFacade) {
         super(promotionDTOGenericDTOService);
+        this.federationFacade = federationFacade;
         this.dtoPromotionService = (DtoPromotionService) promotionDTOGenericDTOService;
     }
 
@@ -49,6 +57,71 @@ public class RemotePromotionServiceImpl extends AbstractRemoteService<PromotionD
                                                final String action,
                                                final Boolean enabled)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoPromotionService.findByParameters(code, shopCode, currency, tag, type, action, enabled);
+        final List<PromotionDTO> all = new ArrayList<PromotionDTO>(dtoPromotionService.findByParameters(code, shopCode, currency, tag, type, action, enabled));
+        federationFacade.applyFederationFilter(all, PromotionDTO.class);
+        return all;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<PromotionDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<PromotionDTO> all = new ArrayList<PromotionDTO>(super.getAll());
+        federationFacade.applyFederationFilter(all, PromotionDTO.class);
+        return all;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public PromotionDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final PromotionDTO promo = super.getById(id);
+        if (promo == null || federationFacade.isManageable(promo.getShopCode(), ShopDTO.class)) {
+            return promo;
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public PromotionDTO getById(final long id, final Map converters) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final PromotionDTO promo = super.getById(id, converters);
+        if (promo == null || federationFacade.isManageable(promo.getShopCode(), ShopDTO.class)) {
+            return promo;
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public PromotionDTO create(final PromotionDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (federationFacade.isManageable(instance.getShopCode(), ShopDTO.class)) {
+            return super.create(instance);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public PromotionDTO update(final PromotionDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (federationFacade.isManageable(instance.getShopCode(), ShopDTO.class)) {
+            return super.update(instance);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void remove(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        getById(id); // checks access
+        super.remove(id);
     }
 }

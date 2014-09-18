@@ -28,10 +28,7 @@ import org.yes.cart.service.federation.FederationFacade;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -75,7 +72,7 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
     public List<ManagerDTO> getManagers(final String emailFilter, final String firstNameFilter, final String lastNameFilter)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<ManagerDTO> managers = managementService.getManagers(emailFilter, firstNameFilter, lastNameFilter);
+        final List<ManagerDTO> managers = new ArrayList<ManagerDTO>(managementService.getManagers(emailFilter, firstNameFilter, lastNameFilter));
         federationFacade.applyFederationFilter(managers, ManagerDTO.class);
         return managers;
     }

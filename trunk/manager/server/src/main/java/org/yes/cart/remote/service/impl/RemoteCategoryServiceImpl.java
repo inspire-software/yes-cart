@@ -17,10 +17,7 @@
 package org.yes.cart.remote.service.impl;
 
 import org.springframework.security.access.AccessDeniedException;
-import org.yes.cart.domain.dto.AttrValueDTO;
-import org.yes.cart.domain.dto.CategoryDTO;
-import org.yes.cart.domain.dto.ShopCategoryDTO;
-import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.dto.*;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteCategoryService;
@@ -28,6 +25,7 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.dto.DtoCategoryService;
 import org.yes.cart.service.federation.FederationFacade;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +71,7 @@ public class RemoteCategoryServiceImpl
      */
     public List<CategoryDTO> getAllWithAvailabilityFilter(final boolean withAvailabilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CategoryDTO> all = ((DtoCategoryService) getGenericDTOService()).getAllWithAvailabilityFilter(withAvailabilityFiltering);
+        final List<CategoryDTO> all = new ArrayList<CategoryDTO>(((DtoCategoryService) getGenericDTOService()).getAllWithAvailabilityFilter(withAvailabilityFiltering));
         federationFacade.applyFederationFilter(all, CategoryDTO.class);
         return all;
     }
@@ -82,8 +80,9 @@ public class RemoteCategoryServiceImpl
      * {@inheritDoc}
      */
     public List<CategoryDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CategoryDTO> all = super.getAll();
+        final List<CategoryDTO> all = new ArrayList<CategoryDTO>(super.getAll());
         for (final CategoryDTO root : all) {
+            root.setChildren(new ArrayList<CategoryDTO>(root.getChildren()));
             federationFacade.applyFederationFilter(root.getChildren(), CategoryDTO.class);
         }
         return all;
@@ -177,6 +176,7 @@ public class RemoteCategoryServiceImpl
      * {@inheritDoc}
      */
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
         return ((DtoCategoryService) getGenericDTOService()).updateEntityAttributeValue(attrValueDTO);
     }
 
@@ -213,7 +213,7 @@ public class RemoteCategoryServiceImpl
      * {@inheritDoc}
      */
     public List<CategoryDTO> getByProductId(final long productId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CategoryDTO> all = ((DtoCategoryService) getGenericDTOService()).getByProductId(productId);
+        final List<CategoryDTO> all = new ArrayList<CategoryDTO>(((DtoCategoryService) getGenericDTOService()).getByProductId(productId));
         federationFacade.applyFederationFilter(all, ShopDTO.class);
         return all;
     }
