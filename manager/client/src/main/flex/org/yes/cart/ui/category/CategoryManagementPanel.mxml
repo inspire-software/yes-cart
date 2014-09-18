@@ -17,7 +17,7 @@
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:cat="org.yes.cart.ui.category.*"
-           xmlns:seo="org.yes.cart.ui.seo.*" xmlns:yci18n="org.yes.cart.ui.i18n.*"
+           xmlns:yci18n="org.yes.cart.ui.i18n.*"
            width="100%" height="100%"
            creationComplete="init();">
     <mx:Script>
@@ -80,7 +80,7 @@
             categorySelected = this.categoryTree.selectedItem != null && !DomainUtils.isRootCategory(this.categoryTree.selectedItem);
             categoryOrRootSelected = this.categoryTree.selectedItem != null;
             categorySelectedAndChanged = categorySelected && this.categoryTree.selectedItem.changed;
-            Debug.trace("Selected category dto name is :" + (this.categoryTree.selectedItem != null ?
+            Debug.trace("Selected category dto name is :" + (categoryOrRootSelected ?
                     this.categoryTree.selectedItem.name : "null"));
             unbindMain();
             unbindSeo();
@@ -328,6 +328,11 @@
                         resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteSelectedCategoryConfirm, null, Alert.OK);
             }
+        }
+
+
+        private function onRefreshCategoriesClick(event:MouseEvent):void {
+            init();
         }
 
 
@@ -673,6 +678,10 @@
                                label="@Resource(bundle='CategoryManagementPanel',key='deleteCategory')"
                                toolTip="@Resource(bundle='CategoryManagementPanel',key='deleteCategoryHint')"
                                click="onDeleteCategoryClick(event)"
+                            />
+                    <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='refreshCategories')"
+                               toolTip="@Resource(bundle='CategoryManagementPanel',key='refreshCategoriesHint')"
+                               click="onRefreshCategoriesClick(event)"
                             />
                 </mx:HBox>
                 <mx:HDividedBox width="100%" height="100%">

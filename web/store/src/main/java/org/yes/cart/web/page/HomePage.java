@@ -153,8 +153,7 @@ public class HomePage extends AbstractWebPage {
             add(new PriceProductFilter("priceFilter", query, categoryId));
         }
 
-        final List<Long> shopAllCategoriesIds = new ArrayList<Long>(shopService.getShopCategoriesIds(shop.getShopId()));
-        add(new BreadCrumbsView("breadCrumbs", categoryId, shopAllCategoriesIds));
+        add(new BreadCrumbsView("breadCrumbs", categoryId, shopService.getShopAllCategoriesIds(shop.getShopId())));
 
 
         add(new RecentlyViewedProducts("recentlyViewed"));
@@ -325,7 +324,7 @@ public class HomePage extends AbstractWebPage {
     /**
      * Check if given content is visible in current shop.
      *
-     * NOTE: we are using categoryService for retirving content since Breadcrumbs use
+     * NOTE: we are using categoryService for retrieving content since Breadcrumbs use
      * categoryService and thus cache will work better
      *
      * Criteria to satisfy:
@@ -338,8 +337,7 @@ public class HomePage extends AbstractWebPage {
      */
     private boolean isContentVisibleInShop(final Long contentId) {
 
-        final String shopCode = ShopCodeContext.getShopCode();
-
+        final Set<Long> catIds = shopService.getShopContentIds(ShopCodeContext.getShopId());
         Category content = categoryService.getById(contentId);
         final Date now = new Date();
 
@@ -347,8 +345,7 @@ public class HomePage extends AbstractWebPage {
 
             while (content != null) {
 
-                // If this belong to root content for this shop
-                if (content.getGuid().equals(shopCode)) {
+                if (catIds.contains(content.getCategoryId())) {
 
                     return true;
 

@@ -16,6 +16,7 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.CustomerDTO;
 import org.yes.cart.domain.dto.ShopDTO;
@@ -47,7 +48,7 @@ public class RemoteCustomerServiceImpl
      * Construct service to manage the users.
      *
      * @param customerDTOGenericService dto service to use
-     * @param federationFacade
+     * @param federationFacade federation service
      */
     public RemoteCustomerServiceImpl(final GenericDTOService<CustomerDTO> customerDTOGenericService,
                                      final FederationFacade federationFacade) {
@@ -71,8 +72,9 @@ public class RemoteCustomerServiceImpl
     public CustomerDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         if (federationFacade.isManageable(id, CustomerDTO.class)) {
             return super.getById(id);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
-        return null;
     }
 
     /**
@@ -95,6 +97,8 @@ public class RemoteCustomerServiceImpl
     public void remoteResetPassword(final CustomerDTO customer, final long shopId) {
         if (federationFacade.isManageable(customer.getCustomerId(), CustomerDTO.class)) {
             dtoCustomerService.remoteResetPassword(customer, shopId);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
     }
 
@@ -104,6 +108,8 @@ public class RemoteCustomerServiceImpl
     public void updateCustomerTags(final CustomerDTO customerDTO, final String tags) {
         if (federationFacade.isManageable(customerDTO.getCustomerId(), CustomerDTO.class)) {
             dtoCustomerService.updateCustomerTags(customerDTO, tags);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
     }
 
@@ -198,6 +204,8 @@ public class RemoteCustomerServiceImpl
         if (federationFacade.isManageable(customerId, CustomerDTO.class)
                 && federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
             dtoCustomerService.grantShop(customerId, shopCode);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
     }
 
@@ -208,6 +216,8 @@ public class RemoteCustomerServiceImpl
         if (federationFacade.isManageable(customerId, CustomerDTO.class)
                 && federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
             dtoCustomerService.revokeShop(customerId, shopCode);
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
         }
     }
 

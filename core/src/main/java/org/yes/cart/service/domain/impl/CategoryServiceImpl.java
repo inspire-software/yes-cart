@@ -89,8 +89,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "shopService-shopById",
             "shopService-shopByDomainName",
             "shopService-allShops",
-            "shopService-shopCategories",
-            "shopService-shopCategoriesIds"
+            "shopService-shopCategoriesIds",
+            "shopService-shopAllCategoriesIds"
     }, allEntries = true)
     public ShopCategory assignToShop(final long categoryId, final long shopId) {
         final ShopCategory shopCategory = shopCategoryDao.getEntityFactory().getByIface(ShopCategory.class);
@@ -108,8 +108,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "shopService-shopById",
             "shopService-shopByDomainName",
             "shopService-allShops",
-            "shopService-shopCategories",
-            "shopService-shopCategoriesIds"
+            "shopService-shopCategoriesIds",
+            "shopService-shopAllCategoriesIds"
     }, allEntries = true)
     public void unassignFromShop(final long categoryId, final long shopId) {
         ShopCategory shopCategory = shopCategoryDao.findSingleByNamedQuery(

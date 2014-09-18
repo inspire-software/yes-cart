@@ -284,28 +284,31 @@
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
 
-    <cache name="shopService-shopByCode" maxElementsInMemory="10" overflowToDisk="false"
+    <cache name="shopService-shopByCode" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="shopService-shopById" maxElementsInMemory="20" overflowToDisk="false"
+    <cache name="shopService-shopById" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="shopService-allShops" maxElementsInMemory="5" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="shopService-shopByDomainName" maxElementsInMemory="20" overflowToDisk="false"
+    <cache name="shopService-shopByDomainName" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="shopService-shopCategories" maxElementsInMemory="200" overflowToDisk="false"
+    <cache name="shopService-shopCategoriesIds" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="shopService-shopCategoriesIds" maxElementsInMemory="200" overflowToDisk="false"
+    <cache name="shopService-shopContentIds" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="shopService-shopWarehouses" maxElementsInMemory="20" overflowToDisk="false"
+    <cache name="shopService-shopAllCategoriesIds" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="shopService-shopWarehousesIds" maxElementsInMemory="20" overflowToDisk="false"
+    <cache name="shopService-shopWarehouses" maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="shopService-shopWarehousesIds" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
 

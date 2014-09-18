@@ -21,7 +21,6 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 
@@ -54,24 +53,24 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testGetAllCategoriesTestOnShopWithoutAssignedCategories() {
         Shop shop = shopService.getShopByDomainName("eddie.lives.somewhere.in.time");
-        Set<Category> categorySet = shopService.getShopCategories(shop.getShopId());
+        Set<Long> categorySet = shopService.getShopCategoriesIds(shop.getShopId());
         assertTrue(categorySet.isEmpty());
     }
 
     /**
-     * Test to getByKey assigneg categories
+     * Test to getByKey assigned categories
      */
     @Test
     public void testGetAllCategoriesTestOnShopWithLimitedAssignedCategories() {
         List<Long> categories = Arrays.asList(200L, 203L, 204L, 205L, 206L, 207L, 208L);
         List<Long> notAvailableCategories = Arrays.asList(201L, 202L);
         Shop shop = shopService.getShopByDomainName("long.live.robots");
-        Set<Category> categorySet = shopService.getShopCategories(shop.getShopId());
+        Set<Long> categorySet = shopService.getShopCategoriesIds(shop.getShopId());
         assertFalse(categorySet.isEmpty());
         assertEquals(categories.size(), categorySet.size());
-        for (Category category : categorySet) {
-            assertTrue(categories.contains(category.getCategoryId()));
-            assertFalse(notAvailableCategories.contains(category.getCategoryId()));
+        for (Long categoryId : categorySet) {
+            assertTrue(categories.contains(categoryId));
+            assertFalse(notAvailableCategories.contains(categoryId));
         }
     }
 

@@ -16,7 +16,6 @@
   -->
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:prod="org.yes.cart.ui.product.*"
-           xmlns:seo="org.yes.cart.ui.seo.*"
            width="100%" height="100%" creationComplete="init();">
     <mx:Panel width="100%" height="100%" title="@Resource(bundle='PaymentGateConfigManagementPanel',key='pgwconfig')"
               paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">

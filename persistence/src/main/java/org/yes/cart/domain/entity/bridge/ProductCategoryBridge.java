@@ -92,7 +92,7 @@ public class ProductCategoryBridge implements FieldBridge {
             for (final Shop shop : shops) {
 
                 for (final ProductCategory category : (Set<ProductCategory>) value) {
-                    if (support.getShopCategoriesIds(shop).contains(category.getCategory().getCategoryId())) {
+                    if (support.getShopCategoriesIds(shop.getShopId()).contains(category.getCategory().getCategoryId())) {
                         document.add(new Field(
                                 ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD,
                                 String.valueOf(shop.getShopId()),

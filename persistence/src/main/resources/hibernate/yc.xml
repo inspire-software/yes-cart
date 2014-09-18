@@ -2381,7 +2381,7 @@
        where c.categoryId = sc.category.categoryId and sc.shop.shopId = ?1
        and (c.availablefrom < ?2 OR c.availablefrom IS NULL)
        and (c.availableto > ?2 OR c.availableto IS NULL)
-       order by sc.rank
+       order by sc.rank, sc.shopCategoryId
        ]]>
     </query>
 
@@ -2389,7 +2389,7 @@
         <![CDATA[
        select c from CategoryEntity c, ShopCategoryEntity sc
        where c.categoryId = sc.category.categoryId and sc.shop.shopId = ?1
-       order by sc.rank
+       order by sc.rank, sc.shopCategoryId
        ]]>
     </query>
 
