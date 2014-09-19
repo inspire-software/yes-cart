@@ -162,7 +162,7 @@
     <mx:VBox height="100%" width="100%">
 
         <mx:HBox paddingTop="5" width="100%">
-        <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='newWarehouse')"
+            <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='newWarehouse')"
                        toolTip="@Resource(bundle='WarehouseManagementPanel',key='newWarehouseHint')"
                        click="onNewWarehouseClick(event)"/>
             <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='editWarehouse')"

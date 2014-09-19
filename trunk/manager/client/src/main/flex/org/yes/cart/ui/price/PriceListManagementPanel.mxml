@@ -29,6 +29,10 @@
                                  change="onShopSelectionChanged(event)"
                                  prompt="@Resource(bundle='ProductManagementPanel',key='selectStorePropmt')"/>
                     <mx:ComboBox id="storeCurrencyComboBox" change="onShopCurrencyChange(event)"/>
+                    <mx:Button id="refreshShopList"
+                               label="@Resource(bundle='ShopManagerApplication',key='refresh')"
+                               click="onRefreshShopListButtonClick(event)"/>
+
                 </mx:HBox>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='product')">
@@ -37,6 +41,7 @@
                                   toolTip="@Resource(bundle='ShopManagerApplication',key='optionalInput')"
                                   change="onProductCodeChange(event)"/>
                     <mx:CheckBox id="productCodeExact"
+                                 toolTip="@Resource(bundle='ShopManagerApplication',key='exactMatch')"
                                  change="onProductCodeExactChange(event)"/>
                 </mx:HBox>
             </mx:FormItem>
@@ -46,6 +51,7 @@
                                   toolTip="@Resource(bundle='ShopManagerApplication',key='optionalInput')"
                                   change="onTagChange(event)"/>
                     <mx:CheckBox id="tagExact"
+                                 toolTip="@Resource(bundle='ShopManagerApplication',key='exactMatch')"
                                  change="onTagExactChange(event)"/>
                 </mx:HBox>
             </mx:FormItem>
@@ -490,6 +496,10 @@
 
         private function onSearchButtonClick(event:MouseEvent):void {
             refreshSkuPrices();
+        }
+
+        private function onRefreshShopListButtonClick(event:MouseEvent):void {
+            remotePriceListService.getShops();
         }
 
         private function onProductCodeChange(event:Event):void {

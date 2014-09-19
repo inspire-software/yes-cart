@@ -31,6 +31,9 @@
                                  change="onWarehouseSelectionChanged(event)"
                                  prompt="@Resource(bundle='ProductManagementPanel',key='selectWarehousePropmt')">
                     </mx:ComboBox>
+                    <mx:Button id="refreshWarehouseList"
+                               label="@Resource(bundle='ShopManagerApplication',key='refresh')"
+                               click="onRefreshWarehouseListButtonClick(event)"/>
                 </mx:HBox>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='product')">
@@ -39,6 +42,7 @@
                                   toolTip="@Resource(bundle='ShopManagerApplication',key='optionalInput')"
                                   change="onProductCodeChange(event)"/>
                     <mx:CheckBox id="productCodeExact"
+                                 toolTip="@Resource(bundle='ShopManagerApplication',key='exactMatch')"
                                  change="onProductCodeExactChange(event)"/>
                 </mx:HBox>
             </mx:FormItem>
@@ -163,6 +167,11 @@
             // available
             remoteInventoryService.getWarehouses();
         }
+
+        private function onRefreshWarehouseListButtonClick(event:MouseEvent):void {
+            remoteInventoryService.getWarehouses();
+        }
+
 
         private function onSkuWarehouseQuantitySelected(event:ListEvent):void {
             if (inventoryDataGrid.selectedItem != null) {

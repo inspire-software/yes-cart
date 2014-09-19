@@ -60,6 +60,11 @@
         <constructor-arg index="0" ref="shopFederationStrategy"/>
     </bean>
 
+    <bean id="warehouseFederationFilter" class="org.yes.cart.service.federation.impl.WarehouseFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1" ref="dtoWarehouseService"/>
+    </bean>
+
     <bean id="federationFacade" class="org.yes.cart.service.federation.impl.FederationFacadeImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1">
@@ -71,6 +76,7 @@
                 <entry key="org.yes.cart.domain.dto.ShopDTO" value-ref="shopFederationFilter"/>
                 <entry key="org.yes.cart.domain.dto.CategoryDTO" value-ref="categoryFederationFilter"/>
                 <entry key="org.yes.cart.domain.dto.PromotionDTO" value-ref="promotionFederationFilter"/>
+                <entry key="org.yes.cart.domain.dto.WarehouseDTO" value-ref="warehouseFederationFilter"/>
             </map>
         </constructor-arg>
     </bean>

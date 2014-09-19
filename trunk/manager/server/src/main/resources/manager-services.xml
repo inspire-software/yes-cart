@@ -410,17 +410,18 @@
     <bean id="remoteWarehouseService" class="org.yes.cart.remote.service.impl.RemoteWarehouseServiceImpl">
         <constructor-arg index="0" ref="dtoWarehouseService"/>
         <constructor-arg index="1" ref="reindexService"/>
-        <constructor-arg index="2" ref="productSkuService"/>
+        <constructor-arg index="2" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
-            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="create" access="ROLE_SMADMIN"/>
+            <security:protect method="createForShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
-            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN"/>
             <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="findByShopId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="assignWarehouse" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="unassignWarehouse" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="assignWarehouse" access="ROLE_SMADMIN"/>
+            <security:protect method="unassignWarehouse" access="ROLE_SMADMIN"/>
             <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="removeSkuOnWarehouse" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
             <security:protect method="createSkuOnWarehouse" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN"/>
@@ -432,6 +433,7 @@
     <bean id="remoteInventoryService" class="org.yes.cart.remote.service.impl.RemoteInventoryServiceImpl">
         <constructor-arg index="0" ref="dtoInventoryService"/>
         <constructor-arg index="1" ref="reindexService"/>
+        <constructor-arg index="2" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="getWarehouses" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
