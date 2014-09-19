@@ -16,6 +16,7 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.InventoryDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -24,7 +25,10 @@ import org.yes.cart.remote.service.ReindexService;
 import org.yes.cart.remote.service.RemoteInventoryService;
 import org.yes.cart.service.dto.DtoInventoryService;
 import org.yes.cart.service.dto.support.InventoryFilter;
+import org.yes.cart.service.federation.FederationFacade;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,55 +40,84 @@ public class RemoteInventoryServiceImpl implements RemoteInventoryService {
 
     private final DtoInventoryService dtoInventoryService;
     private final ReindexService reindexService;
+    private final FederationFacade federationFacade;
 
     public RemoteInventoryServiceImpl(final DtoInventoryService dtoInventoryService,
-                                      final ReindexService reindexService) {
+                                      final ReindexService reindexService,
+                                      final FederationFacade federationFacade) {
         this.dtoInventoryService = dtoInventoryService;
         this.reindexService = reindexService;
+        this.federationFacade = federationFacade;
     }
 
     /** {@inheritDoc} */
     @Override
     public List<InventoryDTO> getInventoryList(final InventoryFilter filter) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoInventoryService.getInventoryList(filter);
+        if (filter.getWarehouse() != null && federationFacade.isManageable(filter.getWarehouse().getWarehouseId(), WarehouseDTO.class)) {
+            return dtoInventoryService.getInventoryList(filter);
+        }
+        return Collections.emptyList();
     }
 
     /** {@inheritDoc} */
     @Override
     public InventoryDTO createInventory(final InventoryDTO inventory) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final InventoryDTO rez = dtoInventoryService.createInventory(inventory);
-        reindexService.reindexProductSkuCode(inventory.getSkuCode());
-        return rez;
+        if (federationFacade.isManageable(inventory.getWarehouseCode(), WarehouseDTO.class)) {
+            final InventoryDTO rez = dtoInventoryService.createInventory(inventory);
+            reindexService.reindexProductSkuCode(inventory.getSkuCode());
+            return rez;
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
+        }
     }
 
     /** {@inheritDoc} */
     @Override
     public InventoryDTO updateInventory(final InventoryDTO inventory) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final InventoryDTO rez = dtoInventoryService.updateInventory(inventory);
-        reindexService.reindexProductSkuCode(inventory.getSkuCode());
-        return rez;
-
+        if (federationFacade.isManageable(inventory.getWarehouseCode(), WarehouseDTO.class)) {
+            final InventoryDTO rez = dtoInventoryService.updateInventory(inventory);
+            reindexService.reindexProductSkuCode(inventory.getSkuCode());
+            return rez;
+        } else {
+            throw new AccessDeniedException("ACCESS DENIED");
+        }
     }
 
     /** {@inheritDoc} */
     @Override
     public List<WarehouseDTO> getWarehouses() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoInventoryService.getWarehouses();
+        final List<WarehouseDTO> all = new ArrayList<WarehouseDTO>(dtoInventoryService.getWarehouses());
+        federationFacade.applyFederationFilter(all, WarehouseDTO.class);
+        return all;
     }
 
     /** {@inheritDoc} */
     @Override
     public InventoryDTO getInventory(final long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return dtoInventoryService.getInventory(skuWarehouseId);
+        final InventoryDTO inv = dtoInventoryService.getInventory(skuWarehouseId);
+        if (inv != null) {
+            if (federationFacade.isManageable(inv.getWarehouseCode(), WarehouseDTO.class)) {
+                return inv;
+            } else {
+                throw new AccessDeniedException("ACCESS DENIED");
+            }
+        }
+        return null;
     }
 
     /** {@inheritDoc} */
     @Override
     public void removeInventory(final long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final InventoryDTO skuWarehouse = dtoInventoryService.getInventory(skuWarehouseId);
-        dtoInventoryService.removeInventory(skuWarehouseId);
         if (skuWarehouse != null) {
-            reindexService.reindexProductSkuCode(skuWarehouse.getSkuCode());
+            if (federationFacade.isManageable(skuWarehouse.getWarehouseCode(), WarehouseDTO.class)) {
+                dtoInventoryService.removeInventory(skuWarehouseId);
+                if (skuWarehouse != null) {
+                    reindexService.reindexProductSkuCode(skuWarehouse.getSkuCode());
+                }
+            } else {
+                throw new AccessDeniedException("ACCESS DENIED");
+            }
         }
     }
 

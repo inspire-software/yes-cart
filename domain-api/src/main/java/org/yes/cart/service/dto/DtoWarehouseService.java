@@ -33,7 +33,7 @@ import java.util.List;
 public interface DtoWarehouseService extends GenericDTOService<WarehouseDTO> {
 
     /**
-     * Find wharehouses, that assigned to given shop id.
+     * Find warehouses, that assigned to given shop id.
      *
      * @param shopId given shop id
      * @return list of assigned warehouses
