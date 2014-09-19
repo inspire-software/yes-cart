@@ -72,7 +72,7 @@
 
     <bean id="cacheDirectorBean" parent="txProxyTemplate">
         <property name="target">
-            <bean  class="org.yes.cart.web.service.ws.impl.CacheDirectorImpl">
+            <bean  class="org.yes.cart.web.service.ws.impl.WsCacheDirectorImpl">
                 <property name="entityOperationCache" ref="evictionConfig"/>
                 <property name="cacheManager" ref="cacheManager"/>
             </bean>

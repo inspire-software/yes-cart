@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Igor Azarnyi, Denys Pavlov
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,20 +15,13 @@
  */
 package org.yes.cart.web.service.ws.impl;
 
-import org.slf4j.Logger;
-import org.springframework.beans.BeansException;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.CacheDirector;
 
-import javax.jws.WebService;
-import javax.servlet.ServletContext;
 import java.util.*;
 
 /**
@@ -38,17 +31,9 @@ import java.util.*;
  * Date: 18 Aug 2013
  * Time: 9:50 AM
  */
-@WebService(endpointInterface = "org.yes.cart.web.service.ws.CacheDirector",
-        serviceName = "CacheDirector")
-public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware, ServletContextAware {
-
-    final Logger log = ShopCodeContext.getLog(this);
+public class CacheDirectorImpl implements CacheDirector {
 
     private Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache;
-
-    private ApplicationContext applicationContext;
-
-    private ServletContext servletContext;
 
     private CacheManager cacheManager;
 
@@ -144,7 +129,7 @@ public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware
 
                     } else {
 
-                        log.warn("The [" + cacheStrategy.getSecond() + "] cache eviction strategy not supported");
+                        ShopCodeContext.getLog(this).warn("The [" + cacheStrategy.getSecond() + "] cache eviction strategy not supported");
 
                     }
 
@@ -183,20 +168,6 @@ public class CacheDirectorImpl implements CacheDirector, ApplicationContextAware
     /** IoC. Set cache manager.  */
     public void setCacheManager(final CacheManager cacheManager) {
         this.cacheManager = cacheManager;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setServletContext(final ServletContext servletContext) {
-        this.servletContext = servletContext;
     }
 
 }

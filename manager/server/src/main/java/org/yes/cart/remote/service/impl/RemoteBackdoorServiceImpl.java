@@ -48,14 +48,17 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
     private final NodeService nodeService;
     private final BackdoorService localBackdoorService;
+    private final CacheDirector localCacheDirector;
     private final WsAbstractFactoryClientFactory wsAbstractFactoryClientFactory;
 
 
     public RemoteBackdoorServiceImpl(final NodeService nodeService,
                                      final BackdoorService localBackdoorService,
+                                     final CacheDirector localCacheDirector,
                                      final WsAbstractFactoryClientFactory wsAbstractFactoryClientFactory) {
         this.nodeService = nodeService;
         this.localBackdoorService = localBackdoorService;
+        this.localCacheDirector = localCacheDirector;
         this.wsAbstractFactoryClientFactory = wsAbstractFactoryClientFactory;
     }
 
@@ -334,51 +337,59 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      * {@inheritDoc}
      */
     public Map<String, List<CacheInfoDTOImpl>> getCacheInfo(final AsyncContext context)
-             throws UnmappedInterfaceException, UnableToCreateInstanceException {
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-         final Map<String, List<CacheInfoDTOImpl>> info = new HashMap<String, List<CacheInfoDTOImpl>>();
+        final Map<String, List<CacheInfoDTOImpl>> info = new HashMap<String, List<CacheInfoDTOImpl>>();
 
-         for (final Node yesNode : nodeService.getYesNodes()) {
+        for (final Node yesNode : nodeService.getYesNodes()) {
 
-             try {
+            try {
 
-                 final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>();
+                final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>();
 
-                 final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
-                 CacheDirector cacheDirector = factory.getService();
-                 List<CacheInfoDTOImpl> shopRez = null;
-                 try {
+                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
+                CacheDirector cacheDirector = factory.getService();
+                List<CacheInfoDTOImpl> shopRez = null;
+                try {
                     shopRez = cacheDirector.getCacheInfo();
-                 } finally {
-                     factory.release(cacheDirector);
-                     cacheDirector = null;
-                 }
+                } finally {
+                    factory.release(cacheDirector);
+                    cacheDirector = null;
+                }
 
-                 for (final CacheInfoDTOImpl cacheInfoDTO : shopRez) {
-                     cacheInfoDTO.setNodeId(yesNode.getNodeId());
-                     cacheInfoDTO.setNodeUri(yesNode.getCacheManagerUri());
-                     rez.add(cacheInfoDTO);
-                 }
+                for (final CacheInfoDTOImpl cacheInfoDTO : shopRez) {
+                    cacheInfoDTO.setNodeId(yesNode.getNodeId());
+                    cacheInfoDTO.setNodeUri(yesNode.getCacheManagerUri());
+                    rez.add(cacheInfoDTO);
+                }
 
-                 info.put(yesNode.getNodeId(), rez);
+                info.put(yesNode.getNodeId(), rez);
 
-             } catch (Exception e) {
+            } catch (Exception e) {
 
-                 info.put(yesNode.getNodeId(), null);
+                info.put(yesNode.getNodeId(), null);
 
-                 if (LOG.isWarnEnabled()) {
-                     LOG.warn("Cannot to get cache info  from url ["
-                             + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
-                             + "] . Will try next one, if exists",
-                             e);
+                if (LOG.isWarnEnabled()) {
+                    LOG.warn("Cannot to get cache info  from url ["
+                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
+                            + "] . Will try next one, if exists",
+                            e);
 
-                 }
+                }
 
 
-             }
+            }
 
-         }
-         return info;
+        }
+
+        final String yum = nodeService.getCurrentNodeId();
+        List<CacheInfoDTOImpl> yumRez = localCacheDirector.getCacheInfo();
+        for (final CacheInfoDTOImpl cacheInfoDTO : yumRez) {
+            cacheInfoDTO.setNodeId(yum);
+        }
+        info.put(yum, yumRez);
+
+        return info;
     }
 
 
@@ -387,34 +398,38 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      */
     public Map<String, Boolean> evictAllCache(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-         final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
-         for (final Node yesNode : nodeService.getYesNodes()) {
+        final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
+        for (final Node yesNode : nodeService.getYesNodes()) {
 
-             try {
+            try {
 
-                 final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
-                 CacheDirector cacheDirector = factory.getService();
-                 try {
-                     cacheDirector.evictAllCache();
-                 } finally {
-                     factory.release(cacheDirector);
-                     cacheDirector = null;
-                 }
-                 evicts.put(yesNode.getNodeId(), Boolean.TRUE);
+                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
+                CacheDirector cacheDirector = factory.getService();
+                try {
+                    cacheDirector.evictAllCache();
+                } finally {
+                    factory.release(cacheDirector);
+                    cacheDirector = null;
+                }
+                evicts.put(yesNode.getNodeId(), Boolean.TRUE);
 
-             } catch (Exception e) {
-                 evicts.put(yesNode.getNodeId(), Boolean.FALSE);
-                 if (LOG.isErrorEnabled()) {
-                     LOG.error("Cannot evict cache,  url ["
-                             + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
-                             + "] . Will try next one, if exists",
-                             e);
+            } catch (Exception e) {
+                evicts.put(yesNode.getNodeId(), Boolean.FALSE);
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Cannot evict cache,  url ["
+                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
+                            + "] . Will try next one, if exists",
+                            e);
 
-                 }
+                }
 
-             }
-         }
-         return evicts;
+            }
+        }
+
+        localCacheDirector.evictAllCache();
+        evicts.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
+
+        return evicts;
 
     }
 
@@ -423,34 +438,38 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      */
     public Map<String, Boolean> evictCache(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-         final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
-         for (final Node yesNode : nodeService.getYesNodes()) {
+        final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
+        for (final Node yesNode : nodeService.getYesNodes()) {
 
-             try {
+            try {
 
-                 final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
-                 CacheDirector cacheDirector = factory.getService();
-                 try {
-                     cacheDirector.evictCache(name);
-                 } finally {
-                     factory.release(cacheDirector);
-                     cacheDirector = null;
-                 }
-                 evicts.put(yesNode.getNodeId(), Boolean.TRUE);
+                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
+                CacheDirector cacheDirector = factory.getService();
+                try {
+                    cacheDirector.evictCache(name);
+                } finally {
+                    factory.release(cacheDirector);
+                    cacheDirector = null;
+                }
+                evicts.put(yesNode.getNodeId(), Boolean.TRUE);
 
-             } catch (Exception e) {
-                 evicts.put(yesNode.getNodeId(), Boolean.FALSE);
-                 if (LOG.isErrorEnabled()) {
-                     LOG.error("Cannot evict cache [" + name + "],  url ["
-                             + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
-                             + "] . Will try next one, if exists",
-                             e);
+            } catch (Exception e) {
+                evicts.put(yesNode.getNodeId(), Boolean.FALSE);
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Cannot evict cache [" + name + "],  url ["
+                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
+                            + "] . Will try next one, if exists",
+                            e);
 
-                 }
+                }
 
-             }
-         }
-         return evicts;
+            }
+        }
+
+        localCacheDirector.evictCache(name);
+        evicts.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
+
+        return evicts;
 
     }
 
@@ -479,7 +498,6 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         return wsAbstractFactoryClientFactory.getFactory(CacheDirector.class, userName, password, cacheDirUrl, timeout);
 
     }
-
 
 
 }

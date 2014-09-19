@@ -294,6 +294,9 @@ public class ManagementServiceImpl implements ManagementService {
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "yum.shopFederationStrategy-admin"
+    }, key = "#userId")
     public void grantRole(final String userId, final String role) {
         final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq(CODE, role));
         final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
@@ -308,6 +311,9 @@ public class ManagementServiceImpl implements ManagementService {
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "yum.shopFederationStrategy-admin"
+    }, key = "#userId")
     public void revokeRole(final String userId, final String role) {
         final ManagerRole managerRole = managerRoleDao.findSingleByCriteria(
                 Restrictions.eq(CODE, role),

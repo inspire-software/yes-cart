@@ -42,16 +42,16 @@ import static junit.framework.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:testApplicationContext.xml")
-public class CacheDirectorImplTest {
+public class WsCacheDirectorImplTest {
 
     @Autowired
     private ApplicationContext context;
-    private CacheDirectorImpl cacheDirector;
+    private WsCacheDirectorImpl cacheDirector;
 
     @Before
     public void setUp() throws NamingException {
 
-        cacheDirector = new CacheDirectorImpl();
+        cacheDirector = new WsCacheDirectorImpl();
         cacheDirector.setEntityOperationCache((Map<String, Map<String, Set<Pair<String,String>>>>) context.getBean("evictionConfig"));
         cacheDirector.setCacheManager((CacheManager) context.getBean("cacheManager"));
 

@@ -469,6 +469,13 @@
             productSelected = false;
             productDTOImpl = null;
 
+            if ((codeTextInput.text == null || codeTextInput.text.length == 0)
+                && (nameTextInput.text == null || nameTextInput.text.length == 0)
+                && selectedBrandId == 0 && selectedTypeId == 0) {
+                Alert.show(resourceManager.getString('ProductManagementPanel', 'selectCriteria'));
+                return;
+            }
+
             remoteProductService.getProductByCodeNameBrandType(
                     codeTextInput.text,
                     nameTextInput.text,
