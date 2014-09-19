@@ -76,7 +76,7 @@ public class RemoteCustomerOrderServiceImpl
         if (federationFacade.isManageable(id, CustomerOrderDTO.class)) {
             return super.getById(id);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -126,7 +126,7 @@ public class RemoteCustomerOrderServiceImpl
         if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
             return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetConfirmed(orderNum);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -137,7 +137,7 @@ public class RemoteCustomerOrderServiceImpl
         if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
             return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetCancelled(orderNum);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -146,7 +146,7 @@ public class RemoteCustomerOrderServiceImpl
         if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
             return ((DtoCustomerOrderService) getGenericDTOService()).updateExternalDeliveryRefNo(orderNum, deliveryNum, newRefNo) ;
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -158,7 +158,7 @@ public class RemoteCustomerOrderServiceImpl
             return ((DtoCustomerOrderService) getGenericDTOService())
                 .updateDeliveryStatus(orderNum, deliveryNum, currentStatus, destinationStatus);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
 
     }
@@ -192,7 +192,7 @@ public class RemoteCustomerOrderServiceImpl
 
             return reportService.produceReport(reportLang, "reportDelivery", rez);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
 
     }

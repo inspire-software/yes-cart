@@ -121,7 +121,7 @@
             if (skuComboBox.dataProvider.length == 1) {//preselect for single sku product
                 skuComboBox.selectedIndex = 0;
                 skuComboBox.selectedItem = skuComboBox.dataProvider.getItemAt(0);
-                skuComboBox.dispatchEvent(new ListEvent(Event.CHANGE));
+                skuComboBox.dispatchEvent(new Event(Event.CHANGE));
             }
 
 

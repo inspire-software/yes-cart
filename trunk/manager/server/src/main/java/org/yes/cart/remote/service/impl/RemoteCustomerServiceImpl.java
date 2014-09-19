@@ -70,7 +70,7 @@ public class RemoteCustomerServiceImpl
         if (federationFacade.isManageable(id, CustomerDTO.class)) {
             return super.getById(id);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -95,7 +95,7 @@ public class RemoteCustomerServiceImpl
         if (federationFacade.isManageable(customer.getCustomerId(), CustomerDTO.class)) {
             dtoCustomerService.remoteResetPassword(customer, shopId);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -106,7 +106,7 @@ public class RemoteCustomerServiceImpl
         if (federationFacade.isManageable(customerDTO.getCustomerId(), CustomerDTO.class)) {
             dtoCustomerService.updateCustomerTags(customerDTO, tags);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -202,7 +202,7 @@ public class RemoteCustomerServiceImpl
                 && federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
             dtoCustomerService.grantShop(customerId, shopCode);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -214,7 +214,7 @@ public class RemoteCustomerServiceImpl
                 && federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
             dtoCustomerService.revokeShop(customerId, shopCode);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 

@@ -95,7 +95,7 @@ public class RemoteCategoryServiceImpl
         if (federationFacade.isManageable(id, CategoryDTO.class)) {
             return super.getById(id);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -106,7 +106,7 @@ public class RemoteCategoryServiceImpl
         if (federationFacade.isManageable(id, CategoryDTO.class)) {
             return super.getById(id, converters);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -117,7 +117,7 @@ public class RemoteCategoryServiceImpl
         if (federationFacade.isManageable(instance.getParentId(), CategoryDTO.class)) {
             return super.create(instance);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -134,7 +134,7 @@ public class RemoteCategoryServiceImpl
             return created;
 
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -145,7 +145,7 @@ public class RemoteCategoryServiceImpl
         if (federationFacade.isManageable(instance.getCategoryId(), CategoryDTO.class)) {
             return super.update(instance);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -156,7 +156,7 @@ public class RemoteCategoryServiceImpl
         if (federationFacade.isManageable(id, CategoryDTO.class)) {
             super.remove(id);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -168,7 +168,7 @@ public class RemoteCategoryServiceImpl
         if (federationFacade.isManageable(entityPk, CategoryDTO.class)) {
             return ((DtoCategoryService) getGenericDTOService()).getEntityAttributes(entityPk);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -176,7 +176,7 @@ public class RemoteCategoryServiceImpl
      * {@inheritDoc}
      */
     public AttrValueDTO updateEntityAttributeValue(final AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
+        getById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId()); // check access
         return ((DtoCategoryService) getGenericDTOService()).updateEntityAttributeValue(attrValueDTO);
     }
 
@@ -184,6 +184,7 @@ public class RemoteCategoryServiceImpl
      * {@inheritDoc}
      */
     public AttrValueDTO createEntityAttributeValue(final AttrValueDTO attrValueDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        getById(((AttrValueCategoryDTO) attrValueDTO).getCategoryId()); // check access
         return ((DtoCategoryService) getGenericDTOService()).createEntityAttributeValue(attrValueDTO);
     }
 
@@ -214,7 +215,7 @@ public class RemoteCategoryServiceImpl
      */
     public List<CategoryDTO> getByProductId(final long productId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<CategoryDTO> all = new ArrayList<CategoryDTO>(((DtoCategoryService) getGenericDTOService()).getByProductId(productId));
-        federationFacade.applyFederationFilter(all, ShopDTO.class);
+        federationFacade.applyFederationFilter(all, CategoryDTO.class);
         return all;
     }
 

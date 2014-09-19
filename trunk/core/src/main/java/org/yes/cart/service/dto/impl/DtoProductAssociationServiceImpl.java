@@ -129,12 +129,12 @@ public class DtoProductAssociationServiceImpl
      * Get all product associations by association type.
      *
      * @param productId       product primary key
-     * @param accosiationCode accosiation code [up, cross, etc]
+     * @param associationCode accosiation code [up, cross, etc]
      * @return list of product assotiations
      */
-    public List<ProductAssociationDTO> getProductAssociationsByProductAssociationType(final long productId, final String accosiationCode) 
+    public List<ProductAssociationDTO> getProductAssociationsByProductAssociationType(final long productId, final String associationCode)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        List<ProductAssociation> list = productAssociationService.findProductAssociations(productId, accosiationCode);
+        List<ProductAssociation> list = productAssociationService.findProductAssociations(productId, associationCode);
         List<ProductAssociationDTO> result = new ArrayList<ProductAssociationDTO>(list.size());
         fillDTOs(list, result);
         return result;

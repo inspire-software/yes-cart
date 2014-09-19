@@ -74,7 +74,7 @@ public class RemotePriceListServiceImpl implements RemotePriceListService {
         if (price.getShopCode() != null && federationFacade.isManageable(price.getShopCode(), ShopDTO.class)) {
             return dtoPriceListsService.createPrice(price);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
 
     }
@@ -84,7 +84,7 @@ public class RemotePriceListServiceImpl implements RemotePriceListService {
         if (price.getShopCode() != null && federationFacade.isManageable(price.getShopCode(), ShopDTO.class)) {
             return dtoPriceListsService.updatePrice(price);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 

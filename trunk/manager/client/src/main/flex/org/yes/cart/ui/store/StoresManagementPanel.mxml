@@ -29,10 +29,10 @@
 
         private var TAB_URL_IDX:int = 1;
         private var TAB_CURRENCY_IDX:int = 2;
-        private var TAB_CURRENCY_EXCHANGE_IDX:int = 3;
-        private var TAB_CATEGORY_IDX:int = 4;
-        private var TAB_WAREHOUSE_IDX:int = 5;
-        private var TAB_ATTR_IDX:int = 6;
+//        private var TAB_CURRENCY_EXCHANGE_IDX:int = 3;
+        private var TAB_CATEGORY_IDX:int = 3;
+        private var TAB_WAREHOUSE_IDX:int = 4;
+        private var TAB_ATTR_IDX:int = 5;
 
 
         private var _shopDTOImpl:ShopDTOImpl;
@@ -77,13 +77,13 @@
             storeSupportedCurrencyPanel.shopDTOImpl = _shopDTOImpl;
             currencyTab.addChild(storeSupportedCurrencyPanel);
         }
-
-        private function currencyExcRateTabSelected(event:MouseEvent):void {
-            currencyExcangeTab.removeAllChildren();
-            var storeSupportedCurrencyPanel:StoreCurrencyExcahngePanel = new StoreCurrencyExcahngePanel();
-            storeSupportedCurrencyPanel.shopDTOImpl = _shopDTOImpl;
-            currencyExcangeTab.addChild(storeSupportedCurrencyPanel);
-        }
+//
+//        private function currencyExcRateTabSelected(event:MouseEvent):void {
+//            currencyExcangeTab.removeAllChildren();
+//            var storeSupportedCurrencyPanel:StoreCurrencyExcahngePanel = new StoreCurrencyExcahngePanel();
+//            storeSupportedCurrencyPanel.shopDTOImpl = _shopDTOImpl;
+//            currencyExcangeTab.addChild(storeSupportedCurrencyPanel);
+//        }
 
         private function categoryTabSelected(event:MouseEvent):void {
             categoryTab.removeAllChildren();
@@ -119,11 +119,11 @@
                     currencyTabSelected(null);
                     break;
                 }
-                case TAB_CURRENCY_EXCHANGE_IDX:
-                {
-                    currencyExcRateTabSelected(null);
-                    break;
-                }
+//                case TAB_CURRENCY_EXCHANGE_IDX:
+//                {
+//                    currencyExcRateTabSelected(null);
+//                    break;
+//                }
                 case TAB_CATEGORY_IDX:
                 {
                     categoryTabSelected(null);
@@ -159,8 +159,8 @@
                    id="urlTab" enabled="{editingMode}"/>
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='currency')" width="100%" height="100%"
                    id="currencyTab" enabled="{editingMode}"/>
-        <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='currencyExcRate')" width="100%" height="100%"
-                   id="currencyExcangeTab" enabled="{editingMode}"/>
+        <!--<mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='currencyExcRate')" width="100%" height="100%"-->
+                   <!--id="currencyExcangeTab" enabled="{editingMode}"/>-->
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='catalog')" width="100%" height="100%"
                    id="categoryTab" enabled="{editingMode}"/>
         <mx:Canvas id="warehouseTab" label="@Resource(bundle='StoresManagementPanel',key='warehouses')"

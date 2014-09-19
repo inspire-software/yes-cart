@@ -120,7 +120,7 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
             } catch (Exception e) {
                 indexStatus.put(yesNode.getNodeId(), null);
                 if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot get image vault path,  url ["
+                    LOG.error("Cannot reindex products,  url ["
                             + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
                             + "] . Will try next one, if exists",
                             e);

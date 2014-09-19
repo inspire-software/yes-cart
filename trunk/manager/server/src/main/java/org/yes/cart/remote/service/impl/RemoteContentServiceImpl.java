@@ -64,7 +64,7 @@ public class RemoteContentServiceImpl
         if (federationFacade.isManageable(shopId, ShopDTO.class)) {
             ((DtoContentService) getGenericDTOService()).createContentRoot(shopId);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -106,7 +106,7 @@ public class RemoteContentServiceImpl
         if (federationFacade.isManageable(id, CategoryDTO.class)) {
             return super.getById(id);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -117,7 +117,7 @@ public class RemoteContentServiceImpl
         if (federationFacade.isManageable(id, CategoryDTO.class)) {
             return super.getById(id, converters);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -128,7 +128,7 @@ public class RemoteContentServiceImpl
         if (federationFacade.isManageable(instance.getParentId(), CategoryDTO.class)) {
             return super.create(instance);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -139,7 +139,7 @@ public class RemoteContentServiceImpl
         if (federationFacade.isManageable(instance.getCategoryId(), CategoryDTO.class)) {
             return super.update(instance);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -150,7 +150,7 @@ public class RemoteContentServiceImpl
         if (federationFacade.isManageable(id, CategoryDTO.class)) {
             super.remove(id);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -162,7 +162,7 @@ public class RemoteContentServiceImpl
         if (federationFacade.isManageable(entityPk, CategoryDTO.class)) {
             return ((DtoContentService) getGenericDTOService()).getEntityAttributes(entityPk);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -173,7 +173,7 @@ public class RemoteContentServiceImpl
         if (federationFacade.isManageable(entityPk, CategoryDTO.class)) {
             return ((DtoContentService) getGenericDTOService()).getEntityContentAttributes(entityPk);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 

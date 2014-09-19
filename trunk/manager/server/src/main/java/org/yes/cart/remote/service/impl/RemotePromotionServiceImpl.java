@@ -79,7 +79,7 @@ public class RemotePromotionServiceImpl extends AbstractRemoteService<PromotionD
         if (promo == null || federationFacade.isManageable(promo.getShopCode(), ShopDTO.class)) {
             return promo;
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -91,7 +91,7 @@ public class RemotePromotionServiceImpl extends AbstractRemoteService<PromotionD
         if (promo == null || federationFacade.isManageable(promo.getShopCode(), ShopDTO.class)) {
             return promo;
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -102,7 +102,7 @@ public class RemotePromotionServiceImpl extends AbstractRemoteService<PromotionD
         if (federationFacade.isManageable(instance.getShopCode(), ShopDTO.class)) {
             return super.create(instance);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -113,7 +113,7 @@ public class RemotePromotionServiceImpl extends AbstractRemoteService<PromotionD
         if (federationFacade.isManageable(instance.getShopCode(), ShopDTO.class)) {
             return super.update(instance);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 

@@ -67,7 +67,7 @@ public class RemoteInventoryServiceImpl implements RemoteInventoryService {
             reindexService.reindexProductSkuCode(inventory.getSkuCode());
             return rez;
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -79,7 +79,7 @@ public class RemoteInventoryServiceImpl implements RemoteInventoryService {
             reindexService.reindexProductSkuCode(inventory.getSkuCode());
             return rez;
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -99,7 +99,7 @@ public class RemoteInventoryServiceImpl implements RemoteInventoryService {
             if (federationFacade.isManageable(inv.getWarehouseCode(), WarehouseDTO.class)) {
                 return inv;
             } else {
-                throw new AccessDeniedException("ACCESS DENIED");
+                throw new AccessDeniedException("Access is denied");
             }
         }
         return null;
@@ -116,7 +116,7 @@ public class RemoteInventoryServiceImpl implements RemoteInventoryService {
                     reindexService.reindexProductSkuCode(skuWarehouse.getSkuCode());
                 }
             } else {
-                throw new AccessDeniedException("ACCESS DENIED");
+                throw new AccessDeniedException("Access is denied");
             }
         }
     }

@@ -47,20 +47,68 @@
                          prompt="@Resource(bundle='ProductManagementPanel',key='selectAvailability')"
                     />
         </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='category')">
+            <mx:Label id="categoryLabel" width="150"/>
+            <mx:Button id="selectProductBtn" width="30"
+                       label="..."
+                       toolTip="@Resource(bundle='ProductManagementPanel',key='addProductCategory')"
+                       click="onCategorySelectedClick(event);"
+                    />
+        </mx:FormItem>
     </mx:Form>
 		
     <mx:ControlBar width="100%" horizontalAlign="right">
         <mx:Button id="saveBtn" label="@Resource(bundle='ProductManagementPanel',key='createProduct')"
-                   toolTip="@Resource(bundle='ProductManagementPanel',key='createProductHint')"/>
+                   toolTip="@Resource(bundle='ProductManagementPanel',key='createProductHint')"
+                   enabled="{allowSave}"/>
         <mx:Button label="@Resource(bundle='ShopManagerApplication',key='close')" click="PopUpManager.removePopUp(this);"/>
     </mx:ControlBar>
 
+    <mx:Boolean id="allowSave">false</mx:Boolean>
+
     <mx:Script>
             <![CDATA[
-
+        import mx.core.FlexGlobals;
         import mx.managers.PopUpManager;
 
-                ]]>
+        import org.yes.cart.impl.ProductCategoryDTOImpl;
+        import org.yes.cart.ui.category.CategoryFinderDialog;
+
+        private var _categoryDTO:ProductCategoryDTOImpl;
+
+        private var categoryFinderPopUp:CategoryFinderDialog;
+
+        public function get categoryDTO():ProductCategoryDTOImpl {
+            return _categoryDTO;
+        }
+
+        private function onCategorySelectedClick(event:MouseEvent):void {
+            categoryFinderPopUp = CategoryFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CategoryFinderDialog, true));
+            categoryFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, onAssignSelectedProductCategorySaveClick);
+            PopUpManager.centerPopUp(categoryFinderPopUp);
+        }
+
+        private function onAssignSelectedProductCategorySaveClick(event:Event):void {
+            if (categoryFinderPopUp != null) {
+                var productCategoryDTOImpl:ProductCategoryDTOImpl = new ProductCategoryDTOImpl();
+                productCategoryDTOImpl.categoryId = categoryFinderPopUp.selectedCategoryDTOImpl.categoryId;
+                productCategoryDTOImpl.rank = 0;
+
+                _categoryDTO = productCategoryDTOImpl;
+                categoryLabel.text = categoryFinderPopUp.selectedCategoryDTOImpl.name;
+
+                categoryFinderPopUp.assignedCategories = null;
+                categoryFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onAssignSelectedProductCategorySaveClick);
+                PopUpManager.removePopUp(categoryFinderPopUp);
+                categoryFinderPopUp = null;
+
+                allowSave = true;
+            }
+        }
+
+
+
+        ]]>
 
         </mx:Script>
 </mx:TitleWindow>
