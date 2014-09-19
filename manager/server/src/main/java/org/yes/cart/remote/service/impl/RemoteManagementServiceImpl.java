@@ -62,7 +62,7 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
         if (federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
             managementService.addUser(userId, firstName, lastName, shopCode);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -106,7 +106,7 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
         if (federationFacade.isManageable(userId, ManagerDTO.class)) {
             managementService.updateUser(userId, firstName, lastName);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -117,7 +117,7 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
         if (federationFacade.isManageable(userId, ManagerDTO.class)) {
             managementService.resetPassword(userId);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -128,7 +128,7 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
         if (federationFacade.isManageable(userId, ManagerDTO.class)) {
             managementService.deleteUser(userId);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -168,12 +168,12 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
      */
     public void grantRole(final String userId, final String role) {
         if ("ROLE_SMADMIN".equals(role) && !federationFacade.isCurrentUserSystemAdmin()) {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
         if (federationFacade.isManageable(userId, ManagerDTO.class)) {
             managementService.grantRole(userId, role);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -182,12 +182,12 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
      */
     public void revokeRole(final String userId, final String role) {
         if ("ROLE_SMADMIN".equals(role) && !federationFacade.isCurrentUserSystemAdmin()) {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
         if (federationFacade.isManageable(userId, ManagerDTO.class)) {
             managementService.revokeRole(userId, role);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -245,7 +245,7 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
                 && federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
             managementService.grantShop(userId, shopCode);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
 
     }
@@ -258,7 +258,7 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
                 && federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
             managementService.revokeShop(userId, shopCode);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 

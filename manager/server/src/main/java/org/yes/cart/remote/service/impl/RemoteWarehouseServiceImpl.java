@@ -83,7 +83,7 @@ public class RemoteWarehouseServiceImpl
         if (federationFacade.isManageable(id, WarehouseDTO.class)) {
             return super.getById(id);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -94,7 +94,7 @@ public class RemoteWarehouseServiceImpl
         if (federationFacade.isManageable(id, WarehouseDTO.class)) {
             return super.getById(id, converters);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -107,7 +107,7 @@ public class RemoteWarehouseServiceImpl
             assignWarehouse(created.getWarehouseId(), shopId);
             return created;
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -118,7 +118,7 @@ public class RemoteWarehouseServiceImpl
         if (federationFacade.isManageable(instance.getWarehouseId(), WarehouseDTO.class)) {
             return super.update(instance);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 

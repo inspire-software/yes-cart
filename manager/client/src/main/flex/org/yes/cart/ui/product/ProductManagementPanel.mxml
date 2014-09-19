@@ -287,6 +287,8 @@
                 product.productTypeDTO = ProductTypeDTOImpl(productCreateDialog.productTypeComboBox.selectedItem);
                 product.brandDTO = BrandDTOImpl(productCreateDialog.brandComboBox.selectedItem);
                 product.availability = productCreateDialog.productAvailabilityComboBox.selectedItem.data;
+                product.productCategoryDTOs = new ArrayCollection();
+                product.productCategoryDTOs.addItem(productCreateDialog.categoryDTO);
                 remoteProductService.create(product);
                 productCreateDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewProductSaveClick);
                 PopUpManager.removePopUp(productCreateDialog);

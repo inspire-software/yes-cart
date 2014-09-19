@@ -42,12 +42,12 @@ public interface DtoProductAssociationService extends GenericDTOService<ProductA
      * Get all product associations by association type.
      *
      * @param productId       product primary key
-     * @param accosiationCode accosiation code [up, cross, etc]
-     * @return list of product assotiations
+     * @param associationCode association code [up, cross, etc]
+     * @return list of product associations
      */
     List<ProductAssociationDTO> getProductAssociationsByProductAssociationType(
             long productId,
-            String accosiationCode)
+            String associationCode)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 

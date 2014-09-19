@@ -69,7 +69,7 @@ public class RemoteShopServiceImpl
         if (federationFacade.isManageable(id, ShopDTO.class)) {
             return super.getById(id);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -80,7 +80,7 @@ public class RemoteShopServiceImpl
         if (federationFacade.isManageable(instance.getShopId(), ShopDTO.class)) {
             return super.update(instance);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -98,7 +98,7 @@ public class RemoteShopServiceImpl
         if (federationFacade.isManageable(shopId, ShopDTO.class)) {
             return ((DtoShopService) getGenericDTOService()).getSupportedCurrencies(shopId);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
@@ -109,7 +109,7 @@ public class RemoteShopServiceImpl
         if (federationFacade.isManageable(shopId, ShopDTO.class)) {
             ((DtoShopService) getGenericDTOService()).updateSupportedCurrencies(shopId, currencies);
         } else {
-            throw new AccessDeniedException("ACCESS DENIED");
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
