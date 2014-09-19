@@ -38,6 +38,7 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
 
     private final ManagementService managementService;
 
+    private final Cache USER_ACCESS_CACHE_ADMIN;
     private final Cache USER_ACCESS_CACHE_SHOP;
     private final Cache USER_ACCESS_CACHE_SHOP_ID;
     private final Cache USER_ACCESS_CACHE_SHOP_CODE;
@@ -46,6 +47,7 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
     public ShopFederationStrategyImpl(final ManagementService managementService,
                                       final CacheManager cacheManager) {
         this.managementService = managementService;
+        USER_ACCESS_CACHE_ADMIN = cacheManager.getCache("yum.shopFederationStrategy-admin");
         USER_ACCESS_CACHE_SHOP = cacheManager.getCache("yum.shopFederationStrategy-shop");
         USER_ACCESS_CACHE_SHOP_ID = cacheManager.getCache("yum.shopFederationStrategy-shopId");
         USER_ACCESS_CACHE_SHOP_CODE = cacheManager.getCache("yum.shopFederationStrategy-shopCode");
@@ -56,12 +58,19 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
      * {@inheritDoc}
      */
     public boolean isCurrentUserSystemAdmin() {
-        for (final GrantedAuthority auth : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
-            if ("ROLE_SMADMIN".equals(auth.getAuthority())) {
-                return true;
+        final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
+        Boolean isAdmin = getValueWrapper(USER_ACCESS_CACHE_ADMIN.get(currentManager));
+        if (isAdmin == null) {
+            isAdmin = false;
+            for (final GrantedAuthority auth : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
+                if ("ROLE_SMADMIN".equals(auth.getAuthority())) {
+                    isAdmin = true;
+                    break;
+                }
             }
+            USER_ACCESS_CACHE_ADMIN.put(currentManager, isAdmin);
         }
-        return false;
+        return isAdmin;
     }
 
 

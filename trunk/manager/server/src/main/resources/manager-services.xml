@@ -625,11 +625,17 @@
         </property>
     </bean>
 
+    <bean id="localCacheDirector" class="org.yes.cart.web.service.ws.impl.LocalCacheDirectorImpl">
+        <property name="entityOperationCache" ref="evictionConfig"/>
+        <property name="cacheManager" ref="cacheManager"/>
+    </bean>
+
 
     <bean id="remoteBackdoorService" class="org.yes.cart.remote.service.impl.RemoteBackdoorServiceImpl">
         <constructor-arg index="0" ref="nodeService"/>
         <constructor-arg index="1" ref="localBackdoorService"/>
-        <constructor-arg index="2" ref="wsAbstractFactoryClientFactory"/>
+        <constructor-arg index="2" ref="localCacheDirector"/>
+        <constructor-arg index="3" ref="wsAbstractFactoryClientFactory"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
