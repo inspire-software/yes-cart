@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+
+    <session-factory>
+        <property name="cache.use_query_cache">true</property>
+        <property name="cache.provider_configuration_file_resource_path">ehcache.xml</property>
+
+        <property name="hibernate.cache.use_query_cache">true</property>
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.provider_configuration_file_resource_path">ehcache.xml</property>
+        <property name="hibernate.cache.region.factory_class">org.yes.cart.domain.entity.cache.HibernateEhCacheRegionFactory</property>
+
+        <property name="hibernate.search.default.indexBase">${lucene.config.index.dir}</property>
+        <property name="hibernate.dialect">${db.config.yes.hibernate.dialect}</property>
+        <!--<property name="hibernate.hbm2ddl.auto">update</property>-->
+        <property name="show_sql">true</property>
+        <property name="hibernate.show_sql">true</property>
+
+        <!-- validate | update | create | create-drop -->
+
+
+        <class-cache class="org.yes.cart.domain.entity.impl.CategoryEntity" usage="transactional"/>
+        <!--<collection-cache collection="org.yes.cart.domain.entity.impl.CategoryEntity.attributes" usage="transactional"/>-->
+        <!--<collection-cache collection="org.yes.cart.domain.entity.impl.CategoryEntity.productCategory" usage="transactional"/>-->
+
+        <!--<class-cache class="org.yes.cart.domain.entity.impl.ProductCategoryEntity" usage="transactional"/>-->
+
+        <!--<class-cache class="org.yes.cart.domain.entity.impl.AttributeGroupEntity" usage="transactional"/>-->
+
+        <!--<class-cache class="org.yes.cart.domain.entity.impl.ProductEntity" usage="transactional"/>-->
+        <!--<collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.sku" usage="transactional"/>-->
+        <!--<collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.productAssociations" usage="transactional"/>-->
+        <!--<collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.ensebleOption" usage="transactional"/>-->
+        <!--<collection-cache collection="org.yes.cart.domain.entity.impl.ProductEntity.attributes" usage="transactional"/>-->
+
+        <class-cache class="org.yes.cart.domain.entity.impl.EtypeEntity" usage="transactional"/>
+        <!--<collection-cache collection="org.yes.cart.domain.entity.impl.EtypeEntity.attributes" usage="transactional"/>-->
+
+        <class-cache class="org.yes.cart.domain.entity.impl.AttributeEntity" usage="transactional"/>
+
+        <class-cache class="org.yes.cart.domain.entity.impl.ProductTypeEntity" usage="transactional"/>
+        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductTypeEntity.attributeViewGroup" usage="transactional"/>
+        <collection-cache collection="org.yes.cart.domain.entity.impl.ProductTypeEntity.attributes" usage="transactional"/>
+
+        <class-cache class="org.yes.cart.domain.entity.impl.BrandEntity" usage="transactional"/>
+
+        <class-cache class="org.yes.cart.domain.entity.impl.CustomerEntity" usage="transactional"/>
+
+        <class-cache class="org.yes.cart.domain.entity.impl.CarrierSlaEntity" usage="transactional"/>
+
+        <class-cache class="org.yes.cart.domain.entity.impl.ShopEntity" usage="transactional"/>
+
+
+    </session-factory>
+
+</hibernate-configuration>

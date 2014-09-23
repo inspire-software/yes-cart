@@ -1,0 +1,48 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+    <div class="col-xs-12 no-padding">
+        <h2 id="wishlist" class="profile-title"><wicket:message key="wishlistItems">[Wish List]</wicket:message></h2>
+    </div>
+    <div wicket:id="products" class="col-xs-12 col-sm-4 col-md-3 wishlist">
+        <div class="thumbnail">
+            <a wicket:id="productLinkImage" rel="bookmark">
+                <img wicket:id="productDefaultImage"/>
+            </a>
+        </div>
+        <p class="wishlist-item-name">
+            <a wicket:id="productLinkName" rel="bookmark">
+                <span wicket:id="name"/>
+            </a>
+        </p>
+        <p class="text-center">
+            <a wicket:id="addToCardFromWishListLink" class="btn btn-warning" rel="nofollow">
+                <span wicket:id="addToCardFromWishListLinkLabel"/>
+            </a>
+        </p>
+        <p class="text-center">
+            <a wicket:id="removeFromWishListLink" class="btn btn-default" rel="nofollow">
+                <span wicket:id="removeFromWishListLinkLabel"/>
+            </a>
+        </p>
+    </div>
+    <div wicket:id="noProducts" class="col-xs-12">[no products]</div>
+</wicket:panel>
+</body>
+</html>

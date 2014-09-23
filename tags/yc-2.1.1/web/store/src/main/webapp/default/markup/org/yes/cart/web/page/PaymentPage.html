@@ -1,0 +1,116 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+
+<wicket:head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
+    <meta name="google-site-verification" content="rHZLga_ppoOy7iVYFQgRVDZOLa7fuT7cGs2t8TY4m6c" />
+    <meta name="robots" content="noindex" />
+
+    <wicket:link>
+
+        <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
+        <!--[if lt IE 9]>
+        <script src="../../../../../js/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/fonts.css"/>
+        <link rel="stylesheet" href="../../../../../style/yc.css"/>
+
+        <script type="text/javascript" src="../../../../../js/yc.js"></script>
+    </wicket:link>
+    <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
+
+    <title wicket:id="pageTitle">[page title]</title>
+    <meta wicket:id="description" name="description" content=""/>
+    <meta wicket:id="keywords" name="keywords" content=""/>
+
+</wicket:head>
+
+<body>
+
+    <wicket:container wicket:id="header">
+        [header]
+    </wicket:container>
+
+    <div class="container">
+
+        <div class="col-xs-12">
+            <h2><wicket:message key="orderPayment">[Order payment]</wicket:message></h2>
+        </div>
+
+        <div class="col-xs-12">
+            <label wicket:id="feedback"/>
+        </div>
+        <div class="col-xs-12 payment-result-holder">
+            <wicket:container wicket:id="paymentResult">
+                [payment result panel]
+            </wicket:container>
+        </div>
+
+    </div>
+
+    <span wicket:id="footer">[footer]</span>
+
+
+<wicket:fragment wicket:id="negativeItemAllocationResultFragment">
+    <span style="display: none" wicket:id="negativeItemAllocationNotes">[negative item allocation]</span>
+
+</wicket:fragment>
+
+
+<wicket:fragment wicket:id="negativeResultFragment">
+    <span style="display: none">
+        <wicket:message key="negativePaymentNotes">[negative payments]</wicket:message>
+    </span>
+    <table width="100%">
+        <tr wicket:id="paymentDetail">
+            <td valign="top"><span wicket:id="id">[id]</span></td>
+            <td valign="top"><span wicket:id="transactionId">[transaction id]</span></td>
+            <td valign="top"><span wicket:id="authCode">[authorization code]</span></td>
+            <td valign="top"><span wicket:id="errorCode">[error code]</span></td>
+            <td valign="top"><span wicket:id="errorDescription">[error description]</span></td>
+        </tr>
+    </table>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="positiveResultFragment">
+    <span style="display: none">
+        <wicket:message key="positivePaymentNotes">[negative payments]</wicket:message>
+    </span>
+    <wicket:link>
+
+        <a href="HomePage.html" class="btn btn-warning" rel="bookmark">
+            <span><wicket:message key="continueShopping">[Shopping]</wicket:message></span>
+        </a>
+
+        <a href="CustomerSelfCarePage.html" class="btn btn-primary" rel="nofollow">
+            <wicket:message key="checkStatus">[check order status]</wicket:message>
+        </a>
+
+    </wicket:link>
+
+
+</wicket:fragment>
+
+</body>
+</html>

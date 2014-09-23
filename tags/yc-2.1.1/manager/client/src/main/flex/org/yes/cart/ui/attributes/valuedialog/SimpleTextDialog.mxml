@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                implements="org.yes.cart.ui.attributes.valuedialog.ValueDialog"
+                layout="vertical"
+                creationComplete="init();">
+
+    <mx:Label id="infoLabel"
+              visible="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
+              includeInLayout="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
+            />
+    <mx:Form width="100%">
+        <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
+            <mx:TextInput width="400" id="valueTextInput" change="onInputChange(event)"/>
+        </mx:FormItem>
+        <mx:FormItem id="displayValFormItem" label="@Resource(bundle='AttributesManagementPanel',key='displayValue')">
+            <yci18n:i18nStringField id="displayVal"/>
+        </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar width="100%" horizontalAlign="right">
+        <mx:Button id="btnSave" enabled="{saveEnabled}"
+                   width="94"
+                   label="@Resource(bundle='AttributesManagementPanel',key='save')"/>
+        <mx:Button id="btnCancel"
+                   width="94"
+                   label="@Resource(bundle='AttributesManagementPanel',key='cancel')"
+                   click="PopUpManager.removePopUp(this)"
+                />
+    </mx:ControlBar>
+
+    <mx:Boolean id="saveEnabled">true</mx:Boolean>
+    <mx:String id="validationRegExp">.</mx:String>
+    <mx:RegExpValidator id="validator" source="{valueTextInput}" property="text" flags="g" expression="{validationRegExp}"/>
+
+    <mx:Script><![CDATA[
+        import mx.binding.utils.BindingUtils;
+        import mx.events.ValidationResultEvent;
+        import mx.managers.PopUpManager;
+
+        private var _value:String;
+        private var _valueTypeName:String;
+        private var _displayValues:Object;
+        private var _oldValue:String;
+        private var _attributeCode:String;
+        private var _windowTitle:String;
+        private var _code:String;
+        private var _attributeGroup:String;
+
+
+        private function init():void {
+
+            BindingUtils.bindProperty(valueTextInput, "text", this, "value");
+
+            BindingUtils.bindProperty(this, "value", valueTextInput, "text");
+
+            this.title = windowTitle;
+
+            initialiseValidator();
+
+        }
+
+        private function initialiseValidator():void {
+
+            var _valType:String = _valueTypeName;
+
+            /*
+                The following types are OOTB provided in initial.sql
+
+                    String              - .
+                    URI                 - . (no validation as we may have relative urls and complex use of numbers and letters as well as parameters)
+                    URL                 - . (no validation as we may have relative urls and complex use of numbers and letters as well as parameters)
+                    Image               - handled by ImageDialog.mxml
+                    CommaSeparatedList  - handled by SimpleTextAreaDialog.mxml
+                    Float               - ^(([\-][0-9]+)|([0-9]*))[\.]?[0-9]+$
+                    Integer             - ^[\-]?[0-9]+$
+                    Phone               - ^[\+]?[\(\)0-9\- ]+$
+                    Boolean             - handled by SimpleBooleanDialog.mxml
+                    Date                - ^[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?$
+                    Email               - ^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$
+                    HTML                - handled by HTMLEditorDialog.mxml
+
+             */
+
+            if (_valType != null) {
+                if (_valType.indexOf('Integer') > -1) {
+                    validationRegExp = '^[\-]?[0-9]+$';
+                } else if (_valType.indexOf('Float') > -1) {
+                    validationRegExp = '^(([\-][0-9]+)|([0-9]*))[\.]?[0-9]+$';
+                } else if (_valType.indexOf('Phone') > -1) {
+                    validationRegExp = '^[\+]?[\(\)0-9\- ]+$';
+                } else if (_valType.indexOf('Email') > -1) {
+                    validationRegExp = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$';
+                } else if (_valType.indexOf('Date') > -1) {
+                    validationRegExp = '^[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?$';
+                }
+            }
+        }
+
+
+        public function getButtonSave():Button {
+            return this.btnSave;
+        }
+
+
+        public function get oldValue():String {
+            return _oldValue;
+        }
+
+        public function get windowTitle():String {
+            return _windowTitle;
+        }
+
+        public function set windowTitle(value:String):void {
+            _windowTitle = value;
+        }
+
+        public function get value():String {
+            return _value;
+        }
+
+        public function get displayValues():Object {
+            return _displayValues;
+        }
+
+        public function set displayValues(value:Object):void {
+            _displayValues = value;
+            displayVal.setSourceObject(this, 'displayValues');
+        }
+
+        public function set value(value:String):void {
+            _value = value;
+            _oldValue = new String(value);
+        }
+
+
+        public function get code():String {
+            return _code;
+        }
+
+        public function set code(value:String):void {
+            _code = value;
+        }
+
+        public function get attributeGroup():String {
+            return _attributeGroup;
+        }
+
+        public function set attributeGroup(value:String):void {
+            _attributeGroup = value;
+        }
+
+        public function get attributeCode():String {
+            return _attributeCode;
+        }
+
+        public function set attributeCode(value:String):void {
+            _attributeCode = value;
+        }
+
+        public function setInformation(value:String):void {
+            infoLabel.text = value;
+        }
+
+        public function get valueTypeName():String {
+            return _valueTypeName;
+        }
+
+        public function set valueTypeName(value:String):void {
+            _valueTypeName = value;
+        }
+
+        private function onInputChange(event:Event):void {
+            saveEnabled = validator.validate().type == ValidationResultEvent.VALID;
+        }
+        ]]>
+    </mx:Script>
+</mx:TitleWindow>

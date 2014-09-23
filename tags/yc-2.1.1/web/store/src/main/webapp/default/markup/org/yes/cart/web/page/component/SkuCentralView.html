@@ -1,0 +1,168 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:head>
+    <wicket:link>
+        <script src="../../../../../../js/responsive-tabs.js" type="text/javascript"></script>
+    </wicket:link>
+</wicket:head>
+<body>
+
+<wicket:panel>
+
+    <div class="product-detail-holder">
+        <div class="col-xs-12 col-sm-5 no-margin">
+            <div>
+                <wicket:container wicket:id="imageView">
+                    [product image view]
+                </wicket:container>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-7">
+
+            <div class="product-detail-name">
+                <span wicket:id="name">[product or sku name]</span>
+            </div>
+            <div class="pull-left">
+                <wicket:message key="skuCode">[sku.code:]</wicket:message>
+                <span class="sku-code" wicket:id="skuCode">[sku num]</span>
+            </div>
+
+            <div class="text-right clearfix">
+                <a wicket:id="addToCartLink" class="btn btn-warning js-buy" rel="nofollow">
+                    <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
+                </a>
+            </div>
+
+             <div class="text-right">
+                <a wicket:id="addToWishListLink" class="btn btn-info" rel="nofollow">
+                    <span wicket:id="addToWishListLinkLabel">[add one to wish list]</span>
+                </a>
+            </div>
+
+            <div class="text-right">
+                <wicket:container wicket:id="priceView">
+                    [price]
+                </wicket:container>
+            </div>
+
+            <div class="product-detail-sku-list">
+                <wicket:container wicket:id="skuList">
+                    [product variation / sku list]
+                </wicket:container>
+            </div>
+
+            <wicket:container wicket:id="addToAnyButton">
+                [Add to any social button]
+            </wicket:container>
+        </div>
+
+        <div class="col-xs-12">
+
+            <div class="product-detail-tabs">
+                <ul class="nav nav-tabs responsive" id="productDetailsTabs" role="tablist">
+                    <li class="active">
+                        <a href="#description" role="tab" data-toggle="tab">
+                            <wicket:message key="description">[description]</wicket:message>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#details" role="tab" data-toggle="tab">
+                            <wicket:message key="details">[details]</wicket:message>
+                        </a>
+                    </li>
+                    <wicket:container wicket:id="accessoriesHeadContainer">
+                        [accessories view]
+                    </wicket:container>
+                    <wicket:container wicket:id="volumeDiscountsHeadContainer">
+                        [discounts view]
+                    </wicket:container>
+                </ul>
+                <div class="tab-content responsive">
+                    <div class="tab-pane fade in active" id="description">
+                        <wicket:container wicket:id="description">
+                            [product or sku description]
+                        </wicket:container>
+                    </div>
+                    <div class="tab-pane fade" id="details">
+                        <wicket:container wicket:id="skuAttrView">
+                            [attributes view]
+                        </wicket:container>
+                    </div>
+                    <wicket:container wicket:id="accessoriesBodyContainer">
+                        [accessories]
+                    </wicket:container>
+                    <wicket:container wicket:id="priceTiersView">
+                        [price tiers view]
+                    </wicket:container>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: none;">
+            <div class="jsWishListItemAddedMsg">
+                <wicket:container wicket:id="jsWishListItemAddedMsg">
+                    [wish list]
+                </wicket:container>
+            </div>
+            <wicket:container wicket:id="jsWishListItemAdded">
+                [wish list]
+            </wicket:container>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $( '#productDetailsTabs a' ).click( function ( e ) {
+            e.preventDefault();
+            $( this ).tab( 'show' );
+        } );
+
+        ( function( $ ) {
+            fakewaffle.responsiveTabs( [ 'xs', 'sm' ] );
+        } )( jQuery );
+    </script>
+
+</wicket:panel>
+
+
+<wicket:fragment wicket:id="accessoriesHead">
+    <li>
+        <a href="#accessories" role="tab" data-toggle="tab">
+            <wicket:message key="accessories">[accessories]</wicket:message>
+        </a>
+    </li>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="accessoriesBody">
+    <div class="tab-pane fade" id="accessories">
+        <wicket:container wicket:id="accessoriesView">
+            [accessories]
+        </wicket:container>
+    </div>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="volumeDiscountsHead">
+    <li>
+        <a href="#discounts" role="tab" data-toggle="tab">
+            <wicket:message key="volumeDiscount">[discounts]</wicket:message>
+        </a>
+    </li>
+</wicket:fragment>
+
+</body>
+</html>

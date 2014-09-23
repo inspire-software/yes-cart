@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.yes</groupId>
+        <artifactId>manager</artifactId>
+        <version>2.1.1</version>
+    </parent>
+    <artifactId>yes-manager</artifactId>
+    <packaging>war</packaging>
+    <name>Yes cart manager server</name>
+    <description>Yes cart manager server</description>
+    <properties>
+        <backport-util-concurrent.version>3.1</backport-util-concurrent.version>
+        <!-- <blazeds.version>3.2.0.3978</blazeds.version>-->
+        <blazeds.version>4.0.0.14931</blazeds.version>
+
+        <junit.version>4.0</junit.version>
+        <servlet-api.version>2.5</servlet-api.version>
+        <mysql-connector.version>5.1.13</mysql-connector.version>
+        <spring-flex.version>1.5.2.RELEASE</spring-flex.version>
+    </properties>
+    <repositories>
+        <repository>
+            <id>SpringFlex</id>
+            <name>SpringFlex Source Repo</name>
+            <url>https://src.springsource.org/svn/spring-flex/tags/spring-flex-1.5.0.RELEASE/local-repo/</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>spring-maven-external</id>
+            <name>Springframework Maven External Repository</name>
+            <url>http://maven.springframework.org/external</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>yes-manager-client</artifactId>
+            <version>${project.parent.version}</version>
+            <type>swf</type>
+        </dependency -->
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>domain-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-remoting</artifactId>
+            <version>${blazeds.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-common</artifactId>
+            <version>${blazeds.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-core</artifactId>
+            <version>${blazeds.version}</version>
+        </dependency>
+        <!-- <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-opt</artifactId>
+            <version>${blazeds.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>com.adobe.blazeds</groupId>
+            <artifactId>blazeds-proxy</artifactId>
+            <version>${blazeds.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.flex</groupId>
+            <artifactId>spring-flex-core</artifactId>
+            <version>${spring-flex.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>backport-util-concurrent</groupId>
+            <artifactId>backport-util-concurrent</artifactId>
+            <version>${backport-util-concurrent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-security</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dumbster</groupId>
+            <artifactId>dumbster</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>opensymphony</groupId>
+            <artifactId>quartz</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>mysql</id>
+            <dependencies>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>${mysql-connector.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>derby</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.derby</groupId>
+                    <artifactId>derby</artifactId>
+                    <version>10.8.1.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.derby</groupId>
+                    <artifactId>derbyclient</artifactId>
+                    <version>10.8.1.2</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+    <build>
+        <finalName>yes-manager</finalName>
+
+        <pluginManagement>
+            <plugins>
+
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+
+                    <configuration>
+                        <!--<resourceEncoding>${project.build.sourceEncoding}</resourceEncoding>-->
+                        <nonFilteredFileExtensions>
+                            <!-- default value contains jpg,jpeg,gif,bmp,png -->
+                            <nonFilteredFileExtension>swf</nonFilteredFileExtension>
+                        </nonFilteredFileExtensions>
+                        <webResources>
+                            <resource>
+                                <filtering>true</filtering>
+                                <directory>src/main/webapp</directory>
+                                <includes>
+                                    <include>**/*.xml</include>
+                                    <include>default/**</include>
+                                </includes>
+                            </resource>
+                            <resource>
+                                <filtering>true</filtering>
+                                <directory>../client/target</directory>
+                                <includes>
+                                    <include>en_US/ShopManagerApplication.html</include>
+                                    <include>en_US/ShopManagerApplication.swf</include>
+                                    <include>en_US/swfobject.js</include>
+                                    <include>en_US/history/**</include>
+                                    <include>ru_RU/ShopManagerApplication.html</include>
+                                    <include>ru_RU/ShopManagerApplication.swf</include>
+                                    <include>ru_RU/swfobject.js</include>
+                                    <include>ru_RU/history/**</include>
+                                    <include>uk_UK/ShopManagerApplication.html</include>
+                                    <include>uk_UK/ShopManagerApplication.swf</include>
+                                    <include>uk_UK/swfobject.js</include>
+                                    <include>uk_UK/history/**</include>
+                                </includes>
+                            </resource>
+                        </webResources>
+                        <!-- web.xml is added to the project by other means, and shouldn't be packaged by default -->
+                        <!--<packagingExcludes>WEB-INF/web.xml</packagingExcludes>-->
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

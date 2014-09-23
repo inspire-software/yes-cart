@@ -1,0 +1,511 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<ehcache updateCheck="false">
+
+    <!--
+        timeToLiveSeconds - maximum time the cache is allowed to exists regardless of its use
+        timeToIdleSeconds - time to when cache becomes idle and hence expired.
+
+        E.g. if we have  timeToLiveSeconds = 3600 (1h) and  timeToIdleSeconds = 60 (1m) and no
+        one accesses the object for more than one minute the cache will expire. If however the
+        cache gets used with frequency less than a minute it will expire after 1h.
+
+        Therefore the recommended approach is to have:
+        * 1d (timeToLiveSeconds) and 2h (timeToIdleSeconds) for: configurations, categories and
+          content
+        * 1h (timeToLiveSeconds) and 30min (timeToIdleSeconds) for: products, sku and prices
+        * Search result and product by id and sku should have interval no more than 10m
+          (timeToLiveSeconds) and 2m (timeToIdleSeconds) to correctly reflect inventory and
+          pricing information. (Which means that under heavy load we have caching for up 10m
+          to keep the server fast and with less load the cache will only last 2 minutes).
+
+        This is however only recommendation which is based on the assumption that category, content
+        and configurations will only change once a day at most and products and prices information
+        is updated throughout the day. If however frequency of updates is less (e.g. everything
+        is updated once a day at most or event less frequently) then performance can be improved by
+        increasing timeToLiveSeconds and timeToIdleSeconds further.
+
+        For the filtered navigation it is advisable to set: 1h (timeToLiveSeconds) and 30min
+        (timeToIdleSeconds) and items going out of stock will affect the contents of filtered
+        navigation menu
+
+        All methods that return product entities should be kept in cache at minimum to prevent
+        phantom products (i.e. those that already are sold but data has not been updated in cache).
+
+        Second level cache is recommended to have no more than 10 minutes timeToLiveSeconds
+        as risk of concurrent modification exceptions rises with longer cache times.
+      -->
+
+    <defaultCache
+            maxElementsInMemory="10000"
+            overflowToDisk="false"
+            eternal="false"
+            timeToIdleSeconds="1800" timeToLiveSeconds="3600"
+            />
+
+    <cache
+            name="org.hibernate.cache.StandardQueryCache"
+            maxEntriesLocalHeap="5000"
+            eternal="false"
+            timeToLiveSeconds="600"
+
+            />
+
+    <!-- ############################################# cluster cache #######################################-->
+
+    <cache name="nodeService-config"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="nodeService-cluster"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="nodeService-yumNode"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="nodeService-yesNodes"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="nodeService-otherYesNodes"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="nodeService-wsFactory"      maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="43200" timeToIdleSeconds="7200"/>
+
+    <!-- ############################################# service cache #######################################-->
+
+    <cache name="attributeService-availableAttributesByProductTypeId"      maxElementsInMemory="20" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="attributeService-availableImageAttributesByGroupCode"      maxElementsInMemory="20" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="attributeService-availableAttributesByGroupCodeStartsWith"      maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="attributeService-allAttributeCodes"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="attributeService-allNavigatableAttributeCodes"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="attributeService-singleNavigatableAttributeCodesByProductType"      maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="attributeService-allAttributeNames"      maxElementsInMemory="5" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="attributeService-attributeNamesByCodes"      maxElementsInMemory="5" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="attributeService-navigatableAttributeDisplayValue"   maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+
+
+
+    <cache name="categoryService-topLevelCategories"      maxElementsInMemory="30" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-rootCategory"      maxElementsInMemory="2" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-categoryTemplateVariation"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-categoryTemplate"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-itemsPerPage"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-categoryAttributeRecursive"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-categoryAttributesRecursive"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-productQuantity"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="categoryService-categoryHasProducts"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="categoryService-categoryHasChildren"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-childCategories"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-childCategoriesRecursive"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-childCategoriesRecursiveIds"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-categoryHasSubcategory"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-byId"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+
+    <cache name="contentService-rootContent"      maxElementsInMemory="10" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="contentService-contentTemplateVariation"      maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="contentService-contentTemplate"      maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="contentService-itemsPerPage"      maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="contentService-contentBody"      maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="contentService-contentAttributeRecursive"      maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="contentService-contentAttributesRecursive"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="contentService-childContent"      maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="contentService-childContentRecursive"      maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="contentService-byId"      maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="contentService-contentHasSubcontent"      maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+
+
+    <cache name="imageService-seoImage"      maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+
+
+    <cache name="priceService-minimalRegularPrice"      maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="priceService-allCurrentPrices"      maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+
+    <cache name="skuWarehouseService-productOnWarehouse"      maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+    <cache name="skuWarehouseService-productSkusOnWarehouse"  maxElementsInMemory="15000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="120"/>
+
+
+    <cache name="productService-productById"      maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="productService-skuById"      maxElementsInMemory="15000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="productService-productBySkuCode"      maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="productSkuService-productSkuBySkuCode"   maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="productService-defaultImage"      maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="productService-randomProductByCategory"      maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="productService-productAttributes"      maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="productService-productAttribute"      maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="productService-allProductsAttributeValues"      maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="productService-productAssociationsIds"      maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="productService-featuredProducts"      maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="productService-newArrivalsProductInCategory"      maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="productService-productByQuery"      maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="300"/>
+
+    <cache name="productService-productSearchResultDTOByQuery"      maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="600" timeToIdleSeconds="300"/>
+
+    <cache name="productService-productQtyByQuery"      maxElementsInMemory="10000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="productService-productByIdList"      maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="productService-distinctAttributeValues"      maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="productService-distinctBrands"      maxElementsInMemory="500" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="productService-productQtyByCategoryId"      maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+
+    <cache name="productTypeAttrService-viewGroupsByProductTypeId"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="productTypeAttrService-byProductTypeId"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+
+    <cache name="customerWishListService-wishListByCustomerEmail"   maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+
+    <cache name="shopService-shopByCode"      maxElementsInMemory="10" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="shopService-shopById"      maxElementsInMemory="20" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="shopService-allShops"      maxElementsInMemory="5" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="shopService-shopByDomainName"      maxElementsInMemory="20" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="shopService-shopCategories"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="shopService-shopCategoriesIds"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="shopService-shopWarehouses"      maxElementsInMemory="20" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="shopService-shopWarehousesIds"      maxElementsInMemory="20" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+
+    <cache name="systemService-attributeValue"      maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="systemService-attributeValues"      maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+
+    <cache name="productImageNameStrategyService-productCode"      maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+
+    <cache name="centralViewResolver-booleanQuery"      maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+
+    <cache name="breadCrumbBuilder-breadCrumbs"      maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+
+    <cache name="filteredNavigationSupport-attributeFilteredNavigationRecords"      maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="filteredNavigationSupport-brandFilteredNavigationRecords"      maxElementsInMemory="500" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="filteredNavigationSupport-priceFilteredNavigationRecords"      maxElementsInMemory="500" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="promotionService-promotionsByShopCode"  maxElementsInMemory="20" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="promotionService-factoryGetInstance"  maxElementsInMemory="20" overflowToDisk="false"
+           eternal="false"  timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
+    <cache name="promotionService-groovyCache"  maxElementsInMemory="500" overflowToDisk="false"
+           eternal="true" />
+
+    <cache name="customerService-customerByEmail" maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+
+    <!-- ############################################# hibernate entity cache #######################################-->
+
+    <cache name="org.yes.cart.domain.entity.impl.CategoryEntity" maxElementsInMemory="500" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.CategoryEntity.attribute" maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.CategoryEntity.productCategory" maxElementsInMemory="10000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductCategoryEntity" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.AttributeGroupEntity" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity" maxElementsInMemory="1000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity.sku" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity.productAssociations" maxElementsInMemory="1000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity.ensebleOption" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductEntity.attribute" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.EtypeEntity" maxElementsInMemory="100" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.AttributeEntity" maxElementsInMemory="5000" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductTypeEntity" maxElementsInMemory="100" overflowToDisk="false" eternal="false"
+           timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductTypeEntity.attributeViewGroup" maxElementsInMemory="100"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ProductTypeEntity.attribute" maxElementsInMemory="1000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.BrandEntity" maxElementsInMemory="100"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.CustomerEntity" maxElementsInMemory="1000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.CarrierSlaEntity" maxElementsInMemory="1000"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+    <cache name="org.yes.cart.domain.entity.impl.ShopEntity" maxElementsInMemory="10"
+           overflowToDisk="false" eternal="false" timeToLiveSeconds="600"/>
+
+
+
+    <!-- ############################################# storefront cache #######################################-->
+
+    <cache name="web.bookmarkService-seoCategoryDecode"
+           maxElementsInMemory="200"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+    <cache name="web.bookmarkService-seoCategoryEncode"
+           maxElementsInMemory="200"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
+    <cache name="web.bookmarkService-seoContentDecode"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+    <cache name="web.bookmarkService-seoContentEncode"
+           maxElementsInMemory="1000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
+    <cache name="web.bookmarkService-seoSkuDecode"
+           maxElementsInMemory="15000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+    <cache name="web.bookmarkService-seoSkuEncode"
+           maxElementsInMemory="15000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
+    <cache name="web.bookmarkService-seoProductDecode"
+           maxElementsInMemory="5000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+    <cache name="web.bookmarkService-seoProductEncode"
+           maxElementsInMemory="5000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
+    <cache name="web.decoratorFacade-decorate"
+           maxElementsInMemory="5000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="600"
+           timeToIdleSeconds="120"/>
+
+    <cache name="web.addressBookFacade-customerHasAtLeastOneAddress"
+           maxElementsInMemory="5000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
+    <cache name="web.addressBookFacade-allCountries"
+           maxElementsInMemory="10"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
+    <cache name="web.addressBookFacade-statesByCountry"
+           maxElementsInMemory="200"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
+
+</ehcache>

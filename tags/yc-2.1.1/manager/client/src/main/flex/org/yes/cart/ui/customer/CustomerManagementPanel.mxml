@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:VDividedBox xmlns:mx="http://www.adobe.com/2006/mxml"
+                xmlns:cust="org.yes.cart.ui.customer.*"
+                width="100%"
+                height="100%"
+                creationComplete="initPanel()"
+                paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+    <mx:Script>
+
+        <![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import org.yes.cart.constants.AttributeGroupNames;
+        import org.yes.cart.impl.AttrValueCustomerDTOImpl;
+        import org.yes.cart.impl.AttributeDTOImpl;
+        import org.yes.cart.impl.CustomerDTOImpl;
+        import org.yes.cart.util.CloneUtil;
+        import org.yes.cart.util.DomainUtils;
+        import org.yes.cart.util.UpdateTarget;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.attributes.EntityAttributeValuesManagementPanel;
+
+        import org.yes.cart.ui.order.OrdersManagementPanel;
+
+        import flash.events.Event;
+        import flash.events.MouseEvent;
+
+        import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
+        import mx.events.IndexChangedEvent;
+        import mx.events.ListEvent;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        private var TAB_ATTRIB_IDX:int = 0;
+        private var TAB_ORDERS_IDX:int = 1;
+        //private var TAB_WISHLIST_IDX:int = 2;
+        private var TAB_ADDRESS_IDX:int = 2;
+        private var TAB_SHOP_IDX:int = 3;
+        private var TAB_TAGS_IDX:int = 4;
+
+
+        [Bindable]
+        private var selectedCustomer:CustomerDTOImpl;
+
+        public function initPanel():void {
+
+        }
+
+        private function onCustomerSelected(event:ListEvent):void {
+            customerSelected = this.customerGrid.selectedItem != null;
+            if (customerSelected) {
+                selectedCustomer = CustomerDTOImpl(CloneUtil.clone(event.currentTarget.selectedItem));
+                initTabs(customerTabNavigator.selectedIndex);
+            }
+        }
+
+        private function initTabs(tabIdx:int):void {
+            if (customerSelected) {
+                Debug.trace("INFO customerTabNavigator.selectedIndex is :" + tabIdx);
+                switch (tabIdx) {
+
+
+                    case TAB_ATTRIB_IDX:
+                    {
+                        attrValuesTabSelected();
+                        break;
+                    }
+
+                    case TAB_ORDERS_IDX:
+                    {
+                        ordersTabSelected();
+                        break;
+                    }
+
+                    /*case TAB_WISHLIST_IDX:
+                    {
+                        wishListTabSelected();
+                        break;
+                    } */
+
+                    case TAB_ADDRESS_IDX:
+                    {
+                        addressTabSelected();
+                        break;
+                    }
+
+                    case TAB_SHOP_IDX:
+                    {
+                        shopTabSelected();
+                        break;
+                    }
+
+                    case TAB_TAGS_IDX:
+                    {
+                        tagsTabSelected();
+                        break;
+                    }
+
+
+                }
+            }
+
+        }
+
+        private function attrValuesTabSelected():void {
+            this.customerSummary.customer = selectedCustomer;
+            Debug.trace("INFO Customer attribute values tab selected for customer id" + selectedCustomer.customerId);
+        }
+
+        private function ordersTabSelected():void {
+            Debug.trace("INFO Customer orders tab selected for customer id" + selectedCustomer.customerId);
+            customerOrders.customerId = selectedCustomer.customerId;
+        }
+
+        private function shopTabSelected():void {
+            Debug.trace("INFO Customer's shop for customer id" + selectedCustomer.customerId);
+            var panel:CustomerShopPanel = new CustomerShopPanel();
+            panel.customerId = selectedCustomer.customerId;
+            customerShops.removeAllChildren();
+            customerShops.addChild(panel);
+        }
+
+        private function tagsTabSelected():void {
+            Debug.trace("INFO Customer tags tab selected for customer id" + selectedCustomer.customerId);
+            customerTags.customer = selectedCustomer;
+        }
+
+        private function addressTabSelected():void {
+            Debug.trace("INFO Customer address tab selected for customer id" + selectedCustomer.customerId);
+            customerAddresses.customerId = selectedCustomer.customerId;
+        }
+
+        /*private function wishListTabSelected():void {
+            Debug.trace("INFO Customer wish list tab selected for customer id" + selectedCustomer.customerId);
+            var panel:CustomerWishListPanel = new CustomerWishListPanel();
+            panel.customerId = selectedCustomer.customerId;
+            customerWishlist.removeAllChildren();
+            customerWishlist.addChild(panel);
+        }*/
+
+        private function onApplyFilterClick(event:MouseEvent):void {
+
+            remoteCustomerService.findCustomer(
+                    emailFilterValue.text,
+                    firstNameFilterValue.text,
+                    lastNameFilterValue.text,
+                    null,
+                    tagFilterValue.text);
+        }
+
+        private function onTabClick(event:IndexChangedEvent):void {
+            initTabs(event.newIndex);
+        }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onFindCustomerResult(event:ResultEvent):void {
+            this.customerSelected = false;
+            this.customerGrid.dataProvider = event.result;
+        }
+
+        private function onApplyFilterShowClick(event:MouseEvent):void {
+            filterPanel.visible = !filterPanel.visible;
+            filterPanel.includeInLayout = filterPanel.visible;
+            if (filterPanel.visible) {
+                (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOff');
+            } else {
+                (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOn');
+            }
+        }
+        ]]>
+
+    </mx:Script>
+
+    <mx:Boolean id="customerSelected">false</mx:Boolean>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCustomerService" destination="remoteCustomerService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="findCustomer" name="findCustomer"
+                   result="onFindCustomerResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='CustomerManagementPanel',key='customers')"
+              paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+        <mx:VBox width="100%">
+
+            <mx:HBox paddingTop="5" width="100%">
+
+                <mx:VBox paddingTop="5">
+
+                    <mx:Grid >
+                        <mx:GridRow>
+                            <mx:GridItem>
+                                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='lastNameFilter')"/>
+
+                                <mx:TextInput id="lastNameFilterValue" width="100"
+                                              toolTip="@Resource(bundle='CustomerManagementPanel',key='lastNameFilter')"/>
+                            </mx:GridItem>
+                            <mx:GridItem>
+                                <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
+                                           click="onApplyFilterShowClick(event)"
+                                        />
+                            </mx:GridItem>
+                        </mx:GridRow>
+                    </mx:Grid>
+
+                    <mx:Grid id="filterPanel" visible="false" includeInLayout="false" >
+                        <mx:GridRow>
+                            <mx:GridItem>
+                                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='firstNameFilter')"/>
+                                <mx:TextInput id="firstNameFilterValue" width="150"/>
+                            </mx:GridItem>
+                            <mx:GridItem>
+                                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='emailFilter')"/>
+                                <mx:TextInput id="emailFilterValue" width="150"/>
+                            </mx:GridItem>
+                            <mx:GridItem>
+                                <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='tagFilter')"/>
+                                <mx:TextInput id="tagFilterValue" width="150"/>
+                            </mx:GridItem>
+                        </mx:GridRow>
+                    </mx:Grid>
+                </mx:VBox>
+
+                <mx:Button height="100%" label="@Resource(bundle='CustomerManagementPanel',key='applyFilter')"
+                           toolTip="@Resource(bundle='CustomerManagementPanel',key='applyFilterToolTip')"
+                           click="onApplyFilterClick(event)"
+                        />
+
+
+            </mx:HBox>
+
+            <mx:DataGrid id="customerGrid" width="100%" height="100%"
+                         itemClick="onCustomerSelected(event)">
+                <mx:columns>
+                    <mx:DataGridColumn width="80" headerText="@Resource(bundle='CustomerManagementPanel',key='id')"
+                                       dataField="customerId"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='email')"
+                                       dataField="email"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='lastname')"
+                                       dataField="lastname"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='firstname')"
+                                       dataField="firstname"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='middlename')"
+                                       dataField="middlename"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='tags')"
+                                       dataField="tag"/>
+                </mx:columns>
+            </mx:DataGrid>
+
+        </mx:VBox>
+        <mx:TabNavigator id="customerTabNavigator" change="onTabClick(event);" width="100%" height="100%"
+                         visible="{customerSelected}">
+
+            <cust:CustomerAttributesPanel id="customerSummary"/>
+            <cust:CustomerOrdersPanel id="customerOrders"/>
+<!--
+            <mx:Canvas id="customerWishlist"
+                       label="@Resource(bundle='CustomerManagementPanel',key='customerWishlist')"
+                       width="100%" height="100%"/>
+-->
+            <cust:AddressPanel id="customerAddresses"
+                               label="@Resource(bundle='CustomerManagementPanel',key='customerAddresses')"
+                               width="100%" height="100%"/>
+            <mx:Canvas id="customerShops" label="@Resource(bundle='CustomerManagementPanel',key='customerShops')"
+                       width="100%" height="100%"/>
+
+            <cust:CustomerTagsPanel id="customerTags"/>
+
+        </mx:TabNavigator>
+
+    </mx:Panel>
+
+</mx:VDividedBox>

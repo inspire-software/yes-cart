@@ -1,0 +1,67 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+
+
+    <div class="col-xs-12 col-sm-6 col-md-6">
+
+        <div class="thumbnail">
+
+            <div class="product-name-holder">
+                <a wicket:id="productLinkName" rel="bookmark">
+                    <span  wicket:id="name">[name]</span>
+                </a>
+            </div>
+
+            <div class="text-right">
+                <a wicket:id="addToCartLink" class="btn btn-warning js-buy" rel="nofollow">
+                    <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
+                </a>
+            </div>
+
+            <div class="product-price-holder">
+                <wicket:container wicket:id="priceView">
+                    [price]
+                </wicket:container>
+            </div>
+
+            <div class="text-center">
+                <a wicket:id="productLinkImage" rel="bookmark">
+                    <img wicket:id="productDefaultImage"/>
+                </a>
+            </div>
+
+            <div class="product-code-holder">
+                <wicket:message key="skuCode">[sku.code:]</wicket:message>
+                <a wicket:id="productLinkSku" rel="bookmark">
+                    <span wicket:id="skuCode">[sku num]</span>
+                </a>
+            </div>
+
+            <div class="caption">
+                <span wicket:id="description">[description Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s]</span>
+            </div>
+
+        </div>
+    </div>
+
+
+</wicket:panel>
+</body>
+</html>
