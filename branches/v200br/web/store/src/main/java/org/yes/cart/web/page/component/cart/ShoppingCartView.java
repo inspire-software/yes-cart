@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -29,6 +30,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 
@@ -50,13 +52,14 @@ public class ShoppingCartView extends BaseComponent {
     private static final String COUPON_CODE_INPUT = "couponInput";
     private static final String COUPON_CODE_ADD_BTN = "addCouponBtn";
 
+    private final static String CHECKOUT_LINK = "checkoutLink";
+
     private static final String DELIVERY_COST_LABEL = "deliveryCost";
     private static final String TAX_LABEL = "tax";
     private static final String TOTAL_LABEL = "total";
     private static final String GRAND_TOTAL_LABEL = "grandTotal";
     private static final String DELIVERY_LIST = "deliveryList";
     private static final String NEXT_LINK = "nextLink";
-
 
     private static final String MULTIPLE_DELIVERY_CHECKBOX = "multipleDelivery";
     private static final String MULTIPLE_DELIVERY_LABEL = "multipleDeliveryLabel";
@@ -111,7 +114,7 @@ public class ShoppingCartView extends BaseComponent {
                 }
             }
         });
-
+        cartForm.addOrReplace(new BookmarkablePageLink<CheckoutPage>(CHECKOUT_LINK, CheckoutPage.class).setVisible(!ApplicationDirector.getShoppingCart().getCartItemList().isEmpty()));
 
         addOrReplace(cartForm);
 

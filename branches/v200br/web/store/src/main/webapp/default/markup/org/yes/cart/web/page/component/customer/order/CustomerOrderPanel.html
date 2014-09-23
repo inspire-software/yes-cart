@@ -18,24 +18,15 @@
 <body>
 <wicket:panel>
 
-
-    <div class="grid-100 mobile-grid-100 grid-parent" >
-        <div class="grid-50 mobile-grid-50">
-            <p>
-                <a name="orderInfo" class="middle-title"><wicket:message key="orderInfo">[orderInfo] </wicket:message></a>
-            <hr>
-            </p>
-        </div>
-
-        <div class="grid-50 mobile-grid-50">
-            &nbsp;
-        </div>
-
+    <div class="col-xs-12 no-padding">
+        <h2 id="orderInfo" class="profile-title"><wicket:message key="orderInfo">[orderInfo] </wicket:message></h2>
     </div>
 
-    <wicket:container wicket:id="orderInformation">
-            [Order info]
-    </wicket:container>
+    <div class="col-xs-12">
+        <wicket:container wicket:id="orderInformation">
+                [Order info]
+        </wicket:container>
+    </div>
 
 
 
@@ -43,60 +34,39 @@
 
 <wicket:fragment wicket:id="orderInformationFragment">
 
-    <div class="grid-100 mobile-grid-100 grid-parent" style="background-color: #bbbbbb;">
-
-        <div class="grid-25 mobile-grid-25">
-            <p>
-                <span class="small-title"><wicket:message key="orderNumHead">[order number]</wicket:message></span>
-                <span class="small-title"><wicket:message key="orderDateHead">[order date]</wicket:message></span>
-            </p>
-        </div>
-        <div class="grid-15 mobile-grid-15">
-            <p>
-                <span class="small-title"><wicket:message key="orderStatusHead">[status]</wicket:message></span>
-            </p>
-        </div>
-        <div class="grid-40 mobile-grid-40">
-            <p>
-                <span class="small-title"><wicket:message key="orderItemsHead">[items in order]</wicket:message></span>
-            </p>
-        </div>
-        <div class="grid-20 mobile-grid-20 text-right">
-            <p>
-                <span class="small-title"><wicket:message key="orderAmountHead">[order amount]</wicket:message></span>
-            </p>
+    <div class="profile-order-history">
+        <div class="col-xs-12 no-margin header">
+            <div class="col-xs-12 col-sm-3">
+                <wicket:message key="orderNumHead">[order number]</wicket:message> /
+                <wicket:message key="orderDateHead">[order date]</wicket:message>
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <wicket:message key="orderStatusHead">[status]</wicket:message>
+            </div>
+            <div class="col-xs-12 col-sm-5">
+                <wicket:message key="orderItemsHead">[items in order]</wicket:message>
+            </div>
+            <div class="col-xs-12 col-sm-2 text-right">
+                <wicket:message key="orderAmountHead">[order amount]</wicket:message>
+            </div>
         </div>
 
+        <div class="col-xs-12 no-margin single-order" wicket:id="orders">
+            <div class="col-xs-12 col-sm-3">
+                <label wicket:id="orderNum">[order number]</label><br/>
+                <span wicket:id="orderDate">[order date]</span>
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <span wicket:id="orderStatus">[status]</span>
+            </div>
+            <div class="col-xs-12 col-sm-5">
+                <span wicket:id="orderItems">[items in order]</span>
+            </div>
+            <div class="col-xs-12 col-sm-2 text-right">
+                <span wicket:id="orderAmount">[order amount]</span>
+            </div>
+        </div>
     </div>
-
-    <div class="grid-100 mobile-grid-100 grid-parent" wicket:id="orders">
-        <div class="grid-25 mobile-grid-25">
-            <p>
-                <span wicket:id="orderNum" class="text-90p">[order number]</span>
-            </p>
-            <p>
-                <span wicket:id="orderDate" class="text-90p">[order date]</span>
-            </p>
-        </div>
-        <div class="grid-15 mobile-grid-15">
-            <p>
-                <span wicket:id="orderStatus" class="text-90p">[status]</span>
-            </p>
-        </div>
-        <div class="grid-40 mobile-grid-40">
-            <p>
-                <span wicket:id="orderItems" class="text-90p">[items in order]</span>
-            </p>
-        </div>
-        <div class="grid-20 mobile-grid-20 text-right">
-            <p>
-                <span wicket:id="orderAmount" class="text-90p">[order amount]</span>
-            </p>
-        </div>
-
-    </div>
-
-
 </wicket:fragment>
 
 </body>

@@ -18,26 +18,26 @@
 <body>
 <wicket:panel>
 
-
-
-    <div class="grid-100 mobile-grid-100 grid-parent">
-
-        <div class="grid-100 mobile-grid-100">
-            <a wicket:id="defaultImageRef" class="example-image-link" rel="lightbox">
-                <img wicket:id="defaultImage" id="defaultImage" align="center" />
-            </a>
-        </div>
-
-        <div class="grid-100 mobile-grid-100 grid-parent hide-on-mobile" style="margin-top: 5px;">
-            <div class="grid-20 mobile-grid-20" wicket:id="altImageList">
-                <a wicket:id="altImageRef"  class="example-image-link" rel="lightbox-alternatives">
-                    <img wicket:id="altImage" align="center" class="example-image jsAltImage" />
-                </a>
+    <div class="product-detail-img-holder">
+        <div class="row main">
+            <div class="col-xs-12">
+                <div class="thumbnail">
+                    <a wicket:id="defaultImageRef" class="example-image-link" rel="lightbox">
+                        <img wicket:id="defaultImage" id="defaultImage" align="center" />
+                    </a>
+                </div>
             </div>
         </div>
-
+        <div class="row gallery">
+            <div wicket:id="altImageList">
+                <div class="col-xs-3 col-sm-4 col-md-3">
+                    <a wicket:id="altImageRef" class="thumbnail" rel="lightbox-alternatives">
+                        <img wicket:id="altImage" class="jsAltImage" />
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-
     <script type="text/javascript">
         $(document).ready(function() {
 

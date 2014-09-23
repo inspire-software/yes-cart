@@ -17,30 +17,23 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <div class="grid-100 mobile-grid-100 grid-parent" style="padding-bottom: 20px;">
 
-        <div class="grid-100 mobile-grid-100 grid-parent" style="min-height: 65px; height: 65px; overflow: hidden;">
-            <p align="justify" style="text-indent: 20px;">
-                <a class="product-tittle " wicket:id="categoryLinkName" rel="bookmark">
+        <div class="col-xs-12 col-sm-4 col-md-3 sub-categories-holder">
+            <p>
+                <a wicket:id="categoryLinkName" rel="bookmark">
                     <span wicket:id="categoryName">[sub category name]</span>
                 </a>
             </p>
+            <div class="thumbnail">
+                <a wicket:id="categoryLinkImage">
+                    <img wicket:id="categoryImage"/>
+                </a>
+            </div>
+            <p class="sub-cat-desc">
+                <span wicket:id="categoryDescription">[sub category description]</span>
+            </p>
         </div>
 
-        <p align="justify">
-
-            <a wicket:id="categoryLinkImage" class="image-border">
-                <img border="0" wicket:id="categoryImage" align="left" hspace="10" vspace="10"/>
-            </a>
-
-            <a wicket:id="categoryLinkDescription" class="hide-on-mobile" style="min-height: 200px; height: 200px; overflow: hidden;">
-                <span wicket:id="categoryDescription">[sub category description]</span>
-            </a>
-
-        </p>
-
-
-    </div>
 </wicket:panel>
 </body>
 </html>

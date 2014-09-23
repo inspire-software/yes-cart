@@ -123,10 +123,11 @@
         <property name="enabledPatterns">
             <list>
                 <!-- Custom fonts support -->
-                <!--<value>+*.eot</value>-->
-                <!--<value>+*.svg</value>-->
-                <!--<value>+*.ttf</value>-->
-                <!--<value>+*.woff</value>-->
+                <value>+*.eot</value>
+                <value>+*.svg</value>
+                <value>+*.ttf</value>
+                <value>+*.woff</value>
+                <value>+*.map</value>
 
                 <!-- PDF streams -->
                 <!--<value>+*.pdf</value>-->

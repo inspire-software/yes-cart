@@ -96,6 +96,8 @@ public class TopCategories extends BaseComponent {
 
                         );
 
+                        categoryListItem.add(new AttributeModifier("class", category.getCategoryId() == categoryId ? "list-group-item active-item" : "list-group-item"));
+
                     }
                 }
 

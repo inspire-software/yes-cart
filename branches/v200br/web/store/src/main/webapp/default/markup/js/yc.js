@@ -19,25 +19,6 @@ $(document).ready(function() {
         return "";
     }();
 
-
-    // highlight tag links
-    $('a.jsTag').each(function() {
-        var _url = 'tag/' + $(this).attr('id');
-        var _fullUrl = ctx.root + '/' + _url + (_categoryId.length > 0 ? _categoryId : '');
-        $(this).attr('href', _fullUrl);
-        if (ctx.url.indexOf(_url) != -1) {
-            $(this).addClass('active-tag');
-        }
-    });
-
-    // highlight page links
-    $('a.jsPage').each(function() {
-        var _url = $(this).attr('href');
-        if (ctx.url.indexOf(_url) != -1) {
-            $(this).addClass('active-page');
-        }
-    });
-
     // AJAX buy with minicart
     $('a.js-buy').click(function(event) {
         event.preventDefault();

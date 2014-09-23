@@ -20,11 +20,21 @@
     <span>
         <wicket:message key="currency">[Currency]</wicket:message>
     </span>
-    <span wicket:id="supportedCurrencies">&nbsp;
-        <a wicket:id="switchCurrencyLink" class="currency" rel="nofollow">
-            <span wicket:id="currencyName"/>
-        </a>
-    </span>
+
+    <a class="dropdown-toggle" id="currencyMenu" data-toggle="dropdown" href="#">
+        <span wicket:id="activeCurrencyName"/>
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="currencyMenu">
+        <span wicket:id="supportedCurrencies">
+            <li role="presentation">
+                <a wicket:id="switchCurrencyLink" rel="nofollow">
+                    <span wicket:id="currencyName"/>
+                </a>
+            </li>
+        </span>
+    </ul>
+
 </wicket:panel>
 </body>
 </html>
