@@ -180,9 +180,7 @@ public class ProductInListView extends BaseComponent {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     /*public String getDescription(final String locale) {
         final Pair<String, String> desc = productService.getProductAttribute(
                 locale, product.getId(), 0L, AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
@@ -193,7 +191,10 @@ public class ProductInListView extends BaseComponent {
     }  */
 
     /**
-     * {@inheritDoc}
+     * Get url of default image.
+     * @param  width width
+     * @param  height height
+     * @return image url
      */
     public String getDefaultImage(final String width, final String height) {
 

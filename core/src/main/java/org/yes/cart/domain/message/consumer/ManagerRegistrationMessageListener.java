@@ -83,8 +83,7 @@ public class ManagerRegistrationMessageListener implements Runnable {
         mailComposer.composeMessage(
                 mail,
                 null,
-                registrationMessage.getLocale(),
-                registrationMessage.getMailTemplatePathChain(),
+                registrationMessage.getPathToTemplateFolder(),
                 registrationMessage.getTemplateName(),
                 registrationMessage.getShopMailFrom(),
                 registrationMessage.getEmail(),

@@ -17,12 +17,15 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <div wicket:id="head" class="attrhead"/>
-    <ul wicket:id="keyValues">
-        <li class="attr">
-            <table width="98%"><tr><td><span wicket:id="key"/>&nbsp; &nbsp;</td><td align="right"><span wicket:id="value" /></td></tr></table>
-        </li>
-    </ul>
+    <div wicket:id="head" class="attr-head"/>
+    <div class="single-attr-block clearfix">
+        <ul wicket:id="keyValues">
+            <li class="attr">
+                <span wicket:id="key"/>
+                <span class="pull-right" wicket:id="value"/>
+            </li>
+        </ul>
+    </div>
 </wicket:panel>
 </body>
 </html>

@@ -101,6 +101,18 @@ public interface ShopDTO extends Identifiable {
     void setFspointer(String fspointer);
 
     /**
+     * Get image vault folder.
+     * @return image vault folder.
+     */
+    String getImageVaultFolder();
+
+    /**
+     * Set image vaule folder.
+     * @param imageVaultFolder  image vault  folder.
+     */
+    void setImageVaultFolder(String imageVaultFolder);
+
+    /**
      * Get seo uri.
      * @return uri
      */

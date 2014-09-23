@@ -60,11 +60,6 @@ public interface AttributeNamesKeys {
          */
         String SYSTEM_CACHEDIRECTOR_URI_PREFIX = "SYSTEM_CACHEDIRECTOR_URI";
         /**
-         * Default lucene index disabled setting.
-         * Real example of attribute would be: SYSTEM_LUCENE_DISABLED_PREFIX_YES0
-         */
-        String SYSTEM_LUCENE_INDEX_DISABLED_PREFIX = "SYSTEM_LUCENE_DISABLED_PREFIX";
-        /**
          * Size of the log tail in characters to show in YUM.
          */
         String IMPORT_JOB_LOG_SIZE = "IMPORT_JOB_LOG_SIZE";
@@ -179,14 +174,6 @@ public interface AttributeNamesKeys {
          */
         String PRODUCT_DESCRIPTION_PREFIX = "PRODUCT_DESCRIPTION_";
 
-        /**
-         * Default image attribute name.
-         */
-        String PRODUCT_IMAGE_ATTR_NAME_PREFIX = "IMAGE";
-        /**
-         * Default image attribute name.
-         */
-        String PRODUCT_DEFAULT_IMAGE_ATTR_NAME = PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0";
     }
 
     interface Shop {
@@ -195,15 +182,6 @@ public interface AttributeNamesKeys {
          * Admin email in particular shop.
          */
         String SHOP_ADMIN_EMAIL = "SHOP_ADMIN_EMAIL";
-
-    }
-
-    interface Brand {
-
-        /**
-         * Default Brand image.
-         */
-        String BRAND_IMAGE = "BRAND_IMAGE";
 
     }
 
@@ -217,6 +195,9 @@ public interface AttributeNamesKeys {
      * Supported by shop currencies.
      */
     String SUPPORTED_CURRENCIES = "CURRENCY";
+
+
+    String BRAND_IMAGE = "BRAND_IMAGE";
 
 
     /**

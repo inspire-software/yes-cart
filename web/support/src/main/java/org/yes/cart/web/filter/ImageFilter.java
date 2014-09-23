@@ -19,10 +19,10 @@ package org.yes.cart.web.filter;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
-import org.yes.cart.stream.io.IOProvider;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
@@ -33,12 +33,14 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Map;
+
+//import org.yes.cart.web.support.shoppingcart.RequestRuntimeContainer;
 
 /**
  * ImageServlet responsible for get product or brand images
@@ -119,7 +121,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
                                       final HttpServletResponse httpServletResponse) throws ServletException, IOException {
 
 
-        final String servletPath = URLDecoder.decode(httpServletRequest.getServletPath(), "UTF-8"); //this for filter
+        final String servetPath = URLDecoder.decode(httpServletRequest.getServletPath()); //this for filter
         //httpServletRequest.getPathInfo(); //this for servlet
 
         final String previousToken = httpServletRequest.getHeader(IF_NONE_MATCH);
@@ -149,45 +151,48 @@ public class ImageFilter extends AbstractFilter implements Filter {
             final String height = httpServletRequest.getParameter(Constants.HEIGHT);
 
 
-            final ImageNameStrategy imageNameStrategy = imageService.getImageNameStrategy(servletPath);
+            final ImageNameStrategy imageNameStrategy = imageService.getImageNameStrategy(servetPath);
 
-            String code = imageNameStrategy.resolveObjectCode(servletPath);  //optional product or sku code
-            String originalFileName = imageNameStrategy.resolveFileName(servletPath);  //here file name with prefix
+            String code = imageNameStrategy.getCode(servetPath);  //optional product or sku code
+            String fileName = imageNameStrategy.getFileName(servetPath);  //here file name with prefix
 
-            final String imageRealPathPrefix = getImageRepositoryRoot();
+            final String imageRealPathPrefix = getRealPathPrefix(httpServletRequest.getServerName().toLowerCase());
 
-            String absolutePathToOriginal =
+            String original =
                             imageRealPathPrefix +
-                            imageNameStrategy.resolveRelativeInternalFileNamePath(originalFileName, code); //path to not resized image
+                            imageNameStrategy.getFullFileNamePath(fileName, code); //path to not resized image
 
 
-            final boolean origFileExists = imageService.isImageInRepository(originalFileName, code, imageNameStrategy.getUrlPath(), imageRealPathPrefix);
+            final File origFile = new File(original);
 
-            if (!origFileExists) {
+            if (!origFile.exists()) {
                 code = Constants.NO_IMAGE;
-                originalFileName = imageNameStrategy.resolveFileName(code);  //here file name with prefix
-                absolutePathToOriginal =
+                fileName = imageNameStrategy.getFileName(code);  //here file name with prefix
+                original =
                         imageRealPathPrefix +
-                                imageNameStrategy.resolveRelativeInternalFileNamePath(originalFileName, code); //path to not resized image
+                                imageNameStrategy.getFullFileNamePath(fileName, code); //path to not resized image
             }
 
 
-            String absolutePathToResized = null;
+            String resizedImageFileName = null;
             if (width != null && height != null && imageService.isSizeAllowed(width, height)) {
-                absolutePathToResized =
+                resizedImageFileName =
                         imageRealPathPrefix +
-                                imageNameStrategy.resolveRelativeInternalFileNamePath(originalFileName, code, width, height);
+                                imageNameStrategy.getFullFileNamePath(fileName, code, width, height);
             }
 
-            final byte[] imageFile = getImageFile(absolutePathToOriginal, absolutePathToResized, width, height);
-            IOUtils.write(imageFile, httpServletResponse.getOutputStream());
-
+            final File imageFile = getImageFile(original, resizedImageFileName, width, height);
+            final FileInputStream fileInputStream = new FileInputStream(imageFile);
+            IOUtils.copy(fileInputStream, httpServletResponse.getOutputStream());
+            fileInputStream.close();
         }
     }
 
-    private String getImageRepositoryRoot() {
+    private String getRealPathPrefix(final String serverDomainName) {
 
-        return systemService.getImageRepositoryDirectory();
+        final Shop shop = getApplicationDirector().getShopByDomainName(serverDomainName);
+
+        return getFilterConfig().getServletContext().getRealPath(shop.getImageVaultFolder()) + File.separator;
 
     }
 
@@ -227,13 +232,30 @@ public class ImageFilter extends AbstractFilter implements Filter {
         //do nothing
     }
 
-    byte[] getImageFile(final String absolutePathToOriginal,
-                        final String absolutePathToResized,
-                        final String width,
-                        final String height) throws IOException {
+    File getImageFile(final String original, final String resized,
+                      final String width, final String height) throws IOException {
+        if (resized != null) {
 
-        return imageService.resizeImage(absolutePathToOriginal, absolutePathToResized, width, height);
+            final File fileResized = new File(resized);
 
+            final File fileOrig = new File(original);
+
+            boolean resizedImageOutdated = isResizedImageOutdated(fileResized, fileOrig);
+
+            if (!fileResized.exists() || resizedImageOutdated) {
+
+                imageService.resizeImage(original, resized, width, height);
+
+
+            }
+
+            return fileResized;
+        }
+        return new File(original);
+    }
+
+    boolean isResizedImageOutdated(final File fileResized, final File fileOrig) {
+        return fileOrig.lastModified() > fileResized.lastModified();
     }
 
 }

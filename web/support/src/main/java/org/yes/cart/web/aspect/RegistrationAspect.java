@@ -30,8 +30,6 @@ import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
 import org.yes.cart.service.mail.MailComposer;
-import org.yes.cart.service.theme.ThemeService;
-import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
@@ -57,24 +55,20 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
     private final MailComposer mailComposer;
 
-    private final ThemeService themeService;
-
 
     /**
      * Construct customer aspect.
      *
-     * @param taskExecutor    {@link org.springframework.core.task.TaskExecutor} to execute task.
      * @param phrazeGenerator {@link org.yes.cart.service.domain.PassPhrazeGenerator}
      * @param hashHelper      {@link org.yes.cart.service.domain.HashHelper}
-     * @param themeService    theme service
+     * @param taskExecutor     {@link TaskExecutor} to execute task.
      */
     public RegistrationAspect(
             final TaskExecutor taskExecutor,
             final PassPhrazeGenerator phrazeGenerator,
             final HashHelper hashHelper,
             final MailService mailService,
-            final MailComposer mailComposer,
-            final ThemeService themeService) {
+            final MailComposer mailComposer) {
         super(taskExecutor);
 
         this.hashHelper = hashHelper;
@@ -83,8 +77,30 @@ public class RegistrationAspect extends BaseNotificationAspect {
         this.mailComposer = mailComposer;
 
 
-        this.themeService = themeService;
     }
+
+    /**
+     * Construct customer aspect.
+     *
+     * @param phrazeGenerator {@link org.yes.cart.service.domain.PassPhrazeGenerator}
+     * @param hashHelper      {@link org.yes.cart.service.domain.HashHelper}
+     */
+    public RegistrationAspect(
+            final PassPhrazeGenerator phrazeGenerator,
+            final HashHelper hashHelper,
+            final MailService mailService,
+            final MailComposer mailComposer) {
+        super(null);
+
+        this.hashHelper = hashHelper;
+        this.phrazeGenerator = phrazeGenerator;
+
+        this.mailService = mailService;
+        this.mailComposer = mailComposer;
+
+
+    }
+
 
     /**
      * Perform notification about person registration.
@@ -98,7 +114,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
         final Object[] args = pjp.getArgs();
 
         final RegisteredPerson registeredPerson = (RegisteredPerson) args[0];
-        final Shop shop = (Shop) args[1];
+        final Shop shop = (Shop) args[1]; //ApplicationDirector.getCurrentShop();// (Shop) args[1];
 
 
         final String generatedPassword;
@@ -115,13 +131,9 @@ public class RegistrationAspect extends BaseNotificationAspect {
         registrationMessage.setFirstname(registeredPerson.getFirstname());
         registrationMessage.setLastname(registeredPerson.getLastname());
         registrationMessage.setPassword(generatedPassword);
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-        if (cart != null) {
-            registrationMessage.setLocale(cart.getCurrentLocale());
-        }
 
 
-        registrationMessage.setMailTemplatePathChain(themeService.getMailTemplateChainByShopId(shop.getShopId()));
+        registrationMessage.setPathToTemplateFolder(ApplicationDirector.getCurrentMailTemplateFolder());
 
         registrationMessage.setTemplateName(newPerson ? "customer-registered" : "customer-change-password");
 

@@ -17,7 +17,7 @@
 package org.yes.cart.service.image;
 
 /**
- * Strategy to getByKey the file names for store/retrieve images from image repository.
+ * Strategy to getByKey the filenames for store/retrieve images from image repository.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -26,39 +26,32 @@ package org.yes.cart.service.image;
 public interface ImageNameStrategy {
 
     /**
-     * URL path that identifies this type of strategy for filename resolution.
-     *
-     * @return url path
-     */
-    String getUrlPath();
-
-    /**
-     * Get the internal image relative path root directory ended with {@see File#separator}. E.g. "category/"
-     *
-     * @return directory name
-     */
-    String getRelativeInternalRootDirectory();
-
-    /**
      * Get the file name from url with particular prefix.
      * Prefix - part of path to image repository.
      *
-     * @param url given url
+     * @param url fiven url
      * @return image file name.
      */
-    String resolveFileName(final String url);
+    String getFileName(final String url);
 
     /**
-     * Get the object code for given url.
+     * Get the file name in image repository.
      *
-     * For sku or product this will be SKU code
-     * For categories will be name
-     * For brand will be name
-     *
-     * @param url filename
-     * @return code for given image name or null if particular strategy not support code.
+     * @param fileName file name without the full path
+     * @return full name with path to file.
      */
-    String resolveObjectCode(String url);
+    // String getFullFileNamePath(String fileName);
+
+    /**
+     * Get the file name of resized in image repository.
+     *
+     * @param fileName file name without the full path
+     * @param width    image width
+     * @param height   image height
+     * @return full name with path to file.
+     */
+    //String getFullFileNamePath(String fileName, String width, String height);
+
 
     /**
      * Get the file name in image repository.
@@ -67,10 +60,10 @@ public interface ImageNameStrategy {
      * @param code     product or sku  code
      * @return full name with path to file.
      */
-    String resolveRelativeInternalFileNamePath(String fileName, String code);
+    String getFullFileNamePath(String fileName, String code);
 
     /**
-     * Get the file name of re-sized in image repository.
+     * Get the file name of resized in image repository.
      *
      * @param fileName file name without the full path
      * @param code     product code
@@ -78,6 +71,15 @@ public interface ImageNameStrategy {
      * @param height   image height
      * @return full name with path to file.
      */
-    String resolveRelativeInternalFileNamePath(String fileName, String code, String width, String height);
+    String getFullFileNamePath(String fileName, String code, String width, String height);
+
+    /**
+     * Get the code (sku or product) for given url.
+     *
+     * @param url filename
+     * @return code for given image name or null if particular strategy not support code.
+     */
+    String getCode(String url);
+
 
 }

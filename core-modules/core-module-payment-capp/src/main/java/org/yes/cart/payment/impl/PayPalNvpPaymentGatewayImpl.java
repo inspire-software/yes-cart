@@ -70,6 +70,7 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImp
                 nvpCallerServices.setAPIProfile(profile);
             } catch (PayPalException e) {
                 ShopCodeContext.getLog(this).error("Cant create api profile", e);
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
 

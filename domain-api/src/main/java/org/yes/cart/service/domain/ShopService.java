@@ -76,13 +76,14 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
      */
     Shop getShopByOrderNum(String orderNum);
 
+
     /**
-     * Get all categories and content including child categories, that belong to given shop.
+     * Get all categories including child categories, that belong to given shop.
      *
      * @param shopId given shop
      * @return linear representation of category tree
      */
-    Set<Long> getShopAllCategoriesIds(long shopId);
+    Set<Category> getShopCategories(long shopId);
 
     /**
      * Get all categories including child categories, that belong to given shop.
@@ -91,14 +92,6 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
      * @return linear representation of category tree
      */
     Set<Long> getShopCategoriesIds(long shopId);
-
-    /**
-     * Get all content including child content, that belong to given shop.
-     *
-     * @param shopId given shop
-     * @return linear representation of category tree
-     */
-    Set<Long> getShopContentIds(long shopId);
 
     /**
      * Get all supported currencies by all shops.

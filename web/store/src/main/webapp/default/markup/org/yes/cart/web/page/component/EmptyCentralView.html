@@ -15,73 +15,59 @@
   -->
 
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<wicket:head>
-    <wicket:link>
-        <script src="../../../../../../js/unslider.js"></script>
-
-
-    </wicket:link>
-    <style type="text/css">
-        .banner { position: relative; overflow: auto; }
-        .banner li { list-style: none; height: 570px }
-        .banner ul li { float: left; }
-    </style>
-</wicket:head>
 <body>
 <wicket:panel>
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
+    <div id="home-page-carousel" class="carousel slide" data-ride="carousel">
 
-        <div class="banner" style="margin: 0px; padding: 0px;">
-            <ul style="margin: 0px; padding: 0px;">
-                <li>
-                    <a href="/yes-shop/category/notebooks" rel="bookmark">
-                        <wicket:link>
-                            <img src="../../../../../../image/baner1.png">
-                        </wicket:link>
-                    </a>
-                </li>
-                <li>
-                    <a href="/yes-shop/category/pc" rel="bookmark">
-                        <wicket:link>
-                            <img src="../../../../../../image/baner2.png">
-                        </wicket:link>
-                    </a>
-                </li>
-                <li>
-                    <a href="/yes-shop/category/mice" rel="bookmark">
-                        <wicket:link>
-                            <img src="../../../../../../image/baner3.png">
-                        </wicket:link>
-                    </a>
-                </li>
-                <li>
-                    <a href="/yes-shop/category/keyboards" rel="bookmark">
-                        <wicket:link>
-                            <img src="../../../../../../image/baner4.png">
-                        </wicket:link>
-                    </a>
-                </li>
-
-            </ul>
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <a href="/yes-shop/category/notebooks" rel="bookmark">
+                    <wicket:link>
+                        <img src="../../../../../../image/baner1.png">
+                    </wicket:link>
+                </a>
+            </div>
+            <div class="item">
+                <a href="/yes-shop/category/pc" rel="bookmark">
+                    <wicket:link>
+                        <img src="../../../../../../image/baner2.png">
+                    </wicket:link>
+                </a>
+            </div>
+            <div class="item">
+                <a href="/yes-shop/category/mice" rel="bookmark">
+                    <wicket:link>
+                        <img src="../../../../../../image/baner3.png">
+                    </wicket:link>
+                </a>
+            </div>
+            <div class="item">
+                <a href="/yes-shop/category/keyboards" rel="bookmark">
+                    <wicket:link>
+                        <img src="../../../../../../image/baner4.png">
+                    </wicket:link>
+                </a>
+            </div>
         </div>
-        <script type="text/javascript">
-            $(function() {
-                $('.banner').unslider(
-                        {
-                            speed: 500,               //  The speed to animate each slide (in milliseconds)
-                            delay: 5000,              //  The delay between slide animations (in milliseconds)
-                            complete: function() {},  //  A function that gets called after every slide animation
-                            keys: true,               //  Enable keyboard (left, right) arrow shortcuts
-                            dots: true,               //  Display dot navigation
-                            fluid: true              //  Support responsive design. May break non-responsive designs
-                        }
-                );
-            });
-        </script>
 
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#home-page-carousel" data-slide-to="0" class="active"></li>
+            <li data-target="#home-page-carousel" data-slide-to="1"></li>
+            <li data-target="#home-page-carousel" data-slide-to="2"></li>
+            <li data-target="#home-page-carousel" data-slide-to="3"></li>
+        </ol>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#home-page-carousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left blue"></span>
+        </a>
+        <a class="right carousel-control" href="#home-page-carousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right blue"></span>
+        </a>
     </div>
-
 
 </wicket:panel>
 </body>

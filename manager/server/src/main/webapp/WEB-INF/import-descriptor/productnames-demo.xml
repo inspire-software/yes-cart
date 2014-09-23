@@ -23,6 +23,8 @@
 
     <entity-type>org.yes.cart.domain.entity.Product</entity-type>
 
+    <import-directory></import-directory>
+
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
         <file-name-mask>productnames(.*).csv(.*)</file-name-mask>
@@ -126,6 +128,7 @@
             <name/>
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.AttrValueProduct</entity-type>
+                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
                     <file-name-mask/>
@@ -154,6 +157,7 @@
             <name/>
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.AttrValueProduct</entity-type>
+                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
                     <file-name-mask/>
@@ -182,6 +186,7 @@
             <name/>
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.AttrValueProduct</entity-type>
+                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
                     <file-name-mask/>

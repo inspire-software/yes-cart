@@ -20,13 +20,13 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>web</artifactId>
-        <version>2.2.0-SNAPSHOT</version>
+        <version>2.1.1</version>
     </parent>
     <artifactId>yes-shop</artifactId>
     <packaging>war</packaging>
     <name>Yes cart storefront</name>
     <properties>
-        <wicket.version>1.5.11</wicket.version>
+        <wicket.version>1.5.8</wicket.version>
         <jetty.version>6.1.4</jetty.version>
         <mysql-connector.version>5.1.13</mysql-connector.version>
     </properties>
@@ -34,22 +34,22 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>payment-api</artifactId>
-            <version>2.2.0-SNAPSHOT</version>
+            <version>2.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
-            <version>2.2.0-SNAPSHOT</version>
+            <version>2.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core</artifactId>
-            <version>2.2.0-SNAPSHOT</version>
+            <version>2.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>websupport</artifactId>
-            <version>2.2.0-SNAPSHOT</version>
+            <version>2.1.1</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -201,35 +201,6 @@
                 </dependency>
             </dependencies>
         </profile>
-        <profile>
-            <id>templates</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <artifactId>maven-resources-plugin</artifactId>
-                            <executions>
-                                <execution>
-                                    <id>copy-mail-themes</id>
-                                    <phase>validate</phase>
-                                    <goals>
-                                        <goal>copy-resources</goal>
-                                    </goals>
-                                    <configuration>
-                                        <outputDirectory>${basedir}/target/yes-shop</outputDirectory>
-                                        <resources>
-                                            <resource>
-                                                <directory>${basedir}/../../theme/mail/src/main/resources</directory>
-                                            </resource>
-                                        </resources>
-                                    </configuration>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
     </profiles>
 
     <build>
@@ -251,10 +222,6 @@
                                 <excludes>
                                     <exclude>**/*.properties.xml</exclude>
                                 </excludes>
-                            </resource>
-                            <resource>
-                                <filtering>false</filtering>
-                                <directory>../../theme/mail/src/main/resources</directory>
                             </resource>
                         </webResources>
                         <!-- web.xml is added to the project by other means, and shouldn't be packaged by default -->

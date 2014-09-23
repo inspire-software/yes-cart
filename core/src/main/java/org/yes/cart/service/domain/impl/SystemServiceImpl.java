@@ -145,13 +145,8 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getImageRepositoryDirectory() {
-
-        final String attrValue = proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_IMAGE_VAULT);
-        if (StringUtils.isBlank(attrValue)) {
-            return "context://default/imagevault/";
-        }
-
-        return addTailFileSeparator(attrValue);
+        return addTailFileSeparator(
+                proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_IMAGE_VAULT));
     }
 
 

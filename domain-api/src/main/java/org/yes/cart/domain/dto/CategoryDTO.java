@@ -137,7 +137,7 @@ public interface CategoryDTO extends Identifiable {
     /**
      * Get category description.
      *
-     * @return category description.
+     * @return category decription.
      */
     String getDescription();
 
@@ -156,9 +156,9 @@ public interface CategoryDTO extends Identifiable {
     String getUitemplate();
 
     /**
-     * Set category UI template variation.
+     * Set category UI template varioantion.
      *
-     * @param uitemplate template variation.
+     * @param uitemplate template varioantion.
      */
     void setUitemplate(String uitemplate);
 
@@ -197,9 +197,9 @@ public interface CategoryDTO extends Identifiable {
     Boolean getNavigationByAttributes();
 
     /**
-     * Set navigation by attribute values.
+     * Set nagivation by attribute values.
      *
-     * @param navigationByAttributes navigation by attribute values flag.
+     * @param navigationByAttributes nagivation by attribute values flag.
      */
     void setNavigationByAttributes(Boolean navigationByAttributes);
 
@@ -209,7 +209,7 @@ public interface CategoryDTO extends Identifiable {
     Boolean getNavigationByBrand();
 
     /**
-     * Set navigation by brand in category.
+     * Set nagivation by brand in category.
      *
      * @param navigationByBrand flag to set
      */
@@ -221,9 +221,9 @@ public interface CategoryDTO extends Identifiable {
     Boolean getNavigationByPrice();
 
     /**
-     * Set navigation by price.
+     * Set nagivation by price.
      *
-     * @param navigationByPrice navigation by price flag.
+     * @param navigationByPrice nagivation by price flag.
      */
     void setNavigationByPrice(Boolean navigationByPrice);
 

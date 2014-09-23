@@ -32,12 +32,18 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityShop;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.GenericService;
+import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -54,7 +60,7 @@ public class DtoShopServiceImpl
     private final DtoAttributeService dtoAttributeService;
     private final GenericDAO<AttrValueEntityShop, Long> attrValueEntityShopDao;
     private final ImageService imageService;
-    private final SystemService systemService;
+
 
 
     public DtoShopServiceImpl(
@@ -64,12 +70,10 @@ public class DtoShopServiceImpl
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityShop, Long> attrValueEntityShopDao,
             final ImageService imageService,
-            final AdaptersRepository adaptersRepository,
-            final SystemService systemService) {
+            final AdaptersRepository adaptersRepository) {
         super(dtoFactory, shopService, adaptersRepository);
 
         this.customerService = customerService;
-        this.systemService = systemService;
 
         this.attrValueAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(AttrValueShopDTO.class),
@@ -111,6 +115,16 @@ public class DtoShopServiceImpl
         final ShopDTO dto = (ShopDTO) dtoFactory.getByIface(getDtoIFace());
         getAssembler().assembleDto(dto, shop, getAdaptersRepository(), getDtoFactory());
         return dto;
+    }
+
+    /** {@inheritDoc} */
+    public List<ShopDTO> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        List<Shop> rez = new ArrayList<Shop>();
+        for (CustomerShop customerShop : customerService.findById(customerId).getShops()) {
+            rez.add(customerShop.getShop());
+        }
+        return getDTOs(rez);
+
     }
 
     /** {@inheritDoc} */
@@ -184,7 +198,7 @@ public class DtoShopServiceImpl
     public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityShop valueEntityShop = attrValueEntityShopDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityShop.getAttribute().getEtype().getBusinesstype())) {
-            imageService.deleteImage(valueEntityShop.getVal(), "", systemService.getImageRepositoryDirectory());
+            imageService.deleteImage(valueEntityShop.getVal());
         }
         attrValueEntityShopDao.delete(valueEntityShop);
         return valueEntityShop.getShop().getShopId();

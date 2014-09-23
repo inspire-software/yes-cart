@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.SeoImageDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.SeoImageDTOImpl;
@@ -30,7 +31,7 @@ import org.yes.cart.service.dto.DtoImageService;
 import java.io.IOException;
 
 /**
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
@@ -43,9 +44,9 @@ public class DtoImageServiceImpl
     /**
      * Construct base remote service.
      *
-     * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
-     * @param seoImageGenericService                  {@link org.yes.cart.service.domain.GenericService}
-     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     * @param dtoFactory             {@link org.yes.cart.domain.dto.factory.DtoFactory}
+     * @param seoImageGenericService {@link org.yes.cart.service.domain.GenericService}
+     * @param adaptersRepository     {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
      */
     public DtoImageServiceImpl(final DtoFactory dtoFactory,
                                final GenericService<SeoImage> seoImageGenericService,
@@ -54,21 +55,69 @@ public class DtoImageServiceImpl
         imageService = (ImageService) seoImageGenericService;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public String addImageToRepository(final String fullFileName,
-                                        final String code,
-                                        final byte[] imgBody,
-                                        final String storagePrefix,
-                                        final String pathToRepository) throws IOException {
+                                       final String code,
+                                       final byte[] imgBody,
+                                       final String storagePrefix) throws IOException {
+        return imageService.addImageToRepository(fullFileName, code, imgBody, storagePrefix, StringUtils.EMPTY);
+    }
+
+    /**
+     * Add the given file to image repository.
+     * Used from UI to
+     *
+     * @param fullFileName     full path to image file.
+     * @param code             product or sku code.
+     * @param imgBody          image as byte array.
+     * @param storagePrefix    optional storage prefix see Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN
+     *                         or Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN. If parameter not provider the product image storage will be used.
+     * @param pathToRepository path to repository
+     * @return true if file was added successfully
+     * @throws java.io.IOException in case of any I/O errors
+     */
+    public String addImageToRepository(final String fullFileName,
+                                       final String code,
+                                       final byte[] imgBody,
+                                       final String storagePrefix,
+                                       final String pathToRepository) throws IOException {
         return imageService.addImageToRepository(fullFileName, code, imgBody, storagePrefix, pathToRepository);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Read product or sku image into byte array.
+     *
+     * @param fileName      file name from attribute
+     * @param code          product or sku code
+     * @param storagePrefix storage prefix
+     * @return byte array
+     * @throws java.io.IOException in case of any I/O errors
+     */
+    public byte[] getImageAsByteArray(final String fileName, final String code, final String storagePrefix) throws IOException {
+        return getImageAsByteArray(fileName, code, storagePrefix, StringUtils.EMPTY);
+    }
+
+    /**
+     * Read product or sku image into byte array.
+     *
+     * @param fileName         file name from attribute
+     * @param code             product or sku code
+     * @param pathToRepository path to repository
+     * @return byte array
+     * @throws java.io.IOException in case of any I/O errors
+     */
     public byte[] getImageAsByteArray(final String fileName, final String code, final String storagePrefix, final String pathToRepository) throws IOException {
         return imageService.imageToByteArray(fileName, code, storagePrefix, pathToRepository);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Get {@link SeoImageDTO} by given file name.
+     *
+     * @param imageFileName fiven file name.
+     * @return instance of {@link SeoImageDTO} or null if not found.
+     */
     public SeoImageDTO getSeoImage(final String imageFileName) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final SeoImage seoImage = imageService.getSeoImage(imageFileName);
         if (seoImage != null) {
@@ -80,19 +129,30 @@ public class DtoImageServiceImpl
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * Get the dto interface.
+     *
+     * @return dto interface.
+     */
     public Class<SeoImageDTO> getDtoIFace() {
         return SeoImageDTO.class;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Get the dto implementation class.
+     *
+     * @return dto implementation class.
+     */
     public Class<SeoImageDTOImpl> getDtoImpl() {
         return SeoImageDTOImpl.class;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Get the entity interface.
+     *
+     * @return entity interface.
+     */
     public Class<SeoImage> getEntityIFace() {
         return SeoImage.class;
     }
-
 }

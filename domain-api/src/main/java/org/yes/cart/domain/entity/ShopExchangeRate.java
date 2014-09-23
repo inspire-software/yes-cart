@@ -36,7 +36,7 @@ public interface ShopExchangeRate extends Auditable {
 
     /**
      * Set primary key
-     * @param shopexchangerateId
+     * @param shopexchangerateId  set pk
      */
     void setShopexchangerateId(long shopexchangerateId);
 
@@ -58,7 +58,7 @@ public interface ShopExchangeRate extends Auditable {
 
     /**
      * Set to currency.
-     * @param toCurrency
+     * @param toCurrency  target currency
      */
     void setToCurrency(String toCurrency);
 
@@ -75,7 +75,7 @@ public interface ShopExchangeRate extends Auditable {
 
     /**
      * Get exchange rate between two currencies.
-     * @return
+     * @return    rate
      */
     BigDecimal getRate();
 

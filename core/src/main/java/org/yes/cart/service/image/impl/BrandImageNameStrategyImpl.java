@@ -17,10 +17,8 @@
 package org.yes.cart.service.image.impl;
 
 import org.yes.cart.constants.Constants;
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.AttrValueBrand;
 
-import java.util.List;
+import java.io.File;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -29,39 +27,19 @@ import java.util.List;
  */
 public class BrandImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
 
-    private final GenericDAO<AttrValueBrand, Long> attrValueBrandDao;
+    private final static String PATH_PREFIX = Constants.BRAND_IMAGE_FILE_PREFIX + File.separator;
 
     /**
-     * Construct image name strategy
-     *
-     * @param relativeInternalRootDirectory  internal image relative path root directory without {@see File#separator}. E.g. "brand"
-     * @param attrValueBrandDao              brand attribute dao
+     * {@inheritDoc}
      */
-    public BrandImageNameStrategyImpl(final String relativeInternalRootDirectory,
-                                      final GenericDAO<AttrValueBrand, Long> attrValueBrandDao) {
-        super(Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory);
-        this.attrValueBrandDao = attrValueBrandDao;
+    protected String getPathPrefix() {
+        return PATH_PREFIX;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected String resolveObjectCodeInternal(final String url) {
-
-        final String val = resolveFileName(url);
-
-        final Object[] nameAndGuid = attrValueBrandDao.findSingleByNamedQuery("BRAND.NAME.AND.GUID.BY.IMAGE.NAME", val);
-
-        if (nameAndGuid != null && nameAndGuid.length == 2) {
-            if (nameAndGuid[0] instanceof String) {
-                return (String) nameAndGuid[0];
-            } else if (nameAndGuid[1] instanceof String) {
-                return (String) nameAndGuid[1];
-            }
-        }
-
+    public String getCode(final String url) {
         return null;
-
     }
-
 }

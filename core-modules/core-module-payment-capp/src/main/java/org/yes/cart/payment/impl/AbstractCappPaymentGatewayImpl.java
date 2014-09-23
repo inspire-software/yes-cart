@@ -144,7 +144,7 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
     }
 
     /**
-     * Work around problem with wicket param values, when it can return
+     * Work around promlem with wicket param values, when it can return
      * parameter value as string or as array of strings with single value.
      * This behavior depends from url encoding strategy
      * @param param parameters
@@ -197,7 +197,8 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
 
 
     /**
-     * {@inheritDoc}
+     * Set service to get parameters.
+     * @param paymentGatewayParameterService given service to use.
      */
     public void setPaymentGatewayParameterService(
             final PaymentGatewayParameterService paymentGatewayParameterService) {
@@ -240,7 +241,7 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
     }
 
 
-    protected String getHiddenField(final String fieldName, final Object value) {
+    protected String getHiddenFiled(final String fieldName, final Object value) {
         return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
     }
 

@@ -36,10 +36,8 @@ public interface JobContextKeys {
     String IMPORT_FILE_SET = "importedFiles";
     /** chosen descriptors group */
     String IMPORT_DESCRIPTOR_GROUP = "descriptorGroup";
-    /** import descriptor object */
-    String IMPORT_DESCRIPTOR = "importDescriptor";
-    /** import descriptor name */
-    String IMPORT_DESCRIPTOR_NAME = "importDescriptorName";
+    /** chosen import descriptor path */
+    String IMPORT_DESCRIPTOR_PATH = "pathToImportDescriptor";
     /** path to import directory. */
     String IMPORT_DIRECTORY_ROOT = "pathToImportDirectoryRoot";
     /** path to image vault. */

@@ -20,7 +20,6 @@ import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.constants.AttributeGroupNames;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -29,7 +28,10 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.GenericService;
+import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.domain.ShopCategoryService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCategoryService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
@@ -59,15 +61,12 @@ public class DtoCategoryServiceImpl
 
     private final ImageService imageService;
 
-    private final SystemService systemService;
-
     /**
      * Construct base remote service.
      *
      * @param dtoFactory             {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param categoryGenericService category     {@link org.yes.cart.service.domain.GenericService}
-     * @param imageService           {@link org.yes.cart.service.domain.ImageService} to manipulate  related images.
-     * @param systemService          system service
+     * @param imageService           {@link ImageService} to manipulate  related images.
      */
     public DtoCategoryServiceImpl(final DtoFactory dtoFactory,
                                   final GenericService<Category> categoryGenericService,
@@ -76,8 +75,7 @@ public class DtoCategoryServiceImpl
                                   final DtoAttributeService dtoAttributeService,
                                   final GenericDAO<AttrValueEntityCategory, Long> attrValueEntityCategoryDao,
                                   final ImageService imageService,
-                                  final AdaptersRepository adaptersRepository,
-                                  final SystemService systemService) {
+                                  final AdaptersRepository adaptersRepository) {
         super(dtoFactory, categoryGenericService, adaptersRepository);
 
 
@@ -85,7 +83,6 @@ public class DtoCategoryServiceImpl
         this.productTypeService = productTypeService;
         this.attrValueEntityCategoryDao = attrValueEntityCategoryDao;
         this.dtoAttributeService = dtoAttributeService;
-        this.systemService = systemService;
 
         this.attributeService = dtoAttributeService.getService();
 
@@ -306,8 +303,7 @@ public class DtoCategoryServiceImpl
     public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueEntityCategory valueEntityCategory = attrValueEntityCategoryDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(valueEntityCategory.getAttribute().getEtype().getBusinesstype())) {
-            imageService.deleteImage(valueEntityCategory.getVal(),
-                    Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+            imageService.deleteImage(valueEntityCategory.getVal());
         }
 
         attrValueEntityCategoryDao.delete(valueEntityCategory);

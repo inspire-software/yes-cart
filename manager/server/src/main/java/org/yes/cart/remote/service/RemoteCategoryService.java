@@ -16,9 +16,6 @@
 
 package org.yes.cart.remote.service;
 
-import org.yes.cart.domain.dto.CategoryDTO;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.DtoCategoryService;
 
 /**
@@ -27,15 +24,4 @@ import org.yes.cart.service.dto.DtoCategoryService;
  * Time: 17:22:15
  */
 public interface RemoteCategoryService extends DtoCategoryService {
-
-    /**
-     * Create category under root and assign it to shop.
-     *
-     * @param category category
-     * @param shopId shop
-     *
-     * @return created category
-     */
-    CategoryDTO createForShop(CategoryDTO category, long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
 }

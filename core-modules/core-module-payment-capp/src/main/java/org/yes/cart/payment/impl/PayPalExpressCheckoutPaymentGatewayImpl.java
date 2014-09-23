@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -106,7 +105,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
 
         } catch (IOException e) {
             payment.setPaymentProcessorResult( Payment.PAYMENT_STATUS_FAILED);
-            ShopCodeContext.getLog(this).error(e.getMessage(), e);
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         return payment;
     }
@@ -385,13 +384,9 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
         while (stTok.hasMoreTokens()) {
             StringTokenizer stInternalTokenizer = new StringTokenizer(stTok.nextToken(), EQ);
             if (stInternalTokenizer.countTokens() == 2) {
-                try {
-                    String key = URLDecoder.decode(stInternalTokenizer.nextToken(), "UTF-8");
-                    String value = URLDecoder.decode(stInternalTokenizer.nextToken(), "UTF-8");
-                    nvp.put(key.toUpperCase(), value);
-                } catch (UnsupportedEncodingException e) {
-                    ShopCodeContext.getLog(this).error("Unable to decode NVP payload " + pPayload, e);
-                }
+                String key = URLDecoder.decode(stInternalTokenizer.nextToken());
+                String value = URLDecoder.decode(stInternalTokenizer.nextToken());
+                nvp.put(key.toUpperCase(), value);
             }
         }
         return nvp;
@@ -404,7 +399,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
                               final String currencyCode, final String orderGuid, final Payment payment) {
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getHiddenField(ORDER_GUID, orderGuid));  // this will be bypassed via payment gateway to restore it latter
+        stringBuilder.append(getHiddenFiled(ORDER_GUID, orderGuid));  // this will be bypassed via payment gateway to restore it latter
         return stringBuilder.toString();
     }
 

@@ -18,8 +18,7 @@
 
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
     <bean id="txJobProxyTemplate" abstract="true"
           class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
@@ -51,15 +50,6 @@
                 <constructor-arg index="0" ref="shopService"/>
                 <constructor-arg index="1" ref="customerService"/>
                 <constructor-arg index="2" ref="promotionContextFactory"/>
-            </bean>
-        </property>
-    </bean>
-
-    <bean id="bulkAbandonedShoppingCartProcessor" parent="txJobProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.bulkjob.shoppingcart.BulkAbandonedShoppingCartProcessorImpl">
-                <constructor-arg index="0" ref="shoppingCartStateService"/>
-                <property name="abandonedTimeoutDays" value="30"/> <!-- CPOINT -->
             </bean>
         </property>
     </bean>

@@ -25,7 +25,6 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.remote.service.RemotePaymentModulesManagementService;
-import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
 
 import java.util.*;
@@ -47,20 +46,15 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
 
     private final CustomerOrderPaymentService customerOrderPaymentService;
 
-    private final FederationFacade federationFacade;
-
     /**
      * Create remote payment gateway manager service.
      * @param paymentModulesManager service to use.
-     * @param federationFacade federation facade
      */
     public RemotePaymentModulesManagementServiceImpl(
             final PaymentModulesManager paymentModulesManager,
-            final CustomerOrderPaymentService customerOrderPaymentService,
-            final FederationFacade federationFacade) {
+            final CustomerOrderPaymentService customerOrderPaymentService) {
         this.paymentModulesManager = paymentModulesManager;
         this.customerOrderPaymentService = customerOrderPaymentService;
-        this.federationFacade = federationFacade;
     }
 
     /** {@inheritDoc} */
@@ -166,7 +160,7 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
 
     /**
      * Find all payments by given parameters.
-     * All parameters are optional, but at least one must be present. Please verify this fact on UI.
+     * All parameters are optional, but at leasn one must be present. Please verify this fact on UI.
      *
      * @param orderNumber            given order number. optional
      * @param fromDate from date
@@ -185,16 +179,13 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
             final String paymentGateway
     ) {
 
-        final List<CustomerOrderPayment> payments = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+        return customerOrderPaymentService.findBy(
                 orderNumber,
                 fromDate,
                 tillDate,
                 lastCardDigits,
                 cardHolderName,
-                paymentGateway));
-
-        federationFacade.applyFederationFilter(payments, CustomerOrderPayment.class);
-        return payments;
+                paymentGateway);
 
     }
 

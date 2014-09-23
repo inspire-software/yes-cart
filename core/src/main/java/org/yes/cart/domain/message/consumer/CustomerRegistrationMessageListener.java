@@ -70,7 +70,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
 
             ShopCodeContext.getLog(this).info("CustomerRegistrationMessageListener#onMessage response :" + registrationMessage);
 
-            if (registrationMessage.getMailTemplatePathChain() != null) {
+            if (registrationMessage.getPathToTemplateFolder() != null) {
                 processMessage(registrationMessage);
             }
 
@@ -99,8 +99,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
         mailComposer.composeMessage(
                 mail,
                 registrationMessage.getShopCode(),
-                registrationMessage.getLocale(),
-                registrationMessage.getMailTemplatePathChain(),
+                registrationMessage.getPathToTemplateFolder(),
                 registrationMessage.getTemplateName(),
                 registrationMessage.getShopMailFrom(),
                 registrationMessage.getEmail(),

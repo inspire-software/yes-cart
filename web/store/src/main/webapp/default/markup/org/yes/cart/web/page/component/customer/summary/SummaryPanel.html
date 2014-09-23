@@ -19,85 +19,47 @@
 <wicket:panel>
 
 
-    <form wicket:id="summaryForm">
-        <div class="grid-100 mobile-grid-100 grid-parent" >
-            <div class="grid-50 mobile-grid-50">
-                <p>
-                    <a name="customerSummary" class="middle-title"><wicket:message key="customerSummary">[summary info]</wicket:message></a>
-                <hr>
-                </p>
-            </div>
-
-            <div class="grid-50 mobile-grid-50">
-                &nbsp;
-            </div>
-
+    <form wicket:id="summaryForm" class="form-horizontal">
+        <div class="col-xs-12 no-padding">
+            <h2 id="customerSummary" class="profile-title"><wicket:message key="customerSummary">[summary info]</wicket:message></h2>
         </div>
 
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-30 mobile-grid-30">
-                <p>
-                    <wicket:message key="email">[email]</wicket:message>
-                </p>
-            </div>
-
-            <div class="grid-70 mobile-grid-70">
-                <p>
-                    <span wicket:id="email">[email label]</span>
-                </p>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="email">[email]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-5">
+                <p style="margin-top: 7px" wicket:id="email">[email label]</p>
             </div>
         </div>
 
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-30 mobile-grid-30">
-                <p>
-                    <wicket:message key="firstname">[firstname]</wicket:message>
-                </p>
-            </div>
-
-            <div class="grid-70 mobile-grid-70">
-                <p>
-                    <input wicket:id="firstname" type="text">
-                </p>
+        <div class="form-group">
+            <label for="profileFirstName" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="firstname">[firstname]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-5">
+                <input wicket:id="firstname" type="text" class="form-control" id="profileFirstName"/>
             </div>
         </div>
 
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-30 mobile-grid-30">
-                <p>
-                    <wicket:message key="lastname">[lastname]</wicket:message>
-                </p>
-            </div>
-
-            <div class="grid-70 mobile-grid-70">
-                <p>
-                    <input wicket:id="lastname" type="text">
-                </p>
+        <div class="form-group">
+            <label for="profileLastName" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="lastname">[lastname]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-5">
+                <input wicket:id="lastname" type="text" class="form-control" id="profileLastName"/>
             </div>
         </div>
 
-
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-30 mobile-grid-30">
-                <p>
-                    &nbsp;
-                </p>
-            </div>
-
-            <div class="grid-70 mobile-grid-70">
-                <p>
-                    <a wicket:id="saveLink" class="button gray" rel="nofollow">
-				<span>
-					<wicket:message key="save">[save]</wicket:message>
-				</span>
-                    </a>
-                </p>
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-offset-2 col-sm-5">
+                <a wicket:id="saveLink" class="btn btn-primary" rel="nofollow">
+                    <span>
+                        <wicket:message key="save">[save]</wicket:message>
+                    </span>
+                </a>
             </div>
         </div>
-
-
-
-
     </form>
 </wicket:panel>
 </body>

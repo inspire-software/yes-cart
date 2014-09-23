@@ -17,10 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.yes.cart.domain.entity.ManagerShop;
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -32,8 +28,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
 
     private long managerId;
     private long version;
-
-    private Collection<ManagerShop> shops = new ArrayList<ManagerShop>(0);
 
     private String email;
     private String firstname;
@@ -149,14 +143,6 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
 
     public void setVersion(final long version) {
         this.version = version;
-    }
-
-    public Collection<ManagerShop> getShops() {
-        return this.shops;
-    }
-
-    public void setShops(Collection<ManagerShop> shops) {
-        this.shops = shops;
     }
 }
 

@@ -81,6 +81,17 @@ public interface Constants {
      */
     String NO_IMAGE = "noimage.jpeg";
 
+    /**
+     * Default image attribute name.
+     */
+    String PRODUCT_IMAGE_ATTR_NAME_PREFIX = "IMAGE";
+
+
+    /**
+     * Default image attribute name.
+     */
+    String PRODUCT_DEFAULT_IMAGE_ATTR_NAME = PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0";
+
 
     /**
      * Image height.
@@ -92,9 +103,14 @@ public interface Constants {
     String WIDTH = "w";
 
 
-    String CATEGORY_IMAGE_REPOSITORY_URL_PATTERN    = "/imgvault/category/";
-    String BRAND_IMAGE_REPOSITORY_URL_PATTERN       = "/imgvault/brand/";
-    String PRODUCT_IMAGE_REPOSITORY_URL_PATTERN     = "/imgvault/product/";
+    String CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN = "/imgvault/category/";
+    String BRAND_IMAGE_REPOSITORY_URL_PATTERN = "/imgvault/brand/";
+    String PRODUCT_IMAGE_REPOSITORY_URL_PATTERN = "/imgvault/";
+
+
+    String CATEGOTY_IMAGE_FILE_PREFIX = "category";
+    String BRAND_IMAGE_FILE_PREFIX = "brand";
+
 
     /**
      * Items quantity on page. In case if default value in root category not set
@@ -104,5 +120,15 @@ public interface Constants {
 
 
     long ROOT_CATEGORY_ID = 100L;
+
+
+    String IMPORT_FOLDER = "import";
+    String ARCHIVE_FOLDER = "archive";
+
+
+
+
+    long DEFAULT_EXPIRATION_TIMEOUT = 3L; //minutes
+
 
 }

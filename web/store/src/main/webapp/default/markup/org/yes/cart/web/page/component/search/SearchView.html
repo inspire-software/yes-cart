@@ -54,13 +54,20 @@
             });
         </script>
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-80 mobile-grid-80 text-center search-input">
-            <input id="searchPhraze" type="text" class="jsSearchInput"/>
+    <div class="search-bar-holder">
+        <div class="contact-line">
+            <span class="glyphicon glyphicon-envelope blue"></span>
+            <a href="http://www.yes-cart.org/#contact" target="_blank">
+                <wicket:message key="contactForm">[contact form]</wicket:message>
+            </a>
         </div>
-        <div class="grid-20 mobile-grid-20 search-button">
-            <input type="button" wicket:message="value:search" class="jsSearchButton"
-                   src="images/layout/nav/search/nav-search-butt.jpg"/>
+        <div class="input-group input-group-lg">
+            <input id="searchPhraze" type="text" class="form-control jsSearchInput" wicket:message="placeholder:searchHolder">
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-primary jsSearchButton">
+                    <span class="glyphicon glyphicon-search white"></span>
+                </button>
+            </span>
         </div>
     </div>
 

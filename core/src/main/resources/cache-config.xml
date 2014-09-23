@@ -21,11 +21,11 @@
        xmlns:cache="http://www.springframework.org/schema/cache"
        xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
        http://www.springframework.org/schema/cache
 	   http://www.springframework.org/schema/cache/spring-cache.xsd
 	   http://www.springframework.org/schema/util
-	   http://www.springframework.org/schema/util/spring-util.xsd">
+	   http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
     <cache:annotation-driven/>
 
@@ -219,14 +219,6 @@
             <constructor-arg index="0" value="contentService-contentHasSubcontent"/>
             <constructor-arg index="1" value="all"/>
         </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="shopService-shopContentIds"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="shopService-shopAllCategoriesIds"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
     </util:set>
 
     <util:set id="CategoryCreate">
@@ -309,7 +301,7 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="imageNameStrategy-resolveObjectCode"/>
+            <constructor-arg index="0" value="productImageNameStrategyService-productCode"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>
@@ -554,27 +546,11 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-shopCategories"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="shopService-shopCategoriesIds"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="shopService-shopContentIds"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="shopService-shopAllCategoriesIds"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="themeService-themeChainByShopId"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="themeService-markupChainByShopId"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="themeService-mailTemplateChainByShopId"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>

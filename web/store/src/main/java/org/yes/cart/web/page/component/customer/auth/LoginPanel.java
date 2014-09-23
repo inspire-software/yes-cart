@@ -19,6 +19,7 @@ package org.yes.cart.web.page.component.customer.auth;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
+import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -196,6 +197,9 @@ public class LoginPanel extends BaseComponent {
                         public void onSubmit() {
 
                             if (signIn(getEmail(), getPassword())) {
+                                final IAuthenticationStrategy strategy = getApplication().getSecuritySettings()
+                                        .getAuthenticationStrategy();
+                                strategy.save(getEmail(), getPassword());
                                 ((AbstractWebPage) getPage()).executeHttpPostedCommands();
                                 ((AbstractWebPage) getPage()).persistCartIfNecessary();
                                 if (!continueToOriginalDestination()) {

@@ -16,21 +16,16 @@
 
 package org.yes.cart.remote.service.impl;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.PromotionCouponDTO;
 import org.yes.cart.domain.dto.PromotionDTO;
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemotePromotionCouponService;
 import org.yes.cart.service.dto.DtoPromotionCouponService;
 import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.service.dto.GenericDTOService;
-import org.yes.cart.service.federation.FederationFacade;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -40,98 +35,22 @@ import java.util.Map;
 public class RemotePromotionCouponServiceImpl extends AbstractRemoteService<PromotionCouponDTO>
         implements RemotePromotionCouponService {
 
-    private final DtoPromotionCouponService dtoPromotionCouponService;
-    private final DtoPromotionService dtoPromotionService;
-    private final FederationFacade federationFacade;
+    private DtoPromotionCouponService dtoPromotionCouponService;
 
-
-    public RemotePromotionCouponServiceImpl(final GenericDTOService<PromotionCouponDTO> promotionCouponDTOGenericDTOService,
-                                            final DtoPromotionService dtoPromotionService,
-                                            final FederationFacade federationFacade) {
+    public RemotePromotionCouponServiceImpl(final GenericDTOService<PromotionCouponDTO> promotionCouponDTOGenericDTOService) {
         super(promotionCouponDTOGenericDTOService);
-        this.dtoPromotionService = dtoPromotionService;
-        this.federationFacade = federationFacade;
         this.dtoPromotionCouponService = (DtoPromotionCouponService) promotionCouponDTOGenericDTOService;
     }
 
     /** {@inheritDoc} */
     public List<PromotionCouponDTO> getCouponsByPromotionId(Long promotionId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final PromotionDTO promo = dtoPromotionService.getById(promotionId);
-        if (federationFacade.isManageable(promo.getShopCode(), ShopDTO.class)) {
-            return dtoPromotionCouponService.getCouponsByPromotionId(promotionId);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        return dtoPromotionCouponService.getCouponsByPromotionId(promotionId);
     }
 
     /** {@inheritDoc} */
     public byte[] getCouponsByPromotionIdExport(Long promotionId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final PromotionDTO promo = dtoPromotionService.getById(promotionId);
-        if (federationFacade.isManageable(promo.getShopCode(), ShopDTO.class)) {
-            return dtoPromotionCouponService.getCouponsByPromotionIdExport(promotionId);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
-    }
-
-    /** {@inheritDoc} */
-    public List<PromotionCouponDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        throw new AccessDeniedException("Access is denied");
-    }
-
-    /** {@inheritDoc} */
-    public PromotionCouponDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final PromotionCouponDTO coupon = super.getById(id);
-        if (coupon != null) {
-            final PromotionDTO promo = dtoPromotionService.getById(coupon.getPromotionId());
-            if (federationFacade.isManageable(promo.getShopCode(), ShopDTO.class)) {
-                return coupon;
-            } else {
-                throw new AccessDeniedException("Access is denied");
-            }
-        }
-        return null;
-    }
-
-    /** {@inheritDoc} */
-    public PromotionCouponDTO getById(final long id, final Map converters) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final PromotionCouponDTO coupon = super.getById(id, converters);
-        if (coupon != null) {
-            final PromotionDTO promo = dtoPromotionService.getById(coupon.getPromotionId());
-            if (federationFacade.isManageable(promo.getShopCode(), ShopDTO.class)) {
-                return coupon;
-            } else {
-                throw new AccessDeniedException("Access is denied");
-            }
-        }
-        return null;
-    }
-
-    /** {@inheritDoc} */
-    public PromotionCouponDTO create(final PromotionCouponDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final PromotionDTO promo = dtoPromotionService.getById(instance.getPromotionId());
-        if (federationFacade.isManageable(promo.getShopCode(), ShopDTO.class)) {
-            return super.create(instance);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
-    }
-
-    /** {@inheritDoc} */
-    public PromotionCouponDTO update(final PromotionCouponDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final PromotionDTO promo = dtoPromotionService.getById(instance.getPromotionId());
-        if (federationFacade.isManageable(promo.getShopCode(), ShopDTO.class)) {
-            return super.update(instance);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
-    }
-
-    /** {@inheritDoc} */
-    public void remove(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        getById(id); // check access
-        super.remove(id);
+        return dtoPromotionCouponService.getCouponsByPromotionIdExport(promotionId);
     }
 }

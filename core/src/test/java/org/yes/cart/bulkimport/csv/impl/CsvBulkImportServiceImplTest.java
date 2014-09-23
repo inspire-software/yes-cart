@@ -28,16 +28,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
-import org.yes.cart.bulkimport.model.ImportDescriptor;
-import org.yes.cart.bulkimport.service.ImportService;
+import org.yes.cart.bulkimport.service.BulkImportService;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
-import org.yes.cart.stream.xml.XStreamProvider;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,8 +50,7 @@ import static junit.framework.Assert.*;
 public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
-    ImportService bulkImportService = null;
-    XStreamProvider<ImportDescriptor> xml = null;
+    BulkImportService bulkImportService = null;
 
     private final Mockery mockery = new JUnit4Mockery();
 
@@ -63,17 +58,16 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     public void setUp()  {
 
         if (bulkImportService == null) {
-            bulkImportService = createContext().getBean("csvBulkImportService", ImportService.class);
-            xml = createContext().getBean("importDescriptorXStreamProvider", XStreamProvider.class);
+            bulkImportService = (BulkImportService) createContext().getBean("csvBulkImportService");
         }
         super.setUp();
+
 
     }
 
     @After
     public void tearDown() throws Exception {
         bulkImportService = null;
-        xml = null;
         super.tearDown();
 
     }
@@ -117,14 +111,9 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
-    private JobContext createContext(final String descriptorPath, final JobStatusListener listener, final Set<String> importFileSet) throws Exception {
-
-        final ImportDescriptor descriptor = xml.fromXML(new FileInputStream(new File(descriptorPath)));
-        descriptor.setImportDirectory(new File("src/test/resources/import").getAbsolutePath());
-
+    private JobContext createContext(final String descriptorPath, final JobStatusListener listener, final Set<String> importFileSet) {
         return new JobContextImpl(false, listener, new HashMap<String, Object>() {{
-            put(JobContextKeys.IMPORT_DESCRIPTOR, descriptor);
-            put(JobContextKeys.IMPORT_DESCRIPTOR_NAME, descriptorPath);
+            put(JobContextKeys.IMPORT_DESCRIPTOR_PATH, descriptorPath);
             put(JobContextKeys.IMPORT_FILE_SET, importFileSet);
         }});
     }
@@ -665,7 +654,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
 
     @Test
-    public void testDoImportWithForeignKeys() throws Exception {
+    public void testDoImportWithForeignKeys() {
 
 
         final JobStatusListener listenerCarrier = mockery.mock(JobStatusListener.class, "listenerCarrier");
@@ -732,7 +721,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testDoImportWithSimpleSlaveFiled() throws Exception {
+    public void testDoImportWithSimpleSlaveFiled() {
 
         final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 

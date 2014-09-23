@@ -39,9 +39,17 @@ public interface ShopCategoryRelationshipSupport {
     /**
      * Get all categories including child categories, that belong to given shop.
      *
-     * @param shopId given shop PK
+     * @param shop given shop
      * @return linear representation of category tree
      */
-    Set<Long> getShopCategoriesIds(long shopId);
+    Set<Long> getShopCategoriesIds(Shop shop);
+
+    /**
+     * Get all categories including child categories, that belong to given shop.
+     *
+     * @param shop given shop
+     * @return linear representation of category tree
+     */
+    Set<Category> getShopCategories(Shop shop);
 
 }

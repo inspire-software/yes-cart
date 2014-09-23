@@ -29,7 +29,10 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.service.domain.AddressService;
+import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -41,7 +44,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Collections.singletonMap;
-import static org.junit.Assert.fail;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -61,7 +63,12 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
     protected synchronized ApplicationContext createContext() {
         if (sharedContext == null) {
-            sharedContext = new ClassPathXmlApplicationContext("testApplicationContext.xml");
+            sharedContext = new ClassPathXmlApplicationContext(
+                    "testApplicationContext.xml",
+                    "core-services.xml",
+                    "core-aspects.xml",
+                    "test-core-module-payment-base.xml",
+                    "test-payment-api.xml");
         }
         return sharedContext;
     }
@@ -82,7 +89,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         Map<String, String> params = new HashMap<String, String>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, email);
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
 
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -177,7 +184,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         Map<String, String> params;
         params = new HashMap<String, String>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customerEmail);
-        params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_NAME, "John Doe");
 
 
         params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
@@ -242,18 +249,12 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         CustomerService customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
         AttributeService attributeService = (AttributeService) ctx().getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
         AddressService addressService = (AddressService) ctx().getBean(ServiceSpringKeys.ADDRESS_SERVICE);
-        HashHelper hashHelper = (HashHelper) ctx().getBean("hashHelper");
         GenericDAO<Customer, Long> customerDao = (GenericDAO<Customer, Long>) ctx().getBean("customerDao");
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
         customer.setEmail(prefix + "jd@domain.com");
         customer.setFirstname(prefix + "John");
         customer.setLastname(prefix + "Doe");
-        try {
-            final String passw = hashHelper.getHash("rawpassword");
-            customer.setPassword(passw);
-        } catch (Exception exp) {
-            fail("Unable to generate password hash");
-        }
+        customer.setPassword("rawpassword");
         //AttrValueCustomer attrValueCustomer = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
         //attrValueCustomer.setCustomer(customer);
         //attrValueCustomer.setVal("555-55-51");

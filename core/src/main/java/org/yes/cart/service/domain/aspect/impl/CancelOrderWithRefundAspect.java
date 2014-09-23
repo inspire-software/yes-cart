@@ -21,6 +21,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
@@ -29,7 +31,6 @@ import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.order.OrderEvent;
-import org.yes.cart.service.theme.ThemeService;
 
 import javax.servlet.ServletContext;
 import java.io.Serializable;
@@ -45,7 +46,7 @@ import java.io.Serializable;
  */
 
 @Aspect
-public class CancelOrderWithRefundAspect extends BaseOrderStateAspect {
+public class CancelOrderWithRefundAspect  extends BaseOrderStateAspect  implements ServletContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(CancelOrderWithRefundAspect.class);
 
@@ -56,6 +57,10 @@ public class CancelOrderWithRefundAspect extends BaseOrderStateAspect {
     private final CustomerService customerService;
 
     private final ShopService shopService;
+
+    private ServletContext servletContext;
+
+
 
 
     /**
@@ -68,9 +73,8 @@ public class CancelOrderWithRefundAspect extends BaseOrderStateAspect {
             final MailService mailService,
             final MailComposer mailComposer,
             final CustomerService customerService,
-            final ShopService shopService,
-            final ThemeService themeService) {
-        super(taskExecutor, themeService);
+            final ShopService shopService) {
+        super(taskExecutor);
 
         this.mailService = mailService;
         this.mailComposer = mailComposer;

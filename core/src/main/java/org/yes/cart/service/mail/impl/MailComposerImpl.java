@@ -19,18 +19,20 @@ package org.yes.cart.service.mail.impl;
 import groovy.lang.Writable;
 import groovy.text.GStringTemplateEngine;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.MailPart;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.mail.MailComposer;
-import org.yes.cart.service.mail.MailTemplateResourcesProvider;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -52,32 +54,63 @@ import java.util.regex.Pattern;
  */
 public class MailComposerImpl implements MailComposer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MailComposerImpl.class);
+    /**
+     * Default mail template folder.
+     */
+    private final static String DEFAULT_TEMPLATE_FOLDER = "default";
+
 
     /**
      * Default regular expression.
      */
-    private final static String RE_EXPRESSION = "cid\\:([^'\"]+)['|\"]";
+    private final static String RE_EXPRESSION = "cid\\:([^'\"]+)[\\'|\\\"]";
+
+    private final SystemService systemService;
+
+    private final ShopService shopService;
 
     private String resourceExpression = RE_EXPRESSION;
 
     private Pattern resourcePattern;
 
-    private final GStringTemplateEngine templateEngine;
+    private String mailResourceDirectory;
 
-    private final MailTemplateResourcesProvider mailTemplateResourcesProvider;
+    private final GStringTemplateEngine templateEngine;
 
 
     /**
      * Construct mail composer
      *
-     * @param mailTemplateResourcesProvider mail resources provider
+     * @param systemService to getByKey the path to mail templates.
+     * @param shopService   shop service.
      */
-    public MailComposerImpl(final MailTemplateResourcesProvider mailTemplateResourcesProvider) throws ClassNotFoundException {
-        this.mailTemplateResourcesProvider = mailTemplateResourcesProvider;
+    public MailComposerImpl(final SystemService systemService, final ShopService shopService) throws ClassNotFoundException {
         final ClassLoader classLoader = this.getClass().getClassLoader();
         classLoader.loadClass(DecimalFormat.class.getName());
         this.templateEngine = new GStringTemplateEngine(classLoader);
+        this.systemService = systemService;
+        this.shopService = shopService;
+    }
+
+
+    /**
+     * Get mail resource directory for given shop .
+     *
+     * @param shopCode given shop code.
+     * @return mail resource directory.
+     */
+    private String getMailResourceDirectory(final String shopCode) {
+        return shopService.getShopByCode(shopCode).getMailFolder();
+    }
+
+
+    /**
+     * Set mail resource directory.
+     *
+     * @param mailResourceDirectory mail resource directory.
+     */
+    public void setMailResourceDirectory(final String mailResourceDirectory) {
+        this.mailResourceDirectory = mailResourceDirectory;
     }
 
     /**
@@ -103,8 +136,7 @@ public class MailComposerImpl implements MailComposer {
      */
     public void composeMessage(final MimeMessage message,
                                final String shopCode,
-                               final String locale,
-                               final List<String> mailTemplateChain,
+                               final String pathToTemplateFolder,
                                final String templateName,
                                final String from,
                                final String toEmail,
@@ -128,13 +160,18 @@ public class MailComposerImpl implements MailComposer {
             helper.setBcc(bccEmail);
         }
 
+        final String fullPath = pathToTemplateFolder + templateName + File.separator;
 
-        final String textTemplate = getTemplate(mailTemplateChain, locale, templateName, ".txt");
-        final String htmlTemplate = getTemplate(mailTemplateChain, locale, templateName, ".html");
-        final String propString = getTemplate(mailTemplateChain, locale, templateName, ".properties");
+
+        final String textTemplate = getTemplate(fullPath, templateName + ".txt");
+        final String htmlTemplate = getTemplate(fullPath, templateName + ".html");
+        final String pathToResources = fullPath + "resources" + File.separator;
+        final String propString = getTemplate(fullPath, templateName + ".properties");
         final Properties prop = new Properties();
         if (propString != null) {
+
             prop.load(new StringReader(propString));
+
         }
         helper.setSubject(prop.getProperty("subject") );
 
@@ -144,7 +181,7 @@ public class MailComposerImpl implements MailComposer {
             helper.setFrom(from);
         }
 
-        composeMessage(helper, textTemplate, htmlTemplate, mailTemplateChain, locale, templateName, model);
+        composeMessage(helper, textTemplate, htmlTemplate, pathToResources, model);
 
     }
 
@@ -152,14 +189,11 @@ public class MailComposerImpl implements MailComposer {
     /**
      * Fill mail message. At least one of the templates must be given.
      *
-     * @param helper          mail message helper
      * @param textTemplate    optional text template
      * @param htmlTemplate    optional html template
-     * @param mailTemplateChain path to template folder
-     * @param locale          locale
-     * @param templateName    template name
      * @param model           model
-     *
+     * @param pathToResources optional path to inline resources. Used if htmlTemplate is set and has "cid" resoures.
+     * @param helper          mail message helper
      * @throws MessagingException     in case if message can not be composed
      * @throws java.io.IOException    in case of inline resources can not be found
      * @throws ClassNotFoundException in case if something wrong with template engine
@@ -167,9 +201,7 @@ public class MailComposerImpl implements MailComposer {
     void composeMessage(final MimeMessageHelper helper,
                         final String textTemplate,
                         final String htmlTemplate,
-                        final List<String> mailTemplateChain,
-                        final String locale,
-                        final String templateName,
+                        final String pathToResources,
                         final Map<String, Object> model)
             throws MessagingException, ClassNotFoundException, IOException {
 
@@ -180,7 +212,7 @@ public class MailComposerImpl implements MailComposer {
 
             if (htmlTemplate != null) {
                 helper.setText(merge(htmlTemplate, model), true);
-                inlineResources(helper, htmlTemplate, mailTemplateChain, locale, templateName);
+                inlineResources(helper, htmlTemplate, pathToResources);
             }
 
         } else {
@@ -188,7 +220,7 @@ public class MailComposerImpl implements MailComposer {
                     merge(textTemplate, model),
                     merge(htmlTemplate, model)
             );
-            inlineResources(helper, htmlTemplate, mailTemplateChain, locale, templateName);
+            inlineResources(helper, htmlTemplate, pathToResources);
         }
 
     }
@@ -200,29 +232,23 @@ public class MailComposerImpl implements MailComposer {
      *
      * @param helper          MimeMessageHelper, that has mail message
      * @param htmlTemplate    html message template
-     * @param mailTemplateChain physical path to resources
-     * @param templateName    template name
-     *
+     * @param pathToResources physical path to resources
      * @throws javax.mail.MessagingException in case if resource can not be inlined
      */
     void inlineResources(final MimeMessageHelper helper,
                          final String htmlTemplate,
-                         final List<String> mailTemplateChain,
-                         final String locale,
-                         final String templateName) throws MessagingException, IOException {
+                         final String pathToResources) throws MessagingException {
 
         if (StringUtils.isNotBlank(htmlTemplate)) {
             final List<String> resourcesIds = getResourcesId(htmlTemplate);
             if (!resourcesIds.isEmpty()) {
                 for (String resourceId : resourcesIds) {
-                    final String resourceFilename = transformResourceIdToFileName(resourceId);
-                    final byte[] content = mailTemplateResourcesProvider.getResource(mailTemplateChain, locale, templateName, resourceFilename);
-                    helper.addInline(resourceId, new ByteArrayResource(content) {
-                        @Override
-                        public String getFilename() {
-                            return resourceFilename;
-                        }
-                    });
+                    final String fileName = pathToResources + transformResourceIdToFileName(resourceId);
+                    final File file = new File(fileName);
+                    if (file.exists()) {
+                        FileSystemResource res = new FileSystemResource(file);
+                        helper.addInline(resourceId, res);
+                    }
                 }
             }
         }
@@ -267,7 +293,7 @@ public class MailComposerImpl implements MailComposer {
 
     /**
      * Set regular expression  to collect resources to inline.
-     * Also set pattern to null.
+     * Also set patternt to null.
      *
      * @param resourceExpression regular expression
      */
@@ -288,24 +314,38 @@ public class MailComposerImpl implements MailComposer {
     /**
      * Get template as string.
      *
-     * @param mailTemplateChain path to template folder
-     * @param locale            locale
-     * @param fileName          file name
-     * @param ext               file extension
-     *
+     * @param pathToTemplate path to template folder
+     * @param fileName       file name
      * @return template if exists
+     * @throws IOException in case of io errors.
      */
-    String getTemplate(final List<String> mailTemplateChain,
-                       final String locale,
-                       final String fileName,
-                       final String ext) {
-
-        try {
-            return mailTemplateResourcesProvider.getTemplate(mailTemplateChain, locale, fileName, ext);
-        } catch (IOException e) {
-            LOG.warn("No template found for locale {}, template: {}, ext: {}", new Object[] { locale, fileName, ext });
-            return null;
+    String getTemplate(final String pathToTemplate, final String fileName) throws IOException {
+        final String fullFileName = pathToTemplate + fileName;
+        final File file = new File(fullFileName);
+        if (file.exists()) {
+            return FileUtils.readFileToString(file, "UTF-8");
         }
+        return null;
+    }
+
+    /**
+     * Get path to template folder terminated with File.separator.
+     *
+     * @param shopCode     optional shop code
+     * @param templateName template name
+     * @return path to template folder
+     */
+    String getPathToTemplate(final String shopCode, final String templateName) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(getMailResourceDirectory(shopCode));
+
+        //stringBuilder.append(File.separator);
+        stringBuilder.append(templateName);
+        stringBuilder.append(File.separator);
+
+        return stringBuilder.toString();
 
     }
 
@@ -313,8 +353,7 @@ public class MailComposerImpl implements MailComposer {
     @Override
     public void composeMessage(final Mail mail,
                                final String shopCode,
-                               final String locale,
-                               final List<String> mailTemplateChain,
+                               final String pathToTemplateFolder,
                                final String templateName,
                                final String from,
                                final String toEmail,
@@ -334,9 +373,13 @@ public class MailComposerImpl implements MailComposer {
             mail.setBcc(bccEmail);
         }
 
-        final String textTemplate = getTemplate(mailTemplateChain, locale, templateName, ".txt");
-        final String htmlTemplate = getTemplate(mailTemplateChain, locale, templateName, ".html");
-        final String propString = getTemplate(mailTemplateChain, locale, templateName, ".properties");
+        final String fullPath = pathToTemplateFolder + templateName + File.separator;
+
+
+        final String textTemplate = getTemplate(fullPath, templateName + ".txt");
+        final String htmlTemplate = getTemplate(fullPath, templateName + ".html");
+        final String pathToResources = fullPath + "resources" + File.separator;
+        final String propString = getTemplate(fullPath, templateName + ".properties");
         final Properties prop = new Properties();
         if (propString != null) {
 
@@ -355,9 +398,7 @@ public class MailComposerImpl implements MailComposer {
         composeMessage(mail,
                 textTemplate,
                 htmlTemplate,
-                mailTemplateChain,
-                locale,
-                templateName,
+                pathToResources,
                 model);
 
 
@@ -367,13 +408,11 @@ public class MailComposerImpl implements MailComposer {
     /**
      * Fill mail message. At least one of the templates must be given.
      *
-     * @param mail            mail message
      * @param textTemplate    optional text template
      * @param htmlTemplate    optional html template
-     * @param mailTemplateChain path to template folder
-     * @param locale          locale
-     * @param templateName    template name
      * @param model           model
+     * @param pathToResources optional path to inline resources. Used if htmlTemplate is set and has "cid" resoures.
+     * @param mail          mail message
      *
      * @throws MessagingException     in case if message can not be composed
      * @throws java.io.IOException    in case of inline resources can not be found
@@ -382,9 +421,7 @@ public class MailComposerImpl implements MailComposer {
     void composeMessage(final Mail mail,
                         final String textTemplate,
                         final String htmlTemplate,
-                        final List<String> mailTemplateChain,
-                        final String locale,
-                        final String templateName,
+                        final String pathToResources,
                         final Map<String, Object> model)
             throws MessagingException, ClassNotFoundException, IOException {
 
@@ -394,13 +431,13 @@ public class MailComposerImpl implements MailComposer {
             }
             if (htmlTemplate != null) {
                 mail.setHtmlVersion(merge(htmlTemplate, model));
-                inlineResources(mail, htmlTemplate, mailTemplateChain, locale, templateName);
+                inlineResources(mail, htmlTemplate, pathToResources);
             }
 
         } else {
             mail.setTextVersion(merge(textTemplate, model));
             mail.setHtmlVersion(merge(htmlTemplate, model));
-            inlineResources(mail, htmlTemplate, mailTemplateChain, locale, templateName);
+            inlineResources(mail, htmlTemplate, pathToResources);
         }
 
     }
@@ -410,30 +447,27 @@ public class MailComposerImpl implements MailComposer {
      * Add inline resource to mail message.
      * Resource id will be interpreted as file name in following fashion: filename_ext.
      *
-     * @param mail            MimeMessageHelper, that has mail message
+     * @param mail          MimeMessageHelper, that has mail message
      * @param htmlTemplate    html message template
-     * @param mailTemplateChain path to template folder
-     * @param locale          locale
-     * @param templateName    template name
-     *
+     * @param pathToResources physical path to resources
      * @throws javax.mail.MessagingException in case if resource can not be inlined
      */
     void inlineResources(final Mail mail,
                          final String htmlTemplate,
-                         final List<String> mailTemplateChain,
-                         final String locale,
-                         final String templateName) throws MessagingException, IOException {
+                         final String pathToResources) throws MessagingException, IOException {
 
         if (StringUtils.isNotBlank(htmlTemplate)) {
             final List<String> resourcesIds = getResourcesId(htmlTemplate);
             if (!resourcesIds.isEmpty()) {
                 for (String resourceId : resourcesIds) {
-                    final String resourceFilename = transformResourceIdToFileName(resourceId);
-                    final byte[] content = mailTemplateResourcesProvider.getResource(mailTemplateChain, locale, templateName, resourceFilename);
-                    final MailPart part = mail.addPart();
-                    part.setResourceId(resourceId);
-                    part.setFilename(resourceFilename);
-                    part.setData(content);
+                    final String fileName = pathToResources + transformResourceIdToFileName(resourceId);
+                    final File file = new File(fileName);
+                    if (file.exists()) {
+                        final MailPart part = mail.addPart();
+                        part.setResourceId(resourceId);
+                        part.setFilename(fileName);
+                        part.setData(FileUtils.readFileToByteArray(file));
+                    }
                 }
             }
         }

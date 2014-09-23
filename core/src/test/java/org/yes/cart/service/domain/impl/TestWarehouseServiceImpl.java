@@ -98,6 +98,7 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
         shop.setCode(shopCode);
         shop.setName("Test shop");
         shop.setFspointer("/test");
+        shop.setImageVaultFolder("/imagevault");
         shop = shopService.create(shop);
         assertNotNull(shop);
         warehouse = entityFactory.getByIface(Warehouse.class);

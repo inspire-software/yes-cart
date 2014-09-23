@@ -22,7 +22,6 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -109,7 +108,7 @@ public abstract class AbstractTestDAO  {
     }
 
     protected IDataSet createDataSet() throws Exception {
-        return new FlatXmlDataSetBuilder().build(getClass().getClassLoader().getResourceAsStream("initialdata.xml"));
+        return new FlatXmlDataSet(getClass().getClassLoader().getResourceAsStream("initialdata.xml"), false);
     }
 
     protected void dumpDataBase(final String prefix, final String ... tables) throws Exception {

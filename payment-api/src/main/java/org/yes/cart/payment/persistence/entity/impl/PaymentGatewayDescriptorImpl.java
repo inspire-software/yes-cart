@@ -56,7 +56,8 @@ public class PaymentGatewayDescriptorImpl extends DescriptorImpl implements Paym
     }
 
     /**
-     * {@inheritDoc}
+     * Set priority. Used to sort on UI.
+     * @param priority priority to set.
      */
     public void setPriority(final int priority) {
         this.priority = priority;

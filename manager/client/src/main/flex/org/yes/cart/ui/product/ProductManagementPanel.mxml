@@ -17,6 +17,7 @@
 
 <mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:prod="org.yes.cart.ui.product.*"
+           xmlns:seo="org.yes.cart.ui.seo.*"
            width="100%" height="100%" creationComplete="init();">
 
 
@@ -287,8 +288,6 @@
                 product.productTypeDTO = ProductTypeDTOImpl(productCreateDialog.productTypeComboBox.selectedItem);
                 product.brandDTO = BrandDTOImpl(productCreateDialog.brandComboBox.selectedItem);
                 product.availability = productCreateDialog.productAvailabilityComboBox.selectedItem.data;
-                product.productCategoryDTOs = new ArrayCollection();
-                product.productCategoryDTOs.addItem(productCreateDialog.categoryDTO);
                 remoteProductService.create(product);
                 productCreateDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewProductSaveClick);
                 PopUpManager.removePopUp(productCreateDialog);
@@ -470,13 +469,6 @@
 
             productSelected = false;
             productDTOImpl = null;
-
-            if ((codeTextInput.text == null || codeTextInput.text.length == 0)
-                && (nameTextInput.text == null || nameTextInput.text.length == 0)
-                && selectedBrandId == 0 && selectedTypeId == 0) {
-                Alert.show(resourceManager.getString('ProductManagementPanel', 'selectCriteria'));
-                return;
-            }
 
             remoteProductService.getProductByCodeNameBrandType(
                     codeTextInput.text,

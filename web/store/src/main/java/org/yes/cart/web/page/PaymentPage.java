@@ -83,7 +83,7 @@ public class PaymentPage extends AbstractWebPage {
     private static final String PAYMENT_TRANS_ID = "transactionId";
     private static final String PAYMENT_AUTH_CODE = "authCode";
     private static final String PAYMENT_ERROR_CODE = "errorCode";
-    private static final String PAYMENT_ERROR_DESCR = "errorDecription";
+    private static final String PAYMENT_ERROR_DESCR = "errorDescription";
 
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
@@ -123,29 +123,40 @@ public class PaymentPage extends AbstractWebPage {
             mparam.putAll(param);
             mparam.put(PaymentMiscParam.CLIENT_IP, ApplicationDirector.getShopperIPAddress());
 
-            final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+            result = paymentProcessFacade.pay(
+                    ApplicationDirector.getShoppingCart(),
+                    mparam
+            );
 
-            if (cart.getCartItemsCount() > 0) {
-                result = paymentProcessFacade.pay(cart, mparam);
-                if (result) {
-                    addOrReplace(createPositiveResultFragment());
+            if (result) {
+                addOrReplace(
+                        createPositiveResultFragment()
+                );
 
-                } else {
-                    addOrReplace(createNegativePaymentResultFragment());
-                }
-            } else {
-               addOrReplace(createNeutralResultFragment());
+            }   else {
+                addOrReplace(
+                        createNegativePaymentResultFragment()
+                );
             }
 
 
         } catch (OrderItemAllocationException e) {
 
-            addOrReplace(createNegativeItemAllocationResultFragment(e.getProductSkuCode()));
+
+            addOrReplace(
+                    createNegativeItemAllocationResultFragment(e.getProductSkuCode())
+            );
+
             result = false;
 
         } catch (OrderException e) {
 
-            addOrReplace(createNegativePaymentResultFragment());
+
+
+            addOrReplace(
+                    createNegativePaymentResultFragment()
+            );
+
             result = false;
         }
 
@@ -246,15 +257,6 @@ public class PaymentPage extends AbstractWebPage {
      */
     private MarkupContainer createPositiveResultFragment() {
         info(getLocalizer().getString(POSITIVE_PAYMENT_NOTES, this));
-        return new Fragment(RESULT_CONTAINER, POSITIVE_RESULT_FRAGMENT, this);
-    }
-
-
-    /**
-     * Neutral result (e.g. if someone changes locale on this page - then there is nothing to check).
-     * @return neutral result fragment.
-     */
-    private MarkupContainer createNeutralResultFragment() {
         return new Fragment(RESULT_CONTAINER, POSITIVE_RESULT_FRAGMENT, this);
     }
 

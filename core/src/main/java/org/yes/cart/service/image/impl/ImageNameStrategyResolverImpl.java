@@ -16,16 +16,12 @@
 
 package org.yes.cart.service.image.impl;
 
+import org.yes.cart.constants.Constants;
 import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.service.image.ImageNameStrategyResolver;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
- * Responsible to get the particular {@link ImageNameStrategy} by given image url.
+ * Responsible to get the particular {@link ImageNameStrategy} by fiven image url.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -33,26 +29,25 @@ import java.util.Map;
  */
 public class ImageNameStrategyResolverImpl implements ImageNameStrategyResolver {
 
-    private final ImageNameStrategy defaultStrategy;
-    private final Map<String, ImageNameStrategy> urlToStrategyMap;
-    private final String[] urls;
+    final ImageNameStrategy brandImageNameStrategy;
+    final ImageNameStrategy categoryImageNameStrategy;
+    final ImageNameStrategy productImageNameStrategy;
 
     /**
      * Construct image name strategy resolver.
      *
-     * @param defaultStrategy  default strategy
-     * @param urlToStrategies map of strategies for given url paths
+     * @param brandImageNameStrategy    brand image name strategy
+     * @param categoryImageNameStrategy category image name strategy
+     * @param productImageNameStrategy  product and sku image name strategy
      */
-    public ImageNameStrategyResolverImpl(final ImageNameStrategy defaultStrategy,
-                                         final List<ImageNameStrategy> urlToStrategies) {
+    public ImageNameStrategyResolverImpl(
+            final ImageNameStrategy brandImageNameStrategy,
+            final ImageNameStrategy categoryImageNameStrategy,
+            final ImageNameStrategy productImageNameStrategy) {
 
-        this.defaultStrategy = defaultStrategy;
-        final Map<String, ImageNameStrategy> urlToStrategyMap = new HashMap<String, ImageNameStrategy>();
-        for (final ImageNameStrategy strategy : urlToStrategies) {
-            urlToStrategyMap.put(strategy.getUrlPath(), strategy);
-        }
-        this.urlToStrategyMap = urlToStrategyMap;
-        this.urls = new ArrayList<String>(urlToStrategyMap.keySet()).toArray(new String[urlToStrategyMap.keySet().size()]);
+        this.brandImageNameStrategy = brandImageNameStrategy;
+        this.categoryImageNameStrategy = categoryImageNameStrategy;
+        this.productImageNameStrategy = productImageNameStrategy;
     }
 
 
@@ -60,16 +55,13 @@ public class ImageNameStrategyResolverImpl implements ImageNameStrategyResolver 
      * {@inheritDoc}
      */
     public ImageNameStrategy getImageNameStrategy(final String imageUrl) {
-
-        for (final String url : urls) {
-
-            if (imageUrl.contains(url)) {
-                return urlToStrategyMap.get(url);
-            }
-
+        if (imageUrl == null) {
+            return productImageNameStrategy;
+        } else if (imageUrl.indexOf(Constants.CATEGOTY_IMAGE_REPOSITORY_URL_PATTERN) > -1) {
+            return categoryImageNameStrategy;
+        } else if (imageUrl.indexOf(Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN) > -1) {
+            return brandImageNameStrategy;
         }
-
-        return defaultStrategy;
-
+        return productImageNameStrategy;
     }
 }

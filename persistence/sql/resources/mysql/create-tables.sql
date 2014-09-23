@@ -446,20 +446,6 @@
         primary key (MANAGERROLE_ID)
     ) comment='Hold roles list' ;
 
-
-    create table TMANAGERSHOP (
-        MANAGERSHOP_ID bigint not null auto_increment,
-        VERSION bigint not null default 0,
-        MANAGER_ID bigint not null,
-        SHOP_ID bigint not null,
-        CREATED_TIMESTAMP datetime,
-        UPDATED_TIMESTAMP datetime,
-        CREATED_BY varchar(64),
-        UPDATED_BY varchar(64),
-        GUID varchar(36) not null unique,
-        primary key (MANAGERSHOP_ID)
-    ) ;
-
     create table TPRODTYPEATTRVIEWGROUP (
         PRODTYPEATTRIBUTEGROUP_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
@@ -639,6 +625,7 @@
         NAME varchar(64) not null,
         DESCRIPTION longtext,
         FSPOINTER longtext not null comment 'Point to jsps',
+        IMGVAULT longtext not null comment 'Point to image repository',
         URI varchar(255),
         TITLE varchar(255),
         METAKEYWORDS varchar(255),
@@ -989,21 +976,6 @@
         GUID varchar(36) not null unique,
         primary key (MAILPART_ID)
     );
-
-
-    create table TSHOPPINGCARTSTATE (
-        TSHOPPINGCARTSTATE_ID bigint not null auto_increment,
-        VERSION bigint not null default 0,
-        CREATED_TIMESTAMP datetime,
-        UPDATED_TIMESTAMP datetime,
-        CREATED_BY varchar(64),
-        UPDATED_BY varchar(64),
-        GUID varchar(36) not null unique,
-        CART_STATE varbinary(16384),
-        CUSTOMER_EMAIL varchar(255),
-        primary key (TSHOPPINGCARTSTATE_ID)
-    );
-
 
 
 	create table HIBERNATE_UNIQUE_KEYS (
@@ -1442,26 +1414,9 @@
         references TCUSTOMERORDER (CUSTOMERORDER_ID) on delete cascade;
 
 
-    create index PROMOTIONCOUPONUSAGE_EMAIL on TPROMOTIONCOUPONUSAGE (CUSTOMER_EMAIL);
-
-    create index SHOPPINGCARTSTATE_EMAIL on TSHOPPINGCARTSTATE (CUSTOMER_EMAIL);
-
-
     alter table TMAILPART
         add index FK_MAIL(MAIL_ID)  ,
         add constraint FKMAILMAILPART
         foreign key (MAIL_ID)
         references TMAIL(MAIL_ID);
 
-
-    alter table TMANAGERSHOP
-        add index FK_MS_SHOP (SHOP_ID),
-        add constraint FK_MS_SHOP
-        foreign key (SHOP_ID)
-        references TSHOP (SHOP_ID);
-
-    alter table TMANAGERSHOP
-        add index FK_MS_MANAGER (MANAGER_ID),
-        add constraint FK_MS_MANAGER
-        foreign key (MANAGER_ID)
-        references TMANAGER (MANAGER_ID)         on delete cascade;

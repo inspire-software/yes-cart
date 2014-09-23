@@ -23,7 +23,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.service.domain.CustomerService;
@@ -33,7 +32,8 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.aspect.impl.BaseNotificationAspect;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.payment.PaymentModulesManager;
-import org.yes.cart.service.theme.ThemeService;
+import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.application.ApplicationDirector;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -57,8 +57,6 @@ public class PaymentAspect extends BaseNotificationAspect {
 
     private final ShopService shopService;
 
-    private final ThemeService themeService;
-
     private final PaymentModulesManager paymentModulesManager;
 
 
@@ -72,7 +70,6 @@ public class PaymentAspect extends BaseNotificationAspect {
                          final MailComposer mailComposer,
                          final CustomerService customerService,
                          final ShopService shopService,
-                         final ThemeService themeService,
                          final PaymentModulesManager paymentModulesManager) {
         super(taskExecutor);
         this.productService = productService;
@@ -80,7 +77,6 @@ public class PaymentAspect extends BaseNotificationAspect {
         this.mailComposer = mailComposer;
         this.shopService = shopService;
         this.customerService = customerService;
-        this.themeService = themeService;
         this.paymentModulesManager = paymentModulesManager;
 
 
@@ -118,16 +114,14 @@ public class PaymentAspect extends BaseNotificationAspect {
         fillParameters(pjp, map);
 
         final CustomerOrder customerOrder = (CustomerOrder) pjp.getArgs()[0];
-        final Shop shop = shopService.getById(customerOrder.getShop().getShopId());
-        map.put(StandardMessageListener.SHOP_CODE, shop.getCode());
+        map.put(StandardMessageListener.SHOP_CODE, ShopCodeContext.getShopCode());
         map.put(StandardMessageListener.CUSTOMER_EMAIL, customerOrder.getCustomer().getEmail());
         map.put(StandardMessageListener.RESULT, rez);
         map.put(StandardMessageListener.ROOT, customerOrder);
-        map.put(StandardMessageListener.TEMPLATE_FOLDER, themeService.getMailTemplateChainByShopId(shop.getShopId()));
+        map.put(StandardMessageListener.TEMPLATE_FOLDER, ApplicationDirector.getCurrentMailTemplateFolder());
 
-        map.put(StandardMessageListener.SHOP, shop);
+        map.put(StandardMessageListener.SHOP, ApplicationDirector.getCurrentShop());
         map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
-        map.put(StandardMessageListener.LOCALE, customerOrder.getLocale());
 
         final PaymentGatewayFeature feature = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel()).getPaymentGatewayFeatures();
         if (feature.isOnlineGateway()) {
@@ -170,16 +164,14 @@ public class PaymentAspect extends BaseNotificationAspect {
         fillParameters(pjp, map);
 
         final CustomerOrder customerOrder = (CustomerOrder) pjp.getArgs()[0];
-        final Shop shop = shopService.getById(customerOrder.getShop().getShopId());
-        map.put(StandardMessageListener.SHOP_CODE, shop.getCode());
+        map.put(StandardMessageListener.SHOP_CODE, ShopCodeContext.getShopCode());
         map.put(StandardMessageListener.CUSTOMER_EMAIL, customerOrder.getCustomer().getEmail());
         map.put(StandardMessageListener.RESULT, rez);
         map.put(StandardMessageListener.ROOT, customerOrder);
-        map.put(StandardMessageListener.TEMPLATE_FOLDER, themeService.getMailTemplateChainByShopId(shop.getShopId()));
+        map.put(StandardMessageListener.TEMPLATE_FOLDER, ApplicationDirector.getCurrentMailTemplateFolder());
 
-        map.put(StandardMessageListener.SHOP, shop);
+        map.put(StandardMessageListener.SHOP, ApplicationDirector.getCurrentShop());
         map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
-        map.put(StandardMessageListener.LOCALE, customerOrder.getLocale());
 
         map.put(StandardMessageListener.TEMPLATE_NAME, "shipment-complete");
 

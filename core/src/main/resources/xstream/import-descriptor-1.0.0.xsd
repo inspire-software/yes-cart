@@ -59,6 +59,7 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element name="entity-type" type="xs:string" minOccurs="1"/>
+            <xs:element name="import-directory" type="xs:string" minOccurs="1"/>
             <xs:element name="import-file-descriptor" type="ImportFileDescriptorType" minOccurs="1"/>
             <xs:element name="select-sql" type="xs:string" minOccurs="1"/>
             <xs:element name="insert-sql" type="xs:string" minOccurs="0"/>

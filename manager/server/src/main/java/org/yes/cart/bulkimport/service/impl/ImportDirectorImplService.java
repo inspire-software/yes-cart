@@ -17,7 +17,6 @@
 package org.yes.cart.bulkimport.service.impl;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -25,11 +24,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.TaskExecutor;
-import org.yes.cart.bulkimport.model.ImportDescriptor;
+import org.yes.cart.bulkimport.service.BulkImportImagesService;
+import org.yes.cart.bulkimport.service.BulkImportService;
 import org.yes.cart.bulkimport.service.ImportDirectorService;
-import org.yes.cart.bulkimport.service.ImportService;
 import org.yes.cart.bulkimport.service.model.JobContextDecoratorImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.remote.service.RemoteBackdoorService;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
@@ -40,21 +40,18 @@ import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.stream.xml.XStreamProvider;
 import org.yes.cart.utils.impl.ZipUtils;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 import org.yes.cart.web.service.ws.node.NodeService;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Import Director class to perform import via {@link ImportService}
+ * Import Director class to perform import via {@link BulkImportService}
  * collect imported files and move it to archive folder.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
@@ -77,45 +74,43 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private ApplicationContext applicationContext;
 
+    private final RemoteBackdoorService remoteBackdoorService;
+
     private final NodeService nodeService;
 
-    private final SystemService systemService;
-
     private final ZipUtils zipUtils;
-
-    private XStreamProvider<ImportDescriptor> importDescriptorXStreamProvider;
-
 
     /**
      * Construct the import director
      *
      * @param importDescriptors       import descriptors
-     * @param pathToImportDescriptors path to use.
      * @param pathToArchiveFolder     path to archive folder.
+     * @param pathToImportDescriptors path to use.
      * @param pathToImportFolder      path to use.
      * @param productService          product service
      * @param executor                async executor
+     * @param remoteBackdoorService   backdoor service
      * @param nodeService             node service
-     * @param systemService           system service
      * @param zipUtils                zip algorithm
      */
-    public ImportDirectorImplService(final Map<String, List<String>> importDescriptors,
-                                     final String pathToImportDescriptors,
-                                     final String pathToArchiveFolder,
-                                     final String pathToImportFolder,
-                                     final ProductService productService,
-                                     final TaskExecutor executor,
-                                     final NodeService nodeService,
-                                     final SystemService systemService,
-                                     final ZipUtils zipUtils) {
+    public ImportDirectorImplService(
+            final Map<String, List<String>> importDescriptors,
+            final String pathToArchiveFolder,
+            final String pathToImportDescriptors,
+            final String pathToImportFolder,
+            final ProductService productService,
+            final TaskExecutor executor,
+            final RemoteBackdoorService remoteBackdoorService,
+            final NodeService nodeService,
+            final ZipUtils zipUtils) {
         super(executor);
         this.pathToImportDescriptors = pathToImportDescriptors;
         this.pathToArchiveFolder = pathToArchiveFolder;
         this.pathToImportFolder = pathToImportFolder;
         this.importDescriptors = importDescriptors;
         this.productService = productService;
+        this.remoteBackdoorService = remoteBackdoorService;
         this.nodeService = nodeService;
-        this.systemService = systemService;
         this.zipUtils = zipUtils;
 
     }
@@ -128,6 +123,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      */
     public void doImportInternal(final JobContext context) throws IOException {
         doDataImport(context);
+        doImageImport(context);
         moveImportFilesToArchive((Set<String>) context.getAttribute(JobContextKeys.IMPORT_FILE_SET));
     }
 
@@ -137,13 +133,27 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     }
 
     /** {@inheritDoc} */
+    public String doImport(final String descriptorGroup, final boolean async) {
+        return doImport(descriptorGroup, null, async);
+    }
+
+    /** {@inheritDoc} */
     public String doImport(final String descriptorGroup, final String fileName, final boolean async) {
 
         final Map<String, Object> param = new HashMap<String, Object>();
 
         final AsyncContext flex = new AsyncFlexContextImpl(param);
 
-        final String imgVault = systemService.getImageRepositoryDirectory();
+        final String imgVault;
+        try {
+            // TODO: YC-237 We take the first path available for now - this needs to be refactored
+            final Map<String, String> path = remoteBackdoorService.getImageVaultPath(flex);
+            final String firstAvailable = path.values().iterator().next();
+            imgVault = firstAvailable + File.separator;
+        } catch (IOException ioe) {
+            LOG.error("Unable to get image vault path", ioe);
+            throw new IllegalStateException("Unable to get image vault path");
+        }
 
         // Max char of report to UI since it will get huge and simply will crash the UI, not to mention traffic cost.
         final int logSize = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE));
@@ -155,8 +165,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                     put(JobContextKeys.IMPORT_DESCRIPTOR_GROUP, descriptorGroup);
                     put(JobContextKeys.IMPORT_FILE, fileName);
                     put(JobContextKeys.IMPORT_FILE_SET, new HashSet<String>());
-                    put(JobContextKeys.IMAGE_VAULT_PATH, imgVault);
-                    put(JobContextKeys.IMPORT_DIRECTORY_ROOT, pathToImportFolder);
+                    put(JobContextKeys.IMPORT_DIRECTORY_ROOT, getOsAwarePath(pathToImportFolder));
+                    put(JobContextKeys.IMAGE_VAULT_PATH, getOsAwarePath(imgVault));
                     putAll(flex.getAttributes());
                 }}));
     }
@@ -206,6 +216,11 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         };
     }
 
+    private void doImageImport(final JobContext context) throws IOException {
+        final BulkImportImagesService bulkImportImagesService = getNewBulkImportImagesService();
+        bulkImportImagesService.doImport(context);
+    }
+
     private void doDataImport(final JobContext context) throws IOException {
         final List<String> descriptors = importDescriptors.get(context.getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_GROUP));
         if (descriptors == null) {
@@ -213,23 +228,11 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         }
         for (final String descriptor : descriptors) {
             final Resource res = applicationContext.getResource("WEB-INF/" + pathToImportDescriptors + "/" + descriptor);
-
-            final ImportDescriptor descriptorObject = getImportDescriptorFromXML(res.getInputStream());
-            final String pathToImportRootDirectory = context.getAttribute(JobContextKeys.IMPORT_DIRECTORY_ROOT);
-            if (StringUtils.isNotBlank(pathToImportRootDirectory)) {
-                descriptorObject.setImportDirectory(pathToImportRootDirectory);
-            }
-
+            final BulkImportService bulkImportService = getNewBulkImportService();
             final JobContext dataJob = new JobContextDecoratorImpl(context, new HashMap<String, Object>() {{
-                put(JobContextKeys.IMPORT_DESCRIPTOR, descriptorObject);
-                put(JobContextKeys.IMPORT_DESCRIPTOR_NAME, descriptor);
+                put(JobContextKeys.IMPORT_DESCRIPTOR_PATH, res.getFile().getAbsolutePath());
             }});
-
-            if ("IMAGE".equals(descriptorObject.getEntityType())) {
-                getNewBulkImportImagesService().doImport(dataJob);
-            } else {
-                getNewBulkImportService().doImport(dataJob);
-            }
+            bulkImportService.doImport(dataJob);
         }
     }
 
@@ -283,49 +286,21 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     /**
      * {@inheritDoc}
      */
-    public String getImportDirectory() {
-        return pathToImportFolder;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getArchiveDirectory() {
-        return pathToArchiveFolder;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-    }
-
-
-    /**
-     * IoC. XStream provider for import descriptor files.
-     *
-     * @param importDescriptorXStreamProvider xStream provider
-     */
-    public void setImportDescriptorXStreamProvider(final XStreamProvider importDescriptorXStreamProvider) {
-        this.importDescriptorXStreamProvider = importDescriptorXStreamProvider;
-    }
-
-    protected ImportDescriptor getImportDescriptorFromXML(InputStream is) {
-        return importDescriptorXStreamProvider.fromXML(is);
     }
 
     /**
      * @return IoC prototype instance
      */
-    public ImportService getNewBulkImportService() {
+    public BulkImportService getNewBulkImportService() {
         return null;
     }
 
     /**
      * @return IoC prototype instance
      */
-    public ImportService getNewBulkImportImagesService() {
+    public BulkImportImagesService getNewBulkImportImagesService() {
         return null;
     }
 }

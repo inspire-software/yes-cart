@@ -20,6 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.authentication.IAuthenticationStrategy;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -43,7 +45,7 @@ import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
-import org.yes.cart.web.support.shoppingcart.ShoppingCartPersister;
+import org.yes.cart.web.support.util.cookie.ShoppingCartPersister;
 import org.yes.cart.web.util.WicketUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -133,9 +135,9 @@ public class AbstractWebPage extends WebPage {
         keywords.add( new AttributeAppender("content", getKeywords(), " "));
         addOrReplace(keywords);
 
-        Label created = new Label(CREATED,"");
+        /*Label created = new Label(CREATED,"");
         created.add( new AttributeAppender("content", getCreated(), " "));
-        addOrReplace(created);
+        addOrReplace(created);*/ // TODO: YC-362
 
         if (!isPageStateless() && Application.get().getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
             determineStatefulComponent();
@@ -173,6 +175,20 @@ public class AbstractWebPage extends WebPage {
 
         final PageParameters params = getPageParameters();
         getShoppingCartCommandFactory().execute(cart, (Map) WicketUtil.pageParametesAsMap(params));
+
+        if (cart.isModified()) {
+
+            if (params.getNamedKeys().contains(ShoppingCartCommand.CMD_CHANGELOCALE)) {
+                getSession().setLocale(new Locale(cart.getCurrentLocale()));
+            }
+            if (params.getNamedKeys().contains(ShoppingCartCommand.CMD_LOGOUT)) {
+                // Need to remove user from wicket auth
+                final IAuthenticationStrategy strategy = getApplication().getSecuritySettings().getAuthenticationStrategy();
+                strategy.remove();
+                AuthenticatedWebSession.get().signOut();
+            }
+
+        }
 
     }
 
@@ -296,13 +312,7 @@ public class AbstractWebPage extends WebPage {
         return null;
     }
 
-    /**
-     * Get created date time.
-     * @return page created
-     */
-    public IModel<String> getCreated() {
-        return new Model<String>(new Date().toString());
-    }
+
     protected String getKeywords(final Seo seo, final String language) {
         if (seo != null) {
             final String desc = getI18NSupport().getFailoverModel(seo.getDisplayMetakeywords(), seo.getMetakeywords()).getValue(language);

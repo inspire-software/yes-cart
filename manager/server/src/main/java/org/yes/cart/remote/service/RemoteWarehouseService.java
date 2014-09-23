@@ -16,9 +16,6 @@
 
 package org.yes.cart.remote.service;
 
-import org.yes.cart.domain.dto.WarehouseDTO;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.DtoWarehouseService;
 
 /**
@@ -27,15 +24,4 @@ import org.yes.cart.service.dto.DtoWarehouseService;
  * Time: 17:22:15
  */
 public interface RemoteWarehouseService extends DtoWarehouseService {
-
-    /**
-     * Create instance of warehouse for given shop.
-     *
-     * @param warehouse warehouse to create
-     * @param shopId shop pk
-     *
-     * @return warehouse
-     */
-    WarehouseDTO createForShop(WarehouseDTO warehouse, long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
-
 }

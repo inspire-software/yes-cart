@@ -21,6 +21,9 @@
 
     <mx:VBox width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
         <mx:Form>
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='product')">
+                <mx:Label id="productCodeName"/>
+            </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='shop')">
                 <mx:HBox>
                     <mx:ComboBox id="storesComboBox"
@@ -29,10 +32,6 @@
                                  change="onShopSelectionChanged(event)"
                                  prompt="@Resource(bundle='ProductManagementPanel',key='selectStorePropmt')"/>
                     <mx:ComboBox id="storeCurrencyComboBox" change="onShopCurrencyChange(event)"/>
-                    <mx:Button id="refreshShopList"
-                               label="@Resource(bundle='ShopManagerApplication',key='refresh')"
-                               click="onRefreshShopListButtonClick(event)"/>
-
                 </mx:HBox>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='product')">
@@ -41,7 +40,6 @@
                                   toolTip="@Resource(bundle='ShopManagerApplication',key='optionalInput')"
                                   change="onProductCodeChange(event)"/>
                     <mx:CheckBox id="productCodeExact"
-                                 toolTip="@Resource(bundle='ShopManagerApplication',key='exactMatch')"
                                  change="onProductCodeExactChange(event)"/>
                 </mx:HBox>
             </mx:FormItem>
@@ -51,7 +49,6 @@
                                   toolTip="@Resource(bundle='ShopManagerApplication',key='optionalInput')"
                                   change="onTagChange(event)"/>
                     <mx:CheckBox id="tagExact"
-                                 toolTip="@Resource(bundle='ShopManagerApplication',key='exactMatch')"
                                  change="onTagExactChange(event)"/>
                 </mx:HBox>
             </mx:FormItem>
@@ -312,10 +309,10 @@
 
             _filter.shop = storesComboBox.selectedItem as ShopDTOImpl;
 
-            if (_filter.shop != null) {
-                prices.refresh();
+            if (storesComboBox.selectedItem != null) {
                 prices.removeAll(); // remove previous results
-                remotePriceListService.getShopCurrencies(_filter.shop);
+                var shopDTOImpl:ShopDTOImpl = event.currentTarget.selectedItem;
+                remotePriceListService.getShopCurrencies(shopDTOImpl);
             }
         }
 
@@ -445,7 +442,7 @@
                 // preselect first one
                 storesComboBox.selectedIndex = 0;
                 storesComboBox.selectedItem = storesComboBox.dataProvider.getItemAt(0);
-                onShopSelectionChanged(null);
+                storesComboBox.dispatchEvent(new ListEvent(Event.CHANGE));
             }
         }
 
@@ -496,10 +493,6 @@
 
         private function onSearchButtonClick(event:MouseEvent):void {
             refreshSkuPrices();
-        }
-
-        private function onRefreshShopListButtonClick(event:MouseEvent):void {
-            remotePriceListService.getShops();
         }
 
         private function onProductCodeChange(event:Event):void {

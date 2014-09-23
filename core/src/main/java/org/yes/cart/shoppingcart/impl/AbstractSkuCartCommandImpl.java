@@ -26,7 +26,6 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -55,16 +54,14 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
     /**
      * Construct abstract sku command.
      *
-     * @param registry shopping cart command registry
      * @param priceService price service
      * @param productService product service
      * @param shopService shop service
      */
-    public AbstractSkuCartCommandImpl(final ShoppingCartCommandRegistry registry,
-                                      final PriceService priceService,
+    public AbstractSkuCartCommandImpl(final PriceService priceService,
                                       final ProductService productService,
                                       final ShopService shopService) {
-        super(registry);
+        super();
         this.priceService = priceService;
         this.productService = productService;
         this.shopService = shopService;
@@ -107,7 +104,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
      */
     protected void recalculatePrice(final ShoppingCart shoppingCart, final ProductSku productSku) {
 
-        if (shoppingCart.getShoppingContext().getShopId() == 0L) {
+        if (shoppingCart.getShoppingContext().getShopId() == 0) {
 
             ShopCodeContext.getLog(this).error("Can not recalculate price because the shop id is 0");
 

@@ -16,18 +16,15 @@
 
 package org.yes.cart.remote.service.impl;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.CustomerDTO;
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteCustomerService;
 import org.yes.cart.service.dto.DtoCustomerService;
 import org.yes.cart.service.dto.GenericDTOService;
-import org.yes.cart.service.federation.FederationFacade;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -39,39 +36,15 @@ public class RemoteCustomerServiceImpl
         implements RemoteCustomerService {
 
     private final DtoCustomerService dtoCustomerService;
-    private final FederationFacade federationFacade;
 
     /**
      * Construct service to manage the users.
      *
      * @param customerDTOGenericService dto service to use
-     * @param federationFacade federation service
      */
-    public RemoteCustomerServiceImpl(final GenericDTOService<CustomerDTO> customerDTOGenericService,
-                                     final FederationFacade federationFacade) {
+    public RemoteCustomerServiceImpl(final GenericDTOService<CustomerDTO> customerDTOGenericService) {
         super(customerDTOGenericService);
-        this.federationFacade = federationFacade;
         dtoCustomerService = (DtoCustomerService) customerDTOGenericService;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<CustomerDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CustomerDTO> all = new ArrayList<CustomerDTO>(super.getAll());
-        federationFacade.applyFederationFilter(all, CustomerDTO.class);
-        return all;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public CustomerDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(id, CustomerDTO.class)) {
-            return super.getById(id);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
     }
 
     /**
@@ -83,31 +56,21 @@ public class RemoteCustomerServiceImpl
                                           final String middlename,
                                           final String tag)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CustomerDTO> customers = new ArrayList<CustomerDTO>(dtoCustomerService.findCustomer(email, firstname, lastname, middlename, tag));
-        federationFacade.applyFederationFilter(customers, CustomerDTO.class);
-        return customers;
+        return dtoCustomerService.findCustomer(email, firstname, lastname, middlename, tag);
     }
 
     /**
      * {@inheritDoc}
      */
     public void remoteResetPassword(final CustomerDTO customer, final long shopId) {
-        if (federationFacade.isManageable(customer.getCustomerId(), CustomerDTO.class)) {
-            dtoCustomerService.remoteResetPassword(customer, shopId);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        dtoCustomerService.remoteResetPassword(customer, shopId);
     }
 
     /**
      * {@inheritDoc}
      */
     public void updateCustomerTags(final CustomerDTO customerDTO, final String tags) {
-        if (federationFacade.isManageable(customerDTO.getCustomerId(), CustomerDTO.class)) {
-            dtoCustomerService.updateCustomerTags(customerDTO, tags);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        dtoCustomerService.updateCustomerTags(customerDTO, tags);
     }
 
     /**
@@ -136,10 +99,7 @@ public class RemoteCustomerServiceImpl
      */
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(entityPk, CustomerDTO.class)) {
-            return dtoCustomerService.getEntityAttributes(entityPk);
-        }
-        return Collections.emptyList();
+        return dtoCustomerService.getEntityAttributes(entityPk);
     }
 
     /**
@@ -148,74 +108,4 @@ public class RemoteCustomerServiceImpl
     public AttrValueDTO createAndBindAttrVal(long entityPk, String attrName, String attrValue) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<ShopDTO> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(customerId, CustomerDTO.class)) {
-            final List<ShopDTO> assigned = dtoCustomerService.getAssignedShop(customerId);
-
-            if (!federationFacade.isCurrentUserSystemAdmin()) { // restrict other managers
-                final Set<Long> currentAssignedIds = federationFacade.getAccessibleShopIdsByCurrentManager();
-                final Iterator<ShopDTO> availableIt = assigned.iterator();
-                while (availableIt.hasNext()) {
-                    final ShopDTO shop = availableIt.next();
-                    if (!currentAssignedIds.contains(shop.getShopId())) {
-                        availableIt.remove();
-                    }
-                }
-            }
-            return assigned;
-        }
-        return Collections.emptyList();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<ShopDTO> getAvailableShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(customerId, CustomerDTO.class)) {
-
-            final List<ShopDTO> available = dtoCustomerService.getAvailableShop(customerId);
-
-            if (!federationFacade.isCurrentUserSystemAdmin()) { // restrict other managers
-                final Set<Long> currentAssignedIds = federationFacade.getAccessibleShopIdsByCurrentManager();
-                final Iterator<ShopDTO> availableIt = available.iterator();
-                while (availableIt.hasNext()) {
-                    final ShopDTO shop = availableIt.next();
-                    if (!currentAssignedIds.contains(shop.getShopId())) {
-                        availableIt.remove();
-                    }
-                }
-            }
-            return available;
-        }
-        return Collections.emptyList();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void grantShop(final long customerId, final String shopCode) {
-        if (federationFacade.isManageable(customerId, CustomerDTO.class)
-                && federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
-            dtoCustomerService.grantShop(customerId, shopCode);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void revokeShop(final long customerId, final String shopCode) {
-        if (federationFacade.isManageable(customerId, CustomerDTO.class)
-                && federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
-            dtoCustomerService.revokeShop(customerId, shopCode);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
-    }
-
 }

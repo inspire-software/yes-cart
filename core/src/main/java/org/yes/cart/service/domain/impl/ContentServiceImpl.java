@@ -393,7 +393,10 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
 
 
     /**
-     * {@inheritDoc} Just to cache
+     * Get category by id.
+     *
+     * @param pk given category id
+     * @return category
      */
     @Cacheable(value = "contentService-byId")
     public Category getById(final long pk) {
@@ -401,7 +404,9 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     }
 
     /**
-     * {@inheritDoc}
+     * Transform given list of categories into list of category ids.
+     * @param categories given list of categories.
+     * @return set of category id.
      */
     public Set<Long> transform(final Collection<Category> categories) {
         final Set<Long> result = new LinkedHashSet<Long>(categories.size());
@@ -481,9 +486,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             "contentService-childContent",
             "contentService-childContentRecursive",
             "contentService-byId",
-            "contentService-contentHasSubcontent",
-            "shopService-shopContentIds",
-            "shopService-shopAllCategoriesIds"
+            "contentService-contentHasSubcontent"
 
     },allEntries = true)
     public Category create(Category instance) {
@@ -504,9 +507,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             "contentService-childContent",
             "contentService-childContentRecursive",
             "contentService-byId",
-            "contentService-contentHasSubcontent",
-            "shopService-shopContentIds",
-            "shopService-shopAllCategoriesIds"
+            "contentService-contentHasSubcontent"
     }, allEntries = true)
     public Category update(Category instance) {
         return super.update(instance);
@@ -526,9 +527,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             "contentService-childContent",
             "contentService-childContentRecursive",
             "contentService-byId",
-            "contentService-contentHasSubcontent",
-            "shopService-shopContentIds",
-            "shopService-shopAllCategoriesIds"
+            "contentService-contentHasSubcontent"
     }, allEntries = true)
     public void delete(Category instance) {
         super.delete(instance);

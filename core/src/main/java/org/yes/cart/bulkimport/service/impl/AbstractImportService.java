@@ -16,7 +16,7 @@
 
 package org.yes.cart.bulkimport.service.impl;
 
-import org.yes.cart.bulkimport.model.ImportDescriptor;
+import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -31,13 +31,13 @@ import java.util.regex.Pattern;
  */
 public class AbstractImportService {
 
-    protected File[] getFilesToImport(final ImportDescriptor importDescriptor, final String fileName) {
+    protected File[] getFilesToImport(final CsvImportDescriptor importDescriptor, final String fileName) {
         return getFilesToImport(importDescriptor.getImportDirectory(),
                 importDescriptor.getImportFileDescriptor().getFileNameMask(),
                 fileName);
     }
 
-    private File[] getFilesToImport(final String importFolder, final String fileMaskRe, final String fileName) {
+    protected File[] getFilesToImport(final String importFolder, final String fileMaskRe, final String fileName) {
         final FilenameFilter filenameFilter =
                 new AbstractImportService.RegexPatternFilenameFilter(fileMaskRe);
         final File importDirectory = new File(importFolder);
@@ -51,7 +51,7 @@ public class AbstractImportService {
      * @param fileName optional file name
      * @return the filtered file array
      */
-    private File[] filterFiles(final File[] toFilter, final String fileName) {
+    protected File[] filterFiles(final File[] toFilter, final String fileName) {
         if (fileName != null && toFilter != null) {
             final File fileAsFilter = new File(fileName);
             for (File file : toFilter) {
@@ -88,7 +88,7 @@ public class AbstractImportService {
         }
 
         /**
-         * {@inheritDoc
+         * {@inheritDoc}
          */
         public boolean accept(final File dir, final String name) {
             return (name != null) && this.pattern.matcher(name).matches();

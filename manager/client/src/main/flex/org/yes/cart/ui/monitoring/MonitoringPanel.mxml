@@ -69,9 +69,7 @@
             var _caches:Object = event.result;
             var _all:ArrayCollection = new ArrayCollection();
             for (var prop:String in _caches) {
-                if (_caches[prop] is ArrayCollection) {
-                    _all.addAll(_caches[prop] as ArrayCollection);
-                }
+                _all.addAll(_caches[prop] as ArrayCollection);
             }
             cacheInfoDataGrid.dataProvider = _all;
         }

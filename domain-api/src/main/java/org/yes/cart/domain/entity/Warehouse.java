@@ -89,7 +89,7 @@ public interface Warehouse extends Auditable, Codable {
     /**
      * Get country.
      *
-     * @return country.
+     * @return coubtry.
      */
     String getCountryCode();
 

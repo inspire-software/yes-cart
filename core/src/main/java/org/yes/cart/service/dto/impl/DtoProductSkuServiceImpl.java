@@ -23,7 +23,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.adapter.impl.EntityFactoryToBeanFactoryAdaptor;
@@ -32,7 +31,10 @@ import org.yes.cart.domain.dto.impl.ProductSkuDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.service.domain.GenericService;
+import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoProductService;
 import org.yes.cart.service.dto.DtoProductSkuService;
@@ -58,7 +60,18 @@ public class DtoProductSkuServiceImpl
     private final GenericService<Attribute> attributeService;
     private final PriceService priceService;
     private final ImageService imageService;
-    private final SystemService systemService;
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ProductSkuDTO> getAllProductSkus(final long productId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final Collection<ProductSku> skus = ((ProductSkuService) getService()).getAllProductSkus(productId);
+        final List<ProductSkuDTO> result = new ArrayList<ProductSkuDTO>(skus.size());
+        fillDTOs(skus, result);
+        return result;
+    }
 
     /**
      * Construct product sku dto service.
@@ -68,8 +81,7 @@ public class DtoProductSkuServiceImpl
      * @param dtoAttributeService          attr service to determinate allowed duplicates for attribute values.
      * @param attrValueEntityProductSkuDao sku attributes dao
      * @param adaptersRepository           value converter
-     * @param imageService                 {@link org.yes.cart.service.domain.ImageService} to manipulate  related images.
-     * @param systemService                system service
+     * @param imageService                 {@link ImageService} to manipulate  related images.
      */
     public DtoProductSkuServiceImpl(
             final DtoFactory dtoFactory,
@@ -78,15 +90,13 @@ public class DtoProductSkuServiceImpl
             final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao,
             final AdaptersRepository adaptersRepository,
             final PriceService priceService,
-            final ImageService imageService,
-            final SystemService systemService) {
+            final ImageService imageService) {
         super(dtoFactory, productSkuGenericService, adaptersRepository);
 
         this.imageService = imageService;
 
         this.dtoAttributeService = dtoAttributeService;
         this.attrValueEntityProductSkuDao = attrValueEntityProductSkuDao;
-        this.systemService = systemService;
         this.attributeService = dtoAttributeService.getService();
         this.priceService = priceService;
         this.attrValueAssembler = DTOAssembler.newAssembler(
@@ -104,18 +114,6 @@ public class DtoProductSkuServiceImpl
             dtoProductService = lookupDtoProductService();
         }
         return dtoProductService;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<ProductSkuDTO> getAllProductSkus(final long productId)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Collection<ProductSku> skus = ((ProductSkuService) getService()).getAllProductSkus(productId);
-        final List<ProductSkuDTO> result = new ArrayList<ProductSkuDTO>(skus.size());
-        fillDTOs(skus, result);
-        return result;
     }
 
     /**
@@ -397,8 +395,7 @@ public class DtoProductSkuServiceImpl
     public long deleteAttributeValue(final long attributeValuePk) {
         final AttrValueProductSku attrValue = attrValueEntityProductSkuDao.findById(attributeValuePk);
         if (Etype.IMAGE_BUSINESS_TYPE.equals(attrValue.getAttribute().getEtype().getBusinesstype())) {
-            imageService.deleteImage(attrValue.getVal(),
-                    Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, systemService.getImageRepositoryDirectory());
+            imageService.deleteImage(attrValue.getVal());
         }
         attrValueEntityProductSkuDao.delete(attrValue);
         return attrValue.getProductSku().getSkuId();

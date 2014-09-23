@@ -23,6 +23,8 @@
 
     <entity-type>org.yes.cart.domain.entity.ProductSku</entity-type>
 
+    <import-directory></import-directory>
+
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
         <file-name-mask>productskunames(.*).csv(.*)</file-name-mask>
@@ -125,6 +127,7 @@
             <name/>
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
+                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
                     <file-name-mask/>
@@ -153,6 +156,7 @@
             <name/>
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
+                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
                     <file-name-mask/>
@@ -181,6 +185,7 @@
             <name/>
             <import-descriptor>
                 <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
+                <import-directory/>
                 <import-file-descriptor>
                     <file-encoding>UTF-8</file-encoding>
                     <file-name-mask/>

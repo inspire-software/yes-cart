@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component.navigation;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -43,14 +42,30 @@ public class URLPagingNavigator   extends PagingNavigator {
 
 
     /**
-     * {@inheritDoc}
+     * Constructor.
+     *
+     * @param s
+     *            See Component
+     * @param iPageable
+     *            The pageable component the page links are referring to.
+     * @param pageParameters
+     *           page parameters
      */
     public URLPagingNavigator(final String s, final IPageable iPageable, final PageParameters pageParameters) {
         this(s, iPageable, null, pageParameters);
     }
 
     /**
-     * {@inheritDoc}
+     * Constructor.
+     *
+     * @param s
+     *            See Component
+     * @param iPageable
+     *            The pageable component the page links are referring to.
+     * @param iPagingLabelProvider
+     *            The label provider for the link text.
+     * @param pageParameters
+     *           page parameters
      */
     public URLPagingNavigator(final String s,
                               final IPageable iPageable,
@@ -103,7 +118,7 @@ public class URLPagingNavigator   extends PagingNavigator {
 
         params.set(WebParametersKeys.PAGE, pNum);
 
-        return (AbstractLink) links.newLink(id, params).add(new AttributeModifier("class", "nav-page-control"));
+        return (AbstractLink) links.newLink(id, params).add(new AttributeModifier("class", "nav-page-control " + id));
 
     }
 

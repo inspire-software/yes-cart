@@ -26,16 +26,16 @@ public interface PaymentGatewayDescriptor extends Descriptor {
 
 
     /**
-     * Get payment gateway priority.
+     * Get paymnet gateway priority.
      *
-     * @return priority.
+     * @return piority.
      */
     int getPriority();
 
 
     /**
      * Get the payment gateway url. Url can be a web service url,
-     * spring name bean, jndi name. For more information see service locator from core.
+     * spring name bean, jndi name. For more information see servise locator from core.
      *
      * @return url of payment gateway.
      */
@@ -57,16 +57,16 @@ public interface PaymentGatewayDescriptor extends Descriptor {
     void setLogin(String login);
 
     /**
-     * Get service password.
+     * Get service passwd.
      *
-     * @return password.
+     * @return passwd.
      */
     String getPassword();
 
     /**
-     * Set service password.
+     * Set service passwd.
      *
-     * @param password password.
+     * @param password passwrd.
      */
     void setPassword(String password);
 

@@ -16,7 +16,6 @@
 
 package org.yes.cart.remote.service.impl;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
@@ -27,10 +26,7 @@ import org.yes.cart.remote.service.RemoteCustomerOrderService;
 import org.yes.cart.report.ReportService;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.dto.GenericDTOService;
-import org.yes.cart.service.federation.FederationFacade;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -44,40 +40,17 @@ public class RemoteCustomerOrderServiceImpl
         implements RemoteCustomerOrderService {
 
     private final ReportService reportService;
-    private final FederationFacade federationFacade;
 
     /**
      * Construct remote service
      *
-     * @param customerOrderDTOGenericDTOService dto service to use.
-     * @param federationFacade federation facade
+     * @param customerOrderDTOGenericDTOService
+     *         dto serivese to use.
      */
     public RemoteCustomerOrderServiceImpl(final GenericDTOService<CustomerOrderDTO> customerOrderDTOGenericDTOService,
-                                          final ReportService reportService,
-                                          final FederationFacade federationFacade) {
+                                          final ReportService reportService) {
         super(customerOrderDTOGenericDTOService);
         this.reportService = reportService;
-        this.federationFacade = federationFacade;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<CustomerOrderDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CustomerOrderDTO> all = new ArrayList<CustomerOrderDTO>(super.getAll());
-        federationFacade.applyFederationFilter(all, CustomerOrderDTO.class);
-        return all;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public CustomerOrderDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(id, CustomerOrderDTO.class)) {
-            return super.getById(id);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
     }
 
     /**
@@ -93,7 +66,7 @@ public class RemoteCustomerOrderServiceImpl
             final Date toDate,
             final String orderNum
     ) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CustomerOrderDTO> orders = new ArrayList<CustomerOrderDTO>(((DtoCustomerOrderService) getGenericDTOService()).findCustomerOrdersByCriteria(
+        return ((DtoCustomerOrderService) getGenericDTOService()).findCustomerOrdersByCriteria(
                 customerId,
                 firstName,
                 lastName,
@@ -102,9 +75,7 @@ public class RemoteCustomerOrderServiceImpl
                 fromDate,
                 toDate,
                 orderNum
-        ));
-        federationFacade.applyFederationFilter(orders, CustomerOrderDTO.class);
-        return orders;
+        );
     }
 
     /**
@@ -112,10 +83,7 @@ public class RemoteCustomerOrderServiceImpl
      */
     public List<CustomerOrderDeliveryDetailDTO> findDeliveryDetailsByOrderNumber(final String orderNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
-            return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryDetailsByOrderNumber(orderNum);
-        }
-        return Collections.emptyList();
+        return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryDetailsByOrderNumber(orderNum);
     }
 
 
@@ -123,62 +91,40 @@ public class RemoteCustomerOrderServiceImpl
      * {@inheritDoc}
      */
     public Result updateOrderSetConfirmed(String orderNum) {
-        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
-            return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetConfirmed(orderNum);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetConfirmed(orderNum);
     }
 
     /**
      * {@inheritDoc}
      */
     public Result updateOrderSetCancelled(final String orderNum) {
-        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
-            return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetCancelled(orderNum);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetCancelled(orderNum);
     }
 
     /** {@inheritDoc} */
-    public Result updateExternalDeliveryRefNo(String orderNum, String deliveryNum, String newRefNo) {
-        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
-            return ((DtoCustomerOrderService) getGenericDTOService()).updateExternalDeliveryRefNo(orderNum, deliveryNum, newRefNo) ;
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+    public Result updateExternalDelieryRefNo(String orderNum, String deliveryNum, String newRefNo) {
+        return ((DtoCustomerOrderService) getGenericDTOService()).updateExternalDelieryRefNo(orderNum,  deliveryNum,  newRefNo) ;
     }
 
     /** {@inheritDoc} */
     public Result updateDeliveryStatus(final String orderNum, final String deliveryNum,
                                        final String currentStatus, final String destinationStatus) {
 
-        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
-            return ((DtoCustomerOrderService) getGenericDTOService())
+        return ((DtoCustomerOrderService) getGenericDTOService())
                 .updateDeliveryStatus(orderNum, deliveryNum, currentStatus, destinationStatus);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
 
     }
 
     /** {@inheritDoc} */
     public List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
-            return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryByOrderNumber(orderNum);
-        }
-        return Collections.emptyList();
+        return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryByOrderNumber(orderNum);
     }
 
     /** {@inheritDoc} */
     public List<CustomerOrderDeliveryDTO> findDeliveryByOrderNumber(final String orderNum, final String deliveryNum)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
-            return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryByOrderNumber(orderNum, deliveryNum);
-        }
-        return Collections.emptyList();
+        return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryByOrderNumber(orderNum, deliveryNum);
     }
 
 
@@ -186,14 +132,10 @@ public class RemoteCustomerOrderServiceImpl
     /** {@inheritDoc} */
     public byte[] produceDeliveryReport(final String reportLang, final String orderNum, final String deliveryNum)
             throws Exception {
-        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
 
-            List rez =  findDeliveryByOrderNumber(orderNum, deliveryNum);
+        List rez =  findDeliveryByOrderNumber(orderNum, deliveryNum);
 
-            return reportService.produceReport(reportLang, "reportDelivery", rez);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        return reportService.produceReport(reportLang, "reportDelivery", rez);
 
     }
 

@@ -17,16 +17,16 @@
 package org.yes.cart.web.page.component.product;
 
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.StringResourceModel;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.util.WicketUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,7 +54,6 @@ public class NewArrivalProducts extends AbstractProductSearchResultList {
     @Override
     protected void onBeforeRender() {
 
-        add(new Label("productsTitle", new StringResourceModel("newArrivals", this, null)).setVisible(!getProductListToShow().isEmpty()));
         super.onBeforeRender();
     }
 
@@ -66,7 +65,17 @@ public class NewArrivalProducts extends AbstractProductSearchResultList {
 
             final ProductsInCategoryQueryBuilderImpl inCat = new ProductsInCategoryQueryBuilderImpl();
 
-            final BooleanQuery inCategory = inCat.createQuery(categoryId);
+            final BooleanQuery inCategory;
+            if (categoryId > 0L) {
+                inCategory = inCat.createQuery(categoryId);
+            } else {
+                final List<Category> topCategories = categoryService.getTopLevelCategories(ShopCodeContext.getShopId());
+                final List<Long> topCategoryIds = new ArrayList<Long>();
+                for (final Category topCategory : topCategories) {
+                    topCategoryIds.add(topCategory.getCategoryId());
+                }
+                inCategory = inCat.createQuery(topCategoryIds);
+            }
 
             products = productService.getProductSearchResultDTOByQuery(inCategory, 0, getProductsLimit(categoryId),
                     ProductSearchQueryBuilder.PRODUCT_CREATED_FIELD, true);

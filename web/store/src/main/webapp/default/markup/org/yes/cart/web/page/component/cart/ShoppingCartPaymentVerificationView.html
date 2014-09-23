@@ -18,164 +18,127 @@
 <body>
 <wicket:panel>
 
-    <div class="grid-100 mobile-grid-100 grid-parent" wicket:id="deliveryList">
+    <div class="col-xs-12 payment-title">
+        <h2><wicket:message key="orderVerification">[Check order and select payment method]</wicket:message></h2>
+    </div>
 
-
-
-        <div class="grid-100 mobile-grid-100  grid-parent">
-            <p>
-            <span class="big-title">
-                <wicket:message key="orderVerification">[Check order and select payment method]</wicket:message>
-            </span>
-            </p>
-        </div>
-        <hr>
-        <div class="grid-100 mobile-grid-100 grid-parent" style="background-color: #bbbbbb;">
-            <div class="grid-40 mobile-grid-40">
-                <p class="middle-title">
-                    <span><wicket:message key="productName">[Product name]</wicket:message></span>
-                </p>
-            </div>
-            <div class="grid-20 mobile-grid-20">
-                <p class="middle-title" align="right">
-                    <wicket:message key="price">[price]</wicket:message>
-                </p>
-            </div>
-            <div class="grid-20 mobile-grid-20">
-                <p class="middle-title" align="right">
-                    <wicket:message key="qty">[qty]</wicket:message>
-                </p>
-            </div>
-            <div class="grid-20 mobile-grid-20">
-                <p class="middle-title" align="right">
-                    <wicket:message key="amount">[ amount ]</wicket:message>
-                </p>
-            </div>
-        </div>
-
-
-
-        <div class="grid-100 mobile-grid-100">
-            <p>
+    <div wicket:id="deliveryList">
+        <div class="col-xs-12 col-md-8 mo-margin order-items-holder">
+            <label class="col-xs-12 no-padding delivery-no-title">
                 <wicket:message key="deliveryNum">[ Delivery ]</wicket:message>
                 <span wicket:id="deliveryCode">[delivery Code]</span>
-            </p>
-        </div>
-
-        <div class="grid-100 mobile-grid-100 grid-parent" wicket:id="itemList">
-            <div class="grid-40 mobile-grid-40 grid-parent">
-                <div class="grid-35 mobile-grid-35 grid-parent">
-                    <img border="0" wicket:id="defaultImage"/>
+            </label>
+            <div class="row no-margin cart-items-header hidden-xs">
+                <div class="col-xs-12 col-sm-6">
+                    <span><wicket:message key="productName">[Product name]</wicket:message></span>
                 </div>
-                <div class="grid-65 mobile-grid-65 grid-parent">
-                    <div class="grid-100 mobile-grid-100 ">
-                        <span wicket:id="itemName">[sku name]</span>
+                <div class="col-xs-12 col-sm-2">
+                    <wicket:message key="price">[price]</wicket:message>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <wicket:message key="qty">[qty]</wicket:message>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <wicket:message key="amount">[ amount ]</wicket:message>
+                </div>
+            </div>
+
+            <div wicket:id="itemList">
+                <div class="row cart-item">
+                    <div class="col-xs-6 col-sm-2">
+                        <div class="thumbnail">
+                            <img wicket:id="defaultImage"/>
+                        </div>
                     </div>
-                    <div class="grid-100 mobile-grid-100">
+                    <div class="col-xs-6 col-sm-4">
+                        <div class="cart-item-name">
+                            <span wicket:id="itemName">[sku name]</span>
+                        </div>
                         <span wicket:id="itemCode">[sku code]</span>
                     </div>
-
+                    <div class="col-xs-12 col-sm-2">
+                        <wicket:container wicket:id="itemPrice">
+                            [sku price]
+                        </wicket:container>
+                    </div>
+                    <div class="col-xs-12 col-sm-2">
+                        <span wicket:id="itemQty">[qty]</span>
+                    </div>
+                    <div class="col-xs-12 col-sm-2">
+                        <wicket:container wicket:id="itemTotal">[total line]</wicket:container>
+                    </div>
                 </div>
             </div>
 
-            <div class="grid-20 mobile-grid-20 ">
-                <p align="right">
-                    <wicket:container wicket:id="itemPrice">
-                        [sku price]
-                    </wicket:container>
-                </p>
-            </div>
-            <div class="grid-20 mobile-grid-20 ">
-                <p align="right">
-                    <span wicket:id="itemQty">[qty]</span>
-                </p>
-            </div>
-            <div class="grid-20 mobile-grid-20 ">
-                <p align="right">
-                    <wicket:container wicket:id="itemTotal">[total line]</wicket:container>
-                </p>
-            </div>
         </div>
+        <div class="col-xs-12 col-md-3 mo-margin order-items-sidebar">
 
-        <hr>
-
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-40 mobile-grid-40">
-                &nbsp;
-            </div>
-            <div class="grid-20 mobile-grid-20">
-                <p align="right">
-                    <wicket:message key="deliverySubTotal">[Delivery sub total]</wicket:message>
+            <div class="subtotal-block">
+                <div class="pull-left">
+                    <label><wicket:message key="deliverySubTotal">[Delivery sub total]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
                     <wicket:container wicket:id="deliverySubTotal">[sub total]</wicket:container>
-                </p>
-            </div>
-            <div class="grid-20 mobile-grid-20">
-                <p align="right">
-                    <wicket:message key="deliverySubTotalTax">[Delivery sub total tax ]</wicket:message>
+                </div>
+                <div class="pull-left">
+                    <label><wicket:message key="deliverySubTotalTax">[Delivery sub total tax ]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
                     <wicket:container wicket:id="deliverySubTotalTax">[sub total tax ]</wicket:container>
-                </p>
-                &nbsp;
-            </div>
-            <div class="grid-20 mobile-grid-20">
-                <p align="right">
-                    <wicket:message key="deliverySubTotalAmount">[Delivery sub total amount]</wicket:message>
+                </div>
+                <div class="pull-left">
+                    <label><wicket:message key="deliverySubTotalAmount">[Delivery sub total amount]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
                     <wicket:container wicket:id="deliverySubTotalAmount">[sub total amount ]</wicket:container>
-                </p>
+                </div>
             </div>
-        </div>
 
-        <hr>
-
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-40 mobile-grid-40">
-                &nbsp;
-            </div>
-            <div class="grid-20 mobile-grid-20">
-                <p align="right">
-                    <wicket:message key="deliveryCost">[Delivery sub total amount]</wicket:message>
+            <div class="delivery-block">
+                <div class="pull-left">
+                    <label><wicket:message key="deliveryCost">[Delivery sub total amount]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
                     <wicket:container wicket:id="deliveryCost">[delivery cost]</wicket:container>
-                </p>
-            </div>
-            <div class="grid-20 mobile-grid-20">
-                <p align="right">
-                    <wicket:message key="deliveryCostTax">[Delivery sub total amount]</wicket:message>
+                </div>
+                <div class="pull-left">
+                    <label><wicket:message key="deliveryCostTax">[Delivery sub total amount]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
                     <wicket:container wicket:id="deliveryCostTax">[delivery tax]</wicket:container>
-                </p>
-                &nbsp;
-            </div>
-            <div class="grid-20 mobile-grid-20">
-                <p align="right">
-                    <wicket:message key="deliveryCostAmount">[Delivery sub total amount]</wicket:message>
+                </div>
+                <div class="pull-left">
+                    <label><wicket:message key="deliveryCostAmount">[Delivery sub total amount]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
                     <wicket:container wicket:id="deliveryCostAmount ">[delivery amount]</wicket:container>
-                </p>
+                </div>
             </div>
         </div>
     </div>
-    <hr>
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-40 mobile-grid-40">
-            &nbsp;
-        </div>
-        <div class="grid-20 mobile-grid-20">
-            <p align="right">
-                <wicket:message key="grandTotal">[Delivery sub total amount]</wicket:message>
+
+    <div class="col-xs-12 col-md-8">
+        <div class="order-grand-total">
+            <div class="pull-left">
+                <label><wicket:message key="grandTotal">[Delivery sub total amount]</wicket:message></label>
+            </div>
+            <div class="text-right">
                 <wicket:container wicket:id="grandTotal">[grand  total]</wicket:container>
-            </p>
-        </div>
-        <div class="grid-20 mobile-grid-20">
-            <p align="right">
-                <wicket:message key="grandTotalTax">[Delivery sub total amount]</wicket:message>
+            </div>
+            <div class="pull-left">
+                <label><wicket:message key="grandTotalTax">[Delivery sub total amount]</wicket:message></label>
+            </div>
+            <div class="text-right">
                 <wicket:container wicket:id="grandTotalTax">[grand total tax ]</wicket:container>
-            </p>
-            &nbsp;
-        </div>
-        <div class="grid-20 mobile-grid-20">
-            <p align="right">
-                <wicket:message key="grandTotalAmount">[Delivery sub total amount]</wicket:message>
+            </div>
+            <div class="pull-left">
+                <label><wicket:message key="grandTotalAmount">[Delivery sub total amount]</wicket:message></label>
+            </div>
+            <div class="text-right">
                 <wicket:container wicket:id="grandTotalAmount">
                     [grand total amount]
                 </wicket:container>
-            </p>
+            </div>
         </div>
     </div>
 

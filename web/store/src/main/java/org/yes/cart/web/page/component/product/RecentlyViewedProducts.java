@@ -17,8 +17,6 @@
 package org.yes.cart.web.page.component.product;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.StringResourceModel;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.AttrValue;
@@ -55,7 +53,6 @@ public class RecentlyViewedProducts extends AbstractProductSearchResultList {
     @Override
     protected void onBeforeRender() {
 
-        add(new Label("productsTitle", new StringResourceModel("recentlyViewed", this, null)).setVisible(!getProductListToShow().isEmpty()));
         super.onBeforeRender();
     }
 

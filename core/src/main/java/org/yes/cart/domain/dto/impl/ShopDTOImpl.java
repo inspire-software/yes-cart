@@ -21,7 +21,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueShopDTO;
 import org.yes.cart.domain.dto.ShopDTO;
-import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
+import org.yes.cart.domain.dto.matcher.impl.AttrValueShopMatcher;
 import org.yes.cart.domain.entity.AttrValueShop;
 
 import java.util.ArrayList;
@@ -49,6 +49,9 @@ public class ShopDTOImpl implements ShopDTO {
 
     @DtoField(value = "fspointer")
     private String fspointer;
+
+    @DtoField(value = "imageVaultFolder")
+    private String imageVaultFolder;
 
     @DtoField(value = "shopId", readOnly = true)
     private long shopId;
@@ -81,7 +84,7 @@ public class ShopDTOImpl implements ShopDTO {
             entityGenericType = AttrValueShop.class,
             entityCollectionClass = ArrayList.class,
             dtoCollectionClass = ArrayList.class,
-            dtoToEntityMatcher = IdentifiableMatcher.class,
+            dtoToEntityMatcher = AttrValueShopMatcher.class,
             readOnly = true
     )
     private Collection<AttrValueShopDTO> attributes;
@@ -155,6 +158,20 @@ public class ShopDTOImpl implements ShopDTO {
      */
     public void setShopId(final long shopId) {
         this.shopId = shopId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getImageVaultFolder() {
+        return imageVaultFolder;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setImageVaultFolder(final String imageVaultFolder) {
+        this.imageVaultFolder = imageVaultFolder;
     }
 
 
@@ -273,6 +290,7 @@ public class ShopDTOImpl implements ShopDTO {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", fspointer='" + fspointer + '\'' +
+                ", imageVaultFolder='" + imageVaultFolder + '\'' +
                 ", shopId=" + shopId +
                 '}';
     }

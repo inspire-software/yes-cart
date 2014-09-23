@@ -89,8 +89,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "shopService-shopById",
             "shopService-shopByDomainName",
             "shopService-allShops",
-            "shopService-shopCategoriesIds",
-            "shopService-shopAllCategoriesIds"
+            "shopService-shopCategories",
+            "shopService-shopCategoriesIds"
     }, allEntries = true)
     public ShopCategory assignToShop(final long categoryId, final long shopId) {
         final ShopCategory shopCategory = shopCategoryDao.getEntityFactory().getByIface(ShopCategory.class);
@@ -108,8 +108,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "shopService-shopById",
             "shopService-shopByDomainName",
             "shopService-allShops",
-            "shopService-shopCategoriesIds",
-            "shopService-shopAllCategoriesIds"
+            "shopService-shopCategories",
+            "shopService-shopCategoriesIds"
     }, allEntries = true)
     public void unassignFromShop(final long categoryId, final long shopId) {
         ShopCategory shopCategory = shopCategoryDao.findSingleByNamedQuery(
@@ -463,7 +463,9 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     }
 
     /**
-     * {@inheritDoc}
+     * Transform given collecion of categories to set of category id.
+     * @param categories categories.
+     * @return set of category id.
      */
     public Set<Long> transform(final Collection<Category> categories) {
         final Set<Long> result = new LinkedHashSet<Long>(categories.size());
@@ -499,18 +501,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             }
         }
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Category findCategoryIdBySeoUriOrGuid(final String seoUriOrGuid) {
-
-        final Category category = getGenericDao().findSingleByNamedQuery("CATEGORY.BY.SEO.URI", seoUriOrGuid);
-        if (category == null) {
-            return getGenericDao().findSingleByNamedQuery("CATEGORY.BY.GUID", seoUriOrGuid);
-        }
-        return category;
     }
 
     /**

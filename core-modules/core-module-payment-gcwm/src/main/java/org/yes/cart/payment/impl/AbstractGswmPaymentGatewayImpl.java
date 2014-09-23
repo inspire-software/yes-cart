@@ -105,10 +105,11 @@ public abstract class AbstractGswmPaymentGatewayImpl implements PaymentGateway {
         return null;
 
     }
-    
+
 
     /**
-     * {@inheritDoc}
+     * Set parameter service.
+     * @param paymentGatewayParameterService service to use.
      */
     public void setPaymentGatewayParameterService(
             final PaymentGatewayParameterService paymentGatewayParameterService) {
@@ -133,30 +134,45 @@ public abstract class AbstractGswmPaymentGatewayImpl implements PaymentGateway {
     }
 
 
-
     /**
-     * {@inheritDoc}
+     * Get hidden fields to construct html.
+     * @param fieldName filed name
+     * @param value filed value
+     * @return html string
      */
-    protected String getHiddenField(final String fieldName, final Object value) {
+    protected String getHiddenFiled(final String fieldName, final Object value) {
         return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
     }
 
     /**
-     * {@inheritDoc}
+     * Set express checkout method.
+     * @param amount amount to checkout
+     * @param currencyCode currency code
+     * @return   result of call
+     * @throws IOException in case of error
      */
     public Map<String, String> setExpressCheckoutMethod(BigDecimal amount, String currencyCode) throws IOException {
         return null;  //nothing
     }
 
     /**
-     * {@inheritDoc}
+     * Make express checkout.
+     * @param token token
+     * @param payerId payer identificator
+     * @param amount amount
+     * @param currencyCode currency code
+     * @return   result of call
+     * @throws IOException in case of error
      */
     public Map<String, String> doDoExpressCheckoutPayment(String token, String payerId, BigDecimal amount, String currencyCode) throws IOException {
         return null;  //nothing
     }
 
     /**
-     * {@inheritDoc}
+     * Obtain express checkout details.
+     * @param token token
+     * @return   result of call
+     * @throws IOException in case of error
      */
     public Map<String, String> getExpressCheckoutDetails(String token) throws IOException {
         return null;  //nothing

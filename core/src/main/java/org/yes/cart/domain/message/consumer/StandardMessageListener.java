@@ -27,7 +27,6 @@ import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -74,21 +73,14 @@ public class StandardMessageListener implements Runnable {
      * Default object, which passed to email template.
      */
     public static final String ROOT = "root";
-
     /**
      * Current template folder.
      */
     public static final String TEMPLATE_FOLDER = "templateFolder";
-
     /**
      * Template folder.
      */
     public static final String TEMPLATE_NAME = "templateName";
-
-    /**
-     * Template folder.
-     */
-    public static final String LOCALE = "locale";
 
     /**
      * Carrier name.
@@ -170,8 +162,7 @@ public class StandardMessageListener implements Runnable {
                 mailComposer.composeMessage(
                         mail,
                         (String) map.get(SHOP_CODE),
-                        (String) map.get(LOCALE),
-                        (List<String>) map.get(TEMPLATE_FOLDER),
+                        (String) map.get(TEMPLATE_FOLDER),
                         (String) map.get(TEMPLATE_NAME),
                         fromEmail,
                         (String) map.get(CUSTOMER_EMAIL),  //email recipient - to
@@ -184,11 +175,10 @@ public class StandardMessageListener implements Runnable {
             } catch (Exception e) {
                 ShopCodeContext.getLog(this).error(
                         MessageFormat.format(
-                                "Cant compose or send email template {0} with locale {1} folder {2} to {3}",
-                                map.get(TEMPLATE_NAME),
-                                map.get(LOCALE),
-                                map.get(TEMPLATE_FOLDER),
-                                map.get(CUSTOMER_EMAIL)
+                                "Cant compose or send email template {0} folder {1} to {2}",
+                                (String) map.get(TEMPLATE_NAME),
+                                (String) map.get(TEMPLATE_FOLDER),
+                                (String) map.get(CUSTOMER_EMAIL)
                         ),
                         e);
             }

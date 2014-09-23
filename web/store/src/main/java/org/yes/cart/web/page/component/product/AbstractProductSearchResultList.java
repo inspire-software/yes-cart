@@ -205,7 +205,11 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
 
 
     /**
-     * {@inheritDoc}
+     * Get default image of product.
+     * @param product given product
+     * @param width width
+     * @param height height
+     * @return image url
      */
     public String getDefaultImage(final ProductSearchResultDTO product, final String width, final String height) {
 

@@ -28,6 +28,7 @@ import org.yes.cart.web.support.request.HttpServletRequestWrapper;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 
 
@@ -77,8 +78,10 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
         ApplicationDirector.setCurrentShop(shop);
         ApplicationDirector.setShopperIPAddress(getRemoteIpAddr(servletRequest));
         ShopCodeContext.setShopCode(shop.getCode());
-        ShopCodeContext.setShopId(shop.getShopId());
+        ShopCodeContext.setShopId(shop.getShopId()) ;
         //ApplicationDirector.setCurrentServletContext(servletContext);
+        ApplicationDirector.setCurrentMailTemplateFolder(servletContext.getRealPath(shop.getMailFolder()) + File.separator);
+
 
         return getModifiedRequest(servletRequest, shop);
 

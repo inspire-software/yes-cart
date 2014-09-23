@@ -35,6 +35,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private String name;
     private String description;
     private String fspointer;
+    private String imageVaultFolder;
     private Set<ShopUrl> shopUrl = new HashSet<ShopUrl>(0);
     private Collection<ShopExchangeRate> exchangerates = new ArrayList<ShopExchangeRate>(0);
     private Collection<ShopAdvPlace> advertisingPlaces = new ArrayList<ShopAdvPlace>(0);
@@ -82,6 +83,14 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public void setFspointer(String fspointer) {
         this.fspointer = fspointer;
+    }
+
+    public String getImageVaultFolder() {
+        return this.imageVaultFolder;
+    }
+
+    public void setImageVaultFolder(String imageVaultFolder) {
+        this.imageVaultFolder = imageVaultFolder;
     }
 
     public Set<ShopUrl> getShopUrl() {
@@ -213,7 +222,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         if (currencies != null) {
             return Arrays.asList(currencies.split(","));
         }
-        return Collections.emptyList();
+        return null;
     }
 
 
@@ -266,6 +275,17 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
             }
         }
         return markupFolder;
+    }
+
+    private String mailFolder = null;
+
+    public String getMailFolder() {
+        if (mailFolder == null) {
+            synchronized (this) {
+                mailFolder = "/" + fspointer + "/mail";
+            }
+        }
+        return mailFolder;
     }
 
     public String getDefaultShopUrl() {

@@ -17,12 +17,11 @@
 package org.yes.cart.domain.message;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 /**
  * Registration message. Used for user or customer notification in case of registration
- * or password reset
+ * or password reset.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -30,60 +29,16 @@ import java.util.Set;
  */
 public interface RegistrationMessage extends Serializable {
 
-    /**
-     * Email or the person registered.
-     *
-     * @return email
-     */
     String getEmail();
 
-    /**
-     * Email or the person registered.
-     *
-     * @param email email
-     */
     void setEmail(String email);
 
-    /**
-     * Registration shop PK.
-     *
-     * @return shop PK
-     */
     long getShopId();
 
-    /**
-     * Registration shop PK.
-     *
-     * @param shopId shop PK
-     */
     void setShopId(long shopId);
 
-    /**
-     * Locale used when registering.
-     *
-     * @return locale
-     */
-    String getLocale();
-
-    /**
-     * Locale used when registering.
-     *
-     * @param locale locale
-     */
-    void setLocale(String locale);
-
-    /**
-     * Password for new account.
-     *
-     * @return password
-     */
     String getPassword();
 
-    /**
-     * Password for new account.
-     *
-     * @param password password
-     */
     void setPassword(String password);
 
     /**
@@ -117,17 +72,15 @@ public interface RegistrationMessage extends Serializable {
     /**
      * Get path to template folder.
      * Example /some/path/shop/mailtemplates/ must hold folders with concrete templates
-     *
      * @return path to template folder.
      */
-    List<String> getMailTemplatePathChain();
+    String getPathToTemplateFolder();
 
     /**
      * Set path to template folder.
-     *
-     * @param mailTemplatePathChain  path to template folder.
+     * @param pathToTemplateFolder  path to template folder.
      */
-    public void setMailTemplatePathChain(List<String> mailTemplatePathChain);
+    public void setPathToTemplateFolder(String pathToTemplateFolder);
 
 
     /**

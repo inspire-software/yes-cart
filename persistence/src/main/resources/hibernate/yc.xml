@@ -37,11 +37,6 @@
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
         <property name="password" length="255" type="java.lang.String" column="PASSWORD" not-null="true"/>
 
-        <bag name="shops" inverse="true" lazy="true" cascade="all,delete-orphan" >
-            <key column="MANAGER_ID" on-delete="cascade"/>
-            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ManagerShopEntity"/>
-        </bag>
-
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -90,34 +85,7 @@
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36"  unique-key="MANAGER_ROLE_GUID" not-null="true"/>
     </class>
-
-    <class name="org.yes.cart.domain.entity.impl.ManagerShopEntity" table="TMANAGERSHOP">
-        <id name="managerShopId" column="MANAGERSHOP_ID" type="long">
-            <generator class="native">
-                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
-                <param name="column">value</param>
-            </generator>
-        </id>
-        <version name="version" column="VERSION" type="long"/>
-
-        <many-to-one name="manager" class="org.yes.cart.domain.entity.impl.ManagerEntity" foreign-key="FK_MS_MANAGER">
-            <column name="MANAGER_ID" not-null="true"/>
-        </many-to-one>
-
-        <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_MS_SHOP">
-            <column name="SHOP_ID" not-null="true"/>
-        </many-to-one>
-
-
-
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
-        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-        <property name="guid" column="GUID" type="string" length="36" unique-key="MANAGERSHOP_GUID" not-null="true"/>
-
-    </class>
-
+	    
 
     <!--
     Warnings:
@@ -1443,6 +1411,13 @@
                 </comment>
             </column>
         </property>
+        <property name="imageVaultFolder" length="4000" type="string">
+            <column name="IMGVAULT" length="4000" not-null="true">
+                <comment>
+                    Point to image repository
+                </comment>
+            </column>
+        </property>
         <set name="shopUrl" inverse="true" lazy="false" cascade="all">
             <key>
                 <column name="SHOP_ID" not-null="true"/>
@@ -1782,8 +1757,8 @@
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.AddressEntity"/>
         </bag>
 
-        <bag name="shops" inverse="true" lazy="true" cascade="all,delete-orphan" >
-            <key column="CUSTOMER_ID" on-delete="cascade"/>
+        <bag name="shops" inverse="true" lazy="true" cascade="all" >
+            <key column="CUSTOMER_ID" not-null="true" on-delete="cascade"/>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.CustomerShopEntity"/>
         </bag>
 
@@ -2292,7 +2267,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" not-null="true" index="PROMOTIONCOUPONUSAGE_EMAIL"/>
+        <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" not-null="true"/>
 
         <many-to-one name="coupon" class="org.yes.cart.domain.entity.impl.PromotionCouponEntity" foreign-key="FK_COUPON_USAGE">
             <column name="COUPON_ID" not-null="true"/>
@@ -2301,27 +2276,6 @@
         <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.impl.CustomerOrderEntity" foreign-key="FK_ORD_COUPON_USAGE">
             <column name="CUSTOMERORDER_ID" not-null="true"/>
         </many-to-one>
-
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
-        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-
-    </class>
-
-
-    <class name="org.yes.cart.domain.entity.impl.ShoppingCartStateEntity" table="TSHOPPINGCARTSTATE">
-        <id name="shoppingCartStateId" type="long" column="TSHOPPINGCARTSTATE_ID">
-            <generator class="native">
-                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
-                <param name="column">value</param>
-            </generator>
-        </id>
-        <version name="version" column="VERSION" type="long"/>
-
-        <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPPINGCARTSTATE_GUID" not-null="true"/>
-        <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" index="SHOPPINGCARTSTATE_EMAIL"/>
-        <property name="state" column="CART_STATE" type="byte[]" length="255" not-null="true"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -2355,33 +2309,13 @@
        ]]>
     </query>
 
-
-    <query name="SHOPPINGCARTSTATE.BY.GUID">
-        <![CDATA[
-       select scs from ShoppingCartStateEntity scs where scs.guid  = ?1
-       ]]>
-    </query>
-
-    <query name="SHOPPINGCARTSTATE.BY.EMAIL">
-        <![CDATA[
-       select scs from ShoppingCartStateEntity scs where scs.customerEmail  = ?1
-       ]]>
-    </query>
-
-    <query name="SHOPPINGCARTSTATE.BY.LASTMODIFIED">
-        <![CDATA[
-       select scs from ShoppingCartStateEntity scs where scs.updatedTimestamp < ?1 OR scs.updatedTimestamp IS NULL
-       ]]>
-    </query>
-
-
     <query name="TOPCATEGORIES.BY.SHOPID">
         <![CDATA[
        select c from CategoryEntity c, ShopCategoryEntity sc
        where c.categoryId = sc.category.categoryId and sc.shop.shopId = ?1
        and (c.availablefrom < ?2 OR c.availablefrom IS NULL)
        and (c.availableto > ?2 OR c.availableto IS NULL)
-       order by sc.rank, sc.shopCategoryId
+       order by sc.rank
        ]]>
     </query>
 
@@ -2389,7 +2323,7 @@
         <![CDATA[
        select c from CategoryEntity c, ShopCategoryEntity sc
        where c.categoryId = sc.category.categoryId and sc.shop.shopId = ?1
-       order by sc.rank, sc.shopCategoryId
+       order by sc.rank
        ]]>
     </query>
 
@@ -2838,12 +2772,6 @@
        ]]>
     </query>
 
-    <query name="CATEGORY.BY.GUID">
-        <![CDATA[
-                  select c from CategoryEntity c  where c.guid = ?1
-       ]]>
-    </query>
-
     <query name="CATEGORY.BY.SEO.URI">
         <![CDATA[
                   select c from CategoryEntity c  where c.seoInternal.uri = ?1
@@ -2922,12 +2850,6 @@
     <query name="BRAND.BY.NAME">
         <![CDATA[
                  select b from BrandEntity b  where b.name =?1
-        ]]>
-    </query>
-
-    <query name="BRAND.BY.GUID">
-        <![CDATA[
-                 select b from BrandEntity b  where b.guid =?1
         ]]>
     </query>
 
@@ -3030,20 +2952,6 @@
             from SkuWarehouseEntity sw
             where sw.warehouse.warehouseId IN (?2)
             and sw.sku.product.productId = ?1
-        ]]>
-    </query>
-
-    <query name="BRAND.NAME.AND.GUID.BY.IMAGE.NAME">
-        <![CDATA[
-            select a.brand.name, a.brand.guid from AttrValueEntityBrand a
-            where a.val = ?1
-        ]]>
-    </query>
-
-    <query name="CATEGORY.URI.AND.GUID.BY.IMAGE.NAME">
-        <![CDATA[
-            select a.category.seoInternal.uri, a.category.guid from AttrValueEntityCategory a
-            where a.val = ?1
         ]]>
     </query>
 

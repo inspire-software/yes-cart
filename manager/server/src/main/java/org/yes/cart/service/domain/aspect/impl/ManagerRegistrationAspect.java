@@ -22,6 +22,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Manager;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.domain.message.consumer.ManagerRegistrationMessageListener;
@@ -31,10 +32,11 @@ import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.service.mail.MailComposer;
 
+import javax.servlet.ServletContext;
+import java.io.File;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -42,7 +44,7 @@ import java.util.Arrays;
  * Time: 14:12:54
  */
 @Aspect
-public class ManagerRegistrationAspect extends BaseNotificationAspect {
+public class ManagerRegistrationAspect  extends BaseNotificationAspect implements ServletContextAware {
 
 
     private static final Logger LOG = LoggerFactory.getLogger(ManagerRegistrationAspect.class);
@@ -55,6 +57,8 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
     private final MailService mailService;
 
     private final MailComposer mailComposer;
+
+    private ServletContext servletContext ;
 
 
 
@@ -117,7 +121,7 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
         registrationMessage.setFirstname(manager.getFirstname());
         registrationMessage.setLastname(manager.getLastname());
         registrationMessage.setPassword(generatedPassword);
-        registrationMessage.setMailTemplatePathChain(Arrays.asList("/admin/mail/", "/default/mail/"));
+        registrationMessage.setPathToTemplateFolder(servletContext.getRealPath("/default/mail") + File.separator);
 
         registrationMessage.setTemplateName("adm-passwd");
 
@@ -149,4 +153,8 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
         );
     }
 
+    /** {@inheritDoc} */
+    public void setServletContext(final ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
 }

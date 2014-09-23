@@ -49,11 +49,13 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
         return this.shopDao.findAll();
     }
 
-    private Set<Category> getShopCategories(final long shopId) {
+    /** {@inheritDoc} */
+    @Cacheable(value = "shopService-shopCategories"/*, key ="shop.getShopId()"*/)
+    public Set<Category> getShopCategories(final Shop shop) {
 
         final Set<Category> result = new HashSet<Category>();
 
-        for (ShopCategory shopCategory : shopDao.findById(shopId).getShopCategory()) {
+        for (ShopCategory shopCategory : shop.getShopCategory()) {
 
             loadChildCategoriesRecursiveInternal(result, shopCategory.getCategory().getCategoryId());
 
@@ -86,8 +88,8 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
      * {@inheritDoc}
      */
     @Cacheable(value = "shopService-shopCategoriesIds"/*, key ="shop.getShopId()"*/)
-    public Set<Long> getShopCategoriesIds(final long shopId) {
-        return transform(getShopCategories(shopId));
+    public Set<Long> getShopCategoriesIds(final Shop shop) {
+        return transform(getShopCategories(shop));
     }
 
     public Set<Long> transform(final Collection<Category> categories) {

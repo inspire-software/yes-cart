@@ -17,7 +17,6 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -48,6 +47,7 @@ public class Language extends BaseComponent {
     private final static String LANGUAGE_LIST = "languageList";
     private final static String LANGUAGE_LINK = "languageLink";
     private final static String LANGUAGE_NAME = "languageName";
+    private final static String ACTIVE_LANGUAGE_NAME = "activeLanguageName";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     @SpringBean(name = StorefrontServiceSpringKeys.LANGUAGE_SERVICE)
@@ -90,6 +90,10 @@ public class Language extends BaseComponent {
 
             final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
 
+            final String activeLocal = ApplicationDirector.getShoppingCart().getCurrentLocale();
+            final String activeLanguageName = languageService.resolveLanguageName(activeLocal);
+
+            add(new Label(ACTIVE_LANGUAGE_NAME, activeLanguageName));
             add(new ListView<String>(LANGUAGE_LIST, languageService.getSupportedLanguages(ShopCodeContext.getShopCode())) {
 
                 @Override
@@ -105,19 +109,15 @@ public class Language extends BaseComponent {
                             getPage().getPageClass(),
                             basePageParameters);
 
+                    final boolean isActiveLng = languageCode.equals(activeLocal);
+
                     final Label languageLabel = new Label(LANGUAGE_NAME, languageName);
 
                     languageLabel.setEscapeModelStrings(false);
 
-                    if (languageCode.equals(ApplicationDirector.getShoppingCart().getCurrentLocale())) {
-
-                        pageLink.add(new AttributeModifier(HTML_CLASS, "language-active"));
-
-                    }
-
                     pageLink.add(languageLabel);
 
-                    stringListItem.add(pageLink);
+                    stringListItem.add(pageLink).setVisible(!isActiveLng);
                 }
             }
             );

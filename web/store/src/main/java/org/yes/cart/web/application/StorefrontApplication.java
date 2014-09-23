@@ -115,7 +115,13 @@ public class StorefrontApplication
         // wicket-groovy dynamic pages support
         //getApplicationSettings().setClassResolver(new GroovyClassResolver(this));
 
-        configureMarkupSettings();
+        getMarkupSettings().setMarkupFactory(new MultiMarkupFactory());
+        getMarkupSettings().setCompressWhitespace(true);
+        getMarkupSettings().setStripWicketTags(true); // true remove wicket:tags in development mode
+        getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
+        //getMarkupSettings().setDefaultAfterDisabledLink("");
+        //getMarkupSettings().setDefaultBeforeDisabledLink("");
+        //getMarkupSettings().setAutomaticLinking(false);
 
         getComponentInstantiationListeners().add(getSpringComponentInjector());
 
@@ -182,29 +188,6 @@ public class StorefrontApplication
     }
 
     /**
-     * Configure markup settings
-     */
-    private void configureMarkupSettings() {
-
-        // EhCache cache for markup
-        final ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        final MultiMarkupFactory multiMarkupFactory = ctx.getBean(
-                "wicketMultiMarkupFactory",
-                MultiMarkupFactory.class);
-        getMarkupSettings().setMarkupFactory(multiMarkupFactory);
-
-        // Plain POJO with Concurrent hash map cache
-        // getMarkupSettings().setMarkupFactory(new MultiMarkupFactory());
-
-        getMarkupSettings().setCompressWhitespace(true);
-        getMarkupSettings().setStripWicketTags(true); // true remove wicket:tags in development mode
-        getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
-        //getMarkupSettings().setDefaultAfterDisabledLink("");
-        //getMarkupSettings().setDefaultBeforeDisabledLink("");
-        //getMarkupSettings().setAutomaticLinking(false);
-    }
-
-    /**
      * Mount resources to particular paths.
      */
     private void mountResources() {
@@ -217,9 +200,9 @@ public class StorefrontApplication
 
     }
 
-    /**
-     * Mount pages to particular paths.
-     */
+        /**
+        * Mount pages to particular paths.
+        */
     private void mountPages() {
         final ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
         final WicketPagesMounter mounter = ctx.getBean(

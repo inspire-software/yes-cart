@@ -39,11 +39,11 @@ if %1.==i3rd. (
     call cd %RUNDIR%
 	goto finish
 )
-if %1.==cpres. (
+if %1.==cpclient. (
     call cd %YC_HOME%
-	set comeBack=cpres
-    goto cp_resources_to_webapp
-:cpres
+	set comeBack=cpclient
+    goto cp_client_to_webapp
+:cpclient
     call cd %RUNDIR%
 	goto finish
 )
@@ -147,7 +147,7 @@ rem Sub routines below this comment
     echo   i3rd      - setup necessary artifacts 3rd     
     echo               party artifacts for maven         
     echo.                                                 
-    echo   cpres     - copy extra resources to webapps
+    echo   cpclient  - copy swf (from target) to webapps 
     echo.                                                 
     echo   dbimysql  - initialise db for mysql           
     echo.                                                 
@@ -192,26 +192,17 @@ rem Sub routines below this comment
 	goto %comeBack%
 	
 	
-:cp_resources_to_webapp
+:cp_client_to_webapp
 
     echo ================================================
-    echo  Copy resources to webapps
+    echo  Copy SWF client to webapps                     
     echo ================================================
 
-    echo  copying resources... manager/server
-    call cd %YC_HOME%\manager\server
-    call %MVN% validate -Ptemplates
-
-    echo  copying resources... web/store
-    call cd %YC_HOME%\web\store
-    call %MVN% validate -Ptemplates
-
-    echo  copying resources... web/api
-    call cd %YC_HOME%\web\api
-    call %MVN% validate -Ptemplates
-
+    echo  copying... %YC_HOME%\manager\client\target\ShopManagerApplication.swf
+    copy %YC_HOME%\manager\client\target\ShopManagerApplication.swf  %YC_HOME%\manager\server\src\main\webapp\ShopManagerApplication.swf
 	goto %comeBack%
 
+	
 	
 :init_db_mysql
 

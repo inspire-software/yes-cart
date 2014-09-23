@@ -16,158 +16,128 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        &nbsp;
-    </div>
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-25 hide-on-mobile">
-            <p>
-                <wicket:link>
-                    <a href="HomePage.html" rel="bookmark">
+    <nav class="top-menu">
+        <div class="container no-padding">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 no-margin">
+                <ul>
+                    <li>
+                        <a href="tag/sale" rel="search">
+                            <span><wicket:message key="sale">[Sale]</wicket:message></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tag/specialoffer" rel="search">
+                            <span><wicket:message key="specialOffer">[Special offer]</wicket:message></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tag/newarrival" rel="search">
+                            <span><wicket:message key="newArrivals">[New products]</wicket:message></span>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" id="demoMenu" data-toggle="dropdown" href="#">
+                            <wicket:message key="demo">[Demo]</wicket:message>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="demoMenu">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/multisku" rel="search">
+                                    <span><wicket:message key="demoMultiSku">[Multi sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/preorder" rel="search">
+                                    <span><wicket:message key="demoPreorder">[Pre-order sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/backorder" rel="search">
+                                    <span><wicket:message key="demoBackorder">[Back order sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/always" rel="search">
+                                    <span><wicket:message key="demoAlways">[Back order sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
                         <wicket:link>
-                            <img src="../../../../../../../image/yes-logo.png" border="0"/>
+                            <a href="ContactPage.html" rel="search">
+                                <span><wicket:message key="contacts">[Contacts]</wicket:message></span>
+                            </a>
                         </wicket:link>
-                    </a>
-                </wicket:link>
-            </p>
-        </div>
-
-        <div class="grid-50 mobile-grid-75 text-left" style="padding-top: 10px; padding-left: 0px;">
-            <wicket:container wicket:id="search">
-                [search]
-            </wicket:container>
-        </div>
-        <div class="grid-25 mobile-grid-25 slides" style="padding-top: 10px;">
-            <p id="mini-cart" align="right">
-                <wicket:container wicket:id="smallCart">
-                    [small shopping cart]
-                </wicket:container>
-            </p>
-            <p align="right">
-                <wicket:container wicket:id="logout">
-                    [logout language]
-                </wicket:container>
-            </p>
-        </div>
-
-    </div>
-
-    <div class="grid-100 mobile-grid-100 grid-parent">
-
-        <div class="grid-40 hide-on-mobile grid-parent">
-            <div class="g-plusone" data-size="medium"></div>
-            <script type="text/javascript">
-                (function () {
-                    var po = document.createElement('script');
-                    po.type = 'text/javascript';
-                    po.async = true;
-                    po.src = 'https://apis.google.com/js/plusone.js';
-                    var s = document.getElementsByTagName('script')[0];
-                    s.parentNode.insertBefore(po, s);
-                })();
-            </script>
-            &nbsp;
-            <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="yescart">Tweet</a>
-            <script type="text/javascript">!function (d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-                if (!d.getElementById(id)) {
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = p + '://platform.twitter.com/widgets.js';
-                    fjs.parentNode.insertBefore(js, fjs);
-                }
-            }(document, 'script', 'twitter-wjs');</script>
-            &nbsp;
-            <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.yes-cart.org&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21"
-                    scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:110px; height:21px;"
-                    allowTransparency="true">
-
-            </iframe>
-        </div>
-
-        <div class="grid-60 mobile-grid-100 grid-parent text-right">
-
-            <div class="grid-60 mobile-grid-50 grid-parent">
-                <wicket:container wicket:id="language">
-                    [switch language]
-                </wicket:container>
-            </div>
-
-            <div class="grid-40 mobile-grid-50 grid-parent text-right">
-                <wicket:container wicket:id="currency">
-                    [switch currency]
-                </wicket:container>
-            </div>
-
-        </div>
-
-
-    </div>
-
-
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <a class="toggleMenu" href="#">
-            <wicket:message key="menu">[Menu]</wicket:message>
-        </a>
-        <ul class="nav">
-            <li>
-                <a id="sale" href="tag/sale" class="jsTag nav-link" rel="search">
-                    <span><wicket:message key="sale">[Sale]</wicket:message></span>
-                </a>
-            </li>
-            <li>
-                <a id="specialoffer" href="tag/specialoffer" class="jsTag nav-link" rel="search">
-                    <span><wicket:message key="specialOffer">[Special offer]</wicket:message></span>
-                </a>
-            </li>
-            <li>
-                <a id="newarrival" href="tag/newarrival" class="jsTag nav-link" rel="search">
-                    <span><wicket:message key="newArrivals">[New products]</wicket:message></span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="nav-link">
-                    <wicket:message key="demo">[Demo]</wicket:message>
-                </a>
-                <ul class="subnav">
-                    <li>
-                        <a id="multisku" href="tag/multisku" class="jsTag nav-link" rel="search">
-                            <span><wicket:message key="demoMultiSku">[Multi sku demo]</wicket:message></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="preorder" href="tag/preorder" class="jsTag nav-link" rel="search">
-                            <span><wicket:message key="demoPreorder">[Pre-order sku demo]</wicket:message></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="backorder" href="tag/backorder" class="jsTag nav-link" rel="search">
-                            <span><wicket:message key="demoBackorder">[Back order sku demo]</wicket:message></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a id="always" href="tag/always" class="jsTag nav-link" rel="search">
-                            <span><wicket:message key="demoAlways">[Always sku demo]</wicket:message></span>
-                        </a>
                     </li>
                 </ul>
-            </li>
+            </div>
 
-            <li>
-                <wicket:link>
-                    <a href="CustomerSelfCarePage.html" class="jsPage nav-link" rel="nofollow"><span><wicket:message key="profile">[Profile]
-                    </wicket:message></span></a>
-                </wicket:link>
-            </li>
-            <li>
-                <wicket:link><a href="ContactPage.html" class="jsPage nav-link" rel="search"><span><wicket:message key="contacts">[Contacts]
-                </wicket:message></span></a></wicket:link>
-            </li>
-        </ul>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 no-margin">
+                <ul class="text-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" id="profileMenu" data-toggle="dropdown" href="#">
+                            <wicket:message key="profile">[Profile]</wicket:message>
+                            <span class="glyphicon glyphicon-user"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="profileMenu">
+                            <li role="presentation">
+                                <wicket:link>
+                                    <a href="CustomerSelfCarePage.html" rel="nofollow">
+                                        <span><wicket:message key="profile">[Profile]</wicket:message></span>
+                                    </a>
+                                </wicket:link>
+                            </li>
+                            <li role="presentation">
+                                <wicket:container wicket:id="logout">
+                                    [logout language]
+                                </wicket:container>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <wicket:container wicket:id="language">
+                            [switch language]
+                        </wicket:container>
+                    </li>
+                    <li class="dropdown">
+                        <wicket:container wicket:id="currency">
+                            [switch currency]
+                        </wicket:container>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container no-padding">
+            <div class="col-xs-12 col-sm-12 col-md-3 logo-holder">
+                <div class="logo">
+                    <wicket:link>
+                        <a href="HomePage.html" rel="bookmark">
+                            <wicket:link>
+                                <img class="center-block" src="../../../../../../../image/yes-logo.png" border="0"/>
+                            </wicket:link>
+                        </a>
+                    </wicket:link>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 no-margin">
+                <wicket:container wicket:id="search">
+                    [search]
+                </wicket:container>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-3 mini-cart-holder no-margin">
+                <div id="mini-cart" class="mini-cart-line">
+                    <wicket:container wicket:id="smallCart">
+                        [small shopping cart]
+                    </wicket:container>
+                </div>
+            </div>
+
+        </div>
     </div>
-
-
 
 </wicket:panel>
 </body>

@@ -31,7 +31,6 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -48,7 +47,7 @@ public class BreadCrumbsView extends BaseComponent {
     @SpringBean(name = StorefrontServiceSpringKeys.BREAD_CRUMBS_BUILDER)
     private BreadCrumbsBuilder breadCrumbsBuilder;
 
-    private final Set<Long> shopCategoryIds;
+    private final List<Long> shopCategoryIds;
 
     private final long categoryId;
 
@@ -61,7 +60,7 @@ public class BreadCrumbsView extends BaseComponent {
     public BreadCrumbsView(
             final String id,
             final long categoryId,
-            final Set<Long> shopCategoryIds) {
+            final List<Long> shopCategoryIds) {
 
         super(id);
 

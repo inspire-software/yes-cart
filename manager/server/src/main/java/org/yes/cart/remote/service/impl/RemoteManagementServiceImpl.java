@@ -16,19 +16,16 @@
 
 package org.yes.cart.remote.service.impl;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.ManagerDTO;
 import org.yes.cart.domain.dto.RoleDTO;
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteManagementService;
 import org.yes.cart.service.dto.ManagementService;
-import org.yes.cart.service.federation.FederationFacade;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -38,32 +35,23 @@ import java.util.*;
 public class RemoteManagementServiceImpl implements RemoteManagementService {
 
     private final ManagementService managementService;
-    private final FederationFacade federationFacade;
 
     /**
-     * Construct remote user management service.
+     * Construct remote user managment service.
      *
      * @param managementService
-     * @param federationFacade
      */
-    public RemoteManagementServiceImpl(final ManagementService managementService,
-                                       final FederationFacade federationFacade) {
+    public RemoteManagementServiceImpl(final ManagementService managementService) {
         this.managementService = managementService;
-        this.federationFacade = federationFacade;
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public void addUser(final String userId, final String firstName, final String lastName, final String shopCode)
+    public void addUser(final String userId, final String firstName, final String lastName)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
-
-        if (federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
-            managementService.addUser(userId, firstName, lastName, shopCode);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        managementService.addUser(userId, firstName, lastName);
     }
 
     /**
@@ -71,10 +59,7 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
      */
     public List<ManagerDTO> getManagers(final String emailFilter, final String firstNameFilter, final String lastNameFilter)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        final List<ManagerDTO> managers = new ArrayList<ManagerDTO>(managementService.getManagers(emailFilter, firstNameFilter, lastNameFilter));
-        federationFacade.applyFederationFilter(managers, ManagerDTO.class);
-        return managers;
+        return managementService.getManagers(emailFilter, firstNameFilter, lastNameFilter);
     }
 
     /**
@@ -82,10 +67,7 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
      */
     public List<RoleDTO> getAssignedManagerRoles(String userId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(userId, ManagerDTO.class)) {
-            return managementService.getAssignedManagerRoles(userId);
-        }
-        return Collections.emptyList();
+        return managementService.getAssignedManagerRoles(userId);
     }
 
     /**
@@ -93,43 +75,28 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
      */
     public List<RoleDTO> getAvailableManagerRoles(String userId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(userId, ManagerDTO.class)) {
-            return managementService.getAvailableManagerRoles(userId);
-        }
-        return Collections.emptyList();
+        return managementService.getAvailableManagerRoles(userId);
     }
 
     /**
      * {@inheritDoc}
      */
     public void updateUser(final String userId, final String firstName, final String lastName) {
-        if (federationFacade.isManageable(userId, ManagerDTO.class)) {
-            managementService.updateUser(userId, firstName, lastName);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        managementService.updateUser(userId, firstName, lastName);
     }
 
     /**
      * {@inheritDoc}
      */
     public void resetPassword(final String userId) {
-        if (federationFacade.isManageable(userId, ManagerDTO.class)) {
-            managementService.resetPassword(userId);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        managementService.resetPassword(userId);
     }
 
     /**
      * {@inheritDoc}
      */
     public void deleteUser(final String userId) {
-        if (federationFacade.isManageable(userId, ManagerDTO.class)) {
-            managementService.deleteUser(userId);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        managementService.deleteUser(userId);
     }
 
 
@@ -145,8 +112,8 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
     /**
      * {@inheritDoc}
      */
-    public void addRole(final String role, final String description) {
-        managementService.addRole(role, description);
+    public void addRole(final String role, final String decription) {
+        managementService.addRole(role, decription);
     }
 
     /**
@@ -167,99 +134,14 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
      * {@inheritDoc}
      */
     public void grantRole(final String userId, final String role) {
-        if ("ROLE_SMADMIN".equals(role) && !federationFacade.isCurrentUserSystemAdmin()) {
-            throw new AccessDeniedException("Access is denied");
-        }
-        if (federationFacade.isManageable(userId, ManagerDTO.class)) {
-            managementService.grantRole(userId, role);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        managementService.grantRole(userId, role);
     }
 
     /**
      * {@inheritDoc}
      */
     public void revokeRole(final String userId, final String role) {
-        if ("ROLE_SMADMIN".equals(role) && !federationFacade.isCurrentUserSystemAdmin()) {
-            throw new AccessDeniedException("Access is denied");
-        }
-        if (federationFacade.isManageable(userId, ManagerDTO.class)) {
-            managementService.revokeRole(userId, role);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<ShopDTO> getAssignedManagerShops(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(userId, ManagerDTO.class)) {
-            final List<ShopDTO> assigned = managementService.getAssignedManagerShops(userId);
-
-            if (!federationFacade.isCurrentUserSystemAdmin()) { // restrict other managers
-                final Set<Long> currentAssignedIds = federationFacade.getAccessibleShopIdsByCurrentManager();
-                final Iterator<ShopDTO> availableIt = assigned.iterator();
-                while (availableIt.hasNext()) {
-                    final ShopDTO shop = availableIt.next();
-                    if (!currentAssignedIds.contains(shop.getShopId())) {
-                        availableIt.remove();
-                    }
-                }
-            }
-            return assigned;
-        }
-        return Collections.emptyList();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<ShopDTO> getAvailableManagerShops(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        if (federationFacade.isManageable(userId, ManagerDTO.class)) {
-            final List<ShopDTO> available = managementService.getAvailableManagerShops(userId);
-
-            if (!federationFacade.isCurrentUserSystemAdmin()) { // restrict other managers
-                final Set<Long> currentAssignedIds = federationFacade.getAccessibleShopIdsByCurrentManager();
-                final Iterator<ShopDTO> availableIt = available.iterator();
-                while (availableIt.hasNext()) {
-                    final ShopDTO shop = availableIt.next();
-                    if (!currentAssignedIds.contains(shop.getShopId())) {
-                        availableIt.remove();
-                    }
-                }
-            }
-            return available;
-        }
-        return Collections.emptyList();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void grantShop(final String userId, final String shopCode) {
-
-        if (federationFacade.isManageable(userId, ManagerDTO.class)
-                && federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
-            managementService.grantShop(userId, shopCode);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void revokeShop(final String userId, final String shopCode) {
-        if (federationFacade.isManageable(userId, ManagerDTO.class)
-                && federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
-            managementService.revokeShop(userId, shopCode);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        managementService.revokeRole(userId, role);
     }
 
 }

@@ -18,7 +18,6 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 import java.util.Map;
 
@@ -35,15 +34,6 @@ public class CleanCartCommandImpl extends AbstractCartCommandImpl implements Sho
     /** {@inheritDoc} */
     public String getCmdKey() {
         return CMD_CLEAN;
-    }
-
-    /**
-     * Construct command.
-     *
-     * @param registry shopping cart command registry
-     */
-    public CleanCartCommandImpl(final ShoppingCartCommandRegistry registry) {
-        super(registry);
     }
 
     /** {@inheritDoc} */

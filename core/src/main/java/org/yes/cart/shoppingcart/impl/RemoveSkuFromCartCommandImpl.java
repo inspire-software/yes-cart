@@ -21,7 +21,6 @@ import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
@@ -39,19 +38,10 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
 
     private static final long serialVersionUID = 20100313L;
 
-    /**
-     * Construct sku command.
-     *
-     * @param registry shopping cart command registry
-     * @param priceService price service
-     * @param productService product service
-     * @param shopService shop service
-     */
-    public RemoveSkuFromCartCommandImpl(final ShoppingCartCommandRegistry registry,
-                                        final PriceService priceService,
+    public RemoveSkuFromCartCommandImpl(final PriceService priceService,
                                         final ProductService productService,
                                         final ShopService shopService) {
-        super(registry, priceService, productService, shopService);
+        super(priceService, productService, shopService);
     }
 
     /** {@inheritDoc} */

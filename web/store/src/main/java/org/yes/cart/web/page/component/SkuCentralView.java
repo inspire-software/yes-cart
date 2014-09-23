@@ -102,7 +102,6 @@ public class SkuCentralView extends AbstractCentralView {
      * Product name
      */
     private final static String PRODUCT_NAME_LABEL = "name";
-    private final static String PRODUCT_NAME_LABEL2 = "name2";
     /**
      * Product description
      */
@@ -243,8 +242,6 @@ public class SkuCentralView extends AbstractCentralView {
                 new Label(SKU_CODE_LABEL, sku.getCode())
         ).add(
                 new Label(PRODUCT_NAME_LABEL, decorator.getName(selectedLocale))
-        ).add(
-                new Label(PRODUCT_NAME_LABEL2, decorator.getName(selectedLocale))
         ).add(
                 new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false)
         ).add(

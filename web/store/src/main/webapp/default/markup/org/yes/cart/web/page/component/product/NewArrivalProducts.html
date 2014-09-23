@@ -17,18 +17,19 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <div wicket:id="productsTitle">[New]</div>
-    <div wicket:id="products" class="newarrival">
-        <p align="center" style="height: 85px; overflow:hidden">
-            <a wicket:id="productLinkImage"   class="image-border" rel="bookmark">
-                <img wicket:id="productDefaultImage"/>
-            </a>
-        </p>
-        <p align="center" style="height: 40px; overflow:hidden">
-            <a wicket:id="productLinkName" rel="bookmark">
-                <span wicket:id="name"/>
-            </a>
-        </p>
+    <div class="row no-margin">
+        <div wicket:id="products" class="col-xs-12 col-sm-3 col-md-2">
+            <div class="thumbnail">
+                <a wicket:id="productLinkImage" rel="bookmark">
+                    <img wicket:id="productDefaultImage"/>
+                </a>
+            </div>
+            <p>
+                <a wicket:id="productLinkName" rel="bookmark">
+                    <span wicket:id="name"/>
+                </a>
+            </p>
+        </div>
     </div>
 </wicket:panel>
 </body>

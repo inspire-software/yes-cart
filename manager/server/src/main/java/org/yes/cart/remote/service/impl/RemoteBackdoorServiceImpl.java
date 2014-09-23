@@ -32,6 +32,7 @@ import org.yes.cart.web.service.ws.client.WsClientFactory;
 import org.yes.cart.web.service.ws.node.NodeService;
 import org.yes.cart.web.service.ws.node.dto.Node;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,17 +49,14 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
     private final NodeService nodeService;
     private final BackdoorService localBackdoorService;
-    private final CacheDirector localCacheDirector;
     private final WsAbstractFactoryClientFactory wsAbstractFactoryClientFactory;
 
 
     public RemoteBackdoorServiceImpl(final NodeService nodeService,
                                      final BackdoorService localBackdoorService,
-                                     final CacheDirector localCacheDirector,
                                      final WsAbstractFactoryClientFactory wsAbstractFactoryClientFactory) {
         this.nodeService = nodeService;
         this.localBackdoorService = localBackdoorService;
-        this.localCacheDirector = localCacheDirector;
         this.wsAbstractFactoryClientFactory = wsAbstractFactoryClientFactory;
     }
 
@@ -120,7 +118,7 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
             } catch (Exception e) {
                 indexStatus.put(yesNode.getNodeId(), null);
                 if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot reindex products,  url ["
+                    LOG.error("Cannot get image vault path,  url ["
                             + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
                             + "] . Will try next one, if exists",
                             e);
@@ -151,7 +149,7 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
                 }
 
             } catch (Exception e) {
-                reindexResult.put(yesNode.getNodeId(), -1);
+                reindexResult.put(yesNode.getNodeId(), null);
                 if (LOG.isErrorEnabled()) {
                     LOG.error("Cannot reindex product [" + productPk + "],  url ["
                             + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
@@ -337,59 +335,51 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      * {@inheritDoc}
      */
     public Map<String, List<CacheInfoDTOImpl>> getCacheInfo(final AsyncContext context)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, List<CacheInfoDTOImpl>> info = new HashMap<String, List<CacheInfoDTOImpl>>();
+         final Map<String, List<CacheInfoDTOImpl>> info = new HashMap<String, List<CacheInfoDTOImpl>>();
 
-        for (final Node yesNode : nodeService.getYesNodes()) {
+         for (final Node yesNode : nodeService.getYesNodes()) {
 
-            try {
+             try {
 
-                final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>();
+                 final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>();
 
-                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
-                CacheDirector cacheDirector = factory.getService();
-                List<CacheInfoDTOImpl> shopRez = null;
-                try {
+                 final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
+                 CacheDirector cacheDirector = factory.getService();
+                 List<CacheInfoDTOImpl> shopRez = null;
+                 try {
                     shopRez = cacheDirector.getCacheInfo();
-                } finally {
-                    factory.release(cacheDirector);
-                    cacheDirector = null;
-                }
+                 } finally {
+                     factory.release(cacheDirector);
+                     cacheDirector = null;
+                 }
 
-                for (final CacheInfoDTOImpl cacheInfoDTO : shopRez) {
-                    cacheInfoDTO.setNodeId(yesNode.getNodeId());
-                    cacheInfoDTO.setNodeUri(yesNode.getCacheManagerUri());
-                    rez.add(cacheInfoDTO);
-                }
+                 for (final CacheInfoDTOImpl cacheInfoDTO : shopRez) {
+                     cacheInfoDTO.setNodeId(yesNode.getNodeId());
+                     cacheInfoDTO.setNodeUri(yesNode.getCacheManagerUri());
+                     rez.add(cacheInfoDTO);
+                 }
 
-                info.put(yesNode.getNodeId(), rez);
+                 info.put(yesNode.getNodeId(), rez);
 
-            } catch (Exception e) {
+             } catch (Exception e) {
 
-                info.put(yesNode.getNodeId(), null);
+                 info.put(yesNode.getNodeId(), null);
 
-                if (LOG.isWarnEnabled()) {
-                    LOG.warn("Cannot to get cache info  from url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
-                            + "] . Will try next one, if exists",
-                            e);
+                 if (LOG.isWarnEnabled()) {
+                     LOG.warn("Cannot to get cache info  from url ["
+                             + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
+                             + "] . Will try next one, if exists",
+                             e);
 
-                }
+                 }
 
 
-            }
+             }
 
-        }
-
-        final String yum = nodeService.getCurrentNodeId();
-        List<CacheInfoDTOImpl> yumRez = localCacheDirector.getCacheInfo();
-        for (final CacheInfoDTOImpl cacheInfoDTO : yumRez) {
-            cacheInfoDTO.setNodeId(yum);
-        }
-        info.put(yum, yumRez);
-
-        return info;
+         }
+         return info;
     }
 
 
@@ -398,38 +388,34 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      */
     public Map<String, Boolean> evictAllCache(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
-        for (final Node yesNode : nodeService.getYesNodes()) {
+         final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
+         for (final Node yesNode : nodeService.getYesNodes()) {
 
-            try {
+             try {
 
-                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
-                CacheDirector cacheDirector = factory.getService();
-                try {
-                    cacheDirector.evictAllCache();
-                } finally {
-                    factory.release(cacheDirector);
-                    cacheDirector = null;
-                }
-                evicts.put(yesNode.getNodeId(), Boolean.TRUE);
+                 final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
+                 CacheDirector cacheDirector = factory.getService();
+                 try {
+                     cacheDirector.evictAllCache();
+                 } finally {
+                     factory.release(cacheDirector);
+                     cacheDirector = null;
+                 }
+                 evicts.put(yesNode.getNodeId(), Boolean.TRUE);
 
-            } catch (Exception e) {
-                evicts.put(yesNode.getNodeId(), Boolean.FALSE);
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot evict cache,  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
-                            + "] . Will try next one, if exists",
-                            e);
+             } catch (Exception e) {
+                 evicts.put(yesNode.getNodeId(), Boolean.FALSE);
+                 if (LOG.isErrorEnabled()) {
+                     LOG.error("Cannot evict cache,  url ["
+                             + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
+                             + "] . Will try next one, if exists",
+                             e);
 
-                }
+                 }
 
-            }
-        }
-
-        localCacheDirector.evictAllCache();
-        evicts.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
-
-        return evicts;
+             }
+         }
+         return evicts;
 
     }
 
@@ -438,39 +424,72 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      */
     public Map<String, Boolean> evictCache(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
-        for (final Node yesNode : nodeService.getYesNodes()) {
+         final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
+         for (final Node yesNode : nodeService.getYesNodes()) {
 
-            try {
+             try {
 
-                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
-                CacheDirector cacheDirector = factory.getService();
-                try {
-                    cacheDirector.evictCache(name);
-                } finally {
-                    factory.release(cacheDirector);
-                    cacheDirector = null;
-                }
-                evicts.put(yesNode.getNodeId(), Boolean.TRUE);
+                 final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
+                 CacheDirector cacheDirector = factory.getService();
+                 try {
+                     cacheDirector.evictCache(name);
+                 } finally {
+                     factory.release(cacheDirector);
+                     cacheDirector = null;
+                 }
+                 evicts.put(yesNode.getNodeId(), Boolean.TRUE);
 
-            } catch (Exception e) {
-                evicts.put(yesNode.getNodeId(), Boolean.FALSE);
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot evict cache [" + name + "],  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
-                            + "] . Will try next one, if exists",
-                            e);
+             } catch (Exception e) {
+                 evicts.put(yesNode.getNodeId(), Boolean.FALSE);
+                 if (LOG.isErrorEnabled()) {
+                     LOG.error("Cannot evict cache [" + name + "],  url ["
+                             + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
+                             + "] . Will try next one, if exists",
+                             e);
 
-                }
+                 }
 
-            }
-        }
+             }
+         }
+         return evicts;
 
-        localCacheDirector.evictCache(name);
-        evicts.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
+    }
 
-        return evicts;
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, String> getImageVaultPath(final AsyncContext context) throws IOException {
 
+         // TODO: need to have a better way for this - ATM we assume we are on the same FS!!!
+         // TODO: potentially we need either dedicated server for images or we need to transfer images via WS
+
+         final Map<String, String> paths = new HashMap<String, String>();
+         for (final Node yesNode : nodeService.getYesNodes()) {
+             try {
+                 final WsClientFactory<BackdoorService> factory =
+                         getBackdoorService(context, yesNode.getBackdoorUri(),
+                                 AttributeNamesKeys.System.SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS);
+
+                 BackdoorService service = factory.getService();
+                 try {
+                    paths.put(yesNode.getNodeId(), service.getImageVaultPath());
+                 } finally {
+                     factory.release(service);
+                     service = null;
+                 }
+
+             } catch (Exception e) {
+                 paths.put(yesNode.getNodeId(), null);
+                 if (LOG.isErrorEnabled()) {
+                     LOG.error("Cannot get image vault path,  url ["
+                             + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
+                             + "] . Will try next one, if exists",
+                             e);
+                 }
+             }
+
+         }
+         return paths;
     }
 
     private WsClientFactory<BackdoorService> getBackdoorService(final AsyncContext context,
@@ -498,6 +517,7 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
         return wsAbstractFactoryClientFactory.getFactory(CacheDirector.class, userName, password, cacheDirUrl, timeout);
 
     }
+
 
 
 }

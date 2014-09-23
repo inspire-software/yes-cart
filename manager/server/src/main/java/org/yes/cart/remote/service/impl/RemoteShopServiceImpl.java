@@ -16,18 +16,14 @@
 
 package org.yes.cart.remote.service.impl;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteShopService;
 import org.yes.cart.service.dto.DtoShopService;
-import org.yes.cart.service.federation.FederationFacade;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,49 +35,13 @@ public class RemoteShopServiceImpl
         extends AbstractRemoteService<ShopDTO>
         implements RemoteShopService {
 
-    private final FederationFacade federationFacade;
-
     /**
      * Construct remote service.
      *
      * @param dtoShopService dto service to use.
-     * @param federationFacade federation facade
      */
-    public RemoteShopServiceImpl(final DtoShopService dtoShopService,
-                                 final FederationFacade federationFacade) {
+    public RemoteShopServiceImpl(final DtoShopService dtoShopService) {
         super(dtoShopService);
-        this.federationFacade = federationFacade;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<ShopDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<ShopDTO> all = new ArrayList<ShopDTO>(super.getAll());
-        federationFacade.applyFederationFilter(all, ShopDTO.class);
-        return all;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public ShopDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(id, ShopDTO.class)) {
-            return super.getById(id);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public ShopDTO update(final ShopDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(instance.getShopId(), ShopDTO.class)) {
-            return super.update(instance);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
     }
 
     /**
@@ -95,22 +55,14 @@ public class RemoteShopServiceImpl
      * {@inheritDoc}
      */
     public String getSupportedCurrencies(final long shopId) {
-        if (federationFacade.isManageable(shopId, ShopDTO.class)) {
-            return ((DtoShopService) getGenericDTOService()).getSupportedCurrencies(shopId);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        return ((DtoShopService) getGenericDTOService()).getSupportedCurrencies(shopId);
     }
 
     /**
      * {@inheritDoc}
      */
     public void updateSupportedCurrencies(final long shopId, final String currencies) {
-        if (federationFacade.isManageable(shopId, ShopDTO.class)) {
-            ((DtoShopService) getGenericDTOService()).updateSupportedCurrencies(shopId, currencies);
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
+        ((DtoShopService) getGenericDTOService()).updateSupportedCurrencies(shopId, currencies);
     }
 
     /**
@@ -120,14 +72,19 @@ public class RemoteShopServiceImpl
         return ((DtoShopService) getGenericDTOService()).getShopDtoByDomainName(serverDomainName);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ShopDTO> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return ((DtoShopService) getGenericDTOService()).getAssignedShop(customerId);
+    }
+
     /**
      * {@inheritDoc}
      */
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        if (federationFacade.isManageable(entityPk, ShopDTO.class)) {
-            return ((DtoShopService) getGenericDTOService()).getEntityAttributes(entityPk);
-        }
-        return Collections.emptyList();
+        return ((DtoShopService) getGenericDTOService()).getEntityAttributes(entityPk);
     }
 
     /**

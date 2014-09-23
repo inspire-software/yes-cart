@@ -37,6 +37,8 @@ import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
@@ -205,6 +207,9 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
             } else {
                 error(getLocalizer().getString("badStatus", this));
             }
+
+            add(new StandardHeader(HEADER));
+            add(new StandardFooter(FOOTER));
 
             add(
                     new ServerSideJs("serverSideJs")

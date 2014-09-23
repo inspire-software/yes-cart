@@ -83,7 +83,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
     private TransactionTemplate tx;
 
     /**
-     * Construct report service.
+     * Consstruct report service.
      *
      * @param genericDAO        report service
      * @param reportDescriptors list of configured reports.
@@ -176,7 +176,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
      * @param params   report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
      * @param lang     given lang to roduce report.
      * @return true in case if report was generated successfuly.
-     * @
+     *
      */
     public byte[] downloadReport(String lang, String reportId, Object... params) throws Exception {
         final File tmpFile = File.createTempFile("yescartreport", "pdf");
@@ -195,7 +195,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
      * @param objectList   list of object for report
      * @param lang     given lang to roduce report.
      * @return true in case if report was generated successfuly.
-     * @
+     *
      */
     public byte[] produceReport(String lang, String reportId, List<Object> objectList) throws Exception {
         final File tmpFile = File.createTempFile("yescartreport", "pdf");
@@ -212,7 +212,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
      *
      * @param reportId report descriptor.
      * @param fileName report filename
-     * @param params   report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
+     * @param params   report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in report description.
      * @param lang     given lang to produce report.
      * @return true in case if report was generated successfuly.
      */
@@ -228,7 +228,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
      *
      * @param reportId report descriptor.
      * @param fileName report filename
-     * @param lang     given lang to produce report.
+     * @param lang     given lang to roduce report.
      * @param rez      list of object for report
      * @return true in case if report was generated
      * @throws SAXException

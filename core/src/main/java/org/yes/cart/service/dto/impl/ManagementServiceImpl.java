@@ -23,16 +23,15 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.cache.annotation.CacheEvict;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ManagerDTO;
 import org.yes.cart.domain.dto.RoleDTO;
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ManagerDTOImpl;
 import org.yes.cart.domain.dto.impl.RoleDTOImpl;
-import org.yes.cart.domain.dto.impl.ShopDTOImpl;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.Manager;
+import org.yes.cart.domain.entity.ManagerRole;
+import org.yes.cart.domain.entity.Role;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.ManagerService;
@@ -41,7 +40,8 @@ import org.yes.cart.service.dto.ManagementService;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User management service implemenation
@@ -62,15 +62,11 @@ public class ManagementServiceImpl implements ManagementService {
 
     private final GenericDAO<Role, Long> roleDao;
 
-    private final GenericDAO<Shop, Long> shopDao;
-
     private final DtoFactory dtoFactory;
 
     private final Assembler managerAssembler;
 
     private final Assembler roleAssembler;
-
-    private final Assembler shopAssembler;
 
     private final AdaptersRepository adaptersRepository;
 
@@ -89,21 +85,19 @@ public class ManagementServiceImpl implements ManagementService {
     public ManagementServiceImpl(final ManagerService managerService,
                                     final GenericDAO<ManagerRole, Long> managerRoleDao,
                                     final GenericDAO<Role, Long> roleDao,
-                                    final GenericDAO<Shop, Long> shopDao,
                                     final DtoFactory dtoFactory,
                                     final AdaptersRepository adaptersRepository,
                                     final PassPhrazeGenerator passPhrazeGenerator) {
         this.managerService = managerService;
         this.managerRoleDao = managerRoleDao;
         this.roleDao = roleDao;
-        this.shopDao = shopDao;
         this.dtoFactory = dtoFactory;
         this.adaptersRepository = adaptersRepository;
         this.passPhrazeGenerator = passPhrazeGenerator;
 
         managerAssembler = DTOAssembler.newAssembler(ManagerDTOImpl.class, Manager.class);
+
         roleAssembler = DTOAssembler.newAssembler(RoleDTOImpl.class, Role.class);
-        shopAssembler = DTOAssembler.newAssembler(ShopDTOImpl.class, Shop.class);
     }
 
     /**
@@ -191,7 +185,7 @@ public class ManagementServiceImpl implements ManagementService {
     /**
      * {@inheritDoc}
      */
-    public void addUser(final String userId, final String firstName, final String lastName, final String shopCode)
+    public void addUser(final String userId, final String firstName, final String lastName)
             throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
         final Manager manager = managerService.getGenericDao().getEntityFactory().getByIface(Manager.class);
@@ -201,12 +195,7 @@ public class ManagementServiceImpl implements ManagementService {
         manager.setLastname(lastName);
         manager.setPassword(passPhrazeGenerator.getNextPassPhrase());
 
-        final Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.CODE", shopCode);
-        if (shop == null) {
-            throw new IllegalArgumentException("No shop found");
-        }
-
-        managerService.create(manager, shop);
+        managerService.create(manager, null); //No particular shop at this moment, but  future
 
     }
 
@@ -294,9 +283,6 @@ public class ManagementServiceImpl implements ManagementService {
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "yum.shopFederationStrategy-admin"
-    }, key = "#userId")
     public void grantRole(final String userId, final String role) {
         final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq(CODE, role));
         final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
@@ -311,9 +297,6 @@ public class ManagementServiceImpl implements ManagementService {
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "yum.shopFederationStrategy-admin"
-    }, key = "#userId")
     public void revokeRole(final String userId, final String role) {
         final ManagerRole managerRole = managerRoleDao.findSingleByCriteria(
                 Restrictions.eq(CODE, role),
@@ -324,108 +307,5 @@ public class ManagementServiceImpl implements ManagementService {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<ShopDTO> getAssignedManagerShops(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
-        if (manager == null) {
-            return Collections.emptyList();
-        }
-        final Collection<ManagerShop> assigned = manager.getShops();
-        final List<ShopDTO> shopDTOs = new ArrayList<ShopDTO>(assigned.size());
-        fillManagerShopsDTOs(shopDTOs, assigned);
-        return shopDTOs;
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<ShopDTO> getAvailableManagerShops(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
-        if (manager == null) {
-            return Collections.emptyList();
-        }
-        final List<Shop> all = shopDao.findAll();
-        final Iterator<Shop> allIt = all.iterator();
-        while (allIt.hasNext()) {
-            final Shop current = allIt.next();
-            for (final ManagerShop shop : manager.getShops()) {
-                if (shop.getShop().getShopId() == current.getShopId()) {
-                    allIt.remove();
-                }
-            }
-        }
-
-        final List<ShopDTO> shopDTOs = new ArrayList<ShopDTO>(all.size());
-        fillShopsDTOs(shopDTOs, all);
-
-        return shopDTOs;
-    }
-
-
-    private void fillManagerShopsDTOs(final List<ShopDTO> result, final Collection<ManagerShop> shops)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        for (ManagerShop shop : shops) {
-            final ShopDTO shopDTO = dtoFactory.getByIface(ShopDTO.class);
-            shopAssembler.assembleDto(shopDTO, shop.getShop(), adaptersRepository.getAll(), dtoFactory);
-            result.add(shopDTO);
-        }
-    }
-
-    private void fillShopsDTOs(final List<ShopDTO> result, final Collection<Shop> shops)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        for (Shop shop : shops) {
-            final ShopDTO shopDTO = dtoFactory.getByIface(ShopDTO.class);
-            shopAssembler.assembleDto(shopDTO, shop, adaptersRepository.getAll(), dtoFactory);
-            result.add(shopDTO);
-        }
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "yum.shopFederationStrategy-shop",
-            "yum.shopFederationStrategy-shopId",
-            "yum.shopFederationStrategy-shopCode"
-    }, key = "#userId")
-    public void grantShop(final String userId, final String shopCode) {
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
-        final Collection<ManagerShop> assigned = manager.getShops();
-        for (final ManagerShop shop : assigned) {
-            if (shop.getShop().getCode().equals(shopCode)) {
-                return;
-            }
-        }
-        final Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.CODE", shopCode);
-        if (shop != null) {
-            final ManagerShop managerShop = shopDao.getEntityFactory().getByIface(ManagerShop.class);
-            managerShop.setManager(manager);
-            managerShop.setShop(shop);
-            assigned.add(managerShop);
-        }
-        managerService.update(manager);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "yum.shopFederationStrategy-shop",
-            "yum.shopFederationStrategy-shopId",
-            "yum.shopFederationStrategy-shopCode"
-    }, key = "#userId")
-    public void revokeShop(final String userId, final String shopCode) {
-        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
-        final Iterator<ManagerShop> assigned = manager.getShops().iterator();
-        while (assigned.hasNext()) {
-            final ManagerShop shop = assigned.next();
-            if (shop.getShop().getCode().equals(shopCode)) {
-                assigned.remove();
-                managerService.update(manager);
-            }
-        }
-    }
 }

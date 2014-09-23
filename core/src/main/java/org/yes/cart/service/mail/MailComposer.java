@@ -21,7 +21,6 @@ import org.yes.cart.domain.entity.Mail;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,13 +38,12 @@ public interface MailComposer {
      *
      * @param message      mime message to fill
      * @param shopCode     optional shop code
-     * @param locale       locale in which to render the email
-     * @param mailTemplateChain path to template folder
+     * @param pathToTemplateFolder path to template folder
      * @param templateName template name
      * @param from         from address
-     * @param toEmail      mail destination address
-     * @param ccEmail      optional cc
-     * @param bccEmail     optional bcc
+     * @param toEmail           mail destination address
+     * @param ccEmail           optional cc
+     * @param bccEmail          optional bcc
      * @param model        model
      *
      * @throws javax.mail.MessagingException in case if mail message can not be converted
@@ -57,8 +55,7 @@ public interface MailComposer {
     @Deprecated
     void composeMessage(MimeMessage message,
                         String shopCode,
-                        String locale,
-                        List<String> mailTemplateChain,
+                        String pathToTemplateFolder,
                         String templateName,
                         String from,
                         String toEmail,
@@ -72,8 +69,7 @@ public interface MailComposer {
      *
      * @param mail mail message
      * @param shopCode     optional shop code
-     * @param locale       locale in which to render the email
-     * @param mailTemplateChain path to template folder
+     * @param pathToTemplateFolder path to template folder
      * @param templateName template name
      * @param from         from address
      * @param toEmail           mail destination address
@@ -87,8 +83,7 @@ public interface MailComposer {
      */
     void composeMessage(Mail mail,
                         String shopCode,
-                        String locale,
-                        List<String> mailTemplateChain,
+                        String pathToTemplateFolder,
                         String templateName,
                         String from,
                         String toEmail,
