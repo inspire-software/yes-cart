@@ -115,9 +115,13 @@
             <security:protect method="remove" access="ROLE_SMADMIN"/>
             <security:protect method="getNew" access="ROLE_SMADMIN"/>
             <security:protect method="getSupportedCurrencies" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="getSupportedShippingCountries" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="getSupportedBillingCountries" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="updateSupportedCurrencies" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateSupportedShippingCountries" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateSupportedBillingCountries" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
 
             <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -517,8 +521,8 @@
             <security:protect method="update" access="ROLE_SMADMIN"/>
             <security:protect method="remove" access="ROLE_SMADMIN"/>
             <security:protect method="getNew" access="ROLE_SMADMIN"/>
-            <security:protect method="getAll" access="ROLE_SMADMIN"/>
-            <security:protect method="getById" access="ROLE_SMADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>
         </security:intercept-methods>
     </bean>
 
@@ -563,8 +567,8 @@
             <security:protect method="update" access="ROLE_SMADMIN"/>
             <security:protect method="remove" access="ROLE_SMADMIN"/>
             <security:protect method="getNew" access="ROLE_SMADMIN"/>
-            <security:protect method="getAll" access="ROLE_SMADMIN"/>
-            <security:protect method="getById" access="ROLE_SMADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>
         </security:intercept-methods>
     </bean>
 
@@ -683,8 +687,8 @@
                       -->
                     <list>
                         <value>shopcurrencies-demo.xml</value>
-                        <value>country.xml</value>
-                        <value>state.xml</value>
+                        <value>countrynames-demo.xml</value>
+                        <value>statenames-demo.xml</value>
                         <value>carriernames.xml</value>
                         <value>carrierslanames.xml</value>
                         <value>promotionnames.xml</value>
@@ -783,6 +787,12 @@
                 <entry key="Images: Brands">
                     <list>
                         <value>brandimages.xml</value>
+                    </list>
+                </entry>
+                <entry key="Location import">
+                    <list>
+                        <value>countrynames.xml</value>
+                        <value>statenames.xml</value>
                     </list>
                 </entry>
                 <entry key="Shops and Warehouses">

@@ -18,16 +18,16 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.service.domain.AddressService;
-import org.yes.cart.service.domain.CountryService;
-import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.StateService;
+import org.yes.cart.service.domain.*;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.service.AddressBookFacade;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,15 +41,18 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     private final AddressService addressService;
     private final CountryService countryService;
     private final StateService stateService;
+    private final ShopService shopService;
 
     public AddressBookFacadeImpl(final CustomerService customerService,
                                  final AddressService addressService,
                                  final CountryService countryService,
-                                 final StateService stateService) {
+                                 final StateService stateService,
+                                 final ShopService shopService) {
         this.customerService = customerService;
         this.addressService = addressService;
         this.countryService = countryService;
         this.stateService = stateService;
+        this.shopService = shopService;
     }
 
     /** {@inheritDoc} */
@@ -93,8 +96,19 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
     /** {@inheritDoc} */
     @Cacheable(value = "web.addressBookFacade-allCountries")
-    public List<Country> getAllCountries(final String shopCode) {
-        return countryService.findAll();
+    public List<Country> getAllCountries(final String shopCode, final String addressType) {
+        final Shop shop = shopService.getShopByCode(shopCode);
+        final List<String> supported;
+        if ("S".equals(addressType)) {
+            supported = shop.getSupportedShippingCountriesAsList();
+        } else {
+            supported = shop.getSupportedBillingCountriesAsList();
+        }
+        if (supported.isEmpty()) {
+            ShopCodeContext.getLog(this).warn("No '{}' countries configured for shop {}", addressType, shopCode);
+            return Collections.emptyList();
+        }
+        return countryService.findByCriteria(Restrictions.in("countryCode", supported));
     }
 
     /** {@inheritDoc} */

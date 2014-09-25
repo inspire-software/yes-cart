@@ -87,9 +87,15 @@ public class WarmUpServiceImpl implements WarmUpService {
     private void loadAddressData() {
         final List<Shop> shops = shopService.findAll();
         for (final Shop shop : shops) {
-            // Preload all countries
-            final List<Country> countries = addressBookFacade.getAllCountries(shop.getCode());
-            for (final Country country : countries) {
+            // Preload all shipping countries
+            final List<Country> countriesShip = addressBookFacade.getAllCountries(shop.getCode(), "S");
+            for (final Country country : countriesShip) {
+                // Preload states by country
+                addressBookFacade.getStatesByCountry(country.getCountryCode());
+            }
+            // Preload all billing countries
+            final List<Country> countriesBill = addressBookFacade.getAllCountries(shop.getCode(), "B");
+            for (final Country country : countriesBill) {
                 // Preload states by country
                 addressBookFacade.getStatesByCountry(country.getCountryCode());
             }

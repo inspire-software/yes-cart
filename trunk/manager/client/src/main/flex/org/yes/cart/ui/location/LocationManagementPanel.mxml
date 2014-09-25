@@ -327,9 +327,10 @@
                     <mx:DataGridColumn width="100"
                                        headerText="@Resource(bundle='LocationManagementPanel',key='isoCode')"
                                        dataField="isoCode"/>
-                    <mx:DataGridColumn
-                            headerText="@Resource(bundle='LocationManagementPanel',key='name')"
-                            dataField="name"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='LocationManagementPanel',key='name')"
+                                       dataField="name"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='LocationManagementPanel',key='displayName')"
+                                       dataField="displayName"/>
                 </mx:columns>
                 <!--countries dg-->
             </mx:DataGrid>
@@ -370,9 +371,11 @@
                                        headerText="@Resource(bundle='LocationManagementPanel',key='stateCode')"
                                        dataField="stateCode"/>
 
-                    <mx:DataGridColumn
-                            headerText="@Resource(bundle='LocationManagementPanel',key='stateName')"
-                            dataField="name"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='LocationManagementPanel',key='stateName')"
+                                       dataField="name"/>
+
+                    <mx:DataGridColumn headerText="@Resource(bundle='LocationManagementPanel',key='displayName')"
+                                       dataField="displayName"/>
 
                 </mx:columns>
             </mx:DataGrid>

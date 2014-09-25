@@ -26,7 +26,10 @@
         import org.yes.cart.impl.AttrValueShopDTOImpl;
 
         override protected function allowManageAttribute(attr:AttrValueShopDTOImpl):Boolean {
-            return attr.attributeDTO.code.indexOf("IMAGE") == -1 && attr.attributeDTO.code.indexOf("CURRENCY") == -1;;
+            return attr.attributeDTO.code.indexOf("IMAGE") == -1
+                    && attr.attributeDTO.code != "CURRENCY"
+                    && attr.attributeDTO.code != "COUNTRY_SHIP"
+                    && attr.attributeDTO.code != "COUNTRY_BILL";
         }
         ]]></mx:Script>
 

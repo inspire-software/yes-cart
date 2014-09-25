@@ -29,7 +29,6 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.SystemService;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -130,7 +129,7 @@ public class SystemServiceImpl implements SystemService {
      * {@inheritDoc}
      */
     public String getMailResourceDirectory() {
-        return addTailFileSeparator(proxy().getAttributeValue(AttributeNamesKeys.SYSTEM_MAILTEMPLATES_FSPOINTER));
+        return addTailFileSeparator(proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_MAILTEMPLATES_FSPOINTER));
     }
 
 

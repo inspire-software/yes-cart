@@ -70,16 +70,30 @@ public interface Country extends Auditable {
     void setName(String name);
 
     /**
-     * Get iso constry code.
+     * Get country name.
      *
-     * @return iso constry code.
+     * @return country name.
+     */
+    String getDisplayName();
+
+    /**
+     * Set country name.
+     *
+     * @param name country name.
+     */
+    void setDisplayName(String name);
+
+    /**
+     * Get iso country code.
+     *
+     * @return iso country code.
      */
     String getIsoCode();
 
     /**
-     * Set iso constry code.
+     * Set iso country code.
      *
-     * @param isoCode iso constry code.
+     * @param isoCode iso country code.
      */
     void setIsoCode(final String isoCode);
 

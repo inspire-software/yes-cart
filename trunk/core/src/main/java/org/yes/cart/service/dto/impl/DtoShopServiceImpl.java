@@ -93,6 +93,32 @@ public class DtoShopServiceImpl
         return ((ShopService)service).findAllSupportedCurrenciesByShops();
     }
 
+    /** {@inheritDoc} */
+    public String getSupportedShippingCountries(final long shopId) {
+        return service.findById(shopId).getSupportedShippingCountries();
+    }
+
+    /** {@inheritDoc} */
+    public void updateSupportedShippingCountries(final long shopId, final String countries) {
+        ((ShopService) service).updateAttributeValue(
+                shopId,
+                AttributeNamesKeys.Shop.SUPPORTED_COUNTRY_SHIP,
+                countries);
+    }
+
+    /** {@inheritDoc} */
+    public String getSupportedBillingCountries(final long shopId) {
+        return service.findById(shopId).getSupportedBillingCountries();
+    }
+
+    /** {@inheritDoc} */
+    public void updateSupportedBillingCountries(final long shopId, final String countries) {
+        ((ShopService) service).updateAttributeValue(
+                shopId,
+                AttributeNamesKeys.Shop.SUPPORTED_COUNTRY_BILL,
+                countries);
+    }
+
     /**
      * Set supported currencies by given shop.
      * @param shopId shop id
@@ -101,7 +127,7 @@ public class DtoShopServiceImpl
     public void updateSupportedCurrencies(final long shopId, final String currencies) {
         ((ShopService) service).updateAttributeValue(
                 shopId,
-                AttributeNamesKeys.SUPPORTED_CURRENCIES,
+                AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES,
                 currencies);
     }
 
