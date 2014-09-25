@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/main/groovy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.codehaus.gmaven.runtime:gmaven-runtime-2.0:1.4" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.5.10" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.gmaven.feature:gmaven-feature-support:1.4" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.gmaven.feature:gmaven-feature-api:1.4" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.gmaven.runtime:gmaven-runtime-support:1.4" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.gmaven.runtime:gmaven-runtime-api:1.4" level="project" />
+    <orderEntry type="library" name="Maven: org.sonatype.gshell:gshell-io:2.4" level="project" />
+    <orderEntry type="library" name="Maven: org.sonatype.gossip:gossip:1.3" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-utils:3.0" level="project" />
+    <orderEntry type="library" name="Maven: com.thoughtworks.qdox:qdox:1.12" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-all:2.0.0-beta-2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.ant:ant:1.8.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.ant:ant-launcher:1.8.2" level="project" />
+    <orderEntry type="library" name="Maven: jline:jline:0.9.94" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
+  </component>
+</module>
+

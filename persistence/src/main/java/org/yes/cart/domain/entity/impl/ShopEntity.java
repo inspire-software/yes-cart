@@ -193,7 +193,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public String getSupportedCurrencies() {
-        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.SUPPORTED_CURRENCIES);
+        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES);
         if (attrValueShop != null) {
             return attrValueShop.getVal();
         }
@@ -216,6 +216,38 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return Collections.emptyList();
     }
 
+
+    public String getSupportedShippingCountries() {
+        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.SUPPORTED_COUNTRY_SHIP);
+        if (attrValueShop != null) {
+            return attrValueShop.getVal();
+        }
+        return null;
+    }
+
+    public List<String> getSupportedShippingCountriesAsList() {
+        final String countries = getSupportedShippingCountries();
+        if (countries != null) {
+            return Arrays.asList(countries.split(","));
+        }
+        return Collections.emptyList();
+    }
+
+    public String getSupportedBillingCountries() {
+        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.SUPPORTED_COUNTRY_BILL);
+        if (attrValueShop != null) {
+            return attrValueShop.getVal();
+        }
+        return null;
+    }
+
+    public List<String> getSupportedBillingCountriesAsList() {
+        final String countries = getSupportedBillingCountries();
+        if (countries != null) {
+            return Arrays.asList(countries.split(","));
+        }
+        return Collections.emptyList();
+    }
 
     public Collection<AttrValueShop> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueShop> result = new ArrayList<AttrValueShop>();
@@ -250,7 +282,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public boolean isB2ProfileActive() {
         final AttrValueShop avs = getAttributeByCode(
-                AttributeNamesKeys.SHOP_B2B);
+                AttributeNamesKeys.Shop.SHOP_B2B);
         if (avs != null) {
             return Boolean.valueOf(avs.getVal());
         }

@@ -81,11 +81,11 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testAssignCurrency() {
         Shop shop = shopService.getShopByDomainName("long.live.robots");
-        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENCIES, "QWE,ASD,ZXC");
+        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES, "QWE,ASD,ZXC");
         shop = shopService.getShopByDomainName("long.live.robots");
         assertEquals("Supported currency is incorrect",
                 "QWE,ASD,ZXC",
-                shop.getAttributeByCode(AttributeNamesKeys.SUPPORTED_CURRENCIES).getVal());
+                shop.getAttributeByCode(AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES).getVal());
     }
 
     /**
@@ -94,11 +94,11 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testAssignCurrencys() {
         Shop shop = shopService.getShopByDomainName("long.live.robots");
-        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENCIES, "QWE,ZXC");
+        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES, "QWE,ZXC");
         shop = shopService.getShopByDomainName("eddie.lives.somewhere.in.time");
-        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENCIES, "ASD,USD,QWE,UAH");
+        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES, "ASD,USD,QWE,UAH");
         shop = shopService.getShopByDomainName("gadget.yescart.org");
-        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.SUPPORTED_CURRENCIES, "");
+        shopService.updateAttributeValue(shop.getShopId(), AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES, "");
         Collection<String> currencies = shopService.findAllSupportedCurrenciesByShops();
         assertEquals(5, currencies.size());
         Iterator<String> iter = currencies.iterator();

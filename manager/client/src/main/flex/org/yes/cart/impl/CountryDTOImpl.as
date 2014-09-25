@@ -27,6 +27,8 @@ package org.yes.cart.impl {
 
         public var name:String;
 
+        public var displayName:String;
+
         public function CountryDTOImpl() {
         }
 

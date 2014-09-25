@@ -101,7 +101,7 @@ public class AddressForm extends Form<Address> {
 
 
         final List<State> stateList = getStateList(address.getCountryCode());
-        final List<Country> countryList = addressBookFacade.getAllCountries(ShopCodeContext.getShopCode());
+        final List<Country> countryList = addressBookFacade.getAllCountries(ShopCodeContext.getShopCode(), addressType);
 
         final AbstractChoice<State, State> stateDropDownChoice = new DropDownChoice<State>(
                 STATE,

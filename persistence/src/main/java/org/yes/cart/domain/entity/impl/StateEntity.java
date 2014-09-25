@@ -31,6 +31,7 @@ public class StateEntity implements org.yes.cart.domain.entity.State, java.io.Se
     private String countryCode;
     private String stateCode;
     private String name;
+    private String displayName;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -63,6 +64,14 @@ public class StateEntity implements org.yes.cart.domain.entity.State, java.io.Se
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(final String displayName) {
+        this.displayName = displayName;
     }
 
     public Date getCreatedTimestamp() {

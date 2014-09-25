@@ -32,6 +32,7 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
     private String countryCode;
     private String isoCode;
     private String name;
+    private String displayName;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -66,6 +67,14 @@ public class CountryEntity implements org.yes.cart.domain.entity.Country, java.i
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(final String displayName) {
+        this.displayName = displayName;
     }
 
     public Date getCreatedTimestamp() {

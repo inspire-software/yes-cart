@@ -31,7 +31,7 @@ public class StateRenderer extends ChoiceRenderer<State> {
      */
     @Override
     public Object getDisplayValue(final State state) {
-        return state.getName();
+        return state.getDisplayName();
     }
 
     /**

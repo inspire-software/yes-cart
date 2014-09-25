@@ -116,6 +116,10 @@ public interface AttributeNamesKeys {
          * The absolute path to import folder.
          */
         String SYSTEM_IMPORT = "SYSTEM_IMPORT";
+        /**
+         * Default (failover) directory for resources.
+         */
+        String SYSTEM_MAILTEMPLATES_FSPOINTER = "SYSTEM_MAILTEMPLATES_FSPOINTER";
     }
 
 
@@ -196,6 +200,26 @@ public interface AttributeNamesKeys {
          */
         String SHOP_ADMIN_EMAIL = "SHOP_ADMIN_EMAIL";
 
+        /**
+         * The absolute path to import folder.
+         */
+        String SHOP_B2B = "SHOP_B2B";
+
+        /**
+         * Supported by shop currencies.
+         */
+        String SUPPORTED_CURRENCIES = "CURRENCY";
+
+        /**
+         * Supported by shop countries for delivery.
+         */
+        String SUPPORTED_COUNTRY_SHIP = "COUNTRY_SHIP";
+
+        /**
+         * Supported by shop countries for billing.
+         */
+        String SUPPORTED_COUNTRY_BILL = "COUNTRY_BILL";
+
     }
 
     interface Brand {
@@ -214,18 +238,6 @@ public interface AttributeNamesKeys {
     String SEARCH_ITEMS_PER_PAGE = "SEARCH_ITEMS_PER_PAGE";
 
     /**
-     * Supported by shop currencies.
-     */
-    String SUPPORTED_CURRENCIES = "CURRENCY";
-
-
-    /**
-     * Default (failover) directory for resources.
-     */
-    String SYSTEM_MAILTEMPLATES_FSPOINTER = "SYSTEM_MAILTEMPLATES_FSPOINTER";
-
-
-    /**
      * Customer phone.
      */
     String CUSTOMER_PHONE = "CUSTOMER_PHONE";
@@ -239,11 +251,6 @@ public interface AttributeNamesKeys {
      * Shop mail from.
      */
     String SHOP_MAIL_FROM = "SHOP_MAIL_FROM";
-
-    /**
-     * The absolute path to import folder.
-     */
-    String SHOP_B2B = "SHOP_B2B";
 
 
 }

@@ -32,7 +32,9 @@
 //        private var TAB_CURRENCY_EXCHANGE_IDX:int = 3;
         private var TAB_CATEGORY_IDX:int = 3;
         private var TAB_WAREHOUSE_IDX:int = 4;
-        private var TAB_ATTR_IDX:int = 5;
+        private var TAB_SHIPPING_IDX:int = 5;
+        private var TAB_BILLING_IDX:int = 6;
+        private var TAB_ATTR_IDX:int = 7;
 
 
         private var _shopDTOImpl:ShopDTOImpl;
@@ -77,6 +79,20 @@
             storeSupportedCurrencyPanel.shopDTOImpl = _shopDTOImpl;
             currencyTab.addChild(storeSupportedCurrencyPanel);
         }
+
+        private function countryShipTabSelected(event:MouseEvent):void {
+            shippingTab.removeAllChildren();
+            var storeSupportedCountryShipPanel:StoreSupportedCountryShip = new StoreSupportedCountryShip();
+            storeSupportedCountryShipPanel.shopDTOImpl = _shopDTOImpl;
+            shippingTab.addChild(storeSupportedCountryShipPanel);
+        }
+
+        private function countryBillTabSelected(event:MouseEvent):void {
+            billingTab.removeAllChildren();
+            var storeSupportedCountryBillPanel:StoreSupportedCountryBill = new StoreSupportedCountryBill();
+            storeSupportedCountryBillPanel.shopDTOImpl = _shopDTOImpl;
+            billingTab.addChild(storeSupportedCountryBillPanel);
+        }
 //
 //        private function currencyExcRateTabSelected(event:MouseEvent):void {
 //            currencyExcangeTab.removeAllChildren();
@@ -117,6 +133,16 @@
                 case TAB_CURRENCY_IDX:
                 {
                     currencyTabSelected(null);
+                    break;
+                }
+                case TAB_SHIPPING_IDX:
+                {
+                    countryShipTabSelected(null);
+                    break;
+                }
+                case TAB_BILLING_IDX:
+                {
+                    countryBillTabSelected(null);
                     break;
                 }
 //                case TAB_CURRENCY_EXCHANGE_IDX:
@@ -164,6 +190,10 @@
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='catalog')" width="100%" height="100%"
                    id="categoryTab" enabled="{editingMode}"/>
         <mx:Canvas id="warehouseTab" label="@Resource(bundle='StoresManagementPanel',key='warehouses')"
+                   width="100%" height="100%" enabled="{editingMode}"/>
+        <mx:Canvas id="shippingTab" label="@Resource(bundle='StoresManagementPanel',key='shipping')"
+                   width="100%" height="100%" enabled="{editingMode}"/>
+        <mx:Canvas id="billingTab" label="@Resource(bundle='StoresManagementPanel',key='billing')"
                    width="100%" height="100%" enabled="{editingMode}"/>
         <!--<mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='payments')" width="100%"
                    height="100%"/>

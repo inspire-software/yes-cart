@@ -17,17 +17,17 @@
 <import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
 
-    <entity-type>org.yes.cart.domain.entity.Country</entity-type>
+    <entity-type>org.yes.cart.domain.entity.State</entity-type>
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>locations(.*).csv(.*)</file-name-mask>
+        <file-name-mask>statenames(.*).csv(.*)</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
-    <select-sql>select c from CountryEntity c where c.countryCode = {countryCode}</select-sql>
+    <select-sql>select s from StateEntity s where s.stateCode = {stateCode}</select-sql>
 
     <import-columns>
 
@@ -42,8 +42,8 @@
         <column-descriptor>
             <column-index>1</column-index>
             <field-type>FIELD</field-type>
-            <name>isoCode</name>
-            <value-regex>(.{0,3})(.*)</value-regex>
+            <name>stateCode</name>
+            <value-regex>(.{0,64})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
@@ -52,6 +52,14 @@
             <field-type>FIELD</field-type>
             <name>name</name>
             <value-regex>(.{0,64})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>3</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 

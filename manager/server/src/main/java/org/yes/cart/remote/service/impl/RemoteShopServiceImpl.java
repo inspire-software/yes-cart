@@ -116,6 +116,50 @@ public class RemoteShopServiceImpl
     /**
      * {@inheritDoc}
      */
+    public String getSupportedShippingCountries(final long shopId) {
+        if (federationFacade.isManageable(shopId, ShopDTO.class)) {
+            return ((DtoShopService) getGenericDTOService()).getSupportedShippingCountries(shopId);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateSupportedShippingCountries(final long shopId, final String countries) {
+        if (federationFacade.isManageable(shopId, ShopDTO.class)) {
+            ((DtoShopService) getGenericDTOService()).updateSupportedShippingCountries(shopId, countries);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getSupportedBillingCountries(final long shopId) {
+        if (federationFacade.isManageable(shopId, ShopDTO.class)) {
+            return ((DtoShopService) getGenericDTOService()).getSupportedBillingCountries(shopId);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateSupportedBillingCountries(final long shopId, final String countries) {
+        if (federationFacade.isManageable(shopId, ShopDTO.class)) {
+            ((DtoShopService) getGenericDTOService()).updateSupportedBillingCountries(shopId, countries);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public ShopDTO getShopDtoByDomainName(final String serverDomainName) {
         return ((DtoShopService) getGenericDTOService()).getShopDtoByDomainName(serverDomainName);
     }

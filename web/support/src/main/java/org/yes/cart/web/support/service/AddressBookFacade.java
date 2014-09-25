@@ -77,9 +77,12 @@ public interface AddressBookFacade {
     /**
      * Find all countries.
      *
+     * @param shopCode shop code
+     * @param addressType address type
+     *
      * @return all countries
      */
-    List<Country> getAllCountries(String shopCode);
+    List<Country> getAllCountries(String shopCode, String addressType);
 
     /**
      * Find by country code.

@@ -42,6 +42,9 @@ public class StateDTOImpl implements StateDTO {
     @DtoField(value = "name")
     private String name;
 
+    @DtoField(value = "displayName")
+    private String displayName;
+
     /**
      * {@inheritDoc}
      */
@@ -94,6 +97,20 @@ public class StateDTOImpl implements StateDTO {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDisplayName(final String displayName) {
+        this.displayName = displayName;
     }
 
     /**

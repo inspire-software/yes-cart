@@ -201,7 +201,8 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "shopService-shopByDomainName",
             "shopService-allShops",
             "shopService-shopWarehouses",
-            "shopService-shopWarehousesIds"
+            "shopService-shopWarehousesIds",
+            "web.addressBookFacade-allCountries"
     }, allEntries = true)
     public void updateAttributeValue(final long shopId, final String attributeKey, final String attributeValue) {
         final Shop shop = shopDao.findById(shopId);

@@ -30,7 +30,7 @@ public class CountryRenderer extends ChoiceRenderer<Country> {
     /** {@inheritDoc} */
     @Override
     public Object getDisplayValue(final Country country) {
-        return country.getName();
+        return country.getDisplayName();
     }
 
     /** {@inheritDoc} */

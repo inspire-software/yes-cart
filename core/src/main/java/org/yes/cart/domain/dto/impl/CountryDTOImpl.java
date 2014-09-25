@@ -42,6 +42,9 @@ public class CountryDTOImpl implements CountryDTO {
     @DtoField(value = "name")
     private String name;
 
+    @DtoField(value = "displayName")
+    private String displayName;
+
 
     /**
      * {@inheritDoc}
@@ -104,6 +107,20 @@ public class CountryDTOImpl implements CountryDTO {
      */
     public void setName(final String name) {
         this.name = name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDisplayName(final String displayName) {
+        this.displayName = displayName;
     }
 
     @Override

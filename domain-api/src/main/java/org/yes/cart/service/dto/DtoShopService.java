@@ -17,11 +17,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ShopDTO;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -52,6 +49,38 @@ public interface DtoShopService extends GenericDTOService<ShopDTO>, GenericAttrV
      * @param currencies comma separated list of supported currency codes. Example USD,EUR
      */
     void updateSupportedCurrencies(long shopId, String currencies);
+
+    /**
+     * Get supported shipping countries by given shop.
+     *
+     * @param shopId given shop id.
+     * @return comma separated list of supported country codes. Example GB,US
+     */
+    String getSupportedShippingCountries(long shopId);
+
+    /**
+     * Set supported shipping countries by given shop.
+     *
+     * @param shopId     shop id
+     * @param countries comma separated list of supported country codes. Example GB,US
+     */
+    void updateSupportedShippingCountries(long shopId, String countries);
+
+    /**
+     * Get supported billing countries by given shop.
+     *
+     * @param shopId given shop id.
+     * @return comma separated list of supported country codes. Example GB,US
+     */
+    String getSupportedBillingCountries(long shopId);
+
+    /**
+     * Set supported billing countries by given shop.
+     *
+     * @param shopId     shop id
+     * @param countries comma separated list of supported country codes. Example GB,US
+     */
+    void updateSupportedBillingCountries(long shopId, String countries);
 
 
     /**

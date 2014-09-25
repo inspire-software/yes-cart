@@ -26,12 +26,12 @@ public interface State extends Auditable {
     /**
      * Get contry code.
      *
-     * @return contry code.
+     * @return country code.
      */
     String getCountryCode();
 
     /**
-     * Set contry code.
+     * Set country code.
      *
      * @param countryCode code to set.
      */
@@ -64,6 +64,20 @@ public interface State extends Auditable {
      * @param name name to set.
      */
     void setName(String name);
+
+    /**
+     * Get name.
+     *
+     * @return name.
+     */
+    String getDisplayName();
+
+    /**
+     * Set name.
+     *
+     * @param name name to set.
+     */
+    void setDisplayName(String name);
 
     /**
      * Get state pk value.
