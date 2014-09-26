@@ -2140,6 +2140,12 @@
         </bag>
 
 
+        <bag name="shops" inverse="true" lazy="true" cascade="all,delete-orphan" >
+            <key column="CARRIER_ID" on-delete="cascade"/>
+            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.CarrierShopEntity"/>
+        </bag>
+
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -2186,6 +2192,35 @@
         <property name="guid" column="GUID" type="string" length="36" unique-key="CARRIERSLA_GUID" not-null="true"/>
 
     </class>
+
+
+    <class name="org.yes.cart.domain.entity.impl.CarrierShopEntity" table="TCARRIERSHOP">
+        <id name="carrierShopId" column="CARRIERSHOP_ID" type="long">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <many-to-one name="carrier" class="org.yes.cart.domain.entity.impl.CarrierEntity" foreign-key="FK_CRS_CARRIER">
+            <column name="CARRIER_ID" not-null="true"/>
+        </many-to-one>
+
+        <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_CRS_SHOP">
+            <column name="SHOP_ID" not-null="true"/>
+        </many-to-one>
+
+
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36" unique-key="CARRIERSHOP_GUID" not-null="true"/>
+
+    </class>
+
 
     <!--     ########################################### SEO ################################# -->
 
@@ -3121,6 +3156,13 @@
         <![CDATA[
             select a from CarrierSlaEntity a
                 where a.carrier.carrierId = ?1
+        ]]>
+    </query>
+
+    <query name="CARRIER.BY.SHOPID">
+        <![CDATA[
+            select distinct a.carrier from CarrierShopEntity a
+                where a.shop.shopId = ?1
         ]]>
     </query>
 

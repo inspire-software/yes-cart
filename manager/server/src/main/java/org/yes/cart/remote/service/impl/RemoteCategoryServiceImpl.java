@@ -129,7 +129,7 @@ public class RemoteCategoryServiceImpl
 
             category.setParentId(((CategoryService) getService()).getRootCategory().getCategoryId());
             final CategoryDTO created = super.create(category);
-            assignToShop(created.getCategoryId(), shopId);
+            ((DtoCategoryService) getGenericDTOService()).assignToShop(created.getCategoryId(), shopId);
 
             return created;
 

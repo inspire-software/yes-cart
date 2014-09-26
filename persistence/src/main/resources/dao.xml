@@ -114,6 +114,7 @@
 
                 <entry key="org.yes.cart.domain.entity.Carrier" value="org.yes.cart.domain.entity.impl.CarrierEntity"/>
                 <entry key="org.yes.cart.domain.entity.CarrierSla" value="org.yes.cart.domain.entity.impl.CarrierSlaEntity"/>
+                <entry key="org.yes.cart.domain.entity.CarrierShop" value="org.yes.cart.domain.entity.impl.CarrierShopEntity"/>
                 <entry key="org.yes.cart.domain.entity.Category" value="org.yes.cart.domain.entity.impl.CategoryEntity"/>
                 <entry key="org.yes.cart.domain.entity.Country" value="org.yes.cart.domain.entity.impl.CountryEntity"/>
                 <entry key="org.yes.cart.domain.entity.State" value="org.yes.cart.domain.entity.impl.StateEntity"/>

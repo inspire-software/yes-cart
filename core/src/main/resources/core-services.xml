@@ -903,9 +903,10 @@
     <bean id="dtoCarrierService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoCarrierServiceImpl">
-                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
-                <constructor-arg index="1" ref="carrierService"/>
-                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="0" ref="carrierService"/>
+                <constructor-arg index="1" ref="shopDao"/>
+                <constructor-arg index="2" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="3" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>

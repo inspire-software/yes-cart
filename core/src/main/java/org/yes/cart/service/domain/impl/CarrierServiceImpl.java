@@ -16,12 +16,15 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.domain.CarrierService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -40,19 +43,24 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
     }
 
     /**
-     * Find carriers, that can make delivery to given country and state.
-     *
-     * @param countryCode given country code.
-     * @param stateCode   state code - optional.
-     * @param city        city - optional.
-     * @param currency currency to filter
-     * @return list of carries with filtered SLA, that satisfy to given search criteria.
+     * {@inheritDoc}
      */
-    public List<Carrier> findCarriers(final String countryCode, final String stateCode, final String city, final String currency) {
-        final List<Carrier> rez  = new ArrayList<Carrier>();
-        rez.addAll(getGenericDao().findAll());
-        filterByCurrency(rez, currency);
-        return rez;  //TODO: V2 implement more sophisticated search
+    public List<Carrier> findCarriersByShopId(final long shopId) {
+        final List<Carrier> rez  = getGenericDao().findByNamedQuery("CARRIER.BY.SHOPID", shopId);
+        return rez;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Carrier> findCarriersByShopIdAndCurrency(final long shopId, final String currency) {
+        final List<Carrier> rez  = findCarriersByShopId(shopId);
+        if (CollectionUtils.isEmpty(rez)) {
+            return Collections.emptyList();
+        }
+        final List<Carrier> filtered = new ArrayList<Carrier>(rez);
+        filterByCurrency(filtered, currency);
+        return filtered;
     }
 
     /**
@@ -63,25 +71,20 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
      */
     void filterByCurrency(final List<Carrier> carriers,  final String currency) {
 
-        for (Carrier carrier : carriers) {
-            final List<CarrierSla> toRemove = new ArrayList<CarrierSla>();
-            for(CarrierSla carrierSla : carrier.getCarrierSla()) {
-                if (!currency.endsWith(carrierSla.getCurrency())) {
-                     toRemove.add(carrierSla);
+        final Iterator<Carrier> carrierIt = carriers.iterator();
+        while (carrierIt.hasNext()) {
+            final Carrier carrier = carrierIt.next();
+            final Iterator<CarrierSla> slaIt = carrier.getCarrierSla().iterator();
+            while (slaIt.hasNext()) {
+                final CarrierSla carrierSla = slaIt.next();
+                if (!currency.equals(carrierSla.getCurrency())) {
+                    slaIt.remove();
                 }
             }
-            carrier.getCarrierSla().removeAll(toRemove);
-        }
-
-        //remove carriers with empty sla list.
-        final List<Carrier> carriersToRemove = new ArrayList<Carrier>();
-        for (Carrier carrier : carriers) {
-            if(carrier.getCarrierSla().isEmpty()) {
-                carriersToRemove.add(carrier);
+            if (carrier.getCarrierSla().isEmpty()) {
+                carrierIt.remove();
             }
         }
-        carriers.removeAll(carriersToRemove);
-
 
     }
 }

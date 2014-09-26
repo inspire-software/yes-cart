@@ -17,6 +17,7 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.yes.cart.domain.entity.CarrierShop;
 import org.yes.cart.domain.entity.CarrierSla;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
     private boolean state;
     private boolean local;
     private Collection<CarrierSla> carrierSla = new ArrayList<CarrierSla>(0);
+    private Collection<CarrierShop> shops = new ArrayList<CarrierShop>(0);
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -123,6 +125,14 @@ public class CarrierEntity implements org.yes.cart.domain.entity.Carrier, java.i
 
     public void setCarrierSla(Collection<CarrierSla> carrierSla) {
         this.carrierSla = carrierSla;
+    }
+
+    public Collection<CarrierShop> getShops() {
+        return shops;
+    }
+
+    public void setShops(final Collection<CarrierShop> shops) {
+        this.shops = shops;
     }
 
     public Date getCreatedTimestamp() {

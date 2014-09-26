@@ -32,9 +32,10 @@
 //        private var TAB_CURRENCY_EXCHANGE_IDX:int = 3;
         private var TAB_CATEGORY_IDX:int = 3;
         private var TAB_WAREHOUSE_IDX:int = 4;
-        private var TAB_SHIPPING_IDX:int = 5;
-        private var TAB_BILLING_IDX:int = 6;
-        private var TAB_ATTR_IDX:int = 7;
+        private var TAB_CARRIERS_IDX:int = 5;
+        private var TAB_SHIPPING_IDX:int = 6;
+        private var TAB_BILLING_IDX:int = 7;
+        private var TAB_ATTR_IDX:int = 8;
 
 
         private var _shopDTOImpl:ShopDTOImpl;
@@ -115,6 +116,13 @@
             warehouseTab.addChild(panel);
         }
 
+        private function carriersTabSelected(event:MouseEvent):void {
+            carriersTab.removeAllChildren();
+            var panel:StoreSupportedCarriers = new StoreSupportedCarriers();
+            panel.shopDTOImpl = _shopDTOImpl;
+            carriersTab.addChild(panel);
+        }
+
         private function attrTabSelected():void {
             storeNonImagesPanel.shop = this._shopDTOImpl;
         }
@@ -160,6 +168,11 @@
                     warehouseTabSelected(null);
                     break;
                 }
+                case TAB_CARRIERS_IDX:
+                {
+                    carriersTabSelected(null);
+                    break;
+                }
                 case TAB_ATTR_IDX:
                 {
                     attrTabSelected();
@@ -190,6 +203,8 @@
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='catalog')" width="100%" height="100%"
                    id="categoryTab" enabled="{editingMode}"/>
         <mx:Canvas id="warehouseTab" label="@Resource(bundle='StoresManagementPanel',key='warehouses')"
+                   width="100%" height="100%" enabled="{editingMode}"/>
+        <mx:Canvas id="carriersTab" label="@Resource(bundle='StoresManagementPanel',key='carriers')"
                    width="100%" height="100%" enabled="{editingMode}"/>
         <mx:Canvas id="shippingTab" label="@Resource(bundle='StoresManagementPanel',key='shipping')"
                    width="100%" height="100%" enabled="{editingMode}"/>

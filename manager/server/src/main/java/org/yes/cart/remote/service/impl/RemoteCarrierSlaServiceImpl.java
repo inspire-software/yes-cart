@@ -16,14 +16,18 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.springframework.security.access.AccessDeniedException;
+import org.yes.cart.domain.dto.CarrierDTO;
 import org.yes.cart.domain.dto.CarrierSlaDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteCarrierSlaService;
 import org.yes.cart.service.dto.DtoCarrierSlaService;
 import org.yes.cart.service.dto.GenericDTOService;
+import org.yes.cart.service.federation.FederationFacade;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -34,13 +38,18 @@ public class RemoteCarrierSlaServiceImpl
         extends AbstractRemoteService<CarrierSlaDTO>
         implements RemoteCarrierSlaService {
 
+    private final FederationFacade federationFacade;
+
     /**
      * Construct remote service.
      *
      * @param carrierSlaDTOGenericDTOService carrier sla dto service to use
+     * @param federationFacade federation facade
      */
-    public RemoteCarrierSlaServiceImpl(final GenericDTOService<CarrierSlaDTO> carrierSlaDTOGenericDTOService) {
+    public RemoteCarrierSlaServiceImpl(final GenericDTOService<CarrierSlaDTO> carrierSlaDTOGenericDTOService,
+                                       final FederationFacade federationFacade) {
         super(carrierSlaDTOGenericDTOService);
+        this.federationFacade = federationFacade;
     }
 
 
@@ -48,23 +57,77 @@ public class RemoteCarrierSlaServiceImpl
      * {@inheritDoc}
      */
     public List<CarrierSlaDTO> findByCarrier(final long carrierId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return ((DtoCarrierSlaService) getGenericDTOService()).findByCarrier(carrierId);
+        if (federationFacade.isManageable(carrierId, CarrierDTO.class)) {
+            return ((DtoCarrierSlaService) getGenericDTOService()).findByCarrier(carrierId);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public List<CarrierSlaDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        throw new AccessDeniedException("Access is denied");
+    }
 
     /**
-     * Fill dtos from entities
-     * @param entities list of entities
-     * @param dtos list of dtos
-     * @throws UnmappedInterfaceException in case of config errors
-     * @throws UnableToCreateInstanceException ion case of dto creating errors
+     * {@inheritDoc}
      */
-    /*public void fillDTOs(Collection<IFACE> entities, Collection<DTOIFACE> dtos)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        for (IFACE entity : entities) {
-            DTOIFACE dto = (DTOIFACE) dtoFactory.getByIface(getDtoIFace());
-            assembler.assembleDto(dto, entity, valueConverterRepository, dtoFactory);
-            dtos.add(dto);
+    public CarrierSlaDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final CarrierSlaDTO sla = super.getById(id);
+        if (sla != null) {
+            if (federationFacade.isManageable(sla.getCarrierId(), CarrierDTO.class)) {
+                return sla;
+            } else {
+                throw new AccessDeniedException("Access is denied");
+            }
         }
-    } */
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public CarrierSlaDTO getById(final long id, final Map converters) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final CarrierSlaDTO sla = super.getById(id, converters);
+        if (sla != null) {
+            if (federationFacade.isManageable(sla.getCarrierId(), CarrierDTO.class)) {
+                return sla;
+            } else {
+                throw new AccessDeniedException("Access is denied");
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public CarrierSlaDTO create(final CarrierSlaDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (federationFacade.isManageable(instance.getCarrierId(), CarrierDTO.class)) {
+            return super.create(instance);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public CarrierSlaDTO update(final CarrierSlaDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (federationFacade.isManageable(instance.getCarrierId(), CarrierDTO.class)) {
+            return super.update(instance);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void remove(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        getById(id); // check access
+        super.remove(id);
+    }
 }

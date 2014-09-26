@@ -17,6 +17,11 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.CarrierDTO;
+import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
+
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -24,5 +29,64 @@ import org.yes.cart.domain.dto.CarrierDTO;
  * Time: 11:13:01
  */
 public interface DtoCarrierService extends GenericDTOService<CarrierDTO> {
+
+
+    /**
+     * Get all assigned to shop carriers.
+     *
+     * @param shopId shop id
+     * @return list of assigned categories
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    List<CarrierDTO> findAllByShopId(final long shopId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+    /**
+     * Get the assigned to carrier shops
+     *
+     * @param carrierId carrier PK
+     * @return list of assigned shops
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration error
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case if some problems with reflection
+     */
+    List<ShopDTO> getAssignedCarrierShops(long carrierId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+    /**
+     * Get the available to carrier shops. Mean all roles minus assigned.
+     *
+     * @param carrierId carrier PK
+     * @return list of available shops
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration error
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case if some problems with reflection
+     */
+    List<ShopDTO> getAvailableCarrierShops(long carrierId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Assign given shop to carrier
+     *
+     * @param carrierId user id
+     * @param shopId  shop
+     */
+    void assignToShop(long carrierId, long shopId);
+
+    /**
+     * Unassign shop from carrier.
+     *
+     * @param carrierId user id
+     * @param shopId  shop
+     */
+    void unassignFromShop(long carrierId, long shopId);
+
 
 }

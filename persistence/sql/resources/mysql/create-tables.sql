@@ -147,6 +147,20 @@
         primary key (CARRIERSLA_ID)
     ) comment='Shipment service layer agreement. Days, distances , etc.' ;
 
+    create table TCARRIERSHOP (
+        CARRIERSHOP_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        CARRIER_ID bigint not null,
+        SHOP_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (CARRIERSHOP_ID)
+    ) ;
+
+
     create table TCATEGORY (
         CATEGORY_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
@@ -1054,6 +1068,19 @@
         add constraint FK_CSLA_CARR 
         foreign key (CARRIER_ID) 
         references TCARRIER (CARRIER_ID);
+
+    alter table TCARRIERSHOP
+        add index FK_CRS_SHOP (SHOP_ID),
+        add constraint FK_CRS_SHOP
+        foreign key (SHOP_ID)
+        references TSHOP (SHOP_ID);
+
+    alter table TCARRIERSHOP
+        add index FK_CRS_CARRIER (CARRIER_ID),
+        add constraint FK_CRS_CARRIER
+        foreign key (CARRIER_ID)
+        references TCARRIER (CARRIER_ID)         on delete cascade;
+
 
 
     alter table TCATEGORY 

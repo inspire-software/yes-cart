@@ -327,27 +327,38 @@
 
     <bean id="remoteCarrierService" class="org.yes.cart.remote.service.impl.RemoteCarrierServiceImpl">
         <constructor-arg index="0" ref="dtoCarrierService"/>
+        <constructor-arg index="1" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
-            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="create" access="ROLE_SMADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMSHIPPINGADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMSHIPPINGADMIN"/>
             <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMSHIPPINGADMIN"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMSHIPPINGADMIN"/>
+            <security:protect method="findAllByShopId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMSHIPPINGADMIN,ROLE_SMMARKETINGADMIN"/>
+
+            <security:protect method="createForShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAssignedCarrierShops" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAvailableCarrierShops" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="assignToShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="unassignFromShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
         </security:intercept-methods>
     </bean>
 
+
     <bean id="remoteCarrierSlaService" class="org.yes.cart.remote.service.impl.RemoteCarrierSlaServiceImpl">
         <constructor-arg index="0" ref="dtoCarrierSlaService"/>
+        <constructor-arg index="1" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
-            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMSHIPPINGADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMSHIPPINGADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMSHIPPINGADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMSHIPPINGADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMSHIPPINGADMIN"/>
+            <security:protect method="findByCarrier" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMSHIPPINGADMIN"/>
         </security:intercept-methods>
     </bean>
 
@@ -690,6 +701,7 @@
                         <value>countrynames-demo.xml</value>
                         <value>statenames-demo.xml</value>
                         <value>carriernames.xml</value>
+                        <value>carriershopnames.xml</value>
                         <value>carrierslanames.xml</value>
                         <value>promotionnames.xml</value>
                         <value>promotioncouponnames.xml</value>
@@ -793,6 +805,13 @@
                     <list>
                         <value>countrynames.xml</value>
                         <value>statenames.xml</value>
+                    </list>
+                </entry>
+                <entry key="Carriers import">
+                    <list>
+                        <value>carriernames.xml</value>
+                        <value>carriershopnames.xml</value>
+                        <value>carrierslanames.xml</value>
                     </list>
                 </entry>
                 <entry key="Shops and Warehouses">

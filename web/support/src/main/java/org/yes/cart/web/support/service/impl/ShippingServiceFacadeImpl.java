@@ -46,12 +46,16 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     /** {@inheritDoc} */
     @Override
     public List<Carrier> findCarriers(final ShoppingCart shoppingCart) {
-        // CPOINT: shipping logic in most cases is very business specific and should be put into this method
-        return carrierService.findCarriers(
-                null,
-                null,
-                null,
+        final List<Carrier> all = carrierService.findCarriersByShopIdAndCurrency(
+                shoppingCart.getShoppingContext().getShopId(),
                 shoppingCart.getCurrencyCode());
+        filterCarriersForShoppingCart(all, shoppingCart);
+        return all;
+    }
+
+    private void filterCarriersForShoppingCart(final List<Carrier> all, final ShoppingCart shoppingCart) {
+        // CPOINT: shipping logic in most cases it is very business specific and should be put into this method
+        // CPOINT: recommended approach is to create Carrier filter strategy bean and delegate filtering to it
     }
 
     /** {@inheritDoc} */
