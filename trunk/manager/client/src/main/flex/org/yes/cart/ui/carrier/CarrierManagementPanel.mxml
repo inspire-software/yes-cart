@@ -15,11 +15,11 @@
   -    limitations under the License.
   -->
 
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
-           width="100%"
-           height="100%"
-           creationComplete="init();"
-           paddingLeft="2" paddingRight="2" paddingBottom="5">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:carrier="org.yes.cart.ui.carrier.*"
+         width="100%"
+         height="100%"
+         creationComplete="init();"
+         paddingLeft="2" paddingRight="2" paddingBottom="5">
     <mx:Script><![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
@@ -235,7 +235,13 @@
             this.carrierSlaSelected = false;
             this.carrierSlaGrid.dataProvider = event.result;
             this.carrierSelectedAndHasNoSla = this.carrierSlaGrid.dataProvider.length == 0;
-
+            this.carrierShops.removeAllChildren();
+            var _carrier:CarrierDTOImpl = this.carrierGrid.selectedItem as CarrierDTOImpl;
+            if (_carrier != null) {
+                var _shops:CarrierShopPanel = new CarrierShopPanel();
+                _shops.carrierId = _carrier.carrierId;
+                this.carrierShops.addChild(_shops);
+            }
         }
 
         private function onUpdateCarrierResult(event:ResultEvent):void {
@@ -276,6 +282,10 @@
 
         private function onRpcMethodFault(event:FaultEvent):void {
             ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onRefreshCarrierListButtonClick(event:MouseEvent):void {
+            init();
         }
         ]]></mx:Script>
 
@@ -341,6 +351,10 @@
                            click="onDeleteCarrierClick(event)"
 
                         />
+                <mx:Button id="refreshShopList"
+                           label="@Resource(bundle='ShopManagerApplication',key='refresh')"
+                           click="onRefreshCarrierListButtonClick(event)"/>
+
             </mx:HBox>
             <mx:DataGrid id="carrierGrid"
                          doubleClickEnabled="true"
@@ -400,105 +414,113 @@
                 <!--countries dg-->
             </mx:DataGrid>
         </mx:Panel>
-        <mx:Panel width="100%" title="@Resource(bundle='CarrierManagementPanel',key='carrierSLA')"
-                  paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2"
-                  visible="{carrierSelected}">
-            <mx:HBox paddingTop="5" width="100%">
-                <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='newCarrierSla')"
-                               toolTip="@Resource(bundle='CarrierManagementPanel',key='newCarrierSlaHint')"
-                               enabled="{carrierSelected}"
-                               click="onCreateNewCarrierSlaClick(event)"
-                            />
-                <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='editCarrierSla')"
-                           toolTip="@Resource(bundle='CarrierManagementPanel',key='editCarrierSlaHint')"
-                           enabled="{carrierSlaSelected}"
-                           click="onEditCarrierSlaClick(event)"
-                        />
-                <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='deleteCarrierSla')"
-                           toolTip="@Resource(bundle='CarrierManagementPanel',key='deleteCarrierSlaHint')"
-                           enabled="{carrierSlaSelected}"
-                           click="onDeleteCarrierSlaClick(event)"
-                        />
-            </mx:HBox>
-            <mx:DataGrid id="carrierSlaGrid"
-                         doubleClickEnabled="true"
-                         itemDoubleClick="onEditCarrierSlaClick(event)"
-                         itemClick="onCarrierSlaSelectedClick(event)"
-                         width="100%" height="100%">
-                <mx:columns>
-                    <mx:DataGridColumn width="80"
-                                       headerText="@Resource(bundle='CarrierManagementPanel',key='carrierslaId')"
-                                       dataField="carrierslaId"/>
-                    <mx:DataGridColumn width="250"
-                                       headerText="@Resource(bundle='CarrierManagementPanel',key='name')"
-                                       dataField="name"/>
+        <mx:TabNavigator width="100%" height="100%" id="shopTabNavigator" creationPolicy="all">
 
-                    <mx:DataGridColumn width="80"
-                                       headerText="@Resource(bundle='CarrierManagementPanel',key='maxDays')"
-                                       dataField="maxDays"/>
+            <mx:Canvas width="100%" height="100%" label="@Resource(bundle='CarrierManagementPanel',key='carrierSLA')"
+                       visible="{carrierSelected}">
+                <mx:VBox paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2"  width="100%" height="100%">
+                    <mx:HBox paddingTop="5" width="100%">
+                        <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='newCarrierSla')"
+                                   toolTip="@Resource(bundle='CarrierManagementPanel',key='newCarrierSlaHint')"
+                                   enabled="{carrierSelected}"
+                                   click="onCreateNewCarrierSlaClick(event)"
+                                />
+                        <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='editCarrierSla')"
+                                   toolTip="@Resource(bundle='CarrierManagementPanel',key='editCarrierSlaHint')"
+                                   enabled="{carrierSlaSelected}"
+                                   click="onEditCarrierSlaClick(event)"
+                                />
+                        <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='deleteCarrierSla')"
+                                   toolTip="@Resource(bundle='CarrierManagementPanel',key='deleteCarrierSlaHint')"
+                                   enabled="{carrierSlaSelected}"
+                                   click="onDeleteCarrierSlaClick(event)"
+                                />
+                    </mx:HBox>
+                    <mx:DataGrid id="carrierSlaGrid"
+                                 doubleClickEnabled="true"
+                                 itemDoubleClick="onEditCarrierSlaClick(event)"
+                                 itemClick="onCarrierSlaSelectedClick(event)"
+                                 width="100%" height="100%">
+                        <mx:columns>
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='CarrierManagementPanel',key='carrierslaId')"
+                                               dataField="carrierslaId"/>
+                            <mx:DataGridColumn width="250"
+                                               headerText="@Resource(bundle='CarrierManagementPanel',key='name')"
+                                               dataField="name"/>
 
-                    <mx:DataGridColumn width="80"
-                                       headerText="@Resource(bundle='CarrierManagementPanel',key='currency')"
-                                       dataField="currency"/>
-                    <mx:DataGridColumn width="100"
-                                       headerText="@Resource(bundle='CarrierManagementPanel',key='slaType')"
-                                       dataField="slaType">
-                        <mx:itemRenderer>
-                            <mx:Component>
-                                <mx:Label text="{outerDocument.getSlaTypeLabel(data.slaType)}"/>
-                            </mx:Component>
-                        </mx:itemRenderer>
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='CarrierManagementPanel',key='maxDays')"
+                                               dataField="maxDays"/>
 
-                   </mx:DataGridColumn>
-                    <mx:DataGridColumn width="80"
-                                       headerText="@Resource(bundle='CarrierManagementPanel',key='price')"
-                                       dataField="price">
-                        <mx:itemRenderer>
-                            <mx:Component>
-                                <mx:Label text="{data.price == 0?'':data.price}"/>
-                            </mx:Component>
-                        </mx:itemRenderer>
-                    </mx:DataGridColumn>
-                    <mx:DataGridColumn width="80"
-                                       headerText="@Resource(bundle='CarrierManagementPanel',key='priceNotLess')"
-                                       dataField="priceNotLess">
-                        <mx:itemRenderer>
-                            <mx:Component>
-                                <mx:Label text="{data.priceNotLess == 0?'':data.priceNotLess}"/>
-                            </mx:Component>
-                        </mx:itemRenderer>
-                    </mx:DataGridColumn>
-                    <mx:DataGridColumn width="80"
-                                       headerText="@Resource(bundle='CarrierManagementPanel',key='percent')"
-                                       dataField="percent">
-                        <mx:itemRenderer>
-                            <mx:Component>
-                                <mx:Label text="{data.percent == 0?'':data.percent}"/>
-                            </mx:Component>
-                        </mx:itemRenderer>
-                    </mx:DataGridColumn>
-                    <mx:DataGridColumn width="80"
-                                       headerText="@Resource(bundle='CarrierManagementPanel',key='percentNotLess')"
-                                       dataField="percentNotLess">
-                        <mx:itemRenderer>
-                            <mx:Component>
-                                <mx:Label text="{data.percentNotLess == 0?'':data.percentNotLess}"/>
-                            </mx:Component>
-                        </mx:itemRenderer>
-                    </mx:DataGridColumn>
-                    <mx:DataGridColumn width="80"
-                                       headerText="@Resource(bundle='CarrierManagementPanel',key='costNotLess')"
-                                       dataField="costNotLess">
-                        <mx:itemRenderer>
-                            <mx:Component>
-                                <mx:Label text="{data.costNotLess == 0?'':data.costNotLess}"/>
-                            </mx:Component>
-                        </mx:itemRenderer>
-                    </mx:DataGridColumn>
-                </mx:columns>
-            </mx:DataGrid>
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='CarrierManagementPanel',key='currency')"
+                                               dataField="currency"/>
+                            <mx:DataGridColumn width="100"
+                                               headerText="@Resource(bundle='CarrierManagementPanel',key='slaType')"
+                                               dataField="slaType">
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:Label text="{outerDocument.getSlaTypeLabel(data.slaType)}"/>
+                                    </mx:Component>
+                                </mx:itemRenderer>
 
-        </mx:Panel>
+                            </mx:DataGridColumn>
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='CarrierManagementPanel',key='price')"
+                                               dataField="price">
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:Label text="{data.price == 0?'':data.price}"/>
+                                    </mx:Component>
+                                </mx:itemRenderer>
+                            </mx:DataGridColumn>
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='CarrierManagementPanel',key='priceNotLess')"
+                                               dataField="priceNotLess">
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:Label text="{data.priceNotLess == 0?'':data.priceNotLess}"/>
+                                    </mx:Component>
+                                </mx:itemRenderer>
+                            </mx:DataGridColumn>
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='CarrierManagementPanel',key='percent')"
+                                               dataField="percent">
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:Label text="{data.percent == 0?'':data.percent}"/>
+                                    </mx:Component>
+                                </mx:itemRenderer>
+                            </mx:DataGridColumn>
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='CarrierManagementPanel',key='percentNotLess')"
+                                               dataField="percentNotLess">
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:Label text="{data.percentNotLess == 0?'':data.percentNotLess}"/>
+                                    </mx:Component>
+                                </mx:itemRenderer>
+                            </mx:DataGridColumn>
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='CarrierManagementPanel',key='costNotLess')"
+                                               dataField="costNotLess">
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:Label text="{data.costNotLess == 0?'':data.costNotLess}"/>
+                                    </mx:Component>
+                                </mx:itemRenderer>
+                            </mx:DataGridColumn>
+                        </mx:columns>
+                    </mx:DataGrid>
+                </mx:VBox>
+            </mx:Canvas>
+
+            <mx:Canvas id="carrierShops" label="@Resource(bundle='CarrierManagementPanel',key='carrierShops')"
+                       width="100%" height="100%"/>
+
+        </mx:TabNavigator>
+
     </mx:VDividedBox>
 
 

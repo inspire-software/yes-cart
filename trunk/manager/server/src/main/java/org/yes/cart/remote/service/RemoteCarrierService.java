@@ -16,6 +16,9 @@
 
 package org.yes.cart.remote.service;
 
+import org.yes.cart.domain.dto.CarrierDTO;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.DtoCarrierService;
 
 /**
@@ -24,4 +27,16 @@ import org.yes.cart.service.dto.DtoCarrierService;
  * Time: 17:22:15
  */
 public interface RemoteCarrierService extends DtoCarrierService {
+
+
+    /**
+     * Create carrier and assign it to shop.
+     *
+     * @param carrier carrier
+     * @param shopId shop
+     *
+     * @return created category
+     */
+    CarrierDTO createForShop(CarrierDTO carrier, long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 }

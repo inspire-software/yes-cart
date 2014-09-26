@@ -44,7 +44,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
- * User management service implemenation
+ * User management service implementation
  * <p/>
 * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -107,7 +107,7 @@ public class ManagementServiceImpl implements ManagementService {
     }
 
     /**
-     * Get the list of managers by given filtring citeria.
+     * Get the list of managers by given filtering criteria.
      *
      * @param emailFilter     optional email filter
      * @param firstNameFilter optional first name filter

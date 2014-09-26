@@ -28,12 +28,12 @@
         import org.yes.cart.impl.ShopDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
-        public var userId:String;
+        public var carrierId:Number;
 
         public function init():void {
 
-            remoteUserManagementService.getAssignedManagerShops(userId);
-            remoteUserManagementService.getAvailableManagerShops(userId);
+            remoteCarrierService.getAssignedCarrierShops(carrierId);
+            remoteCarrierService.getAvailableCarrierShops(carrierId);
 
         }
 
@@ -92,7 +92,7 @@
         private function onAvailableShopClick(event:MouseEvent):void {
             var _shop:ShopDTOImpl = availableShopList.selectedItem as ShopDTOImpl;
             if (_shop != null) {
-                remoteUserManagementService.grantShop(userId, _shop.code);
+                remoteCarrierService.assignToShop(carrierId, _shop.shopId);
             }
         }
 
@@ -103,7 +103,7 @@
         private function onAssignedShopClick(event:MouseEvent):void {
             var _shop:ShopDTOImpl = assignedShopList.selectedItem as ShopDTOImpl;
             if (_shop != null) {
-                remoteUserManagementService.revokeShop(userId, _shop.code);
+                remoteCarrierService.unassignFromShop(carrierId, _shop.shopId);
             }
         }
 
@@ -118,22 +118,22 @@
     <mx:ArrayCollection id="assignedShop"/>
 
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteUserManagementService"
-                     destination="remoteUserManagementService"
+    <mx:RemoteObject showBusyCursor="true" id="remoteCarrierService"
+                     destination="remoteCarrierService"
                      result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
                      fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-        <mx:method id="getAvailableManagerShops" name="getAvailableManagerShops"
+        <mx:method id="getAvailableCarrierShops" name="getAvailableCarrierShops"
                    result="onGetAvailableShop(event)"/>
 
-        <mx:method id="getAssignedManagerShops" name="getAssignedManagerShops"
+        <mx:method id="getAssignedCarrierShops" name="getAssignedCarrierShops"
                    result="onGetAssignedShop(event)"/>
 
-        <mx:method id="grantShop" name="grantShop"
+        <mx:method id="assignToShop" name="assignToShop"
                    result="onGrantShop(event)"/>
 
-        <mx:method id="revokeShop" name="revokeShop"
+        <mx:method id="unassignFromShop" name="unassignFromShop"
                    result="onRevokeShop(event)"/>
 
     </mx:RemoteObject>
@@ -141,13 +141,13 @@
 
     <mx:Grid x="0" y="0" width="100%" height="100%">
         <mx:GridRow width="100%" height="50">
-            <mx:GridItem  width="44%"  height="50" textAlign="center" verticalAlign="middle">
-                <mx:Label text="@Resource(bundle='CustomerShopPanel',key='availableShop')"/>
+            <mx:GridItem width="44%" height="50" textAlign="center" verticalAlign="middle">
+                <mx:Label text="@Resource(bundle='CarrierManagementPanel',key='availableShop')"/>
             </mx:GridItem>
             <mx:GridItem width="12%" height="50">
             </mx:GridItem>
-            <mx:GridItem  width="44%" height="50" textAlign="center" verticalAlign="middle">
-                <mx:Label text="@Resource(bundle='CustomerShopPanel',key='assignedShop')"/>
+            <mx:GridItem width="44%" height="50" textAlign="center" verticalAlign="middle">
+                <mx:Label text="@Resource(bundle='CarrierManagementPanel',key='assignedShop')"/>
             </mx:GridItem>
         </mx:GridRow>
         <mx:GridRow width="100%" height="100%">
@@ -166,12 +166,12 @@
                 <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
                     <mx:Button width="100"
                                enabled="{availableShopList.selectedItem != null}"
-                               label="@Resource(bundle='CustomerShopPanel',key='assign')"
-                               toolTip="@Resource(bundle='CustomerShopPanel',key='assignHint')"
+                               label="@Resource(bundle='CarrierManagementPanel',key='assign')"
+                               toolTip="@Resource(bundle='CarrierManagementPanel',key='assignHint')"
                                click="onAvailableShopClick(event)"/>
                     <mx:Button width="100" enabled="{assignedShopList.selectedItem != null}"
-                               label="@Resource(bundle='CustomerShopPanel',key='unassign')"
-                               toolTip="@Resource(bundle='CustomerShopPanel',key='unassignHint')"
+                               label="@Resource(bundle='CarrierManagementPanel',key='unassign')"
+                               toolTip="@Resource(bundle='CarrierManagementPanel',key='unassignHint')"
                                click="onAssignedShopClick(event)"/>
                 </mx:VBox>
             </mx:GridItem>

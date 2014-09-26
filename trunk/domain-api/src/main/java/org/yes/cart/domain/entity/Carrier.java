@@ -170,6 +170,22 @@ public interface Carrier extends Auditable {
     void setLocal(boolean local);
 
 
+    /**
+     * Get assigned shops.
+     *
+     * @return shops
+     */
+    Collection<CarrierShop> getShops();
+
+    /**
+     * Set assigned shops.
+     *
+     * @param shops shops
+     */
+    void setShops(Collection<CarrierShop> shops);
+
+
+
 }
 
 

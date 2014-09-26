@@ -30,18 +30,28 @@ import java.util.List;
 public interface CarrierService extends GenericService<Carrier> {
 
     /**
-     * Find carriers, that can prepare delivery to given country and state.
-     * <p/>
-     * At this moment only one supply point is supported.  Supply location
-     * must be moved from shop to assigned warehouses to have multiple supply point.
-     * TODO: V2 such sophisticated logistic shall be in separate module
+     * Find carriers, that are applicable for given shop in all currencies available.
      *
-     * @param countryCode given country code.
-     * @param stateCode   state code - optional.
-     * @param city        city - optional.
-     * @param currency    currency in shopping cart
+     * Complex custom logic should be implemented in the ShippingServiceFacade, which is part of
+     * websupport module.
+     * <p/>
+     * @param shopId shop PK
+     *
      * @return list of carries with filtered SLA, that satisfy to given search criteria.
      */
-    List<Carrier> findCarriers(String countryCode, String stateCode, String city, String currency);
+    List<Carrier> findCarriersByShopId(long shopId);
+
+    /**
+     * Find carriers, that are applicable for given shop and given currency.
+     *
+     * Complex custom logic should be implemented in the ShippingServiceFacade, which is part of
+     * websupport module.
+     * <p/>
+     * @param shopId shop PK
+     * @param currency    currency in shopping cart
+     *
+     * @return list of carries with filtered SLA, that satisfy to given search criteria.
+     */
+    List<Carrier> findCarriersByShopIdAndCurrency(long shopId, String currency);
 
 }

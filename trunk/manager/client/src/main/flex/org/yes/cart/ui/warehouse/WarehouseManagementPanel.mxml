@@ -134,6 +134,10 @@
             remoteWarehouseService.getAll();
 
         }
+
+        private function onRefreshWarehouseListButtonClick(event:MouseEvent):void {
+            init();
+        }
         ]]>
     </mx:Script>
 
@@ -173,6 +177,9 @@
                        toolTip="@Resource(bundle='WarehouseManagementPanel',key='deleteWarehouseHint')"
                        enabled="{warehouseSelected}"
                        click="onDeleteWarehouseClick(event)"/>
+            <mx:Button id="refreshShopList"
+                       label="@Resource(bundle='ShopManagerApplication',key='refresh')"
+                       click="onRefreshWarehouseListButtonClick(event)"/>
 
         </mx:HBox>
 

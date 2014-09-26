@@ -110,10 +110,10 @@ public interface ManagementService {
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Get the available to manager roles. Mean all roles minus assigned.
+     * Get the available to manager shops.
      *
      * @param userId user email
-     * @return list of available roles
+     * @return list of available shops
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration error
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
