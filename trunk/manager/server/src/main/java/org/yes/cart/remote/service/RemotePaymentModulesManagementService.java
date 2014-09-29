@@ -39,50 +39,127 @@ public interface RemotePaymentModulesManagementService {
 
     /**
      * Get allowed payment gateways in all modules.
+     *
      * @param lang ui lang
+     *
      * @return list of label-name pairs .
      */
     List<DtoPaymentGatewayInfo> getPaymentGateways(String lang);
 
     /**
      * Get allowed payment gateways in all modules.
+     *
      * @param lang ui lang
+     * @param shopCode shop code
+     *
      * @return list of label-name pairs .
      */
-    List<Pair<String,String>> getAllowedPaymentGateways(String lang);
+    List<DtoPaymentGatewayInfo> getPaymentGatewaysForShop(String lang, String shopCode);
+
+    /**
+     * Get allowed payment gateways in all modules.
+     *
+     * @param lang ui lang
+     *
+     * @return list of label-name pairs .
+     */
+    List<Pair<String, String>> getAllowedPaymentGateways(String lang);
+
+    /**
+     * Get allowed payment gateways in all modules.
+     *
+     * @param lang ui lang
+     * @param shopCode shop code
+     *
+     * @return list of label-name pairs .
+     */
+    List<Pair<String, String>> getAllowedPaymentGatewaysForShop(String lang, String shopCode);
 
     /**
      * Get available payment gateways in all modules.
+     *
      * @param lang ui lang
+     *
      * @return list of label-name pairs .
      */
-    List<Pair<String,String>> getAvailablePaymentGateways(String lang);
+    List<Pair<String, String>> getAvailablePaymentGateways(String lang);
+
+    /**
+     * Get available payment gateways in all modules.
+     *
+     * @param lang ui lang
+     * @param shopCode shop code
+     *
+     * @return list of label-name pairs .
+     */
+    List<Pair<String, String>> getAvailablePaymentGatewaysForShop(String lang, String shopCode);
 
     /**
      * Get parameters for given payment gateway.
+     *
      * @param gatewayLabel payment gateway label.
      * @param lang ui lang
+     *
      * @return PG parameters.
      */
     Collection<PaymentGatewayParameter> getPaymentGatewayParameters(String gatewayLabel, String lang);
 
+    /**
+     * Get parameters for given payment gateway.
+     *
+     * @param gatewayLabel payment gateway label.
+     * @param lang ui lang
+     * @param shopCode shop code
+     *
+     * @return PG parameters.
+     */
+    Collection<PaymentGatewayParameter> getPaymentGatewayParametersForShop(String gatewayLabel, String lang, String shopCode);
+
 
     /**
      * Get payment gateway features.
+     *
      * @param gatewayLabel payment gateway label.
+     *
      * @return {@link PaymentGatewayFeature}  supported features of gateway.
      */
     PaymentGatewayFeature getPaymentGatewayFeature(String gatewayLabel);
 
 
     /**
-     * Update configuration parameter of payment gateway.
+     * Get payment gateway features.
+     *
      * @param gatewayLabel payment gateway label.
-     * @param paramaterLabel parameter label, unique identification.
+     * @param shopCode shop code
+     *
+     * @return {@link PaymentGatewayFeature}  supported features of gateway.
+     */
+    PaymentGatewayFeature getPaymentGatewayFeatureForShop(String gatewayLabel, String shopCode);
+
+
+    /**
+     * Update configuration parameter of payment gateway.
+     *
+     * @param gatewayLabel payment gateway label.
+     * @param parameterLabel parameter label, unique identification.
      * @param parameterValue parameter value.
+     *
      * @return  true in case if update was ok
      */
-    boolean updateConfigurationParameter(String gatewayLabel, String paramaterLabel, String parameterValue);
+    boolean updateConfigurationParameter(String gatewayLabel, String parameterLabel, String parameterValue);
+
+
+    /**
+     * Update configuration parameter of payment gateway.
+     *
+     * @param gatewayLabel payment gateway label.
+     * @param parameterLabel parameter label, unique identification.
+     * @param parameterValue parameter value.
+     * @param shopCode shop code
+     *
+     * @return  true in case if update was ok
+     */
+    boolean updateConfigurationParameterForShop(String gatewayLabel, String parameterLabel, String parameterValue, String shopCode);
 
     /**
      * Put available payment gateway into allowed.
@@ -92,11 +169,27 @@ public interface RemotePaymentModulesManagementService {
     void allowPaymentGateway(String label);
 
     /**
+     * Put available payment gateway into allowed.
+     *
+     * @param label   payment gateway label
+     * @param shopCode shop code
+     */
+    void allowPaymentGatewayForShop(String label, String shopCode);
+
+    /**
      * Remove available payment gateway from allowed and put it into allowed.
      *
      * @param label   payment gateway label
      */
     void disallowPaymentGateway(String label);
+
+    /**
+     * Remove available payment gateway from allowed and put it into allowed.
+     *
+     * @param label   payment gateway label
+     * @param shopCode shop code
+     */
+    void disallowPaymentGatewayForShop(String label, String shopCode);
 
 
     /**
@@ -109,16 +202,15 @@ public interface RemotePaymentModulesManagementService {
      * @param lastCardDigits last 4 digits of plastic card
      * @param cardHolderName card holder name
      * @param paymentGateway payment gateway
+     *
      * @return list of payments which satisfy search criteria
      */
-    List<CustomerOrderPayment> findPayments(
-            String orderNumber,
-            Date fromDate,
-            Date tillDate,
-            String lastCardDigits,
-            String cardHolderName,
-            String paymentGateway
-    );
+    List<CustomerOrderPayment> findPayments(String orderNumber,
+                                            Date fromDate,
+                                            Date tillDate,
+                                            String lastCardDigits,
+                                            String cardHolderName,
+                                            String paymentGateway);
 
 
 

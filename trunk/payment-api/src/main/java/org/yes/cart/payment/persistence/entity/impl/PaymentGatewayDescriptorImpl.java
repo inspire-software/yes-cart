@@ -31,7 +31,6 @@ public class PaymentGatewayDescriptorImpl extends DescriptorImpl implements Paym
     private String url;
     private String login;
     private String password;
-    private int priority;
 
 
     /**
@@ -42,28 +41,14 @@ public class PaymentGatewayDescriptorImpl extends DescriptorImpl implements Paym
      * @param url         url
      */
     public PaymentGatewayDescriptorImpl(final String description,
-                                        final String label, final String url) {
+                                        final String label,
+                                        final String url) {
         super(description, label);
         this.url = url;
     }
 
-
     /**
-     * {@inheritDoc}
-     */
-    public int getPriority() {
-        return priority;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setPriority(final int priority) {
-        this.priority = priority;
-    }
-
-    /**
-     * Defaiult constructor.
+     * Default constructor.
      */
     public PaymentGatewayDescriptorImpl() {
         super();

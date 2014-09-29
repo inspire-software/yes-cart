@@ -41,12 +41,12 @@ public class PaymentProcessorFactoryImplTest extends BaseCoreDBTestCase {
     }
 
     /**
-     * Test that two instance are different , because of prototypw scope in spring
+     * Test that two instance are different (prototype scope), because processors are stateful
      */
     @Test
     public void testCreate() {
-        PaymentProcessor paymentProcessor0 = paymentProcessorFactory.create("testPaymentGatewayLabel");
-        PaymentProcessor paymentProcessor1 = paymentProcessorFactory.create("testPaymentGatewayLabel");
+        PaymentProcessor paymentProcessor0 = paymentProcessorFactory.create("testPaymentGatewayLabel", "SHOIP1");
+        PaymentProcessor paymentProcessor1 = paymentProcessorFactory.create("testPaymentGatewayLabel", "SHOIP1");
         assertNotSame(paymentProcessor0, paymentProcessor1);
     }
 }

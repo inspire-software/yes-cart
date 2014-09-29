@@ -38,10 +38,12 @@ public interface PaymentGatewayParameterService extends PaymentModuleGenericServ
     void deleteByLabel(String paymentGatewayLabel, String parameterLabel);
 
     /**
-     * Get payment gateway parametrs.
+     * Get payment gateway parameters.
      *
-     * @param label payment gaeway label
+     * @param label payment gateway label
+     * @param shopCode shop code
+     *
      * @return all PG parameters
      */
-    Collection<PaymentGatewayParameter> findAll(String label);
+    Collection<PaymentGatewayParameter> findAll(String label, String shopCode);
 }

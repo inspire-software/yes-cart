@@ -60,8 +60,10 @@ public class CancelNewOrderWithRefundOrderEventHandlerImpl extends AbstractOrder
     @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
-            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(orderEvent.getCustomerOrder().getPgLabel());
+
             final CustomerOrder order = orderEvent.getCustomerOrder();
+
+            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
 
             boolean handled = true;
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {

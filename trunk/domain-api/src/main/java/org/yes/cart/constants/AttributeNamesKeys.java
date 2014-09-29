@@ -138,18 +138,12 @@ public interface AttributeNamesKeys {
          */
         String CATEGORY_IMAGE = "CATEGORY_IMAGE";
 
-
         /**
-         * Label of category image retreive strategy. Allowed values:
+         * Label of category image retrieve strategy. Allowed values:
          * ATTRIBUTE
          * RANDOM_PRODUCT
          */
         String CATEGORY_IMAGE_RETRIEVE_STRATEGY = "CATEGORY_IMAGE_RETRIEVE_STRATEGY";
-
-        /**
-         * Default strategy
-         */
-        String CATEGORY_IMAGE_DEFAULT_RETREIVE_STRATEGY = "RANDOM_PRODUCT";
 
         /** Category images width and height.  */
         String CATEGORY_IMAGE_WIDTH = "CATEGORY_IMAGE_WIDTH";
@@ -219,6 +213,11 @@ public interface AttributeNamesKeys {
          * Supported by shop countries for billing.
          */
         String SUPPORTED_COUNTRY_BILL = "COUNTRY_BILL";
+
+        /**
+         * Comma separated list of active payment gateways.
+         */
+        String SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL = "SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL";
 
     }
 

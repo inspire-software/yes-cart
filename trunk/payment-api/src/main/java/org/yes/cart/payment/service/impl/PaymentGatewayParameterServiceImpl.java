@@ -16,6 +16,7 @@
 
 package org.yes.cart.payment.service.impl;
 
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
@@ -58,7 +59,23 @@ public class PaymentGatewayParameterServiceImpl
     /**
      * {@inheritDoc}
      */
-    public Collection<PaymentGatewayParameter> findAll(final String label) {
-        return getGenericDao().findByCriteria(Restrictions.eq("pgLabel", label));
+    public Collection<PaymentGatewayParameter> findAll(final String label, final String shopCode) {
+        if (shopCode != null && !"DEFAULT".equals(shopCode)) {
+            return getGenericDao().findByCriteria(
+                    Restrictions.and(
+                            Restrictions.eq("pgLabel", label),
+                            Restrictions.or(
+                                    Restrictions.not(Restrictions.like("label", "#", MatchMode.START)),
+                                    Restrictions.like("label", "#" + shopCode + "_", MatchMode.START)
+                            )
+                        )
+            );
+        }
+        return getGenericDao().findByCriteria(
+                Restrictions.and(
+                        Restrictions.eq("pgLabel", label),
+                        Restrictions.not(Restrictions.like("label", "#", MatchMode.START))
+                )
+        );
     }
 }

@@ -76,8 +76,10 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
     @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
-            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(orderEvent.getCustomerOrder().getPgLabel());
             final CustomerOrder order = orderEvent.getCustomerOrder();
+
+            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
+
             if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.cancelOrder(order))) {
 
                 return super.handle(orderEvent);

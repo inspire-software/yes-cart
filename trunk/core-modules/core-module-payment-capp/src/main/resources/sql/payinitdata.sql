@@ -364,6 +364,9 @@ VALUES (1199, 'cyberSourcePaymentGateway',
 '
 , 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (1198, 'cyberSourcePaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
+
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -640,6 +643,8 @@ VALUES (130, 'authorizeNetAimPaymentGateway',
 '
 , 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (1298, 'authorizeNetAimPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
 
 
 
@@ -1025,6 +1030,8 @@ VALUES (163, 'payflowPaymentGateway',
 '
 , 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (164, 'payflowPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
 
 
 
@@ -1293,6 +1300,8 @@ VALUES (183, 'payPalNvpPaymentGateway',
 '
 , 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (184, 'payPalNvpPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
@@ -1351,6 +1360,8 @@ VALUES (210, 'authorizeNetSimPaymentGateway', 'name_ru', 'Authorize.net SIM', '�
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (211, 'authorizeNetSimPaymentGateway', 'name_uk', 'Authorize.net SIM', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (212, 'authorizeNetSimPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
 
 
 
@@ -1422,4 +1433,6 @@ VALUES (230, 'payPalExpressPaymentGateway', 'name_ru', 'PayPal Express', 'Наз
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (231, 'payPalExpressPaymentGateway', 'name_uk', 'PayPal Express', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (232, 'payPalExpressPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
 

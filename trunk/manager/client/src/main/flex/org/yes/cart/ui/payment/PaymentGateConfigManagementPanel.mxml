@@ -22,8 +22,8 @@
 
         <mx:VDividedBox width="100%" height="100%">
             <mx:VBox width="100%" height="50%">
-                <mx:DataGrid id="gatewayGrid" width="100%" height="100%"
-                             itemClick="onGatewaySelected(event)" editable="true">
+                <mx:DataGrid id="gatewayGrid" dataProvider="{pgList}" width="100%" height="100%"
+                             itemClick="onGatewaySelected(event)">
                     <mx:columns>
 
                         <mx:DataGridColumn width="60"
@@ -36,30 +36,53 @@
                             <mx:itemRenderer>
                                 <mx:Component>
                                     <mx:HBox horizontalAlign="center">
-                                        <mx:CheckBox id="activeStatusCombobox" enabled="true" selected="{data.active}"
-                                                     click="onActiveStatusChange(event);">
-                                            <mx:Script>
-                                              <![CDATA[
+                                        <mx:Button id="activate"
+                                                   label="@Resource(bundle='PaymentGateConfigManagementPanel',key='deactivated')"
+                                                   toolTip="@Resource(bundle='PaymentGateConfigManagementPanel',key='activate')"
+                                                   click="onActivateClick(event)"
+                                                   visible="{!data.active}" includeInLayout="{!data.active}">
+                                            <mx:Script><![CDATA[
                                                 import com.hexagonstar.util.debug.Debug;
 
-                                                /**
-                                                 * Handle activate/deactivation of payment gateway
-                                                 * @param event
-                                                 */
-                                                private function onActiveStatusChange(event:MouseEvent):void {
-
-                                                    Debug.trace("DEBUG new active status is " + activeStatusCombobox.selected + " for " + data.name);
-                                                    if (activeStatusCombobox.selected) {
+                                                private function onActivateClick(event:MouseEvent):void {
+                                                    if (outerDocument.shopDTOImpl == null) {
+                                                        Debug.trace("DEBUG new active status is ON for " + data.name);
                                                         outerDocument.remotePaymentModulesManagementService.allowPaymentGateway(data.label);
                                                     } else {
-                                                        outerDocument.remotePaymentModulesManagementService.disallowPaymentGateway(data.label);
+                                                        Debug.trace("DEBUG new active status is ON for " + data.name + " at shop " + outerDocument.shopDTOImpl.code);
+                                                        outerDocument.remotePaymentModulesManagementService.allowPaymentGatewayForShop(data.label, outerDocument.shopDTOImpl.code);
                                                     }
-
+                                                    data.active = true;
+                                                    activate.visible = false;
+                                                    activate.includeInLayout = false;
+                                                    deactivate.visible = true;
+                                                    deactivate.includeInLayout = true;
 
                                                 }
-                                                ]]>
-                                             </mx:Script>
-                                        </mx:CheckBox>
+                                                ]]></mx:Script>
+                                        </mx:Button>
+                                        <mx:Button id="deactivate"
+                                                   label="@Resource(bundle='PaymentGateConfigManagementPanel',key='activated')"
+                                                   toolTip="@Resource(bundle='PaymentGateConfigManagementPanel',key='deactivate')"
+                                                   click="onDeactivateClick(event)"
+                                                   visible="{data.active}" includeInLayout="{data.active}">
+                                            <mx:Script><![CDATA[
+                                                private function onDeactivateClick(event:MouseEvent):void {
+                                                    if (outerDocument.shopDTOImpl == null) {
+                                                        Debug.trace("DEBUG new active status is OFF for " + data.name);
+                                                        outerDocument.remotePaymentModulesManagementService.disallowPaymentGateway(data.label);
+                                                    } else {
+                                                        Debug.trace("DEBUG new active status is OFF for " + data.name + " at shop " + outerDocument.shopDTOImpl.code);
+                                                        outerDocument.remotePaymentModulesManagementService.disallowPaymentGatewayForShop(data.label, outerDocument.shopDTOImpl.code);
+                                                    }
+                                                    data.active = false;
+                                                    activate.visible = true;
+                                                    activate.includeInLayout = true;
+                                                    deactivate.visible = false;
+                                                    deactivate.includeInLayout = false;
+                                                }
+                                                ]]></mx:Script>
+                                        </mx:Button>
                                     </mx:HBox>
                                 </mx:Component>
                             </mx:itemRenderer>
@@ -78,9 +101,9 @@
                 </mx:DataGrid>
             </mx:VBox>
             <mx:VBox width="100%" height="50%">
-                <mx:DataGrid id="parameterGrid" width="100%" height="100%"
+                <mx:DataGrid id="parameterGrid" dataProvider="{pgParameters}" width="100%" height="100%"
                              itemEditEnd="onAttributeValueEditEnd(event);"
-                             visible="{gatewayGrid.selectedItem != null}">
+                             visible="{pgSelected}">
                     <mx:columns>
                         <mx:DataGridColumn width="200"
                                            headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='name')"
@@ -185,13 +208,18 @@
             </mx:VBox>
         </mx:VDividedBox>
 
-    </mx:Panel>
+</mx:Panel>
 
 
     <mx:RemoteObject showBusyCursor="true" id="remotePaymentModulesManagementService"
                      destination="remotePaymentModulesManagementService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
+
         <mx:method id="getPaymentGateways" name="getPaymentGateways"
+                   result="onGetPaymentGatewaysResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="getPaymentGatewaysForShop" name="getPaymentGatewaysForShop"
                    result="onGetPaymentGatewaysResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
@@ -199,13 +227,59 @@
                    result="onGetPaymentGatewayParametersResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="getPaymentGatewayParametersForShop" name="getPaymentGatewayParametersForShop"
+                   result="onGetPaymentGatewayParametersResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="allowPaymentGateway" name="allowPaymentGateway"
+                   result="onAllowPaymentGatewayResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="allowPaymentGatewayForShop" name="allowPaymentGatewayForShop"
+                   result="onAllowPaymentGatewayResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="disallowPaymentGateway" name="disallowPaymentGateway"
+                   result="onDisallowPaymentGatewayResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="disallowPaymentGatewayForShop" name="disallowPaymentGatewayForShop"
+                   result="onDisallowPaymentGatewayResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateConfigurationParameter" name="updateConfigurationParameter"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateConfigurationParameterForShop" name="updateConfigurationParameterForShop"
+                   fault="onRpcMethodFault(event)"/>
+
     </mx:RemoteObject>
 
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteDevService"
+                     destination="remoteDevService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="evictAllCache" name="evictAllCache"
+                   result="onEvictCacheResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="warmUp" name="warmUp"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:ArrayCollection id="pgList"/>
+    <mx:ArrayCollection id="pgParameters"/>
+    <mx:Boolean id="pgSelected"/>
     <mx:String id="localeFilter"/>
 
 
     <mx:Script><![CDATA[
         import com.hexagonstar.util.debug.Debug;
+
+        import mx.controls.CheckBox;
+        import mx.events.CloseEvent;
 
         import mx.events.DataGridEvent;
         import mx.events.DataGridEventReason;
@@ -214,7 +288,20 @@
         import mx.rpc.events.ResultEvent;
         import mx.controls.Alert;
 
+        import org.yes.cart.impl.ShopDTOImpl;
+
         import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        private var _shopDTOImpl:ShopDTOImpl;
+
+
+        public function set shopDTOImpl(value:ShopDTOImpl):void {
+            _shopDTOImpl = value;
+        }
+
+        public function get shopDTOImpl():ShopDTOImpl {
+            return _shopDTOImpl;
+        }
 
         /**
          * Init created panel.
@@ -224,18 +311,43 @@
             localeFilter = resourceManager.getString('Common', 'localeFilter');
 
             //Load list of payment gateways.
-            remotePaymentModulesManagementService.getPaymentGateways(localeFilter);
+            if (_shopDTOImpl == null) {
+                remotePaymentModulesManagementService.getPaymentGateways(localeFilter);
+            } else {
+                remotePaymentModulesManagementService.getPaymentGatewaysForShop(localeFilter, _shopDTOImpl.code);
+            }
 
         }
 
 
         /**
-         * Handle gataway selection event.
+         * Handle gateway selection event.
          * @param event
          */
         private function onGatewaySelected(event:ListEvent):void {
 
-            remotePaymentModulesManagementService.getPaymentGatewayParameters(gatewayGrid.selectedItem.label, localeFilter);
+            var _item:Object = gatewayGrid.selectedItem;
+            pgSelected = _item != null;
+            if (pgSelected) {
+                if (_item.active) {
+                    if (_shopDTOImpl == null) {
+                        remotePaymentModulesManagementService.getPaymentGatewayParameters(_item.label, localeFilter);
+                    } else {
+                        remotePaymentModulesManagementService.getPaymentGatewayParametersForShop(_item.label, localeFilter, _shopDTOImpl.code);
+                    }
+                } else {
+                    pgParameters.refresh();
+                    pgParameters.removeAll();
+                }
+            }
+        }
+
+        private function onAllowPaymentGatewayResult(event:ResultEvent):void {
+            onActivationStatusResult(event);
+        }
+
+        private function onDisallowPaymentGatewayResult(event:ResultEvent):void {
+            onActivationStatusResult(event);
         }
 
         /**
@@ -244,7 +356,9 @@
          */
         private function onGetPaymentGatewaysResult(event:ResultEvent):void {
             //assign loaded list of payment gateways to grid
-            gatewayGrid.dataProvider = event.result;
+            pgList.refresh();
+            pgList.removeAll();
+            pgList.addAll(event.result as ArrayCollection);
         }
 
         /**
@@ -253,7 +367,9 @@
          */
         private function onGetPaymentGatewayParametersResult(event:ResultEvent):void {
             //assign loaded list of payment gateways parameters to data grid.
-            parameterGrid.dataProvider = event.result;
+            pgParameters.refresh();
+            pgParameters.removeAll();
+            pgParameters.addAll(event.result as ArrayCollection);
         }
 
         /**
@@ -263,7 +379,6 @@
         private function onRpcMethodFault(event:FaultEvent):void {
             ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
-
 
 
         /**
@@ -284,11 +399,57 @@
          * Handle new data for payment gateway.
          */
         protected function onValueChanged(event:DataGridEvent, pgParameter:Object, newValue:Object):void {
-            Debug.trace("INFO new value " + pgParameter.value + " for " + pgParameter.label + " in gateway " + gatewayGrid.selectedItem.label);
-            remotePaymentModulesManagementService.updateConfigurationParameter(
-                    gatewayGrid.selectedItem.label,
-                    pgParameter.label,
-                    pgParameter.value);
+            if (_shopDTOImpl == null) {
+                Debug.trace("INFO new value " + pgParameter.value +
+                        " for " + pgParameter.label +
+                        " in gateway " + gatewayGrid.selectedItem.label +
+                        " at DEFAULT");
+
+                remotePaymentModulesManagementService.updateConfigurationParameter(
+                        gatewayGrid.selectedItem.label,
+                        pgParameter.label,
+                        pgParameter.value);
+            } else {
+                Debug.trace("INFO new value " + pgParameter.value +
+                        " for " + pgParameter.label +
+                        " in gateway " + gatewayGrid.selectedItem.label +
+                        " at shop " + _shopDTOImpl.code);
+
+                remotePaymentModulesManagementService.updateConfigurationParameterForShop(
+                        gatewayGrid.selectedItem.label,
+                        pgParameter.label,
+                        pgParameter.value,
+                        _shopDTOImpl.code
+                );
+            }
         }
+
+        private function onActivationStatusResult(event:ResultEvent):void {
+            Alert.show(resourceManager.getString('PaymentGateConfigManagementPanel', 'evictCache'),
+                    resourceManager.getString('ShopManagerApplication', 'info'),
+                    Alert.YES | Alert.CANCEL, this, onGetImportStatusResultSuccess, null, Alert.YES);
+        }
+
+
+        private function onGetImportStatusResultSuccess(event:CloseEvent):void {
+            if (event.detail == Alert.YES) {
+                remoteDevService.evictAllCache();
+            }
+        }
+
+        private function onEvictCacheResult(event:ResultEvent):void {
+            Alert.show(resourceManager.getString('PaymentGateConfigManagementPanel', 'warmUpServers'),
+                    resourceManager.getString('ShopManagerApplication', 'info'),
+                    Alert.YES | Alert.CANCEL, this, onEvictCacheResultSuccess, null, Alert.YES);
+        }
+
+
+        private function onEvictCacheResultSuccess(event:CloseEvent):void {
+            if (event.detail == Alert.YES) {
+                remoteDevService.warmUp();
+            }
+        }
+
+
         ]]></mx:Script>
 </mx:Canvas>

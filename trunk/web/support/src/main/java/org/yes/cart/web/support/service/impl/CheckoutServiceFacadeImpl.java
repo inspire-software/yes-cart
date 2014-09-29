@@ -17,6 +17,7 @@
 package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
@@ -93,7 +94,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     public Payment createPaymentToAuthorize(final CustomerOrder order) {
 
         final String pgLabel = order.getPgLabel();
-        final PaymentProcessor processor = paymentProcessorFactory.create(pgLabel);
+        final PaymentProcessor processor = paymentProcessorFactory.create(pgLabel, order.getShop().getCode());
         final PaymentGateway gateway = processor.getPaymentGateway();
 
         if (gateway.getPaymentGatewayFeatures().isRequireDetails()) {
@@ -113,7 +114,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     public PaymentGateway getOrderPaymentGateway(final CustomerOrder order) {
 
         final String pgLabel = order.getPgLabel();
-        return paymentModulesManager.getPaymentGateway(pgLabel);
+        return paymentModulesManager.getPaymentGateway(pgLabel, order.getShop().getCode());
 
     }
 
@@ -122,12 +123,34 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     public List<Pair<PaymentGatewayDescriptor, String>> getPaymentGatewaysDescriptors(final Shop shop, final ShoppingCart cart) {
 
         final String lang = cart.getCurrentLocale();
-        final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false);
+        final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false, cart.getShoppingContext().getShopCode());
         final List<Pair<PaymentGatewayDescriptor, String>> available = new ArrayList<Pair<PaymentGatewayDescriptor, String>>(descriptors.size());
+        final Map<String, Integer> sorting = new HashMap<String, Integer>();
         for (final PaymentGatewayDescriptor descriptor : descriptors) {
-            final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel());
+            final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel(), cart.getShoppingContext().getShopCode());
             available.add(new Pair<PaymentGatewayDescriptor, String>(descriptor, gateway.getName(lang)));
+            final String priority = gateway.getParameterValue("priority");
+            if (priority == null) {
+                sorting.put(descriptor.getLabel(), 0);
+            } else {
+                sorting.put(descriptor.getLabel(), NumberUtils.toInt(priority, 0));
+            }
         }
+
+        Collections.sort(
+                available,
+                new Comparator<Pair<PaymentGatewayDescriptor, String>>() {
+                    public int compare(final Pair<PaymentGatewayDescriptor, String> pgd1, final Pair<PaymentGatewayDescriptor, String> pgd2) {
+                        final int priority1 = sorting.get(pgd1.getFirst().getLabel());
+                        final int priority2 = sorting.get(pgd2.getFirst().getLabel());
+                        if (priority1 == priority2) {
+                            return pgd1.getSecond().compareTo(pgd2.getSecond()); // if no priority sort naturally by name
+                        }
+                        return priority1 - priority2; // if prioritised then sort by priority
+                    }
+                }
+        );
+
         return available;
 
     }

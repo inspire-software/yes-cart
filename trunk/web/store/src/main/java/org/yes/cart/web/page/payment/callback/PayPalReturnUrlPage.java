@@ -105,7 +105,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
 
         final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(orderGuid);
 
-        final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(ApplicationDirector.getShoppingCart().getOrderInfo().getPaymentGatewayLabel());
+        final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(customerOrder.getPgLabel(), customerOrder.getShop().getCode());
 
         final PaymentGatewayExternalForm paymentGatewayExternalForm =
                 (PaymentGatewayExternalForm) paymentProcessor.getPaymentGateway();
@@ -122,7 +122,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
 
         try {
 
-            // we are on step 4 accourding
+            // we are on step 4 according
             // to https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECGettingStarted
             final Map<String, String> nvpCallResult = paymentGatewayExternalForm
                     .getExpressCheckoutDetails(getPageParameters().get("token").toString());
@@ -174,7 +174,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
                                     );
 
                                 } else {
-                                    // TODO: YC-156 lacks of information to show what the real problem
+                                    // TODO: YC-156 lacks information to show what the real problem is
                                     error(getLocalizer().getString("paymentFailed", this));
 
                                 }

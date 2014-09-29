@@ -24,10 +24,13 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.entity.AttrValueShop;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentModule;
 import org.yes.cart.payment.persistence.entity.Descriptor;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.payment.PaymentModulesManager;
 
@@ -82,8 +85,14 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
     public void testGetPaymentGateways() {
         Collection<PaymentGatewayDescriptor> paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors("basePaymentModule");
         assertEquals(3, paymentGateways.size());
-        paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(true);
+        paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(true, null);
         assertEquals(3, paymentGateways.size());
+        paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(true, "DEFAULT");
+        assertEquals(3, paymentGateways.size());
+        paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(true, "SHOIP1");
+        assertEquals(3, paymentGateways.size());
+        paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(false, "SHOIP1");
+        assertEquals(2, paymentGateways.size());
     }
 
     /**
@@ -91,7 +100,7 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
      */
     @Test
     public void testGetPaymentGateway() {
-        PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway("testPaymentGatewayLabel");
+        PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway("testPaymentGatewayLabel", "SHOIP1");
         assertNotNull(paymentGateway);
         assertEquals("testPaymentGateway", paymentGateway.getLabel());
     }
@@ -102,9 +111,7 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
         final SystemService systemService = mockery.mock(SystemService.class);
 
         mockery.checking(new Expectations() {{
-            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("aaa,bbb,ccc,ddd"));
-        }});
-        mockery.checking(new Expectations() {{
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL); will(returnValue("aaa,bbb,ccc,ddd"));
             oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL, "aaa,bbb,ccc,ddd,eee");
         }});
 
@@ -112,24 +119,61 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
             oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("aaa,bbb"));
         }});
 
-
         mockery.checking(new Expectations() {{
             oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("xx,yy,"));
-        }});
-        mockery.checking(new Expectations() {{
             oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL, "xx,yy,zz");
         }});
 
 
-
-        PaymentModulesManager pmm = new PaymentModulesManagerImpl( null, systemService );
+        PaymentModulesManager pmm = new PaymentModulesManagerImpl( null, systemService, null);
         pmm.allowPaymentGateway("eee");
 
-        pmm = new PaymentModulesManagerImpl( null, systemService );
+        pmm = new PaymentModulesManagerImpl( null, systemService, null);
         pmm.allowPaymentGateway("aaa");
 
-        pmm = new PaymentModulesManagerImpl( null, systemService );
+        pmm = new PaymentModulesManagerImpl( null, systemService, null);
         pmm.allowPaymentGateway("zz");
+
+
+    }
+
+
+    @Test
+    public void testAllowPaymentGatewayForShop() {
+        final ShopService shopService = mockery.mock(ShopService.class);
+        final Shop shop = mockery.mock(Shop.class);
+        final AttrValueShop attrValueShop = mockery.mock(AttrValueShop.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(shopService).getShopByCode("SHOP10");  will(returnValue(shop));
+            allowing(shop).getShopId();  will(returnValue(10L));
+            allowing(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue(attrValueShop));
+        }});
+
+        mockery.checking(new Expectations() {{
+            oneOf(attrValueShop).getVal();  will(returnValue("aaa,bbb,ccc,ddd"));
+            oneOf(shopService).updateAttributeValue(10L, AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL, "aaa,bbb,ccc,ddd,eee");
+        }});
+
+        mockery.checking(new Expectations() {{
+            oneOf(attrValueShop).getVal();  will(returnValue("aaa,bbb"));
+        }});
+
+
+        mockery.checking(new Expectations() {{
+            oneOf(attrValueShop).getVal();  will(returnValue("xx,yy,"));
+            oneOf(shopService).updateAttributeValue(10L, AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL, "xx,yy,zz");
+        }});
+
+
+        PaymentModulesManager pmm = new PaymentModulesManagerImpl( null, null, shopService);
+        pmm.allowPaymentGatewayForShop("eee", "SHOP10");
+
+        pmm = new PaymentModulesManagerImpl( null, null, shopService);
+        pmm.allowPaymentGatewayForShop("aaa", "SHOP10");
+
+        pmm = new PaymentModulesManagerImpl( null, null, shopService);
+        pmm.allowPaymentGatewayForShop("zz", "SHOP10");
 
 
     }
@@ -140,36 +184,84 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
 
         mockery.checking(new Expectations() {{
             oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("aaa,bbb,ccc,ddd"));
-        }});
-        mockery.checking(new Expectations() {{
             oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL, "aaa,bbb,ddd");
         }});
 
         mockery.checking(new Expectations() {{
             oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("1,2,3"));
-        }});
-        mockery.checking(new Expectations() {{
             oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL, "2,3");
         }});
 
         mockery.checking(new Expectations() {{
             oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("xxx,yyy,zzz"));
-        }});
-        mockery.checking(new Expectations() {{
             oneOf(systemService).updateAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL, "xxx,yyy");
         }});
 
+        mockery.checking(new Expectations() {{
+            oneOf(systemService).getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue("xxx,yyy"));
+        }});
 
 
-
-        PaymentModulesManager pmm = new PaymentModulesManagerImpl( null, systemService );
+        PaymentModulesManager pmm = new PaymentModulesManagerImpl( null, systemService, null);
         pmm.disallowPaymentGateway("ccc");
 
-        pmm = new PaymentModulesManagerImpl( null, systemService );
+        pmm = new PaymentModulesManagerImpl( null, systemService, null);
         pmm.disallowPaymentGateway("1");
 
-        pmm = new PaymentModulesManagerImpl( null, systemService );
+        pmm = new PaymentModulesManagerImpl( null, systemService, null);
         pmm.disallowPaymentGateway("zzz");
+
+        pmm = new PaymentModulesManagerImpl( null, systemService, null);
+        pmm.disallowPaymentGateway("zzz");
+
+
+    }
+
+    @Test
+    public void testdisallowPaymentGatewayForShop() {
+        final ShopService shopService = mockery.mock(ShopService.class);
+        final Shop shop = mockery.mock(Shop.class);
+        final AttrValueShop attrValueShop = mockery.mock(AttrValueShop.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(shopService).getShopByCode("SHOP10");  will(returnValue(shop));
+            allowing(shop).getShopId();  will(returnValue(10L));
+            allowing(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL);  will(returnValue(attrValueShop));
+        }});
+
+        mockery.checking(new Expectations() {{
+            oneOf(attrValueShop).getVal();  will(returnValue("aaa,bbb,ccc,ddd"));
+            oneOf(shopService).updateAttributeValue(10L, AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL, "aaa,bbb,ddd");
+        }});
+
+        mockery.checking(new Expectations() {{
+            oneOf(attrValueShop).getVal();  will(returnValue("1,2,3"));
+            oneOf(shopService).updateAttributeValue(10L, AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL, "2,3");
+        }});
+
+
+        mockery.checking(new Expectations() {{
+            oneOf(attrValueShop).getVal();  will(returnValue("xxx,yyy,zzz"));
+            oneOf(shopService).updateAttributeValue(10L, AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL, "xxx,yyy");
+        }});
+
+
+        mockery.checking(new Expectations() {{
+            oneOf(attrValueShop).getVal();  will(returnValue("xxx,yyy"));
+        }});
+
+
+        PaymentModulesManager pmm = new PaymentModulesManagerImpl( null, null, shopService);
+        pmm.disallowPaymentGatewayForShop("ccc", "SHOP10");
+
+        pmm = new PaymentModulesManagerImpl( null, null, shopService);
+        pmm.disallowPaymentGatewayForShop("1", "SHOP10");
+
+        pmm = new PaymentModulesManagerImpl( null, null, shopService);
+        pmm.disallowPaymentGatewayForShop("zzz", "SHOP10");
+
+        pmm = new PaymentModulesManagerImpl( null, null, shopService);
+        pmm.disallowPaymentGatewayForShop("zzz", "SHOP10");
 
 
     }

@@ -129,7 +129,7 @@ public class PaymentAspect extends BaseNotificationAspect {
         map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
         map.put(StandardMessageListener.LOCALE, customerOrder.getLocale());
 
-        final PaymentGatewayFeature feature = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel()).getPaymentGatewayFeatures();
+        final PaymentGatewayFeature feature = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel(), shop.getCode()).getPaymentGatewayFeatures();
         if (feature.isOnlineGateway()) {
             map.put(StandardMessageListener.TEMPLATE_NAME, "payment");
         } else {

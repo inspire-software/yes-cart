@@ -48,7 +48,7 @@ public interface PaymentModuleGenericService<T> {
      * Persist instance.
      *
      * @param instance instance to persist
-     * @return persisted instanse
+     * @return persisted instance
      */
     T create(T instance);
 
@@ -56,7 +56,7 @@ public interface PaymentModuleGenericService<T> {
      * Update instance.
      *
      * @param instance instance to update
-     * @return persisted instanse
+     * @return persisted instance
      */
     T update(T instance);
 
@@ -70,7 +70,7 @@ public interface PaymentModuleGenericService<T> {
     /**
      * Find entities by criteria.
      *
-     * @param criterion given criterias
+     * @param criterion given criteria
      * @return list of found entities.
      */
     List<T> findByCriteria(Criterion... criterion);
@@ -78,7 +78,7 @@ public interface PaymentModuleGenericService<T> {
     /**
      * Find single entity by criteria.
      *
-     * @param criterion given criterias
+     * @param criterion given criteria
      * @return single entity or null if not found.
      */
     T findSingleByCriteria(Criterion... criterion);

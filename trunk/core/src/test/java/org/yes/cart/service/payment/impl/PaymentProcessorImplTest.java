@@ -102,7 +102,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         final Pair<BigDecimal, BigDecimal> skuCcTest3Qty0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse) , "CC_TEST3");
 
         Customer customer = createCustomer();
-        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
         CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart1(customer.getEmail()), true);
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         CustomerOrderDelivery delivery0 = iter.next();
@@ -135,7 +135,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testAuthCapture1() throws Exception {
         Customer customer = createCustomer();
-        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
         CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart1(customer.getEmail()), true);
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         CustomerOrderDelivery delivery0 = iter.next();
@@ -161,7 +161,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testAuthorize2() throws Exception {
         Customer customer = createCustomer();
-        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
         CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(customer.getEmail()), false);
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         CustomerOrderDelivery delivery0 = iter.next();
@@ -184,7 +184,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testAuthCapture2() throws Exception {
         Customer customer = createCustomer();
-        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
         CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(customer.getEmail()), false);
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         try {
@@ -208,7 +208,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         try {
             TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_FAIL, new PaymentGatewayParameterEntity());
             Customer customer = createCustomer();
-            PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+            PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
             CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(customer.getEmail()), false);
             Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
             CustomerOrderDelivery delivery0 = iter.next();
@@ -244,7 +244,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
             TestPaymentGatewayImpl.setAuthNum(0);
             TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_FAIL_NO + "1", new PaymentGatewayParameterEntity());
             Customer customer = createCustomer();
-            PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+            PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
             CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(customer.getEmail()), false);
             assertEquals(Payment.PAYMENT_STATUS_FAILED, paymentProcessor.authorize(customerOrder, createParametersMap()));
             assertEquals("Two Auth with different statuses and reverse auth must be present",
@@ -280,7 +280,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
             TestPaymentGatewayImpl.setAuthNum(0);
             TestPaymentGatewayImpl.getGatewayConfig().put(TestPaymentGatewayImpl.AUTH_EXCEPTION_NO + "1", new PaymentGatewayParameterEntity());
             Customer customer = createCustomer();
-            PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+            PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
             CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(customer.getEmail()), false);
             assertEquals(Payment.PAYMENT_STATUS_FAILED, paymentProcessor.authorize(customerOrder, createParametersMap()));
             assertEquals(
@@ -317,7 +317,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         BigDecimal amountForOnePayment = BigDecimal.ZERO;
         BigDecimal amountForTwoPayments;
         Customer customer = createCustomer();
-        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
         CarrierSla carrier = carrierSlaService.findById(1L); // carrier set by shopping cart
         CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(customer.getEmail()), false); //multiple delivery
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
@@ -358,7 +358,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testShipmentComplete1() throws Exception {
         Customer customer = createCustomer();
-        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
         CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart1(customer.getEmail()), false); //multiple delivery enabled
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         CustomerOrderDelivery delivery0 = iter.next();
@@ -394,7 +394,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testShipmentComplete2() throws Exception {
         Customer customer = createCustomer();
-        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
         CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(customer.getEmail()), false);
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         CustomerOrderDelivery delivery0 = iter.next();
@@ -431,7 +431,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testShipmentComplete3() throws Exception {
         Customer customer = createCustomer();
-        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
         CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(customer.getEmail()), false);
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         CustomerOrderDelivery delivery0 = iter.next();
@@ -468,7 +468,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testShipmentComplete4() throws Exception {
         Customer customer = createCustomer();
-        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
         CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(customer.getEmail()), false);
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         CustomerOrderDelivery delivery0 = iter.next();
@@ -494,7 +494,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testCancelOrder1() throws Exception {
         Customer customer = createCustomer();
-        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL);
+        PaymentProcessor paymentProcessor = paymentProcessorFactory.create(PGLABEL, "SHOIP1");
         CustomerOrder customerOrder = customerOrderService.createFromCart(getShoppingCart2(customer.getEmail()), false);
         Iterator<CustomerOrderDelivery> iter = customerOrder.getDelivery().iterator();
         CustomerOrderDelivery delivery0 = iter.next();

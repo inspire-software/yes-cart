@@ -31,10 +31,13 @@ public interface PaymentProcessorFactory {
 
     /**
      * Create a new, thread safe, payment processor. 
+     *
      * @param paymentGatewayLabel label , that specify a payment gateway.
+     * @param shopCode shop code for this processor
+     *
      * @return {@link PaymentProcessor}
      */
-    PaymentProcessor create(String paymentGatewayLabel);
+    PaymentProcessor create(String paymentGatewayLabel, String shopCode);
 
 
 

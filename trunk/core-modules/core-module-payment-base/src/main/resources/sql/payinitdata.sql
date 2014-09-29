@@ -203,6 +203,10 @@ VALUES (57, 'testPaymentGateway', 'htmlForm_uk',
     </div>'
 , 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (58, 'testPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
+
+
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (60, 'courierPaymentGateway', 'name', 'Payment via courier', 'Gateway name (default)', 'Gateway name (default)');
@@ -215,3 +219,6 @@ VALUES (62, 'courierPaymentGateway', 'name_ru', 'Оплата курьеру', '
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (63, 'courierPaymentGateway', 'name_uk', 'Оплата кур''єру', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (64, 'courierPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');

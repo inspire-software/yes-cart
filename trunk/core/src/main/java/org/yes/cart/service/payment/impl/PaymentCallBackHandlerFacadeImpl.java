@@ -163,6 +163,9 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
     }
 
     private PaymentGatewayExternalForm getPaymentGateway(String paymentGatewayLabel) {
-        return (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(paymentGatewayLabel);
+        if ("DEFAULT".equals(ShopCodeContext.getShopCode())) {
+            throw new RuntimeException("Payment gateway URL must be configured for shop specific URL's");
+        }
+        return (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(paymentGatewayLabel, ShopCodeContext.getShopCode());
     }
 }

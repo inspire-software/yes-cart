@@ -1281,6 +1281,7 @@
     <bean id="paymentModulesManager" class="org.yes.cart.service.payment.impl.PaymentModulesManagerImpl">
         <constructor-arg index="0" ref="serviceLocator"/>
         <constructor-arg index="1" ref="systemService"/>
+        <constructor-arg index="2" ref="shopService"/>
     </bean>
 
     <bean id="paymentProcessor" parent="txProxyTemplate" scope="prototype">

@@ -9,6 +9,7 @@ import org.yes.cart.domain.dto.DtoPaymentGatewayInfo;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl;
+import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
 
 import java.util.*;
@@ -39,7 +40,7 @@ public class RemotePaymentModulesManagementServiceImplTest {
         final PaymentGateway pg2 = mockery.mock(PaymentGateway.class, "pg2");
 
         mockery.checking(new Expectations() {{
-            allowing(paymentModulesManager).getPaymentGatewaysDescriptors(false);
+            allowing(paymentModulesManager).getPaymentGatewaysDescriptors(false, "DEFAULT");
             will(
                     returnValue(
                             new ArrayList<PaymentGatewayDescriptor>() {{
@@ -49,7 +50,7 @@ public class RemotePaymentModulesManagementServiceImplTest {
             );
         }});
         mockery.checking(new Expectations() {{
-            allowing(paymentModulesManager).getPaymentGatewaysDescriptors(true); //all
+            allowing(paymentModulesManager).getPaymentGatewaysDescriptors(true, "DEFAULT"); //all
             will(
                     returnValue(
                             new ArrayList<PaymentGatewayDescriptor>() {{
@@ -60,14 +61,14 @@ public class RemotePaymentModulesManagementServiceImplTest {
             );
         }});
         mockery.checking(new Expectations() {{
-            allowing(paymentModulesManager).getPaymentGateway("one");
+            allowing(paymentModulesManager).getPaymentGateway("one", "DEFAULT");
             will( returnValue(  pg1     )       );
             allowing(pg1).getName("ru");
             will(returnValue("pg1 name"));
         }});
 
         mockery.checking(new Expectations() {{
-            allowing(paymentModulesManager).getPaymentGateway("two");
+            allowing(paymentModulesManager).getPaymentGateway("two", "DEFAULT");
             will( returnValue(  pg2     )       );
             allowing(pg2).getName("ru");
             will(returnValue("pg2 name"));
@@ -109,7 +110,7 @@ public class RemotePaymentModulesManagementServiceImplTest {
         final PaymentGateway pg2 = mockery.mock(PaymentGateway.class, "pg2");
 
         mockery.checking(new Expectations() {{
-            allowing(paymentModulesManager).getPaymentGatewaysDescriptors(false);
+            allowing(paymentModulesManager).getPaymentGatewaysDescriptors(false, "DEFAULT");
             will(
                     returnValue(
                             Collections.EMPTY_LIST
@@ -117,7 +118,7 @@ public class RemotePaymentModulesManagementServiceImplTest {
             );
         }});
         mockery.checking(new Expectations() {{
-            allowing(paymentModulesManager).getPaymentGatewaysDescriptors(true); //all
+            allowing(paymentModulesManager).getPaymentGatewaysDescriptors(true, "DEFAULT"); //all
             will(
                     returnValue(
                             new ArrayList<PaymentGatewayDescriptor>() {{
@@ -128,14 +129,14 @@ public class RemotePaymentModulesManagementServiceImplTest {
             );
         }});
         mockery.checking(new Expectations() {{
-            allowing(paymentModulesManager).getPaymentGateway("one");
+            allowing(paymentModulesManager).getPaymentGateway("one", "DEFAULT");
             will( returnValue(  pg1     )       );
             allowing(pg1).getName("ru");
             will(returnValue("pg1 name"));
         }});
 
         mockery.checking(new Expectations() {{
-            allowing(paymentModulesManager).getPaymentGateway("two");
+            allowing(paymentModulesManager).getPaymentGateway("two", "DEFAULT");
             will( returnValue(  pg2     )       );
             allowing(pg2).getName("ru");
             will(returnValue("pg2 name"));

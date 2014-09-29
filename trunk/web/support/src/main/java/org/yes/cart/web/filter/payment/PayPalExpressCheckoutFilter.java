@@ -92,7 +92,7 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
 
         final String paymentGatewayLabel = getFilterConfig().getInitParameter("paymentGatewayLabel");
 
-        final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(paymentGatewayLabel);
+        final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(paymentGatewayLabel, customerOrder.getShop().getCode());
 
         final PaymentGatewayExternalForm paymentGatewayExternalForm = (PaymentGatewayExternalForm) paymentProcessor.getPaymentGateway();
 

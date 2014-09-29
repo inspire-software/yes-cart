@@ -82,4 +82,17 @@ public interface PaymentGatewayParameter extends Serializable, Descriptor {
      */
     void setPgLabel(String pgLabel);
 
+    /**
+     * GUID is an auto generated identified that can help in entity synchronisation
+     * and global identification.
+     *
+     * @return guid that uniquely identifies this object.
+     */
+    String getGuid();
+
+    /**
+     * @param guid guid that uniquely identifies this object.
+     */
+    void setGuid(String guid);
+
 }

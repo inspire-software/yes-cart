@@ -293,8 +293,8 @@ public interface Payment extends Serializable {
     void setTransactionReferenceId(String transactionReferenceId);
 
     /**
-     * Get transaction request token. Request token than can be used as reference in pair oreation like
-     * authorize - capture or authorize - reverce authorization.
+     * Get transaction request token. Request token than can be used as reference in pair operation like
+     * authorize - capture or authorize - reverse authorization.
      * Often correspond to reference id.
      *
      * @return transaction request token.
@@ -331,14 +331,14 @@ public interface Payment extends Serializable {
     String getTransactionGatewayLabel();
 
     /**
-     * Set label of paymeng gataway.
+     * Set label of payment gateway.
      *
-     * @param transactionGatewayLabel label of paymeng gataway.
+     * @param transactionGatewayLabel label of payment gateway.
      */
     void setTransactionGatewayLabel(String transactionGatewayLabel);
 
     /**
-     * Get the trasaction operation.
+     * Get the transaction operation.
      *
      * @return operation.
      */
@@ -369,7 +369,7 @@ public interface Payment extends Serializable {
     /**
      * Get message if any.
      *
-     * @return result messagae
+     * @return result message
      */
     String getTransactionOperationResultMessage();
 
@@ -403,9 +403,9 @@ public interface Payment extends Serializable {
     String getBillingAddressString();
 
     /**
-     * Set billign address.
+     * Set billing address.
      *
-     * @param billingAddressString billilgn address.
+     * @param billingAddressString billing address.
      */
     void setBillingAddressString(String billingAddressString);
 

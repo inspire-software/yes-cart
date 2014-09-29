@@ -19,7 +19,7 @@ package org.yes.cart.service.locator;
 /**
  *
  * Need to locate services, that can be in external modules or in local spring context.
- * Supports: web services, ejb services, locat spring context services.
+ * Supports: web services, ejb services, local spring context services.
  *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -46,13 +46,13 @@ public interface ServiceLocator {
      * Corba support not implemented but can be easily added.
      *
      * @param iface service interface
-     * @param seriveUrl service url to find
+     * @param serviceUrl service url to find
      * @param loginName login name to service
      * @param password  password to service
      * @throws RuntimeException in case if service can not be instantiated  or  founded
      * @return service instance.
      */
-    <T> T getServiceInstance(String seriveUrl, Class<T> iface, String loginName, String password) throws RuntimeException;
+    <T> T getServiceInstance(String serviceUrl, Class<T> iface, String loginName, String password) throws RuntimeException;
 
 
 }
