@@ -93,7 +93,9 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                 reserveQuantity(customerOrderDelivery);
             }
             handleInternal(orderEvent);
-            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(orderEvent.getCustomerOrder().getPgLabel());
+
+            final CustomerOrder order = orderEvent.getCustomerOrder();
+            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
                 if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams()))) {
                     //payment was ok, so quantity on warehouses will be decreased

@@ -156,7 +156,7 @@ public class DtoCustomerOrderServiceImpl
         try {
             final String paymentGateway = order.getPgLabel();
             final String cancelOperation;
-            if (paymentModulesManager.getPaymentGateway(paymentGateway).getPaymentGatewayFeatures().isOnlineGateway()) {
+            if (paymentModulesManager.getPaymentGateway(paymentGateway, order.getShop().getCode()).getPaymentGatewayFeatures().isOnlineGateway()) {
                 cancelOperation = OrderStateManager.EVT_CANCEL_WITH_REFUND;
             } else {
                 cancelOperation = OrderStateManager.EVT_CANCEL;
@@ -316,7 +316,7 @@ public class DtoCustomerOrderServiceImpl
 
         if (CollectionUtils.isNotEmpty(orderList)) {
             final CustomerOrder customerOrder = orderList.get(0);
-            final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel());
+            final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel(), customerOrder.getShop().getCode());
 
             final List<CustomerOrderDeliveryDTO> rez = new ArrayList<CustomerOrderDeliveryDTO>(customerOrder.getDelivery().size());
 

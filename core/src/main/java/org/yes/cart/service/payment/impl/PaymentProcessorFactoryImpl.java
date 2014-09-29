@@ -53,12 +53,12 @@ public class PaymentProcessorFactoryImpl implements ApplicationContextAware, Pay
     
 
     /** {@inheritDoc} */
-    public PaymentProcessor create(final String paymentGatewayLabel) {
+    public PaymentProcessor create(final String paymentGatewayLabel, final String shopCode) {
 
         final PaymentProcessor paymentProcessor = (PaymentProcessor) applicationContext.getBean(paymentProcessorBeanId);
 
         paymentProcessor.setPaymentGateway(
-                paymentModulesManager.getPaymentGateway(paymentGatewayLabel)
+                paymentModulesManager.getPaymentGateway(paymentGatewayLabel, shopCode)
         );
 
         return paymentProcessor;

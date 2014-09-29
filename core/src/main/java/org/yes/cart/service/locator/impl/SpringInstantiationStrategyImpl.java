@@ -39,7 +39,7 @@ public class SpringInstantiationStrategyImpl implements InstantiationStrategy, A
      */
     public <T> T getInstance(final String serviceUrl,
                              final Class<T> iface,
-                             final String loginName, 
+                             final String loginName,
                              final String password) throws RuntimeException {
         ShopCodeContext.getLog(this).debug("Get {} as {}", serviceUrl, iface.getName());
         return applicationContext.getBean(serviceUrl, iface);

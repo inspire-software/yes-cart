@@ -51,7 +51,10 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
         synchronized (OrderEventHandler.syncMonitor) {
 
             final Logger log = ShopCodeContext.getLog(this);
-            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(orderEvent.getCustomerOrder().getPgLabel());
+
+            final CustomerOrder order = orderEvent.getCustomerOrder();
+
+            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
 
             final boolean fundCaptured = Payment.PAYMENT_STATUS_OK.equals(
                     paymentProcessor.shipmentComplete(orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery().getDeliveryNum())

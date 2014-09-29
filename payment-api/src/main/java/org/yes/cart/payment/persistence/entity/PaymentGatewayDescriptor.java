@@ -24,15 +24,6 @@ package org.yes.cart.payment.persistence.entity;
  */
 public interface PaymentGatewayDescriptor extends Descriptor {
 
-
-    /**
-     * Get payment gateway priority.
-     *
-     * @return priority.
-     */
-    int getPriority();
-
-
     /**
      * Get the payment gateway url. Url can be a web service url,
      * spring name bean, jndi name. For more information see service locator from core.

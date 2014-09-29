@@ -18,6 +18,8 @@ package org.yes.cart.payment.impl;
 
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
+import org.yes.cart.payment.service.ConfigurablePaymentGateway;
+import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
 
 import java.io.IOException;
@@ -30,12 +32,20 @@ import java.util.Map;
  * Date: 25-Dec-2011
  * Time: 14:12:54
  */
-public abstract class AbstractGswmPaymentGatewayImpl implements PaymentGateway {
+public abstract class AbstractGswmPaymentGatewayImpl implements ConfigurablePaymentGateway, PaymentGateway {
 
     private PaymentGatewayParameterService paymentGatewayParameterService;
 
     private Collection<PaymentGatewayParameter> allParameters = null;
 
+    private String shopCode;
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getShopCode() {
+        return shopCode;
+    }
 
     /**
      * {@inheritDoc}
@@ -58,7 +68,7 @@ public abstract class AbstractGswmPaymentGatewayImpl implements PaymentGateway {
 
     public Collection<PaymentGatewayParameter> getPaymentGatewayParameters() {
         if (allParameters == null) {
-            allParameters = paymentGatewayParameterService.findAll(getLabel());
+            allParameters = paymentGatewayParameterService.findAll(getLabel(), shopCode);
         }
         return allParameters;
     }
@@ -88,10 +98,12 @@ public abstract class AbstractGswmPaymentGatewayImpl implements PaymentGateway {
     }
 
     /**
-     * Work around promlem with wicket param values, when it can return
+     * Work around problem with wicket param values, when it can return
      * parameter value as string or as array of strings with single value.
-     * This behavior depends from url encoding strategy
+     * This behavior depends on url encoding strategy.
+     *
      * @param param parameters
+     *
      * @return value
      */
     public static String getSingleValue(final Object param) {
@@ -123,6 +135,19 @@ public abstract class AbstractGswmPaymentGatewayImpl implements PaymentGateway {
      * @return value or null if not found
      */
     public String getParameterValue(final String valueLabel) {
+        if (valueLabel == null || valueLabel.startsWith("#")) {
+            return null; // Need to prevent direct access to Shop specific attributes
+        }
+        if (shopCode != null && !"DEFAULT".equals(shopCode)) {
+            final String shopSpecific = getParameterValueInternal("#" + shopCode + "_" + valueLabel);
+            if (shopSpecific != null) {
+                return shopSpecific;
+            }
+        }
+        return getParameterValueInternal(valueLabel);
+    }
+
+    private String getParameterValueInternal(final String valueLabel) {
         final Collection<PaymentGatewayParameter> values = getPaymentGatewayParameters();
         for (PaymentGatewayParameter keyValue : values) {
             if (keyValue.getLabel().equals(valueLabel)) {
@@ -178,6 +203,14 @@ public abstract class AbstractGswmPaymentGatewayImpl implements PaymentGateway {
         }
 
         return stringBuilder.toString();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void accept(final PaymentGatewayConfigurationVisitor visitor) {
+        this.shopCode = visitor.getConfiguration("shopCode");
     }
 
 

@@ -23,6 +23,8 @@ import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
+import org.yes.cart.payment.service.ConfigurablePaymentGateway;
+import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -35,12 +37,21 @@ import java.util.*;
  * Time: 14:12:54
  
  */
-public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
+public abstract class AbstractCappPaymentGatewayImpl implements ConfigurablePaymentGateway, PaymentGateway {
 
     private PaymentGatewayParameterService paymentGatewayParameterService;
 
     private Collection<PaymentGatewayParameter> allParameters = null;
 
+    private String shopCode;
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getShopCode() {
+        return shopCode;
+    }
 
     /**
      * {@inheritDoc}
@@ -66,9 +77,11 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
 
 
     /**
-     * Dafault implementation.
+     * Default implementation.
+     *
      * @param cardHolderName card holder name.
      * @param locale locale
+     *
      * @return html form.
      */
     protected String getHtmlForm(final String cardHolderName, final String locale) {
@@ -91,7 +104,7 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
 
     public Collection<PaymentGatewayParameter> getPaymentGatewayParameters() {
         if (allParameters == null) {
-            allParameters = paymentGatewayParameterService.findAll(getLabel());
+            allParameters = paymentGatewayParameterService.findAll(getLabel(), shopCode);
         }
         return allParameters;
     }
@@ -144,10 +157,12 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
     }
 
     /**
-     * Work around problem with wicket param values, when it can return
+     * Work around for problem with wicket param values, when it can return
      * parameter value as string or as array of strings with single value.
-     * This behavior depends from url encoding strategy
+     * This behavior depends on url encoding strategy.
+     *
      * @param param parameters
+     *
      * @return value
      */
     public static String getSingleValue(final Object param) {
@@ -212,6 +227,19 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
      * @return value or null if not found
      */
     public String getParameterValue(final String valueLabel) {
+        if (valueLabel == null || valueLabel.startsWith("#")) {
+            return null; // Need to prevent direct access to Shop specific attributes
+        }
+        if (shopCode != null && !"DEFAULT".equals(shopCode)) {
+            final String shopSpecific = getParameterValueInternal("#" + shopCode + "_" + valueLabel);
+            if (shopSpecific != null) {
+                return shopSpecific;
+            }
+        }
+        return getParameterValueInternal(valueLabel);
+    }
+
+    private String getParameterValueInternal(final String valueLabel) {
         final Collection<PaymentGatewayParameter> values = getPaymentGatewayParameters();
         for (PaymentGatewayParameter keyValue : values) {
             if (keyValue.getLabel().equals(valueLabel)) {
@@ -220,7 +248,6 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
         }
         return null;
     }
-
 
     /**
      * Get street address.
@@ -244,5 +271,11 @@ public abstract class AbstractCappPaymentGatewayImpl implements PaymentGateway {
         return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void accept(final PaymentGatewayConfigurationVisitor visitor) {
+        this.shopCode = visitor.getConfiguration("shopCode");
+    }
 
 }

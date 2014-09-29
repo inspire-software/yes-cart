@@ -617,11 +617,13 @@
         <constructor-arg index="0" ref="remoteBackdoorService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
-            <security:protect method="sqlQuery" access="ROLE_SMADMIN"/>
-            <security:protect method="hsqlQuery" access="ROLE_SMADMIN"/>
-            <security:protect method="luceneQuery" access="ROLE_SMADMIN"/>
-            <security:protect method="getCacheInfo" access="ROLE_SMADMIN"/>
-            <security:protect method="evictCache" access="ROLE_SMADMIN"/>
+            <security:protect method="sqlQuery"         access="ROLE_SMADMIN"/>
+            <security:protect method="hsqlQuery"        access="ROLE_SMADMIN"/>
+            <security:protect method="luceneQuery"      access="ROLE_SMADMIN"/>
+            <security:protect method="getCacheInfo"     access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="evictCache"       access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="evictAllCache"    access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="warmUp"           access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
         </security:intercept-methods>
     </bean>
 
@@ -668,8 +670,9 @@
             <security:protect method="hsqlQuery"          access="ROLE_SMADMIN"/>
             <security:protect method="luceneQuery"        access="ROLE_SMADMIN"/>
             <security:protect method="getCacheInfo"       access="ROLE_SMADMIN"/>
-            <security:protect method="evictCache"         access="ROLE_SMADMIN"/>
-            <security:protect method="warmUp"             access="ROLE_SMADMIN"/>
+            <security:protect method="evictCache"         access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="evictAllCache"      access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="warmUp"             access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
         </security:intercept-methods>
     </bean>
 
@@ -886,14 +889,23 @@
         <constructor-arg index="2" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
-            <security:protect method="getAllowedPaymentGateways" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="getAvailablePaymentGateways" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="getPaymentGatewayParameters" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="updateConfigurationParameter" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="allowPaymentGateway" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="disallowPaymentGateway" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getPaymentGatewaysForShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAllowedPaymentGatewaysForShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAvailablePaymentGatewaysForShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getPaymentGatewayParametersForShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="updateConfigurationParameterForShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="allowPaymentGatewayForShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="disallowPaymentGatewayForShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+
+            <security:protect method="getPaymentGateways" access="ROLE_SMADMIN"/>
+            <security:protect method="getAllowedPaymentGateways" access="ROLE_SMADMIN"/>
+            <security:protect method="getAvailablePaymentGateways" access="ROLE_SMADMIN"/>
+            <security:protect method="getPaymentGatewayParameters" access="ROLE_SMADMIN"/>
+            <security:protect method="updateConfigurationParameter" access="ROLE_SMADMIN"/>
+            <security:protect method="allowPaymentGateway" access="ROLE_SMADMIN"/>
+            <security:protect method="disallowPaymentGateway" access="ROLE_SMADMIN"/>
+
             <security:protect method="findPayments" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="getPaymentGateways" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
         </security:intercept-methods>
     </bean>
 

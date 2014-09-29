@@ -48,6 +48,12 @@ public interface PaymentGateway extends Serializable {
      */
     String getName(String locale);
 
+    /**
+     * Shop code of the shop for this PG.
+     *
+     * @return shop code
+     */
+    String getShopCode();
 
     /**
      * Get the whole or part of html form to fill data for payment.
@@ -164,7 +170,7 @@ public interface PaymentGateway extends Serializable {
     /**
      * Get payment gateway supported features.
      *
-     * @return feature set of mayment gateway.
+     * @return feature set of payment gateway.
      */
     PaymentGatewayFeature getPaymentGatewayFeatures();
 
@@ -185,12 +191,12 @@ public interface PaymentGateway extends Serializable {
     /**
      * Add new configuration parameter.
      *
-     * @param paymentGatewayParameter configuraionparameter.
+     * @param paymentGatewayParameter configuration parameter.
      */
     void addParameter(PaymentGatewayParameter paymentGatewayParameter);
 
     /**
-     * Update configurationparameter.
+     * Update configuration parameter.
      *
      * @param paymentGatewayParameter {@link PaymentGatewayParameter}
      */

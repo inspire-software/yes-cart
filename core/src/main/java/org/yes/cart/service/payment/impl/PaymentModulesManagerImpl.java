@@ -18,9 +18,14 @@ package org.yes.cart.service.payment.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.AttrValueShop;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentModule;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
+import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
+import org.yes.cart.payment.service.impl.PaymentGatewayConfigurationVisitorImpl;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.locator.ServiceLocator;
 import org.yes.cart.service.payment.PaymentModulesManager;
@@ -44,28 +49,31 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     private final ServiceLocator serviceLocator;
 
     private final SystemService systemService;
+    private final ShopService shopService;
 
     private List<String> modulesUrl = null;
 
     private Map<String, PaymentModule> paymentModulesMap;
 
     /**
-     * Construct PG module smanager.
+     * Construct PG module manager.
      *
      * @param serviceLocator service locator.
      * @param systemService to get the payment modules URLs
+     * @param shopService to get shop enabled modules
      */
-    public PaymentModulesManagerImpl(
-            final ServiceLocator serviceLocator,
-            final SystemService systemService) {
+    public PaymentModulesManagerImpl(final ServiceLocator serviceLocator,
+                                     final SystemService systemService,
+                                     final ShopService shopService) {
         this.serviceLocator = serviceLocator;
         this.systemService = systemService;
+        this.shopService = shopService;
     }
 
 
     /**
      * @return list of string treated as list or payment modules URLs, not as spring bean names. Example
-     *  https://doma.com:1234/module1,https://othedomain.com/module2, values are posible. URL without protocol will be treated as spring bean name
+     *  https://doma.com:1234/module1,https://othedomain.com/module2, values are possible. URL without protocol will be treated as spring bean name
      */
     private List<String> getModulesUrl() {
         if (modulesUrl == null) {
@@ -126,30 +134,74 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
      */
     public void allowPaymentGateway(final String label) {
 
-        String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
+        final String[] allowed = StringUtils.split(systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL), ',');
 
-        if (StringUtils.isBlank(allowed)) {       //not yet allowed
+        if (allowed == null || allowed.length == 0) {       //not yet allowed
 
             systemService.updateAttributeValue(
                     AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL,
                     label
             );
 
-        } else  if (!allowed.contains(label)) {       //not yet allowed
+        } else  if (!Arrays.asList(allowed).contains(label)) {       //not yet allowed
 
-            if (allowed.endsWith(","))  {
-                allowed += label;
-            } else {
-                allowed += ',' + label;
-            }
+
+            final List<String> updated = new ArrayList<String>(Arrays.asList(allowed));
+            updated.add(label);
 
             systemService.updateAttributeValue(
                     AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL,
-                    allowed
+                    StringUtils.join(updated, ',')
             );
 
         }
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void allowPaymentGatewayForShop(final String label, final String shopCode) {
+
+        final Shop shop = shopService.getShopByCode(shopCode);
+
+        if (shop != null) {
+
+            final AttrValueShop av = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL);
+
+            if (av != null) {
+
+                final String[] allowed = StringUtils.split(av.getVal(), ',');
+                if (allowed == null || allowed.length == 0) {       //not yet allowed
+
+                    shopService.updateAttributeValue(
+                            shop.getShopId(),
+                            AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL,
+                            label);
+
+                } else  if (!Arrays.asList(allowed).contains(label)) {       //not yet allowed
+
+
+                    final List<String> updated = new ArrayList<String>(Arrays.asList(allowed));
+                    updated.add(label);
+
+                    shopService.updateAttributeValue(
+                            shop.getShopId(),
+                            AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL,
+                            StringUtils.join(updated, ','));
+
+                }
+
+            } else {
+
+                shopService.updateAttributeValue(
+                        shop.getShopId(),
+                        AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL,
+                        label);
+
+            }
+
+        }
 
     }
 
@@ -158,27 +210,16 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
      */
     public void disallowPaymentGateway(final String label) {
 
-        String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
+        final String[] allowed = StringUtils.split(systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL), ',');
 
-        if (allowed.contains(label)) {       //need to remove
+        if (allowed != null && Arrays.asList(allowed).contains(label)) {       //need to remove
 
-            allowed = StringUtils.remove(allowed, label).replace(",,",",");
-
-            if (allowed.endsWith(",")) {
-
-                allowed = StringUtils.chop(allowed);
-
-            }
-
-            if (allowed.startsWith(",")) {
-
-                allowed = allowed.substring(1);
-
-            }
+            final List<String> updated = new ArrayList<String>(Arrays.asList(allowed));
+            updated.remove(label);
 
             systemService.updateAttributeValue(
                     AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL,
-                    allowed
+                    StringUtils.join(updated, ',')
             );
 
         }
@@ -188,57 +229,138 @@ public class PaymentModulesManagerImpl implements PaymentModulesManager {
     /**
      * {@inheritDoc}
      */
-    public List<PaymentGatewayDescriptor> getPaymentGatewaysDescriptors(final boolean allModules) {
-        final List<PaymentGatewayDescriptor> paymentGatewayDescriptors = new ArrayList<PaymentGatewayDescriptor>();
+    public void disallowPaymentGatewayForShop(final String label, final String shopCode) {
 
-        for (Map.Entry<String, PaymentModule> moduleEntry : getPaymentModulesMap().entrySet()) {
-            paymentGatewayDescriptors.addAll(
-                    getPaymentModulesMap().get(moduleEntry.getKey()).getPaymentGateways()
-            );
-        }
-        if (!allModules) {
-            final String allowed = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
-            if (StringUtils.isNotBlank(allowed)) {
-                final List<PaymentGatewayDescriptor> allowedDescr = new ArrayList<PaymentGatewayDescriptor>();
-                for (PaymentGatewayDescriptor descriptor : paymentGatewayDescriptors) {
-                    if (allowed.contains(descriptor.getLabel())) {
-                        allowedDescr.add(descriptor);
-                    }
+
+        final Shop shop = shopService.getShopByCode(shopCode);
+        if (shop != null) {
+
+            final AttrValueShop av = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL);
+
+            if (av != null) {
+
+                final String[] allowed = StringUtils.split(av.getVal(), ',');
+                if (allowed != null && Arrays.asList(allowed).contains(label)) {       //need to remove
+
+                    final List<String> updated = new ArrayList<String>(Arrays.asList(allowed));
+                    updated.remove(label);
+
+                    shopService.updateAttributeValue(
+                            shop.getShopId(),
+                            AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL,
+                            StringUtils.join(updated, ','));
+
                 }
-                paymentGatewayDescriptors.retainAll(allowedDescr);
-            } else {
-                paymentGatewayDescriptors.clear();
 
             }
 
         }
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<PaymentGatewayDescriptor> getPaymentGatewaysDescriptors(final boolean includeDisabled, final String shopCode) {
+        final List<PaymentGatewayDescriptor> paymentGatewayDescriptors = new ArrayList<PaymentGatewayDescriptor>();
+
+        for (final Map.Entry<String, PaymentModule> moduleEntry : getPaymentModulesMap().entrySet()) {
+            paymentGatewayDescriptors.addAll(moduleEntry.getValue().getPaymentGateways());
+        }
+
+        final boolean systemEnabledOnly = !includeDisabled || (shopCode != null && !"DEFAULT".equals(shopCode));
+        final boolean shopEnabledOnly = systemEnabledOnly && !includeDisabled;
+
+        if (systemEnabledOnly) {
+
+            final String av = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL);
+            final String[] allowed = StringUtils.split(av, ',');
+            filterOutDisabledPaymentGateways(paymentGatewayDescriptors, allowed);
+
+        }
+
+        if (shopEnabledOnly) {
+
+            final Shop shop = shopService.getShopByCode(shopCode);
+
+            if (shop != null) {
+
+                final AttrValueShop av = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL);
+
+                if (av != null) {
+
+                    final String[] allowed = StringUtils.split(av.getVal(), ',');
+                    filterOutDisabledPaymentGateways(paymentGatewayDescriptors, allowed);
+
+                } else {
+
+                    filterOutDisabledPaymentGateways(paymentGatewayDescriptors, null);
+
+                }
+            }
+
+        }
+
         Collections.sort(
                 paymentGatewayDescriptors,
                 new Comparator<PaymentGatewayDescriptor>() {
                     public int compare(final PaymentGatewayDescriptor pgd1, final PaymentGatewayDescriptor pgd2) {
-                        return (pgd1.getPriority() < pgd2.getPriority() ? -1 : (pgd1.getPriority() == pgd2.getPriority() ? 0 : 1));
+                        return pgd1.getLabel().compareToIgnoreCase(pgd2.getLabel());
                     }
                 }
         );
         return paymentGatewayDescriptors;
     }
 
+    private void filterOutDisabledPaymentGateways(final List<PaymentGatewayDescriptor> paymentGatewayDescriptors, final String[] allowed) {
+
+        if (allowed != null && allowed.length > 0) {
+
+            final List<String> enabled = Arrays.asList(allowed);
+
+            final List<PaymentGatewayDescriptor> allowedDescr = new ArrayList<PaymentGatewayDescriptor>();
+            for (final PaymentGatewayDescriptor descriptor : paymentGatewayDescriptors) {
+                if (enabled.contains(descriptor.getLabel())) {
+                    allowedDescr.add(descriptor);
+                }
+            }
+            paymentGatewayDescriptors.retainAll(allowedDescr);
+
+        } else {
+
+            paymentGatewayDescriptors.clear();
+
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
-    public PaymentGateway getPaymentGateway(final String paymentGatewayLabel) {
-        //TODO refactor need map label - descriptor
+    public PaymentGateway getPaymentGateway(final String paymentGatewayLabel, final String shopCode) {
 
-        for (PaymentGatewayDescriptor pgDescriptor : getPaymentGatewaysDescriptors(true)) {
-            if (pgDescriptor.getLabel().equals(paymentGatewayLabel)) {
-                return serviceLocator.getServiceInstance(
-                        pgDescriptor.getUrl(),
-                        PaymentGateway.class,
-                        pgDescriptor.getLogin(),
-                        pgDescriptor.getPassword()
-                );
+        for (final Map.Entry<String, PaymentModule> moduleEntry : getPaymentModulesMap().entrySet()) {
+            for (final PaymentGatewayDescriptor pgDescriptor : moduleEntry.getValue().getPaymentGateways()) {
+                if (pgDescriptor.getLabel().equals(paymentGatewayLabel)) {
+
+                    final PaymentGatewayConfigurationVisitor visitor = new PaymentGatewayConfigurationVisitorImpl(
+                            (Map) Collections.singletonMap("shopCode", shopCode)
+                    );
+
+                    final PaymentGateway pg = serviceLocator.getServiceInstance(
+                            pgDescriptor.getUrl(),
+                            PaymentGateway.class,
+                            pgDescriptor.getLogin(),
+                            pgDescriptor.getPassword()
+                    );
+
+                    visitor.visit(pg);
+
+                    return pg;
+
+                }
             }
         }
+
         ShopCodeContext.getLog(this).error("Payment gateway {} not found", paymentGatewayLabel);
 
         return null;

@@ -52,6 +52,8 @@ VALUES (458, 'liqPayPaymentGateway', 'name_ru', 'LiqPay', 'Название пл
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (459, 'liqPayPaymentGateway', 'name_uk', 'LiqPay', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (4591, 'liqPayPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
 
 
 
@@ -106,3 +108,6 @@ VALUES (468, 'liqPayNoRefundPaymentGateway', 'name_ru', 'LiqPay (Без возв
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (469, 'liqPayNoRefundPaymentGateway', 'name_uk', 'LiqPay (Без повернень)', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (4691, 'liqPayNoRefundPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');

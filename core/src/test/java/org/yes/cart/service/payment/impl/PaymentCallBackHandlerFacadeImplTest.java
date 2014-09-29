@@ -33,6 +33,7 @@ import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.HashMap;
 import java.util.List;
@@ -77,12 +78,14 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
                 CustomerOrder.ORDER_STATUS_NONE,
                 customerOrder.getOrderStatus());
         final String ordGuid = customerOrder.getCartGuid();
+        ShopCodeContext.setShopCode(customerOrder.getShop().getCode());
         paymentCallBackHandlerFacade.handlePaymentCallback(
                 new HashMap<String, String>() {{
                     put(TestExtFormPaymentGatewayImpl.ORDER_GUID_PARAM_KEY, ordGuid);
                     put(TestExtFormPaymentGatewayImpl.RESPONSE_CODE_PARAM_KEY, "1"); // 1 - means ok
                 }},
                 "testExtFormPaymentGatewayLabel");
+        ShopCodeContext.clear();
         customerOrder = customerOrderService.findByGuid(customerOrder.getCartGuid());
         assertEquals("Order must be in ORDER_STATUS_PARTIALLY_SHIPPED state",  //because one of the delivery is electronic delivery
                 CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED,
@@ -116,12 +119,14 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
                 CustomerOrder.ORDER_STATUS_NONE,
                 customerOrder.getOrderStatus());
         final String ordGuid = customerOrder.getCartGuid();
+        ShopCodeContext.setShopCode(customerOrder.getShop().getCode());
         paymentCallBackHandlerFacade.handlePaymentCallback(
                 new HashMap<String, String>() {{
                     put(TestExtFormPaymentGatewayImpl.ORDER_GUID_PARAM_KEY, ordGuid);
                     put(TestExtFormPaymentGatewayImpl.RESPONSE_CODE_PARAM_KEY, "1"); // 1 - means ok
                 }},
                 "testExtFormPaymentGatewayLabel");
+        ShopCodeContext.clear();
         customerOrder = customerOrderService.findByGuid(customerOrder.getCartGuid());
         assertEquals("Order must be in ORDER_STATUS_CANCELLED state",  //because item is out of stock
                 CustomerOrder.ORDER_STATUS_CANCELLED,

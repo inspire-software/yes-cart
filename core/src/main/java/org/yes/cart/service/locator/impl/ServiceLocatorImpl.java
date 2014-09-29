@@ -25,7 +25,7 @@ import java.util.Map;
 
 /**
  * Service locator use particular strategy, that depends from protocol in service url, to
- * instantiate serice. At thi moment tree strategies available - web service , jnp an spring local.
+ * instantiate service. At thi moment tree strategies available - web service , jnp an spring local.
  *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -40,7 +40,7 @@ public class ServiceLocatorImpl implements ServiceLocator {
     /**
      * Construct the service locator.
      *
-     * @param protocolStrategyMap strategy  map to instanciate service.
+     * @param protocolStrategyMap strategy  map to instantiate service.
      */
     public ServiceLocatorImpl(final Map<String, InstantiationStrategy> protocolStrategyMap) {
         this.protocolStrategyMap = protocolStrategyMap;

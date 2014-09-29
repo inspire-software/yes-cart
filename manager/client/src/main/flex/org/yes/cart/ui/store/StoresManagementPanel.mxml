@@ -26,6 +26,7 @@
         import mx.events.IndexChangedEvent;
 
         import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.ui.payment.PaymentGateConfigManagementPanel;
 
         private var TAB_URL_IDX:int = 1;
         private var TAB_CURRENCY_IDX:int = 2;
@@ -36,6 +37,7 @@
         private var TAB_SHIPPING_IDX:int = 6;
         private var TAB_BILLING_IDX:int = 7;
         private var TAB_ATTR_IDX:int = 8;
+        private var TAB_PG_IDX:int = 9;
 
 
         private var _shopDTOImpl:ShopDTOImpl;
@@ -123,6 +125,13 @@
             carriersTab.addChild(panel);
         }
 
+        private function pgTabSelected(event:MouseEvent):void {
+            pgTab.removeAllChildren();
+            var panel:PaymentGateConfigManagementPanel = new PaymentGateConfigManagementPanel();
+            panel.shopDTOImpl = _shopDTOImpl;
+            pgTab.addChild(panel);
+        }
+
         private function attrTabSelected():void {
             storeNonImagesPanel.shop = this._shopDTOImpl;
         }
@@ -178,6 +187,11 @@
                     attrTabSelected();
                     break;
                 }
+                case TAB_PG_IDX:
+                {
+                    pgTabSelected(null);
+                    break;
+                }
 
             }
 
@@ -219,6 +233,8 @@
         <mx:Canvas enabled="false" label="@Resource(bundle='StoresManagementPanel',key='taxes')" width="100%"
                    height="100%"/>-->
         <attr:StoreNonImageAttributesPanel id="storeNonImagesPanel" enabled="{editingMode}"/>
+        <mx:Canvas id="pgTab" label="@Resource(bundle='PaymentGateConfigManagementPanel',key='pgwconfig')"
+                   width="100%" height="100%" enabled="{editingMode}"/>
     </mx:TabNavigator>
 
 

@@ -197,6 +197,19 @@
             ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
 
+        private function onEvictCacheResult(event:ResultEvent):void {
+            Alert.show(resourceManager.getString('BulkImportPanel', 'warmUpServers'),
+                    resourceManager.getString('ShopManagerApplication', 'info'),
+                    Alert.YES | Alert.CANCEL, this, onEvictCacheResultSuccess, null, Alert.YES);
+        }
+
+
+        private function onEvictCacheResultSuccess(event:CloseEvent):void {
+            if (event.detail == Alert.YES) {
+                remoteDevService.warmUp();
+            }
+        }
+
         ]]>
 	</mx:Script>
 
@@ -232,6 +245,10 @@
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
         <mx:method id="evictAllCache" name="evictAllCache"
+                   result="onEvictCacheResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="warmUp" name="warmUp"
                    fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
