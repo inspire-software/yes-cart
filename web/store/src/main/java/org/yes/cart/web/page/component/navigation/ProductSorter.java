@@ -38,6 +38,8 @@ public class ProductSorter extends BaseComponent {
     private static final String PRODUCT_SORT_BY_NAME_DESC = "orderByNameD";
     private static final String PRODUCT_SORT_BY_PRICE_ASC = "orderByPriceA";
     private static final String PRODUCT_SORT_BY_PRICE_DESC = "orderByPriceD";
+    private static final String PRODUCT_SORT_BY_CODE_ASC = "orderByCodeA";
+    private static final String PRODUCT_SORT_BY_CODE_DESC = "orderByCodeD";
 
 
 
@@ -57,6 +59,8 @@ public class ProductSorter extends BaseComponent {
 
         add(getSortLink(PRODUCT_SORT_BY_NAME_ASC, WebParametersKeys.SORT, ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD));
         add(getSortLink(PRODUCT_SORT_BY_NAME_DESC, WebParametersKeys.SORT_REVERSE, ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD));
+        add(getSortLink(PRODUCT_SORT_BY_CODE_ASC, WebParametersKeys.SORT, ProductSearchQueryBuilder.PRODUCT_CODE_FIELD));
+        add(getSortLink(PRODUCT_SORT_BY_CODE_DESC, WebParametersKeys.SORT_REVERSE, ProductSearchQueryBuilder.PRODUCT_CODE_FIELD));
         add(getSortLink(PRODUCT_SORT_BY_PRICE_ASC, WebParametersKeys.SORT, ProductSearchQueryBuilder.PRODUCT_PRICE_AMOUNT));
         add(getSortLink(PRODUCT_SORT_BY_PRICE_DESC, WebParametersKeys.SORT_REVERSE, ProductSearchQueryBuilder.PRODUCT_PRICE_AMOUNT));
 
