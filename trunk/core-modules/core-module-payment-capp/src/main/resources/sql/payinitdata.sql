@@ -78,10 +78,10 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (114, 'cyberSourcePaymentGateway',
 'htmlForm',
 '
-<table>
-    <tr>
-        <td>Card type</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="Eurocard">Eurocard</option>
@@ -100,15 +100,19 @@ VALUES (114, 'cyberSourcePaymentGateway',
             <option value="Carte Bleue">Carte Bleue</option>
             <option value="Carta Si">Carta Si</option>
             <option value="UATP">UATP</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card number</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Expiration date</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
             <option value="01">01 - January</option>
             <option value="02">02 - February</option>
             <option value="03">03 - March</option>
@@ -121,17 +125,22 @@ VALUES (114, 'cyberSourcePaymentGateway',
             <option value="10">10 - October</option>
             <option value="11">11 - November</option>
             <option value="12">12 - December</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card security code</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Part of html form (default)', 'Part of html form, that display when user select this gateway to pay (default)');
 
@@ -143,10 +152,10 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (116, 'cyberSourcePaymentGateway',
 'htmlForm_en',
 '
-<table>
-    <tr>
-        <td>Card type</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="Eurocard">Eurocard</option>
@@ -165,15 +174,19 @@ VALUES (116, 'cyberSourcePaymentGateway',
             <option value="Carte Bleue">Carte Bleue</option>
             <option value="Carta Si">Carta Si</option>
             <option value="UATP">UATP</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card number</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Expiration date</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
             <option value="01">01 - January</option>
             <option value="02">02 - February</option>
             <option value="03">03 - March</option>
@@ -186,17 +199,22 @@ VALUES (116, 'cyberSourcePaymentGateway',
             <option value="10">10 - October</option>
             <option value="11">11 - November</option>
             <option value="12">12 - December</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card security code</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Part of html form (EN)', 'Part of html form, that display when user select this gateway to pay (EN)');
 
@@ -207,10 +225,10 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (118, 'cyberSourcePaymentGateway',
 'htmlForm_ru',
 '
-<table>
-    <tr>
-        <td>Тип карты</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="Eurocard">Eurocard</option>
@@ -229,38 +247,47 @@ VALUES (118, 'cyberSourcePaymentGateway',
             <option value="Carte Bleue">Carte Bleue</option>
             <option value="Carta Si">Carta Si</option>
             <option value="UATP">UATP</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Номер карты</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Срок действия</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
-            <option value="01">01 - январь</option>
-            <option value="02">02 - февраль</option>
-            <option value="03">03 - март</option>
-            <option value="04">04 - апрель</option>
-            <option value="05">05 - май</option>
-            <option value="06">06 - июнь</option>
-            <option value="07">07 - июль</option>
-            <option value="08">08 - август</option>
-            <option value="09">09 - сентябрь</option>
-            <option value="10">10 - октябрь</option>
-            <option value="11">11 - ноябрь</option>
-            <option value="12">12 - декабрь</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Срок действия</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Январь</option>
+            <option value="02">02 - Февраль</option>
+            <option value="03">03 - Март</option>
+            <option value="04">04 - Апрель</option>
+            <option value="05">05 - Май</option>
+            <option value="06">06 - Июнь</option>
+            <option value="07">07 - Июль</option>
+            <option value="08">08 - Август</option>
+            <option value="09">09 - Сентябрь</option>
+            <option value="10">10 - Октябрь</option>
+            <option value="11">11 - Ноябрь</option>
+            <option value="12">12 - Декабрь</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Код безопасности</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безопасности</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
 
@@ -271,10 +298,10 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (1199, 'cyberSourcePaymentGateway',
 'htmlForm_uk',
 '
-<table>
-    <tr>
-        <td>Тип карти</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="Eurocard">Eurocard</option>
@@ -293,38 +320,47 @@ VALUES (1199, 'cyberSourcePaymentGateway',
             <option value="Carte Bleue">Carte Bleue</option>
             <option value="Carta Si">Carta Si</option>
             <option value="UATP">UATP</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Номер карти</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Термін дії</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
-            <option value="01">01 - січень</option>
-            <option value="02">02 - лютий</option>
-            <option value="03">03 - березень</option>
-            <option value="04">04 - квітень</option>
-            <option value="05">05 - травень</option>
-            <option value="06">06 - червень</option>
-            <option value="07">07 - липень</option>
-            <option value="08">08 - серпень</option>
-            <option value="09">09 - вересень</option>
-            <option value="10">10 - жовтень</option>
-            <option value="11">11 - листопад</option>
-            <option value="12">12 - грудень</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Термін дії</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Січень</option>
+            <option value="02">02 - Лютий</option>
+            <option value="03">03 - Березень</option>
+            <option value="04">04 - Квітень</option>
+            <option value="05">05 - Травень</option>
+            <option value="06">06 - Червень</option>
+            <option value="07">07 - Липень</option>
+            <option value="08">08 - Серпень</option>
+            <option value="09">09 - Вересень</option>
+            <option value="10">10 - Жовтень</option>
+            <option value="11">11 - Листопад</option>
+            <option value="12">12 - Грудень</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Код безпеки</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безпеки</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 
@@ -355,10 +391,10 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (124, 'authorizeNetAimPaymentGateway',
 'htmlForm',
 '
-<table>
-    <tr>
-        <td>Card type</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="American Express">American Express</option>
@@ -368,15 +404,19 @@ VALUES (124, 'authorizeNetAimPaymentGateway',
             <option value="Diners Club">Diners Club</option>
             <option value="Optima">Optima</option>
             <option value="Novus">Novus</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card number</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Expiration date</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
             <option value="01">01 - January</option>
             <option value="02">02 - February</option>
             <option value="03">03 - March</option>
@@ -389,17 +429,22 @@ VALUES (124, 'authorizeNetAimPaymentGateway',
             <option value="10">10 - October</option>
             <option value="11">11 - November</option>
             <option value="12">12 - December</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card security code</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Part of html form (default)', 'Part of html form, that display when user select this gateway to pay (default)');
 
@@ -410,10 +455,10 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (126, 'authorizeNetAimPaymentGateway',
 'htmlForm_en',
 '
-<table>
-    <tr>
-        <td>Card type</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="American Express">American Express</option>
@@ -423,15 +468,19 @@ VALUES (126, 'authorizeNetAimPaymentGateway',
             <option value="Diners Club">Diners Club</option>
             <option value="Optima">Optima</option>
             <option value="Novus">Novus</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card number</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Expiration date</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
             <option value="01">01 - January</option>
             <option value="02">02 - February</option>
             <option value="03">03 - March</option>
@@ -444,17 +493,22 @@ VALUES (126, 'authorizeNetAimPaymentGateway',
             <option value="10">10 - October</option>
             <option value="11">11 - November</option>
             <option value="12">12 - December</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card security code</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Part of html form (EN)', 'Part of html form, that display when user select this gateway to pay (EN)');
 
@@ -465,10 +519,10 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (128, 'authorizeNetAimPaymentGateway',
 'htmlForm_ru',
 '
-<table>
-    <tr>
-        <td>Тип карты</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="American Express">American Express</option>
@@ -478,38 +532,47 @@ VALUES (128, 'authorizeNetAimPaymentGateway',
             <option value="Diners Club">Diners Club</option>
             <option value="Optima">Optima</option>
             <option value="Novus">Novus</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Номер карты</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Срок действия</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
-            <option value="01">01 - январь</option>
-            <option value="02">02 - февраль</option>
-            <option value="03">03 - март</option>
-            <option value="04">04 - апрель</option>
-            <option value="05">05 - май</option>
-            <option value="06">06 - июнь</option>
-            <option value="07">07 - июль</option>
-            <option value="08">08 - август</option>
-            <option value="09">09 - сентябрь</option>
-            <option value="10">10 - октябрь</option>
-            <option value="11">11 - ноябрь</option>
-            <option value="12">12 - декабрь</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Срок действия</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Январь</option>
+            <option value="02">02 - Февраль</option>
+            <option value="03">03 - Март</option>
+            <option value="04">04 - Апрель</option>
+            <option value="05">05 - Май</option>
+            <option value="06">06 - Июнь</option>
+            <option value="07">07 - Июль</option>
+            <option value="08">08 - Август</option>
+            <option value="09">09 - Сентябрь</option>
+            <option value="10">10 - Октябрь</option>
+            <option value="11">11 - Ноябрь</option>
+            <option value="12">12 - Декабрь</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Код безопасности</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безопасности</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
 
@@ -520,10 +583,10 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (130, 'authorizeNetAimPaymentGateway',
 'htmlForm_uk',
 '
-<table>
-    <tr>
-        <td>Тип карти</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="American Express">American Express</option>
@@ -533,38 +596,47 @@ VALUES (130, 'authorizeNetAimPaymentGateway',
             <option value="Diners Club">Diners Club</option>
             <option value="Optima">Optima</option>
             <option value="Novus">Novus</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Номер карти</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Термін дії</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
-            <option value="01">01 - січень</option>
-            <option value="02">02 - лютий</option>
-            <option value="03">03 - березень</option>
-            <option value="04">04 - квітень</option>
-            <option value="05">05 - травень</option>
-            <option value="06">06 - червень</option>
-            <option value="07">07 - липень</option>
-            <option value="08">08 - серпень</option>
-            <option value="09">09 - вересень</option>
-            <option value="10">10 - жовтень</option>
-            <option value="11">11 - листопад</option>
-            <option value="12">12 - грудень</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" name="ccNumber" class="form-control" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Термін дії</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Січень</option>
+            <option value="02">02 - Лютий</option>
+            <option value="03">03 - Березень</option>
+            <option value="04">04 - Квітень</option>
+            <option value="05">05 - Травень</option>
+            <option value="06">06 - Червень</option>
+            <option value="07">07 - Липень</option>
+            <option value="08">08 - Серпень</option>
+            <option value="09">09 - Вересень</option>
+            <option value="10">10 - Жовтень</option>
+            <option value="11">11 - Листопад</option>
+            <option value="12">12 - Грудень</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Код безпеки</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безпеки</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 
@@ -675,14 +747,16 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (157, 'payflowPaymentGateway',
 'htmlForm',
 '
-<table>
-    <tr>
-        <td>Name on card</td>
-        <td><input type="text" class="paymentlongfield" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
-    </tr>
-    <tr>
-        <td>Card type</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Name on card</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="JCB">JCB</option>
@@ -692,15 +766,19 @@ VALUES (157, 'payflowPaymentGateway',
             <option value="Diners Club">Diners Club</option>
             <option value="Optima">Optima</option>
             <option value="Novus">Novus</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card number</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Expiration date</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
             <option value="01">01 - January</option>
             <option value="02">02 - February</option>
             <option value="03">03 - March</option>
@@ -713,17 +791,22 @@ VALUES (157, 'payflowPaymentGateway',
             <option value="10">10 - October</option>
             <option value="11">11 - November</option>
             <option value="12">12 - December</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card security code</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Part of html form (default)', 'Part of html form, that display when user select this gateway to pay (default)');
 
@@ -734,14 +817,16 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (159, 'payflowPaymentGateway',
 'htmlForm_en',
 '
-<table>
-    <tr>
-        <td>Name on card</td>
-        <td><input type="text" class="paymentlongfield" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
-    </tr>
-    <tr>
-        <td>Card type</td>
-        <td><select name="ccType" class="paymentlongfield">
+<div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Name on card</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="JCB">JCB</option>
@@ -751,15 +836,19 @@ VALUES (159, 'payflowPaymentGateway',
             <option value="Diners Club">Diners Club</option>
             <option value="Optima">Optima</option>
             <option value="Novus">Novus</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card number</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Expiration date</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
             <option value="01">01 - January</option>
             <option value="02">02 - February</option>
             <option value="03">03 - March</option>
@@ -772,17 +861,22 @@ VALUES (159, 'payflowPaymentGateway',
             <option value="10">10 - October</option>
             <option value="11">11 - November</option>
             <option value="12">12 - December</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card security code</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Part of html form (EN)', 'Part of html form, that display when user select this gateway to pay (EN)');
 
@@ -795,14 +889,16 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (161, 'payflowPaymentGateway',
 'htmlForm_ru',
 '
-<table>
-    <tr>
-        <td>Имя на карте</td>
-        <td><input type="text" class="paymentlongfield" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
-    </tr>
-    <tr>
-        <td>Тип карты</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Имя на карте</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="JCB">JCB</option>
@@ -812,38 +908,47 @@ VALUES (161, 'payflowPaymentGateway',
             <option value="Diners Club">Diners Club</option>
             <option value="Optima">Optima</option>
             <option value="Novus">Novus</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Номер карты</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Срок действия</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
-            <option value="01">01 - январь</option>
-            <option value="02">02 - февраль</option>
-            <option value="03">03 - март</option>
-            <option value="04">04 - апрель</option>
-            <option value="05">05 - май</option>
-            <option value="06">06 - июнь</option>
-            <option value="07">07 - июль</option>
-            <option value="08">08 - август</option>
-            <option value="09">09 - сентябрь</option>
-            <option value="10">10 - октябрь</option>
-            <option value="11">11 - ноябрь</option>
-            <option value="12">12 - декабрь</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Срок действия</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Январь</option>
+            <option value="02">02 - Февраль</option>
+            <option value="03">03 - Март</option>
+            <option value="04">04 - Апрель</option>
+            <option value="05">05 - Май</option>
+            <option value="06">06 - Июнь</option>
+            <option value="07">07 - Июль</option>
+            <option value="08">08 - Август</option>
+            <option value="09">09 - Сентябрь</option>
+            <option value="10">10 - Октябрь</option>
+            <option value="11">11 - Ноябрь</option>
+            <option value="12">12 - Декабрь</option>
+          </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Код безопасности</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безопасности</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
 
@@ -857,14 +962,16 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (163, 'payflowPaymentGateway',
 'htmlForm_uk',
 '
-<table>
-    <tr>
-        <td>Ім''я на картці</td>
-        <td><input type="text" class="paymentlongfield" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
-    </tr>
-    <tr>
-        <td>Тип карти</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Ім''я на картці</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="JCB">JCB</option>
@@ -874,38 +981,47 @@ VALUES (163, 'payflowPaymentGateway',
             <option value="Diners Club">Diners Club</option>
             <option value="Optima">Optima</option>
             <option value="Novus">Novus</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Номер карти</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Термін дії</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
-            <option value="01">01 - січень</option>
-            <option value="02">02 - лютий</option>
-            <option value="03">03 - березень</option>
-            <option value="04">04 - квітень</option>
-            <option value="05">05 - травень</option>
-            <option value="06">06 - червень</option>
-            <option value="07">07 - липень</option>
-            <option value="08">08 - серпень</option>
-            <option value="09">09 - вересень</option>
-            <option value="10">10 - жовтень</option>
-            <option value="11">11 - листопад</option>
-            <option value="12">12 - грудень</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Термін дії</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Січень</option>
+            <option value="02">02 - Лютий</option>
+            <option value="03">03 - Березень</option>
+            <option value="04">04 - Квітень</option>
+            <option value="05">05 - Травень</option>
+            <option value="06">06 - Червень</option>
+            <option value="07">07 - Липень</option>
+            <option value="08">08 - Серпень</option>
+            <option value="09">09 - Вересень</option>
+            <option value="10">10 - Жовтень</option>
+            <option value="11">11 - Листопад</option>
+            <option value="12">12 - Грудень</option>
+          </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Код безпеки</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безпеки</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 
@@ -946,23 +1062,27 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (177, 'payPalNvpPaymentGateway',
 'htmlForm',
 '
-<table>
-    <tr>
-        <td>Card type</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="American Express">American Express</option>
             <option value="Discover">Discover</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card number</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Expiration date</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
             <option value="01">01 - January</option>
             <option value="02">02 - February</option>
             <option value="03">03 - March</option>
@@ -975,17 +1095,22 @@ VALUES (177, 'payPalNvpPaymentGateway',
             <option value="10">10 - October</option>
             <option value="11">11 - November</option>
             <option value="12">12 - December</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card security code</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Part of html form (default)', 'Part of html form, that display when user select this gateway to pay (default)');
 
@@ -996,23 +1121,27 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (179, 'payPalNvpPaymentGateway',
 'htmlForm_en',
 '
-<table>
-    <tr>
-        <td>Card type</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card type</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="American Express">American Express</option>
             <option value="Discover">Discover</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card number</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Expiration date</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card number</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Expiration date</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
             <option value="01">01 - January</option>
             <option value="02">02 - February</option>
             <option value="03">03 - March</option>
@@ -1025,17 +1154,22 @@ VALUES (179, 'payPalNvpPaymentGateway',
             <option value="10">10 - October</option>
             <option value="11">11 - November</option>
             <option value="12">12 - December</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Card security code</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Card security code</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Part of html form (EN)', 'Part of html form, that display when user select this gateway to pay (EN)');
 
@@ -1047,23 +1181,27 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (181, 'payPalNvpPaymentGateway',
 'htmlForm_ru',
 '
-<table>
-    <tr>
-        <td>Тип карты</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="American Express">American Express</option>
             <option value="Discover">Discover</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Номер карты</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Срок действия</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карты</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Срок действия</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
             <option value="01">01 - Январь</option>
             <option value="02">02 - Февраль</option>
             <option value="03">03 - Март</option>
@@ -1076,17 +1214,22 @@ VALUES (181, 'payPalNvpPaymentGateway',
             <option value="10">10 - Октябрь</option>
             <option value="11">11 - Ноябрь</option>
             <option value="12">12 - Декабрь</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Код безопасности</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безопасности</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Часть HTML формы для оплаты (RU)', 'Часть HTML формы для оплаты, которая будет показана на последнем шаге при оформлении заказа (RU)');
 
@@ -1098,46 +1241,55 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (183, 'payPalNvpPaymentGateway',
 'htmlForm_uk',
 '
-<table>
-    <tr>
-        <td>Тип карти</td>
-        <td><select name="ccType" class="paymentlongfield">
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Тип карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+            <select name="ccType" class="form-control">
             <option value="Visa">Visa</option>
             <option value="MasterCard">MasterCard</option>
             <option value="American Express">American Express</option>
             <option value="Discover">Discover</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Номер карти</td>
-        <td><input type="text" class="paymentlongfield" name="ccNumber"  maxlength="16"/></td>
-    </tr>
-    <tr>
-        <td>Термін дії</td>
-        <td><select name="ccExpireMonth" class="paymentnormalfield">
-            <option value="01">01 - січень</option>
-            <option value="02">02 - лютий</option>
-            <option value="03">03 - березень</option>
-            <option value="04">04 - квітень</option>
-            <option value="05">05 - травень</option>
-            <option value="06">06 - червень</option>
-            <option value="07">07 - липень</option>
-            <option value="08">08 - серпень</option>
-            <option value="09">09 - вересень</option>
-            <option value="10">10 - жовтень</option>
-            <option value="11">11 - листопад</option>
-            <option value="12">12 - грудень</option>
-        </select> <select name="ccExpireYear" class="paymentshortfield">
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Номер карти</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Термін дії</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+            <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Січень</option>
+            <option value="02">02 - Лютий</option>
+            <option value="03">03 - Березень</option>
+            <option value="04">04 - Квітень</option>
+            <option value="05">05 - Травень</option>
+            <option value="06">06 - Червень</option>
+            <option value="07">07 - Липень</option>
+            <option value="08">08 - Серпень</option>
+            <option value="09">09 - Вересень</option>
+            <option value="10">10 - Жовтень</option>
+            <option value="11">11 - Листопад</option>
+            <option value="12">12 - Грудень</option>
+            </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+            <select name="ccExpireYear" class="form-control">
             <option value="2013">2013</option>
             <option value="2014">2014</option>
             <option value="2015">2015</option>
-        </select></td>
-    </tr>
-    <tr>
-        <td>Код безпеки</td>
-        <td><input type="text" class="paymentshortfield" name="ccSecCode" maxlength="3"/></td>
-    </tr>
-</table>
+            </select>
+        </div>
+    </div>
+    <div class="col-xs-12 form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Код безпеки</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>
 '
 , 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 

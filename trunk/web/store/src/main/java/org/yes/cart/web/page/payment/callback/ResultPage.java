@@ -25,6 +25,8 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
+import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
@@ -56,6 +58,12 @@ public class ResultPage extends AbstractWebPage {
     public ResultPage(final PageParameters params) {
 
         super(params);
+
+        add(
+                new StandardFooter(FOOTER)
+        ).add(
+                new StandardHeader(HEADER)
+        );
 
         final String orderNum = params.get("orderNum").toString();
 

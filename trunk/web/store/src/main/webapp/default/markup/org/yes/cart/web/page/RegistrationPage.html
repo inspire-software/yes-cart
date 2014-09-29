@@ -19,6 +19,7 @@
 
 <wicket:head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
     <meta name="google-site-verification" content="rHZLga_ppoOy7iVYFQgRVDZOLa7fuT7cGs2t8TY4m6c" />
     <meta name="robots" content="noindex" />
 
@@ -26,16 +27,15 @@
 
         <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
         <!--[if lt IE 9]>
         <script src="../../../../../js/html5.js"></script>
         <![endif]-->
-        <link rel="stylesheet" href="../../../../../style/demo.css"/>
-        <!--[if (gt IE 8) | (IEMobile)]><!-->
-        <link rel="stylesheet" href="../../../../../style/unsemantic-grid-responsive.css"/>
-        <!--<![endif]-->
-        <!--[if (lt IE 9) & (!IEMobile)]>
-        <link rel="stylesheet" href="../../../../../style/ie.css"/>
-        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/fonts.css"/>
+        <link rel="stylesheet" href="../../../../../style/yc.css"/>
+
         <script type="text/javascript" src="../../../../../js/yc.js"></script>
     </wicket:link>
     <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
@@ -47,64 +47,20 @@
 </wicket:head>
 
 <body>
-
-
-<div class="grid-container">
-
     <span wicket:id="header">[header]</span>
 
+    <div class="container">
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-15 hide-on-mobile grid-parent">
-            <p>
-                &nbsp;
-            </p>
+        <div class="col-xs-12">
+            <span wicket:id="feedback"/>
         </div>
 
-        <div class="grid-70  mobile-grid-100 grid-parent">
-            <p>
-                <span  class="big-title"><wicket:message key="registration">[Registration]</wicket:message></span>
-            </p>
-            <hr>
-        </div>
-        <div class="grid-15 hide-on-mobile grid-parent">
-            <p>
-                &nbsp;
-            </p>
+        <div class="col-xs-12 col-sm-9">
+            <wicket:container wicket:id="registrationView">
+             [registration panel]
+            </wicket:container>
         </div>
     </div>
-
-
-
-
-
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-15 hide-on-mobile grid-parent">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-        <div class="grid-70  mobile-grid-100 grid-parent">
-            <p>
-				<span wicket:id="feedback"/>
-                <wicket:container wicket:id="registrationView">
-                 [registration panel]
-                </wicket:container>
-            </p>
-        </div>
-        <div class="grid-15 hide-on-mobile grid-parent">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-    </div>
-
     <span wicket:id="footer">[footer]</span>
-
-
-</div>
-
-
-
 </body>
 </html>

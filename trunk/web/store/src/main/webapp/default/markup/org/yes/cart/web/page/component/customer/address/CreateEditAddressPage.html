@@ -28,17 +28,16 @@
 
         <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
 
         <!--[if lt IE 9]>
         <script src="../../../../../../../../js/html5.js"></script>
         <![endif]-->
-        <link rel="stylesheet" href="../../../../../../../../style/demo.css"/>
-        <!--[if (gt IE 8) | (IEMobile)]><!-->
-        <link rel="stylesheet" href="../../../../../../../../style/unsemantic-grid-responsive.css"/>
-        <!--<![endif]-->
-        <!--[if (lt IE 9) & (!IEMobile)]>
-        <link rel="stylesheet" href="../../../../../../../../style/ie.css"/>
-        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/fonts.css"/>
+        <link rel="stylesheet" href="../../../../../style/yc.css"/>
+
         <script type="text/javascript" src="../../../../../../../../js/yc.js"></script>
     </wicket:link>
     <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
@@ -51,171 +50,112 @@
 
 <body>
 
-<div class="grid-container">
+<div class="container">
 
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-15 hide-on-mobile">
-            <p>&nbsp;</p>
-        </div>
-        <div class="grid-70 mobile-grid-100">
-            <span class="big-title">
-                <wicket:message key="createEditAddress">[Create edit address]</wicket:message>
-            </span>
-            <hr>
-        </div>
-        <div class="grid-15 hide-on-mobile">
-            <p>&nbsp;</p>
-        </div>
+    <div class="col-xs-12 edit-address-title">
+        <h2><wicket:message key="createEditAddress">[Create edit address]</wicket:message></h2>
     </div>
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-15 hide-on-mobile">
-            <p>&nbsp;</p>
-        </div>
-        <div class="grid-70 mobile-grid-100">
-            <div wicket:id="feedback">[feedpack panel]</div>
-        </div>
-        <div class="grid-15 hide-on-mobile">
-            <p>&nbsp;</p>
-        </div>
+    <div class="col-xs-12">
+        <div wicket:id="feedback">[feedpack panel]</div>
     </div>
 
-    <form wicket:id="addressForm">
+    <form wicket:id="addressForm" class="form-horizontal">
 
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-15 hide-on-mobile">
-                <p>&nbsp;</p>
-            </div>
-            <div class="grid-70 mobile-grid-100 grid-parent">
-
-                <div class="grid-100 mobile-grid-100 grid-parent">
-                    <div class="grid-20 mobile-grid-20">
-                        <wicket:message key="firstName">[First name]</wicket:message>
-                    </div>
-                    <div class="grid-80 mobile-grid-80">
-                        <input type="text" class="input-text" wicket:id="firstName" maxlength="128"/>
-                    </div>
-                </div>
-
-                <div class="grid-100 mobile-grid-100 grid-parent">
-                    <div class="grid-20 mobile-grid-20">
-                        <wicket:message key="lastName">[Last name]</wicket:message>
-                    </div>
-                    <div class="grid-80 mobile-grid-80">
-                        <input type="text" class="input-text" wicket:id="lastName" maxlength="128"/>
-                    </div>
-                </div>
-
-                <div class="grid-100 mobile-grid-100 grid-parent">
-                    <div class="grid-20 mobile-grid-20">
-                        <wicket:message key="line1">[line 1]</wicket:message>
-                    </div>
-                    <div class="grid-80 mobile-grid-80">
-                        <input type="text" class="input-text" wicket:id="line1" maxlength="255"/>
-                    </div>
-                </div>
-
-                <div class="grid-100 mobile-grid-100 grid-parent">
-                    <div class="grid-20 mobile-grid-20">
-                        <wicket:message key="line2">[line 2]</wicket:message>
-                    </div>
-                    <div class="grid-80 mobile-grid-80">
-                        <input type="text" class="input-text" wicket:id="line2" maxlength="255"/>
-                    </div>
-                </div>
-
-                <div class="grid-100 mobile-grid-100 grid-parent">
-                    <div class="grid-20 mobile-grid-20">
-                        <wicket:message key="country">[Country]</wicket:message>
-                    </div>
-                    <div class="grid-80 mobile-grid-80">
-                        <select class="input-select" wicket:id="country"/>
-                    </div>
-                </div>
-
-                <div class="grid-100 mobile-grid-100 grid-parent">
-                    <div class="grid-20 mobile-grid-20">
-                        <wicket:message key="state">[State]</wicket:message>
-                    </div>
-                    <div class="grid-80 mobile-grid-80">
-                        <select class="input-select" wicket:id="state"/>
-                    </div>
-                </div>
-
-                <div class="grid-100 mobile-grid-100 grid-parent">
-                    <div class="grid-20 mobile-grid-20">
-                        <wicket:message key="city">[City]</wicket:message>
-                    </div>
-                    <div class="grid-80 mobile-grid-80">
-                        <input type="text" class="input-text" wicket:id="city" maxlength="128"/>
-                    </div>
-                </div>
-
-                <div class="grid-100 mobile-grid-100 grid-parent">
-                    <div class="grid-20 mobile-grid-20">
-                        <wicket:message key="postcode">[postcode]</wicket:message>
-                    </div>
-                    <div class="grid-80 mobile-grid-80">
-                        <input type="text" class="input-text" wicket:id="postcode" maxlength="16"/>
-                    </div>
-
-                </div>
-
-                <div class="grid-100 mobile-grid-100 grid-parent">
-                    <div class="grid-20 mobile-grid-20">
-                        <wicket:message key="phoneList">[phoneList]</wicket:message>
-                    </div>
-                    <div class="grid-80 mobile-grid-80">
-                        <input type="text" class="input-text" wicket:id="phoneList" maxlength="256"/>
-                    </div>
-                </div>
-
-                <div class="grid-100 mobile-grid-100 grid-parent">
-                    <div class="grid-20 mobile-grid-20">
-                        <p>
-                            &nbsp;
-                        </p>
-                    </div>
-                    <div class="grid-80 mobile-grid-80">
-                        <div class="grid-80 mobile-grid-80">
-
-                        </div>
-                        <p>
-                            <a wicket:id="cancel" class="button gray" rel="nofollow">
-                                    <span>
-                                        <wicket:message key="cancel">[cancel]</wicket:message>
-                                    </span>
-                            </a>
-                            <a wicket:id="addAddress" class="button gray" rel="nofollow">
-                                    <span>
-                                        <wicket:message key="create">[create]</wicket:message>
-                                    </span>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-
-
-                <div class="grid-100 mobile-grid-100">
-                    <p>
-                        &nbsp;
-                    </p>
-                </div>
-            </div>
-            <div class="grid-15 hide-on-mobile">
-                <p>&nbsp;</p>
+        <div class="form-group">
+            <label for="inputFirstName" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="firstName">[First name]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-7">
+                <input type="text" wicket:id="firstName" class="form-control" id="inputFirstName" maxlength="128"/>
             </div>
         </div>
 
+        <div class="form-group">
+            <label for="inputLastName" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="lastName">[Last Name]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-7">
+                <input type="text" wicket:id="lastName" class="form-control" id="inputLastName" maxlength="128"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputAddr1" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="line1">[Address Line 1]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-7">
+                <input type="text" wicket:id="line1" class="form-control" id="inputAddr1" maxlength="255"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputAddr2" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="line2">[Address Line 2]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-7">
+                <input type="text" wicket:id="line2" class="form-control" id="inputAddr2" maxlength="255"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="selectCountry" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="country">[Country]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-7">
+                <select class="form-control" wicket:id="country" id="selectCountry"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="selectState" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="state">[State]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-7">
+                <select class="form-control" wicket:id="state" id="selectState"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputCity" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="city">[City]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-7">
+                <input type="text" wicket:id="city" class="form-control" id="inputCity" maxlength="128"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputPostCode" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="postcode">[Post code]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-7">
+                <input type="text" wicket:id="postcode" class="form-control" id="inputPostCode" maxlength="16"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputPhone" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="phoneList">[Phone list]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-7">
+                <input type="text" wicket:id="phoneList" class="form-control" id="inputPhone" maxlength="256"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <a wicket:id="cancel" class="btn btn-default" rel="nofollow">
+                    <wicket:message key="cancel">[cancel]</wicket:message>
+                </a>
+                <a wicket:id="addAddress" class="btn btn-primary" rel="nofollow">
+                    <wicket:message key="create">[create]</wicket:message>
+                </a>
+            </div>
+        </div>
 
     </form>
-
-    <div class="grid-100 mobile-grid-100">
-        <p>
-            &nbsp;
-        </p>
-    </div>
 
 </div>
 

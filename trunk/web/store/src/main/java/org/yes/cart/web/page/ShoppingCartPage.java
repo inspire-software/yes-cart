@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page;
 
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -37,7 +36,6 @@ public class ShoppingCartPage extends AbstractWebPage {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String CART_VIEW = "shoppingCartView";
-    private final static String CHECKOUT_LINK = "checkoutLink";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
@@ -72,8 +70,6 @@ public class ShoppingCartPage extends AbstractWebPage {
                 new FeedbackPanel(FEEDBACK)
         ).addOrReplace(
                 new ShoppingCartView(CART_VIEW).setVisible(!ApplicationDirector.getShoppingCart().getCartItemList().isEmpty())
-        ).addOrReplace(
-                new BookmarkablePageLink<CheckoutPage>(CHECKOUT_LINK, CheckoutPage.class).setVisible(!ApplicationDirector.getShoppingCart().getCartItemList().isEmpty())
         ).addOrReplace(
                 new StandardFooter(FOOTER)
         ).addOrReplace(

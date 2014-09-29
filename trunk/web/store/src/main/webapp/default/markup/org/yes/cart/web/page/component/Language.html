@@ -20,11 +20,21 @@
     <span>
         <wicket:message key="language">[additional info]</wicket:message>
     </span>
-    <span wicket:id="languageList">&nbsp;
-        <a wicket:id="languageLink" class="language" rel="nofollow">
-            <span wicket:id="languageName"/>
-        </a>
-    </span>
+
+    <a class="dropdown-toggle" id="languageMenu" data-toggle="dropdown" href="#">
+        <span wicket:id="activeLanguageName"/>
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="languageMenu">
+        <span wicket:id="languageList">
+            <li role="presentation">
+                <a wicket:id="languageLink" rel="nofollow">
+                    <span wicket:id="languageName"/>
+                </a>
+            </li>
+        </span>
+    </ul>
+
 </wicket:panel>
 </body>
 </html>

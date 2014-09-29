@@ -19,6 +19,7 @@
 
 <wicket:head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
     <meta name="google-site-verification" content="rHZLga_ppoOy7iVYFQgRVDZOLa7fuT7cGs2t8TY4m6c" />
     <meta name="robots" content="noindex" />
 
@@ -26,16 +27,15 @@
 
         <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
         <!--[if lt IE 9]>
         <script src="../../../../../js/html5.js"></script>
         <![endif]-->
-        <link rel="stylesheet" href="../../../../../style/demo.css"/>
-        <!--[if (gt IE 8) | (IEMobile)]><!-->
-        <link rel="stylesheet" href="../../../../../style/unsemantic-grid-responsive.css"/>
-        <!--<![endif]-->
-        <!--[if (lt IE 9) & (!IEMobile)]>
-        <link rel="stylesheet" href="../../../../../style/ie.css"/>
-        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/fonts.css"/>
+        <link rel="stylesheet" href="../../../../../style/yc.css"/>
+
         <script type="text/javascript" src="../../../../../js/yc.js"></script>
     </wicket:link>
     <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
@@ -48,156 +48,93 @@
 
 <body>
 
-<div class="grid-container">
-
-
     <span wicket:id="header">[header]</span>
 
+    <div class="container">
 
+        <wicket:container wicket:id="navigation">
+            [step navigation panel]
+        </wicket:container>
 
-
-
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-15 hide-on-mobile">
-            <p>
-                &nbsp;
-            </p>
+        <div class="row">
+            <div wicket:id="feedback" class="col-xs-12">[feedback panel]</div>
         </div>
-        <div class="grid-70 mobile-grid-100 grid-parent">
 
-            <div class="grid-100 mobile-grid-100 grid-parent">
-                <span class="big-title">
-                    <wicket:message key="checkoutTitle">[Checkout]</wicket:message>
-                </span>
-            </div>
-
-            <hr>
-
-            <div class="grid-100 mobile-grid-100 grid-parent">
-                <wicket:container wicket:id="navigation">
-                    [step navigation panel]
-                </wicket:container>
-            </div>
-
-
-
-        </div>
-        <div class="grid-15 hide-on-mobile">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-    </div>
-
-
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-15 hide-on-mobile">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-        <div class="grid-70 mobile-grid-100 grid-parent">
-            <div wicket:id="feedback">[feedpack panel]</div>
-        </div>
-        <div class="grid-15 hide-on-mobile">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-    </div>
-
-
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-15 hide-on-mobile">
-            <p>
-                &nbsp;
-            </p>
-        </div>
-        <div class="grid-70 mobile-grid-100 grid-parent">
+        <div class="col-xs-12">
             <wicket:container wicket:id="content">
                 [current content]
             </wicket:container>
         </div>
-        <div class="grid-15 hide-on-mobile">
-            <p>
-                &nbsp;
-            </p>
-        </div>
+
     </div>
 
     <span wicket:id="footer">[footer]</span>
 
-
-</div>
-
-
 <wicket:fragment wicket:id="addressFragment">
-    <div class="grid-100 mobile-grid-100 grid-parent" style="margin-bottom: 10px">
-        <div class="grid-33 mobile-grid-33 grid-parent">
-            <wicket:link>
-                <a href="?thp=true&amp;step=address" rel="nofollow">
-                    <span class="active-checkout-step"><wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message></span>
-                </a>
-            </wicket:link>
-        </div>
-        <div class="grid-33 mobile-grid-33 grid-parent">
-            <wicket:link>
-                <a href="?thp=true&amp;step=ship" rel="nofollow">
-                    <span  class="checkout-step"><wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message></span>
-                </a>
-            </wicket:link>
-        </div>
-        <div class="grid-33 mobile-grid-33 grid-parent">
-            <wicket:link>
-                <a href="?thp=true&amp;step=payment" rel="nofollow">
-                    <span class="checkout-step"><wicket:message key="paymentStep"> [Verification and Payment]</wicket:message></span>
-                </a>
-            </wicket:link>
-        </div>
+    <div class="row checkout-progress-bar">
+        <ul class="checkout-steps">
+            <li class="col-xs-12 col-sm-6 col-md-3 complete">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=login" class=" disabled" rel="nofollow">
+                        <span class="badge">1</span>
+                        <wicket:message key="loginStep"> [Login Or Registration]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3 active">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=address" rel="nofollow">
+                        <span class="badge">2</span>
+                        <wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=ship" rel="nofollow">
+                        <span class="badge">3</span>
+                        <wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=payment" rel="nofollow">
+                        <span class="badge">4</span>
+                        <wicket:message key="paymentStep"> [Verification and Payment]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+        </ul>
     </div>
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
-
-        <div class="grid-100 mobile-grid-100">
-            <p>
-                <span><wicket:message key="selectAddr">[Address to use]</wicket:message></span>
-            </p>
-        </div>
-
-        <div class="grid-100 mobile-grid-100">
-            <p>
-
+    <div class="container active-step-holder">
+        <div class="col-xs-12">
             <form wicket:id="billingTheSameForm">
                 <input type="checkbox" wicket:id="billingTheSame">
-                <wicket:message key="billingAddrTheSame">[Billing address the same]</wicket:message>
+                <label><wicket:message key="billingAddrTheSame">[Billing address the same]</wicket:message></label>
             </form>
-            </p>
         </div>
 
-
-        <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="col-xs-12 no-margin">
             <wicket:container wicket:id="shippingAddress">
                 [Shipping address]
             </wicket:container>
         </div>
-        <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="col-xs-12 no-margin">
             <wicket:container wicket:id="billingAddress">
                 [Shipping address]
             </wicket:container>
         </div>
 
-
-        <div class="grid-100 mobile-grid-100">
-            <p>
-                <wicket:link>
-                    <a href="?thp=true&amp;step=ship" class="button orange forward" rel="nofollow">
-                        <span><wicket:message key="shipmentStep">[Shipping method]</wicket:message></span>
-                    </a>
-                </wicket:link>
-            </p>
+        <div class="col-xs-12 address-step-btn">
+            <wicket:link>
+                <a href="?thp=true&amp;step=ship" class="btn btn-warning" rel="nofollow">
+                    <wicket:message key="shipmentStep">[Shipping method]</wicket:message>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+            </wicket:link>
         </div>
-
-
     </div>
 
 </wicket:fragment>
@@ -209,30 +146,55 @@
 
 
 <wicket:fragment wicket:id="fourStepNavigationFragment">
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-25 mobile-grid-25 grid-parent">
-            <wicket:link>
-                <a href="?thp=true&amp;step=login" rel="nofollow">
-                    <span><wicket:message key="loginStep"> [Login Or Registration]</wicket:message></span>
-                </a>
-            </wicket:link>
-        </div>
+    <div class="row checkout-progress-bar">
+        <ul class="checkout-steps">
+            <li class="col-xs-12 col-sm-6 col-md-3 active">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=login" rel="nofollow">
+                        <span class="badge">1</span>
+                        <wicket:message key="loginStep"> [Login Or Registration]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=address" rel="nofollow">
+                        <span class="badge">2</span>
+                        <wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=ship" rel="nofollow">
+                        <span class="badge">3</span>
+                        <wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=payment" rel="nofollow">
+                        <span class="badge">4</span>
+                        <wicket:message key="paymentStep"> [Verification and Payment]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+        </ul>
     </div>
 </wicket:fragment>
 
 <wicket:fragment wicket:id="loginFragment">
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-50 mobile-grid-100 grid-parent">
-            <wicket:container wicket:id="registerView">
-                [New user registration]
-            </wicket:container>
-        </div>
-        <div class="grid-50 mobile-grid-100 grid-parent">
-            <wicket:container wicket:id="loginView">
-                [Login for existing user]
-            </wicket:container>
-        </div>
+    <div class="col-xs-12 col-sm-6">
+        <wicket:container wicket:id="loginView">
+            [Login for existing user]
+        </wicket:container>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+        <wicket:container wicket:id="registerView">
+            [New user registration]
+        </wicket:container>
     </div>
 
 </wicket:fragment>
@@ -240,47 +202,60 @@
 
 <wicket:fragment wicket:id="shipmentFragment">
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-33 mobile-grid-33 grid-parent" style="margin-bottom: 10px">
-            <wicket:link>
-                <a href="?thp=true&amp;step=address" rel="nofollow">
-                    <span class="checkout-step"><wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message></span>
-                </a>
-            </wicket:link>
-        </div>
-        <div class="grid-33 mobile-grid-33 grid-parent">
-            <wicket:link>
-                <a href="?thp=true&amp;step=ship" rel="nofollow">
-                    <span class="active-checkout-step"><wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message></span>
-                </a>
-            </wicket:link>
-        </div>
-        <div class="grid-33 mobile-grid-33 grid-parent">
-            <wicket:link>
-                <a href="?thp=true&amp;step=payment" rel="nofollow">
-                    <span class="checkout-step"><wicket:message key="paymentStep"> [Verification and Payment]</wicket:message></span>
-                </a>
-            </wicket:link>
-        </div>
+    <div class="row checkout-progress-bar">
+        <ul class="checkout-steps">
+            <li class="col-xs-12 col-sm-6 col-md-3 complete">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=login" class=" disabled" rel="nofollow">
+                        <span class="badge">1</span>
+                        <wicket:message key="loginStep"> [Login Or Registration]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3 complete">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=address" rel="nofollow">
+                        <span class="badge">2</span>
+                        <wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3 active">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=ship" rel="nofollow">
+                        <span class="badge">3</span>
+                        <wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=payment" rel="nofollow">
+                        <span class="badge">4</span>
+                        <wicket:message key="paymentStep"> [Verification and Payment]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+        </ul>
     </div>
 
-
-
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-100 mobile-grid-100 grid-parent">
+    <div class="container active-step-holder">
+        <div class="shipping-form">
             <wicket:container wicket:id="shipmentView">
                 [Shipping address]
             </wicket:container>
         </div>
-        <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="col-xs-12 shipment-step-btn">
             <wicket:link>
-                <a href="?thp=true&amp;step=address" class="button orange back" rel="nofollow">
-                    <span><wicket:message key="addressStep">[Address]</wicket:message></span>
+                <a href="?thp=true&amp;step=address" class="btn btn-primary" rel="nofollow">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <wicket:message key="addressStep">[Address]</wicket:message>
                 </a>
             </wicket:link>
             <wicket:link>
-                <a href="?thp=true&amp;step=payment" class="button orange forward" rel="nofollow">
-                    <span><wicket:message key="paymentStep">[Verification and payment]</wicket:message></span>
+                <a href="?thp=true&amp;step=payment" class="btn btn-warning" rel="nofollow">
+                    <wicket:message key="paymentStep">[Verification and payment]</wicket:message>
+                    <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
             </wicket:link>
         </div>
@@ -289,73 +264,82 @@
 
 <wicket:fragment wicket:id="paymentFragment">
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-33 mobile-grid-33 grid-parent" style="margin-bottom: 10px">
-            <wicket:link>
-                <a href="?thp=true&amp;step=address" rel="nofollow">
-                    <span class="checkout-step"><wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message></span>
-                </a>
-            </wicket:link>
-
-        </div>
-        <div class="grid-33 mobile-grid-33 grid-parent">
-            <wicket:link>
-                <a href="?thp=true&amp;step=ship" rel="nofollow">
-                    <span class="checkout-step"><wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message></span>
-                </a>
-            </wicket:link>
-        </div>
-        <div class="grid-33 mobile-grid-33 grid-parent">
-            <wicket:link>
-                <a href="?thp=true&amp;step=payment" rel="nofollow">
-                    <span class="active-checkout-step"><wicket:message key="paymentStep"> [Verification and Payment]</wicket:message></span>
-                </a>
-            </wicket:link>
-        </div>
+    <div class="row checkout-progress-bar">
+        <ul class="checkout-steps">
+            <li class="col-xs-12 col-sm-6 col-md-3 complete">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=login" class=" disabled" rel="nofollow">
+                        <span class="badge">1</span>
+                        <wicket:message key="loginStep"> [Login Or Registration]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3 complete">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=address" rel="nofollow">
+                        <span class="badge">2</span>
+                        <wicket:message key="addressStep"> [Shipping and Billing Addresses]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3 complete">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=ship" rel="nofollow">
+                        <span class="badge">3</span>
+                        <wicket:message key="shipMethodStep"> [Shipping Method]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+            <li class="col-xs-12 col-sm-6 col-md-3 active">
+                <wicket:link>
+                    <a href="?thp=true&amp;step=payment" rel="nofollow">
+                        <span class="badge">4</span>
+                        <wicket:message key="paymentStep"> [Verification and Payment]</wicket:message>
+                    </a>
+                </wicket:link>
+            </li>
+        </ul>
     </div>
 
-    <div class="grid-100 mobile-grid-100  grid-parent">
+    <div class="container active-step-holder">
+
         <wicket:container wicket:id="orderVerificationView">
             [Order verification]
         </wicket:container>
-    </div>
 
-    <div class="grid-100 mobile-grid-100  grid-parent">
-        <p>
-            <span class="middle-title">
-                <wicket:message key="selectPayment">[Payment details heading]</wicket:message>
-            </span>
-        </p>
-    </div>
+        <div class="col-xs-12">
+            <h2><wicket:message key="selectPayment">[Payment details heading]</wicket:message></h2>
+        </div>
 
+        <div class="col-xs-12 payment-form">
+            <form wicket:id="paymentOptionsForm" class="form-horizontal">
+                <div class="col-xs-12 no-padding form-group">
+                    <label class="control-label col-xs-12 col-sm-3 col-md-2" wicket:id="multipleDeliveryLabel">[multiple delivery]</label>
+                    <div class="col-xs-1">
+                        <input style="width: 40px; height: 40px;" wicket:id="multipleDelivery" wicket:message="title:multipleDeliveryHint" type="checkbox">
+                    </div>
+                </div>
+                <div class="col-xs-12 no-padding form-group">
+                    <label class="control-label col-xs-12 col-sm-3 col-md-2">
+                        <wicket:message key="paymentGatewayLabel">[Payment method]</wicket:message>
+                    </label>
+                    <div class="col-xs-12 col-sm-9 col-md-6">
+                        <select class="form-control" wicket:id="paymentGateway"/>
+                    </div>
+                </div>
+            </form>
+        </div>
 
-    <div class="grid-100 mobile-grid-100  grid-parent">
-        <form wicket:id="paymentOptionsForm" class="payment-options-form">
+        <div class="col-xs-12 no-padding" wicket:id="dynamicPaymentForm">[dynamic payment form]</div>
 
-            <div class="grid-100 mobile-grid-100 grid-parent">
-                <input wicket:id="multipleDelivery" wicket:message="title:multipleDeliveryHint"
-                       type="checkbox">
-                <label wicket:id="multipleDeliveryLabel">[multiple delivery]</label>
-            </div>
-            <div class="grid-100 mobile-grid-100  grid-parent">
-                <span><wicket:message key="paymentGatewayLabel">[Payment method]</wicket:message></span>
-                <select class="input-select" wicket:id="paymentGateway"/>
-            </div>
-
-
-        </form>
-    </div>
-
-    <div class="grid-100 mobile-grid-100  grid-parent">
-        <div wicket:id="dynamicPaymentForm">[dynamic payment form]</div>
-    </div>
-
-    <div class="grid-100 mobile-grid-100  grid-parent text-right" style="margin-top: 20px;">
-        <wicket:link>
-            <a href="?thp=true&amp;step=ship" class="button orange back" rel="nofollow">
-                <span><wicket:message key="shipmentStep">[Shipping method]</wicket:message></span>
-            </a>
-        </wicket:link>
+        <div class="col-xs-12 shipment-step-btn">
+            <wicket:link>
+                <a href="?thp=true&amp;step=ship" class="btn btn-primary" rel="nofollow">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span><wicket:message key="shipmentStep">[Shipping method]</wicket:message></span>
+                </a>
+            </wicket:link>
+        </div>
     </div>
 </wicket:fragment>
 

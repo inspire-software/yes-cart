@@ -17,51 +17,52 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <form wicket:id="registerForm">
+    <form wicket:id="registerForm" class="form-horizontal">
 
-        <div class="grid-100 mobile-grid-100">
-            <span class="middle-title"><wicket:message key="newUser">[new user]</wicket:message></span>
+        <div class="new-customer-title">
+            <h2><wicket:message key="newUser">[new user]</wicket:message></h2>
         </div>
 
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-33 mobile-grid-33">
+        <div class="form-group">
+            <label for="registerEmail" class="control-label col-xs-12 col-sm-3">
                 <wicket:message key="email">[user email]</wicket:message>
-            </div>
-            <div class="grid-66 mobile-grid-66 text-right">
-                <input type="text" wicket:id="email" class="width-100p"/>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="text" wicket:id="email" class="form-control" id="registerEmail" placeholder="Email"/>
             </div>
         </div>
 
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-33 mobile-grid-33">
+        <div class="form-group">
+            <label for="registerFirstName" class="control-label col-xs-12 col-sm-3">
                 <wicket:message key="firstname">[first name]</wicket:message>
-            </div>
-            <div class="grid-66 mobile-grid-66 text-right">
-                <input type="text" wicket:id="firstname" class="width-100p"/>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="text" wicket:id="firstname" class="form-control" id="registerFirstName" placeholder="Name"/>
             </div>
         </div>
 
-
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-33 mobile-grid-33">
+        <div class="form-group">
+            <label for="registerLastName" class="control-label col-xs-12 col-sm-3">
                 <wicket:message key="lastname">[last name]</wicket:message>
-            </div>
-            <div class="grid-66 mobile-grid-66 text-right">
-                <input type="text" wicket:id="lastname" class="width-100p"/>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="text" wicket:id="lastname" class="form-control" id="registerLastName" placeholder="Last Name"/>
             </div>
         </div>
 
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-33 mobile-grid-33">
+        <div class="form-group">
+            <label for="registerPhone" class="control-label col-xs-12 col-sm-3">
                 <wicket:message key="phone">[phone]</wicket:message>
-            </div>
-            <div class="grid-66 mobile-grid-66 text-right">
-                <input type="text" wicket:id="phone" class="width-100p"/>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="text" wicket:id="phone" class="form-control" id="registerPhone" placeholder="Phone"/>
             </div>
         </div>
 
-        <div class="grid-100 mobile-grid-100 grid-parent text-right">
-            <input type="submit" class="button orange" wicket:id="registerBtn" wicket:message="value:register"/>
+        <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-8 buttons">
+                <input type="submit" class="btn btn-primary" wicket:id="registerBtn" wicket:message="value:register"/>
+            </div>
         </div>
 
     </form>

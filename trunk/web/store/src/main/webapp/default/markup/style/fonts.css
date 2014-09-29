@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('fonts/opensans400.woff');
+    src: local('Open Sans'), local('OpenSans'), url('./fonts/opensans400.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: url('fonts/opensans600.woff');
+    src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url('./fonts/opensans600.woff') format('woff');
+}

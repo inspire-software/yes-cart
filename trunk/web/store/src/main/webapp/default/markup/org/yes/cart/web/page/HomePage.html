@@ -33,16 +33,14 @@
         <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
         <script type="text/javascript" src="../../../../../js/jquery.carouFredSel-6.2.1.js"></script>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
         <!--[if lt IE 9]>
         <script src="../../../../../js/html5.js"></script>
         <![endif]-->
-        <link rel="stylesheet" href="../../../../../style/demo.css"/>
-        <!--[if (gt IE 8) | (IEMobile)]><!-->
-        <link rel="stylesheet" href="../../../../../style/unsemantic-grid-responsive.css"/>
-        <!--<![endif]-->
-        <!--[if (lt IE 9) & (!IEMobile)]>
-        <link rel="stylesheet" href="../../../../../style/ie.css"/>
-        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/fonts.css"/>
+        <link rel="stylesheet" href="../../../../../style/yc.css"/>
 
         <script type="text/javascript" src="../../../../../js/slimbox2.js"></script>
         <link rel="stylesheet" href="../../../../../style/slimbox2.css" type="text/css" media="screen" />
@@ -57,113 +55,69 @@
 
 <body>
 
+    <wicket:container wicket:id="header">
+        [header]
+    </wicket:container>
 
-<div class="grid-container">
-
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <wicket:container wicket:id="header">
-            [header]
-        </wicket:container>
-    </div>
-
-    <div class="grid-100 hide-on-mobile grid-parent">
-        <div class="grid-100 hide-on-mobile">
-            <wicket:container wicket:id="featured">
-                [featured products]
-            </wicket:container>
-        </div>
-    </div>
-
+    <wicket:container wicket:id="featured">
+        [featured products]
+    </wicket:container>
 
     <wicket:container wicket:id="breadCrumbs">
         [bread crumbs]
     </wicket:container>
 
-    <div class="hide-on-desktop mobile-grid-100 grid-parent" id="top-categories-mobile">
-        <wicket:container wicket:id="topCategories">
-            [top categories]
-        </wicket:container>
-    </div>
+    <div class="container">
+        <div class="col-xs-12 col-sm-4 col-md-3">
+            <wicket:container wicket:id="topCategories">
+                [top categories]
+            </wicket:container>
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
-        <div class="grid-20 mobile-grid-30 grid-parent">
-            <div class="grid-100 hide-on-mobile grid-parent" id="top-categories-desktop">
+            <wicket:container wicket:id="priceFilter">
+                [price filter]
+            </wicket:container>
 
-            </div>
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    var pMenu = $("#top-categories-mobile").html();
-                    $("#top-categories-desktop").html(pMenu);
-                });
-            </script>
-            <p>
-                <wicket:container wicket:id="priceFilter">
-                    [price filter]
-                </wicket:container>
-            </p>
-            <p>
-                <wicket:container wicket:id="attributeFilter">
-                    [attribute filter]
-                </wicket:container>
-            </p>
-            <p>
-                <wicket:container wicket:id="brandFilter">
-                    [brand filter]
-                </wicket:container>
-            </p>
+            <wicket:container wicket:id="attributeFilter">
+                [attribute filter]
+            </wicket:container>
+
+            <wicket:container wicket:id="brandFilter">
+                [brand filter]
+            </wicket:container>
         </div>
-        <div id="centralView" class="grid-70 mobile-grid-70 grid-parent">
+        <div class="col-xs-12 col-sm-8 col-md-9">
             <wicket:container wicket:id="centralView">
                 [central view]
             </wicket:container>
         </div>
-        <div id="rightView" class="grid-10 hide-on-mobile grid-parent">
-            <wicket:container wicket:id="recentlyViewed">
-                [recently viewed items]
-            </wicket:container>
-            <wicket:container wicket:id="newArrival">
-                [category new arrival and promo]
-            </wicket:container>
-        </div>
-        <script type="text/javascript">
-
-            function endsWith(str, suffix) {
-                return str.indexOf(suffix, str.length - suffix.length) !== -1;
-            }
-
-            if (document.URL.indexOf('/product/') > -1 || document.URL.indexOf('/sku/')  > -1) {
-
-                document.getElementById('centralView').classList.add('mobile-grid-100');
-                document.getElementById('centralView').classList.remove('mobile-grid-70');
-
-            }  else {
-
-                document.getElementById('centralView').classList.add('mobile-grid-70');
-                document.getElementById('centralView').classList.remove('mobile-grid-100');
-
-            }
-
-            if (endsWith(document.URL, 'yes-shop/')) {
-
-                document.getElementById('centralView').classList.remove('mobile-grid-70');
-                document.getElementById('centralView').classList.add('mobile-grid-100');
-                document.getElementById('centralView').classList.remove('grid-70');
-                document.getElementById('centralView').classList.add('grid-80');
-
-                document.getElementById('rightView').classList.remove('grid-10');
-                document.getElementById('rightView').classList.add('hide-on-desktop');
-
-
-            }
-
-        </script>
-
     </div>
 
+    <div class="container">
+        <div class="bottom-tabs-holder">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#newarrival" data-toggle="tab">
+                    <wicket:message key="newArrivals">[Profile]</wicket:message>
+                </a></li>
+                <li><a href="#viewed" data-toggle="tab">
+                    <wicket:message key="recentlyViewed">[Profile]</wicket:message>
+                </a></li>
+            </ul>
+            <div id="bottomTabs" class="tab-content">
+                <div class="tab-pane active" id="newarrival">
+                    <wicket:container wicket:id="newArrival">
+                        [category new arrival and promo]
+                    </wicket:container>
+                </div>
+                <div class="tab-pane" id="viewed">
+                    <wicket:container wicket:id="recentlyViewed">
+                        [recently viewed items]
+                    </wicket:container>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <span wicket:id="footer">[footer]</span>
 
-
-</div>
 </body>
 </html>

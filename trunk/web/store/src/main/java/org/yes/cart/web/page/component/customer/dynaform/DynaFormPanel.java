@@ -18,6 +18,7 @@ package org.yes.cart.web.page.component.customer.dynaform;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -226,6 +227,7 @@ public class DynaFormPanel extends BaseComponent {
 
             final TextField textField = new TextField(EDIT, model);
             textField.setLabel(labelModel);
+            textField.add(new AttributeModifier("class", "form-control"));
             textField.setRequired(attrValue.getAttribute().isMandatory());
             if (StringUtils.isNotBlank(attrValue.getAttribute().getRegexp())) {
                 final PatternValidator patternValidator = new PatternValidator(attrValue.getAttribute().getRegexp()) {

@@ -18,34 +18,36 @@
 <body>
 <wicket:panel>
 
-    <form wicket:id="loginForm">
-        <input type="hidden"  wicket:id="restorePassword"/>
+    <form wicket:id="loginForm" class="form-horizontal">
+        <input type="hidden" wicket:id="restorePassword"/>
 
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-33 mobile-grid-33">
+        <div class="login-title">
+            <h2><wicket:message key="login">[login]</wicket:message></h2>
+        </div>
+
+        <div class="form-group">
+            <label for="loginEmail" class="control-label col-xs-12 col-sm-3">
                 <wicket:message key="email">[user email]</wicket:message>
-            </div>
-            <div class="grid-66 mobile-grid-66 text-right">
-                <input type="text"  wicket:id="email" class="width-100p"/>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <input wicket:id="email" type="text" class="form-control" id="loginEmail" placeholder="Email">
             </div>
         </div>
-
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <div class="grid-33 mobile-grid-33">
+        <div class="form-group">
+            <label for="loginPassword" class="control-label col-xs-12 col-sm-3">
                 <wicket:message key="password">[password]</wicket:message>
-            </div>
-            <div class="grid-66 mobile-grid-66 text-right">
-                <input type="password"  wicket:id="password" class="width-100p"/>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <input wicket:id="password" type="password" class="form-control" id="loginPassword" placeholder="Password">
             </div>
         </div>
-
-        <div class="grid-100 mobile-grid-100 grid-parent text-right">
-            <a wicket:id="registrationLink"  class="button orange" rel="nofollow"><wicket:message key="registration">[registration]</wicket:message></a>
-            <input type="submit" class="button orange" wicket:id="restorePasswordBtn"  wicket:message="value:restorePassword"/>
-            <input type="submit" class="button orange" wicket:id="loginBtn"  wicket:message="value:signIn"/>
+        <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-8 buttons">
+                <input type="submit" class="btn btn-info" wicket:id="restorePasswordBtn"  wicket:message="value:restorePassword"/>
+                <input type="submit" class="btn btn-warning" wicket:id="loginBtn"  wicket:message="value:signIn"/>
+                <a wicket:id="registrationLink"  class="btn btn-primary" rel="nofollow"><wicket:message key="registration">[registration]</wicket:message></a>
+            </div>
         </div>
-
-
     </form>
 
 </wicket:panel>

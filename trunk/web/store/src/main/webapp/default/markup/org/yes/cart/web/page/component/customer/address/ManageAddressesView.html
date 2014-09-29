@@ -19,50 +19,36 @@
 <wicket:panel>
     <form wicket:id="selectAddressForm">
 
-
         <div wicket:id="addressRadioGroup" >
-            <div class="grid-100 mobile-grid-100  grid-parent">
-				<p>
-					<span class="small-title" wicket:id="addressTitle">[type dependend message]</span>
-					<a wicket:id="createLink" class="button gray" rel="nofollow">
-						<span><wicket:message key="create">[create]</wicket:message></span>
-                    </a>
-                    <hr>
-				</p>
+            <div class="col-xs-12">
+                <h2 id="addresses" wicket:id="addressTitle">[type dependend message]</h2>
+                <a wicket:id="createLink" class="btn btn-primary" rel="nofollow">
+                    <span><wicket:message key="create">[create]</wicket:message></span>
+                </a>
 			</div>
-            <div class="grid-100 mobile-grid-100  grid-parent" wicket:id="addressList">
-				<div class="grid-5 mobile-grid-5  grid-parent">
-					<p>
-						<input type="radio" wicket:id="addressRadio">
-					</p>
+            <div wicket:id="addressList" class="col-xs-12 col-sm-10 single-address-row">
+				<div class="pull-left">
+                    <input type="radio" wicket:id="addressRadio">
 				</div>
-				<div class="grid-60 mobile-grid-50 grid-parent">
-					<p>
-						<span wicket:id="addrLine1">[line 1]</span>
-						<span wicket:id="addrLine2">[line 2]</span>
-						<span wicket:id="addrLine3">[line 3]</span>
-						<span wicket:id="addrLine4">[line 4]</span>
-						<span wicket:id="addrLine5">[line 5]</span>
-					</p>
+				<div class="col-xs-11">
+                    <span wicket:id="addrLine1">[line 1]</span>
+                    <span wicket:id="addrLine2">[line 2]</span>
+                    <span wicket:id="addrLine3">[line 3]</span>
+                    <span wicket:id="addrLine4">[line 4]</span>
+                    <span wicket:id="addrLine5">[line 5]</span>
 				</div>
-				 <div class="grid-35 mobile-grid-45 grid-parent">
-					<p style="text-align: right">
-						<a wicket:id="deleteLink" class="button gray" rel="nofollow">
-							<span><wicket:message key="delete">[delete]</wicket:message></span>
-						</a>
-						<a wicket:id="editLink" class="button gray" rel="nofollow">
-							<span><wicket:message key="edit">[edit]</wicket:message></span>
-						</a>
-					</p>
+                <div class="col-xs-12 manage-address-btn">
+                    <a wicket:id="deleteLink" class="btn btn-default" rel="nofollow">
+                        <span><wicket:message key="delete">[delete]</wicket:message></span>
+                    </a>
+                    <a wicket:id="editLink" class="btn btn-default" rel="nofollow">
+                        <span><wicket:message key="edit">[edit]</wicket:message></span>
+                    </a>
 				</div>
             </div>
         </div>
 
     </form>
-	<div class="grid-100 mobile-grid-100  grid-parent">
-		<p>&nbsp;</p>
-	</div>
-
 
 </wicket:panel>
 </body>

@@ -34,7 +34,7 @@
     <entry key="customerAdditional">Додаткова інформація</entry>
     <entry key="faq">Часті запитання</entry>
     <entry key="contacts">Контакти</entry>
-    <entry key="profile">Особистий кабінет / Список побажань</entry>
+    <entry key="profile">Особистий кабінет</entry>
     <entry key="sale">Розпродаж</entry>
     <entry key="newArrivals">Нові надходження</entry>
     <entry key="addToCart">В кошик</entry>
@@ -45,7 +45,7 @@
     <entry key="itemAdded">товар {0} успішно додано до кошика</entry>
 
     <!-- CheckoutPage -->
-    <entry key="addressStep">Адреса для рахунку та доставки</entry>
+    <entry key="addressStep">Ваша адреса</entry>
     <entry key="shipMethodStep">Спосіб доставки</entry>
     <entry key="paymentStep">Перевірка та оплата</entry>
     <entry key="loginStep">Вхід</entry>
@@ -123,15 +123,16 @@
     <entry key="amountMsg">Всього</entry>
     <entry key="addOneLink">+1</entry>
     <entry key="removeOneLink">-1</entry>
-    <entry key="removeAllLink">X</entry>
     <entry key="addOneLinkHint">Додати один</entry>
     <entry key="removeOneLinkHint">Видалити один</entry>
     <entry key="removeAllLinkHint">Видалити усі</entry>
+    <entry key="refreshLinkHint">Оновити кількість</entry>
     <entry key="nonZeroDigits">Введіть позитивне ціле число</entry>
-    <entry key="skuNumber">Номер</entry>
-    <entry key="productsInCart">Товари у кошику</entry>
+    <entry key="skuNumber">Код</entry>
+    <entry key="addCouponsTitle">Додати промо-код</entry>
     <entry key="removeCouponCodeLabel">Видалити промо-код</entry>
     <entry key="addCouponButtonLabel">Додати промо-код</entry>
+    <entry key="enterCouponLabel">Введіть промо-код</entry>
     <entry key="appliedPromoCode">${0} [застосований]</entry>
     <entry key="pendingPromoCode">${0} [не застосований]</entry>
     <entry key="noEmptyCoupons">Введіть будь-ласка промо-код</entry>
@@ -141,6 +142,7 @@
     <entry key="itemForm1">{0} товара</entry>
     <entry key="itemForm2">{0} товарів</entry>
     <entry key="noItem">Кошик порожній</entry>
+    <entry key="yourCartTitle">Ваш кошик:</entry>
 
     <!-- CreateEditAddressPage -->
     <entry key="firstName">Ім'я</entry>
@@ -237,15 +239,17 @@
     <entry key="demoAlways">Завжди</entry>
     <entry key="menu">Меню</entry>
     <entry key="demo">Демо</entry>
+    <entry key="contactForm">Контактна форма</entry>
 
     <!-- ProductSorter -->
     <entry key="sort">Сортувати:</entry>
     <entry key="byName">ім'я</entry>
+    <entry key="byCode">код</entry>
     <entry key="byPrice">ціна</entry>
 
     <!-- PriceTierView -->
     <entry key="priceTierLabel">Ціна за одиницю</entry>
-    <entry key="descountRule">Купуючи більше однієї одиниці товару, ви отримуєте знижку. Чим більше однотипних товарів Ви купуєте, тим більше знижка</entry>
+    <entry key="discountRule">Купуючи більше однієї одиниці товару, ви отримуєте знижку. Чим більше однотипних товарів Ви купуєте, тим більше знижка</entry>
 
     <!-- PriceView -->
     <entry key="savePercent">Знижка {0}%</entry>
@@ -255,6 +259,7 @@
 
     <!-- SearchView -->
     <entry key="search">Пошук</entry>
+    <entry key="searchHolder">Пошук...</entry>
 
     <!-- ShippingView -->
     <entry key="carrier">Перевізник</entry>

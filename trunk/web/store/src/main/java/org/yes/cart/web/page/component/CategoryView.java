@@ -73,9 +73,7 @@ public class CategoryView extends  BaseComponent {
                     new Label(CATEGORY_NAME, category.getName(selectedLocale)).setEscapeModelStrings(false)
             )
         ).add(
-            links.newCategoryLink(CATEGORY_DESCR_LINK, category.getCategoryId()).add(
-                    new Label( CATEGORY_DESCR,  getDescription(category)  ).setEscapeModelStrings(false)
-            )
+                new Label( CATEGORY_DESCR,  getDescription(category)  ).setEscapeModelStrings(false)
         );
 
 

@@ -83,7 +83,7 @@ public class PaymentPage extends AbstractWebPage {
     private static final String PAYMENT_TRANS_ID = "transactionId";
     private static final String PAYMENT_AUTH_CODE = "authCode";
     private static final String PAYMENT_ERROR_CODE = "errorCode";
-    private static final String PAYMENT_ERROR_DESCR = "errorDecription";
+    private static final String PAYMENT_ERROR_DESCR = "errorDescription";
 
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 

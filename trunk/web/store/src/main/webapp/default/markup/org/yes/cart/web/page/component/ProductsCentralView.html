@@ -18,39 +18,35 @@
 <body>
 <wicket:panel>
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
-
-        <div class="grid-65 mobile-grid-100 grid-parent">
+    <div class="controls-holder">
+        <div class="col-xs-12 col-sm-12 col-md-6 sorter">
             <wicket:container wicket:id="sorter">
                 [sorter]
             </wicket:container>
         </div>
-
-        <div class="grid-35 hide-on-mobile grid-parent text-right">
+        <div class="col-xs-12 col-sm-12 col-md-6 product-items">
             <span><wicket:message key="items">[items]</wicket:message></span>
             <wicket:container wicket:id="itemsPerPageList">
                 <a wicket:id="itemsPerPage" rel="search"><span wicket:id="items"/></a>
             </wicket:container>
         </div>
-
     </div>
 
-    <div class="grid-100 mobile-grid-100 grid-parent text-center">
+    <div class="col-xs-12 col-sm-12 text-center paginator">
         <span wicket:id="paginator">[dataview navigator]</span>
     </div>
 
-
-    <table cellspacing="0" width="99%" align="right"  style="table-layout:fixed;">
-        <tr wicket:id="rows">
-            <td wicket:id="cols" valign="top">
+    <div class="products-holder">
+        <div class="row" wicket:id="rows">
+            <div wicket:id="cols">
                 <wicket:container wicket:id="product">
                     [product in list]
                 </wicket:container>
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+    </div>
 
-    <div class="grid-100 mobile-grid-100 grid-parent text-center">
+    <div class="col-xs-12 col-sm-12 text-center paginator">
         <span wicket:id="paginator2">[dataview navigator]</span>
     </div>
 

@@ -17,51 +17,34 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <form wicket:id="shippingForm">
+    <form wicket:id="shippingForm" class="col-xs-12 form-horizontal">
 
-        <div class="grid-100 mobile-grid-100  grid-parent">
-            <p>
-                <span><wicket:message key="carrierSelect">[Select Carrier and SLA]</wicket:message></span>
-            </p>
+        <div class="col-xs-12 no-padding shipping-title">
+            <h2><wicket:message key="carrierSelect">[Select Carrier and SLA]</wicket:message></h2>
         </div>
 
-        <div class="grid-100 mobile-grid-100  grid-parent">
-            <div class="grid-40 mobile-grid-40  grid-parent">
-                <p>
-                    <wicket:message key="carrier">[Carrier]</wicket:message>
-                </p>
+        <div class="form-group">
+            <label for="selectCarrier" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="carrier">[Carrier]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <select wicket:id="carrier" class="form-control" id="selectCarrier"/>
             </div>
-            <div class="grid-40 mobile-grid-40  grid-parent">
-                <p>
-                    <select wicket:id="carrier" class="input-select"/>
-                </p>
-            </div>
-            <div><p>&nbsp;</p></div>
         </div>
 
-        <div class="grid-100 mobile-grid-100  grid-parent">
-            <div class="grid-40 mobile-grid-40  grid-parent">
-                <p>
-                    <wicket:message key="carrierSla">[Carrier SLA]</wicket:message>
-                </p>
+        <div class="form-group">
+            <label for="selectSla" class="control-label col-xs-12 col-sm-2">
+                <wicket:message key="carrierSla">[Carrier SLA]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <select wicket:id="carrierSla" class="form-control" id="selectSla"/>
+            </div>
+        </div>
 
-            </div>
-            <div class="grid-40 mobile-grid-40  grid-parent">
-                <p>
-                    <select wicket:id="carrierSla" class="input-select"/>
-                </p>
-
-            </div>
-            <div class="hide-on-desktop mobile-grid-80  grid-parent">
-                &nbsp;
-            </div>
-            <div class="grid-20 mobile-grid-20  grid-parent text-right">
-                <p>&nbsp;
-                    <wicket:container wicket:id="priceView">
-                        [price]
-                    </wicket:container>
-                </p>
-            </div>
+        <div class="col-xs-12 no-padding">
+            <wicket:container wicket:id="priceView">
+                [price]
+            </wicket:container>
         </div>
     </form>
 </wicket:panel>
