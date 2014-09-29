@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -42,6 +41,7 @@ public class Currency extends BaseComponent {
     private final static String CURRENCY_LIST = "supportedCurrencies";
     private final static String CURRENCY_LINK = "switchCurrencyLink";
     private final static String CURRENCY_NAME = "currencyName";
+    private final static String ACTIVE_CURRENCY_NAME = "activeCurrencyName";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
@@ -79,6 +79,9 @@ public class Currency extends BaseComponent {
             final List<String> supportedCurrencies = ApplicationDirector.getCurrentShop().getSupportedCurrenciesAsList();
 
             final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
+            final String activeCurrencyCode = ApplicationDirector.getShoppingCart().getCurrencyCode();
+            final String activeCurrencySymbol =  currencySymbolService.getCurrencySymbol(activeCurrencyCode);
+            add(new Label(ACTIVE_CURRENCY_NAME, activeCurrencySymbol));
 
             add( new ListView<String>(CURRENCY_LIST, supportedCurrencies) {
 
@@ -93,18 +96,15 @@ public class Currency extends BaseComponent {
                             getPage().getPageClass(),
                             basePageParameters);
 
+                    final boolean isActiveCurrency = currencyCode.equals(activeCurrencyCode);
+
                     final Label currencyLabel = new Label(CURRENCY_NAME, currencySymbol);
 
                     currencyLabel.setEscapeModelStrings(false);
 
-                    if (currencyCode.equals(ApplicationDirector.getShoppingCart().getCurrencyCode())) {
-
-                        pageLink.add(new AttributeModifier(HTML_CLASS, "currency-active"));
-                    }
-
                     pageLink.add(currencyLabel);
 
-                    stringListItem.add(pageLink);
+                    stringListItem.add(pageLink).setVisible(!isActiveCurrency);
                 }
             }
             );

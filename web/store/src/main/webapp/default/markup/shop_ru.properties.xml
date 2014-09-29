@@ -34,7 +34,7 @@
     <entry key="customerAdditional">Дополнительная информация</entry>
     <entry key="faq">ЧАВО</entry>
     <entry key="contacts">Контакты</entry>
-    <entry key="profile">Личный кабинет / Список пожеланий</entry>
+    <entry key="profile">Личный кабинет</entry>
     <entry key="sale">Распродажа</entry>
     <entry key="newArrivals">Новые послупления</entry>
     <entry key="addToCart">В корзину</entry>
@@ -45,7 +45,7 @@
     <entry key="itemAdded">продукт {0} успешно добавлен в корзину</entry>
 
     <!-- CheckoutPage -->
-    <entry key="addressStep">Адреса для счета и доставки</entry>
+    <entry key="addressStep">Ваш адрес</entry>
     <entry key="shipMethodStep">Метод доставки</entry>
     <entry key="paymentStep">Проверка и оплата</entry>
     <entry key="loginStep">Вход</entry>
@@ -87,7 +87,7 @@
     <!-- RegistrationPage -->
 
     <!-- ShoppingCartPage -->
-    <entry key="checkout">Оформляем покупку</entry>
+    <entry key="checkout">Оформить покупку</entry>
     <entry key="shoppingCart">Корзина</entry>
     <entry key="emptyCart">Корзина пуста</entry>
     <entry key="orderErrorGeneral">Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.</entry>
@@ -123,15 +123,16 @@
     <entry key="amountMsg">Всего</entry>
     <entry key="addOneLink">+1</entry>
     <entry key="removeOneLink">-1</entry>
-    <entry key="removeAllLink">X</entry>
     <entry key="addOneLinkHint">Добавить один</entry>
     <entry key="removeOneLinkHint">Удалить один</entry>
     <entry key="removeAllLinkHint">Удалить все</entry>
+    <entry key="refreshLinkHint">Обновить количество</entry>
     <entry key="nonZeroDigits">Введите положительное целое количество</entry>
-    <entry key="skuNumber">Номер</entry>
-    <entry key="productsInCart">Товары в корзине</entry>
+    <entry key="skuNumber">Код</entry>
+    <entry key="addCouponsTitle">Добавить промо-код</entry>
     <entry key="removeCouponCodeLabel">Убрать промо-код</entry>
     <entry key="addCouponButtonLabel">Добавить промо-код</entry>
+    <entry key="enterCouponLabel">Введите промо-код</entry>
     <entry key="appliedPromoCode">${0} [применен]</entry>
     <entry key="pendingPromoCode">${0} [не применен]</entry>
     <entry key="noEmptyCoupons">Введите пожалуйста промо-код</entry>
@@ -141,6 +142,7 @@
     <entry key="itemForm1">{0} продукта</entry>
     <entry key="itemForm2">{0} продуктов</entry>
     <entry key="noItem">Пустая корзина</entry>
+    <entry key="yourCartTitle">Ваша корзина:</entry>
 
     <!-- CreateEditAddressPage -->
     <entry key="firstName">Имя</entry>
@@ -237,15 +239,17 @@
     <entry key="demoAlways">Всегда</entry>
     <entry key="menu">Меню</entry>
     <entry key="demo">Демо</entry>
+    <entry key="contactForm">Контактная форма</entry>
 
     <!-- ProductSorter -->
     <entry key="sort">Сортировать:</entry>
     <entry key="byName">имя</entry>
+    <entry key="byCode">код</entry>
     <entry key="byPrice">цена</entry>
 
     <!-- PriceTierView -->
     <entry key="priceTierLabel">Цена за единицу</entry>
-    <entry key="descountRule">Покупая более одной единицы товара, вы получаете скидку. Чем больше однотипных товаров Вы покупаете, тем больше скидка</entry>
+    <entry key="discountRule">Покупая более одной единицы товара, вы получаете скидку. Чем больше однотипных товаров Вы покупаете, тем больше скидка</entry>
 
     <!-- PriceView -->
     <entry key="savePercent">Скидка {0}%</entry>
@@ -255,6 +259,7 @@
 
     <!-- SearchView -->
     <entry key="search">Поиск</entry>
+    <entry key="searchHolder">Поиск...</entry>
 
     <!-- ShippingView -->
     <entry key="carrier">Перевозчик</entry>

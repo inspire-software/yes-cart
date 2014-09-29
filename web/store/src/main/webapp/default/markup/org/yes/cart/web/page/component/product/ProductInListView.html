@@ -19,50 +19,46 @@
 <wicket:panel>
 
 
-    <div class="grid-100 mobile-grid-100 grid-parent">
+    <div class="col-xs-12 col-sm-6 col-md-6">
 
-        <div class="grid-100 mobile-grid-100" style="min-height: 65px; height: 65px; overflow: hidden;">
-            <p align="justify">
-                <a wicket:id="productLinkName" class="product-tittle" rel="bookmark">
+        <div class="thumbnail">
+
+            <div class="product-name-holder">
+                <a wicket:id="productLinkName" rel="bookmark">
                     <span  wicket:id="name">[name]</span>
                 </a>
-            </p>
-        </div>
+            </div>
 
-        <div class="grid-100 mobile-grid-100 text-right">
-            <a wicket:id="addToCartLink" class="button orange js-buy" rel="nofollow">
-                <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
-            </a>
-        </div>
+            <div class="text-right">
+                <a wicket:id="addToCartLink" class="btn btn-warning js-buy" rel="nofollow">
+                    <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
+                </a>
+            </div>
 
-        <div class="grid-100 mobile-grid-100 text-right">
-            <wicket:container wicket:id="priceView">
-                [price]
-            </wicket:container>
-        </div>
+            <div class="product-price-holder">
+                <wicket:container wicket:id="priceView">
+                    [price]
+                </wicket:container>
+            </div>
 
-        <div class="grid-100 mobile-grid-100 text-center">
-            <a wicket:id="productLinkImage"  class="image-border" rel="bookmark">
-                <img border="1" wicket:id="productDefaultImage"/>
-            </a>
-        </div>
+            <div class="text-center">
+                <a wicket:id="productLinkImage" rel="bookmark">
+                    <img wicket:id="productDefaultImage"/>
+                </a>
+            </div>
 
-        <div class="grid-30 hide-on-mobile">
-            <wicket:message key="skuCode">[sku.code:]</wicket:message>
-        </div>
-        <div class="grid-70 hide-on-mobile">
-            <a wicket:id="productLinkSku" class="product-sku-code" rel="bookmark">
-                <span wicket:id="skuCode">[sku num]</span>
-            </a>
-        </div>
+            <div class="product-code-holder">
+                <wicket:message key="skuCode">[sku.code:]</wicket:message>
+                <a wicket:id="productLinkSku" rel="bookmark">
+                    <span wicket:id="skuCode">[sku num]</span>
+                </a>
+            </div>
 
-        <div class="grid-100 mobile-grid-100" style="height: 120px; overflow: hidden;  margin-top: 5px; margin-bottom: 5px;">
-            <p align="justify" style="text-indent: 20px;">
+            <div class="caption">
                 <span wicket:id="description">[description Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s]</span>
-            </p>
+            </div>
+
         </div>
-
-
     </div>
 
 

@@ -41,7 +41,7 @@ import java.util.List;
 public class SubCategoriesCentralView extends AbstractCentralView {
 
     /**
-     * Default quantity of columns to show subcategorues in list
+     * Default quantity of columns to show subcategories in list
      */
     private static final String DEFAULT_SUBCATEGORIES_COLUMNS = "2";
 

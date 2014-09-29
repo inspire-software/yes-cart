@@ -442,7 +442,7 @@ public class CheckoutPage extends AbstractWebPage {
 
 
         return MessageFormat.format(
-                "<form method=\"POST\" action=\"{0}\">\n" +
+                "<form method=\"POST\" action=\"{0}\" class=\"form-horizontal\">\n" +
                         "{1}\n" +
                         "<div id=\"paymentDiv\">\n" +
                         "{2}" +

@@ -20,149 +20,123 @@
 
     <form wicket:id="cartForm">
 
-        <div class="grid-100 mobile-grid-100 grid-parent">
+        <div class="col-xs-12 clearfix">
             <div wicket:id="feedback">[feedpack panel]</div>
         </div>
 
-        <div class="grid-100 mobile-grid-100 grid-parent">
-            <span class="middle-title"><wicket:message key="productsInCart"> [products in cart]</wicket:message></span>
-        </div>
-        <hr>
-
-        <div class="grid-100 mobile-grid-100 grid-parent" style="background-color: #bbbbbb;">
-            <div class="grid-40 mobile-grid-40 grid-parent">
-                <p class="small-title">
+        <div class="col-xs-12 col-md-9 mo-margin cart-items-holder">
+            <div class="row no-margin cart-items-header hidden-xs">
+                <div class="col-xs-12 col-sm-5">
                     <wicket:message key="product">[product]</wicket:message>
-                </p>
-            </div>
-            <div class="grid-20 mobile-grid-20 grid-parent">
-                <p class="small-title" align="right">
+                </div>
+                <div class="col-xs-12 col-sm-2">
                     <wicket:message key="price">[price]</wicket:message>
-                </p>
-            </div>
-            <div class="grid-20 mobile-grid-20 grid-parent">
-                <p class="small-title" align="right">
+                </div>
+                <div class="col-xs-12 col-sm-3">
                     <wicket:message key="qty">[qty]</wicket:message>
-                </p>
-            </div>
-            <div class="grid-20 mobile-grid-20 grid-parent">
-                <p class="small-title" align="right">
+                </div>
+                <div class="col-xs-12 col-sm-2">
                     <wicket:message key="amountMsg">[amount]</wicket:message>
-                </p>
+                </div>
             </div>
-        </div>
-
-
-
-        <table align="center"  width="100%">
-
-            <tr wicket:id="itemsList">
-
-                <td>
-
-                    <div class="grid-100 mobile-grid-100 grid-parent">
-                        <div class="grid-40 mobile-grid-40 grid-parent">
-                            <div class="grid-35 mobile-grid-35 grid-parent">
-                                <img border="0" wicket:id="defaultImage"/>
-                            </div>
-                            <div class="grid-65 mobile-grid-65 grid-parent">
-                                <div class="grid-100 mobile-grid-100 grid-parent">
-                                    <a wicket:id="productLink" rel="bookmark">
-                                        <span wicket:id="name">[product name]</span>
-                                    </a>
-                                </div>
-                                <div class="grid-100 mobile-grid-100 grid-parent">
-                                    <wicket:message key="skuNumber">
-                                        [sku code]
-                                    </wicket:message>
-                                    <span wicket:id="skunum">[sku number]</span>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="grid-20 mobile-grid-20 grid-parent">
-                            <p align="right" style="margin-top : 30px;">
-                                <wicket:container wicket:id="skuPriceView">
-                                    [sku price]
-                                </wicket:container>
-                            </p>
-                        </div>
-                        <div class="grid-20 mobile-grid-20 grid-parent">
-                            <p align="right" style="margin-top : 25px;">
-                                <input wicket:id="quantity" type="text" style="width:30px"/>
-                                <span wicket:id="quantityRo"/>
-                                <input wicket:id="quantityButton" type="submit" style="width:30px" value="Ok"/>
-                                <br>
-                                <a wicket:id="addOneLink" style="margin-right : 5px;"
-                                   wicket:message="title:addOneLinkHint"
-                                   rel="nofollow">
-                                    <wicket:message key="addOneLink">[add one]</wicket:message>
-                                </a>
-                                <a wicket:id="removeOneLink" style="margin-right : 5px;"
-                                   wicket:message="title:removeOneLinkHint"
-                                   rel="nofollow">
-                                    <wicket:message key="removeOneLink">[remove one]</wicket:message>
-                                </a>
-                                <a wicket:id="removeAllLink" style="margin-right : 5px;"
-                                   wicket:message="title:removeAllLinkHint"
-                                   rel="nofollow">
-                                    <wicket:message key="removeAllLink">[remove all]</wicket:message>
-                                </a>
-
-                            </p>
-                        </div>
-                        <div class="grid-20 mobile-grid-20 grid-parent">
-                            <p align="right" style="margin-top : 30px;">
-                                <wicket:container wicket:id="lineAmountView">
-                                    [line amount price]
-                                </wicket:container>
-                            </p>
+            <div wicket:id="itemsList">
+                <div class="row no-margin cart-item">
+                    <div class="col-xs-12 col-sm-2">
+                        <div class="thumbnail">
+                            <img wicket:id="defaultImage"/>
                         </div>
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <hr>
-                    <div class="grid-60 mobile-grid-60 grid-parent">
-                        <wicket:message key="amountMsg">[Amount]</wicket:message>
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="cart-item-name">
+                            <a wicket:id="productLink" rel="bookmark">
+                                <span wicket:id="name">[product name]</span>
+                            </a>
+                        </div>
+                        <wicket:message key="skuNumber">
+                            [sku code]
+                        </wicket:message>
+                        <span class="sku-code" wicket:id="skunum">[sku number]</span>
                     </div>
-                    <div class="grid-40 mobile-grid-40 grid-parent text-right">
-                        <wicket:container wicket:id="subTotalView">
-                            [sub total]
+                    <div class="col-xs-12 col-sm-2">
+                        <wicket:container wicket:id="skuPriceView">
+                            [sku price]
                         </wicket:container>
                     </div>
-                </td>
-            </tr>
-            <tr wicket:id="couponsList">
-                <td>
-                    <div class="grid-100 mobile-grid-100 grid-parent">
-                        <div class="grid-50 mobile-grid-50" wicket:id="couponsListItem">
-                            [sub total]
+                    <div class="col-xs-12 col-sm-3">
+                        <div class="pull-left quantity-block">
+                            <a wicket:id="removeOneLink" wicket:message="title:removeOneLinkHint" rel="nofollow">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </a>
+                            <input wicket:id="quantity" type="text" class="form-control"/>
+                            <span wicket:id="quantityRo"/>
+                            <a wicket:id="addOneLink" wicket:message="title:addOneLinkHint" rel="nofollow">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>
                         </div>
-                        <div class="grid-50 mobile-grid-50">
-                            <a wicket:id="couponsListItemRemoveLink" class="button gray" rel="nofollow">
-                                <wicket:message key="removeCouponCodeLabel">[Amount]</wicket:message>
+                        <button wicket:id="quantityButton" type="submit" class="btn btn-link">
+                            <span class="glyphicon glyphicon-refresh"></span>
+                        </button>
+                    </div>
+                    <div class="col-xs-12 col-sm-2">
+                        <div class="pull-left amount-holder">
+                            <wicket:container wicket:id="lineAmountView">
+                                [line amount price]
+                            </wicket:container>
+                        </div>
+                        <div class="text-right">
+                            <a wicket:id="removeAllLink" wicket:message="title:removeAllLinkHint" rel="nofollow">
+                                <span class="glyphicon glyphicon-remove"></span>
                             </a>
                         </div>
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="grid-100 mobile-grid-100 grid-parent">
-                        <div class="grid-50 mobile-grid-50">
-                            <input type="text" wicket:id="couponInput" class="width-100p"/>
-                        </div>
 
-                        <div class="grid-50 mobile-grid-50">
-                            <input type="submit" class="button gray" wicket:id="addCouponBtn" wicket:message="value:addCouponButtonLabel"/>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-md-3 no-padding shopping-cart-sidebar">
+            <div class="shopping-cart-title">
+                <h2><wicket:message key="shoppingCart">[Shopping cart]</wicket:message></h2>
+            </div>
+            <label class="pull-left">
+                <wicket:message key="amountMsg">[Amount]</wicket:message>
+            </label>
+            <div class="text-right clearfix">
+                <wicket:container wicket:id="subTotalView">
+                    [sub total]
+                </wicket:container>
+            </div>
+            <div class="checkout-btn text-right">
+                <a wicket:id="checkoutLink" class="btn btn-warning" rel="nofollow">
+                    <span><wicket:message key="checkout">[Checkout]</wicket:message></span>
+                </a>
+            </div>
+
+            <div class="coupons-title">
+                <h2><wicket:message key="addCouponsTitle">[Shopping cart]</wicket:message></h2>
+            </div>
+            <div wicket:id="couponsList">
+                <div class="single-coupon pull-left" wicket:id="couponsListItem">
+                    [sub total]
+                </div>
+                <div class="text-right clearfix">
+                    <a wicket:id="couponsListItemRemoveLink" rel="nofollow">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <input type="text" wicket:id="couponInput" class="form-control" wicket:message="placeholder:enterCouponLabel"/>
+                </div>
+                <div class="text-right">
+                    <input type="submit" class="btn btn-info" wicket:id="addCouponBtn" wicket:message="value:addCouponButtonLabel"/>
+                </div>
+            </div>
+        </div>
+
     </form>
+
 </wicket:panel>
 </body>
 </html>

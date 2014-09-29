@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component.navigation;
 
-import org.apache.wicket.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.link.AbstractLink;
@@ -103,7 +102,7 @@ public class URLPagingNavigator   extends PagingNavigator {
 
         params.set(WebParametersKeys.PAGE, pNum);
 
-        return (AbstractLink) links.newLink(id, params).add(new AttributeModifier("class", "nav-page-control"));
+        return (AbstractLink) links.newLink(id, params).add(new AttributeModifier("class", "nav-page-control " + id));
 
     }
 

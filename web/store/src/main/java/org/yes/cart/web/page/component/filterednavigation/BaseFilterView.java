@@ -126,7 +126,7 @@ public class BaseFilterView extends BaseComponent {
                             valueVabel.setEscapeModelStrings(false);
 
                             link.add(valueVabel);
-                            link.add( new Label(QUANTITY, '[' +keyValue.getFirst().getSecond().toString() + ']'));
+                            link.add( new Label(QUANTITY, keyValue.getFirst().getSecond().toString()));
 
                             pairListItem.add(link);
                         }

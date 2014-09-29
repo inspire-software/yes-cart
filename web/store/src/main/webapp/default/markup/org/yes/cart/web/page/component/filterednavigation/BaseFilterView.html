@@ -17,21 +17,19 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-
-    <span wicket:id="head" class="filternav-head">[attr name]</span>
-    <ul wicket:id="linkList" class="filternav">
-        <li>
-            <a wicket:id="link" rel="search">
-                <div class="filternav-line">
-                    <div class="filternav-row">
-                        <div class="filternav-row-attr"><span wicket:id="linkName" >[attr value]</span></div>
-                        <div class="filternav-row-val"><span wicket:id="quantity">[qty]</span></div>
-                    </div>
-                </div>
-            </a>
-        </li>
-    </ul>
-
+    <div class="filter-nav-holder">
+        <h2 wicket:id="head">[attr name]</h2>
+        <div class="single-nav-block">
+            <ul wicket:id="linkList">
+                <li>
+                    <a wicket:id="link" rel="search">
+                        <span wicket:id="linkName" >[attr value]</span>
+                        <span class="badge"><span wicket:id="quantity">[qty]</span></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </wicket:panel>
 
 </body>
