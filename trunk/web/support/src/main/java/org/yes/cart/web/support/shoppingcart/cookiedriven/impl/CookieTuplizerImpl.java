@@ -288,9 +288,11 @@ public class CookieTuplizerImpl extends AbstractCryptedTuplizerImpl implements C
     public boolean supports(final HttpServletRequest httpServletRequest) {
 
         final Cookie[] cookies = httpServletRequest.getCookies();
-        for (final Cookie cookie : cookies) {
-            if (cookie.getName().startsWith(tuplizerSetting.key)) {
-                return true;
+        if (cookies != null) {
+            for (final Cookie cookie : cookies) {
+                if (cookie.getName().startsWith(tuplizerSetting.key)) {
+                    return true;
+                }
             }
         }
         return false;

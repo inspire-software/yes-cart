@@ -70,9 +70,11 @@ public class TokenTuplizerImpl implements CartTuplizer {
             return true;
         }
         final Cookie[] cookies = httpServletRequest.getCookies();
-        for (final Cookie cookie : cookies) {
-            if (cookie.getName().equals(tuplizerSetting.key)) {
-                return true;
+        if (cookies != null) {
+            for (final Cookie cookie : cookies) {
+                if (cookie.getName().equals(tuplizerSetting.key)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -85,10 +87,12 @@ public class TokenTuplizerImpl implements CartTuplizer {
         String token = httpServletRequest.getHeader(tuplizerSetting.key);
         if (token == null) {
             final Cookie[] cookies = httpServletRequest.getCookies();
-            for (final Cookie cookie : cookies) {
-                if (cookie.getName().equals(tuplizerSetting.key)) {
-                    token = cookie.getValue();
-                    break;
+            if (cookies != null) {
+                for (final Cookie cookie : cookies) {
+                    if (cookie.getName().equals(tuplizerSetting.key)) {
+                        token = cookie.getValue();
+                        break;
+                    }
                 }
             }
         }

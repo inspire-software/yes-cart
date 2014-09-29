@@ -90,6 +90,8 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
                 }
             } catch (CartDetuplizationException e) {
                 ShopCodeContext.getLog(this).warn("Cart not restored from cookies");
+            } catch (Exception e) {
+                ShopCodeContext.getLog(this).error("Cart not restored from cookies", e);
             }
             if (cart == null) {
                 cart = new ShoppingCartImpl();
