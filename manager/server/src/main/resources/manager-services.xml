@@ -212,9 +212,9 @@
             <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN"/>
             <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN"/>
             <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN"/>
-            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN"/>
-            <security:protect method="getAllByShopId" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAllByShopId" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
 
 
             <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN"/>
@@ -229,21 +229,21 @@
         <constructor-arg index="1" ref="federationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
-            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="findCustomer" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="remoteResetPassword" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="findCustomer" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="remoteResetPassword" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
 
-            <security:protect method="getAvailableShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="getAssignedShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="grantShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="revokeShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getAvailableShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="getAssignedShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="grantShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="revokeShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
 
-            <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="createEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
-            <security:protect method="deleteAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="createEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="deleteAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
         </security:intercept-methods>
     </bean>
 
@@ -395,10 +395,10 @@
         <constructor-arg index="0" ref="dtoProdTypeAttributeViewGroupService"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
-            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
-            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="create" access="ROLE_SMADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN"/>
             <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
         </security:intercept-methods>
