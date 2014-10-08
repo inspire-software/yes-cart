@@ -168,6 +168,8 @@
     <!-- LoginPanel -->
     <entry key="wrongPassword">Неправильный пароль</entry>
     <entry key="customerNotExists">Email не зарегистрирован. Пройдите процедуру регистрации.</entry>
+    <entry key="customerNotActiveInShop">E-mail не активирован для этого магазина. Для активации ведите логин и пароль еще раз и нажмите "Вход".</entry>
+    <entry key="existingUser">Зарегистрированный покупатель</entry>
     <entry key="restorePassword">Восстановить пароль</entry>
     <entry key="signIn">Вход</entry>
     <entry key="tryToRestore">Нажмите "восстановить пароль" и он будет выслан Вам на почту {0}</entry>

@@ -487,6 +487,7 @@
                 <constructor-arg index="1" type="org.yes.cart.service.domain.HashHelper" ref="hashHelper"/>
                 <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="genericDao"/>
                 <constructor-arg index="3" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
+                <constructor-arg index="4" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
             </bean>
         </property>
     </bean>

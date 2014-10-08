@@ -30,6 +30,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.HashHelper;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.utils.impl.AttrValueRankComparator;
 
 import java.util.ArrayList;
@@ -50,6 +51,8 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
 
     private final AttributeService attributeService;
 
+    private final ShopService shopService;
+
 
     /**
      * Construct customer service.
@@ -57,15 +60,18 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * @param genericDao customer dao to use.
      * @param hashHelper to generate password hash
      * @param customerShopDao    to delete
+     * @param shopService shop service (reuse retrieval + caching)
      */
     public CustomerServiceImpl(final GenericDAO<Customer, Long> genericDao,
                                final HashHelper hashHelper,
                                final GenericDAO<Object, Long> customerShopDao,
-                               final AttributeService attributeService) {
+                               final AttributeService attributeService,
+                               final ShopService shopService) {
         super(genericDao);
         this.hashHelper = hashHelper;
         this.customerShopDao = customerShopDao;
         this.attributeService = attributeService;
+        this.shopService = shopService;
     }
 
     /**
@@ -86,6 +92,22 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         return customer;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public List<Shop> getCustomerShopsByEmail(final String email) {
+        Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("email", email));
+        final List<Shop> shops = new ArrayList<Shop>();
+        if (customer != null) {
+            for (CustomerShop customerShop : customer.getShops()) {
+                final Shop shop = shopService.getById(customerShop.getShop().getShopId());
+                if (shop != null) {
+                    shops.add(shop);
+                }
+            }
+        }
+        return shops;
+    }
 
     /**
      * {@inheritDoc}
@@ -235,6 +257,29 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         return super.create(customer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, key = "#email")
+    public Customer update(final String email, final String shopCode) {
+        final Shop shop = shopService.getShopByCode(shopCode);
+        if (shop != null) {
+            final Customer customer = getCustomerByEmail(email);
+            for (final CustomerShop customerShop : customer.getShops()) {
+                if (shop.getShopId() == customerShop.getShop().getShopId()) {
+                    return customer;
+                }
+            }
+            final CustomerShop customerShop = getGenericDao().getEntityFactory().getByIface(CustomerShop.class);
+            customerShop.setCustomer(customer);
+            customerShop.setShop(shop);
+            customer.getShops().add(customerShop);
+            return super.update(customer);
+        }
+        return null;
+    }
 
     /**
      * {@inheritDoc}

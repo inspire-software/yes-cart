@@ -18,6 +18,7 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.shoppingcart.ShoppingContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +37,7 @@ public class ShoppingContextImpl implements ShoppingContext {
     private long shopId;
     private String shopCode;
     private String customerEmail;
+    private List<String> customerShops;
 
     private List<String> latestViewedSkus;
     private List<String> latestViewedCategories;
@@ -56,6 +58,7 @@ public class ShoppingContextImpl implements ShoppingContext {
         clearShopRelatedParameters();
         customerEmail = null;
         customerName = null;
+        customerShops = new ArrayList<String>(0);
     }
 
     private void clearShopRelatedParameters() {
@@ -103,6 +106,16 @@ public class ShoppingContextImpl implements ShoppingContext {
     /** {@inheritDoc} */
     public void setCustomerName(final String customerName) {
         this.customerName = customerName;
+    }
+
+    /** {@inheritDoc} */
+    public List<String> getCustomerShops() {
+        return customerShops;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustomerShops(final List<String> shops) {
+        this.customerShops = shops;
     }
 
     /** {@inheritDoc} */

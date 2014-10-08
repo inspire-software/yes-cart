@@ -262,6 +262,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
                 fillEntityFields(tuple, object, importDescriptor.getImportColumns(FieldTypeEnum.FIELD));
                 fillEntityForeignKeys(tuple, object, importDescriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, importDescriptor);
+//                fillEntityCollectionItems(tuple, object, importDescriptor.getImportColumns(FieldTypeEnum.COLLECTION_ITEM), masterObject, importDescriptor);
 
                 genericDAO.saveOrUpdate(object);
                 performSubImport(statusListener, tuple, csvImportDescriptorName, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SLAVE_INLINE_FIELD));
@@ -456,6 +457,76 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
             ), exp);
         }
 
+    }
+
+
+    /**
+     * Fill the given entity object with line information using import column descriptions.
+     *
+     * @param tuple            given csv line
+     * @param object           entity object
+     * @param importColumns    particular type column collection
+     * @param masterObject     master object , that set from main import in case of sub import
+     * @param importDescriptor import descriptor
+     * @throws Exception in case if something wrong with reflection (IntrospectionException,
+     *                   InvocationTargetException,
+     *                   IllegalAccessException)
+     */
+    private void fillEntityCollectionItems(final ImportTuple tuple,
+                                           final Object object,
+                                           final Collection<ImportColumn> importColumns,
+                                           final Object masterObject,
+                                           final ImportDescriptor importDescriptor) throws Exception {
+//        ImportColumn currentColumn = null;
+//        final Class clz = object.getClass();
+//        Object singleObjectValue = null;
+//        PropertyDescriptor propertyDescriptor = null;
+//
+//        try {
+//            for (ImportColumn importColumn : importColumns) {
+//                currentColumn = importColumn;
+//
+//                singleObjectValue = getEntity(tuple, importColumn, masterObject, importDescriptor);
+//
+//                propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);
+//                final Collection oldValues = (Collection) propertyDescriptor.getReadMethod().invoke(object);
+//                if (oldValues == null) {
+//                    try {
+//                        propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
+//                    } catch (Exception exp) {
+//
+//                    }
+//                }
+//
+//
+//                if (oldValue instanceof Identifiable) {
+//                    final Object oldValuePK = oldValue != null ? genericDAO.getEntityIdentifier(oldValue) : null;
+//                    final Object newValuePK = singleObjectValue != null ? genericDAO.getEntityIdentifier(singleObjectValue) : null;
+//
+//                    if (oldValuePK == null || !oldValuePK.equals(newValuePK)) {
+//                        // Update the object only if the value has changed
+//                        propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
+//                    }
+//                } else {
+//                    // This is not identifiable, possibly primitive (PK) so write always
+//                    propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
+//                }
+//
+//            }
+//        } catch (Exception exp) {
+//
+//            final String propName = propertyDescriptor != null ? propertyDescriptor.getName() : null;
+//            final String propType = propertyDescriptor != null ? propertyDescriptor.getPropertyType().getName() : null;
+//
+//            throw new Exception(MessageFormat.format(
+//                    "Failed to process property name {0} type {1} object is {2} caused by column {0} with value {1}",
+//                    propName,
+//                    propType,
+//                    object,
+//                    currentColumn,
+//                    singleObjectValue
+//            ), exp);
+//        }
     }
 
 

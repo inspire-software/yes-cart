@@ -168,7 +168,8 @@
     <!-- LoginPanel -->
     <entry key="wrongPassword">Wrong password</entry>
     <entry key="customerNotExists">Unknown user. Register please</entry>
-    <entry key="existingUser">Existing shopper</entry>
+    <entry key="customerNotActiveInShop">E-mail is not active for this shop. To activate please enter login and password again and click "Sign In".</entry>
+    <entry key="existingUser">Registered customer</entry>
     <entry key="restorePassword">Restore password</entry>
     <entry key="signIn">Sign In</entry>
     <entry key="tryToRestore">Try to restore password. It will be send to your email {0}</entry>
@@ -179,7 +180,7 @@
     <entry key="register">Register</entry>
     <entry key="phone">Phone</entry>
     <entry key="customerExists">Customer already registered.</entry>
-    <entry key="canNotRegister">Sorry. Some problem. Our administrators try to solve temporally problems.</entry>
+    <entry key="canNotRegister">Unable to register.</entry>
 
     <!-- LogoutPanel -->
     <entry key="logoffLabel">Logoff</entry>

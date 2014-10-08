@@ -18,7 +18,10 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -40,9 +43,14 @@ public class LogoutCommandImplTest extends BaseCoreDBTestCase {
     @Test
     public void testExecute() {
 
+        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        Shop shop = shopService.getById(10L);
+
         final Customer customer = createCustomer();
 
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.getShoppingContext().setShopCode(shop.getCode());
+        shoppingCart.getShoppingContext().setShopId(shop.getShopId());
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -57,12 +65,16 @@ public class LogoutCommandImplTest extends BaseCoreDBTestCase {
         assertEquals("Test that auth saved to cart",
                 customer.getEmail(),
                 shoppingCart.getShoppingContext().getCustomerEmail());
+        assertNotNull(shoppingCart.getShoppingContext().getCustomerShops());
+        assertTrue(shoppingCart.getShoppingContext().getCustomerShops().contains(shop.getCode()));
 
         commands.execute(shoppingCart,
                 (Map) Collections.singletonMap(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT));
 
         assertNull(shoppingCart.getCustomerEmail());
         assertNull(shoppingCart.getCustomerName());
+        assertNotNull(shoppingCart.getShoppingContext().getCustomerShops());
+        assertTrue(shoppingCart.getShoppingContext().getCustomerShops().isEmpty());
         assertEquals(ShoppingCart.NOT_LOGGED, shoppingCart.getLogonState());
     }
 }

@@ -33,6 +33,7 @@ public interface ShoppingCart extends Serializable {
     int NOT_LOGGED = 0;
     int SESSION_EXPIRED = 1;
     int LOGGED_IN = 2;
+    int INACTIVE_FOR_SHOP = 3;
 
     /**
      * Set amount calculation strategy.

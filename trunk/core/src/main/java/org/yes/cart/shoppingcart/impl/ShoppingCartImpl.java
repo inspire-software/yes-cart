@@ -473,7 +473,11 @@ public class ShoppingCartImpl implements ShoppingCart {
             return ShoppingCart.SESSION_EXPIRED;
         } else if (StringUtils.isNotBlank(getCustomerEmail())
                    && StringUtils.isNotBlank(getCustomerName())) {
-            return ShoppingCart.LOGGED_IN;
+            final String currentShop = getShoppingContext().getShopCode();
+            if (getShoppingContext().getCustomerShops().contains(currentShop)) {
+                return ShoppingCart.LOGGED_IN;
+            }
+            return ShoppingCart.INACTIVE_FOR_SHOP;
         }
         return ShoppingCart.NOT_LOGGED;
     }
