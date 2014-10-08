@@ -74,49 +74,42 @@ public class Currency extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        if (isVisible()) {
+        final List<String> supportedCurrencies = ApplicationDirector.getCurrentShop().getSupportedCurrenciesAsList();
 
-            final List<String> supportedCurrencies = ApplicationDirector.getCurrentShop().getSupportedCurrenciesAsList();
+        final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
+        final String activeCurrencyCode = ApplicationDirector.getShoppingCart().getCurrencyCode();
+        final String activeCurrencySymbol =  currencySymbolService.getCurrencySymbol(activeCurrencyCode);
+        add(new Label(ACTIVE_CURRENCY_NAME, activeCurrencySymbol));
 
-            final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
-            final String activeCurrencyCode = ApplicationDirector.getShoppingCart().getCurrencyCode();
-            final String activeCurrencySymbol =  currencySymbolService.getCurrencySymbol(activeCurrencyCode);
-            add(new Label(ACTIVE_CURRENCY_NAME, activeCurrencySymbol));
+        add( new ListView<String>(CURRENCY_LIST, supportedCurrencies) {
 
-            add( new ListView<String>(CURRENCY_LIST, supportedCurrencies) {
+            protected void populateItem(ListItem<String> stringListItem) {
 
-                protected void populateItem(ListItem<String> stringListItem) {
+                final String currencyCode = stringListItem.getModelObject();
+                final String currencySymbol = currencySymbolService.getCurrencySymbol(currencyCode);
 
-                    final String currencyCode = stringListItem.getModelObject();
-                    final String currencySymbol = currencySymbolService.getCurrencySymbol(currencyCode);
+                final Link pageLink = getWicketSupportFacade().links().newChangeCurrencyLink(
+                        CURRENCY_LINK,
+                        currencyCode,
+                        getPage().getPageClass(),
+                        basePageParameters);
 
-                    final Link pageLink = getWicketSupportFacade().links().newChangeCurrencyLink(
-                            CURRENCY_LINK,
-                            currencyCode,
-                            getPage().getPageClass(),
-                            basePageParameters);
+                final boolean isActiveCurrency = currencyCode.equals(activeCurrencyCode);
 
-                    final boolean isActiveCurrency = currencyCode.equals(activeCurrencyCode);
+                final Label currencyLabel = new Label(CURRENCY_NAME, currencySymbol);
 
-                    final Label currencyLabel = new Label(CURRENCY_NAME, currencySymbol);
+                currencyLabel.setEscapeModelStrings(false);
 
-                    currencyLabel.setEscapeModelStrings(false);
+                pageLink.add(currencyLabel);
 
-                    pageLink.add(currencyLabel);
-
-                    stringListItem.add(pageLink).setVisible(!isActiveCurrency);
-                }
+                stringListItem.add(pageLink).setVisible(!isActiveCurrency);
             }
-            );
-
         }
+        );
+
+        setVisible(supportedCurrencies.size() > 1);
+
         super.onBeforeRender();
-    }
-
-    public boolean isVisible() {
-        return !(ApplicationDirector.getCurrentShop().getSupportedCurrenciesAsList() == null
-                || ApplicationDirector.getCurrentShop().getSupportedCurrenciesAsList().size() <= 1);
-
     }
 
 }

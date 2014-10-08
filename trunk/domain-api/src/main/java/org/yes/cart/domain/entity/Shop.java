@@ -272,6 +272,20 @@ public interface Shop extends Auditable, Seoable, Codable {
     List<String> getSupportedBillingCountriesAsList();
 
 
+    /**
+     * List of supported language codes.
+     *
+     * @return  list of language codes
+     */
+    String getSupportedLanguages();
+
+    /**
+     * List of supported language code.
+     *
+     * @return  list of language codes
+     */
+    List<String> getSupportedLanguagesAsList();
+
 }
 
 

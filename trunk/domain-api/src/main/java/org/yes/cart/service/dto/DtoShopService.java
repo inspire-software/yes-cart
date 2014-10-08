@@ -82,6 +82,22 @@ public interface DtoShopService extends GenericDTOService<ShopDTO>, GenericAttrV
      */
     void updateSupportedBillingCountries(long shopId, String countries);
 
+    /**
+     * Get supported languages by given shop.
+     *
+     * @param shopId given shop id.
+     * @return comma separated list of supported language codes. Example en,uk,ru
+     */
+    String getSupportedLanguages(long shopId);
+
+    /**
+     * Set supported languages by given shop.
+     *
+     * @param shopId     shop id
+     * @param languages comma separated list of supported language codes. Example en,uk,ru
+     */
+    void updateSupportedLanguages(long shopId, String languages);
+
 
     /**
      * Get shop by server domain name.
