@@ -2,10 +2,13 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerWishList;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerWishListService;
 import org.yes.cart.service.domain.ProductSkuService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -32,12 +35,17 @@ public class RemoveSkuFromWishListEventCommandImplTest extends BaseCoreDBTestCas
     @Test
     public void testExecute() {
 
+        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        Shop shop = shopService.getById(10L);
+
         final Customer customer = createCustomer();
 
         final ProductSkuService skuService = ctx().getBean("productSkuService", ProductSkuService.class);
         final CustomerWishListService customerWishListService = ctx().getBean("customerWishListService", CustomerWishListService.class);
 
         ShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.getShoppingContext().setShopCode(shop.getCode());
+        shoppingCart.getShoppingContext().setShopId(shop.getShopId());
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 

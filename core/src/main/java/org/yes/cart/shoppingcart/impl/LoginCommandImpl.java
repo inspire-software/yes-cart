@@ -17,11 +17,14 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,10 +65,19 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
         if (parameters.containsKey(getCmdKey())) {
             final String email = (String) parameters.get(CMD_LOGIN_P_EMAIL);
             final String passw = (String) parameters.get(CMD_LOGIN_P_PASS);
+            final boolean activate = shoppingCart.getLogonState() == ShoppingCart.INACTIVE_FOR_SHOP;
             if (authenticate(email, passw)) {
                 final Customer customer = customerService.getCustomerByEmail(email);
+                if (activate) {
+                    customerService.update(email, shoppingCart.getShoppingContext().getShopCode());
+                }
+                final List<String> customerShops = new ArrayList<String>();
+                for (final Shop shop : customerService.getCustomerShopsByEmail(email)) {
+                    customerShops.add(shop.getCode());
+                }
                 shoppingCart.getShoppingContext().setCustomerEmail(customer.getEmail());
                 shoppingCart.getShoppingContext().setCustomerName(customer.getFirstname() + " " + customer.getLastname());
+                shoppingCart.getShoppingContext().setCustomerShops(customerShops);
                 recalculate(shoppingCart);
                 markDirty(shoppingCart);
             } else {

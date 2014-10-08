@@ -18,7 +18,10 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -39,6 +42,9 @@ public class LoginCommandImplTest extends BaseCoreDBTestCase {
     @Test
     public void testExecute() {
 
+        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        Shop shop = shopService.getById(10L);
+
         final Customer customer = createCustomer();
 
         ShoppingCart shoppingCart = new ShoppingCartImpl();
@@ -51,6 +57,12 @@ public class LoginCommandImplTest extends BaseCoreDBTestCase {
         params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
         params.put(ShoppingCartCommand.CMD_LOGIN, "1");
         commands.execute(shoppingCart, (Map) params);
+        assertEquals(ShoppingCart.INACTIVE_FOR_SHOP, shoppingCart.getLogonState());
+
+        shoppingCart.getShoppingContext().setShopCode(shop.getCode());
+        shoppingCart.getShoppingContext().setShopId(shop.getShopId());
+        commands.execute(shoppingCart, (Map) params);
         assertEquals(ShoppingCart.LOGGED_IN, shoppingCart.getLogonState());
+
     }
 }

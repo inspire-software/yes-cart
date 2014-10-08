@@ -56,6 +56,20 @@ public interface ShoppingContext extends Serializable {
     void setCustomerName(String customerName);
 
     /**
+     * Get customer active shops.
+     *
+     * @return customer active shops
+     */
+    List<String> getCustomerShops();
+
+    /**
+     * Set customer active shops.
+     *
+     * @param shops customer active shops
+     */
+    void setCustomerShops(List<String> shops);
+
+    /**
      * Get current shop id
      *
      * @return current shop id.

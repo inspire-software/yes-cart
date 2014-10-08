@@ -51,6 +51,14 @@ public interface CustomerService extends GenericService<Customer> {
     Customer getCustomerByEmail(String email);
 
     /**
+     * Get customer shops by email.
+     *
+     * @param email email
+     * @return List of {@link Shop} or null if customer not found
+     */
+    List<Shop> getCustomerShopsByEmail(String email);
+
+    /**
      * Check is customer already registered.
      *
      * @param email email to check
@@ -84,6 +92,16 @@ public interface CustomerService extends GenericService<Customer> {
      * @return customer instance
      */
     Customer create(final Customer customer, final Shop shop);
+
+
+    /**
+     * Update customer and assign it to particular shop
+     *
+     * @param email customer to update
+     * @param shopCode shop to assign
+     * @return customer instance
+     */
+    Customer update(final String email, final String shopCode);
 
 
     /**

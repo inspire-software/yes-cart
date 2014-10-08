@@ -30,6 +30,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
@@ -202,17 +203,19 @@ public class LoginPanel extends BaseComponent {
                                     setResponsePage(successfulPage, parameters);
                                 }
                             } else {
-                                final String email = getEmail();
-                                if (isCustomerExists(email)) {
-                                    setRestorePassword(email);
-
-                                    error(getLocalizer().getString("wrongPassword", this));
-                                    error(new StringResourceModel("tryToRestore", this, null, new Object[] {email}).getString());
-
-                                } else {
+                                if (ApplicationDirector.getShoppingCart().getLogonState() == ShoppingCart.INACTIVE_FOR_SHOP) {
                                     setRestorePassword(null);
-
-                                    error(getLocalizer().getString("customerNotExists", this));
+                                    error(getLocalizer().getString("customerNotActiveInShop", this));
+                                } else {
+                                    final String email = getEmail();
+                                    if (isCustomerExists(email)) {
+                                        setRestorePassword(email);
+                                        error(getLocalizer().getString("wrongPassword", this));
+                                        error(new StringResourceModel("tryToRestore", this, null, new Object[] {email}).getString());
+                                    } else {
+                                        setRestorePassword(null);
+                                        error(getLocalizer().getString("customerNotExists", this));
+                                    }
                                 }
                             }
                         }
