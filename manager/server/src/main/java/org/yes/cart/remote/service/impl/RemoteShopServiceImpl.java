@@ -160,6 +160,28 @@ public class RemoteShopServiceImpl
     /**
      * {@inheritDoc}
      */
+    public String getSupportedLanguages(final long shopId) {
+        if (federationFacade.isManageable(shopId, ShopDTO.class)) {
+            return ((DtoShopService) getGenericDTOService()).getSupportedLanguages(shopId);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateSupportedLanguages(final long shopId, final String languages) {
+        if (federationFacade.isManageable(shopId, ShopDTO.class)) {
+            ((DtoShopService) getGenericDTOService()).updateSupportedLanguages(shopId, languages);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public ShopDTO getShopDtoByDomainName(final String serverDomainName) {
         return ((DtoShopService) getGenericDTOService()).getShopDtoByDomainName(serverDomainName);
     }

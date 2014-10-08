@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.misc.impl;
 
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.misc.LanguageService;
 
 import java.util.Comparator;
@@ -36,12 +38,17 @@ public class LanguageServiceImpl implements LanguageService {
 
     private final Map<String, List<String>> shopToLanguageMap;
 
+    private final ShopService shopService;
+
     /**
      * Construct language service.
      * @param languageName  map lang code - lang name
+     * @param shopService shop service
      */
     public LanguageServiceImpl(final Map<String, String> languageName,
-                               final Map<String, List<String>> shopToLanguageMap) {
+                               final Map<String, List<String>> shopToLanguageMap,
+                               final ShopService shopService) {
+        this.shopService = shopService;
         this.languageName = new TreeMap<String, String>(new Comparator<String>() {
             public int compare(String o1, String o2) {
                 return o1.compareTo(o2);
@@ -73,6 +80,15 @@ public class LanguageServiceImpl implements LanguageService {
     /** {@inheritDoc} */
     @Override
     public List<String> getSupportedLanguages(final String shopCode) {
+
+        final Shop shop = shopService.getShopByCode(shopCode);
+        if (shop != null) {
+            final List<String> languageCodes = shop.getSupportedLanguagesAsList();
+            if (!languageCodes.isEmpty()) {
+                return languageCodes;
+            }
+        }
+
         if (shopToLanguageMap.containsKey(shopCode)) {
             return shopToLanguageMap.get(shopCode);
         }

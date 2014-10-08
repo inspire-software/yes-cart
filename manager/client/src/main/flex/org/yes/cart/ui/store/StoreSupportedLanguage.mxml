@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+         width="100%" height="100%" creationComplete="init();"
+         paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
+    <mx:Script>
+<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.collections.ArrayCollection;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        private var _shopDTOImpl:ShopDTOImpl;
+
+        /**
+         * Init supported by shop language panel.
+         * @return nothing
+         */
+        private function init():void {
+            remoteLanguageService.getSupportedLanguages();
+        }
+
+        private function onGetAllSupportedLanguagesResult(event:ResultEvent):void {
+
+            var _all:ArrayCollection = new ArrayCollection();
+            for (var prop:String in event.result) {
+                _all.addItem({
+                    data: prop,
+                    label: event.result[prop]
+                })
+            }
+
+            allAvailableLanguages = _all;
+            availableLanguages.removeAll();
+            if (allAvailableLanguages.length > 0) {
+                remoteShopService.getSupportedLanguages(_shopDTOImpl.shopId);
+            }
+        }
+
+        public function set shopDTOImpl(value:ShopDTOImpl):void {
+            _shopDTOImpl = value;
+        }
+
+        private function availableLanguageSelected(event:MouseEvent):void {
+            addAvailableEnabled = this.availableLanguageList.selectedItem != null;
+        }
+
+        private function assignedLanguageSelected(event:MouseEvent):void {
+            addAssignedEnabled = this.assignedLanguageList.selectedItem != null;
+        }
+
+        private function assignLanguage(event:Event):void {
+            if (this.addAvailableEnabled && this.availableLanguageList.selectedItem != null) {
+                var langs:String = constructStringList(true, this.availableLanguageList.selectedItem);
+                addAvailableEnabled = false;
+                remoteShopService.updateSupportedLanguages(_shopDTOImpl.shopId, langs);
+            }
+        }
+
+        private function unassignLanguage(event:Event):void {
+            if (this.addAssignedEnabled && this.assignedLanguageList.selectedItem != null) {
+                var langs:String = constructStringList(false, this.assignedLanguageList.selectedItem);
+                addAssignedEnabled = false;
+                remoteShopService.updateSupportedLanguages(_shopDTOImpl.shopId, langs);
+            }
+        }
+
+        private function constructStringList(addFlag:Boolean, item:Object):String {
+            var result:String = "";
+            if (addFlag) {
+                if (assignedLanguages != null) {
+                    for (var i:int = 0; i < assignedLanguages.length; i++) {
+                        result = result + assignedLanguages[i].data + ",";
+                    }
+                }
+                result = result + item.data + ",";
+            } else {
+                if (assignedLanguages != null) {
+                    for (var j:int = 0; j < assignedLanguages.length; j++) {
+                        if (assignedLanguages[j].data != item.data) {
+                            result = result + assignedLanguages[j].data + ",";
+                        }
+                    }
+                }
+            }
+            if (result != null && result.length > 0) {
+                result = result.substr(0, result.length - 1);
+            }
+            Debug.trace("result -> " + result);
+            return result;
+        }
+
+        private function onGetSupportedLanguagesResult(event:ResultEvent):void {
+
+            var assignedLangStr:String = String(event.result);
+            assignedLanguages.removeAll();
+            availableLanguages.removeAll();
+            if (assignedLangStr == null || assignedLangStr == "null") {
+                availableLanguages.addAll(allAvailableLanguages);
+            } else {
+                var _assignedLanguagesCodes:ArrayCollection = new ArrayCollection(assignedLangStr.split(","));
+                for each (var lang:Object in allAvailableLanguages) {
+                    var _exists:Boolean = false;
+                    for each (var avLang:String in _assignedLanguagesCodes) {
+                        if (avLang == lang.data) {
+                            assignedLanguages.addItem(lang);
+                            _exists = true;
+                            break;
+                        }
+                    }
+                    if (!_exists) {
+                        availableLanguages.addItem(lang);
+                    }
+                }
+            }
+            addAssignedEnabled = false;
+            addAvailableEnabled = false;
+
+        }
+
+        private function onUpdateSupportedLanguagesResult(event:ResultEvent):void {
+
+            remoteShopService.getSupportedLanguages(_shopDTOImpl.shopId);
+
+        }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+        ]]>
+    </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteLanguageService"
+                     destination="remoteLanguageService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllSupportedLanguages" name="getSupportedLanguages"
+                   result="onGetAllSupportedLanguagesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
+                     destination="remoteShopService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getSupportedLanguages" name="getSupportedLanguages"
+                   result="onGetSupportedLanguagesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateSupportedLanguages" name="updateSupportedLanguages"
+                   result="onUpdateSupportedLanguagesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:ArrayCollection id="allAvailableLanguages"/>
+    <mx:ArrayCollection id="availableLanguages"/>
+    <mx:ArrayCollection id="assignedLanguages"/>
+
+    <mx:Boolean id="addAvailableEnabled">false</mx:Boolean>
+    <mx:Boolean id="addAssignedEnabled">false</mx:Boolean>
+
+    <mx:Grid x="0" y="0" width="100%" height="100%" id="supportedLangPanel">
+        <mx:GridRow width="100%" height="50">
+            <mx:GridItem width="45%" height="50" textAlign="center" verticalAlign="middle">
+                <mx:Label text="@Resource(bundle='StoresManagementPanel',key='availableLang')"/>
+            </mx:GridItem>
+            <mx:GridItem width="10%" height="50">
+            </mx:GridItem>
+            <mx:GridItem width="45%" height="50" textAlign="center" verticalAlign="middle">
+                <mx:Label text="@Resource(bundle='StoresManagementPanel',key='supportedLang')"/>
+            </mx:GridItem>
+        </mx:GridRow>
+        <mx:GridRow width="100%" height="100%">
+            <mx:GridItem width="45%" height="100%">
+                <mx:List
+                        id="availableLanguageList"
+                        width="100%"
+                        height="100%"
+                        dataProvider="{availableLanguages}"
+                        doubleClickEnabled="true"
+                        itemDoubleClick="assignLanguage(event)"
+                        click="availableLanguageSelected(event)"
+                        >
+                </mx:List>
+            </mx:GridItem>
+            <mx:GridItem width="10%" height="100%" verticalAlign="middle" textAlign="center">
+                <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+                    <mx:Button enabled="{addAvailableEnabled}"
+                               label="@Resource(bundle='StoresManagementPanel',key='assign')"
+                               toolTip="@Resource(bundle='StoresManagementPanel',key='assignHint')"
+                               click="assignLanguage(event)"/>
+                    <mx:Button enabled="{addAssignedEnabled}"
+                               label="@Resource(bundle='StoresManagementPanel',key='unassign')"
+                               toolTip="@Resource(bundle='StoresManagementPanel',key='unassignHint')"
+                               click="unassignLanguage(event)"/>
+                </mx:VBox>
+            </mx:GridItem>
+            <mx:GridItem width="45%" height="100%">
+                <mx:List
+                        id="assignedLanguageList"
+                        width="100%"
+                        height="100%"
+                        dataProvider="{assignedLanguages}"
+                        doubleClickEnabled="true"
+                        itemDoubleClick="unassignLanguage(event)"
+                        click="assignedLanguageSelected(event)"
+                        >
+
+                </mx:List>
+            </mx:GridItem>
+        </mx:GridRow>
+
+    </mx:Grid>
+</mx:VBox>

@@ -82,10 +82,17 @@ public class DtoShopServiceImpl
 
     }
 
-
     /** {@inheritDoc} */
     public String getSupportedCurrencies(final long shopId) {
         return service.findById(shopId).getSupportedCurrencies();
+    }
+
+    /** {@inheritDoc} */
+    public void updateSupportedCurrencies(final long shopId, final String currencies) {
+        ((ShopService) service).updateAttributeValue(
+                shopId,
+                AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES,
+                currencies);
     }
 
     /** {@inheritDoc} */
@@ -119,16 +126,17 @@ public class DtoShopServiceImpl
                 countries);
     }
 
-    /**
-     * Set supported currencies by given shop.
-     * @param shopId shop id
-     * @param currencies comma separated list of supported currency codes. Example USD,EUR
-     */
-    public void updateSupportedCurrencies(final long shopId, final String currencies) {
+    /** {@inheritDoc} */
+    public String getSupportedLanguages(final long shopId) {
+        return service.findById(shopId).getSupportedLanguages();
+    }
+
+    /** {@inheritDoc} */
+    public void updateSupportedLanguages(final long shopId, final String languages) {
         ((ShopService) service).updateAttributeValue(
                 shopId,
-                AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES,
-                currencies);
+                AttributeNamesKeys.Shop.SUPPORTED_LANGUAGES,
+                languages);
     }
 
     /** {@inheritDoc} */

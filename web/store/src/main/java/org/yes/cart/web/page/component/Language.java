@@ -34,6 +34,7 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -81,48 +82,46 @@ public class Language extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        if (isVisible()) {
-
-            if (StringUtils.isBlank(ApplicationDirector.getShoppingCart().getCurrentLocale())) {
-                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_CHANGELOCALE, ApplicationDirector.getShoppingCart(),
-                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_CHANGELOCALE, getSession().getLocale().getLanguage()));
-            }
-
-            final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
-
-            final String activeLocal = ApplicationDirector.getShoppingCart().getCurrentLocale();
-            final String activeLanguageName = languageService.resolveLanguageName(activeLocal);
-
-            add(new Label(ACTIVE_LANGUAGE_NAME, activeLanguageName));
-            add(new ListView<String>(LANGUAGE_LIST, languageService.getSupportedLanguages(ShopCodeContext.getShopCode())) {
-
-                @Override
-                protected void populateItem(final ListItem<String> stringListItem) {
-
-                    final String languageCode = stringListItem.getModelObject();
-
-                    final String languageName = languageService.resolveLanguageName(languageCode);
-
-                    final Link pageLink = getWicketSupportFacade().links().newChangeLocaleLink(
-                            LANGUAGE_LINK,
-                            languageCode,
-                            getPage().getPageClass(),
-                            basePageParameters);
-
-                    final boolean isActiveLng = languageCode.equals(activeLocal);
-
-                    final Label languageLabel = new Label(LANGUAGE_NAME, languageName);
-
-                    languageLabel.setEscapeModelStrings(false);
-
-                    pageLink.add(languageLabel);
-
-                    stringListItem.add(pageLink).setVisible(!isActiveLng);
-                }
-            }
-            );
-
+        if (StringUtils.isBlank(ApplicationDirector.getShoppingCart().getCurrentLocale())) {
+            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_CHANGELOCALE, ApplicationDirector.getShoppingCart(),
+                    (Map) Collections.singletonMap(ShoppingCartCommand.CMD_CHANGELOCALE, getSession().getLocale().getLanguage()));
         }
+
+        final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
+
+        final String activeLocal = ApplicationDirector.getShoppingCart().getCurrentLocale();
+        final String activeLanguageName = languageService.resolveLanguageName(activeLocal);
+        final List<String> supportedLanguages = languageService.getSupportedLanguages(ShopCodeContext.getShopCode());
+
+        add(new Label(ACTIVE_LANGUAGE_NAME, activeLanguageName));
+        add(new ListView<String>(LANGUAGE_LIST, supportedLanguages) {
+
+            @Override
+            protected void populateItem(final ListItem<String> stringListItem) {
+
+                final String languageCode = stringListItem.getModelObject();
+
+                final String languageName = languageService.resolveLanguageName(languageCode);
+
+                final Link pageLink = getWicketSupportFacade().links().newChangeLocaleLink(
+                        LANGUAGE_LINK,
+                        languageCode,
+                        getPage().getPageClass(),
+                        basePageParameters);
+
+                final boolean isActiveLng = languageCode.equals(activeLocal);
+
+                final Label languageLabel = new Label(LANGUAGE_NAME, languageName);
+
+                languageLabel.setEscapeModelStrings(false);
+
+                pageLink.add(languageLabel);
+
+                stringListItem.add(pageLink).setVisible(!isActiveLng);
+            }
+        });
+
+        setVisible(supportedLanguages.size() > 1);
 
         super.onBeforeRender();
     }

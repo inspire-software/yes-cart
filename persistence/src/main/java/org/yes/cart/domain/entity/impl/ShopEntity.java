@@ -47,6 +47,11 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private String updatedBy;
     private String guid;
 
+    private List<String> supportedCurrenciesAsList;
+    private List<String> supportedShippingCountriesAsList;
+    private List<String> supportedBillingCountriesAsList;
+    private List<String> supportedLanguagesAsList;
+
     public ShopEntity() {
     }
 
@@ -201,19 +206,23 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public String getDefaultCurrency() {
-        String currencies = getSupportedCurrencies();
-        if (currencies != null) {
-            return currencies.split(",")[0];
+        List<String> currencies = getSupportedCurrenciesAsList();
+        if (currencies != null && !currencies.isEmpty()) {
+            return currencies.get(0);
         }
         return null;
     }
 
     public List<String> getSupportedCurrenciesAsList() {
-        final String currencies = getSupportedCurrencies();
-        if (currencies != null) {
-            return Arrays.asList(currencies.split(","));
+        if (supportedCurrenciesAsList == null) {
+            final String currencies = getSupportedCurrencies();
+            if (currencies != null) {
+                supportedCurrenciesAsList = Arrays.asList(currencies.split(","));
+            } else {
+                supportedCurrenciesAsList = Collections.emptyList();
+            }
         }
-        return Collections.emptyList();
+        return supportedCurrenciesAsList;
     }
 
 
@@ -226,11 +235,16 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public List<String> getSupportedShippingCountriesAsList() {
-        final String countries = getSupportedShippingCountries();
-        if (countries != null) {
-            return Arrays.asList(countries.split(","));
+        if (supportedShippingCountriesAsList == null) {
+            final String countries = getSupportedShippingCountries();
+            if (countries != null) {
+                supportedShippingCountriesAsList = Arrays.asList(countries.split(","));
+            } else {
+                supportedShippingCountriesAsList = Collections.emptyList();
+            }
+
         }
-        return Collections.emptyList();
+        return supportedShippingCountriesAsList;
     }
 
     public String getSupportedBillingCountries() {
@@ -242,11 +256,35 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public List<String> getSupportedBillingCountriesAsList() {
-        final String countries = getSupportedBillingCountries();
-        if (countries != null) {
-            return Arrays.asList(countries.split(","));
+        if (supportedBillingCountriesAsList == null) {
+            final String countries = getSupportedBillingCountries();
+            if (countries != null) {
+                supportedBillingCountriesAsList = Arrays.asList(countries.split(","));
+            } else {
+                supportedBillingCountriesAsList = Collections.emptyList();
+            }
         }
-        return Collections.emptyList();
+        return supportedBillingCountriesAsList;
+    }
+
+    public String getSupportedLanguages() {
+        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.SUPPORTED_LANGUAGES);
+        if (attrValueShop != null) {
+            return attrValueShop.getVal();
+        }
+        return null;
+    }
+
+    public List<String> getSupportedLanguagesAsList() {
+        if (supportedLanguagesAsList == null) {
+            final String languages = getSupportedLanguages();
+            if (languages != null) {
+                supportedLanguagesAsList = Arrays.asList(languages.split(","));
+            } else {
+                supportedLanguagesAsList = Collections.emptyList();
+            }
+        }
+        return supportedLanguagesAsList;
     }
 
     public Collection<AttrValueShop> getAttributesByCode(final String attributeCode) {

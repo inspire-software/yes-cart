@@ -215,6 +215,11 @@ public interface AttributeNamesKeys {
         String SUPPORTED_COUNTRY_BILL = "COUNTRY_BILL";
 
         /**
+         * Supported by shop storefront languages.
+         */
+        String SUPPORTED_LANGUAGES = "SUPPORTED_LANGUAGES";
+
+        /**
          * Comma separated list of active payment gateways.
          */
         String SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL = "SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL";

@@ -30,14 +30,15 @@
 
         private var TAB_URL_IDX:int = 1;
         private var TAB_CURRENCY_IDX:int = 2;
+        private var TAB_LANG_IDX:int = 3;
 //        private var TAB_CURRENCY_EXCHANGE_IDX:int = 3;
-        private var TAB_CATEGORY_IDX:int = 3;
-        private var TAB_WAREHOUSE_IDX:int = 4;
-        private var TAB_CARRIERS_IDX:int = 5;
-        private var TAB_SHIPPING_IDX:int = 6;
-        private var TAB_BILLING_IDX:int = 7;
-        private var TAB_ATTR_IDX:int = 8;
-        private var TAB_PG_IDX:int = 9;
+        private var TAB_CATEGORY_IDX:int = 4;
+        private var TAB_WAREHOUSE_IDX:int = 5;
+        private var TAB_CARRIERS_IDX:int = 6;
+        private var TAB_SHIPPING_IDX:int = 7;
+        private var TAB_BILLING_IDX:int = 8;
+        private var TAB_ATTR_IDX:int = 9;
+        private var TAB_PG_IDX:int = 10;
 
 
         private var _shopDTOImpl:ShopDTOImpl;
@@ -81,6 +82,13 @@
             var storeSupportedCurrencyPanel:StoreSupportedCurrency = new StoreSupportedCurrency();
             storeSupportedCurrencyPanel.shopDTOImpl = _shopDTOImpl;
             currencyTab.addChild(storeSupportedCurrencyPanel);
+        }
+
+        private function languageTabSelected(event:MouseEvent):void {
+            languageTab.removeAllChildren();
+            var storeSupportedLanguagePanel:StoreSupportedLanguage = new StoreSupportedLanguage();
+            storeSupportedLanguagePanel.shopDTOImpl = _shopDTOImpl;
+            languageTab.addChild(storeSupportedLanguagePanel);
         }
 
         private function countryShipTabSelected(event:MouseEvent):void {
@@ -152,6 +160,11 @@
                     currencyTabSelected(null);
                     break;
                 }
+                case TAB_LANG_IDX:
+                {
+                    languageTabSelected(null);
+                    break;
+                }
                 case TAB_SHIPPING_IDX:
                 {
                     countryShipTabSelected(null);
@@ -212,6 +225,8 @@
                    id="urlTab" enabled="{editingMode}"/>
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='currency')" width="100%" height="100%"
                    id="currencyTab" enabled="{editingMode}"/>
+        <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='language')" width="100%" height="100%"
+                   id="languageTab" enabled="{editingMode}"/>
         <!--<mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='currencyExcRate')" width="100%" height="100%"-->
                    <!--id="currencyExcangeTab" enabled="{editingMode}"/>-->
         <mx:Canvas label="@Resource(bundle='StoresManagementPanel',key='catalog')" width="100%" height="100%"
