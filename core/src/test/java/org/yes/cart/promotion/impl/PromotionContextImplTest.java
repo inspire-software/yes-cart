@@ -55,9 +55,9 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
 
         // basic init
         commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
-        commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         generatePromotionsMix(promotionService, promotions, shoppingCart);
 

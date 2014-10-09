@@ -83,7 +83,7 @@ public interface CustomerOrder extends Auditable {
 
     /**
      * Get the order number. Order number not a pk value, it
-     * can be slighty different and depends from active {@link org.yes.cart.service.order.OrderNumberGenerator}
+     * can be slightly different and depends from active {@link org.yes.cart.service.order.OrderNumberGenerator}
      * implementation.
      *
      * @return order number
@@ -121,7 +121,7 @@ public interface CustomerOrder extends Auditable {
     String getBillingAddress();
 
     /**
-     * Set formated address.
+     * Set formatted address.
      *
      * @param billingAddress formatted address.
      */
@@ -129,7 +129,7 @@ public interface CustomerOrder extends Auditable {
 
 
     /**
-     * Get formated shipping address.
+     * Get formatted shipping address.
      *
      * @return shipping address.
      */

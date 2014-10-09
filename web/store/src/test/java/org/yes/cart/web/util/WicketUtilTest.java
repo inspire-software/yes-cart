@@ -21,6 +21,9 @@ import org.apache.wicket.util.string.StringValue;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -30,6 +33,27 @@ import static org.junit.Assert.*;
  * Time: 9:12 AM
  */
 public class WicketUtilTest {
+
+
+    @Test
+    public void testPageParametesAsMap() throws Exception {
+        WicketUtil wicketUtil = new WicketUtil();
+        wicketUtil.setCmdKeys(new ArrayList<String>() {{
+            add("cmd1");
+            add("cmd2");
+        }});
+        wicketUtil.setCmdInternalKeys(new ArrayList<String>() {{
+            add("cmd1");
+        }});
+        PageParameters parametersToFilter = new PageParameters("cmd1=val1,asd=dsa,cmd2=ppp");
+        assertEquals(3, parametersToFilter.getNamedKeys().size());
+        Map<String, String> filtered = WicketUtil.pageParametesAsMap(parametersToFilter);
+        assertNotNull(filtered);
+        assertEquals(2, filtered.size());
+        assertEquals("ppp", filtered.get("cmd2"));
+        assertEquals("dsa", filtered.get("asd"));
+    }
+
 
     @Test
     public void testGetFilteredRequestParameters() throws Exception {
@@ -45,6 +69,72 @@ public class WicketUtilTest {
         assertNotNull(filtered);
         assertEquals(1, filtered.getNamedKeys().size());
         assertEquals("dsa", filtered.get("asd").toString());
+    }
+
+
+    @Test
+    public void testGetFilteredRequestParametersNameFilter() throws Exception {
+        WicketUtil wicketUtil = new WicketUtil();
+        wicketUtil.setCmdKeys(new ArrayList<String>() {{
+            add("cmd1");
+        }});
+        assertNotNull(WicketUtil.getFilteredRequestParameters(null));
+        PageParameters parametersToFilter = new PageParameters("cmd1=val1,asd=dsa,toRemove=ppp");
+        assertEquals(3, parametersToFilter.getNamedKeys().size());
+        assertEquals(2, WicketUtil.getFilteredRequestParameters(parametersToFilter).getNamedKeys().size());
+        PageParameters filtered = WicketUtil.getFilteredRequestParameters(parametersToFilter, Arrays.asList("toRemove"));
+        assertNotNull(filtered);
+        assertEquals(1, filtered.getNamedKeys().size());
+        assertEquals("dsa", filtered.get("asd").toString());
+    }
+
+
+    @Test
+    public void testGetFilteredRequestParametersKeyName() throws Exception {
+        WicketUtil wicketUtil = new WicketUtil();
+        wicketUtil.setCmdKeys(new ArrayList<String>() {{
+            add("cmd1");
+        }});
+        assertNotNull(WicketUtil.getFilteredRequestParameters(null));
+        PageParameters parametersToFilter = new PageParameters("cmd1=val1,asd=dsa,toRemove=ppp,toRemove=zzz");
+        assertEquals(3, parametersToFilter.getNamedKeys().size());
+        assertEquals(2, WicketUtil.getFilteredRequestParameters(parametersToFilter).getNamedKeys().size());
+        PageParameters filtered = WicketUtil.getFilteredRequestParameters(parametersToFilter, "toRemove", null);
+        assertNotNull(filtered);
+        assertEquals(2, filtered.getNamedKeys().size());
+        assertEquals("dsa", filtered.get("asd").toString());
+        assertEquals("ppp", filtered.getValues("toRemove").get(0).toString());
+        assertEquals("zzz", filtered.getValues("toRemove").get(1).toString());
+        filtered = WicketUtil.getFilteredRequestParameters(parametersToFilter, "toRemove", "zzz");
+        assertNotNull(filtered);
+        assertEquals(2, filtered.getNamedKeys().size());
+        assertEquals("dsa", filtered.get("asd").toString());
+        assertEquals(1, filtered.getValues("toRemove").size());
+        assertEquals("ppp", filtered.getValues("toRemove").get(0).toString());
+        filtered = WicketUtil.getFilteredRequestParameters(parametersToFilter, "toRemove", "ppp");
+        assertNotNull(filtered);
+        assertEquals(2, filtered.getNamedKeys().size());
+        assertEquals("dsa", filtered.get("asd").toString());
+        assertEquals(1, filtered.getValues("toRemove").size());
+        assertEquals("zzz", filtered.getValues("toRemove").get(0).toString());
+    }
+
+
+    @Test
+    public void testGetRetainedRequestParameters() throws Exception {
+        WicketUtil wicketUtil = new WicketUtil();
+        wicketUtil.setCmdKeys(new ArrayList<String>() {{
+            add("cmd1");
+        }});
+        assertNotNull(WicketUtil.getFilteredRequestParameters(null));
+        PageParameters parametersToFilter = new PageParameters("cmd1=val1,asd=dsa,retained1=ppp,retained2=zzz");
+        assertEquals(4, parametersToFilter.getNamedKeys().size());
+        assertEquals(3, WicketUtil.getFilteredRequestParameters(parametersToFilter).getNamedKeys().size());
+        PageParameters filtered = WicketUtil.getRetainedRequestParameters(parametersToFilter, new HashSet<String>(Arrays.asList("retained1", "retained2")));
+        assertNotNull(filtered);
+        assertEquals(2, filtered.getNamedKeys().size());
+        assertEquals("ppp", filtered.get("retained1").toString());
+        assertEquals("zzz", filtered.get("retained2").toString());
     }
 
     @Test

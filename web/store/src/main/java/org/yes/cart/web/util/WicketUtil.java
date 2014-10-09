@@ -42,12 +42,16 @@ public class WicketUtil {
      * Temporally fields will be removed from parameter maps
      */
     private static Set<String> cmdKeys = new HashSet<String>();
-
-    private static final PageParametersEncoder pageParametersEncoder = new PageParametersEncoder();
+    private static Set<String> cmdInternalKeys = new HashSet<String>();
 
     public void setCmdKeys(final List<String> cmdKeys) {
         WicketUtil.cmdKeys.addAll(cmdKeys);
     }
+
+    public void setCmdInternalKeys(final List<String> cmdKeys) {
+        WicketUtil.cmdInternalKeys.addAll(cmdKeys);
+    }
+
 
     /**
      * Get  {@link HttpServletRequest} .
@@ -55,18 +59,7 @@ public class WicketUtil {
      * @return {@link HttpServletRequest}
      */
     public static HttpServletRequest getHttpServletRequest() {
-        return (HttpServletRequest) ((WebRequest) RequestCycle.get().getRequest()).getContainerRequest();
-    }
-
-    /**
-     * @return decoded page parameters (null safe)
-     */
-    public static PageParameters getPageParameters() {
-        final PageParameters pageParameters = pageParametersEncoder.decodePageParameters(RequestCycle.get().getRequest());
-        if (pageParameters == null) {
-            return new PageParameters();
-        }
-        return pageParameters;
+        return (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
     }
 
 
@@ -98,7 +91,9 @@ public class WicketUtil {
         final Map<String, String> map = new LinkedHashMap<String, String>();
         if (pageParameters != null) {
             for (String key : pageParameters.getNamedKeys()) {
-                map.put(key, pageParameters.get(key).toString());
+                if (!cmdInternalKeys.contains(key)) {
+                    map.put(key, pageParameters.get(key).toString());
+                }
             }
         }
         return map;
@@ -114,19 +109,17 @@ public class WicketUtil {
      */
     public static PageParameters getFilteredRequestParameters(final PageParameters parameters) {
 
-        final PageParameters rez = new PageParameters();
-
         if (parameters != null) {
 
-            for (PageParameters.NamedPair pair : parameters.getAllNamed()) {
-                final String name = pair.getKey();
-                if (!cmdKeys.contains(pair.getKey())) {
-                    rez.add(name, pair.getValue());
-                }
+            final PageParameters rez = new PageParameters(parameters);
+            for (String paramName : cmdKeys) {
+                rez.remove(paramName);
             }
+            return rez;
+
         }
 
-        return rez;
+        return new PageParameters();
     }
 
     /**
@@ -136,9 +129,8 @@ public class WicketUtil {
      * @param nameFilter     set of parameter name to remove
      * @return new filtered {@link PageParameters}
      */
-    public static PageParameters getFilteredRequestParameters(
-            final PageParameters pageParameters,
-            final Collection<String> nameFilter) {
+    public static PageParameters getFilteredRequestParameters(final PageParameters pageParameters,
+                                                              final Collection<String> nameFilter) {
 
         final PageParameters rez = getFilteredRequestParameters(pageParameters);
         for (String paramName : nameFilter) {
@@ -149,21 +141,20 @@ public class WicketUtil {
 
 
     /**
-     * Get the filtered, from commands, request parameters,
-     * that not contains given key and his value.
+     * Get the filtered request parameters that does not
+     * not contain given key and value.
      *
      * @param parameters original request parameters
      * @param key        key part to remove
      * @param value      value part to remove
      * @return new filtered {@link PageParameters}
      */
-    public static PageParameters getFilteredRequestParameters(
-            final PageParameters parameters,
-            final String key,
-            final String value) {
+    public static PageParameters getFilteredRequestParameters(final PageParameters parameters,
+                                                              final String key,
+                                                              final String value) {
         final PageParameters rez = getFilteredRequestParameters(parameters);
         final List<StringValue> vals = rez.getValues(key);
-        if (vals.size() > 1) {
+        if (vals.size() > 0) {
             rez.remove(key, value);
         } else {
             rez.remove(key);
@@ -176,16 +167,12 @@ public class WicketUtil {
      * Get the retained request parameters, that not contains given set of request parameter names
      *
      * @param pageParameters original request parameters
-     * @param nameFilter     set of parameter name to retaine
+     * @param nameFilter     set of parameter name to retain
      * @return new filtered {@link PageParameters}
      */
-    public static PageParameters getRetainedRequestParameters(
-            final PageParameters pageParameters,
-            final Set<String> nameFilter) {
-        final PageParameters rez = new PageParameters(pageParameters);
-        for (String paramName : cmdKeys) {
-            rez.remove(paramName);
-        }
+    public static PageParameters getRetainedRequestParameters(final PageParameters pageParameters,
+                                                              final Set<String> nameFilter) {
+        final PageParameters rez = getFilteredRequestParameters(pageParameters);
         for (String keyName : rez.getNamedKeys()) {
             if (!nameFilter.contains(keyName)) {
                 rez.remove(keyName);
@@ -221,7 +208,7 @@ public class WicketUtil {
      * @param pageParameters page parameters from http request
      * @param sortOrder      current sorting order
      * @param sortField      current sorting field
-     * @return true in case if ginen sorting order and field present in paga parameters.
+     * @return true in case if given sorting order and field present in page parameters.
      */
     public static boolean isSelectedProductSortOnPage(final PageParameters pageParameters, final String sortOrder, final String sortField) {
         return ((StringUtils.isNotBlank(sortOrder) && StringUtils.isNotBlank(sortField)))
@@ -234,7 +221,7 @@ public class WicketUtil {
      * @param pageParameters    page parameters from http request
      * @param pageParameterName page parameter name.
      * @param page              current page
-     * @return true in case if ginen sorting order and field present in paga parameters.
+     * @return true in case if given sorting order and field present in page parameters.
      */
     public static boolean isSelectedPageActive(final PageParameters pageParameters, final String pageParameterName, final int page) {
         return ((StringUtils.isNotBlank(pageParameterName)))

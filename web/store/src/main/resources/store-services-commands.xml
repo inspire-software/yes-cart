@@ -39,6 +39,7 @@
 
     <bean id="changeLocaleCmd" class="org.yes.cart.shoppingcart.impl.WicketChangeLocaleCartCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
+        <constructor-arg index="1" ref="languageService"/>
         <property name="priority" value="2"/>
     </bean>
 

@@ -106,7 +106,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                     entry.getKey(),
                     idx);
 
-            if (order.getCustomer() == null || CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP.equals(entry.getKey())) {
+            if (order.getCustomer() == null || CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(entry.getKey())) {
                 // this is electronic delivery
                 customerOrderDelivery.setPrice(BigDecimal.ZERO);
                 customerOrderDelivery.setListPrice(BigDecimal.ZERO);
@@ -114,6 +114,12 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                 customerOrderDelivery.setAppliedPromo(null);
 
             } else {
+
+                if (shoppingCart.getTotal() == null
+                        || shoppingCart.getTotal().getDeliveryCost() == null
+                        || shoppingCart.getTotal().getDeliveryListCost() == null) {
+                    throw new OrderAssemblyException("No delivery total");
+                }
 
                 customerOrderDelivery.setPrice(shoppingCart.getTotal().getDeliveryCost());
                 customerOrderDelivery.setListPrice(shoppingCart.getTotal().getDeliveryListCost());
@@ -254,7 +260,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
                 for (Map.Entry<String, List<CustomerOrderDet>> entry : deliveryGroups.entrySet()) {
                     if (
-                            !(CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP.equals(entry.getKey())
+                            !(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(entry.getKey())
                                     ||
                                     CustomerOrderDelivery.MIX_DELIVERY_GROUP.equals(entry.getKey()))
                             ) {
@@ -277,7 +283,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
     private int getPhysicalDeliveriesQty(final Map<String, List<CustomerOrderDet>> deliveryMap) {
         int qty = deliveryMap.size();
-        if (deliveryMap.get(CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP) != null) {
+        if (deliveryMap.get(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP) != null) {
             qty--;
         }
         return qty;
@@ -312,7 +318,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
             }
 
             if (product.getProducttype().isDigital()) {
-                return CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP;
+                return CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP;
             }
             return CustomerOrderDelivery.STANDARD_DELIVERY_GROUP;
         }

@@ -201,6 +201,19 @@
                 <value>type</value>
                 <value>sku</value>
                 <value>wla</value>
+                <value>viewSkuInternalCmd</value>
+            </list>
+        </property>
+        <property name="cmdInternalKeys">
+            <list>
+                <value>cleanCartCmd</value>
+                <value>expireCartCmd</value>
+                <value>loginCmd</value>
+                <value>setBillingAddressSeparateCmd</value>
+                <value>setCarrierSlaCmd</value>
+                <value>setMultipleDeliveryCmd</value>
+                <value>setShopIdCmd</value>
+                <value>viewSkuInternalCmd</value>
             </list>
         </property>
     </bean>

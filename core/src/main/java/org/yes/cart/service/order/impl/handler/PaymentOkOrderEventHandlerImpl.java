@@ -50,7 +50,7 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
         put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_ALLOCATION);
         put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_TIME_WAIT);
         put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_INVENTORY_WAIT);
-        put(CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP, OrderStateManager.EVT_SHIPMENT_COMPLETE);
+        put(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, OrderStateManager.EVT_SHIPMENT_COMPLETE);
         put(CustomerOrderDelivery.MIX_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_TIME_WAIT);
 
     }};

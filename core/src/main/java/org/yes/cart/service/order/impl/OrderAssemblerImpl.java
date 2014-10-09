@@ -94,6 +94,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
         final CustomerOrder customerOrder = entityFactory.getByIface(CustomerOrder.class);
 
+        if (shoppingCart.getTotal() == null
+                || shoppingCart.getTotal().getListSubTotal() == null
+                || shoppingCart.getTotal().getSubTotal() == null) {
+            throw new OrderAssemblyException("No order total");
+        }
+
         fillCustomerData(customerOrder, shoppingCart);
 
         fillOrderDetails(customerOrder, shoppingCart);
@@ -213,9 +219,16 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * @param customerOrder order to fill
      * @param shoppingCart  cart
      */
-    private void fillOrderDetails(final CustomerOrder customerOrder, final ShoppingCart shoppingCart) {
+    private void fillOrderDetails(final CustomerOrder customerOrder, final ShoppingCart shoppingCart) throws OrderAssemblyException {
 
         for (CartItem item : shoppingCart.getCartItemList()) {
+
+            if (item.getPrice() == null
+                    || item.getSalePrice() == null
+                    || item.getListPrice() == null
+                    || item.getProductSkuCode() == null) {
+                throw new OrderAssemblyException("No order line total");
+            }
 
             CustomerOrderDet customerOrderDet = entityFactory.getByIface(CustomerOrderDet.class);
             customerOrderDet.setCustomerOrder(customerOrder);
@@ -233,6 +246,9 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
             // this is cached call so it should speed-up things
             final ProductSku sku = productSkuService.getProductSkuBySkuCode(item.getProductSkuCode());
+            if (sku == null) {
+                throw new OrderAssemblyException("No order line sku for " + item.getProductSkuCode());
+            }
             customerOrderDet.setProductName(
                     new FailoverStringI18NModel(sku.getDisplayName(), sku.getName()).getValue(customerOrder.getLocale()));
 

@@ -47,9 +47,9 @@ public class ItemAmountOffPromotionActionTest extends BaseCoreDBTestCase {
 
         // basic init
         commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
-        commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         // create amount promotion
         final Promotion amount80 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
@@ -103,9 +103,9 @@ public class ItemAmountOffPromotionActionTest extends BaseCoreDBTestCase {
 
         // basic init
         commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
-        commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         // create amount promotion
         final Promotion amount200 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
@@ -175,9 +175,9 @@ public class ItemAmountOffPromotionActionTest extends BaseCoreDBTestCase {
 
         // basic init
         commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
-        commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         // create discount promotion
         final Promotion amount80 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
@@ -263,9 +263,9 @@ public class ItemAmountOffPromotionActionTest extends BaseCoreDBTestCase {
 
         // basic init
         commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
-        commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         // create combined discount promotion 80off + 15off
         final Promotion amount80 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
