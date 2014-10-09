@@ -16,9 +16,11 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,13 +32,18 @@ public class ChangeLocaleCartCommandImpl  extends AbstractCartCommandImpl {
 
     private static final long serialVersionUID = 20110625L;
 
+    private final LanguageService languageService;
+
     /**
      * Construct command.
      *
      * @param registry shopping cart command registry
+     * @param languageService shop service
      */
-    public ChangeLocaleCartCommandImpl(final ShoppingCartCommandRegistry registry) {
+    public ChangeLocaleCartCommandImpl(final ShoppingCartCommandRegistry registry,
+                                       final LanguageService languageService) {
         super(registry);
+        this.languageService = languageService;
     }
 
     /** {@inheritDoc} */
@@ -50,8 +57,11 @@ public class ChangeLocaleCartCommandImpl  extends AbstractCartCommandImpl {
         if (parameters.containsKey(getCmdKey())) {
             final String locale = (String) parameters.get(getCmdKey());
             if (locale != null && !locale.equals(shoppingCart.getCurrentLocale())) {
-                ((ShoppingCartImpl)shoppingCart).setCurrentLocale(locale);
-                markDirty(shoppingCart);
+                final List<String> supported = languageService.getSupportedLanguages(shoppingCart.getShoppingContext().getShopCode());
+                if (supported.contains(locale)) {
+                    ((ShoppingCartImpl)shoppingCart).setCurrentLocale(locale);
+                    markDirty(shoppingCart);
+                }
             }
         }
     }

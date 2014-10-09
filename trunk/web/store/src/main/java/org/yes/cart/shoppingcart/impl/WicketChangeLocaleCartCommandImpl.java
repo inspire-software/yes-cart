@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.wicket.Session;
+import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
@@ -38,9 +39,11 @@ public class WicketChangeLocaleCartCommandImpl extends ChangeLocaleCartCommandIm
      * Wicket command.
      *
      * @param registry shopping cart command registry
+     * @param languageService language service
      */
-    public WicketChangeLocaleCartCommandImpl(final ShoppingCartCommandRegistry registry) {
-        super(registry);
+    public WicketChangeLocaleCartCommandImpl(final ShoppingCartCommandRegistry registry,
+                                             final LanguageService languageService) {
+        super(registry, languageService);
     }
 
     /** {@inheritDoc} */

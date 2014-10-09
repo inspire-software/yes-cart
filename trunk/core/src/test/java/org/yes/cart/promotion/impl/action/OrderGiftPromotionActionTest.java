@@ -47,9 +47,9 @@ public class OrderGiftPromotionActionTest extends BaseCoreDBTestCase {
 
         // basic init
         commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
-        commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         // create gift promotion
         final Promotion gift6 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
@@ -116,9 +116,9 @@ public class OrderGiftPromotionActionTest extends BaseCoreDBTestCase {
 
         // basic init
         commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
-        commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         // create gift promotion
         final Promotion gift6 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);
@@ -185,9 +185,9 @@ public class OrderGiftPromotionActionTest extends BaseCoreDBTestCase {
 
         // basic init
         commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
-        commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
         // create gift promotion
         final Promotion gift6 = promotionService.getGenericDao().getEntityFactory().getByIface(Promotion.class);

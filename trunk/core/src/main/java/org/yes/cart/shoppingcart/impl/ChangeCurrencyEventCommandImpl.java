@@ -18,6 +18,7 @@ package org.yes.cart.shoppingcart.impl;
 
 
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
@@ -67,9 +68,12 @@ public class ChangeCurrencyEventCommandImpl extends AbstractSkuCartCommandImpl {
         if (parameters.containsKey(getCmdKey())) {
             final String currencyCode = (String) parameters.get(getCmdKey());
             if (currencyCode != null && !currencyCode.equals(shoppingCart.getCurrencyCode())) {
-                ((ShoppingCartImpl) shoppingCart).setCurrencyCode(currencyCode);
-                recalculatePrice(shoppingCart, productSku);
-                markDirty(shoppingCart);
+                final Shop shop = getShopService().getShopByCode(shoppingCart.getShoppingContext().getShopCode());
+                if (shop.getSupportedCurrenciesAsList().contains(currencyCode)) {
+                    ((ShoppingCartImpl) shoppingCart).setCurrencyCode(currencyCode);
+                    recalculatePrice(shoppingCart, productSku);
+                    markDirty(shoppingCart);
+                }
             }
         }
     }

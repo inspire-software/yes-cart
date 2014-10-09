@@ -128,10 +128,10 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertNotNull(dgroups.get(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
         assertNotNull(dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
         assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
-        assertNotNull(dgroups.get(CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP));
+        assertNotNull(dgroups.get(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
         assertEquals(3, dgroups.get(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP).size());
         assertEquals(1, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
-        assertEquals(1, dgroups.get(CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP).size());
+        assertEquals(1, dgroups.get(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP).size());
         assertEquals(1, dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).size());
     }
 
@@ -148,7 +148,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         for (CustomerOrderDelivery cod : customerOrder.getDelivery()) {
             assertTrue(cod.getCustomerOrderDeliveryId() > 0);
             assertNotNull(cod.getDeliveryNum());
-            if (CustomerOrderDelivery.ELECTONIC_DELIVERY_GROUP.equals(cod.getDeliveryGroup())) {
+            if (CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(cod.getDeliveryGroup())) {
                 assertEquals(BigDecimal.ZERO, cod.getPrice());
             } else {
                 assertEquals(new BigDecimal("16.77"), cod.getPrice());

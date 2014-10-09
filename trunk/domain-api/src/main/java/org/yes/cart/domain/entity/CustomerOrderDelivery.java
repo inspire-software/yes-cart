@@ -21,8 +21,8 @@ import java.util.Collection;
 
 /**
  * The Order Delivery. Each order has one or more deliveries.
- * Delivery/Shpiment split posible when not all skus present on warehouse
- * and skus have different availability (pre/back order, etc.), also
+ * Delivery/Shipment split possible when not all sku's present on warehouse
+ * and sku's have different availability (pre/back order, etc.), also
  * some products can not be shipped together, because of security.
  * Delivery address can be taken from order.
  * <p/>
@@ -110,7 +110,7 @@ public interface CustomerOrderDelivery extends Auditable {
     /**
      * Electronic delivery.
      */
-    String ELECTONIC_DELIVERY_GROUP = "D4";
+    String ELECTRONIC_DELIVERY_GROUP = "D4";
 
     /**
      * Mixed physical delivery group.
