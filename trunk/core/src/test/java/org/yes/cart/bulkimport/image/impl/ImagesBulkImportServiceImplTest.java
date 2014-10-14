@@ -107,7 +107,7 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testgetImageAttributeSuffixName() {
         ImagesBulkImportServiceImpl service =
-                new ImagesBulkImportServiceImpl(null, null);
+                new ImagesBulkImportServiceImpl(null, null, null);
         int idx = 0;
         for (String fileName : fileNames) {
             Integer attrIdx = Integer.valueOf(service.getImageAttributeSuffixName(fileName));

@@ -683,6 +683,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listenerCarrierSla).notifyPing(with(any(String.class)));
             allowing(listenerCarrierSla).notifyMessage(with(any(String.class)));
             one(listenerCarrierSla).notifyError(with(aStringStartingWith("during import row : CsvImportTupleImpl{sid=carrierslanames.csv:1, line=[NEW_V 1 day,,,New Vasuki express 1")));
+            one(listenerCarrierSla).notifyError(with(aStringStartingWith("unexpected error during import")));
         }});
 
         Set<String> importedFilesSet = new HashSet<String>();
@@ -714,13 +715,13 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
             assertEquals(3, cntNewCarries);
 
-            //sla for UPS only + 4 from initialdata.xml, not for  new vasuki carrier
+            //only 4 from initialdata.xml, not for import since there was at least one failure new vasuki carrier
             rs = getConnection().getConnection().createStatement().executeQuery(
                     "select count(*) as cnt from TCARRIERSLA");
             rs.next();
             int cntCarriesSlas = rs.getInt("cnt");
             rs.close();
-            assertEquals(5, cntCarriesSlas);
+            assertEquals(4, cntCarriesSlas);
 
 
         } catch (Exception e) {

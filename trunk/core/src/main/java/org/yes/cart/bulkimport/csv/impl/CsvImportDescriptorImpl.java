@@ -16,11 +16,13 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
 import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportColumn;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.io.Serializable;
 import java.util.*;
@@ -43,6 +45,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     private String importDirectory;
 
     private String entityType;
+    private Class entityTypeClass;
 
     private String selectSql;
     private String insertSql;
@@ -60,6 +63,24 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     /** {@inheritDoc} */
     public String getEntityType() {
         return entityType;
+    }
+
+    /** {@inheritDoc} */
+    public Class getEntityTypeClass() {
+        if (entityTypeClass == null) {
+            if (StringUtils.isNotBlank(entityType)) {
+                try {
+                    entityTypeClass = Class.forName(entityType);
+                } catch (ClassNotFoundException e) {
+                    ShopCodeContext.getLog(this).error("Unable to work out entity type for descriptor {}", this);
+                    entityTypeClass = Object.class;
+                }
+            } else {
+                ShopCodeContext.getLog(this).error("Entity type is not specified for descriptor {}", this);
+                entityTypeClass = Object.class;
+            }
+        }
+        return entityTypeClass;
     }
 
     /** {@inheritDoc} */
@@ -200,5 +221,21 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         }
     }
 
-
+    /**
+     * {@inheritDoc
+     */
+    public String toString() {
+        return "CsvImportDescriptorImpl{" +
+                "importFileDescriptor=" + importFileDescriptor +
+                ", importColumns=" + importColumns +
+                ", pkColumn=" + pkColumn +
+                ", columnByName=" + columnByName +
+                ", columnsByType=" + columnsByType +
+                ", importDirectory='" + importDirectory + '\'' +
+                ", entityType='" + entityType + '\'' +
+                ", selectSql='" + selectSql + '\'' +
+                ", insertSql='" + insertSql + '\'' +
+                ", initialised=" + initialised +
+                '}';
+    }
 }

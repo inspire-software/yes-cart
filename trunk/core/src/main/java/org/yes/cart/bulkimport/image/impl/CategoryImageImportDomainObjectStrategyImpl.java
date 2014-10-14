@@ -29,6 +29,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.federation.FederationFacade;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -38,15 +39,17 @@ import java.util.List;
  * Date: 01/09/2014
  * Time: 22:26
  */
-public class CategoryImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
+public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImagesBulkImportServiceImpl.class);
 
     private final CategoryService categoryService;
     private final AttributeService attributeService;
 
-    public CategoryImageImportDomainObjectStrategyImpl(final CategoryService categoryService,
+    public CategoryImageImportDomainObjectStrategyImpl(final FederationFacade federationFacade,
+                                                       final CategoryService categoryService,
                                                        final AttributeService attributeService) {
+        super(federationFacade);
         this.categoryService = categoryService;
         this.attributeService = attributeService;
     }
@@ -71,6 +74,8 @@ public class CategoryImageImportDomainObjectStrategyImpl implements ImageImportD
             LOG.warn(warn);
             return false;
         }
+
+        validateAccessBeforeUpdate(category, Category.class);
 
         final String attributeCode = AttributeNamesKeys.Category.CATEGORY_IMAGE;
         AttrValueCategory imageAttributeValue = (AttrValueCategory) category.getAttributeByCode(attributeCode);

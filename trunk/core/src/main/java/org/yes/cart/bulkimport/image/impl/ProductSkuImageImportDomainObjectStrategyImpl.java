@@ -29,6 +29,7 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductSkuService;
+import org.yes.cart.service.federation.FederationFacade;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -38,7 +39,7 @@ import java.util.List;
  * Date: 01/09/2014
  * Time: 22:44
  */
-public class ProductSkuImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
+public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImagesBulkImportServiceImpl.class);
 
@@ -46,8 +47,10 @@ public class ProductSkuImageImportDomainObjectStrategyImpl implements ImageImpor
 
     private final AttributeService attributeService;
 
-    public ProductSkuImageImportDomainObjectStrategyImpl(final ProductSkuService productSkuService,
+    public ProductSkuImageImportDomainObjectStrategyImpl(final FederationFacade federationFacade,
+                                                         final ProductSkuService productSkuService,
                                                          final AttributeService attributeService) {
+        super(federationFacade);
         this.productSkuService = productSkuService;
         this.attributeService = attributeService;
     }
@@ -73,6 +76,8 @@ public class ProductSkuImageImportDomainObjectStrategyImpl implements ImageImpor
             LOG.warn(warn);
             return false;
         }
+
+        validateAccessBeforeUpdate(productSku, ProductSku.class);
 
         final String attributeCode = AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + suffix;
         AttrValueProductSku imageAttibute = (AttrValueProductSku) productSku.getAttributeByCode(attributeCode);

@@ -34,6 +34,11 @@ public interface ShopFederationStrategy {
     boolean isCurrentUserSystemAdmin();
 
     /**
+     * @return access to specific role
+     */
+    boolean isCurrentUser(String role);
+
+    /**
      * @param shopCode shop code
      *
      * @return true if current manager has access to this shop

@@ -121,4 +121,18 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     public void setFileEncoding(String fileEncoding) {
         this.fileEncoding = fileEncoding;
     }
+
+    /**
+     * {@inheritDoc
+     */
+    public String toString() {
+        return "CsvImportFileImpl{" +
+                "columnDelimiter=" + columnDelimiter +
+                ", textQualifier=" + textQualifier +
+                ", ignoreFirstLine=" + ignoreFirstLine +
+                ", fileNameMask='" + fileNameMask + '\'' +
+                ", fileEncoding='" + fileEncoding + '\'' +
+                ", entityName='" + entityName + '\'' +
+                '}';
+    }
 }

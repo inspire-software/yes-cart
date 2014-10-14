@@ -138,11 +138,11 @@ public class JobStatusListenerImpl implements JobStatusListener {
     }
 
     /** {@inheritDoc} */
-    public void notifyCompleted(final JobStatus.Completion result) {
+    public void notifyCompleted() {
         if (this.result != null) {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
-        this.result = result;
+        this.result = err > 0 ? JobStatus.Completion.ERROR : JobStatus.Completion.OK;
         this.pingMsg = null; // we have completed the job, clear ping message
         notifyPing();
     }

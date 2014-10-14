@@ -534,7 +534,9 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-childCategoriesRecursive",
             "categoryService-childCategoriesRecursiveIds",
             "categoryService-categoryHasSubcategory",
-            "categoryService-byId"
+            "categoryService-byId",
+            "shopService-shopCategoriesIds",
+            "shopService-shopAllCategoriesIds"
     }, allEntries = true)
     public Category create(Category instance) {
         return super.create(instance);
@@ -558,7 +560,9 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-childCategoriesRecursive",
             "categoryService-childCategoriesRecursiveIds",
             "categoryService-categoryHasSubcategory",
-            "categoryService-byId"
+            "categoryService-byId",
+            "shopService-shopCategoriesIds",
+            "shopService-shopAllCategoriesIds"
     }, allEntries = true)
     public Category update(Category instance) {
         return super.update(instance);

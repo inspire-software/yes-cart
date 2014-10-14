@@ -264,14 +264,14 @@
                 <mx:FormHeading label="@Resource(bundle='BulkImportPanel',key='importMessage')"/>
                 <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='selectFile')">
                     <mx:HBox>
-                        <mx:ComboBox id="importGroups" width="250"/>
+                        <mx:ComboBox id="importGroups" width="350"/>
                         <mx:Button id="selectFileBtn" label="@Resource(bundle='BulkImportPanel',key='open')"
                                    click="onSelectFileClick(event)"/>
                     </mx:HBox>
                 </mx:FormItem>
                 <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='jobToken')">
                     <mx:HBox>
-                        <mx:TextInput id="jobToken" width="250"/>
+                        <mx:TextInput id="jobToken" width="350"/>
                         <mx:Button id="watchBtn" label="@Resource(bundle='BulkImportPanel',key='watch')"
                                    click="onWatchClick(event)"/>
                     </mx:HBox>

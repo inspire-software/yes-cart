@@ -27,6 +27,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.image.ImageNameStrategy;
 
 import java.io.File;
@@ -50,11 +51,14 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
     /**
      * Construct bilk import service.
      *
+     * @param federationFacade federation facade
      * @param imageService image service
      * @param strategies   domain strategies to associate image with domain model
      */
-    public ImagesBulkImportServiceImpl(final ImageService imageService,
+    public ImagesBulkImportServiceImpl(final FederationFacade federationFacade,
+                                       final ImageService imageService,
                                        final ImageImportDomainObjectStrategy[] strategies) {
+        super(federationFacade);
         this.imageService = imageService;
         this.strategies = strategies;
     }
@@ -143,7 +147,6 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
                         "image {0} {1} added to image repository", file.getAbsolutePath(), newFileName);
                 statusListener.notifyMessage(info);
                 LOG.info(info);
-                importedFiles.add(file.getAbsolutePath());
 
             } catch (IOException e) {
                 final String err = MessageFormat.format(
@@ -152,6 +155,9 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
                 statusListener.notifyError(err);
             }
         }
+
+        importedFiles.add(file.getAbsolutePath());
+
     }
 
     /**

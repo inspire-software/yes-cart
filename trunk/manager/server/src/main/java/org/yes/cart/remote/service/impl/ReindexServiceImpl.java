@@ -126,11 +126,11 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                     }
                     state.append("CAUTION this may not be the full count of products that was indexed.\n");
                     listener.notifyMessage(state.toString());
-                    listener.notifyCompleted(JobStatus.Completion.OK);
+                    listener.notifyCompleted();
                 } catch (Throwable trw) {
                     LOG.error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
-                    listener.notifyCompleted(JobStatus.Completion.ERROR);
+                    listener.notifyCompleted();
                 } finally {
                     ThreadLocalAsyncContextUtils.clear();
                 }

@@ -16,7 +16,9 @@
 
 package org.yes.cart.bulkimport.service.impl;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
+import org.yes.cart.service.federation.FederationFacade;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -30,6 +32,12 @@ import java.util.regex.Pattern;
  * Time: 10:43 AM
  */
 public class AbstractImportService {
+
+    protected final FederationFacade federationFacade;
+
+    public AbstractImportService(final FederationFacade federationFacade) {
+        this.federationFacade = federationFacade;
+    }
 
     protected File[] getFilesToImport(final ImportDescriptor importDescriptor, final String fileName) {
         return getFilesToImport(importDescriptor.getImportDirectory(),
@@ -96,4 +104,32 @@ public class AbstractImportService {
 
 
     }
+
+    /**
+     * Verify access of the current user.
+     *
+     * @param object target object to update
+     *
+     * @throws AccessDeniedException
+     */
+    protected void validateAccessBeforeUpdate(final Object object, final Class objectType) throws AccessDeniedException {
+        if (!federationFacade.isManageable(object, objectType)) {
+            throw new AccessDeniedException("access denied");
+        }
+    }
+
+    /**
+     * Verify access of the current user.
+     *
+     * @param object target object to update
+     *
+     * @throws AccessDeniedException
+     */
+    protected void validateAccessAfterUpdate(final Object object, final Class objectType) throws AccessDeniedException {
+        if (!federationFacade.isManageable(object, objectType)) {
+            throw new AccessDeniedException("access denied");
+        }
+    }
+
+
 }

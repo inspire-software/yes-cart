@@ -308,15 +308,15 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Find entities by criteria.
      *
-     * @param firstResult scroll to firts result.
-     * @param criterion   given criterias
+     * @param firstResult scroll to first result.
+     * @param criterion   given criteria
      * @return list of found entities.
      */
     T findUniqueByCriteria(int firstResult, Criterion... criterion);
 
 
     /**
-     * Persist the new enitity in DB.
+     * Persist the new entity in DB.
      *
      * @param entity entity to persist
      * @return persisted entity.
@@ -324,7 +324,7 @@ public interface GenericDAO<T, PK extends Serializable> {
     T create(T entity);
 
     /**
-     * Update the enitity in DB.
+     * Update the entity in DB.
      *
      * @param entity entity to update
      * @return updated entity.
@@ -345,6 +345,13 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param entity to delete
      */
     void delete(Object entity);
+
+    /**
+     * Re-read given entity to get latest state from DB.
+     *
+     * @param entity to refresh
+     */
+    void refresh(Object entity);
 
     /**
      * Evict given entity from the first and second level cache.
@@ -391,26 +398,26 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Get the full text search result.
      *
      * @param query       lucene search query
-     * @param firtsResult first row of result
+     * @param firstResult first row of result
      * @param maxResults  size of result set
      * @return list of found entities
      */
     List<T> fullTextSearch(org.apache.lucene.search.Query query,
-                           int firtsResult,
+                           int firstResult,
                            int maxResults);
 
     /**
      * Get the full text search result.
      *
      * @param query         lucene search query
-     * @param firtsResult   first row of result
+     * @param firstResult   first row of result
      * @param maxResults    size of result set
      * @param sortFieldName optional  sort field name
      * @param reverse       reverse the search result
      * @return list of found entities
      */
     List<T> fullTextSearch(final org.apache.lucene.search.Query query,
-                           int firtsResult,
+                           int firstResult,
                            int maxResults,
                            String sortFieldName,
                            boolean reverse);
@@ -485,7 +492,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param hsql       hibernate sql
      * @param parameters hsql query parameters.
-     * @return quantity of updated resords.
+     * @return quantity of updated records.
      */
     int executeHsqlUpdate(String hsql, Object... parameters);
 

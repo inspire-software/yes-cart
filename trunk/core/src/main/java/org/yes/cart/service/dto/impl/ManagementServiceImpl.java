@@ -295,7 +295,7 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @CacheEvict(value = {
-            "yum.shopFederationStrategy-admin"
+            "shopFederationStrategy-admin"
     }, key = "#userId")
     public void grantRole(final String userId, final String role) {
         final Role roleEntity = roleDao.findSingleByCriteria(Restrictions.eq(CODE, role));
@@ -312,7 +312,7 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @CacheEvict(value = {
-            "yum.shopFederationStrategy-admin"
+            "shopFederationStrategy-admin"
     }, key = "#userId")
     public void revokeRole(final String userId, final String role) {
         final ManagerRole managerRole = managerRoleDao.findSingleByCriteria(
@@ -387,9 +387,9 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @CacheEvict(value = {
-            "yum.shopFederationStrategy-shop",
-            "yum.shopFederationStrategy-shopId",
-            "yum.shopFederationStrategy-shopCode"
+            "shopFederationStrategy-shop",
+            "shopFederationStrategy-shopId",
+            "shopFederationStrategy-shopCode"
     }, key = "#userId")
     public void grantShop(final String userId, final String shopCode) {
         final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
@@ -413,9 +413,9 @@ public class ManagementServiceImpl implements ManagementService {
      * {@inheritDoc}
      */
     @CacheEvict(value = {
-            "yum.shopFederationStrategy-shop",
-            "yum.shopFederationStrategy-shopId",
-            "yum.shopFederationStrategy-shopCode"
+            "shopFederationStrategy-shop",
+            "shopFederationStrategy-shopId",
+            "shopFederationStrategy-shopCode"
     }, key = "#userId")
     public void revokeShop(final String userId, final String shopCode) {
         final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
