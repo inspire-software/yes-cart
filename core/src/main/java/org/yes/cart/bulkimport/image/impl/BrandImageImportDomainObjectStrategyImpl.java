@@ -29,6 +29,7 @@ import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.BrandService;
+import org.yes.cart.service.federation.FederationFacade;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -39,15 +40,17 @@ import java.util.List;
  * Date: 01/09/2014
  * Time: 22:26
  */
-public class BrandImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
+public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImagesBulkImportServiceImpl.class);
 
     private final BrandService brandService;
     private final AttributeService attributeService;
 
-    public BrandImageImportDomainObjectStrategyImpl(final BrandService brandService,
+    public BrandImageImportDomainObjectStrategyImpl(final FederationFacade federationFacade,
+                                                    final BrandService brandService,
                                                     final AttributeService attributeService) {
+        super(federationFacade);
         this.brandService = brandService;
         this.attributeService = attributeService;
     }
@@ -72,6 +75,8 @@ public class BrandImageImportDomainObjectStrategyImpl implements ImageImportDoma
             LOG.warn(warn);
             return false;
         }
+
+        validateAccessBeforeUpdate(brand, Brand.class);
 
         final String attributeCode = AttributeNamesKeys.Brand.BRAND_IMAGE;
 

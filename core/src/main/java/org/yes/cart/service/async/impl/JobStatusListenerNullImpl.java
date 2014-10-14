@@ -75,7 +75,7 @@ public class JobStatusListenerNullImpl implements JobStatusListener {
     }
 
     /** {@inheritDoc} */
-    public void notifyCompleted(final JobStatus.Completion result) {
+    public void notifyCompleted() {
         throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
     }
 

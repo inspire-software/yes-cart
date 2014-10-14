@@ -452,6 +452,13 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    public void refresh(final Object entity) {
+        sessionFactory.getCurrentSession().refresh(entity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void evict(Object entity) {
         sessionFactory.getCurrentSession().evict(entity);
 
@@ -704,9 +711,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     @SuppressWarnings("unchecked")
     public List<T> fullTextSearch(final org.apache.lucene.search.Query query,
-                                  final int firtsResult,
+                                  final int firstResult,
                                   final int maxResults) {
-        return fullTextSearch(query, firtsResult, maxResults, null);
+        return fullTextSearch(query, firstResult, maxResults, null);
     }
 
     /**
@@ -748,12 +755,12 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     @SuppressWarnings("unchecked")
     public List<T> fullTextSearch(final org.apache.lucene.search.Query query,
-                                  final int firtsResult,
+                                  final int firstResult,
                                   final int maxResults,
                                   final String sortFieldName,
                                   final boolean reverse) {
         if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
-            final FullTextQuery fullTextQuery = createFullTextQuery(query, firtsResult, maxResults, sortFieldName, reverse);
+            final FullTextQuery fullTextQuery = createFullTextQuery(query, firstResult, maxResults, sortFieldName, reverse);
             final List<T> list = fullTextQuery.list();
             if (list != null) {
                 return list;

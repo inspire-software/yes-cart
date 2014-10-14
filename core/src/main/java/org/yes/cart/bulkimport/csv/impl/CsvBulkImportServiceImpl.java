@@ -21,6 +21,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
@@ -37,6 +39,7 @@ import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
+import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.util.misc.ExceptionUtil;
 
@@ -71,6 +74,10 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
     private final LookUpQueryParameterStrategy descriptorInsert = new CsvDescriptorNativeInsertStrategy();
     private final LookUpQueryParameterStrategy columnLookUp = new CsvColumnLookUpQueryStrategy();
     private EntityCacheKeyStrategy cacheKey;
+
+    public CsvBulkImportServiceImpl(final FederationFacade federationFacade) {
+        super(federationFacade);
+    }
 
     /**
      * IoC. Set {@link GenericConversionService}.
@@ -129,6 +136,16 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 doImport(statusListener, filesToImport, csvImportDescriptorName, csvImportDescriptor, importedFiles);
             }
         } catch (Exception e) {
+
+            /**
+             * Programmatically rollback for any error during import - ALL or NOTHING.
+             * But we do not throw exception since this is in a separate thread so not point
+             * Need to finish gracefully with error status
+             */
+            if (!TransactionAspectSupport.currentTransactionStatus().isRollbackOnly()) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            }
+
             final String msgError = MessageFormat.format(
                     "unexpected error {0}",
                     e.getMessage());
@@ -155,10 +172,13 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                   final File[] filesToImport,
                   final String csvImportDescriptorName,
                   final CsvImportDescriptor csvImportDescriptor,
-                  final Set<String> importedFiles) {
+                  final Set<String> importedFiles) throws Exception {
+        // Need to add all file to the set for proper clean up after job in case exception occurs
+        for (File fileToImport : filesToImport) {
+            importedFiles.add(fileToImport.getAbsolutePath());
+        }
         for (File fileToImport : filesToImport) {
             doImport(statusListener, fileToImport, csvImportDescriptorName, csvImportDescriptor);
-            importedFiles.add(fileToImport.getAbsolutePath());
         }
     }
 
@@ -173,7 +193,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
     void doImport(final JobStatusListener statusListener,
                   final File fileToImport,
                   final String csvImportDescriptorName,
-                  final CsvImportDescriptor csvImportDescriptor) {
+                  final CsvImportDescriptor csvImportDescriptor) throws Exception {
 
         final Logger log = ShopCodeContext.getLog(this);
         final String msgInfoImp = MessageFormat.format("import file : {0}", fileToImport.getAbsolutePath());
@@ -243,7 +263,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                          final ImportTuple tuple,
                          final String csvImportDescriptorName,
                          final ImportDescriptor descriptor,
-                         final Object masterObject) {
+                         final Object masterObject) throws Exception {
         Object object = null;
         final Logger log = ShopCodeContext.getLog(this);
         final CsvImportDescriptor importDescriptor = (CsvImportDescriptor) descriptor;
@@ -252,6 +272,10 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
             if (importDescriptor.getInsertSql() != null) {
                 // this is dirty hack , because of import speed
+                if (masterObject == null) {
+                    // No need to validate sub imports
+                    validateAccessBeforeUpdate(null, null); // only allowed by system admins
+                }
                 executeNativeInsert(importDescriptor, masterObject, tuple);
 
 
@@ -262,17 +286,52 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
                 fillEntityFields(tuple, object, importDescriptor.getImportColumns(FieldTypeEnum.FIELD));
                 fillEntityForeignKeys(tuple, object, importDescriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, importDescriptor);
-//                fillEntityCollectionItems(tuple, object, importDescriptor.getImportColumns(FieldTypeEnum.COLLECTION_ITEM), masterObject, importDescriptor);
 
+                /*
+                    Note: for correct data federation processing we need ALL-OR-NOTHING update for all import.
+                          Once validation fails we fail the whole import with a rollback. Necessary to facilitate
+                          objects with complex relationships to shop (e.g. products, SKU)
+                 */
+
+                if (masterObject == null) {
+                    // No need to validate sub imports
+                    // Preliminary validation - not always applicable for transient object (e.g. products need category assignments)
+                    validateAccessBeforeUpdate(object, importDescriptor.getEntityTypeClass());
+                }
                 genericDAO.saveOrUpdate(object);
                 performSubImport(statusListener, tuple, csvImportDescriptorName, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SLAVE_INLINE_FIELD));
                 performSubImport(statusListener, tuple, csvImportDescriptorName, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SLAVE_TUPLE_FIELD));
+
+                if (masterObject == null) {
+                    genericDAO.refresh(object);
+                    // No need to validate sub imports
+                    // This validation is after sub imports to facilitate objects with complex relationships to shop (e.g. products)
+                    validateAccessAfterUpdate(object, importDescriptor.getEntityTypeClass());
+                }
+
                 genericDAO.flushClear();
 
             }
             statusListener.notifyPing("Importing tuple: " + tuple.getSourceId()); // make sure we do not time out
 
+        } catch (AccessDeniedException ade) {
+
+            String message = MessageFormat.format(
+                    "Access denied during import row : {0} \ndescriptor {1} \nobject is {2} \nmaster object is {3}",
+                    tuple,
+                    csvImportDescriptorName,
+                    object,
+                    masterObject
+            );
+            log.error(message, ade);
+            statusListener.notifyError(message);
+            genericDAO.clear();
+
+            throw new Exception(message, ade);
+
+
         } catch (Exception e) {
+
             String additionalInfo = e.getMessage();
             String message = MessageFormat.format(
                     "during import row : {0} \ndescriptor {1} \nerror {2}\n{3} \nadditional info {4} \nobject is {5} \nmaster object is {6}",
@@ -287,6 +346,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
             log.error(message, e);
             statusListener.notifyError(message);
             genericDAO.clear();
+
+            throw new Exception(message, e);
         }
     }
 
@@ -306,7 +367,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                                   final String csvImportDescriptorName,
                                   final ImportDescriptor importDescriptor,
                                   final Object object,
-                                  final Collection<ImportColumn> slaves) {
+                                  final Collection<ImportColumn> slaves) throws Exception {
         for (ImportColumn slaveTable : slaves) {
             final List<ImportTuple> subTuples = tuple.getSubTuples(importDescriptor, slaveTable, valueDataAdapter);
             CsvImportDescriptor innerCsvImportDescriptor = (CsvImportDescriptor) slaveTable.getImportDescriptor();
@@ -428,7 +489,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 }
                 propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);
                 final Object oldValue = propertyDescriptor.getReadMethod().invoke(object);
-                if (oldValue instanceof Identifiable) {
+                if (oldValue instanceof Identifiable || singleObjectValue instanceof Identifiable) {
                     final Object oldValuePK = oldValue != null ? genericDAO.getEntityIdentifier(oldValue) : null;
                     final Object newValuePK = singleObjectValue != null ? genericDAO.getEntityIdentifier(singleObjectValue) : null;
 
@@ -458,77 +519,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
         }
 
     }
-
-
-    /**
-     * Fill the given entity object with line information using import column descriptions.
-     *
-     * @param tuple            given csv line
-     * @param object           entity object
-     * @param importColumns    particular type column collection
-     * @param masterObject     master object , that set from main import in case of sub import
-     * @param importDescriptor import descriptor
-     * @throws Exception in case if something wrong with reflection (IntrospectionException,
-     *                   InvocationTargetException,
-     *                   IllegalAccessException)
-     */
-    private void fillEntityCollectionItems(final ImportTuple tuple,
-                                           final Object object,
-                                           final Collection<ImportColumn> importColumns,
-                                           final Object masterObject,
-                                           final ImportDescriptor importDescriptor) throws Exception {
-//        ImportColumn currentColumn = null;
-//        final Class clz = object.getClass();
-//        Object singleObjectValue = null;
-//        PropertyDescriptor propertyDescriptor = null;
-//
-//        try {
-//            for (ImportColumn importColumn : importColumns) {
-//                currentColumn = importColumn;
-//
-//                singleObjectValue = getEntity(tuple, importColumn, masterObject, importDescriptor);
-//
-//                propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);
-//                final Collection oldValues = (Collection) propertyDescriptor.getReadMethod().invoke(object);
-//                if (oldValues == null) {
-//                    try {
-//                        propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
-//                    } catch (Exception exp) {
-//
-//                    }
-//                }
-//
-//
-//                if (oldValue instanceof Identifiable) {
-//                    final Object oldValuePK = oldValue != null ? genericDAO.getEntityIdentifier(oldValue) : null;
-//                    final Object newValuePK = singleObjectValue != null ? genericDAO.getEntityIdentifier(singleObjectValue) : null;
-//
-//                    if (oldValuePK == null || !oldValuePK.equals(newValuePK)) {
-//                        // Update the object only if the value has changed
-//                        propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
-//                    }
-//                } else {
-//                    // This is not identifiable, possibly primitive (PK) so write always
-//                    propertyDescriptor.getWriteMethod().invoke(object, singleObjectValue);
-//                }
-//
-//            }
-//        } catch (Exception exp) {
-//
-//            final String propName = propertyDescriptor != null ? propertyDescriptor.getName() : null;
-//            final String propType = propertyDescriptor != null ? propertyDescriptor.getPropertyType().getName() : null;
-//
-//            throw new Exception(MessageFormat.format(
-//                    "Failed to process property name {0} type {1} object is {2} caused by column {0} with value {1}",
-//                    propName,
-//                    propType,
-//                    object,
-//                    currentColumn,
-//                    singleObjectValue
-//            ), exp);
-//        }
-    }
-
 
     /**
      * Get the entity object with following strategy: first attempt - locate

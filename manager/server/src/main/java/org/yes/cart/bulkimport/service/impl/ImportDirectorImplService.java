@@ -128,7 +128,6 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      */
     public void doImportInternal(final JobContext context) throws IOException {
         doDataImport(context);
-        moveImportFilesToArchive((Set<String>) context.getAttribute(JobContextKeys.IMPORT_FILE_SET));
     }
 
     /** {@inheritDoc} */
@@ -185,21 +184,26 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                         doImportInternal(context); //single file import
                     }
                     productService.clearEmptyAttributes();
-                    listener.notifyMessage("Import Job completed successfully");
-                    listener.notifyCompleted(JobStatus.Completion.OK);
+                    listener.notifyMessage("Import Job completed");
+                    listener.notifyCompleted();
                 } catch (IOException ioe) {
                     // if we are here this is probably due images failure
                     LOG.error(ioe.getMessage(), ioe);
                     listener.notifyError(ioe.getMessage());
                     listener.notifyMessage("Import Job completed but there was an IO error: " + ioe.getMessage());
-                    listener.notifyCompleted(JobStatus.Completion.OK);
+                    listener.notifyCompleted();
                 } catch (Throwable trw) {
                     // something very wrong
                     LOG.error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
                     listener.notifyMessage("Import Job was terminated. Error: " + trw.getMessage());
-                    listener.notifyCompleted(JobStatus.Completion.ERROR);
+                    listener.notifyCompleted();
                 } finally {
+                    try {
+                        moveImportFilesToArchive((Set<String>) context.getAttribute(JobContextKeys.IMPORT_FILE_SET));
+                    } catch (Exception exp) {
+                        LOG.error("Exception occurred while archiving import files." + exp.getMessage(), exp);
+                    }
                     ThreadLocalAsyncContextUtils.clear();
                 }
             }

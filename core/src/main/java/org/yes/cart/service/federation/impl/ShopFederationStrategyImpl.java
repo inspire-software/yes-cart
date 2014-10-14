@@ -47,10 +47,10 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
     public ShopFederationStrategyImpl(final ManagementService managementService,
                                       final CacheManager cacheManager) {
         this.managementService = managementService;
-        USER_ACCESS_CACHE_ADMIN = cacheManager.getCache("yum.shopFederationStrategy-admin");
-        USER_ACCESS_CACHE_SHOP = cacheManager.getCache("yum.shopFederationStrategy-shop");
-        USER_ACCESS_CACHE_SHOP_ID = cacheManager.getCache("yum.shopFederationStrategy-shopId");
-        USER_ACCESS_CACHE_SHOP_CODE = cacheManager.getCache("yum.shopFederationStrategy-shopCode");
+        USER_ACCESS_CACHE_ADMIN = cacheManager.getCache("shopFederationStrategy-admin");
+        USER_ACCESS_CACHE_SHOP = cacheManager.getCache("shopFederationStrategy-shop");
+        USER_ACCESS_CACHE_SHOP_ID = cacheManager.getCache("shopFederationStrategy-shopId");
+        USER_ACCESS_CACHE_SHOP_CODE = cacheManager.getCache("shopFederationStrategy-shopCode");
     }
 
 
@@ -58,21 +58,28 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
      * {@inheritDoc}
      */
     public boolean isCurrentUserSystemAdmin() {
+        return isCurrentUser("ROLE_SMADMIN");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isCurrentUser(final String role) {
         final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
-        Boolean isAdmin = getValueWrapper(USER_ACCESS_CACHE_ADMIN.get(currentManager));
+        final String cacheKey = currentManager + role;
+        Boolean isAdmin = getValueWrapper(USER_ACCESS_CACHE_ADMIN.get(cacheKey));
         if (isAdmin == null) {
             isAdmin = false;
             for (final GrantedAuthority auth : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
-                if ("ROLE_SMADMIN".equals(auth.getAuthority())) {
+                if (role.equals(auth.getAuthority())) {
                     isAdmin = true;
                     break;
                 }
             }
-            USER_ACCESS_CACHE_ADMIN.put(currentManager, isAdmin);
+            USER_ACCESS_CACHE_ADMIN.put(cacheKey, isAdmin);
         }
         return isAdmin;
     }
-
 
     /**
      * {@inheritDoc}

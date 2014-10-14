@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- ############################# Federation For Import ######################### -->
+
+    <import resource="core-federation.xml"/>
+
+    <bean id="nullImportFederationFilter" class="org.yes.cart.service.federation.impl.NullImpexFederationFilterImpl"/>
+
+    <bean id="categoryImpexFederationFilter" class="org.yes.cart.service.federation.impl.CategoryImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+                <value>ROLE_SMMARKETINGADMIN</value>
+                <value>ROLE_SMCONTENTADMIN</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg index="2" ref="shopService"/>
+        <constructor-arg index="3" ref="cacheManager"/>
+        <constructor-arg index="4">
+            <list>
+                <value>shopService-shopCategoriesIds</value>
+                <value>shopService-shopContentIds</value>
+                <value>shopService-shopAllCategoriesIds</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="productImpexFederationFilter" class="org.yes.cart.service.federation.impl.ProductImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+                <value>ROLE_SMMARKETINGADMIN</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg index="2" ref="categoryImpexFederationFilter"/>
+    </bean>
+
+    <bean id="productSkuImpexFederationFilter" class="org.yes.cart.service.federation.impl.ProductSkuImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+                <value>ROLE_SMMARKETINGADMIN</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg index="2" ref="productImpexFederationFilter"/>
+    </bean>
+
+    <bean id="attrValueProductImpexFederationFilter" class="org.yes.cart.service.federation.impl.AttrValueProductImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+                <value>ROLE_SMMARKETINGADMIN</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg index="2" ref="productImpexFederationFilter"/>
+    </bean>
+
+    <bean id="attrValueProductSkuImpexFederationFilter" class="org.yes.cart.service.federation.impl.AttrValueProductSkuImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+                <value>ROLE_SMMARKETINGADMIN</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg index="2" ref="productImpexFederationFilter"/>
+    </bean>
+
+    <bean id="promotionImpexFederationFilter" class="org.yes.cart.service.federation.impl.PromotionImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+                <value>ROLE_SMMARKETINGADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="promotionCouponImpexFederationFilter" class="org.yes.cart.service.federation.impl.PromotionCouponImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+                <value>ROLE_SMMARKETINGADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="skuWarehouseFederationFilter" class="org.yes.cart.service.federation.impl.SkuWarehouseFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+                <value>ROLE_SMWAREHOUSEADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="skuPriceImpexFederationFilter" class="org.yes.cart.service.federation.impl.SkuPriceImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+                <value>ROLE_SMMARKETINGADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="importFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <map>
+                <entry key="org.yes.cart.domain.entity.Category"            value-ref="categoryImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.Promotion"           value-ref="promotionImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.PromotionCoupon"     value-ref="promotionCouponImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.SkuWarehouse"        value-ref="skuWarehouseFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.SkuPrice"            value-ref="skuPriceImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.Product"             value-ref="productImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.AttrValueProduct"    value-ref="attrValueProductImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.ProductSku"          value-ref="productSkuImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.AttrValueProductSku" value-ref="attrValueProductSkuImpexFederationFilter"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+
+</beans>

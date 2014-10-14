@@ -43,7 +43,7 @@
 
     <bean id="remoteUserManagementService" class="org.yes.cart.remote.service.impl.RemoteManagementServiceImpl">
         <constructor-arg index="0" ref="userManagementService"/>
-        <constructor-arg index="1" ref="federationFacade"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="addUser" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -107,7 +107,7 @@
 
     <bean id="remoteShopService" class="org.yes.cart.remote.service.impl.RemoteShopServiceImpl">
         <constructor-arg index="0" ref="dtoShopService"/>
-        <constructor-arg index="1" ref="federationFacade"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN"/>
@@ -191,7 +191,7 @@
 
     <bean id="remoteCategoryService" class="org.yes.cart.remote.service.impl.RemoteCategoryServiceImpl">
         <constructor-arg index="0" ref="dtoCategoryService"/>
-        <constructor-arg index="1" ref="federationFacade"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMMARKETINGADMIN"/>
@@ -216,7 +216,7 @@
 
     <bean id="remoteContentService" class="org.yes.cart.remote.service.impl.RemoteContentServiceImpl">
         <constructor-arg index="0" ref="dtoContentService"/>
-        <constructor-arg index="1" ref="federationFacade"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="createContentRoot" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -238,7 +238,7 @@
 
     <bean id="remoteCustomerService" class="org.yes.cart.remote.service.impl.RemoteCustomerServiceImpl">
         <constructor-arg index="0" ref="dtoCustomerService"/>
-        <constructor-arg index="1" ref="federationFacade"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
@@ -265,7 +265,7 @@
         <constructor-arg index="0" ref="dtoProductService"/>
         <constructor-arg index="1" ref="reindexService"/>
         <constructor-arg index="2" ref="dtoProductCategoryService"/>
-        <constructor-arg index="3" ref="federationFacade"/>
+        <constructor-arg index="3" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMMARKETINGADMIN"/>
@@ -283,7 +283,7 @@
     <bean id="remoteProductSkuService" class="org.yes.cart.remote.service.impl.RemoteProductSkuServiceImpl">
         <constructor-arg index="0" ref="dtoProductSkuService"/>
         <constructor-arg index="1" ref="reindexService"/>
-        <constructor-arg index="2" ref="federationFacade"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="createSkuPrice" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMMARKETINGADMIN"/>
@@ -305,7 +305,7 @@
 
     <bean id="remotePriceListService" class="org.yes.cart.remote.service.impl.RemotePriceListServiceImpl">
         <constructor-arg index="0" ref="dtoPriceListService"/>
-        <constructor-arg index="1" ref="federationFacade"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="getShops" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
@@ -339,7 +339,7 @@
 
     <bean id="remoteCarrierService" class="org.yes.cart.remote.service.impl.RemoteCarrierServiceImpl">
         <constructor-arg index="0" ref="dtoCarrierService"/>
-        <constructor-arg index="1" ref="federationFacade"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN"/>
@@ -361,7 +361,7 @@
 
     <bean id="remoteCarrierSlaService" class="org.yes.cart.remote.service.impl.RemoteCarrierSlaServiceImpl">
         <constructor-arg index="0" ref="dtoCarrierSlaService"/>
-        <constructor-arg index="1" ref="federationFacade"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMSHIPPINGADMIN"/>
@@ -376,7 +376,7 @@
 
     <bean id="remoteProductAssociationService" class="org.yes.cart.remote.service.impl.RemoteProductAssociationServiceImpl">
         <constructor-arg index="0" ref="dtoProductAssociationService"/>
-        <constructor-arg index="1" ref="federationFacade"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMMARKETINGADMIN"/>
@@ -440,7 +440,7 @@
     <bean id="remoteWarehouseService" class="org.yes.cart.remote.service.impl.RemoteWarehouseServiceImpl">
         <constructor-arg index="0" ref="dtoWarehouseService"/>
         <constructor-arg index="1" ref="reindexService"/>
-        <constructor-arg index="2" ref="federationFacade"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN"/>
@@ -463,7 +463,7 @@
     <bean id="remoteInventoryService" class="org.yes.cart.remote.service.impl.RemoteInventoryServiceImpl">
         <constructor-arg index="0" ref="dtoInventoryService"/>
         <constructor-arg index="1" ref="reindexService"/>
-        <constructor-arg index="2" ref="federationFacade"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="getWarehouses" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER"/>
@@ -522,7 +522,7 @@
     <bean id="remoteProductCategoryService" class="org.yes.cart.remote.service.impl.RemoteProductCategoryServiceImpl">
         <constructor-arg index="0" ref="dtoProductCategoryService"/>
         <constructor-arg index="1" ref="reindexService"/>
-        <constructor-arg index="2" ref="federationFacade"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMMARKETINGADMIN"/>
@@ -552,7 +552,7 @@
     <bean id="remoteCustomerOrderService" class="org.yes.cart.remote.service.impl.RemoteCustomerOrderServiceImpl">
         <constructor-arg index="0" ref="dtoCustomerOrderService"/>
         <constructor-arg index="1" ref="remoteReportService"/>
-        <constructor-arg index="2" ref="federationFacade"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
@@ -716,7 +716,7 @@
                         <value>countrynames-demo.xml</value>
                         <value>statenames-demo.xml</value>
                         <value>carriernames.xml</value>
-                        <value>carriershopnames.xml</value>
+                        <value>carriershopnames-demo.xml</value>
                         <value>carrierslanames.xml</value>
                         <value>promotionnames.xml</value>
                         <value>promotioncouponnames.xml</value>
@@ -775,10 +775,11 @@
                 </entry>
                 <entry key="Product import (Products, SKUs and attributes)">
                     <list>
+                        <value>productandcategorynames.xml</value>
                         <value>productnames.xml</value>
+                        <value>productcategorynames.xml</value>
                         <value>productsku.xml</value>
                         <value>productsattributes.xml</value>
-                        <value>productcategorynames.xml</value>
                     </list>
                 </entry>
                 <entry key="Inventory import">
@@ -793,7 +794,7 @@
                         <value>promotioncouponnames.xml</value>
                     </list>
                 </entry>
-                <entry key="Content">
+                <entry key="Content import">
                     <!--
                         Content import to upload static content for shops.
                     -->
@@ -814,6 +815,11 @@
                 <entry key="Images: Brands">
                     <list>
                         <value>brandimages.xml</value>
+                    </list>
+                </entry>
+                <entry key="Images: Shop">
+                    <list>
+                        <value>shopimages.xml</value>
                     </list>
                 </entry>
                 <entry key="Location import">
@@ -858,7 +864,6 @@
 
         <flex:remoting-destination/>
         <security:intercept-methods>
-            <!-- TODO: YC-140 add security settings so that each descriptor group is driven by a certain role -->
             <security:protect method="doImport" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>
             <security:protect method="getImportStatus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>
             <security:protect method="getImportGroups" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>
@@ -898,7 +903,7 @@
     <bean id="remotePaymentModulesManagementService" class="org.yes.cart.remote.service.impl.RemotePaymentModulesManagementServiceImpl">
         <constructor-arg index="0" ref="paymentModulesManager"/>
         <constructor-arg index="1" ref="customerOrderPaymentService"/>
-        <constructor-arg index="2" ref="federationFacade"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="getPaymentGatewaysForShop" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
@@ -923,7 +928,7 @@
 
     <bean id="remotePromotionService" class="org.yes.cart.remote.service.impl.RemotePromotionServiceImpl">
         <constructor-arg index="0" ref="dtoPromotionService"/>
-        <constructor-arg index="1" ref="federationFacade"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMMARKETINGADMIN"/>
@@ -939,7 +944,7 @@
     <bean id="remotePromotionCouponService" class="org.yes.cart.remote.service.impl.RemotePromotionCouponServiceImpl">
         <constructor-arg index="0" ref="dtoPromotionCouponService"/>
         <constructor-arg index="1" ref="dtoPromotionService"/>
-        <constructor-arg index="2" ref="federationFacade"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMMARKETINGADMIN"/>

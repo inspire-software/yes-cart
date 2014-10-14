@@ -31,13 +31,13 @@ import java.util.Set;
  * Date: 16/09/2014
  * Time: 14:19
  */
-public class FederationFacadeImpl implements FederationFacade {
+public class UiFederationFacadeImpl implements FederationFacade {
 
     private final ShopFederationStrategy shopFederationStrategy;
     private final Map<Class, FederationFilter> filters;
 
-    public FederationFacadeImpl(final ShopFederationStrategy shopFederationStrategy,
-                                final Map<Class, FederationFilter> filters) {
+    public UiFederationFacadeImpl(final ShopFederationStrategy shopFederationStrategy,
+                                  final Map<Class, FederationFilter> filters) {
         this.shopFederationStrategy = shopFederationStrategy;
         this.filters = filters;
     }

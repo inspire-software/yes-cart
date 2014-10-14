@@ -33,6 +33,14 @@ public interface ImportDescriptor {
     String getEntityType();
 
     /**
+     * Get entity interface. For example - org.yes.cart.domain.entity.Brand
+     *
+     * @return entity interface
+     */
+    Class getEntityTypeClass();
+
+
+    /**
      * Set full qualified entity interface.
      *
      * @param entityInterface entity interface

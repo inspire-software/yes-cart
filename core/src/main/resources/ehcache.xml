@@ -542,24 +542,24 @@
            overflowToDisk="false"
            eternal="true"/>
 
-    <!-- ############################################# YUM cache #######################################-->
+    <!-- ############################################# Federation cache #######################################-->
 
-    <cache name="yum.shopFederationStrategy-admin"
+    <cache name="shopFederationStrategy-admin"
            maxElementsInMemory="1000"
            overflowToDisk="false"
            eternal="true"/>
 
-    <cache name="yum.shopFederationStrategy-shop"
+    <cache name="shopFederationStrategy-shop"
            maxElementsInMemory="1000"
            overflowToDisk="false"
            eternal="true"/>
 
-    <cache name="yum.shopFederationStrategy-shopId"
+    <cache name="shopFederationStrategy-shopId"
            maxElementsInMemory="1000"
            overflowToDisk="false"
            eternal="true"/>
 
-    <cache name="yum.shopFederationStrategy-shopCode"
+    <cache name="shopFederationStrategy-shopCode"
            maxElementsInMemory="1000"
            overflowToDisk="false"
            eternal="true"/>

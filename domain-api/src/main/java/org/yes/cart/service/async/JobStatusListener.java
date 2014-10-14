@@ -71,9 +71,8 @@ public interface JobStatusListener {
 
     /**
      * Notify completion
-     * @param result import result
      */
-    void notifyCompleted(JobStatus.Completion result);
+    void notifyCompleted();
 
     /**
      * @return true if listeners has received result
