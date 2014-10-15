@@ -449,6 +449,12 @@
                     resourceManager.getString('ShopManagerApplication', 'info'));
 
         }
+
+
+        private function onRefreshCategoriesClick(event:MouseEvent):void {
+            init();
+        }
+
         ]]>
 
     </mx:Script>
@@ -505,6 +511,10 @@
                                label="@Resource(bundle='CategoryManagementPanel',key='deleteCategory')"
                                toolTip="@Resource(bundle='CategoryManagementPanel',key='deleteCategoryHint')"
                                click="onDeleteCategoryClick(event)"
+                            />
+                    <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='refreshCategories')"
+                               toolTip="@Resource(bundle='CategoryManagementPanel',key='refreshCategoriesHint')"
+                               click="onRefreshCategoriesClick(event)"
                             />
                 </mx:HBox>
                 <mx:HDividedBox width="100%" height="100%">

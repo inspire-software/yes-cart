@@ -412,7 +412,8 @@
 
             <mx:Canvas  label="@Resource(bundle='UserManagementPanel',key='availableRoles')"
                         width="100%" height="100%">
-                <mx:Grid width="100%" height="50%" id="rolesDetailPanel"  visible="{userSelected}" >
+                <mx:Grid width="100%" height="100%" id="rolesDetailPanel"  visible="{userSelected}"
+                         paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
 
                     <mx:GridRow width="100%" height="5%">
                         <mx:GridItem width="45%" height="100%">

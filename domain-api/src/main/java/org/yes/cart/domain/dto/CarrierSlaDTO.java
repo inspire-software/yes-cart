@@ -238,6 +238,50 @@ public interface CarrierSlaDTO extends Identifiable {
     void setMaxDays(Integer maxDays);
 
 
+
+    /**
+     * Is billing address not required for this order.
+     *
+     * @return true is  address not required for this order.
+     */
+    boolean isBillingAddressNotRequired();
+
+    /**
+     * Set billing address not required for this order flag.
+     *
+     * @param billingAddressNotRequired flag.
+     */
+    void setBillingAddressNotRequired(boolean billingAddressNotRequired);
+
+    /**
+     * Is delivery address not required for this order.
+     *
+     * @return true is  address not required for this order.
+     */
+    boolean isDeliveryAddressNotRequired();
+
+    /**
+     * Set delivery address not required for this order flag.
+     *
+     * @param deliveryAddressNotRequired flag.
+     */
+    void setDeliveryAddressNotRequired(boolean deliveryAddressNotRequired);
+
+
+    /**
+     * Get supported payment gateways CSV
+     *
+     * @return CSV PG labels
+     */
+    String getSupportedPaymentGateways();
+
+    /**
+     * Set supported payment gateways CSV
+     *
+     * @param supportedPaymentGateways CSV PG labels
+     */
+    void setSupportedPaymentGateways(String supportedPaymentGateways);
+
     /**
      * Get carrier.
      *

@@ -117,7 +117,8 @@ public class ShippingView extends BaseComponent {
                 final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getShoppingContext().getCustomerEmail());
                 final String shippingAddressId;
                 final String billingAddressId;
-                if (customer != null) {
+                if (customer != null &&
+                        (!carrierSla.isBillingAddressNotRequired() || !carrierSla.isDeliveryAddressNotRequired())) {
                     Address billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
                     Address shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
 
@@ -139,8 +140,8 @@ public class ShippingView extends BaseComponent {
                         shippingAddressId = String.valueOf(shippingAddress.getAddressId());
 
                     } else { // should not happen as we check that we have at least one address before this step
-                    shippingAddressId = "";
-                    billingAddressId = "";
+                        shippingAddressId = "";
+                        billingAddressId = "";
                     }
 
                 } else {
@@ -151,7 +152,9 @@ public class ShippingView extends BaseComponent {
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, ApplicationDirector.getShoppingCart(),
                         (Map) new HashMap() {{
                             put(ShoppingCartCommand.CMD_SETCARRIERSLA, String.valueOf(carrierSla.getCarrierslaId()));
+                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, carrierSla.isBillingAddressNotRequired());
                             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billingAddressId);
+                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, carrierSla.isDeliveryAddressNotRequired());
                             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, shippingAddressId);
                         }}
                 );

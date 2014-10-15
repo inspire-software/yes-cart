@@ -122,5 +122,29 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
+
+        <column-descriptor>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>billingAddressNotRequired</name>
+            <value-constant>false</value-constant>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>deliveryAddressNotRequired</name>
+            <value-constant>false</value-constant>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
+            <name>supportedPaymentGateways</name>
+            <value-constant>testPaymentGatewayLabel,courierPaymentGatewayLabel</value-constant>
+        </column-descriptor>
+
     </import-columns>
 </import-descriptor>

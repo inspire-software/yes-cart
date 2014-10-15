@@ -20,7 +20,10 @@ package org.yes.cart.domain.entity.impl;
 import org.yes.cart.domain.entity.Carrier;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -45,6 +48,10 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     private BigDecimal priceNotLess;
     private BigDecimal percentNotLess;
     private BigDecimal costNotLess;
+    private String supportedPaymentGateways;
+    private List<String> supportedPaymentGatewaysAsList;
+    private boolean billingAddressNotRequired;
+    private boolean deliveryAddressNotRequired;
     private Carrier carrier;
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -160,6 +167,43 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
 
     public void setCostNotLess(BigDecimal costNotLess) {
         this.costNotLess = costNotLess;
+    }
+
+    public String getSupportedPaymentGateways() {
+        return supportedPaymentGateways;
+    }
+
+    public void setSupportedPaymentGateways(final String supportedPaymentGateways) {
+        this.supportedPaymentGateways = supportedPaymentGateways;
+        this.supportedPaymentGatewaysAsList = null;
+    }
+
+    public List<String> getSupportedPaymentGatewaysAsList() {
+        if (supportedPaymentGatewaysAsList == null) {
+            if (supportedPaymentGateways != null) {
+                supportedPaymentGatewaysAsList = Arrays.asList(supportedPaymentGateways.split(","));
+            } else {
+                supportedPaymentGatewaysAsList = Collections.emptyList();
+            }
+
+        }
+        return supportedPaymentGatewaysAsList;
+    }
+
+    public boolean isBillingAddressNotRequired() {
+        return billingAddressNotRequired;
+    }
+
+    public void setBillingAddressNotRequired(final boolean billingAddressNotRequired) {
+        this.billingAddressNotRequired = billingAddressNotRequired;
+    }
+
+    public boolean isDeliveryAddressNotRequired() {
+        return deliveryAddressNotRequired;
+    }
+
+    public void setDeliveryAddressNotRequired(final boolean deliveryAddressNotRequired) {
+        this.deliveryAddressNotRequired = deliveryAddressNotRequired;
     }
 
     public Carrier getCarrier() {

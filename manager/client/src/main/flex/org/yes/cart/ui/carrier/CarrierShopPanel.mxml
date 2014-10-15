@@ -139,7 +139,7 @@
     </mx:RemoteObject>
 
 
-    <mx:Grid x="0" y="0" width="100%" height="100%">
+    <mx:Grid x="0" y="0" width="100%" height="100%" paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
         <mx:GridRow width="100%" height="50">
             <mx:GridItem width="44%" height="50" textAlign="center" verticalAlign="middle">
                 <mx:Label text="@Resource(bundle='CarrierManagementPanel',key='availableShop')"/>

@@ -239,6 +239,20 @@ public interface ShoppingCart extends Serializable {
     boolean isSeparateBillingAddress();
 
     /**
+     * Is billing address not required for this order.
+     *
+     * @return true is  address not required for this order.
+     */
+    boolean isBillingAddressNotRequired();
+
+    /**
+     * Is delivery address not required for this order.
+     *
+     * @return true is  address not required for this order.
+     */
+    boolean isDeliveryAddressNotRequired();
+
+    /**
      * Get carrier shipping SLA.
      *
      * @return carries sla id.

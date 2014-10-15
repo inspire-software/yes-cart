@@ -31,6 +31,17 @@ import java.util.List;
 public interface ShippingServiceFacade {
 
     /**
+     * Determine if address is skippable. We can skip over the address step
+     * straight to the carrier selection if at least one applicable SLA does not require
+     * billing or shipping address.
+     *
+     * @param shoppingCart current cart
+     *
+     * @return true if we can skip address
+     */
+    boolean isSkippableAddress(ShoppingCart shoppingCart);
+
+    /**
      * Find all applicable carriers for given shopping cart. This method could be potentially cached
      * however the logic for selecting carriers may be delicate and depending on other factors, so need
      * to be careful - hence left uncached OOTB.

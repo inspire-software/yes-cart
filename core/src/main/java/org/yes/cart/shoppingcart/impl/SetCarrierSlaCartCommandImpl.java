@@ -57,12 +57,36 @@ public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl imple
             final Long slaPkvalue = val != null ? NumberUtils.createLong(val) : null;
             if (slaPkvalue == null || !slaPkvalue.equals(shoppingCart.getOrderInfo().getCarrierSlaId())) {
                 ShopCodeContext.getLog(this).debug("Set carrier sla to {}", slaPkvalue);
+
                 shoppingCart.getOrderInfo().setCarrierSlaId(slaPkvalue);
+                if (parameters.get(CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED) instanceof Boolean) {
+                    shoppingCart.getOrderInfo().setBillingAddressNotRequired((Boolean) parameters.get(CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED));
+                } else if (parameters.get(CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED) instanceof String) {
+                    shoppingCart.getOrderInfo().setBillingAddressNotRequired(Boolean.valueOf((String) parameters.get(CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED)));
+                } else {
+                    shoppingCart.getOrderInfo().setBillingAddressNotRequired(false);
+                }
+                if (parameters.get(CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED) instanceof Boolean) {
+                    shoppingCart.getOrderInfo().setDeliveryAddressNotRequired((Boolean) parameters.get(CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED));
+                } else if (parameters.get(CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED) instanceof String) {
+                    shoppingCart.getOrderInfo().setDeliveryAddressNotRequired(Boolean.valueOf((String) parameters.get(CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED)));
+                } else {
+                    shoppingCart.getOrderInfo().setDeliveryAddressNotRequired(false);
+                }
+
                 if (slaPkvalue != null) {
-                    final Long billingId = NumberUtils.createLong((String) parameters.get(CMD_SETCARRIERSLA_P_BILLING_ADDRESS));
-                    final Long shippingId = NumberUtils.createLong((String) parameters.get(CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS));
-                    shoppingCart.getOrderInfo().setBillingAddressId(billingId);
-                    shoppingCart.getOrderInfo().setDeliveryAddressId(shippingId);
+                    final Long billingId = NumberUtils.toLong((String) parameters.get(CMD_SETCARRIERSLA_P_BILLING_ADDRESS), 0L);
+                    if (billingId > 0L) {
+                        shoppingCart.getOrderInfo().setBillingAddressId(billingId);
+                    } else {
+                        shoppingCart.getOrderInfo().setBillingAddressId(null);
+                    }
+                    final Long shippingId = NumberUtils.toLong((String) parameters.get(CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS), 0L);
+                    if (shippingId > 0L) {
+                        shoppingCart.getOrderInfo().setDeliveryAddressId(shippingId);
+                    } else {
+                        shoppingCart.getOrderInfo().setDeliveryAddressId(null);
+                    }
                 } else {
                     shoppingCart.getOrderInfo().setBillingAddressId(null);
                     shoppingCart.getOrderInfo().setDeliveryAddressId(null);

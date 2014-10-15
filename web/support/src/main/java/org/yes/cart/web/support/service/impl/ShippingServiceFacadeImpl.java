@@ -45,6 +45,20 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
     /** {@inheritDoc} */
     @Override
+    public boolean isSkippableAddress(final ShoppingCart shoppingCart) {
+        final List<Carrier> available = findCarriers(shoppingCart);
+        for (final Carrier carrier : available) {
+            for (final CarrierSla sla : carrier.getCarrierSla()) {
+                if (sla.isBillingAddressNotRequired() && sla.isDeliveryAddressNotRequired()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public List<Carrier> findCarriers(final ShoppingCart shoppingCart) {
         final List<Carrier> all = carrierService.findCarriersByShopIdAndCurrency(
                 shoppingCart.getShoppingContext().getShopId(),

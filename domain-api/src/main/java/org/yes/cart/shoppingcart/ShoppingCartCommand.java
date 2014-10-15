@@ -50,6 +50,8 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_SETCARRIERSLA = "setCarrierSlaCmd";
     String CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS = "d";
     String CMD_SETCARRIERSLA_P_BILLING_ADDRESS = "b";
+    String CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED = "dr";
+    String CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED = "br";
     String CMD_MULTIPLEDELIVERY = "setMultipleDeliveryCmd";
     String CMD_SETPGLABEL = "setPgLabelCmd";
     String CMD_SETSHOP = "setShopIdCmd";

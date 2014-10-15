@@ -261,3 +261,15 @@ INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (9, 'tes
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10994,  'SUPPORTED_LANGUAGES', 'SUPPORTED_LANGUAGES',  0,  NULL,  'Languages',  'Supported shop languages',  1004, 1001);
+
+--
+-- YC-446 Allow selection of payment methods with Carrier SLA
+--
+
+alter table TCARRIERSLA add column BILLING_ADDRESS_NOT_REQUIRED bit not null default 0;
+alter table TCARRIERSLA add column DELIVERY_ADDRESS_NOT_REQUIRED bit not null default 0;
+alter table TCARRIERSLA add column SUPPORTED_PGS varchar(255);
+
+-- alter table TCARRIERSLA add column BILLING_ADDRESS_NOT_REQUIRED smallint not null default 0;
+-- alter table TCARRIERSLA add column DELIVERY_ADDRESS_NOT_REQUIRED smallint not null default 0;
+-- alter table TCARRIERSLA add column SUPPORTED_PGS varchar(255);

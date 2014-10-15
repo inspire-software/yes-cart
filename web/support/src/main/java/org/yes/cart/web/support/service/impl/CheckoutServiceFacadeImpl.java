@@ -18,16 +18,14 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
+import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.service.payment.PaymentModulesManager;
@@ -50,17 +48,20 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     private final CustomerOrderService customerOrderService;
     private final AmountCalculationStrategy amountCalculationStrategy;
     private final CustomerOrderPaymentService customerOrderPaymentService;
+    private final CarrierSlaService carrierSlaService;
     private final PaymentProcessorFactory paymentProcessorFactory;
     private final PaymentModulesManager paymentModulesManager;
 
     public CheckoutServiceFacadeImpl(final CustomerOrderService customerOrderService,
                                      final AmountCalculationStrategy amountCalculationStrategy,
                                      final CustomerOrderPaymentService customerOrderPaymentService,
+                                     final CarrierSlaService carrierSlaService,
                                      final PaymentProcessorFactory paymentProcessorFactory,
                                      final PaymentModulesManager paymentModulesManager) {
         this.customerOrderService = customerOrderService;
         this.amountCalculationStrategy = amountCalculationStrategy;
         this.customerOrderPaymentService = customerOrderPaymentService;
+        this.carrierSlaService = carrierSlaService;
         this.paymentProcessorFactory = paymentProcessorFactory;
         this.paymentModulesManager = paymentModulesManager;
     }
@@ -123,17 +124,21 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     public List<Pair<PaymentGatewayDescriptor, String>> getPaymentGatewaysDescriptors(final Shop shop, final ShoppingCart cart) {
 
         final String lang = cart.getCurrentLocale();
+        final CarrierSla carrierSla = carrierSlaService.findById(cart.getCarrierSlaId());
+        final List<String> carrierSlaPGs = carrierSla.getSupportedPaymentGatewaysAsList();
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false, cart.getShoppingContext().getShopCode());
         final List<Pair<PaymentGatewayDescriptor, String>> available = new ArrayList<Pair<PaymentGatewayDescriptor, String>>(descriptors.size());
         final Map<String, Integer> sorting = new HashMap<String, Integer>();
         for (final PaymentGatewayDescriptor descriptor : descriptors) {
-            final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel(), cart.getShoppingContext().getShopCode());
-            available.add(new Pair<PaymentGatewayDescriptor, String>(descriptor, gateway.getName(lang)));
-            final String priority = gateway.getParameterValue("priority");
-            if (priority == null) {
-                sorting.put(descriptor.getLabel(), 0);
-            } else {
-                sorting.put(descriptor.getLabel(), NumberUtils.toInt(priority, 0));
+            if (carrierSlaPGs.contains(descriptor.getLabel())) {
+                final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel(), cart.getShoppingContext().getShopCode());
+                available.add(new Pair<PaymentGatewayDescriptor, String>(descriptor, gateway.getName(lang)));
+                final String priority = gateway.getParameterValue("priority");
+                if (priority == null) {
+                    sorting.put(descriptor.getLabel(), 0);
+                } else {
+                    sorting.put(descriptor.getLabel(), NumberUtils.toInt(priority, 0));
+                }
             }
         }
 

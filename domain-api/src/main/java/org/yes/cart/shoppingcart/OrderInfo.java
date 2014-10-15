@@ -98,6 +98,34 @@ public interface OrderInfo extends Serializable {
      */
     Long getBillingAddressId();
 
+    /**
+     * Is billing address not required for this order.
+     *
+     * @return true is  address not required for this order.
+     */
+    boolean isBillingAddressNotRequired();
+
+    /**
+     * Set billing address not required for this order flag.
+     *
+     * @param billingAddressRequired flag.
+     */
+    void setBillingAddressNotRequired(boolean billingAddressRequired);
+
+    /**
+     * Is delivery address not required for this order.
+     *
+     * @return true is  address not required for this order.
+     */
+    boolean isDeliveryAddressNotRequired();
+
+    /**
+     * Set delivery address not required for this order flag.
+     *
+     * @param deliveryAddressRequired flag.
+     */
+    void setDeliveryAddressNotRequired(boolean deliveryAddressRequired);
+
 
     /**
      * Get selected payment gateway.

@@ -147,5 +147,27 @@
             <name>maxDays</name>
         </column-descriptor>
 
+        <column-descriptor>
+            <column-index>13</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>billingAddressNotRequired</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>14</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>deliveryAddressNotRequired</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>15</column-index>
+            <field-type>FIELD</field-type>
+            <name>supportedPaymentGateways</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
     </import-columns>
 </import-descriptor>

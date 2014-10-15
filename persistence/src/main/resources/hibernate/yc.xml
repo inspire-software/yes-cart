@@ -2180,6 +2180,11 @@
         <property name="priceNotLess"    column="PRICE_NOTLESS"   type="java.math.BigDecimal"/>
         <property name="percentNotLess"  column="PERCENT_NOTLESS" type="java.math.BigDecimal"/>
         <property name="costNotLess"     column="COST_NOTLESS"    type="java.math.BigDecimal"/>
+        
+        <property name="billingAddressNotRequired" column="BILLING_ADDRESS_NOT_REQUIRED" type="boolean" not-null="true"/>
+        <property name="deliveryAddressNotRequired" column="DELIVERY_ADDRESS_NOT_REQUIRED" type="boolean" not-null="true"/>
+
+        <property name="supportedPaymentGateways" column="SUPPORTED_PGS" type="string" length="1024"/>
 
         <many-to-one name="carrier" class="org.yes.cart.domain.entity.impl.CarrierEntity" foreign-key="FK_CSLA_CARR" lazy="false">
             <column name="CARRIER_ID" not-null="true"/>
