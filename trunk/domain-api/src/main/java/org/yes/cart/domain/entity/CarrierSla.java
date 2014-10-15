@@ -17,6 +17,7 @@
 package org.yes.cart.domain.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -214,7 +215,7 @@ public interface CarrierSla extends Auditable {
     void setPriceNotLess(BigDecimal priceNotLess);
 
     /**
-     * Get minimal amount  for prrcent.
+     * Get minimal amount  for percent.
      *
      * @return minimal amount  for percent.
      */
@@ -285,6 +286,57 @@ public interface CarrierSla extends Auditable {
      * @param maxDays max days delivery.
      */
     void setMaxDays(Integer maxDays);
+
+
+    /**
+     * Is billing address not required for this order.
+     *
+     * @return true is  address not required for this order.
+     */
+    boolean isBillingAddressNotRequired();
+
+    /**
+     * Set billing address not required for this order flag.
+     *
+     * @param billingAddressNotRequired flag.
+     */
+    void setBillingAddressNotRequired(boolean billingAddressNotRequired);
+
+    /**
+     * Is delivery address not required for this order.
+     *
+     * @return true is  address not required for this order.
+     */
+    boolean isDeliveryAddressNotRequired();
+
+    /**
+     * Set delivery address not required for this order flag.
+     *
+     * @param deliveryAddressNotRequired flag.
+     */
+    void setDeliveryAddressNotRequired(boolean deliveryAddressNotRequired);
+
+
+    /**
+     * Get supported payment gateways CSV
+     *
+     * @return CSV PG labels
+     */
+    String getSupportedPaymentGateways();
+
+    /**
+     * Set supported payment gateways CSV
+     *
+     * @param supportedPaymentGateways CSV PG labels
+     */
+    void setSupportedPaymentGateways(String supportedPaymentGateways);
+
+    /**
+     * Get supported payment gateways list.
+     *
+     * @return supported payment gateways list.
+     */
+    List<String> getSupportedPaymentGatewaysAsList();
 
 
     /**

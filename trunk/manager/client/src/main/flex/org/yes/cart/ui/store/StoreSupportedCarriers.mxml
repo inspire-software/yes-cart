@@ -31,7 +31,7 @@
         import org.yes.cart.impl.ShopDTOImpl;
         import org.yes.cart.impl.CarrierDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
-        import org.yes.cart.ui.carrier.CarrierCreateEditDialog;
+        import org.yes.cart.ui.carrier.CarrierCreateDialog;
 
         private var _shopDTOImpl:ShopDTOImpl;
 
@@ -119,11 +119,11 @@
             remoteCarrierService.getAll();
         }
 
-        private var newPopUp:CarrierCreateEditDialog;
+        private var newPopUp:CarrierCreateDialog;
 
         private function onNewCarrierClick(event:MouseEvent):void {
             Debug.trace("carrier panel onNewCarrierClick");
-            newPopUp = CarrierCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CarrierCreateEditDialog, true));
+            newPopUp = CarrierCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CarrierCreateDialog, true));
             newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, createNewCarrier);
             newPopUp.carrierDTOImpl = new CarrierDTOImpl();
             PopUpManager.centerPopUp(newPopUp);

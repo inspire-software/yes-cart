@@ -48,6 +48,12 @@ public class CarrierSlaDTOImpl {
 
     public var costNotLess:Number;
 
+    public var billingAddressNotRequired:Boolean;
+
+    public var deliveryAddressNotRequired:Boolean;
+
+    public var supportedPaymentGateways:String;
+
     public var carrierId:Number;
 
 

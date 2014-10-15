@@ -54,6 +54,7 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
      * {@inheritDoc}
      */
     public List<Carrier> findCarriersByShopIdAndCurrency(final long shopId, final String currency) {
+        // This method must be READONLY transaction since we are modifying the list of SLA
         final List<Carrier> rez  = findCarriersByShopId(shopId);
         if (CollectionUtils.isEmpty(rez)) {
             return Collections.emptyList();

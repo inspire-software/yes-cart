@@ -143,19 +143,19 @@
     </mx:RemoteObject>
 
 
-    <mx:Grid x="0" y="0" width="100%" height="100%">
+    <mx:Grid x="0" y="0" width="100%" height="100%" paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
         <mx:GridRow width="100%" height="50">
-            <mx:GridItem width="200" height="50" textAlign="center" verticalAlign="middle">
+            <mx:GridItem width="44%" height="50" textAlign="center" verticalAlign="middle">
                 <mx:Label text="@Resource(bundle='CustomerShopPanel',key='availableShop')"/>
             </mx:GridItem>
-            <mx:GridItem width="100%" height="50">
+            <mx:GridItem width="12%" height="50">
             </mx:GridItem>
-            <mx:GridItem width="200" height="50" textAlign="center" verticalAlign="middle">
+            <mx:GridItem width="44%" height="50" textAlign="center" verticalAlign="middle">
                 <mx:Label text="@Resource(bundle='CustomerShopPanel',key='assignedShop')"/>
             </mx:GridItem>
         </mx:GridRow>
         <mx:GridRow width="100%" height="100%">
-            <mx:GridItem width="150" height="100%">
+            <mx:GridItem width="44%" height="100%">
                 <mx:List id="availableShopList"
                         width="100%"
                         height="100%"
@@ -166,7 +166,7 @@
                         >
                 </mx:List>
             </mx:GridItem>
-            <mx:GridItem width="100%" height="100%" verticalAlign="middle" textAlign="center">
+            <mx:GridItem width="12%" height="100%" verticalAlign="middle" textAlign="center">
                 <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
                     <mx:Button width="100"
                                enabled="{availableShopList.selectedItem != null}"
@@ -179,7 +179,7 @@
                                click="onAssignedShopClick(event)"/>
                 </mx:VBox>
             </mx:GridItem>
-            <mx:GridItem width="150" height="100%">
+            <mx:GridItem width="44%" height="100%">
                 <mx:List id="assignedShopList"
                         width="100%"
                         height="100%"

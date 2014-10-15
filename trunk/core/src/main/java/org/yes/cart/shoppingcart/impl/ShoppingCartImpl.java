@@ -21,7 +21,6 @@ import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
-import java.io.Externalizable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -114,6 +113,16 @@ public class ShoppingCartImpl implements ShoppingCart {
     /** {@inheritDoc} */
     public boolean isSeparateBillingAddress() {
         return getOrderInfo().isSeparateBillingAddress();
+    }
+
+    /** {@inheritDoc} */
+    public boolean isBillingAddressNotRequired() {
+        return getOrderInfo().isBillingAddressNotRequired();
+    }
+
+    /** {@inheritDoc} */
+    public boolean isDeliveryAddressNotRequired() {
+        return getOrderInfo().isDeliveryAddressNotRequired();
     }
 
     /** {@inheritDoc} */

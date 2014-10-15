@@ -15,12 +15,8 @@
   -    limitations under the License.
   -->
 
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*"
-                creationComplete="init()"
-                creationCompleteEffect="Zoom"
-                title="@Resource(bundle='CarrierManagementPanel',key='newCarrierSlaDialogTitle')"
-                showCloseButton="true"
-                close="PopUpManager.removePopUp(this)">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*"
+                creationComplete="init()">
 
 
     <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
@@ -36,22 +32,6 @@
 
 
     <mx:Form>
-        <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='name')">
-            <mx:TextInput width="195" id="cname"/>
-        </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayName')">
-            <yci18n:i18nStringField id="displayNames"/>
-        </mx:FormItem>
-        <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='description')">
-            <mx:TextArea width="195" id="description"/>
-        </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayDescription')">
-            <yci18n:i18nStringField id="displayDescriptions"/>
-        </mx:FormItem>
-        <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='maxDays')">
-            <mx:TextInput width="195" id="maxDays"/>
-        </mx:FormItem>
-
         <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='currency')">
             <mx:ComboBox id="currencyComboBox"
                          change="currencyChangeEvt(event)"
@@ -104,29 +84,27 @@
             <mx:TextInput width="195" id="costNotLess"/>
         </mx:FormItem>
 
-    </mx:Form>
-    <mx:ControlBar horizontalAlign="right" width="100%">
-        <mx:Button id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"/>
-        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
-                   click="PopUpManager.removePopUp(this)"/>
-    </mx:ControlBar>
+        <mx:FormItem width="100%">
+            <mx:Button id="saveBtn" label="@Resource(bundle='CarrierManagementPanel',key='update')"/>
+        </mx:FormItem>
 
+    </mx:Form>
 
     <mx:Script><![CDATA[
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.controls.Alert;
         import mx.rpc.events.ResultEvent;
+        import mx.utils.StringUtil;
 
         import org.yes.cart.impl.CarrierSlaDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
-        import mx.binding.utils.BindingUtils;
-        import mx.controls.Alert;
-        import mx.managers.PopUpManager;
-        import mx.utils.StringUtil;
-
-        public var newCarrierSlaFlag:Boolean;
         private var _carrierSlaDTOImpl:CarrierSlaDTOImpl;
         [Bindable]
         private var slaTypes:Array;
+
+        private var _binding:Array = [];
 
         public function get carrierSlaDTOImpl():CarrierSlaDTOImpl {
             return _carrierSlaDTOImpl;
@@ -134,48 +112,45 @@
 
         public function set carrierSlaDTOImpl(value:CarrierSlaDTOImpl):void {
             _carrierSlaDTOImpl = value;
+            unbind();
+            bind();
+            var curr:String = _carrierSlaDTOImpl.currency;
+            currencyComboBox.selectedItem = curr;
         }
 
 
         private function init():void {
             slaTypes = new Array();
-            slaTypes[0] = new SlaType("F", resourceManager.getString('CarrierManagementPanel', 'slaTypeFixed'));
-            slaTypes[1] = new SlaType("O", resourceManager.getString('CarrierManagementPanel', 'slaTypePerOrder'));
-            slaTypes[2] = new SlaType("P", resourceManager.getString('CarrierManagementPanel', 'slaTypePerPackage'));
-            slaTypes[3] = new SlaType("R", resourceManager.getString('CarrierManagementPanel', 'slaTypeFree'));
-            slaTypes[4] = new SlaType("E", resourceManager.getString('CarrierManagementPanel', 'slaTypeExternal'));
+            slaTypes.push(new SlaType("F", resourceManager.getString('CarrierManagementPanel', 'slaTypeFixed')));
+            // TODO: YC-154	CarrierSlaCreateEditDialog price matrix
+            // slaTypes.push(new SlaType("O", resourceManager.getString('CarrierManagementPanel', 'slaTypePerOrder')));
+            // slaTypes.push(new SlaType("P", resourceManager.getString('CarrierManagementPanel', 'slaTypePerPackage')));
+            slaTypes.push(new SlaType("R", resourceManager.getString('CarrierManagementPanel', 'slaTypeFree')));
+            // TODO: YC-449 CarrierSlaCreateEditDialog external script support
+            // slaTypes.push(new SlaType("E", resourceManager.getString('CarrierManagementPanel', 'slaTypeExternal')));
 
             remoteShopService.getAllSupportedCurrenciesByShops();
+        }
 
+        private function unbind():void {
+            for each (var _watch:ChangeWatcher in _binding) {
+                _watch.unwatch();
+            }
+            _binding = [];
+        }
 
-            if (newCarrierSlaFlag) {
-                this.title = resourceManager.getString('CarrierManagementPanel', 'newCarrierSlaDialogTitle');
-                saveBtn.label = resourceManager.getString('CarrierManagementPanel', 'create');
-            } else {
-                this.title = resourceManager.getString('CarrierManagementPanel', 'editCarrierSlaDialogTitle');
-                saveBtn.label = resourceManager.getString('CarrierManagementPanel', 'update');
+        private function bind():void {
 
-
-                for each (var slaType:SlaType in slaTypeComboBox.dataProvider) {
-                    if (slaType.data == _carrierSlaDTOImpl.slaType) {
-                        slaTypeComboBox.selectedItem = slaType;
-                        break;
-                    }
+            for each (var slaType:SlaType in slaTypeComboBox.dataProvider) {
+                if (slaType.data == _carrierSlaDTOImpl.slaType) {
+                    slaTypeComboBox.selectedItem = slaType;
+                    break;
                 }
             }
 
-            displayNames.setSourceObject(_carrierSlaDTOImpl, 'displayNames');
-            displayDescriptions.setSourceObject(_carrierSlaDTOImpl, 'displayDescriptions');
+            _binding.push(BindingUtils.bindProperty(this.script, "text", _carrierSlaDTOImpl, "script"));
 
-            BindingUtils.bindProperty(this.cname, "text", _carrierSlaDTOImpl, "name");
-            BindingUtils.bindProperty(this.description, "text", _carrierSlaDTOImpl, "description");
-            BindingUtils.bindProperty(this.script, "text", _carrierSlaDTOImpl, "script");
-            BindingUtils.bindProperty(this.maxDays, "text", _carrierSlaDTOImpl, "maxDays");
-
-            BindingUtils.bindProperty(_carrierSlaDTOImpl, "name", this.cname, "text");
-            BindingUtils.bindProperty(_carrierSlaDTOImpl, "description", this.description, "text");
-            BindingUtils.bindProperty(_carrierSlaDTOImpl, "script", this.script, "text");
-            BindingUtils.bindProperty(_carrierSlaDTOImpl, "maxDays", this.maxDays, "text");
+            _binding.push(BindingUtils.bindProperty(_carrierSlaDTOImpl, "script", this.script, "text"));
 
             if (!isNaN(_carrierSlaDTOImpl.price) && (_carrierSlaDTOImpl.price > 0)) {
                 this.price.text = _carrierSlaDTOImpl.price.toString();
@@ -291,15 +266,13 @@
             Alert.show(
                     resourceManager.getString('CarrierManagementPanel', 'notImplemented'),
                     resourceManager.getString('ShopManagerApplication', 'warning')
-                    ); //TODO: YC-154 weight and distance-volume matrix to price determination
+            ); //TODO: YC-154 weight and distance-volume matrix to price determination
 
         }
 
         private function onGetAllSupportedCurrenciesByShopsResult(event:ResultEvent):void {
-            var curr:String = _carrierSlaDTOImpl.currency;
             currencyComboBox.dataProvider = event.result;
-            currencyComboBox.selectedItem = curr;
         }
         ]]>
     </mx:Script>
-</mx:TitleWindow>
+</mx:Canvas>

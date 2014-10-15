@@ -85,16 +85,7 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
             );
         }
 
-        Collections.sort(
-                rez,
-                new Comparator<DtoPaymentGatewayInfo>() {
-
-                    /** {@inheritDoc} */
-                    public int compare(DtoPaymentGatewayInfo o1, DtoPaymentGatewayInfo o2) {
-                        return o1.getName().compareTo(o2.getName());
-                    }
-                }
-        );
+        sortPgInfo(rez);
 
         return rez;
     }
@@ -118,6 +109,12 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
             );
         }
 
+        sortPgInfo(rez);
+
+        return rez;
+    }
+
+    private void sortPgInfo(final List<DtoPaymentGatewayInfo> rez) {
         Collections.sort(
                 rez,
                 new Comparator<DtoPaymentGatewayInfo>() {
@@ -128,6 +125,20 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
                     }
                 }
         );
+    }
+
+    /** {@inheritDoc}*/
+    public List<DtoPaymentGatewayInfo> getAllowedPaymentGatewaysForShops(final String lang) {
+
+        List<DtoPaymentGatewayInfo> rez = new ArrayList<DtoPaymentGatewayInfo> ();
+        List<Pair<String, String>> active = getAllowedPaymentGateways(lang);
+        for (Pair<String, String> pair : active) {
+            rez.add(
+                    new DtoPaymentGatewayInfoImpl(pair.getFirst(), pair.getSecond(), true)
+            );
+        }
+
+        sortPgInfo(rez);
 
         return rez;
     }

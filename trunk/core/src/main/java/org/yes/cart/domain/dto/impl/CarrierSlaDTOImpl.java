@@ -81,6 +81,14 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     @DtoField(value = "displayDescription", converter = "i18nStringConverter")
     private Map<String, String> displayDescriptions;
 
+    @DtoField(value = "supportedPaymentGateways")
+    private String supportedPaymentGateways;
+
+    @DtoField(value = "billingAddressNotRequired")
+    private boolean billingAddressNotRequired;
+
+    @DtoField(value = "deliveryAddressNotRequired")
+    private boolean deliveryAddressNotRequired;
 
     /** {@inheritDoc} */
     public long getCarrierslaId() {
@@ -281,6 +289,48 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
      */
     public void setCostNotLess(final BigDecimal costNotLess) {
         this.costNotLess = costNotLess;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getSupportedPaymentGateways() {
+        return supportedPaymentGateways;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSupportedPaymentGateways(final String supportedPaymentGateways) {
+        this.supportedPaymentGateways = supportedPaymentGateways;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isBillingAddressNotRequired() {
+        return billingAddressNotRequired;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setBillingAddressNotRequired(final boolean billingAddressNotRequired) {
+        this.billingAddressNotRequired = billingAddressNotRequired;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isDeliveryAddressNotRequired() {
+        return deliveryAddressNotRequired;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDeliveryAddressNotRequired(final boolean deliveryAddressNotRequired) {
+        this.deliveryAddressNotRequired = deliveryAddressNotRequired;
     }
 
     /**

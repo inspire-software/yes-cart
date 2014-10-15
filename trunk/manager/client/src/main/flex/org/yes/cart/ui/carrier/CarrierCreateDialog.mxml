@@ -37,30 +37,31 @@
         <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayDescription')">
             <yci18n:i18nStringField id="displayDescriptions"/>
         </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='worldwide')">
-            <mx:CheckBox
-                    id="worldwideCheckBox"
-                    toolTip="@Resource(bundle='CarrierManagementPanel',key='worldwideHint')"
-                    />
-        </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='country')">
-            <mx:CheckBox
-                    id="countryCheckBox"
-                    toolTip="@Resource(bundle='CarrierManagementPanel',key='countryHint')"
-                    />
-        </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='state')">
-            <mx:CheckBox
-                    id="stateCheckBox"
-                    toolTip="@Resource(bundle='CarrierManagementPanel',key='stateHint')"
-                    />
-        </mx:FormItem>
-        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='local')">
-            <mx:CheckBox
-                    id="localCheckBox"
-                    toolTip="@Resource(bundle='CarrierManagementPanel',key='localHint')"
-                    />
-        </mx:FormItem>
+        <!-- TODO: YC-450 CarrierCreateEditDialog support for worldwide, country, state and local checkboxes -->
+        <!--<mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='worldwide')">-->
+            <!--<mx:CheckBox-->
+                    <!--id="worldwideCheckBox"-->
+                    <!--toolTip="@Resource(bundle='CarrierManagementPanel',key='worldwideHint')"-->
+                    <!--/>-->
+        <!--</mx:FormItem>-->
+        <!--<mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='country')">-->
+            <!--<mx:CheckBox-->
+                    <!--id="countryCheckBox"-->
+                    <!--toolTip="@Resource(bundle='CarrierManagementPanel',key='countryHint')"-->
+                    <!--/>-->
+        <!--</mx:FormItem>-->
+        <!--<mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='state')">-->
+            <!--<mx:CheckBox-->
+                    <!--id="stateCheckBox"-->
+                    <!--toolTip="@Resource(bundle='CarrierManagementPanel',key='stateHint')"-->
+                    <!--/>-->
+        <!--</mx:FormItem>-->
+        <!--<mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='local')">-->
+            <!--<mx:CheckBox-->
+                    <!--id="localCheckBox"-->
+                    <!--toolTip="@Resource(bundle='CarrierManagementPanel',key='localHint')"-->
+                    <!--/>-->
+        <!--</mx:FormItem>-->
     </mx:Form>
     <mx:ControlBar horizontalAlign="right" width="100%">
         <mx:Button  id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"/>
@@ -102,17 +103,20 @@
 
             BindingUtils.bindProperty(this.cname, "text", _carrierDTOImpl, "name");
             BindingUtils.bindProperty(this.description, "text", _carrierDTOImpl, "description");
-            BindingUtils.bindProperty(this.worldwideCheckBox, "selected", _carrierDTOImpl, "worldwide");
-            BindingUtils.bindProperty(this.countryCheckBox, "selected", _carrierDTOImpl, "country");
-            BindingUtils.bindProperty(this.stateCheckBox, "selected", _carrierDTOImpl, "state");
-            BindingUtils.bindProperty(this.localCheckBox, "selected", _carrierDTOImpl, "local");
+
+            // TODO: YC-450 CarrierCreateEditDialog support for worldwide, country, state and local checkboxes
+//            BindingUtils.bindProperty(this.worldwideCheckBox, "selected", _carrierDTOImpl, "worldwide");
+//            BindingUtils.bindProperty(this.countryCheckBox, "selected", _carrierDTOImpl, "country");
+//            BindingUtils.bindProperty(this.stateCheckBox, "selected", _carrierDTOImpl, "state");
+//            BindingUtils.bindProperty(this.localCheckBox, "selected", _carrierDTOImpl, "local");
 
             BindingUtils.bindProperty(_carrierDTOImpl, "name", this.cname, "text");
             BindingUtils.bindProperty(_carrierDTOImpl, "description", this.description, "text");
-            BindingUtils.bindProperty(_carrierDTOImpl, "worldwide", this.worldwideCheckBox, "selected");
-            BindingUtils.bindProperty(_carrierDTOImpl, "country", this.countryCheckBox, "selected");
-            BindingUtils.bindProperty(_carrierDTOImpl, "state", this.stateCheckBox, "selected");
-            BindingUtils.bindProperty(_carrierDTOImpl, "local", this.localCheckBox, "selected");
+            // TODO: YC-450 CarrierCreateEditDialog support for worldwide, country, state and local checkboxes
+//            BindingUtils.bindProperty(_carrierDTOImpl, "worldwide", this.worldwideCheckBox, "selected");
+//            BindingUtils.bindProperty(_carrierDTOImpl, "country", this.countryCheckBox, "selected");
+//            BindingUtils.bindProperty(_carrierDTOImpl, "state", this.stateCheckBox, "selected");
+//            BindingUtils.bindProperty(_carrierDTOImpl, "local", this.localCheckBox, "selected");
 
 
         }

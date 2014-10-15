@@ -57,6 +57,15 @@ public interface RemotePaymentModulesManagementService {
     List<DtoPaymentGatewayInfo> getPaymentGatewaysForShop(String lang, String shopCode);
 
     /**
+     * Get allowed payment gateways in all modules which are system enabled.
+     *
+     * @param lang ui lang
+     *
+     * @return list of label-name pairs .
+     */
+    List<DtoPaymentGatewayInfo> getAllowedPaymentGatewaysForShops(String lang);
+
+    /**
      * Get allowed payment gateways in all modules.
      *
      * @param lang ui lang

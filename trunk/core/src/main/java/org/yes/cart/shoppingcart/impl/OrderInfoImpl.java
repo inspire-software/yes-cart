@@ -28,6 +28,8 @@ public class OrderInfoImpl implements OrderInfo {
     private String paymentGatewayLabel;
     private boolean multipleDelivery;
     private boolean separateBillingAddress;
+    private boolean billingAddressNotRequired;
+    private boolean deliveryAddressNotRequired;
     private Long carrierSlaId;
     private Long billingAddressId;
     private Long deliveryAddressId;
@@ -82,6 +84,26 @@ public class OrderInfoImpl implements OrderInfo {
     /** {@inheritDoc} */
     public void setSeparateBillingAddress(final boolean separateBillingAddress) {
         this.separateBillingAddress = separateBillingAddress;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isBillingAddressNotRequired() {
+        return billingAddressNotRequired;
+    }
+
+    /** {@inheritDoc} */
+    public void setBillingAddressNotRequired(final boolean billingAddressNotRequired) {
+        this.billingAddressNotRequired = billingAddressNotRequired;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isDeliveryAddressNotRequired() {
+        return deliveryAddressNotRequired;
+    }
+
+    /** {@inheritDoc} */
+    public void setDeliveryAddressNotRequired(final boolean deliveryAddressNotRequired) {
+        this.deliveryAddressNotRequired = deliveryAddressNotRequired;
     }
 
     /** {@inheritDoc} */

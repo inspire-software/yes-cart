@@ -62,6 +62,7 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
+import org.yes.cart.web.support.service.ShippingServiceFacade;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -144,6 +145,9 @@ public class CheckoutPage extends AbstractWebPage {
 
     @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
     private CheckoutServiceFacade checkoutServiceFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.SHIPPING_SERVICE_FACADE)
+    private ShippingServiceFacade shippingServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
@@ -230,26 +234,45 @@ public class CheckoutPage extends AbstractWebPage {
      * @return markup container
      */
     private MarkupContainer getContent(final String currentStep) {
-        if (!((AuthenticatedWebSession) getSession()).isSignedIn()
-                || StringUtils.isBlank(ApplicationDirector.getShoppingCart().getCustomerEmail())) {
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        if (!STEP_LOGIN.equals(currentStep) &&
+                (!((AuthenticatedWebSession) getSession()).isSignedIn()
+                    || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {
+            final PageParameters parameters = new PageParameters(getPageParameters());
+            parameters.set(STEP, STEP_LOGIN);
+            setResponsePage(this.getClass(), parameters);
             return createLoginFragment();
         }
 
-        if (!addressBookFacade.customerHasAtLeastOneAddress(ApplicationDirector.getShoppingCart().getCustomerEmail())) {
-            return createAddressFragment();
-        }
-
-        if (ApplicationDirector.getShoppingCart().getOrderInfo().getCarrierSlaId() == null) {
-            //need to select carrier
-            return createShippmentFragment();
-        }
-
-
         if (STEP_ADDR.equals(currentStep)) {
+            if (shippingServiceFacade.isSkippableAddress(cart)) {
+                final PageParameters parameters = new PageParameters(getPageParameters());
+                parameters.set(STEP, STEP_SHIPMENT);
+                setResponsePage(this.getClass(), parameters);
+                return createShippmentFragment();
+            }
             return createAddressFragment();
         } else if (STEP_SHIPMENT.equals(currentStep)) {
             return createShippmentFragment();
         } else if (STEP_PAY.equals(currentStep)) {
+            // For final step we:
+            if ((!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
+                    && !addressBookFacade.customerHasAtLeastOneAddress(cart.getCustomerEmail())) {
+                // Must have an address if it is required
+                final PageParameters parameters = new PageParameters(getPageParameters());
+                parameters.set(STEP, STEP_ADDR);
+                setResponsePage(this.getClass(), parameters);
+                return createAddressFragment();
+            }
+            if (cart.getCarrierSlaId() == null) {
+                // Must select a carrier
+                final PageParameters parameters = new PageParameters(getPageParameters());
+                parameters.set(STEP, STEP_SHIPMENT);
+                setResponsePage(this.getClass(), parameters);
+                return createShippmentFragment();
+            }
             return createPaymentFragment();
         } else {
             return createLoginFragment();
