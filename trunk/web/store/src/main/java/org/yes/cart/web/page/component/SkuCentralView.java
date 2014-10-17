@@ -151,7 +151,7 @@ public class SkuCentralView extends AbstractCentralView {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
     protected AttributableImageService attributableImageService;
 
     @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
@@ -348,15 +348,9 @@ public class SkuCentralView extends AbstractCentralView {
 
     private ObjectDecorator getDecorator() {
         if (isProduct) {
-            return getDecoratorFacade().decorate(
-                    product,
-                    WicketUtil.getHttpServletRequest().getContextPath(),
-                    getI18NSupport(), true);
+            return getDecoratorFacade().decorate(product, WicketUtil.getHttpServletRequest().getContextPath(), true);
         }
-        return getDecoratorFacade().decorate(
-                sku,
-                WicketUtil.getHttpServletRequest().getContextPath(),
-                getI18NSupport());
+        return getDecoratorFacade().decorate(sku, WicketUtil.getHttpServletRequest().getContextPath(), true);
     }
 
     /**

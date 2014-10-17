@@ -323,9 +323,9 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         return null;
     }
 
-    public Map<String, AttrValue> getAllAttibutesAsMap() {
+    public Map<String, AttrValue> getAllAttributesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
-        for (AttrValue attrValue : getAllAttibutes()) {
+        for (AttrValue attrValue : getAllAttributes()) {
             if (attrValue != null && attrValue.getAttribute() != null) {
                 rez.put(attrValue.getAttribute().getCode(), attrValue);
             }
@@ -333,7 +333,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         return rez;
     }
 
-    public Collection<AttrValue> getAllAttibutes() {
+    public Collection<AttrValue> getAllAttributes() {
         return new ArrayList<AttrValue>(attributes);
     }
 

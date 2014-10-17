@@ -64,18 +64,28 @@
                 <entry key="RANDOM_PRODUCT" value-ref="categoryImageRandomProduct"/>
             </map>
         </constructor-arg>
-        <constructor-arg index="1" ref="categoryService"/>
-        <constructor-arg index="2" value="RANDOM_PRODUCT"/>
-        <!-- one of the allowed stategy label -->
+        <constructor-arg index="1" value="ATTRIBUTE"/>
+        <constructor-arg index="2" ref="cacheManager"/>
     </bean>
 
-    <bean id="attributableImageService" class="org.yes.cart.web.support.service.impl.AttributableImageServiceImpl"/>
+    <bean id="productImageService" class="org.yes.cart.web.support.service.impl.ProductImageServiceImpl">
+        <constructor-arg index="0" ref="cacheManager"/>
+    </bean>
 
     <bean id="productAvailabilityStrategy"
           class="org.yes.cart.web.support.service.impl.ProductAvailabilityStrategyImpl">
         <constructor-arg index="0" ref="warehouseService"/>
         <constructor-arg index="1" ref="skuWarehouseService"/>
     </bean>
+
+    <bean id="brandImageService" class="org.yes.cart.web.support.service.impl.BrandImageServiceImpl">
+        <constructor-arg index="0" ref="cacheManager"/>
+    </bean>
+
+    <bean id="shopImageService" class="org.yes.cart.web.support.service.impl.ShopImageServiceImpl">
+        <constructor-arg index="0" ref="cacheManager"/>
+    </bean>
+
 
     <!-- ############################ Category , Product and Sku image services end ############################### -->
 

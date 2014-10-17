@@ -64,14 +64,6 @@ public interface BookmarkService {
     String saveBookmarkForProduct(String bookmark);
 
     /**
-     * Save (or return cached) bookmark for given product context.
-     *
-     * @param product product
-     * @return SEO data
-     */
-    String saveBookmarkForProduct(Product product);
-
-    /**
      * Get product bookmark id by URI
      * @param uri SEO URI
      * @return product id

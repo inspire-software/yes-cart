@@ -31,7 +31,9 @@ import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -39,15 +41,6 @@ import java.util.*;
  * Time: 9:39 PM
  */
 public class ProductDecoratorImpl extends ProductEntity implements ProductDecorator, Serializable {
-
-    private final static List<String> attrNames = new ArrayList<String>() {{
-        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
-        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "1");
-        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "2");
-        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "3");
-        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "4");
-        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "5");
-    }};
 
     final static  String [] defaultSize =
             new String [] {
@@ -61,94 +54,37 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
                         AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_HEIGHT
             };
 
-    private transient ProductService productService;
-    private transient AttributableImageService attributableImageService;
-    private transient CategoryService categoryService;
-    private transient ImageService imageService;
+    private final ProductService productService;
+    private final AttributableImageService productImageService;
+    private final CategoryService categoryService;
+    private final ImageService imageService;
 
     private final String httpServletContextPath;
-    private final Map<Integer, String> productImageUrl = new HashMap<Integer, String>();
     private final Map<String, AttrValue> attrValueMap;
     private final String defaultImageAttributeValue;
     private final I18NWebSupport i18NWebSupport;
 
 
-        /**
-        * Construct entity decorator.
-        *
-        * @param imageService image service to get the image seo info
-        * @param attributableImageService category image service to get the image.
-        * @param categoryService          to get image width and height
-        * @param productEntity            original product to decorate.
-        * @param httpServletContextPath   servlet context path
-        * @param productService           product service
-        * @param i18NWebSupport           i18n support
-        */
-    public ProductDecoratorImpl(
-            final ImageService imageService,
-            final AttributableImageService attributableImageService,
-            final CategoryService categoryService,
-            final ProductService productService,
-            final I18NWebSupport i18NWebSupport  ,
-            final Product productEntity,
-            final String httpServletContextPath,
-            final boolean withAttributes,
-            final String defaultImageAttributeValue) {
-
-        this.i18NWebSupport = i18NWebSupport;
-        if (productEntity != null) {
-            BeanUtils.copyProperties(productEntity, this);
-        }
-        this.httpServletContextPath = httpServletContextPath;
-        this.defaultImageAttributeValue = defaultImageAttributeValue;
-        if (withAttributes) {
-            this.attrValueMap = getAllAttibutesAsMap();
-        } else {
-            this.attrValueMap = Collections.emptyMap();
-        }
-
-        this.attributableImageService = attributableImageService;
-        this.categoryService = categoryService;
-        this.productService = productService;
-        this.imageService = imageService;
-
-    }
-
-    /**
-     * Attache to context after de-serialization in case of cache overflow.
-     *
-     * @param imageService image serice to get the image seo info
-     * @param attributableImageService category image service to get the image.
-     * @param categoryService          to get image width and height
-     * @param productService           product service
-     */
-    public void attachToContext(
-            final ImageService imageService,
-            final AttributableImageService attributableImageService,
-            final CategoryService categoryService,
-            final ProductService productService) {
-
-
-        this.attributableImageService = attributableImageService;
-        this.categoryService = categoryService;
-        this.productService = productService;
-        this.imageService = imageService;
-
-    }
-
     /**
      * Construct entity decorator.
      *
+     * @param imageService image service to get the image seo info
+     * @param productImageService category image service to get the image.
+     * @param categoryService          to get image width and height
      * @param productEntity            original product to decorate.
      * @param httpServletContextPath   servlet context path
+     * @param productService           product service
      * @param i18NWebSupport           i18n support
      */
-    public ProductDecoratorImpl(
-            final I18NWebSupport i18NWebSupport  ,
-            final Product productEntity,
-            final String httpServletContextPath,
-            final boolean withAttributes,
-            final String defaultImageAttributeValue) {
+    public ProductDecoratorImpl(final ImageService imageService,
+                                final AttributableImageService productImageService,
+                                final CategoryService categoryService,
+                                final ProductService productService,
+                                final I18NWebSupport i18NWebSupport,
+                                final Product productEntity,
+                                final String httpServletContextPath,
+                                final boolean withAttributes,
+                                final String defaultImageAttributeValue) {
 
         this.i18NWebSupport = i18NWebSupport;
         if (productEntity != null) {
@@ -157,51 +93,41 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
         this.httpServletContextPath = httpServletContextPath;
         this.defaultImageAttributeValue = defaultImageAttributeValue;
         if (withAttributes) {
-            this.attrValueMap = getAllAttibutesAsMap();
+            this.attrValueMap = getAllAttributesAsMap();
         } else {
             this.attrValueMap = Collections.emptyMap();
         }
+
+        this.productImageService = productImageService;
+        this.categoryService = categoryService;
+        this.productService = productService;
+        this.imageService = imageService;
+
     }
 
 
     /**
      * {@inheritDoc}
+     * @param lang
      */
-    public List<String> getImageAttributeNames() {
-        return attrNames;
-    }
+    public List<Pair<String, String>> getImageAttributeFileNames(final String lang) {
 
+        return productImageService.getImageAttributeFileNames(this, lang);
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<Pair<String, String>> getImageAttributeFileNames() {
-        final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>();
-        for (String attrName : attrNames) {
-            if (this.getAttributeByCode(attrName) != null) {
-                rez.add(new Pair<String, String>(attrName, this.getAttributeByCode(attrName).getVal()));
-            }
-        }
-        return rez;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getImage(final String width, final String height, final String imageAttributeName) {
-        final Integer hash = getImageWithSizeHash(imageAttributeName, width, height);
-        String img = productImageUrl.get(hash);
-        if (img == null) {
-            img = attributableImageService.getImage(
+    public String getImage(final String width, final String height, final String imageAttributeName, final String lang) {
+        return productImageService.getImage(
                     this,
                     httpServletContextPath,
+                    lang,
                     width,
                     height,
                     imageAttributeName,
                     null);
-            productImageUrl.put(hash, img);
-        }
-        return img;
     }
 
 
@@ -209,35 +135,17 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
     /**
      * {@inheritDoc}
      */
-    public String getDefaultImage(final String width, final String height) {
-        final String imageAttributeName = getDefaultImageAttributeName();
-        final Integer hash = getImageWithSizeHash(imageAttributeName, width, height);
-        String img = productImageUrl.get(hash);
-        if (img == null) {
-            img = attributableImageService.getImage(
+    public String getDefaultImage(final String width, final String height, final String lang) {
+        final String imageAttributeName = getImageAttributeFileNames(lang).get(0).getFirst();
+        return productImageService.getImage(
                     this,
                     httpServletContextPath,
+                    lang,
                     width,
                     height,
                     imageAttributeName,
                     defaultImageAttributeValue
             );
-            productImageUrl.put(hash, img);
-        }
-        return img;
-    }
-
-
-    private Integer getImageWithSizeHash(final String ... params) {
-        final int prime = 31;
-        int result = 1;
-        for( String param : params) {
-            if (param == null) {
-                continue;
-            }
-            result = result * prime + param.hashCode();
-        }
-        return result;
     }
 
 
@@ -268,16 +176,6 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
                 null, category,
                 ProductDecoratorImpl.thumbnailSize
         );
-    }
-
-
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getDefaultImageAttributeName() {
-        return AttributeNamesKeys.Product.PRODUCT_DEFAULT_IMAGE_ATTR_NAME;
     }
 
     /**

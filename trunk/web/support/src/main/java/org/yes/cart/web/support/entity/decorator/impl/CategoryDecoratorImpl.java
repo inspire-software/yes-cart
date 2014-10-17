@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.support.entity.decorator.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
@@ -29,7 +30,7 @@ import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -37,8 +38,6 @@ import java.util.*;
  * Time: 8:19 PM
  */
 public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDecorator {
-
-    private static final List<String> attrNames = Collections.singletonList(AttributeNamesKeys.Category.CATEGORY_IMAGE);
 
     private final static String[] defaultSize =
             new String[]{
@@ -55,7 +54,6 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
     private final AttributableImageService categoryImageService;
     private final CategoryService categoryService;
     private final String httpServletContextPath;
-    private Map<Integer, String> categoryImageUrl = new HashMap<Integer, String>();
     private final ImageService imageService;
     private final I18NWebSupport i18NWebSupport;
 
@@ -69,12 +67,12 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
      * @param httpServletContextPath servlet context path
      * @param i18NWebSupport         i18n support
      */
-    public CategoryDecoratorImpl(
-            final ImageService imageService,
-            final AttributableImageService categoryImageService,
-            final CategoryService categoryService,
-            final Category categoryEntity,
-            final String httpServletContextPath, final I18NWebSupport i18NWebSupport) {
+    public CategoryDecoratorImpl(final ImageService imageService,
+                                 final AttributableImageService categoryImageService,
+                                 final CategoryService categoryService,
+                                 final Category categoryEntity,
+                                 final String httpServletContextPath,
+                                 final I18NWebSupport i18NWebSupport) {
         this.categoryService = categoryService;
         this.categoryImageService = categoryImageService;
         this.httpServletContextPath = httpServletContextPath;
@@ -85,64 +83,39 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<String> getImageAttributeNames() {
-        return attrNames;
-    }
 
 
     /**
      * {@inheritDoc}
+     * @param lang
      */
-    public List<Pair<String, String>> getImageAttributeFileNames() {
-        final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>();
-        for (String attrName : attrNames) {
-            if (this.getAttributeByCode(attrName) != null) {
-                rez.add(new Pair<String, String>(attrName, this.getAttributeByCode(attrName).getVal()));
-            }
-        }
-        return rez;
+    public List<Pair<String, String>> getImageAttributeFileNames(final String lang) {
+
+        return categoryImageService.getImageAttributeFileNames(this, lang);
+
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getImage(final String width, final String height, final String imageAttributeName) {
-        final Integer hash = getImageWithSizeHash(imageAttributeName, width, height);
-        String img = categoryImageUrl.get(hash);
-        if (img == null) {
-            img = categoryImageService.getImage(
+    public String getImage(final String width, final String height, final String imageAttributeName, final String lang) {
+        return categoryImageService.getImage(
                     this,
                     httpServletContextPath,
+                    lang,
                     width,
                     height,
                     imageAttributeName,
                     null);
-            categoryImageUrl.put(hash, img);
-        }
-        return img;
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public String getDefaultImage(final String width, final String height) {
-        return getImage(width, height, null);
-    }
-
-    private Integer getImageWithSizeHash(final String ... params) {
-        final int prime = 31;
-        int result = 1;
-        for( String param : params) {
-            if (param == null) {
-                continue;
-            }
-            result = result * prime + param.hashCode();
-        }
-        return result;
+    public String getDefaultImage(final String width, final String height, final String lang) {
+        final String defaultAttribute = getImageAttributeFileNames(lang).get(0).getFirst();
+        return getImage(width, height, defaultAttribute, lang);
     }
 
 
@@ -168,30 +141,13 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
     }
 
 
-    public String getThumbnailImageWidth(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(null, category,
-                AttributeNamesKeys.Category.CATEGORY_IMAGE_WIDTH,
-                "80");
-    }
-
-    public String getThumbnailImageHeight(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(null, this,
-                AttributeNamesKeys.Category.CATEGORY_IMAGE_HEIGHT,
-                "80");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getDefaultImageAttributeName() {
-        return AttributeNamesKeys.Category.CATEGORY_IMAGE;
-    }
-
-
     /**
      * {@inheritDoc}
      */
     public SeoImage getSeoImage(final String fileName) {
+        if (StringUtils.isBlank(fileName)) {
+            return null;
+        }
         return imageService.getSeoImage(Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN + fileName);
     }
 

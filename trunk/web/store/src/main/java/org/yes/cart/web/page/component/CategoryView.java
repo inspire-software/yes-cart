@@ -64,7 +64,7 @@ public class CategoryView extends  BaseComponent {
 
         add(
             links.newCategoryLink(CATEGORY_IMAGE_LINK, category.getCategoryId()).add(
-                    new ContextImage(CATEGORY_IMAGE, category.getDefaultImage(width, height))
+                    new ContextImage(CATEGORY_IMAGE, category.getDefaultImage(width, height, selectedLocale))
                             .add(new AttributeModifier(HTML_WIDTH, width))
                             .add(new AttributeModifier(HTML_HEIGHT, height))
             )

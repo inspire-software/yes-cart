@@ -16,6 +16,8 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.springframework.cache.CacheManager;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.web.support.service.AttributableImageService;
 
@@ -24,11 +26,23 @@ import org.yes.cart.web.support.service.AttributableImageService;
  * Date: 8/8/11
  * Time: 2:40 PM
  */
-public class AttributableImageServiceImpl extends AbstractImageServiceImpl implements AttributableImageService {
+public class ShopImageServiceImpl extends AbstractImageServiceImpl implements AttributableImageService {
 
-    /** {@inheritDoc} */
-    public String getImageRepositoryUrlPattern(final Object object) {
-        return Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN;
+    public ShopImageServiceImpl(final CacheManager cacheManager) {
+        super(cacheManager);
     }
+
+    /** {@inheritDoc}
+     * @param attributableOrStrategy*/
+    protected String getImageRepositoryUrlPattern(final Object attributableOrStrategy) {
+        return Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN;
+    }
+
+    /** {@inheritDoc}
+     * @param attributableOrStrategy*/
+    protected String getImageAttributePrefix(final Object attributableOrStrategy) {
+        return AttributeNamesKeys.Shop.SHOP_IMAGE_PREFIX;
+    }
+
 
 }

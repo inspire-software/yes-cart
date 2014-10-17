@@ -17,20 +17,14 @@
 package org.yes.cart.web.support.entity.decorator.impl;
 
 
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
-import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
-import org.yes.cart.web.support.entity.decorator.ProductDecorator;
-import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
+import org.yes.cart.web.support.entity.decorator.*;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
-import org.yes.cart.web.support.seo.BookmarkService;
 import org.yes.cart.web.support.service.AttributableImageService;
 
 /**
@@ -41,17 +35,13 @@ import org.yes.cart.web.support.service.AttributableImageService;
 public class DecoratorFacadeImpl implements DecoratorFacade {
 
 
-    //private static final ConcurrentMap<String, ProductDecorator> ;
-    private final Cache PRODUCT_CACHE;
-
-
     private final ImageService imageService;
     private final AttributableImageService categoryImageService;
     private final AttributableImageService productImageService;
     private final AttributableImageService skuImageService;
     private final CategoryService categoryService;
     private final ProductService productService;
-    private final BookmarkService bookmarkService;
+    private final I18NWebSupport i18NWebSupport;
 
     public DecoratorFacadeImpl(final ImageService imageService,
                                final AttributableImageService categoryImageService,
@@ -59,24 +49,35 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
                                final AttributableImageService skuImageService,
                                final CategoryService categoryService,
                                final ProductService productService,
-                               final BookmarkService bookmarkService,
-                               final CacheManager cacheManager) {
+                               final I18NWebSupport i18NWebSupport) {
         this.imageService = imageService;
         this.categoryImageService = categoryImageService;
         this.productImageService = productImageService;
         this.skuImageService = skuImageService;
         this.categoryService = categoryService;
         this.productService = productService;
-        this.bookmarkService = bookmarkService;
-        this.PRODUCT_CACHE = cacheManager.getCache("web.decoratorFacade-decorate");
+        this.i18NWebSupport = i18NWebSupport;
     }
 
     /**
      * {@inheritDoc}
      */
-    public CategoryDecorator decorate(final Category category,
-                                      final String servletContextPath,
-                                      final I18NWebSupport i18NWebSupport) {
+    public <T extends ObjectDecorator> T decorate(final Object object,
+                                                  final String servletContextPath,
+                                                  final boolean withAttributes) {
+
+        if (object instanceof Product) {
+            return (T) decorate((Product) object, servletContextPath, withAttributes);
+        } else if (object instanceof ProductSku) {
+            return (T) decorate((ProductSku) object, servletContextPath);
+        } else if (object instanceof Category) {
+            return (T) decorate((Category) object, servletContextPath);
+        }
+        throw new IllegalArgumentException("Object is not decoratable: " + object.getClass());
+    }
+
+    private CategoryDecorator decorate(final Category category,
+                                       final String servletContextPath) {
 
         return new CategoryDecoratorImpl(
                 imageService,
@@ -85,58 +86,31 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
                 category,
                 servletContextPath,
                 i18NWebSupport);
+
     }
 
-    private ProductDecorator getProductDecoratorFromValueWrapper(final Cache.ValueWrapper wrapper) {
-        if (wrapper != null) {
-            return (ProductDecorator) wrapper.get();
-        }
-        return null;
-    }
 
     /**
      * {@inheritDoc}
      */
-    public ProductDecorator decorate(final Product product,
-                                     final String servletContextPath,
-                                     final I18NWebSupport i18NWebSupport,
-                                     final boolean withAttributes) {
+    private ProductDecorator decorate(final Product product,
+                                      final String servletContextPath,
+                                      final boolean withAttributes) {
 
-        final String key = servletContextPath + product.getProductId() + withAttributes;
-        ProductDecorator decorator = getProductDecoratorFromValueWrapper(PRODUCT_CACHE.get(key));
-
-        if (decorator == null) {
-
-            decorator = new ProductDecoratorImpl(
-                    imageService,
-                    productImageService,
-                    categoryService,
-                    productService,
-                    i18NWebSupport,
-                    product,
-                    servletContextPath,
-                    withAttributes,
-                    productService.getDefaultImage(product.getProductId())
-            );
-
-            PRODUCT_CACHE.put(key, decorator);
-            bookmarkService.saveBookmarkForProduct(decorator);
-        } else {
-            decorator.attachToContext(
-                    imageService,
-                    productImageService,
-                    categoryService,
-                    productService
-            );
-        }
-
-        return decorator;
+        return new ProductDecoratorImpl(
+                imageService,
+                productImageService,
+                categoryService,
+                productService,
+                i18NWebSupport,
+                product,
+                servletContextPath,
+                withAttributes,
+                productService.getDefaultImage(product.getProductId()));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public ProductSkuDecorator decorate(final ProductSku sku, final String servletContextPath, final I18NWebSupport i18NWebSupport) {
+    private ProductSkuDecorator decorate(final ProductSku sku,
+                                         final String servletContextPath) {
         return new ProductSkuDecoratorImpl(
                 imageService,
                 skuImageService,

@@ -29,10 +29,14 @@ public interface CategoryImageRetrieveStrategy {
     /**
      * Get the image name
      *
+     *
      * @param category category
+     * @param attributeCodeHint attribute name hint (not guaranteed to be this attribute)
+     * @param locale locale for image
+     *
      * @return image name to show as category image
      */
-    String getImageName(Attributable category);
+    String getImageName(Attributable category, String attributeCodeHint, String locale);
 
     /**
      * Get image repository url pattern.
@@ -41,11 +45,11 @@ public interface CategoryImageRetrieveStrategy {
      */
     String getImageRepositoryUrlPattern();
 
-
     /**
-     * Get default image attribute name.
-     * @return  default image attribute name.
+     * Get image attribute prefix.
+     *
+     * @return attribute prefix
      */
-    String getAttributeCode();
+    String getImageAttributePrefix();
 
 }

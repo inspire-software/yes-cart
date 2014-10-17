@@ -16,6 +16,8 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.commons.lang.StringUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Attributable;
@@ -42,8 +44,8 @@ public class CategoryImageRetrieveStrategyAttributeImpl implements CategoryImage
     /**
      * {@inheritDoc}
      */
-    public String getImageName(final Attributable category) {
-        final AttrValue attrValue = category.getAttributeByCode(attributeCode);
+    public String getImageName(final Attributable category, final String attributeCodeHint, final String locale) {
+        final AttrValue attrValue = category.getAttributeByCode(StringUtils.isBlank(attributeCodeHint) ? attributeCode : attributeCodeHint);
         if (attrValue == null) {
             return Constants.NO_IMAGE;
         }
@@ -51,16 +53,17 @@ public class CategoryImageRetrieveStrategyAttributeImpl implements CategoryImage
     }
 
     /**
-     * Get image repository url pattern.
-     *
-     * @return image repository url pattern
+     * {@inheritDoc}
      */
     public String getImageRepositoryUrlPattern() {
         return Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN;
     }
 
-    /** {@inheritDoc} */
-    public String getAttributeCode() {
-        return attributeCode;
+    /**
+     * {@inheritDoc}
+     */
+    public String getImageAttributePrefix() {
+        return AttributeNamesKeys.Category.CATEGORY_IMAGE_PREFIX;
     }
+
 }

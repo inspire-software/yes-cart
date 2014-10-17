@@ -16,11 +16,6 @@
 
 package org.yes.cart.web.support.entity.decorator;
 
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.web.support.i18n.I18NWebSupport;
-
 /**
  * Simple facae for creating entity decorators for Web.
  * User: denispavlov
@@ -30,29 +25,16 @@ import org.yes.cart.web.support.i18n.I18NWebSupport;
 public interface DecoratorFacade {
 
     /**
-     * @param category category
-     * @param servletContextPath path
-     * @param i18NWebSupport i18n support
-     * @return decorated category
-     */
-    CategoryDecorator decorate(Category category, String servletContextPath, I18NWebSupport i18NWebSupport);
-
-    /**
+     * Get decorator object for storefront.
      *
-     * @param product product
+     * @param object decoratable object
      * @param servletContextPath path
-     * @param i18NWebSupport i18n support
-     * @param withAttributes true if decorator should load product attributes
-     * @return decorated product
+     * @param withAttributes true if decorator should load attributes
+     *
+     * @return decorated object
      */
-    ProductDecorator decorate(Product product, String servletContextPath, I18NWebSupport i18NWebSupport, final boolean withAttributes);
-
-    /**
-     * @param sku sku
-     * @param servletContextPath path
-     * @param i18NWebSupport i18n support
-     * @return decorated sku
-     */
-    ProductSkuDecorator decorate(ProductSku sku, String servletContextPath, I18NWebSupport i18NWebSupport);
+    <T extends ObjectDecorator> T decorate(Object object,
+                                           String servletContextPath,
+                                           final boolean withAttributes);
 
 }

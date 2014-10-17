@@ -344,12 +344,11 @@
     <bean id="decoratorFacade" class="org.yes.cart.web.support.entity.decorator.impl.DecoratorFacadeImpl">
         <constructor-arg index="0" ref="imageService"/>
         <constructor-arg index="1" ref="categoryImageService"/>
-        <constructor-arg index="2" ref="attributableImageService"/>
-        <constructor-arg index="3" ref="attributableImageService"/>
+        <constructor-arg index="2" ref="productImageService"/>
+        <constructor-arg index="3" ref="productImageService"/>
         <constructor-arg index="4" ref="categoryService"/>
         <constructor-arg index="5" ref="productService"/>
-        <constructor-arg index="6" ref="bookmarkService"/>
-        <constructor-arg index="7" ref="cacheManager"/>
+        <constructor-arg index="6" ref="i18nSupport"/>
     </bean>
 
     <!-- ################################### presentation layer support end ######################### -->

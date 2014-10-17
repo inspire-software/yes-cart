@@ -30,46 +30,40 @@ import java.util.List;
  */
 public interface Depictable {
 
-
-    String PRODUCT_DEFAULT_IMAGE_WIDTH = "360";
-    String PRODUCT_DEFAULT_IMAGE_HEIGHT = "360";
-
-    String PRODUCT_THUMBNAIL_IMAGE_WIDTH = "80";
-    String PRODUCT_THUMBNAIL_IMAGE_HEIGHT = "80";
-
     /**
-     * Get images attributes names.
+     * Get pair of images attributes name and image file name for given language.
+     *
+     * @param lang language
+     *
      * @return images attributes names.
      */
-    List<String> getImageAttributeNames();
-
-    /**
-     * Get pair of images attributes names - image file name.
-     * @return images attributes names.
-     */
-    List<Pair<String, String>> getImageAttributeFileNames();
+    List<Pair<String, String>> getImageAttributeFileNames(String lang);
 
 
 
     /**
      * Get product image with give width and height.
+     *
      * @param width image width to get correct url
      * @param height image height to get correct url
      * @param imageAttributeName particular attribute name.
+     * @param lang language
      *
      * @return product image url, depending from strategy.
      */
-    String getImage(String width, String height, String imageAttributeName);
+    String getImage(String width, String height, String imageAttributeName, String lang);
 
 
     /**
      * Get product image with give width and height.
+     *
      * @param width image width to get correct url
      * @param height image height to get correct url
+     * @param lang language
      *
      * @return product image url, depending from strategy.
      */
-    String getDefaultImage(String width, String height);
+    String getDefaultImage(String width, String height, String lang);
 
 
     /**
@@ -85,13 +79,6 @@ public interface Depictable {
      * @return width and height of depictable
      */
     String [] getThumbnailImageSize(Category category);
-
-
-
-     /** Get default image attribute name.
-      * @return default image attribute name
-      * */
-    String getDefaultImageAttributeName();
 
 
     /**

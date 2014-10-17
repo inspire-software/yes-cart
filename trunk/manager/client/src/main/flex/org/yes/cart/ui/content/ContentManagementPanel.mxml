@@ -192,6 +192,7 @@
             displayNames.setSourceObject(this.selectedCategoryDTOImpl, 'displayNames');
 
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryNameTextInput, "text", this.selectedCategoryDTOImpl, "name"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryGUIDTextInput, "text", this.selectedCategoryDTOImpl, "guid"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryDescriptionTextInput, "text", this.selectedCategoryDTOImpl, "description"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryTemplateTextInput, "text", this.selectedCategoryDTOImpl, "uitemplate"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryRankTextInput, "text", this.selectedCategoryDTOImpl, "rank"));
@@ -199,6 +200,7 @@
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(categoryAvailableToDateField, "selectedDate", this.selectedCategoryDTOImpl, "availableto"));
 
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "name", categoryNameTextInput, "text"));
+            categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "guid", categoryGUIDTextInput, "text"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "description", categoryDescriptionTextInput, "text"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "uitemplate", categoryTemplateTextInput, "text"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "rank", categoryRankTextInput, "text"));
@@ -206,6 +208,7 @@
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "availableto", categoryAvailableToDateField, "selectedDate"));
 
             // if (!saveBtnVisible) {
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "guid", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "name", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "description", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "uitemplate", categoryDtoChanged));
@@ -533,6 +536,10 @@
                                    y="0" width="100%" height="100%" id="categoryInfoPanel">
                             <mx:VBox width="100%" height="100%">
                                 <mx:Form>
+                                    <mx:FormItem width="100%"
+                                                 label="GUID">
+                                        <mx:TextInput id="categoryGUIDTextInput" width="300"/>
+                                    </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='name')">
                                         <mx:TextInput id="categoryNameTextInput" width="300"/>

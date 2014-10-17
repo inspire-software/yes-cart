@@ -98,7 +98,7 @@ public class BrandDAOTest extends AbstractTestDAO {
 
                 Brand entityWithAttributes = new BrandEntity();
                 entityWithAttributes.setName("brandName with attributes");
-                Attribute attributeEntity = attributeDAO.findByCriteria(Restrictions.eq("code", "BRAND_IMAGE")).get(0);
+                Attribute attributeEntity = attributeDAO.findByCriteria(Restrictions.eq("code", "BRAND_IMAGE0")).get(0);
                 AttrValueBrand attrValueBrandEntity = new AttrValueEntityBrand();
                 attrValueBrandEntity.setBrand(entityWithAttributes);
                 attrValueBrandEntity.setAttribute(attributeEntity);

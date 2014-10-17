@@ -26,21 +26,21 @@ import java.util.Map;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Attributable {
+public interface Attributable extends Identifiable {
 
     /**
      * Get all attribute values.
      *
      * @return all attr values.
      */
-    Collection<AttrValue> getAllAttibutes();
+    Collection<AttrValue> getAllAttributes();
 
     /**
      * Get all attribute values.
      *
      * @return all attr values.
      */
-    Map<String, AttrValue> getAllAttibutesAsMap();
+    Map<String, AttrValue> getAllAttributesAsMap();
 
 
     /**
@@ -77,7 +77,7 @@ public interface Attributable {
     /**
      * Get category description.
      *
-     * @return category decription.
+     * @return category description.
      */
     String getDescription();
 

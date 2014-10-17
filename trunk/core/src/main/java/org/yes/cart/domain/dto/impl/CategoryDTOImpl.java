@@ -54,6 +54,9 @@ public class CategoryDTOImpl implements CategoryDTO {
     @DtoField(value = "name")
     private String name;
 
+    @DtoField(value = "guid")
+    private String guid;
+
     @DtoField(value = "displayName", converter = "i18nStringConverter")
     private Map<String, String> displayNames;
 
@@ -207,6 +210,20 @@ public class CategoryDTOImpl implements CategoryDTO {
      */
     public void setProductTypeId(final Long productTypeId) {
         this.productTypeId = productTypeId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getGuid() {
+        return guid;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setGuid(final String guid) {
+        this.guid = guid;
     }
 
     /**

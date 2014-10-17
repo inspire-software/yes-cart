@@ -34,6 +34,7 @@ import org.yes.cart.web.support.entity.decorator.Depictable;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.util.WicketUtil;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -96,32 +97,34 @@ public class ImageView extends BaseComponent {
 
         final String tumbWidth = size[0];
         final String tumbHeight = size[1];
-
-        final List<Pair<String, String>> filledImageAttributes = depictable.getImageAttributeFileNames();
-
-
-        final String defaultImageRelativePath = depictable.getDefaultImage(width, height);
-
         final String lang = getLocale().getLanguage();
+
+        final List<Pair<String, String>> allImageAttrWithFileName = depictable.getImageAttributeFileNames(lang);
+
+        final Pair<String, String> defaultImageAttrWithFileName = allImageAttrWithFileName.get(0);
+        final List<Pair<String, String>> altImageAttrWithFileName =
+                allImageAttrWithFileName.size() > 1 ? allImageAttrWithFileName.subList(1, allImageAttrWithFileName.size()) : Collections.EMPTY_LIST;
+
+        final String defaultImageRelativePath = depictable.getDefaultImage(width, height, lang);
 
         add(
 
-                new ExternalLink(DEFAULT_IMAGE_REF, depictable.getDefaultImage("as", "is"))
+                new ExternalLink(DEFAULT_IMAGE_REF, depictable.getImage("as", "is", defaultImageAttrWithFileName.getFirst(), lang))
                         .add(
                                 createSeoImage(
-                                        new ContextImage(DEFAULT_IMAGE, defaultImageRelativePath)
+                                        new ContextImage(DEFAULT_IMAGE, depictable.getImage(width, height, defaultImageAttrWithFileName.getFirst(), lang))
                                                 .add(
                                                         new AttributeModifier(HTML_WIDTH, width),
                                                         new AttributeModifier(HTML_HEIGHT, height)
                                                 ),
-                                        getSeoImage(filledImageAttributes, depictable.getDefaultImageAttributeName()), lang)
+                                        depictable.getSeoImage(defaultImageAttrWithFileName.getSecond()), lang)
 
                         )
 
         );
 
         add(
-                new ListView<Pair<String, String>>(ALT_IMAGE_LIST, filledImageAttributes) {
+                new ListView<Pair<String, String>>(ALT_IMAGE_LIST, altImageAttrWithFileName) {
 
                     @Override
                     protected void populateItem(ListItem<Pair<String, String>> pairListItem) {
@@ -130,22 +133,22 @@ public class ImageView extends BaseComponent {
 
 
                         pairListItem.add(
-                                new ExternalLink(ALT_IMAGE_REF, depictable.getImage("as", "is", pair.getFirst()))
+                                new ExternalLink(ALT_IMAGE_REF, depictable.getImage("as", "is", pair.getFirst(), lang))
                                         .add(
                                                 createSeoImage(
-                                                        new ContextImage(ALT_IMAGE, depictable.getImage(tumbWidth, tumbHeight, pair.getFirst()))
+                                                        new ContextImage(ALT_IMAGE, depictable.getImage(tumbWidth, tumbHeight, pair.getFirst(), lang))
                                                                 .add(
                                                                         new AttributeModifier(HTML_WIDTH, tumbWidth),
                                                                         new AttributeModifier(HTML_HEIGHT, tumbHeight)
                                                                 ),
-                                                        getSeoImage(filledImageAttributes, pair.getFirst()), lang)
+                                                        depictable.getSeoImage(pair.getSecond()), lang)
 
                                         )
                         );
 
                     }
 
-                }.setVisible(filledImageAttributes.size() > 1)
+                }.setVisible(altImageAttrWithFileName.size() > 0)
         );
 
 
@@ -166,25 +169,6 @@ public class ImageView extends BaseComponent {
 
         }
         return component;
-    }
-
-
-    private SeoImage getSeoImage(final List<Pair<String, String>> allImages, final String attrName) {
-        final String fileName = getFileName(allImages, attrName);
-        if (StringUtils.isNotBlank(fileName)) {
-            return depictable.getSeoImage(fileName);
-        }
-        return null;
-    }
-
-
-    private String getFileName(final List<Pair<String, String>> allImages, final String attrName) {
-        for (Pair<String, String> attrFileName : allImages) {
-            if (attrFileName.getFirst().equals(attrName)) {
-                return attrFileName.getSecond();
-            }
-        }
-        return null;
     }
 
 }

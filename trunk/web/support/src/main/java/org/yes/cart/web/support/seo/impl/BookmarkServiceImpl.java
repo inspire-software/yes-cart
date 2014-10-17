@@ -55,11 +55,10 @@ public class BookmarkServiceImpl implements BookmarkService {
      * @param productService  product service
      * @param cacheManager    cache manager to use
      */
-    public BookmarkServiceImpl(
-            final CategoryService categoryService,
-            final ContentService contentService,
-            final ProductService productService,
-            final CacheManager cacheManager) {
+    public BookmarkServiceImpl(final CategoryService categoryService,
+                               final ContentService contentService,
+                               final ProductService productService,
+                               final CacheManager cacheManager) {
 
         this.categoryService = categoryService;
         this.productService = productService;
@@ -183,30 +182,6 @@ public class BookmarkServiceImpl implements BookmarkService {
                 seoData = DecoratorUtil.encodeId(
                         bookmark,
                         productSeoUri
-                );
-            }
-            if (seoData != null) {
-                PRODUCT_ENCODE_CACHE.put(bookmark, seoData);
-                PRODUCT_DECODE_CACHE.put(seoData, bookmark);
-            }
-        }
-
-        return seoData;
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String saveBookmarkForProduct(final Product product) {
-
-        final String bookmark = String.valueOf(product.getProductId());
-        String seoData = getStringFromValueWrapper(PRODUCT_ENCODE_CACHE.get(bookmark));
-        if (seoData == null) {
-            if (product != null) {
-                seoData = DecoratorUtil.encodeId(
-                        bookmark,
-                        product.getSeo()
                 );
             }
             if (seoData != null) {

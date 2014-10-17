@@ -234,7 +234,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
 
-    public Map<String, AttrValue> getAllAttibutesAsMap() {
+    public Map<String, AttrValue> getAllAttributesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         if (this.attributes != null) {
             for (AttrValue attrValue : this.attributes) {
@@ -246,7 +246,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         return rez;
     }
 
-    public Collection<AttrValue> getAllAttibutes() {
+    public Collection<AttrValue> getAllAttributes() {
         return new ArrayList<AttrValue>(attributes);
     }
 

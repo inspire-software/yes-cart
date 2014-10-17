@@ -95,7 +95,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
     protected AttributableImageService attributableImageService;
 
 
@@ -161,17 +161,15 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                 final ProductSkuDecorator productSkuDecorator = getDecoratorFacade().decorate(
                                                         productSkuService.getProductSkuBySkuCode(det.getProductSkuCode()),
                                                         WicketUtil.getHttpServletRequest().getContextPath(),
-                                                        getI18NSupport());
+                                                        true);
 
                                                 final String[] size = productSkuDecorator.getThumbnailImageSize(rootCategory);
 
                                                 final String width = size[0];
                                                 final String height = size[1];
 
-                                                final String defaultImageRelativePath = productSkuDecorator.getImage(
-                                                        width,
-                                                        height,
-                                                        productSkuDecorator.getDefaultImageAttributeName());
+                                                final String lang = getLocale().getLanguage();
+                                                final String defaultImageRelativePath = productSkuDecorator.getDefaultImage(width, height, lang);
 
                                                 final BigDecimal itemTotal = det.getPrice()
                                                         .multiply(det.getQty())

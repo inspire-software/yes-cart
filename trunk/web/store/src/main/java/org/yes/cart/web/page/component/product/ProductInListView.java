@@ -66,7 +66,7 @@ public class ProductInListView extends BaseComponent {
     private final Category category;
 
 
-    @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
     private AttributableImageService attributableImageService;
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
@@ -138,7 +138,7 @@ public class ProductInListView extends BaseComponent {
 
         add(links.newProductLink(PRODUCT_LINK_IMAGE, product.getId(), getPage().getPageParameters())
                 .add(
-                        new ContextImage(PRODUCT_IMAGE, getDefaultImage(width, height))
+                        new ContextImage(PRODUCT_IMAGE, getDefaultImage(width, height, selectedLocale))
                                 .add(new AttributeModifier(HTML_WIDTH, width))
                                 .add(new AttributeModifier(HTML_HEIGHT, height))
                 )
@@ -195,16 +195,12 @@ public class ProductInListView extends BaseComponent {
     /**
      * {@inheritDoc}
      */
-    public String getDefaultImage(final String width, final String height) {
+    public String getDefaultImage(final String width, final String height, final String lang) {
 
         final Logger log = ShopCodeContext.getLog(this);
 
         final String result = attributableImageService.getImageURI(
-                product.getDefaultImage(),
-                width,
-                height,
-                WicketUtil.getHttpServletRequest().getContextPath(),
-                product
+                product, WicketUtil.getHttpServletRequest().getContextPath(), lang, width, height, product.getDefaultImage()
         );
 
         if (log.isInfoEnabled()) {
