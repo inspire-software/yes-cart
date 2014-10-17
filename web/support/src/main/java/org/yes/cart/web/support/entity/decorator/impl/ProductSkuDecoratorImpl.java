@@ -33,10 +33,7 @@ import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AttributableImageService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Product sku decorator.
@@ -47,22 +44,11 @@ import java.util.Map;
  */
 public class ProductSkuDecoratorImpl extends ProductSkuEntity implements ProductSkuDecorator {
 
-    private final static List<String> attrNames = new ArrayList<String>() {{
-        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
-        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "1");
-        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "2");
-        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "3");
-        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "4");
-        add(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "5");
-    }};
-
-
 
     private final ProductService productService;
-    private final AttributableImageService attributableImageService;
+    private final AttributableImageService productSkuImageService;
     private final CategoryService categoryService;
     private final String httpServletContextPath;
-    private final Map<Integer, String> productImageUrl = new HashMap<Integer, String>();
     private final ImageService imageService;
     private final I18NWebSupport i18NWebSupport;
 
@@ -70,7 +56,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      * Construct product sku decorator.
      *
      * @param imageService             image service to get the image seo info
-     * @param attributableImageService category image service to get the image.
+     * @param productSkuImageService category image service to get the image.
      * @param categoryService          to get image width and height
      * @param productSkuEntity         sku to decorate
      * @param httpServletContextPath   servlet context path
@@ -78,7 +64,7 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      * @param i18NWebSupport           i18n
      */
     public ProductSkuDecoratorImpl(final ImageService imageService,
-                                   final AttributableImageService attributableImageService,
+                                   final AttributableImageService productSkuImageService,
                                    final CategoryService categoryService,
                                    final ProductSku productSkuEntity,
                                    final String httpServletContextPath,
@@ -90,82 +76,50 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
             BeanUtils.copyProperties(productSkuEntity, this);
         }
         this.httpServletContextPath = httpServletContextPath;
-        this.attributableImageService = attributableImageService;
+        this.productSkuImageService = productSkuImageService;
         this.categoryService = categoryService;
         this.imageService = imageService;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public List<String> getImageAttributeNames() {
-        return attrNames;
-    }
-
 
     /**
      * {@inheritDoc}
+     * @param lang
      */
-    public List<Pair<String, String>> getImageAttributeFileNames() {
-        final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>();
-        for (String attrName : attrNames) {
-            if (this.getAttributeByCode(attrName) != null) {
-                rez.add(new Pair<String, String>(attrName, this.getAttributeByCode(attrName).getVal()));
-            }
-        }
-        return rez;
-    }
+    public List<Pair<String, String>> getImageAttributeFileNames(final String lang) {
 
-    private Integer getImageWithSizeHash(final String ... params) {
-        final int prime = 31;
-        int result = 1;
-        for( String param : params) {
-            if (param == null) {
-                continue;
-            }
-            result = result * prime + param.hashCode();
-        }
-        return result;
+        return productSkuImageService.getImageAttributeFileNames(this, lang);
+
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getImage(final String width, final String height, final String imageAttributeName) {
-        final Integer hash = getImageWithSizeHash(imageAttributeName, width, height);
-        String img = productImageUrl.get(hash);
-        if (img == null) {
-            img = attributableImageService.getImage(
+    public String getImage(final String width, final String height, final String imageAttributeName, final String lang) {
+        return productSkuImageService.getImage(
                     this,
                     httpServletContextPath,
+                    lang,
                     width,
                     height,
                     imageAttributeName,
                     null);
-            productImageUrl.put(hash, img);
-        }
-        return img;
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public String getDefaultImage(final String width, final String height) {
-        final String imageAttributeName = getDefaultImageAttributeName();
-        final Integer hash = getImageWithSizeHash(imageAttributeName, width, height);
-        String img = productImageUrl.get(hash);
-        if (img == null) {
-            img = attributableImageService.getImage(
+    public String getDefaultImage(final String width, final String height, final String lang) {
+        final String imageAttributeName = getImageAttributeFileNames(lang).get(0).getFirst();
+        return productSkuImageService.getImage(
                     this,
                     httpServletContextPath,
+                    lang,
                     width,
                     height,
                     imageAttributeName,
                     null);
-            productImageUrl.put(hash, img);
-        }
-        return img;
     }
 
 
@@ -187,13 +141,6 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
                 null, category,
                 ProductDecoratorImpl.thumbnailSize
         );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getDefaultImageAttributeName() {
-        return AttributeNamesKeys.Product.PRODUCT_DEFAULT_IMAGE_ATTR_NAME;
     }
 
 

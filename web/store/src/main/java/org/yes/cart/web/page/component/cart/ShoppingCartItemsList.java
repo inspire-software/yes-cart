@@ -44,11 +44,9 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
-import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
-import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
@@ -97,12 +95,6 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
     private final Category rootCategory;
 
 
-    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_SUPPORT_FACADE)
-    private WicketSupportFacade wicketSupportFacade;
-
-    @SpringBean(name = StorefrontServiceSpringKeys.I18N_SUPPORT)
-    private I18NWebSupport i18NWebSupport;
-
     @SpringBean(name = StorefrontServiceSpringKeys.DECORATOR_FACADE)
     private DecoratorFacade decoratorFacade;
 
@@ -131,11 +123,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
         final ProductSku sku = productSkuService.getProductSkuBySkuCode(skuCode);
 
-        final ProductSkuDecorator productSkuDecorator = decoratorFacade.decorate(
-                sku,
-                WicketUtil.getHttpServletRequest().getContextPath(),
-                i18NWebSupport);
-
+        final ProductSkuDecorator productSkuDecorator = decoratorFacade.decorate(sku, WicketUtil.getHttpServletRequest().getContextPath(), true);
 
         final boolean notGift = !cartItem.isGift();
 
@@ -174,9 +162,8 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         final String width = size[0];
         final String height = size[1];
 
-        final String defaultImageRelativePath = productSkuDecorator.getImage(
-                width, height,
-                productSkuDecorator.getDefaultImageAttributeName());
+        final String lang = getLocale().getLanguage();
+        final String defaultImageRelativePath = productSkuDecorator.getDefaultImage(width, height, lang);
 
         cartItemListItem.add(new ContextImage(DEFAULT_IMAGE, defaultImageRelativePath)
                 .add(

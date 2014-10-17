@@ -31,7 +31,6 @@ import org.yes.cart.service.dto.DtoImageService;
 import java.io.File;
 import java.util.UUID;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertNotNull;
@@ -221,32 +220,6 @@ public class ImageServiceImplTest  extends BaseCoreDBTestCase {
         imageService.resizeImage(
                 "src/test/resources/imgresize/resize-200x150.png",
                 "target/test/resources/imgresize/resize-200x150-to-80x80-crop.png", "80", "80", true);
-
-    }
-
-
-    @Test
-    public void testCreateRollingFileName() throws Exception {
-
-        final ImageServiceImpl srv = new ImageServiceImpl(null, null, "", 0, 0, 0, true, 0, null);
-
-        // no extension
-        assertEquals("filenameNoExt_1", srv.createRollingFileName("filenameNoExt"));
-        assertEquals("filenameNoExt_some_suffix_1", srv.createRollingFileName("filenameNoExt_some_suffix"));
-        assertEquals("filenameNoExt_some_suffix_2", srv.createRollingFileName("filenameNoExt_some_suffix_1"));
-        assertEquals("filenameNoExt_some_suffix_3", srv.createRollingFileName("filenameNoExt_some_suffix_2"));
-
-        // with extension
-        assertEquals("filename_1.ext", srv.createRollingFileName("filename.ext"));
-        assertEquals("filename_some_suffix_1.ext", srv.createRollingFileName("filename_some_suffix.ext"));
-        assertEquals("filename_some_suffix_2.ext", srv.createRollingFileName("filename_some_suffix_1.ext"));
-        assertEquals("filename_some_suffix_3.ext", srv.createRollingFileName("filename_some_suffix_2.ext"));
-
-        // number in filename
-        assertEquals("100200300_1", srv.createRollingFileName("100200300"));
-        assertEquals("100200300_1.ext", srv.createRollingFileName("100200300.ext"));
-        assertEquals("100200300_2.ext", srv.createRollingFileName("100200300_1.ext"));
-        assertEquals("100200300_3.ext", srv.createRollingFileName("100200300_2.ext"));
 
     }
 

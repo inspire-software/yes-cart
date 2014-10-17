@@ -72,11 +72,7 @@ public class SubCategoriesCentralView extends AbstractCentralView {
         final DecoratorFacade facade = getDecoratorFacade();
         final List<CategoryDecorator> rez = new ArrayList<CategoryDecorator>();
         for (Category cat : categories) {
-            rez.add(facade.decorate(
-                    cat,
-                    WicketUtil.getHttpServletRequest().getContextPath(),
-                    getI18NSupport())
-            );
+            rez.add((CategoryDecorator) facade.decorate(cat, WicketUtil.getHttpServletRequest().getContextPath(), true));
         }
         return rez;
     }

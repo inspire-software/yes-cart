@@ -18,6 +18,9 @@ package org.yes.cart.web.support.service;
 
 
 import org.yes.cart.domain.entity.Attributable;
+import org.yes.cart.domain.misc.Pair;
+
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -28,19 +31,34 @@ public interface AttributableImageService {
 
 
     /**
+     * Get pair of images attributes name and image file name for given language.
+     *
+     * @param attributable           given attributable
+     * @param lang language
+     *
+     * @return images attributes names.
+     */
+    List<Pair<String, String>> getImageAttributeFileNames(Attributable attributable,
+                                                          String lang);
+
+
+    /**
      * Get the context image with image servlet url
      * and specified parameters.
      *
-     * @param attributable                given attributable
+     * @param attributable           given attributable
      * @param httpServletContextPath http servlet request path
+     * @param locale                 locale for image
      * @param width                  image width
      * @param height                 image height.
      * @param attrName given image attribute name
      * @param attrVal optional attrValue, if it not provided service will try to get value from attributes
+     *
      * @return default context image url.
      */
     String getImage(Attributable attributable,
                     String httpServletContextPath,
+                    String locale,
                     String width,
                     String height,
                     String attrName,
@@ -49,17 +67,21 @@ public interface AttributableImageService {
     /**
      * Get default image uri.
      *
-     * @param imageName          name of image
+     *
+     * @param object             product/sku/category
+     * @param servletContextPath http servlet request
+     * @param locale             locale for image
      * @param width              image width
      * @param height             image height
-     * @param servletContextPath http servlet request
-     * @param object             product/sku/category
+     * @param imageName          name of image
+     *
      * @return image uri.
      */
-    String getImageURI(final String imageName,
-                              final String width,
-                              final String height,
-                              final String servletContextPath,
-                              final Object object);
+    String getImageURI(Object object,
+                       String servletContextPath,
+                       String locale,
+                       String width,
+                       String height,
+                       String imageName);
 
 }

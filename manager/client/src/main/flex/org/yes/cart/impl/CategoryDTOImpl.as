@@ -33,6 +33,8 @@ public class CategoryDTOImpl {
 
     public var name:String;
 
+    public var guid:String;
+
     public var displayNames:Object;
 
     public var description:String;

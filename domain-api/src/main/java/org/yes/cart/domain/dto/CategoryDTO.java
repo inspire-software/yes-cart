@@ -17,6 +17,7 @@
 package org.yes.cart.domain.dto;
 
 
+import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.util.Date;
@@ -32,7 +33,7 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface CategoryDTO extends Identifiable {
+public interface CategoryDTO extends Identifiable, Guidable {
 
     /**
      * Get category pk value.

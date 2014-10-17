@@ -177,10 +177,10 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         Collection<AttrValue> productAttrValues;
         Collection<AttrValue> skuAttrValues;
         if (sku != null) {
-            productAttrValues = product.getAllAttibutes();
-            skuAttrValues = sku.getAllAttibutes();
+            productAttrValues = product.getAllAttributes();
+            skuAttrValues = sku.getAllAttributes();
         } else if (product != null) {
-            productAttrValues = product.getAllAttibutes();
+            productAttrValues = product.getAllAttributes();
             skuAttrValues = Collections.emptyList();
         } else {
             return Collections.emptyMap();

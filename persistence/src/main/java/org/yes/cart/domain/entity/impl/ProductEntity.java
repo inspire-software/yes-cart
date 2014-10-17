@@ -384,7 +384,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return result;
     }
 
-    public Map<String, AttrValue> getAllAttibutesAsMap() {
+    public Map<String, AttrValue> getAllAttributesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         if (this.attributes != null) {
             for (AttrValue attrValue : this.attributes) {
@@ -409,7 +409,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return null;
     }
 
-    public Collection<AttrValue> getAllAttibutes() {
+    public Collection<AttrValue> getAllAttributes() {
         return new ArrayList<AttrValue>(attributes);
     }
 

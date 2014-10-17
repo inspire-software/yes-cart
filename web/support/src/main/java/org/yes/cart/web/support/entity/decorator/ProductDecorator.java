@@ -17,10 +17,6 @@
 package org.yes.cart.web.support.entity.decorator;
 
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.web.support.service.AttributableImageService;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -28,20 +24,5 @@ import org.yes.cart.web.support.service.AttributableImageService;
  * Time: 9:39 PM
  */
 public interface ProductDecorator extends Product, ObjectDecorator {
-
-    /**
-     * Attache to context after de-serialization in case of cache overflow.
-     *
-     * @param imageService image service to get the image seo info
-     * @param attributableImageService category image service to get the image.
-     * @param categoryService          to get image width and height
-     * @param productService           product service
-     */
-    public void attachToContext(
-             ImageService imageService,
-             AttributableImageService attributableImageService,
-             CategoryService categoryService,
-             ProductService productService);
-
 
 }

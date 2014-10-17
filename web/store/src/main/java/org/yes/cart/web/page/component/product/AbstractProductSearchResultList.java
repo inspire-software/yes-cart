@@ -72,8 +72,8 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.ATTRIBUTABLE_IMAGE_SERVICE)
-    protected AttributableImageService attributableImageService;
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
+    protected AttributableImageService productImageService;
 
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     protected CategoryService categoryService;
@@ -189,7 +189,7 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
         listItem.add(
                 links.newProductLink(PRODUCT_LINK_IMAGE, prod.getId(), getPage().getPageParameters())
                         .add(
-                                new ContextImage(PRODUCT_IMAGE, getDefaultImage(prod, width, height))
+                                new ContextImage(PRODUCT_IMAGE, getDefaultImage(prod, width, height, selectedLocale))
                                         .add(new AttributeModifier(HTML_WIDTH, width))
                                         .add(new AttributeModifier(HTML_HEIGHT, height))
                                         .add(new AttributeModifier(HTML_TITLE, prodName))
@@ -207,16 +207,12 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
     /**
      * {@inheritDoc}
      */
-    public String getDefaultImage(final ProductSearchResultDTO product, final String width, final String height) {
+    public String getDefaultImage(final ProductSearchResultDTO product, final String width, final String height, final String locale) {
 
         final Logger log = ShopCodeContext.getLog(this);
 
-        final String result = attributableImageService.getImageURI(
-                product.getDefaultImage(),
-                width,
-                height,
-                WicketUtil.getHttpServletRequest().getContextPath(),
-                product
+        final String result = productImageService.getImageURI(
+                product, WicketUtil.getHttpServletRequest().getContextPath(), locale, width, height, product.getDefaultImage()
         );
 
         if (log.isInfoEnabled()) {

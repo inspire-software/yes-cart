@@ -26,8 +26,7 @@
         import org.yes.cart.impl.AttrValueShopDTOImpl;
 
         override protected function allowManageAttribute(attr:AttrValueShopDTOImpl):Boolean {
-            return attr.attributeDTO.code.indexOf("IMAGE") == -1
-                    && attr.attributeDTO.code != "CURRENCY"
+            return     attr.attributeDTO.code != "CURRENCY"
                     && attr.attributeDTO.code != "COUNTRY_SHIP"
                     && attr.attributeDTO.code != "COUNTRY_BILL"
                     && attr.attributeDTO.code != "SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL"

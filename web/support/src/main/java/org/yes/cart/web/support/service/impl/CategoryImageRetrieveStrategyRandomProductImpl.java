@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Attributable;
@@ -31,14 +32,6 @@ import org.yes.cart.web.support.service.CategoryImageRetrieveStrategy;
  */
 public class CategoryImageRetrieveStrategyRandomProductImpl implements CategoryImageRetrieveStrategy {
 
-    /**
-     * Get image repository url pattern.
-     *
-     * @return image repository url pattern
-     */
-    public String getImageRepositoryUrlPattern() {
-        return Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN;
-    }
 
     private final ProductService productService;
     private final String attributeCode;
@@ -49,9 +42,8 @@ public class CategoryImageRetrieveStrategyRandomProductImpl implements CategoryI
      * @param productService product service to get random product in category.
      * @param attributeCode attribute code.
      */
-    public CategoryImageRetrieveStrategyRandomProductImpl(
-            final ProductService productService,
-            final String attributeCode) {
+    public CategoryImageRetrieveStrategyRandomProductImpl(final ProductService productService,
+                                                          final String attributeCode) {
         this.productService = productService;
         this.attributeCode = attributeCode;
     }
@@ -59,19 +51,34 @@ public class CategoryImageRetrieveStrategyRandomProductImpl implements CategoryI
     /**
      * {@inheritDoc}
      */
-    public String getImageName(final Attributable category) {
+    public String getImageName(final Attributable category, final String attributeCodeHint, final String locale) {
         Product product = productService.getRandomProductByCategory((Category)category);
         if (product != null) {
-            AttrValue attrValue = product.getAttributeByCode(attributeCode);
+            AttrValue attrValue = product.getAttributeByCode(attributeCode + "_" + locale);
             if (attrValue != null) {
                 return attrValue.getVal();
+            } else {
+                attrValue = product.getAttributeByCode(attributeCode);
+                if (attrValue != null) {
+                    return attrValue.getVal();
+                }
             }
         }
         return Constants.NO_IMAGE;
     }
 
-    /** {@inheritDoc} */
-    public String getAttributeCode() {
-        return attributeCode;
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getImageRepositoryUrlPattern() {
+        return Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getImageAttributePrefix() {
+        return AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX;
     }
 }
