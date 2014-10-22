@@ -28,13 +28,21 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -68,6 +76,8 @@ public class ManageAddressesView extends BaseComponent {
     @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
     private AddressBookFacade addressBookFacade;
 
+    @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
+    private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
     /**
      * Create panel to manage addresses
@@ -90,8 +100,18 @@ public class ManageAddressesView extends BaseComponent {
 
                             @Override
                             protected void onSelectionChanged(final Object o) {
-                                super.onSelectionChanged(o);
-                                addressBookFacade.useAsDefault((Address) o);
+                                final Address address = (Address) o;
+                                super.onSelectionChanged(address);
+                                addressBookFacade.useAsDefault(address);
+                                final String key = Address.ADDR_TYPE_BILLING.equals(addressType) ?
+                                        ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS : ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS;
+                                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, ApplicationDirector.getShoppingCart(),
+                                        (Map) new HashMap() {{
+                                            put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
+                                            put(key, String.valueOf(address.getAddressId()));
+                                        }}
+                                );
+                                ((AbstractWebPage) getPage()).persistCartIfNecessary();
                             }
 
                             @Override

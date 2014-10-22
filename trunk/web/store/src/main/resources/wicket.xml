@@ -194,6 +194,7 @@
                 <value>removeOneSkuCmd</value>
                 <value>setBillingAddressSeparateCmd</value>
                 <value>setCarrierSlaCmd</value>
+                <value>setAddressesCmd</value>
                 <value>setMultipleDeliveryCmd</value>
                 <value>setShopIdCmd</value>
                 <value>setQuantityToCartCmd</value>
@@ -211,6 +212,7 @@
                 <value>loginCmd</value>
                 <value>setBillingAddressSeparateCmd</value>
                 <value>setCarrierSlaCmd</value>
+                <value>setAddressesCmd</value>
                 <value>setMultipleDeliveryCmd</value>
                 <value>setShopIdCmd</value>
                 <value>viewSkuInternalCmd</value>
