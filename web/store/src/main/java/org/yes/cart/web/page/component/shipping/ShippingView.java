@@ -33,6 +33,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.page.component.util.CarrierRenderer;
@@ -158,6 +159,7 @@ public class ShippingView extends BaseComponent {
                             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, shippingAddressId);
                         }}
                 );
+                ((AbstractWebPage) getPage()).persistCartIfNecessary();
 
                 addPriceView(form);
 

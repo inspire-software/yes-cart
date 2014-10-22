@@ -27,12 +27,7 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-/**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
- */
-public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
+public class SetAddressesCartCommandImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testExecuteNoAddressParams() {
@@ -40,7 +35,6 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        assertNull(shoppingCart.getCarrierSlaId());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -48,14 +42,11 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
             put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
             put(ShoppingCartCommand.CMD_SETSHOP, "10");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA, "123");
+            put(ShoppingCartCommand.CMD_SETADDRESES, "1");
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
-        assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
-        assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
     }
 
     @Test
@@ -72,16 +63,13 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
             put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
             put(ShoppingCartCommand.CMD_SETSHOP, "10");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA, "123");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, "234");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, "345");
+            put(ShoppingCartCommand.CMD_SETADDRESES, "1");
+            put(ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS, "234");
+            put(ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS, "345");
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
         assertEquals(234, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
         assertEquals(345, shoppingCart.getOrderInfo().getDeliveryAddressId().intValue());
-        assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
-        assertFalse(shoppingCart.getOrderInfo().isDeliveryAddressNotRequired());
     }
 
     @Test
@@ -90,26 +78,21 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        assertNull(shoppingCart.getCarrierSlaId());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
+        shoppingCart.getOrderInfo().setBillingAddressNotRequired(true);
 
         commands.execute(shoppingCart, new HashMap<String, Object>() {{
             put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
             put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
             put(ShoppingCartCommand.CMD_SETSHOP, "10");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA, "123");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, Boolean.TRUE);
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, Boolean.FALSE);
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, "234");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, "345");
+            put(ShoppingCartCommand.CMD_SETADDRESES, "1");
+            put(ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS, "234");
+            put(ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS, "345");
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertEquals(345, shoppingCart.getOrderInfo().getDeliveryAddressId().intValue());
-        assertTrue(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
-        assertFalse(shoppingCart.getOrderInfo().isDeliveryAddressNotRequired());
     }
 
     @Test
@@ -118,26 +101,21 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        assertNull(shoppingCart.getCarrierSlaId());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
+        shoppingCart.getOrderInfo().setDeliveryAddressNotRequired(true);
 
         commands.execute(shoppingCart, new HashMap<String, Object>() {{
             put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
             put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
             put(ShoppingCartCommand.CMD_SETSHOP, "10");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA, "123");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, Boolean.FALSE);
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, Boolean.TRUE);
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, "234");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, "345");
+            put(ShoppingCartCommand.CMD_SETADDRESES, "1");
+            put(ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS, "234");
+            put(ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS, "345");
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
         assertEquals(234, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
-        assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
-        assertTrue(shoppingCart.getOrderInfo().isDeliveryAddressNotRequired());
     }
 
     @Test
@@ -149,26 +127,21 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.getOrderInfo().setBillingAddressId(234L);
         shoppingCart.getOrderInfo().setDeliveryAddressId(345L);
 
-        assertNull(shoppingCart.getCarrierSlaId());
         assertNotNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNotNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
+        shoppingCart.getOrderInfo().setBillingAddressNotRequired(true);
 
         commands.execute(shoppingCart, new HashMap<String, Object>() {{
             put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
             put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
             put(ShoppingCartCommand.CMD_SETSHOP, "10");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA, "123");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, Boolean.TRUE);
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, Boolean.FALSE);
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, "234");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, "345");
+            put(ShoppingCartCommand.CMD_SETADDRESES, "1");
+            put(ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS, "234");
+            put(ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS, "345");
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertEquals(345, shoppingCart.getOrderInfo().getDeliveryAddressId().intValue());
-        assertTrue(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
-        assertFalse(shoppingCart.getOrderInfo().isDeliveryAddressNotRequired());
     }
 
     @Test
@@ -180,25 +153,20 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.getOrderInfo().setBillingAddressId(234L);
         shoppingCart.getOrderInfo().setDeliveryAddressId(345L);
 
-        assertNull(shoppingCart.getCarrierSlaId());
         assertNotNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNotNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
+        shoppingCart.getOrderInfo().setDeliveryAddressNotRequired(true);
 
         commands.execute(shoppingCart, new HashMap<String, Object>() {{
             put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
             put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
             put(ShoppingCartCommand.CMD_SETSHOP, "10");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA, "123");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, Boolean.FALSE);
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, Boolean.TRUE);
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, "234");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, "345");
+            put(ShoppingCartCommand.CMD_SETADDRESES, "1");
+            put(ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS, "234");
+            put(ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS, "345");
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
         assertEquals(234, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
-        assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
-        assertTrue(shoppingCart.getOrderInfo().isDeliveryAddressNotRequired());
     }
 }

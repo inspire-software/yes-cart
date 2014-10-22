@@ -16,6 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
@@ -78,10 +79,31 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
                 shoppingCart.getShoppingContext().setCustomerEmail(customer.getEmail());
                 shoppingCart.getShoppingContext().setCustomerName(customer.getFirstname() + " " + customer.getLastname());
                 shoppingCart.getShoppingContext().setCustomerShops(customerShops);
+                setDefaultAddressesIfNecessary(shoppingCart, customer);
                 recalculate(shoppingCart);
                 markDirty(shoppingCart);
             } else {
                 shoppingCart.getShoppingContext().clearContext();
+            }
+        }
+    }
+
+    private void setDefaultAddressesIfNecessary(final ShoppingCart shoppingCart, final Customer customer) {
+        if (!shoppingCart.getOrderInfo().isBillingAddressNotRequired()
+                || !shoppingCart.getOrderInfo().isDeliveryAddressNotRequired()) {
+
+            final Address delivery = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+            final Address billing = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
+
+            if (!shoppingCart.getOrderInfo().isDeliveryAddressNotRequired() && delivery != null) {
+                shoppingCart.getOrderInfo().setDeliveryAddressId(delivery.getAddressId());
+            }
+            if (!shoppingCart.getOrderInfo().isDeliveryAddressNotRequired() && (delivery != null || billing != null)) {
+                if (billing != null) {
+                    shoppingCart.getOrderInfo().setDeliveryAddressId(billing.getAddressId());
+                } else {
+                    shoppingCart.getOrderInfo().setDeliveryAddressId(delivery.getAddressId());
+                }
             }
         }
     }

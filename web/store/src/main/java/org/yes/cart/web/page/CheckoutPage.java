@@ -67,6 +67,7 @@ import org.yes.cart.web.support.service.ShippingServiceFacade;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -533,8 +534,9 @@ public class CheckoutPage extends AbstractWebPage {
 
         MarkupContainer rez;
 
-        boolean billingAddressHidden = getRequest().getRequestParameters().getParameterValue(
-                BILLING_ADDR_VISIBLE).toBoolean(true);
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        boolean billingAddressHidden = !cart.getOrderInfo().isSeparateBillingAddress();
 
         final Customer customer = customerServiceFacade.getCustomerByEmail(
                 ApplicationDirector.getShoppingCart().getCustomerEmail());
@@ -566,9 +568,15 @@ public class CheckoutPage extends AbstractWebPage {
 
                             @Override
                             public void onSelectionChanged() {
-                                final boolean newVal = !getModelObject();
-                                setModelObject(newVal);
-                                billingAddress.setVisible(!newVal);
+                                final boolean billingHidden = !getModelObject();
+                                setModelObject(billingHidden);
+                                billingAddress.setVisible(!billingHidden);
+                                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SEPARATEBILLING, ApplicationDirector.getShoppingCart(),
+                                        (Map) new HashMap() {{
+                                            put(ShoppingCartCommand.CMD_SEPARATEBILLING, String.valueOf(!billingHidden));
+                                        }}
+                                );
+                                persistCartIfNecessary();
                             }
                         }
                 )
