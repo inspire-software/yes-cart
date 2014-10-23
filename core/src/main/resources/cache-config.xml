@@ -227,6 +227,14 @@
             <constructor-arg index="0" value="shopService-shopAllCategoriesIds"/>
             <constructor-arg index="1" value="all"/>
         </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="web.imageService-imageURI"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="web.imageService-objectImages"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
     </util:set>
 
     <util:set id="CategoryCreate">
@@ -310,6 +318,14 @@
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="imageNameStrategy-resolveObjectCode"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="imageNameStrategy-resolveLocale"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="imageNameStrategy-resolveSuffix"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>
@@ -445,6 +461,14 @@
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="filteredNavigationSupport-brandFilteredNavigationRecords"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="web.imageService-imageURI"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="web.imageService-objectImages"/>
             <constructor-arg index="1" value="all"/>
         </bean>
     </util:set>

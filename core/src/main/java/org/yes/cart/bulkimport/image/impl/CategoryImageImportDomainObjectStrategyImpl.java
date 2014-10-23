@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.image.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -62,10 +63,7 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
 
     /** {@inheritDoc} */
     @Override
-    public boolean doImageImport(final JobStatusListener statusListener,
-                                 final String fileName,
-                                 final String code,
-                                 final String suffix) {
+    public boolean doImageImport(final JobStatusListener statusListener, final String fileName, final String code, final String suffix, final String locale) {
 
         final Category category = categoryService.findCategoryIdBySeoUriOrGuid(code);
         if (category == null) {
@@ -77,7 +75,7 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
 
         validateAccessBeforeUpdate(category, Category.class);
 
-        final String attributeCode = AttributeNamesKeys.Category.CATEGORY_IMAGE;
+        final String attributeCode = AttributeNamesKeys.Category.CATEGORY_IMAGE_PREFIX + suffix + (StringUtils.isNotEmpty(locale) ? "_" + locale : "");
         AttrValueCategory imageAttributeValue = (AttrValueCategory) category.getAttributeByCode(attributeCode);
         if (imageAttributeValue == null) {
             final List<Attribute> imageAttributes = attributeService.getAvailableImageAttributesByGroupCode(AttributeGroupNames.CATEGORY);

@@ -94,7 +94,7 @@ public interface ImageService extends GenericService<SeoImage> {
     /**
      * Is given image size allowed check.
      *
-     * @param size size in widthxheight format, for example 50x60
+     * @param size size in width x height format, for example 50x60
      * @return true if size is allowed
      */
     boolean isSizeAllowed(String size);

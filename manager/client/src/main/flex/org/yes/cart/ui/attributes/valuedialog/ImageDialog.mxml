@@ -118,6 +118,7 @@
         IMAGE_URL_MAP[AttributeGroupNames.CATEGORY] = "/imgvault/category/";
         IMAGE_URL_MAP[AttributeGroupNames.BRAND]    = "/imgvault/brand/";
         IMAGE_URL_MAP[AttributeGroupNames.PRODUCT]  = "/imgvault/product/";
+        IMAGE_URL_MAP[AttributeGroupNames.SHOP]     = "/imgvault/shop/";
 
 
         private var _value:String;
@@ -183,7 +184,7 @@
             var _ext:String = 'jpg';
             if (filename.lastIndexOf('.') > -1) {
                 var _pos:int = filename.lastIndexOf('.');
-                _name = filename.substr(0, _pos).toLowerCase();
+                _name = filename.substr(0, _pos);
                 _ext = filename.substr(_pos + 1).toLowerCase();
             }
 
@@ -286,12 +287,17 @@
 
         private function getFileNameSuffix(attributeImageCode:String):String {
 
-            var tailingDigit:RegExp = /^([^\d]*)(\d+)$/g;
+            var tailingDigit:RegExp = /^([^\d]*)(\d+)(_[a-z]{2})?$/g;
             var match:Array = tailingDigit.exec(attributeImageCode);
-            if (match != null && match.length >= 3) {
+            if (match != null && match.length >= 4) {
+                if (match[3] != null && match[3].length > 0) {
+                    // with language
+                    return String.fromCharCode('a'.charCodeAt(0) + Number(match[2])) + match[3];
+                }
+                // position
                 return String.fromCharCode('a'.charCodeAt(0) + Number(match[2]));
             }
-            return "a";
+            return "a"; // default
 
         }
 

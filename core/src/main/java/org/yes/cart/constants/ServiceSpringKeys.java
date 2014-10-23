@@ -90,6 +90,11 @@ public interface ServiceSpringKeys {
     String BRAND_IMAGE_NAME_STRATEGY = "brandImageNameStrategy";
 
     /**
+     * {@link org.yes.cart.service.image.impl.ShopImageNameStrategyImpl} bean key.
+     */
+    String SHOP_IMAGE_NAME_STRATEGY = "shopImageNameStrategy";
+
+    /**
      * {@link org.yes.cart.service.image.impl.CategoryImageNameStrategyImpl} bean key.
      */
     String CATEGORY_IMAGE_NAME_STRATEGY = "categoryImageNameStrategy";

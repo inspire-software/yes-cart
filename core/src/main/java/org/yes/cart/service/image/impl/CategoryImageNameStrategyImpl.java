@@ -19,6 +19,7 @@ package org.yes.cart.service.image.impl;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueCategory;
+import org.yes.cart.service.misc.LanguageService;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -34,10 +35,12 @@ public class CategoryImageNameStrategyImpl extends AbstractImageNameStrategyImpl
      *
      * @param relativeInternalRootDirectory  internal image relative path root directory without {@see File#separator}. E.g. "category"
      * @param attrValueCategoryDao           category attributes dao
+     * @param languageService                language service
      */
     public CategoryImageNameStrategyImpl(final String relativeInternalRootDirectory,
-                                         final GenericDAO<AttrValueCategory, Long> attrValueCategoryDao) {
-        super(Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory);
+                                         final GenericDAO<AttrValueCategory, Long> attrValueCategoryDao,
+                                         final LanguageService languageService) {
+        super(Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory, languageService);
         this.attrValueEntityCategoryDao = attrValueCategoryDao;
     }
 

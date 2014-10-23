@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.image.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -63,10 +64,7 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
 
     /** {@inheritDoc} */
     @Override
-    public boolean doImageImport(final JobStatusListener statusListener,
-                                 final String fileName,
-                                 final String code,
-                                 final String suffix) {
+    public boolean doImageImport(final JobStatusListener statusListener, final String fileName, final String code, final String suffix, final String locale) {
 
         final Brand brand = brandService.findByNameOrGuid(code);
         if (brand == null) {
@@ -78,7 +76,7 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
 
         validateAccessBeforeUpdate(brand, Brand.class);
 
-        final String attributeCode = AttributeNamesKeys.Brand.BRAND_IMAGE;
+        final String attributeCode = AttributeNamesKeys.Brand.BRAND_IMAGE_PREFIX + suffix + (StringUtils.isNotEmpty(locale) ? "_" + locale : "");;
 
         AttrValueBrand imageAttributeValue = null;
         final Collection<AttrValueBrand> attributes = brand.getAttributes();

@@ -319,7 +319,13 @@
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
 
-    <cache name="imageNameStrategy-resolveObjectCode" maxElementsInMemory="2000" overflowToDisk="false"
+    <cache name="imageNameStrategy-resolveObjectCode" maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="imageNameStrategy-resolveLocale" maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="imageNameStrategy-resolveSuffix" maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
 
@@ -444,63 +450,75 @@
     <!-- ############################################# storefront cache #######################################-->
 
     <cache name="web.bookmarkService-seoCategoryDecode"
-           maxElementsInMemory="200"
+           maxElementsInMemory="1000"
            overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
+
     <cache name="web.bookmarkService-seoCategoryEncode"
-           maxElementsInMemory="200"
+           maxElementsInMemory="1000"
            overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
     <cache name="web.bookmarkService-seoContentDecode"
-           maxElementsInMemory="1000"
+           maxElementsInMemory="5000"
            overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
+
     <cache name="web.bookmarkService-seoContentEncode"
-           maxElementsInMemory="1000"
+           maxElementsInMemory="5000"
            overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
     <cache name="web.bookmarkService-seoSkuDecode"
-           maxElementsInMemory="15000"
+           maxElementsInMemory="25000"
            overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
+
     <cache name="web.bookmarkService-seoSkuEncode"
-           maxElementsInMemory="15000"
+           maxElementsInMemory="25000"
            overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
     <cache name="web.bookmarkService-seoProductDecode"
-           maxElementsInMemory="5000"
-           overflowToDisk="false"
-           eternal="false"
-           timeToLiveSeconds="86400"
-           timeToIdleSeconds="7200"/>
-    <cache name="web.bookmarkService-seoProductEncode"
-           maxElementsInMemory="5000"
+           maxElementsInMemory="10000"
            overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
 
-    <cache name="web.decoratorFacade-decorate"
-           maxElementsInMemory="5000"
+    <cache name="web.bookmarkService-seoProductEncode"
+           maxElementsInMemory="10000"
            overflowToDisk="false"
            eternal="false"
-           timeToLiveSeconds="600"
-           timeToIdleSeconds="120"/>
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
+    <cache name="web.imageService-imageURI"
+           maxElementsInMemory="25000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
+    <cache name="web.imageService-objectImages"
+           maxElementsInMemory="10000"
+           overflowToDisk="false"
+           eternal="false"
+           timeToLiveSeconds="86400"
+           timeToIdleSeconds="7200"/>
+
 
     <cache name="web.addressBookFacade-customerHasAtLeastOneAddress"
            maxElementsInMemory="5000"

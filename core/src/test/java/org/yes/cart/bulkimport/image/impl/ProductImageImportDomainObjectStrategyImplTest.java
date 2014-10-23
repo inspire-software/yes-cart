@@ -55,10 +55,8 @@ public class ProductImageImportDomainObjectStrategyImplTest extends BaseCoreDBTe
         ImageImportDomainObjectStrategy service = (ImageImportDomainObjectStrategy) createContext().getBean("productImageImportDomainObjectStrategy");
 
         boolean rez = service.doImageImport(
-                listener,
-                "im-image-file_BENDER-ua_a.jpeg",
-                "BENDER-ua",
-                "0");
+                listener, "im-image-file_BENDER-ua_a.jpeg", "BENDER-ua", "0",
+                null);
         assertTrue(rez);
 
         clearCache();

@@ -67,10 +67,8 @@ public class BrandImageImportDomainObjectStrategyImplTest extends BaseCoreDBTest
         ImageImportDomainObjectStrategy service = (ImageImportDomainObjectStrategy) createContext().getBean("brandImageImportDomainObjectStrategy");
 
         boolean rez = service.doImageImport(
-                listener,
-                "im-image-file_FutureRobots_a.jpeg",
-                "FutureRobots",
-                "0");
+                listener, "im-image-file_FutureRobots_a.jpeg", "FutureRobots", "0",
+                null);
         assertTrue(rez);
 
         clearCache();

@@ -24,10 +24,8 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkimport.image.ImageImportDomainObjectStrategy;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ProductService;
 
 import static junit.framework.Assert.*;
 
@@ -58,10 +56,8 @@ public class CategoryImageImportDomainObjectStrategyImplTest extends BaseCoreDBT
         ImageImportDomainObjectStrategy service = (ImageImportDomainObjectStrategy) createContext().getBean("categoryImageImportDomainObjectStrategy");
 
         boolean rez = service.doImageImport(
-                listener,
-                "im-image-file_101_a.jpeg",
-                "101",
-                "0");
+                listener, "im-image-file_101_a.jpeg", "101", "0",
+                null);
         assertTrue(rez);
 
         clearCache();

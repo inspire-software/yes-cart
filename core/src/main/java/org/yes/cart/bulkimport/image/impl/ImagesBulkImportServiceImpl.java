@@ -115,22 +115,23 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
      * @param importedFiles add file to this set if imported it successfully imported.
      * @param imageVaultRootDirectory path to image vault
      */
-    public void doImport(final File file,
-                         final ImportDescriptor importDescriptor,
-                         final JobStatusListener statusListener,
-                         final Set<String> importedFiles,
-                         final String imageVaultRootDirectory) {
+    private void doImport(final File file,
+                          final ImportDescriptor importDescriptor,
+                          final JobStatusListener statusListener,
+                          final Set<String> importedFiles,
+                          final String imageVaultRootDirectory) {
 
         final ImageNameStrategy strategy = imageService.getImageNameStrategy(importDescriptor.getSelectSql());
 
         final String fileName = file.getName();
         final String code = strategy.resolveObjectCode(fileName);
-        final String suffix = getImageAttributeSuffixName(fileName);
+        final String locale = strategy.resolveLocale(fileName);
+        final String suffix = strategy.resolveSuffix(fileName);
 
         boolean success = false;
         for (final ImageImportDomainObjectStrategy domainStrategy : strategies) {
             if (domainStrategy.supports(strategy.getUrlPath())) {
-                success |= domainStrategy.doImageImport(statusListener, fileName, code, suffix);
+                success |= domainStrategy.doImageImport(statusListener, fileName, code, suffix, locale);
             }
         }
 
@@ -158,20 +159,6 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
 
         importedFiles.add(file.getAbsolutePath());
 
-    }
-
-    /**
-     * Get the suffix of IMAGE or SKUIMAGE attribute name by given file name.
-     * a  - 0, b - 1, etc
-     *
-     * @param fileName file name.
-     * @return image attribute suffix name
-     */
-    String getImageAttributeSuffixName(final String fileName) {
-        int startIndex = fileName.lastIndexOf('_') + 1;
-        int endIndex = fileName.lastIndexOf('.');
-        String suffixChar = fileName.substring(startIndex, endIndex);
-        return String.valueOf(0 + suffixChar.charAt(0) - 'a');
     }
 
 }
