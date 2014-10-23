@@ -63,20 +63,14 @@ public class ProductSkuImageImportDomainObjectStrategyImplTest extends BaseCoreD
         ImageImportDomainObjectStrategy service = (ImageImportDomainObjectStrategy) createContext().getBean("productSkuImageImportDomainObjectStrategy");
 
         boolean rez = service.doImageImport(
-                listener,
-                "im-image1-file_SOBOT-BEER_a.jpeg",
-                "SOBOT-BEER",
-                "0");
+                listener, "im-image1-file_SOBOT-BEER_a.jpeg", "SOBOT-BEER", "0",
+                null);
         rez &= service.doImageImport(
-                listener,
-                "im-image2-file_SOBOT-BEER_b.jpeg",
-                "SOBOT-BEER",
-                "1");
+                listener, "im-image2-file_SOBOT-BEER_b.jpeg", "SOBOT-BEER", "1",
+                null);
         rez &= service.doImageImport(
-                listener,
-                "im-image-file_SOBOT-BEER_c.jpeg",
-                "SOBOT-BEER",
-                "2");
+                listener, "im-image-file_SOBOT-BEER_c.jpeg", "SOBOT-BEER", "2",
+                null);
         assertTrue(rez);
 
         clearCache();

@@ -200,6 +200,7 @@
             <bean  class="org.yes.cart.service.image.impl.CategoryImageNameStrategyImpl">
                 <constructor-arg index="0" value="category"/>
                 <constructor-arg index="1" ref="attrValueEntityCategoryDao"/>
+                <constructor-arg index="2" ref="languageService"/>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -217,6 +218,7 @@
                 <constructor-arg index="0" value="product"/>
                 <constructor-arg index="1" ref="attrValueEntityProductSkuDao"/>
                 <constructor-arg index="2" ref="attrValueEntityProductDao"/>
+                <constructor-arg index="3" ref="languageService"/>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -232,6 +234,23 @@
             <bean  class="org.yes.cart.service.image.impl.BrandImageNameStrategyImpl">
                 <constructor-arg index="0" value="brand"/>
                 <constructor-arg index="1" ref="attrValueEntityBrandDao"/>
+                <constructor-arg index="2" ref="languageService"/>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="resolveObjectCode">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="shopImageNameStrategy" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.image.impl.ShopImageNameStrategyImpl">
+                <constructor-arg index="0" value="shop"/>
+                <constructor-arg index="1" ref="attrValueEntityShopDao"/>
+                <constructor-arg index="2" ref="languageService"/>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -250,6 +269,7 @@
                 <ref bean="categoryImageNameStrategy"/>
                 <ref bean="brandImageNameStrategy"/>
                 <ref bean="productImageNameStrategy"/>
+                <ref bean="shopImageNameStrategy"/>
             </list>
         </constructor-arg>
     </bean>
@@ -1545,6 +1565,12 @@
         <constructor-arg index="2" ref="attributeService"/>
     </bean>
 
+    <bean id="shopImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ShopImageImportDomainObjectStrategyImpl">
+        <constructor-arg index="0" ref="importFederationFacade"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2" ref="attributeService"/>
+    </bean>
+
     <bean id="productImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductImageImportDomainObjectStrategyImpl">
         <constructor-arg index="0" ref="importFederationFacade"/>
         <constructor-arg index="1" ref="productService"/>
@@ -1568,6 +1594,7 @@
                         <ref bean="productSkuImageImportDomainObjectStrategy"/>
                         <ref bean="categoryImageImportDomainObjectStrategy"/>
                         <ref bean="brandImageImportDomainObjectStrategy"/>
+                        <ref bean="shopImageImportDomainObjectStrategy"/>
                     </array>
                 </constructor-arg>
             </bean>

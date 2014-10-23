@@ -20,6 +20,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.AttrValueProductSku;
+import org.yes.cart.service.misc.LanguageService;
 
 
 /**
@@ -44,11 +45,13 @@ public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl 
      * @param relativeInternalRootDirectory  internal image relative path root directory without {@see File#separator}. E.g. "product"
      * @param attrValueProductSkuDao         product sku attributes  dao
      * @param attrValueProductDao            product attributes dao
+     * @param languageService                language service
      */
     public ProductImageNameStrategyImpl(final String relativeInternalRootDirectory,
                                         final GenericDAO<AttrValueProductSku, Long> attrValueProductSkuDao,
-                                        final GenericDAO<AttrValueProduct, Long> attrValueProductDao) {
-        super(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory);
+                                        final GenericDAO<AttrValueProduct, Long> attrValueProductDao,
+                                        final LanguageService languageService) {
+        super(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory, languageService);
         this.attrValueEntityProductSkuDao = attrValueProductSkuDao;
         this.attrValueEntityProductDao = attrValueProductDao;
     }

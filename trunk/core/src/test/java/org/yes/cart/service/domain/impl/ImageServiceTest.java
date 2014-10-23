@@ -32,10 +32,12 @@ import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.service.image.ImageNameStrategyResolver;
 import org.yes.cart.service.image.impl.ProductImageNameStrategyImpl;
+import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.stream.io.IOProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
@@ -61,39 +63,9 @@ public class ImageServiceTest {
     private IOProvider ioProvider = mockery.mock(IOProvider.class);
     private GenericDAO<SeoImage, Long> seoImageDao = mockery.mock(GenericDAO.class, "seoImageDao");
     private GenericDAO<AttrValueProduct, Long> productDao = mockery.mock(GenericDAO.class, "productDao");
-    private ImageNameStrategy imageNameStrategy = new ProductImageNameStrategyImpl("product", null, productDao);
+    final LanguageService languageService = mockery.mock(LanguageService.class, "languageService");
+    private ImageNameStrategy imageNameStrategy = new ProductImageNameStrategyImpl("product", null, productDao, languageService);
 
-
-    @Test
-    public void testCreateRollingFileName() throws Exception {
-
-        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, ioProvider);
-
-        assertEquals("/tmp/file_1", imageService.createRollingFileName("/tmp/file"));
-        assertEquals("/tmp/file_1.txt", imageService.createRollingFileName("/tmp/file.txt"));
-        assertEquals("/tmp/file_1.txt", imageService.createRollingFileName("/tmp/file_0.txt"));
-        assertEquals("/tmp/file_2.txt", imageService.createRollingFileName("/tmp/file_1.txt"));
-        assertEquals("/tmp/file_3456.txt", imageService.createRollingFileName("/tmp/file_3455.txt"));
-        assertEquals("D:\\dev\\apache-tomcat-7.0.23\\webapps\\yes-manager\\..\\yes-shop\\default\\imagevault\\L\\L2700A#B19\\example_1.jpeg",
-                imageService.createRollingFileName("D:\\dev\\apache-tomcat-7.0.23\\webapps\\yes-manager\\..\\yes-shop\\default\\imagevault\\L\\L2700A#B19\\example.jpeg"));
-        assertEquals("_1", imageService.createRollingFileName(""));
-    }
-
-    @Test
-    public void testCreateRepositoryUniqueName() throws Exception {
-
-        mockery.checking(new Expectations() {{
-            allowing(ioProvider).exists(with(equal("path/to/some/file/pattern.suffix")), with(any(Map.class))); will(returnValue(true));
-            allowing(ioProvider).exists(with(equal("path/to/some/file/pattern_1.suffix")), with(any(Map.class))); will(returnValue(true));
-            allowing(ioProvider).exists(with(equal("path/to/some/file/pattern_2.suffix")), with(any(Map.class))); will(returnValue(false));
-        }});
-
-        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, ioProvider);
-
-        String newFileName = imageService.createRepositoryUniqueName("path/to/some/file/pattern.suffix", ioProvider);
-        assertEquals(newFileName, "path/to/some/file/pattern_2.suffix");
-
-    }
 
     @Test
     public void testResizeImageJPEG() throws Exception {
@@ -148,6 +120,8 @@ public class ImageServiceTest {
         mockery.checking(new Expectations() {{
             allowing(imageNameStrategyResolver).getImageNameStrategy(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN);
             will(returnValue(imageNameStrategy));
+            allowing(languageService).getSupportedLanguages();
+            will(returnValue(Arrays.asList("en", "uk", "ru")));
         }});
 
         imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, new IOProvider() {
@@ -202,6 +176,8 @@ public class ImageServiceTest {
         mockery.checking(new Expectations() {{
             allowing(imageNameStrategyResolver).getImageNameStrategy(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN);
             will(returnValue(imageNameStrategy));
+            allowing(languageService).getSupportedLanguages();
+            will(returnValue(Arrays.asList("en", "uk", "ru")));
             allowing(seoImageDao).findByCriteria(with(any(Criterion.class)));
             will(returnValue(null));
             allowing(productDao).findSingleByNamedQuery(with(equal("PRODUCT.CODE.BY.IMAGE.NAME")), with(any(String.class)));

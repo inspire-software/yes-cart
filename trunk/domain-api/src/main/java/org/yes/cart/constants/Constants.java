@@ -95,12 +95,13 @@ public interface Constants {
     String CATEGORY_IMAGE_REPOSITORY_URL_PATTERN    = "/imgvault/category/";
     String BRAND_IMAGE_REPOSITORY_URL_PATTERN       = "/imgvault/brand/";
     String PRODUCT_IMAGE_REPOSITORY_URL_PATTERN     = "/imgvault/product/";
+    String SHOP_IMAGE_REPOSITORY_URL_PATTERN        = "/imgvault/shop/";
 
     /**
      * Items quantity on page. In case if default value in root category not set
      * the default values will be used.
      */
-    List<String> DEFAULT_ITEMS_ON_PAGE = Arrays.asList("10,20,30".split(","));
+    List<String> DEFAULT_ITEMS_ON_PAGE = Arrays.asList("10", "20", "30");
 
 
     long ROOT_CATEGORY_ID = 100L;

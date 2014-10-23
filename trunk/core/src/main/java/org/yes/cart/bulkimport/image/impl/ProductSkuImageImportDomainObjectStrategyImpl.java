@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkimport.image.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -63,10 +64,7 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
 
     /** {@inheritDoc} */
     @Override
-    public boolean doImageImport(final JobStatusListener statusListener,
-                                 final String fileName,
-                                 final String code,
-                                 final String suffix) {
+    public boolean doImageImport(final JobStatusListener statusListener, final String fileName, final String code, final String suffix, final String locale) {
 
         final ProductSku productSku = productSkuService.getProductSkuBySkuCode(code);
 
@@ -79,7 +77,7 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
 
         validateAccessBeforeUpdate(productSku, ProductSku.class);
 
-        final String attributeCode = AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + suffix;
+        final String attributeCode = AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + suffix + (StringUtils.isNotEmpty(locale) ? "_" + locale : "");
         AttrValueProductSku imageAttibute = (AttrValueProductSku) productSku.getAttributeByCode(attributeCode);
         if (imageAttibute == null) {
             final List<Attribute> imageAttributes = attributeService.getAvailableImageAttributesByGroupCode(AttributeGroupNames.PRODUCT);

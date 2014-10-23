@@ -22,7 +22,6 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
-import org.yes.cart.stream.io.IOProvider;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
@@ -36,9 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * ImageServlet responsible for get product or brand images
@@ -152,13 +149,14 @@ public class ImageFilter extends AbstractFilter implements Filter {
             final ImageNameStrategy imageNameStrategy = imageService.getImageNameStrategy(servletPath);
 
             String code = imageNameStrategy.resolveObjectCode(servletPath);  //optional product or sku code
+            String locale = imageNameStrategy.resolveLocale(servletPath);  //optional locale
             String originalFileName = imageNameStrategy.resolveFileName(servletPath);  //here file name with prefix
 
             final String imageRealPathPrefix = getImageRepositoryRoot();
 
             String absolutePathToOriginal =
                             imageRealPathPrefix +
-                            imageNameStrategy.resolveRelativeInternalFileNamePath(originalFileName, code); //path to not resized image
+                            imageNameStrategy.resolveRelativeInternalFileNamePath(originalFileName, code, locale); //path to not resized image
 
 
             final boolean origFileExists = imageService.isImageInRepository(originalFileName, code, imageNameStrategy.getUrlPath(), imageRealPathPrefix);
@@ -168,7 +166,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
                 originalFileName = imageNameStrategy.resolveFileName(code);  //here file name with prefix
                 absolutePathToOriginal =
                         imageRealPathPrefix +
-                                imageNameStrategy.resolveRelativeInternalFileNamePath(originalFileName, code); //path to not resized image
+                                imageNameStrategy.resolveRelativeInternalFileNamePath(originalFileName, code, locale); //path to not resized image
             }
 
 
@@ -176,7 +174,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
             if (width != null && height != null && imageService.isSizeAllowed(width, height)) {
                 absolutePathToResized =
                         imageRealPathPrefix +
-                                imageNameStrategy.resolveRelativeInternalFileNamePath(originalFileName, code, width, height);
+                                imageNameStrategy.resolveRelativeInternalFileNamePath(originalFileName, code, locale, width, height);
             }
 
             final byte[] imageFile = getImageFile(absolutePathToOriginal, absolutePathToResized, width, height);

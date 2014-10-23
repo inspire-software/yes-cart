@@ -56,28 +56,61 @@ public interface ImageNameStrategy {
      * For brand will be name
      *
      * @param url filename
-     * @return code for given image name or null if particular strategy not support code.
+     * @return code for given image name or null if particular strategy does not support code.
      */
     String resolveObjectCode(String url);
 
     /**
+     * Get locale for given url
+     *
+     * Locale must correspond to available locales provided by LanguageService
+     *
+     * @param url filename
+     * @return locale for given image name or null if no locale information can be extracted
+     */
+    String resolveLocale(String url);
+
+    /**
+     * Get suffix (a-z) for given url
+     *
+     * @param url filename
+     * @return "0"-"26" suffix
+     */
+    String resolveSuffix(String url);
+
+    /**
      * Get the file name in image repository.
+     *
      *
      * @param fileName file name without the full path
      * @param code     product or sku  code
+     * @param locale   locale information or null
      * @return full name with path to file.
      */
-    String resolveRelativeInternalFileNamePath(String fileName, String code);
+    String resolveRelativeInternalFileNamePath(String fileName, String code, String locale);
 
     /**
      * Get the file name of re-sized in image repository.
      *
+     *
      * @param fileName file name without the full path
      * @param code     product code
+     * @param locale   locale information or null
      * @param width    image width
-     * @param height   image height
-     * @return full name with path to file.
+     * @param height   image height   @return full name with path to file.
      */
-    String resolveRelativeInternalFileNamePath(String fileName, String code, String width, String height);
+    String resolveRelativeInternalFileNamePath(String fileName, String code, final String locale, String width, String height);
+
+    /**
+     * Create rolling name for given filename with given code and locale.
+     *
+     *
+     * @param fileName full filename
+     * @param code     object code
+     * @param suffix   suffix
+     * @param locale   locale
+     *  @return rolling file name (e.g. name-1_code_a.jpg -> name-2_code_a.jpg)
+     */
+    String createRollingFileName(String fileName, String code, final String suffix, final String locale);
 
 }

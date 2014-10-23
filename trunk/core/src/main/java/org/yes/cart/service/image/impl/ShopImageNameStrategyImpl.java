@@ -19,6 +19,7 @@ package org.yes.cart.service.image.impl;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueBrand;
+import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.service.misc.LanguageService;
 
 /**
@@ -26,22 +27,22 @@ import org.yes.cart.service.misc.LanguageService;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class BrandImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
+public class ShopImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
 
-    private final GenericDAO<AttrValueBrand, Long> attrValueBrandDao;
+    private final GenericDAO<AttrValueShop, Long> attrValueShopDao;
 
     /**
      * Construct image name strategy
      *
      * @param relativeInternalRootDirectory  internal image relative path root directory without {@see File#separator}. E.g. "brand"
-     * @param attrValueBrandDao              brand attribute dao
+     * @param attrValueShopDao               shop attribute dao
      * @param languageService                language service
      */
-    public BrandImageNameStrategyImpl(final String relativeInternalRootDirectory,
-                                      final GenericDAO<AttrValueBrand, Long> attrValueBrandDao,
-                                      final LanguageService languageService) {
-        super(Constants.BRAND_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory, languageService);
-        this.attrValueBrandDao = attrValueBrandDao;
+    public ShopImageNameStrategyImpl(final String relativeInternalRootDirectory,
+                                     final GenericDAO<AttrValueShop, Long> attrValueShopDao,
+                                     final LanguageService languageService) {
+        super(Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory, languageService);
+        this.attrValueShopDao = attrValueShopDao;
     }
 
     /**
@@ -51,14 +52,10 @@ public class BrandImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
 
         final String val = resolveFileName(url);
 
-        final Object[] nameAndGuid = attrValueBrandDao.findSingleByNamedQuery("BRAND.NAME.AND.GUID.BY.IMAGE.NAME", val);
+        final String code = attrValueShopDao.findSingleByNamedQuery("SHOP.CODE.BY.IMAGE.NAME", val);
 
-        if (nameAndGuid != null && nameAndGuid.length == 2) {
-            if (nameAndGuid[0] instanceof String) {
-                return (String) nameAndGuid[0];
-            } else if (nameAndGuid[1] instanceof String) {
-                return (String) nameAndGuid[1];
-            }
+        if (code != null) {
+            return code;
         }
 
         return null;

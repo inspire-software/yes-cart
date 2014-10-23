@@ -343,7 +343,7 @@ public class ImageServiceImpl
         final ImageNameStrategy strategy = getImageNameStrategy(storagePrefix);
         final String filename = strategy.resolveFileName(fullFileName);
 
-        String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(filename, code);
+        String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(filename, code, null);
 
         return ioProvider.exists(pathInRepository, Collections.EMPTY_MAP);
 
@@ -358,10 +358,12 @@ public class ImageServiceImpl
 
         final ImageNameStrategy strategy = getImageNameStrategy(storagePrefix);
         final String filename = strategy.resolveFileName(fullFileName);
+        final String suffix = strategy.resolveSuffix(fullFileName);
+        final String locale = strategy.resolveLocale(fullFileName);
 
-        String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(filename, code);
+        String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(filename, code, null);
 
-        final String uniqueName = createRepositoryUniqueName(pathInRepository, ioProvider);
+        final String uniqueName = createRepositoryUniqueName(pathInRepository, ioProvider, strategy, code, suffix, locale);
 
         ioProvider.write(uniqueName, imgBody, Collections.EMPTY_MAP);
 
@@ -369,54 +371,21 @@ public class ImageServiceImpl
     }
 
 
-    /**
+    /*
      * Check is given file name present on disk and create new if necessary.
-     * @param fileName given file name
-     * @return sequential file name.
+     * Return sequential file name.
      */
-    String createRepositoryUniqueName(final String fileName, final IOProvider ioProvider) {
+    String createRepositoryUniqueName(final String fileName,
+                                      final IOProvider ioProvider,
+                                      final ImageNameStrategy strategy,
+                                      final String code,
+                                      final String suffix,
+                                      final String locale) {
         if (ioProvider.exists(fileName, Collections.EMPTY_MAP)) {
-            final String newFileName = createRollingFileName(fileName);
-            return createRepositoryUniqueName(newFileName, ioProvider);
+            final String newFileName = strategy.createRollingFileName(fileName, code, suffix, locale);
+            return createRepositoryUniqueName(newFileName, ioProvider, strategy, code, suffix, locale);
         }
         return fileName;
-    }
-
-    /**
-     * Create new sequential file name, which will have _seqnumber before file extension.
-     * Example /tmp/file.txt -> /tmp/file_1.txt
-     *  /tmp/file_1.txt -> /tmp/file_2.txt
-     * @param fullFileName given file name
-     * @return sequential file name.
-     */
-    String createRollingFileName(final String fullFileName) {
-        Assert.notNull(fullFileName, "file name must be not null");
-        final int posExt = fullFileName.lastIndexOf('.');
-        final String fileName;
-        final String fileExt;
-        if (posExt == -1) {
-            fileName = fullFileName;
-            fileExt = "";
-        } else {
-            fileName = fullFileName.substring(0, posExt);
-            fileExt = fullFileName.substring(posExt); // including '.'
-        }
-        final int posSuffix = fileName.lastIndexOf('_');
-        final String mainPart;
-        final String suffix;
-        if (posSuffix == -1) {
-            mainPart = fileName;
-            suffix = "";
-        } else {
-            mainPart = fileName.substring(0, posSuffix);
-            suffix = fileName.substring(posSuffix + 1); // excluding '_'
-        }
-        if (NumberUtils.isDigits(suffix)) {
-            return mainPart + "_" + (NumberUtils.toInt(suffix) + 1) + fileExt;
-        } else if (suffix.length() > 0) {
-            return mainPart + "_" + suffix + "_1" + fileExt;
-        }
-        return mainPart + "_1" + fileExt;
     }
 
     /** {@inheritDoc} */
@@ -427,7 +396,7 @@ public class ImageServiceImpl
 
         final ImageNameStrategy strategy = getImageNameStrategy(storagePrefix);
         final String file = strategy.resolveFileName(fileName);
-        String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(file, code);
+        String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(file, code, null);
 
         return ioProvider.read(pathInRepository, Collections.EMPTY_MAP);
 
@@ -446,7 +415,7 @@ public class ImageServiceImpl
         final ImageNameStrategy strategy = getImageNameStrategy(storagePrefix);
         final String file = strategy.resolveFileName(imageFileName);
         final String code = strategy.resolveObjectCode(imageFileName);
-        String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(file, code);
+        String pathInRepository = pathToRepository + strategy.resolveRelativeInternalFileNamePath(file, code, null);
 
         try {
             ioProvider.delete(pathInRepository, Collections.EMPTY_MAP);

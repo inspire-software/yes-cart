@@ -37,16 +37,20 @@ public interface ImageImportDomainObjectStrategy {
     /**
      * Do necessary actions to associate given image file with domain object.
      *
+     *
+     *
      * @param statusListener job status listener
      * @param fileName file name (no path) which will be saved to domain object image custom attribute
      * @param code     object code that will be used to look up the domain object
      * @param suffix   suffix identified the image file order (e.g. products can have more than one image)
+     * @param locale   language for the image
      *
      * @return true if import was successful
      */
     boolean doImageImport(JobStatusListener statusListener,
                           String fileName,
                           String code,
-                          String suffix);
+                          String suffix,
+                          String locale);
 
 }

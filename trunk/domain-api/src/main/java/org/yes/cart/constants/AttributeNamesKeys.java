@@ -134,9 +134,14 @@ public interface AttributeNamesKeys {
         String CATEGORY_ITEMS_NEW_ARRIVAL = "CATEGORY_ITEMS_NEW_ARRIVAL";
 
         /**
+         * Category image attribute name prefix
+         */
+        String CATEGORY_IMAGE_PREFIX = "CATEGORY_IMAGE";
+
+        /**
          * Category image attribute name
          */
-        String CATEGORY_IMAGE = "CATEGORY_IMAGE";
+        String CATEGORY_IMAGE = CATEGORY_IMAGE_PREFIX + "0";
 
         /**
          * Label of category image retrieve strategy. Allowed values:
@@ -224,14 +229,31 @@ public interface AttributeNamesKeys {
          */
         String SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL = "SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL";
 
+
+        /**
+         * Shop image attribute name prefix.
+         */
+        String SHOP_IMAGE_PREFIX = "SHOP_IMAGE";
+
+        /**
+         * Default Shop image.
+         */
+        String SHOP_IMAGE = SHOP_IMAGE_PREFIX + "0";
+
+
     }
 
     interface Brand {
 
         /**
+         * Brand image attribute name prefix.
+         */
+        String BRAND_IMAGE_PREFIX = "BRAND_IMAGE";
+
+        /**
          * Default Brand image.
          */
-        String BRAND_IMAGE = "BRAND_IMAGE";
+        String BRAND_IMAGE = BRAND_IMAGE_PREFIX + "0";
 
     }
 

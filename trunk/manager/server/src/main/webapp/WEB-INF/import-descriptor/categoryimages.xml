@@ -21,7 +21,7 @@
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>^(.*)_([.[^_]]*)_[a-z]\.(jpe?g|png)$</file-name-mask>
+        <file-name-mask>^(.*)_([.[^_]]*)_[a-z](_[a-z]{2})?\.(jpe?g|png)$</file-name-mask>
         <ignore-first-line>false</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
