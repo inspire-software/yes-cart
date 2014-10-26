@@ -1127,6 +1127,10 @@
             <property name="displayMetadescription" type="string" column="DISPLAY_METADESCRIPTION" length="4000" not-null="false"/>
         </component>
 
+        <property name="minOrderQuantity" column="MIN_ORDER_QUANTITY"  type="java.math.BigDecimal"/>
+        <property name="maxOrderQuantity" column="MAX_ORDER_QUANTITY"  type="java.math.BigDecimal"/>
+        <property name="stepOrderQuantity" column="STEP_ORDER_QUANTITY"  type="java.math.BigDecimal"/>
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>

@@ -18,26 +18,15 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.yes.cart.domain.entity.CustomerWishList;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.CustomerWishListService;
-import org.yes.cart.service.domain.PriceService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.domain.entity.*;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Default implementation of the add to cart visitor.
@@ -52,6 +41,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
 
     private final CustomerService customerService;
     private final CustomerWishListService customerWishListService;
+    private final ProductQuantityStrategy productQuantityStrategy;
 
     /**
      * Construct sku command.
@@ -62,16 +52,19 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
      * @param shopService shop service
      * @param customerService customer service
      * @param customerWishListService customer wish list service
+     * @param productQuantityStrategy product quantity strategy
      */
     public AddSkuToWishListEventCommandImpl(final ShoppingCartCommandRegistry registry,
                                             final PriceService priceService,
                                             final ProductService productService,
                                             final ShopService shopService,
                                             final CustomerService customerService,
-                                            final CustomerWishListService customerWishListService) {
+                                            final CustomerWishListService customerWishListService,
+                                            final ProductQuantityStrategy productQuantityStrategy) {
         super(registry, priceService, productService, shopService);
         this.customerService = customerService;
         this.customerWishListService = customerWishListService;
+        this.productQuantityStrategy = productQuantityStrategy;
     }
 
     /**
@@ -85,15 +78,14 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
     private BigDecimal getQuantityValue(final Map parameters) {
         final Object strQty = parameters.get(CMD_ADDTOWISHLIST_P_QTY);
 
-        BigDecimal qty = BigDecimal.ONE;
         if (strQty instanceof String) {
             try {
-                qty = new BigDecimal((String) strQty);
+                return new BigDecimal((String) strQty);
             } catch (Exception exp) {
-                ShopCodeContext.getLog(this).error("Invalid quantity in add to wish list command", exp);
+                ShopCodeContext.getLog(this).error("Invalid quantity in add to cart command", exp);
             }
         }
-        return MoneyUtils.isFirstBiggerThanSecond(qty, BigDecimal.ZERO) ? qty : BigDecimal.ONE;
+        return null;
     }
 
 
@@ -126,11 +118,10 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
 
         if (productSku != null && ShoppingCart.LOGGED_IN == shoppingCart.getLogonState()) {
 
-            final BigDecimal quantity = getQuantityValue(parameters);
             final String type = getTypeValue(parameters);
             final String tags = getTagsValue(parameters);
 
-            createWishListItem(shoppingCart, productSku, type, quantity, tags);
+            createWishListItem(shoppingCart, productSku, type, parameters, tags);
 
             /*
                 We do not need it for demo but if we have dependency of promotions on wish list items
@@ -147,7 +138,11 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         }
     }
 
-    private void createWishListItem(final ShoppingCart shoppingCart, final ProductSku productSku, final String type, final BigDecimal quantity, final String tags) {
+    private void createWishListItem(final ShoppingCart shoppingCart,
+                                    final ProductSku productSku,
+                                    final String type,
+                                    final Map<String, Object> parameters,
+                                    final String tags) {
 
         final List<CustomerWishList> wishList = customerWishListService.getWishListByCustomerEmail(shoppingCart.getCustomerEmail());
 
@@ -157,6 +152,12 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                     && item.getWlType().equals(type)) {
 
                 // duplicate item, so just update quantity
+                final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(item.getQuantity(), productSku);
+                if (!pqm.canOrderMore()) {
+                    return; // cannot add more
+                }
+
+                final BigDecimal quantity = pqm.getValidAddQty(getQuantityValue(parameters));
                 item.setQuantity(item.getQuantity().add(quantity));
 
                 final Set<String> tag = new TreeSet<String>();
@@ -182,6 +183,13 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         // not found so need to create one
         final Shop shop = getShopService().getById(shoppingCart.getShoppingContext().getShopId());
         final String skuCode = productSku.getCode();
+
+        final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(BigDecimal.ZERO, productSku);
+        if (!pqm.canOrderMore()) {
+            return; // cannot add more
+        }
+
+        final BigDecimal quantity = pqm.getValidAddQty(getQuantityValue(parameters));
 
         final SkuPrice skuPrice = getPriceService().getMinimalRegularPrice(
                 null,

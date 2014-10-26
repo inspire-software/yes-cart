@@ -45,10 +45,10 @@
     <entry key="itemAdded">item {0} successfully added to the cart</entry>
 
     <!-- CheckoutPage -->
-    <entry key="addressStep">Billing &amp; Shipping Address</entry>
+    <entry key="addressStep">Your Address</entry>
     <entry key="shipMethodStep">Shipping Method</entry>
     <entry key="paymentStep">Verification and Payment</entry>
-    <entry key="loginStep">Login</entry>
+    <entry key="loginStep">Log In</entry>
     <entry key="billingAddrTheSame">Billing address the same as shipping</entry>
     <entry key="shipmentStep">Shipment method</entry>
     <entry key="paymentStep">Payment</entry>
@@ -88,7 +88,7 @@
 
     <!-- ShoppingCartPage -->
     <entry key="checkout">Checkout</entry>
-    <entry key="shoppingCart">Cart</entry>
+    <entry key="shoppingCart">Shopping Cart</entry>
     <entry key="emptyCart">Cart is empty</entry>
     <entry key="orderErrorGeneral">An error occurred while trying to create your order. Please try again.</entry>
     <entry key="orderErrorCouponInvalid">Coupon '${0}' is no longer valid please remove it from the cart.</entry>
@@ -128,11 +128,14 @@
     <entry key="addOneLinkHint">Add one item</entry>
     <entry key="removeOneLinkHint">Remove one item</entry>
     <entry key="removeAllLinkHint">Remove all items</entry>
+    <entry key="refreshLinkHint">Refresh quantity</entry>
     <entry key="nonZeroDigits">Please, input valid items quantity</entry>
     <entry key="skuNumber">SKU code</entry>
     <entry key="productsInCart">Items in cart</entry>
+    <entry key="addCouponsTitle">Add Coupon</entry>
     <entry key="removeCouponCodeLabel">Remove coupon</entry>
     <entry key="addCouponButtonLabel">Add coupon</entry>
+    <entry key="enterCouponLabel">Enter coupon</entry>
     <entry key="appliedPromoCode">${0} [applied]</entry>
     <entry key="pendingPromoCode">${0} [not applied]</entry>
     <entry key="noEmptyCoupons">Please enter coupon code</entry>
@@ -141,6 +144,7 @@
     <entry key="itemForm0">{0} item in cart</entry>
     <entry key="itemForm1">{0} items in cart</entry>
     <entry key="noItem">Cart is empty</entry>
+    <entry key="yourCartTitle">Your Cart:</entry>
 
     <!-- CreateEditAddressPage -->
     <entry key="firstName">First name</entry>
@@ -166,6 +170,7 @@
     <!-- LoginPanel -->
     <entry key="wrongPassword">Wrong password</entry>
     <entry key="customerNotExists">Unknown user. Register please</entry>
+    <entry key="customerNotActiveInShop">E-mail is not active for this shop. To activate please enter login and password again and click "Sign In".</entry>
     <entry key="existingUser">Registered customer</entry>
     <entry key="restorePassword">Restore password</entry>
     <entry key="signIn">Sign In</entry>
@@ -239,15 +244,17 @@
     <entry key="demoAlways">Always</entry>
     <entry key="menu">Menu</entry>
     <entry key="demo">Demo</entry>
+    <entry key="contactForm">Contact form</entry>
 
     <!-- ProductSorter -->
-    <entry key="sort">Sort</entry>
+    <entry key="sort">Sort:</entry>
     <entry key="byName">by name</entry>
+    <entry key="byCode">by code</entry>
     <entry key="byPrice">by price</entry>
 
     <!-- PriceTierView -->
     <entry key="priceTierLabel">Price of one item</entry>
-    <entry key="descountRule">Buy more than one item and get discount</entry>
+    <entry key="discountRule">Buy more than one item and get discount</entry>
 
     <!-- PriceView -->
     <entry key="savePercent">Discount {0}%</entry>
@@ -257,6 +264,7 @@
 
     <!-- SearchView -->
     <entry key="search">Search</entry>
+    <entry key="searchHolder">Search...</entry>
 
     <!-- ShippingView -->
     <entry key="carrier">Carrier</entry>
@@ -278,7 +286,10 @@
     <entry key="description">Description</entry>
     <entry key="details">Details</entry>
     <entry key="accessories">Accessories</entry>
-    <entry key="volumeDiscount">Volume Discount</entry>
+    <entry key="volumeDiscount">Multi buy</entry>
+    <entry key="quantityPickerTooltip">Minimum order is ${0} with step ${1} up to ${2}. ${3} in cart.</entry>
+    <entry key="quantityPickerTooltipNoMax">Minimum order is ${0} with step ${1}. ${2} in cart.</entry>
+    <entry key="quantityPickerFullTooltip">You have added maximum orderable quantity. ${0} in cart.</entry>
 
     <!-- TopCategories -->
     <entry key="categories">Categories</entry>

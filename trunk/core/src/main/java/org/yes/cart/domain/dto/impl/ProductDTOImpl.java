@@ -25,6 +25,7 @@ import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.ProductCategory;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -90,6 +91,16 @@ public class ProductDTOImpl implements ProductDTO {
 
     @DtoField(value = "featured")
     private Boolean featured;
+
+    @DtoField(value = "minOrderQuantity")
+    private BigDecimal minOrderQuantity;
+
+    @DtoField(value = "maxOrderQuantity")
+    private BigDecimal maxOrderQuantity;
+
+    @DtoField(value = "stepOrderQuantity")
+    private BigDecimal stepOrderQuantity;
+
 
     @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
     private String uri;
@@ -294,6 +305,48 @@ public class ProductDTOImpl implements ProductDTO {
      */
     public void setFeatured(final Boolean featured) {
         this.featured = featured;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getMinOrderQuantity() {
+        return minOrderQuantity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
+        this.minOrderQuantity = minOrderQuantity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getMaxOrderQuantity() {
+        return maxOrderQuantity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
+        this.maxOrderQuantity = maxOrderQuantity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getStepOrderQuantity() {
+        return stepOrderQuantity;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
+        this.stepOrderQuantity = stepOrderQuantity;
     }
 
     /**

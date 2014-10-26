@@ -47,6 +47,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ProductTypeAttrService;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -471,7 +472,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 ProductSearchQueryBuilder.PRODUCT_DESCRIPTION_ASIS_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_FROM_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_TO_FIELD);
+                ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_TO_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_MIN_QTY_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_MAX_QTY_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_STEP_QTY_FIELD
+                );
 
         final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.size());
         for (Object[] obj : searchRez) {
@@ -489,6 +494,9 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             dto.setFeatured(obj[10] != null && (Boolean) obj[10]);
             dto.setAvailablefrom((Date) obj[11]);
             dto.setAvailableto((Date) obj[12]);
+            dto.setMinOrderQuantity((BigDecimal) obj[13]);
+            dto.setMaxOrderQuantity((BigDecimal) obj[14]);
+            dto.setStepOrderQuantity((BigDecimal) obj[15]);
             rez.add(dto);
         }
 

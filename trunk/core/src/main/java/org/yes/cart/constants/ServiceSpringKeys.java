@@ -445,4 +445,16 @@ public interface ServiceSpringKeys {
      */
     String DTO_PROMOTION_COUPON_SERVICE = "dtoPromotionCouponService";
 
+    /**
+     * Language service.
+     */
+    String LANGUAGE_SERVICE = "languageService";
+    /**
+     * Strategy for determining if product is purchasable
+     */
+    String PRODUCT_AVAILABILITY_STRATEGY = "productAvailabilityStrategy";
+    /**
+      * Strategy for determining valid orderable quantity of product
+      */
+    String PRODUCT_QUANTITY_STRATEGY = "productQuantityStrategy";
 }

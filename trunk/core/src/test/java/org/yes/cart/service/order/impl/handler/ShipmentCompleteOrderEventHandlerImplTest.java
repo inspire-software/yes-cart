@@ -28,10 +28,7 @@ import org.yes.cart.payment.impl.TestPaymentGatewayImpl;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
-import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.ProductSkuService;
-import org.yes.cart.service.domain.SkuWarehouseService;
-import org.yes.cart.service.domain.WarehouseService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
@@ -63,6 +60,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
     private CustomerOrderPaymentService customerOrderPaymentService;
     private WarehouseService warehouseService;
     private ProductSkuService productSkuService;
+    private ProductService productService;
 
     @Before
     public void setUp()  {
@@ -74,6 +72,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
         pendingHandler = (OrderEventHandler) ctx().getBean("pendingOrderEventHandler");
         warehouseService = (WarehouseService) ctx().getBean("warehouseService");
         productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
+        productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
         super.setUp();
     }
 
@@ -147,13 +146,18 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
 
 
         final Warehouse warehouse = warehouseService.findById(1);
-        final Pair<BigDecimal, BigDecimal> skuTest0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse), "CC_TEST3");
+        final Pair<BigDecimal, BigDecimal> skuTest0 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse), "CC_TEST12");
 
+        final Product cc_test3 = productService.getProductBySkuCode("CC_TEST12");
 
+        cc_test3.setMinOrderQuantity(new BigDecimal("1"));
+        cc_test3.setStepOrderQuantity(new BigDecimal("0.5"));
+
+        productService.update(cc_test3);
 
         Customer customer = createCustomer();
 
-        ShoppingCart cart3 = getShoppingCart3(customer.getEmail());
+        ShoppingCart cart3 = getShoppingCart12(customer.getEmail());
         CustomerOrder customerOrder = orderService.createFromCart(cart3, false); //multiple delivery enabled
         customerOrder.setPgLabel("testPaymentGatewayLabel");
 
@@ -171,7 +175,7 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
 
 
 
-        final Pair<BigDecimal, BigDecimal> skuTest1 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse), "CC_TEST3");
+        final Pair<BigDecimal, BigDecimal> skuTest1 = skuWarehouseService.getQuantity(Collections.singletonList(warehouse), "CC_TEST12");
 
 
 
@@ -192,37 +196,21 @@ public class ShipmentCompleteOrderEventHandlerImplTest extends AbstractEventHand
      *
      * @return cart
      */
-    protected ShoppingCart getShoppingCart3(String customerEmail) {
+    protected ShoppingCart getShoppingCart12(String customerEmail) {
         ShoppingCart shoppingCart = getEmptyCart(customerEmail);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-//        commands.execute(shoppingCart,
-//                (Map) Collections.singletonMap(ShoppingCartCommandFactory.CMD_ADDTOCART, "CC_TEST1"));
         commands.execute(shoppingCart,
-                (Map) Collections.singletonMap(ShoppingCartCommandFactory.CMD_ADDTOCART, "CC_TEST3"));
+                (Map) Collections.singletonMap(ShoppingCartCommandFactory.CMD_ADDTOCART, "CC_TEST12"));
 
         final Map<String, String> param = new HashMap<String, String>() {{
-            put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST3");
+            put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST12");
             put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.50");
         }};
         commands.execute(shoppingCart, (Map) param);
 
         return shoppingCart;
     }
-
-
-    private Map<String, String> createParametersMap() {
-        Map<String, String> rez = new HashMap<String, String>();
-        rez.put("ccHolderName", "John Dou");
-        rez.put("ccNumber", "4111111111111111");
-        rez.put("ccExpireMonth", "12");
-        rez.put("ccExpireYear", "2020");
-        rez.put("ccSecCode", "111");
-        rez.put("ccType", "Visa");
-        return rez;
-    }
-
-
 
 
 }

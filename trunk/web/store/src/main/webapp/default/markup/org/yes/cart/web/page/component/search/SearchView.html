@@ -18,42 +18,6 @@
 <body>
 <wicket:panel>
 
-        <script type="text/javascript">
-            $(document).ready(function() {
-
-                var isBlank = function isBlank(str) {
-                    return (!str || /^\s*$/.test(str));
-                };
-
-                var doSearch = function() {
-                    var _val = $('.jsSearchInput').val();
-                    if (!isBlank(_val)) {
-                        if (ctx.page.indexOf('HomePage') != -1) {
-                            if ((window.location.href.lastIndexOf("/") == window.location.href.length - 1)) {
-                                window.location.href = window.location.href + 'query/' + _val;
-                            } else {
-                                window.location.href = window.location.href + '/query/' + _val;
-                            }
-                        } else {
-                            window.location.href = ctx.root + '/query/' + _val;
-                        }
-                    }
-                };
-
-                $('.jsSearchInput').keydown(function(event) {
-                    if (event.keyCode == 13) {
-                        event.preventDefault();
-                        doSearch();
-                    }
-                });
-
-                $('.jsSearchButton').click(function(event) {
-                    doSearch();
-                });
-
-            });
-        </script>
-
     <div class="search-bar-holder">
         <div class="contact-line">
             <span class="glyphicon glyphicon-envelope blue"></span>
@@ -62,9 +26,9 @@
             </a>
         </div>
         <div class="input-group input-group-lg">
-            <input id="searchPhraze" type="text" class="form-control jsSearchInput" wicket:message="placeholder:searchHolder">
+            <input id="searchPhraze" type="text" class="form-control js-search-input" wicket:message="placeholder:searchHolder">
             <span class="input-group-btn">
-                <button type="button" class="btn btn-primary jsSearchButton">
+                <button type="button" class="btn btn-primary js-search-button">
                     <span class="glyphicon glyphicon-search white"></span>
                 </button>
             </span>

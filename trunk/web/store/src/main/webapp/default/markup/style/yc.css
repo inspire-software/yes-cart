@@ -596,6 +596,29 @@ a {
     margin-bottom: 10px;
 }
 
+.product-detail-holder .product-sku-code {
+    margin-bottom: 10px;
+}
+
+.product-detail-holder .sku-qty-add,
+.product-detail-holder .sku-qty-remove{
+    padding: 6px 6px 6px 6px;
+    max-width: 40px;
+    display: inline-block;
+    margin-bottom: 7px;
+}
+
+.product-detail-holder .sku-qty-add.disabled,
+.product-detail-holder .sku-qty-remove.disabled {
+    color: #cccccc;
+}
+
+.product-detail-holder .sku-qty-value {
+    max-width: 60px;
+    display: inline-block;
+    margin-bottom: 7px;
+}
+
 .product-detail-holder .btn {
     margin-bottom: 7px;
 }

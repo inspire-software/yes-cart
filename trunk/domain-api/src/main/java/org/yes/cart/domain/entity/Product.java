@@ -25,8 +25,6 @@ import java.util.Set;
 
 /**
  * Product.
- * TODO: V2 need to think about delivery estimation time when product has back order capability and
- * it is in order and no items on stock
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -359,6 +357,43 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      * @return total quantity
      */
     Map<String, BigDecimal> getQtyOnWarehouse(Collection<Warehouse> warehouses);
+
+    /**
+     * Get minimal quantity for order. E.g. 5.0 means customer can only buy 5 or more.
+     *
+     * @return minimal order quantity
+     */
+    BigDecimal getMinOrderQuantity();
+
+    /**
+     * @param minOrderQuantity minimal quantity for order.
+     */
+    void setMinOrderQuantity(BigDecimal minOrderQuantity);
+
+    /**
+     * Get maximum quantity for order. E.g. 5.0 means customer can only buy up to 5
+     *
+     * @return maximum order quantity
+     */
+    BigDecimal getMaxOrderQuantity();
+
+    /**
+     * @param maxOrderQuantity maximum quantity for order.
+     */
+    void setMaxOrderQuantity(BigDecimal maxOrderQuantity);
+
+    /**
+     * Get step quantity for order. E.g. 5.0 means customer can only buy in batches of 5 - 5, 10, 15
+     * but not say 11.
+     *
+     * @return step order quantity
+     */
+    BigDecimal getStepOrderQuantity();
+
+    /**
+     * @param stepOrderQuantity step quantity for order.
+     */
+    void setStepOrderQuantity(BigDecimal stepOrderQuantity);
 
 }
 

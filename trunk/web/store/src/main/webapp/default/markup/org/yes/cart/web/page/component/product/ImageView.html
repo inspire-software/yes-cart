@@ -18,12 +18,12 @@
 <body>
 <wicket:panel>
 
-    <div class="product-detail-img-holder">
+    <div class="product-detail-img-holder js-product-image-view">
         <div class="row main">
             <div class="col-xs-12">
                 <div class="thumbnail">
                     <a wicket:id="defaultImageRef" class="example-image-link" rel="lightbox">
-                        <img wicket:id="defaultImage" id="defaultImage" align="center" />
+                        <img wicket:id="defaultImage" class="js-product-image-default" align="center" />
                     </a>
                 </div>
             </div>
@@ -32,37 +32,12 @@
             <div wicket:id="altImageList">
                 <div class="col-xs-3 col-sm-4 col-md-3">
                     <a wicket:id="altImageRef" class="thumbnail" rel="lightbox-alternatives">
-                        <img wicket:id="altImage" class="jsAltImage" />
+                        <img wicket:id="altImage" class="js-product-image-alt" />
                     </a>
                 </div>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        $(document).ready(function() {
-
-            var _defaultImageUrl = $('#defaultImage').attr('src');
-            var _defaultImageWidth = /(w=)(\d{1,10})/.exec(_defaultImageUrl)[2];
-            var _defaultImageHeight = /(h=)(\d{1,10})/.exec(_defaultImageUrl)[2];
-
-            $('.jsAltImage').each(function() {
-
-                var _altImage = $(this);
-
-                _altImage.mouseenter(function() {
-                    var _altImageUrl = _altImage.attr('src');
-                    _altImageUrl = _altImageUrl.substring(0, _altImageUrl.indexOf('?')) + "?w="+_defaultImageWidth+"&h="+_defaultImageHeight;
-                    $('#defaultImage').attr('src', _altImageUrl);
-                }).mouseleave(function() {
-                    $('#defaultImage').attr('src', _defaultImageUrl);
-                });
-
-
-            })
-
-        });
-    </script>
-
 </wicket:panel>
 </body>
 </html>

@@ -38,33 +38,52 @@
             <div class="product-detail-name">
                 <span wicket:id="name">[product or sku name]</span>
             </div>
-            <div class="pull-left">
-                <wicket:message key="skuCode">[sku.code:]</wicket:message>
-                <span class="sku-code" wicket:id="skuCode">[sku num]</span>
+
+            <div class="row">
+                <div class="col-xs-12 product-sku-code">
+                    <wicket:message key="skuCode">[sku.code:]</wicket:message>
+                    <span class="sku-code" wicket:id="skuCode">[sku num]</span>
+                </div>
             </div>
 
-            <div class="text-right clearfix">
-                <a wicket:id="addToCartLink" class="btn btn-warning js-buy" rel="nofollow">
-                    <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
-                </a>
-            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="product-detail-sku-list">
+                        <wicket:container wicket:id="skuList">
+                            [product variation / sku list]
+                        </wicket:container>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
 
-             <div class="text-right">
-                <a wicket:id="addToWishListLink" class="btn btn-info" rel="nofollow">
-                    <span wicket:id="addToWishListLinkLabel">[add one to wish list]</span>
-                </a>
-            </div>
+                    <div class="row js-buy-panel">
 
-            <div class="text-right">
-                <wicket:container wicket:id="priceView">
-                    [price]
-                </wicket:container>
-            </div>
+                        <div class="col-md-12 col-xs-6 text-right">
+                            <wicket:container wicket:id="quantityPicker">
+                                [Quantity picker]
+                            </wicket:container>
+                        </div>
 
-            <div class="product-detail-sku-list">
-                <wicket:container wicket:id="skuList">
-                    [product variation / sku list]
-                </wicket:container>
+                        <div class="col-md-12 col-xs-6 text-right">
+                            <a wicket:id="addToCartLink" class="btn btn-warning js-buy" rel="nofollow">
+                                <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
+                            </a>
+                        </div>
+
+                        <div class="col-md-12 col-xs-12 text-right">
+                            <a wicket:id="addToWishListLink" class="btn btn-info" rel="nofollow">
+                                <span wicket:id="addToWishListLinkLabel">[add one to wish list]</span>
+                            </a>
+                        </div>
+
+                        <div class="col-md-12 col-xs-12 text-right">
+                            <wicket:container wicket:id="priceView">
+                                [price]
+                            </wicket:container>
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
             <wicket:container wicket:id="addToAnyButton">

@@ -23,8 +23,10 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.bridge.ProductSkuCodeBridge;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -57,6 +59,9 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private Set<ProductAssociation> productAssociations = new HashSet<ProductAssociation>(0);
     private Boolean featured;
     private SeoEntity seoInternal;
+    private BigDecimal minOrderQuantity;
+    private BigDecimal maxOrderQuantity;
+    private BigDecimal stepOrderQuantity;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -440,6 +445,33 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     /** {@inheritDoc} */
     public void setSeo(final Seo seo) {
         this.setSeoInternal((SeoEntity) seo);
+    }
+
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    public BigDecimal getMinOrderQuantity() {
+        return minOrderQuantity;
+    }
+
+    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
+        this.minOrderQuantity = minOrderQuantity;
+    }
+
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    public BigDecimal getMaxOrderQuantity() {
+        return maxOrderQuantity;
+    }
+
+    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
+        this.maxOrderQuantity = maxOrderQuantity;
+    }
+
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    public BigDecimal getStepOrderQuantity() {
+        return stepOrderQuantity;
+    }
+
+    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
+        this.stepOrderQuantity = stepOrderQuantity;
     }
 
 }

@@ -39,6 +39,9 @@ public interface ProductSearchQueryBuilder {
     public final static String PRODUCT_QTY_FIELD = "qtyOnWarehouse"; //for projections only
     public final static String PRODUCT_DEFAULTIMAGE_FIELD = "defaultImage"; //for projections only
     public final static String PRODUCT_DESCRIPTION_ASIS_FIELD = "descriptionAsIs"; //for projections only
+    public final static String PRODUCT_MIN_QTY_FIELD = "minOrderQuantity"; //for projections only
+    public final static String PRODUCT_MAX_QTY_FIELD = "maxOrderQuantity"; //for projections only
+    public final static String PRODUCT_STEP_QTY_FIELD = "stepOrderQuantity"; //for projections only
 
     public final static String PRODUCT_TAG_FIELD = "tag";
     public final static String SKU_PRODUCT_CODE_FIELD = "sku.code";

@@ -104,7 +104,9 @@ public class LinksSupportImpl implements LinksSupport {
     public Link newAddToCartLink(final String linkId, final String skuCode, final String quantity, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_ADDTOCART, skuCode);
-        params.set(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, quantity != null ? quantity : "1");
+        if (quantity != null) { // null quantity will pick min from product
+            params.set(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, quantity);
+        }
         return new BookmarkablePageLink(linkId, getHomePage(), params);
     }
 
@@ -114,7 +116,9 @@ public class LinksSupportImpl implements LinksSupport {
     public Link newAddToWishListLink(final String linkId, final String skuCode, final String quantity, final String wishList, final String tags, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST, skuCode);
-        params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_QTY, quantity != null ? quantity : "1");
+        if (quantity != null) { // null quantity will pick min from product
+            params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_QTY, quantity);
+        }
         params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TYPE, wishList != null ? wishList : "W");
         if (tags != null) {
             params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TAGS, tags);
@@ -167,7 +171,7 @@ public class LinksSupportImpl implements LinksSupport {
         params.set(ShoppingCartCommand.CMD_CHANGELOCALE, language);
         return new BookmarkablePageLink(
                 linkId,
-                pageClass==null?getHomePage():pageClass,
+                pageClass == null ? getHomePage() : pageClass,
                 params);
     }
 
@@ -179,7 +183,7 @@ public class LinksSupportImpl implements LinksSupport {
         params.set(ShoppingCartCommand.CMD_CHANGECURRENCY, currency);
         return new BookmarkablePageLink(
                 linkId,
-                pageClass==null?getHomePage():pageClass,
+                pageClass == null ? getHomePage() : pageClass,
                 params);
     }
 

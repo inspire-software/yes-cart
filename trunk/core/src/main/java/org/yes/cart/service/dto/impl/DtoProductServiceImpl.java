@@ -41,8 +41,10 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.*;
 import org.yes.cart.service.misc.LanguageService;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -182,12 +184,25 @@ public class DtoProductServiceImpl
         }
     }
 
+    private void cleanProductOrderQuantities(final ProductDTO productDTO) {
+        if (MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, productDTO.getMinOrderQuantity())) {
+            productDTO.setMinOrderQuantity(null);
+        }
+        if (MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, productDTO.getMaxOrderQuantity())) {
+            productDTO.setMaxOrderQuantity(null);
+        }
+        if (MoneyUtils.isFirstEqualToSecond(BigDecimal.ZERO, productDTO.getStepOrderQuantity())) {
+            productDTO.setStepOrderQuantity(null);
+        }
+    }
+
 
     /**
      * {@inheritDoc}
      * Default product sku will be also created.
      */
     public ProductDTO create(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        cleanProductOrderQuantities(instance);
         Product product = getEntityFactory().getByIface(Product.class);
         assembler.assembleEntity(instance, product, getAdaptersRepository(),
                 new EntityFactoryToBeanFactoryAdaptor(productService.getGenericDao().getEntityFactory()));
@@ -199,6 +214,7 @@ public class DtoProductServiceImpl
      * {@inheritDoc}
      */
     public ProductDTO update(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        cleanProductOrderQuantities(instance);
         Product product = service.findById(instance.getProductId());
         assembler.assembleEntity(
                 instance,

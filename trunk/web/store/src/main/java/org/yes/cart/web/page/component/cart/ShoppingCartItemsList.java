@@ -34,9 +34,11 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ProductQuantityStrategy;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.shoppingcart.CartItem;
@@ -88,6 +90,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
 
+    @SpringBean(name = ServiceSpringKeys.PRODUCT_QUANTITY_STRATEGY)
+    protected ProductQuantityStrategy productQuantityStrategy;
+
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     protected CategoryService categoryService;
 
@@ -122,17 +127,18 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         final String skuCode = cartItem.getProductSkuCode();
 
         final ProductSku sku = productSkuService.getProductSkuBySkuCode(skuCode);
+        final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(cartItem.getQty(), sku);
 
         final ProductSkuDecorator productSkuDecorator = decoratorFacade.decorate(sku, WicketUtil.getHttpServletRequest().getContextPath(), true);
 
         final boolean notGift = !cartItem.isGift();
 
         cartItemListItem.add(
-                createAddOneSkuLink(skuCode).setVisible(notGift)
+                createAddOneSkuLink(skuCode).setVisible(notGift && pqm.canOrderMore())
         ).add(
                 createRemoveAllSkuLink(skuCode).setVisible(notGift)
         ).add(
-                createRemoveOneSkuLink(skuCode).setVisible(notGift)
+                createRemoveOneSkuLink(skuCode).setVisible(notGift && pqm.canOrderLess())
         ).add(
                 new Label(SKU_NUM_LABEL, skuCode)
         ).add(
@@ -145,13 +151,38 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         );
 
 
+        final String message;
+        if (!pqm.canOrderMore()) {
+            message = getLocalizer().getString("quantityPickerFullTooltip", this,
+                    new Model<Object[]>(new Object[] {
+                            pqm.getCartQty().toPlainString()
+                    }));
+        } else if (pqm.hasMax()) {
+            message = getLocalizer().getString("quantityPickerTooltip", this,
+                    new Model<Object[]>(new Object[] {
+                            pqm.getMin().toPlainString(),
+                            pqm.getStep().toPlainString(),
+                            pqm.getMax().toPlainString(),
+                            cartItem.getQty().toPlainString()
+                    }));
+        } else {
+            message = getLocalizer().getString("quantityPickerTooltipNoMax", this,
+                    new Model<Object[]>(new Object[] {
+                            pqm.getMin().toPlainString(),
+                            pqm.getStep().toPlainString(),
+                            pqm.getCartQty().toPlainString()
+                    }));
+        }
+
+
         final TextField<BigDecimal> quantity = new TextField<BigDecimal>(QUANTITY_TEXT,
-                new Model<BigDecimal>(cartItem.getQty()));
+                new Model<BigDecimal>(pqm.getCartQty()));
+        quantity.add(new AttributeModifier("title", message));
 
         cartItemListItem.add(
                 quantity.setVisible(notGift)
         )
-        .add(new Label(QUANTITY_TEXT_RO, cartItem.getQty().toString()).setVisible(!notGift))
+        .add(new Label(QUANTITY_TEXT_RO, pqm.getCartQty().toPlainString()).setVisible(!notGift))
         .add(
                 createAddSeveralSkuButton(skuCode, quantity).setVisible(notGift)
         );

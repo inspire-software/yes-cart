@@ -155,6 +155,15 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /** {@inheritDoc} */
+    public BigDecimal getProductSkuQuantity(final String sku) {
+        final int skuIndex = indexOfProductSku(sku);
+        if (skuIndex == -1) { //not found
+            return BigDecimal.ZERO;
+        }
+        return getItems().get(skuIndex).getQty();
+    }
+
+    /** {@inheritDoc} */
     public boolean addProductSkuToCart(final String sku, final BigDecimal quantity) {
 
         final int skuIndex = indexOfProductSku(sku);

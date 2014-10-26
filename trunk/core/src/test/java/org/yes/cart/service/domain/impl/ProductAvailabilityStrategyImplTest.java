@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.service.impl;
+package org.yes.cart.service.domain.impl;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
+import org.yes.cart.service.domain.impl.ProductAvailabilityStrategyImpl;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
