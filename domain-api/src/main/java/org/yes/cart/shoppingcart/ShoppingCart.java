@@ -72,6 +72,13 @@ public interface ShoppingCart extends Serializable {
      */
     List<CartItem> getCartItemList();
 
+    /**
+     * Get quantity of given SKU in cart (excluding gifts).
+     *
+     * @param sku sku to check
+     * @return quantity of given sku
+     */
+    BigDecimal getProductSkuQuantity(String sku);
 
     /**
      * Add product sku to cart.

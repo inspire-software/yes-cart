@@ -19,6 +19,7 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
@@ -329,5 +330,41 @@ public interface ProductDTO extends Identifiable {
      */
     void setTag(String tag);
 
+    /**
+     * Get minimal quantity for order. E.g. 5.0 means customer can only buy 5 or more.
+     *
+     * @return minimal order quantity
+     */
+    BigDecimal getMinOrderQuantity();
+
+    /**
+     * @param minOrderQuantity minimal quantity for order.
+     */
+    void setMinOrderQuantity(BigDecimal minOrderQuantity);
+
+    /**
+     * Get maximum quantity for order. E.g. 5.0 means customer can only buy up to 5
+     *
+     * @return maximum order quantity
+     */
+    BigDecimal getMaxOrderQuantity();
+
+    /**
+     * @param maxOrderQuantity maximum quantity for order.
+     */
+    void setMaxOrderQuantity(BigDecimal maxOrderQuantity);
+
+    /**
+     * Get step quantity for order. E.g. 5.0 means customer can only buy in batches of 5 - 5, 10, 15
+     * but not say 11.
+     *
+     * @return step order quantity
+     */
+    BigDecimal getStepOrderQuantity();
+
+    /**
+     * @param stepOrderQuantity step quantity for order.
+     */
+    void setStepOrderQuantity(BigDecimal stepOrderQuantity);
 
 }

@@ -30,7 +30,6 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
@@ -51,7 +50,7 @@ public class Language extends BaseComponent {
     private final static String ACTIVE_LANGUAGE_NAME = "activeLanguageName";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
-    @SpringBean(name = StorefrontServiceSpringKeys.LANGUAGE_SERVICE)
+    @SpringBean(name = ServiceSpringKeys.LANGUAGE_SERVICE)
     private LanguageService languageService;
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)

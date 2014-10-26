@@ -359,3 +359,17 @@ INSERT INTO TATTRIBUTE (GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID,
 INSERT INTO TATTRIBUTE (GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES ( 'SHOP_IMAGE0_uk',  'SHOP_IMAGE0_uk',  1,  NULL,  'Картинка магазину за замовчуванням  (UK)',  null,  1003, 1001);
 
+--
+-- YC-443 Add Min, Max, Step quantities to product object
+--
+
+alter table TPRODUCT add column MIN_ORDER_QUANTITY decimal(19,2);
+alter table TPRODUCT add column MAX_ORDER_QUANTITY decimal(19,2);
+alter table TPRODUCT add column STEP_ORDER_QUANTITY decimal(19,2);
+
+-- alter table TPRODUCT add column MIN_ORDER_QUANTITY numeric(19,2);
+-- alter table TPRODUCT add column MAX_ORDER_QUANTITY numeric(19,2);
+-- alter table TPRODUCT add column STEP_ORDER_QUANTITY numeric(19,2);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10993,  'CART_ADD_ENABLE_QTY_PICKER', 'CART_ADD_ENABLE_QTY_PICKER',  0,  NULL,  'Cart: Enable quantity picker for products',  'Cart: Enable quantity picker for products',  1008, 1001);

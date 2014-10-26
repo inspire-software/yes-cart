@@ -72,12 +72,6 @@
         <constructor-arg index="0" ref="cacheManager"/>
     </bean>
 
-    <bean id="productAvailabilityStrategy"
-          class="org.yes.cart.web.support.service.impl.ProductAvailabilityStrategyImpl">
-        <constructor-arg index="0" ref="warehouseService"/>
-        <constructor-arg index="1" ref="skuWarehouseService"/>
-    </bean>
-
     <bean id="brandImageService" class="org.yes.cart.web.support.service.impl.BrandImageServiceImpl">
         <constructor-arg index="0" ref="cacheManager"/>
     </bean>

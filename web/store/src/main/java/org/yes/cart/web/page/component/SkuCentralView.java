@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
@@ -33,10 +34,7 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.price.PriceTierView;
 import org.yes.cart.web.page.component.price.PriceView;
-import org.yes.cart.web.page.component.product.ImageView;
-import org.yes.cart.web.page.component.product.ProductAssociationsView;
-import org.yes.cart.web.page.component.product.SkuAttributesView;
-import org.yes.cart.web.page.component.product.SkuListView;
+import org.yes.cart.web.page.component.product.*;
 import org.yes.cart.web.page.component.social.AddAnyButton;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -82,6 +80,10 @@ public class SkuCentralView extends AbstractCentralView {
      * Add single item to wish list
      */
     private final static String LOGIN_LINK = "addToWishListLink";
+    /**
+     * Quantity picker
+     */
+    private final static String QTY_PICKER = "quantityPicker";
     /**
      * Add single item to cart label
      */
@@ -166,7 +168,7 @@ public class SkuCentralView extends AbstractCentralView {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_ASSOCIATIONS_SERVICE)
     protected ProductAssociationService productAssociationService;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
+    @SpringBean(name = ServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
     private ProductAvailabilityStrategy productAvailabilityStrategy;
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
@@ -234,20 +236,20 @@ public class SkuCentralView extends AbstractCentralView {
 
         final ObjectDecorator decorator = getDecorator();
 
-        add(
-                new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true, true)
-        ).add(
-                new SkuListView(SKU_LIST_VIEW, product.getSku(), sku, isProduct)
-        ).add(
-                new Label(SKU_CODE_LABEL, sku.getCode())
-        ).add(
-                new Label(PRODUCT_NAME_LABEL, decorator.getName(selectedLocale))
-        ).add(
-                new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false)
-        ).add(
-                new AddAnyButton(SOCIAL_ADD_TO_ANY_BUTTON, product));
+        add(new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true, true));
+        add(new SkuListView(SKU_LIST_VIEW, product.getSku(), sku, isProduct));
+        add(new Label(SKU_CODE_LABEL, sku.getCode()));
+        add(new Label(PRODUCT_NAME_LABEL, decorator.getName(selectedLocale)));
+        add(new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false));
+        add(new AddAnyButton(SOCIAL_ADD_TO_ANY_BUTTON, product));
 
         final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), sku);
+
+        final Shop shop = ApplicationDirector.getCurrentShop();
+        final AttrValue val = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER);
+        final boolean qtyPickVisible = pam.isAvailable() && val != null && val.getVal() != null && Boolean.valueOf(val.getVal());
+
+        add(new QuantityPickerPanel(QTY_PICKER, product.getProductId(), sku.getCode()).setVisible(qtyPickVisible));
 
         add(
                 getWicketSupportFacade().links().newAddToCartLink(ADD_TO_CART_LINK, sku.getCode(), null, getPage().getPageParameters())

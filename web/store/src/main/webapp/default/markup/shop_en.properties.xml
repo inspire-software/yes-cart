@@ -124,12 +124,14 @@
     <entry key="amountMsg">Amount</entry>
     <entry key="addOneLink">+1</entry>
     <entry key="removeOneLink">-1</entry>
+    <entry key="removeAllLink">X</entry>
     <entry key="addOneLinkHint">Add one item</entry>
     <entry key="removeOneLinkHint">Remove one item</entry>
     <entry key="removeAllLinkHint">Remove all items</entry>
     <entry key="refreshLinkHint">Refresh quantity</entry>
     <entry key="nonZeroDigits">Please, input valid items quantity</entry>
     <entry key="skuNumber">SKU code</entry>
+    <entry key="productsInCart">Items in cart</entry>
     <entry key="addCouponsTitle">Add Coupon</entry>
     <entry key="removeCouponCodeLabel">Remove coupon</entry>
     <entry key="addCouponButtonLabel">Add coupon</entry>
@@ -285,6 +287,9 @@
     <entry key="details">Details</entry>
     <entry key="accessories">Accessories</entry>
     <entry key="volumeDiscount">Multi buy</entry>
+    <entry key="quantityPickerTooltip">Minimum order is ${0} with step ${1} up to ${2}. ${3} in cart.</entry>
+    <entry key="quantityPickerTooltipNoMax">Minimum order is ${0} with step ${1}. ${2} in cart.</entry>
+    <entry key="quantityPickerFullTooltip">You have added maximum orderable quantity. ${0} in cart.</entry>
 
     <!-- TopCategories -->
     <entry key="categories">Categories</entry>

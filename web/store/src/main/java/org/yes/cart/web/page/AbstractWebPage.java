@@ -67,7 +67,7 @@ public class AbstractWebPage extends WebPage {
     @SpringBean(name = StorefrontServiceSpringKeys.CART_PERSISTER)
     private ShoppingCartPersister shoppingCartPersister;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.LANGUAGE_SERVICE)
+    @SpringBean(name = ServiceSpringKeys.LANGUAGE_SERVICE)
     private LanguageService languageService;
 
     @SpringBean(name = StorefrontServiceSpringKeys.I18N_SUPPORT)

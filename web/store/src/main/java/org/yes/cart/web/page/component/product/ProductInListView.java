@@ -81,7 +81,7 @@ public class ProductInListView extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
     protected ProductService productService;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
+    @SpringBean(name = ServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
     private ProductAvailabilityStrategy productAvailabilityStrategy;
 
     private final String[] defImgSize;

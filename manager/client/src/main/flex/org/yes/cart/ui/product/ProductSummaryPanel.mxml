@@ -75,6 +75,36 @@
                             click="productAvailableToDateField.selectedDate = null;"/>
                 </mx:HBox>
             </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='minOrderQuantity')">
+                <mx:HBox>
+                    <mx:TextInput id="minOrderQuantity" width="125"/>
+                    <mx:Button
+                            visible="{minOrderQuantity.text != null}"
+                            label="@Resource(bundle='ProductManagementPanel',key='clearOrderQuantity')"
+                            click="minOrderQuantity.text = null;"/>
+                </mx:HBox>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='maxOrderQuantity')">
+                <mx:HBox>
+                    <mx:TextInput id="maxOrderQuantity" width="125"/>
+                    <mx:Button
+                            visible="{maxOrderQuantity.text != null}"
+                            label="@Resource(bundle='ProductManagementPanel',key='clearOrderQuantity')"
+                            click="maxOrderQuantity.text = null;"/>
+                </mx:HBox>
+            </mx:FormItem>
+            <mx:FormItem width="100%"
+                         label="@Resource(bundle='ProductManagementPanel',key='stepOrderQuantity')">
+                <mx:HBox>
+                    <mx:TextInput id="stepOrderQuantity" width="125"/>
+                    <mx:Button
+                            visible="{stepOrderQuantity.text != null}"
+                            label="@Resource(bundle='ProductManagementPanel',key='clearOrderQuantity')"
+                            click="stepOrderQuantity.text = null;"/>
+                </mx:HBox>
+            </mx:FormItem>
         </mx:Form>
 
         <mx:Form width="100%">
@@ -185,6 +215,9 @@
                 propertyWatchers.addItem(BindingUtils.bindProperty(brandComboBox, "selectedItem", _productDTOImpl, "brandDTO"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(typeComboBox, "selectedItem", _productDTOImpl, "productTypeDTO"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(productAvailabilityComboBox, "selectedItem", _productDTOImpl, "availability"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(minOrderQuantity, "text", _productDTOImpl, "minOrderQuantityS"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(maxOrderQuantity, "text", _productDTOImpl, "maxOrderQuantityS"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(stepOrderQuantity, "text", _productDTOImpl, "stepOrderQuantityS"));
 
                 for (var i:int =0 ; i < productAvailabilityComboBox.dataProvider.length; i++) {
                     if (productAvailabilityComboBox.dataProvider[i].data == _productDTOImpl.availability) {
@@ -206,6 +239,9 @@
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "featured", featuredCheckBox, "selected"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "brandDTO", brandComboBox, "selectedItem"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "productTypeDTO", typeComboBox, "selectedItem"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "minOrderQuantityS", minOrderQuantity, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "maxOrderQuantityS", maxOrderQuantity, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "stepOrderQuantityS", stepOrderQuantity, "text"));
 
 
                 propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "code", onProductDTOChanged));
@@ -223,6 +259,9 @@
                 propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "brandDTO", onProductDTOChanged));
                 propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "productTypeDTO", onProductDTOChanged));
                 propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "availability", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "minOrderQuantityS", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "maxOrderQuantityS", onProductDTOChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productDTOImpl, "stepOrderQuantityS", onProductDTOChanged));
 
             } catch(e:Error) {
 

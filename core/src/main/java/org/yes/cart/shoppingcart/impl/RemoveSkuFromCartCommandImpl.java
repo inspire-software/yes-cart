@@ -16,8 +16,10 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductQuantityStrategy;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -39,6 +41,8 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
 
     private static final long serialVersionUID = 20100313L;
 
+    private final ProductQuantityStrategy productQuantityStrategy;
+
     /**
      * Construct sku command.
      *
@@ -46,17 +50,29 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
      * @param priceService price service
      * @param productService product service
      * @param shopService shop service
+     * @param productQuantityStrategy product quantity strategy
      */
     public RemoveSkuFromCartCommandImpl(final ShoppingCartCommandRegistry registry,
                                         final PriceService priceService,
                                         final ProductService productService,
-                                        final ShopService shopService) {
+                                        final ShopService shopService,
+                                        final ProductQuantityStrategy productQuantityStrategy) {
         super(registry, priceService, productService, shopService);
+        this.productQuantityStrategy = productQuantityStrategy;
     }
 
     /** {@inheritDoc} */
     public String getCmdKey() {
         return CMD_REMOVEONESKU;
+    }
+
+
+
+    private BigDecimal getQuantityValue(final ProductSku productSku, final BigDecimal quantityInCart) {
+
+        final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+        return pqm.getValidRemoveQty(null);
+
     }
 
     /**
@@ -67,7 +83,8 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
                            final ProductSku productSku, final Map<String, Object> parameters) {
         if (productSku != null) {
             final String skuCode = productSku.getCode();
-            if(!shoppingCart.removeCartItemQuantity(productSku.getCode(), BigDecimal.ONE)) {
+            if(!shoppingCart.removeCartItemQuantity(productSku.getCode(),
+                    getQuantityValue(productSku, shoppingCart.getProductSkuQuantity(productSku.getCode())))) {
                 ShopCodeContext.getLog(this).warn("Can not remove one sku with code {} from cart",
                         skuCode);
             }

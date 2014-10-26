@@ -240,6 +240,10 @@ public interface AttributeNamesKeys {
          */
         String SHOP_IMAGE = SHOP_IMAGE_PREFIX + "0";
 
+        /**
+         * Setting for whether to show quantity picker or not
+         */
+        String CART_ADD_ENABLE_QTY_PICKER = "CART_ADD_ENABLE_QTY_PICKER";
 
     }
 

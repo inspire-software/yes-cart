@@ -65,6 +65,11 @@ public class ProductDTOImpl {
 
     public var attributes:ArrayCollection; // of AttrValueProductDTO
 
+    public var minOrderQuantity:Number;
+
+    public var maxOrderQuantity:Number;
+
+    public var stepOrderQuantity:Number;
 
     public function ProductDTOImpl() {
     }
@@ -114,6 +119,54 @@ public class ProductDTOImpl {
                 + ",name=" + String(name)
                 + ",description=" + String(description)
                 + ",featured=" + String(featured) + "}";
+    }
+
+    public function get minOrderQuantityS():String {
+        if (isNaN(minOrderQuantity) || minOrderQuantity <= 0) {
+            return "";
+        }
+        return String(minOrderQuantity);
+    }
+
+    public function set minOrderQuantityS(value:String):void {
+        var _num:Number = new Number(value);
+        if (isNaN(_num)) {
+            minOrderQuantity = 0;
+        } else {
+            minOrderQuantity = _num;
+        }
+    }
+
+    public function get maxOrderQuantityS():String {
+        if (isNaN(maxOrderQuantity) || maxOrderQuantity <= 0) {
+            return "";
+        }
+        return String(maxOrderQuantity);
+    }
+
+    public function set maxOrderQuantityS(value:String):void {
+        var _num:Number = new Number(value);
+        if (isNaN(_num)) {
+            maxOrderQuantity = 0;
+        } else {
+            maxOrderQuantity = _num;
+        }
+    }
+
+    public function get stepOrderQuantityS():String {
+        if (isNaN(stepOrderQuantity) || stepOrderQuantity <= 0) {
+            return "";
+        }
+        return String(stepOrderQuantity);
+    }
+
+    public function set stepOrderQuantityS(value:String):void {
+        var _num:Number = new Number(value);
+        if (isNaN(_num)) {
+            stepOrderQuantity = 0;
+        } else {
+            stepOrderQuantity = _num;
+        }
     }
 }
 }

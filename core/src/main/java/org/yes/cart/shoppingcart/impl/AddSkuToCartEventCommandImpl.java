@@ -17,13 +17,14 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
+import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductQuantityStrategy;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
-import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
@@ -40,6 +41,8 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
 
     private static final long serialVersionUID = 20100122L;
 
+    private final ProductQuantityStrategy productQuantityStrategy;
+
     /**
      * Construct sku command.
      *
@@ -47,12 +50,15 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
      * @param priceService price service
      * @param productService product service
      * @param shopService shop service
+     * @param productQuantityStrategy product quantity strategy
      */
     public AddSkuToCartEventCommandImpl(final ShoppingCartCommandRegistry registry,
                                         final PriceService priceService,
                                         final ProductService productService,
-                                        final ShopService shopService) {
+                                        final ShopService shopService,
+                                        final ProductQuantityStrategy productQuantityStrategy) {
         super(registry, priceService, productService, shopService);
+        this.productQuantityStrategy = productQuantityStrategy;
     }
 
     /**
@@ -63,18 +69,20 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
     }
 
 
-    private BigDecimal getQuantityValue(final Map parameters) {
+    private BigDecimal getQuantityValue(final Map parameters, final ProductSku productSku, final BigDecimal quantityInCart) {
         final Object strQty = parameters.get(CMD_ADDTOCART_P_QTY);
 
-        BigDecimal qty = BigDecimal.ONE;
         if (strQty instanceof String) {
             try {
-                qty = new BigDecimal((String) strQty);
+                final BigDecimal qty = new BigDecimal((String) strQty);
+                final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+                return pqm.getValidAddQty(qty);
             } catch (Exception exp) {
                 ShopCodeContext.getLog(this).error("Invalid quantity in add to cart command", exp);
             }
         }
-        return MoneyUtils.isFirstBiggerThanSecond(qty, BigDecimal.ZERO) ? qty : BigDecimal.ONE;
+        final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+        return pqm.getValidAddQty(null);
     }
 
     /**
@@ -85,7 +93,8 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
                            final ProductSku productSku,
                            final Map<String, Object> parameters) {
         if (productSku != null) {
-            shoppingCart.addProductSkuToCart(productSku.getCode(), getQuantityValue(parameters));
+            shoppingCart.addProductSkuToCart(productSku.getCode(),
+                    getQuantityValue(parameters, productSku, shoppingCart.getProductSkuQuantity(productSku.getCode())));
             recalculatePrice(shoppingCart, productSku);
             markDirty(shoppingCart);
             final Logger log = ShopCodeContext.getLog(this);

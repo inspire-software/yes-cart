@@ -45,7 +45,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
     private ContentService service;
     private DtoContentService dtoService;
     private DtoAttributeService dtoAttrService;
-    public static final int QTY = 8;
+    public static final int QTY = 10;
 
     @Before
     public void setUp() {

@@ -79,7 +79,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
         assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
         assertTrue(cc_test4.isPromoApplied());
         assertEquals("CC_TEST_10,CC_TEST_10%,CC_TEST_6_GIFT", cc_test4.getAppliedPromo());
-        assertEquals("2.00", cc_test4.getQty().toString());
+        assertEquals("2", cc_test4.getQty().toString());
         assertEquals("123.00", cc_test4.getListPrice().toString());
         assertEquals("123.00", cc_test4.getSalePrice().toString());
         assertEquals("100.70", cc_test4.getPrice().toString()); // -10 -10%
@@ -123,7 +123,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
         assertEquals("CC_TEST4", cc_test4_2.getProductSkuCode());
         assertTrue(cc_test4_2.isPromoApplied());
         assertEquals("CC_TEST_10,CC_TEST_10%,CC_TEST_6_GIFT", cc_test4_2.getAppliedPromo());
-        assertEquals("20.00", cc_test4_2.getQty().toString());
+        assertEquals("20", cc_test4_2.getQty().toString());
         assertEquals("99.99", cc_test4_2.getListPrice().toString());
         assertEquals("99.99", cc_test4_2.getSalePrice().toString());
         assertEquals("79.99", cc_test4_2.getPrice().toString()); // -10 -10%

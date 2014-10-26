@@ -153,6 +153,15 @@
         </property>
     </bean>
 
+    <bean id="productAvailabilityStrategy"
+          class="org.yes.cart.service.domain.impl.ProductAvailabilityStrategyImpl">
+        <constructor-arg index="0" ref="warehouseService"/>
+        <constructor-arg index="1" ref="skuWarehouseService"/>
+    </bean>
+
+    <bean id="productQuantityStrategy"
+          class="org.yes.cart.service.domain.impl.ProductQuantityStrategyImpl"/>
+
     <bean id="addressService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.AddressServiceImpl">
@@ -1504,7 +1513,6 @@
 
     <bean id="passwordHashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
 
-    <!--TODOv2  must read languages from db-->
     <bean id="languageService" class="org.yes.cart.service.misc.impl.LanguageServiceImpl">
         <constructor-arg index="0">
             <map>

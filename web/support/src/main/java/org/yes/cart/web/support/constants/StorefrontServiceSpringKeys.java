@@ -49,19 +49,9 @@ public interface StorefrontServiceSpringKeys {
     public String FILTERNAV_SUPPORT_PRICE = "priceFilteredNavigationSupport";
 
     /**
-     * Language service.
-     */
-    public String LANGUAGE_SERVICE = "languageService";
-
-    /**
      * Service to resolve central view from request parameters.
      */
     public String CENTRAL_VIEW_RESOLVER = "centralViewResolver";
-
-    /**
-     * Service to resolve theme visitors.
-     */
-    public String COMPONENT_THEME_VISITOR_FACTORY = "componentThemeVisitorFactory";
 
     /**
      * Service to resolve central view from request parameters.
@@ -98,12 +88,7 @@ public interface StorefrontServiceSpringKeys {
       */
      public String WICKET_SUPPORT_FACADE = "wicketSupportFacade";
 
-     /**
-      * Strategy for determining if product is purchasable
-      */
-     public String PRODUCT_AVAILABILITY_STRATEGY = "productAvailabilityStrategy";
-
-     /**
+    /**
       * Address book facade
       */
      public String ADDRESS_BOOK_FACADE = "addressBookFacade";

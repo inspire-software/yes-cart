@@ -82,6 +82,7 @@
         <constructor-arg index="3" ref="shopService"/>
         <constructor-arg index="4" ref="customerService"/>
         <constructor-arg index="5" ref="customerWishListService"/>
+        <constructor-arg index="6" ref="productQuantityStrategy"/>
         <property name="priority" value="9"/>
     </bean>
 
@@ -112,6 +113,7 @@
         <constructor-arg index="1" ref="priceService"/>
         <constructor-arg index="2" ref="productService"/>
         <constructor-arg index="3" ref="shopService"/>
+        <constructor-arg index="4" ref="productQuantityStrategy"/>
         <property name="priority" value="13"/>
     </bean>
 
@@ -128,6 +130,7 @@
         <constructor-arg index="1" ref="priceService"/>
         <constructor-arg index="2" ref="productService"/>
         <constructor-arg index="3" ref="shopService"/>
+        <constructor-arg index="4" ref="productQuantityStrategy"/>
         <property name="priority" value="15"/>
     </bean>
 
@@ -136,6 +139,7 @@
         <constructor-arg index="1" ref="priceService"/>
         <constructor-arg index="2" ref="productService"/>
         <constructor-arg index="3" ref="shopService"/>
+        <constructor-arg index="4" ref="productQuantityStrategy"/>
         <property name="priority" value="16"/>
     </bean>
 

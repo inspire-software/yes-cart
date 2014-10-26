@@ -79,7 +79,7 @@ public class OrderGiftPromotionActionTest extends BaseCoreDBTestCase {
         assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
         assertFalse(cc_test4.isPromoApplied());
         assertNull(cc_test4.getAppliedPromo());
-        assertEquals("5.00", cc_test4.getQty().toString());
+        assertEquals("5", cc_test4.getQty().toString());
         assertEquals("99.99", cc_test4.getListPrice().toString());
         assertEquals("99.99", cc_test4.getSalePrice().toString());
         assertEquals("99.99", cc_test4.getPrice().toString());
@@ -148,7 +148,7 @@ public class OrderGiftPromotionActionTest extends BaseCoreDBTestCase {
         assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
         assertFalse(cc_test4.isPromoApplied());
         assertNull(cc_test4.getAppliedPromo());
-        assertEquals("5.00", cc_test4.getQty().toString());
+        assertEquals("5", cc_test4.getQty().toString());
         assertEquals("99.99", cc_test4.getListPrice().toString());
         assertEquals("99.99", cc_test4.getSalePrice().toString());
         assertEquals("99.99", cc_test4.getPrice().toString());
@@ -217,7 +217,7 @@ public class OrderGiftPromotionActionTest extends BaseCoreDBTestCase {
         assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
         assertFalse(cc_test4.isPromoApplied());
         assertNull(cc_test4.getAppliedPromo());
-        assertEquals("1.00", cc_test4.getQty().toString());
+        assertEquals("1", cc_test4.getQty().toString());
         assertEquals("123.00", cc_test4.getListPrice().toString());
         assertEquals("123.00", cc_test4.getSalePrice().toString());
         assertEquals("123.00", cc_test4.getPrice().toString());

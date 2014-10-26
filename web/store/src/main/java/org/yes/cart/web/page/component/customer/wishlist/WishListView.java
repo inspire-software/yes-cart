@@ -23,6 +23,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.CustomerWishList;
@@ -59,7 +60,7 @@ public class WishListView extends AbstractProductSearchResultList {
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
     private CustomerServiceFacade customerServiceFacade;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
+    @SpringBean(name = ServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
     private ProductAvailabilityStrategy productAvailabilityStrategy;
 
 

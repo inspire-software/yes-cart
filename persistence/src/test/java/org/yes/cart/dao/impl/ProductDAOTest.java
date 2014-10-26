@@ -158,7 +158,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 // search by Sku code with stems
                 query = queryBuilder.createQuerySearchInCategory("cc_test4", (Long) null, true);
                 products = productDao.fullTextSearch(query);
-                assertEquals("Relaxed search should give all cc_test skus", 12, products.size());
+                assertEquals("Relaxed search should give all cc_test skus", 13, products.size());
                 // search by sku id
                 query = new SkuQueryBuilderImpl().createQuery("11004");
                 products = productDao.fullTextSearch(query);

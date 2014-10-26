@@ -284,6 +284,9 @@
     <entry key="details">Деталі</entry>
     <entry key="accessories">Аксесуари</entry>
     <entry key="volumeDiscount">Оптові знижки</entry>
+    <entry key="quantityPickerTooltip">Мінімальна кількість для покупки ${0} з кроком ${1} до ${2}. ${3} у кошику.</entry>
+    <entry key="quantityPickerTooltipNoMax">Мінімальна кількість для покупки ${0} з кроком ${1}. ${2} у кошику.</entry>
+    <entry key="quantityPickerFullTooltip">Ви додали максимальну кількість. ${0} у кошику.</entry>
 
     <!-- TopCategories -->
     <entry key="categories">Каталог</entry>

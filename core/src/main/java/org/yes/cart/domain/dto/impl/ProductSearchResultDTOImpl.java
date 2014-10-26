@@ -46,6 +46,9 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private Map<Long, Map<String, BigDecimal>> qtyOnWarehouse;
     private String defaultImage;
     private Boolean featured;
+    private BigDecimal minOrderQuantity;
+    private BigDecimal maxOrderQuantity;
+    private BigDecimal stepOrderQuantity;
 
     private I18NModel i18NModelName;
     private I18NModel i18NModelDescription;
@@ -207,6 +210,36 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     }
 
     /** {@inheritDoc} */
+    public BigDecimal getMinOrderQuantity() {
+        return minOrderQuantity;
+    }
+
+    /** {@inheritDoc} */
+    public void setMinOrderQuantity(final BigDecimal minOrderQuantity) {
+        this.minOrderQuantity = minOrderQuantity;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getMaxOrderQuantity() {
+        return maxOrderQuantity;
+    }
+
+    /** {@inheritDoc} */
+    public void setMaxOrderQuantity(final BigDecimal maxOrderQuantity) {
+        this.maxOrderQuantity = maxOrderQuantity;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getStepOrderQuantity() {
+        return stepOrderQuantity;
+    }
+
+    /** {@inheritDoc} */
+    public void setStepOrderQuantity(final BigDecimal stepOrderQuantity) {
+        this.stepOrderQuantity = stepOrderQuantity;
+    }
+
+    /** {@inheritDoc} */
     public ProductSearchResultDTO copy() {
         final ProductSearchResultDTOImpl copy = new ProductSearchResultDTOImpl();
         copy.setId(this.getId());
@@ -222,6 +255,9 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         copy.setQtyOnWarehouse(this.getQtyOnWarehouse());
         copy.setDefaultImage(this.getDefaultImage());
         copy.setFeatured(this.getFeatured());
+        copy.setMaxOrderQuantity(this.getMaxOrderQuantity());
+        copy.setMinOrderQuantity(this.getMinOrderQuantity());
+        copy.setStepOrderQuantity(this.getStepOrderQuantity());
         return copy;
     }
 }
