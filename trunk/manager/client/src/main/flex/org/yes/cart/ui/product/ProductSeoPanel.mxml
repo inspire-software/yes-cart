@@ -25,7 +25,7 @@
 
             <mx:FormItem width="100%"
                          label="@Resource(bundle='ProductManagementPanel',key='uri')">
-                <mx:TextInput id="uriNameTextInput" width="300"/>
+                <mx:TextInput id="uriNameTextInput" width="300" focusOut="onUriChange(event)"/>
             </mx:FormItem>
             <mx:FormItem width="100%"
                          label="@Resource(bundle='ProductManagementPanel',key='title')">
@@ -72,15 +72,27 @@
     <mx:Boolean id="allowChangeCode">false</mx:Boolean>
     <mx:Boolean id="productDTOImplChanged">false</mx:Boolean>
 
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="isUriAvailableForProduct" name="isUriAvailableForProduct"
+                   result="onUriAvailableForProductResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
     <mx:Script><![CDATA[
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
         import mx.controls.Alert;
         import mx.events.FlexEvent;
         import mx.events.PropertyChangeEvent;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.event.DtoEvent;
         import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.util.DataModelUtils;
         import org.yes.cart.util.DomainUtils;
 
@@ -96,6 +108,9 @@
             _productDTOImpl = value;
             allowChangeCode = DomainUtils.isPersistentPK(_productDTOImpl.productId);
             bindProperties();
+            if (uriNameTextInput != null) {
+                uriNameTextInput.errorString = '';
+            }
         }
 
         private function onDisplayNamesChange(event:FlexEvent):void {
@@ -153,6 +168,24 @@
         private function onProductDTOChanged(event:PropertyChangeEvent):void {
             productDTOImplChanged = true;
         }
+
+        private function onUriChange(event:Event):void {
+            remoteProductService.isUriAvailableForProduct(uriNameTextInput.text, _productDTOImpl.productId);
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onUriAvailableForProductResult(event:ResultEvent):void {
+            var _available:Boolean = Boolean(event.result);
+            if (_available) {
+                uriNameTextInput.errorString = '';
+            } else {
+                uriNameTextInput.errorString = resourceManager.getString('ProductManagementPanel', 'seoUriIsNotAvailable', [ uriNameTextInput.text ]);
+            }
+        }
+
         ]]></mx:Script>
 
 </mx:VBox>

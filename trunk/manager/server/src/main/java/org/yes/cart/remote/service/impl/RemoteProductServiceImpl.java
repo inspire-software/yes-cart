@@ -219,4 +219,18 @@ public class RemoteProductServiceImpl
             throw new AccessDeniedException("Access is denied");
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isUriAvailableForProduct(final String seoUri, final Long productId) {
+        return ((DtoProductService) getGenericDTOService()).isUriAvailableForProduct(seoUri, productId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isUriAvailableForProductSku(final String seoUri, final Long productSkuId) {
+        return ((DtoProductService) getGenericDTOService()).isUriAvailableForProductSku(seoUri, productSkuId);
+    }
 }

@@ -202,7 +202,7 @@
             <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="getAllByShopId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
-
+            <security:protect method="isUriAvailableForCategory" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
 
             <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMMARKETINGADMIN"/>
@@ -227,7 +227,7 @@
             <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="getAllByShopId" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
-
+            <security:protect method="isUriAvailableForContent" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
 
             <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN"/>
             <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMCONTENTADMIN"/>
@@ -277,6 +277,8 @@
             <security:protect method="getProductByCategory" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="getProductByCategoryWithPaging" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="createAndBindAttrVal" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="isUriAvailableForProduct" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="isUriAvailableForProductSku" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
         </security:intercept-methods>
     </bean>
 

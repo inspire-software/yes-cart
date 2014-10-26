@@ -172,7 +172,9 @@
             if (displayNames != null) {
                 displayNames.setSourceObject(null, null);
             }
-
+            if (uriNameTextInput != null) {
+                uriNameTextInput.errorString = '';
+            }
             categoryProductTypeComboBox.removeEventListener(Event.CHANGE, onCategoryProductTypeChanged);
         }
 
@@ -262,6 +264,22 @@
 
         private function onDisplayNamesChange(event:FlexEvent):void {
             categoryDtoChanged(null);
+        }
+
+        private function onUriChange(event:Event):void {
+            remoteCategoryService.isUriAvailableForCategory(uriNameTextInput.text, selectedCategoryDTOImpl.categoryId);
+        }
+
+
+        private function onUriAvailableForCategoryResult(event:ResultEvent):void {
+
+            var _available:Boolean = Boolean(event.result);
+            if (_available) {
+                uriNameTextInput.errorString = '';
+            } else {
+                uriNameTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'seoUriIsNotAvailable', [ uriNameTextInput.text ]);
+            }
+
         }
 
         public function categoryDtoChanged(event:PropertyChangeEvent):void {
@@ -619,6 +637,10 @@
                    result="onRemoveCategoriesResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="isUriAvailableForCategory" name="isUriAvailableForCategory"
+                   result="onUriAvailableForCategoryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
     </mx:RemoteObject>
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
@@ -811,7 +833,7 @@
 
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='uri')">
-                                        <mx:TextInput id="uriNameTextInput" width="300"/>
+                                        <mx:TextInput id="uriNameTextInput" width="300" focusOut="onUriChange(event)"/>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='title')">

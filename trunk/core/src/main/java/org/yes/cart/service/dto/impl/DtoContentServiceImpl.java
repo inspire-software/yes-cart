@@ -193,6 +193,17 @@ public class DtoContentServiceImpl
         return getAllWithAvailabilityFilter(shopId, false);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isUriAvailableForContent(final String seoUri, final Long contentId) {
+
+        final Long conId = ((ContentService) service).findContentIdBySeoUri(seoUri);
+        return conId == null || conId.equals(contentId);
+
+    }
+
     /**
      * Get the dto interface.
      *

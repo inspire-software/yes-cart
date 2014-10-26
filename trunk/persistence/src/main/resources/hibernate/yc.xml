@@ -948,7 +948,7 @@
         </bag>
 
         <component name="seoInternal" class="org.yes.cart.domain.entity.impl.SeoEntity">
-            <property name="uri" type="string" column="URI" length="255" not-null="false"/>
+            <property name="uri" type="string" column="URI" length="255" not-null="false" unique-key="CATEGORY_URI"/>
             <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
             <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
             <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
@@ -1118,7 +1118,7 @@
         </property>
 
         <component name="seoInternal" class="org.yes.cart.domain.entity.impl.SeoEntity">
-            <property name="uri" type="string" column="URI" length="255" not-null="false"/>
+            <property name="uri" type="string" column="URI" length="255" not-null="false" unique-key="PRODUCT_URI"/>
             <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
             <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
             <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>
@@ -1223,7 +1223,7 @@
         </bag>
 
         <component name="seoInternal" class="org.yes.cart.domain.entity.impl.SeoEntity">
-            <property name="uri" type="string" column="URI" length="255" not-null="false"/>
+            <property name="uri" type="string" column="URI" length="255" not-null="false" unique-key="SKU_URI"/>
             <property name="title" type="string" column="TITLE" length="255" not-null="false"/>
             <property name="metakeywords" type="string" column="METAKEYWORDS" length="255" not-null="false"/>
             <property name="metadescription" type="string" column="METADESCRIPTION" length="255" not-null="false"/>

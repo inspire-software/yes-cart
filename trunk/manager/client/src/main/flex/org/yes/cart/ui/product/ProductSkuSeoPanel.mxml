@@ -22,7 +22,7 @@
     <mx:Form x="0" y="0">
         <mx:FormItem width="100%"
                      label="@Resource(bundle='ProductManagementPanel',key='uri')">
-            <mx:TextInput id="uriNameTextInput" width="300"/>
+            <mx:TextInput id="uriNameTextInput" width="300" focusOut="onUriChange(event)"/>
         </mx:FormItem>
         <mx:FormItem width="100%"
                      label="@Resource(bundle='ProductManagementPanel',key='title')">
@@ -62,6 +62,15 @@
 
     <mx:ArrayCollection id="propertyWatchers"/>
 
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="isUriAvailableForProductSku" name="isUriAvailableForProductSku"
+                   result="onUriAvailableForProductResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
     <mx:Script>
         <![CDATA[
         import com.hexagonstar.util.debug.Debug;
@@ -70,10 +79,13 @@
         import mx.binding.utils.ChangeWatcher;
         import mx.events.FlexEvent;
         import mx.events.PropertyChangeEvent;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
         import mx.validators.Validator;
 
         import org.yes.cart.event.DtoEvent;
         import org.yes.cart.impl.ProductSkuDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         [Bindable]
         private var _productSku:ProductSkuDTOImpl;
@@ -89,6 +101,9 @@
             unbindProperties();
             _productSku = value;
             bindProperties();
+            if (uriNameTextInput != null) {
+                uriNameTextInput.errorString = '';
+            }
         }
 
         private var validatorArr:Array;
@@ -150,6 +165,24 @@
             dispatchEvent(new DtoEvent(DtoEvent.UPDATE, _productSku));
             productSkuChangedFlag = false;
         }
+
+        private function onUriChange(event:Event):void {
+            remoteProductService.isUriAvailableForProductSku(uriNameTextInput.text, _productSku.skuId);
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onUriAvailableForProductResult(event:ResultEvent):void {
+            var _available:Boolean = Boolean(event.result);
+            if (_available) {
+                uriNameTextInput.errorString = '';
+            } else {
+                uriNameTextInput.errorString = resourceManager.getString('ProductManagementPanel', 'seoUriIsNotAvailable', [ uriNameTextInput.text ]);
+            }
+        }
+
         ]]>
 </mx:Script>
 </mx:Canvas>
