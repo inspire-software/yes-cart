@@ -233,6 +233,16 @@ public class DtoCategoryServiceImpl
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public boolean isUriAvailableForCategory(final String seoUri, final Long categoryId) {
+
+        final Long catId = ((CategoryService) service).findCategoryIdBySeoUri(seoUri);
+        return catId == null || catId.equals(categoryId);
+
+    }
+
+    /**
      * Get the dto interface.
      *
      * @return dto interface.

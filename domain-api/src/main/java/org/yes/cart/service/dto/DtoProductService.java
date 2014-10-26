@@ -96,6 +96,23 @@ public interface DtoProductService extends GenericDTOService<ProductDTO>, Generi
             final long productTypeId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
+    /**
+     * Check if URI is available to be set for given product.
+     *
+     * @param seoUri uri to check
+     * @param productId PK or null for transient
+     *
+     * @return true if this URI is available
+     */
+    boolean isUriAvailableForProduct(String seoUri, Long productId);
 
-
+    /**
+     * Check if URI is available to be set for given product SKU.
+     *
+     * @param seoUri uri to check
+     * @param productSkuId PK or null for transient
+     *
+     * @return true if this URI is available
+     */
+    boolean isUriAvailableForProductSku(String seoUri, Long productSkuId);
 }

@@ -508,4 +508,25 @@ public class DtoProductServiceImpl
         attrValueEntityProductDao.delete(attrValue);
         return attrValue.getProduct().getProductId();
     }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isUriAvailableForProduct(final String seoUri, final Long productId) {
+
+        final Long prodId = ((ProductService) service).getProductIdBySeoUri(seoUri);
+        return prodId == null || prodId.equals(productId);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isUriAvailableForProductSku(final String seoUri, final Long productSkuId) {
+
+        final Long skuId = ((ProductService) service).getProductSkuIdBySeoUri(seoUri);
+        return skuId == null || skuId.equals(productSkuId);
+
+    }
 }

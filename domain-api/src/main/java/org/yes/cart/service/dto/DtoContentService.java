@@ -86,4 +86,13 @@ public interface DtoContentService extends GenericDTOService<CategoryDTO>, Gener
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
+    /**
+     * Check if URI is available to be set for given content.
+     *
+     * @param seoUri uri to check
+     * @param contentId PK or null for transient
+     *
+     * @return true if this URI is available
+     */
+    boolean isUriAvailableForContent(String seoUri, Long contentId);
 }

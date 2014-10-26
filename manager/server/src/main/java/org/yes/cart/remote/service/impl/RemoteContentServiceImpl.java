@@ -166,6 +166,14 @@ public class RemoteContentServiceImpl
         }
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isUriAvailableForContent(final String seoUri, final Long contentId) {
+        return ((DtoContentService) getGenericDTOService()).isUriAvailableForContent(seoUri, contentId);
+    }
+
     /**
      * {@inheritDoc}
      */

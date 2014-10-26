@@ -85,7 +85,7 @@
             categorySelected = this.categoryTree.selectedItem != null && !DomainUtils.isRootCategory(this.categoryTree.selectedItem);
             categoryOrRootSelected = this.categoryTree.selectedItem != null;
             categorySelectedAndChanged = categorySelected && this.categoryTree.selectedItem.changed;
-            Debug.trace("Selected category dto name is :" + (this.categoryTree.selectedItem != null ?
+            Debug.trace("Selected category dto name is :" + (categoryOrRootSelected ?
                     this.categoryTree.selectedItem.name : "null"));
             unbindMain();
             unbindSeo();
@@ -169,7 +169,9 @@
             if (displayNames != null) {
                 displayNames.setSourceObject(null, null);
             }
-
+            if (uriNameTextInput != null) {
+                uriNameTextInput.errorString = '';
+            }
         }
 
         private function unbindSeo():void {
@@ -185,7 +187,6 @@
                 displayMetadescriptions.setSourceObject(null, null);
             }
         }
-
 
         private function bingCategoryDataMain():void {
 
@@ -251,6 +252,22 @@
 
         private function onDisplayNamesChange(event:FlexEvent):void {
             categoryDtoChanged(null);
+        }
+
+        private function onUriChange(event:Event):void {
+            remoteContentService.isUriAvailableForContent(uriNameTextInput.text, selectedCategoryDTOImpl.categoryId);
+        }
+
+
+        private function onUriAvailableForCategoryResult(event:ResultEvent):void {
+
+            var _available:Boolean = Boolean(event.result);
+            if (_available) {
+                uriNameTextInput.errorString = '';
+            } else {
+                uriNameTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'seoUriIsNotAvailable', [ uriNameTextInput.text ]);
+            }
+
         }
 
         public function categoryDtoChanged(event:PropertyChangeEvent):void {
@@ -487,6 +504,10 @@
                    result="onRemoveCategoriesResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="isUriAvailableForContent" name="isUriAvailableForContent"
+                   result="onUriAvailableForCategoryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
     </mx:RemoteObject>
 
     <mx:Boolean id="categorySelected">false</mx:Boolean>
@@ -601,7 +622,7 @@
 
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='uri')">
-                                        <mx:TextInput id="uriNameTextInput" width="300"/>
+                                        <mx:TextInput id="uriNameTextInput" width="300" focusOut="onUriChange(event)"/>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='title')">

@@ -83,5 +83,15 @@ public interface DtoCategoryService extends GenericDTOService<CategoryDTO>, Gene
     List<CategoryDTO> getByProductId(long productId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Check if URI is available to be set for given category.
+     *
+     * @param seoUri uri to check
+     * @param categoryId PK or null for transient
+     *
+     * @return true if this URI is available
+     */
+    boolean isUriAvailableForCategory(String seoUri, Long categoryId);
+
 
 }
