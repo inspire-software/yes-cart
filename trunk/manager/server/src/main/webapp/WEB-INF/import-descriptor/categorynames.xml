@@ -199,6 +199,18 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
+        <column-descriptor>
+            <column-index>11</column-index>
+            <field-type>FIELD</field-type>
+            <name>availablefrom</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>12</column-index>
+            <field-type>FIELD</field-type>
+            <name>availableto</name>
+        </column-descriptor>
+
         <!-- Category rank in parent category -->
         <column-descriptor>
             <column-index>-1</column-index>

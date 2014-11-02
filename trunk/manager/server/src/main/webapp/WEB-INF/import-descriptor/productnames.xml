@@ -259,6 +259,17 @@
             <name>stepOrderQuantity</name>
         </column-descriptor>
 
+        <column-descriptor>
+            <column-index>20</column-index>
+            <field-type>FIELD</field-type>
+            <name>availablefrom</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>21</column-index>
+            <field-type>FIELD</field-type>
+            <name>availableto</name>
+        </column-descriptor>
 
     </import-columns>
 </import-descriptor>

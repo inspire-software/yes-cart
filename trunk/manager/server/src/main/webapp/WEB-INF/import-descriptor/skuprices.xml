@@ -77,5 +77,23 @@
             <name>salePrice</name>
         </column-descriptor>
 
+        <column-descriptor>
+            <column-index>7</column-index>
+            <field-type>FIELD</field-type>
+            <name>salefrom</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>8</column-index>
+            <field-type>FIELD</field-type>
+            <name>saleto</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>9</column-index>
+            <field-type>FIELD</field-type>
+            <name>tag</name>
+        </column-descriptor>
+
     </import-columns>
 </import-descriptor>
