@@ -151,5 +151,17 @@
             <name>couponTriggered</name>
         </column-descriptor>
 
+        <column-descriptor>
+            <column-index>15</column-index>
+            <field-type>FIELD</field-type>
+            <name>enabledFrom</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>16</column-index>
+            <field-type>FIELD</field-type>
+            <name>enabledTo</name>
+        </column-descriptor>
+
     </import-columns>
 </import-descriptor>

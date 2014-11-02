@@ -29,7 +29,12 @@ import java.util.List;
 @SuppressWarnings("PMD.AvoidConstantsInterface")
 public interface Constants {
 
-    String DEFAULT_DATE_TIME_FORMAT = "yyyy-MMM-dd hh:mm:ss";
+    /**
+     * This is the import date format for csv import.
+     * Example: 2014-01-24 16:54:00
+     * We used short form format to prevent localisation issues in csv. All parts of date time imports are numbers.
+     */
+    String DEFAULT_IMPORT_DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss";
 
     String DEFAULT_DATE_FORMAT = "dd MMMMM yyyy";
 
