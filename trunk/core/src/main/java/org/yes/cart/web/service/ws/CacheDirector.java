@@ -33,21 +33,6 @@ import java.util.List;
 @WebService
 public interface CacheDirector {
 
-    public interface EntityName {
-
-        String ATTRIBUTE = "AttributeEntity";
-        String CATEGORY = "CategoryEntity";
-        String SEO_IMAGE = "SeoImageEntity";
-        String PRICE = "SkuPriceEntity";
-        String PRODUCT = "ProductEntity";
-
-        String PRODUCT_TYPE_ATTR = "ProductTypeAttrEntity";
-        String SHOP = "ShopEntity";
-        String SYSTEM = "SystemEntity";
-        String PROMOTION = "PromotionEntity";
-
-    }
-
     public interface EntityOperation {
 
         String CREATE = "Create";

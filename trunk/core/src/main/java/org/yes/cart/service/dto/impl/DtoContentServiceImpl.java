@@ -153,7 +153,7 @@ public class DtoContentServiceImpl
      * {@inheritDoc}
      */
     public CategoryDTO create(final CategoryDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Category category = getEntityFactory().getByIface(Category.class);
+        Category category = getPersistenceEntityFactory().getByIface(Category.class);
         assembler.assembleEntity(instance, category, getAdaptersRepository(), dtoFactory);
         bindDictionaryData(instance, category);
         category = service.create(category);
@@ -282,7 +282,7 @@ public class DtoContentServiceImpl
                     parts.append(content.get(partNo));
                 }
 
-                AttrValueCategoryDTO attrValueCategoryDTO = getDtoFactory().getByIface(AttrValueCategoryDTO.class);
+                AttrValueCategoryDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueCategoryDTO.class);
                 attrValueCategoryDTO.setAttributeDTO(attributeDTO);
                 attrValueCategoryDTO.setCategoryId(entityPk);
                 attrValueCategoryDTO.setVal(parts.toString());
@@ -310,7 +310,7 @@ public class DtoContentServiceImpl
                     AttributeGroupNames.CATEGORY,
                     getCodes(result));
             for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-                AttrValueCategoryDTO attrValueCategoryDTO = getDtoFactory().getByIface(AttrValueCategoryDTO.class);
+                AttrValueCategoryDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueCategoryDTO.class);
                 attrValueCategoryDTO.setAttributeDTO(attributeDTO);
                 attrValueCategoryDTO.setCategoryId(entityPk);
                 result.add(attrValueCategoryDTO);
@@ -369,7 +369,7 @@ public class DtoContentServiceImpl
             do {
                 part = pos + CHUNK_SIZE > val.length() ? val.substring(pos) : val.substring(pos, pos + CHUNK_SIZE);
                 Attribute atr = (Attribute) bodyAttrs.get(chunkCount);
-                AttrValueCategory valueEntityCategory = getEntityFactory().getByIface(AttrValueCategory.class);
+                AttrValueCategory valueEntityCategory = getPersistenceEntityFactory().getByIface(AttrValueCategory.class);
                 valueEntityCategory.setAttribute(atr);
                 valueEntityCategory.setCategory(content);
                 valueEntityCategory.setVal(part);
@@ -425,7 +425,7 @@ public class DtoContentServiceImpl
             }
         }
 
-        AttrValueCategory valueEntityCategory = getEntityFactory().getByIface(AttrValueCategory.class);
+        AttrValueCategory valueEntityCategory = getPersistenceEntityFactory().getByIface(AttrValueCategory.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCategory, getAdaptersRepository(), dtoFactory);
         valueEntityCategory.setAttribute(atr);
         valueEntityCategory.setCategory(category);

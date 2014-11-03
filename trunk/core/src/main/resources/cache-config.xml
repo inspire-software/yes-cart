@@ -628,6 +628,25 @@
         <entry key="Delete" value-ref="PromotionAll"/>
     </util:map>
 
+    <!-- ###################### Taxes  ################################################################################################################## -->
+
+    <util:set id="TaxAll">
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="taxConfigService-getTaxIdBy"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="taxService-getTaxesByShopCode"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+    </util:set>
+
+    <util:map id="TaxCUD">
+        <entry key="Create" value-ref="TaxAll"/>
+        <entry key="Update" value-ref="TaxAll"/>
+        <entry key="Delete" value-ref="TaxAll"/>
+    </util:map>
+
     <!-- ###################### System  ################################################################################################################## -->
 
     <util:set id="SystemAll">
@@ -658,7 +677,8 @@
         <entry key="ProductTypeEntity" value-ref="ProductTypeCUD"/>
         <entry key="ShopEntity" value-ref="ShopCUD"/>
         <entry key="PromotionEntity" value-ref="PromotionCUD"/>
-        <entry key="SystemEntity" value-ref="SystemCUD"/>
+        <entry key="AttrValueEntitySystem" value-ref="SystemCUD"/>
+        <entry key="TaxEntity" value-ref="TaxCUD"/>
     </util:map>
 
 

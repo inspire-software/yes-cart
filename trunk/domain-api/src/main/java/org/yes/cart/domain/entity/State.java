@@ -24,7 +24,7 @@ package org.yes.cart.domain.entity;
 public interface State extends Auditable {
 
     /**
-     * Get contry code.
+     * Get country code.
      *
      * @return country code.
      */

@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto.adapter.impl;
 
 
 import org.yes.cart.dao.EntityFactory;
+import org.yes.cart.service.domain.GenericService;
 
 /**
  * Adaptor to port Domain entity factory to GeDA bean factory
@@ -27,20 +28,27 @@ import org.yes.cart.dao.EntityFactory;
  */
 public class EntityFactoryToBeanFactoryAdaptor implements com.inspiresoftware.lib.dto.geda.adapter.BeanFactory {
 
-    private final EntityFactory entityFactory;
+    private final GenericService service;
 
-    public EntityFactoryToBeanFactoryAdaptor(final EntityFactory entityFactory) {
-        this.entityFactory = entityFactory;
+    public EntityFactoryToBeanFactoryAdaptor(final GenericService service) {
+        this.service = service;
     }
 
     /** {@inheritDoc} */
     public Class getClazz(final String entityBeanKey) {
-        return entityFactory.getImplClass(entityBeanKey);
+        return service.getGenericDao().getEntityFactory().getImplClass(entityBeanKey);
     }
 
     /** {@inheritDoc} */
     public Object get(final String entityBeanKey) {
-        return entityFactory.getByKey(entityBeanKey);
+        return service.getGenericDao().getEntityFactory().getByKey(entityBeanKey);
+    }
+
+    /**
+     * @return {@link org.yes.cart.dao.EntityFactory}
+     */
+    public EntityFactory getEntityFactory() {
+        return service.getGenericDao().getEntityFactory();
     }
 
 }

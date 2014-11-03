@@ -17,6 +17,7 @@
 package org.yes.cart.service.federation.impl;
 
 import org.yes.cart.domain.dto.PromotionDTO;
+import org.yes.cart.domain.dto.TaxDTO;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 
@@ -29,11 +30,11 @@ import java.util.Set;
  * Date: 16/09/2014
  * Time: 14:27
  */
-public class PromotionFederationFilterImpl implements FederationFilter {
+public class TaxFederationFilterImpl implements FederationFilter {
 
     private final ShopFederationStrategy shopFederationStrategy;
 
-    public PromotionFederationFilterImpl(final ShopFederationStrategy shopFederationStrategy) {
+    public TaxFederationFilterImpl(final ShopFederationStrategy shopFederationStrategy) {
         this.shopFederationStrategy = shopFederationStrategy;
     }
 
@@ -43,11 +44,11 @@ public class PromotionFederationFilterImpl implements FederationFilter {
     public void applyFederationFilter(final Collection list, final Class objectType) {
         final Set<String> manageableShopIds = shopFederationStrategy.getAccessibleShopCodesByCurrentManager();
 
-        final Iterator<PromotionDTO> promoIt = list.iterator();
-        while (promoIt.hasNext()) {
-            final PromotionDTO promo = promoIt.next();
-            if (!manageableShopIds.contains(promo.getShopCode())) {
-                promoIt.remove();
+        final Iterator<TaxDTO> taxIt = list.iterator();
+        while (taxIt.hasNext()) {
+            final TaxDTO tax = taxIt.next();
+            if (!manageableShopIds.contains(tax.getShopCode())) {
+                taxIt.remove();
             }
         }
     }
@@ -56,6 +57,7 @@ public class PromotionFederationFilterImpl implements FederationFilter {
      * {@inheritDoc}
      */
     public boolean isManageable(final Object object, final Class objectType) {
-        throw new UnsupportedOperationException("Use shop filter and promo.shopCode instead");
+        throw new UnsupportedOperationException("Use shop filter and tax.shopCode instead");
     }
+
 }

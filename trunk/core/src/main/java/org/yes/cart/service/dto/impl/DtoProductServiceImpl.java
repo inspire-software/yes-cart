@@ -203,11 +203,7 @@ public class DtoProductServiceImpl
      */
     public ProductDTO create(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         cleanProductOrderQuantities(instance);
-        Product product = getEntityFactory().getByIface(Product.class);
-        assembler.assembleEntity(instance, product, getAdaptersRepository(),
-                new EntityFactoryToBeanFactoryAdaptor(productService.getGenericDao().getEntityFactory()));
-        product = service.create(product);
-        return getById(product.getProductId());
+        return super.create(instance);
     }
 
     /**
@@ -215,15 +211,7 @@ public class DtoProductServiceImpl
      */
     public ProductDTO update(final ProductDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         cleanProductOrderQuantities(instance);
-        Product product = service.findById(instance.getProductId());
-        assembler.assembleEntity(
-                instance,
-                product,
-                getAdaptersRepository(),
-                new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
-        product = service.update(product);
-        return getById(product.getProductId());
-
+        return super.update(instance);
     }
 
 
@@ -362,7 +350,7 @@ public class DtoProductServiceImpl
         for (final AttributeDTO available : ptList) {
             if (!existingAttrValueCodes.contains(available.getCode())) {
                 // add blank value for available attribute
-                final AttrValueProductDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductDTO.class);
+                final AttrValueProductDTO attrValueDTO = getAssemblerDtoFactory().getByIface(AttrValueProductDTO.class);
                 attrValueDTO.setAttributeDTO(available);
                 attrValueDTO.setProductId(entityPk);
                 full.add(attrValueDTO);
@@ -412,7 +400,7 @@ public class DtoProductServiceImpl
             }
         }
 
-        AttrValueProduct valueEntity = getEntityFactory().getByIface(AttrValueProduct.class);
+        AttrValueProduct valueEntity = getPersistenceEntityFactory().getByIface(AttrValueProduct.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntity, getAdaptersRepository(), dtoFactory);
         valueEntity.setAttribute(atr);
         valueEntity.setProduct(product);
@@ -472,7 +460,7 @@ public class DtoProductServiceImpl
 
         }
 
-        AttrValueProductDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductDTO.class);
+        AttrValueProductDTO attrValueDTO = getAssemblerDtoFactory().getByIface(AttrValueProductDTO.class);
         attrValueDTO.setAttributeDTO(attrDto);
         attrValueDTO.setProductId(entityPk);
         attrValueDTO.setVal(attrValue);

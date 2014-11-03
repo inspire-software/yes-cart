@@ -67,24 +67,16 @@ public class DtoAttributeServiceImpl
 
     }
 
-    /** {@inheritDoc}  */
-    public AttributeDTO create(final AttributeDTO dto) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Attribute attribute = getEntityFactory().getByIface(Attribute.class);
-        assembler.assembleEntity(dto, attribute,  getAdaptersRepository(), dtoFactory);
-        attribute.setEtype(etypeService.findById(dto.getEtypeId()));
-        attribute.setAttributeGroup(attributeGroupService.findById(dto.getAttributegroupId()));
-        attribute = service.create(attribute);
-        return getById(attribute.getAttributeId());
+    @Override
+    protected void createPostProcess(final AttributeDTO dto, final Attribute entity) {
+        entity.setEtype(etypeService.findById(dto.getEtypeId()));
+        entity.setAttributeGroup(attributeGroupService.findById(dto.getAttributegroupId()));
     }
 
-    /** {@inheritDoc}  */
-    public AttributeDTO update(final AttributeDTO dto) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Attribute attribute = service.findById(dto.getAttributeId());
-        assembler.assembleEntity(dto, attribute,  getAdaptersRepository(), dtoFactory);
-        attribute.setEtype(etypeService.findById(dto.getEtypeId()));
-        attribute.setAttributeGroup(attributeGroupService.findById(dto.getAttributegroupId()));
-        attribute = service.update(attribute);
-        return getById(attribute.getAttributeId());
+    @Override
+    protected void updatePostProcess(final AttributeDTO dto, final Attribute entity) {
+        entity.setEtype(etypeService.findById(dto.getEtypeId()));
+        entity.setAttributeGroup(attributeGroupService.findById(dto.getAttributegroupId()));
     }
 
     /** {@inheritDoc}  */

@@ -141,6 +141,9 @@
                 <entry key="org.yes.cart.domain.entity.PromotionCoupon" value="org.yes.cart.domain.entity.impl.PromotionCouponEntity"/>
                 <entry key="org.yes.cart.domain.entity.PromotionCouponUsage" value="org.yes.cart.domain.entity.impl.PromotionCouponUsageEntity"/>
 
+                <entry key="org.yes.cart.domain.entity.Tax" value="org.yes.cart.domain.entity.impl.TaxEntity"/>
+                <entry key="org.yes.cart.domain.entity.TaxConfig" value="org.yes.cart.domain.entity.impl.TaxConfigEntity"/>
+
                 <entry key="org.yes.cart.domain.entity.Shop" value="org.yes.cart.domain.entity.impl.ShopEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopAdvPlace" value="org.yes.cart.domain.entity.impl.ShopAdvPlaceEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopAdvPlaceRule" value="org.yes.cart.domain.entity.impl.ShopAdvPlaceRuleEntity"/>
@@ -465,6 +468,18 @@
 
     <bean id="promotionCouponUsageDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.PromotionCouponUsageEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="taxDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.TaxEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="taxConfigDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.TaxConfigEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>

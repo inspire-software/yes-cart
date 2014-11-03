@@ -28,9 +28,7 @@ import java.util.List;
 public interface PromotionService extends GenericService<Promotion> {
 
     /**
-     * Get all promotions by shop code.
-     *
-     *
+     * Get all promotions by shop code and currency.
      *
      * @param shopCode shop code
      * @param currency currency
@@ -39,10 +37,10 @@ public interface PromotionService extends GenericService<Promotion> {
      *
      * @return list of promotions
      */
-    List<Promotion> getPromotionsByShopCode(String shopCode, final String currency, boolean active);
+    List<Promotion> getPromotionsByShopCode(String shopCode, String currency, boolean active);
 
     /**
-     * Customer search function to find promotions by given parameters.
+     * Manager search function to find promotions by given parameters.
      *
      * @param code promo code
      * @param shopCode optional shop code

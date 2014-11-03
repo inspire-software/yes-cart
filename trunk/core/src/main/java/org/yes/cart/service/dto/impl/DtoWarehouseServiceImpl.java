@@ -166,7 +166,7 @@ public class DtoWarehouseServiceImpl
                 skuWarehouseDTO,
                 skuWarehouse,
                 getAdaptersRepository(),
-                new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
+                getAssemblerEntityFactory());
         skuWarehouse = skuWarehouseService.create(skuWarehouse);
         skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouseDTO.getSkuCode());
         return assembleSkuWarehouseDTO(skuWarehouse);
@@ -184,7 +184,7 @@ public class DtoWarehouseServiceImpl
                 skuWarehouseDTO,
                 skuWarehouse,
                 getAdaptersRepository(),
-                new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
+                getAssemblerEntityFactory());
         skuWarehouse = skuWarehouseService.update(skuWarehouse);
         skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouseDTO.getSkuCode());
         return assembleSkuWarehouseDTO(skuWarehouse);
@@ -192,12 +192,12 @@ public class DtoWarehouseServiceImpl
     }
 
     private SkuWarehouseDTO assembleSkuWarehouseDTO(final SkuWarehouse skuWarehouse) {
-        SkuWarehouseDTO result = getDtoFactory().getByIface(SkuWarehouseDTO.class);
+        SkuWarehouseDTO result = getAssemblerDtoFactory().getByIface(SkuWarehouseDTO.class);
         dtoSkuWarehouseAssembler.assembleDto(
                 result,
                 skuWarehouse,
                 getAdaptersRepository(),
-                getDtoFactory());
+                getAssemblerDtoFactory());
         return result;
     }
 

@@ -143,7 +143,7 @@ public class DtoShopServiceImpl
     public ShopDTO getShopDtoByDomainName(final String serverDomainName) {
         final Shop shop =((ShopService)service).getShopByDomainName(serverDomainName);
         final ShopDTO dto = (ShopDTO) dtoFactory.getByIface(getDtoIFace());
-        getAssembler().assembleDto(dto, shop, getAdaptersRepository(), getDtoFactory());
+        getAssembler().assembleDto(dto, shop, getAdaptersRepository(), getAssemblerDtoFactory());
         return dto;
     }
 
@@ -169,7 +169,7 @@ public class DtoShopServiceImpl
                 AttributeGroupNames.SHOP,
                 getCodes(result));
         for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-            AttrValueShopDTO attrValueShopDTO = getDtoFactory().getByIface(AttrValueShopDTO.class);
+            AttrValueShopDTO attrValueShopDTO = getAssemblerDtoFactory().getByIface(AttrValueShopDTO.class);
             attrValueShopDTO.setAttributeDTO(attributeDTO);
             attrValueShopDTO.setShopId(entityPk);
             result.add(attrValueShopDTO);
@@ -203,7 +203,7 @@ public class DtoShopServiceImpl
             }
         }
 
-        AttrValueShop valueEntityShop = getEntityFactory().getByIface(AttrValueShop.class);
+        AttrValueShop valueEntityShop = getPersistenceEntityFactory().getByIface(AttrValueShop.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityShop, getAdaptersRepository(), dtoFactory);
         valueEntityShop.setAttribute(atr);
         valueEntityShop.setShop(shop);

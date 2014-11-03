@@ -1028,6 +1028,37 @@
 
 
 
+    create table TTAX (
+        TAX_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        TAX_RATE decimal(19,2) not null,
+        EXCLUSIVE_OF_PRICE bit not null default 0,
+        SHOP_CODE varchar(255) not null,
+        CURRENCY varchar(5) not null,
+        CODE varchar(255) not null,
+        DESCRIPTION varchar(100),
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        primary key (TAX_ID)
+    );
+
+    create table TTAXCONFIG (
+        TAXCONFIG_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        TAX_ID bigint not null,
+        PRODUCT_CODE varchar(255),
+        STATE_CODE varchar(16),
+        COUNTRY_CODE varchar(2),
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        primary key (TAXCONFIG_ID)
+    );
+
+
 	create table HIBERNATE_UNIQUE_KEYS (
          value integer 
     );
@@ -1500,3 +1531,14 @@
         add constraint FK_MS_MANAGER
         foreign key (MANAGER_ID)
         references TMANAGER (MANAGER_ID)         on delete cascade;
+
+    create index TAX_SHOP_CODE on TTAX (SHOP_CODE);
+    create index TAX_CURRENCY on TTAX (CURRENCY);
+    create index TAX_PRODUCT_CODE on TTAXCONFIG (PRODUCT_CODE);
+    create index TAX_STATE_CODE on TTAXCONFIG (STATE_CODE);
+    create index TAX_COUNTRY_CODE on TTAXCONFIG (COUNTRY_CODE);
+
+    alter table TTAXCONFIG
+        add constraint FK_TAXCFG_TAX
+        foreign key FK_TAXCFG_TAX (TAX_ID)
+        references TAX (TAX_ID) on delete cascade;

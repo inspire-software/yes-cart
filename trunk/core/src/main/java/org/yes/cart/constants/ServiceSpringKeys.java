@@ -446,6 +446,16 @@ public interface ServiceSpringKeys {
     String DTO_PROMOTION_COUPON_SERVICE = "dtoPromotionCouponService";
 
     /**
+     * {@link org.yes.cart.service.dto.DtoTaxService}
+     */
+    String DTO_TAX_SERVICE = "dtoTaxService";
+
+    /**
+     * {@link org.yes.cart.service.dto.DtoTaxConfigService}
+     */
+    String DTO_TAX_CONFIG_SERVICE = "dtoTaxConfigService";
+
+    /**
      * Language service.
      */
     String LANGUAGE_SERVICE = "languageService";

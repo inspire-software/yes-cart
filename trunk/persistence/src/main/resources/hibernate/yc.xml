@@ -2380,6 +2380,53 @@
 
     </class>
 
+    <class name="org.yes.cart.domain.entity.impl.TaxEntity" table="TTAX">
+        <id name="taxId" type="long" column="TAX_ID">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="taxRate" type="java.math.BigDecimal" not-null="true" column="TAX_RATE"/>
+        <property name="exclusiveOfPrice" column="EXCLUSIVE_OF_PRICE" type="boolean" length="1" not-null="true"/>
+
+        <property name="shopCode" column="SHOP_CODE" type="string" length="255" not-null="true" index="TAX_SHOP_CODE"/>
+        <property name="currency" column="CURRENCY" type="string" length="5" not-null="true" index="TAX_CURRENCY"/>
+        <property name="code" column="CODE" type="string" length="255" not-null="true"/>
+        <property name="description" column="DESCRIPTION" type="string" length="100"/>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+    </class>
+
+    <class name="org.yes.cart.domain.entity.impl.TaxConfigEntity" table="TTAXCONFIG">
+        <id name="taxConfigId" type="long" column="TAXCONFIG_ID">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <many-to-one name="tax" class="org.yes.cart.domain.entity.impl.TaxEntity" foreign-key="FK_TAXCFG_TAX">
+            <column name="TAX_ID" not-null="true"/>
+        </many-to-one>
+
+        <property name="productCode" type="string" length="255" column="PRODUCT_CODE" index="TAX_PRODUCT_CODE"/>
+        <property name="stateCode" type="string" length="16" column="STATE_CODE" index="TAX_STATE_CODE"/>
+        <property name="countryCode" type="string" length="2" column="COUNTRY_CODE" index="TAX_COUNTRY_CODE"/>
+
+        <property name="guid" column="GUID" type="string" length="36" unique-key="TTAXCONFIG_GUID" not-null="true"/>
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+    </class>
+
 
     <query name="SHOP.BY.URL">
         <![CDATA[
@@ -3297,13 +3344,26 @@
         ]]>
     </query>
 
+    <query name="TAX.BY.SHOPCODE.CURRENCY">
+        <![CDATA[
+            select t from TaxEntity t where t.shopCode = ?1 and t.currency = ?2
+        ]]>
+    </query>
+
+    <query name="TAXCONFIG.BY.COUNTRYCODE.STATECODE.PRODUCTCODE.IN.TAXES">
+        <![CDATA[
+            select tc from TaxConfigEntity tc where
+                tc.tax in (?1) and
+                (tc.countryCode = ?2 or tc.countryCode is null) and
+                (tc.stateCode = ?3 or tc.stateCode is null) and
+                (tc.productCode = ?4 or tc.productCode is null)
+        ]]>
+    </query>
 
     <query name="OLDEST.MAIL">
         <![CDATA[
             select m from MailEntity m order by m.createdTimestamp asc
         ]]>
     </query>
-
-
 
 </hibernate-mapping>

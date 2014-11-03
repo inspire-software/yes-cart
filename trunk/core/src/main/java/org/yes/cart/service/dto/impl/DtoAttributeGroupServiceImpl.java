@@ -77,7 +77,7 @@ public class DtoAttributeGroupServiceImpl
      */
     public AttributeGroupDTO create(final String code, final String name, final String description) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final AttributeGroup attributeGroup = getEntityFactory().getByIface(AttributeGroup.class);
+        final AttributeGroup attributeGroup = getPersistenceEntityFactory().getByIface(AttributeGroup.class);
         attributeGroup.setCode(code);
         attributeGroup.setName(name);
         attributeGroup.setDescription(description);

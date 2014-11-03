@@ -105,7 +105,7 @@ public class DtoCustomerServiceImpl
      * {@inheritDoc}
      */
     public CustomerDTO create(final CustomerDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Customer customer = getEntityFactory().getByIface(getEntityIFace());
+        Customer customer = getPersistenceEntityFactory().getByIface(getEntityIFace());
         assembler.assembleEntity(instance, customer, null, dtoFactory);
         customer.setPassword(passPhrazeGenerator.getNextPassPhrase());
         customer = ((CustomerService)service).create(customer, null);
@@ -147,7 +147,7 @@ public class DtoCustomerServiceImpl
                 AttributeGroupNames.CUSTOMER,
                 getCodes(result));
         for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-            AttrValueCustomerDTO attrValueCategoryDTO = getDtoFactory().getByIface(AttrValueCustomerDTO.class);
+            AttrValueCustomerDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueCustomerDTO.class);
             attrValueCategoryDTO.setAttributeDTO(attributeDTO);
             attrValueCategoryDTO.setCustomerId(entityPk);
             result.add(attrValueCategoryDTO);
@@ -185,7 +185,7 @@ public class DtoCustomerServiceImpl
         }
 
 
-        AttrValueCustomer valueEntityCustomer = getEntityFactory().getByIface(AttrValueCustomer.class);
+        AttrValueCustomer valueEntityCustomer = getPersistenceEntityFactory().getByIface(AttrValueCustomer.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCustomer, getAdaptersRepository(), dtoFactory);
         valueEntityCustomer.setAttribute(atr);
         valueEntityCustomer.setCustomer(customer);
