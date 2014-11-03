@@ -60,7 +60,7 @@ public class WsCacheDirectorImplTest {
     @Test
     public void testResolveCacheNames() throws Exception {
 
-        Set<Pair<String,String>> caches = cacheDirector.resolveCacheNames(CacheDirector.EntityOperation.CREATE, CacheDirector.EntityName.ATTRIBUTE);
+        Set<Pair<String,String>> caches = cacheDirector.resolveCacheNames(CacheDirector.EntityOperation.CREATE, "AttributeEntity");
 
         assertEquals(11, caches.size());
 
@@ -79,7 +79,7 @@ public class WsCacheDirectorImplTest {
         caches = cacheDirector.resolveCacheNames(CacheDirector.EntityOperation.CREATE, "unknownEntity");
         assertNull(caches);
 
-        caches = cacheDirector.resolveCacheNames("unkbnownOperation", CacheDirector.EntityName.PRODUCT);
+        caches = cacheDirector.resolveCacheNames("unkbnownOperation", "ProductEntity");
         assertNull(caches);
 
 
@@ -148,7 +148,7 @@ public class WsCacheDirectorImplTest {
     public void testOnCacheableChange() {
         cacheDirector.getCacheManager().getCache("attributeService-availableAttributesByProductTypeId").put("hi", "there");
         cacheDirector.getCacheManager().getCache("categoryService-categoryHasSubcategory").put("hi", "there");
-        cacheDirector.onCacheableChange(CacheDirector.EntityOperation.UPDATE, CacheDirector.EntityName.ATTRIBUTE, 123L);
+        cacheDirector.onCacheableChange(CacheDirector.EntityOperation.UPDATE, "AttributeEntity", 123L);
         assertNull(cacheDirector.getCacheManager().getCache("attributeService-availableAttributesByProductTypeId").get("hi"));
         assertNotNull(cacheDirector.getCacheManager().getCache("categoryService-categoryHasSubcategory").get("hi"));
     }

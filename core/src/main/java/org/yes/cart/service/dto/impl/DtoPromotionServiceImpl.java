@@ -69,8 +69,8 @@ public class DtoPromotionServiceImpl
 
     @Override
     public PromotionDTO create(final PromotionDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Promotion iface = (Promotion) getEntityFactory().getByIface(getEntityIFace());
-        assembler.assembleEntity(instance, iface, getAdaptersRepository(), getDtoFactory());
+        Promotion iface = (Promotion) getPersistenceEntityFactory().getByIface(getEntityIFace());
+        assembler.assembleEntity(instance, iface, getAdaptersRepository(), getAssemblerDtoFactory());
 
         // we store comma separated lists of promo codes on cart item, so we cannot allow commas
         iface.setCode(instance.getCode().replace(',','_'));

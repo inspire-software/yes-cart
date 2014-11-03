@@ -135,7 +135,9 @@
             </list>
         </property>
         <property name="entityInterceptor">
-            <bean class="org.yes.cart.domain.interceptor.AdminInterceptor"/>
+            <bean class="org.yes.cart.domain.interceptor.AdminInterceptor">
+                <property name="entityOperationCache" ref="evictionConfig"/>
+            </bean>
         </property>
         <property name="hibernateProperties">
             <props>

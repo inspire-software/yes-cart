@@ -26,7 +26,6 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
-import org.yes.cart.domain.dto.adapter.impl.EntityFactoryToBeanFactoryAdaptor;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProductSkuDTOImpl;
 import org.yes.cart.domain.entity.*;
@@ -125,21 +124,6 @@ public class DtoProductSkuServiceImpl
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public ProductSkuDTO create(final ProductSkuDTO instance)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ProductSku productSku = getEntityFactory().getByIface(ProductSku.class);
-        assembler.assembleEntity(
-                instance,
-                productSku,
-                getAdaptersRepository(),
-                new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
-        productSku = service.create(productSku);
-        return getById(productSku.getSkuId(), getAdaptersRepository());
-    }
-
 
     /**
      * {@inheritDoc}
@@ -148,7 +132,7 @@ public class DtoProductSkuServiceImpl
         final SkuPrice skuPrice = priceService.findById(skuPriceDTO.getSkuPriceId());
         skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
                 getAdaptersRepository(),
-                new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
+                getAssemblerEntityFactory());
         priceService.update(skuPrice);
         return skuPrice.getSkuPriceId();
     }
@@ -175,10 +159,10 @@ public class DtoProductSkuServiceImpl
      */
     public SkuPriceDTO getSkuPrice(final long skuPriceId) {
         SkuPrice skuPrice = priceService.findById(skuPriceId);
-        SkuPriceDTO skuPriceDTO = getDtoFactory().getByIface(SkuPriceDTO.class);
+        SkuPriceDTO skuPriceDTO = getAssemblerDtoFactory().getByIface(SkuPriceDTO.class);
         skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
                 getAdaptersRepository(),
-                new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
+                getAssemblerEntityFactory());
         return skuPriceDTO;
     }
 
@@ -219,27 +203,10 @@ public class DtoProductSkuServiceImpl
         SkuPrice skuPrice = getService().getGenericDao().getEntityFactory().getByIface(SkuPrice.class);
         skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
                 getAdaptersRepository(),
-                new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
+                getAssemblerEntityFactory());
         skuPrice = priceService.create(skuPrice);
         return skuPrice.getSkuPriceId();
     }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public ProductSkuDTO update(final ProductSkuDTO instance)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ProductSku productSku = service.findById(instance.getSkuId());
-        assembler.assembleEntity(
-                instance,
-                productSku,
-                getAdaptersRepository(),
-                new EntityFactoryToBeanFactoryAdaptor(service.getGenericDao().getEntityFactory()));
-        productSku = service.update(productSku);
-        return getById(productSku.getSkuId(), getAdaptersRepository());
-    }
-
 
 
     /**
@@ -317,7 +284,7 @@ public class DtoProductSkuServiceImpl
                 if (productValues == null) {
 
                     // we do not have product nor sku values, so create blank
-                    final AttrValueProductSkuDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductSkuDTO.class);
+                    final AttrValueProductSkuDTO attrValueDTO = getAssemblerDtoFactory().getByIface(AttrValueProductSkuDTO.class);
                     attrValueDTO.setAttributeDTO(available);
                     attrValueDTO.setSkuId(entityPk);
                     full.add(attrValueDTO);
@@ -326,7 +293,7 @@ public class DtoProductSkuServiceImpl
                     for (final AttrValueProductDTO prodValue : productValues) {
 
                         // pre-fill sku value with product value so that we can easily see it
-                        AttrValueProductSkuDTO attrValueDTO = getDtoFactory().getByIface(AttrValueProductSkuDTO.class);
+                        AttrValueProductSkuDTO attrValueDTO = getAssemblerDtoFactory().getByIface(AttrValueProductSkuDTO.class);
                         attrValueDTO.setAttributeDTO(available);
                         attrValueDTO.setSkuId(entityPk);
                         attrValueDTO.setVal(prodValue.getVal());
@@ -381,7 +348,7 @@ public class DtoProductSkuServiceImpl
             }
         }
 
-        AttrValueProductSku valueEntity = getEntityFactory().getByIface(AttrValueProductSku.class);
+        AttrValueProductSku valueEntity = getPersistenceEntityFactory().getByIface(AttrValueProductSku.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntity, getAdaptersRepository(), dtoFactory);
         valueEntity.setAttribute(atr);
         valueEntity.setProductSku(productSku);

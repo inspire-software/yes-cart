@@ -18,7 +18,6 @@ package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.yes.cart.domain.dto.ProductAssociationDTO;
-import org.yes.cart.domain.dto.adapter.impl.EntityFactoryToBeanFactoryAdaptor;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl;
 import org.yes.cart.domain.entity.ProductAssociation;
@@ -62,12 +61,7 @@ public class DtoProductAssociationServiceImpl
      */
     public ProductAssociationDTO create(final ProductAssociationDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         if (instance.getProductId() != instance.getAssociatedProductId()) {
-            ProductAssociation productAssociation = getEntityFactory().getByIface(ProductAssociation.class);
-            assembler.assembleEntity(instance, productAssociation,  getAdaptersRepository(),
-                    new EntityFactoryToBeanFactoryAdaptor(getEntityFactory()));
-            productAssociation = getService().create(productAssociation);
-            return getById(productAssociation.getProductassociationId());
-
+            return super.create(instance);
         }
         throw new UnableToCreateInstanceException("Cannot associate product with itself", null);
 
@@ -78,11 +72,10 @@ public class DtoProductAssociationServiceImpl
      * {@inheritDoc}
      */
     public ProductAssociationDTO update(final ProductAssociationDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ProductAssociation productAssociation = service.findById(instance.getProductassociationId());
-        assembler.assembleEntity(instance, productAssociation,  getAdaptersRepository(), new EntityFactoryToBeanFactoryAdaptor(getEntityFactory()));
-        productAssociation = getService().update(productAssociation);
-        return getById(productAssociation.getProductassociationId());
-
+        if (instance.getProductId() != instance.getAssociatedProductId()) {
+            return super.update(instance);
+        }
+        throw new UnableToCreateInstanceException("Cannot associate product with itself", null);
     }
 
     /**

@@ -145,7 +145,7 @@ public class DtoCategoryServiceImpl
      * {@inheritDoc}
      */
     public CategoryDTO create(final CategoryDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Category category = getEntityFactory().getByIface(Category.class);
+        Category category = getPersistenceEntityFactory().getByIface(Category.class);
         assembler.assembleEntity(instance, category, getAdaptersRepository(), dtoFactory);
         bindDictionaryData(instance, category);
         category = service.create(category);
@@ -282,7 +282,7 @@ public class DtoCategoryServiceImpl
                     AttributeGroupNames.CATEGORY,
                     getCodes(result));
             for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-                AttrValueCategoryDTO attrValueCategoryDTO = getDtoFactory().getByIface(AttrValueCategoryDTO.class);
+                AttrValueCategoryDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueCategoryDTO.class);
                 attrValueCategoryDTO.setAttributeDTO(attributeDTO);
                 attrValueCategoryDTO.setCategoryId(entityPk);
                 result.add(attrValueCategoryDTO);
@@ -345,7 +345,7 @@ public class DtoCategoryServiceImpl
             }
         }
 
-        AttrValueCategory valueEntityCategory = getEntityFactory().getByIface(AttrValueCategory.class);
+        AttrValueCategory valueEntityCategory = getPersistenceEntityFactory().getByIface(AttrValueCategory.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCategory, getAdaptersRepository(), dtoFactory);
         valueEntityCategory.setAttribute(atr);
         valueEntityCategory.setCategory(category);

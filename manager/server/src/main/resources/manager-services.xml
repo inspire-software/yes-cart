@@ -961,6 +961,38 @@
     </bean>
 
 
+    <bean id="remoteTaxService" class="org.yes.cart.remote.service.impl.RemoteTaxServiceImpl">
+        <constructor-arg index="0" ref="dtoTaxService"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="findByParameters" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+        </security:intercept-methods>
+    </bean>
+
+    <bean id="remoteTaxConfigService" class="org.yes.cart.remote.service.impl.RemoteTaxConfigServiceImpl">
+        <constructor-arg index="0" ref="dtoTaxConfigService"/>
+        <constructor-arg index="1" ref="dtoTaxService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <flex:remoting-destination/>
+        <security:intercept-methods>
+            <security:protect method="create" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="remove" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getNew" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="findByTaxId" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+        </security:intercept-methods>
+    </bean>
+
+
     <import resource="manager-tools.xml"/>
     <import resource="manager-cronjob.xml"/>
 

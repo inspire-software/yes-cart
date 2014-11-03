@@ -65,7 +65,7 @@ public class DtoProductCategoryServiceImpl
      */
     public ProductCategoryDTO create(final ProductCategoryDTO instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ProductCategory productCategory = getEntityFactory().getByIface(ProductCategory.class);
+        ProductCategory productCategory = getPersistenceEntityFactory().getByIface(ProductCategory.class);
         assembler.assembleEntity(instance, productCategory, getAdaptersRepository(), dtoFactory);
         productCategory.setCategory(categoryService.findById(instance.getCategoryId()));
         productCategory.setProduct(productService.findById(instance.getProductId()));

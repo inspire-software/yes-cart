@@ -83,6 +83,8 @@
         import org.yes.cart.impl.SkuPriceDTOImpl;
         import org.yes.cart.impl.SkuWarehouseDTOImpl;
         import org.yes.cart.impl.StateDTOImpl;
+        import org.yes.cart.impl.TaxConfigDTOImpl;
+        import org.yes.cart.impl.TaxDTOImpl;
         import org.yes.cart.impl.WarehouseDTOImpl;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
@@ -169,6 +171,8 @@
             registerClassAlias("org.yes.cart.domain.dto.impl.WarehouseDTOImpl", WarehouseDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.PromotionDTOImpl", PromotionDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.PromotionCouponDTOImpl", PromotionCouponDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.TaxDTOImpl", TaxDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.TaxConfigDTOImpl", TaxConfigDTOImpl);
 
             registerClassAlias("org.yes.cart.service.dto.support.impl.InventoryFilterImpl", InventoryFilter);
             registerClassAlias("org.yes.cart.service.dto.support.impl.PriceListFilterImpl", PriceListFilter);

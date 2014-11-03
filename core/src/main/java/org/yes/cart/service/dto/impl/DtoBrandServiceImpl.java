@@ -127,7 +127,7 @@ public class DtoBrandServiceImpl
                 AttributeGroupNames.BRAND,
                 getCodes(result));
         for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-            AttrValueBrandDTO attrValueBarndDTO = getDtoFactory().getByIface(AttrValueBrandDTO.class);
+            AttrValueBrandDTO attrValueBarndDTO = getAssemblerDtoFactory().getByIface(AttrValueBrandDTO.class);
             attrValueBarndDTO.setAttributeDTO(attributeDTO);
             attrValueBarndDTO.setBrandId(entityPk);
             result.add(attrValueBarndDTO);
@@ -161,7 +161,7 @@ public class DtoBrandServiceImpl
             }
         }
 
-        AttrValueBrand valueEntityBrand = getEntityFactory().getByIface(AttrValueBrand.class);
+        AttrValueBrand valueEntityBrand = getPersistenceEntityFactory().getByIface(AttrValueBrand.class);
         attrValueAssembler.assembleEntity(attrValueDTO, valueEntityBrand, getAdaptersRepository(), dtoFactory);
         valueEntityBrand.setAttribute(atr);
         valueEntityBrand.setBrand(brand);

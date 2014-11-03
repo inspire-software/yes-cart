@@ -648,6 +648,22 @@
 
     <bean id="promoActionCustomerTag" class="org.yes.cart.promotion.impl.action.CustomerTagPromotionAction"/>
 
+    <bean id="taxService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.TaxServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="taxDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="taxConfigService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.TaxConfigServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="taxConfigDao"/>
+                <constructor-arg index="1" ref="taxService"/>
+            </bean>
+        </property>
+    </bean>
 
     <bean id="mailService" parent="txProxyTemplate">
         <property name="target">
@@ -1063,6 +1079,27 @@
         </property>
     </bean>
 
+    <bean id="dtoTaxService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoTaxServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="taxService"/>
+                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dtoTaxConfigService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoTaxConfigServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="taxConfigService"/>
+                <constructor-arg index="2" ref="taxService"/>
+                <constructor-arg index="3" ref="dtoAssemblerAdaptersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="dtoPromotionCouponService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoPromotionCouponServiceImpl">
@@ -1134,6 +1171,9 @@
 
                 <entry key="org.yes.cart.domain.dto.PromotionDTO"        value="org.yes.cart.domain.dto.impl.PromotionDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.PromotionCouponDTO"  value="org.yes.cart.domain.dto.impl.PromotionCouponDTOImpl"/>
+
+                <entry key="org.yes.cart.domain.dto.TaxDTO"              value="org.yes.cart.domain.dto.impl.TaxDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.TaxConfigDTO"        value="org.yes.cart.domain.dto.impl.TaxConfigDTOImpl"/>
 
             </map>
         </constructor-arg>

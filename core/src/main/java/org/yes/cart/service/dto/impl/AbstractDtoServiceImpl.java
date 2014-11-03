@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.dto.AttrValueDTO;
+import org.yes.cart.domain.dto.adapter.impl.EntityFactoryToBeanFactoryAdaptor;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.Auditable;
 import org.yes.cart.domain.entity.Identifiable;
@@ -43,6 +44,8 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
 
     protected final DtoFactory dtoFactory;
 
+    protected final EntityFactoryToBeanFactoryAdaptor entityFactory;
+
     protected final Assembler assembler;
 
     protected GenericService<IFACE> service;
@@ -61,6 +64,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
                                   final AdaptersRepository adaptersRepository) {
         this.dtoFactory = dtoFactory;
         this.service = service;
+        this.entityFactory = new EntityFactoryToBeanFactoryAdaptor(this.service);
         this.assembler = DTOAssembler.newAssembler(getDtoImpl(), getEntityIFace());
         this.adaptersRepository = adaptersRepository;
     }
@@ -98,7 +102,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
 
     /** {@inheritDoc} */
     public DTOIFACE getNew() throws UnableToCreateInstanceException, UnmappedInterfaceException {
-        return (DTOIFACE) dtoFactory.getByIface( getDtoIFace());
+        return (DTOIFACE) dtoFactory.getByIface(getDtoIFace());
     }
 
     /** {@inheritDoc} */
@@ -153,16 +157,24 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     /**
      * @return {@link EntityFactory}
      */
-    public EntityFactory getEntityFactory() {
-        return service.getGenericDao().getEntityFactory();
+    public EntityFactory getPersistenceEntityFactory() {
+        return this.entityFactory.getEntityFactory();
     }
 
     /**
      *
      * @return {@link DtoFactory}
      */
-    public DtoFactory getDtoFactory() {
+    public DtoFactory getAssemblerDtoFactory() {
         return dtoFactory;
+    }
+
+    /**
+     *
+     * @return {@link DtoFactory}
+     */
+    public EntityFactoryToBeanFactoryAdaptor getAssemblerEntityFactory() {
+        return entityFactory;
     }
 
     /**
@@ -177,10 +189,22 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     @SuppressWarnings({"unchecked"})
     public DTOIFACE create(final DTOIFACE instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        IFACE iface = (IFACE) getEntityFactory().getByIface(getEntityIFace());
-        assembler.assembleEntity(instance, iface, getAdaptersRepository(), getDtoFactory());
+        IFACE iface = (IFACE) getPersistenceEntityFactory().getByIface(getEntityIFace());
+        assembler.assembleEntity(instance, iface, getAdaptersRepository(), entityFactory);
+        createPostProcess(instance, iface);
         iface = service.create(iface);
         return getById(iface.getId());
+    }
+
+    /**
+     * Use this hook in subclasses to modify entity after it had been populated with
+     * assembler from DTO.
+     *
+     * @param dto dto with update information
+     * @param entity entity to update
+     */
+    protected void createPostProcess(DTOIFACE dto, IFACE entity) {
+        // extension hook
     }
 
 
@@ -189,7 +213,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
     public DTOIFACE update(final DTOIFACE instance)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         IFACE iface = service.findById(instance.getId());
-        assembler.assembleEntity(instance, iface, getAdaptersRepository(), dtoFactory);
+        assembler.assembleEntity(instance, iface, getAdaptersRepository(), entityFactory);
         updatePostProcess(instance, iface);
         iface = service.update(iface);
         return getById(iface.getId());

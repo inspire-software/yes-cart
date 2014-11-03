@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.util.ShopCodeContext;
@@ -35,6 +36,7 @@ import org.yes.cart.web.service.ws.node.dto.Node;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -46,28 +48,12 @@ import java.util.Set;
  */
 public class AdminInterceptor extends AuditInterceptor implements ApplicationContextAware {
 
-    private final static Set<String> CACHED_ENTITIES;
-
     private ApplicationContext applicationContext;
     private NodeService nodeService;
     private WsAbstractFactoryClientFactory wsAbstractFactoryClientFactory;
 
-    static {
-
-        CACHED_ENTITIES = new HashSet<String>();
-
-        CACHED_ENTITIES.add(CacheDirector.EntityName.ATTRIBUTE);
-        CACHED_ENTITIES.add(CacheDirector.EntityName.PRODUCT);
-        CACHED_ENTITIES.add(CacheDirector.EntityName.CATEGORY);
-        CACHED_ENTITIES.add(CacheDirector.EntityName.PRICE);
-        CACHED_ENTITIES.add(CacheDirector.EntityName.PRODUCT_TYPE_ATTR);
-
-        CACHED_ENTITIES.add(CacheDirector.EntityName.SEO_IMAGE);
-        CACHED_ENTITIES.add(CacheDirector.EntityName.SHOP);
-        CACHED_ENTITIES.add(CacheDirector.EntityName.SYSTEM);
-        CACHED_ENTITIES.add(CacheDirector.EntityName.PROMOTION);
-
-    }
+    private Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache;
+    private Set<String> cachedEntities;
 
     @Override
     public boolean onSave(Object entity, Serializable serializable, Object[] objects, String[] propertyNames, Type[] types) {
@@ -164,7 +150,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
     boolean isEntityInCache(final Object entity) {
         if (entity != null) {
             final String entityName = entity.getClass().getSimpleName();
-            return CACHED_ENTITIES.contains(entityName);
+            return cachedEntities.contains(entityName);
         }
         return false;
     }
@@ -185,6 +171,12 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
      */
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    /** IoC. Set configuration. */
+    public void setEntityOperationCache(final Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache) {
+        this.entityOperationCache = entityOperationCache;
+        this.cachedEntities = new HashSet<String>(this.entityOperationCache.keySet());
     }
 
 }
