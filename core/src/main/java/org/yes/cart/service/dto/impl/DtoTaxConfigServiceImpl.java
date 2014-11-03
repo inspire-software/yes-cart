@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.TaxConfigDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.TaxConfigDTOImpl;
@@ -70,7 +71,25 @@ public class DtoTaxConfigServiceImpl
 
     @Override
     protected void createPostProcess(final TaxConfigDTO dto, final TaxConfig entity) {
+        cleanReginalTaxCodes(entity);
         entity.setTax(taxService.findById(dto.getTaxId()));
+    }
+
+    @Override
+    protected void updatePostProcess(final TaxConfigDTO dto, final TaxConfig entity) {
+        cleanReginalTaxCodes(entity);
+    }
+
+    private void cleanReginalTaxCodes(final TaxConfig entity) {
+        if (entity.getCountryCode() != null && StringUtils.isBlank(entity.getCountryCode())) {
+            entity.setCountryCode(null);
+        }
+        if (entity.getStateCode() != null && StringUtils.isBlank(entity.getStateCode())) {
+            entity.setStateCode(null);
+        }
+        if (entity.getProductCode() != null && StringUtils.isBlank(entity.getProductCode())) {
+            entity.setProductCode(null);
+        }
     }
 
 

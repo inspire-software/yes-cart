@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas
+        label="@Resource(bundle='TaxManagementPanel',key='taxes')"
+        xmlns:mx="http://www.adobe.com/2006/mxml"
+        width="100%"
+        height="100%"
+        creationComplete="init()">
+
+    <mx:Script><![CDATA[
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.controls.Alert;
+        import mx.events.ValidationResultEvent;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.TaxDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.util.DomainUtils;
+
+        private var _tax:TaxDTOImpl;
+
+        private var _updateCallback:Function;
+
+        public function set updateCallback(value:Function):void {
+            _updateCallback = value;
+        }
+
+        public function get tax():TaxDTOImpl {
+            return _tax;
+        }
+
+        public function set tax(value:TaxDTOImpl):void {
+            unbindProperties();
+            _tax = value;
+            entityIsNew = DomainUtils.isNewPK(_tax.taxId);
+            bindProperties();
+            this.label = _tax.code;
+        }
+
+        private function onUpdateTaxResult(event:ResultEvent):void {
+            // updated
+            if (_updateCallback != null) {
+                _updateCallback(event.result);
+            }
+            formChanged = false;
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onChange(event:Event):void {
+            formChanged = true;
+        }
+
+        private function onSaveTax(event:MouseEvent):void {
+
+            if (taxRateValidator.validate().type == ValidationResultEvent.VALID) {
+
+                if (DomainUtils.isNewPK(_tax.taxId)) {
+                    remoteTaxService.create(_tax);
+                } else {
+                    remoteTaxService.update(_tax);
+                }
+            }
+        }
+
+        private function init():void {
+            formChanged = false;
+        }
+
+        private function unbindProperties():void {
+            for each (var watcher:ChangeWatcher in propertyWatchers) {
+                watcher.unwatch();
+            }
+            propertyWatchers.removeAll();
+        }
+
+        private function bindProperties():void {
+
+
+            try {
+
+                if (entityIsNew) {
+                    propertyWatchers.addItem(BindingUtils.bindProperty(code, "text", _tax, "code"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(_tax, "code", code, "text"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(shopCode, "text", _tax, "shopCode"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(_tax, "shopCode", shopCode, "text"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(currency, "text", _tax, "currency"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(_tax, "currency", currency, "text"));
+                } else {
+                    propertyWatchers.addItem(BindingUtils.bindProperty(code, "text", _tax, "code"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(shopCode, "text", _tax, "shopCode"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(currency, "text", _tax, "currency"));
+                }
+                propertyWatchers.addItem(BindingUtils.bindProperty(exclusiveOfPrice, "selected", _tax, "exclusiveOfPrice"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_tax, "exclusiveOfPrice", exclusiveOfPrice, "selected"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(taxRate, "text", _tax, "taxRate"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_tax, "taxRate", taxRate, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(description, "text", _tax, "description"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_tax, "description", description, "text"));
+
+            } catch (e:Error) {
+
+                Alert.show("" + e.toString());
+
+            }
+
+        }
+        ]]></mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteTaxService"
+                     destination="remoteTaxService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="create" name="create"
+                   result="onUpdateTaxResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="update" name="update"
+                   result="onUpdateTaxResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:ArrayCollection id="propertyWatchers"/>
+    <mx:Boolean id="formChanged"/>
+    <mx:Boolean id="entityIsNew"/>
+
+    <mx:NumberValidator id="taxRateValidator" source="{taxRate}" property="text" minValue="0.01" maxValue="99.99"/>
+
+    <mx:VBox>
+        <mx:Form>
+            <mx:FormItem label="@Resource(bundle='TaxManagementPanel',key='code')">
+                <mx:TextInput id="code" enabled="{entityIsNew}" width="150" change="onChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='TaxManagementPanel',key='shopCode')">
+                <mx:TextInput id="shopCode" enabled="{entityIsNew}" width="150" change="onChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='TaxManagementPanel',key='currency')">
+                <mx:TextInput id="currency" enabled="{entityIsNew}" width="150" change="onChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='TaxManagementPanel',key='taxRate')">
+                <mx:TextInput id="taxRate" change="onChange(event)" width="150"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='TaxManagementPanel',key='exclusiveOfPrice')">
+                <mx:CheckBox id="exclusiveOfPrice" enabled="{entityIsNew}" change="onChange(event)"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='TaxManagementPanel',key='description')">
+                <mx:TextInput id="description" change="onChange(event)" width="150"/>
+            </mx:FormItem>
+        </mx:Form>
+        <mx:ControlBar horizontalAlign="right" width="100%">
+            <mx:Button id="saveBtn"
+                       label="@Resource(bundle='ShopManagerApplication',key='save')"
+                       enabled="{formChanged}"
+                       click="onSaveTax(event)"/>
+        </mx:ControlBar>
+    </mx:VBox>
+
+</mx:Canvas>
