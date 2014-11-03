@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:VDividedBox xmlns:mx="http://www.adobe.com/2006/mxml"
+                xmlns:tax="org.yes.cart.ui.tax.*"
+                xmlns:georg="com.georg.*"
+                width="100%"
+                height="100%"
+                creationComplete="initPanel()"
+                paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+    <mx:Script>
+
+        <![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.collections.ArrayCollection;
+
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.IndexChangedEvent;
+        import mx.events.ListEvent;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.TaxConfigDTOImpl;
+
+        import org.yes.cart.impl.TaxDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.util.CloneUtil;
+
+        private var TAB_SUMMARY_IDX:int = 0;
+
+        [Bindable]
+        private var _taxDTOImpl:TaxDTOImpl;
+
+        [Bindable]
+        private var _taxConfigDTOImpl:TaxConfigDTOImpl;
+
+        public function initPanel():void {
+        }
+
+        public function set tax(value:TaxDTOImpl):void {
+            _taxDTOImpl = value;
+            taxConfigSelected = false;
+            taxGrid.dataProvider = new ArrayCollection();
+        }
+
+        private function onTaxConfigSelected(event:ListEvent):void {
+            taxConfigSelected = this.taxGrid.selectedItem != null;
+            if (taxConfigSelected) {
+                _taxConfigDTOImpl = TaxConfigDTOImpl(CloneUtil.clone(event.currentTarget.selectedItem));
+                initTabs(taxTabNavigator.selectedIndex);
+            }
+        }
+
+        private function initTabs(tabIdx:int):void {
+            if (taxConfigSelected) {
+                Debug.trace("INFO promotionTabNavigator.selectedIndex is :" + tabIdx);
+
+                taxSummary.label = _taxDTOImpl.code;
+
+                switch (tabIdx) {
+
+
+                    case TAB_SUMMARY_IDX:
+                        summaryTabSelected();
+                        break;
+
+
+                }
+            }
+
+        }
+
+        private function onTaxConfigUpdate(taxConfig:TaxConfigDTOImpl):void {
+            _taxConfigDTOImpl = taxConfig;
+            taxConfigSelected = _taxConfigDTOImpl != null;
+            if (taxConfigSelected) {
+                initTabs(taxTabNavigator.selectedIndex);
+            }
+        }
+
+        private function summaryTabSelected():void {
+            this.taxSummary.taxConfig = _taxConfigDTOImpl;
+            Debug.trace("INFO Summary tab selected for tax id" + _taxDTOImpl.taxId);
+        }
+
+        private function onApplyFilterClick(event:MouseEvent):void {
+
+            remoteTaxConfigService.findByTaxId(
+                    _taxDTOImpl.taxId,
+                    countryCodeFilterValue.text,
+                    stateCodeFilterValue.text,
+                    productCodeFilterValue.text);
+        }
+
+        private function onRemoveTaxResult(event:ResultEvent):void {
+            onApplyFilterClick(null);
+        }
+
+        private function onTabClick(event:IndexChangedEvent):void {
+            initTabs(event.newIndex);
+        }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onFindTaxResult(event:ResultEvent):void {
+            this.taxConfigSelected = false;
+            this.taxGrid.dataProvider = event.result;
+        }
+
+        private function onApplyFilterShowClick(event:MouseEvent):void {
+            filterPanel.visible = !filterPanel.visible;
+            filterPanel.includeInLayout = filterPanel.visible;
+            if (filterPanel.visible) {
+                (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOff');
+            } else {
+                (event.target as Button).label = resourceManager.getString('Common', 'findBtnToggleOn');
+            }
+        }
+
+        private function onRemoveBtnClick(event:MouseEvent):void {
+            if (taxConfigSelected && _taxDTOImpl != null) {
+                Alert.show(
+                        resourceManager.getString('TaxManagementPanel', 'deleteConfigConfirm', [
+                            this._taxConfigDTOImpl.countryCode != null ? this._taxConfigDTOImpl.countryCode : '-',
+                            this._taxConfigDTOImpl.stateCode != null ? this._taxConfigDTOImpl.stateCode : '-',
+                            this._taxConfigDTOImpl.productCode != null ? this._taxConfigDTOImpl.productCode : '-' ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteSelectedTaxConfirm, null, Alert.OK);
+            }
+        }
+
+        private function onDeleteSelectedTaxConfirm(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                if (taxConfigSelected && _taxConfigDTOImpl != null) {
+                    remoteTaxConfigService.remove(_taxConfigDTOImpl.taxConfigId);
+                }
+            }
+        }
+
+        private function onCreateBtnClick(event:MouseEvent):void {
+            _taxConfigDTOImpl = new TaxConfigDTOImpl();
+            _taxConfigDTOImpl.taxId = _taxDTOImpl.taxId;
+            taxConfigSelected = true;
+
+            initTabs(taxTabNavigator.selectedIndex);
+        }
+        ]]>
+
+    </mx:Script>
+
+    <mx:Boolean id="taxConfigSelected">false</mx:Boolean>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteTaxConfigService" destination="remoteTaxConfigService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="findByTaxId" name="findByTaxId"
+                   result="onFindTaxResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="remove" name="remove"
+                   result="onRemoveTaxResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='TaxManagementPanel',key='taxes')"
+              paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+        <mx:VBox width="100%">
+
+            <mx:HBox paddingTop="5" width="100%">
+
+                <mx:VBox paddingTop="5">
+
+                    <mx:Grid >
+                        <mx:GridRow>
+                            <mx:GridItem>
+                                <mx:Button label="@Resource(bundle='TaxManagementPanel',key='createTax')"
+                                           click="onCreateBtnClick(event)"/>
+                                <mx:Button label="@Resource(bundle='TaxManagementPanel',key='deleteTax')"
+                                           click="onRemoveBtnClick(event)"
+                                           enabled="{taxConfigSelected}"
+                                        />
+                            </mx:GridItem>
+                            <mx:GridItem>
+                                <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
+                                           click="onApplyFilterShowClick(event)"
+                                        />
+                            </mx:GridItem>
+                        </mx:GridRow>
+                    </mx:Grid>
+
+                    <mx:Grid id="filterPanel" visible="false" includeInLayout="false" >
+                        <mx:GridRow>
+                            <mx:GridItem>
+                                <mx:Label text="@Resource(bundle='TaxManagementPanel',key='countryCode')"/>
+                                <mx:TextInput id="countryCodeFilterValue" width="100"/>
+                            </mx:GridItem>
+                            <mx:GridItem>
+                                <mx:Label text="@Resource(bundle='TaxManagementPanel',key='stateCode')"/>
+                                <mx:TextInput id="stateCodeFilterValue" width="100"/>
+                            </mx:GridItem>
+                            <mx:GridItem>
+                                <mx:Label text="@Resource(bundle='TaxManagementPanel',key='productCode')"/>
+                                <mx:TextInput id="productCodeFilterValue" width="100"/>
+                            </mx:GridItem>
+                        </mx:GridRow>
+                    </mx:Grid>
+                </mx:VBox>
+
+                <mx:Button height="100%" label="@Resource(bundle='TaxManagementPanel',key='applyFilter')"
+                           toolTip="@Resource(bundle='TaxManagementPanel',key='applyFilterToolTip')"
+                           click="onApplyFilterClick(event)"
+                        />
+
+
+            </mx:HBox>
+
+            <mx:DataGrid id="taxGrid" width="100%" height="100%"
+                         itemClick="onTaxConfigSelected(event)">
+                <mx:columns>
+                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='id')"
+                                       dataField="taxConfigId"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='countryCode')"
+                                       dataField="countryCode"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='stateCode')"
+                                       dataField="stateCode"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='productCode')"
+                                       dataField="productCode"/>
+                </mx:columns>
+            </mx:DataGrid>
+
+        </mx:VBox>
+        <mx:TabNavigator id="taxTabNavigator" change="onTabClick(event);" width="100%" height="100%"
+                         visible="{taxConfigSelected}">
+
+            <tax:TaxConfigSummaryPanel id="taxSummary" updateCallback="onTaxConfigUpdate"/>
+
+        </mx:TabNavigator>
+
+    </mx:Panel>
+
+</mx:VDividedBox>
