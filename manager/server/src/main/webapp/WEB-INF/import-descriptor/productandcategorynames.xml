@@ -261,6 +261,18 @@
 
         <column-descriptor>
             <column-index>20</column-index>
+            <field-type>FIELD</field-type>
+            <name>availablefrom</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>21</column-index>
+            <field-type>FIELD</field-type>
+            <name>availableto</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>22</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
@@ -288,7 +300,7 @@
                     </column-descriptor>
                     <!-- Category -->
                     <column-descriptor>
-                        <column-index>20</column-index>
+                        <column-index>22</column-index>
                         <field-type>FK_FIELD</field-type>
                         <entity-type>org.yes.cart.domain.entity.Category</entity-type>
                         <name>category</name>

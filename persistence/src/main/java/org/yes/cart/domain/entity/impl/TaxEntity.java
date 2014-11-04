@@ -45,13 +45,15 @@ public class TaxEntity implements Tax, Serializable {
     private Date updatedTimestamp;
     private String createdBy;
     private String updatedBy;
+    private String guid;
+
 
     public String getGuid() {
-        return getCode();
+        return guid;
     }
 
     public void setGuid(final String guid) {
-        setCode(code);
+        this.guid = guid;
     }
 
     public long getId() {

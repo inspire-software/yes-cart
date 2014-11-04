@@ -17,6 +17,7 @@
 package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Codable;
+import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
@@ -26,7 +27,7 @@ import java.math.BigDecimal;
  * Date: 27/10/2014
  * Time: 12:23
  */
-public interface TaxDTO extends Codable, Identifiable {
+public interface TaxDTO extends Codable, Identifiable, Guidable {
 
     /**
      * Tax rate as percentage in range 0-100. E.g. taxRate = 6.00, means

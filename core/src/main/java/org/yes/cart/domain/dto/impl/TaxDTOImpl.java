@@ -45,12 +45,25 @@ public class TaxDTOImpl implements TaxDTO {
     @DtoField(value = "code")
     private String code;
 
+    @DtoField(value = "guid", readOnly = true)
+    private String guid;
+
     @DtoField(value = "description")
     private String description;
 
     /** {@inheritDoc} */
     public long getId() {
         return taxId;
+    }
+
+    /** {@inheritDoc} */
+    public String getGuid() {
+        return guid;
+    }
+
+    /** {@inheritDoc} */
+    public void setGuid(final String guid) {
+        this.guid = guid;
     }
 
     /** {@inheritDoc} */

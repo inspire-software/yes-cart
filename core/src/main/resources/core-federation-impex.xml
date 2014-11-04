@@ -118,6 +118,26 @@
         </constructor-arg>
     </bean>
 
+    <bean id="taxImpexFederationFilter" class="org.yes.cart.service.federation.impl.TaxImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="taxConfigImpexFederationFilter" class="org.yes.cart.service.federation.impl.TaxConfigImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
     <bean id="skuWarehouseFederationFilter" class="org.yes.cart.service.federation.impl.SkuWarehouseFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1">
@@ -147,6 +167,8 @@
                 <entry key="org.yes.cart.domain.entity.Category"            value-ref="categoryImpexFederationFilter"/>
                 <entry key="org.yes.cart.domain.entity.Promotion"           value-ref="promotionImpexFederationFilter"/>
                 <entry key="org.yes.cart.domain.entity.PromotionCoupon"     value-ref="promotionCouponImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.Tax"                 value-ref="taxImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.TaxConfig"           value-ref="taxConfigImpexFederationFilter"/>
                 <entry key="org.yes.cart.domain.entity.SkuWarehouse"        value-ref="skuWarehouseFederationFilter"/>
                 <entry key="org.yes.cart.domain.entity.SkuPrice"            value-ref="skuPriceImpexFederationFilter"/>
                 <entry key="org.yes.cart.domain.entity.Product"             value-ref="productImpexFederationFilter"/>

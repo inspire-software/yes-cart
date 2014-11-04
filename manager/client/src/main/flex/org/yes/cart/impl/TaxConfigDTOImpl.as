@@ -34,5 +34,7 @@ public class TaxConfigDTOImpl {
 
     public var countryCode:String;
 
+    public var guid:String;
+
 }
 }

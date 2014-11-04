@@ -1075,6 +1075,7 @@
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),
         UPDATED_BY varchar(64),
+        GUID varchar(255) not null unique,
         primary key (TAX_ID)
     );
 
@@ -1089,7 +1090,7 @@
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),
         UPDATED_BY varchar(64),
-        GUID varchar(36) not null unique,
+        GUID varchar(255) not null unique,
         primary key (TAXCONFIG_ID)
     );
 

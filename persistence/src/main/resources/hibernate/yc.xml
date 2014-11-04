@@ -2397,6 +2397,7 @@
         <property name="code" column="CODE" type="string" length="255" not-null="true"/>
         <property name="description" column="DESCRIPTION" type="string" length="100"/>
 
+        <property name="guid" column="GUID" type="string" length="255" unique-key="TTAX_GUID" not-null="true"/>
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -2420,7 +2421,7 @@
         <property name="stateCode" type="string" length="16" column="STATE_CODE" index="TAX_STATE_CODE"/>
         <property name="countryCode" type="string" length="2" column="COUNTRY_CODE" index="TAX_COUNTRY_CODE"/>
 
-        <property name="guid" column="GUID" type="string" length="36" unique-key="TTAXCONFIG_GUID" not-null="true"/>
+        <property name="guid" column="GUID" type="string" length="255" unique-key="TTAXCONFIG_GUID" not-null="true"/>
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>

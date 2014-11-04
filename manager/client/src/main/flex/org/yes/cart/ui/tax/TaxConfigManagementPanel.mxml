@@ -237,7 +237,7 @@
                          itemClick="onTaxConfigSelected(event)">
                 <mx:columns>
                     <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='id')"
-                                       dataField="taxConfigId"/>
+                                       dataField="guid"/>
                     <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='countryCode')"
                                        dataField="countryCode"/>
                     <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='stateCode')"

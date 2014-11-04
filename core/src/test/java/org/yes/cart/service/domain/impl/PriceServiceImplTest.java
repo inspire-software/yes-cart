@@ -60,7 +60,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         priceService = (PriceService) ctx().getBean(ServiceSpringKeys.PRICE_SERVICE);
         shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         try {
-            dumpDataBase("x0x0xx_cats", new String[]{"TCATEGORY"});
+            dumpDataBase("x0x0xx_cats", new String[] { "TCATEGORY" });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,7 +75,7 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(cat);
         PriceTierTree priceTierTree = cat.getNavigationByPriceTree();
         try {
-            dumpDataBase("x1x1xx_cats_nav", new String[]{"TCATEGORY"});
+            dumpDataBase("x1x1xx_cats_nav", new String[] { "TCATEGORY" });
         } catch (Exception e) {
             e.printStackTrace();
         }
