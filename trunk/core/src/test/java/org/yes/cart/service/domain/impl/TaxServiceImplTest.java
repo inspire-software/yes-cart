@@ -45,7 +45,7 @@ public class TaxServiceImplTest extends BaseCoreDBTestCase {
         start = startTaxes.size();
 
         final Tax vatHi = taxService.getGenericDao().getEntityFactory().getByIface(Tax.class);
-        vatHi.setCode("VAT");
+        vatHi.setCode("VAT21");
         vatHi.setTaxRate(new BigDecimal("21.00"));
         vatHi.setShopCode("SHOP10");
         vatHi.setCurrency("EUR");
@@ -54,7 +54,7 @@ public class TaxServiceImplTest extends BaseCoreDBTestCase {
         taxService.create(vatHi);
 
         final Tax vatLo = taxService.getGenericDao().getEntityFactory().getByIface(Tax.class);
-        vatLo.setCode("VAT");
+        vatLo.setCode("VAT6");
         vatLo.setTaxRate(new BigDecimal("6.00"));
         vatLo.setShopCode("SHOP10");
         vatLo.setCurrency("EUR");

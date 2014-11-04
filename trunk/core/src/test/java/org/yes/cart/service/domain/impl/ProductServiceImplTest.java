@@ -205,7 +205,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         List<Product> rezLimit = productService.getFeaturedProducts(shopCategoryIds, 2);
         assertNotNull(rezLimit);
         try {
-            dumpDataBase("x2x2xx_products", new String[]{"TPRODUCT"});
+            dumpDataBase("x2x2xx_products", new String[] { "TPRODUCT" });
         } catch (Exception e) {
             e.printStackTrace();
         }

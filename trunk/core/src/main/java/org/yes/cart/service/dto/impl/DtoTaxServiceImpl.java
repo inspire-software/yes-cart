@@ -64,7 +64,6 @@ public class DtoTaxServiceImpl
         return dtos;
     }
 
-
     /** {@inheritDoc} */
     public Class<TaxDTO> getDtoIFace() {
         return TaxDTO.class;

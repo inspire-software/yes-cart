@@ -44,7 +44,7 @@ public class TaxConfigServiceImplTest extends BaseCoreDBTestCase {
         final TaxConfigService taxConfigService = ctx().getBean("taxConfigService", TaxConfigService.class);
 
         final Tax vat = taxService.getGenericDao().getEntityFactory().getByIface(Tax.class);
-        vat.setCode("VAT");
+        vat.setCode("VAT20");
         vat.setTaxRate(new BigDecimal("20.00"));
         vat.setShopCode("SHOP10");
         vat.setCurrency("EUR");

@@ -38,5 +38,7 @@ public class TaxDTOImpl {
 
     public var description:String;
 
+    public var guid:String;
+
 }
 }

@@ -132,15 +132,49 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
         );
     }
 
+
+    private void cleanRegionalTaxCodes(final TaxConfig entity) {
+        if (entity.getCountryCode() != null && StringUtils.isBlank(entity.getCountryCode())) {
+            entity.setCountryCode(null);
+        }
+        if (entity.getStateCode() != null && StringUtils.isBlank(entity.getStateCode())) {
+            entity.setStateCode(null);
+        }
+        if (entity.getProductCode() != null && StringUtils.isBlank(entity.getProductCode())) {
+            entity.setProductCode(null);
+        }
+    }
+
+    private void regenerateGuid(final TaxConfig entity) {
+        final StringBuilder guid = new StringBuilder();
+        if (entity.getTax() != null) {
+            guid.append(entity.getTax().getGuid());
+        }
+        if (entity.getCountryCode() != null) {
+            guid.append('_').append(entity.getCountryCode());
+        }
+        if (entity.getStateCode() != null) {
+            guid.append('_').append(entity.getStateCode());
+        }
+        if (entity.getProductCode() != null) {
+            guid.append('_').append(entity.getProductCode());
+        }
+        entity.setGuid(guid.toString());
+    }
+
     /** {@inheritDoc} */
     @CacheEvict(value = "taxConfigService-getTaxIdBy", allEntries = true)
     public TaxConfig create(final TaxConfig instance) {
+        cleanRegionalTaxCodes(instance);
+        regenerateGuid(instance);
         return super.create(instance);
     }
 
     /** {@inheritDoc} */
     @CacheEvict(value = "taxConfigService-getTaxIdBy", allEntries = true)
     public TaxConfig update(final TaxConfig instance) {
+        cleanRegionalTaxCodes(instance);
+        regenerateGuid(instance);
         return super.update(instance);
     }
 

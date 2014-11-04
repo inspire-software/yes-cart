@@ -40,9 +40,22 @@ public class TaxConfigDTOImpl implements TaxConfigDTO {
     @DtoField(value = "countryCode")
     private String countryCode;
 
+    @DtoField(value = "guid", readOnly = true)
+    private String guid;
+
     /** {@inheritDoc} */
     public long getId() {
         return taxConfigId;
+    }
+
+    /** {@inheritDoc} */
+    public String getGuid() {
+        return guid;
+    }
+
+    /** {@inheritDoc} */
+    public void setGuid(final String guid) {
+        this.guid = guid;
     }
 
     /** {@inheritDoc} */

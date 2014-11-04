@@ -722,6 +722,8 @@
                         <value>carrierslanames.xml</value>
                         <value>promotionnames.xml</value>
                         <value>promotioncouponnames.xml</value>
+                        <value>taxnames.xml</value>
+                        <value>taxconfignames.xml</value>
                     </list>
                 </entry>
                 <entry key="YC DEMO: IceCat Catalog">
@@ -789,11 +791,13 @@
                         <value>skuinventory.xml</value>
                     </list>
                 </entry>
-                <entry key="Prices and Promotions import">
+                <entry key="Prices, Promotions and Taxes import">
                     <list>
                         <value>skuprices.xml</value>
                         <value>promotionnames.xml</value>
                         <value>promotioncouponnames.xml</value>
+                        <value>taxnames.xml</value>
+                        <value>taxconfignames.xml</value>
                     </list>
                 </entry>
                 <entry key="Content import">
@@ -830,14 +834,14 @@
                         <value>statenames.xml</value>
                     </list>
                 </entry>
-                <entry key="Carriers import">
+                <entry key="Carriers and SLA import">
                     <list>
                         <value>carriernames.xml</value>
                         <value>carriershopnames.xml</value>
                         <value>carrierslanames.xml</value>
                     </list>
                 </entry>
-                <entry key="Shops and Warehouses">
+                <entry key="Shops and Warehouses import">
                     <!-- This is just example for completeness -->
                     <list>
                         <value>shop.xml</value>

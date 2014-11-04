@@ -605,17 +605,53 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             rs.close();
             assertEquals(3L + cntBeforePromotion, cntPromotionCoupons);   // 3 new
 
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TTAX  ");
+            rs.next();
+            long cntBeforeTax = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/taxnames.xml", listener, importedFilesSet));
+            final long taxes = System.currentTimeMillis() - dt;
+            System.out.println("   2 tax entries in " + taxes + "millis (~" + (taxes / 2) + " per item)");
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TTAX  ");
+            rs.next();
+            long cntTaxes = rs.getLong(1);
+            rs.close();
+            assertEquals(2L + cntBeforeTax, cntTaxes);   // 2 new
+
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TTAXCONFIG  ");
+            rs.next();
+            long cntBeforeTaxConfig = rs.getLong(1);
+            rs.close();
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/taxconfignames.xml", listener, importedFilesSet));
+            final long taxConfigs = System.currentTimeMillis() - dt;
+            System.out.println("   5 tax configs in " + taxConfigs + "millis (~" + (taxConfigs / 5) + " per item)");
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TTAXCONFIG  ");
+            rs.next();
+            long cntTaxConfigs = rs.getLong(1);
+            rs.close();
+            assertEquals(5L + cntBeforeTaxConfig, cntTaxConfigs);   // 5 new
+
+
             mockery.assertIsSatisfied();
 
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
         } finally {
-            dumpDataBase("www", new String[]{"TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
+            dumpDataBase("www", new String[] { "TATTRIBUTE", "TPRODUCTTYPE", "TPRODUCTTYPEATTR",
                     "TPRODUCT", "TSKU", "TPRODUCTATTRVALUE",
                     "TSKUWAREHOUSE", "TSKUPRICE", "TPRODUCTCATEGORY", "TCATEGORY", "TCATEGORYATTRVALUE",
                     "TPRODTYPEATTRVIEWGROUP" ,
-                    "TSHOPCATEGORY", "TPROMOTION", "TPROMOTIONCOUPON"
+                    "TSHOPCATEGORY", "TPROMOTION", "TPROMOTIONCOUPON", "TTAX", "TTAXCONFIG"
             });
         }
 
@@ -695,7 +731,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         try {
             dumpDataBase(
                     "carrier",
-                    new String[]{"tcarrier", "tcarriersla"}
+                    new String[] { "TCARRIER", "TCARRIERSLA" }
             );
         } catch (Exception e1) {
             e1.printStackTrace();

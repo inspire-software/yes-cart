@@ -74,15 +74,25 @@ public class TaxServiceImpl  extends BaseGenericServiceImpl<Tax> implements TaxS
         }
     }
 
+    private void regenerateGuid(final Tax entity) {
+        final StringBuilder guid = new StringBuilder();
+        guid.append(entity.getShopCode()).append('_');
+        guid.append(entity.getCurrency()).append('_');
+        guid.append(entity.getCode());
+        entity.setGuid(guid.toString());
+    }
+
     /** {@inheritDoc} */
     @CacheEvict(value = "taxService-getTaxesByShopCode", allEntries = true)
     public Tax create(final Tax instance) {
+        regenerateGuid(instance);
         return super.create(instance);
     }
 
     /** {@inheritDoc} */
     @CacheEvict(value = "taxService-getTaxesByShopCode", allEntries = true)
     public Tax update(final Tax instance) {
+        regenerateGuid(instance);
         return super.update(instance);
     }
 
