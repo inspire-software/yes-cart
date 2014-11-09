@@ -17,10 +17,7 @@
 package org.yes.cart.service.order.impl.handler;
 
 import org.yes.cart.BaseCoreDBTestCase;
-import org.yes.cart.shoppingcart.AmountCalculationStrategy;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 
 import java.util.HashMap;
@@ -56,7 +53,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
     }
 
     protected ShoppingCart getEmptyCart(final String customerEmail) {
-        ShoppingCart shoppingCart = new ShoppingCartImpl();
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 

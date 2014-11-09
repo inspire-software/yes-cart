@@ -639,12 +639,44 @@
             <constructor-arg index="0" value="taxService-getTaxesByShopCode"/>
             <constructor-arg index="1" value="all"/>
         </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="taxService-getById"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
     </util:set>
 
     <util:map id="TaxCUD">
         <entry key="Create" value-ref="TaxAll"/>
         <entry key="Update" value-ref="TaxAll"/>
         <entry key="Delete" value-ref="TaxAll"/>
+    </util:map>
+
+    <!-- ###################### Carrier  ################################################################################################################## -->
+
+    <util:set id="CarrierAll">
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="carrierService-getCarriersByShopIdAndCurrency"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+    </util:set>
+
+    <util:map id="CarrierCUD">
+        <entry key="Create" value-ref="CarrierAll"/>
+        <entry key="Update" value-ref="CarrierAll"/>
+        <entry key="Delete" value-ref="CarrierAll"/>
+    </util:map>
+
+    <util:set id="CarrierSlaAll">
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="carrierSlaService-getById"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+    </util:set>
+
+    <util:map id="CarrierSlaCUD">
+        <entry key="Create" value-ref="CarrierSlaAll"/>
+        <entry key="Update" value-ref="CarrierSlaAll"/>
+        <entry key="Delete" value-ref="CarrierSlaAll"/>
     </util:map>
 
     <!-- ###################### System  ################################################################################################################## -->
@@ -679,6 +711,8 @@
         <entry key="PromotionEntity" value-ref="PromotionCUD"/>
         <entry key="AttrValueEntitySystem" value-ref="SystemCUD"/>
         <entry key="TaxEntity" value-ref="TaxCUD"/>
+        <entry key="CarrierEntity" value-ref="CarrierCUD"/>
+        <entry key="CarrierSlaEntity" value-ref="CarrierSlaCUD"/>
     </util:map>
 
 

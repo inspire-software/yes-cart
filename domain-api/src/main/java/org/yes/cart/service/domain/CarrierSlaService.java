@@ -27,6 +27,8 @@ import java.util.List;
  */
 public interface CarrierSlaService extends GenericService<CarrierSla> {
 
+    CarrierSla getById(long carrierSlaId);
+
     /**
      * Get shipping SLA by carrier Id.
      *
@@ -35,23 +37,4 @@ public interface CarrierSlaService extends GenericService<CarrierSla> {
      */
     List<CarrierSla> findByCarrier(long carrierId);
 
-    /**
-     * Get sla by name. Sla name is unique
-     * @param slaName given sla name.
-     * @return {@link CarrierSla}
-     *
-     * @deprecated used only by Google Checkout which is now retired - remove this
-     */
-    @Deprecated
-    CarrierSla findByName(final String slaName);
-
-    /**
-     * Find all sla for given currency.
-     * @param currency given currency.
-     * @return   list of found currency
-     *
-     * @deprecated used only by Google Checkout which is now retired - remove this
-     */
-    @Deprecated
-    List<CarrierSla> findByCurrency(String currency);
 }

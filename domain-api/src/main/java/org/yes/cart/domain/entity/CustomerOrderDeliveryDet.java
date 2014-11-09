@@ -117,6 +117,76 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
     void setPrice(BigDecimal price);
 
     /**
+     * Get the sku sale price including all promotions.
+     *
+     * @return after tax price
+     */
+    BigDecimal getNetPrice();
+
+    /**
+     * Set net price (price before tax).
+     *
+     * @param netPrice price before tax
+     */
+    void setNetPrice(final BigDecimal netPrice);
+
+    /**
+     * Get the sku sale price including all promotions.
+     *
+     * @return before tax price
+     */
+    BigDecimal getGrossPrice();
+
+    /**
+     * Set net price (price after tax).
+     *
+     * @param grossPrice price after tax
+     */
+    void setGrossPrice(final BigDecimal grossPrice);
+
+    /**
+     * Get tax code used for this item.
+     *
+     * @return tax code
+     */
+    String getTaxCode();
+
+    /**
+     * Set tax code reference.
+     *
+     * @param taxCode tax code
+     */
+    void setTaxCode(final String taxCode);
+
+    /**
+     * Get tax rate for this item.
+     *
+     * @return tax rate 0-99
+     */
+    BigDecimal getTaxRate();
+
+    /**
+     * Set tax rate used (0-99).
+     *
+     * @param taxRate tax rate
+     */
+    void setTaxRate(final BigDecimal taxRate);
+
+    /**
+     * Tax exclusive of price flag.
+     *
+     * @return true if exclusive, false if inclusive
+     */
+    boolean isTaxExclusiveOfPrice();
+
+    /**
+     * Set whether this tax is included or excluded from price.
+     *
+     * @param taxExclusiveOfPrice tax flag
+     */
+    void setTaxExclusiveOfPrice(final boolean taxExclusiveOfPrice);
+
+    /**
      * Get sale price for this item (i.e. special sale price before promotions).
      *
      * @return price

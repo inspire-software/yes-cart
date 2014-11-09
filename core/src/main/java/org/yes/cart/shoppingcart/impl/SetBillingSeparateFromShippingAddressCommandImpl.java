@@ -16,6 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
@@ -50,7 +51,7 @@ public class SetBillingSeparateFromShippingAddressCommandImpl extends AbstractCa
 
     /** {@inheritDoc} */
     @Override
-    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             final Boolean value = Boolean.valueOf((String) parameters.get(getCmdKey()));
             if (!value.equals(shoppingCart.getOrderInfo().isSeparateBillingAddress())) {

@@ -37,6 +37,7 @@ public interface PromotionCondition extends Serializable {
     String VAR_CUSTOMER_TAGS = "customerTags";
     String VAR_CART = "shoppingCart";
     String VAR_CART_ITEM = "shoppingCartItem";
+    String VAR_SHIPPING = "shipping";
     String VAR_CART_ITEM_TOTAL = "shoppingCartItemTotal";
     String VAR_CART_ORDER_TOTAL = "shoppingCartOrderTotal";
     String VAR_TMP_TOTAL = "tmpTotal";

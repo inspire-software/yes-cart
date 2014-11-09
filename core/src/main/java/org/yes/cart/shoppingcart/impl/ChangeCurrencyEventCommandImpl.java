@@ -22,7 +22,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 import java.util.Map;
@@ -62,7 +62,7 @@ public class ChangeCurrencyEventCommandImpl extends AbstractSkuCartCommandImpl {
      * {@inheritDoc}
      */
     @Override
-    protected void execute(final ShoppingCart shoppingCart,
+    protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
                            final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
@@ -70,7 +70,9 @@ public class ChangeCurrencyEventCommandImpl extends AbstractSkuCartCommandImpl {
             if (currencyCode != null && !currencyCode.equals(shoppingCart.getCurrencyCode())) {
                 final Shop shop = getShopService().getShopByCode(shoppingCart.getShoppingContext().getShopCode());
                 if (shop.getSupportedCurrenciesAsList().contains(currencyCode)) {
-                    ((ShoppingCartImpl) shoppingCart).setCurrencyCode(currencyCode);
+                    shoppingCart.setCurrencyCode(currencyCode);
+                    shoppingCart.getOrderInfo().setCarrierSlaId(null); // If we change currency then SLA is no longer eligible
+                    shoppingCart.getOrderInfo().setPaymentGatewayLabel(null); // and PG label too
                     recalculatePrice(shoppingCart, productSku);
                     markDirty(shoppingCart);
                 }

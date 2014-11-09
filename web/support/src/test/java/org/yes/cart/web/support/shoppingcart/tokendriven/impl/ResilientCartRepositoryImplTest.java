@@ -25,6 +25,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.ShoppingCartStateService;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.web.support.shoppingcart.tokendriven.CartUpdateProcessor;
@@ -129,7 +130,7 @@ public class ResilientCartRepositoryImplTest {
         final Cache cartCache = context.mock(Cache.class, "cartCache");
         final ShoppingCartState cartState = context.mock(ShoppingCartState.class, "cartState");
 
-        final ShoppingCart cart = new ShoppingCartImpl();
+        final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail("bob@doe.com");
         final byte[] bytes = serializeCart(cart);
         final ShoppingCart restored = deserializeCart(bytes);
@@ -167,7 +168,7 @@ public class ResilientCartRepositoryImplTest {
         final Cache cartCache = context.mock(Cache.class, "cartCache");
         final ShoppingCartState cartState = context.mock(ShoppingCartState.class, "cartState");
 
-        final ShoppingCart cart = new ShoppingCartImpl();
+        final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail("bob@doe.com");
         final byte[] bytes = serializeCart(cart);
         final ShoppingCart restored = deserializeCart(bytes);
@@ -265,7 +266,7 @@ public class ResilientCartRepositoryImplTest {
         final CacheManager cacheManager = context.mock(CacheManager.class, "cacheManager");
         final Cache cartCache = context.mock(Cache.class, "cartCache");
 
-        final ShoppingCart cart = new ShoppingCartImpl();
+        final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail("bob@doe.com");
 
         context.checking(new Expectations() {{
@@ -296,7 +297,7 @@ public class ResilientCartRepositoryImplTest {
         final CacheManager cacheManager = context.mock(CacheManager.class, "cacheManager");
         final Cache cartCache = context.mock(Cache.class, "cartCache");
 
-        final ShoppingCart cart = new ShoppingCartImpl();
+        final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail("bob@doe.com");
 
         context.checking(new Expectations() {{

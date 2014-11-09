@@ -93,8 +93,16 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     @DtoField(value = "appliedPromo", readOnly = true)
     private String appliedPromo;
 
-
-
+    @DtoField(value = "netPrice", readOnly = true)
+    private BigDecimal netPrice;
+    @DtoField(value = "grossPrice", readOnly = true)
+    private BigDecimal grossPrice;
+    @DtoField(value = "taxRate", readOnly = true)
+    private BigDecimal taxRate;
+    @DtoField(value = "taxCode", readOnly = true)
+    private String taxCode;
+    @DtoField(value = "taxExclusiveOfPrice", readOnly = true)
+    private boolean taxExclusiveOfPrice;
 
     @DtoCollection(
             value = "detail",
@@ -176,6 +184,56 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     /** {@inheritDoc} */
     public void setListPrice(final BigDecimal listPrice) {
         this.listPrice = listPrice;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getNetPrice() {
+        return netPrice;
+    }
+
+    /** {@inheritDoc} */
+    public void setNetPrice(final BigDecimal netPrice) {
+        this.netPrice = netPrice;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getGrossPrice() {
+        return grossPrice;
+    }
+
+    /** {@inheritDoc} */
+    public void setGrossPrice(final BigDecimal grossPrice) {
+        this.grossPrice = grossPrice;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getTaxRate() {
+        return taxRate;
+    }
+
+    /** {@inheritDoc} */
+    public void setTaxRate(final BigDecimal taxRate) {
+        this.taxRate = taxRate;
+    }
+
+    /** {@inheritDoc} */
+    public String getTaxCode() {
+        return taxCode;
+    }
+
+    /** {@inheritDoc} */
+    public void setTaxCode(final String taxCode) {
+        this.taxCode = taxCode;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isTaxExclusiveOfPrice() {
+        return taxExclusiveOfPrice;
+    }
+
+    /** {@inheritDoc} */
+    public void setTaxExclusiveOfPrice(final boolean taxExclusiveOfPrice) {
+        this.taxExclusiveOfPrice = taxExclusiveOfPrice;
     }
 
     /** {@inheritDoc} */

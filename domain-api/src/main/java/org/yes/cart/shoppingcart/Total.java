@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart;
 
+import org.yes.cart.constants.Constants;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -31,6 +33,11 @@ import java.math.BigDecimal;
  * Time: 12:05
  */
 public interface Total extends Serializable {
+
+    /**
+     * Zero with correct scale
+     */
+    BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
     /**
      * Get subtotal of all items list price.

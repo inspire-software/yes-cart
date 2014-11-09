@@ -18,7 +18,7 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.apache.wicket.Session;
 import org.yes.cart.service.misc.LanguageService;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 import java.util.Locale;
@@ -48,7 +48,7 @@ public class WicketChangeLocaleCartCommandImpl extends ChangeLocaleCartCommandIm
 
     /** {@inheritDoc} */
     @Override
-    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         // current locale may be null if it is new cart
         final String locale = shoppingCart.getCurrentLocale();
         super.execute(shoppingCart, parameters);

@@ -31,8 +31,6 @@ import java.util.Set;
  */
 public class TotalImpl implements Total {
 
-    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-
     private BigDecimal listSubTotal;
     private BigDecimal saleSubTotal;
     private BigDecimal nonSaleSubTotal;

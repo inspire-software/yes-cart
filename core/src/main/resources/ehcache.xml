@@ -379,9 +379,17 @@
     <cache name="taxService-getTaxesByShopCode" maxElementsInMemory="500" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="taxService-getById" maxElementsInMemory="500" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
     <cache name="taxConfigService-getTaxIdBy" maxElementsInMemory="10000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="carrierService-getCarriersByShopIdAndCurrency" maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="carrierSlaService-getById" maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <!-- ############################################# hibernate entity cache #######################################-->
 

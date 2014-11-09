@@ -42,6 +42,9 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private BigDecimal price;
     private BigDecimal listPrice;
 
+    private BigDecimal netPrice;
+    private BigDecimal grossPrice;
+
     private boolean promoApplied;
     private String appliedPromo;
 
@@ -201,6 +204,22 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     public void setPrice(final BigDecimal price) {
         this.price = price;
+    }
+
+    public BigDecimal getNetPrice() {
+        return netPrice;
+    }
+
+    public void setNetPrice(final BigDecimal netPrice) {
+        this.netPrice = netPrice;
+    }
+
+    public BigDecimal getGrossPrice() {
+        return grossPrice;
+    }
+
+    public void setGrossPrice(final BigDecimal grossPrice) {
+        this.grossPrice = grossPrice;
     }
 
     public BigDecimal getListPrice() {

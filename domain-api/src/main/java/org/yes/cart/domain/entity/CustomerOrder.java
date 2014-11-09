@@ -334,6 +334,35 @@ public interface CustomerOrder extends Auditable {
      */
     void setPrice(BigDecimal price);
 
+
+    /**
+     * Get the sku sale price including all promotions.
+     *
+     * @return after tax price
+     */
+    BigDecimal getNetPrice();
+
+    /**
+     * Set net price (price before tax).
+     *
+     * @param netPrice price before tax
+     */
+    void setNetPrice(final BigDecimal netPrice);
+
+    /**
+     * Get the sku sale price including all promotions.
+     *
+     * @return before tax price
+     */
+    BigDecimal getGrossPrice();
+
+    /**
+     * Set net price (price after tax).
+     *
+     * @param grossPrice price after tax
+     */
+    void setGrossPrice(final BigDecimal grossPrice);
+
     /**
      * Get order list price is the sum of all list prices of oder details.
      * This price is effectively sub total (does not include delivery).

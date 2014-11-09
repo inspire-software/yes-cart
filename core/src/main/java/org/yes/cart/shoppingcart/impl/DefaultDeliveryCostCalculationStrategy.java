@@ -17,12 +17,15 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.constants.Constants;
-import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * User: denispavlov
@@ -33,23 +36,57 @@ public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalcu
 
     private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
-    private final GenericDAO<CarrierSla, Long> genericDao;
+    private static final BigDecimal SINGLE = new BigDecimal(1).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal MULTI = new BigDecimal(2).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
-    public DefaultDeliveryCostCalculationStrategy(final GenericDAO<CarrierSla, Long> genericDao) {
-        this.genericDao = genericDao;
+    private static final Total ZERO_TOTAL = new TotalImpl();
+
+    private final CarrierSlaService carrierSlaService;
+
+    public DefaultDeliveryCostCalculationStrategy(final CarrierSlaService carrierSlaService) {
+        this.carrierSlaService = carrierSlaService;
     }
 
     /** {@inheritDoc} */
-    public BigDecimal getDeliveryPrice(final ShoppingCart cart) {
+    public Total calculate(final MutableShoppingCart cart) {
+
+        cart.removeShipping();
+
         if (cart.getCarrierSlaId() != null) {
-            final CarrierSla carrierSla = genericDao.findById(cart.getCarrierSlaId());
-            if (carrierSla == null || carrierSla.getPrice() == null) {
-                return BigDecimal.ZERO;
+            final CarrierSla carrierSla = carrierSlaService.getById(cart.getCarrierSlaId());
+            if (carrierSla != null) {
+                // TODO: YC-154 at this moment fixed or zero delivery prices are supported, so just return the price from sla
+                final String carrierSlaId = String.valueOf(carrierSla.getCarrierslaId());
+                final BigDecimal listPrice = MoneyUtils.notNull(carrierSla.getPrice(), ZERO);
+                final BigDecimal qty = cart.getOrderInfo().isMultipleDelivery() ? MULTI : SINGLE;
+                cart.addShippingToCart(carrierSlaId, qty);
+                cart.setShippingPrice(carrierSlaId, listPrice, listPrice);
+                final BigDecimal deliveryListCost = listPrice.multiply(qty).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
+
+                return new TotalImpl(
+                        Total.ZERO,
+                        Total.ZERO,
+                        Total.ZERO,
+                        Total.ZERO,
+                        false,
+                        null,
+                        Total.ZERO,
+                        Total.ZERO,
+                        Total.ZERO,
+                        deliveryListCost,
+                        deliveryListCost,
+                        false,
+                        null,
+                        Total.ZERO,
+                        deliveryListCost,
+                        deliveryListCost,
+                        Total.ZERO,
+                        deliveryListCost,
+                        deliveryListCost
+                );
             }
-            // TODO: V2 at this moment fixed or zero delivery prices are supported, so just return the price from sla
-            return carrierSla.getPrice();
         }
-        return ZERO;
+        return ZERO_TOTAL;
     }
 
 }

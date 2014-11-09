@@ -1923,6 +1923,9 @@
         <property name="price" column="PRICE" type="java.math.BigDecimal" not-null="true"/>
         <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
 
+        <property name="netPrice" column="NET_PRICE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="grossPrice" column="GROSS_PRICE" type="java.math.BigDecimal" not-null="true"/>
+
         <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
         <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
 
@@ -1998,13 +2001,13 @@
         <property name="qty" column="QTY" type="java.math.BigDecimal" not-null="true"/>
         <property name="salePrice" column="SALE_PRICE" type="java.math.BigDecimal" not-null="true"/>
         <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
-        <property name="price" type="java.math.BigDecimal" not-null="false">
+        <property name="price" column="PRICE" type="java.math.BigDecimal" not-null="true"/>
 
-            <column name="PRICE" not-null="true">
-                <comment>Price per one unit
-                </comment>
-            </column>
-        </property>
+        <property name="netPrice" column="NET_PRICE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="grossPrice" column="GROSS_PRICE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="taxRate" column="TAX_RATE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="taxExclusiveOfPrice" column="TAX_EXCLUSIVE_OF_PRICE" type="boolean" length="1" not-null="true"/>
+        <property name="taxCode" column="TAX_CODE" type="string" length="255" not-null="true"/>
 
         <property name="gift" column="IS_GIFT" type="boolean" length="1" not-null="true"/>
         <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
@@ -2055,6 +2058,12 @@
         <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
         <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
 
+        <property name="netPrice" column="NET_PRICE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="grossPrice" column="GROSS_PRICE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="taxRate" column="TAX_RATE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="taxExclusiveOfPrice" column="TAX_EXCLUSIVE_OF_PRICE" type="boolean" length="1" not-null="true"/>
+        <property name="taxCode" column="TAX_CODE" type="string" length="255" not-null="true"/>
+
         <property name="deliveryStatus" column="DELIVERYSTATUS" type="string" length="64" not-null="true"/>
         <bag name="detail" cascade="all" inverse="true" lazy="false">
             <key column="CUSTOMERORDERDELIVERY_ID" not-null="true" foreign-key="FK_CODD_CDELIVERY"/>
@@ -2097,6 +2106,12 @@
         <property name="price" column="PRICE" type="java.math.BigDecimal" not-null="true"/>
         <property name="salePrice" column="SALE_PRICE" type="java.math.BigDecimal" not-null="true"/>
         <property name="listPrice" column="LIST_PRICE" type="java.math.BigDecimal" not-null="true"/>
+
+        <property name="netPrice" column="NET_PRICE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="grossPrice" column="GROSS_PRICE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="taxRate" column="TAX_RATE" type="java.math.BigDecimal" not-null="true"/>
+        <property name="taxExclusiveOfPrice" column="TAX_EXCLUSIVE_OF_PRICE" type="boolean" length="1" not-null="true"/>
+        <property name="taxCode" column="TAX_CODE" type="string" length="255" not-null="true"/>
 
         <property name="gift" column="IS_GIFT" type="boolean" length="1" not-null="true"/>
         <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>

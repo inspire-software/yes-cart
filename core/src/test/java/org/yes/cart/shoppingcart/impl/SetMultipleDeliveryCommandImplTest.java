@@ -19,7 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public class SetMultipleDeliveryCommandImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testExecute() {
-        ShoppingCart shoppingCart = new ShoppingCartImpl();
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 

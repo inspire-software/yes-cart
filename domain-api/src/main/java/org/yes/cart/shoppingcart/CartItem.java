@@ -46,6 +46,41 @@ public interface CartItem extends Serializable {
     BigDecimal getPrice();
 
     /**
+     * Get the sku sale price including all promotions.
+     *
+     * @return after tax price
+     */
+    BigDecimal getNetPrice();
+
+    /**
+     * Get the sku sale price including all promotions.
+     *
+     * @return before tax price
+     */
+    BigDecimal getGrossPrice();
+
+    /**
+     * Get tax code used for this item.
+     *
+     * @return tax code
+     */
+    String getTaxCode();
+
+    /**
+     * Get tax rate for this item.
+     *
+     * @return tax rate 0-99
+     */
+    BigDecimal getTaxRate();
+
+    /**
+     * Tax exclusive of price flag.
+     *
+     * @return true if exclusive, false if inclusive
+     */
+    boolean isTaxExclusiveOfPrice();
+
+    /**
      * Get sale price.
      *
      * @return price

@@ -17,7 +17,8 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.domain.entity.Address;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
@@ -45,7 +46,7 @@ public class SetAddressesCartCommandImpl extends AbstractCartCommandImpl impleme
 
     /** {@inheritDoc} */
     @Override
-    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
 
             boolean changed = false;
@@ -54,17 +55,23 @@ public class SetAddressesCartCommandImpl extends AbstractCartCommandImpl impleme
                 if (notRequired) {
                     if (shoppingCart.getOrderInfo().getBillingAddressId() != null) {
                         shoppingCart.getOrderInfo().setBillingAddressId(null);
+                        shoppingCart.getShoppingContext().setCountryCode(null);
+                        shoppingCart.getShoppingContext().setStateCode(null);
                         changed = true;
                     }
                 } else {
-                    final Long billingId = NumberUtils.toLong((String) parameters.get(CMD_SETADDRESES_P_BILLING_ADDRESS), 0L);
-                    if (billingId > 0L) {
-                        if (!billingId.equals(shoppingCart.getOrderInfo().getBillingAddressId())) {
-                            shoppingCart.getOrderInfo().setBillingAddressId(billingId);
+                    final Address billing = (Address) parameters.get(CMD_SETADDRESES_P_BILLING_ADDRESS);
+                    if (billing != null) {
+                        if (!Long.valueOf(billing.getAddressId()).equals(shoppingCart.getOrderInfo().getBillingAddressId())) {
+                            shoppingCart.getOrderInfo().setBillingAddressId(billing.getAddressId());
+                            shoppingCart.getShoppingContext().setCountryCode(billing.getCountryCode());
+                            shoppingCart.getShoppingContext().setStateCode(billing.getStateCode());
                             changed = true;
                         }
                     } else if (shoppingCart.getOrderInfo().getBillingAddressId() != null) {
                         shoppingCart.getOrderInfo().setBillingAddressId(null);
+                        shoppingCart.getShoppingContext().setCountryCode(null);
+                        shoppingCart.getShoppingContext().setStateCode(null);
                         changed = true;
                     }
                 }
@@ -78,10 +85,15 @@ public class SetAddressesCartCommandImpl extends AbstractCartCommandImpl impleme
                         changed = true;
                     }
                 } else {
-                    final Long deliveryId = NumberUtils.toLong((String) parameters.get(CMD_SETADDRESES_P_DELIVERY_ADDRESS), 0L);
-                    if (deliveryId > 0L) {
-                        if (!deliveryId.equals(shoppingCart.getOrderInfo().getDeliveryAddressId())) {
-                            shoppingCart.getOrderInfo().setDeliveryAddressId(deliveryId);
+                    final Address delivery = (Address) parameters.get(CMD_SETADDRESES_P_DELIVERY_ADDRESS);
+                    if (delivery != null) {
+                        if (!Long.valueOf(delivery.getAddressId()).equals(shoppingCart.getOrderInfo().getDeliveryAddressId())) {
+                            shoppingCart.getOrderInfo().setDeliveryAddressId(delivery.getAddressId());
+                            if (!shoppingCart.isSeparateBillingAddress() && !shoppingCart.isBillingAddressNotRequired()) {
+                                shoppingCart.getOrderInfo().setBillingAddressId(delivery.getAddressId());
+                                shoppingCart.getShoppingContext().setCountryCode(delivery.getCountryCode());
+                                shoppingCart.getShoppingContext().setStateCode(delivery.getStateCode());
+                            }
                             changed = true;
                         }
                     } else if (shoppingCart.getOrderInfo().getDeliveryAddressId() != null) {

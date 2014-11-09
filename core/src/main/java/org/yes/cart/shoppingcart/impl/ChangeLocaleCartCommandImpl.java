@@ -17,7 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.service.misc.LanguageService;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 import java.util.List;
@@ -53,13 +53,13 @@ public class ChangeLocaleCartCommandImpl  extends AbstractCartCommandImpl {
 
     /** {@inheritDoc} */
     @Override
-    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             final String locale = (String) parameters.get(getCmdKey());
             if (locale != null && !locale.equals(shoppingCart.getCurrentLocale())) {
                 final List<String> supported = languageService.getSupportedLanguages(shoppingCart.getShoppingContext().getShopCode());
                 if (supported.contains(locale)) {
-                    ((ShoppingCartImpl)shoppingCart).setCurrentLocale(locale);
+                    shoppingCart.setCurrentLocale(locale);
                     markDirty(shoppingCart);
                 }
             }

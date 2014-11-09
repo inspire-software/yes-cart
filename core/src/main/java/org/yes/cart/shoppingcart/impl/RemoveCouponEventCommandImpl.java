@@ -17,7 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
@@ -52,7 +52,7 @@ public class RemoveCouponEventCommandImpl extends AbstractCartCommandImpl implem
      * {@inheritDoc}
      */
     @Override
-    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
 
             final Object coupon = parameters.get(getCmdKey());

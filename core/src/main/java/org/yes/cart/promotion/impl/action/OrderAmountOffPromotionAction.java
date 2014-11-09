@@ -16,7 +16,6 @@
 
 package org.yes.cart.promotion.impl.action;
 
-import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;

@@ -49,7 +49,7 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
         final List<Promotion> promotions = new ArrayList<Promotion>();
 
-        ShoppingCart shoppingCart = new ShoppingCartImpl();
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 

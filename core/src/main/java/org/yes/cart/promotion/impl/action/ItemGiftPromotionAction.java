@@ -16,12 +16,12 @@
 
 package org.yes.cart.promotion.impl.action;
 
-import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
@@ -103,15 +103,13 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
 
         final ItemPromotionActionContext ctx = getPromotionActionContext(context);
         final CartItem cartItem = getShoppingCartItem(context);
-        final ShoppingCart cart = getShoppingCart(context);
+        final MutableShoppingCart cart = getShoppingCart(context);
 
         final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart);
         if (giftValue != null) {
-            final Promotion promotion = getPromotion(context);
-
             // add gift and set its price, we assume gift are in whole units
             final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(cartItem.getQty())).setScale(0, RoundingMode.HALF_UP).setScale(2);
-            cart.addGiftToCart(ctx.getSubject(), giftQty, promotion.getCode());
+            cart.addGiftToCart(ctx.getSubject(), giftQty, getPromotionCode(context));
             final BigDecimal minimal = MoneyUtils.minPositive(giftValue.getSalePriceForCalculation(), giftValue.getRegularPrice());
             cart.setGiftPrice(ctx.getSubject(), minimal, giftValue.getRegularPrice());
             // update current cart item with promotion details but do not alter its price as we

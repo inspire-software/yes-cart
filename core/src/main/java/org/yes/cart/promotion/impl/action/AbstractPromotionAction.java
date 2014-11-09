@@ -20,7 +20,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.promotion.PromotionCondition;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 
 import java.util.List;
 import java.util.Map;
@@ -53,8 +53,8 @@ public abstract class AbstractPromotionAction implements PromotionAction {
      *
      * @return shopping cart
      */
-    protected ShoppingCart getShoppingCart(final Map<String, Object> context) {
-        return (ShoppingCart) context.get(PromotionCondition.VAR_CART);
+    protected MutableShoppingCart getShoppingCart(final Map<String, Object> context) {
+        return (MutableShoppingCart) context.get(PromotionCondition.VAR_CART);
     }
 
     /**

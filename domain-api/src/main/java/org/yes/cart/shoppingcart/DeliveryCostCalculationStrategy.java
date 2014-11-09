@@ -16,8 +16,6 @@
 
 package org.yes.cart.shoppingcart;
 
-import java.math.BigDecimal;
-
 /**
  * User: denispavlov
  * Date: 13-10-20
@@ -29,9 +27,7 @@ public interface DeliveryCostCalculationStrategy {
      * Get the delivery price for cart.
      *
      * @param cart current cart
-     *
-     * @return price of delivery
      */
-    BigDecimal getDeliveryPrice(ShoppingCart cart);
+    Total calculate(MutableShoppingCart cart);
 
 }

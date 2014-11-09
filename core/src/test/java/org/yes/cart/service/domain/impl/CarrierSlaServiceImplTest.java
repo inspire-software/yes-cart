@@ -46,16 +46,16 @@ public class CarrierSlaServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testFindCarriersFilterByCurrency() {
         List<Carrier> carriers;
-        carriers = carrierService.findCarriersByShopIdAndCurrency(20L, "USD"); // no shop 20
+        carriers = carrierService.getCarriersByShopIdAndCurrency(20L, "USD"); // no shop 20
         assertEquals(0, carriers.size());
-        carriers = carrierService.findCarriersByShopIdAndCurrency(10L, "USD"); // 2 USD Carriers
+        carriers = carrierService.getCarriersByShopIdAndCurrency(10L, "USD"); // 2 USD Carriers
         assertEquals(2, carriers.size());
         assertEquals(1, carriers.get(0).getCarrierSla().size());
         assertEquals(1, carriers.get(1).getCarrierSla().size());
-        carriers = carrierService.findCarriersByShopIdAndCurrency(10L, "RUB"); // 1 RUB Carrier
+        carriers = carrierService.getCarriersByShopIdAndCurrency(10L, "RUB"); // 1 RUB Carrier
         assertEquals(1, carriers.size());
         assertEquals(1, carriers.get(0).getCarrierSla().size());
-        carriers = carrierService.findCarriersByShopIdAndCurrency(10L, "MWZ"); // no web money carriers
+        carriers = carrierService.getCarriersByShopIdAndCurrency(10L, "MWZ"); // no web money carriers
         assertEquals(0, carriers.size());
     }
 }

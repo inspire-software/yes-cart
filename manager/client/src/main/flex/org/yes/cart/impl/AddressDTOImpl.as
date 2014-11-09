@@ -61,14 +61,14 @@ public class AddressDTOImpl {
     }
 
     public function get fulladdress():String {
-        return addrline1 + '\n' +
-                (DomainUtils.isNotBlankString(addrline2) ? (addrline2 + '\n') : '') +
-                city + '\n' +
-                postcode;
+        return addrline1 + (DomainUtils.isNotBlankString(addrline2) ? (addrline2 + '\n') : '\n') +
+                city + ' ' + postcode + '\n' +
+                stateCode + '\n' +
+                countryCode;
     }
 
     public function get fullcountry():String {
-        return countryCode + ', ' + stateCode;
+        return countryCode + '\n' + stateCode;
     }
 
     public function AddressDTOImpl() {

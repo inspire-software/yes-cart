@@ -17,7 +17,8 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.domain.entity.Address;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.ShopCodeContext;
@@ -51,7 +52,7 @@ public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl imple
 
     /** {@inheritDoc} */
     @Override
-    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             final String val = (String) parameters.get(getCmdKey());
             final Long slaPkvalue = val != null ? NumberUtils.createLong(val) : null;
@@ -67,6 +68,8 @@ public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl imple
                 } else {
                     shoppingCart.getOrderInfo().setBillingAddressId(null);
                     shoppingCart.getOrderInfo().setDeliveryAddressId(null);
+                    shoppingCart.getShoppingContext().setCountryCode(null);
+                    shoppingCart.getShoppingContext().setStateCode(null);
                 }
                 recalculate(shoppingCart);
                 markDirty(shoppingCart);
@@ -74,20 +77,24 @@ public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl imple
         }
     }
 
-    private void setAddressParametersIfRequired(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    private void setAddressParametersIfRequired(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         final boolean notRequiredBilling = shoppingCart.getOrderInfo().isBillingAddressNotRequired();
         if (notRequiredBilling) {
             if (shoppingCart.getOrderInfo().getBillingAddressId() != null) {
                 shoppingCart.getOrderInfo().setBillingAddressId(null);
             }
         } else {
-            final Long billingId = NumberUtils.toLong((String) parameters.get(CMD_SETCARRIERSLA_P_BILLING_ADDRESS), 0L);
-            if (billingId > 0L) {
-                if (!billingId.equals(shoppingCart.getOrderInfo().getBillingAddressId())) {
-                    shoppingCart.getOrderInfo().setBillingAddressId(billingId);
+            final Address billing = (Address) parameters.get(CMD_SETCARRIERSLA_P_BILLING_ADDRESS);
+            if (billing != null) {
+                if (!Long.valueOf(billing.getAddressId()).equals(shoppingCart.getOrderInfo().getBillingAddressId())) {
+                    shoppingCart.getOrderInfo().setBillingAddressId(billing.getAddressId());
+                    shoppingCart.getShoppingContext().setCountryCode(billing.getCountryCode());
+                    shoppingCart.getShoppingContext().setStateCode(billing.getStateCode());
                 }
             } else if (shoppingCart.getOrderInfo().getBillingAddressId() != null) {
                 shoppingCart.getOrderInfo().setBillingAddressId(null);
+                shoppingCart.getShoppingContext().setCountryCode(null);
+                shoppingCart.getShoppingContext().setStateCode(null);
             }
         }
 
@@ -97,10 +104,15 @@ public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl imple
                 shoppingCart.getOrderInfo().setDeliveryAddressId(null);
             }
         } else {
-            final Long deliveryId = NumberUtils.toLong((String) parameters.get(CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS), 0L);
-            if (deliveryId > 0L) {
-                if (!deliveryId.equals(shoppingCart.getOrderInfo().getDeliveryAddressId())) {
-                    shoppingCart.getOrderInfo().setDeliveryAddressId(deliveryId);
+            final Address delivery = (Address) parameters.get(CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS);
+            if (delivery != null) {
+                if (!Long.valueOf(delivery.getAddressId()).equals(shoppingCart.getOrderInfo().getDeliveryAddressId())) {
+                    shoppingCart.getOrderInfo().setDeliveryAddressId(delivery.getAddressId());
+                    if (!shoppingCart.isSeparateBillingAddress() && !shoppingCart.isBillingAddressNotRequired()) {
+                        shoppingCart.getOrderInfo().setBillingAddressId(delivery.getAddressId());
+                        shoppingCart.getShoppingContext().setCountryCode(delivery.getCountryCode());
+                        shoppingCart.getShoppingContext().setStateCode(delivery.getStateCode());
+                    }
                 }
             } else if (shoppingCart.getOrderInfo().getDeliveryAddressId() != null) {
                 shoppingCart.getOrderInfo().setDeliveryAddressId(null);
@@ -108,7 +120,7 @@ public class SetCarrierSlaCartCommandImpl  extends AbstractCartCommandImpl imple
         }
     }
 
-    private void setAddressNotRequiredFlags(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    private void setAddressNotRequiredFlags(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.get(CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED) instanceof Boolean) {
             shoppingCart.getOrderInfo().setBillingAddressNotRequired((Boolean) parameters.get(CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED));
         } else if (parameters.get(CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED) instanceof String) {

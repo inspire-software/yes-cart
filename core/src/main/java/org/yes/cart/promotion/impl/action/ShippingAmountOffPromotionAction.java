@@ -16,9 +16,9 @@
 
 package org.yes.cart.promotion.impl.action;
 
-import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.PromotionAction;
-import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -35,8 +35,8 @@ public class ShippingAmountOffPromotionAction extends AbstractShippingPromotionA
 
     /** {@inheritDoc} */
     public BigDecimal testDiscountValue(final Map<String, Object> context) {
-        final Total itemTotal = getOrderTotal(context);
-        return getDiscountValue(getRawPromotionActionContext(context), itemTotal.getDeliveryListCost());
+        final CartItem shipping = getShipping(context);
+        return getDiscountValue(getRawPromotionActionContext(context), shipping.getSalePrice());
     }
 
     private BigDecimal getDiscountValue(final String ctx, final BigDecimal salePrice) {
@@ -46,9 +46,10 @@ public class ShippingAmountOffPromotionAction extends AbstractShippingPromotionA
                 return amountOff.divide(salePrice, RoundingMode.HALF_UP);
             }
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error("Unable top parse discount for promotion action context: {}", ctx);
+            ShopCodeContext.getLog(this).error(
+                    "Unable top parse amountOff for promotion action context: {}", ctx);
         }
-        return BigDecimal.ZERO;
+        return MoneyUtils.ZERO;
     }
 
     private BigDecimal getAmountValue(final String ctx) {
@@ -59,13 +60,22 @@ public class ShippingAmountOffPromotionAction extends AbstractShippingPromotionA
         }
     }
 
-
     /** {@inheritDoc} */
     public void perform(final Map<String, Object> context) {
         final BigDecimal amountOff = getAmountValue(getRawPromotionActionContext(context));
         if (MoneyUtils.isFirstBiggerThanSecond(amountOff, BigDecimal.ZERO)) {
+            final MutableShoppingCart cart = getShoppingCart(context);
+            final CartItem shipping = getShipping(context);
 
-            subtractPromotionValue(context, amountOff);
+            // we may have compound discounts so need to use final price
+            final BigDecimal promoPrice;
+            if (MoneyUtils.isFirstBiggerThanSecond(amountOff, shipping.getPrice())) {
+                promoPrice = MoneyUtils.ZERO;
+            } else {
+                promoPrice = shipping.getPrice().subtract(amountOff);
+            }
+
+            cart.setShippingPromotion(shipping.getProductSkuCode(), promoPrice, getPromotionCode(context));
 
         }
     }

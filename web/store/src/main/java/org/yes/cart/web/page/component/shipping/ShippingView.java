@@ -116,47 +116,53 @@ public class ShippingView extends BaseComponent {
 
                 final ShoppingCart cart = ApplicationDirector.getShoppingCart();
                 final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getShoppingContext().getCustomerEmail());
-                final String shippingAddressId;
-                final String billingAddressId;
+                final Address billingAddress;
+                final Address shippingAddress;
                 if (customer != null &&
                         (!carrierSla.isBillingAddressNotRequired() || !carrierSla.isDeliveryAddressNotRequired())) {
-                    Address billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
-                    Address shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+                    final Address billingAddressTemp = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
+                    final Address shippingAddressTemp = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
 
-                    if (shippingAddress != null) { //normal case when we entered shipping address
+                    if (shippingAddressTemp != null) { //normal case when we entered shipping address
 
-                        shippingAddressId = String.valueOf(shippingAddress.getAddressId());
+                        if (!cart.isSeparateBillingAddress() || billingAddressTemp == null) {
 
-                        if (!cart.isSeparateBillingAddress() || billingAddress == null) {
-                            billingAddress = shippingAddress;
+                            billingAddress = shippingAddressTemp;
+                            shippingAddress = shippingAddressTemp;
+
+                        } else {
+
+                            billingAddress = billingAddressTemp;
+                            shippingAddress = shippingAddressTemp;
+
                         }
-                        billingAddressId = String.valueOf(billingAddress.getAddressId());
 
-                    } else if (billingAddress != null) { // exception use case when we only have billing address
+                    } else if (billingAddressTemp != null) { // exception use case when we only have billing address
 
-                        billingAddressId = String.valueOf(billingAddress.getAddressId());
+                        billingAddress = billingAddressTemp;
+                        shippingAddress = billingAddressTemp;
 
-                        shippingAddress = billingAddress;
+                    } else {
 
-                        shippingAddressId = String.valueOf(shippingAddress.getAddressId());
+                        billingAddress = null;
+                        shippingAddress = null;
 
-                    } else { // should not happen as we check that we have at least one address before this step
-                        shippingAddressId = "";
-                        billingAddressId = "";
                     }
 
                 } else {
-                    shippingAddressId = "";
-                    billingAddressId = "";
+
+                    billingAddress = null;
+                    shippingAddress = null;
+
                 }
 
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, ApplicationDirector.getShoppingCart(),
                         (Map) new HashMap() {{
                             put(ShoppingCartCommand.CMD_SETCARRIERSLA, String.valueOf(carrierSla.getCarrierslaId()));
                             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, carrierSla.isBillingAddressNotRequired());
-                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billingAddressId);
+                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billingAddress);
                             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, carrierSla.isDeliveryAddressNotRequired());
-                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, shippingAddressId);
+                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, shippingAddress);
                         }}
                 );
                 ((AbstractWebPage) getPage()).persistCartIfNecessary();

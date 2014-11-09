@@ -26,7 +26,9 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryAssembler;
 import org.yes.cart.service.order.OrderAssemblyException;
+import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -112,19 +114,39 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                 customerOrderDelivery.setListPrice(BigDecimal.ZERO);
                 customerOrderDelivery.setPromoApplied(false);
                 customerOrderDelivery.setAppliedPromo(null);
+                customerOrderDelivery.setNetPrice(BigDecimal.ZERO);
+                customerOrderDelivery.setGrossPrice(BigDecimal.ZERO);
+                customerOrderDelivery.setTaxCode("");
+                customerOrderDelivery.setTaxRate(BigDecimal.ZERO);
 
             } else {
 
-                if (shoppingCart.getTotal() == null
-                        || shoppingCart.getTotal().getDeliveryCost() == null
-                        || shoppingCart.getTotal().getDeliveryListCost() == null) {
+                final Total cartTotal = shoppingCart.getTotal();
+
+                final String shippingSlaId = String.valueOf(customerOrderDelivery.getCarrierSla().getCarrierslaId());
+                final int index = shoppingCart.indexOfShipping(shippingSlaId);
+                final CartItem shipping = index > -1 ? shoppingCart.getShippingList().get(index) : null;
+
+                if (cartTotal == null
+                        || shipping == null
+                        || shipping.getListPrice() == null
+                        || shipping.getPrice() == null
+                        || shipping.getNetPrice() == null
+                        || shipping.getGrossPrice() == null
+                        || shipping.getTaxRate() == null
+                        || shipping.getTaxCode() == null) {
                     throw new OrderAssemblyException("No delivery total");
                 }
 
-                customerOrderDelivery.setPrice(shoppingCart.getTotal().getDeliveryCost());
-                customerOrderDelivery.setListPrice(shoppingCart.getTotal().getDeliveryListCost());
-                customerOrderDelivery.setPromoApplied(shoppingCart.getTotal().isDeliveryPromoApplied());
-                customerOrderDelivery.setAppliedPromo(shoppingCart.getTotal().getAppliedDeliveryPromo());
+                customerOrderDelivery.setPrice(shipping.getPrice());
+                customerOrderDelivery.setListPrice(shipping.getListPrice());
+                customerOrderDelivery.setPromoApplied(shipping.isPromoApplied());
+                customerOrderDelivery.setAppliedPromo(shipping.getAppliedPromo());
+                customerOrderDelivery.setNetPrice(shipping.getNetPrice());
+                customerOrderDelivery.setGrossPrice(shipping.getGrossPrice());
+                customerOrderDelivery.setTaxCode(shipping.getTaxCode());
+                customerOrderDelivery.setTaxRate(shipping.getTaxRate());
+                customerOrderDelivery.setTaxExclusiveOfPrice(shipping.isTaxExclusiveOfPrice());
 
             }
             order.getDelivery().add(customerOrderDelivery);
@@ -145,7 +167,9 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      * @param orderDet              order detail
      */
     private void fillDeliveryDetail(final CustomerOrderDelivery customerOrderDelivery, final CustomerOrderDet orderDet) {
+
         final CustomerOrderDeliveryDet deliveryDet = entityFactory.getByIface(CustomerOrderDeliveryDet.class);
+
         deliveryDet.setDelivery(customerOrderDelivery);
         customerOrderDelivery.getDetail().add(deliveryDet);
         deliveryDet.setQty(orderDet.getQty());
@@ -157,6 +181,12 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         deliveryDet.setGift(orderDet.isGift());
         deliveryDet.setPromoApplied(orderDet.isPromoApplied());
         deliveryDet.setAppliedPromo(orderDet.getAppliedPromo());
+        deliveryDet.setNetPrice(orderDet.getNetPrice());
+        deliveryDet.setGrossPrice(orderDet.getGrossPrice());
+        deliveryDet.setTaxCode(orderDet.getTaxCode());
+        deliveryDet.setTaxRate(orderDet.getTaxRate());
+        deliveryDet.setTaxExclusiveOfPrice(orderDet.isTaxExclusiveOfPrice());
+
     }
 
     /**
@@ -177,7 +207,12 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         Assert.notNull(order, "Expecting order, but found null");
         Assert.notNull(shoppingCart, "Expecting shopping cart, but found null");
         final CustomerOrderDelivery customerOrderDelivery = entityFactory.getByIface(CustomerOrderDelivery.class);
-        customerOrderDelivery.setCarrierSla(carrierSlaService.findById(shoppingCart.getCarrierSlaId() == null ? 0 : shoppingCart.getCarrierSlaId()));
+        if (shoppingCart.getCarrierSlaId() != null) {
+            customerOrderDelivery.setCarrierSla(carrierSlaService.getById(shoppingCart.getCarrierSlaId()));
+        } else {
+            customerOrderDelivery.setCarrierSla(null);
+        }
+
         customerOrderDelivery.setDeliveryNum(order.getOrdernum() + "-" + idx);
         customerOrderDelivery.setDeliveryGroup(deliveryGroup);
 

@@ -108,7 +108,7 @@ public class ManageAddressesView extends BaseComponent {
                                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, ApplicationDirector.getShoppingCart(),
                                         (Map) new HashMap() {{
                                             put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
-                                            put(key, String.valueOf(address.getAddressId()));
+                                            put(key, address);
                                         }}
                                 );
                                 ((AbstractWebPage) getPage()).persistCartIfNecessary();

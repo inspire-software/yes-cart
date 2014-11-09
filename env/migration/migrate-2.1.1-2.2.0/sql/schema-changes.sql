@@ -473,3 +473,61 @@ ALTER TABLE TCATEGORY ADD UNIQUE (URI);
 --         add constraint FK_TAXCFG_TAX
 --         foreign key (TAX_ID)
 --         references TTAX on delete cascade;
+
+alter table TCUSTOMERORDER add column NET_PRICE decimal(19,2) not null default 0;
+alter table TCUSTOMERORDER add column GROSS_PRICE decimal(19,2) not null default 0;
+-- alter table TCUSTOMERORDER add column NET_PRICE numeric(19,2) not null default 0;
+-- alter table TCUSTOMERORDER add column GROSS_PRICE numeric(19,2) not null default 0;
+
+update TCUSTOMERORDER set GROSS_PRICE = PRICE;
+update TCUSTOMERORDER set NET_PRICE = PRICE/1.2;
+
+alter table TCUSTOMERORDERDELIVERY add column NET_PRICE numeric(19,2) not null default 0;
+alter table TCUSTOMERORDERDELIVERY add column GROSS_PRICE numeric(19,2) not null default 0;
+alter table TCUSTOMERORDERDELIVERY add column TAX_RATE numeric(19,2) not null default 0;
+alter table TCUSTOMERORDERDELIVERY add column TAX_EXCLUSIVE_OF_PRICE bit not null default 0;
+alter table TCUSTOMERORDERDELIVERY add column TAX_CODE varchar(255) not null default '';
+-- alter table TCUSTOMERORDERDELIVERY add column NET_PRICE decimal(19,2) not null default 0;
+-- alter table TCUSTOMERORDERDELIVERY add column GROSS_PRICE decimal(19,2) not null default 0;
+-- alter table TCUSTOMERORDERDELIVERY add column TAX_RATE decimal(19,2) not null default 0;
+-- alter table TCUSTOMERORDERDELIVERY add column TAX_EXCLUSIVE_OF_PRICE smallint not null default 0;
+-- alter table TCUSTOMERORDERDELIVERY add column TAX_CODE varchar(255) not null default '';
+
+update TCUSTOMERORDERDELIVERY set GROSS_PRICE = PRICE;
+update TCUSTOMERORDERDELIVERY set NET_PRICE = PRICE/1.2;
+update TCUSTOMERORDERDELIVERY set TAX_RATE = 20.00;
+update TCUSTOMERORDERDELIVERY set TAX_CODE = 'VAT';
+
+
+alter table TCUSTOMERORDERDET add column NET_PRICE numeric(19,2) not null default 0;
+alter table TCUSTOMERORDERDET add column GROSS_PRICE numeric(19,2) not null default 0;
+alter table TCUSTOMERORDERDET add column TAX_RATE numeric(19,2) not null default 0;
+alter table TCUSTOMERORDERDET add column TAX_EXCLUSIVE_OF_PRICE bit not null default 0;
+alter table TCUSTOMERORDERDET add column TAX_CODE varchar(255) not null default '';
+-- alter table TCUSTOMERORDERDET add column NET_PRICE decimal(19,2) not null default 0;
+-- alter table TCUSTOMERORDERDET add column GROSS_PRICE decimal(19,2) not null default 0;
+-- alter table TCUSTOMERORDERDET add column TAX_RATE decimal(19,2) not null default 0;
+-- alter table TCUSTOMERORDERDET add column TAX_EXCLUSIVE_OF_PRICE smallint not null default 0;
+-- alter table TCUSTOMERORDERDET add column TAX_CODE varchar(255) not null default '';
+
+update TCUSTOMERORDERDET set GROSS_PRICE = PRICE;
+update TCUSTOMERORDERDET set NET_PRICE = PRICE/1.2;
+update TCUSTOMERORDERDET set TAX_RATE = 20.00;
+update TCUSTOMERORDERDET set TAX_CODE = 'VAT';
+
+
+alter table TCUSTOMERORDERDELIVERYDET add column NET_PRICE numeric(19,2) not null default 0;
+alter table TCUSTOMERORDERDELIVERYDET add column GROSS_PRICE numeric(19,2) not null default 0;
+alter table TCUSTOMERORDERDELIVERYDET add column TAX_RATE numeric(19,2) not null default 0;
+alter table TCUSTOMERORDERDELIVERYDET add column TAX_EXCLUSIVE_OF_PRICE bit not null default 0;
+alter table TCUSTOMERORDERDELIVERYDET add column TAX_CODE varchar(255) not null default '';
+-- alter table TCUSTOMERORDERDELIVERYDET add column NET_PRICE decimal(19,2) not null default 0;
+-- alter table TCUSTOMERORDERDELIVERYDET add column GROSS_PRICE decimal(19,2) not null default 0;
+-- alter table TCUSTOMERORDERDELIVERYDET add column TAX_RATE decimal(19,2) not null default 0;
+-- alter table TCUSTOMERORDERDELIVERYDET add column TAX_EXCLUSIVE_OF_PRICE smallint not null default 0;
+-- alter table TCUSTOMERORDERDELIVERYDET add column TAX_CODE varchar(255) not null default '';
+
+update TCUSTOMERORDERDELIVERYDET set GROSS_PRICE = PRICE;
+update TCUSTOMERORDERDELIVERYDET set NET_PRICE = PRICE/1.2;
+update TCUSTOMERORDERDELIVERYDET set TAX_RATE = 20.00;
+update TCUSTOMERORDERDELIVERYDET set TAX_CODE = 'VAT';

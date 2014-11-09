@@ -33,6 +33,8 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.utils.impl.CustomerOrderComparator;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CurrencySymbolService;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -71,6 +73,8 @@ public class CustomerOrderPanel extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.ORDER_PAYMENT_SERICE)
     private CustomerOrderPaymentService customerOrderPaymentService;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
+    private CurrencySymbolService currencySymbolService;
 
     /**
      * Construct panel.
@@ -136,7 +140,7 @@ public class CustomerOrderPanel extends BaseComponent {
                                                     .add(new Label(ORDER_AMOUNT,
                                                             decimalFormat.format(
                                                                     customerOrderPaymentService.getOrderAmount(order.getOrdernum())
-                                                            ) + " " + order.getCurrency()
+                                                            ) + " " + currencySymbolService.getCurrencySymbol(order.getCurrency())
                                                     ));
 
                                         }

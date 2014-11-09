@@ -17,7 +17,7 @@
 package org.yes.cart.promotion;
 
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
 import java.io.Serializable;
@@ -49,7 +49,7 @@ public interface PromotionContext extends Serializable {
      * @param customer customer
      * @param cart cart
      */
-    void applyItemPromo(Customer customer, ShoppingCart cart);
+    void applyItemPromo(Customer customer, MutableShoppingCart cart);
 
     /**
      * Apply order level promotions on cart.
@@ -60,7 +60,7 @@ public interface PromotionContext extends Serializable {
      *
      * @return  order total (does not include shipping promotions)
      */
-    Total applyOrderPromo(Customer customer, ShoppingCart cart, Total itemTotal);
+    Total applyOrderPromo(Customer customer, MutableShoppingCart cart, Total itemTotal);
 
     /**
      * Apply shipping promotions on cart.
@@ -68,10 +68,8 @@ public interface PromotionContext extends Serializable {
      * @param customer customer
      * @param cart cart
      * @param orderTotal current total after order promotions
-     *
-     * @return final total (includes all promotions)
      */
-    Total applyShippingPromo(Customer customer, ShoppingCart cart, Total orderTotal);
+    void applyShippingPromo(Customer customer, MutableShoppingCart cart, Total orderTotal);
 
     /**
      * Apply promotion on customer. This is not strictly speaking promotion
@@ -82,5 +80,5 @@ public interface PromotionContext extends Serializable {
      *             if anyone would want to use this on storefront for some custom
      *             events
      */
-    void applyCustomerPromo(Customer customer, ShoppingCart cart);
+    void applyCustomerPromo(Customer customer, MutableShoppingCart cart);
 }

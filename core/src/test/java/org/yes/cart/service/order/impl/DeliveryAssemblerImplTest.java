@@ -23,10 +23,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssembler;
-import org.yes.cart.shoppingcart.AmountCalculationStrategy;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.util.MoneyUtils;
 
@@ -150,8 +147,18 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
             assertNotNull(cod.getDeliveryNum());
             if (CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(cod.getDeliveryGroup())) {
                 assertEquals(BigDecimal.ZERO, cod.getPrice());
+                assertEquals(BigDecimal.ZERO, cod.getNetPrice());
+                assertEquals(BigDecimal.ZERO, cod.getGrossPrice());
+                assertEquals(BigDecimal.ZERO, cod.getTaxRate());
+                assertEquals("", cod.getTaxCode());
+                assertFalse(cod.isTaxExclusiveOfPrice());
             } else {
                 assertEquals(new BigDecimal("16.77"), cod.getPrice());
+                assertEquals(new BigDecimal("13.97"), cod.getNetPrice());
+                assertEquals(new BigDecimal("16.77"), cod.getGrossPrice());
+                assertEquals(new BigDecimal("20.00"), cod.getTaxRate());
+                assertEquals("VAT", cod.getTaxCode());
+                assertFalse(cod.isTaxExclusiveOfPrice());
             }
             for (CustomerOrderDeliveryDet det : cod.getDetail()) {
                 assertTrue(det.getCustomerOrderDeliveryDetId() > 0);
@@ -346,7 +353,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     }
 
     protected ShoppingCart getEmptyCart(String customerEmail) {
-        ShoppingCart shoppingCart = new ShoppingCartImpl();
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         Map<String, String> params = new HashMap<String, String>();
         params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customerEmail);

@@ -84,15 +84,15 @@ public interface CustomerOrderDTO extends Identifiable {
     String getBillingAddress();
 
     /**
-     * Set formated address.
+     * Set formatted address.
      *
-     * @param billingAddress formated address.
+     * @param billingAddress formatted address.
      */
     void setBillingAddress(String billingAddress);
 
 
     /**
-     * Get formated shipping address.
+     * Get formatted shipping address.
      *
      * @return shipping address.
      */
@@ -322,6 +322,36 @@ public interface CustomerOrderDTO extends Identifiable {
      * @param price delivery price.
      */
     void setPrice(BigDecimal price);
+
+
+    /**
+     * Get the sku sale price including all promotions.
+     *
+     * @return after tax price
+     */
+    BigDecimal getNetPrice();
+
+    /**
+     * Set net price (price before tax).
+     *
+     * @param netPrice price before tax
+     */
+    void setNetPrice(final BigDecimal netPrice);
+
+    /**
+     * Get the sku sale price including all promotions.
+     *
+     * @return before tax price
+     */
+    BigDecimal getGrossPrice();
+
+    /**
+     * Set net price (price after tax).
+     *
+     * @param grossPrice price after tax
+     */
+    void setGrossPrice(final BigDecimal grossPrice);
+
 
     /**
      * Get sale price.

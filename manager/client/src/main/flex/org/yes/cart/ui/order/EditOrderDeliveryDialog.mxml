@@ -84,8 +84,12 @@
                 <mx:DataGridColumn editable="false"
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='skuName')"
                                    dataField="skuName"/>
-                <mx:DataGridColumn headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
+                <mx:DataGridColumn editable="false"
+                                   headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
                                    dataField="invoicePrice"/>
+                <mx:DataGridColumn editable="false"
+                                   headerText="@Resource(bundle='CustomerOrderPanel',key='tax')"
+                                   labelFunction="lineTaxLabelFunction" showDataTips="true" dataTipFunction="lineTaxTipFunction"/>
                 <mx:DataGridColumn headerText="@Resource(bundle='CustomerOrderPanel',key='qty')"
                                    dataField="qty"/>
                 <mx:DataGridColumn editable="false"
@@ -173,13 +177,34 @@
 
 
         /**
+         * Get line tax .
+         * @param item
+         * @param column
+         * @return
+         */
+        private function lineTaxLabelFunction(item:Object, column:DataGridColumn):String {
+            return (item.grossPrice - item.netPrice).toFixed(2);
+        }
+
+        /**
+         * Get line tax .
+         * @param item
+         * @param column
+         * @return
+         */
+        private function lineTaxTipFunction(item:Object):String {
+            return item.taxCode + ': ' + item.taxRate.toFixed(2) + '%';
+        }
+
+
+        /**
          * Get line total .
          * @param item
          * @param column
          * @return
          */
         private function lineTotalLabelFunction(item:Object, column:DataGridColumn):String {
-            return (item.qty * item.invoicePrice).toFixed(2);
+            return (item.qty * item.grossPrice).toFixed(2);
         }
 
 

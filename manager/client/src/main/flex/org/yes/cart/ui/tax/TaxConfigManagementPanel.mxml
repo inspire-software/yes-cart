@@ -183,78 +183,80 @@
 
     <mx:Panel width="100%" height="100%" title="@Resource(bundle='TaxManagementPanel',key='taxes')"
               paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
-        <mx:VBox width="100%">
 
-            <mx:HBox paddingTop="5" width="100%">
+        <mx:VDividedBox height="100%" width="100%">
+            <mx:VBox width="100%">
 
-                <mx:VBox paddingTop="5">
+                <mx:HBox paddingTop="5" width="100%">
 
-                    <mx:Grid >
-                        <mx:GridRow>
-                            <mx:GridItem>
-                                <mx:Button label="@Resource(bundle='TaxManagementPanel',key='createTax')"
-                                           click="onCreateBtnClick(event)"/>
-                                <mx:Button label="@Resource(bundle='TaxManagementPanel',key='deleteTax')"
-                                           click="onRemoveBtnClick(event)"
-                                           enabled="{taxConfigSelected}"
-                                        />
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
-                                           click="onApplyFilterShowClick(event)"
-                                        />
-                            </mx:GridItem>
-                        </mx:GridRow>
-                    </mx:Grid>
+                    <mx:VBox paddingTop="5">
 
-                    <mx:Grid id="filterPanel" visible="false" includeInLayout="false" >
-                        <mx:GridRow>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='TaxManagementPanel',key='countryCode')"/>
-                                <mx:TextInput id="countryCodeFilterValue" width="100"/>
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='TaxManagementPanel',key='stateCode')"/>
-                                <mx:TextInput id="stateCodeFilterValue" width="100"/>
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='TaxManagementPanel',key='productCode')"/>
-                                <mx:TextInput id="productCodeFilterValue" width="100"/>
-                            </mx:GridItem>
-                        </mx:GridRow>
-                    </mx:Grid>
-                </mx:VBox>
+                        <mx:Grid >
+                            <mx:GridRow>
+                                <mx:GridItem>
+                                    <mx:Button label="@Resource(bundle='TaxManagementPanel',key='createTax')"
+                                               click="onCreateBtnClick(event)"/>
+                                    <mx:Button label="@Resource(bundle='TaxManagementPanel',key='deleteTax')"
+                                               click="onRemoveBtnClick(event)"
+                                               enabled="{taxConfigSelected}"
+                                            />
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
+                                               click="onApplyFilterShowClick(event)"
+                                            />
+                                </mx:GridItem>
+                            </mx:GridRow>
+                        </mx:Grid>
 
-                <mx:Button height="100%" label="@Resource(bundle='TaxManagementPanel',key='applyFilter')"
-                           toolTip="@Resource(bundle='TaxManagementPanel',key='applyFilterToolTip')"
-                           click="onApplyFilterClick(event)"
-                        />
+                        <mx:Grid id="filterPanel" visible="false" includeInLayout="false" >
+                            <mx:GridRow>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='TaxManagementPanel',key='countryCode')"/>
+                                    <mx:TextInput id="countryCodeFilterValue" width="100"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='TaxManagementPanel',key='stateCode')"/>
+                                    <mx:TextInput id="stateCodeFilterValue" width="100"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='TaxManagementPanel',key='productCode')"/>
+                                    <mx:TextInput id="productCodeFilterValue" width="100"/>
+                                </mx:GridItem>
+                            </mx:GridRow>
+                        </mx:Grid>
+                    </mx:VBox>
+
+                    <mx:Button height="100%" label="@Resource(bundle='TaxManagementPanel',key='applyFilter')"
+                               toolTip="@Resource(bundle='TaxManagementPanel',key='applyFilterToolTip')"
+                               click="onApplyFilterClick(event)"
+                            />
 
 
-            </mx:HBox>
+                </mx:HBox>
 
-            <mx:DataGrid id="taxGrid" width="100%" height="100%"
-                         itemClick="onTaxConfigSelected(event)">
-                <mx:columns>
-                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='id')"
-                                       dataField="guid"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='countryCode')"
-                                       dataField="countryCode"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='stateCode')"
-                                       dataField="stateCode"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='productCode')"
-                                       dataField="productCode"/>
-                </mx:columns>
-            </mx:DataGrid>
+                <mx:DataGrid id="taxGrid" width="100%" height="100%"
+                             itemClick="onTaxConfigSelected(event)">
+                    <mx:columns>
+                        <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='id')"
+                                           dataField="guid"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='countryCode')"
+                                           dataField="countryCode"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='stateCode')"
+                                           dataField="stateCode"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='productCode')"
+                                           dataField="productCode"/>
+                    </mx:columns>
+                </mx:DataGrid>
 
-        </mx:VBox>
-        <mx:TabNavigator id="taxTabNavigator" change="onTabClick(event);" width="100%" height="100%"
-                         visible="{taxConfigSelected}">
+            </mx:VBox>
+            <mx:TabNavigator id="taxTabNavigator" change="onTabClick(event);" width="100%" height="100%"
+                             visible="{taxConfigSelected}">
 
-            <tax:TaxConfigSummaryPanel id="taxSummary" updateCallback="onTaxConfigUpdate"/>
+                <tax:TaxConfigSummaryPanel id="taxSummary" updateCallback="onTaxConfigUpdate"/>
 
-        </mx:TabNavigator>
-
+            </mx:TabNavigator>
+        </mx:VDividedBox>
     </mx:Panel>
 
 </mx:VDividedBox>

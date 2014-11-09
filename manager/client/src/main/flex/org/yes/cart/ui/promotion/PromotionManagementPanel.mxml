@@ -223,133 +223,135 @@
 
     <mx:Panel width="100%" height="100%" title="@Resource(bundle='PromotionManagementPanel',key='promotions')"
               paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
-        <mx:VBox width="100%">
 
-            <mx:HBox paddingTop="5" width="100%">
+        <mx:VDividedBox height="100%" width="100%">
+            <mx:VBox width="100%">
 
-                <mx:VBox paddingTop="5">
+                <mx:HBox paddingTop="5" width="100%">
 
-                    <mx:Grid >
-                        <mx:GridRow>
-                            <mx:GridItem>
-                                <mx:Button label="@Resource(bundle='PromotionManagementPanel',key='createPromotion')"
-                                           click="onCreateBtnClick(event)"/>
-                                <mx:Button label="@Resource(bundle='PromotionManagementPanel',key='deletePromotion')"
-                                           click="onRemoveBtnClick(event)"
-                                           enabled="{promotionSelected}"
-                                        />
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='code')"/>
+                    <mx:VBox paddingTop="5">
 
-                                <mx:TextInput id="codeFilterValue" width="100"
-                                              toolTip="@Resource(bundle='PromotionManagementPanel',key='code')"/>
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
-                                           click="onApplyFilterShowClick(event)"
-                                        />
-                            </mx:GridItem>
-                        </mx:GridRow>
-                    </mx:Grid>
+                        <mx:Grid >
+                            <mx:GridRow>
+                                <mx:GridItem>
+                                    <mx:Button label="@Resource(bundle='PromotionManagementPanel',key='createPromotion')"
+                                               click="onCreateBtnClick(event)"/>
+                                    <mx:Button label="@Resource(bundle='PromotionManagementPanel',key='deletePromotion')"
+                                               click="onRemoveBtnClick(event)"
+                                               enabled="{promotionSelected}"
+                                            />
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='code')"/>
 
-                    <mx:Grid id="filterPanel" visible="false" includeInLayout="false" >
-                        <mx:GridRow>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='shopCode')"/>
-                                <mx:TextInput id="shopCodeFilterValue" width="100"/>
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='currency')"/>
-                                <mx:TextInput id="currencyFilterValue" width="100"/>
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='tags')"/>
-                                <mx:TextInput id="tagFilterValue" width="100"/>
-                            </mx:GridItem>
-                        </mx:GridRow>
-                        <mx:GridRow>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='promoType')"/>
-                                <mx:ComboBox id="typeFilterValue" width="120"
-                                             prompt="@Resource(bundle='PromotionManagementPanel',key='selectPromoType')"
-                                        />
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='promoAction')"/>
-                                <mx:ComboBox id="actionFilterValue" width="145"
-                                             prompt="@Resource(bundle='PromotionManagementPanel',key='selectPromoAction')"
-                                        />
-                            </mx:GridItem>
-                        </mx:GridRow>
-                        <mx:GridRow>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='enabled')"/>
-                                <mx:ComboBox id="enabledFilterValue" width="50"/>
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='enabledFrom')"/>
-                                <georg:DateTimeField id="enabledFromFilterValue" width="130"/>
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='enabledTo')"/>
-                                <georg:DateTimeField id="enabledToFilterValue" width="130"/>
-                            </mx:GridItem>
-                        </mx:GridRow>
-                    </mx:Grid>
-                </mx:VBox>
+                                    <mx:TextInput id="codeFilterValue" width="100"
+                                                  toolTip="@Resource(bundle='PromotionManagementPanel',key='code')"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
+                                               click="onApplyFilterShowClick(event)"
+                                            />
+                                </mx:GridItem>
+                            </mx:GridRow>
+                        </mx:Grid>
 
-                <mx:Button height="100%" label="@Resource(bundle='PromotionManagementPanel',key='applyFilter')"
-                           toolTip="@Resource(bundle='PromotionManagementPanel',key='applyFilterToolTip')"
-                           click="onApplyFilterClick(event)"
-                        />
+                        <mx:Grid id="filterPanel" visible="false" includeInLayout="false" >
+                            <mx:GridRow>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='shopCode')"/>
+                                    <mx:TextInput id="shopCodeFilterValue" width="100"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='currency')"/>
+                                    <mx:TextInput id="currencyFilterValue" width="100"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='tags')"/>
+                                    <mx:TextInput id="tagFilterValue" width="100"/>
+                                </mx:GridItem>
+                            </mx:GridRow>
+                            <mx:GridRow>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='promoType')"/>
+                                    <mx:ComboBox id="typeFilterValue" width="120"
+                                                 prompt="@Resource(bundle='PromotionManagementPanel',key='selectPromoType')"
+                                            />
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='promoAction')"/>
+                                    <mx:ComboBox id="actionFilterValue" width="145"
+                                                 prompt="@Resource(bundle='PromotionManagementPanel',key='selectPromoAction')"
+                                            />
+                                </mx:GridItem>
+                            </mx:GridRow>
+                            <mx:GridRow>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='enabled')"/>
+                                    <mx:ComboBox id="enabledFilterValue" width="50"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='enabledFrom')"/>
+                                    <georg:DateTimeField id="enabledFromFilterValue" width="130"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='PromotionManagementPanel',key='enabledTo')"/>
+                                    <georg:DateTimeField id="enabledToFilterValue" width="130"/>
+                                </mx:GridItem>
+                            </mx:GridRow>
+                        </mx:Grid>
+                    </mx:VBox>
+
+                    <mx:Button height="100%" label="@Resource(bundle='PromotionManagementPanel',key='applyFilter')"
+                               toolTip="@Resource(bundle='PromotionManagementPanel',key='applyFilterToolTip')"
+                               click="onApplyFilterClick(event)"
+                            />
 
 
-            </mx:HBox>
+                </mx:HBox>
 
-            <mx:DataGrid id="promotionGrid" width="100%" height="100%"
-                         itemClick="onPromotionSelected(event)">
-                <mx:columns>
-                    <!--<mx:DataGridColumn width="80" headerText="@Resource(bundle='PromotionManagementPanel',key='id')"-->
-                                       <!--dataField="promotionId"/>-->
-                    <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='code')"
-                                       dataField="code"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='name')"
-                                       dataField="name"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='shopCode')"
-                                       dataField="shopCode"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='currency')"
-                                       dataField="currency"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='promoType')">
-                        <mx:itemRenderer>
-                            <mx:Component>
-                                <mx:Label text="{resourceManager.getString('PromotionManagementPanel', 'promoType' + data.promoType)}"/>
-                            </mx:Component>
-                        </mx:itemRenderer>
-                    </mx:DataGridColumn>
-                    <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='promoAction')">
-                        <mx:itemRenderer>
-                            <mx:Component>
-                                <mx:Label text="{resourceManager.getString('PromotionManagementPanel', 'promoAction' + data.promoAction)}"/>
-                            </mx:Component>
-                        </mx:itemRenderer>
-                    </mx:DataGridColumn>
-                    <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='tags')"
-                                       dataField="tag"/>
-                </mx:columns>
-            </mx:DataGrid>
+                <mx:DataGrid id="promotionGrid" width="100%" height="100%"
+                             itemClick="onPromotionSelected(event)">
+                    <mx:columns>
+                        <!--<mx:DataGridColumn width="80" headerText="@Resource(bundle='PromotionManagementPanel',key='id')"-->
+                                           <!--dataField="promotionId"/>-->
+                        <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='code')"
+                                           dataField="code"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='name')"
+                                           dataField="name"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='shopCode')"
+                                           dataField="shopCode"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='currency')"
+                                           dataField="currency"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='promoType')">
+                            <mx:itemRenderer>
+                                <mx:Component>
+                                    <mx:Label text="{resourceManager.getString('PromotionManagementPanel', 'promoType' + data.promoType)}"/>
+                                </mx:Component>
+                            </mx:itemRenderer>
+                        </mx:DataGridColumn>
+                        <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='promoAction')">
+                            <mx:itemRenderer>
+                                <mx:Component>
+                                    <mx:Label text="{resourceManager.getString('PromotionManagementPanel', 'promoAction' + data.promoAction)}"/>
+                                </mx:Component>
+                            </mx:itemRenderer>
+                        </mx:DataGridColumn>
+                        <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='tags')"
+                                           dataField="tag"/>
+                    </mx:columns>
+                </mx:DataGrid>
 
-        </mx:VBox>
-        <mx:TabNavigator id="promotionTabNavigator" change="onTabClick(event);" width="100%" height="100%"
-                         visible="{promotionSelected}">
+            </mx:VBox>
+            <mx:TabNavigator id="promotionTabNavigator" change="onTabClick(event);" width="100%" height="100%"
+                             visible="{promotionSelected}">
 
-            <promo:PromotionSummaryPanel id="promotionSummary" updateCallback="onPromotionUpdate"/>
-            <promo:PromotionRulePanel id="promotionRule" updateCallback="onPromotionUpdate"/>
-            <promo:PromotionTagsPanel id="promotionTags" updateCallback="onPromotionUpdate"/>
-            <promo:PromotionCouponsPanel id="promotionCoupons"/>
+                <promo:PromotionSummaryPanel id="promotionSummary" updateCallback="onPromotionUpdate"/>
+                <promo:PromotionRulePanel id="promotionRule" updateCallback="onPromotionUpdate"/>
+                <promo:PromotionTagsPanel id="promotionTags" updateCallback="onPromotionUpdate"/>
+                <promo:PromotionCouponsPanel id="promotionCoupons"/>
 
-        </mx:TabNavigator>
-
+            </mx:TabNavigator>
+        </mx:VDividedBox>
     </mx:Panel>
 
 </mx:VDividedBox>

@@ -35,29 +35,6 @@ public interface ShoppingCart extends Serializable {
     int LOGGED_IN = 2;
     int INACTIVE_FOR_SHOP = 3;
 
-    /**
-     * Set amount calculation strategy.
-     *
-     * @param calculationStrategy {@link AmountCalculationStrategy}
-     */
-    void initialise(AmountCalculationStrategy calculationStrategy);
-
-    /**
-     * Mark this cart as dirty thus eligible for persisting.
-     */
-    void markDirty();
-
-
-    /**
-     * Clean current cart and prepare it to reuse.
-     */
-    void clean();
-
-    /**
-     * Recalculate totals, promotions and shipping cost for this cart.
-     */
-    void recalculate();
-
 
     /**
      * Get shopping cart guid.
@@ -72,6 +49,12 @@ public interface ShoppingCart extends Serializable {
      */
     List<CartItem> getCartItemList();
 
+
+    /**
+     * @return immutable list of shipping cart items.
+     */
+    List<CartItem> getShippingList();
+
     /**
      * Get quantity of given SKU in cart (excluding gifts).
      *
@@ -80,99 +63,6 @@ public interface ShoppingCart extends Serializable {
      */
     BigDecimal getProductSkuQuantity(String sku);
 
-    /**
-     * Add product sku to cart.
-     *
-     * @param sku      product sku to add
-     * @param quantity the quantity to add
-     * @return true if item has been added to the cart as a separate cart item,
-     *         false if adding this item cause only quantity update of already present in cart
-     *         product sku.
-     */
-    boolean addProductSkuToCart(String sku, BigDecimal quantity);
-
-    /**
-     * Add product sku to cart.
-     *
-     * @param sku      product sku to add
-     * @param quantity the quantity to add
-     * @param promotionCode promotion code fof promotion that resulted in this gift
-     * @return true if item has been added to the cart as a separate cart item,
-     *         false if adding this item cause only quantity update of already present in cart
-     *         product sku.
-     */
-    boolean addGiftToCart(String sku, BigDecimal quantity, String promotionCode);
-
-    /**
-     * Set sku quantity, in case if sku not present in cart it will be added.
-     *
-     * @param sku      product sku to add
-     * @param quantity the quantity to add
-     * @return true if item has been added to the cart as a separate cart item,
-     *         false if adding this item cause only quantity update of already present in cart
-     *         product sku.
-     */
-    boolean setProductSkuToCart(String sku, BigDecimal quantity);
-
-
-    /**
-     * Removes the cart item from shopping cart.
-     *
-     * @param productSku product sku
-     * @return true if item has been removed, false if item was not present in the cart.
-     */
-    boolean removeCartItem(String productSku);
-
-    /**
-     * Removes a specified quantity from the shopping cart item
-     *
-     * @param productSku product sku
-     * @param quantity   quantity to remove
-     * @return true if quantity has been removed, false if item was not present in the cart.
-     */
-    boolean removeCartItemQuantity(String productSku, BigDecimal quantity);
-
-    /**
-     * Remove all cart promotions, which effectively removes promotion prices and reinstates
-     * sale price as final price and clear all promotion data and gift items.
-     *
-     * This method only acts upon promotions at the item level. Note that this method should
-     * not be used manually as it puts the cart total in out of sync. The purpose of this method
-     * is clearing up cart by amount calculation strategy before it starts calculating cart.
-     *
-     * @return  true if promotions have been removed, false if item was not present in the cart.
-     */
-    boolean removeItemPromotions();
-
-    /**
-     * Set product sku price and clear all promotion details
-     *
-     * @param productSkuCode product sku
-     * @param salePrice      price to set - sale price without promos
-     * @param listPrice      list price - without discounts, promos, etc.
-     * @return true if price has been set
-     */
-    boolean setProductSkuPrice(String productSkuCode, BigDecimal salePrice, BigDecimal listPrice);
-
-    /**
-     * Set product sku price and clear all promotion details
-     *
-     * @param productSkuCode product sku
-     * @param salePrice      price to set - sale price without promos
-     * @param listPrice      list price - without discounts, promos, etc.
-     * @return true if price has been set
-     */
-    boolean setGiftPrice(String productSkuCode, BigDecimal salePrice, BigDecimal listPrice);
-
-    /**
-     * Set product sku price and clear all promotion details
-     *
-     * @param productSkuCode product sku
-     * @param promoPrice     price to set
-     * @param promoCode      promotion code that activated this discount
-     * @return true if price has been set
-     */
-    boolean setProductSkuPromotion(String productSkuCode, BigDecimal promoPrice, String promoCode);
 
     /**
      * @return number of cart items currently in the shopping cart.
@@ -188,16 +78,6 @@ public interface ShoppingCart extends Serializable {
      * @return coupon codes that triggered promotion
      */
     List<String> getAppliedCoupons();
-
-    /**
-     * @param coupon coupon code
-     */
-    boolean addCoupon(String coupon);
-
-    /**
-     * @param coupon remove coupon from the cart
-     */
-    boolean removeCoupon(String coupon);
 
     /**
      * Get current currency from shopping cart.
@@ -290,6 +170,14 @@ public interface ShoppingCart extends Serializable {
     boolean contains(String skuCode);
 
     /**
+     * This method only searches for shipping indexes.
+     *
+     * @param carrierSlaId sku code
+     * @return index of cart item for this sku
+     */
+    int indexOfShipping(final String carrierSlaId);
+
+    /**
      * This method only searches for non-gift items indexes.
      *
      * @param skuCode sku code
@@ -313,7 +201,7 @@ public interface ShoppingCart extends Serializable {
     ShoppingContext getShoppingContext();
 
     /**
-     * GEt order info.
+     * Get order info.
      *
      * @return order information.
      */

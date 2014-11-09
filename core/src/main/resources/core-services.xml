@@ -1268,19 +1268,19 @@
 
     <bean id="amountCalculationStrategy"
           class="org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy">  <!-- CPOINT cart calculation algorithm -->
-        <constructor-arg index="0" value="20.00"/>
-        <constructor-arg index="1" value="true"/>
-        <constructor-arg index="2" ref="deliveryCostCalculationStrategy"/>
-        <constructor-arg index="3" ref="promotionContextFactory"/>
-        <constructor-arg index="4" ref="customerService"/>
+        <constructor-arg index="0" ref="taxProvider"/>
+        <constructor-arg index="1" ref="deliveryCostCalculationStrategy"/>
+        <constructor-arg index="2" ref="promotionContextFactory"/>
+        <constructor-arg index="3" ref="customerService"/>
     </bean>
 
-    <bean id="deliveryCostCalculationStrategy" parent="txProxyTemplate"> <!-- CPOINT delivery calculation strategy -->
-        <property name="target">
-            <bean class="org.yes.cart.shoppingcart.impl.DefaultDeliveryCostCalculationStrategy">
-                <constructor-arg index="0" ref="carrierSlaDao"/>
-            </bean>
-        </property>
+    <bean id="deliveryCostCalculationStrategy"  class="org.yes.cart.shoppingcart.impl.DefaultDeliveryCostCalculationStrategy"> <!-- CPOINT delivery calculation strategy -->
+        <constructor-arg index="0" ref="carrierSlaService"/>
+    </bean>
+
+    <bean id="taxProvider" class="org.yes.cart.shoppingcart.impl.TaxProviderImpl">
+        <constructor-arg index="0" ref="taxService"/>
+        <constructor-arg index="1" ref="taxConfigService"/>
     </bean>
 
     <bean id="orderNumberGenerator" class="org.yes.cart.service.order.impl.DefaultOrderNumberGeneratorImpl">
