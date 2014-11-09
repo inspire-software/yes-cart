@@ -134,7 +134,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
 
         final ShoppingContext oldCartCtx = oldCart.getShoppingContext();
         final ShoppingContext shoppingCartCtx = shoppingCart.getShoppingContext();
-        if (oldCartCtx.getLatestViewedSkus() != null) {
+        if (oldCartCtx.getLatestViewedSkus() != null && shoppingCartCtx instanceof MutableShoppingContext) {
             final List<String> viewed = new ArrayList<String>();
 
             // Current cart first
@@ -143,9 +143,9 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
             }
             // Then old
             viewed.addAll(oldCartCtx.getLatestViewedSkus());
-            shoppingCartCtx.setLatestViewedSkus(viewed);
+            ((MutableShoppingContext) shoppingCartCtx).setLatestViewedSkus(viewed);
         }
-        if (oldCartCtx.getLatestViewedCategories() != null) {
+        if (oldCartCtx.getLatestViewedCategories() != null && shoppingCartCtx instanceof MutableShoppingContext) {
             final List<String> viewed = new ArrayList<String>();
 
             // Current cart first
@@ -154,7 +154,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
             }
             // Then old
             viewed.addAll(oldCartCtx.getLatestViewedCategories());
-            shoppingCartCtx.setLatestViewedCategories(viewed);
+            ((MutableShoppingContext) shoppingCartCtx).setLatestViewedCategories(viewed);
 
         }
 

@@ -9,19 +9,14 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerWishListService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.AmountCalculationStrategy;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.singletonMap;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -42,7 +37,7 @@ public class AddSkuToWishListEventCommandImplTest extends BaseCoreDBTestCase {
         final ProductSkuService skuService = ctx().getBean("productSkuService", ProductSkuService.class);
         final CustomerWishListService customerWishListService = ctx().getBean("customerWishListService", CustomerWishListService.class);
 
-        ShoppingCart shoppingCart = new ShoppingCartImpl();
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.getShoppingContext().setShopCode(shop.getCode());
         shoppingCart.getShoppingContext().setShopId(shop.getShopId());
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));

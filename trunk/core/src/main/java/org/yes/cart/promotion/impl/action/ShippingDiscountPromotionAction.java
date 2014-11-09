@@ -16,13 +16,14 @@
 
 package org.yes.cart.promotion.impl.action;
 
-import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.PromotionAction;
-import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Map;
 
 /**
@@ -50,16 +51,21 @@ public class ShippingDiscountPromotionAction extends AbstractShippingPromotionAc
     public void perform(final Map<String, Object> context) {
         final BigDecimal discount = getDiscountValue(getRawPromotionActionContext(context));
         if (MoneyUtils.isFirstBiggerThanSecond(discount, BigDecimal.ZERO)) {
-
-            final Total cartItemTotal = getOrderTotal(context);
+            final MutableShoppingCart cart = getShoppingCart(context);
+            final CartItem shipping = getShipping(context);
 
             // calculate discount relative to sale price
-            BigDecimal saleDiscount = cartItemTotal.getDeliveryListCost().multiply(discount);
+            final BigDecimal saleDiscount = shipping.getSalePrice().multiply(discount);
+            final BigDecimal promoPrice;
+            if (MoneyUtils.isFirstBiggerThanSecond(shipping.getPrice(), saleDiscount)) {
+                // we may have compound discounts so need to use final price
+                promoPrice = shipping.getPrice().subtract(saleDiscount).setScale(2, RoundingMode.HALF_DOWN);
+            } else {
+                promoPrice = MoneyUtils.ZERO;
+            }
 
-            subtractPromotionValue(context, saleDiscount);
+            cart.setShippingPromotion(shipping.getProductSkuCode(), promoPrice, getPromotionCode(context));
 
         }
     }
-
-
 }

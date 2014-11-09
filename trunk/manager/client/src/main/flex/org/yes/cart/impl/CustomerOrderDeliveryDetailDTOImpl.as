@@ -32,8 +32,13 @@ public class CustomerOrderDeliveryDetailDTOImpl {
     public var invoicePrice:Number;
 
     public var listPrice:Number;
-
     public var salePrice:Number;
+
+    public var netPrice:Number;
+    public var grossPrice:Number;
+    public var taxRate:Number;
+    public var taxExclusiveOfPrice:Boolean;
+    public var taxCode:String;
 
     public var gift:Boolean;
 

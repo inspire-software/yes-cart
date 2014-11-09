@@ -58,7 +58,7 @@ public interface Tax extends Auditable, Codable {
     boolean getExclusiveOfPrice();
 
     /**
-     * Set tax exlusive flag.
+     * Set tax exclusive flag.
      *
      * @param exclusiveOfPrice exclusive flag
      */

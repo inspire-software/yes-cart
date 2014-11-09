@@ -27,6 +27,14 @@ import java.util.List;
  */
 public interface TaxService extends GenericService<Tax> {
 
+    /**
+     * Get by PK.
+     *
+     * @param pk PK.
+     *
+     * @return tax
+     */
+    Tax getById(long pk);
 
     /**
      * Get all taxes by shop code and currency.

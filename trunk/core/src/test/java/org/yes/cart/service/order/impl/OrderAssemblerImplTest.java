@@ -26,6 +26,8 @@ import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
+import java.math.BigDecimal;
+
 import static org.junit.Assert.*;
 
 /**
@@ -69,5 +71,9 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
                 customerOrder.getGuid());
         assertEquals(8, customerOrder.getOrderDetail().size());
         assertFalse(customerOrder.isMultipleShipmentOption());
+        assertEquals(new BigDecimal("5463.91"), customerOrder.getListPrice());
+        assertEquals(new BigDecimal("5463.91"), customerOrder.getPrice());
+        assertEquals(new BigDecimal("4551.88"), customerOrder.getNetPrice());
+        assertEquals(new BigDecimal("5463.91"), customerOrder.getGrossPrice());
     }
 }

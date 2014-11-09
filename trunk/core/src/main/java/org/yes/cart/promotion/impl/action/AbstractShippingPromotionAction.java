@@ -17,11 +17,9 @@
 package org.yes.cart.promotion.impl.action;
 
 import org.yes.cart.promotion.PromotionCondition;
+import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.shoppingcart.impl.TotalImpl;
-import org.yes.cart.util.MoneyUtils;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -33,6 +31,17 @@ public abstract class AbstractShippingPromotionAction extends AbstractPromotionA
 
 
     /**
+     * Get promotion action context variable.
+     *
+     * @param context evaluation context
+     *
+     * @return action context string
+     */
+    protected CartItem getShipping(final Map<String, Object> context) {
+        return (CartItem) context.get(PromotionCondition.VAR_SHIPPING);
+    }
+
+    /**
      * Get current items total.
      *
      * @param context evaluation context
@@ -41,58 +50,6 @@ public abstract class AbstractShippingPromotionAction extends AbstractPromotionA
      */
     protected Total getOrderTotal(final Map<String, Object> context) {
         return (Total) context.get(PromotionCondition.VAR_CART_ORDER_TOTAL);
-    }
-
-    private Total getTotal(final Map<String, Object> context) {
-        return (Total) context.get(PromotionCondition.VAR_TMP_TOTAL);
-    }
-
-    private void setTotal(final Map<String, Object> context, final Total total) {
-        context.put(PromotionCondition.VAR_TMP_TOTAL, total);
-    }
-
-    /**
-     * Subtract amount from the sub total to reflect promotion being applied.
-     *
-     * @param context evaluation context
-     * @param amount amount off
-     */
-    protected void subtractPromotionValue(final Map<String, Object> context,
-                                          final BigDecimal amount) {
-
-        final String promoCode = getPromotionCode(context);
-        final Total total = getTotal(context);
-        final BigDecimal orderAmountOff;
-        if (MoneyUtils.isFirstBiggerThanSecond(amount, total.getDeliveryCost())) {
-            orderAmountOff = total.getDeliveryCost();
-        } else {
-            orderAmountOff = amount;
-        }
-
-        setTotal(
-                context,
-                total.add(new TotalImpl(
-                        MoneyUtils.ZERO,
-                        MoneyUtils.ZERO,
-                        MoneyUtils.ZERO,
-                        MoneyUtils.ZERO,
-                        false,
-                        null,
-                        MoneyUtils.ZERO,
-                        MoneyUtils.ZERO,
-                        MoneyUtils.ZERO,
-                        MoneyUtils.ZERO,
-                        orderAmountOff.negate(), // simple subtraction of base value
-                        true,
-                        promoCode,
-                        MoneyUtils.ZERO,
-                        MoneyUtils.ZERO,
-                        MoneyUtils.ZERO,
-                        MoneyUtils.ZERO,
-                        MoneyUtils.ZERO,
-                        MoneyUtils.ZERO
-                )));
-
     }
 
 }

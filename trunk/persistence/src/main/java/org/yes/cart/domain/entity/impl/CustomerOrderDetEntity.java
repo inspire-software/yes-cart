@@ -37,6 +37,12 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     private BigDecimal salePrice;
     private BigDecimal listPrice;
 
+    private BigDecimal netPrice;
+    private BigDecimal grossPrice;
+    private BigDecimal taxRate;
+    private String taxCode;
+    private boolean taxExclusiveOfPrice;
+
     private boolean gift;
     private boolean promoApplied;
     private String appliedPromo;
@@ -69,6 +75,46 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public BigDecimal getNetPrice() {
+        return netPrice;
+    }
+
+    public void setNetPrice(final BigDecimal netPrice) {
+        this.netPrice = netPrice;
+    }
+
+    public BigDecimal getGrossPrice() {
+        return grossPrice;
+    }
+
+    public void setGrossPrice(final BigDecimal grossPrice) {
+        this.grossPrice = grossPrice;
+    }
+
+    public BigDecimal getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(final BigDecimal taxRate) {
+        this.taxRate = taxRate;
+    }
+
+    public String getTaxCode() {
+        return taxCode;
+    }
+
+    public void setTaxCode(final String taxCode) {
+        this.taxCode = taxCode;
+    }
+
+    public boolean isTaxExclusiveOfPrice() {
+        return taxExclusiveOfPrice;
+    }
+
+    public void setTaxExclusiveOfPrice(final boolean taxExclusiveOfPrice) {
+        this.taxExclusiveOfPrice = taxExclusiveOfPrice;
     }
 
     public BigDecimal getSalePrice() {

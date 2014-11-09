@@ -173,38 +173,6 @@ public class CheckoutPage extends AbstractWebPage {
         final String currentStep =
                 params.get(STEP).toString(threeStepsProcess ? STEP_ADDR : STEP_LOGIN);
 
-
-        if (STEP_PAY.equals(currentStep) ) {
-
-            try {
-                checkoutServiceFacade.createFromCart(ApplicationDirector.getShoppingCart());
-            } catch (CouponCodeInvalidException invalidCoupon) {
-
-                ShopCodeContext.getLog(this).error(invalidCoupon.getMessage(), invalidCoupon);
-
-                throw new RestartResponseException(
-                        new PageProvider(
-                                ShoppingCartPage.class,
-                                new PageParameters()
-                                        .set(ERROR, ERROR_COUPON)
-                                        .set(ERROR_COUPON, invalidCoupon.getCoupon())
-                        ), RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT
-                );
-
-            } catch (OrderAssemblyException assembly) {
-
-                ShopCodeContext.getLog(this).error(assembly.getMessage(), assembly);
-
-                throw new RestartResponseException(
-                        new PageProvider(
-                                ShoppingCartPage.class,
-                                new PageParameters().set(ERROR, "1")
-                        ), RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT
-                );
-            }
-        }
-
-
         add(
                 new FeedbackPanel(FEEDBACK)
         ).add(
@@ -258,6 +226,8 @@ public class CheckoutPage extends AbstractWebPage {
         } else if (STEP_SHIPMENT.equals(currentStep)) {
             return createShippmentFragment();
         } else if (STEP_PAY.equals(currentStep)) {
+            // Need to make sure we execute commands before we recreate order (we may need to choose another SLA)
+            executeHttpPostedCommands();
             // For final step we:
             if ((!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
                     && !addressBookFacade.customerHasAtLeastOneAddress(cart.getCustomerEmail())) {
@@ -274,9 +244,41 @@ public class CheckoutPage extends AbstractWebPage {
                 setResponsePage(this.getClass(), parameters);
                 return createShippmentFragment();
             }
+
+            recreateOrderBeforePayment();
+
             return createPaymentFragment();
         } else {
             return createLoginFragment();
+        }
+    }
+
+    private void recreateOrderBeforePayment() {
+        try {
+            checkoutServiceFacade.createFromCart(ApplicationDirector.getShoppingCart());
+        } catch (CouponCodeInvalidException invalidCoupon) {
+
+            ShopCodeContext.getLog(this).error(invalidCoupon.getMessage(), invalidCoupon);
+
+            throw new RestartResponseException(
+                    new PageProvider(
+                            ShoppingCartPage.class,
+                            new PageParameters()
+                                    .set(ERROR, ERROR_COUPON)
+                                    .set(ERROR_COUPON, invalidCoupon.getCoupon())
+                    ), RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT
+            );
+
+        } catch (OrderAssemblyException assembly) {
+
+            ShopCodeContext.getLog(this).error(assembly.getMessage(), assembly);
+
+            throw new RestartResponseException(
+                    new PageProvider(
+                            ShoppingCartPage.class,
+                            new PageParameters().set(ERROR, "1")
+                    ), RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT
+            );
         }
     }
 
@@ -333,7 +335,6 @@ public class CheckoutPage extends AbstractWebPage {
         final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
         final OrderInfo orderInfo = shoppingCart.getOrderInfo();
         final boolean showMultipleDelivery = checkoutServiceFacade.isMultipleDeliveryAllowedForCart(shoppingCart);
-        orderInfo.setPaymentGatewayLabel(null);
 
         rez.addOrReplace(new Label(PAYMENT_FRAGMENT_PAYMENT_FORM));
         rez.addOrReplace(new ShoppingCartPaymentVerificationView("orderVerificationView", shoppingCart.getGuid()));

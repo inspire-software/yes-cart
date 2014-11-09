@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.wicket.Application;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.web.support.shoppingcart.tokendriven.CartRepository;
@@ -59,7 +60,7 @@ public class WicketLoginCommandImpl extends LoginCommandImpl {
 
     /** {@inheritDoc} */
     @Override
-    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         super.execute(shoppingCart, parameters);
         if (parameters.containsKey(getCmdKey()) && shoppingCart.getLogonState() == ShoppingCart.LOGGED_IN) {
 
@@ -76,7 +77,7 @@ public class WicketLoginCommandImpl extends LoginCommandImpl {
      * Merges and recalculates the cart.
      */
     @Override
-    protected void recalculate(final ShoppingCart shoppingCart) {
+    protected void recalculate(final MutableShoppingCart shoppingCart) {
 
         // This call will merge the cart
         cartRepository.storeShoppingCart(shoppingCart);

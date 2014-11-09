@@ -100,4 +100,45 @@ public class ImmutableCartItemImpl implements CartItem {
         return cartItem.getAppliedPromo();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getNetPrice() {
+        return cartItem.getNetPrice();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getGrossPrice() {
+        return cartItem.getGrossPrice();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getTaxCode() {
+        return cartItem.getTaxCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getTaxRate() {
+        return cartItem.getTaxRate();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isTaxExclusiveOfPrice() {
+        return cartItem.isTaxExclusiveOfPrice();
+    }
+
+    @Override
+    public String toString() {
+        return "ImmutableCartItemImpl{" +
+                "cartItem=" + cartItem +
+                '}';
+    }
 }

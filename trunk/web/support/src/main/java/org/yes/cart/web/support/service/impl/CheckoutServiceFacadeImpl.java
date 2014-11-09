@@ -124,7 +124,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     public List<Pair<PaymentGatewayDescriptor, String>> getPaymentGatewaysDescriptors(final Shop shop, final ShoppingCart cart) {
 
         final String lang = cart.getCurrentLocale();
-        final CarrierSla carrierSla = carrierSlaService.findById(cart.getCarrierSlaId());
+        final CarrierSla carrierSla = carrierSlaService.getById(cart.getCarrierSlaId());
         final List<String> carrierSlaPGs = carrierSla.getSupportedPaymentGatewaysAsList();
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false, cart.getShoppingContext().getShopCode());
         final List<Pair<PaymentGatewayDescriptor, String>> available = new ArrayList<Pair<PaymentGatewayDescriptor, String>>(descriptors.size());

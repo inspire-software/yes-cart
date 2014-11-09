@@ -42,7 +42,7 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
 
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
 
-        ShoppingCart shoppingCart = new ShoppingCartImpl();
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -108,7 +108,7 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
 
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
 
-        ShoppingCart shoppingCart = new ShoppingCartImpl();
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -191,7 +191,7 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
 
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
 
-        ShoppingCart shoppingCart = new ShoppingCartImpl();
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
@@ -290,7 +290,7 @@ public class ShippingAmountOffPromotionActionTest extends BaseCoreDBTestCase {
 
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
 
-        ShoppingCart shoppingCart = new ShoppingCartImpl();
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 

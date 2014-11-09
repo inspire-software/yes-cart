@@ -21,7 +21,10 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Promotion;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * User: denispavlov

@@ -21,7 +21,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.*;
 import org.yes.cart.shoppingcart.CartItem;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.shoppingcart.impl.TotalImpl;
 
@@ -94,7 +94,7 @@ public class PromotionContextImpl implements PromotionContext {
     }
 
     /** {@inheritDoc} */
-    public void applyItemPromo(final Customer customer, final ShoppingCart cart) {
+    public void applyItemPromo(final Customer customer, final MutableShoppingCart cart) {
 
         cart.removeItemPromotions(); // remove all gifts and promo prices
 
@@ -104,15 +104,15 @@ public class PromotionContextImpl implements PromotionContext {
             return;
         }
 
+        final Map<String, Object> context = new HashMap<String, Object>();
+        context.put(PromotionCondition.VAR_REGISTERED, customer != null);
+        context.put(PromotionCondition.VAR_CUSTOMER, customer);
+        context.put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
+        context.put(PromotionCondition.VAR_CART, cart);
+
         for (final CartItem item : cart.getCartItemList()) {
 
-            final Map<String, Object> context = new HashMap<String, Object>() {{
-                put(PromotionCondition.VAR_REGISTERED, customer != null);
-                put(PromotionCondition.VAR_CUSTOMER, customer);
-                put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
-                put(PromotionCondition.VAR_CART, cart);
-                put(PromotionCondition.VAR_CART_ITEM, item);
-            }};
+            context.put(PromotionCondition.VAR_CART_ITEM, item);
 
             applyPromotions(itemPromoBuckets, context);
 
@@ -121,7 +121,7 @@ public class PromotionContextImpl implements PromotionContext {
     }
 
     /** {@inheritDoc} */
-    public Total applyOrderPromo(final Customer customer, final ShoppingCart cart, final Total itemTotal) {
+    public Total applyOrderPromo(final Customer customer, final MutableShoppingCart cart, final Total itemTotal) {
 
         final List<List<PromoTriplet>> orderPromoBuckets = promotionBuckets.get(Promotion.TYPE_ORDER);
 
@@ -129,14 +129,13 @@ public class PromotionContextImpl implements PromotionContext {
             return new TotalImpl().add(itemTotal);
         }
 
-        final Map<String, Object> context = new HashMap<String, Object>() {{
-            put(PromotionCondition.VAR_REGISTERED, customer != null);
-            put(PromotionCondition.VAR_CUSTOMER, customer);
-            put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
-            put(PromotionCondition.VAR_CART, cart);
-            put(PromotionCondition.VAR_CART_ITEM_TOTAL, itemTotal);
-            put(PromotionCondition.VAR_TMP_TOTAL, new TotalImpl().add(itemTotal));
-        }};
+        final Map<String, Object> context = new HashMap<String, Object>();
+        context.put(PromotionCondition.VAR_REGISTERED, customer != null);
+        context.put(PromotionCondition.VAR_CUSTOMER, customer);
+        context.put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
+        context.put(PromotionCondition.VAR_CART, cart);
+        context.put(PromotionCondition.VAR_CART_ITEM_TOTAL, itemTotal);
+        context.put(PromotionCondition.VAR_TMP_TOTAL, new TotalImpl().add(itemTotal));
 
         applyPromotions(orderPromoBuckets, context);
 
@@ -145,30 +144,33 @@ public class PromotionContextImpl implements PromotionContext {
     }
 
     /** {@inheritDoc} */
-    public Total applyShippingPromo(final Customer customer, final ShoppingCart cart, final Total orderTotal) {
+    public void applyShippingPromo(final Customer customer, final MutableShoppingCart cart, final Total orderTotal) {
 
         final List<List<PromoTriplet>> orderPromoBuckets = promotionBuckets.get(Promotion.TYPE_SHIPPING);
 
         if (CollectionUtils.isEmpty(orderPromoBuckets)) {
-            return new TotalImpl().add(orderTotal);
+            return;
         }
 
-        final Map<String, Object> context = new HashMap<String, Object>() {{
-            put(PromotionCondition.VAR_REGISTERED, customer != null);
-            put(PromotionCondition.VAR_CUSTOMER, customer);
-            put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
-            put(PromotionCondition.VAR_CART, cart);
-            put(PromotionCondition.VAR_CART_ORDER_TOTAL, orderTotal);
-            put(PromotionCondition.VAR_TMP_TOTAL, new TotalImpl().add(orderTotal));
-        }};
+        final Map<String, Object> context = new HashMap<String, Object>();
+        context.put(PromotionCondition.VAR_REGISTERED, customer != null);
+        context.put(PromotionCondition.VAR_CUSTOMER, customer);
+        context.put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
+        context.put(PromotionCondition.VAR_CART, cart);
+        context.put(PromotionCondition.VAR_CART_ORDER_TOTAL, orderTotal);
 
-        applyPromotions(orderPromoBuckets, context);
+        for (final CartItem shipping : cart.getShippingList()) {
 
-        return (Total) context.get(PromotionCondition.VAR_TMP_TOTAL);
+            context.put(PromotionCondition.VAR_SHIPPING, shipping);
+
+            applyPromotions(orderPromoBuckets, context);
+
+        }
+
     }
 
     /** {@inheritDoc} */
-    public void applyCustomerPromo(final Customer customer, final ShoppingCart cart) {
+    public void applyCustomerPromo(final Customer customer, final MutableShoppingCart cart) {
 
         if (customer == null) {
             return;

@@ -24,7 +24,7 @@ import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.CartItem;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.MoneyUtils;
@@ -72,7 +72,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
     /** {@inheritDoc} */
     @Override
-    public final void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public final void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
 
         if (parameters.containsKey(getCmdKey())) {
             final String skuCode = (String) parameters.get(getCmdKey());
@@ -94,7 +94,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
      * @param productSku current sku
      * @param parameters all parameters
      */
-    protected abstract void execute(final ShoppingCart shoppingCart,
+    protected abstract void execute(final MutableShoppingCart shoppingCart,
                                     final ProductSku productSku,
                                     final Map<String, Object> parameters);
 
@@ -105,7 +105,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
      * @param shoppingCart shopping cart
      * @param productSku current sku (or null)
      */
-    protected void recalculatePrice(final ShoppingCart shoppingCart, final ProductSku productSku) {
+    protected void recalculatePrice(final MutableShoppingCart shoppingCart, final ProductSku productSku) {
 
         if (shoppingCart.getShoppingContext().getShopId() == 0L) {
 
@@ -144,7 +144,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
 
     }
 
-    private void setProductSkuPrice(final ShoppingCart shoppingCart,
+    private void setProductSkuPrice(final MutableShoppingCart shoppingCart,
                                     final Shop shop,
                                     final String skuCode,
                                     final BigDecimal qty) {

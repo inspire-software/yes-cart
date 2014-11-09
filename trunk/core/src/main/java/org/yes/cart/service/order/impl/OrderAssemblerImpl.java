@@ -27,6 +27,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.Total;
 
 import java.util.Date;
 import java.util.List;
@@ -94,9 +95,13 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
         final CustomerOrder customerOrder = entityFactory.getByIface(CustomerOrder.class);
 
-        if (shoppingCart.getTotal() == null
-                || shoppingCart.getTotal().getListSubTotal() == null
-                || shoppingCart.getTotal().getSubTotal() == null) {
+        final Total cartTotal = shoppingCart.getTotal();
+
+        if (cartTotal == null
+                || cartTotal.getListSubTotal() == null
+                || cartTotal.getSubTotal() == null
+                || cartTotal.getSubTotalTax() == null
+                || cartTotal.getSubTotalAmount() == null) {
             throw new OrderAssemblyException("No order total");
         }
 
@@ -110,10 +115,13 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setOrderTimestamp(new Date());
         customerOrder.setGuid(shoppingCart.getGuid());
         customerOrder.setCartGuid(shoppingCart.getGuid());
-        customerOrder.setListPrice(shoppingCart.getTotal().getListSubTotal());
-        customerOrder.setPrice(shoppingCart.getTotal().getSubTotal());
-        customerOrder.setPromoApplied(shoppingCart.getTotal().isOrderPromoApplied());
-        customerOrder.setAppliedPromo(shoppingCart.getTotal().getAppliedOrderPromo());
+
+        customerOrder.setListPrice(cartTotal.getListSubTotal());
+        customerOrder.setPrice(cartTotal.getSubTotal());
+        customerOrder.setPromoApplied(cartTotal.isOrderPromoApplied());
+        customerOrder.setAppliedPromo(cartTotal.getAppliedOrderPromo());
+        customerOrder.setGrossPrice(cartTotal.getSubTotalAmount());
+        customerOrder.setNetPrice(cartTotal.getSubTotalAmount().subtract(cartTotal.getSubTotalTax()));
 
         // sets shop from cache
         customerOrder.setShop(shopService.getById(shoppingCart.getShoppingContext().getShopId()));
@@ -226,8 +234,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
             if (item.getPrice() == null
                     || item.getSalePrice() == null
                     || item.getListPrice() == null
+                    || item.getNetPrice() == null
+                    || item.getGrossPrice() == null
+                    || item.getTaxRate() == null
+                    || item.getTaxCode() == null
                     || item.getProductSkuCode() == null) {
-                throw new OrderAssemblyException("No order line total");
+                throw new OrderAssemblyException("Order line has no prices and/or taxes: " + item);
             }
 
             CustomerOrderDet customerOrderDet = entityFactory.getByIface(CustomerOrderDet.class);
@@ -241,6 +253,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
             customerOrderDet.setGift(item.isGift());
             customerOrderDet.setPromoApplied(item.isPromoApplied());
             customerOrderDet.setAppliedPromo(item.getAppliedPromo());
+            customerOrderDet.setNetPrice(item.getNetPrice());
+            customerOrderDet.setGrossPrice(item.getGrossPrice());
+            customerOrderDet.setTaxCode(item.getTaxCode());
+            customerOrderDet.setTaxRate(item.getTaxRate());
+            customerOrderDet.setTaxExclusiveOfPrice(item.isTaxExclusiveOfPrice());
 
             customerOrderDet.setProductSkuCode(item.getProductSkuCode());
 

@@ -178,92 +178,94 @@
 
     <mx:Panel width="100%" height="100%" title="@Resource(bundle='TaxManagementPanel',key='taxes')"
               paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
-        <mx:VBox width="100%">
 
-            <mx:HBox paddingTop="5" width="100%">
+        <mx:VDividedBox height="100%" width="100%">
+            <mx:VBox width="100%">
 
-                <mx:VBox paddingTop="5">
+                <mx:HBox paddingTop="5" width="100%">
 
-                    <mx:Grid >
-                        <mx:GridRow>
-                            <mx:GridItem>
-                                <mx:Button label="@Resource(bundle='TaxManagementPanel',key='createTax')"
-                                           click="onCreateBtnClick(event)"/>
-                                <mx:Button label="@Resource(bundle='TaxManagementPanel',key='deleteTax')"
-                                           click="onRemoveBtnClick(event)"
-                                           enabled="{taxSelected}"
-                                        />
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='TaxManagementPanel',key='code')"/>
+                    <mx:VBox paddingTop="5">
 
-                                <mx:TextInput id="codeFilterValue" width="100"
-                                              toolTip="@Resource(bundle='TaxManagementPanel',key='code')"/>
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
-                                           click="onApplyFilterShowClick(event)"
-                                        />
-                            </mx:GridItem>
-                        </mx:GridRow>
-                    </mx:Grid>
+                        <mx:Grid >
+                            <mx:GridRow>
+                                <mx:GridItem>
+                                    <mx:Button label="@Resource(bundle='TaxManagementPanel',key='createTax')"
+                                               click="onCreateBtnClick(event)"/>
+                                    <mx:Button label="@Resource(bundle='TaxManagementPanel',key='deleteTax')"
+                                               click="onRemoveBtnClick(event)"
+                                               enabled="{taxSelected}"
+                                            />
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='TaxManagementPanel',key='code')"/>
 
-                    <mx:Grid id="filterPanel" visible="false" includeInLayout="false" >
-                        <mx:GridRow>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='TaxManagementPanel',key='shopCode')"/>
-                                <mx:TextInput id="shopCodeFilterValue" width="100"/>
-                            </mx:GridItem>
-                            <mx:GridItem>
-                                <mx:Label text="@Resource(bundle='TaxManagementPanel',key='currency')"/>
-                                <mx:TextInput id="currencyFilterValue" width="100"/>
-                            </mx:GridItem>
-                        </mx:GridRow>
-                    </mx:Grid>
-                </mx:VBox>
+                                    <mx:TextInput id="codeFilterValue" width="100"
+                                                  toolTip="@Resource(bundle='TaxManagementPanel',key='code')"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
+                                               click="onApplyFilterShowClick(event)"
+                                            />
+                                </mx:GridItem>
+                            </mx:GridRow>
+                        </mx:Grid>
 
-                <mx:Button height="100%" label="@Resource(bundle='TaxManagementPanel',key='applyFilter')"
-                           toolTip="@Resource(bundle='TaxManagementPanel',key='applyFilterToolTip')"
-                           click="onApplyFilterClick(event)"
-                        />
+                        <mx:Grid id="filterPanel" visible="false" includeInLayout="false" >
+                            <mx:GridRow>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='TaxManagementPanel',key='shopCode')"/>
+                                    <mx:TextInput id="shopCodeFilterValue" width="100"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='TaxManagementPanel',key='currency')"/>
+                                    <mx:TextInput id="currencyFilterValue" width="100"/>
+                                </mx:GridItem>
+                            </mx:GridRow>
+                        </mx:Grid>
+                    </mx:VBox>
+
+                    <mx:Button height="100%" label="@Resource(bundle='TaxManagementPanel',key='applyFilter')"
+                               toolTip="@Resource(bundle='TaxManagementPanel',key='applyFilterToolTip')"
+                               click="onApplyFilterClick(event)"
+                            />
 
 
-            </mx:HBox>
+                </mx:HBox>
 
-            <mx:DataGrid id="taxGrid" width="100%" height="100%"
-                         itemClick="onTaxSelected(event)">
-                <mx:columns>
-                    <mx:DataGridColumn width="80" headerText="@Resource(bundle='TaxManagementPanel',key='id')"
-                                       dataField="guid"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='code')"
-                                       dataField="code"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='shopCode')"
-                                       dataField="shopCode"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='currency')"
-                                       dataField="currency"/>
-                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='exclusiveOfPrice')">
-                        <mx:itemRenderer>
-                            <mx:Component>
-                                <mx:HBox verticalAlign="middle" paddingLeft="3" paddingRight="3">
-                                    <mx:CheckBox selected="{data.exclusiveOfPrice}" enabled="false"/>
-                                </mx:HBox>
-                            </mx:Component>
-                        </mx:itemRenderer>
-                    </mx:DataGridColumn>
-                    <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='taxRate')"
-                                       dataField="taxRate"/>
-                </mx:columns>
-            </mx:DataGrid>
+                <mx:DataGrid id="taxGrid" width="100%" height="100%"
+                             itemClick="onTaxSelected(event)">
+                    <mx:columns>
+                        <mx:DataGridColumn width="80" headerText="@Resource(bundle='TaxManagementPanel',key='id')"
+                                           dataField="guid"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='code')"
+                                           dataField="code"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='shopCode')"
+                                           dataField="shopCode"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='currency')"
+                                           dataField="currency"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='exclusiveOfPrice')">
+                            <mx:itemRenderer>
+                                <mx:Component>
+                                    <mx:HBox verticalAlign="middle" paddingLeft="3" paddingRight="3">
+                                        <mx:CheckBox selected="{data.exclusiveOfPrice}" enabled="false"/>
+                                    </mx:HBox>
+                                </mx:Component>
+                            </mx:itemRenderer>
+                        </mx:DataGridColumn>
+                        <mx:DataGridColumn headerText="@Resource(bundle='TaxManagementPanel',key='taxRate')"
+                                           dataField="taxRate"/>
+                    </mx:columns>
+                </mx:DataGrid>
 
-        </mx:VBox>
-        <mx:TabNavigator id="taxTabNavigator" change="onTabClick(event);" width="100%" height="100%"
-                         visible="{taxSelected}">
+            </mx:VBox>
+            <mx:TabNavigator id="taxTabNavigator" change="onTabClick(event);" width="100%" height="100%"
+                             visible="{taxSelected}">
 
-            <tax:TaxSummaryPanel id="taxSummary" updateCallback="onTaxUpdate"/>
-            <tax:TaxConfigManagementPanel id="taxConfigs" label="@Resource(bundle='TaxManagementPanel',key='configs')"/>
+                <tax:TaxSummaryPanel id="taxSummary" updateCallback="onTaxUpdate"/>
+                <tax:TaxConfigManagementPanel id="taxConfigs" label="@Resource(bundle='TaxManagementPanel',key='configs')"/>
 
-        </mx:TabNavigator>
-
+            </mx:TabNavigator>
+        </mx:VDividedBox>
     </mx:Panel>
 
 </mx:VDividedBox>

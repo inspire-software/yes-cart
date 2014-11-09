@@ -18,14 +18,13 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.service.domain.PriceService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -50,7 +49,7 @@ public class ViewProductSkuInternalCommandImpl extends AbstractCartCommandImpl i
 
     /** {@inheritDoc} */
     @Override
-    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             final Object sku = parameters.get(getCmdKey());
             if (sku instanceof ProductSku) {
@@ -63,7 +62,7 @@ public class ViewProductSkuInternalCommandImpl extends AbstractCartCommandImpl i
         }
     }
 
-    private void updateViewedSku(final ShoppingCart shoppingCart, final String productId) {
+    private void updateViewedSku(final MutableShoppingCart shoppingCart, final String productId) {
 
         List<String> skus = shoppingCart.getShoppingContext().getLatestViewedSkus();
 

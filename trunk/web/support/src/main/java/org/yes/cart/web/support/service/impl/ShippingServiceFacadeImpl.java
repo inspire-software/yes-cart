@@ -60,7 +60,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     /** {@inheritDoc} */
     @Override
     public List<Carrier> findCarriers(final ShoppingCart shoppingCart) {
-        final List<Carrier> all = carrierService.findCarriersByShopIdAndCurrency(
+        final List<Carrier> all = carrierService.getCarriersByShopIdAndCurrency(
                 shoppingCart.getShoppingContext().getShopId(),
                 shoppingCart.getCurrencyCode());
         filterCarriersForShoppingCart(all, shoppingCart);

@@ -524,8 +524,8 @@ public class PaymentProcessorSurrogate {
                                         delivery.getCarrierSla().getDisplayName(),
                                         delivery.getCarrierSla().getName()).getValue(order.getLocale()),
                         BigDecimal.ONE,
-                        delivery.getPrice(),
-                        BigDecimal.ZERO,
+                        delivery.getGrossPrice(),
+                        delivery.getGrossPrice().subtract(delivery.getNetPrice()),
                         true
                 )
         );
@@ -538,8 +538,8 @@ public class PaymentProcessorSurrogate {
                             deliveryDet.getProductSkuCode(),
                             deliveryDet.getProductName(),
                             deliveryDet.getQty(),
-                            deliveryDet.getPrice(),
-                            BigDecimal.ZERO
+                            deliveryDet.getGrossPrice(),
+                            deliveryDet.getGrossPrice().subtract(deliveryDet.getNetPrice()).multiply(deliveryDet.getQty())
                     )
             );
         }

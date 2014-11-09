@@ -19,7 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
@@ -57,7 +57,7 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
 
     /** {@inheritDoc} */
     @Override
-    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             final Long value = NumberUtils.createLong(String.valueOf(parameters.get(getCmdKey())));
             if (value != null && !value.equals(shoppingCart.getShoppingContext().getShopId())) {

@@ -45,7 +45,7 @@ public interface AmountCalculationStrategy {
      *
      * @return {@link Total}
      */
-    Total calculate(ShoppingCart cart);
+    Total calculate(MutableShoppingCart cart);
 
     /**
      * Calculate single delivery amount.

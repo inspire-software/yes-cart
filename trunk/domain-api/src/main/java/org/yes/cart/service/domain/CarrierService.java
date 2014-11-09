@@ -32,8 +32,6 @@ public interface CarrierService extends GenericService<Carrier> {
     /**
      * Find carriers, that are applicable for given shop in all currencies available.
      *
-     * Complex custom logic should be implemented in the ShippingServiceFacade, which is part of
-     * websupport module.
      * <p/>
      * @param shopId shop PK
      *
@@ -52,6 +50,6 @@ public interface CarrierService extends GenericService<Carrier> {
      *
      * @return list of carries with filtered SLA, that satisfy to given search criteria.
      */
-    List<Carrier> findCarriersByShopIdAndCurrency(long shopId, String currency);
+    List<Carrier> getCarriersByShopIdAndCurrency(long shopId, String currency);
 
 }

@@ -36,20 +36,6 @@ public interface OrderInfo extends Serializable {
     String getOrderMessage();
 
     /**
-     * Set order message.
-     *
-     * @param orderMessage order message.
-     */
-    void setOrderMessage(String orderMessage);
-
-    /**
-     * Set carrier shipping SLA.
-     *
-     * @param carrierSlaId selected sla id.
-     */
-    void setCarrierSlaId(Long carrierSlaId);
-
-    /**
      * Get carrier shipping SLA.
      *
      * @return carries sla id.
@@ -64,32 +50,11 @@ public interface OrderInfo extends Serializable {
     boolean isSeparateBillingAddress();
 
     /**
-     * Set billing address different from shipping address flag.
-     *
-     * @param separateBillingAddress flag.
-     */
-    void setSeparateBillingAddress(boolean separateBillingAddress);
-
-    /**
-     * Set delivery address.
-     *
-     * @param deliveryAddressId delivery address.
-     */
-    void setDeliveryAddressId(Long deliveryAddressId);
-
-    /**
      * Get delivery address.
      *
      * @return delivery address.
      */
     Long getDeliveryAddressId();
-
-    /**
-     * Set billing address.
-     *
-     * @param billingAddressId billing address.
-     */
-    void setBillingAddressId(Long billingAddressId);
 
     /**
      * Get billing address.
@@ -106,25 +71,11 @@ public interface OrderInfo extends Serializable {
     boolean isBillingAddressNotRequired();
 
     /**
-     * Set billing address not required for this order flag.
-     *
-     * @param billingAddressRequired flag.
-     */
-    void setBillingAddressNotRequired(boolean billingAddressRequired);
-
-    /**
      * Is delivery address not required for this order.
      *
      * @return true is  address not required for this order.
      */
     boolean isDeliveryAddressNotRequired();
-
-    /**
-     * Set delivery address not required for this order flag.
-     *
-     * @param deliveryAddressRequired flag.
-     */
-    void setDeliveryAddressNotRequired(boolean deliveryAddressRequired);
 
 
     /**
@@ -135,24 +86,10 @@ public interface OrderInfo extends Serializable {
     String getPaymentGatewayLabel();
 
     /**
-     * Set selected payment gateway.
-     *
-     * @param paymentGatewayLabel selected payment gateway.
-     */
-    void setPaymentGatewayLabel(String paymentGatewayLabel);
-
-    /**
      * Does order need multiple delivery.
      *
      * @return true if need multiple delivery.
      */
     boolean isMultipleDelivery();
-
-    /**
-     * Set multiple delivery for order.
-     *
-     * @param multipleDelivery multiple delivery for order.
-     */
-    void setMultipleDelivery(boolean multipleDelivery);
 
 }

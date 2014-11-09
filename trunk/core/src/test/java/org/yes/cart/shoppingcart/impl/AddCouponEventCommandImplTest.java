@@ -7,7 +7,7 @@ import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.domain.PromotionCouponService;
 import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
@@ -30,7 +30,7 @@ public class AddCouponEventCommandImplTest extends BaseCoreDBTestCase {
     @Test
     public void testExecute() {
 
-        ShoppingCart shoppingCart = new ShoppingCartImpl();
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 

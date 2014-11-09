@@ -16,7 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
@@ -47,7 +47,7 @@ public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements S
 
     /** {@inheritDoc} */
     @Override
-    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             shoppingCart.getShoppingContext().clearContext();
             markDirty(shoppingCart);

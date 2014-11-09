@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.web.support.shoppingcart.tokendriven.CartRepository;
@@ -52,7 +53,7 @@ public class RESTLoginCommandImpl extends LoginCommandImpl {
      * Merges and recalculates the cart.
      */
     @Override
-    protected void recalculate(final ShoppingCart shoppingCart) {
+    protected void recalculate(final MutableShoppingCart shoppingCart) {
 
         // This call will merge the cart
         cartRepository.storeShoppingCart(shoppingCart);

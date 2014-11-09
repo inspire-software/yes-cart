@@ -41,6 +41,12 @@ public class TaxServiceImpl  extends BaseGenericServiceImpl<Tax> implements TaxS
     }
 
     /** {@inheritDoc} */
+    @Cacheable("taxService-getById")
+    public Tax getById(final long pk) {
+        return findById(pk);
+    }
+
+    /** {@inheritDoc} */
     @Cacheable("taxService-getTaxesByShopCode")
     public List<Tax> getTaxesByShopCode(final String shopCode, final String currency) {
         return getGenericDao().findByNamedQuery("TAX.BY.SHOPCODE.CURRENCY", shopCode, currency);
@@ -83,21 +89,30 @@ public class TaxServiceImpl  extends BaseGenericServiceImpl<Tax> implements TaxS
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = "taxService-getTaxesByShopCode", allEntries = true)
+    @CacheEvict(value = {
+            "taxService-getTaxesByShopCode",
+            "taxService-getById"
+    }, allEntries = true)
     public Tax create(final Tax instance) {
         regenerateGuid(instance);
         return super.create(instance);
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = "taxService-getTaxesByShopCode", allEntries = true)
+    @CacheEvict(value = {
+            "taxService-getTaxesByShopCode",
+            "taxService-getById"
+    }, allEntries = true)
     public Tax update(final Tax instance) {
         regenerateGuid(instance);
         return super.update(instance);
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = "taxService-getTaxesByShopCode", allEntries = true)
+    @CacheEvict(value = {
+            "taxService-getTaxesByShopCode",
+            "taxService-getById"
+    }, allEntries = true)
     public void delete(final Tax instance) {
         super.delete(instance);
     }

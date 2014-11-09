@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.wicket.Application;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
@@ -40,7 +41,7 @@ public class WicketLogoutCommandImpl extends LogoutCommandImpl {
     }
 
     @Override
-    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         super.execute(shoppingCart, parameters);
         if (shoppingCart.getLogonState() == ShoppingCart.NOT_LOGGED && parameters.containsKey(getCmdKey())) {
             final IAuthenticationStrategy strategy = Application.get().getSecuritySettings().getAuthenticationStrategy();

@@ -60,6 +60,8 @@ public class CustomerOrderDTOImpl {
 
     public var listPrice:Number;
     public var price:Number;
+    public var netPrice:Number;
+    public var grossPrice:Number;
     public var promoApplied:Boolean;
     public var appliedPromo:String;
 

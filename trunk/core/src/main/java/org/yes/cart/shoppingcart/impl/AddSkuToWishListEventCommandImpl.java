@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.MoneyUtils;
@@ -112,7 +113,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
      * {@inheritDoc}
      */
     @Override
-    protected void execute(final ShoppingCart shoppingCart,
+    protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
                            final Map<String, Object> parameters) {
 

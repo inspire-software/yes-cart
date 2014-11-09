@@ -59,6 +59,12 @@ public class CustomerOrderDeliveryDTOImpl {
     public var promoApplied:Boolean;
     public var appliedPromo:String;
 
+    public var netPrice:Number;
+    public var grossPrice:Number;
+    public var taxRate:Number;
+    public var taxExclusiveOfPrice:Boolean;
+    public var taxCode:String;
+
     public function CustomerOrderDeliveryDTOImpl() {
     }
 

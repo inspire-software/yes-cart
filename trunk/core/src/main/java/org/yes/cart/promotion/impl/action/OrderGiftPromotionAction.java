@@ -16,11 +16,11 @@
 
 package org.yes.cart.promotion.impl.action;
 
-import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;
@@ -105,7 +105,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
 
         final ItemPromotionActionContext ctx = getPromotionActionContext(context);
         final Total itemTotal = getItemTotal(context);
-        final ShoppingCart cart = getShoppingCart(context);
+        final MutableShoppingCart cart = getShoppingCart(context);
 
         final SkuPrice giftValue = getGiftPrices(ctx.getSubject(), cart);
         if (giftValue != null) {

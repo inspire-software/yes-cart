@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
@@ -62,7 +63,7 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
      * {@inheritDoc}
      */
     @Override
-    public void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             final String email = (String) parameters.get(CMD_LOGIN_P_EMAIL);
             final String passw = (String) parameters.get(CMD_LOGIN_P_PASS);
@@ -88,7 +89,7 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
         }
     }
 
-    private void setDefaultAddressesIfNecessary(final ShoppingCart shoppingCart, final Customer customer) {
+    private void setDefaultAddressesIfNecessary(final MutableShoppingCart shoppingCart, final Customer customer) {
         if (!shoppingCart.getOrderInfo().isBillingAddressNotRequired()
                 || !shoppingCart.getOrderInfo().isDeliveryAddressNotRequired()) {
 
@@ -100,10 +101,17 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
             }
             if (!shoppingCart.getOrderInfo().isDeliveryAddressNotRequired() && (delivery != null || billing != null)) {
                 if (billing != null) {
-                    shoppingCart.getOrderInfo().setDeliveryAddressId(billing.getAddressId());
+                    shoppingCart.getOrderInfo().setBillingAddressId(billing.getAddressId());
+                    shoppingCart.getShoppingContext().setCountryCode(billing.getCountryCode());
+                    shoppingCart.getShoppingContext().setStateCode(billing.getStateCode());
                 } else {
-                    shoppingCart.getOrderInfo().setDeliveryAddressId(delivery.getAddressId());
+                    shoppingCart.getOrderInfo().setBillingAddressId(delivery.getAddressId());
+                    shoppingCart.getShoppingContext().setCountryCode(delivery.getCountryCode());
+                    shoppingCart.getShoppingContext().setStateCode(delivery.getStateCode());
                 }
+            } else {
+                shoppingCart.getShoppingContext().setCountryCode(null);
+                shoppingCart.getShoppingContext().setStateCode(null);
             }
         }
     }

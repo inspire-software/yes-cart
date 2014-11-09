@@ -19,10 +19,7 @@ package org.yes.cart.web.filter;
 
 import org.springframework.aop.TargetSource;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.shoppingcart.AmountCalculationStrategy;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -82,9 +79,9 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
         CartTuplizer tuplizer = null;
         try {
             tuplizer = (CartTuplizer) tuplizerPool.getTarget();
-            ShoppingCart cart = null;
+            MutableShoppingCart cart = null;
             try {
-                ShoppingCart restored = tuplizer.detuplize(httpRequest);
+                MutableShoppingCart restored = (MutableShoppingCart) tuplizer.detuplize(httpRequest);
                 if (restored != null) {
                     cart = restored;
                 }

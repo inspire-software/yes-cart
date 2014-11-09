@@ -16,9 +16,12 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -38,12 +41,25 @@ public abstract class AbstractCartCommandImpl implements ShoppingCartCommand {
         registry.registerCommand(this);
     }
 
+    public final void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
+        // OOTB we only have mutable cart
+        execute((MutableShoppingCart) shoppingCart, parameters);
+    }
+
+    /**
+     * Internal hook to switch to mutable cart.
+     *
+     * @param shoppingCart mutable cart
+     * @param parameters   parameters
+     */
+    public abstract void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters);
+
     /**
      * Recalculate shopping cart.
      *
      * @param shoppingCart current cart
      */
-    protected void recalculate(final ShoppingCart shoppingCart) {
+    protected void recalculate(final MutableShoppingCart shoppingCart) {
         shoppingCart.recalculate();
     }
 
@@ -52,7 +68,7 @@ public abstract class AbstractCartCommandImpl implements ShoppingCartCommand {
      *
      * @param shoppingCart current cart
      */
-    protected void markDirty(final ShoppingCart shoppingCart) {
+    protected void markDirty(final MutableShoppingCart shoppingCart) {
         shoppingCart.markDirty();
     }
 

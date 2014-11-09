@@ -25,6 +25,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Customer order detail DTO interface implementation.
@@ -65,6 +66,16 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     @DtoField(value = "appliedPromo", readOnly = true)
     private String appliedPromo;
 
+    @DtoField(value = "netPrice", readOnly = true)
+    private BigDecimal netPrice;
+    @DtoField(value = "grossPrice", readOnly = true)
+    private BigDecimal grossPrice;
+    @DtoField(value = "taxRate", readOnly = true)
+    private BigDecimal taxRate;
+    @DtoField(value = "taxCode", readOnly = true)
+    private String taxCode;
+    @DtoField(value = "taxExclusiveOfPrice", readOnly = true)
+    private boolean taxExclusiveOfPrice;
 
     private BigDecimal lineTotal;
 
@@ -90,7 +101,7 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     private void calculateLineTotal() {
 
         if (qty != null && invoicePrice != null) {
-            lineTotal = qty.multiply(invoicePrice).setScale(Constants.DEFAULT_SCALE);
+            lineTotal = qty.multiply(invoicePrice).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
         }
 
     }
@@ -150,6 +161,56 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     public void setInvoicePrice(final BigDecimal invoicePrice) {
         this.invoicePrice = invoicePrice;
         calculateLineTotal();
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getNetPrice() {
+        return netPrice;
+    }
+
+    /** {@inheritDoc} */
+    public void setNetPrice(final BigDecimal netPrice) {
+        this.netPrice = netPrice;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getGrossPrice() {
+        return grossPrice;
+    }
+
+    /** {@inheritDoc} */
+    public void setGrossPrice(final BigDecimal grossPrice) {
+        this.grossPrice = grossPrice;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getTaxRate() {
+        return taxRate;
+    }
+
+    /** {@inheritDoc} */
+    public void setTaxRate(final BigDecimal taxRate) {
+        this.taxRate = taxRate;
+    }
+
+    /** {@inheritDoc} */
+    public String getTaxCode() {
+        return taxCode;
+    }
+
+    /** {@inheritDoc} */
+    public void setTaxCode(final String taxCode) {
+        this.taxCode = taxCode;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isTaxExclusiveOfPrice() {
+        return taxExclusiveOfPrice;
+    }
+
+    /** {@inheritDoc} */
+    public void setTaxExclusiveOfPrice(final boolean taxExclusiveOfPrice) {
+        this.taxExclusiveOfPrice = taxExclusiveOfPrice;
     }
 
     /** {@inheritDoc} */

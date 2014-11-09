@@ -20,7 +20,7 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -61,7 +61,7 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
 
     /** {@inheritDoc} */
     @Override
-    protected void execute(final ShoppingCart shoppingCart,
+    protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
                            final Map<String, Object> parameters) {
         if (productSku != null) {

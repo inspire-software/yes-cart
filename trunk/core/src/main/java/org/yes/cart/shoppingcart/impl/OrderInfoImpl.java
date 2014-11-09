@@ -16,14 +16,14 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.shoppingcart.OrderInfo;
+import org.yes.cart.shoppingcart.MutableOrderInfo;
 
 /**
  * Igor Azarny iazarny@yahoo.com
  * Date: 19-May-2011
  * Time: 17:32:44
  */
-public class OrderInfoImpl implements OrderInfo {
+public class OrderInfoImpl implements MutableOrderInfo {
 
     private String paymentGatewayLabel;
     private boolean multipleDelivery;
@@ -40,7 +40,11 @@ public class OrderInfoImpl implements OrderInfo {
         return orderMessage;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set order message.
+         *
+         * @param orderMessage order message.
+         */
     public void setOrderMessage(final String orderMessage) {
         this.orderMessage = orderMessage;
     }
@@ -51,7 +55,11 @@ public class OrderInfoImpl implements OrderInfo {
         return carrierSlaId;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set carrier shipping SLA.
+         *
+         * @param carrierSlaId selected sla id.
+         */
     public void setCarrierSlaId(final Long carrierSlaId) {
         this.carrierSlaId = carrierSlaId;
     }
@@ -61,7 +69,11 @@ public class OrderInfoImpl implements OrderInfo {
         return billingAddressId;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set billing address.
+         *
+         * @param billingAddressId billing address.
+         */
     public void setBillingAddressId(final Long billingAddressId) {
         this.billingAddressId = billingAddressId;
     }
@@ -71,7 +83,11 @@ public class OrderInfoImpl implements OrderInfo {
         return deliveryAddressId;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set delivery address.
+         *
+         * @param deliveryAddressId delivery address.
+         */
     public void setDeliveryAddressId(final Long deliveryAddressId) {
         this.deliveryAddressId = deliveryAddressId;
     }
@@ -81,7 +97,11 @@ public class OrderInfoImpl implements OrderInfo {
         return separateBillingAddress;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set billing address different from shipping address flag.
+         *
+         * @param separateBillingAddress flag.
+         */
     public void setSeparateBillingAddress(final boolean separateBillingAddress) {
         this.separateBillingAddress = separateBillingAddress;
     }
@@ -91,7 +111,11 @@ public class OrderInfoImpl implements OrderInfo {
         return billingAddressNotRequired;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set billing address not required for this order flag.
+         *
+         * @param billingAddressRequired flag.
+         */
     public void setBillingAddressNotRequired(final boolean billingAddressNotRequired) {
         this.billingAddressNotRequired = billingAddressNotRequired;
     }
@@ -101,7 +125,11 @@ public class OrderInfoImpl implements OrderInfo {
         return deliveryAddressNotRequired;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set delivery address not required for this order flag.
+         *
+         * @param deliveryAddressRequired flag.
+         */
     public void setDeliveryAddressNotRequired(final boolean deliveryAddressNotRequired) {
         this.deliveryAddressNotRequired = deliveryAddressNotRequired;
     }
@@ -111,7 +139,11 @@ public class OrderInfoImpl implements OrderInfo {
         return paymentGatewayLabel;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set selected payment gateway.
+         *
+         * @param paymentGatewayLabel selected payment gateway.
+         */
     public void setPaymentGatewayLabel(final String paymentGatewayLabel) {
         this.paymentGatewayLabel = paymentGatewayLabel;
     }
@@ -122,7 +154,11 @@ public class OrderInfoImpl implements OrderInfo {
         return multipleDelivery;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set multiple delivery for order.
+         *
+         * @param multipleDelivery multiple delivery for order.
+         */
     public void setMultipleDelivery(final boolean multipleDelivery) {
         this.multipleDelivery = multipleDelivery;
     }

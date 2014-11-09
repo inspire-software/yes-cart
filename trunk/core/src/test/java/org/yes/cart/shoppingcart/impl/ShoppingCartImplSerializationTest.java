@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
@@ -231,7 +232,7 @@ public class ShoppingCartImplSerializationTest {
 
         cart.initialise(new AmountCalculationStrategy() {
             @Override
-            public Total calculate(final ShoppingCart cart) {
+            public Total calculate(final MutableShoppingCart cart) {
                 return total;
             }
 

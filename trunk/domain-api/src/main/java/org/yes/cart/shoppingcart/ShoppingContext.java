@@ -36,24 +36,11 @@ public interface ShoppingContext extends Serializable {
     String getCustomerEmail();
 
     /**
-     * Set customer email.
-     * @param customerEmail customer email.
-     */
-    void setCustomerEmail(String customerEmail);
-
-    /**
      * Get customer name.
      *
      * @return customer name or null if customer is anonymous
      */
     String getCustomerName();
-
-    /**
-     * Set customer name.
-     *
-     * @param customerName customer name.
-     */
-    void setCustomerName(String customerName);
 
     /**
      * Get customer active shops.
@@ -63,25 +50,11 @@ public interface ShoppingContext extends Serializable {
     List<String> getCustomerShops();
 
     /**
-     * Set customer active shops.
-     *
-     * @param shops customer active shops
-     */
-    void setCustomerShops(List<String> shops);
-
-    /**
      * Get current shop id
      *
      * @return current shop id.
      */
     long getShopId();
-
-    /**
-     * Set current shop id.
-     *
-     * @param shopId current shop id.
-     */
-    void setShopId(long shopId);
 
     /**
      * Get current shop code
@@ -91,11 +64,18 @@ public interface ShoppingContext extends Serializable {
     String getShopCode();
 
     /**
-     * Set current shop code.
+     * Get current country code
      *
-     * @param shopCode current shop code.
+     * @return current country id.
      */
-    void setShopCode(String shopCode);
+    String getCountryCode();
+
+    /**
+     * Get current country code
+     *
+     * @return current country id.
+     */
+    String getStateCode();
 
 
     /**
@@ -107,15 +87,6 @@ public interface ShoppingContext extends Serializable {
      */
     String getResolvedIp();
 
-    /**
-     * Set shopper ip address.
-     *
-     * TODO: YC-361
-     *
-     * @param resolvedIp resolved ip address.
-     */
-    void setResolvedIp(String resolvedIp);
-
 
     /**
      * Get last viewed sku codes.
@@ -123,13 +94,6 @@ public interface ShoppingContext extends Serializable {
      * @return comma separated string of viewed skus.
      */
     List<String> getLatestViewedSkus();
-
-    /**
-     * Set latest viewed sku codes.
-     *
-     * @param latestViewedSkus latest viewed skus.
-     */
-    void setLatestViewedSkus(List<String> latestViewedSkus);
 
 
     /**
@@ -141,19 +105,5 @@ public interface ShoppingContext extends Serializable {
      */
     List<String> getLatestViewedCategories();
 
-    /**
-     * Set last viewed categories.
-     *
-     * TODO: YC-360
-     *
-     * @param latestViewedCategories comma separated list of category ids.
-     */
-    void setLatestViewedCategories(List<String> latestViewedCategories);
-
-
-    /**
-     * Clear context.
-     */
-    void clearContext();
 
 }

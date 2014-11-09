@@ -94,6 +94,10 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
+    @DtoField(value = "netPrice", readOnly = true)
+    private BigDecimal netPrice;
+    @DtoField(value = "grossPrice", readOnly = true)
+    private BigDecimal grossPrice;
     @DtoField(value = "listPrice", readOnly = true)
     private BigDecimal listPrice;
     @DtoField(value = "promoApplied", readOnly = true)
@@ -127,6 +131,34 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      */
     public void setPrice(final BigDecimal price) {
         this.price = price;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public BigDecimal getNetPrice() {
+        return netPrice;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public void setNetPrice(final BigDecimal netPrice) {
+        this.netPrice = netPrice;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public BigDecimal getGrossPrice() {
+        return grossPrice;
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public void setGrossPrice(final BigDecimal grossPrice) {
+        this.grossPrice = grossPrice;
     }
 
     /**

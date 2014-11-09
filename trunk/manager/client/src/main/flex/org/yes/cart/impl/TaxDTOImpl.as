@@ -26,7 +26,7 @@ public class TaxDTOImpl {
 
     public var taxId:Number;
 
-    public var taxRate:Number;
+    public var taxRate:Number = 0;
 
     public var exclusiveOfPrice:Boolean;
 

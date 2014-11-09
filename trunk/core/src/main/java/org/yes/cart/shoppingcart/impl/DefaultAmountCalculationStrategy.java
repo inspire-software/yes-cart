@@ -28,6 +28,7 @@ import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,9 +60,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
     private static final BigDecimal ZERO = MoneyUtils.ZERO;
     private static final BigDecimal HUNDRED = MoneyUtils.HUNDRED;
 
-    private final BigDecimal tax;
-    private final boolean taxIncluded;
-
+    private final TaxProvider taxProvider;
     private final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy;
     private final PromotionContextFactory promotionContextFactory;
     private final CustomerService customerService;
@@ -69,28 +68,24 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
     /**
      * Construct default amount calculator with included tax.
      *
-     * @param tax vat value in percents
-     * @param taxIncluded if true taxes assumed to be included in price, otherwise they are added to totals
+     * @param taxProvider tax configuration provider
      * @param deliveryCostCalculationStrategy delivery cost calculation strategy
      * @param promotionContextFactory promotion context
      * @param customerService customer service
      */
-    public DefaultAmountCalculationStrategy(final BigDecimal tax,
-                                            final boolean taxIncluded,
+    public DefaultAmountCalculationStrategy(final TaxProvider taxProvider,
                                             final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy,
                                             final PromotionContextFactory promotionContextFactory,
                                             final CustomerService customerService) {
 
-        this.tax = tax.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        this.taxIncluded = taxIncluded;
-
+        this.taxProvider = taxProvider;
         this.deliveryCostCalculationStrategy = deliveryCostCalculationStrategy;
         this.promotionContextFactory = promotionContextFactory;
         this.customerService = customerService;
     }
 
     /** {@inheritDoc} */
-    public Total calculate(final ShoppingCart cart) {
+    public Total calculate(final MutableShoppingCart cart) {
 
         final Customer customer;
         if (StringUtils.isNotBlank(cart.getCustomerEmail())) {
@@ -104,71 +99,31 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         // 1. Apply all item level promotions as the first step
         applyItemLevelPromotions(customer, cart, promoCtx);
 
-        // 2. Calculate current subtotal (including item promotions)
-        final CartItemPrices sub = calculateSubTotal(cart.getCartItemList());
+        // 2. Calculate current subtotal (including item promotions, excluding delivery cost)
+        final Total itemTotal = applyTaxToCartItemsAndCalculateItemTotal(cart);
 
-        // 3. Calculate delivery costs
-        final BigDecimal deliveryListCost = deliveryCostCalculationStrategy.getDeliveryPrice(cart);
-        final boolean shippingPromoApplied = false;
-        final String appliedShippingPromo = null;
-        final BigDecimal deliveryCost = deliveryListCost;
-        final BigDecimal deliveryTax = calculateTax(deliveryCost);
-        final BigDecimal deliveryCostAmount = calculateAmount(deliveryCost, deliveryTax);
+        // 3. Calculate delivery costs (just for reference)
+        final Total deliveryCostTotalNoTax = deliveryCostCalculationStrategy.calculate(cart);
 
-        // 4. Create dummy total for items
-        final boolean orderPromoApplied = false;
-        final String appliedOrderPromo = null;
-        final BigDecimal subTotalList = sub.listPrice;
-        final BigDecimal subTotalTaxList = calculateTax(subTotalList);
-        final BigDecimal subTotalAmountList = calculateAmount(subTotalList, subTotalTaxList);
-        final BigDecimal subTotal = sub.finalPrice;
-        final BigDecimal subTotalTax = calculateTax(subTotal);
-        final BigDecimal subTotalAmount = calculateAmount(subTotal, subTotalTax);
-
-        final BigDecimal total = subTotal.add(deliveryCost);
-        final BigDecimal totalTax = calculateTax(total);
-        final BigDecimal totalAmount = calculateAmount(total, totalTax);
-        final BigDecimal listTotalAmount = subTotalAmountList.add(
-                calculateAmount(deliveryListCost, calculateTax(deliveryListCost)));
-
-
-        final Total itemTotal = new TotalImpl(
-                sub.listPrice,
-                sub.salePrice,
-                sub.nonSalePrice,
-                sub.finalPrice,
-                orderPromoApplied,
-                appliedOrderPromo,
-                subTotal,
-                subTotalTax,
-                subTotalAmount,
-                deliveryListCost,
-                deliveryCost,
-                shippingPromoApplied,
-                appliedShippingPromo,
-                deliveryTax,
-                deliveryCostAmount,
-                total,
-                totalTax,
-                listTotalAmount, // This can be useful for showing total savings
-                totalAmount
-        );
+        // 4. Create dummy total for items + delivery cost
+        final Total draftOrderTotal = itemTotal.add(deliveryCostTotalNoTax);
 
         // 5. Use current cart + dummy item total to calculate order level promotions
-        final Total orderTotal = applyOrderLevelPromotions(customer, cart, itemTotal, promoCtx);
-
+        final Total orderTotal = applyOrderLevelPromotions(customer, cart, draftOrderTotal, promoCtx);
 
         // 6. At this stage we have reliable total for the whole order so we can
-        //    calculate shipping promotions, which would be calculation for single
-        //    delivery. If we have multiple we can reuse this calculation.
-        final Total finalTotal = applyShippingPromotions(customer, cart, orderTotal, promoCtx);
+        //    calculate shipping promotions
+        applyShippingPromotions(customer, cart, orderTotal, promoCtx);
+
+        // 7. Calculate final order total (including delivery cost)
+        final Total finalTotal = applyTaxToShippingAndCalculateOrderTotal(cart, orderTotal);
 
         return finalTotal;
 
     }
 
     void applyItemLevelPromotions(final Customer customer,
-                                  final ShoppingCart cart,
+                                  final MutableShoppingCart cart,
                                   final PromotionContext promoCtx) {
 
         promoCtx.applyItemPromo(customer, cart);
@@ -176,26 +131,23 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
     }
 
     Total applyOrderLevelPromotions(final Customer customer,
-                                    final ShoppingCart cart,
+                                    final MutableShoppingCart cart,
                                     final Total itemTotal,
                                     final PromotionContext promoCtx) {
 
         final Total tmp = promoCtx.applyOrderPromo(customer, cart, itemTotal);
 
+        final BigDecimal orderLevelDiscountRatio = MoneyUtils.isFirstBiggerThanSecond(itemTotal.getSubTotal(), BigDecimal.ZERO) ? tmp.getSubTotal().divide(itemTotal.getSubTotal(), 16, RoundingMode.HALF_UP) : Total.ZERO;
+
         final BigDecimal subTotal = tmp.getSubTotal();
-        final BigDecimal subTotalTax = calculateTax(subTotal);
-        final BigDecimal subTotalAmount = calculateAmount(subTotal, subTotalTax);
+        final BigDecimal subTotalTax = multiply(itemTotal.getSubTotalTax(), orderLevelDiscountRatio);
+        final BigDecimal subTotalAmount = MoneyUtils.isFirstBiggerThanSecond(itemTotal.getSubTotalAmount(), itemTotal.getSubTotal()) ? subTotal.add(subTotalTax) : subTotal;
 
         final BigDecimal total = subTotal.add(tmp.getDeliveryCost());
-        final BigDecimal totalTax = calculateTax(total);
-        final BigDecimal totalAmount = calculateAmount(total, totalTax);
+        final BigDecimal totalTax = subTotalTax.add(tmp.getDeliveryTax());
+        final BigDecimal totalAmount = subTotalAmount.add(tmp.getDeliveryCostAmount());
 
-        final BigDecimal subTotalList = tmp.getListSubTotal();
-        final BigDecimal subTotalTaxList = calculateTax(subTotalList);
-        final BigDecimal subTotalAmountList = calculateAmount(subTotalList, subTotalTaxList);
-
-        final BigDecimal listTotalAmount = subTotalAmountList.add(
-                calculateAmount(tmp.getDeliveryListCost(), calculateTax(tmp.getDeliveryListCost())));
+        final BigDecimal listTotalAmount = itemTotal.getListTotalAmount(); // list does not change
 
         return new TotalImpl(
                 tmp.getListSubTotal(),
@@ -220,44 +172,12 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
     }
 
-    Total applyShippingPromotions(final Customer customer,
-                                  final ShoppingCart cart,
-                                  final Total orderTotal,
-                                  final PromotionContext promoCtx) {
+    void applyShippingPromotions(final Customer customer,
+                                 final MutableShoppingCart cart,
+                                 final Total orderTotal,
+                                 final PromotionContext promoCtx) {
 
-        final Total tmp = promoCtx.applyShippingPromo(customer, cart, orderTotal);
-
-        final BigDecimal deliveryListCost = tmp.getDeliveryListCost();
-        final boolean shippingPromoApplied = tmp.isDeliveryPromoApplied();
-        final String appliedShippingPromo = tmp.getAppliedDeliveryPromo();
-        final BigDecimal deliveryCost = tmp.getDeliveryCost();
-        final BigDecimal deliveryTax = calculateTax(deliveryCost);
-        final BigDecimal deliveryCostAmount = calculateAmount(deliveryCost, deliveryTax);
-
-        final BigDecimal total = tmp.getSubTotal().add(deliveryCost);
-        final BigDecimal totalTax = calculateTax(total);
-        final BigDecimal totalAmount = calculateAmount(total, totalTax);
-
-        return new TotalImpl(
-                tmp.getListSubTotal(),
-                tmp.getSaleSubTotal(),
-                tmp.getNonSaleSubTotal(),
-                tmp.getPriceSubTotal(),
-                tmp.isOrderPromoApplied(),
-                tmp.getAppliedOrderPromo(),
-                tmp.getSubTotal(),
-                tmp.getSubTotalTax(),
-                tmp.getSubTotalAmount(),
-                deliveryListCost,
-                deliveryCost,
-                shippingPromoApplied,
-                appliedShippingPromo,
-                deliveryTax,
-                deliveryCostAmount,
-                total,
-                totalTax,
-                tmp.getListTotalAmount(),
-                totalAmount);
+        promoCtx.applyShippingPromo(customer, cart, orderTotal);
 
     }
 
@@ -268,6 +188,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
     /** {@inheritDoc} */
     public Total calculate(final CustomerOrder order) {
+
         Total deliveriesTotal = new TotalImpl();
         for (final CustomerOrderDelivery delivery : order.getDelivery()) {
 
@@ -278,18 +199,13 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
         final boolean orderPromoApplied = order.isPromoApplied();
         final String appliedOrderPromo = order.getAppliedPromo();
-        final BigDecimal subTotalList = deliveriesTotal.getListSubTotal();
-        final BigDecimal subTotalTaxList = calculateTax(subTotalList);
-        final BigDecimal subTotalAmountList = calculateAmount(subTotalList, subTotalTaxList);
         final BigDecimal subTotal = order.getPrice();
-        final BigDecimal subTotalTax = calculateTax(subTotal);
-        final BigDecimal subTotalAmount = calculateAmount(subTotal, subTotalTax);
+        final BigDecimal subTotalTax = order.getGrossPrice().subtract(order.getNetPrice());
+        final BigDecimal subTotalAmount = order.getGrossPrice();
 
         final BigDecimal total = subTotal.add(deliveriesTotal.getDeliveryCost());
         final BigDecimal totalTax = subTotalTax.add(deliveriesTotal.getDeliveryTax());
         final BigDecimal totalAmount = subTotalAmount.add(deliveriesTotal.getDeliveryCostAmount());
-        final BigDecimal listTotalAmount = subTotalAmountList.add(
-                calculateAmount(deliveriesTotal.getDeliveryListCost(), calculateTax(deliveriesTotal.getDeliveryListCost())));
 
         final Total orderTotal = new TotalImpl(
                 deliveriesTotal.getListSubTotal(),
@@ -309,7 +225,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
                 deliveriesTotal.getDeliveryCostAmount(),
                 total,
                 totalTax,
-                listTotalAmount,
+                deliveriesTotal.getListTotalAmount(),
                 totalAmount
         );
 
@@ -321,70 +237,248 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      */
     Total calculate(final CustomerOrderDelivery orderDelivery) {
 
-        final CartItemPrices sub = calculateSubTotal(new ArrayList<CartItem>(orderDelivery.getDetail()));
+        final Total itemTotal = calculateItemTotal(new ArrayList<CartItem>(orderDelivery.getDetail()));
 
-        final BigDecimal deliveryListCost = orderDelivery.getListPrice();
-        final BigDecimal deliveryCost = orderDelivery.getPrice();
-        final boolean shippingPromoApplied = orderDelivery.isPromoApplied();
-        final String appliedShippingPromo = orderDelivery.getAppliedPromo();
-        final BigDecimal deliveryTax = calculateTax(deliveryCost);
-        final BigDecimal deliveryCostAmount = calculateAmount(deliveryCost, deliveryTax);
+        final BigDecimal deliveryTax = orderDelivery.getGrossPrice().subtract(orderDelivery.getNetPrice());
+        final BigDecimal deliveryListAmount;
+        if (orderDelivery.isTaxExclusiveOfPrice()) {
+            final BigDecimal ratio = orderDelivery.getListPrice().divide(orderDelivery.getPrice(), 10, RoundingMode.HALF_UP);
+            deliveryListAmount = orderDelivery.getListPrice().add(multiply(deliveryTax, ratio));
+        } else {
+            deliveryListAmount = orderDelivery.getListPrice();
+        }
 
-        final boolean orderPromoApplied = false;
-        final String appliedOrderPromo = null;
-        final BigDecimal subTotalList = sub.listPrice;
-        final BigDecimal subTotalTaxList = calculateTax(subTotalList);
-        final BigDecimal subTotalAmountList = calculateAmount(subTotalList, subTotalTaxList);
-        final BigDecimal subTotal = sub.finalPrice;
-        final BigDecimal subTotalTax = calculateTax(subTotal);
-        final BigDecimal subTotalAmount = calculateAmount(subTotal, subTotalTax);
-
-        final BigDecimal total = subTotal.add(deliveryCost);
-        final BigDecimal totalList = subTotalList.add(deliveryListCost);
-        final BigDecimal totalTax = calculateTax(total);
-        final BigDecimal totalAmountList = calculateAmount(totalList, calculateTax(totalList));
-        final BigDecimal totalAmount = calculateAmount(total, totalTax);
-
-        return new TotalImpl(
-                sub.listPrice,
-                sub.salePrice,
-                sub.nonSalePrice,
-                sub.finalPrice,
-                orderPromoApplied,
-                appliedOrderPromo,
-                subTotal,
-                subTotalTax,
-                subTotalAmount,
-                deliveryListCost,
-                deliveryCost,
-                shippingPromoApplied,
-                appliedShippingPromo,
+        final Total deliveryCost = new TotalImpl(
+                Total.ZERO,
+                Total.ZERO,
+                Total.ZERO,
+                Total.ZERO,
+                false,
+                null,
+                Total.ZERO,
+                Total.ZERO,
+                Total.ZERO,
+                orderDelivery.getListPrice(),
+                orderDelivery.getPrice(),
+                orderDelivery.isPromoApplied(),
+                orderDelivery.getAppliedPromo(),
                 deliveryTax,
-                deliveryCostAmount,
-                total,
-                totalTax,
-                totalAmountList,
-                totalAmount
+                orderDelivery.getGrossPrice(),
+                orderDelivery.getPrice(),
+                deliveryTax,
+                deliveryListAmount,
+                orderDelivery.getGrossPrice()
         );
+
+        return itemTotal.add(deliveryCost);
 
     }
 
     /**
      * Calculate sub total of cart items.
      *
-     * @param items given list of cart items.
+     * @param cart current shopping cart.
      *
      * @return cart sub total.
      */
-    protected CartItemPrices calculateSubTotal(final List<CartItem> items) {
+    protected Total applyTaxToCartItemsAndCalculateItemTotal(final MutableShoppingCart cart) {
+
+        final ShoppingContext ctx = cart.getShoppingContext();
+        final String currency = cart.getCurrencyCode();
+
         final CartItemPrices prices = new CartItemPrices();
+        final List<CartItem> items = cart.getCartItemList();
+
         if (items != null) {
-            for (CartItem cartItem : items) {
-                final CartItemPrices price = new CartItemPrices(cartItem);
-                prices.add(price);
+            for (final CartItem item : cart.getCartItemList()) {
+                if (!item.isGift() && !MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO, item.getQty()) && item.getPrice() != null) {
+                    final TaxProvider.Tax tax = taxProvider.determineTax(ctx.getShopCode(), currency, ctx.getCountryCode(), ctx.getStateCode(), item.getProductSkuCode());
+                    final BigDecimal price = item.getPrice();
+                    final BigDecimal netPrice;
+                    final BigDecimal grossPrice;
+                    final BigDecimal priceTax = calculateTax(price, tax.getRate(), !tax.isExcluded());
+                    if (tax.isExcluded()) {
+                        netPrice = price;
+                        grossPrice = price.add(priceTax);
+                    } else {
+                        netPrice = price.subtract(priceTax);
+                        grossPrice = price;
+                    }
+                    cart.setProductSkuTax(item.getProductSkuCode(), netPrice, grossPrice, tax.getRate(), tax.getCode(), tax.isExcluded());
+
+                }
+
+                prices.add(new CartItemPrices(item));
+
             }
         }
-        return prices;
+
+        return new TotalImpl(
+                prices.listPrice,
+                prices.salePrice,
+                prices.nonSalePrice,
+                prices.finalPrice,
+                false,
+                null,
+                prices.finalPrice,
+                prices.finalTax,
+                prices.grossFinalPrice,
+                Total.ZERO,
+                Total.ZERO,
+                false,
+                null,
+                Total.ZERO,
+                Total.ZERO,
+                prices.finalPrice,
+                prices.finalTax,
+                prices.grossListPrice, // This can be useful for showing total savings
+                prices.grossFinalPrice
+        );
+    }
+
+
+    /**
+     * Calculate sub total of cart items.
+     *
+     * @param items items.
+     *
+     * @return cart sub total.
+     */
+    protected Total calculateItemTotal(final List<CartItem> items) {
+
+        final CartItemPrices prices = new CartItemPrices();
+
+        if (items != null) {
+            for (final CartItem item : items) {
+
+                prices.add(new CartItemPrices(item));
+
+            }
+        }
+
+        return new TotalImpl(
+                prices.listPrice,
+                prices.salePrice,
+                prices.nonSalePrice,
+                prices.finalPrice,
+                false,
+                null,
+                prices.finalPrice,
+                prices.finalTax,
+                prices.grossFinalPrice,
+                Total.ZERO,
+                Total.ZERO,
+                false,
+                null,
+                Total.ZERO,
+                Total.ZERO,
+                prices.finalPrice,
+                prices.finalTax,
+                prices.grossListPrice, // This can be useful for showing total savings
+                prices.grossFinalPrice
+        );
+    }
+
+
+    /**
+     * Calculate order total.
+     *
+     *
+     * @param cart current shopping cart.
+     * @param orderTotal running total
+     *
+     * @return cart order total.
+     */
+    protected Total applyTaxToShippingAndCalculateOrderTotal(final MutableShoppingCart cart, final Total orderTotal) {
+
+
+        final ShoppingContext ctx = cart.getShoppingContext();
+        final String currency = cart.getCurrencyCode();
+
+        final CartItemPrices prices = new CartItemPrices();
+        final List<CartItem> items = cart.getShippingList();
+        boolean isShippingPromoApplied = false;
+        final StringBuilder promoCodes = new StringBuilder();
+
+        if (items != null) {
+            for (final CartItem item : items) {
+
+                final TaxProvider.Tax tax = taxProvider.determineTax(ctx.getShopCode(), currency, ctx.getCountryCode(), ctx.getStateCode(), item.getProductSkuCode());
+                final BigDecimal price = item.getPrice();
+                final BigDecimal netPrice;
+                final BigDecimal grossPrice;
+                final BigDecimal priceTax = calculateTax(price, tax.getRate(), !tax.isExcluded());
+                if (tax.isExcluded()) {
+                    netPrice = price;
+                    grossPrice = price.add(priceTax);
+                } else {
+                    netPrice = price.subtract(priceTax);
+                    grossPrice = price;
+                }
+                cart.setShippingTax(item.getProductSkuCode(), netPrice, grossPrice, tax.getRate(), tax.getCode(), tax.isExcluded());
+
+                prices.add(new CartItemPrices(item));
+
+                if (item.isPromoApplied()) {
+                    isShippingPromoApplied = true;
+                    if (promoCodes.length() > 0) {
+                        promoCodes.append(',');
+                    }
+                    promoCodes.append(item.getAppliedPromo());
+                }
+
+            }
+        }
+
+        final BigDecimal listPriceRemove = prices.listPrice.negate();
+
+        final Total draftDeliveryCostRemove = new TotalImpl(
+                Total.ZERO,
+                Total.ZERO,
+                Total.ZERO,
+                Total.ZERO,
+                false,
+                null,
+                Total.ZERO,
+                Total.ZERO,
+                Total.ZERO,
+                listPriceRemove,
+                listPriceRemove,
+                false,
+                null,
+                Total.ZERO,
+                listPriceRemove,
+                listPriceRemove,
+                Total.ZERO,
+                listPriceRemove,
+                listPriceRemove
+        );
+
+        final Total deliveryCost = new TotalImpl(
+                Total.ZERO,
+                Total.ZERO,
+                Total.ZERO,
+                Total.ZERO,
+                false,
+                null,
+                Total.ZERO,
+                Total.ZERO,
+                Total.ZERO,
+                prices.listPrice,
+                prices.finalPrice,
+                isShippingPromoApplied,
+                promoCodes.toString(),
+                prices.finalTax,
+                prices.grossFinalPrice,
+                prices.finalPrice,
+                prices.finalTax,
+                prices.grossListPrice,
+                prices.grossFinalPrice
+        );
+
+        final Total finalTotal = orderTotal.add(draftDeliveryCostRemove).add(deliveryCost);
+
+        return finalTotal;
     }
 
     /**
@@ -397,7 +491,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         if (orderDelivery != null && orderDelivery.getPrice() != null) {
             return orderDelivery.getPrice().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         }
-        return BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        return Total.ZERO;
     }
 
 
@@ -405,47 +499,50 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      * Calculate subtotal tax by given sub total.
      *
      * @param money to calculate tax.
+     * @param taxRate tax rate.
+     * @param taxIncluded tax is included in price.
+     *
      * @return tax.
      */
-    BigDecimal calculateTax(final BigDecimal money) {
+    BigDecimal calculateTax(final BigDecimal money, final BigDecimal taxRate, final boolean taxIncluded) {
         if (money == null) {
-            return BigDecimal.ZERO;
+            return Total.ZERO;
         }
         if (taxIncluded) {
-            // vat = item * vatRate / (vat + 100)
-            return money.multiply(tax)
-                    .divide(tax.add(HUNDRED), Constants.DEFAULT_SCALE)
-                    .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+            // vat = item * vatRate / (vat + 100). Round CEILING to make sure we are not underpaying tax
+            return money.multiply(taxRate)
+                    .divide(taxRate.add(HUNDRED), Constants.DEFAULT_SCALE)
+                    .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_CEILING);
         }
-        // tax = item * taxRate / 100
-        return money.multiply(tax).divide(HUNDRED, Constants.DEFAULT_SCALE)
-                .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+        // tax = item * taxRate / 100. Round CEILING to make sure we are not underpaying tax
+        return money.multiply(taxRate).divide(HUNDRED, Constants.DEFAULT_SCALE)
+                .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_CEILING);
     }
-
 
     /**
-     * Calculate sub total amount.
+     * Multiply with correct rounding.
      *
-     * @param money given sub total.
-     * @param tax   sub total tax.
-     * @return cart sub total amount.
+     * @param price price
+     * @param qty quantity
+     *
+     * @return amount with correct scale
      */
-    BigDecimal calculateAmount(final BigDecimal money, final BigDecimal tax) {
-        if (money == null) {
-            return BigDecimal.ZERO;
-        }
-        if (taxIncluded || tax == null) {
-            return money; // tax already included;
-        }
-        return money.add(tax);
+    BigDecimal multiply(final BigDecimal price, final BigDecimal qty) {
+        return price.multiply(qty).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
     }
 
-    public static class CartItemPrices {
+
+    public class CartItemPrices {
 
         private BigDecimal listPrice = ZERO;
+        private BigDecimal listTax = ZERO;
+        private BigDecimal grossListPrice = ZERO;
         private BigDecimal salePrice = ZERO;
         private BigDecimal nonSalePrice = ZERO;
         private BigDecimal finalPrice = ZERO;
+        private BigDecimal finalTax = ZERO;
+        private BigDecimal netFinalPrice = ZERO;
+        private BigDecimal grossFinalPrice = ZERO;
 
         private CartItemPrices() {
         }
@@ -464,11 +561,19 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
                 if (cartItem.getPrice() != null) {
                     this.finalPrice = multiply(cartItem.getPrice(), cartItem.getQty());
                 }
-            }
-        }
+                if (cartItem.getNetPrice() != null && cartItem.getGrossPrice() != null) {
+                    this.netFinalPrice = multiply(cartItem.getNetPrice(), cartItem.getQty());
+                    this.grossFinalPrice = multiply(cartItem.getGrossPrice(), cartItem.getQty());
+                    this.finalTax = this.grossFinalPrice.subtract(this.netFinalPrice);
 
-        private BigDecimal multiply(final BigDecimal price, final BigDecimal qty) {
-            return price.multiply(qty).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+                    this.listTax = calculateTax(this.listPrice, cartItem.getTaxRate(), !cartItem.isTaxExclusiveOfPrice());
+                    if (cartItem.isTaxExclusiveOfPrice()) {
+                        this.grossListPrice = this.listPrice.add(this.listTax).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+                    } else {
+                        this.grossListPrice = this.listPrice;
+                    }
+                }
+            }
         }
 
         public void add(final CartItemPrices prices) {
@@ -476,10 +581,22 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
             this.salePrice = this.salePrice.add(prices.salePrice);
             this.nonSalePrice = this.nonSalePrice.add(prices.nonSalePrice);
             this.finalPrice = this.finalPrice.add(prices.finalPrice);
+            this.finalTax = this.finalTax.add(prices.finalTax);
+            this.netFinalPrice = this.netFinalPrice.add(prices.netFinalPrice);
+            this.grossFinalPrice = this.grossFinalPrice.add(prices.grossFinalPrice);
+            this.grossListPrice = this.grossListPrice.add(prices.grossListPrice);
         }
 
         public BigDecimal getListPrice() {
             return listPrice;
+        }
+
+        public BigDecimal getListTax() {
+            return listTax;
+        }
+
+        public BigDecimal getGrossListPrice() {
+            return grossListPrice;
         }
 
         public BigDecimal getSalePrice() {
@@ -492,6 +609,18 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
         public BigDecimal getFinalPrice() {
             return finalPrice;
+        }
+
+        public BigDecimal getFinalTax() {
+            return finalTax;
+        }
+
+        public BigDecimal getNetFinalPrice() {
+            return netFinalPrice;
+        }
+
+        public BigDecimal getGrossFinalPrice() {
+            return grossFinalPrice;
         }
     }
 

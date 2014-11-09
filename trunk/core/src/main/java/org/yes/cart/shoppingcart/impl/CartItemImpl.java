@@ -43,6 +43,12 @@ public class CartItemImpl implements CartItem {
     private BigDecimal salePrice = BigDecimal.ZERO;
     private BigDecimal listPrice = BigDecimal.ZERO;
 
+    private BigDecimal netPrice = BigDecimal.ZERO;
+    private BigDecimal grossPrice = BigDecimal.ZERO;
+    private BigDecimal taxRate = BigDecimal.ZERO;
+    private String taxCode;
+    private boolean taxExclusiveOfPrice;
+
     private boolean gift;
     private boolean promoApplied;
     private String appliedPromo;
@@ -139,6 +145,75 @@ public class CartItemImpl implements CartItem {
         this.price = price;
     }
 
+    /** {@inheritDoc} */
+    public BigDecimal getNetPrice() {
+        return netPrice;
+    }
+
+    /**
+     * Set net price (price before tax).
+     *
+     * @param netPrice price before tax
+     */
+    public void setNetPrice(final BigDecimal netPrice) {
+        this.netPrice = netPrice;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getGrossPrice() {
+        return grossPrice;
+    }
+
+    /**
+     * Set net price (price after tax).
+     *
+     * @param grossPrice price after tax
+     */
+    public void setGrossPrice(final BigDecimal grossPrice) {
+        this.grossPrice = grossPrice;
+    }
+
+    /** {@inheritDoc} */
+    public String getTaxCode() {
+        return taxCode;
+    }
+
+    /**
+     * Set tax code reference.
+     *
+     * @param taxCode tax code
+     */
+    public void setTaxCode(final String taxCode) {
+        this.taxCode = taxCode;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getTaxRate() {
+        return taxRate;
+    }
+
+    /**
+     * Set tax rate used (0-99).
+     *
+     * @param taxRate tax rate
+     */
+    public void setTaxRate(final BigDecimal taxRate) {
+        this.taxRate = taxRate;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isTaxExclusiveOfPrice() {
+        return taxExclusiveOfPrice;
+    }
+
+    /**
+     * Set whether this tax is included or excluded from price.
+     *
+     * @param taxExclusiveOfPrice tax flag
+     */
+    public void setTaxExclusiveOfPrice(final boolean taxExclusiveOfPrice) {
+        this.taxExclusiveOfPrice = taxExclusiveOfPrice;
+    }
 
     /** {@inheritDoc} */
     public BigDecimal getListPrice() {
@@ -208,5 +283,14 @@ public class CartItemImpl implements CartItem {
      */
     public void setAppliedPromo(final String appliedPromo) {
         this.appliedPromo = appliedPromo;
+    }
+
+    @Override
+    public String toString() {
+        return "CartItemImpl{" +
+                "productSkuCode='" + productSkuCode + '\'' +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                '}';
     }
 }

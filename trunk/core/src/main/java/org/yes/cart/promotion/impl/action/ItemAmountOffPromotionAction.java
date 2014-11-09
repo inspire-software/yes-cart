@@ -16,10 +16,9 @@
 
 package org.yes.cart.promotion.impl.action;
 
-import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.shoppingcart.CartItem;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -65,8 +64,7 @@ public class ItemAmountOffPromotionAction extends AbstractItemPromotionAction im
     public void perform(final Map<String, Object> context) {
         final BigDecimal amountOff = getAmountValue(getRawPromotionActionContext(context));
         if (MoneyUtils.isFirstBiggerThanSecond(amountOff, BigDecimal.ZERO)) {
-            final Promotion promotion = getPromotion(context);
-            final ShoppingCart cart = getShoppingCart(context);
+            final MutableShoppingCart cart = getShoppingCart(context);
             final CartItem cartItem = getShoppingCartItem(context);
 
             // we may have compound discounts so need to use final price

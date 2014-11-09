@@ -22,6 +22,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.ShoppingCartStateService;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.shoppingcart.tokendriven.CartRepository;
@@ -86,8 +87,8 @@ public class ResilientCartRepositoryImpl implements CartRepository {
             } else {
 
                 final boolean invalidateLogin = determineIfLoginInvalidationRequired(state);
-                if (invalidateLogin) {
-                    dbCart.getShoppingContext().setCustomerEmail(null);
+                if (invalidateLogin && dbCart instanceof MutableShoppingCart) {
+                    ((MutableShoppingCart) dbCart).getShoppingContext().setCustomerEmail(null);
                     storeAsynchronously(dbCart);
                 }
                 CART_CACHE.put(dbCart.getGuid(), dbCart);

@@ -475,10 +475,10 @@ public class PaymentProcessorImpl implements PaymentProcessor {
             // promotions against sale price
             BigDecimal orderTotalList = BigDecimal.ZERO;
             for (final CustomerOrderDet detail : order.getOrderDetail()) {
-                orderTotalList = orderTotalList.add(detail.getQty().multiply(detail.getPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+                orderTotalList = orderTotalList.add(detail.getQty().multiply(detail.getGrossPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
             }
 
-            final BigDecimal orderTotal = order.getPrice();
+            final BigDecimal orderTotal = order.getGrossPrice();
             // take the list price (sub total of items using list price)
             final BigDecimal discount = orderTotalList.subtract(orderTotal).divide(orderTotalList, 10, RoundingMode.HALF_UP);
             // scale delivery items total in accordance with order level discount percentage
@@ -502,8 +502,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                                         delivery.getCarrierSla().getDisplayName(),
                                         delivery.getCarrierSla().getName()).getValue(order.getLocale()),
                         BigDecimal.ONE,
-                        delivery.getPrice(),
-                        BigDecimal.ZERO,
+                        delivery.getGrossPrice(),
+                        delivery.getGrossPrice().subtract(delivery.getNetPrice()),
                         true
                 )
         );
@@ -516,8 +516,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                             deliveryDet.getProductSkuCode(),
                             deliveryDet.getProductName(),
                             deliveryDet.getQty(),
-                            deliveryDet.getPrice(),
-                            BigDecimal.ZERO
+                            deliveryDet.getGrossPrice(),
+                            deliveryDet.getGrossPrice().subtract(deliveryDet.getNetPrice()).multiply(deliveryDet.getQty())
                     )
             );
         }

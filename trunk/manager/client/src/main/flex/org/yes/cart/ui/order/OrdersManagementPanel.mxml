@@ -89,7 +89,7 @@
 
     <mx:ArrayCollection id="attrValues"/>
 
-    <mx:VBox width="100%" height="100%">
+    <mx:VDividedBox height="100%" width="100%">
         <mx:Panel width="100%" height="100%" title="@Resource(bundle='CustomerOrderPanel',key='orders')"
                   paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
             <mx:ControlBar
@@ -174,7 +174,7 @@
                             >
                         <mx:itemRenderer>
                             <mx:Component>
-                                <mx:VBox>
+                                <mx:VBox horizontalScrollPolicy="off">
                                     <mx:Label text="{data.ordernum}"/>
                                     <mx:Label text="{data.code}"/>
                                 </mx:VBox>
@@ -186,7 +186,7 @@
                                        sortable="false">
                         <mx:itemRenderer>
                             <mx:Component>
-                                <mx:VBox>
+                                <mx:VBox horizontalScrollPolicy="off">
                                     <mx:HBox>
                                         <mx:Label text="{data.lastname}"/>
                                         <mx:Label text="{data.firstname}"/>
@@ -202,19 +202,23 @@
                         <mx:itemRenderer>
                             <mx:Component>
                                 <mx:VBox horizontalAlign="right">
-                                    <mx:Label text="{data.listPrice}"/>
+                                    <mx:Label text="{data.listPrice.toFixed(2)}"/>
                                     <mx:Label text="{data.currency}"/>
                                 </mx:VBox>
                             </mx:Component>
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
 
-                    <mx:DataGridColumn showDataTips="true"  width="80"
-                                       headerText="@Resource(bundle='CustomerOrderPanel',key='appliedPromo')">
+                    <mx:DataGridColumn showDataTips="true"  width="80" dataField="appliedPromo"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='appliedPromo')"/>
+
+                    <mx:DataGridColumn showDataTips="true" width="80"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='salePrice')">
                         <mx:itemRenderer>
                             <mx:Component>
-                                <mx:VBox horizontalAlign="left">
-                                    <mx:Label text="{data.appliedPromo}"/>
+                                <mx:VBox horizontalAlign="right">
+                                    <mx:Label text="{data.price.toFixed(2)}"/>
+                                    <mx:Label text="{data.currency}"/>
                                 </mx:VBox>
                             </mx:Component>
                         </mx:itemRenderer>
@@ -225,12 +229,13 @@
                         <mx:itemRenderer>
                             <mx:Component>
                                 <mx:VBox horizontalAlign="right">
-                                    <mx:Label text="{data.amount}"/>
+                                    <mx:Label text="{data.amount.toFixed(2)}"/>
                                     <mx:Label text="{data.currency}"/>
                                 </mx:VBox>
                             </mx:Component>
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
+
                     <mx:DataGridColumn showDataTips="true" width="100"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='status')"
                                        labelFunction="statusLabelFunction"/>
@@ -252,7 +257,7 @@
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='actions')">
                         <mx:itemRenderer>
                             <mx:Component>
-                                <mx:VBox horizontalAlign="left" horizontalScrollPolicy="off">
+                                <mx:VBox horizontalAlign="left" horizontalScrollPolicy="off" verticalScrollPolicy="off">
                                     <mx:Script><![CDATA[
                                         import mx.controls.Alert;
                                         import mx.events.CloseEvent;
@@ -372,29 +377,36 @@
                                         />
                                 <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='listPrice')"
-                                                   dataField="listPrice" width="80"
-                                        />
+                                                   width="80">
+                                    <mx:itemRenderer>
+                                        <mx:Component>
+                                            <mx:VBox horizontalAlign="right">
+                                                <mx:Label text="{data.listPrice.toFixed(2)}"/>
+                                            </mx:VBox>
+                                        </mx:Component>
+                                    </mx:itemRenderer>
+                                </mx:DataGridColumn>
+
                                 <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='salePrice')"
-                                                   dataField="salePrice" width="80"
-                                        />
+                                                   dataField="salePrice" width="80">
+                                    <mx:itemRenderer>
+                                        <mx:Component>
+                                            <mx:VBox horizontalAlign="right">
+                                                <mx:Label text="{data.salePrice.toFixed(2)}"/>
+                                            </mx:VBox>
+                                        </mx:Component>
+                                    </mx:itemRenderer>
+                                </mx:DataGridColumn>
+
                                 <mx:DataGridColumn
-                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
-                                                   dataField="invoicePrice" width="80"
-                                        />
-                                <mx:DataGridColumn
-                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='discount')"
-                                                   labelFunction="discountLabelFunction" width="80"
+                                        headerText="@Resource(bundle='CustomerOrderPanel',key='discount')"
+                                        labelFunction="discountLabelFunction" width="80"
                                         />
 
                                 <mx:DataGridColumn
-                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='appliedPromo')"
-                                                   dataField="appliedPromo" width="80"
-                                        />
-
-                                <mx:DataGridColumn
-                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='gift')"
-                                                   width="40">
+                                        headerText="@Resource(bundle='CustomerOrderPanel',key='gift')"
+                                        width="40">
                                     <mx:itemRenderer>
                                         <mx:Component>
                                             <mx:VBox horizontalAlign="center" horizontalScrollPolicy="off">
@@ -403,6 +415,27 @@
                                         </mx:Component>
                                     </mx:itemRenderer>
                                 </mx:DataGridColumn>
+
+                                <mx:DataGridColumn
+                                        headerText="@Resource(bundle='CustomerOrderPanel',key='appliedPromo')"
+                                        dataField="appliedPromo" width="80"
+                                        />
+
+                                <mx:DataGridColumn
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
+                                                   width="80">
+                                    <mx:itemRenderer>
+                                        <mx:Component>
+                                            <mx:VBox horizontalAlign="right">
+                                                <mx:Label text="{data.invoicePrice.toFixed(2)}"/>
+                                            </mx:VBox>
+                                        </mx:Component>
+                                    </mx:itemRenderer>
+                                </mx:DataGridColumn>
+
+                                <mx:DataGridColumn
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='tax')"
+                                                   labelFunction="lineTaxLabelFunction"  width="80" dataTipFunction="lineTaxDataTipFunction" showDataTips="true"/>
 
                                 <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='qty')"
@@ -471,7 +504,7 @@
 
                             >
                         <mx:columns>
-                            <mx:DataGridColumn showDataTips="true" width="25"
+                            <mx:DataGridColumn width="25"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
                                                dataField="customerOrderDeliveryId"
                                     />
@@ -479,24 +512,32 @@
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNumRefNo')">
                                 <mx:itemRenderer>
                                     <mx:Component>
-                                        <mx:VBox>
+                                        <mx:VBox horizontalScrollPolicy="off">
                                             <mx:Label text="{data.deliveryNum}"/>
                                             <mx:Label text="{data.refNo}"/>
                                         </mx:VBox>
                                     </mx:Component>
                                 </mx:itemRenderer>
                             </mx:DataGridColumn>
-                            <mx:DataGridColumn
-                                               headerText="@Resource(bundle='CustomerOrderPanel',key='inventoryStatus')"
-                                               labelFunction="getDeliveryStatusLabel"
-                                    />
-                            <mx:DataGridColumn showDataTips="true" width="300"
+                            <mx:DataGridColumn width="300"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsInfo')"
                                                labelFunction="itemsInfoLabelFunction"
                                                wordWrap="true"/>
                             <mx:DataGridColumn width="80"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsCost')"
                                                labelFunction="itemsCostInDeliveryLabelFunction"/>
+                            <mx:DataGridColumn
+                                    headerText="@Resource(bundle='CustomerOrderPanel',key='carrierInfo')">
+                                <mx:itemRenderer>
+                                    <mx:Component>
+                                        <mx:VBox horizontalScrollPolicy="off">
+                                            <mx:Label text="{data.carrierName}"/>
+                                            <mx:Label text="{data.carrierSlaName}"/>
+                                        </mx:VBox>
+                                    </mx:Component>
+                                </mx:itemRenderer>
+                            </mx:DataGridColumn>
+
                             <mx:DataGridColumn width="80"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='listPrice')"
                                                dataField="listPrice"/>
@@ -507,19 +548,12 @@
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='shipmentCost')"
                                                dataField="price"
                                     />
-                            <mx:DataGridColumn
-                                               headerText="@Resource(bundle='CustomerOrderPanel',key='carrierInfo')">
-                                <mx:itemRenderer>
-                                    <mx:Component>
-                                        <mx:VBox>
-                                            <mx:Label text="{data.carrierName}"/>
-                                            <mx:Label text="{data.carrierSlaName}"/>
-                                        </mx:VBox>
-                                    </mx:Component>
-                                </mx:itemRenderer>
-                            </mx:DataGridColumn>
+                            <mx:DataGridColumn width="80"
+                                               headerText="@Resource(bundle='CustomerOrderPanel',key='tax')"
+                                               labelFunction="deliveryTaxLabelFunction" showDataTips="true" dataTipFunction="deliveryTaxTipFunction"
+                                    />
 
-                            <mx:DataGridColumn showDataTips="true" width="80"
+                            <mx:DataGridColumn width="80"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryTotal')"
                                                labelFunction="deliveryTotalLabelFunction"
                                     />
@@ -802,7 +836,7 @@
             </mx:TabNavigator>
         </mx:Panel>
 
-    </mx:VBox>
+    </mx:VDividedBox>
     <mx:ArrayCollection id="statuses"/>
 
     <mx:NumberFormatter id="moneyFormat"
@@ -820,6 +854,7 @@
 
         import org.yes.cart.impl.CustomerOrderDTOImpl;
         import org.yes.cart.impl.CustomerOrderDeliveryDTOImpl;
+        import org.yes.cart.impl.CustomerOrderDeliveryDetailDTOImpl;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
@@ -1023,7 +1058,7 @@
             if (rez == null) {
                 rez = item.deliveryStatus;
             }
-            return rez;
+            return resourceManager.getString('CustomerOrderPanel', 'inventoryStatus') + ': ' + rez;
         }
 
 
@@ -1051,9 +1086,10 @@
          * @return
          */
         private function itemsInfoLabelFunction(item:CustomerOrderDeliveryDTOImpl, column:DataGridColumn):String {
-            var rez:String = "";
+            var rez:String = getDeliveryStatusLabel(item, column);
             for (var i:int = 0; i < item.detail.length; i++) {
-                rez += "[" + item.detail[i].skuCode + "] " + item.detail[i].skuName + "\n";
+                var _det:CustomerOrderDeliveryDetailDTOImpl = item.detail[i] as CustomerOrderDeliveryDetailDTOImpl;
+                rez += '\n[' + _det.skuCode + ' x ' + _det.qty + '] ' + _det.skuName;
             }
             return rez;
         }
@@ -1073,17 +1109,50 @@
 
 
         /**
-         * Total cost of delivery including ites and shipment price.
+         * Delivery tax.
+         * @param item delivery
+         * @param column column
+         * @return tax of single delivery
+         */
+        public function deliveryTaxLabelFunction(item:Object, column:DataGridColumn):String {
+            var _del:CustomerOrderDeliveryDTOImpl = item as CustomerOrderDeliveryDTOImpl;
+            if (_del != null) {
+                return (_del.grossPrice - _del.netPrice).toFixed(2);
+            }
+            return "0.00";
+        }
+
+        /**
+         * Delivery tax tip.
+         * @param item delivery
+         * @return tax of single delivery
+         */
+        public function deliveryTaxTipFunction(item:Object):String {
+            var _del:CustomerOrderDeliveryDTOImpl = item as CustomerOrderDeliveryDTOImpl;
+            if (_del != null) {
+                return _del.taxCode + ': ' + _del.taxRate.toFixed(2) + '%';
+            }
+            return "";
+        }
+
+
+        /**
+         * Total cost of delivery including items and shipment price.
          * @param item delivery
          * @param column column
          * @return amount of single delivery
          */
         public function deliveryTotalLabelFunction(item:Object, column:DataGridColumn):String {
-            var sum:Number = Number(item.price);
-            for (var i:int = 0; i < item.detail.length; i++) {
-                sum += Number((item.detail[i].qty * item.detail[i].invoicePrice).toFixed(2));
+            var _del:CustomerOrderDeliveryDTOImpl = item as CustomerOrderDeliveryDTOImpl;
+            if (_del != null) {
+                var sum:Number = Number(_del.grossPrice);
+                for (var i:int = 0; i < item.detail.length; i++) {
+                    var _det:CustomerOrderDeliveryDetailDTOImpl = item.detail[i] as CustomerOrderDeliveryDetailDTOImpl;
+                    sum += _det.qty * _det.grossPrice;
+                }
+                return sum.toFixed(2);
             }
-            return sum.toFixed(2);
+            return "0.00";
         }
 
 
@@ -1096,7 +1165,8 @@
         public function itemsCostInDeliveryLabelFunction(item:CustomerOrderDeliveryDTOImpl, column:DataGridColumn):String {
             var sum:Number = 0;
             for (var i:int = 0; i < item.detail.length; i++) {
-                sum += Number((item.detail[i].qty * item.detail[i].invoicePrice).toFixed(2));
+                var _det:CustomerOrderDeliveryDetailDTOImpl = item.detail[i] as CustomerOrderDeliveryDetailDTOImpl;
+                sum += _det.qty * _det.grossPrice;
             }
             return sum.toFixed(2);
         }
@@ -1109,7 +1179,28 @@
          * @return
          */
         private function lineTotalLabelFunction(item:Object, column:DataGridColumn):String {
-            return (item.qty * item.invoicePrice).toFixed(2);
+            return (item.qty * item.grossPrice).toFixed(2);
+        }
+
+
+        /**
+         * Get line price tax .
+         * @param item
+         * @param column
+         * @return
+         */
+        private function lineTaxLabelFunction(item:Object, column:DataGridColumn):String {
+            return (item.grossPrice - item.netPrice).toFixed(2);
+        }
+
+        /**
+         * Get line price tax .
+         * @param item
+         * @param column
+         * @return
+         */
+        private function lineTaxDataTipFunction(item:Object):String {
+            return item.taxCode + ': ' + item.taxRate.toFixed(2) + '%';
         }
 
 
@@ -1278,6 +1369,9 @@
         private function readPaymentInformation():void {
 
             var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
+            if (orderDto == null) {
+                return;
+            }
             orderPaymentManagementPanel.searchFilterPanel.visible = false;
             orderPaymentManagementPanel.searchFilterPanel.includeInLayout = false;
             orderPaymentManagementPanel.orderNumber.text = orderDto.ordernum;
@@ -1286,13 +1380,13 @@
             orderPaymentManagementPanel.panelTitle.title = ""
                     + resourceManager.getString('CustomerOrderPanel', 'amount')
                     + " : "
-                    + customerOrderGrid.selectedItem.amount
+                    + orderDto.amount
                     + "  "
-                    + customerOrderGrid.selectedItem.currency
+                    + orderDto.currency
                     + "    "
                     + resourceManager.getString('CustomerOrderPanel', 'billingAddr')
                     + "   "
-                    + customerOrderGrid.selectedItem.billingAddress;
+                    + orderDto.billingAddress;
 
         }
 

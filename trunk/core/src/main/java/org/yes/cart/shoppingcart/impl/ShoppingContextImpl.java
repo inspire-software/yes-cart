@@ -16,7 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.shoppingcart.ShoppingContext;
+import org.yes.cart.shoppingcart.MutableShoppingContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +29,15 @@ import java.util.List;
  * Date: 12-May-2011
  * Time: 10:37:13
  */
-public class ShoppingContextImpl implements ShoppingContext {
+public class ShoppingContextImpl implements MutableShoppingContext {
 
     private static final long serialVersionUID =  20110509L;
 
     private String customerName;
     private long shopId;
     private String shopCode;
+    private String countryCode;
+    private String stateCode;
     private String customerEmail;
     private List<String> customerShops;
 
@@ -48,12 +50,17 @@ public class ShoppingContextImpl implements ShoppingContext {
         return customerEmail;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set customer email.
+         * @param customerEmail customer email.
+         */
     public void setCustomerEmail(final String customerEmail) {
         this.customerEmail = customerEmail;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Clear context.
+         */
     public void clearContext() {
         clearShopRelatedParameters();
         customerEmail = null;
@@ -73,7 +80,13 @@ public class ShoppingContextImpl implements ShoppingContext {
         return resolvedIp;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set shopper ip address.
+         *
+         * TODO: YC-361
+         *
+         * @param resolvedIp resolved ip address.
+         */
     public void setResolvedIp(final String resolvedIp) {
         this.resolvedIp = resolvedIp;
     }
@@ -83,7 +96,11 @@ public class ShoppingContextImpl implements ShoppingContext {
         return latestViewedSkus;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set latest viewed sku codes.
+         *
+         * @param latestViewedSkus latest viewed skus.
+         */
     public void setLatestViewedSkus(final List<String> latestViewedSkus) {
         this.latestViewedSkus = latestViewedSkus;
     }
@@ -93,7 +110,13 @@ public class ShoppingContextImpl implements ShoppingContext {
         return latestViewedCategories;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set last viewed categories.
+         *
+         * TODO: YC-360
+         *
+         * @param latestViewedCategories comma separated list of category ids.
+         */
     public void setLatestViewedCategories(final List<String> latestViewedCategories) {
         this.latestViewedCategories = latestViewedCategories;
     }
@@ -103,7 +126,11 @@ public class ShoppingContextImpl implements ShoppingContext {
         return customerName;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set customer name.
+         *
+         * @param customerName customer name.
+         */
     public void setCustomerName(final String customerName) {
         this.customerName = customerName;
     }
@@ -113,7 +140,11 @@ public class ShoppingContextImpl implements ShoppingContext {
         return customerShops;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set customer active shops.
+         *
+         * @param shops customer active shops
+         */
     public void setCustomerShops(final List<String> shops) {
         this.customerShops = shops;
     }
@@ -123,7 +154,11 @@ public class ShoppingContextImpl implements ShoppingContext {
         return shopId;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set current shop id.
+         *
+         * @param shopId current shop id.
+         */
     public void setShopId(final long shopId) {
         if (this.shopId != shopId) {
             clearShopRelatedParameters();
@@ -136,11 +171,44 @@ public class ShoppingContextImpl implements ShoppingContext {
         return shopCode;
     }
 
-    /** {@inheritDoc} */
+    /**
+         * Set current shop code.
+         *
+         * @param shopCode current shop code.
+         */
     public void setShopCode(final String shopCode) {
         if (!shopCode.equals(this.shopCode)) {
             clearShopRelatedParameters();
         }
         this.shopCode = shopCode;
     }
+
+    /** {@inheritDoc} */
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    /**
+         * Set current country code.
+         *
+         * @param countryCode current country code.
+         */
+    public void setCountryCode(final String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    /** {@inheritDoc} */
+    public String getStateCode() {
+        return stateCode;
+    }
+
+    /**
+         * Set current state code.
+         *
+         * @param stateCode current state code.
+         */
+    public void setStateCode(final String stateCode) {
+        this.stateCode = stateCode;
+    }
+
 }

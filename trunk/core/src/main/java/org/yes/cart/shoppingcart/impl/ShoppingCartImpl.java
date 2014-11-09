@@ -22,12 +22,7 @@ import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Shopping cart default implementation.
@@ -44,13 +39,14 @@ import java.util.TreeSet;
  * Date: Jan 15, 2011
  * Time: 10:39:12 PM
  */
-public class ShoppingCartImpl implements ShoppingCart {
+public class ShoppingCartImpl implements MutableShoppingCart {
 
     private static final long serialVersionUID =  20110509L;
 
     private List<CartItemImpl> items = new ArrayList<CartItemImpl>();
     private List<CartItemImpl> gifts = new ArrayList<CartItemImpl>();
     private Set<String> coupons = new TreeSet<String>();
+    private List<CartItemImpl> shipping = new ArrayList<CartItemImpl>();
 
     private String guid = java.util.UUID.randomUUID().toString();
 
@@ -62,9 +58,9 @@ public class ShoppingCartImpl implements ShoppingCart {
 
     private long processingStartTimestamp;
 
-    private ShoppingContext shoppingContext;
+    private MutableShoppingContext shoppingContext;
 
-    private OrderInfo orderInfo;
+    private MutableOrderInfo orderInfo;
 
     private Total total = new TotalImpl();
 
@@ -79,11 +75,7 @@ public class ShoppingCartImpl implements ShoppingCart {
         return calculationStrategy;
     }
 
-    /**
-     * Initialise this cart.
-     *
-     * @param calculationStrategy {@link AmountCalculationStrategy}
-     */
+    /** {@inheritDoc} */
     public void initialise(final AmountCalculationStrategy calculationStrategy) {
         this.calculationStrategy = calculationStrategy;
         this.processingStartTimestamp = System.currentTimeMillis();
@@ -155,6 +147,16 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /** {@inheritDoc} */
+    public List<CartItem> getShippingList() {
+        final List<CartItem> immutableItems = new ArrayList<CartItem>(getShipping().size());
+        // all shipping lines
+        for (CartItem item : getShipping()) {
+            immutableItems.add(new ImmutableCartItemImpl(item));
+        }
+        return Collections.unmodifiableList(immutableItems);
+    }
+
+    /** {@inheritDoc} */
     public BigDecimal getProductSkuQuantity(final String sku) {
         final int skuIndex = indexOfProductSku(sku);
         if (skuIndex == -1) { //not found
@@ -176,6 +178,21 @@ public class ShoppingCartImpl implements ShoppingCart {
         newItem.setProductSkuCode(sku);
         newItem.setQuantity(quantity);
         getItems().add(newItem);
+        return true;
+    }
+
+    /** {@inheritDoc} */
+    public boolean addShippingToCart(final String carrierSlaId, final BigDecimal quantity) {
+        final int shipIndex = indexOfShipping(carrierSlaId);
+        if (shipIndex != -1) {
+            getShipping().get(shipIndex).addQuantity(quantity);
+            return false;
+        }
+
+        final CartItemImpl newItem = new CartItemImpl();
+        newItem.setProductSkuCode(carrierSlaId);
+        newItem.setQuantity(quantity);
+        getShipping().add(newItem);
         return true;
     }
 
@@ -281,6 +298,25 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /** {@inheritDoc} */
+    public boolean removeShipping() {
+        if (getShipping().isEmpty()) {
+            return false;
+        }
+        getShipping().clear();
+        return true;
+    }
+
+    /** {@inheritDoc} */
+    public boolean removeShipping(final String carrierSlaId) {
+        final int skuIndex = indexOfShipping(carrierSlaId);
+        if (skuIndex != -1) {
+            getItems().remove(skuIndex);
+            return true;
+        }
+        return false;
+    }
+
+    /** {@inheritDoc} */
     public boolean setProductSkuPrice(final String skuCode, final BigDecimal salePrice, final BigDecimal listPrice) {
         final int skuIndex = indexOfProductSku(skuCode);
         if (skuIndex != -1) {
@@ -297,11 +333,32 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /** {@inheritDoc} */
+    public boolean setShippingPrice(final String carrierSlaId, final BigDecimal salePrice, final BigDecimal listPrice) {
+        final int shipIndex = indexOfShipping(carrierSlaId);
+        if (shipIndex != -1) {
+            final CartItemImpl shipItem = getShipping().get(shipIndex);
+            shipItem.setPrice(salePrice);
+            shipItem.setSalePrice(salePrice);
+            shipItem.setListPrice(listPrice);
+            // clear promotion as we effectively changed the base price for promo calculations
+            shipItem.setAppliedPromo(null);
+            shipItem.setPromoApplied(false);
+            return true;
+        }
+        return false;
+    }
+
+    /** {@inheritDoc} */
     public boolean setGiftPrice(final String skuCode, final BigDecimal salePrice, final BigDecimal listPrice) {
         final int skuIndex = indexOfGift(skuCode);
         if (skuIndex != -1) {
             final CartItemImpl cartItem = getGifts().get(skuIndex);
             cartItem.setPrice(MoneyUtils.ZERO);
+            cartItem.setNetPrice(MoneyUtils.ZERO);
+            cartItem.setGrossPrice(MoneyUtils.ZERO);
+            cartItem.setTaxRate(MoneyUtils.ZERO);
+            cartItem.setTaxCode("");
+            cartItem.setTaxExclusiveOfPrice(false);
             cartItem.setSalePrice(salePrice);
             cartItem.setListPrice(listPrice);
             // must not clear any promotion data
@@ -317,6 +374,48 @@ public class ShoppingCartImpl implements ShoppingCart {
             final CartItemImpl cartItem = getItems().get(skuIndex);
             cartItem.setPrice(promoPrice);
             addPromoCode(cartItem, promoCode);
+            return true;
+        }
+        return false;
+    }
+
+    /** {@inheritDoc} */
+    public boolean setShippingPromotion(final String carrierSlaId, final BigDecimal promoPrice, final String promoCode) {
+        final int shipIndex = indexOfShipping(carrierSlaId);
+        if (shipIndex != -1) {
+            final CartItemImpl shipItem = getShipping().get(shipIndex);
+            shipItem.setPrice(promoPrice);
+            addPromoCode(shipItem, promoCode);
+            return true;
+        }
+        return false;
+    }
+
+    /** {@inheritDoc} */
+    public boolean setProductSkuTax(final String skuCode, final BigDecimal netPrice, final BigDecimal grossPrice, final BigDecimal rate, final String taxCode, final boolean exclPrice) {
+        final int skuIndex = indexOfProductSku(skuCode);
+        if (skuIndex != -1) {
+            final CartItemImpl cartItem = getItems().get(skuIndex);
+            cartItem.setNetPrice(netPrice);
+            cartItem.setGrossPrice(grossPrice);
+            cartItem.setTaxRate(rate);
+            cartItem.setTaxCode(taxCode);
+            cartItem.setTaxExclusiveOfPrice(exclPrice);
+            return true;
+        }
+        return false;
+    }
+
+    /** {@inheritDoc} */
+    public boolean setShippingTax(final String carrierSlaPk, final BigDecimal netPrice, final BigDecimal grossPrice, final BigDecimal rate, final String taxCode, final boolean exclPrice) {
+        final int shipIndex = indexOfShipping(carrierSlaPk);
+        if (shipIndex != -1) {
+            final CartItemImpl shipItem = getShipping().get(shipIndex);
+            shipItem.setNetPrice(netPrice);
+            shipItem.setGrossPrice(grossPrice);
+            shipItem.setTaxRate(rate);
+            shipItem.setTaxCode(taxCode);
+            shipItem.setTaxExclusiveOfPrice(exclPrice);
             return true;
         }
         return false;
@@ -408,6 +507,11 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /** {@inheritDoc} */
+    public int indexOfShipping(final String carrierSlaId) {
+        return indexOf(carrierSlaId, getShipping());
+    }
+
+    /** {@inheritDoc} */
     public int indexOfGift(final String skuCode) {
         return indexOf(skuCode, getGifts());
     }
@@ -450,17 +554,23 @@ public class ShoppingCartImpl implements ShoppingCart {
         return gifts;
     }
 
+    /**
+     * Internal access to mutable items.
+     */
+    List<CartItemImpl> getShipping() {
+        if (shipping == null) {
+            shipping = new ArrayList<CartItemImpl>();
+        }
+        return shipping;
+    }
+
     /** {@inheritDoc} */
     public String getCurrencyCode() {
         return currencyCode;
     }
 
-    /**
-     * Set currency.
-     *
-     * @param currencyCode new currency to use
-     */
-    void setCurrencyCode(final String currencyCode) {
+    /** {@inheritDoc} */
+    public void setCurrencyCode(final String currencyCode) {
         this.currencyCode = currencyCode;
     }
 
@@ -501,7 +611,7 @@ public class ShoppingCartImpl implements ShoppingCart {
     }
 
     /** {@inheritDoc} */
-    public ShoppingContext getShoppingContext() {
+    public MutableShoppingContext getShoppingContext() {
         if (shoppingContext == null) {
             shoppingContext = new ShoppingContextImpl();
         }
@@ -513,17 +623,13 @@ public class ShoppingCartImpl implements ShoppingCart {
         return currentLocale;
     }
 
-    /**
-     * Set shopping cart generic locale.
-     *
-     * @param currentLocale current locale
-     */
-    void setCurrentLocale(final String currentLocale) {
+    /** {@inheritDoc} */
+    public void setCurrentLocale(final String currentLocale) {
         this.currentLocale = currentLocale;
     }
 
     /** {@inheritDoc} */
-    public OrderInfo getOrderInfo() {
+    public MutableOrderInfo getOrderInfo() {
         if (orderInfo == null) {
             orderInfo = new OrderInfoImpl();
         }
