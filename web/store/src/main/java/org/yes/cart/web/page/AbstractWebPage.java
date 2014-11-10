@@ -41,6 +41,7 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.shoppingcart.ShoppingCartPersister;
@@ -76,7 +77,7 @@ public class AbstractWebPage extends WebPage {
     @SpringBean(name = StorefrontServiceSpringKeys.DECORATOR_FACADE)
     private DecoratorFacade decoratorFacade;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_SUPPORT_FACADE)
+    @SpringBean(name = WicketServiceSpringKeys.WICKET_SUPPORT_FACADE)
     private WicketSupportFacade wicketSupportFacade;
 
 

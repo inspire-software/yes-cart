@@ -161,6 +161,34 @@
         <property name="sitemapXml" ref="sitemapXmlResource"/>
     </bean>
 
+    <bean id="wicketCentralViewProvider" class="org.yes.cart.web.theme.impl.WicketCentralViewProviderImpl">
+        <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1" ref="categoryService"/>
+        <constructor-arg index="2">
+            <map key-type="java.lang.String" value-type="java.lang.Class">
+                <entry key="subcats"        value="org.yes.cart.web.page.component.SubCategoriesCentralView"/>
+                <entry key="products"       value="org.yes.cart.web.page.component.ProductsCentralView"/>
+                <entry key="searchrez"      value="org.yes.cart.web.page.component.ProductsCentralView"/>
+                <entry key="product"        value="org.yes.cart.web.page.component.SkuCentralView"/>
+                <entry key="sku"            value="org.yes.cart.web.page.component.SkuCentralView"/>
+                <entry key="content"        value="org.yes.cart.web.page.component.ContentCentralView"/>
+                <entry key="dynocontent"    value="org.yes.cart.web.page.component.DynoContentCentralView"/>
+                <entry key="category"       value="org.yes.cart.web.page.component.EmptyCentralView"/>
+                <entry key="default"        value="org.yes.cart.web.page.component.EmptyCentralView"/>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="3">
+            <map key-type="java.lang.Class" value-type="org.yes.cart.web.theme.impl.WicketCentralViewProviderImpl.CategoryType">
+                <entry key="org.yes.cart.web.page.component.EmptyCentralView"           value="CATEGORY"/>
+                <entry key="org.yes.cart.web.page.component.SubCategoriesCentralView"   value="CATEGORY"/>
+                <entry key="org.yes.cart.web.page.component.ProductsCentralView"        value="ANY"/>
+                <entry key="org.yes.cart.web.page.component.SkuCentralView"             value="ANY"/>
+                <entry key="org.yes.cart.web.page.component.ContentCentralView"         value="CONTENT"/>
+                <entry key="org.yes.cart.web.page.component.DynoContentCentralView"     value="CONTENT"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
     <bean id="sitemapXmlResource" class="org.yes.cart.web.resource.SitemapXmlResource">
         <constructor-arg ref="sitemapXmlService"/>
     </bean>

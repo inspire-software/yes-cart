@@ -25,6 +25,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Category;
@@ -228,10 +229,14 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
 
 
     public String[] getThumbnailImageSize(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(
+        final String[] size = categoryService.getCategoryAttributeRecursive(
                 null, category,
                 thumbnailSize
         );
+        if (size == null || size.length != 2) {
+            return Constants.DEFAULT_THUMB_SIZE;
+        }
+        return size;
     }
 
 }

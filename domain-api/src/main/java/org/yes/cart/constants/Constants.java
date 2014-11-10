@@ -96,6 +96,11 @@ public interface Constants {
      */
     String WIDTH = "w";
 
+    /**
+     * Default thumb size
+     */
+    String[] DEFAULT_THUMB_SIZE = new String[] { "80", "80" };
+
 
     String CATEGORY_IMAGE_REPOSITORY_URL_PATTERN    = "/imgvault/category/";
     String BRAND_IMAGE_REPOSITORY_URL_PATTERN       = "/imgvault/brand/";
