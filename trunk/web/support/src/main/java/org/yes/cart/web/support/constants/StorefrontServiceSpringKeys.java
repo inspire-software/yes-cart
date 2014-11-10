@@ -83,11 +83,6 @@ public interface StorefrontServiceSpringKeys {
       */
      public String DECORATOR_FACADE = "decoratorFacade";
 
-     /**
-      * Wicket support facade
-      */
-     public String WICKET_SUPPORT_FACADE = "wicketSupportFacade";
-
     /**
       * Address book facade
       */

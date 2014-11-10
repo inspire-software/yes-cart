@@ -22,7 +22,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
-import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 
 import java.io.Serializable;
 import java.util.List;
@@ -45,7 +45,7 @@ public class ShoppingCartCouponsList extends ListView<String> {
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
-    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_SUPPORT_FACADE)
+    @SpringBean(name = WicketServiceSpringKeys.WICKET_SUPPORT_FACADE)
     private WicketSupportFacade wicketSupportFacade;
 
     private List<String> appliedCoupons;

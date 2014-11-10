@@ -22,15 +22,11 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.slf4j.Logger;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.DomainApiUtil;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.*;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsView;
@@ -46,12 +42,12 @@ import org.yes.cart.web.page.component.product.RecentlyViewedProducts;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.theme.WicketCentralViewProvider;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.lang.reflect.Constructor;
-import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -68,6 +64,9 @@ public class HomePage extends AbstractWebPage {
 
     @SpringBean(name = StorefrontServiceSpringKeys.CENTRAL_VIEW_RESOLVER)
     private CentralViewResolver centralViewResolver;
+
+    @SpringBean(name = WicketServiceSpringKeys.WICKET_CENTRAL_VIEW_PROVIDER)
+    private WicketCentralViewProvider wicketCentralViewProvider;
 
     @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
     private LuceneQueryFactory luceneQueryFactory;
@@ -249,116 +248,9 @@ public class HomePage extends AbstractWebPage {
             final long categoryId,
             final BooleanQuery booleanQuery) {
 
-        Class<? extends AbstractCentralView> clz = rendererPanelMap.get(rendererLabel);
-        try {
-            if (categoryId != 0) {
-
-                if (clz == ContentCentralView.class || clz == DynoContentCentralView.class) {
-                    //check is this content is allowed to open in this shop
-                    if (!isContentVisibleInShop(categoryId)) {
-                        final Logger log = ShopCodeContext.getLog(this);
-                        if (log.isWarnEnabled()) {
-                            log.warn("Can not access content {} from shop {}", categoryId, ShopCodeContext.getShopId());
-                        }
-                        return new EmptyCentralView(id, booleanQuery);
-                    }
-                } else {
-                    //check is this category allowed to open in this shop
-                    if (!isCategoryVisibleInShop(categoryId)) {
-                        final Logger log = ShopCodeContext.getLog(this);
-                        if (log.isWarnEnabled()) {
-                            log.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
-                        }
-                        return new EmptyCentralView(id, booleanQuery);
-                    }
-                }
-
-            }
-
-            Constructor<? extends AbstractCentralView> constructor = clz.getConstructor(String.class,
-                    long.class,
-                    BooleanQuery.class);
-            return constructor.newInstance(id, categoryId, booleanQuery);
-
-        } catch (Exception e) {
-            ShopCodeContext.getLog(this).error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
-            //e.printStackTrace();
-            return new EmptyCentralView(id, booleanQuery);
-
-        }
+        return wicketCentralViewProvider.getCentralPanel(rendererLabel, id, categoryId, booleanQuery);
 
     }
-
-    /**
-     * Check if given category is visible in current shop.
-     *
-     * Criteria to satisfy:
-     * 1. Category or its parent must belong to a ShopCategory for given shop
-     * 2. All categories in hierarchy leading to ShopCategory must satisfy Availablefrom/Availableto time frame
-     *
-     * @param categoryId category to check
-     *
-     * @return true if criteria is met
-     */
-    private boolean isCategoryVisibleInShop(final Long categoryId) {
-
-        final Set<Long> catIds = shopService.getShopCategoriesIds(ShopCodeContext.getShopId());
-        Category category = categoryService.getById(categoryId);
-        final Date now = new Date();
-
-        while (category != null
-                && DomainApiUtil.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)
-                && category.getId() != category.getParentId()) { // while enabled and not reached root
-
-            if (catIds.contains(categoryId)) {
-
-                return true;
-
-            }
-            category = categoryService.getById(category.getParentId());
-
-        }
-        return false;
-    }
-
-    /**
-     * Check if given content is visible in current shop.
-     *
-     * NOTE: we are using categoryService for retrieving content since Breadcrumbs use
-     * categoryService and thus cache will work better
-     *
-     * Criteria to satisfy:
-     * 1. Content parent must be root content for given shop
-     * 2. Only current content object must satisfy Availablefrom/Availableto time frame
-     *
-     * @param contentId content to check
-     *
-     * @return true if criteria is met
-     */
-    private boolean isContentVisibleInShop(final Long contentId) {
-
-        final Set<Long> catIds = shopService.getShopContentIds(ShopCodeContext.getShopId());
-        Category content = categoryService.getById(contentId);
-        final Date now = new Date();
-
-        if (DomainApiUtil.isObjectAvailableNow(true, content.getAvailablefrom(), content.getAvailableto(), now)) {
-
-            while (content != null) {
-
-                if (catIds.contains(content.getCategoryId())) {
-
-                    return true;
-
-                }
-
-                content = categoryService.getById(content.getParentId());
-
-            }
-
-        }
-        return false;
-    }
-
 
     /**
      * Get page title.

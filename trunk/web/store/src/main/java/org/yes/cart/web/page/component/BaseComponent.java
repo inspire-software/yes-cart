@@ -22,6 +22,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 
@@ -43,7 +44,7 @@ public class BaseComponent extends Panel {
     @SpringBean(name = StorefrontServiceSpringKeys.DECORATOR_FACADE)
     private DecoratorFacade decoratorFacade;
 
-    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_SUPPORT_FACADE)
+    @SpringBean(name = WicketServiceSpringKeys.WICKET_SUPPORT_FACADE)
     private WicketSupportFacade wicketSupportFacade;
 
     private boolean panelVisible = true;
