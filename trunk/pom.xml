@@ -96,12 +96,7 @@
         </repository>
         <repository>
             <id>jboss-public</id>
-            <url>https://repository.jboss.org/nexus/content/groups/public</url>
-            <snapshots><enabled>false</enabled></snapshots>
-        </repository>
-        <repository>
-            <id>nexus.appliqa.com</id>
-            <url>https://nexus.appliqa.com/nexus/content/repositories/public</url>
+            <url>http://repository.jboss.org/nexus/content/groups/public</url>
             <snapshots><enabled>false</enabled></snapshots>
         </repository>
     </repositories>
