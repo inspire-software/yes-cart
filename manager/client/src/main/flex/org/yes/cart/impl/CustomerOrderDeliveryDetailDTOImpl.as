@@ -29,7 +29,7 @@ public class CustomerOrderDeliveryDetailDTOImpl {
 
     public var qty:Number;
 
-    public var invoicePrice:Number;
+    public var price:Number;
 
     public var listPrice:Number;
     public var salePrice:Number;
@@ -60,7 +60,9 @@ public class CustomerOrderDeliveryDetailDTOImpl {
         return "CustomerOrderDeliveryDetailDTOImpl{customerOrderDeliveryDetId=" + String(customerOrderDeliveryDetId)
                 + ",skuCode=" + String(skuCode)
                 + ",qty=" + String(qty)
-                + ",invoicePrice=" + String(invoicePrice)
+                + ",price=" + String(price)
+                + ",netPrice=" + String(netPrice)
+                + ",grossPrice=" + String(grossPrice)
                 + ",listPrice=" + String(listPrice)
                 + ",lineTotal=" + String(lineTotal)
                 + ",deliveryNum=" + String(deliveryNum)

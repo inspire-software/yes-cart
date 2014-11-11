@@ -422,12 +422,12 @@
                                         />
 
                                 <mx:DataGridColumn
-                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='price')"
                                                    width="80">
                                     <mx:itemRenderer>
                                         <mx:Component>
                                             <mx:VBox horizontalAlign="right">
-                                                <mx:Label text="{data.invoicePrice.toFixed(2)}"/>
+                                                <mx:Label text="{data.price.toFixed(2)}"/>
                                             </mx:VBox>
                                         </mx:Component>
                                     </mx:itemRenderer>
@@ -638,9 +638,9 @@
 
                                                         popUp = ValueDialog(PopUpManager.createPopUp(
                                                                 DisplayObject(FlexGlobals.topLevelApplication), clz, true));
-                                                        popUp.windowTitle = data.name;
+                                                        popUp.windowTitle = data.deliveryNum;
                                                         popUp.value = data.refNo;
-                                                        popUp.setInformation(data.description);
+                                                        popUp.setInformation(data.shippingAddress);
                                                         (popUp as SimpleTextDialog).displayVal.visible = false;
                                                         (popUp as SimpleTextDialog).displayVal.includeInLayout = false;
                                                         (popUp as SimpleTextDialog).displayValFormItem.visible = false;
@@ -1076,7 +1076,7 @@
          * @return
          */
         private function discountLabelFunction(item:Object, column:DataGridColumn):String {
-            return "" + moneyFormat.format(item.listPrice - item.invoicePrice);
+            return "" + moneyFormat.format(item.listPrice - item.price);
         }
 
         /**

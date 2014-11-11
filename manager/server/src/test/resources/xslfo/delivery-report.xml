@@ -16,54 +16,129 @@
   ~    limitations under the License.
   -->
 <yes-report>
-    <org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl>
-        <customerOrderDeliveryId>18</customerOrderDeliveryId>
-        <deliveryNum>20120916-16-0</deliveryNum>
-        <refNo>йцу-213</refNo>
-        <deliveryStatus>ds.inventory.allocated</deliveryStatus>
-        <carrierSlaName>fixed</carrierSlaName>
-        <carrierName>carrier</carrierName>
-        <ordernum>20120916-16</ordernum>
-        <shippingAddress>ул. Первака дом 23 кв 213123 23144 Новый мухосранск 12 1 Ivan Pupkin +380978159119</shippingAddress>
-        <billingAddress>ул. Первака дом 23 кв 213123 23144 Новый мухосранск 12 1 Ivan Pupkin +380978159119</billingAddress>
-        <currency>USD</currency>
-        <shopName>YesCart shop</shopName>
-        <deliveryGroup>D1</deliveryGroup>
-        <price>10.00</price>
-        <detail class="list">
-            <org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl>
-                <customerOrderDeliveryDetId>19</customerOrderDeliveryDetId>
-                <skuCode>N1E5TGE</skuCode>
-                <skuName>ThinkPad T530</skuName>
-                <qty>4.00</qty>
-                <invoicePrice>1637.73</invoicePrice>
-                <listPrice>1637.73</listPrice>
-                <lineTotal>6550.92</lineTotal>
-                <deliveryNum>20120916-16-0</deliveryNum>
-                <deliveryStatusLabel>ds.inventory.allocated</deliveryStatusLabel>
-            </org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl>
-            <org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl>
-                <customerOrderDeliveryDetId>20</customerOrderDeliveryDetId>
-                <skuCode>B1R22EA#ABU</skuCode>
-                <skuName>Pavilion g6-1306sa Notebook PC</skuName>
-                <qty>3.00</qty>
-                <invoicePrice>2605.72</invoicePrice>
-                <listPrice>2605.72</listPrice>
-                <lineTotal>7817.16</lineTotal>
-                <deliveryNum>20120916-16-0</deliveryNum>
-                <deliveryStatusLabel>ds.inventory.allocated</deliveryStatusLabel>
-            </org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl>
-            <org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl>
-                <customerOrderDeliveryDetId>21</customerOrderDeliveryDetId>
-                <skuCode>B0R94EA#ABZ</skuCode>
-                <skuName>g6-1364sl</skuName>
-                <qty>2.00</qty>
-                <invoicePrice>979.39</invoicePrice>
-                <listPrice>979.39</listPrice>
-                <lineTotal>1958.78</lineTotal>
-                <deliveryNum>20120916-16-0</deliveryNum>
-                <deliveryStatusLabel>ds.inventory.allocated</deliveryStatusLabel>
-            </org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl>
-        </detail>
-    </org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl>
+    <pair>
+        <first class="orderDto">
+            <customerorderId>53</customerorderId>
+            <ordernum>141111142753-15</ordernum>
+            <pgLabel>courierPaymentGatewayLabel</pgLabel>
+            <billingAddress>1234 `234 123123412 341324124 CN CN Guizhou bob doe 123123123</billingAddress>
+            <shippingAddress>1234 `234 123123412 341324124 CN CN Guizhou bob doe 123123123</shippingAddress>
+            <cartGuid>649cf817-5a87-4f18-abc2-b90c3700f81c</cartGuid>
+            <currency>USD</currency>
+            <orderStatus>os.waiting</orderStatus>
+            <multipleShipmentOption>false</multipleShipmentOption>
+            <orderTimestamp class="sql-timestamp">2014-11-11T14:27:53.554Z</orderTimestamp>
+            <email>bob22@bob.com</email>
+            <firstname>bob</firstname>
+            <lastname>doe</lastname>
+            <customerId>3</customerId>
+            <shopId>10</shopId>
+            <code>SHOP10</code>
+            <amount>10492.04</amount>
+            <price>9118.51</price>
+            <netPrice>9118.51</netPrice>
+            <grossPrice>10486.30</grossPrice>
+            <listPrice>11572.36</listPrice>
+            <promoApplied>true</promoApplied>
+            <appliedPromo>S10C_10:S10C-0001</appliedPromo>
+        </first>
+        <second class="list">
+            <orderDeliveryDto>
+                <customerOrderDeliveryId>52</customerOrderDeliveryId>
+                <deliveryNum>141111142753-15-0</deliveryNum>
+                <refNo>TRK-0001</refNo>
+                <deliveryStatus>ds.inventory.reserved</deliveryStatus>
+                <carrierSlaName>5-12 day USD</carrierSlaName>
+                <carrierName>Post</carrierName>
+                <ordernum>141111142753-15</ordernum>
+                <shippingAddress>1234 `234 123123412 341324124 CN CN Guizhou bob doe 123123123</shippingAddress>
+                <billingAddress>1234 `234 123123412 341324124 CN CN Guizhou bob doe 123123123</billingAddress>
+                <currency>USD</currency>
+                <shopName>YesCart shop</shopName>
+                <pgLabel>courierPaymentGatewayLabel</pgLabel>
+                <supportCaptureMore>true</supportCaptureMore>
+                <supportCaptureLess>true</supportCaptureLess>
+                <deliveryGroup>D3</deliveryGroup>
+                <price>2.49</price>
+                <listPrice>4.99</listPrice>
+                <promoApplied>true</promoApplied>
+                <appliedPromo>SHOP10USDSHIP50P</appliedPromo>
+                <netPrice>2.49</netPrice>
+                <grossPrice>2.87</grossPrice>
+                <taxRate>15.00</taxRate>
+                <taxCode>FED</taxCode>
+                <taxExclusiveOfPrice>true</taxExclusiveOfPrice>
+                <detail class="list">
+                    <orderLineDto>
+                        <customerOrderDeliveryDetId>58</customerOrderDeliveryDetId>
+                        <skuCode>H5F58EA</skuCode>
+                        <skuName>900 G1</skuName>
+                        <qty>4.00</qty>
+                        <price>2040.97</price>
+                        <listPrice>2401.14</listPrice>
+                        <salePrice>2401.14</salePrice>
+                        <gift>false</gift>
+                        <promoApplied>true</promoApplied>
+                        <appliedPromo>H5F58EA_15</appliedPromo>
+                        <netPrice>2040.97</netPrice>
+                        <grossPrice>2347.12</grossPrice>
+                        <taxRate>15.00</taxRate>
+                        <taxCode>FED</taxCode>
+                        <taxExclusiveOfPrice>true</taxExclusiveOfPrice>
+                        <lineTotal>9388.48</lineTotal>
+                        <lineTax>1224.60</lineTax>
+                        <deliveryNum>141111142753-15-0</deliveryNum>
+                        <deliveryStatusLabel>ds.inventory.reserved</deliveryStatusLabel>
+                    </orderLineDto>
+                </detail>
+            </orderDeliveryDto>
+            <orderDeliveryDto>
+                <customerOrderDeliveryId>53</customerOrderDeliveryId>
+                <deliveryNum>141111142753-15-1</deliveryNum>
+                <deliveryStatus>ds.inventory.reserved</deliveryStatus>
+                <carrierSlaName>5-12 day USD</carrierSlaName>
+                <carrierName>Post</carrierName>
+                <ordernum>141111142753-15</ordernum>
+                <shippingAddress>1234 `234 123123412 341324124 CN CN Guizhou bob doe 123123123</shippingAddress>
+                <billingAddress>1234 `234 123123412 341324124 CN CN Guizhou bob doe 123123123</billingAddress>
+                <currency>USD</currency>
+                <shopName>YesCart shop</shopName>
+                <pgLabel>courierPaymentGatewayLabel</pgLabel>
+                <supportCaptureMore>true</supportCaptureMore>
+                <supportCaptureLess>true</supportCaptureLess>
+                <deliveryGroup>D1</deliveryGroup>
+                <price>2.49</price>
+                <listPrice>4.99</listPrice>
+                <promoApplied>true</promoApplied>
+                <appliedPromo>SHOP10USDSHIP50P</appliedPromo>
+                <netPrice>2.49</netPrice>
+                <grossPrice>2.87</grossPrice>
+                <taxRate>15.00</taxRate>
+                <taxCode>FED</taxCode>
+                <taxExclusiveOfPrice>true</taxExclusiveOfPrice>
+                <detail class="list">
+                    <orderLineDto>
+                        <customerOrderDeliveryDetId>59</customerOrderDeliveryDetId>
+                        <skuCode>D4T10AW-AKD-H4F20AA-ABB</skuCode>
+                        <skuName>900 G1</skuName>
+                        <qty>1.00</qty>
+                        <price>1967.80</price>
+                        <listPrice>1967.80</listPrice>
+                        <salePrice>1967.80</salePrice>
+                        <gift>false</gift>
+                        <promoApplied>false</promoApplied>
+                        <netPrice>1967.80</netPrice>
+                        <grossPrice>2262.97</grossPrice>
+                        <taxRate>15.00</taxRate>
+                        <taxCode>FED</taxCode>
+                        <taxExclusiveOfPrice>true</taxExclusiveOfPrice>
+                        <lineTotal>2262.97</lineTotal>
+                        <lineTax>295.17</lineTax>
+                        <deliveryNum>141111142753-15-1</deliveryNum>
+                        <deliveryStatusLabel>ds.inventory.reserved</deliveryStatusLabel>
+                    </orderLineDto>
+                </detail>
+            </orderDeliveryDto>
+        </second>
+    </pair>
 </yes-report>

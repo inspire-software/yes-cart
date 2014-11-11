@@ -20,6 +20,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.Result;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -188,9 +189,11 @@ public class RemoteCustomerOrderServiceImpl
             throws Exception {
         if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
 
-            List rez =  findDeliveryByOrderNumber(orderNum, deliveryNum);
+            final List<CustomerOrderDTO> orders = findCustomerOrdersByCriteria(0, null, null, null, null, null, null, orderNum);
+            List rez =  findDeliveryByOrderNumber(orderNum, null); // All deliveries
 
-            return reportService.produceReport(reportLang, "reportDelivery", rez);
+            return reportService.produceReport(reportLang, "reportDelivery",
+                    (List) Collections.singletonList(new Pair(orders.get(0), rez)));
         } else {
             throw new AccessDeniedException("Access is denied");
         }

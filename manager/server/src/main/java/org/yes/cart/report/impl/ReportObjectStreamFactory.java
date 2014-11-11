@@ -17,12 +17,25 @@
 package org.yes.cart.report.impl;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl;
+import org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl;
+import org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl;
 import org.yes.cart.domain.entity.impl.*;
+import org.yes.cart.domain.misc.Pair;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Writer;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -59,7 +72,41 @@ public class ReportObjectStreamFactory {
 
         xStream.alias("exchangerates", ShopExchangeRateEntity.class);
 
+        xStream.alias("pair", Pair.class);
+        xStream.alias("orderDto", CustomerOrderDTOImpl.class);
+        xStream.alias("orderDeliveryDto", CustomerOrderDeliveryDTOImpl.class);
+        xStream.alias("orderLineDto", CustomerOrderDeliveryDetailDTOImpl.class);
 
+        xStream.registerConverter(new Converter() {
+
+
+
+            @Override
+            public void marshal(final Object source, final HierarchicalStreamWriter writer, final MarshallingContext context) {
+                if (source == null) {
+                    writer.setValue("");
+                } else {
+                    GregorianCalendar calendar = new GregorianCalendar();
+                    calendar.setTime((Date) source);
+                    try {
+                        writer.setValue(DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar).toXMLFormat());
+                    } catch (DatatypeConfigurationException e) {
+                        writer.setValue("");
+                    }
+                }
+
+            }
+
+            @Override
+            public Object unmarshal(final HierarchicalStreamReader reader, final UnmarshallingContext context) {
+                return null; // not needed
+            }
+
+            @Override
+            public boolean canConvert(final Class type) {
+                return Date.class.isAssignableFrom(type);
+            }
+        });
 
         return xStream;
 

@@ -66,7 +66,6 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
 
     @DtoField(value = "orderTimestamp", readOnly = true)
     private Date orderTimestamp;
-    
 
     @DtoField(value = "customer.email", readOnly = true)
     private String email;

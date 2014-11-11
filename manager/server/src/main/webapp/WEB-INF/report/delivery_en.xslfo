@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
   ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
   ~
@@ -15,15 +14,13 @@
   ~    See the License for the specific language governing permissions and
   ~    limitations under the License.
   -->
-
-
 <xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format">
-    <xsl:output method="xml" indent="yes"/>
+    <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 
     <xsl:template match="/">
-        <fo:root font-family="Times">
+        <fo:root font-family="Times" font-size="9">
 
 
             <fo:layout-master-set>
@@ -39,8 +36,10 @@
 
                 <fo:static-content flow-name="xsl-region-before">
                     <fo:block text-align="left" font-weight="bold" font-size="16pt">
-                        <fo:external-graphic src="report/yes-logo.png" width="30mm"/>
-                        Delivery
+                        <fo:inline>
+                            <fo:external-graphic  src="report/yes-logo.png" width="35mm" vertical-align="middle"/>
+                        </fo:inline>
+                        Order Summary
                     </fo:block>
                 </fo:static-content>
 
@@ -56,179 +55,483 @@
 
                 <fo:flow flow-name="xsl-region-body">
 
-                    <xsl:if test="count(./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl) > 0">
+                    <xsl:if test="count(./yes-report/pair) > 0">
 
-
-                        <fo:block>
-                            <fo:leader leader-pattern="rule" leader-length="17.0cm"/>
-                        </fo:block>
-
-                        <fo:block border-width="1mm" padding-before="3mm">
-                            Order #
-                            <fo:inline font-weight="bold">
-                                <xsl:value-of
-                                        select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/ordernum"/>
-                            </fo:inline>
-                            Delivery #
-                            <fo:inline font-weight="bold">
-                                <xsl:value-of
-                                        select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/deliveryNum"/>
-                            </fo:inline>
-                        </fo:block>
-
-
-                        <fo:block border-width="1mm" padding-before="3mm">
-                            Carrier name
-                            <fo:inline font-weight="bold">
-                                <xsl:value-of
-                                        select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/carrierName"/>
-                            </fo:inline>
-                            delivery SLA
-                            <fo:inline font-weight="bold">
-                                <xsl:value-of
-                                        select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/carrierSlaName"/>
-                            </fo:inline>
-                            #
-                            <fo:inline font-weight="bold">
-                                <xsl:value-of
-                                        select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/refNo"/>
-                            </fo:inline>
-                            price
-                            <fo:inline font-weight="bold">
-                                <xsl:value-of
-                                        select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/price"/>
-                            </fo:inline>
-                            <xsl:text disable-output-escaping="yes"> <![CDATA[ ]]></xsl:text>
-                            <fo:inline font-weight="bold">
-                                <xsl:value-of
-                                        select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/currency"/>
-                            </fo:inline>
-
-                        </fo:block>
-
-                        <fo:block>
-                            <fo:leader leader-pattern="rule" leader-length="17.0cm"/>
-                        </fo:block>
-
-                        <fo:block>
-                            Delivery address
-                            <fo:inline font-weight="bold">
-                                <xsl:value-of
-                                        select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/shippingAddress"/>
-                            </fo:inline>
-                        </fo:block>
-
-                        <xsl:if test="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/billingAddress != ./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/shippingAddress">
-                            <fo:block>
-                                <fo:leader leader-pattern="rule" leader-length="17.0cm"/>
-                            </fo:block>
+                        <xsl:for-each
+                                select="./yes-report/pair" >
 
                             <fo:block>
-                                Billing address
-                                <fo:inline font-weight="bold">
-                                    <xsl:value-of
-                                            select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/billingAddress"/>
-                                </fo:inline>
+                                <fo:leader leader-pattern="rule" leader-length="100%"/>
                             </fo:block>
-                        </xsl:if>
 
-
-                        <fo:block>
-                            <fo:leader leader-pattern="rule" leader-length="17.0cm"/>
-                        </fo:block>
-
-                        <fo:block border-width="1mm" padding-before="3mm">
-                            Items delivery information
-                        </fo:block>
-
-
-                        <fo:block border-width="1mm">
-
-                            <fo:table>
-                                <fo:table-header>
-                                    <fo:table-row>
-                                        <fo:table-cell border="solid 1px black" width="1cm" text-align="right">
-                                            <fo:block font-weight="bold">#</fo:block>
-                                        </fo:table-cell>
-                                        <fo:table-cell border="solid 1px black">
-                                            <fo:block font-weight="bold">SKU Code</fo:block>
-                                        </fo:table-cell>
-                                        <fo:table-cell border="solid 1px black">
-                                            <fo:block font-weight="bold">Name</fo:block>
-                                        </fo:table-cell>
-                                        <fo:table-cell border="solid 1px black">
-                                            <fo:block font-weight="bold">Price</fo:block>
-                                        </fo:table-cell>
-                                        <fo:table-cell border="solid 1px black">
-                                            <fo:block font-weight="bold">Quantity</fo:block>
-                                        </fo:table-cell>
-                                        <fo:table-cell border="solid 1px black">
-                                            <fo:block font-weight="bold">Total</fo:block>
-                                        </fo:table-cell>
-                                    </fo:table-row>
-                                </fo:table-header>
-
-                                <fo:table-body>
-                                    <xsl:for-each
-                                            select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/detail/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl">
+                            <fo:block border-width="1mm" padding-before="3mm">
+                                <fo:table>
+                                    <fo:table-body>
                                         <fo:table-row>
-                                            <fo:table-cell border="solid 1px black" width="1cm" text-align="right">
-                                                <fo:block>
-                                                    <xsl:value-of select="position()"/>
-                                                </fo:block>
+                                            <fo:table-cell width="4cm">
+                                                <fo:block font-weight="bold">Order #</fo:block>
                                             </fo:table-cell>
-                                            <fo:table-cell border="solid 1px black" width="4cm">
-                                                <fo:block>
-                                                    <xsl:value-of select="skuCode"/>
-                                                </fo:block>
-                                            </fo:table-cell>
-                                            <fo:table-cell border="solid 1px black" width="6cm">
-                                                <fo:block>
-                                                    <xsl:value-of select="skuName"/>
-                                                </fo:block>
-                                            </fo:table-cell>
-                                            <fo:table-cell border="solid 1px black" width="2cm" text-align="right">
-                                                <fo:block>
-                                                    <xsl:value-of select="invoicePrice"/>
-                                                </fo:block>
-                                            </fo:table-cell>
-                                            <fo:table-cell border="solid 1px black" width="1.8cm" text-align="right">
-                                                <fo:block>
-                                                    <xsl:value-of select="qty"/>
-                                                </fo:block>
-                                            </fo:table-cell>
-                                            <fo:table-cell border="solid 1px black" width="2cm" text-align="right">
-                                                <fo:block>
-                                                    <xsl:value-of select="format-number(qty * invoicePrice, '##0.00')"/>
-                                                    <xsl:text disable-output-escaping="yes"> <![CDATA[ ]]></xsl:text>
-                                                    <xsl:value-of
-                                                            select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/currency"/>
+                                            <fo:table-cell>
+                                                <fo:block><xsl:value-of
+                                                        select="first/ordernum"/>
+                                                    dtd <xsl:value-of
+                                                            select="format-dateTime(first/orderTimestamp, '[D01]/[M01]/[Y0001]')"/>
                                                 </fo:block>
                                             </fo:table-cell>
                                         </fo:table-row>
-                                    </xsl:for-each>
+                                        <fo:table-row>
+                                            <fo:table-cell>
+                                                <fo:block font-weight="bold">Customer</fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell>
+                                                <fo:block-container>
+                                                    <fo:block><fo:inline space-end="3mm"><xsl:value-of
+                                                            select="first/firstname"/></fo:inline><fo:inline><xsl:value-of
+                                                            select="first/lastname"/></fo:inline>
+                                                    </fo:block>
+                                                </fo:block-container>
+                                            </fo:table-cell>
+                                        </fo:table-row>
+                                        <fo:table-row>
+                                            <fo:table-cell>
+                                                <fo:block font-weight="bold">Email</fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell>
+                                                <fo:block><xsl:value-of
+                                                        select="first/email"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                        </fo:table-row>
+                                        <fo:table-row>
+                                            <fo:table-cell>
+                                                <fo:block font-weight="bold">Billing address</fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell>
+                                                <fo:block><xsl:value-of
+                                                        select="first/billingAddress"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                        </fo:table-row>
+                                        <fo:table-row>
+                                            <fo:table-cell>
+                                                <fo:block font-weight="bold">Total amount (inc tax)</fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell>
+                                                <fo:block><fo:inline space-end="3mm"><xsl:value-of
+                                                        select="first/amount"/></fo:inline><fo:inline><xsl:value-of
+                                                        select="first/currency"/></fo:inline>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                        </fo:table-row>
 
-                                    <fo:table-row>
-                                        <fo:table-cell border="solid 1px black" number-columns-spanned="5"
-                                                       font-weight="bold">
-                                            <fo:block>Summary</fo:block>
-                                        </fo:table-cell>
-                                        <fo:table-cell border="solid 1px black" text-align="right" font-weight="bold">
-                                            <fo:block>
-                                                <xsl:value-of
-                                                        select="format-number(sum(./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/detail/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl/lineTotal), '##0.00')"/>
-                                                <xsl:text disable-output-escaping="yes"> <![CDATA[ ]]></xsl:text>
-                                                <xsl:value-of
-                                                        select="./yes-report/org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl/currency"/>
-                                                <xsl:text disable-output-escaping="yes"> <![CDATA[ ]]></xsl:text>
-                                            </fo:block>
-                                        </fo:table-cell>
-                                    </fo:table-row>
-                                </fo:table-body>
-                            </fo:table>
-                        </fo:block>
+                                    </fo:table-body>
+                                </fo:table>
+                            </fo:block>
+
+                            <fo:block border-width="1mm" space-before="5mm">
+
+                                <fo:table>
+
+                                    <fo:table-header>
+                                        <fo:table-row>
+                                            <fo:table-cell border="solid 1px black" width="1cm" text-align="right">
+                                                <fo:block font-weight="bold"></fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black">
+                                                <fo:block font-weight="bold"></fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black">
+                                                <fo:block font-weight="bold">Total (no disc.)</fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black">
+                                                <fo:block font-weight="bold">Discount</fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black">
+                                                <fo:block font-weight="bold">Total</fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black">
+                                                <fo:block font-weight="bold">Tax</fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black">
+                                                <fo:block font-weight="bold"></fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black">
+                                                <fo:block font-weight="bold">Total (inc tax)</fo:block>
+                                            </fo:table-cell>
+                                        </fo:table-row>
+                                    </fo:table-header>
+
+
+                                    <fo:table-body>
+                                        <fo:table-row>
+                                            <fo:table-cell border="solid 1px black" width="5mm" text-align="right">
+                                                <fo:block></fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="75mm">
+                                                <fo:block>
+                                                    Item total
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block>
+                                                    <xsl:value-of select="format-number(first/listPrice, '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block>
+                                                    <xsl:value-of select="format-number(first/price - first/listPrice, '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block>
+                                                    <xsl:value-of select="format-number(first/price, '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block>
+                                                    <xsl:value-of select="format-number(first/grossPrice - first/netPrice, '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block></fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="20mm" text-align="right">
+                                                <fo:block>
+                                                    <xsl:value-of select="format-number(first/grossPrice, '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                        </fo:table-row>
+                                        <xsl:if test="first/promoApplied = 'true'">
+                                            <fo:table-row>
+                                                <fo:table-cell border="solid 1px black">
+                                                    <fo:block></fo:block>
+                                                </fo:table-cell>
+                                                <fo:table-cell border="solid 1px black" number-columns-spanned="7">
+                                                    <fo:block>
+                                                        This order has applied promotions (<xsl:value-of select="first/appliedPromo"/>)
+                                                    </fo:block>
+                                                </fo:table-cell>
+                                            </fo:table-row>
+                                        </xsl:if>
+                                        <fo:table-row>
+                                            <fo:table-cell border="solid 1px black" width="5mm" text-align="right">
+                                                <fo:block></fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="75mm">
+                                                <fo:block>
+                                                    Shipping Cost
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block>
+                                                    <xsl:value-of select="format-number(sum(second/orderDeliveryDto/listPrice), '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block>
+                                                    <xsl:value-of select="format-number(sum(second/orderDeliveryDto/price) - sum(second/orderDeliveryDto/listPrice), '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block>
+                                                    <xsl:value-of select="format-number(sum(second/orderDeliveryDto/price), '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block>
+                                                    <xsl:value-of select="format-number(sum(second/orderDeliveryDto/grossPrice) - sum(second/orderDeliveryDto/netPrice), '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block></fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="20mm" text-align="right">
+                                                <fo:block>
+                                                    <xsl:value-of select="format-number(sum(second/orderDeliveryDto/grossPrice), '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                        </fo:table-row>
+                                        <fo:table-row>
+                                            <fo:table-cell border="solid 1px black" width="5mm" text-align="right">
+                                                <fo:block></fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="75mm">
+                                                <fo:block font-weight="bold">
+                                                    Grand total
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block font-weight="bold">
+                                                    <xsl:value-of select="format-number(first/listPrice + sum(second/orderDeliveryDto/listPrice), '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block font-weight="bold">
+                                                    <xsl:value-of select="format-number(first/price - first/listPrice + sum(second/orderDeliveryDto/price) - sum(second/orderDeliveryDto/listPrice), '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block font-weight="bold">
+                                                    <xsl:value-of select="format-number(first/price + sum(second/orderDeliveryDto/price), '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block font-weight="bold">
+                                                    <xsl:value-of select="format-number(first/grossPrice - first/netPrice + sum(second/orderDeliveryDto/grossPrice) - sum(second/orderDeliveryDto/netPrice), '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                <fo:block></fo:block>
+                                            </fo:table-cell>
+                                            <fo:table-cell border="solid 1px black" width="20mm" text-align="right">
+                                                <fo:block font-weight="bold">
+                                                    <xsl:value-of select="format-number(first/grossPrice + sum(second/orderDeliveryDto/grossPrice), '##0.00')"/>
+                                                </fo:block>
+                                            </fo:table-cell>
+                                        </fo:table-row>
+                                    </fo:table-body>
+                                </fo:table>
+                            </fo:block>
+
+                            <xsl:if test="count(second/orderDeliveryDto) > 0">
+
+                                <xsl:for-each select="second/orderDeliveryDto">
+
+                                    <fo:block>
+                                        <fo:leader leader-pattern="rule" leader-length="100%"/>
+                                    </fo:block>
+
+                                    <fo:block border-width="1mm" space-before="5mm" padding-before="3mm">
+                                        <fo:table>
+                                            <fo:table-body>
+                                                <fo:table-row>
+                                                    <fo:table-cell width="4cm">
+                                                        <fo:block font-weight="bold">Delivery #</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell>
+                                                        <fo:block><xsl:value-of
+                                                                select="deliveryNum"/>
+                                                            ref: <xsl:value-of
+                                                                    select="refNo"/>
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                </fo:table-row>
+                                                <fo:table-row>
+                                                    <fo:table-cell>
+                                                        <fo:block font-weight="bold">Shipping method</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell>
+                                                        <fo:block><xsl:value-of
+                                                                select="carrierName"/>, <xsl:value-of
+                                                                select="carrierSlaName"/>
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                </fo:table-row>
+                                                <fo:table-row>
+                                                    <fo:table-cell>
+                                                        <fo:block font-weight="bold">Shipping address</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell>
+                                                        <fo:block><xsl:value-of
+                                                                select="shippingAddress"/>
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                </fo:table-row>
+                                            </fo:table-body>
+                                        </fo:table>
+                                    </fo:block>
+
+                                    <fo:block border-width="1mm">
+
+                                        <fo:table>
+                                            <fo:table-header>
+                                                <fo:table-row>
+                                                    <fo:table-cell border="solid 1px black" width="1cm" text-align="right">
+                                                        <fo:block font-weight="bold">#</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black">
+                                                        <fo:block font-weight="bold">SKU Code</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black">
+                                                        <fo:block font-weight="bold">Name</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black">
+                                                        <fo:block font-weight="bold">List price</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black">
+                                                        <fo:block font-weight="bold">Discount</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black">
+                                                        <fo:block font-weight="bold">Price</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black">
+                                                        <fo:block font-weight="bold">Tax</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black">
+                                                        <fo:block font-weight="bold">Quantity</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black">
+                                                        <fo:block font-weight="bold">Total (inc tax)</fo:block>
+                                                    </fo:table-cell>
+                                                </fo:table-row>
+                                            </fo:table-header>
+
+                                            <fo:table-body>
+                                                <xsl:for-each
+                                                        select="detail/orderLineDto">
+                                                    <fo:table-row>
+                                                        <fo:table-cell border="solid 1px black" width="5mm" text-align="right">
+                                                            <fo:block>
+                                                                <xsl:value-of select="position()"/>
+                                                            </fo:block>
+                                                        </fo:table-cell>
+                                                        <fo:table-cell border="solid 1px black" width="35mm">
+                                                            <fo:block>
+                                                                <xsl:value-of select="skuCode"/>
+                                                            </fo:block>
+                                                        </fo:table-cell>
+                                                        <fo:table-cell border="solid 1px black" width="40mm">
+                                                            <fo:block>
+                                                                <xsl:value-of select="skuName"/>
+                                                            </fo:block>
+                                                        </fo:table-cell>
+                                                        <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                            <fo:block>
+                                                                <xsl:value-of select="format-number(listPrice, '##0.00')"/>
+                                                            </fo:block>
+                                                        </fo:table-cell>
+                                                        <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                            <fo:block>
+                                                                <xsl:value-of select="format-number(price - listPrice, '##0.00')"/>
+                                                            </fo:block>
+                                                        </fo:table-cell>
+                                                        <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                            <fo:block>
+                                                                <xsl:value-of select="format-number(price, '##0.00')"/>
+                                                            </fo:block>
+                                                        </fo:table-cell>
+                                                        <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                            <fo:block>
+                                                                <xsl:value-of select="format-number(grossPrice - netPrice, '##0.00')"/>
+                                                            </fo:block>
+                                                        </fo:table-cell>
+                                                        <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                            <fo:block>
+                                                                <xsl:value-of select="format-number(qty, '##0.00')"/>
+                                                            </fo:block>
+                                                        </fo:table-cell>
+                                                        <fo:table-cell border="solid 1px black" width="20mm" text-align="right">
+                                                            <fo:block>
+                                                                <xsl:value-of select="format-number(lineTotal, '##0.00')"/>
+                                                            </fo:block>
+                                                        </fo:table-cell>
+                                                    </fo:table-row>
+                                                    <xsl:if test="promoApplied = 'true'">
+                                                         <fo:table-row>
+                                                             <fo:table-cell border="solid 1px black">
+                                                                 <fo:block></fo:block>
+                                                             </fo:table-cell>
+                                                             <fo:table-cell border="solid 1px black" number-columns-spanned="8">
+                                                                 <fo:block>
+                                                                     <xsl:choose>
+                                                                         <xsl:when test="gift = 'true'">
+                                                                             This is a gift item (<xsl:value-of select="appliedPromo"/>)
+                                                                         </xsl:when>
+                                                                         <xsl:otherwise>
+                                                                             This item has applied promotions (<xsl:value-of select="appliedPromo"/>)
+                                                                         </xsl:otherwise>
+                                                                     </xsl:choose>
+                                                                 </fo:block>
+                                                             </fo:table-cell>
+                                                         </fo:table-row>
+                                                    </xsl:if>
+                                                </xsl:for-each>
+                                                <fo:table-row>
+                                                    <fo:table-cell border="solid 1px black" number-columns-spanned="6"
+                                                                   font-weight="bold">
+                                                        <fo:block>Item total</fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black" text-align="right" font-weight="bold">
+                                                        <fo:block>
+                                                            <xsl:value-of
+                                                                    select="format-number(sum(detail/orderLineDto/lineTax), '##0.00')"/>
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black" text-align="right" font-weight="bold">
+                                                        <fo:block></fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black" text-align="right" font-weight="bold">
+                                                        <fo:block>
+                                                            <xsl:value-of
+                                                                    select="format-number(sum(detail/orderLineDto/lineTotal), '##0.00')"/>
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                </fo:table-row>
+                                                <fo:table-row>
+                                                    <fo:table-cell border="solid 1px black" width="5mm" text-align="right">
+                                                        <fo:block></fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black" width="35mm">
+                                                        <fo:block>
+                                                            <xsl:value-of select="refNo"/>
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black" width="40mm">
+                                                        <fo:block>
+                                                            Shipping Cost
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                        <fo:block>
+                                                            <xsl:value-of select="format-number(listPrice, '##0.00')"/>
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                        <fo:block>
+                                                            <xsl:value-of select="format-number(price - listPrice, '##0.00')"/>
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                        <fo:block>
+                                                            <xsl:value-of select="format-number(price, '##0.00')"/>
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                        <fo:block>
+                                                            <xsl:value-of select="format-number(grossPrice - netPrice, '##0.00')"/>
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
+                                                        <fo:block></fo:block>
+                                                    </fo:table-cell>
+                                                    <fo:table-cell border="solid 1px black" width="20mm" text-align="right">
+                                                        <fo:block>
+                                                            <xsl:value-of select="format-number(grossPrice, '##0.00')"/>
+                                                        </fo:block>
+                                                    </fo:table-cell>
+                                                </fo:table-row>
+                                                <xsl:if test="promoApplied = 'true'">
+                                                    <fo:table-row>
+                                                        <fo:table-cell border="solid 1px black">
+                                                            <fo:block></fo:block>
+                                                        </fo:table-cell>
+                                                        <fo:table-cell border="solid 1px black" number-columns-spanned="8">
+                                                            <fo:block>
+                                                                This shipping has applied promotions (<xsl:value-of select="appliedPromo"/>)
+                                                            </fo:block>
+                                                        </fo:table-cell>
+                                                    </fo:table-row>
+                                                </xsl:if>
+                                            </fo:table-body>
+                                        </fo:table>
+                                    </fo:block>
+                                </xsl:for-each>
+                            </xsl:if>
+
+                        </xsl:for-each>
                     </xsl:if>
                     <fo:block id="end"/>
+
                 </fo:flow>
             </fo:page-sequence>
         </fo:root>
