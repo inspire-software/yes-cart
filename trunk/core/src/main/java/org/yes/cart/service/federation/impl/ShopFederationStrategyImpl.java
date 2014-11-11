@@ -65,6 +65,9 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
      * {@inheritDoc}
      */
     public boolean isCurrentUser(final String role) {
+        if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null) {
+            return false;
+        }
         final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
         final String cacheKey = currentManager + role;
         Boolean isAdmin = getValueWrapper(USER_ACCESS_CACHE_ADMIN.get(cacheKey));
@@ -96,6 +99,9 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
      * {@inheritDoc}
      */
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
+        if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null) {
+            return Collections.emptySet();
+        }
         final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
         Set<Long> currentAssignedIds = getValueWrapper(USER_ACCESS_CACHE_SHOP_ID.get(currentManager));
         if (currentAssignedIds == null) {
@@ -117,6 +123,9 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
      * {@inheritDoc}
      */
     public Set<String> getAccessibleShopCodesByCurrentManager() {
+        if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null) {
+            return Collections.emptySet();
+        }
         final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
         Set<String> currentAssignedCodes = getValueWrapper(USER_ACCESS_CACHE_SHOP_CODE.get(currentManager));
         if (currentAssignedCodes == null) {

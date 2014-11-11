@@ -85,8 +85,8 @@
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='skuName')"
                                    dataField="skuName"/>
                 <mx:DataGridColumn editable="false"
-                                   headerText="@Resource(bundle='CustomerOrderPanel',key='invoicePrice')"
-                                   dataField="invoicePrice"/>
+                                   headerText="@Resource(bundle='CustomerOrderPanel',key='price')"
+                                   dataField="price"/>
                 <mx:DataGridColumn editable="false"
                                    headerText="@Resource(bundle='CustomerOrderPanel',key='tax')"
                                    labelFunction="lineTaxLabelFunction" showDataTips="true" dataTipFunction="lineTaxTipFunction"/>
@@ -234,7 +234,9 @@
                     detLine.skuCode = selectedProductDTOImpl.code;
                     detLine.skuName = selectedProductDTOImpl.name;
                     detLine.qty = 1;
-                    detLine.invoicePrice = 0;
+                    detLine.price = 0;
+                    detLine.netPrice = 0;
+                    detLine.grossPrice = 0;
                     detLine.customerOrderDeliveryDetId = 0;
 
                     //detLine.deliveryNum = customerOrderDeliveryDTO
@@ -270,7 +272,8 @@
         public function itemsCostInDeliveryLabelFunction():String {
             var sum:Number = 0;
             for (var i:int = 0; i < detail.length; i++) {
-                sum += Number((detail[i].qty * detail[i].invoicePrice).toFixed(2));
+                var _det:CustomerOrderDeliveryDetailDTOImpl = detail[i] as CustomerOrderDeliveryDetailDTOImpl
+                sum += Number((_det.qty * _det.grossPrice).toFixed(2));
             }
             return sum.toFixed(2);
         }

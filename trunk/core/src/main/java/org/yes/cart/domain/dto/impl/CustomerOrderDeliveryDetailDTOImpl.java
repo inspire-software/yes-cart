@@ -53,7 +53,7 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     private BigDecimal qty;
 
     @DtoField(value = "price", readOnly = true)
-    private BigDecimal invoicePrice;
+    private BigDecimal price;
 
     @DtoField(value = "listPrice", readOnly = true)
     private BigDecimal listPrice;
@@ -79,6 +79,8 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
 
     private BigDecimal lineTotal;
 
+    private BigDecimal lineTax;
+
 
     @DtoField(value = "delivery.deliveryNum", readOnly = true)
     private String deliveryNum;
@@ -87,21 +89,27 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     private String deliveryStatusLabel;
 
 
-    /** {@inheritDoc} */
     public BigDecimal getLineTotal() {
         return lineTotal;
     }
 
-    /** {@inheritDoc} */
     public void setLineTotal(final BigDecimal lineTotal) {
         this.lineTotal = lineTotal;
     }
 
+    public BigDecimal getLineTax() {
+        return lineTax;
+    }
+
+    public void setLineTax(final BigDecimal lineTax) {
+        this.lineTax = lineTax;
+    }
 
     private void calculateLineTotal() {
 
-        if (qty != null && invoicePrice != null) {
-            lineTotal = qty.multiply(invoicePrice).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
+        if (qty != null && netPrice != null && grossPrice != null) {
+            lineTotal = qty.multiply(grossPrice).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
+            lineTax = qty.multiply(grossPrice.subtract(netPrice)).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
         }
 
     }
@@ -153,14 +161,13 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     }
 
     /** {@inheritDoc} */
-    public BigDecimal getInvoicePrice() {
-        return invoicePrice;
+    public BigDecimal getPrice() {
+        return price;
     }
 
     /** {@inheritDoc} */
-    public void setInvoicePrice(final BigDecimal invoicePrice) {
-        this.invoicePrice = invoicePrice;
-        calculateLineTotal();
+    public void setPrice(final BigDecimal price) {
+        this.price = price;
     }
 
     /** {@inheritDoc} */
@@ -171,6 +178,7 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     /** {@inheritDoc} */
     public void setNetPrice(final BigDecimal netPrice) {
         this.netPrice = netPrice;
+        calculateLineTotal();
     }
 
     /** {@inheritDoc} */
@@ -181,6 +189,7 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     /** {@inheritDoc} */
     public void setGrossPrice(final BigDecimal grossPrice) {
         this.grossPrice = grossPrice;
+        calculateLineTotal();
     }
 
     /** {@inheritDoc} */
@@ -290,7 +299,9 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
                 ", skuCode='" + skuCode + '\'' +
                 ", skuName='" + skuName + '\'' +
                 ", qty=" + qty +
-                ", invoicePrice=" + invoicePrice +
+                ", price=" + price +
+                ", netPrice=" + netPrice +
+                ", grossPrice=" + grossPrice +
                 ", listPrice=" + listPrice +
                 ", deliveryNum='" + deliveryNum + '\'' +
                 ", deliveryStatusLabel='" + deliveryStatusLabel + '\'' +

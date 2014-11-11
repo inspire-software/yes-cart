@@ -53,6 +53,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 //JAXP
 //FOP
@@ -174,8 +175,8 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
      *
      * @param reportId report descriptor.
      * @param params   report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
-     * @param lang     given lang to roduce report.
-     * @return true in case if report was generated successfuly.
+     * @param lang     given lang to produce report.
+     * @return true in case if report was generated successfully.
      * @
      */
     public byte[] downloadReport(String lang, String reportId, Object... params) throws Exception {
@@ -208,13 +209,13 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
 
 
     /**
-     * Run report by his id.
+     * Run report by its id.
      *
      * @param reportId report descriptor.
      * @param fileName report filename
      * @param params   report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
      * @param lang     given lang to produce report.
-     * @return true in case if report was generated successfuly.
+     * @return true in case if report was generated successfully.
      */
     public boolean createReport(final String lang, final String reportId, final String fileName, final Object... params) throws Exception {
 
@@ -237,6 +238,10 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
     public boolean createReport(String lang, String reportId, String fileName, List<Object> rez) throws SAXException, IOException {
 
         final File xmlfile = getXml(rez);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(new Scanner(xmlfile).useDelimiter("\\Z").next());
+        }
 
         final String xslFoFile = getReportDescriptorbyId(reportId).getLangXslfo(lang);
 
@@ -283,8 +288,8 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
                 // Construct fop with desired output format
                 final Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
 
-                // Setup XSLT
-                final TransformerFactory factory = TransformerFactory.newInstance();
+                // Setup XSLT 2.0
+                final TransformerFactory factory = TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
                 final Transformer transformer = factory.newTransformer(new StreamSource(xsltfile));
 
                 // Set the value of a <param> in the stylesheet
@@ -294,7 +299,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
 
                 // Setup input for XSLT transformation
                 final Source src = new StreamSource(
-                        new InputStreamReader(new FileInputStream(xmlfile), "UTF8"));
+                        new InputStreamReader(new FileInputStream(xmlfile), "UTF-8"));
 
                 // Resulting SAX events (the generated FO) must be piped through to FOP
                 final Result res = new SAXResult(fop.getDefaultHandler());

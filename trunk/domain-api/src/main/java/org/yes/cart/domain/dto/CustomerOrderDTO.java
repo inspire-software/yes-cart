@@ -144,7 +144,7 @@ public interface CustomerOrderDTO extends Identifiable {
     /**
      * Set order message from shopping cart.
      *
-     * @param orderMessage order messge.
+     * @param orderMessage order message.
      */
     void setOrderMessage(String orderMessage);
 

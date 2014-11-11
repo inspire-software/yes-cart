@@ -212,7 +212,7 @@ public class ReportServiceImplTest  {
         assertTrue(reportService.createReport("en", "reportDelivery", "reportDelivery.pdf"));
         final File pdf = new File("reportDelivery.pdf");
         assertTrue(pdf.exists());
-        assertTrue(pdf.length() > 30720); // more than 30K means it is a valid pdf
+        assertTrue(pdf.length() > 62000); // more than 60K means it is a valid pdf
         assertTrue(pdf.delete());
     }
 

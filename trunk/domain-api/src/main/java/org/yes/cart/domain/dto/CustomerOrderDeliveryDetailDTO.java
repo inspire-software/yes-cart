@@ -85,13 +85,14 @@ public interface CustomerOrderDeliveryDetailDTO extends Identifiable {
      * Get price of product, which is in delivery.
      * @return deal price.
      */
-    BigDecimal getInvoicePrice() ;
+    BigDecimal getPrice() ;
 
     /**
      * Set deal price.
-     * @param invoicePrice deal price.
+     *
+     * @param price deal price.
      */
-    void setInvoicePrice(BigDecimal invoicePrice);
+    void setPrice(BigDecimal price);
 
 
 
