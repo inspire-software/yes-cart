@@ -124,6 +124,9 @@ public class PaymentProcessorSurrogate {
                 //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                 BeanUtils.copyProperties(payment, authCaptureOrderPayment); //from PG object to persisted
                 authCaptureOrderPayment.setPaymentProcessorResult(paymentResult);
+                authCaptureOrderPayment.setShopCode(order.getShop().getCode());
+                // FIXME: YC-390 we assume that funds are settled, but this is not guaranteed
+                authCaptureOrderPayment.setPaymentProcessorBatchSettlement(Payment.PAYMENT_STATUS_OK.equals(paymentResult));
                 customerOrderPaymentService.create(authCaptureOrderPayment);
             }
 
@@ -162,6 +165,7 @@ public class PaymentProcessorSurrogate {
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                     BeanUtils.copyProperties(payment, authOrderPayment); //from PG object to persisted
                     authOrderPayment.setPaymentProcessorResult(paymentResult);
+                    authOrderPayment.setShopCode(order.getShop().getCode());
                     customerOrderPaymentService.create(authOrderPayment);
                     if (Payment.PAYMENT_STATUS_FAILED.equals(paymentResult)) {
                         reverseAuthorizations(order.getOrdernum());
@@ -244,6 +248,7 @@ public class PaymentProcessorSurrogate {
                         //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                         BeanUtils.copyProperties(payment, authReversedOrderPayment); //from PG object to persisted
                         authReversedOrderPayment.setPaymentProcessorResult(paymentResult);
+                        authReversedOrderPayment.setShopCode(customerOrderPayment.getShopCode());
                         customerOrderPaymentService.create(authReversedOrderPayment);
                     }
 
@@ -323,6 +328,9 @@ public class PaymentProcessorSurrogate {
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                     BeanUtils.copyProperties(payment, captureOrderPayment); //from PG object to persisted
                     captureOrderPayment.setPaymentProcessorResult(paymentResult);
+                    captureOrderPayment.setShopCode(paymentToCapture.getShopCode());
+                    // FIXME: YC-390 we assume that funds are settled, but this is not guaranteed
+                    captureOrderPayment.setPaymentProcessorBatchSettlement(Payment.PAYMENT_STATUS_OK.equals(paymentResult));
                     customerOrderPaymentService.create(captureOrderPayment);
                 }
                 if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
@@ -384,9 +392,11 @@ public class PaymentProcessorSurrogate {
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                     BeanUtils.copyProperties(payment, captureReversedOrderPayment); //from PG object to persisted
                     captureReversedOrderPayment.setPaymentProcessorResult(paymentResult);
+                    captureReversedOrderPayment.setShopCode(customerOrderPayment.getShopCode());
                     customerOrderPaymentService.create(captureReversedOrderPayment);
                 }
-                if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
+                if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult) &&
+                        !Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED.equals(paymentResult)) {
                     wasError = true;
                 }
 
@@ -497,10 +507,10 @@ public class PaymentProcessorSurrogate {
             // promotions against sale price
             BigDecimal orderTotalList = BigDecimal.ZERO;
             for (final CustomerOrderDet detail : order.getOrderDetail()) {
-                orderTotalList = orderTotalList.add(detail.getQty().multiply(detail.getPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+                orderTotalList = orderTotalList.add(detail.getQty().multiply(detail.getGrossPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
             }
 
-            final BigDecimal orderTotal = order.getPrice();
+            final BigDecimal orderTotal = order.getGrossPrice();
             // take the list price (sub total of items using list price)
             final BigDecimal discount = orderTotalList.subtract(orderTotal).divide(orderTotalList, 10, RoundingMode.HALF_UP);
             // scale delivery items total in accordance with order level discount percentage

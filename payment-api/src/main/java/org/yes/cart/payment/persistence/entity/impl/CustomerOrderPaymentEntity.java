@@ -42,6 +42,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     private String orderCurrency;
     private String orderNumber;
     private String orderShipment;
+    private String shopCode;
     private String transactionReferenceId;
     private String transactionRequestToken;
     private String transactionAuthorizationCode;
@@ -471,7 +472,19 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
         this.cardIssueNumber = cardIssueNumber;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public String getShopCode() {
+        return shopCode;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void setShopCode(final String shopCode) {
+        this.shopCode = shopCode;
+    }
 }
 
 

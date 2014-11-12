@@ -40,7 +40,6 @@
 
     <bean id="customerOrderPaymentFederationFilter" class="org.yes.cart.service.federation.impl.CustomerOrderPaymentFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
-        <constructor-arg index="1" ref="dtoCustomerOrderService"/>
     </bean>
 
     <bean id="shopFederationFilter" class="org.yes.cart.service.federation.impl.ShopFederationFilterImpl">

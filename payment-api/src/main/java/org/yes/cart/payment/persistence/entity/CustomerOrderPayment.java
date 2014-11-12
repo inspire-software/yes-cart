@@ -340,15 +340,31 @@ public interface CustomerOrderPayment extends Auditable {
 
     /**
      * Get ip address of shopper.
-     * @return
+     *
+     * @return IP address
      */
     String getShopperIpAddress();
 
     /**
      * Set shopper id address.
-     * @param shopperIpAddress
+     *
+     * @param shopperIpAddress IP address
      */
-    void setShopperIpAddress( String shopperIpAddress);
+    void setShopperIpAddress(String shopperIpAddress);
+
+    /**
+     * Get shop code.
+     *
+     * @return shop code.
+     */
+    String getShopCode();
+
+    /**
+     * Set shop code.
+     *
+     * @param shopCode shop code.
+     */
+    void setShopCode(String shopCode);
 
 
 }

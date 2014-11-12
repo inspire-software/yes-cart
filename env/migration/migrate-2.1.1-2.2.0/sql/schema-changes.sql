@@ -531,3 +531,26 @@ update TCUSTOMERORDERDELIVERYDET set GROSS_PRICE = PRICE;
 update TCUSTOMERORDERDELIVERYDET set NET_PRICE = PRICE/1.2;
 update TCUSTOMERORDERDELIVERYDET set TAX_RATE = 20.00;
 update TCUSTOMERORDERDELIVERYDET set TAX_CODE = 'VAT';
+
+
+--
+-- YC-465 Add shop code to CustomerOrderPayment object
+--
+
+alter table TCUSTOMERORDERPAYMENT add column SHOP_CODE varchar(255) not null default '';
+
+-- Data is in two databases, so we need to generate inserts and then populate temp table in yespay
+-- Then we can update the TCUSTOMERORDERPAYMENT and drop temp table
+
+select concat('insert into TTEMPTABLE (SHOP_CODE, ORDER_NUMBER) values (''', s.CODE, ''',''', o.ORDERNUM, ''');') from TCUSTOMERORDER o, TSHOP s where s.SHOP_ID = o.SHOP_ID;
+select 'insert into TTEMPTABLE (SHOP_CODE, ORDER_NUMBER) values (''' || s.CODE || ''',''' || o.ORDERNUM || ''');' from TCUSTOMERORDER o, TSHOP s where s.SHOP_ID = o.SHOP_ID;
+
+CREATE TABLE TTEMPTABLE (
+  ORDER_NUMBER varchar(128) NOT NULL,
+  SHOP_CODE varchar(255) NOT NULL,
+  PRIMARY KEY (ORDER_NUMBER)
+);
+
+update TCUSTOMERORDERPAYMENT p set p.SHOP_CODE = (select o.SHOP_CODE from TTEMPTABLE o where o.ORDER_NUMBER = p.ORDER_NUMBER);
+
+drop table TTEMPTABLE;
