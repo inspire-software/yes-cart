@@ -35,22 +35,20 @@ import java.util.Set;
 public class CustomerOrderPaymentFederationFilterImpl implements FederationFilter {
 
     private final ShopFederationStrategy shopFederationStrategy;
-    private final DtoCustomerOrderService customerOrderService;
 
-    public CustomerOrderPaymentFederationFilterImpl(final ShopFederationStrategy shopFederationStrategy,
-                                                    final DtoCustomerOrderService customerOrderService) {
+    public CustomerOrderPaymentFederationFilterImpl(final ShopFederationStrategy shopFederationStrategy) {
         this.shopFederationStrategy = shopFederationStrategy;
-        this.customerOrderService = customerOrderService;
     }
 
     /**
      * {@inheritDoc}
      */
     public void applyFederationFilter(final Collection list, final Class objectType) {
+        final Set<String> manageableShopCodes = shopFederationStrategy.getAccessibleShopCodesByCurrentManager();
         final Iterator<CustomerOrderPayment> paymentIt = list.iterator();
         while (paymentIt.hasNext()) {
             final CustomerOrderPayment payment = paymentIt.next();
-            if (!isManageable(payment.getOrderNumber(), null)) {
+            if (!manageableShopCodes.contains(payment.getShopCode())) {
                 paymentIt.remove();
             }
         }
@@ -60,13 +58,8 @@ public class CustomerOrderPaymentFederationFilterImpl implements FederationFilte
      * {@inheritDoc}
      */
     public boolean isManageable(final Object object, final Class objectType) {
-        final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
-        try {
-            final List<CustomerOrderDTO> orders = customerOrderService.findCustomerOrdersByCriteria(0L, null, null, null, null, null, null, (String) object);
-            return orders != null && orders.size() == 1 && manageableShopIds.contains(orders.get(0).getShopId());
-        } catch (Exception exp) {
-            return false;
-        }
+        final Set<String> manageableShopCodes = shopFederationStrategy.getAccessibleShopCodesByCurrentManager();
+        return manageableShopCodes.contains(object);
     }
 
 }

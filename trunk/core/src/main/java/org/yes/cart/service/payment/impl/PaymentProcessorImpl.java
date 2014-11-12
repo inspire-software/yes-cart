@@ -112,6 +112,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                 BeanUtils.copyProperties(payment, authCaptureOrderPayment); //from PG object to persisted
                 authCaptureOrderPayment.setPaymentProcessorResult(paymentResult);
+                authCaptureOrderPayment.setShopCode(order.getShop().getCode());
                 // FIXME: YC-390 we assume that funds are settled, but this is not guaranteed
                 authCaptureOrderPayment.setPaymentProcessorBatchSettlement(Payment.PAYMENT_STATUS_OK.equals(paymentResult));
                 customerOrderPaymentService.create(authCaptureOrderPayment);
@@ -152,6 +153,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                     BeanUtils.copyProperties(payment, authOrderPayment); //from PG object to persisted
                     authOrderPayment.setPaymentProcessorResult(paymentResult);
+                    authOrderPayment.setShopCode(order.getShop().getCode());
                     customerOrderPaymentService.create(authOrderPayment);
                     if (Payment.PAYMENT_STATUS_FAILED.equals(paymentResult)) {
                         reverseAuthorizations(order.getOrdernum());
@@ -234,6 +236,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                         //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                         BeanUtils.copyProperties(payment, authReversedOrderPayment); //from PG object to persisted
                         authReversedOrderPayment.setPaymentProcessorResult(paymentResult);
+                        authReversedOrderPayment.setShopCode(customerOrderPayment.getShopCode());
                         customerOrderPaymentService.create(authReversedOrderPayment);
                     }
 
@@ -296,6 +299,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                     BeanUtils.copyProperties(payment, captureOrderPayment); //from PG object to persisted
                     captureOrderPayment.setPaymentProcessorResult(paymentResult);
+                    captureOrderPayment.setShopCode(paymentToCapture.getShopCode());
                     // FIXME: YC-390 we assume that funds are settled, but this is not guaranteed
                     captureOrderPayment.setPaymentProcessorBatchSettlement(Payment.PAYMENT_STATUS_OK.equals(paymentResult));
                     customerOrderPaymentService.create(captureOrderPayment);
@@ -361,6 +365,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
                     BeanUtils.copyProperties(payment, captureReversedOrderPayment); //from PG object to persisted
                     captureReversedOrderPayment.setPaymentProcessorResult(paymentResult);
+                    captureReversedOrderPayment.setShopCode(customerOrderPayment.getShopCode());
                     customerOrderPaymentService.create(captureReversedOrderPayment);
                 }
                 if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult) &&

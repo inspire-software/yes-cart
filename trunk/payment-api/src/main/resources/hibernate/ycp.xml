@@ -37,6 +37,7 @@
         <property name="cardStartDate" column="CARD_START_DATE" type="timestamp"/>
 
         <property name="orderDate" column="ORDER_DATE" type="timestamp" not-null="true"/>
+        <property name="shopCode" column="SHOP_CODE" type="java.lang.String" not-null="true" length="255"/>
         <property name="orderNumber" column="ORDER_NUMBER" type="java.lang.String" index="CUSTOMERORDERPAYMENT_ONUM" not-null="true" length="128"/>
         <property name="orderShipment" column="ORDER_SHIPMENT_NUMBER" type="java.lang.String" not-null="true" length="128"/>
         <property name="paymentAmount" column="ORDER_DELIVERY_AMOUNT" type="java.math.BigDecimal" not-null="true"/>

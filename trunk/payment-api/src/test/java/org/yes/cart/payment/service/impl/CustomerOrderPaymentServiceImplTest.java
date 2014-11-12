@@ -71,6 +71,7 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
         payment.setOrderDate(new Date());
         payment.setPaymentAmount(amount);
         payment.setOrderNumber(orderNum);
+        payment.setShopCode("SHOIP1");
         payment.setOrderShipment(shipmentNum);
         payment.setPaymentProcessorBatchSettlement(false);
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
