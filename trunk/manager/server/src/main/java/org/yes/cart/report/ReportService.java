@@ -20,6 +20,7 @@ import org.yes.cart.report.impl.ReportDescriptor;
 import org.yes.cart.report.impl.ReportPair;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -29,12 +30,16 @@ import java.util.List;
 public interface ReportService {
 
     /**
-     * Get list of value - name to represent on UI;
+     * Get parameter option values for param in lang.
      *
-     * @param hsql hsql to extract allowed values
-     * @return list of pair
+     * @param lang language
+     * @param reportId report id for {@link org.yes.cart.report.impl.ReportDescriptor}
+     * @param param parameter to get options for {@link org.yes.cart.report.impl.ReportParameter}
+     * @param currentSelection optional param value map for complex selectors
+     *
+     * @return options
      */
-    List<ReportPair> getParameterValues(String hsql);
+    List<ReportPair> getParameterValues(String lang, String reportId, String param, Map<String, Object> currentSelection);
 
 
     /**
@@ -44,42 +49,16 @@ public interface ReportService {
      */
     List<ReportDescriptor> getReportDescriptors();
 
-
-    /**
-     * Run report by his id.
-     *
-     * @param reportId report descriptor.
-     * @param fileName report filename
-     * @param params   report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
-     * @param lang     given lang to roduce report.
-     * @return true in case if report was generated successfuly.
-     * @throws Exception in case of errors
-     */
-    boolean createReport(String lang, String reportId, String fileName, Object... params) throws Exception;
-
-
     /**
      * Download report.
      *
      * @param reportId report descriptor.
-     * @param params   report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
-     * @param lang     given lang to roduce report.
-     * @return true in case if report was generated successfuly.
-     * @throws Exception in case of errors
-     */
-    byte[] downloadReport(String lang, String reportId, Object... params) throws Exception;
-
-
-    /**
-     * Download report.
-     *
-     * @param reportId   report descriptor.
-     * @param objectList list of object for report
-     * @param lang       given lang to produce report.
+     * @param params   report parameter values.
+     * @param lang     given lang to produce report.
      * @return true in case if report was generated successfully.
-     * @
+     * @throws Exception in case of errors
      */
-    byte[] produceReport(String lang, String reportId, List<Object> objectList) throws Exception;
+    byte[] downloadReport(String lang, String reportId, Map<String, Object> params) throws Exception;
 
 
 }

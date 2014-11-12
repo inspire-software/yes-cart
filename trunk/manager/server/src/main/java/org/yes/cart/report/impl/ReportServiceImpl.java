@@ -18,7 +18,6 @@ package org.yes.cart.report.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
@@ -26,18 +25,11 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 import org.springframework.web.context.ServletContextAware;
 import org.xml.sax.SAXException;
-import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.report.ReportService;
+import org.yes.cart.report.ReportWorker;
 
 import javax.servlet.ServletContext;
 import javax.xml.transform.Result;
@@ -47,13 +39,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Map;
 
 //JAXP
 //FOP
@@ -64,36 +53,31 @@ import java.util.Scanner;
  * Date: 7/2/12
  * Time: 2:46 PM
  */
-public class ReportServiceImpl implements ReportService, ServletContextAware, ApplicationContextAware {
+public class ReportServiceImpl implements ReportService, ServletContextAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReportServiceImpl.class);
 
-
-    private final GenericDAO<Object, Long> genericDAO;
-
     private final List<ReportDescriptor> reportDescriptors;
+
+    private final Map<String, ReportWorker> reportWorkers;
 
     private final String reportFolder;
 
     private ServletContext servletContext;
 
-    private ApplicationContext applicationContext;
-
-    private PlatformTransactionManager transactionManager;
-
-    private TransactionTemplate tx;
-
     /**
      * Construct report service.
      *
-     * @param genericDAO        report service
      * @param reportDescriptors list of configured reports.
+     * @param reportWorkers     report workers
      * @param reportFolder      report folder
      */
-    public ReportServiceImpl(GenericDAO<Object, Long> genericDAO, final List<ReportDescriptor> reportDescriptors,
+    public ReportServiceImpl(final List<ReportDescriptor> reportDescriptors,
+                             final Map<String, ReportWorker> reportWorkers,
                              final String reportFolder) {
-        this.genericDAO = genericDAO;
+
         this.reportDescriptors = reportDescriptors;
+        this.reportWorkers = reportWorkers;
 
         if (StringUtils.isNotBlank(reportFolder)) {
             this.reportFolder = "WEB-INF" + File.separator + reportFolder + File.separator;
@@ -107,34 +91,12 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
     /**
      * {@inheritDoc}
      */
-    public List<ReportPair> getParameterValues(final String hsql) {
+    public List<ReportPair> getParameterValues(final String lang, final String reportId, final String param, final Map<String, Object> currentSelection) {
 
-        final List<Object> queryRez = new ArrayList<Object>();
-
-
-
-        getTransactionTemplate().execute( new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-                queryRez.addAll(genericDAO.executeHsqlQuery(hsql));
-
-            }
-        });
-
-
-        if (queryRez != null && !queryRez.isEmpty()) {
-            final List<ReportPair> rez = new ArrayList<ReportPair>(queryRez.size());
-            for (Object obj : queryRez) {
-                Object[] data = (Object[]) obj;
-                rez.add(new ReportPair(
-                        (String) data[0],
-                        (String) data[1])
-                );
-            }
-            return rez;
-        } else {
-            return Collections.emptyList();
+        if (reportWorkers.containsKey(reportId)) {
+            return reportWorkers.get(reportId).getParameterValues(lang, param, currentSelection);
         }
-
+        return Collections.emptyList();
 
     }
 
@@ -150,7 +112,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
                 reportDescriptors,
                 new Predicate() {
                     public boolean evaluate(Object object) {
-                        return ((ReportDescriptor)object).isVisibleOnUI();
+                        return ((ReportDescriptor)object).isVisible();
                     }
                 }
 
@@ -171,85 +133,49 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
 
 
     /**
-     * Download report.
-     *
-     * @param reportId report descriptor.
-     * @param params   report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
-     * @param lang     given lang to produce report.
-     * @return true in case if report was generated successfully.
-     * @
+     * {@inheritDoc}
      */
-    public byte[] downloadReport(String lang, String reportId, Object... params) throws Exception {
-        final File tmpFile = File.createTempFile("yescartreport", "pdf");
-        if (createReport(lang, reportId, tmpFile.getAbsolutePath(), params)) {
-            return FileUtils.readFileToByteArray(tmpFile);
+    public byte[] downloadReport(String lang, String reportId, Map<String, Object> params) throws Exception {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if (createReport(lang, reportId, baos, params)) {
+            return baos.toByteArray();
         } else {
-            throw new Exception("Report can not be created , see server logs for more details. Sorry");
+            throw new Exception("Unable to create report");
         }
     }
 
 
-    /**
-     * Download report.
-     *
-     * @param reportId report descriptor.
-     * @param objectList   list of object for report
-     * @param lang     given lang to roduce report.
-     * @return true in case if report was generated successfuly.
-     * @
-     */
-    public byte[] produceReport(String lang, String reportId, List<Object> objectList) throws Exception {
-        final File tmpFile = File.createTempFile("yescartreport", "pdf");
-        if (createReport(lang, reportId, tmpFile.getAbsolutePath(), objectList)) {
-            return FileUtils.readFileToByteArray(tmpFile);
-        } else {
-            throw new Exception("Report can not be created , see server logs for more details. Sorry");
-        }
-    }
+    private boolean createReport(final String lang, final String reportId, final OutputStream reportStream, final Map<String, Object> currentSelection) throws Exception {
 
+        final List<Object> rez = getQueryResult(lang, reportId, currentSelection);
 
-    /**
-     * Run report by its id.
-     *
-     * @param reportId report descriptor.
-     * @param fileName report filename
-     * @param params   report parameter values to pass it into hsql query.   Consequence of parameter must correspond to parameters in repoport description.
-     * @param lang     given lang to produce report.
-     * @return true in case if report was generated successfully.
-     */
-    public boolean createReport(final String lang, final String reportId, final String fileName, final Object... params) throws Exception {
-
-        final List<Object> rez = getQueryResult(getReportDescriptorbyId(reportId).getHsqlQuery(), params);
-
-        return createReport(lang, reportId, fileName, rez);
+        return createReport(lang, reportId, reportStream, rez);
 
     }
 
-    /**
-     *
+    /*
      * @param reportId report descriptor.
-     * @param fileName report filename
+     * @param reportStream report filename
      * @param lang     given lang to produce report.
      * @param rez      list of object for report
      * @return true in case if report was generated
      * @throws SAXException
      * @throws IOException
      */
-    public boolean createReport(String lang, String reportId, String fileName, List<Object> rez) throws SAXException, IOException {
+    private boolean createReport(String lang, String reportId, OutputStream reportStream, List<Object> rez) throws SAXException, IOException {
 
-        final File xmlfile = getXml(rez);
+        final byte[] xmlfile = getXml(rez);
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug(new Scanner(xmlfile).useDelimiter("\\Z").next());
+//            System.out.println(new String(xmlfile));
+            LOG.debug(new String(xmlfile));
         }
 
         final String xslFoFile = getReportDescriptorbyId(reportId).getLangXslfo(lang);
 
-        if (xmlfile != null) {
+        if (xmlfile != null && xmlfile.length > 0) {
 
             final File xsltfile;
-
-            final File pdffile = new File(fileName);
 
             // configure fopFactory as desired
             final FopFactory fopFactory = FopFactory.newInstance();
@@ -278,11 +204,13 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
                 foUserAgent.setBaseURL("file:///" + servletContext.getRealPath("WEB-INF/report/"));
             }
 
+            if (!xsltfile.exists()) {
+                LOG.error("XSLT file does not exist: " + xsltfile.getAbsolutePath());
+                return false;
+            }
 
             // Setup output
-            OutputStream out = new FileOutputStream(pdffile);
-
-            out = new BufferedOutputStream(out);
+            OutputStream out = new BufferedOutputStream(reportStream);
 
             try {
                 // Construct fop with desired output format
@@ -299,7 +227,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
 
                 // Setup input for XSLT transformation
                 final Source src = new StreamSource(
-                        new InputStreamReader(new FileInputStream(xmlfile), "UTF-8"));
+                        new InputStreamReader(new ByteArrayInputStream(xmlfile), "UTF-8"));
 
                 // Resulting SAX events (the generated FO) must be piped through to FOP
                 final Result res = new SAXResult(fop.getDefaultHandler());
@@ -317,8 +245,6 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
 
                 out.close();
 
-                xmlfile.delete();
-
             }
 
 
@@ -330,27 +256,23 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
     }
 
     /**
-     * Write into given file name xml rezult.
+     * Write into given file name xml result.
      *
      * @param rez list of objects.
      * @return tmp xml file name
      */
-    File getXml(final List<Object> rez) {
+    byte[] getXml(final List<Object> rez) {
 
+        final ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
         ObjectOutputStream os = null;
 
         try {
 
-
-            final File xmlReport = File.createTempFile("yes", "cart");
-
-            os = ReportObjectStreamFactory.getObjectOutputStream(new FileWriter(xmlReport));
+            os = ReportObjectStreamFactory.getObjectOutputStream(new OutputStreamWriter(bytesOut));
 
             for (Object obj : rez) {
                 os.writeObject(obj);
             }
-
-            return xmlReport;
 
         } catch (Exception e) {
             LOG.error("Cannot create xml ", e);
@@ -366,49 +288,23 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
 
         }
 
-        return null;
+        return bytesOut.toByteArray();
     }
 
     /**
      * Get query result as object list.
      *
-     * @param query  hsql query
-     * @param params parameters.
+     * @param lang language
+     * @param reportId reportId
+     * @param currentSelection parameters.
      * @return list of objects.
      */
-    List<Object> getQueryResult(final String query, final Object... params) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    List<Object> getQueryResult(final String lang, final String reportId, final Map<String, Object> currentSelection) {
 
-        if (query.toLowerCase().trim().contains("select ")) {
-
-            final List<Object> rez = new ArrayList<Object>();
-            getTransactionTemplate().execute(new TransactionCallbackWithoutResult() {
-                public void doInTransactionWithoutResult(TransactionStatus status) {
-                    rez.addAll(genericDAO.findByQuery(
-                            query,
-                            params
-                    ));
-
-                }
-            } );
-            return rez;
-
-        } else {
-            //this is bean name, which should be taken to via service locator (because may be remote)
-            //at this particula case we are treat payment module report data provider
-
-            final String [] dataProviderPointer = query.split("\\.");
-            final String beanName = dataProviderPointer[0];
-            final String methodName = dataProviderPointer[1];
-            final String repornName = dataProviderPointer[2];
-
-
-            final Object reportDataProvider =  applicationContext.getBean(beanName);
-            final Method method = reportDataProvider.getClass().getMethod(methodName, String.class, Object [] .class);
-
-
-            return (List<Object>) method.invoke(reportDataProvider, repornName, params);
+        if (reportWorkers.containsKey(reportId)) {
+            return reportWorkers.get(reportId).getResult(lang, currentSelection);
         }
-
+        return Collections.emptyList();
 
     }
 
@@ -418,24 +314,5 @@ public class ReportServiceImpl implements ReportService, ServletContextAware, Ap
     public void setServletContext(final ServletContext servletContext) {
         this.servletContext = servletContext;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-        transactionManager =   applicationContext.getBean("transactionManager", PlatformTransactionManager.class);
-        tx = new TransactionTemplate(transactionManager);
-    }
-
-
-    /**
-     * Get transaction template.
-     * @return  TransactionTemplate
-     */
-    public TransactionTemplate getTransactionTemplate() {
-        return tx;
-    }
-
 
 }

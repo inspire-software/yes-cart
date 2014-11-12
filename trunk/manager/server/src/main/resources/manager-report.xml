@@ -16,67 +16,22 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
     <!-- #################################  reporting configuration ######################################-->
 
 
     <bean id="reportDelivery" class="org.yes.cart.report.impl.ReportDescriptor">
         <property name="reportId" value="reportDelivery"/>
-        <property name="visibleOnUI" value="false"/>
-        <property name="langLabel">
+        <property name="xslfoBase" value="delivery"/>
+        <property name="parameters">
             <list>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="en"/>
-                    <constructor-arg index="1" value="Delivery report"/>
-                </bean>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="ru"/>
-                    <constructor-arg index="1" value="Доcтавка"/>
-                </bean>
-            </list>
-        </property>
-        <property name="langXslfo">
-            <list>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="en"/>
-                    <constructor-arg index="1" value="delivery_en.xslfo"/>
-                </bean>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="ru"/>
-                    <constructor-arg index="1" value="delivery_ru.xslfo"/>
-                </bean>
-            </list>
-        </property>
-    </bean>
-
-
-    <bean id="reportShopSummaryInfo" class="org.yes.cart.report.impl.ReportDescriptor">
-        <property name="reportId" value="reportShopSummaryInfo"/>
-        <property name="hsqlQuery" value="select s from ShopEntity s"/>
-        <property name="langLabel">
-            <list>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="en"/>
-                    <constructor-arg index="1" value="Shop summary"/>
-                </bean>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="ru"/>
-                    <constructor-arg index="1" value="Магазины"/>
-                </bean>
-            </list>
-        </property>
-        <property name="langXslfo">
-            <list>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="en"/>
-                    <constructor-arg index="1" value="shop_en.xslfo"/>
-                </bean>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="ru"/>
-                    <constructor-arg index="1" value="shop_ru.xslfo"/>
+                <bean class="org.yes.cart.report.impl.ReportParameter">
+                    <property name="parameterId" value="orderNumber"/>
+                    <property name="businesstype" value="String"/>
+                    <property name="mandatory" value="true"/>
                 </bean>
             </list>
         </property>
@@ -85,124 +40,71 @@
 
     <bean id="reportAvailableStock" class="org.yes.cart.report.impl.ReportDescriptor">
         <property name="reportId" value="reportAvailableStock"/>
-        <property name="hsqlQuery" value="select  o.sku.code,  o.sku.name, o.sku.barCode, coalesce(o.reserved, 0.0), o.quantity  from SkuWarehouseEntity o
-                                          where o.warehouse.code = ?1
-                                          order by o.sku.code"/>
         <property name="parameters">
             <list>
                 <bean class="org.yes.cart.report.impl.ReportParameter">
-                    <constructor-arg index="0" value="warehouse"/>
-                    <constructor-arg index="1">
-                        <list>
-                            <bean class="org.yes.cart.report.impl.ReportPair">
-                                <constructor-arg index="0" value="ru"/>
-                                <constructor-arg index="1" value="Склад"/>
-                            </bean>
-                            <bean class="org.yes.cart.report.impl.ReportPair">
-                                <constructor-arg index="0" value="en"/>
-                                <constructor-arg index="1" value="Warehouse"/>
-                            </bean>
-                        </list>
-                    </constructor-arg>
-                    <constructor-arg index="2" value="String"/>
-                    <constructor-arg index="3" value="true"/>
-                    <constructor-arg index="4" value="select w.code, w.name from WarehouseEntity w"/>
+                    <property name="parameterId" value="warehouse"/>
+                    <property name="businesstype" value="org.yes.cart.domain.dto.WarehouseDTO"/>
+                    <property name="mandatory" value="true"/>
+                </bean>
+                <bean class="org.yes.cart.report.impl.ReportParameter">
+                    <property name="parameterId" value="skuCode"/>
+                    <property name="businesstype" value="String"/>
+                    <property name="mandatory" value="false"/>
                 </bean>
             </list>
         </property>
-        <property name="langLabel">
-            <list>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="en"/>
-                    <constructor-arg index="1" value="Available stock"/>
-                </bean>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="ru"/>
-                    <constructor-arg index="1" value="Склад"/>
-                </bean>
-            </list>
-        </property>
-        <property name="langXslfo">
-            <list>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="en"/>
-                    <constructor-arg index="1" value="available-stock_en.xslfo"/>
-                </bean>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="ru"/>
-                    <constructor-arg index="1" value="available-stock_ru.xslfo"/>
-                </bean>
-            </list>
-        </property>
+        <property name="xslfoBase" value="available-stock"/>
     </bean>
 
-    <bean id="payments" class="org.yes.cart.report.impl.ReportDescriptor">
-        <property name="reportId" value="payments"/>
-        <property name="hsqlQuery" value="customerOrderPaymentService.getData.paymentReport"/>
-        <!-- point to report data method "getData" in  "customerOrderPaymentService" bean. label of report is "paymentReport" -->
+    <bean id="reportPayments" class="org.yes.cart.report.impl.ReportDescriptor">
+        <property name="reportId" value="reportPayments"/>
         <property name="parameters">
             <list>
                 <bean class="org.yes.cart.report.impl.ReportParameter">
-                    <constructor-arg index="0" value="fromDate"/>
-                    <constructor-arg index="1">
-                        <list>
-                            <bean class="org.yes.cart.report.impl.ReportPair">
-                                <constructor-arg index="0" value="ru"/>
-                                <constructor-arg index="1" value="С даты"/>
-                            </bean>
-                            <bean class="org.yes.cart.report.impl.ReportPair">
-                                <constructor-arg index="0" value="en"/>
-                                <constructor-arg index="1" value="From date"/>
-                            </bean>
-                        </list>
-                    </constructor-arg>
-                    <constructor-arg index="2" value="Date"/>
-                    <constructor-arg index="3" value="true"/>
+                    <property name="parameterId" value="orderNumber"/>
+                    <property name="businesstype" value="String"/>
+                    <property name="mandatory" value="false"/>
                 </bean>
                 <bean class="org.yes.cart.report.impl.ReportParameter">
-                    <constructor-arg index="0" value="tillDate"/>
-                    <constructor-arg index="1">
-                        <list>
-                            <bean class="org.yes.cart.report.impl.ReportPair">
-                                <constructor-arg index="0" value="ru"/>
-                                <constructor-arg index="1" value="По дату"/>
-                            </bean>
-                            <bean class="org.yes.cart.report.impl.ReportPair">
-                                <constructor-arg index="0" value="en"/>
-                                <constructor-arg index="1" value="Till date"/>
-                            </bean>
-                        </list>
-                    </constructor-arg>
-                    <constructor-arg index="2" value="Date"/>
-                    <constructor-arg index="3" value="false"/>
+                    <property name="parameterId" value="fromDate"/>
+                    <property name="businesstype" value="Date"/>
+                    <property name="mandatory" value="true"/>
+                </bean>
+                <bean class="org.yes.cart.report.impl.ReportParameter">
+                    <property name="parameterId" value="tillDate"/>
+                    <property name="businesstype" value="Date"/>
+                    <property name="mandatory" value="true"/>
                 </bean>
             </list>
         </property>
-        <property name="langLabel">
-            <list>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="en"/>
-                    <constructor-arg index="1" value="Payments"/>
-                </bean>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="ru"/>
-                    <constructor-arg index="1" value="Оплата заказов"/>
-                </bean>
-            </list>
-        </property>
-        <property name="langXslfo">
-            <list>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="en"/>
-                    <constructor-arg index="1" value="payments_en.xslfo"/>
-                </bean>
-                <bean class="org.yes.cart.report.impl.ReportPair">
-                    <constructor-arg index="0" value="ru"/>
-                    <constructor-arg index="1" value="payments_en.xslfo"/>
-                </bean>
-            </list>
-        </property>
+        <property name="xslfoBase" value="payments"/>
     </bean>
+
+    <util:list id="reportDescriptors">
+        <ref bean="reportAvailableStock"/>
+        <ref bean="reportPayments"/>
+        <ref bean="reportDelivery"/>
+    </util:list>
+
+    <util:map id="reportWorkers">
+        <entry key="reportPayments">
+            <bean class="org.yes.cart.report.impl.PaymentReportWorker">
+                <constructor-arg index="0" ref="remotePaymentModulesManagementService"/>
+            </bean>
+        </entry>
+        <entry key="reportDelivery">
+            <bean class="org.yes.cart.report.impl.DeliveryReportWorker">
+                <constructor-arg index="0" ref="remoteCustomerOrderService"/>
+            </bean>
+        </entry>
+        <entry key="reportAvailableStock">
+            <bean class="org.yes.cart.report.impl.InventoryReportWorker">
+                <constructor-arg index="0" ref="remoteWarehouseService"/>
+                <constructor-arg index="1" ref="remoteInventoryService"/>
+            </bean>
+        </entry>
+    </util:map>
 
 
 </beans>

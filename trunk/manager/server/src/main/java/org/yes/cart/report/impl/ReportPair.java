@@ -20,7 +20,7 @@ package org.yes.cart.report.impl;
  *
  * Pair object to use reports part.
  * Already used immutable Pair from misc package has not setters, but setters is need to
- * perform corrrect serialization by BlazeDS.
+ * perform correct serialization by BlazeDS.
  *
  * See http://cornelcreanga.com/2008/07/amf-problems-when-serializing-between-java-and-actionscript/
  *
@@ -30,17 +30,20 @@ package org.yes.cart.report.impl;
  */
 public class ReportPair {
 
-    private String lang;
+    private String label;
 
     private String value;
 
+    public ReportPair() {
+    }
+
     /**
      * Create pair.
-     * @param lang language
+     * @param label language
      * @param value localized value.
      */
-    public ReportPair(final String lang, final String value) {
-        this.lang = lang;
+    public ReportPair(final String label, final String value) {
+        this.label = label;
         this.value = value;
     }
 
@@ -48,16 +51,16 @@ public class ReportPair {
      * Get lanuage.
      * @return lang label
      */
-    public String getLang() {
-        return lang;
+    public String getLabel() {
+        return label;
     }
 
     /**
      * Set language.
-     * @param lang  lang
+     * @param label  lang
      */
-    public void setLang(final String lang) {
-        this.lang = lang;
+    public void setLabel(final String label) {
+        this.label = label;
     }
 
     /**

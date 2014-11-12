@@ -64,6 +64,9 @@ public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
     @DtoField(value = "quantity")
     private BigDecimal quantity;
 
+    @DtoField(value = "reserved", readOnly = true)
+    private BigDecimal reserved;
+
     /** {@inheritDoc} */
     public long getSkuWarehouseId() {
         return skuWarehouseId;
@@ -147,6 +150,16 @@ public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
     /** {@inheritDoc} */
     public void setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    /** {@inheritDoc} */
+    public BigDecimal getReserved() {
+        return reserved;
+    }
+
+    /** {@inheritDoc} */
+    public void setReserved(final BigDecimal reserved) {
+        this.reserved = reserved;
     }
 
     @Override

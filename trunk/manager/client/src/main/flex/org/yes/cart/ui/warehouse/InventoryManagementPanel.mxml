@@ -91,9 +91,10 @@
                                    dataField="skuName" editable="false"/>
                 <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='quantity')"
                                    dataField="quantity" editable="false"
-                                   labelFunction="quantityLabelFunction"
-
-                        />
+                                   labelFunction="quantityLabelFunction"/>
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='reserved')"
+                                   dataField="reserved" editable="false"
+                                   labelFunction="quantityLabelFunction"/>
             </mx:columns>
         </mx:DataGrid>
     </mx:VBox>
@@ -259,7 +260,10 @@
          * @return string representation of qty
          */
         public function quantityLabelFunction(item:Object, column:DataGridColumn):String {
-            return quantityFormatter.format(item.quantity);
+            if (item[column.dataField] == null || isNaN(item[column.dataField])) {
+                return "0.00";
+            }
+            return Number(item[column.dataField]).toFixed(2);
         }
 
         private function onWarehouseSelectionChanged(event:Event):void {

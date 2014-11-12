@@ -21,32 +21,24 @@
  */
 
 package org.yes.cart.report.impl {
-import mx.collections.ArrayCollection;
-
-import org.yes.cart.report.impl.ReportPair;
 
 
 [Bindable]
 [RemoteClass(alias="org.yes.cart.report.impl.ReportParameter")]
 public class ReportParameter {
 
-    public var name:String;
-
-    public var langLabel:ArrayCollection;
+    public var parameterId:String;
 
     public var businesstype:String;
 
     public var mandatory:Boolean;
-
-    public var allowedValuesQuery:String;
-
 
     public function ReportParameter() {
     }
 
 
     public function toString():String {
-        return "ReportParameter{name=" + String(name) + ",langLabel=" + String(langLabel) + ",businesstype=" + String(businesstype) + ",mandatory=" + String(mandatory) + "}";
+        return "ReportParameter{name=" + String(parameterId) + ",businesstype=" + String(businesstype) + ",mandatory=" + String(mandatory) + "}";
     }
 }
 }

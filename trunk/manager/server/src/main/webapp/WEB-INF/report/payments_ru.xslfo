@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format">
-    <xsl:output method="xml" indent="yes"/>
+    <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 
-    <xsl:key name="currencyGroup" match="org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity"
+    <xsl:key name="currencyGroup" match="payment"
              use="concat(orderCurrency, transactionOperation, transactionGatewayLabel)"/>
 
 
     <xsl:template match="/">
-        <fo:root font-family="Times">
+        <fo:root font-family="Times" font-size="9">
 
             <fo:layout-master-set>
                 <fo:simple-page-master master-name="A4-landscape"
@@ -24,53 +24,48 @@
 
                 <fo:static-content flow-name="xsl-region-before">
                     <fo:block text-align="left" font-weight="bold" font-size="16pt">
-                        <fo:external-graphic src="report/yes-logo.png" width="30mm"/>
-                        Оплата
+                        <fo:inline>
+                            <fo:external-graphic  src="report/yes-logo.png" width="35mm" vertical-align="middle"/>
+                        </fo:inline>
+                        Оплаты
                     </fo:block>
                 </fo:static-content>
 
                 <fo:static-content flow-name="xsl-region-after">
                     <fo:block text-align="right">
-                        Страница <fo:page-number/> из <fo:page-number-citation ref-id="end"/>
+                        стр
+                        <fo:page-number/>
+                        из
+                        <fo:page-number-citation ref-id="end"/>
                     </fo:block>
                 </fo:static-content>
 
 
                 <fo:flow flow-name="xsl-region-body">
 
-                    <xsl:if test="count(./yes-report/org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity) > 0">
-                        <fo:block border-before-width="2cm" border-width="1mm">
-                            <fo:table font-size="10pt" border-before-width="5cm">
+                    <xsl:if test="count(./yes-report/payment) > 0">
+                        <fo:block border-before-width="2cm" border-width="1mm" space-before="5mm">
+                            <fo:table border-before-width="5cm">
                                 <fo:table-header>
                                     <fo:table-row font-weight="bold" keep-together="always" keep-with-next="always">
                                         <fo:table-cell border="solid 1px black" width="1cm" text-align="right">
-                                            <fo:block font-weight="bold">N</fo:block>
+                                            <fo:block font-weight="bold">№</fo:block>
                                         </fo:table-cell>
-                                        <fo:table-cell border="solid 1px black" width="1.5cm" text-align="right">
-                                            <fo:block font-weight="bold">Ид</fo:block>
-                                        </fo:table-cell>
-                                        <fo:table-cell border="solid 1px black" width="2cm">
+                                        <fo:table-cell border="solid 1px black" width="2.5cm">
                                             <fo:block font-weight="bold">Заказ</fo:block>
                                         </fo:table-cell>
-                                        <fo:table-cell border="solid 1px black" width="2.2cm">
+                                        <fo:table-cell border="solid 1px black" width="3.0cm">
                                             <fo:block font-weight="bold">Доставка</fo:block>
                                         </fo:table-cell>
-                                        <fo:table-cell border="solid 1px black" width="3.5cm">
-                                            <fo:block font-weight="bold">Владелец</fo:block>
-                                            <fo:block font-weight="bold">карты</fo:block>
+                                        <fo:table-cell border="solid 1px black" width="4.5cm">
+                                            <fo:block font-weight="bold">Данные карты</fo:block>
                                         </fo:table-cell>
-                                        <fo:table-cell border="solid 1px black" width="1.5cm">
-                                            <fo:block font-weight="bold">Данные</fo:block>
-                                            <fo:block font-weight="bold">карты</fo:block>
-                                        </fo:table-cell>
-
-                                        <fo:table-cell border="solid 1px black" width="3.5cm">
+                                        <fo:table-cell border="solid 1px black" width="2cm">
                                             <fo:block font-weight="bold">Операция</fo:block>
                                         </fo:table-cell>
 
-                                        <fo:table-cell border="solid 1px black" width="3.5cm">
-                                            <fo:block font-weight="bold">Платежный</fo:block>
-                                            <fo:block font-weight="bold">шлюз</fo:block>
+                                        <fo:table-cell border="solid 1px black" width="4.5cm">
+                                            <fo:block font-weight="bold">Шлюз / инфо</fo:block>
                                         </fo:table-cell>
 
                                         <fo:table-cell border="solid 1px black" width="2.5cm">
@@ -78,14 +73,9 @@
                                         </fo:table-cell>
 
                                         <fo:table-cell border="solid 1px black" width="2cm">
-                                            <fo:block font-weight="bold">Зачисленно</fo:block>
+                                            <fo:block font-weight="bold">Проведен</fo:block>
                                         </fo:table-cell>
-
-                                        <fo:table-cell border="solid 1px black" width="1cm">
-                                            <fo:block font-weight="bold">Валюта</fo:block>
-                                        </fo:table-cell>
-
-                                        <fo:table-cell border="solid 1px black" text-align="right" width="1.5cm">
+                                        <fo:table-cell border="solid 1px black" text-align="right" width="3.0cm">
                                             <fo:block font-weight="bold">Сумма</fo:block>
                                         </fo:table-cell>
                                     </fo:table-row>
@@ -94,7 +84,7 @@
                                 <fo:table-body>
 
                                     <xsl:for-each
-                                            select="//org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity[generate-id(.)=generate-id(key('currencyGroup', concat(orderCurrency, transactionOperation, transactionGatewayLabel))[1])]">
+                                            select="//payment[generate-id(.)=generate-id(key('currencyGroup', concat(orderCurrency, transactionOperation, transactionGatewayLabel))[1])]">
                                         <xsl:sort select="orderCurrency"/>
                                         <xsl:sort select="transactionOperation"/>
                                         <xsl:sort select="transactionGatewayLabel"/>
@@ -107,11 +97,6 @@
                                                         <xsl:value-of select="position()"/>
                                                     </fo:block>
                                                 </fo:table-cell>
-                                                <fo:table-cell border="solid 1px black" text-align="right">
-                                                    <fo:block>
-                                                        <xsl:value-of select="customerOrderPaymentId"/>
-                                                    </fo:block>
-                                                </fo:table-cell>
                                                 <fo:table-cell border="solid 1px black">
                                                     <fo:block>
                                                         <xsl:value-of select="orderNumber"/>
@@ -122,18 +107,14 @@
                                                         <xsl:value-of select="orderShipment"/>
                                                     </fo:block>
                                                 </fo:table-cell>
-                                                <fo:table-cell border="solid 1px black" text-align="right">
+                                                <fo:table-cell border="solid 1px black">
                                                     <fo:block>
-                                                        <xsl:value-of select="cardHolderName"/>
-                                                    </fo:block>
-                                                </fo:table-cell>
-                                                <fo:table-cell border="solid 1px black" text-align="right">
-                                                    <fo:block>
-                                                        <xsl:value-of select="cardExpireMonth"/>/<xsl:value-of
-                                                            select="cardExpireYear"/>
-                                                    </fo:block>
-                                                    <fo:block>
-                                                        <xsl:value-of select="cardNumber"/>
+                                                        <xsl:if test="cardNumber">
+                                                            <xsl:value-of select="cardHolderName"/>, карта:
+                                                            <xsl:value-of select="cardNumber"/> действ.
+                                                            <xsl:value-of select="cardExpireMonth"/>/<xsl:value-of
+                                                                select="cardExpireYear"/>
+                                                        </xsl:if>
                                                     </fo:block>
                                                 </fo:table-cell>
                                                 <fo:table-cell border="solid 1px black">
@@ -154,21 +135,20 @@
                                                 </fo:table-cell>
                                                 <fo:table-cell border="solid 1px black">
                                                     <fo:block>
-                                                        <xsl:value-of select="orderDate"/>
+                                                        <xsl:value-of select="format-dateTime(orderDate, '[D01]/[M01]/[Y0001]')"/>
                                                     </fo:block>
                                                 </fo:table-cell>
                                                 <fo:table-cell border="solid 1px black">
                                                     <fo:block>
-                                                        <xsl:value-of select="paymentProcessorBatchSettlement"/>
-                                                    </fo:block>
-                                                </fo:table-cell>
-                                                <fo:table-cell border="solid 1px black">
-                                                    <fo:block>
-                                                        <xsl:value-of select="orderCurrency"/>
+                                                        <xsl:choose>
+                                                            <xsl:when test="paymentProcessorBatchSettlement = 'true'">Да</xsl:when>
+                                                            <xsl:otherwise>Нет</xsl:otherwise>
+                                                        </xsl:choose>
                                                     </fo:block>
                                                 </fo:table-cell>
                                                 <fo:table-cell border="solid 1px black" text-align="right">
                                                     <fo:block>
+                                                        <xsl:value-of select="concat(orderCurrency, ' ')"/>
                                                         <xsl:value-of select="format-number(paymentAmount, '##0.00')"/>
                                                     </fo:block>
                                                 </fo:table-cell>
@@ -179,7 +159,7 @@
                                             <xsl:if test="position() = last()">
                                                 <fo:table-row>
                                                     <fo:table-cell border="solid 1px black"
-                                                                   number-columns-spanned="11" font-weight="bold">
+                                                                   number-columns-spanned="8" font-weight="bold">
                                                         <fo:block>Итого</fo:block>
                                                     </fo:table-cell>
                                                     <fo:table-cell border="solid 1px black" text-align="right"
@@ -194,7 +174,7 @@
                                                 </fo:table-row>
                                                 <fo:table-row>
                                                     <fo:table-cell border="none"
-                                                                   number-columns-spanned="12" font-weight="bold">
+                                                                   number-columns-spanned="9" font-weight="bold">
                                                         <fo:block><fo:leader /></fo:block>
                                                     </fo:table-cell>
                                                 </fo:table-row>

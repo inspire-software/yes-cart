@@ -86,6 +86,9 @@
         import org.yes.cart.impl.TaxConfigDTOImpl;
         import org.yes.cart.impl.TaxDTOImpl;
         import org.yes.cart.impl.WarehouseDTOImpl;
+        import org.yes.cart.report.impl.ReportDescriptor;
+        import org.yes.cart.report.impl.ReportPair;
+        import org.yes.cart.report.impl.ReportParameter;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.ui.attributes.AttributesManagementPanel;
@@ -177,6 +180,10 @@
 
             registerClassAlias("org.yes.cart.service.dto.support.impl.InventoryFilterImpl", InventoryFilter);
             registerClassAlias("org.yes.cart.service.dto.support.impl.PriceListFilterImpl", PriceListFilter);
+
+            registerClassAlias("org.yes.cart.report.impl.ReportDescriptor", ReportDescriptor);
+            registerClassAlias("org.yes.cart.report.impl.ReportParameter", ReportParameter);
+            registerClassAlias("org.yes.cart.report.impl.ReportPair", ReportPair);
 
 
             channelSet.removeChannel(myamf);

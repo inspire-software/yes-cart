@@ -225,14 +225,14 @@ public interface CustomerOrderPayment extends Auditable {
     String getTransactionGatewayLabel();
 
     /**
-     * Set label of paymeng gataway.
+     * Set label of payment gateway.
      *
-     * @param transactionGatewayLabel label of paymeng gataway.
+     * @param transactionGatewayLabel label of payment gateway.
      */
     void setTransactionGatewayLabel(String transactionGatewayLabel);
 
     /**
-     * Get the trasaction operation. Like AUTH, AUTH_CAPTURE, etc
+     * Get the transaction operation. Like AUTH, AUTH_CAPTURE, etc
      *
      * @return operation.
      */
@@ -292,9 +292,9 @@ public interface CustomerOrderPayment extends Auditable {
     void setPaymentProcessorResult(String paymentProcessorResult);
 
     /**
-     * Is AUTH or AUTH_CAPTURE payment was submited to bank for batch settlement.
+     * Is AUTH or AUTH_CAPTURE payment was submitted to bank for batch settlement.
      *
-     * @return true if payment was submited to bank for batch settlement.
+     * @return true if payment was submitted to bank for batch settlement.
      */
     boolean isPaymentProcessorBatchSettlement();
 

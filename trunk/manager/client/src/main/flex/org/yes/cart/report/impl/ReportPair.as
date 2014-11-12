@@ -26,7 +26,7 @@ package org.yes.cart.report.impl {
 [RemoteClass(alias="org.yes.cart.report.impl.ReportPair")]
 public class ReportPair {
 
-    public var lang:String;
+    public var label:String;
 
     public var value:String;
 
@@ -36,7 +36,7 @@ public class ReportPair {
 
 
     public function toString():String {
-        return "ReportPair{lang=" + String(lang) + ",value=" + String(value) + "}";
+        return "ReportPair{lang=" + String(label) + ",value=" + String(value) + "}";
     }
 }
 }

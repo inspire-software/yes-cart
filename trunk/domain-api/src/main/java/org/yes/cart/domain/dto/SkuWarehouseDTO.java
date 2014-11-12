@@ -141,4 +141,20 @@ public interface SkuWarehouseDTO extends Identifiable {
      */
     void setQuantity(BigDecimal quantity);
 
+
+    /**
+     * Get reserved quantity during payment transaction.
+     *
+     * @return reserved quantity during payment transaction.
+     */
+    BigDecimal getReserved();
+
+    /**
+     * Set reserved quantity during payment transaction.
+     *
+     * @param reserved reserved quantity during payment transaction.
+     */
+    void setReserved(BigDecimal reserved);
+
+
 }

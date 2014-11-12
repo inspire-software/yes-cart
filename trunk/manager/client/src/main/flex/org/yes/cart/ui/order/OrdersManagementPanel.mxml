@@ -55,10 +55,14 @@
                    result="onOrderResultStatusChanged(event)"
                    fault="onRpcMethodFault(event)"/>
 
-        <mx:method id="produceDeliveryReport" name="produceDeliveryReport"
+    </mx:RemoteObject>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteReportService"
+                     destination="remoteReportService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+        <mx:method id="downloadReport" name="downloadReport"
                    result="onProduceDeliveryReportResult(event)"
                    fault="onRpcMethodFault(event)"/>
-
 
     </mx:RemoteObject>
 
@@ -726,11 +730,13 @@
 
                                                         var orderDto:CustomerOrderDTOImpl = outerDocument.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
 
-                                                        outerDocument.remoteCustomerOrderService.produceDeliveryReport(
+                                                        outerDocument.remoteReportService.downloadReport(
                                                                 resourceManager.getString("Common", "localeFilter"),
-                                                                orderDto.ordernum,
-                                                                data.deliveryNum
-
+                                                                'reportDelivery',
+                                                                {
+                                                                    'orderNumber': orderDto.ordernum,
+                                                                    'deliveryNumber': data.deliveryNum
+                                                                }
                                                         )
 
                                                     }
@@ -1395,10 +1401,6 @@
             initTab(event.newIndex);
         }
 
-
-        override public function toString():String {
-            return super.toString() + "    \n\n{_searchCriteriaCustomerId=" + String(_searchCriteriaCustomerId) + ",_searchCriteriaCustomerFirstName=" + String(_searchCriteriaCustomerFirstName) + ",_searchCriteriaCustomerLastName=" + String(_searchCriteriaCustomerLastName) + ",_searchCriteriaCustomerEMailName=" + String(_searchCriteriaCustomerEMailName) + ",_searchCriteriarOrderStatus=" + String(_searchCriteriarOrderStatus) + ",_searchCriteriarOrderNum=" + String(_searchCriteriarOrderNum) + ",_searchCriteriarOrderDateFrom=" + String(_searchCriteriarOrderDateFrom) + ",_searchCriteriarOrderDateTo=" + String(_searchCriteriarOrderDateTo) + "}";
-        }
         ]]></mx:Script>
 
 </mx:Canvas>

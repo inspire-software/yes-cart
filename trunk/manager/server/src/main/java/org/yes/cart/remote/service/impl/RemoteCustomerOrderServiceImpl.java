@@ -20,12 +20,10 @@ import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.Result;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteCustomerOrderService;
-import org.yes.cart.report.ReportService;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.dto.GenericDTOService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -44,7 +42,6 @@ public class RemoteCustomerOrderServiceImpl
         extends AbstractRemoteService<CustomerOrderDTO>
         implements RemoteCustomerOrderService {
 
-    private final ReportService reportService;
     private final FederationFacade federationFacade;
 
     /**
@@ -54,10 +51,8 @@ public class RemoteCustomerOrderServiceImpl
      * @param federationFacade federation facade
      */
     public RemoteCustomerOrderServiceImpl(final GenericDTOService<CustomerOrderDTO> customerOrderDTOGenericDTOService,
-                                          final ReportService reportService,
                                           final FederationFacade federationFacade) {
         super(customerOrderDTOGenericDTOService);
-        this.reportService = reportService;
         this.federationFacade = federationFacade;
     }
 
@@ -180,24 +175,6 @@ public class RemoteCustomerOrderServiceImpl
             return ((DtoCustomerOrderService) getGenericDTOService()).findDeliveryByOrderNumber(orderNum, deliveryNum);
         }
         return Collections.emptyList();
-    }
-
-
-
-    /** {@inheritDoc} */
-    public byte[] produceDeliveryReport(final String reportLang, final String orderNum, final String deliveryNum)
-            throws Exception {
-        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
-
-            final List<CustomerOrderDTO> orders = findCustomerOrdersByCriteria(0, null, null, null, null, null, null, orderNum);
-            List rez =  findDeliveryByOrderNumber(orderNum, null); // All deliveries
-
-            return reportService.produceReport(reportLang, "reportDelivery",
-                    (List) Collections.singletonList(new Pair(orders.get(0), rez)));
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
-
     }
 
 }

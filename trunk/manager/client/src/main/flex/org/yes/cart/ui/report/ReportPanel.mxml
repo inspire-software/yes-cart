@@ -43,13 +43,15 @@
         import mx.validators.Validator;
 
         import org.yes.cart.report.impl.ReportDescriptor;
-        import org.yes.cart.report.impl.ReportPair;
         import org.yes.cart.report.impl.ReportParameter;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import spark.components.Label;
 
         [Bindable]
         private var pdf:ByteArray;
         private var validationArray:Array = new Array();
+        private var paramsArray:Array = new Array();
 
         private var reportName:String;
 
@@ -65,19 +67,13 @@
          * @return report display name.
          */
         private function getReportLabel(itm:Object):String {
-            var reportDesriptor:ReportDescriptor = itm as ReportDescriptor;
-            var rez:String = reportDesriptor.reportId;
-            for (var i:int = 0; i < reportDesriptor.langLabel.length; i++) {
-                var langLabel:ReportPair = ReportPair(reportDesriptor.langLabel.getItemAt(i));
-                if (langLabel != null) {
-                    Debug.trace(langLabel);
-                    if (langLabel.lang == localeFilter) {
-                        rez = langLabel.value;
-                        break;
-                    }
-                }
+            var reportDescriptor:ReportDescriptor = itm as ReportDescriptor;
+            var rez:String = reportDescriptor.reportId;
+            var label:String = resourceManager.getString('ReportPanel', rez);
+            if (label == null) {
+                return rez;
             }
-            return rez;
+            return label;
         }
 
         /**
@@ -87,69 +83,91 @@
         private function onReportComboboxChange(event:Event):void {
             var reportDescriptor:ReportDescriptor = ReportDescriptor(reportComboBox.selectedItem);
             parameterForm.removeAllChildren();
-            validationArray = new Array();
+            validationArray = [];
+            paramsArray = [];
             pdf = null;
             Debug.trace("DEBUG Report has " + reportDescriptor.parameters.length + " parameters");
             try {
                 for (var i:int = 0; i < reportDescriptor.parameters.length; i++) {
                     var repoParam:ReportParameter = ReportParameter(reportDescriptor.parameters.getItemAt(i));
-                    for (var j:int = 0; j < repoParam.langLabel.length; j++) { //loop through languages
-                        var localizedParamName:ReportPair = ReportPair(repoParam.langLabel.getItemAt(j));
-                        if (localizedParamName.lang == localeFilter) {
-                            var formItem:FormItem = new FormItem();
-                            formItem.label = localizedParamName.value;
-                            if (repoParam.allowedValuesQuery != null && repoParam.allowedValuesQuery.length > 0) {
-                                var cbmBox:ComboBox = new ComboBox();
-                                cbmBox.prompt = resourceManager.getString('ReportPanel', 'selectDataPrompt');
-                                cbmBox.labelField = "value";
-                                remoteReportService.getParameterValues(repoParam.allowedValuesQuery).addResponder(
-                                        new AsyncResponder(
-                                                function (event:ResultEvent, obj:Object = null):void {
-                                                    cbmBox.dataProvider = event.result;
-                                                }
-                                                ,
-                                                function (event:FaultEvent):void {
-                                                    ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
-                                                }
-                                        )
-                                );
-                                if (repoParam.mandatory) {
-                                    var numberValidator:NumberValidator = new NumberValidator();
-                                    numberValidator.source = cbmBox;
-                                    numberValidator.property = "selectedIndex";
-                                    numberValidator.minValue = 0; // -1 means no selection
-                                    numberValidator.lowerThanMinError = resourceManager.getString('ReportPanel', 'cmbSelectValue');
-                                    validationArray.push(numberValidator);
-                                }
-                                formItem.addChild(cbmBox);
-                            } else if (repoParam.businesstype == "Date") {
-                                var dtf:DateTimeField = new DateTimeField();
-                                if (repoParam.mandatory) {
-                                    var dataValidator:DateValidator = new DateValidator();
-                                    dataValidator.source = dtf;
-                                    dataValidator.property =  "selectedDate";
-                                    dataValidator.required = true;
-                                    validationArray.push(dataValidator);
-                                }
-                                formItem.addChild(dtf);
-                            } else {
-                                var textInput:TextInput = new TextInput();
-                                if (repoParam.mandatory) {
-                                    var stringValidator:StringValidator = new StringValidator();
-                                    stringValidator.source = textInput;
-                                    stringValidator.property = "text";
-                                    stringValidator.required = true;
-                                    stringValidator.maxLength = 1;
-                                    validationArray.push(stringValidator);
-                                }
-                                formItem.addChild(textInput);
-                            }
-
-                            parameterForm.addChild(formItem);
-
-                        }
+                    var formItem:FormItem = new FormItem();
+                    var paramId:String = repoParam.parameterId;
+                    var label:String = resourceManager.getString('ReportPanel', paramId);
+                    if (label == null) {
+                        formItem.label = paramId + (repoParam.mandatory ? ' *' : '');
+                    } else {
+                        formItem.label = label + (repoParam.mandatory ? ' *' : '');
                     }
+                    if (repoParam.businesstype.indexOf('org.yes.cart') > -1) {
+                        var cbmBox:ComboBox = new ComboBox();
+                        cbmBox.prompt = resourceManager.getString('ReportPanel', 'selectDataPrompt');
+                        cbmBox.labelField = "label";
+                        remoteReportService.getParameterValues(localeFilter, reportDescriptor.reportId, repoParam.parameterId, null).addResponder(
+                                new AsyncResponder(
+                                        function (event:ResultEvent, obj:Object = null):void {
+                                            cbmBox.dataProvider = event.result;
+                                        }
+                                        ,
+                                        function (event:FaultEvent):void {
+                                            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+                                        }
+                                )
+                        );
+                        if (repoParam.mandatory) {
+                            var numberValidator:NumberValidator = new NumberValidator();
+                            numberValidator.source = cbmBox;
+                            numberValidator.property = "selectedIndex";
+                            numberValidator.minValue = 0; // -1 means no selection
+                            numberValidator.lowerThanMinError = resourceManager.getString('ReportPanel', 'cmbSelectValue');
+                            validationArray.push(numberValidator);
+                        }
+                        formItem.addChild(cbmBox);
+                        paramsArray.push({
+                            'param': repoParam,
+                            'control': cbmBox
+                        });
+                    } else if (repoParam.businesstype == "Date") {
+                        var dtf:DateTimeField = new DateTimeField();
+                        if (repoParam.mandatory) {
+                            var dataValidator:DateValidator = new DateValidator();
+                            dataValidator.source = dtf;
+                            dataValidator.property = "selectedDate";
+                            dataValidator.required = true;
+                            validationArray.push(dataValidator);
+                        }
+                        formItem.addChild(dtf);
+                        paramsArray.push({
+                            'param': repoParam,
+                            'control': dtf
+                        });
+                    } else {
+                        var textInput:TextInput = new TextInput();
+                        if (repoParam.mandatory) {
+                            var stringValidator:StringValidator = new StringValidator();
+                            stringValidator.source = textInput;
+                            stringValidator.property = "text";
+                            stringValidator.required = true;
+                            stringValidator.minLength = 1;
+                            validationArray.push(stringValidator);
+                        }
+                        formItem.addChild(textInput);
+                        paramsArray.push({
+                            'param': repoParam,
+                            'control': textInput
+                        });
+                    }
+
+                    parameterForm.addChild(formItem);
+
                 }
+                if (validationArray.length > 0) {
+                    var mandatoryLabelItem:FormItem = new FormItem();
+                    var mandatoryLabel:Label = new Label();
+                    mandatoryLabel.text = resourceManager.getString('ReportPanel', 'mandatoryParamsNote');
+                    mandatoryLabelItem.addChild(mandatoryLabel);
+                    parameterForm.addChild(mandatoryLabelItem);
+                }
+
             } catch (e:Error) {
                 Debug.trace("DEBUG error " + e);
             }
@@ -159,24 +177,30 @@
 
         /**
          * Collect report parameters from form.
-         * @returnarray list , which contains report parameters
+         * @return array list , which contains report parameters
          */
-        private function collectReportParameters():ArrayList {
-            var rez:ArrayList = new ArrayList();
-            for (var i:int = 0; i < parameterForm.getChildren().length; i++) {
-                var item:Object = parameterForm.getChildAt(i);
-                if (item is FormItem) {
-                    var formItem:FormItem = item as FormItem;
-                    var uiComponent:UIComponent = UIComponent(formItem.getChildAt(0));
+        private function collectReportParameters():Object {
+            var rez:Object = {};
+            for (var i:int = 0; i < paramsArray.length; i++) {
+                var item:Object = paramsArray[i];
+                if (item != null) {
+                    var param:ReportParameter = item['param'] as ReportParameter;
+                    var uiComponent:UIComponent = item['control'] as UIComponent;
+
                     if (uiComponent is ComboBox) {
-                        rez.addItem(ComboBox(uiComponent).selectedItem.lang);
+                        rez[param.parameterId] = ComboBox(uiComponent).selectedItem.value;
                     } else if (uiComponent is DateTimeField) {
-                        rez.addItem(DateTimeField(uiComponent).selectedDate);
+                        rez[param.parameterId] = DateTimeField(uiComponent).selectedDate;
                     } else if (uiComponent is TextInput) {
-                        rez.addItem(TextInput(uiComponent).text);
+                        var val:String = TextInput(uiComponent).text;
+                        if (param.businesstype == 'Number') {
+                            rez[param.parameterId] = val != null && !isNaN(Number(val)) ? Number(val) : null;
+                        } else {
+                            rez[param.parameterId] = val;
+                        }
                     } else {
-                        Debug.trace(" Cant determinate ui type for  " + formItem + " value extracted as null and will be passed as report parameter");
-                        rez.addItem(null);
+                        Debug.trace(" Cant determinate ui type for  " + param + " value extracted as null and will be passed as report parameter");
+                        rez[param.parameterId] = null;
                     }
                 }
             }
@@ -200,13 +224,13 @@
         }
 
         /**
-         * Create report on server side. Donload as byte array and prompt user to save it on disk.
+         * Create report on server side. Download as byte array and prompt user to save it on disk.
          *
          * @param event mouse event
          */
         private function onCreateReportButtonClick(event:MouseEvent):void {
             var errArr:Array = Validator.validateAll(validationArray);
-            if(errArr.length == 0) {
+            if (errArr.length == 0) {
                 pdf = null;
                 reportName = getReportLabel(reportComboBox.selectedItem) + "_" + DateField.dateToString(new Date(), "DD-MM-YYYY") + ".pdf";
                 var reportDescriptor:ReportDescriptor = ReportDescriptor(reportComboBox.selectedItem);
@@ -258,7 +282,7 @@
     </mx:RemoteObject>
 
     <mx:Canvas width="100%" height="100%">
-        <mx:VBox x="0" y="0" width="100%" height="100%" id="shopManagmenlPanel">
+        <mx:VBox x="0" y="0" width="100%" height="100%" id="reportManagementPanel">
             <mx:ControlBar width="100%">
 
                 <mx:Text text="@Resource(bundle='ReportPanel',key='report')"/>
@@ -283,8 +307,6 @@
                 <mx:FormItem label="@Resource(bundle='BrandManagementPanel',key='description')">
                     <mx:TextArea id="descriptionTextInput" width="200"/>
                 </mx:FormItem>
-
-
             </mx:Form>
 
 

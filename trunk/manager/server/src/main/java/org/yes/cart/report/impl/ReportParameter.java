@@ -16,11 +16,7 @@
 
 package org.yes.cart.report.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * 
  * Class represent report parameter.
  * 
  * User: Igor Azarny iazarny@yahoo.com
@@ -29,96 +25,29 @@ import java.util.List;
  * */
 public class ReportParameter {
     
-    private String name;
-
-    private List<ReportPair> langLabel = new ArrayList<ReportPair>();
+    private String parameterId;
 
     private String businesstype;
 
     private boolean mandatory;
 
-    private String allowedValuesQuery;
-
-    /**
-     * Construct report parmeter.
-     * @param name name
-     * @param langLabel representation of name in different languages
-     * @param businesstype type
-     * @param mandatory is this parameret must be filled from UI
-     * @param allowedValuesQuery optional hsql query to retreive
-     */
-    public ReportParameter(final String name, final List<ReportPair> langLabel, final String businesstype, final boolean mandatory, final String allowedValuesQuery) {
-        this.name = name;
-        this.langLabel = langLabel;
-        this.businesstype = businesstype;
-        this.mandatory = mandatory;
-        this.allowedValuesQuery = allowedValuesQuery;
-    }
-
-
-    /**
-     * Construct report parmeter.
-     * @param name name
-     * @param langLabel representation of name in different languages
-     * @param businesstype type
-     * @param mandatory is this parameret must be filled from UI
-     */
-    public ReportParameter(final String name, final List<ReportPair>  langLabel, final String businesstype, final boolean mandatory) {
-        this.name = name;
-        this.langLabel = langLabel;
-        this.businesstype = businesstype;
-        this.mandatory = mandatory;
-    }
-
-    /**
-     * Get allowed values query. Which will be respesented on UI.
-     * This just draft solution and should be reviewed for more complex cases.
-     * Something like ref to value provideres.
-     *
-     * @return   hsql query to get value-representation pairs
-     */
-    public String getAllowedValuesQuery() {
-        return allowedValuesQuery;
-    }
-
-    /**
-     * Set allowed value hsql query.
-     * @param allowedValuesQuery    hsql query
-     */
-    public void setAllowedValuesQuery(final String allowedValuesQuery) {
-        this.allowedValuesQuery = allowedValuesQuery;
+    public ReportParameter() {
     }
 
     /**
      * Get parameter name.
      * @return parameter name.
      */
-    public String getName() {
-        return name;
+    public String getParameterId() {
+        return parameterId;
     }
 
     /**
      * Set parameter name.
-     * @param name parameter name.
+     * @param parameterId parameter name.
      */
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    /**
-     * Get list of parameter name localization pair: lang - name
-     * @return list of lang - name pair
-     */
-    public List<ReportPair> getLangLabel() {
-        return langLabel;
-    }
-
-    /**
-     * Set ist of lang - name pair.
-     * @param langLabel ist of lang - name pair
-     */
-    public void setLangLabel(final List<ReportPair> langLabel) {
-        this.langLabel = langLabel;
+    public void setParameterId(final String parameterId) {
+        this.parameterId = parameterId;
     }
 
     /**
@@ -138,8 +67,8 @@ public class ReportParameter {
     }
 
     /**
-     * Get business type of paramter. See etype for more details.
-     * @return business type of paramter.
+     * Get business type of parameter. See etype for more details.
+     * @return business type of parameter.
      */
     public String getBusinesstype() {
         return businesstype;
@@ -147,8 +76,8 @@ public class ReportParameter {
     }
 
     /**
-     * Set business type of paramter.
-     * @param businesstype business type of paramter.
+     * Set business type of parameter.
+     * @param businesstype business type of parameter.
      */
     public void setBusinesstype(final String businesstype) {
         this.businesstype = businesstype;
