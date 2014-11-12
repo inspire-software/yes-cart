@@ -31,7 +31,9 @@ public class InventoryDTOImpl {
     public var warehouseName:String;
 
     public var quantity:Number;
-    
+
+    public var reserved:Number;
+
     public function InventoryDTOImpl() {
     }
 

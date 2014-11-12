@@ -70,16 +70,6 @@ public interface CustomerOrderPaymentService extends PaymentModuleGenericService
 
 
     /**
-     * Get report data.
-     * @param dataIdentifier
-     * @param params
-     * @return
-     */
-    List<?> getData(
-            String dataIdentifier,
-            Object... params);
-
-    /**
      * Get order amount
      *
      * @param orderNumber given order number

@@ -17,25 +17,543 @@
   -->
 
 <yes-report>
-  <object-array>
-    <string>LG656ET#UUG</string>
-    <string>HP ProBook 6560b</string>
-    <string>0112312334</string>
-    <big-decimal>0.00</big-decimal>
-    <big-decimal>4.00</big-decimal>
-  </object-array>
-  <object-array>
-    <string>LH339EA#UUG</string>
-    <string>HP ProBook 4730d</string>
-    <string></string>
-    <big-decimal>0.00</big-decimal>
-    <big-decimal>5.00</big-decimal>
-  </object-array>
-  <object-array>
-    <string>LG656ET</string>
-    <string>HP ProBook 6560b</string>    
-    <string>0123456789012</string>
-    <big-decimal>5.00</big-decimal>
-    <big-decimal>100.00</big-decimal>
-  </object-array>
+    <inventoryDto>
+        <skuWarehouseId>239</skuWarehouseId>
+        <skuCode>J6T84AW-ABH</skuCode>
+        <skuName>1000 G2</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>92.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>240</skuWarehouseId>
+        <skuCode>J6T92AW-ABH</skuCode>
+        <skuName>1000 G2</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>16.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>287</skuWarehouseId>
+        <skuCode>J8Q14EA</skuCode>
+        <skuName>ElitePad 1000 G2 Tablet</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>28.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>285</skuWarehouseId>
+        <skuCode>J8Q17EA</skuCode>
+        <skuName>ElitePad 1000 G2 Tablet</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>200.00</quantity>
+        <reserved>1.00</reserved>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>286</skuWarehouseId>
+        <skuCode>J8Q20EA</skuCode>
+        <skuName>ElitePad 1000 G2 Tablet</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>837.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>25</skuWarehouseId>
+        <skuCode>LY542EA-ABB</skuCode>
+        <skuName>8470w</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>412.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>256</skuWarehouseId>
+        <skuCode>M11BB-NR040S</skuCode>
+        <skuName>M11BB-NR040S</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>478.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>65</skuWarehouseId>
+        <skuCode>ME302C-A1-BL</skuCode>
+        <skuName>ME302C-A1-BL</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>195.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>66</skuWarehouseId>
+        <skuCode>ME302C-A1-WH</skuCode>
+        <skuName>ME302C-A1-WH</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>833.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>190</skuWarehouseId>
+        <skuCode>NP940X3G-K03FR</skuCode>
+        <skuName>NP940X3G</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>606.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>140</skuWarehouseId>
+        <skuCode>NS-MKIT100</skuCode>
+        <skuName>NS-MKIT100</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>244.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>166</skuWarehouseId>
+        <skuCode>NT-L0KEH-005</skuCode>
+        <skuName>W510</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>543.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>202</skuWarehouseId>
+        <skuCode>NT-L0MEH-014</skuCode>
+        <skuName>W510</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>868.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>15</skuWarehouseId>
+        <skuCode>NT-L16EE-002</skuCode>
+        <skuName>Tab B1 16GB WiFi</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>514.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>44</skuWarehouseId>
+        <skuCode>NT-L1CEE-004</skuCode>
+        <skuName>A1-810 16GB Wi-Fi</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>0.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>39</skuWarehouseId>
+        <skuCode>NT-L1CEG-001</skuCode>
+        <skuName>A1-810</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>152.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>41</skuWarehouseId>
+        <skuCode>NT-L1JEH-005</skuCode>
+        <skuName>W3-810 64GB</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>882.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>64</skuWarehouseId>
+        <skuCode>NT-L1VEE-004</skuCode>
+        <skuName>B1-710 16GB WiFi</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>978.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>61</skuWarehouseId>
+        <skuCode>NT-L1VEH-001</skuCode>
+        <skuName>B1-710 16GB WiFi</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>0.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>134</skuWarehouseId>
+        <skuCode>NT-L29EE-008</skuCode>
+        <skuName>A3-A10 16 GB WiFi</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>941.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>201</skuWarehouseId>
+        <skuCode>NT-L2AEE-010</skuCode>
+        <skuName>A3-A11</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>882.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>177</skuWarehouseId>
+        <skuCode>NT-L31EH-005</skuCode>
+        <skuName>W4-820</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>670.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>200</skuWarehouseId>
+        <skuCode>NT-L3JEE-005</skuCode>
+        <skuName>B1-720</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>145.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>300</skuWarehouseId>
+        <skuCode>NT-L3WAA-003</skuCode>
+        <skuName>A1-830-1838</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>343.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>215</skuWarehouseId>
+        <skuCode>NT-L3WEE-002</skuCode>
+        <skuName>A1-830</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>702.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>261</skuWarehouseId>
+        <skuCode>PDW0AE-00900PEN</skuCode>
+        <skuName>WT8-B-102</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>979.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>265</skuWarehouseId>
+        <skuCode>PDW0BE-00600TEN</skuCode>
+        <skuName>WT10-A</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>323.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>157</skuWarehouseId>
+        <skuCode>PT330E-0VF03JCE</skuCode>
+        <skuName>R930-1MM</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>380.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>257</skuWarehouseId>
+        <skuCode>QY776AA-B15</skuCode>
+        <skuName>USB Keyboard for PC</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>938.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>26</skuWarehouseId>
+        <skuCode>QY776AT-ABB</skuCode>
+        <skuName>USB Keyboard</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>264.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>29</skuWarehouseId>
+        <skuCode>SGP311DEAB</skuCode>
+        <skuName>Z</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>181.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>67</skuWarehouseId>
+        <skuCode>SGP312A1W</skuCode>
+        <skuName>32GB Wi-Fi</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>269.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>31</skuWarehouseId>
+        <skuCode>SGP312DEAW</skuCode>
+        <skuName>Z</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>84.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>33</skuWarehouseId>
+        <skuCode>SGP312E1AB-CE3</skuCode>
+        <skuName>Z 32GB Wi-Fi</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>465.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>37</skuWarehouseId>
+        <skuCode>SGP312E4AB</skuCode>
+        <skuName>Z</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>0.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>30</skuWarehouseId>
+        <skuCode>SGP321E2</skuCode>
+        <skuName>Z</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>239.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>234</skuWarehouseId>
+        <skuCode>SGP511B2AB-EC5</skuCode>
+        <skuName>Z2 FIFA</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>399.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>217</skuWarehouseId>
+        <skuCode>SGP512E1AW-EC5</skuCode>
+        <skuName>Z2</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>385.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>193</skuWarehouseId>
+        <skuCode>SM-T111NDWANEE</skuCode>
+        <skuName>3 7.0 Lite</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>558.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>208</skuWarehouseId>
+        <skuCode>SM-T520NZKAPHN</skuCode>
+        <skuName>Pro 10.1</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>128.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>207</skuWarehouseId>
+        <skuCode>SM-T520NZWAPHN</skuCode>
+        <skuName>Pro 10.1</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>801.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>205</skuWarehouseId>
+        <skuCode>SM-T520ZWALUX</skuCode>
+        <skuName>Pro 10.1</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>0.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>260</skuWarehouseId>
+        <skuCode>SM-T531NYKASER</skuCode>
+        <skuName>Galaxy Tab 4 10.1&quot; 3G</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>130.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>303</skuWarehouseId>
+        <skuCode>SM010D3020MT11HSW1</skuCode>
+        <skuName>3020 MT</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>742.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>304</skuWarehouseId>
+        <skuCode>SM016D3020MT11HSW1</skuCode>
+        <skuName>3020 MT</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>290.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>8</skuWarehouseId>
+        <skuCode>SVE1513O9ESI</skuCode>
+        <skuName>SVE1513O9E</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>151.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>7</skuWarehouseId>
+        <skuCode>SVS1313R9EB</skuCode>
+        <skuName>SVS1313R9E</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>532.00</quantity>
+        <reserved>0.00</reserved>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>110</skuWarehouseId>
+        <skuCode>SVS1513M1RW</skuCode>
+        <skuName>SVS1513M1R</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>111.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>109</skuWarehouseId>
+        <skuCode>SVS1513V9RB</skuCode>
+        <skuName>SVS1513V9R</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>763.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>108</skuWarehouseId>
+        <skuCode>SVT1312V1RS</skuCode>
+        <skuName>SVT1312V1R</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>373.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>242</skuWarehouseId>
+        <skuCode>TABLET-S100SILVER</skuCode>
+        <skuName>TABLET-S100SILVER</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>174.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>243</skuWarehouseId>
+        <skuCode>TABLET-UN100BLACK</skuCode>
+        <skuName>TABLET-UN100BLACK</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>0.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>266</skuWarehouseId>
+        <skuCode>VFYZP0520P27A1IT</skuCode>
+        <skuName>P520 E85+</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>85.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>238</skuWarehouseId>
+        <skuCode>VFYZP0720PXSA1CZ</skuCode>
+        <skuName>P720 E85+</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>977.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>267</skuWarehouseId>
+        <skuCode>VFYZP0920PXP81IT</skuCode>
+        <skuName>P920 E85+</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>428.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>268</skuWarehouseId>
+        <skuCode>VFYZQ0520P73A1IT</skuCode>
+        <skuName>Q520</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>775.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>224</skuWarehouseId>
+        <skuCode>VFYZQ5840M80A2ES</skuCode>
+        <skuName>Q584</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>229.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>223</skuWarehouseId>
+        <skuCode>VFYZQ7040M87B1ES</skuCode>
+        <skuName>Q704</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>75.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>262</skuWarehouseId>
+        <skuCode>VFYZW5300W28A1IT</skuCode>
+        <skuName>W530</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>36.00</quantity>
+        <reserved>1.00</reserved>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>269</skuWarehouseId>
+        <skuCode>VFYZW5300W28B1IT</skuCode>
+        <skuName>W530</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>863.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>295</skuWarehouseId>
+        <skuCode>XE3000TC-EG1CN</skuCode>
+        <skuName>XE3000TC</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>870.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>296</skuWarehouseId>
+        <skuCode>XE300TZC-K01CL</skuCode>
+        <skuName>XE300TZC</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>997.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>297</skuWarehouseId>
+        <skuCode>XE5100TC-EG1CN</skuCode>
+        <skuName>XE5100TC</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>630.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>298</skuWarehouseId>
+        <skuCode>XE700T1C-G02MY</skuCode>
+        <skuName>XE700T1C</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>640.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>299</skuWarehouseId>
+        <skuCode>XE7100TC-EG1CN</skuCode>
+        <skuName>XE7100TC</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>535.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>306</skuWarehouseId>
+        <skuCode>zzzz</skuCode>
+        <skuName>zzzz</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>10.00</quantity>
+    </inventoryDto>
+    <inventoryDto>
+        <skuWarehouseId>307</skuWarehouseId>
+        <skuCode>zzzz-1</skuCode>
+        <skuName>zzzz-1</skuName>
+        <warehouseCode>Main</warehouseCode>
+        <warehouseName>Main warehouse</warehouseName>
+        <quantity>20.00</quantity>
+    </inventoryDto>
 </yes-report>

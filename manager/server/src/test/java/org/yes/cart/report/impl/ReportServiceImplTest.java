@@ -4,10 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.nio.charset.Charset;
+import java.util.*;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -22,198 +22,114 @@ public class ReportServiceImplTest  {
 
     private static final String ROOT_DIR = "src/test/resources/";
 
-    private String fileName;
-
     @Before
     public void setUp() {
 
 
         ReportDescriptor reportDescriptor = new ReportDescriptor();
-        reportDescriptor.setHsqlQuery("customerOrderPaymentService.getData.paymentReport");
-        reportDescriptor.getLangXslfo().add(new ReportPair("en", ROOT_DIR + "xslfo/payments.xslfo"));
+        reportDescriptor.setXslfoBase(ROOT_DIR + "xslfo/payments");
         reportDescriptor.setReportId("payments");
 
         allReportToTestCreation.add(reportDescriptor);
 
         reportDescriptor = new ReportDescriptor();
-        reportDescriptor.setHsqlQuery("select s from ShopEntity s");
-        reportDescriptor.getLangXslfo().add(new ReportPair("en", ROOT_DIR + "xslfo/shop.xslfo"));
-        reportDescriptor.setReportId("shopTestReport");
-
-        allReportToTestCreation.add(reportDescriptor);
-
-        reportDescriptor = new ReportDescriptor();
-        //reportDescriptor.setHsqlQuery("select s from ShopEntity s");
-        reportDescriptor.getLangXslfo().add(new ReportPair("en", ROOT_DIR + "xslfo/delivery.xslfo"));
+        reportDescriptor.setXslfoBase(ROOT_DIR + "xslfo/delivery");
         reportDescriptor.setReportId("reportDelivery");
 
         allReportToTestCreation.add(reportDescriptor);
 
         reportDescriptor = new ReportDescriptor();
-        reportDescriptor.setHsqlQuery("select  o.sku.code,  o.sku.name, o.sku.barCode, o.reserved, o.quantity  from SkuWarehouseEntity o\n" +
-                "                                          where o.warehouse.code = ?1\n" +
-                "                                          order by o.sku.code");
-        reportDescriptor.getLangXslfo().add(new ReportPair("en", ROOT_DIR + "xslfo/available-stock.xslfo"));
+        reportDescriptor.setXslfoBase(ROOT_DIR + "xslfo/available-stock");
         reportDescriptor.setReportId("reportAvailableStock");
 
         allReportToTestCreation.add(reportDescriptor);
     }
 
-
-    @Test
-    public void testGetReportShop() throws Exception {
-
-        ReportServiceImpl reportService = new ReportServiceImpl(null, allReportToTestCreation, null) {
-
-            /** {@inheritDoc} */
-            List<Object> getQueryResult(final String query, final Object... params) {
-                return Collections.EMPTY_LIST;
-
-            }
-
-            /** {@inheritDoc} */
-            File getXml(final List<Object> rez) {
-
-                try {
-                    System.out.println(new File(".").getAbsolutePath());
-                    BufferedReader in = new BufferedReader(new FileReader(ROOT_DIR + "xslfo/shop-report.xml"));
-                    File file = File.createTempFile("testyes", "cart");
-                    BufferedWriter out = new BufferedWriter(new FileWriter(file));
-                    String line;
-                    while ((line = in.readLine()) != null) {
-                        out.write(line);
-                    }
-                    out.close();
-                    in.close();
-                    return file;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                fail("Unable to create XML file");
-                return null;
-
-            }
-        };
-
-        assertTrue(reportService.createReport("en", "shopTestReport", "shopTestReport.pdf"));
-
-        final File pdf = new File("shopTestReport.pdf");
-        assertTrue(pdf.exists());
-        assertTrue(pdf.length() > 30720); // more than 30K means it is a valid pdf
-        assertTrue(pdf.delete());
-
-    }
-
-
     @Test
     public void testGetReportAvailableStock() throws Exception {
-        ReportServiceImpl reportService = new ReportServiceImpl(null, allReportToTestCreation, null) {
+        ReportServiceImpl reportService = new ReportServiceImpl(allReportToTestCreation, null, null) {
             /** {@inheritDoc} */
-            List<Object> getQueryResult(final String query, final Object... params) {
+            List<Object> getQueryResult(final String lang, final String reportId, final Map<String, Object> currentSelection) {
                 return Collections.EMPTY_LIST;
             }
             /** {@inheritDoc} */
-            File getXml(final List<Object> rez) {
+            byte[] getXml(final List<Object> rez) {
+
                 try {
-                    System.out.println(new File(".").getAbsolutePath());
-                    BufferedReader in = new BufferedReader(new FileReader(ROOT_DIR + "xslfo/available-stock-report.xml"));
-                    File file = File.createTempFile("testyes", "cart");
-                    BufferedWriter out = new BufferedWriter(new FileWriter(file));
-                    String line;
-                    while ((line = in.readLine()) != null) {
-                        out.write(line);
-                    }
-                    out.close();
-                    in.close();
-                    return file;
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    return new Scanner(new File(ROOT_DIR + "xslfo/available-stock-report.xml")).useDelimiter("\\Z").next().getBytes(Charset.forName("UTF-8"));
+                } catch (FileNotFoundException e) {
+                    fail(e.getMessage());
+                    return null;
                 }
-                fail("Unable to create XML file");
-                return null;
+
             }
         };
 
-        assertTrue(reportService.createReport("en", "reportAvailableStock", "reportAvailableStock.pdf"));
-        final File pdf = new File("reportAvailableStock.pdf");
-        assertTrue(pdf.exists());
-        assertTrue(pdf.length() > 30720); // more than 30K means it is a valid pdf
-        assertTrue(pdf.delete());
+
+        byte[] report = reportService.downloadReport(null, "reportAvailableStock", null);
+
+        assertNotNull(report);
+        assertTrue(report.length > 30720); // more than 30K means it is a valid pdf
+
     }
 
 
 
     @Test
     public void testGetReportPayments() throws Exception {
-        ReportServiceImpl reportService = new ReportServiceImpl(null, allReportToTestCreation, null) {
+        ReportServiceImpl reportService = new ReportServiceImpl(allReportToTestCreation, null, null) {
             /** {@inheritDoc} */
-            List<Object> getQueryResult(final String query, final Object... params) {
+            List<Object> getQueryResult(final String lang, final String reportId, final Map<String, Object> currentSelection) {
                 return Collections.EMPTY_LIST;
             }
             /** {@inheritDoc} */
-            File getXml(final List<Object> rez) {
+            byte[] getXml(final List<Object> rez) {
+
                 try {
-                    System.out.println(new File(".").getAbsolutePath());
-                    BufferedReader in = new BufferedReader(new FileReader(ROOT_DIR + "xslfo/payment-report.xml"));
-                    File file = File.createTempFile("testyes", "cart");
-                    BufferedWriter out = new BufferedWriter(new FileWriter(file));
-                    String line;
-                    while ((line = in.readLine()) != null) {
-                        out.write(line);
-                    }
-                    out.close();
-                    in.close();
-                    return file;
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    return new Scanner(new File(ROOT_DIR + "xslfo/payment-report.xml")).useDelimiter("\\Z").next().getBytes(Charset.forName("UTF-8"));
+                } catch (FileNotFoundException e) {
+                    fail(e.getMessage());
+                    return null;
                 }
-                fail("Unable to create XML file");
-                return null;
+
             }
         };
 
-        assertTrue(reportService.createReport("en", "payments", "payments.pdf"));
-        final File pdf = new File("payments.pdf");
-        assertTrue(pdf.exists());
-        assertTrue(pdf.length() > 30720); // more than 30K means it is a valid pdf
-        assertTrue(pdf.delete());
+
+        byte[] report = reportService.downloadReport(null, "payments", null);
+
+        assertNotNull(report);
+        assertTrue(report.length > 30720); // more than 30K means it is a valid pdf
+
     }
 
 
     @Test
     public void testGetReportDelivery() throws Exception {
-        ReportServiceImpl reportService = new ReportServiceImpl(null, allReportToTestCreation, null) {
+        ReportServiceImpl reportService = new ReportServiceImpl(allReportToTestCreation, null, null) {
             /** {@inheritDoc} */
-            List<Object> getQueryResult(final String query, final Object... params) {
+            List<Object> getQueryResult(final String lang, final String reportId, final Map<String, Object> currentSelection) {
                 return Collections.EMPTY_LIST;
             }
             /** {@inheritDoc} */
-            File getXml(final List<Object> rez) {
+            byte[] getXml(final List<Object> rez) {
+
                 try {
-                    System.out.println(new File(".").getAbsolutePath());
-                    BufferedReader in = new BufferedReader(new FileReader(ROOT_DIR + "xslfo/delivery-report.xml"));
-                    File file = File.createTempFile("testyes", "cart");
-                    BufferedWriter out = new BufferedWriter(new FileWriter(file));
-                    String line;
-                    while ((line = in.readLine()) != null) {
-                        out.write(line);
-                    }
-                    out.close();
-                    in.close();
-                    return file;
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    return new Scanner(new File(ROOT_DIR + "xslfo/delivery-report.xml")).useDelimiter("\\Z").next().getBytes(Charset.forName("UTF-8"));
+                } catch (FileNotFoundException e) {
+                    fail(e.getMessage());
+                    return null;
                 }
-                fail("Unable to create XML file");
-                return null;
+
             }
         };
 
-        assertTrue(reportService.createReport("en", "reportDelivery", "reportDelivery.pdf"));
-        final File pdf = new File("reportDelivery.pdf");
-        assertTrue(pdf.exists());
-        assertTrue(pdf.length() > 62000); // more than 60K means it is a valid pdf
-        assertTrue(pdf.delete());
+
+        byte[] report = reportService.downloadReport(null, "reportDelivery", null);
+
+        assertNotNull(report);
+        assertTrue(report.length > 30720); // more than 30K means it is a valid pdf
+
     }
 
 

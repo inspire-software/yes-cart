@@ -23,11 +23,10 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl;
-import org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl;
-import org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl;
+import org.yes.cart.domain.dto.impl.*;
 import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -62,20 +61,23 @@ public class ReportObjectStreamFactory {
         xStream.alias("customer", CustomerEntity.class);
         xStream.alias("order", CustomerOrderEntity.class);
         xStream.alias("wishlist", CustomerWishListEntity.class);
-        xStream.alias("customer-av", AttrValueEntityCustomer.class);
+        xStream.alias("customerAv", AttrValueEntityCustomer.class);
         xStream.alias("address", AddressEntity.class);
-        xStream.alias("customer-shop", CustomerShopEntity.class);
+        xStream.alias("customerShop", CustomerShopEntity.class);
+        xStream.alias("payment", CustomerOrderPaymentEntity.class);
 
         xStream.alias("shop", ShopEntity.class);
-
         xStream.alias("shopurl", ShopUrlEntity.class);
-
-        xStream.alias("exchangerates", ShopExchangeRateEntity.class);
 
         xStream.alias("pair", Pair.class);
         xStream.alias("orderDto", CustomerOrderDTOImpl.class);
         xStream.alias("orderDeliveryDto", CustomerOrderDeliveryDTOImpl.class);
         xStream.alias("orderLineDto", CustomerOrderDeliveryDetailDTOImpl.class);
+
+        xStream.alias("shopDto", ShopDTOImpl.class);
+        xStream.alias("shopAvDto", AttrValueShopDTOImpl.class);
+
+        xStream.alias("inventoryDto", InventoryDTOImpl.class);
 
         xStream.registerConverter(new Converter() {
 

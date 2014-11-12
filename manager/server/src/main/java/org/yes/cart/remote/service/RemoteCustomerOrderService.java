@@ -25,15 +25,4 @@ import org.yes.cart.service.dto.DtoCustomerOrderService;
  */
 public interface RemoteCustomerOrderService extends DtoCustomerOrderService {
 
-    /**
-     * Create delivery report.
-     * @param reportLang  report language
-     * @param orderNum order number
-     * @param deliveryNum delivery number
-     * @return byte array which hold pdf reports.
-     * @throws Exception
-     */
-    byte[] produceDeliveryReport(String reportLang, String orderNum, String deliveryNum)
-            throws Exception;
-
 }
