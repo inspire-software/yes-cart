@@ -67,7 +67,7 @@ public interface SkuPrice extends Auditable, Taggable {
     String getCurrency();
 
     /**
-     * set currecny code.
+     * set currency code.
      *
      * @param currency curr code
      */

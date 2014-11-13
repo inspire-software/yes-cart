@@ -388,6 +388,7 @@
         TAG varchar(255),
         QTY decimal(19,2) not null default 1,
         REGULAR_PRICE_WHEN_ADDED decimal(19,2) not null default 0,
+        REGULAR_PRICE_CURRENCY_WHEN_ADDED varchar(5) not null,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),

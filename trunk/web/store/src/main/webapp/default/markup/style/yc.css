@@ -1242,6 +1242,14 @@ li > .feedbackPanelERROR {
     color: #3498db;
 }
 
+.profile-sections .wishlist .product-price-holder {
+    min-height: 60px;
+}
+
+.profile-sections .wishlist .product-price-holder .sale-price-save {
+    font-size: 75%;
+}
+
 .profile-sections .form-group label {
     padding-right: 0;
 }

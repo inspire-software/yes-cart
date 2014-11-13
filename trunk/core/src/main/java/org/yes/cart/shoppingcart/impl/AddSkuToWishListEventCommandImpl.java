@@ -210,6 +210,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         customerWishList.setVisibility(CustomerWishList.PRIVATE);
         customerWishList.setQuantity(quantity);
         customerWishList.setRegularPriceWhenAdded(price);
+        customerWishList.setRegularPriceCurrencyWhenAdded(shoppingCart.getCurrencyCode());
 
         customerWishListService.create(customerWishList);
 

@@ -554,3 +554,11 @@ CREATE TABLE TTEMPTABLE (
 update TCUSTOMERORDERPAYMENT p set p.SHOP_CODE = (select o.SHOP_CODE from TTEMPTABLE o where o.ORDER_NUMBER = p.ORDER_NUMBER);
 
 drop table TTEMPTABLE;
+
+--
+-- YC-464 Add wish list added price VS now price
+--
+
+alter table TCUSTOMERWISHLIST add column REGULAR_PRICE_CURRENCY_WHEN_ADDED varchar(5) not null default '';
+update TCUSTOMERWISHLIST set REGULAR_PRICE_CURRENCY_WHEN_ADDED = 'EUR';
+

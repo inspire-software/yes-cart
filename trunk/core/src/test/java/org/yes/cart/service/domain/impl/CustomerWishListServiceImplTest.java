@@ -74,6 +74,7 @@ public class CustomerWishListServiceImplTest extends BaseCoreDBTestCase {
         customerWishList.setVisibility(CustomerWishList.PRIVATE);
         customerWishList.setQuantity(BigDecimal.ONE);
         customerWishList.setRegularPriceWhenAdded(BigDecimal.ZERO);
+        customerWishList.setRegularPriceCurrencyWhenAdded("EUR");
         service.create(customerWishList);
         List<CustomerWishList> list = service.findWishListByCustomerId(customer.getCustomerId());
         assertEquals(1, list.size());

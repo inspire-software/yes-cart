@@ -221,6 +221,9 @@
     <entry key="addToCartWlBtn">Add to cart (${0})</entry>
     <entry key="preorderCartWlBtn">Preorder (${0})</entry>
     <entry key="removeFromWishlist">Remove item</entry>
+    <entry key="wishListPriceIncreased">Price increased by ${0}%</entry>
+    <entry key="wishListPriceDecreased">Price dropped by ${0}%</entry>
+    <entry key="wishListPriceOnSaleNow">On sale now. Discount ${0}%</entry>
 
     <!-- StandardFooter, CheckoutFooter -->
     <entry key="profile">Profile</entry>
