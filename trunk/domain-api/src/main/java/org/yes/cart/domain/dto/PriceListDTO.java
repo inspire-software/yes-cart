@@ -32,11 +32,6 @@ public interface PriceListDTO extends Identifiable {
 
 
     /**
-     * @return tier level for this quantity
-     */
-    BigDecimal getQuantityTier();
-
-    /**
      * Get currency code.
      *
      * @return currency code

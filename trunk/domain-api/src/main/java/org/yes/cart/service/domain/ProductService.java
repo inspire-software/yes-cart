@@ -153,19 +153,6 @@ public interface ProductService extends GenericService<Product> {
             int maxResults);
 
     /**
-     * Get new arrivals in category.
-     * @param categoryId  given category id
-     * @param maxResults  max result
-     * @return  list of new arrived products
-     *
-     * @deprecated use ProductsInCategoryQueryBuilderImpl with search
-     */
-    @Deprecated
-    List<Product> getNewArrivalsProductInCategory(
-            long categoryId,
-            int maxResults);
-
-    /**
      * Get the list of unique attribute values by given product type
      * and attribute code.
      *
@@ -226,41 +213,6 @@ public interface ProductService extends GenericService<Product> {
             int maxResults,
             String sortFieldName,
             boolean reverse);
-
-    /**
-     * Get the all products , that match the given query
-     *
-     * @param query         lucene query
-     * @param firstResult   index of first result
-     * @param maxResults    quantity results to return
-     * @param sortFieldName sort field name
-     * @param reverse       reverse the search result if true
-     * @return list of products
-     *
-     * @deprecated use ProductSearchQueryBuilder with search
-     */
-    @Deprecated
-    List<Product> getProductByQuery(
-            Query query,
-            int firstResult,
-            int maxResults,
-            String sortFieldName,
-            boolean reverse);
-
-
-
-    /**
-     * Get all available products, that marked as featured . Need to be careful to mark product as featured and keep
-     * quantity of featured products limited.
-     *
-     * @param categories current shop categories
-     * @param limit limit of products to return.
-     * @return shuffled list of featured products.
-     *
-     * @deprecated use FeaturedProductsInCategoryQueryBuilderImpl with search
-     */
-    @Deprecated
-    List<Product> getFeaturedProducts(Collection categories, int limit);
 
     /**
      * Get the quantity of products in particular category.

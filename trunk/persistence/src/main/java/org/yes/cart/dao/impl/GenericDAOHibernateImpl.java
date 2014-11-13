@@ -359,30 +359,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public List<Object[]> findQueryObjectsByNamedQueryWithList(final String namedQueryName, final List parameter) {
-        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
-        query.setParameterList("list", parameter);
-        return query.list();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-    public List<T> findQueryObjectsByNamedQueryWithList(
-            final String namedQueryName, final Collection<Object> listParameter,
-            final Object... parameters) {
-        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
-        query.setParameterList("list", listParameter);
-        setQueryParameters(query, parameters);
-        return query.list();
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
     public List<T> findRangeByNamedQuery(final String namedQueryName,
                                          final int firstResult,
                                          final int maxResults,

@@ -92,10 +92,10 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         if (assignedAttributeCodes == null || assignedAttributeCodes.isEmpty()) {
             return findByAttributeGroupCode(attributeGroupCode);
         } else {
-            return attributeDao.findQueryObjectsByNamedQueryWithList(
+            return attributeDao.findByNamedQuery(
                     "ATTRIBUTES.BY.GROUPCODE.NOT.IN.LIST",
-                    (List) assignedAttributeCodes,
-                    attributeGroupCode);
+                    attributeGroupCode,
+                    assignedAttributeCodes);
         }
     }
 

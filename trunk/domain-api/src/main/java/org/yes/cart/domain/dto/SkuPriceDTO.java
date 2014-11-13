@@ -30,13 +30,6 @@ import java.util.Date;
  */
 public interface SkuPriceDTO extends Identifiable {
 
-
-    /**
-     * @return tier level for this quantity
-     */
-    BigDecimal getQuantityTier();
-
-
     /**
      * Get the product sku id .
      *
