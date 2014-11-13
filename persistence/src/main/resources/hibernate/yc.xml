@@ -1884,6 +1884,11 @@
                 <comment>Regular price when this item was added</comment>
             </column>
         </property>
+        <property name="regularPriceCurrencyWhenAdded" type="string" not-null="true">
+            <column name="REGULAR_PRICE_CURRENCY_WHEN_ADDED" not-null="true">
+                <comment>Regular price currency when this item was added</comment>
+            </column>
+        </property>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>

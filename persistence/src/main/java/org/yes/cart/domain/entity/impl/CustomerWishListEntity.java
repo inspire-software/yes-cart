@@ -40,6 +40,7 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
     private String tag;
     private BigDecimal quantity;
     private BigDecimal regularPriceWhenAdded;
+    private String regularPriceCurrencyWhenAdded;
 
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -105,6 +106,14 @@ public class CustomerWishListEntity implements org.yes.cart.domain.entity.Custom
 
     public void setRegularPriceWhenAdded(final BigDecimal regularPriceWhenAdded) {
         this.regularPriceWhenAdded = regularPriceWhenAdded;
+    }
+
+    public String getRegularPriceCurrencyWhenAdded() {
+        return regularPriceCurrencyWhenAdded;
+    }
+
+    public void setRegularPriceCurrencyWhenAdded(final String regularPriceCurrencyWhenAdded) {
+        this.regularPriceCurrencyWhenAdded = regularPriceCurrencyWhenAdded;
     }
 
     public Date getCreatedTimestamp() {

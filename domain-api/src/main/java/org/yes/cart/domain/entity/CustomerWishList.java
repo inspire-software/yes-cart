@@ -156,6 +156,22 @@ public interface CustomerWishList extends Auditable {
      */
     void setRegularPriceWhenAdded(BigDecimal listPriceWhenAdded);
 
+
+    /**
+     * Get currency code.
+     *
+     * @return currency code
+     */
+    String getRegularPriceCurrencyWhenAdded();
+
+    /**
+     * set currency code.
+     *
+     * @param regularPriceCurrencyWhenAdded curr code
+     */
+    void setRegularPriceCurrencyWhenAdded(String regularPriceCurrencyWhenAdded);
+
+
 }
 
 

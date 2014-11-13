@@ -28,10 +28,15 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
+import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
+import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductAvailabilityStrategy;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.page.component.product.AbstractProductSearchResultList;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -39,6 +44,7 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,6 +69,8 @@ public class WishListView extends AbstractProductSearchResultList {
     @SpringBean(name = ServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
     private ProductAvailabilityStrategy productAvailabilityStrategy;
 
+    @SpringBean(name = ServiceSpringKeys.PRICE_SERVICE)
+    protected PriceService priceService;
 
     private List<ProductSearchResultDTO> products = null;
 
@@ -160,8 +168,6 @@ public class WishListView extends AbstractProductSearchResultList {
 
                     }
 
-                    productIds.add(String.valueOf(item.getSkus().getProduct().getProductId()));
-
                 }
 
                 products = wishListProducts;
@@ -196,6 +202,42 @@ public class WishListView extends AbstractProductSearchResultList {
         final PageParameters params = new PageParameters();
         params.add(WebParametersKeys.SKU_ID, itemData.getSkus().getSkuId());
 
+        final SkuPrice priceNow = getSkuPrice(product.getDefaultSkuCode(), itemData.getQuantity());
+        final String addedPriceCurr = itemData.getRegularPriceCurrencyWhenAdded();
+        final Pair<BigDecimal, BigDecimal> price;
+        String priceInfo = "";
+        if (ApplicationDirector.getShoppingCart().getCurrencyCode().equals(addedPriceCurr)) {
+            final BigDecimal addedPrice = itemData.getRegularPriceWhenAdded();
+            final BigDecimal saleNow = MoneyUtils.minPositive(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
+            if (MoneyUtils.isFirstEqualToSecond(addedPrice, saleNow)) {
+                // no change
+                if (MoneyUtils.isFirstBiggerThanSecond(priceNow.getRegularPrice(), addedPrice)) {
+                    price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), addedPrice);
+                    priceInfo = getLocalizer().getString("wishListPriceOnSaleNow", this, new Model<Object[]>(new Object[] {
+                            MoneyUtils.getDiscountDisplayValue(priceNow.getRegularPrice(), addedPrice).toPlainString()
+                    }));
+                } else {
+                    // not on sale
+                    price = new Pair<BigDecimal, BigDecimal>(addedPrice, null);
+                }
+            } else if (MoneyUtils.isFirstBiggerThanSecond(addedPrice, saleNow)) {
+                // price dropped since added
+                price = new Pair<BigDecimal, BigDecimal>(addedPrice, saleNow);
+                priceInfo = getLocalizer().getString("wishListPriceDecreased", this, new Model<Object[]>(new Object[] {
+                        MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).toPlainString()
+                }));
+            } else {
+                // price gone up
+                price = new Pair<BigDecimal, BigDecimal>(saleNow, null);
+                priceInfo = getLocalizer().getString("wishListPriceIncreased", this, new Model<Object[]>(new Object[] {
+                        MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).negate().toPlainString()
+                }));
+            }
+        } else {
+            // no comparative price - different currency
+            price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
+        }
+
         final String qty = itemData.getQuantity().setScale(0, RoundingMode.CEILING).toString();
 
         listItem.add(
@@ -212,5 +254,32 @@ public class WishListView extends AbstractProductSearchResultList {
                                 .setVisible(showRemoveLink))
         );
 
+        listItem.add(
+                new PriceView("priceView", price, priceNow.getCurrency(), priceInfo, true, false)
+        );
+
+
     }
+
+
+    /**
+     * Get product or his sku price.
+     * In case of multisku product the minimal regular price from multiple sku was used for single item.
+     *
+     *
+     * @param firstAvailableSkuCode first available sku code.
+     * @param quantity quantity of wish list item
+     *
+     * @return {@link org.yes.cart.domain.entity.SkuPrice}
+     */
+    private SkuPrice getSkuPrice(final String firstAvailableSkuCode, final BigDecimal quantity) {
+        return priceService.getMinimalRegularPrice(
+                null,
+                firstAvailableSkuCode,
+                ApplicationDirector.getCurrentShop(),
+                ApplicationDirector.getShoppingCart().getCurrencyCode(),
+                quantity
+        );
+    }
+
 }

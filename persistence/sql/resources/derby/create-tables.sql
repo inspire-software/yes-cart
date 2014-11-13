@@ -400,6 +400,7 @@
         TAG varchar(255),
         QTY numeric(19,2) not null default 1,
         REGULAR_PRICE_WHEN_ADDED numeric(19,2) not null default 0,
+        REGULAR_PRICE_CURRENCY_WHEN_ADDED varchar(5) not null,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),

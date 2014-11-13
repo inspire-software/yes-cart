@@ -219,6 +219,9 @@
     <entry key="addToCartWlBtn">В кошик (${0})</entry>
     <entry key="preorderCartWlBtn">Замовити (${0})</entry>
     <entry key="removeFromWishlist">Видалити зі списку</entry>
+    <entry key="wishListPriceIncreased">Ціна зросла на ${0}%</entry>
+    <entry key="wishListPriceDecreased">Ціна знизилась на ${0}%</entry>
+    <entry key="wishListPriceOnSaleNow">Акція. Знижка ${0}%</entry>
 
     <!-- StandardFooter, CheckoutFooter -->
     <entry key="siteMap">Карта сайту</entry>
