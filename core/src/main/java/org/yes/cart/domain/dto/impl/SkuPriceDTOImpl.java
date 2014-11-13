@@ -113,23 +113,6 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
         this.currency = currency;
     }
 
-    /**
-     * @deprecated
-     * @return  quantity
-     */
-    public BigDecimal getQuantityTier() {
-        return quantity;
-    }
-
-    /**
-     * @deprecated
-     * @param quantityTier  quantity
-     */
-    public void setQuantityTier(final BigDecimal quantityTier) {
-        this.quantity = quantityTier;
-    }
-
-
     /** {@inheritDoc}*/
     public BigDecimal getSalePrice() {
         return salePrice;
@@ -294,7 +277,6 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
                 ", shopId=" + shopId +
                 ", quantity=" + quantity +
                 ", currency='" + currency + '\'' +
-                ", quantityTier=" + quantity +
                 ", listPrice=" + regularPrice +
                 ", salePrice=" + salePrice +
                 ", tag='" + tag +

@@ -35,39 +35,6 @@ import java.util.Map;
 public interface MailComposer {
 
     /**
-     * Compose mail message. subject will be gathered from mail template property file
-     *
-     * @param message      mime message to fill
-     * @param shopCode     optional shop code
-     * @param locale       locale in which to render the email
-     * @param mailTemplateChain path to template folder
-     * @param templateName template name
-     * @param from         from address
-     * @param toEmail      mail destination address
-     * @param ccEmail      optional cc
-     * @param bccEmail     optional bcc
-     * @param model        model
-     *
-     * @throws javax.mail.MessagingException in case if mail message can not be converted
-     * @throws java.io.IOException    in case of inline resources can not be found
-     * @throws ClassNotFoundException  in case if something wrong with template engine
-     *
-     * @deprecated need to persist the mail and then cron job will send it
-     */
-    @Deprecated
-    void composeMessage(MimeMessage message,
-                        String shopCode,
-                        String locale,
-                        List<String> mailTemplateChain,
-                        String templateName,
-                        String from,
-                        String toEmail,
-                        String ccEmail,
-                        String bccEmail,
-                        Map<String, Object> model)
-                throws MessagingException, IOException, ClassNotFoundException;
-
-    /**
      * Convert mime message into persistent message.
      *
      * @param mail mail message

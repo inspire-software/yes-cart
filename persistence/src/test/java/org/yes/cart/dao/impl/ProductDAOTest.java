@@ -740,7 +740,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 params.add(134L);
                 params.add(135L);
                 params.add(136L);
-                List<Object[]> brands = productDao.findQueryObjectsByNamedQueryWithList(
+                List<Object[]> brands = productDao.findQueryObjectsByNamedQuery(
                         "PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES",
                         params);
 

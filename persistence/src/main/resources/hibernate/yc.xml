@@ -2578,17 +2578,6 @@
        ]]>
     </query>
 
-    <query name="NEW.PRODUCTS.IN.CATEGORYID">
-        <![CDATA[
-       select p from ProductEntity p, ProductCategoryEntity pc
-            where p.productId = pc.product.productId
-            and pc.category.categoryId = ?1
-            and (p.availablefrom < ?2 OR p.availablefrom IS NULL)
-            and (p.availableto > ?2 OR p.availableto IS NULL)
-            order by p.createdTimestamp desc
-       ]]>
-    </query>
-
     <query name="PRODUCTS.QTY.BY.CATEGORYID">
         <![CDATA[
        select count(p) from ProductEntity p, ProductCategoryEntity pc
@@ -2809,7 +2798,7 @@
        select distinct b.name, b.name, b.name, 0
        from ProductCategoryEntity pc, ProductEntity p inner join p.brand b
        where p.productId = pc.product.productId
-        and pc.category.categoryId in (:list)
+        and pc.category.categoryId in (?1)
         order by b.name
        ]]>
     </query>
@@ -2818,7 +2807,7 @@
         <![CDATA[
        select p
        from  ProductEntity p
-       where p.productId  in (:list)
+       where p.productId  in (?1)
        ]]>
     </query>
 
@@ -2865,7 +2854,7 @@
 
     <query name="ATTRIBUTES.BY.GROUPCODE.NOT.IN.LIST">
         <![CDATA[
-       select a from AttributeEntity a where a.attributeGroup.code = ?1 and a.code not in (:list)
+       select a from AttributeEntity a where a.attributeGroup.code = ?1 and a.code not in (?2)
        ]]>
     </query>
 
@@ -2936,18 +2925,6 @@
        select a.product
        from ProductSkuEntity a
        where a.code = ?1
-       ]]>
-    </query>
-
-    <query name="PRODUCT.FEATURED">
-        <![CDATA[
-       select a
-       from ProductEntity a, ProductCategoryEntity pc
-       where a.featured = ?2
-       and (a.availablefrom < ?1 OR a.availablefrom IS NULL)
-       and (a.availableto > ?1 OR a.availableto IS NULL)
-       and a.productId = pc.product.productId
-       and pc.category.categoryId in (:list)
        ]]>
     </query>
 

@@ -98,19 +98,16 @@ public class MailComposerImpl implements MailComposer {
         return stringWriter.toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void composeMessage(final MimeMessage message,
-                               final String shopCode,
-                               final String locale,
-                               final List<String> mailTemplateChain,
-                               final String templateName,
-                               final String from,
-                               final String toEmail,
-                               final String ccEmail,
-                               final String bccEmail,
-                               final Map<String, Object> model)
+    void composeMessage(final MimeMessage message,
+                        final String shopCode,
+                        final String locale,
+                        final List<String> mailTemplateChain,
+                        final String templateName,
+                        final String from,
+                        final String toEmail,
+                        final String ccEmail,
+                        final String bccEmail,
+                        final Map<String, Object> model)
             throws MessagingException, IOException, ClassNotFoundException {
 
 

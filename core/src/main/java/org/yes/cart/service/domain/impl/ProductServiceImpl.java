@@ -385,64 +385,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return prod;
     }
 
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "productService-featuredProducts")
-    public List<Product> getFeaturedProducts(final Collection categories, final int limit) {
-        if (categories == null || categories.isEmpty()) {
-            return Collections.EMPTY_LIST;
-        } else {
-            List<Product> list = productDao.findQueryObjectsByNamedQueryWithList(
-                    "PRODUCT.FEATURED",
-                    categories,
-                    new Date(), //TODO: V2 time machine
-                    true);
-            Collections.shuffle(list);
-            int toIndex = limit; //to index exclusive
-            if (list.size() < limit) {
-                toIndex = list.size();
-            }
-            if (toIndex < 0) {
-                toIndex = 0;
-            }
-            return new ArrayList<Product>(list.subList(0, toIndex));
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "productService-newArrivalsProductInCategory")
-    public List<Product> getNewArrivalsProductInCategory(
-            final long categoryId,
-            final int maxResults) {
-        return productDao.findRangeByNamedQuery("NEW.PRODUCTS.IN.CATEGORYID",
-                0,
-                maxResults,
-                categoryId,
-                new Date()    //TODO: V2 time machine
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "productService-productByQuery")
-    public List<Product> getProductByQuery(
-            final Query query,
-            final int firstResult,
-            final int maxResults,
-            final String sortFieldName,
-            final boolean reverse) {
-
-        return productDao.fullTextSearch(query, firstResult, maxResults, sortFieldName, reverse);
-
-    }
-
-
     /**
      * {@inheritDoc}
      */
@@ -549,7 +491,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         if (idList == null || idList.isEmpty()) {
             return Collections.EMPTY_LIST;
         }
-        return productDao.findQueryObjectsByNamedQueryWithList("PRODUCTS.LIST.BY.IDS", idList, null);
+        return productDao.findByNamedQuery("PRODUCTS.LIST.BY.IDS", idList);
     }
 
     /**
@@ -557,7 +499,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @Cacheable(value = "productService-distinctBrands")
     public List<FilteredNavigationRecord> getDistinctBrands(final String locale, final List categories) {
-        List<Object[]> list = productDao.findQueryObjectsByNamedQueryWithList(
+        List<Object[]> list = productDao.findQueryObjectsByNamedQuery(
                 "PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES",
                 categories);
         return constructBrandFilteredNavigationRecords(list);
@@ -901,8 +843,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     @CacheEvict(value ={
             "productService-randomProductByCategory",
-            "productService-featuredProducts",
-            "productService-newArrivalsProductInCategory",
             "productService-productByQuery",
             "productService-productSearchResultDTOByQuery",
             "productService-productQtyByQuery",
@@ -937,8 +877,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             "productService-productAssociationsIds",
             "productService-productBySkuCode",
             "productService-productById",
-            "productService-featuredProducts",
-            "productService-newArrivalsProductInCategory",
             "productService-productByQuery",
             "productService-productSearchResultDTOByQuery",
             "productService-productQtyByQuery",
@@ -963,8 +901,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             "productService-productAssociationsIds",
             "productService-productBySkuCode",
             "productService-productById",
-            "productService-featuredProducts",
-            "productService-newArrivalsProductInCategory",
             "productService-productByQuery",
             "productService-productSearchResultDTOByQuery",
             "productService-productQtyByQuery",

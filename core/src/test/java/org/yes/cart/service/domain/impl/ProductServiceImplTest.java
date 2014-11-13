@@ -188,48 +188,6 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         assertTrue("Set is " + list + " his size is " + list.size() + " but expected more that 1", list.size() > 1);
     }
 
-    //@Ignore("java.lang.AssertionError")
-    @Test
-    public void testGetFeaturedProducts() {
-        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
-        CategoryService categoryService = (CategoryService) ctx().getBean(ServiceSpringKeys.CATEGORY_SERVICE);
-        Shop shop = shopService.getById(10L);
-        assertNotNull(shop);
-        Set<Long> shopCategories = shopService.getShopCategoriesIds(shop.getShopId());
-        assertNotNull(shopCategories);
-        assertFalse(shopCategories.isEmpty());
-        List<Long> shopCategoryIds = new ArrayList<Long>(shopCategories);
-        assertNotNull(shopCategoryIds);
-        assertFalse(shopCategoryIds.isEmpty());
-        assertTrue(shopCategoryIds.contains(211L));
-        List<Product> rezLimit = productService.getFeaturedProducts(shopCategoryIds, 2);
-        assertNotNull(rezLimit);
-        try {
-            dumpDataBase("x2x2xx_products", new String[] { "TPRODUCT" });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        assertFalse(rezLimit.isEmpty());
-        assertEquals(2, rezLimit.size());
-        rezLimit = productService.getFeaturedProducts(shopCategoryIds, 0);
-        assertNotNull(rezLimit);
-        assertTrue(rezLimit.isEmpty());
-        List<Product> rez = productService.getFeaturedProducts(shopCategoryIds, 100);
-        assertNotNull(rez);
-        assertFalse(rez.isEmpty());
-        assertEquals(4, rez.size());
-        List<String> expectedProductCodes = new ArrayList<String>();
-        expectedProductCodes.add("FEATURED-PRODUCT9");
-        expectedProductCodes.add("FEATURED-PRODUCT7");
-        expectedProductCodes.add("FEATURED-PRODUCT5");
-        expectedProductCodes.add("FEATURED-PRODUCT1");
-        for (Product prod : rez) {
-            assertTrue("add " + prod.getCode(), expectedProductCodes.contains(prod.getCode()));
-            expectedProductCodes.remove(prod.getCode());
-        }
-        assertTrue(expectedProductCodes.isEmpty());
-    }
-
     @Test
     public void testGetDefaultImage() {
         assertEquals("sobot-picture.jpeg", productService.getDefaultImage(10000L));

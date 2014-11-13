@@ -404,14 +404,6 @@
             <constructor-arg index="1" value="key"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-featuredProducts"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-newArrivalsProductInCategory"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="productService-productByQuery"/>
             <constructor-arg index="1" value="all"/>
         </bean>
@@ -476,14 +468,6 @@
     <util:set id="ProductCreate">
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="productService-randomProductByCategory"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-featuredProducts"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="productService-newArrivalsProductInCategory"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">

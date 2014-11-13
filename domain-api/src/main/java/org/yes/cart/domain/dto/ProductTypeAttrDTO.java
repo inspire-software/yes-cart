@@ -74,23 +74,20 @@ public interface ProductTypeAttrDTO extends Identifiable {
      * Candidate to deprecation.
      *
      * @return rank
-     * @deprecated do not use it
      */
     int getRank();
-
 
     /**
      * Candidate to deprecation.
      *
      * @param rank to set.
-     * @deprecated do not use it
      */
     void setRank(int rank);
 
     /**
      * Is this attribute visible on storefront ?
      *
-     * @return true if attribute is vesible.
+     * @return true if attribute is visible.
      */
     boolean isVisible();
 

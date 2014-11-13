@@ -112,23 +112,6 @@ public class PriceListDTOImpl implements PriceListDTO {
         this.currency = currency;
     }
 
-    /**
-     * @deprecated
-     * @return  quantity
-     */
-    public BigDecimal getQuantityTier() {
-        return quantity;
-    }
-
-    /**
-     * @deprecated
-     * @param quantityTier  quantity
-     */
-    public void setQuantityTier(final BigDecimal quantityTier) {
-        this.quantity = quantityTier;
-    }
-
-
     /** {@inheritDoc}*/
     public BigDecimal getSalePrice() {
         return salePrice;
@@ -268,7 +251,6 @@ public class PriceListDTOImpl implements PriceListDTO {
                 ", shopCode=" + shopCode +
                 ", quantity=" + quantity +
                 ", currency='" + currency + '\'' +
-                ", quantityTier=" + quantity +
                 ", listPrice=" + regularPrice +
                 ", salePrice=" + salePrice +
                 ", tag='" + tag +

@@ -38,6 +38,6 @@ public class SkuPriceMatcher implements DtoToEntityMatcher<SkuPriceDTO, SkuPrice
         return priceDTO != null && skuPrice != null
                 && priceDTO.getCurrency() != null && skuPrice.getCurrency() != null
                 && priceDTO.getCurrency().equals(skuPrice.getCurrency())
-                && MoneyUtils.isFirstEqualToSecond(priceDTO.getQuantityTier(), skuPrice.getQuantity());
+                && MoneyUtils.isFirstEqualToSecond(priceDTO.getQuantity(), skuPrice.getQuantity());
     }
 }
