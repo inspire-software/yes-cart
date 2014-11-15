@@ -26,6 +26,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
@@ -512,7 +513,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      *
      * @param locale        locale
      * @param productTypeId product type id
-     * @return list of distinct attib values
+     * @return list of distinct attrib values
      */
     @Cacheable(value = "productService-distinctAttributeValues")
     public List<FilteredNavigationRecord> getDistinctAttributeValues(final String locale, final long productTypeId) {
@@ -609,7 +610,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     }
 
     private String getRangeValueRepresentation(final String from, final String to) {
-        return from + '-' + to;
+        return from + Constants.RANGE_NAVIGATION_DELIMITER + to;
     }
 
     private String getRangeDisplayValueRepresentation(final String locale, final Map<String, String> display, final String from, final String to) {

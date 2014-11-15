@@ -60,7 +60,7 @@
                 <prop key="hibernate.connection.autocommit">true</prop>
                 <prop key="hibernate.jdbc.batch_size">100</prop>
 
-                <prop key="hibernate.search.worker.execution">async</prop>
+                <prop key="hibernate.search.worker.execution">sync</prop>
                 <prop key="hibernate.search.worker.thread_pool.size">2</prop>
                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
                 <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.RAMDirectoryProvider</prop>

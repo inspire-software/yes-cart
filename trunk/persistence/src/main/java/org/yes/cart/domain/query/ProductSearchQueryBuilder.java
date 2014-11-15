@@ -63,9 +63,6 @@ public interface ProductSearchQueryBuilder {
     public final static String PRODUCT_ID_FIELD = "productId";
     public final static String SKU_ID_FIELD = "sku.skuId"; //////////////////////////////////////////////
 
-    //default sort order
-    public final static String PRODUCT_CATEGORY_RANK_FIELD = "productCategory.rank";
-
     public final static String PRODUCT_PRICE_CURRENCY = "sku.skuPrice.currency";
     
     //can be used in sort order

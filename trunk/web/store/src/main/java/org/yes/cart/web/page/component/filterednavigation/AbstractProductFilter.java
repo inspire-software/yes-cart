@@ -91,7 +91,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
         if (categoryId > 0) {
             categories = new ArrayList<Long>(categoryService.getChildCategoriesRecursiveIds(categoryId));
         } else {
-            categories = Arrays.asList(categoryId);
+            categories = null;
         }
     }
 

@@ -205,7 +205,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testIsCategoryHasChildrenTrue() throws Exception {
-        assertTrue(categoryService.isCategoryHasChildren(101L, false));
+        assertTrue(categoryService.isCategoryHasChildren(101L));
     }
 
     @Test
@@ -216,7 +216,7 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
         newCategory.setName("TEST-CHILDREN");
 
         final Category saved = categoryService.create(newCategory);
-        assertFalse(categoryService.isCategoryHasChildren(saved.getCategoryId(), false));
+        assertFalse(categoryService.isCategoryHasChildren(saved.getCategoryId()));
 
         categoryService.delete(saved);
 

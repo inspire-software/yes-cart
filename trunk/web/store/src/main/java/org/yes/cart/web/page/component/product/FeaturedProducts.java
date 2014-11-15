@@ -68,7 +68,7 @@ public class FeaturedProducts extends AbstractProductSearchResultList {
             final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
             final List<Long> categories;
             if (categoryId == 0) {
-                categories = adapt(ApplicationDirector.getCurrentShop().getShopCategory());
+                categories = Collections.EMPTY_LIST;
             } else {
 
                 if (shopService.getShopCategoriesIds(ShopCodeContext.getShopId()).contains(categoryId)) {
@@ -78,16 +78,12 @@ public class FeaturedProducts extends AbstractProductSearchResultList {
                 }
             }
 
-            if (categories.isEmpty()) {
-                products = Collections.emptyList();
-            } else {
+            final FeaturedProductsInCategoryQueryBuilderImpl queryBuilder = new FeaturedProductsInCategoryQueryBuilderImpl();
 
-                final FeaturedProductsInCategoryQueryBuilderImpl queryBuilder = new FeaturedProductsInCategoryQueryBuilderImpl();
+            final BooleanQuery featured = queryBuilder.createQuery(categories, ShopCodeContext.getShopId());
 
-                final BooleanQuery featured = queryBuilder.createQuery(categories);
+            products = productService.getProductSearchResultDTOByQuery(featured, 0, getProductsLimit(categoryId), null, false);
 
-                products = productService.getProductSearchResultDTOByQuery(featured, 0, getProductsLimit(categoryId), null, false);
-            }
         }
         return products;
     }

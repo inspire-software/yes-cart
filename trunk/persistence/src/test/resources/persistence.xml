@@ -47,8 +47,18 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">create</prop>
                 <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.generate_statistics">false</prop>
+                <prop key="hibernate.use_sql_comments">false</prop>
                 <prop key="hibernate.connection.autocommit">true</prop>
-                <prop key="hibernate.jdbc.batch_size">0</prop>
+                <prop key="hibernate.jdbc.batch_size">100</prop>
+
+                <prop key="hibernate.search.worker.execution">sync</prop>
+                <prop key="hibernate.search.worker.thread_pool.size">1</prop>
+                <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+                <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.RAMDirectoryProvider</prop>
+
+                <!--
+                    ONLY use FS index when DEBUGGING tests.
 
                 <prop key="hibernate.search.default.indexBase">
                     #{'target'+systemProperties['file.separator']+'yes-cart'}
@@ -56,16 +66,17 @@
                 <prop key="hibernate.search.worker.execution">async</prop>
                 <prop key="hibernate.search.worker.thread_pool.size">2</prop>
                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+                -->
+
+                <!--
+                    We have dropped the idea of second level cache, so no need to have it in tests.
 
                 <prop key="hibernate.cache.use_second_level_cache">true</prop>
                 <prop key="hibernate.cache.use_query_cache">true</prop>
                 <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop>
 
                 <prop key="net.sf.ehcache.configurationResourceName">test-hibernate-ehcache.xml</prop>
-                <!--http://www.ehcache.org/documentation/integrations/hibernate-->
-
-
-
+                -->
             </props>
         </property>
         <property name="entityInterceptor">

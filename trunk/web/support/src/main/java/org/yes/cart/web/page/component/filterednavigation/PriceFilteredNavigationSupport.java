@@ -34,7 +34,7 @@ public interface PriceFilteredNavigationSupport {
      * @param query boolean query
      * @param categoryId current category
      * @param categories current categories
-     * @param shopCode current shop
+     * @param shopId current shop
      * @param currency currency
      * @param locale selected locale
      * @param recordName record localisable name
@@ -44,7 +44,7 @@ public interface PriceFilteredNavigationSupport {
     List<FilteredNavigationRecord> getFilteredNavigationRecords(final BooleanQuery query,
                                                                 final Long categoryId,
                                                                 final List<Long> categories,
-                                                                final String shopCode,
+                                                                final long shopId,
                                                                 final String currency,
                                                                 final String locale,
                                                                 final String recordName);

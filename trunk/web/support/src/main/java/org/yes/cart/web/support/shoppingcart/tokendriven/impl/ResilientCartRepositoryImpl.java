@@ -140,7 +140,9 @@ public class ResilientCartRepositoryImpl implements CartRepository {
         if (taskExecutor == null) {
             createRunnable(shoppingCart, null, null).run();
         } else {
-            taskExecutor.execute(createRunnable(shoppingCart, ShopCodeContext.getShopCode(), ShopCodeContext.getShopId()));
+            taskExecutor.execute(createRunnable(shoppingCart,
+                    shoppingCart.getShoppingContext().getShopCode(),
+                    shoppingCart.getShoppingContext().getShopId()));
         }
     }
 

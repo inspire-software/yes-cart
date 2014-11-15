@@ -28,21 +28,10 @@ import java.util.Map;
  * Time: 11:12:54
  */
 public interface LuceneQueryFactory {
-    /**
-     * Get the combined from query chain query.
-     * The currecnt query will be last in this chain.
-     * Chain will be truncated if <code>currentQuery</code> already present in
-     * list
-     *
-     * @param allQueries   query chain
-     * @param currentQuery optional current query
-     * @return combined from chain query
-     */
-    BooleanQuery getSnowBallQuery(List<BooleanQuery> allQueries, String currentQuery);
 
     /**
      * Get the combined from query chain query.
-     * The currecnt query will be last in this chain.
+     * The current query will be last in this chain.
      * Chain will be truncated if <code>currentQuery</code> already present in
      * list
      *
@@ -64,9 +53,6 @@ public interface LuceneQueryFactory {
      * @param categories            given category ids
      * @return ordered by cookie name list of cookies
      */
-    List<BooleanQuery> getFilteredNavigationQueryChain(
-            Long shopId,
-            List<Long> categories,
-            Map<String, ?> requestParameters
-    );
+    BooleanQuery getFilteredNavigationQueryChain(Long shopId, List<Long> categories, Map<String, ?> requestParameters);
+
 }

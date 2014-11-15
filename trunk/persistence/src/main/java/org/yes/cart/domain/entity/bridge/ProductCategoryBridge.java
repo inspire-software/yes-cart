@@ -48,24 +48,8 @@ public class ProductCategoryBridge implements FieldBridge {
                 ProductCategory productCategory = (ProductCategory) obj;
 
                 document.add(new Field(
-                        "productCategory.productCategoryId",
-                        String.valueOf(productCategory.getProductCategoryId()),
-                        luceneOptions.getStore(),
-                        Field.Index.NOT_ANALYZED,
-                        luceneOptions.getTermVector()
-                ));
-
-                document.add(new Field(
                         "productCategory.category",
                         String.valueOf(productCategory.getCategory().getCategoryId()),
-                        luceneOptions.getStore(),
-                        Field.Index.NOT_ANALYZED,
-                        luceneOptions.getTermVector()
-                ));
-
-                document.add(new Field(
-                        "productCategory.rank",
-                        String.valueOf(productCategory.getRank()),
                         luceneOptions.getStore(),
                         Field.Index.NOT_ANALYZED,
                         luceneOptions.getTermVector()

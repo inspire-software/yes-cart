@@ -72,7 +72,7 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
     public List<FilteredNavigationRecord> getFilteredNavigationRecords(final BooleanQuery query,
                                                                        final Long categoryId,
                                                                        final List<Long> categories,
-                                                                       final String shopCode,
+                                                                       final long shopId,
                                                                        final String currency,
                                                                        final String locale,
                                                                        final String recordName) {
@@ -95,7 +95,7 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
                 return Collections.emptyList();
             }
 
-            final Shop shop = shopService.getShopByCode(shopCode);
+            final Shop shop = shopService.getById(shopId);
             final List<FilteredNavigationRecord> allNavigationRecords = priceService.getPriceNavigationRecords(
                     priceTierTree,
                     currency,

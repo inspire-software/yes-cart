@@ -46,6 +46,9 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
      */
     public boolean isIncludeInLuceneIndex(final Product entity) {
         if (entity != null) {
+            if (entity.getProductCategory().isEmpty()) {
+                return false; // if it is not assigned to category, no way to determine the shop
+            }
             if (entity.getAvailableto() == null || (entity.getAvailableto() != null && entity.getAvailableto().after(new Date()))) {
                if (Product.AVAILABILITY_STANDARD == entity.getAvailability()) {
                    for (final ProductSku sku : entity.getSku()) {

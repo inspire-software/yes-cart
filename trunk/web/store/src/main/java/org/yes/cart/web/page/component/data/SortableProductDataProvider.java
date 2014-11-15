@@ -40,7 +40,7 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductSea
 
     private final ProductService productService;
     private final Query query;
-    private String sortFieldName = ProductSearchQueryBuilder.PRODUCT_CATEGORY_RANK_FIELD;
+    private String sortFieldName = null;
     private boolean reverse = false;
     private List<ProductSearchResultDTO> products;
     private final I18NWebSupport i18NWebSupport;

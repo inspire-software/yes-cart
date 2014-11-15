@@ -39,7 +39,7 @@ public class StringValueToPairListConverter implements Converter<String, List> {
      * @return list of string pairs
      */
     public List convert(final String values) {
-        return getChoises(values);
+        return getOptions(values);
     }
 
 
@@ -49,7 +49,7 @@ public class StringValueToPairListConverter implements Converter<String, List> {
      * @param values comma separated values
      * @return list of string pairs
      */
-    List<Pair<String, String>> getChoises(final String values) {
+    List<Pair<String, String>> getOptions(final String values) {
         final List<Pair<String, String>> res = new ArrayList<Pair<String, String>>();
         if (StringUtils.isNotBlank(values)) {
             final String [] entryies= values.split(",");

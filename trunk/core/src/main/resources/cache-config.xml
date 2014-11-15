@@ -127,6 +127,18 @@
             <constructor-arg index="1" value="key"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-searchInSubcategory"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryNewArrivalLimit"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryNewArrivalDate"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="categoryService-itemsPerPage"/>
             <constructor-arg index="1" value="all"/>
         </bean>

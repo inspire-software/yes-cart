@@ -16,11 +16,18 @@
 
 package org.yes.cart.web.support.service.impl;
 
-import org.apache.lucene.search.Query;
+import org.apache.lucene.search.BooleanQuery;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
-import org.yes.cart.service.domain.impl.*;
+import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
+import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ContentService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
@@ -35,84 +42,291 @@ import static org.junit.Assert.assertEquals;
  */
 public class CentralViewResolverImplTest {
 
-    @Test
-    public void testResolveMainPanelRendererLabel() throws Exception {
-        CentralViewResolverImpl resolver = new CentralViewResolverImpl(
-                new CategoryServiceImpl(null, null, null) {
-                    @Override
-                    public boolean isCategoryHasProducts(final long categoryId, final boolean includeChildren) {
-                        if (categoryId == 10 || categoryId == 999) {
-                            return false;
-                        }
-                        return true;
-                    }
-                    @Override
-                    public boolean isCategoryHasChildren(final long categoryId, final boolean includeChildren) {
-                        if (categoryId == 10) {
-                            return true;
-                        }
-                        return false;
-                    }
-                    @Override
-                    public String getCategoryTemplate(final long categoryId) {
-                        if (categoryId == 999L) {
-                            return "template";
-                        }
-                        return null;
-                    }
-                },
-                new ContentServiceImpl(null, null, null, new ContentServiceTemplateSupportGroovyImpl()) {
-                    @Override
-                    public String getContentTemplate(final long categoryId) {
-                        if (categoryId == 888L) {
-                            return "template";
-                        }
-                        return null;
-                    }
-                },
-                new ProductServiceImpl(null, null, null, null, null, null, null) {
-                    @Override
-                    public List<ProductSearchResultDTO> getProductSearchResultDTOByQuery(final Query query, final int firstResult, final int maxResults, final String sortFieldName, final boolean reverse) {
-                        if (query.toString().indexOf("category:10") == -1 && query.toString().indexOf("category:999") == -1) {
-                            return new ArrayList<ProductSearchResultDTO>() {{
-                                add(new ProductSearchResultDTOImpl());
-                            }};
-                        }
-                        return Collections.emptyList();
-                    }
-                }, new AttributeServiceImpl(null, null) {
-                    @Override
-                    public Set<String> getAllNavigatableAttributeCodes() {
-                        return new HashSet<String>() {{
-                            add("attrWeight");
-                            add("attrSize");
-                        }};
-                    }
-                },
-                null
+    private final Mockery context = new JUnit4Mockery();
 
-        );
+    private final Set<String> navAttrs = new HashSet<String>() {{
+        add("attrWeight");
+        add("attrSize");
+    }};
+
+    @Test
+    public void testResolveMainPanelRendererLabelSku() throws Exception {
+
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(categoryService, contentService, productService, attributeService, luceneQueryFactory);
+
         assertEquals(CentralViewLabel.SKU,
-                resolver.resolveMainPanelRendererLabel(getRequestParams(WebParametersKeys.SKU_ID, null)));
-        assertEquals(CentralViewLabel.PRODUCT,
-                resolver.resolveMainPanelRendererLabel(getRequestParams(WebParametersKeys.PRODUCT_ID, null)));
-        assertEquals(CentralViewLabel.SEARCH_LIST,
-                resolver.resolveMainPanelRendererLabel(getRequestParams(WebParametersKeys.QUERY, null)));
-        assertEquals(CentralViewLabel.SEARCH_LIST,
-                resolver.resolveMainPanelRendererLabel(getRequestParams("mayBePagingParam", null)));
-        assertEquals(CentralViewLabel.SUBCATEGORIES_LIST,
-                resolver.resolveMainPanelRendererLabel(getRequestParams2(WebParametersKeys.CATEGORY_ID, "10")));
-        assertEquals(CentralViewLabel.PRODUCTS_LIST,
-                resolver.resolveMainPanelRendererLabel(getRequestParams2(WebParametersKeys.CATEGORY_ID, "11")));
-        assertEquals("template",
-                resolver.resolveMainPanelRendererLabel(getRequestParams2(WebParametersKeys.CATEGORY_ID, "999")));
-        assertEquals(CentralViewLabel.CONTENT,
-                resolver.resolveMainPanelRendererLabel(getRequestParams2(WebParametersKeys.CONTENT_ID, "889")));
-        assertEquals("template",
-                resolver.resolveMainPanelRendererLabel(getRequestParams2(WebParametersKeys.CONTENT_ID, "888")));
+                resolver.resolveMainPanelRendererLabel(getRequestParamsWithFilterNav(WebParametersKeys.SKU_ID, null)));
+
     }
 
-    private Map<String, String> getRequestParams(final String param, final String val) {
+    @Test
+    public void testResolveMainPanelRendererLabelProduct() throws Exception {
+
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(categoryService, contentService, productService, attributeService, luceneQueryFactory);
+
+        assertEquals(CentralViewLabel.PRODUCT,
+                resolver.resolveMainPanelRendererLabel(getRequestParamsWithFilterNav(WebParametersKeys.PRODUCT_ID, null)));
+
+    }
+
+    @Test
+    public void testResolveMainPanelRendererLabelFilteredNav() throws Exception {
+
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        context.checking(new Expectations() {{
+            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
+        }});
+
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(categoryService, contentService, productService, attributeService, luceneQueryFactory);
+
+        assertEquals(CentralViewLabel.SEARCH_LIST,
+                resolver.resolveMainPanelRendererLabel(getRequestParamsWithFilterNav("page", null)));
+
+    }
+
+    @Test
+    public void testResolveMainPanelRendererLabelQuery() throws Exception {
+
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        context.checking(new Expectations() {{
+            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
+        }});
+
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(categoryService, contentService, productService, attributeService, luceneQueryFactory);
+
+        assertEquals(CentralViewLabel.SEARCH_LIST,
+                resolver.resolveMainPanelRendererLabel(getRequestParamsWithFilterNav(WebParametersKeys.QUERY, null)));
+
+    }
+
+    @Test
+    public void testResolveMainPanelRendererLabelUnknownParam() throws Exception {
+
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        context.checking(new Expectations() {{
+            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
+        }});
+
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(categoryService, contentService, productService, attributeService, luceneQueryFactory);
+
+        assertEquals(CentralViewLabel.DEFAULT,
+                resolver.resolveMainPanelRendererLabel(getRequestParam("someParam", null)));
+
+    }
+
+    @Test
+    public void testResolveMainPanelRendererLabelCategoryWithTemplate() throws Exception {
+
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        context.checking(new Expectations() {{
+            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
+            one(categoryService).getCategoryTemplate(10L); will(returnValue("template_10"));
+        }});
+
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(categoryService, contentService, productService, attributeService, luceneQueryFactory);
+
+        assertEquals("template_10",
+                resolver.resolveMainPanelRendererLabel(getRequestParam(WebParametersKeys.CATEGORY_ID, "10")));
+
+    }
+
+    @Test
+    public void testResolveMainPanelRendererLabelCategoryNoTemplateWithProducts() throws Exception {
+
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        final BooleanQuery expected = new ProductsInCategoryQueryBuilderImpl().createQuery(10L);
+
+        context.checking(new Expectations() {{
+            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
+            one(categoryService).getCategoryTemplate(10L); will(returnValue(""));
+            one(categoryService).isSearchInSubcategory(10L, 12L); will(returnValue(false));
+            one(productService).getProductQty(expected); will(returnValue(1));
+        }});
+
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(categoryService, contentService, productService, attributeService, luceneQueryFactory);
+
+        ShopCodeContext.setShopId(12L);
+
+        assertEquals(CentralViewLabel.PRODUCTS_LIST,
+                resolver.resolveMainPanelRendererLabel(getRequestParam(WebParametersKeys.CATEGORY_ID, "10")));
+
+        ShopCodeContext.clear();
+    }
+
+    @Test
+    public void testResolveMainPanelRendererLabelCategoryNoTemplateWithProductsInSubCats() throws Exception {
+
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        final BooleanQuery expected = new ProductsInCategoryQueryBuilderImpl().createQuery(Arrays.asList(10L, 11L), 0L);
+
+        context.checking(new Expectations() {{
+            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
+            one(categoryService).getCategoryTemplate(10L); will(returnValue(""));
+            one(categoryService).isSearchInSubcategory(10L, 12L); will(returnValue(true));
+            one(categoryService).getChildCategoriesRecursiveIds(10L); will(returnValue(new HashSet<Long>(Arrays.asList(10L, 11L))));
+            one(productService).getProductQty(expected); will(returnValue(1));
+        }});
+
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(categoryService, contentService, productService, attributeService, luceneQueryFactory);
+
+        ShopCodeContext.setShopId(12L);
+
+        assertEquals(CentralViewLabel.PRODUCTS_LIST,
+                resolver.resolveMainPanelRendererLabel(getRequestParam(WebParametersKeys.CATEGORY_ID, "10")));
+
+        ShopCodeContext.clear();
+    }
+
+
+    @Test
+    public void testResolveMainPanelRendererLabelCategoryNoTemplateWithNoProducts() throws Exception {
+
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        final BooleanQuery expected = new ProductsInCategoryQueryBuilderImpl().createQuery(10L);
+
+        context.checking(new Expectations() {{
+            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
+            one(categoryService).getCategoryTemplate(10L); will(returnValue(""));
+            one(categoryService).isSearchInSubcategory(10L, 12L); will(returnValue(false));
+            one(productService).getProductQty(expected); will(returnValue(0));
+            one(categoryService).isCategoryHasChildren(10L); will(returnValue(true));
+        }});
+
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(categoryService, contentService, productService, attributeService, luceneQueryFactory);
+
+        ShopCodeContext.setShopId(12L);
+
+        assertEquals(CentralViewLabel.SUBCATEGORIES_LIST,
+                resolver.resolveMainPanelRendererLabel(getRequestParam(WebParametersKeys.CATEGORY_ID, "10")));
+
+        ShopCodeContext.clear();
+    }
+
+    @Test
+    public void testResolveMainPanelRendererLabelCategoryNoTemplateWithNoProductsNoSubcategories() throws Exception {
+
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        final BooleanQuery expected = new ProductsInCategoryQueryBuilderImpl().createQuery(10L);
+
+        context.checking(new Expectations() {{
+            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
+            one(categoryService).getCategoryTemplate(10L); will(returnValue(""));
+            one(categoryService).isSearchInSubcategory(10L, 12L); will(returnValue(false));
+            one(productService).getProductQty(expected); will(returnValue(0));
+            one(categoryService).isCategoryHasChildren(10L); will(returnValue(false));
+        }});
+
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(categoryService, contentService, productService, attributeService, luceneQueryFactory);
+
+        ShopCodeContext.setShopId(12L);
+
+        assertEquals(CentralViewLabel.CATEGORY,
+                resolver.resolveMainPanelRendererLabel(getRequestParam(WebParametersKeys.CATEGORY_ID, "10")));
+
+        ShopCodeContext.clear();
+    }
+
+    @Test
+    public void testResolveMainPanelRendererLabelContentWithTemplate() throws Exception {
+
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        context.checking(new Expectations() {{
+            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
+            one(contentService).getContentTemplate(10L); will(returnValue(CentralViewLabel.DYNOCONTENT));
+        }});
+
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(categoryService, contentService, productService, attributeService, luceneQueryFactory);
+
+        ShopCodeContext.setShopId(12L);
+
+        assertEquals(CentralViewLabel.DYNOCONTENT,
+                resolver.resolveMainPanelRendererLabel(getRequestParam(WebParametersKeys.CONTENT_ID, "10")));
+
+        ShopCodeContext.clear();
+    }
+
+    @Test
+    public void testResolveMainPanelRendererLabelContentWithNoTemplate() throws Exception {
+
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        context.checking(new Expectations() {{
+            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
+            one(contentService).getContentTemplate(10L); will(returnValue(""));
+        }});
+
+        CentralViewResolverImpl resolver = new CentralViewResolverImpl(categoryService, contentService, productService, attributeService, luceneQueryFactory);
+
+        ShopCodeContext.setShopId(12L);
+
+        assertEquals(CentralViewLabel.CONTENT,
+                resolver.resolveMainPanelRendererLabel(getRequestParam(WebParametersKeys.CONTENT_ID, "10")));
+
+        ShopCodeContext.clear();
+    }
+
+    private Map<String, String> getRequestParamsWithFilterNav(final String param, final String val) {
         return new HashMap<String, String>() {{
             put("attrWeight", "12");
             put("attrSize", "23");
@@ -120,7 +334,7 @@ public class CentralViewResolverImplTest {
         }};
     }
 
-    private Map<String, String> getRequestParams2(final String param, final String val) {
+    private Map<String, String> getRequestParam(final String param, final String val) {
         return new HashMap<String, String>() {{
             put(param, val);
         }};

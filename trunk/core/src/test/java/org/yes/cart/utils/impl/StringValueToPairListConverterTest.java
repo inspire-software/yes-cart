@@ -34,14 +34,14 @@ public class StringValueToPairListConverterTest {
     public void testConvert() {
         StringValueToPairListConverter converter = new StringValueToPairListConverter();
         String values = "Red,Green,Blue";
-        List<Pair<String, String>> pairList = converter.getChoises(values);
+        List<Pair<String, String>> pairList = converter.getOptions(values);
         assertEquals(3, pairList.size());
         assertEquals("Red", pairList.get(0).getFirst());
         assertEquals("Red", pairList.get(0).getSecond());
         assertEquals("Green", pairList.get(1).getFirst());
         assertEquals("Green", pairList.get(1).getSecond());
         values = "Red,G-Green,Blue";
-        pairList = converter.getChoises(values);
+        pairList = converter.getOptions(values);
         assertEquals(3, pairList.size());
         assertEquals("Red", pairList.get(0).getFirst());
         assertEquals("Red", pairList.get(0).getSecond());

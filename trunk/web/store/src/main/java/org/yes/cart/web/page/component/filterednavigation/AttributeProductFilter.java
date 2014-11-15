@@ -19,6 +19,7 @@ package org.yes.cart.web.page.component.filterednavigation;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.ProductType;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 
 /**
@@ -63,7 +64,7 @@ public class AttributeProductFilter extends AbstractProductFilter {
 
                 setNavigationRecords(
                         attributeFilteredNavigationSupport.getFilteredNavigationRecords(
-                                getQuery(), getCategories(), selectedLocale, productType.getProducttypeId())
+                                getQuery(), getCategories(), ShopCodeContext.getShopId(), selectedLocale, productType.getProducttypeId())
                 );
 
             }

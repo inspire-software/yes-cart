@@ -40,6 +40,7 @@ public interface BrandFilteredNavigationSupport {
      */
     List<FilteredNavigationRecord> getFilteredNavigationRecords(final BooleanQuery query,
                                                                 final List<Long> categories,
+                                                                final long shopId,
                                                                 final String locale,
                                                                 final String recordName);
 

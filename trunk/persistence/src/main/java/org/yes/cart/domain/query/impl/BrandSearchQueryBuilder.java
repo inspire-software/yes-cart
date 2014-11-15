@@ -21,6 +21,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.TermQuery;
+import org.springframework.util.CollectionUtils;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
 import java.util.List;
@@ -38,21 +39,33 @@ public class BrandSearchQueryBuilder implements ProductSearchQueryBuilder {
     /**
      * Create boolean query for search by brand name in given categories
      * @param categories given categories
+     * @param shop given shop (optimisation if no specific cat is required)
      * @param brandName brand name
      * @return boolean query to perform search.
      */
-    public BooleanQuery createQuery(final List<Long> categories, final String brandName) {
+    public BooleanQuery createQuery(final List<Long> categories, final long shop, final String brandName) {
         BooleanQuery query = new BooleanQuery();
-        if (StringUtils.isNotBlank(brandName) && categories != null) {
-            for (Long category : categories) {
+        if (StringUtils.isNotBlank(brandName)) {
+            if (CollectionUtils.isEmpty(categories)) {
                 BooleanQuery currentQuery = new BooleanQuery();
-                currentQuery.add(new TermQuery( new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
-                                    BooleanClause.Occur.MUST
-                            );
-                currentQuery.add(new TermQuery( new Term(BRAND_FIELD, brandName.toLowerCase())),
-                                    BooleanClause.Occur.MUST
-                            );
+                currentQuery.add(new TermQuery( new Term(PRODUCT_SHOP_FIELD, String.valueOf(shop))),
+                        BooleanClause.Occur.MUST
+                );
+                final TermQuery brand = new TermQuery( new Term(BRAND_FIELD, brandName.toLowerCase()));
+                brand.setBoost(3.5f); // boost brand if this is compound query
+                currentQuery.add(brand, BooleanClause.Occur.MUST);
                 query.add(currentQuery, BooleanClause.Occur.SHOULD);
+            } else {
+                for (Long category : categories) {
+                    BooleanQuery currentQuery = new BooleanQuery();
+                    currentQuery.add(new TermQuery( new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
+                                        BooleanClause.Occur.MUST
+                                );
+                    final TermQuery brand = new TermQuery( new Term(BRAND_FIELD, brandName.toLowerCase()));
+                    brand.setBoost(3.5f); // boost brand if this is compound query
+                    currentQuery.add(brand, BooleanClause.Occur.MUST);
+                    query.add(currentQuery, BooleanClause.Occur.SHOULD);
+                }
             }
         }
         return query;

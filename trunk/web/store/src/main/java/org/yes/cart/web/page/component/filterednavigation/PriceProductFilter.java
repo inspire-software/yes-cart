@@ -21,6 +21,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.PriceNavigation;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -91,11 +92,13 @@ public class PriceProductFilter extends AbstractProductFilter {
 
             if(visibilityRezult == null) {
 
+                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
                 setNavigationRecords(
                         priceFilteredNavigationSupport.getFilteredNavigationRecords(
-                                getQuery(), getCategoryId(), getCategories(), ShopCodeContext.getShopCode(),
-                                ApplicationDirector.getShoppingCart().getCurrencyCode(),
-                                ApplicationDirector.getShoppingCart().getCurrentLocale(),
+                                getQuery(), getCategoryId(), getCategories(), cart.getShoppingContext().getShopId(),
+                                cart.getCurrencyCode(),
+                                cart.getCurrentLocale(),
                                 getLocalizer().getString("price", this)
                         )
                 );

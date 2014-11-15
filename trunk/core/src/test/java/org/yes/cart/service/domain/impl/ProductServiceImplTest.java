@@ -255,7 +255,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
                 productService.getGenericDao().fullTextSearchReindex(false);
 
                 final ProductsInCategoryQueryBuilderImpl queryBuilder = new ProductsInCategoryQueryBuilderImpl();
-                Query query = queryBuilder.createQuery(Arrays.asList(101L));
+                Query query = queryBuilder.createQuery(101L);
                 final List<ProductSearchResultDTO> searchRes = productService.getProductSearchResultDTOByQuery(
                         query,
                         0,

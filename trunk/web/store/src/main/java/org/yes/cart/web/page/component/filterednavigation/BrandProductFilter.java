@@ -18,6 +18,7 @@ package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 
 /**
@@ -67,7 +68,7 @@ public class BrandProductFilter extends AbstractProductFilter {
                 final String selectedLocale = getLocale().getLanguage();
 
                 setNavigationRecords(brandsFilteredNavigationSupport.getFilteredNavigationRecords(
-                        getQuery(), getCategories(), selectedLocale, getLocalizer().getString("brand", this))
+                        getQuery(), getCategories(), ShopCodeContext.getShopId(), selectedLocale, getLocalizer().getString("brand", this))
                 );
 
                 visibilityRezult = super.isVisible()

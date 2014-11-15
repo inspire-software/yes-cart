@@ -33,8 +33,9 @@ public class AsIsAnalyzer extends ReusableAnalyzerBase {
     private final boolean toLowerCase;
 
     /**
-     * COnstruct analyser.
-     * @param toLowerCase
+     * Construct analyser.
+     *
+     * @param toLowerCase make terms lower case
      */
     public AsIsAnalyzer(boolean toLowerCase) {
         this.toLowerCase = toLowerCase;

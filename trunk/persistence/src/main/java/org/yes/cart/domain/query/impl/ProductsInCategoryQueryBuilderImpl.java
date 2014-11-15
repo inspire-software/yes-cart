@@ -20,6 +20,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.TermQuery;
+import org.springframework.util.CollectionUtils;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
 import java.util.List;
@@ -32,20 +33,27 @@ import java.util.List;
  * Simple products in category query builder.
  *
  */
-public class ProductsInCategoryQueryBuilderImpl implements ProductSearchQueryBuilder {
+public class ProductsInCategoryQueryBuilderImpl extends ProductsInShopQueryBuilderImpl implements ProductSearchQueryBuilder {
 
 
 
     /**
      * Creates a boolean query for set of categories
+     *
      * @param categories set of categories
+     * @param shop given shop (optimisation if no specific cat is required)
+     *
      * @return constructed BooleanQuery
      */
-    public BooleanQuery createQuery(final List<Long> categories) {
+    public BooleanQuery createQuery(final List<Long> categories, final long shop) {
 
         BooleanQuery booleanQuery = new BooleanQuery();
 
-        if (categories != null && !categories.isEmpty()) {
+        if (CollectionUtils.isEmpty(categories)) {
+
+            booleanQuery = super.createQuery(shop);
+
+        } else {
 
             BooleanClause.Occur occur = categories.size() > 1 ? BooleanClause.Occur.SHOULD : BooleanClause.Occur.MUST;
 
@@ -55,7 +63,6 @@ public class ProductsInCategoryQueryBuilderImpl implements ProductSearchQueryBui
                                 occur
                         );
             }
-            
 
         }
 
@@ -70,7 +77,9 @@ public class ProductsInCategoryQueryBuilderImpl implements ProductSearchQueryBui
 
     /**
      * Create boolean query for given category
+     *
      * @param categoryId given category id
+     *
      * @return constructed BooleanQuery
      */
     public BooleanQuery createQuery(final Long categoryId) {
