@@ -21,6 +21,7 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
+import org.springframework.util.CollectionUtils;
 import org.yes.cart.domain.entity.bridge.SkuPriceBridge;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
@@ -57,7 +58,7 @@ public class PriceSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
      * @return constructed BooleanQuery
      */
     public BooleanQuery createQuery(final List<Long> categories,
-                                    final Long shopId,
+                                    final long shopId,
                                     final String currencyCore,
                                     final BigDecimal lowBorder,
                                     final BigDecimal hiBorder) {
@@ -66,21 +67,39 @@ public class PriceSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
 
         final BooleanQuery booleanQuery = new BooleanQuery();
 
-        for (Long category : categories) {
+        if (CollectionUtils.isEmpty(categories)) {
             BooleanQuery currentQuery = new BooleanQuery();
-            currentQuery.add(new TermQuery(new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
+            currentQuery.add(new TermQuery(new Term(PRODUCT_SHOP_FIELD, String.valueOf(shopId))),
                     BooleanClause.Occur.MUST);
 
-            currentQuery.add(new TermRangeQuery(
+            final TermRangeQuery price = new TermRangeQuery(
                     PRODUCT_SKU_PRICE,
                     skuPriceBridge.objectToString(shopId, currencyCore, lowBorder),
                     skuPriceBridge.objectToString(shopId, currencyCore, hiBorder),
                     true,
-                    true),
-                    BooleanClause.Occur.MUST);
+                    true);
+            // price.setBoost(3f); - no need for boost since this will be applied to all products in result
+            currentQuery.add(price, BooleanClause.Occur.MUST);
 
-             booleanQuery.add(currentQuery, BooleanClause.Occur.SHOULD);
+            booleanQuery.add(currentQuery, BooleanClause.Occur.SHOULD);
+        } else {
+            for (Long category : categories) {
+                BooleanQuery currentQuery = new BooleanQuery();
+                currentQuery.add(new TermQuery(new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
+                        BooleanClause.Occur.MUST);
 
+                final TermRangeQuery price = new TermRangeQuery(
+                        PRODUCT_SKU_PRICE,
+                        skuPriceBridge.objectToString(shopId, currencyCore, lowBorder),
+                        skuPriceBridge.objectToString(shopId, currencyCore, hiBorder),
+                        true,
+                        true);
+                // price.setBoost(3f); - no need for boost since this will be applied to all products in result
+                currentQuery.add(price, BooleanClause.Occur.MUST);
+
+                booleanQuery.add(currentQuery, BooleanClause.Occur.SHOULD);
+
+            }
         }
         return booleanQuery;
     }

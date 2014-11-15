@@ -34,21 +34,19 @@ public class FeaturedProductsInCategoryQueryBuilderImpl extends ProductsInCatego
      * Enhancement of in category query by adding featured="true" clause
      *
      * @param categories set of categories
+     * @param shop given shop (optimisation if no specific cat is required)
      *
      * @return featured products in categories query
      */
     @Override
-    public BooleanQuery createQuery(final List<Long> categories) {
+    public BooleanQuery createQuery(final List<Long> categories, final long shop) {
 
-        BooleanQuery booleanQuery = new BooleanQuery();
+        BooleanQuery inCategories = super.createQuery(categories, shop);
 
-        BooleanQuery inCategories = super.createQuery(categories);
-
-        booleanQuery.add(inCategories, BooleanClause.Occur.MUST);
-        booleanQuery.add(new TermQuery(new Term(PRODUCT_FEATURED_FIELD, Boolean.TRUE.toString())),
+        inCategories.add(new TermQuery(new Term(PRODUCT_FEATURED_FIELD, Boolean.TRUE.toString())),
                 BooleanClause.Occur.MUST);
 
-        return booleanQuery;
+        return inCategories;
     }
 
     /**

@@ -83,9 +83,9 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         List<FilteredNavigationRecord> navigationRecords = priceService.getPriceNavigationRecords(priceTierTree, "EUR", shop);
         assertNotNull(navigationRecords);
         assertEquals(3, navigationRecords.size());
-        assertEquals("EUR-0-100", navigationRecords.get(0).getValue());
-        assertEquals("EUR-100-300", navigationRecords.get(1).getValue());
-        assertEquals("EUR-300-500", navigationRecords.get(2).getValue());
+        assertEquals("EUR-_-0-_-100", navigationRecords.get(0).getValue());
+        assertEquals("EUR-_-100-_-300", navigationRecords.get(1).getValue());
+        assertEquals("EUR-_-300-_-500", navigationRecords.get(2).getValue());
         // In other currency
         navigationRecords = priceService.getPriceNavigationRecords(priceTierTree, "UAH", shop);
         assertNotNull(navigationRecords);

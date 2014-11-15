@@ -42,17 +42,18 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
      * in particular categories
      *
      * @param categories     given set of category ids.
+     * @param shop           given shop (optimisation if no specific cat is required)
      * @param attributeName  attribute name
      * @param attributeValue value of attribute
      * @return boolean query
      */
-    public BooleanQuery createQuery(
-            final List<Long> categories,
-            final String attributeName,
-            final String attributeValue) {
+    public BooleanQuery createQuery(final List<Long> categories,
+                                    final long shop,
+                                    final String attributeName,
+                                    final String attributeValue) {
 
         return addKeyValue(
-                super.createQuery(categories),
+                super.createQuery(categories, shop),
                 attributeName,
                 attributeValue);
 
@@ -63,16 +64,17 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
      * in particular categories
      *
      * @param categories          given set of category ids.
+     * @param shop                given shop (optimisation if no specific cat is required)
      * @param attributeName       attribute name
      * @param attributeValueRange inclusive range of values. hi and lo
      * @return boolean query
      */
-    public BooleanQuery createQuery(
-            final List<Long> categories,
-            final String attributeName,
-            final Pair<String, String> attributeValueRange) {
+    public BooleanQuery createQuery(final List<Long> categories,
+                                    final long shop,
+                                    final String attributeName,
+                                    final Pair<String, String> attributeValueRange) {
 
-        final BooleanQuery query = super.createQuery(categories);
+        final BooleanQuery query = super.createQuery(categories, shop);
 
         return addKeyRangeValues(
                 query,
@@ -80,23 +82,6 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
                 attributeValueRange.getFirst(),
                 attributeValueRange.getSecond());
 
-
-        /*final BooleanQuery query = new BooleanQuery();
-        for (Long category : categories) {
-            BooleanQuery booleanQuery = new BooleanQuery();
-            booleanQuery.add(
-                    new TermQuery(new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
-                    BooleanClause.Occur.MUST
-            );
-            addKeyRangeValues(
-                    booleanQuery,
-                    attributeName,
-                    attributeValueRange.getFirst(),
-                    attributeValueRange.getSecond());
-            query.add(booleanQuery, BooleanClause.Occur.SHOULD);
-
-        }
-        return query; */
     }
 
     /**
@@ -104,17 +89,17 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
      * in particular categories
      *
      * @param categories          given set of category ids.
+     * @param shop                given shop (optimisation if no specific cat is required)
      * @param attributeName       attribute name
      * @param attributeValueRange value range for given attribute
      * @return boolean query
      */
-    public BooleanQuery createQueryWithRangeValues(
-            final List<Long> categories,
-            final String attributeName,
-            final Pair<String, String> attributeValueRange
-            /*final Map<String, Pair<String, String>> attributeRangeMap*/) {
+    public BooleanQuery createQueryWithRangeValues(final List<Long> categories,
+                                                   final long shop,
+                                                   final String attributeName,
+                                                   final Pair<String, String> attributeValueRange) {
 
-        final BooleanQuery categoriesQueries = super.createQuery(categories);
+        final BooleanQuery categoriesQueries = super.createQuery(categories, shop);
 
         return addKeyRangeValues(
                 categoriesQueries,
@@ -122,46 +107,7 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
                 attributeValueRange.getFirst(),
                 attributeValueRange.getSecond());
 
-
-        /*final BooleanQuery query = new BooleanQuery();
-      for (Long category : categories) {
-          BooleanQuery booleanQuery = new BooleanQuery();
-          booleanQuery.add(
-                  new TermQuery(new Term(PRODUCT_CATEGORY_FIELD, category.toString())),
-                  BooleanClause.Occur.MUST
-          );
-          for (Map.Entry<String, Pair<String, String>> entry : attributeRangeMap.entrySet()) {
-              addKeyRangeValues(
-                      booleanQuery,
-                      entry.getKey(),
-                      entry.getValue().getFirst(),
-                      entry.getValue().getSecond());
-          }
-          query.add(booleanQuery, BooleanClause.Occur.SHOULD);
-
-      }
-
-      return query; */
     }
-
-
-    /**
-     * Creates a query to getByKey the products with specified attribute name and values
-     * in particular categories
-     *
-     * @param categories given set of category ids.
-     * @param attribute  map of attribute name and value
-     * @return boolean query
-     */
-    /*public BooleanQuery createQuery(
-            final List<Long> categories,
-            final Map<String, String> attribute) {
-        BooleanQuery query = super.createQuery(categories);
-        for (Map.Entry<String, String> entry : attribute.entrySet()) {
-            addKeyValue(query, entry.getKey(), entry.getValue());
-        }
-        return query;
-    }   */
 
 
     /**
@@ -173,10 +119,9 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
      * @param attributeValue value of attribute
      * @return boolean query
      */
-    public BooleanQuery createQuery(
-            final Long categoryId,
-            final String attributeName,
-            final String attributeValue) {
+    public BooleanQuery createQuery(final Long categoryId,
+                                    final String attributeName,
+                                    final String attributeValue) {
 
         return addKeyValue(super.createQuery(categoryId), attributeName, attributeValue);
 
@@ -210,25 +155,21 @@ public class AttributiveSearchQueryBuilderImpl extends ProductsInCategoryQueryBu
 
 
         final BooleanQuery productAttrNames = new BooleanQuery();
-        productAttrNames.add(
-                new TermQuery(new Term(ATTRIBUTE_CODE_FIELD, attributeName)),
-                BooleanClause.Occur.SHOULD
-        );
-        productAttrNames.add(
-                new TermQuery(new Term(SKU_ATTRIBUTE_CODE_FIELD, attributeName)),
-                BooleanClause.Occur.SHOULD
-        );
+        final TermQuery pattr = new TermQuery(new Term(ATTRIBUTE_CODE_FIELD, attributeName));
+        pattr.setBoost(2f); // boost for compound queries
+        productAttrNames.add(pattr, BooleanClause.Occur.SHOULD);
+        final TermQuery sattr = new TermQuery(new Term(SKU_ATTRIBUTE_CODE_FIELD, attributeName));
+        sattr.setBoost(2f); // boost for compound queries
+        productAttrNames.add(sattr, BooleanClause.Occur.SHOULD);
 
 
         final BooleanQuery productAttrVal = new BooleanQuery();
-        productAttrVal.add(
-                new TermQuery(new Term(ATTRIBUTE_VALUE_FIELD, attributeName + attributeValue)),
-                BooleanClause.Occur.SHOULD
-        );
-        productAttrVal.add(
-                new TermQuery(new Term(SKU_ATTRIBUTE_VALUE_FIELD, attributeName + attributeValue)),
-                BooleanClause.Occur.SHOULD
-        );
+        final TermQuery pval = new TermQuery(new Term(ATTRIBUTE_VALUE_FIELD, attributeName + attributeValue));
+        pval.setBoost(3.5f); // boost for compound queries
+        productAttrVal.add(pval, BooleanClause.Occur.SHOULD);
+        final TermQuery sval = new TermQuery(new Term(SKU_ATTRIBUTE_VALUE_FIELD, attributeName + attributeValue));
+        sval.setBoost(3.5f); // boost for compound queries
+        productAttrVal.add(sval, BooleanClause.Occur.SHOULD);
 
         if (!query.clauses().isEmpty()) {
             aggregatedQuery.add(query, BooleanClause.Occur.MUST);

@@ -17,16 +17,13 @@
 package org.yes.cart.web.page.component.product;
 
 import org.apache.lucene.search.BooleanQuery;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
+import org.yes.cart.domain.query.impl.TagSearchQueryBuilder;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +36,7 @@ import java.util.List;
  */
 public class NewArrivalProducts extends AbstractProductSearchResultList {
 
+    private final TagSearchQueryBuilder tagSearch = new TagSearchQueryBuilder();
 
     private List<ProductSearchResultDTO> products = null;
 
@@ -63,45 +61,20 @@ public class NewArrivalProducts extends AbstractProductSearchResultList {
         if (products == null) {
             final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
 
-            final ProductsInCategoryQueryBuilderImpl inCat = new ProductsInCategoryQueryBuilderImpl();
+            final long shopId = ShopCodeContext.getShopId();
+            final Date beforeDays = categoryService.getCategoryNewArrivalDate(categoryId, shopId);
+            final int limit = categoryService.getCategoryNewArrivalLimit(categoryId, shopId);
 
-            final BooleanQuery inCategory;
+            final BooleanQuery query;
             if (categoryId > 0L) {
-                inCategory = inCat.createQuery(categoryId);
+                query = tagSearch.createQuery(Arrays.asList(categoryId), shopId, beforeDays);
             } else {
-                final List<Category> topCategories = categoryService.getTopLevelCategories(ShopCodeContext.getShopId());
-                final List<Long> topCategoryIds = new ArrayList<Long>();
-                for (final Category topCategory : topCategories) {
-                    topCategoryIds.add(topCategory.getCategoryId());
-                }
-                inCategory = inCat.createQuery(topCategoryIds);
+                query = tagSearch.createQuery(null, shopId, beforeDays);
             }
 
-            products = productService.getProductSearchResultDTOByQuery(inCategory, 0, getProductsLimit(categoryId),
-                    ProductSearchQueryBuilder.PRODUCT_CREATED_FIELD, true);
+            products = productService.getProductSearchResultDTOByQuery(query, 0, limit, null, true);
         }
         return products;
-    }
-
-    /**
-     * Get quantity limit.
-     *
-     * @return quantity limit
-     */
-    public int getProductsLimit(final long categoryId) {
-        final Category category = categoryService.getById(categoryId);
-        if (category != null) {
-            AttrValue av = category.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_NEW_ARRIVAL);
-            if (av != null) {
-                try {
-                    return Integer.valueOf(av.getVal());
-                } catch (Exception ex) {
-                    return 5;
-                }
-            }
-        }
-        return 5;
-
     }
 
 }

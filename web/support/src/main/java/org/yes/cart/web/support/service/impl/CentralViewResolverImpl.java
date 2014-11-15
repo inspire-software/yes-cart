@@ -16,10 +16,9 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.BooleanQuery;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.util.CollectionUtils;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
 import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
@@ -28,6 +27,7 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
@@ -50,6 +50,9 @@ public class CentralViewResolverImpl implements CentralViewResolver {
     private final LuceneQueryFactory luceneQueryFactory;
 
     private final ProductsInCategoryQueryBuilderImpl productsInCategoryQueryBuilder = new ProductsInCategoryQueryBuilderImpl();
+    private final SkuQueryBuilderImpl skuIdBuilder = new SkuQueryBuilderImpl();
+    private final ProductQueryBuilderImpl productIdBuilder = new ProductQueryBuilderImpl();
+
 
 
     /**
@@ -81,22 +84,26 @@ public class CentralViewResolverImpl implements CentralViewResolver {
      */
     public String resolveMainPanelRendererLabel(final Map parameters) {
 
-        final Set<String> allowedAttributeNames = attributeService.getAllNavigatableAttributeCodes(); //list of product attributes plus brand and price
-
         if (parameters.containsKey(WebParametersKeys.SKU_ID)) {
             return CentralViewLabel.SKU;
         } else if (parameters.containsKey(WebParametersKeys.PRODUCT_ID)) {
             return CentralViewLabel.PRODUCT;
         } else if (parameters.containsKey(WebParametersKeys.QUERY)) {
             return CentralViewLabel.SEARCH_LIST;
-        } else if (isAttributiveFilteredNavigation(allowedAttributeNames, parameters)) {
+        } else if (isAttributiveFilteredNavigation(attributeService.getAllNavigatableAttributeCodes(), parameters)) {  //list of product attributes plus brand and price
             return CentralViewLabel.SEARCH_LIST;
         } else if (parameters.containsKey(WebParametersKeys.CATEGORY_ID)) {
             final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(parameters.get(WebParametersKeys.CATEGORY_ID)));
             if (categoryId > 0) {
 
-                final boolean lookInSubCats = parameters.containsKey(WebParametersKeys.CATEGORY_PRODUCTS_RECURSIVE)
-                        && Boolean.valueOf(String.valueOf(parameters.get(WebParametersKeys.CATEGORY_PRODUCTS_RECURSIVE)));
+                // If we have template just use it without any checks (saves us 1 FT query for each request)
+                final String template = categoryService.getCategoryTemplate(categoryId);
+                if (StringUtils.isNotBlank(template)) {
+                    return template;
+                }
+
+                // If template is not set try to figure out the view
+                final boolean lookInSubCats = categoryService.isSearchInSubcategory(categoryId, ShopCodeContext.getShopId());
 
                 final List<Long> catIds;
                 if (lookInSubCats) {
@@ -105,27 +112,21 @@ public class CentralViewResolverImpl implements CentralViewResolver {
                     catIds = Collections.singletonList(categoryId);
                 }
 
-                final BooleanQuery hasProducts = productsInCategoryQueryBuilder.createQuery(catIds);
+                final BooleanQuery hasProducts = productsInCategoryQueryBuilder.createQuery(catIds, 0L); // Do not use shopId as it will bring all products
 
-                if (!productService.getProductSearchResultDTOByQuery(hasProducts, 0, 1, null, false).isEmpty()) {
+                if (productService.getProductQty(hasProducts) > 0) {
                     return CentralViewLabel.PRODUCTS_LIST;
+                } else if (categoryService.isCategoryHasChildren(categoryId)) {
+                    return CentralViewLabel.SUBCATEGORIES_LIST;
                 } else {
-
-                    final String template = categoryService.getCategoryTemplate(categoryId);
-                    if (template != null) {
-                        return template;
-                    } else if (categoryService.isCategoryHasChildren(categoryId, false)) {
-                        return CentralViewLabel.SUBCATEGORIES_LIST;
-                    } else {
-                        return CentralViewLabel.CATEGORY;
-                    }
+                    return CentralViewLabel.CATEGORY;
                 }
             }
         } else if (parameters.containsKey(WebParametersKeys.CONTENT_ID)) {
             final long contentId = NumberUtils.toLong(HttpUtil.getSingleValue(parameters.get(WebParametersKeys.CONTENT_ID)));
             if (contentId > 0) {
                 final String template = contentService.getContentTemplate(contentId);
-                if (template != null) {
+                if (StringUtils.isNotBlank(template)) {
                     return template;
                 }
                 return CentralViewLabel.CONTENT;
@@ -137,10 +138,8 @@ public class CentralViewResolverImpl implements CentralViewResolver {
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "centralViewResolver-booleanQuery")
-    public BooleanQuery getBooleanQuery(final List<BooleanQuery> queriesChain,
-                                        final String currentQuery,
-                                        final long categoryId,
+    public BooleanQuery getBooleanQuery(final BooleanQuery queriesChain,
+                                        final long shopId,
                                         final List<Long> categories,
                                         final String viewLabel,
                                         final String itemId) {
@@ -148,34 +147,19 @@ public class CentralViewResolverImpl implements CentralViewResolver {
         BooleanQuery rez = null;
 
         if (CentralViewLabel.PRODUCTS_LIST.equals(viewLabel)) {
-            //Products in list
-            final ProductsInCategoryQueryBuilderImpl queryBuilder = new ProductsInCategoryQueryBuilderImpl();
-            if (CollectionUtils.isEmpty(categories)) {
-                rez = queryBuilder.createQuery(categoryId);
-            } else {
-                final List<Long> allCategories = new ArrayList<Long>();
-                for (final Long category : categories) {
-                    if (category != null && category > 0l) {
-                        allCategories.add(category);
-                    }
-                }
-                allCategories.add(categoryId);
-                rez = queryBuilder.createQuery(allCategories);
-            }
+            // Products in list, need to add mandatory category parameters
+            rez = luceneQueryFactory.getSnowBallQuery(queriesChain, productsInCategoryQueryBuilder.createQuery(categories, shopId));
         } else if (CentralViewLabel.SKU.equals(viewLabel)) {
             //single sku
-            final SkuQueryBuilderImpl queryBuilder = new SkuQueryBuilderImpl();
-            rez = queryBuilder.createQuery(itemId);
+            rez = skuIdBuilder.createQuery(itemId);
         } else if (CentralViewLabel.PRODUCT.equals(viewLabel)) {
             //Single product
-            final ProductQueryBuilderImpl queryBuilder = new ProductQueryBuilderImpl();
-            rez = queryBuilder.createQuery(itemId);
+            rez = productIdBuilder.createQuery(itemId);
         } else if (CentralViewLabel.SEARCH_LIST.equals(viewLabel)) {
-            //Product in list via filtered navigation
-            rez = luceneQueryFactory.getSnowBallQuery(queriesChain, currentQuery);
+            // Product in list via filtered navigation, need to add mandatory category parameters
+            rez = luceneQueryFactory.getSnowBallQuery(queriesChain, productsInCategoryQueryBuilder.createQuery(categories, shopId));
 
         }
-
 
         return rez;
 

@@ -28,7 +28,8 @@ import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.component.*;
+import org.yes.cart.web.page.component.AbstractCentralView;
+import org.yes.cart.web.page.component.TopCategories;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsView;
 import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
@@ -48,7 +49,10 @@ import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.theme.WicketCentralViewProvider;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -80,13 +84,6 @@ public class HomePage extends AbstractWebPage {
     private AbstractCentralView centralPanel;
 
     /**
-     * CPOINT
-     * to show all products in subcategories rather than category view
-     * change this to true.
-     */
-    private final boolean categoryProductsRecursive = false;
-
-    /**
      * Construct home page.
      *
      * @param params page parameters
@@ -96,7 +93,6 @@ public class HomePage extends AbstractWebPage {
         super(params);
 
         mapParams = WicketUtil.pageParametesAsMap(params);
-        mapParams.put(WebParametersKeys.CATEGORY_PRODUCTS_RECURSIVE, String.valueOf(categoryProductsRecursive));
 
     }
 
@@ -121,20 +117,21 @@ public class HomePage extends AbstractWebPage {
 
         final Shop shop = ApplicationDirector.getCurrentShop();
 
-        final List<Long> shopSubCategoriesIds = getCategories(categoryId);
+
+        final boolean categoryProductsRecursive = categoryService.isSearchInSubcategory(categoryId, shop.getShopId());
+        final List<Long> currentCategoriesIds = getCategories(categoryId, categoryProductsRecursive);
 
 
-        final List<BooleanQuery> queriesChain = luceneQueryFactory.getFilteredNavigationQueryChain(
+        final BooleanQuery queriesChain = luceneQueryFactory.getFilteredNavigationQueryChain(
                 shop.getShopId(),
-                shopSubCategoriesIds,
+                currentCategoriesIds,
                 mapParams
         );
 
         final BooleanQuery query = centralViewResolver.getBooleanQuery(
                 queriesChain,
-                null,
-                categoryId,
-                categoryProductsRecursive ? shopSubCategoriesIds : null,
+                shop.getShopId(),
+                currentCategoriesIds,
                 centralViewLabel,
                 getItemId()
         );
@@ -194,9 +191,10 @@ public class HomePage extends AbstractWebPage {
      * @return product id or product sku id.
      */
     private String getItemId() {
-        String itemId = HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.PRODUCT_ID));
+        // Sku has priority over product
+        String itemId = HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.SKU_ID));
         if (itemId == null) {
-            itemId = HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.SKU_ID));
+            itemId = HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.PRODUCT_ID));
         }
         return itemId;
     }
@@ -205,32 +203,22 @@ public class HomePage extends AbstractWebPage {
     /**
      * Get category sub tree as list, that starts from given category id.
      *
+     *
      * @param categoryId root of tree.
+     * @param includeSubCategories allow subcategories
      * @return list of categories, that belong to sub tree.
      */
-    private List<Long> getCategories(final Long categoryId) {
-        if (categoryId > 0) {
-            return new ArrayList<Long>(categoryService.getChildCategoriesRecursiveIds(categoryId));
+    private List<Long> getCategories(final Long categoryId, final boolean includeSubCategories) {
+        if (categoryId != null && categoryId > 0) {
+            if (includeSubCategories) {
+                // this will include the categoryId as well
+                return new ArrayList<Long>(categoryService.getChildCategoriesRecursiveIds(categoryId));
+            }
+            return Collections.singletonList(categoryId);
         } else {
-            return Arrays.asList(0L);
+            return Collections.emptyList();
         }
     }
-
-    /**
-     * Registered main panel renderers
-     */
-    private static final Map<String, Class<? extends AbstractCentralView>> rendererPanelMap =
-            new HashMap<String, Class<? extends AbstractCentralView>>() {{
-                put(CentralViewLabel.SUBCATEGORIES_LIST, SubCategoriesCentralView.class);
-                put(CentralViewLabel.PRODUCTS_LIST, ProductsCentralView.class);
-                put(CentralViewLabel.PRODUCT, SkuCentralView.class);
-                put(CentralViewLabel.SKU, SkuCentralView.class);
-                put(CentralViewLabel.SEARCH_LIST, ProductsCentralView.class);
-                put(CentralViewLabel.CONTENT, ContentCentralView.class);
-                put(CentralViewLabel.DYNOCONTENT, DynoContentCentralView.class);
-                put(CentralViewLabel.CATEGORY, EmptyCentralView.class);
-                put(CentralViewLabel.DEFAULT, EmptyCentralView.class);
-            }};
 
     /**
      * Get the main panel renderer by given renderer label.

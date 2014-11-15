@@ -171,6 +171,16 @@ public interface AttributeNamesKeys {
          */
         String CATEGORY_DESCRIPTION_PREFIX = "CATEGORY_DESCRIPTION_";
 
+        /**
+         * Flag whether to include subcategories in search
+         */
+        String CATEGORY_INCLUDE_SUBCATEGORIES_IN_SEARCH = "INCLUDE_SUBCATEGORIES_IN_SEARCH_CAT";
+
+        /**
+         * Number of days for newarrival tag
+         */
+        String CATEGORY_NEW_ARRIVAL_DAYS_OFFSET = "CATEGORY_NEW_ARRIVAL_DAYS_OFFSET";
+
 
     }
 
@@ -244,6 +254,16 @@ public interface AttributeNamesKeys {
          * Setting for whether to show quantity picker or not
          */
         String CART_ADD_ENABLE_QTY_PICKER = "CART_ADD_ENABLE_QTY_PICKER";
+
+        /**
+         * Flag whether to include subcategories in search
+         */
+        String SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH = "INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP";
+
+        /**
+         * Number of days for newarrival tag
+         */
+        String SHOP_NEW_ARRIVAL_DAYS_OFFSET = "SHOP_NEW_ARRIVAL_DAYS_OFFSET";
 
     }
 

@@ -114,6 +114,12 @@ public interface Constants {
     List<String> DEFAULT_ITEMS_ON_PAGE = Arrays.asList("10", "20", "30");
 
 
+    /**
+     * Delimiter for range navigation value. Need to select this value carefully so that
+     * parameter parser can distinguish between range and single values.
+     */
+    String RANGE_NAVIGATION_DELIMITER = "-_-";
+
     long ROOT_CATEGORY_ID = 100L;
 
 }

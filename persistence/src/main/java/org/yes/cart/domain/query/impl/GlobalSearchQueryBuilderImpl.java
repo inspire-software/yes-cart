@@ -110,31 +110,66 @@ public class GlobalSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
                                      damaging to search especially in Russian language. The worst example would
                                      be fuzzy 0.5 on color, which is Russian has common ending for adjectives
                                      in all colors
+
+               In order to provide better matches we use the following boosts:
+               Name:            2.5
+               Display name:    3.0
+               Brand:           3.0
+               CODE:            4.0
+               Attributes:      1.0
+               CODE Stems:      1.0
+               Description:     0.4 (Descriptions can be noisy so suppress its significance)
              */
 
             if (abatement) {
 
-                termQuery.add(new FuzzyQuery(new Term(PRODUCT_NAME_FIELD, word)), BooleanClause.Occur.SHOULD);
-                termQuery.add(new FuzzyQuery(new Term(PRODUCT_DISPLAYNAME_FIELD, word)), BooleanClause.Occur.SHOULD);
-                termQuery.add(new FuzzyQuery(new Term(BRAND_FIELD, word.toLowerCase()), 0.7f), BooleanClause.Occur.SHOULD);
+                final FuzzyQuery name = new FuzzyQuery(new Term(PRODUCT_NAME_FIELD, word));
+                name.setBoost(2.5f);
+                termQuery.add(name, BooleanClause.Occur.SHOULD);
+                final FuzzyQuery dname = new FuzzyQuery(new Term(PRODUCT_DISPLAYNAME_FIELD, word));
+                dname.setBoost(3f);
+                termQuery.add(dname, BooleanClause.Occur.SHOULD);
+                final FuzzyQuery brand = new FuzzyQuery(new Term(BRAND_FIELD, word.toLowerCase()), 0.7f);
+                brand.setBoost(3f);
+                termQuery.add(brand, BooleanClause.Occur.SHOULD);
+                final FuzzyQuery pcode = new FuzzyQuery(new Term(PRODUCT_CODE_FIELD, word), 0.7f);
+                pcode.setBoost(4f);
+                termQuery.add(pcode, BooleanClause.Occur.SHOULD);
+                final FuzzyQuery scode = new FuzzyQuery(new Term(SKU_PRODUCT_CODE_FIELD, word), 0.7f);
+                scode.setBoost(4f);
+                termQuery.add(scode, BooleanClause.Occur.SHOULD);
+
                 termQuery.add(new FuzzyQuery(new Term(ATTRIBUTE_VALUE_SEARCH_FIELD, word), 0.65f), BooleanClause.Occur.SHOULD);
                 termQuery.add(new FuzzyQuery(new Term(SKU_ATTRIBUTE_VALUE_SEARCH_FIELD, word), 0.65f), BooleanClause.Occur.SHOULD);
-                termQuery.add(new FuzzyQuery(new Term(PRODUCT_CODE_FIELD, word), 0.7f), BooleanClause.Occur.SHOULD);
-                termQuery.add(new FuzzyQuery(new Term(SKU_PRODUCT_CODE_FIELD, word), 0.7f), BooleanClause.Occur.SHOULD);
 
-                termQuery.add(new FuzzyQuery(new Term(PRODUCT_DESCRIPTION_FIELD, word.toLowerCase()), 0.85f), BooleanClause.Occur.SHOULD);
                 termQuery.add(new FuzzyQuery(new Term(PRODUCT_CODE_STEM_FIELD, word.toLowerCase()), 0.75f), BooleanClause.Occur.SHOULD);
                 termQuery.add(new FuzzyQuery(new Term(SKU_PRODUCT_CODE_STEM_FIELD, word.toLowerCase()), 0.75f), BooleanClause.Occur.SHOULD);
 
+                final FuzzyQuery desc = new FuzzyQuery(new Term(PRODUCT_DESCRIPTION_FIELD, word.toLowerCase()), 0.85f);
+                desc.setBoost(0.4f);
+                termQuery.add(desc, BooleanClause.Occur.SHOULD);
+
             } else {
 
-                termQuery.add(new FuzzyQuery(new Term(PRODUCT_NAME_FIELD, word), 0.6f), BooleanClause.Occur.SHOULD);
-                termQuery.add(new FuzzyQuery(new Term(PRODUCT_DISPLAYNAME_FIELD, word), 0.6f), BooleanClause.Occur.SHOULD);
-                termQuery.add(new FuzzyQuery(new Term(BRAND_FIELD, word.toLowerCase()), 0.8f), BooleanClause.Occur.SHOULD);
+                final FuzzyQuery name = new FuzzyQuery(new Term(PRODUCT_NAME_FIELD, word), 0.6f);
+                name.setBoost(2.5f);
+                termQuery.add(name, BooleanClause.Occur.SHOULD);
+                final FuzzyQuery dname = new FuzzyQuery(new Term(PRODUCT_DISPLAYNAME_FIELD, word), 0.6f);
+                dname.setBoost(3f);
+                termQuery.add(dname, BooleanClause.Occur.SHOULD);
+                final FuzzyQuery brand = new FuzzyQuery(new Term(BRAND_FIELD, word.toLowerCase()), 0.8f);
+                brand.setBoost(3f);
+                termQuery.add(brand, BooleanClause.Occur.SHOULD);
+
+                final FuzzyQuery pcode = new FuzzyQuery(new Term(PRODUCT_CODE_FIELD, word), 0.8f);
+                pcode.setBoost(4f);
+                termQuery.add(pcode, BooleanClause.Occur.SHOULD);
+                final FuzzyQuery scode = new FuzzyQuery(new Term(SKU_PRODUCT_CODE_FIELD, word), 0.8f);
+                scode.setBoost(4f);
+                termQuery.add(scode, BooleanClause.Occur.SHOULD);
+
                 termQuery.add(new FuzzyQuery(new Term(ATTRIBUTE_VALUE_SEARCH_FIELD, word), 0.65f), BooleanClause.Occur.SHOULD);
                 termQuery.add(new FuzzyQuery(new Term(SKU_ATTRIBUTE_VALUE_SEARCH_FIELD, word), 0.65f), BooleanClause.Occur.SHOULD);
-                termQuery.add(new FuzzyQuery(new Term(PRODUCT_CODE_FIELD, word), 0.8f), BooleanClause.Occur.SHOULD);
-                termQuery.add(new FuzzyQuery(new Term(SKU_PRODUCT_CODE_FIELD, word), 0.8f), BooleanClause.Occur.SHOULD);
 
             }
 

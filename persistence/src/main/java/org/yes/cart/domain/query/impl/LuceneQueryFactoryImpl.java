@@ -23,13 +23,16 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.Product;
+import org.slf4j.Logger;
+import org.springframework.util.CollectionUtils;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
@@ -63,27 +66,38 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     private final PriceNavigation priceNavigation;
     private final AttributeService attributeService;
-    private final GenericDAO<Product, Long> productDao;
+    private final ProductService productService;
+    private final CategoryService categoryService;
 
+    private final BrandSearchQueryBuilder brandSearchQueryBuilder = new BrandSearchQueryBuilder();
+    private final TagSearchQueryBuilder tagSearchQueryBuilder = new TagSearchQueryBuilder();
+    private final PriceSearchQueryBuilderImpl priceSearchQueryBuilder = new PriceSearchQueryBuilderImpl();
+    private final AttributiveSearchQueryBuilderImpl attributeSearchQueryBuilder = new AttributiveSearchQueryBuilderImpl();
+    private final GlobalSearchQueryBuilderImpl globalSearchQueryBuilder = new GlobalSearchQueryBuilderImpl();
 
     /**
      * Construct query builder factory.
      *
      * @param priceNavigation  price navigation service
      * @param attributeService attribute service to filter not allowed page parameters during filtered navigation
-     * @param productDao product dao service
+     * @param productService   product service
+     * @param categoryService  category service
      */
     public LuceneQueryFactoryImpl(final PriceNavigation priceNavigation,
                                   final AttributeService attributeService,
-                                  final GenericDAO<Product, Long> productDao) {
+                                  final ProductService productService,
+                                  final CategoryService categoryService) {
         this.priceNavigation = priceNavigation;
         this.attributeService = attributeService;
-        this.productDao = productDao;
+        this.productService = productService;
+
+        this.categoryService = categoryService;
     }
 
 
     private MultiFieldQueryParser getMultiFieldQueryParser(final boolean abatement) {
 
+        // MultiFieldQueryParser is not thread safe so need new instance every time
         final MultiFieldQueryParser multiFieldQueryParser = new MultiFieldQueryParser(
                 Version.LUCENE_31,
                 fields,
@@ -98,7 +112,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      * Parse string into query
      *
      * @param queryString string representation of lucene query
-     * @return query if string was successfuly parsed.
+     * @return query if string was successfully parsed.
      */
     private Query parseQuery(final String queryString, final boolean abatement) {
         try {
@@ -109,34 +123,28 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         return null;
     }
 
+    private BooleanQuery join(final List<BooleanQuery> allQueries, final BooleanQuery currentQuery) {
 
-    /**
-     * Get the combined from query chain query.
-     * The current query will be last in this chain.
-     * Chain will be truncated if <code>currentQuery</code> already present in
-     * list
-     *
-     * @param allQueries   query chain
-     * @param currentQuery optional current query
-     * @return combined from chain query
-     */
-    public BooleanQuery getSnowBallQuery(final List<BooleanQuery> allQueries, final String currentQuery) {
         BooleanQuery booleanQuery = new BooleanQuery();
-        
-        for (int i = 0 ; i < allQueries.size(); i++) {
-            booleanQuery.add(
-                    allQueries.get(i),
-                    BooleanClause.Occur.MUST
-            );
-        }
 
-        if (currentQuery != null) {
-            // add current query
-            Query query = parseQuery(currentQuery, false);
-            if (query != null) {
-                booleanQuery.add(query, BooleanClause.Occur.MUST);
+        if (allQueries.size() > 1) {
+            for (final BooleanQuery allQuery : allQueries) {
+                booleanQuery.add(allQuery, BooleanClause.Occur.MUST);
+            }
+
+            if (currentQuery != null) {
+                booleanQuery.add(currentQuery, BooleanClause.Occur.MUST);
+            }
+
+        } else if (allQueries.size() == 1) {
+            if (currentQuery != null) {
+                booleanQuery.add(allQueries.get(0), BooleanClause.Occur.MUST);
+                booleanQuery.add(currentQuery, BooleanClause.Occur.MUST);
+            } else {
+                booleanQuery = allQueries.get(0);
             }
         }
+
         return booleanQuery;
 
     }
@@ -144,22 +152,27 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     /**
      * Get the combined from query chain query.
-     * The currect query will be last in this chain.
+     * The current query will be last in this chain.
      * Chain will be truncated if <code>currentQuery</code> already present in
      * list
+     *
+     * NOTE: the parameter queries may be mutated, please take care. If you need a copy of this
+     *       you must clone it before passing to this method.
      *
      * @param allQueries   query chain as query
      * @param currentQuery optional current query
      * @return combined from chain query
      */
     public BooleanQuery getSnowBallQuery(final BooleanQuery allQueries, final Query currentQuery) {
+
+        if (currentQuery == null || StringUtils.isBlank(currentQuery.toString())) {
+            return allQueries;
+        }
         BooleanQuery booleanQuery = new BooleanQuery();
         if (allQueries != null && StringUtils.isNotBlank(allQueries.toString())) {
             booleanQuery.add(allQueries, BooleanClause.Occur.MUST);
         }
-        if (currentQuery != null && StringUtils.isNotBlank(currentQuery.toString())) {
-            booleanQuery.add(currentQuery, BooleanClause.Occur.MUST);
-        }
+        booleanQuery.add(currentQuery, BooleanClause.Occur.MUST);
         return booleanQuery;
     }
 
@@ -176,11 +189,9 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      * @param categories        given category ids
      * @return ordered by cookie name list of cookies
      */
-    //@Cacheable(value = "luceneQueryFactoryImplMethodCache")
-    public List<BooleanQuery> getFilteredNavigationQueryChain(
-            final Long shopId,
-            final List<Long> categories,
-            final Map<String, ?> requestParameters) {
+    public BooleanQuery getFilteredNavigationQueryChain(final Long shopId,
+                                                        final List<Long> categories,
+                                                        final Map<String, ?> requestParameters) {
 
         final Set<String> allowedAttributeCodes = attributeService.getAllNavigatableAttributeCodes();
 
@@ -194,22 +205,21 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
                     for (Object val : values) {
                         BooleanQuery query;
                         if (ProductSearchQueryBuilder.BRAND_FIELD.equals(decodedKeyName)) {
-                            query = createBrandChain(categories, val);
+                            query = createBrandChain(shopId, categories, val);
                         } else if (ProductSearchQueryBuilder.PRODUCT_TAG_FIELD.equals(decodedKeyName)) {
-                            query = createTagChain(categories, val);
+                            query = createTagChain(shopId, categories, val);
                         } else if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(decodedKeyName)) {
                             query = createPriceChain(shopId, categories, val);
                         } else if (ProductSearchQueryBuilder.QUERY.equals(decodedKeyName)) {
                             query = createSearchChain(categories, shopId, val, false);
-                            final BooleanQuery booleanQueryToTest = getSnowBallQuery(queryChain, query.toString());
+                            final BooleanQuery booleanQueryToTest = join(queryChain, query);
                             // Take care here - we only need FT, so always put some projection value to prevent db access
-                            if (productDao.fullTextSearch(booleanQueryToTest, 0, 1, null, false,
-                                    ProductSearchQueryBuilder.PRODUCT_CODE_FIELD).isEmpty()) {
+                            if (productService.getProductQty(booleanQueryToTest) == 0) {
                                 //create not very strict query with lowercase
                                 query = createSearchChain(categories, shopId, val, true);
                             }
                         } else {
-                            query = createAttributeChain(categories, decodedKeyName, val);
+                            query = createAttributeChain(categories, shopId, decodedKeyName, val);
                         }
                         queryChain.add(query);
 
@@ -218,28 +228,37 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
             }
         }
 
-        return queryChain;
+        BooleanQuery out = null;
+        if (!queryChain.isEmpty()) {
+            out = join(queryChain, null);
+        }
+        final Logger log = ShopCodeContext.getLog(this);
+        if (log.isDebugEnabled()) {
+            log.debug("Constructed query {}", out);
+        }
+        return out;
     }
 
-    private BooleanQuery createAttributeChain(final List<Long> categories, final String decodedKeyName, final Object val) {
+    private BooleanQuery createAttributeChain(final List<Long> categories, final long shopId, final String decodedKeyName, final Object val) {
         BooleanQuery query;
-        final AttributiveSearchQueryBuilderImpl attributeSearchQueryBuilder = new AttributiveSearchQueryBuilderImpl();
         //is it Single or Range value navigation, determination will be based on hyphen atm
         final String attrValue = String.valueOf(val);
-        if (attrValue.indexOf('-') > -1) { // value range navigation
-            final String[] attrValues = attrValue.split("-");
-            final Pair<String, String> valueRange = new Pair<String, String>(attrValues[0], attrValues[1]);
-            query = attributeSearchQueryBuilder.createQuery(categories, decodedKeyName, valueRange);
+        if (attrValue.indexOf(Constants.RANGE_NAVIGATION_DELIMITER) > -1) { // value range navigation
+            final String[] attrValues = StringUtils.split(attrValue, Constants.RANGE_NAVIGATION_DELIMITER);
+            final Pair<String, String> valueRange = new Pair<String, String>(
+                    attrValues.length > 0 ? attrValues[0] : null,
+                    attrValues.length > 1 ? attrValues[1] : null
+            );
+            query = attributeSearchQueryBuilder.createQuery(categories, shopId, decodedKeyName, valueRange);
         } else { //single attribute value navigation
-            query = attributeSearchQueryBuilder.createQuery(categories, decodedKeyName, attrValue);
+            query = attributeSearchQueryBuilder.createQuery(categories, shopId, decodedKeyName, attrValue);
         }
         return query;
     }
 
-    private BooleanQuery createSearchChain(final List<Long> categories, final Long shopId, final Object val, final boolean abatement) {
+    private BooleanQuery createSearchChain(final List<Long> categories, final long shopId, final Object val, final boolean abatement) {
         BooleanQuery query;
-        final GlobalSearchQueryBuilderImpl globalSearchQueryBuilder = new GlobalSearchQueryBuilderImpl();
-        if (categories.size() == 1 && categories.get(0) == 0) {
+        if (CollectionUtils.isEmpty(categories)) {
             query = globalSearchQueryBuilder.createQuerySearchInShop(String.valueOf(val), shopId, abatement);
         } else {
             query = globalSearchQueryBuilder.createQuerySearchInCategories(String.valueOf(val), categories, abatement);
@@ -261,7 +280,6 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
     private BooleanQuery createPriceChain(final Long shopId, final List<Long> categories, final Object val) {
         final Pair<String, Pair<BigDecimal, BigDecimal>> priceRequestParams =
                 priceNavigation.decomposePriceRequestParams(String.valueOf(val));
-        final PriceSearchQueryBuilderImpl priceSearchQueryBuilder = new PriceSearchQueryBuilderImpl();
         return priceSearchQueryBuilder.createQuery(
                 categories,
                 shopId,
@@ -271,29 +289,29 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         );
     }
 
-    /**
-     * Create query to search by brand name in given categories.
-     *
-     * @param categories given categories
-     * @param val        brand name
-     * @return {@link BooleanQuery}
-     */
-    private BooleanQuery createBrandChain(final List<Long> categories, final Object val) {
-        final BrandSearchQueryBuilder brandSearchQueryBuilder = new BrandSearchQueryBuilder();
-        return brandSearchQueryBuilder.createQuery(categories, String.valueOf(val));
+    private BooleanQuery createBrandChain(final Long shopId, final List<Long> categories, final Object val) {
+        return brandSearchQueryBuilder.createQuery(categories, shopId, String.valueOf(val));
     }
 
 
-    /**
-     * Create query to search by product tag in given categories.
-     *
-     * @param categories given categories
-     * @param val        given product tag
-     * @return {@link BooleanQuery}
-     */
-    private BooleanQuery createTagChain(final List<Long> categories, final Object val) {
-        final TagSearchQueryBuilder tagSearchQueryBuilder = new TagSearchQueryBuilder();
-        return tagSearchQueryBuilder.createQuery(categories, String.valueOf(val));
+    private BooleanQuery createTagChain(final Long shopId, final List<Long> categories, final Object val) {
+        if (TagSearchQueryBuilder.TAG_NEWARRIVAL.equals(val)) {
+
+            Date beforeDays = new Date();
+            if (CollectionUtils.isEmpty(categories)) {
+                beforeDays = categoryService.getCategoryNewArrivalDate(0L, shopId);
+            } else {
+                for (final Long categoryId : categories) {
+                    Date catBeforeDays = categoryService.getCategoryNewArrivalDate(categoryId, shopId);
+                    if (catBeforeDays.before(beforeDays)) {
+                        beforeDays = catBeforeDays; // get the earliest
+                    }
+                }
+            }
+
+            return tagSearchQueryBuilder.createQuery(categories, shopId, beforeDays);
+        }
+        return tagSearchQueryBuilder.createQuery(categories, shopId, String.valueOf(val));
     }
 
 

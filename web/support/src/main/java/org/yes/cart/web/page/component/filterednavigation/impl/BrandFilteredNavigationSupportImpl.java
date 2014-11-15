@@ -48,12 +48,13 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
     @Cacheable(value = "filteredNavigationSupport-brandFilteredNavigationRecords")
     public List<FilteredNavigationRecord> getFilteredNavigationRecords(final BooleanQuery query,
                                                                        final List<Long> categories,
+                                                                       final long shopId,
                                                                        final String locale,
                                                                        final String recordName) {
 
         final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
 
-        if (!isAttributeAlreadyFiltered(query, ProductSearchQueryBuilder.BRAND_FIELD)) {
+        if (categories != null && !isAttributeAlreadyFiltered(query, ProductSearchQueryBuilder.BRAND_FIELD)) {
 
             final List<FilteredNavigationRecord> allNavigationRecordsTemplates = getProductService().getDistinctBrands(locale, categories);
 
@@ -62,7 +63,7 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
                 final FilteredNavigationRecord record = recordTemplate.clone();
                 final BooleanQuery candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
                         query,
-                        queryBuilder.createQuery(categories, record.getValue())
+                        queryBuilder.createQuery(categories, shopId, record.getValue())
                 );
                 int candidateResultCount = getProductService().getProductQty(candidateQuery);
                 if (candidateResultCount > 0) {

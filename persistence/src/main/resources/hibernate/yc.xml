@@ -3135,6 +3135,13 @@
         ]]>
     </query>
 
+    <query name="SHOP.ATTRIBUTE.BY.ID.AND.ATTRCODE">
+        <![CDATA[
+            select a.val from AttrValueEntityShop a
+            where a.shop.shopId = ?1 and a.attribute.code = ?2
+        ]]>
+    </query>
+
     <query name="BRAND.NAME.AND.GUID.BY.IMAGE.NAME">
         <![CDATA[
             select a.brand.name, a.brand.guid from AttrValueEntityBrand a

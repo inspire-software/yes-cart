@@ -175,7 +175,7 @@ public interface ProductService extends GenericService<Product> {
      *
      * @param locale locale
      * @param productTypeId product type id
-     * @return list of distinct attib values
+     * @return list of distinct attrib values
      */
     List<FilteredNavigationRecord> getDistinctAttributeValues(String locale, long productTypeId);
 

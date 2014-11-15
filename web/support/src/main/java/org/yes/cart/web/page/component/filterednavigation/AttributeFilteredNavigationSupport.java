@@ -33,6 +33,7 @@ public interface AttributeFilteredNavigationSupport {
      *
      * @param query boolean query
      * @param categories current categories
+     * @param shopId current shop
      * @param locale selected locale
      * @param productTypeId product type
      *
@@ -40,6 +41,7 @@ public interface AttributeFilteredNavigationSupport {
      */
     List<FilteredNavigationRecord> getFilteredNavigationRecords(final BooleanQuery query,
                                                                 final List<Long> categories,
+                                                                final long shopId,
                                                                 final String locale,
                                                                 final long productTypeId);
 

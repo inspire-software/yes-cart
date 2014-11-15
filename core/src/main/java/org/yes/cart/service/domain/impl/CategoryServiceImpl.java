@@ -17,6 +17,7 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -90,7 +91,10 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "shopService-shopByDomainName",
             "shopService-allShops",
             "shopService-shopCategoriesIds",
-            "shopService-shopAllCategoriesIds"
+            "shopService-shopAllCategoriesIds",
+            "categoryService-searchInSubcategory",
+            "categoryService-categoryNewArrivalLimit",
+            "categoryService-categoryNewArrivalDate"
     }, allEntries = true)
     public ShopCategory assignToShop(final long categoryId, final long shopId) {
         final ShopCategory shopCategory = shopCategoryDao.getEntityFactory().getByIface(ShopCategory.class);
@@ -109,7 +113,10 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "shopService-shopByDomainName",
             "shopService-allShops",
             "shopService-shopCategoriesIds",
-            "shopService-shopAllCategoriesIds"
+            "shopService-shopAllCategoriesIds",
+            "categoryService-searchInSubcategory",
+            "categoryService-categoryNewArrivalLimit",
+            "categoryService-categoryNewArrivalDate"
     }, allEntries = true)
     public void unassignFromShop(final long categoryId, final long shopId) {
         ShopCategory shopCategory = shopCategoryDao.findSingleByNamedQuery(
@@ -160,6 +167,89 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             }
         }
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "categoryService-categoryNewArrivalLimit")
+    public int getCategoryNewArrivalLimit(final long categoryId, final long shopId) {
+
+        if (categoryId > 0L) {
+            final Category category = proxy().getById(categoryId);
+            if (category != null) {
+                final String value = proxy().getCategoryAttributeRecursive(
+                        null, category, AttributeNamesKeys.Category.CATEGORY_ITEMS_NEW_ARRIVAL, null);
+                if (value != null) {
+                    final int limit = NumberUtils.toInt(value, 0);
+                    if (limit > 1) {
+                        return limit;
+                    }
+                }
+            }
+        }
+
+        return 5;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "categoryService-categoryNewArrivalDate")
+    public Date getCategoryNewArrivalDate(final long categoryId, final long shopId) {
+
+        if (categoryId > 0L) {
+            final Category category = proxy().getById(categoryId);
+            if (category != null) {
+                final String value = proxy().getCategoryAttributeRecursive(
+                        null, category, AttributeNamesKeys.Category.CATEGORY_ITEMS_NEW_ARRIVAL, null);
+                if (value != null) {
+                    final int days = NumberUtils.toInt(value, 0);
+                    if (days > 1) {
+                        final Calendar beforeDays = Calendar.getInstance();
+                        beforeDays.add(Calendar.DAY_OF_YEAR, -days);
+                        return beforeDays.getTime();
+                    }
+                }
+            }
+        }
+
+        final List<Object> value = getGenericDao().findQueryObjectByNamedQuery("SHOP.ATTRIBUTE.BY.ID.AND.ATTRCODE",
+                shopId, AttributeNamesKeys.Shop.SHOP_NEW_ARRIVAL_DAYS_OFFSET);
+        final int days;
+        if (value != null && value.size() > 0) {
+            days = NumberUtils.toInt((String) value.get(0), 15);
+        } else {
+            days = 15;
+        }
+        final Calendar beforeDays = Calendar.getInstance();
+        beforeDays.add(Calendar.DAY_OF_YEAR, -days);
+        return beforeDays.getTime();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "categoryService-searchInSubcategory")
+    public boolean isSearchInSubcategory(final long categoryId, final long shopId) {
+
+        if (categoryId > 0L) {
+            final Category category = proxy().getById(categoryId);
+            if (category != null) {
+                final String value = proxy().getCategoryAttributeRecursive(
+                        null, category, AttributeNamesKeys.Category.CATEGORY_INCLUDE_SUBCATEGORIES_IN_SEARCH, null);
+                if (value != null) {
+                    return Boolean.valueOf(value);
+                }
+            }
+        }
+
+        final List<Object> value = getGenericDao().findQueryObjectByNamedQuery("SHOP.ATTRIBUTE.BY.ID.AND.ATTRCODE",
+                shopId, AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
+        if (value != null && value.size() > 0) {
+            return Boolean.valueOf((String) value.get(0));
+        }
+        return false;
     }
 
     /**
@@ -339,22 +429,12 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * {@inheritDoc}
      */
     @Cacheable(value = "categoryService-categoryHasChildren")
-    public boolean isCategoryHasChildren(final long categoryId, final boolean includeChildren) {
+    public boolean isCategoryHasChildren(final long categoryId) {
         List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.SUBCATEGORY.COUNT", categoryId);
         if (count != null && count.size() == 1) {
             int qty = ((Number) count.get(0)).intValue();
             if (qty > 0) {
                 return true;
-            }
-            if (includeChildren) {
-                List<Category> childs = proxy().getChildCategories(categoryId);
-                for (Category childCategory : childs) {
-                    final boolean childHasProducts = proxy().isCategoryHasChildren(childCategory.getCategoryId(), includeChildren);
-                    if (childHasProducts) {
-                        return true;
-                    }
-                }
-
             }
         }
         return false;
@@ -550,6 +630,9 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-rootCategory",
             "categoryService-categoryTemplateVariation",
             "categoryService-categoryTemplate",
+            "categoryService-searchInSubcategory",
+            "categoryService-categoryNewArrivalLimit",
+            "categoryService-categoryNewArrivalDate",
             "categoryService-itemsPerPage",
             "categoryService-categoryAttributeRecursive",
             "categoryService-categoryAttributesRecursive",
@@ -576,6 +659,9 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-rootCategory",
             "categoryService-categoryTemplateVariation",
             "categoryService-categoryTemplate",
+            "categoryService-searchInSubcategory",
+            "categoryService-categoryNewArrivalLimit",
+            "categoryService-categoryNewArrivalDate",
             "categoryService-itemsPerPage",
             "categoryService-categoryAttributeRecursive",
             "categoryService-categoryAttributesRecursive",

@@ -41,10 +41,11 @@ public class ShopCodeContext {
      * @return current shop code.
      */
     public static String getShopCode() {
-        if (shopCode.get() == null) {
-            shopCode.set("DEFAULT");
+        final String code = shopCode.get();
+        if (code == null) {
+            return "DEFAULT";
         }
-        return shopCode.get();
+        return code;
     }
 
     /**
@@ -62,7 +63,11 @@ public class ShopCodeContext {
      * @return current shop id
      */
     public static Long getShopId() {
-        return shopId.get();
+        final Long code = shopId.get();
+        if (code == null) {
+            return 0L;
+        }
+        return code;
     }
 
     /**

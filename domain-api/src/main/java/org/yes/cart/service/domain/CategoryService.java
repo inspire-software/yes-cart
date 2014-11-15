@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ShopCategory;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -87,7 +88,35 @@ public interface CategoryService extends GenericService<Category> {
      */
     String getCategoryTemplate(long categoryId);
 
+    /**
+     * Max number of newarrival products for small view
+     *
+     * @param categoryId current category
+     * @param shopId current shop
+     *
+     * @return max number of products
+     */
+    int getCategoryNewArrivalLimit(long categoryId, long shopId);
 
+    /**
+     * Number of days that counts towards newarrival products
+     *
+     * @param categoryId current category
+     * @param shopId current shop
+     *
+     * @return max number of days
+     */
+    Date getCategoryNewArrivalDate(long categoryId, long shopId);
+
+    /**
+     * Check if product search should include sub categories.
+     *
+     * @param categoryId current category
+     * @param shopId current shop
+     *
+     * @return true if search in subcategories too
+     */
+    boolean isSearchInSubcategory(long categoryId, long shopId);
 
     /**
      * Count products in given category.
@@ -111,10 +140,10 @@ public interface CategoryService extends GenericService<Category> {
      * Does given this category have at least one sub category.
      *
      * @param categoryId   given categoryId
-     * @param includeChildren true if need include child categories
+     *
      * @return true if at least one sub category exists
      */
-    boolean isCategoryHasChildren(long categoryId, boolean includeChildren);
+    boolean isCategoryHasChildren(long categoryId);
 
 
     /**

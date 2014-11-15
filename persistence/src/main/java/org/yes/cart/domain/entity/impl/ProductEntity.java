@@ -36,6 +36,7 @@ import java.util.*;
  */
 
 @Indexed(index = "luceneindex/product", interceptor = org.yes.cart.domain.interceptor.ProductEntityIndexingInterceptor.class)
+@DynamicBoost(impl = ProductDynamicBoostStrategy.class)
 public class ProductEntity implements org.yes.cart.domain.entity.Product, java.io.Serializable {
 
     private ProductSku defaultProductSku = null;

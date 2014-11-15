@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.query.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.PriceNavigation;
@@ -32,17 +33,14 @@ import java.text.DecimalFormat;
  */
 public class PriceNavigationImpl implements PriceNavigation {
 
-    private final static String PRICE_REQUEST_DELIMITER = "-";
-
-
     /**
      * Expected value in following format CUR-LOW-HIGH format
      *
-     * @param val value rfom request
+     * @param val value from request
      * @return filled price tier node.
      */
     public Pair<String, Pair<BigDecimal, BigDecimal>> decomposePriceRequestParams(final String val) {
-        final String[] currencyPriceBorders = val.split(PRICE_REQUEST_DELIMITER);
+        final String[] currencyPriceBorders = StringUtils.split(val, Constants.RANGE_NAVIGATION_DELIMITER);
         final Pair<BigDecimal, BigDecimal> priceBorders =
                 new Pair<BigDecimal, BigDecimal>(
                         new BigDecimal(currencyPriceBorders[1]),
@@ -54,7 +52,7 @@ public class PriceNavigationImpl implements PriceNavigation {
     }
 
     /**
-     * Compoce price tier into string representation.
+     * Compose price tier into string representation.
      *
      * @param currency   currency
      * @param lowBorder  low price
@@ -62,7 +60,7 @@ public class PriceNavigationImpl implements PriceNavigation {
      * @return string representation in CUR-LOW-HIGH format
      */
     public String composePriceRequestParams(final String currency, final BigDecimal lowBorder, final BigDecimal highBorder) {
-        return composePriceRequestParams(currency, lowBorder, highBorder, PRICE_REQUEST_DELIMITER, PRICE_REQUEST_DELIMITER);
+        return composePriceRequestParams(currency, lowBorder, highBorder, Constants.RANGE_NAVIGATION_DELIMITER, Constants.RANGE_NAVIGATION_DELIMITER);
     }
 
 
