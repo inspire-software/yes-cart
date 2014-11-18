@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.page.component;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.basic.Label;
@@ -187,7 +187,7 @@ public class SkuCentralView extends AbstractCentralView {
      * @param categoryId   current category id.
      * @param booleanQuery boolean query.
      */
-    public SkuCentralView(final String id, final long categoryId, final BooleanQuery booleanQuery) {
+    public SkuCentralView(final String id, final long categoryId, final Query booleanQuery) {
         super(id, categoryId, booleanQuery);
     }
 

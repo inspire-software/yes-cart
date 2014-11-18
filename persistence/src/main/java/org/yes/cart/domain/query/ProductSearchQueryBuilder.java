@@ -79,6 +79,9 @@ public interface ProductSearchQueryBuilder {
     // not really a field, but used for global search
     public final static String QUERY = "query";
 
+
+    public final String TAG_NEWARRIVAL = "newarrival";
+
     //--------------------------------------- categories -----------------------------------
 
     public final static String CATEGORY_NAME_FIELD = "name";

@@ -16,16 +16,18 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,6 +40,9 @@ import java.util.List;
  * Time: 15:36:10
  */
 public class ProductAssociationsView extends AbstractProductSearchResultList {
+
+    @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
+    private LuceneQueryFactory luceneQueryFactory;
 
     private List<ProductSearchResultDTO> associatedProductList = null;
     private final String associationType;
@@ -86,16 +91,12 @@ public class ProductAssociationsView extends AbstractProductSearchResultList {
 
             if (productIds != null && !productIds.isEmpty()) {
 
-                final Collection<String> ids = new ArrayList<String>();
-                for (final Long productId : productIds) {
-                    ids.add(String.valueOf(productId));
-                }
-
-                final ProductQueryBuilderImpl builder = new ProductQueryBuilderImpl();
-                final BooleanQuery assoc = builder.createQuery(ids);
+                final Query assoc = luceneQueryFactory.getFilteredNavigationQueryChain(ShopCodeContext.getShopId(), null,
+                        Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
+                                (List) Arrays.asList(productIds)));
 
                 associatedProductList = productService.getProductSearchResultDTOByQuery(
-                        assoc, 0, productIds.size(), ProductSearchQueryBuilder.SKU_PRODUCT_CODE_FIELD, false);
+                        assoc, 0, productIds.size(), null, false);
             } else {
 
                 associatedProductList = Collections.emptyList();

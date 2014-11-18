@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component.customer.wishlist;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.Model;
@@ -30,7 +31,8 @@ import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
+import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductAvailabilityStrategy;
 import org.yes.cart.util.MoneyUtils;
@@ -46,11 +48,7 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Show new arrival. Current category will be selected to pick up
@@ -62,6 +60,8 @@ import java.util.Map;
  */
 public class WishListView extends AbstractProductSearchResultList {
 
+    @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
+    private LuceneQueryFactory luceneQueryFactory;
 
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
     private CustomerServiceFacade customerServiceFacade;
@@ -148,9 +148,12 @@ public class WishListView extends AbstractProductSearchResultList {
 
                 int limit = productIds.size();
 
-                final ProductQueryBuilderImpl ftq = new ProductQueryBuilderImpl();
+                final Query wish = luceneQueryFactory.getFilteredNavigationQueryChain(ShopCodeContext.getShopId(), null,
+                        Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
+                                (List) Arrays.asList(productIds)));
+
                 final List<ProductSearchResultDTO> uniqueProducts = productService.getProductSearchResultDTOByQuery(
-                        ftq.createQuery(productIds), 0, limit, "code", false);
+                        wish, 0, limit, null, false);
 
                 final List<ProductSearchResultDTO> wishListProducts = new ArrayList<ProductSearchResultDTO>();
 

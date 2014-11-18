@@ -58,7 +58,10 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
 
     private static final Logger LOG = LoggerFactory.getLogger(GenericDAOHibernateImpl.class);
 
+    private static final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
+
     private final Class<T> persistentClass;
+    private final boolean persistentClassIndexble;
     private final EntityFactory entityFactory;
     private final EntityIndexingInterceptor entityIndexingInterceptor;
     protected SessionFactory sessionFactory;
@@ -91,10 +94,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * @param entityFactory {@link EntityFactory} to create the entities
      */
     @SuppressWarnings("unchecked")
-    public GenericDAOHibernateImpl(
-            final Class<T> type,
-            final EntityFactory entityFactory) {
+    public GenericDAOHibernateImpl(final Class<T> type, final EntityFactory entityFactory) {
         this.persistentClass = type;
+        this.persistentClassIndexble = null != type.getAnnotation(org.hibernate.search.annotations.Indexed.class);
         this.entityFactory = entityFactory;
         this.entityIndexingInterceptor = getInterceptor();
     }
@@ -517,7 +519,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
 
     public int fullTextSearchReindex(PK primaryKey, boolean purgeOnly) {
         int result = 0;
-        if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
+        if (persistentClassIndexble) {
             sessionFactory.getCache().evictEntity(getPersistentClass(), primaryKey);
 
             FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
@@ -612,7 +614,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                 int index = 0;
                 try {
 
-                    if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
+                    if (persistentClassIndexble) {
                         FullTextSession fullTextSession = Search.getFullTextSession(async ? sessionFactory.openSession() : sessionFactory.getCurrentSession());
                         fullTextSession.setFlushMode(FlushMode.MANUAL);
                         fullTextSession.setCacheMode(CacheMode.IGNORE);
@@ -671,7 +673,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     @SuppressWarnings("unchecked")
     public List<T> fullTextSearch(final org.apache.lucene.search.Query query) {
-        if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
+        if (persistentClassIndexble) {
             FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
             Query fullTextQuery = fullTextSession.createFullTextQuery(query, getPersistentClass());
             List<T> list = fullTextQuery.list();
@@ -713,7 +715,12 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                                          final String sortFieldName,
                                          final boolean reverse,
                                          final String ... fields) {
-        if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
+
+        if (persistentClassIndexble) {
+            if (LOGFTQ.isDebugEnabled()) {
+                LOGFTQ.debug("Run {}x{} {}@{} {}", new Object[] { firstResult, maxResults, sortFieldName, reverse, query });
+            }
+
             final FullTextQuery fullTextQuery = createFullTextQuery(query, firstResult, maxResults, sortFieldName, reverse);
             fullTextQuery.setProjection(fields);
             final List<Object[]> list = fullTextQuery.list();
@@ -735,7 +742,11 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                                   final int maxResults,
                                   final String sortFieldName,
                                   final boolean reverse) {
-        if (null != getPersistentClass().getAnnotation(org.hibernate.search.annotations.Indexed.class)) {
+        if (persistentClassIndexble) {
+            if (LOGFTQ.isDebugEnabled()) {
+                LOGFTQ.debug("Run {}x{} {}@{} {}", new Object[] { firstResult, maxResults, sortFieldName, reverse, query });
+            }
+
             final FullTextQuery fullTextQuery = createFullTextQuery(query, firstResult, maxResults, sortFieldName, reverse);
             final List<T> list = fullTextQuery.list();
             if (list != null) {
@@ -767,8 +778,15 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     public int getResultCount(final org.apache.lucene.search.Query query) {
-        FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
-        return fullTextSession.createFullTextQuery(query, getPersistentClass()).getResultSize();
+        if (persistentClassIndexble) {
+            if (LOGFTQ.isDebugEnabled()) {
+                LOGFTQ.debug("Count {}", query);
+            }
+
+            FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
+            return fullTextSession.createFullTextQuery(query, getPersistentClass()).getResultSize();
+        }
+        return 0;
     }
 
     /**

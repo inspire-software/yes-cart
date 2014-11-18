@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -24,16 +24,13 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ShopCategory;
-import org.yes.cart.domain.query.impl.FeaturedProductsInCategoryQueryBuilderImpl;
+import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Display featured product in particular category or entire shop.
@@ -47,6 +44,8 @@ public class FeaturedProducts extends AbstractProductSearchResultList {
     @SpringBean(name = ServiceSpringKeys.SHOP_SERVICE)
     private ShopService shopService;
 
+    @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
+    private LuceneQueryFactory luceneQueryFactory;
 
     private List<ProductSearchResultDTO> products = null;
 
@@ -65,22 +64,23 @@ public class FeaturedProducts extends AbstractProductSearchResultList {
     @Override
     public List<ProductSearchResultDTO> getProductListToShow() {
         if (products == null) {
+            final long shopId = ShopCodeContext.getShopId();
             final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
             final List<Long> categories;
             if (categoryId == 0) {
                 categories = Collections.EMPTY_LIST;
             } else {
 
-                if (shopService.getShopCategoriesIds(ShopCodeContext.getShopId()).contains(categoryId)) {
+                if (shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
                     categories = Collections.singletonList(categoryId);
                 } else {
                     categories = Collections.EMPTY_LIST;
                 }
             }
 
-            final FeaturedProductsInCategoryQueryBuilderImpl queryBuilder = new FeaturedProductsInCategoryQueryBuilderImpl();
-
-            final BooleanQuery featured = queryBuilder.createQuery(categories, ShopCodeContext.getShopId());
+            final Query featured = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, categories,
+                    Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
+                            (List) Arrays.asList("true")));
 
             products = productService.getProductSearchResultDTOByQuery(featured, 0, getProductsLimit(categoryId), null, false);
 

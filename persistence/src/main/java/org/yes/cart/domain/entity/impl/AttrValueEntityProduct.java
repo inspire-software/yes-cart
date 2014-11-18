@@ -17,10 +17,8 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.hibernate.search.annotations.*;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.bridge.AttributeBridge;
 
 import java.util.Date;
 
@@ -72,9 +70,6 @@ public class AttrValueEntityProduct implements org.yes.cart.domain.entity.AttrVa
         this.product = product;
     }
 
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO,
-        bridge = @FieldBridge(impl = AttributeBridge.class))
-    @ContainedIn
     public Attribute getAttribute() {
         return this.attribute;
     }

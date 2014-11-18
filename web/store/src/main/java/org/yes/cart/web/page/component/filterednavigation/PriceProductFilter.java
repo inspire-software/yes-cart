@@ -16,13 +16,12 @@
 
 package org.yes.cart.web.page.component.filterednavigation;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
@@ -58,7 +57,7 @@ public class PriceProductFilter extends AbstractProductFilter {
      * @param query      current query.
      * @param categoryId current category id
      */
-    public PriceProductFilter(final String id, final BooleanQuery query, final long categoryId) {
+    public PriceProductFilter(final String id, final Query query, final long categoryId) {
         super(id, query, categoryId);
     }
 

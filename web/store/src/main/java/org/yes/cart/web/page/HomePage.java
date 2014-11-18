@@ -17,7 +17,7 @@
 package org.yes.cart.web.page;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -62,10 +62,6 @@ import java.util.Map;
 public class HomePage extends AbstractWebPage {
 
 
-
-    final Map<String, String> mapParams;
-
-
     @SpringBean(name = StorefrontServiceSpringKeys.CENTRAL_VIEW_RESOLVER)
     private CentralViewResolver centralViewResolver;
 
@@ -89,11 +85,7 @@ public class HomePage extends AbstractWebPage {
      * @param params page parameters
      */
     public HomePage(final PageParameters params) {
-
         super(params);
-
-        mapParams = WicketUtil.pageParametesAsMap(params);
-
     }
 
     /**
@@ -103,6 +95,8 @@ public class HomePage extends AbstractWebPage {
     protected void onBeforeRender() {
 
         executeHttpPostedCommands();
+
+        final Map<String, List<String>> mapParams = WicketUtil.pageParametesAsMultiMap(getPageParameters());
 
         final String centralViewLabel = centralViewResolver.resolveMainPanelRendererLabel(mapParams);
 
@@ -122,18 +116,10 @@ public class HomePage extends AbstractWebPage {
         final List<Long> currentCategoriesIds = getCategories(categoryId, categoryProductsRecursive);
 
 
-        final BooleanQuery queriesChain = luceneQueryFactory.getFilteredNavigationQueryChain(
+        final Query query = luceneQueryFactory.getFilteredNavigationQueryChain(
                 shop.getShopId(),
                 currentCategoriesIds,
-                mapParams
-        );
-
-        final BooleanQuery query = centralViewResolver.getBooleanQuery(
-                queriesChain,
-                shop.getShopId(),
-                currentCategoriesIds,
-                centralViewLabel,
-                getItemId()
+                (Map) mapParams
         );
 
 
@@ -188,9 +174,11 @@ public class HomePage extends AbstractWebPage {
     /**
      * Get product id or product sku id.
      *
+     * @param mapParams page parameters
+     *
      * @return product id or product sku id.
      */
-    private String getItemId() {
+    private String getItemId(final Map<String, List<String>> mapParams) {
         // Sku has priority over product
         String itemId = HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.SKU_ID));
         if (itemId == null) {
@@ -234,7 +222,7 @@ public class HomePage extends AbstractWebPage {
             final String rendererLabel,
             final String id,
             final long categoryId,
-            final BooleanQuery booleanQuery) {
+            final Query booleanQuery) {
 
         return wicketCentralViewProvider.getCentralPanel(rendererLabel, id, categoryId, booleanQuery);
 

@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.page.component.filterednavigation;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.util.ShopCodeContext;
@@ -48,7 +48,7 @@ public class AttributeProductFilter extends AbstractProductFilter {
      * @param query      current query.
      * @param categoryId current category id
      */
-    public AttributeProductFilter(final String id, final BooleanQuery query, final long categoryId) {
+    public AttributeProductFilter(final String id, final Query query, final long categoryId) {
 
         super(id, query, categoryId);
 

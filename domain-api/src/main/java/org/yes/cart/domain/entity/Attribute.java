@@ -229,7 +229,7 @@ public interface Attribute extends Auditable, Rankable, Codable, Cloneable {
      * Get the comma separated  [key-]value data or
      * service , that provide data in case if start from protocol,
      *
-     * @return comma separated coices.
+     * @return comma separated choices.
      */
     String getChoiceData();
 

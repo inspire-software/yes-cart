@@ -34,17 +34,19 @@ public class SearchPhrazeUtil {
     private final static Pattern splitPattern = Pattern.compile("\\s+|,+|;+|-+|\\++|\\.+|\\|+");
 
     /**
-     * Tokenaze search phraze and clean from empty strings.
+     * Tokenize search phraze and clean from empty strings.
+     *
      * @param phraze optional phraze
+     *
      * @return list of tokens, that found in phraze.
      */
     public static List<String> splitForSearch(final String phraze) {
         if (phraze != null) {
             String [] token = splitPattern.split(phraze);
             List<String> words = new ArrayList<String>(token.length);
-            for (int i = 0; i < token.length ; i++) {
-                if (StringUtils.isNotBlank(token[i])) {
-                    words.add(token[i].trim());
+            for (final String aToken : token) {
+                if (StringUtils.isNotBlank(aToken)) {
+                    words.add(aToken.trim());
                 }
             }
             return words;

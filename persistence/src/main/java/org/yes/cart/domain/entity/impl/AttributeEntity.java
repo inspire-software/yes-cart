@@ -17,8 +17,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.hibernate.search.annotations.DocumentId;
-import org.hibernate.search.annotations.Indexed;
 import org.yes.cart.domain.entity.AttributeGroup;
 import org.yes.cart.domain.entity.Etype;
 
@@ -30,7 +28,6 @@ import java.util.UUID;
  * Date: 27 0ct 2012
  * Time: 9:10 AM
  */
-@Indexed(index = "luceneindex/attribute")
 public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, java.io.Serializable {
 
     private long attributeId;
@@ -204,7 +201,6 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.guid = guid;
     }
 
-    @DocumentId
     public long getAttributeId() {
         return this.attributeId;
     }

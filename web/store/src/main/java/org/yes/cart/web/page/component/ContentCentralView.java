@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -39,7 +40,7 @@ public class ContentCentralView extends AbstractCentralView {
      * @param id panel id
      * @param booleanQuery     boolean query.
      */
-    public ContentCentralView(String id, BooleanQuery booleanQuery) {
+    public ContentCentralView(String id, Query booleanQuery) {
         super(id, 0l, booleanQuery);
     }
 

@@ -18,6 +18,7 @@ package org.yes.cart.domain.entity.bridge;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.yes.cart.domain.entity.bridge.support.NavigatableAttributesSupport;
 import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
 import org.yes.cart.domain.entity.bridge.support.ShopWarehouseRelationshipSupport;
 
@@ -30,6 +31,7 @@ public class HibernateSearchBridgeStaticLocator implements ApplicationContextAwa
 
     private static ShopCategoryRelationshipSupport SHOP_CATEGORY_SUPPORT;
     private static ShopWarehouseRelationshipSupport SHOP_WAREHOUSE_SUPPORT;
+    private static NavigatableAttributesSupport NAVIGATABLE_ATTRIBUTES_SUPPORT;
 
     public static ShopCategoryRelationshipSupport getShopCategoryRelationshipSupport() {
         return SHOP_CATEGORY_SUPPORT;
@@ -39,10 +41,15 @@ public class HibernateSearchBridgeStaticLocator implements ApplicationContextAwa
         return SHOP_WAREHOUSE_SUPPORT;
     }
 
+    public static NavigatableAttributesSupport getNavigatableAttributesSupport() {
+        return NAVIGATABLE_ATTRIBUTES_SUPPORT;
+    }
+
     /** {@inheritDoc} */
     @Override
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         SHOP_CATEGORY_SUPPORT = applicationContext.getBean("shopCategoryRelationshipSupport", ShopCategoryRelationshipSupport.class);
         SHOP_WAREHOUSE_SUPPORT = applicationContext.getBean("shopWarehouseRelationshipSupport", ShopWarehouseRelationshipSupport.class);
+        NAVIGATABLE_ATTRIBUTES_SUPPORT = applicationContext.getBean("navigatableAttributesSupport", NavigatableAttributesSupport.class);
     }
 }

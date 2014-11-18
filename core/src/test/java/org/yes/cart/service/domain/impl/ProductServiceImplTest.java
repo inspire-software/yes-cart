@@ -30,9 +30,12 @@ import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
+import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.service.domain.BrandService;
+import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ProductTypeService;
 
 import java.util.*;
 
@@ -46,10 +49,12 @@ import static org.junit.Assert.*;
 public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
     private ProductService productService;
+    private LuceneQueryFactory luceneQueryFactory;
 
     @Before
     public void setUp() {
         productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
+        luceneQueryFactory = (LuceneQueryFactory) ctx().getBean(ServiceSpringKeys.LUCENE_QUERY_FACTORY);
 
         super.setUp();
     }
@@ -254,8 +259,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
                 productService.getGenericDao().fullTextSearchReindex(false);
 
-                final ProductsInCategoryQueryBuilderImpl queryBuilder = new ProductsInCategoryQueryBuilderImpl();
-                Query query = queryBuilder.createQuery(101L);
+                Query query = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L), null);
                 final List<ProductSearchResultDTO> searchRes = productService.getProductSearchResultDTOByQuery(
                         query,
                         0,

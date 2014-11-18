@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.theme.impl;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.CategoryService;
@@ -64,7 +64,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
     public AbstractCentralView getCentralPanel(final String rendererLabel,
                                                final String wicketComponentId,
                                                final long categoryId,
-                                               final BooleanQuery booleanQuery) {
+                                               final Query booleanQuery) {
 
         Class<? extends AbstractCentralView> clz = rendererPanelMap.get(rendererLabel);
         try {
@@ -114,7 +114,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
 
             Constructor<? extends AbstractCentralView> constructor = clz.getConstructor(String.class,
                     long.class,
-                    BooleanQuery.class);
+                    Query.class);
             return constructor.newInstance(wicketComponentId, categoryId, booleanQuery);
 
         } catch (Exception e) {

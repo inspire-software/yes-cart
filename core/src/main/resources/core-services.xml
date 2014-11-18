@@ -33,12 +33,52 @@
 
     <bean id="hashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl" scope="prototype"/>
 
+    <bean id="attributeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.AttributeSearchQueryBuilder"/>
+    <bean id="featuredProductLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.FeaturedProductSearchQueryBuilder"/>
+    <bean id="keywordProductLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.KeywordProductSearchQueryBuilder"/>
+    <bean id="priceLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.PriceSearchQueryBuilder">
+        <constructor-arg index="0" ref="priceNavigation"/>
+    </bean>
+    <bean id="brandLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductBrandSearchQueryBuilder"/>
+    <bean id="productCategoryLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductCategorySearchQueryBuilder"/>
+    <bean id="productShopLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopSearchQueryBuilder"/>
+    <bean id="productIdLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductIdSearchQueryBuilder"/>
+    <bean id="productCodeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuCodeSearchQueryBuilder"/>
+    <bean id="productSkuIdLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuIdSearchQueryBuilder"/>
+    <bean id="productTagLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductTagSearchQueryBuilder"/>
 
     <bean id="luceneQueryFactory" class="org.yes.cart.domain.query.impl.LuceneQueryFactoryImpl">
-        <constructor-arg index="0" type="org.yes.cart.domain.query.PriceNavigation" ref="priceNavigation"/>
-        <constructor-arg index="1" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
-        <constructor-arg index="2" type="org.yes.cart.service.domain.ProductService" ref="productService"/>
-        <constructor-arg index="3" type="org.yes.cart.service.domain.CategoryService" ref="categoryService"/>
+        <constructor-arg index="0" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
+        <constructor-arg index="1" type="org.yes.cart.service.domain.ProductService" ref="productService"/>
+        <constructor-arg index="2" type="org.yes.cart.service.domain.CategoryService" ref="categoryService"/>
+        <constructor-arg index="3">
+            <map>
+                <!-- Direct sku from URL or in code -->
+                <entry key="sku"            value-ref="productSkuIdLuceneQueryBuilder"/>
+                <entry key="sku.skuId"      value-ref="productSkuIdLuceneQueryBuilder"/>
+                <entry key="sku.code"       value-ref="productCodeLuceneQueryBuilder"/>
+                <!-- Direct product from URL or in code -->
+                <entry key="product"        value-ref="productIdLuceneQueryBuilder"/>
+                <entry key="productId"      value-ref="productIdLuceneQueryBuilder"/>
+
+                <!-- Searching from url -->
+                <entry key="brand"          value-ref="brandLuceneQueryBuilder"/>
+                <entry key="query"          value-ref="keywordProductLuceneQueryBuilder"/>
+                <entry key="tag"            value-ref="productTagLuceneQueryBuilder"/>
+                <entry key="price"          value-ref="priceLuceneQueryBuilder"/>
+
+                <!-- Internal -->
+                <entry key="attribute.attribute"           value-ref="attributeLuceneQueryBuilder"/>
+                <entry key="productCategory.category"      value-ref="productCategoryLuceneQueryBuilder"/>
+                <entry key="productShopId"                 value-ref="productShopLuceneQueryBuilder"/>
+                <entry key="featured"                      value-ref="featuredProductLuceneQueryBuilder"/>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="4">
+            <set>
+                <value>query</value>
+            </set>
+        </constructor-arg>
     </bean>
 
     <bean id="systemService" parent="txProxyTemplate">

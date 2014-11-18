@@ -208,6 +208,10 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
                     if (days > 1) {
                         final Calendar beforeDays = Calendar.getInstance();
                         beforeDays.add(Calendar.DAY_OF_YEAR, -days);
+                        beforeDays.set(Calendar.HOUR, 0);
+                        beforeDays.set(Calendar.MINUTE, 0);
+                        beforeDays.set(Calendar.SECOND, 0);
+                        beforeDays.set(Calendar.MILLISECOND, 0);
                         return beforeDays.getTime();
                     }
                 }

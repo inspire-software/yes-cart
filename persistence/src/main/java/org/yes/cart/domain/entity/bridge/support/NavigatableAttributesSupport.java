@@ -14,26 +14,22 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.entity.bridge;
+package org.yes.cart.domain.entity.bridge.support;
 
-import org.hibernate.search.bridge.StringBridge;
-import org.yes.cart.domain.entity.Attribute;
+import java.util.Set;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 07-May-2011
- * Time: 16:13:01
+ * User: denispavlov
+ * Date: 16/11/2014
+ * Time: 17:07
  */
+public interface NavigatableAttributesSupport {
 
-public class AttributeBridge implements StringBridge {
     /**
-     * {@inheritDoc}
+     * Get all navigatable attribute codes (+ brands, price, query and tag).
+     *
+     * @return set of attribute codes.
      */
-    public String objectToString(final Object attributeObject) {
-        if (attributeObject == null) {
-            return "";
-        } else {
-            return ((Attribute) attributeObject).getCode();
-        }
-    }
+    Set<String> getAllNavigatableAttributeCodes();
+
 }

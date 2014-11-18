@@ -16,14 +16,10 @@
 
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.query.impl.AttributiveSearchQueryBuilderImpl;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.component.filterednavigation.AttributeFilteredNavigationSupport;
@@ -38,8 +34,6 @@ import java.util.List;
  */
 public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavigationSupportImpl implements AttributeFilteredNavigationSupport {
 
-    private final AttributiveSearchQueryBuilderImpl queryBuilder = new AttributiveSearchQueryBuilderImpl();
-
     public AttributeFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
                                                   final ProductService productService) {
         super(luceneQueryFactory, productService);
@@ -49,7 +43,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
      * {@inheritDoc}
      */
     @Cacheable(value = "filteredNavigationSupport-attributeFilteredNavigationRecords")
-    public List<FilteredNavigationRecord> getFilteredNavigationRecords(final BooleanQuery query,
+    public List<FilteredNavigationRecord> getFilteredNavigationRecords(final Query query,
                                                                        final List<Long> categories,
                                                                        final long shopId,
                                                                        final String locale,
@@ -65,7 +59,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
             if (!isAttributeAlreadyFiltered(query, ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD + ":" + record.getCode())) {
 
-                final BooleanQuery candidateQuery = getQueryCandidate(query, categories, shopId, queryBuilder, record);
+                final Query candidateQuery = getLuceneQueryFactory().getSnowBallQuery(query, shopId, record.getCode(), record.getValue());
 
                 final int candidateResultCount = getProductService().getProductQty(candidateQuery);
 
@@ -81,26 +75,5 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
         return navigationList;
 
     }
-
-
-
-    private BooleanQuery getQueryCandidate(final BooleanQuery query,
-                                           final List<Long> categories,
-                                           final long shopId,
-                                           final AttributiveSearchQueryBuilderImpl queryBuilder,
-                                           final FilteredNavigationRecord record) {
-
-        if ("S".equals(record.getType())) {
-            return getLuceneQueryFactory().getSnowBallQuery(query,
-                    queryBuilder.createQuery(categories, shopId, record.getCode(), record.getValue()));
-        } // range navigation
-        String[] range = StringUtils.split(record.getValue(), Constants.RANGE_NAVIGATION_DELIMITER);
-        return getLuceneQueryFactory().getSnowBallQuery(query,
-                queryBuilder.createQueryWithRangeValues(categories, shopId, record.getCode(),
-                    new Pair<String, String>(range[0], range[1])));
-    }
-
-
-
 
 }

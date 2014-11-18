@@ -18,11 +18,8 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
-import org.yes.cart.domain.query.impl.ProductsInCategoryQueryBuilderImpl;
-import org.yes.cart.domain.query.impl.SkuQueryBuilderImpl;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
@@ -37,6 +34,7 @@ import java.util.*;
 
 /**
  * Service responsible to resolve label of central view in storefront.
+ *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 6/26/11
  * Time: 8:50 PM
@@ -48,12 +46,6 @@ public class CentralViewResolverImpl implements CentralViewResolver {
     private final ProductService productService;
     private final AttributeService attributeService;
     private final LuceneQueryFactory luceneQueryFactory;
-
-    private final ProductsInCategoryQueryBuilderImpl productsInCategoryQueryBuilder = new ProductsInCategoryQueryBuilderImpl();
-    private final SkuQueryBuilderImpl skuIdBuilder = new SkuQueryBuilderImpl();
-    private final ProductQueryBuilderImpl productIdBuilder = new ProductQueryBuilderImpl();
-
-
 
     /**
      * Construct central view resolver.
@@ -112,7 +104,8 @@ public class CentralViewResolverImpl implements CentralViewResolver {
                     catIds = Collections.singletonList(categoryId);
                 }
 
-                final BooleanQuery hasProducts = productsInCategoryQueryBuilder.createQuery(catIds, 0L); // Do not use shopId as it will bring all products
+                // Do not use shopId as it will bring all products
+                final Query hasProducts = luceneQueryFactory.getFilteredNavigationQueryChain(0L, catIds, null);
 
                 if (productService.getProductQty(hasProducts) > 0) {
                     return CentralViewLabel.PRODUCTS_LIST;
@@ -135,39 +128,8 @@ public class CentralViewResolverImpl implements CentralViewResolver {
         return CentralViewLabel.DEFAULT;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public BooleanQuery getBooleanQuery(final BooleanQuery queriesChain,
-                                        final long shopId,
-                                        final List<Long> categories,
-                                        final String viewLabel,
-                                        final String itemId) {
-
-        BooleanQuery rez = null;
-
-        if (CentralViewLabel.PRODUCTS_LIST.equals(viewLabel)) {
-            // Products in list, need to add mandatory category parameters
-            rez = luceneQueryFactory.getSnowBallQuery(queriesChain, productsInCategoryQueryBuilder.createQuery(categories, shopId));
-        } else if (CentralViewLabel.SKU.equals(viewLabel)) {
-            //single sku
-            rez = skuIdBuilder.createQuery(itemId);
-        } else if (CentralViewLabel.PRODUCT.equals(viewLabel)) {
-            //Single product
-            rez = productIdBuilder.createQuery(itemId);
-        } else if (CentralViewLabel.SEARCH_LIST.equals(viewLabel)) {
-            // Product in list via filtered navigation, need to add mandatory category parameters
-            rez = luceneQueryFactory.getSnowBallQuery(queriesChain, productsInCategoryQueryBuilder.createQuery(categories, shopId));
-
-        }
-
-        return rez;
-
-    }
-
-    private boolean isAttributiveFilteredNavigation(
-            final Set<String> allowedAttributeNames,
-            final Map parameters) {
+    private boolean isAttributiveFilteredNavigation(final Set<String> allowedAttributeNames,
+                                                    final Map parameters) {
         for (Object obj : parameters.keySet()) {
             final String decodedParameterKeyName = (String) obj;
             if (allowedAttributeNames.contains(decodedParameterKeyName)) {

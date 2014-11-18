@@ -18,7 +18,7 @@ package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
@@ -91,7 +91,7 @@ public class ProductsCentralView extends AbstractCentralView {
      * @param categoryId   current category id.
      * @param booleanQuery boolean query.
      */
-    public ProductsCentralView(final String id, long categoryId, final BooleanQuery booleanQuery) {
+    public ProductsCentralView(final String id, long categoryId, final Query booleanQuery) {
         super(id, categoryId, booleanQuery);
 
     }
@@ -118,7 +118,7 @@ public class ProductsCentralView extends AbstractCentralView {
 
         final SortableProductDataProvider dataProvider = new  SortableProductDataProvider(
                 productService,
-                getBooleanQuery(),
+                getNavigationQuery(),
                 getI18NSupport(),
                 getDecoratorFacade()
         );
