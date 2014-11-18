@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.page.component;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -37,7 +37,7 @@ public class DynoContentCentralView extends AbstractCentralView {
      * @param id panel id
      * @param booleanQuery     boolean query.
      */
-    public DynoContentCentralView(String id, BooleanQuery booleanQuery) {
+    public DynoContentCentralView(String id, Query booleanQuery) {
         super(id, 0l, booleanQuery);
     }
 
@@ -49,7 +49,7 @@ public class DynoContentCentralView extends AbstractCentralView {
      * @param categoryId ignored
      * @param booleanQuery     boolean query.
      */
-    public DynoContentCentralView(String id, long categoryId, BooleanQuery booleanQuery) {
+    public DynoContentCentralView(String id, long categoryId, Query booleanQuery) {
         super(id, categoryId, booleanQuery);
     }
 

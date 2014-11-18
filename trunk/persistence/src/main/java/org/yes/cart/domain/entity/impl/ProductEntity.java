@@ -183,8 +183,8 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     /**
      *      */
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class)
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
+    bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class))
     public ProductType getProducttype() {
         return this.producttype;
     }
@@ -202,8 +202,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.availability = availability;
     }
 
-    @Field
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class)
+    @Field(bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class))
     public Set<AttrValueProduct> getAttributes() {
         return this.attributes;
     }
@@ -212,8 +211,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.attributes = attributes;
     }
 
-    @Field
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductCategoryBridge.class)
+    @Field(bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductCategoryBridge.class))
     public Set<ProductCategory> getProductCategory() {
         return this.productCategory;
     }

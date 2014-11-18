@@ -23,9 +23,11 @@ import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueProductSku;
+import org.yes.cart.domain.entity.bridge.support.NavigatableAttributesSupport;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -41,29 +43,36 @@ public class AttributeValueBridge implements FieldBridge {
     public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
 
         if (value instanceof Collection) {
+
+            final NavigatableAttributesSupport support = getNavigatableAttributesSupport();
+            final Set<String> navAttrs = support.getAllNavigatableAttributeCodes();
+
             for (Object obj : (Collection) value) {
                 final AttrValue attrValue = (AttrValue) obj;
-                final String prefix = (obj instanceof AttrValueProductSku) ? "sku." : "";
 
-                if (isIndexingAllowed(attrValue)) {
-                    document.add(new Field(
-                            prefix + ProductSearchQueryBuilder.ATTRIBUTE_VALUE_FIELD,
-                            (attrValue.getAttribute() == null ? "" : attrValue.getAttribute().getCode()) + attrValue.getVal(),
-                            luceneOptions.getStore(),
-                            Field.Index.NOT_ANALYZED,
-                            luceneOptions.getTermVector()
-                    ));
-                    document.add(new Field(
-                            prefix + ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
-                            attrValue.getVal(),
-                            luceneOptions.getStore(),
-                            Field.Index.ANALYZED,
-                            luceneOptions.getTermVector()
-                    ));
+                // Only keep navigatable attributes in index
+                if (attrValue.getAttribute() != null && navAttrs.contains(attrValue.getAttribute().getCode())) {
 
-                }
+                    final String prefix = (obj instanceof AttrValueProductSku) ? "sku." : "";
 
-                if (attrValue.getAttribute() != null && StringUtils.isNotBlank(attrValue.getAttribute().getCode())) {
+                    if (isValidValue(attrValue)) {
+                        document.add(new Field(
+                                prefix + ProductSearchQueryBuilder.ATTRIBUTE_VALUE_FIELD,
+                                (attrValue.getAttribute() == null ? "" : attrValue.getAttribute().getCode()) + attrValue.getVal(),
+                                luceneOptions.getStore(),
+                                Field.Index.NOT_ANALYZED,
+                                luceneOptions.getTermVector()
+                        ));
+                        document.add(new Field(
+                                prefix + ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
+                                attrValue.getVal(),
+                                luceneOptions.getStore(),
+                                Field.Index.ANALYZED,
+                                luceneOptions.getTermVector()
+                        ));
+
+                    }
+
                     document.add(new Field(
                             prefix + ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD,
                             attrValue.getAttribute().getCode(),
@@ -71,6 +80,7 @@ public class AttributeValueBridge implements FieldBridge {
                             Field.Index.NOT_ANALYZED,
                             luceneOptions.getTermVector()
                     ));
+
                 }
 
             }
@@ -83,7 +93,7 @@ public class AttributeValueBridge implements FieldBridge {
      * @param attrValue given attribute value
      * @return true if value must be in index.
      */
-    private boolean isIndexingAllowed(final AttrValue attrValue) {
+    private boolean isValidValue(final AttrValue attrValue) {
         return StringUtils.isNotBlank(attrValue.getVal())
                 &&
                 !attrValue.getVal().contains("±")  //ice cat hack
@@ -92,6 +102,10 @@ public class AttributeValueBridge implements FieldBridge {
                 &&
                 !attrValue.getVal().contains("/")  //ice cat hack
                 ;
+    }
+
+    private NavigatableAttributesSupport getNavigatableAttributesSupport() {
+        return HibernateSearchBridgeStaticLocator.getNavigatableAttributesSupport();
     }
 
 

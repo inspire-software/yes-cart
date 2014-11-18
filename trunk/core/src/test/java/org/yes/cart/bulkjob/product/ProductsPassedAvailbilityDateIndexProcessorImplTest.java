@@ -17,6 +17,7 @@
 package org.yes.cart.bulkjob.product;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.junit.Test;
 import org.springframework.cache.CacheManager;
 import org.springframework.transaction.TransactionStatus;
@@ -24,10 +25,12 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
+import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductService;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -44,13 +47,14 @@ public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCor
     public void testRun() throws Exception {
 
         final ProductService productService = ctx().getBean("productService", ProductService.class);
+        final LuceneQueryFactory luceneQueryFactory = ctx().getBean("luceneQueryFactory", LuceneQueryFactory.class);
 
         Product product = productService.findById(9998L); // bender available to 2040
 
         productService.reindexProduct(product.getId());
 
-        final ProductQueryBuilderImpl builder = new ProductQueryBuilderImpl();
-        final BooleanQuery query = builder.createQuery(Arrays.asList("9998"));
+        final Query query = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null,
+                Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD, (List) Arrays.asList("9998")));
 
         List<ProductSearchResultDTO> rez = productService.getProductSearchResultDTOByQuery(query, 0, 1, null, false);
         assertNotNull(rez);

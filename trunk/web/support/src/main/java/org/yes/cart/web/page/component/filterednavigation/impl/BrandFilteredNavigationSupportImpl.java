@@ -16,11 +16,10 @@
 
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.query.impl.BrandSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.component.filterednavigation.BrandFilteredNavigationSupport;
@@ -35,8 +34,6 @@ import java.util.List;
  */
 public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigationSupportImpl implements BrandFilteredNavigationSupport {
 
-    private final BrandSearchQueryBuilder queryBuilder = new BrandSearchQueryBuilder();
-
     public BrandFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
                                               final ProductService productService) {
         super(luceneQueryFactory, productService);
@@ -46,7 +43,7 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
      * {@inheritDoc}
      */
     @Cacheable(value = "filteredNavigationSupport-brandFilteredNavigationRecords")
-    public List<FilteredNavigationRecord> getFilteredNavigationRecords(final BooleanQuery query,
+    public List<FilteredNavigationRecord> getFilteredNavigationRecords(final Query query,
                                                                        final List<Long> categories,
                                                                        final long shopId,
                                                                        final String locale,
@@ -61,10 +58,13 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
             for (final FilteredNavigationRecord recordTemplate : allNavigationRecordsTemplates) {
 
                 final FilteredNavigationRecord record = recordTemplate.clone();
-                final BooleanQuery candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
-                        query,
-                        queryBuilder.createQuery(categories, shopId, record.getValue())
+                final Query candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
+                        query, shopId, ProductSearchQueryBuilder.BRAND_FIELD, record.getValue()
                 );
+//                final Query candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
+//                        query,
+//                        queryBuilder.createQuery(categories, shopId, record.getValue())
+//                );
                 int candidateResultCount = getProductService().getProductQty(candidateQuery);
                 if (candidateResultCount > 0) {
                     record.setName(recordName);

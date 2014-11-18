@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.page.component.filterednavigation;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public interface AttributeFilteredNavigationSupport {
      *
      * @return distinct filter navigation records
      */
-    List<FilteredNavigationRecord> getFilteredNavigationRecords(final BooleanQuery query,
+    List<FilteredNavigationRecord> getFilteredNavigationRecords(final Query query,
                                                                 final List<Long> categories,
                                                                 final long shopId,
                                                                 final String locale,

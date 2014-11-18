@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -31,7 +32,7 @@ public class EmptyCentralView extends AbstractCentralView {
      * @param id panel id
      * @param booleanQuery     boolean query.
      */
-    public EmptyCentralView(String id, BooleanQuery booleanQuery) {
+    public EmptyCentralView(String id, Query booleanQuery) {
         super(id, 0l, booleanQuery);
     }
 
@@ -43,7 +44,7 @@ public class EmptyCentralView extends AbstractCentralView {
      * @param categoryId ignored
      * @param booleanQuery     boolean query.
      */
-    public EmptyCentralView(String id, long categoryId, BooleanQuery booleanQuery) {
+    public EmptyCentralView(String id, long categoryId, Query booleanQuery) {
         super(id, 0l, booleanQuery);
     }
 

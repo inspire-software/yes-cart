@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.theme;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.yes.cart.web.page.component.AbstractCentralView;
 
 /**
@@ -39,6 +39,6 @@ public interface WicketCentralViewProvider {
     AbstractCentralView getCentralPanel(String rendererLabel,
                                         String wicketComponentId,
                                         long categoryId,
-                                        BooleanQuery booleanQuery);
+                                        Query booleanQuery);
 
 }

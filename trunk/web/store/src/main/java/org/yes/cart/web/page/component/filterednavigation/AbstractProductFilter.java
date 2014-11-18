@@ -18,7 +18,7 @@ package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -33,7 +33,6 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -75,7 +74,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
     private CategoryService categoryService;
 
-    private final BooleanQuery query;
+    private final Query query;
 
     /**
      * Construct panel.
@@ -84,7 +83,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
      * @param query current query.
      * @param categoryId current category id
      */
-    public AbstractProductFilter(final String id, final BooleanQuery query, final long categoryId) {
+    public AbstractProductFilter(final String id, final Query query, final long categoryId) {
         super(id);
         this.query = query;
         this.categoryId  = categoryId;
@@ -244,7 +243,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
      * Get current lucene product  query.
      * @return current lucene product  query.
      */
-    public BooleanQuery getQuery() {
+    public Query getQuery() {
         return query;
     }
 }

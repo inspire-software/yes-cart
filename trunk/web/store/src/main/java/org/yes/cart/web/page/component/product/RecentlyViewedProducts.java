@@ -17,14 +17,20 @@
 package org.yes.cart.web.page.component.product;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.lucene.search.Query;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.query.impl.ProductQueryBuilderImpl;
+import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.util.WicketUtil;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,6 +44,8 @@ import java.util.List;
  */
 public class RecentlyViewedProducts extends AbstractProductSearchResultList {
 
+    @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
+    private LuceneQueryFactory luceneQueryFactory;
 
     private List<ProductSearchResultDTO> products = null;
 
@@ -72,9 +80,12 @@ public class RecentlyViewedProducts extends AbstractProductSearchResultList {
                     productIds = productIds.subList(productIds.size() - limit, productIds.size());
                 }
 
-                final ProductQueryBuilderImpl ftq = new ProductQueryBuilderImpl();
+                final Query recent = luceneQueryFactory.getFilteredNavigationQueryChain(ShopCodeContext.getShopId(), null,
+                        Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
+                                (List) Arrays.asList(productIds)));
+
                 products = productService.getProductSearchResultDTOByQuery(
-                        ftq.createQuery(productIds), 0, limit, "code", false);
+                        recent, 0, limit, null, false);
 
             } else {
 

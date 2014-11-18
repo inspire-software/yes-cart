@@ -16,9 +16,6 @@
 
 package org.yes.cart.web.support.service;
 
-import org.apache.lucene.search.BooleanQuery;
-
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,23 +33,5 @@ public interface CentralViewResolver {
      * @return resolved main panel renderer label if resolved, otherwise null
      */
     String resolveMainPanelRendererLabel(Map parameters);
-
-    /**
-     * Construct <code>BooleanQuery</code> by given parameters.
-     *
-     * @param queriesChain  query chain obtained from url
-     * @param shopId        current shop id
-     * @param categories    current category subcategories to include
-     * @param viewLabel     resolved view label
-     * @param itemId        sku or product id
-     * @return <code>BooleanQuery</code> in case if renderer label has a registered query builder, otherwise null.
-     */
-    BooleanQuery getBooleanQuery(BooleanQuery queriesChain,
-                                 long shopId,
-                                 List<Long> categories,
-                                 String viewLabel,
-                                 String itemId);
-
-
 
 }

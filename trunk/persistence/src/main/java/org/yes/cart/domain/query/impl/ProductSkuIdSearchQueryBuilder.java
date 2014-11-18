@@ -16,35 +16,17 @@
 
 package org.yes.cart.domain.query.impl;
 
-import org.apache.lucene.index.Term;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.TermQuery;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-
-import java.util.List;
 
 /**
  * User: denispavlov
- * Date: 13/11/2014
- * Time: 18:40
+ * Date: 15/11/2014
+ * Time: 23:16
  */
-public class ProductsInShopQueryBuilderImpl implements ProductSearchQueryBuilder {
+public class ProductSkuIdSearchQueryBuilder extends AbstractStrictFieldSearchQueryBuilder implements ProductSearchQueryBuilder {
 
-
-    /**
-     * Create boolean query for given shop
-     * @param shopId given shop id
-     * @return constructed BooleanQuery
-     */
-    public BooleanQuery createQuery(final Long shopId) {
-        BooleanQuery booleanQuery = new BooleanQuery();
-        booleanQuery.add(
-                        new TermQuery( new Term(PRODUCT_SHOP_FIELD, shopId.toString())),
-                        BooleanClause.Occur.MUST
-                );
-        return booleanQuery;
+    public ProductSkuIdSearchQueryBuilder() {
+        super(SKU_ID_FIELD);
     }
-
 
 }

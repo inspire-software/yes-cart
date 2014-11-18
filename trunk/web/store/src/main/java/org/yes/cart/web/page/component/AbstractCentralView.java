@@ -16,11 +16,10 @@
 
 package org.yes.cart.web.page.component;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.util.StringUtils;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Seo;
@@ -39,7 +38,7 @@ public abstract class AbstractCentralView extends BaseComponent {
 
     private final long categoryId;
 
-    private final BooleanQuery booleanQuery;
+    private final Query booleanQuery;
 
     private Category category;
 
@@ -52,7 +51,7 @@ public abstract class AbstractCentralView extends BaseComponent {
      * @param categoryId  current category id.
      * @param booleanQuery     boolean query.
      */
-    public AbstractCentralView(final String id, final long categoryId, final BooleanQuery booleanQuery) {
+    public AbstractCentralView(final String id, final long categoryId, final Query booleanQuery) {
         super(id);
         this.categoryId = categoryId;
         this.booleanQuery = booleanQuery;
@@ -70,7 +69,7 @@ public abstract class AbstractCentralView extends BaseComponent {
      * Get current query.
      * @return  query.
      */
-    public BooleanQuery getBooleanQuery() {
+    public Query getNavigationQuery() {
         return booleanQuery;
     }
 

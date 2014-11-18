@@ -16,16 +16,14 @@
 
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.domain.query.impl.PriceSearchQueryBuilderImpl;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.PriceService;
@@ -33,7 +31,6 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.page.component.filterednavigation.PriceFilteredNavigationSupport;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,8 +46,6 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
     private final ShopService shopService;
     private final PriceService priceService;
     private final PriceNavigation priceNavigation;
-
-    private final PriceSearchQueryBuilderImpl queryBuilder = new PriceSearchQueryBuilderImpl();
 
     public PriceFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
                                               final ProductService productService,
@@ -69,7 +64,7 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
      * {@inheritDoc}
      */
     @Cacheable(value = "filteredNavigationSupport-priceFilteredNavigationRecords")
-    public List<FilteredNavigationRecord> getFilteredNavigationRecords(final BooleanQuery query,
+    public List<FilteredNavigationRecord> getFilteredNavigationRecords(final Query query,
                                                                        final Long categoryId,
                                                                        final List<Long> categories,
                                                                        final long shopId,
@@ -102,15 +97,18 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
                     shop);
 
             for (FilteredNavigationRecord record : allNavigationRecords) {
-                Pair<String, Pair<BigDecimal, BigDecimal>> priceNavigationRecord = priceNavigation.decomposePriceRequestParams(record.getValue());
-                BooleanQuery candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
-                        query,
-                        queryBuilder.createQuery(
-                                categories,
-                                shop.getShopId(),
-                                currency,
-                                priceNavigationRecord.getSecond().getFirst(),
-                                priceNavigationRecord.getSecond().getSecond())
+//                Pair<String, Pair<BigDecimal, BigDecimal>> priceNavigationRecord = priceNavigation.decomposePriceRequestParams(record.getValue());
+//                Query candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
+//                        query,
+//                        queryBuilder.createQuery(
+//                                categories,
+//                                shop.getShopId(),
+//                                currency,
+//                                priceNavigationRecord.getSecond().getFirst(),
+//                                priceNavigationRecord.getSecond().getSecond())
+//                );
+                Query candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
+                        query, shopId, ProductSearchQueryBuilder.PRODUCT_PRICE, record.getValue()
                 );
                 int candidateResultCount = getProductService().getProductQty(candidateQuery);
                 if (candidateResultCount > 0) {

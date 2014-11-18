@@ -101,6 +101,29 @@ public class WicketUtil {
 
 
     /**
+     * Transform wicket 1.5 page parameter to more traditional map.  Expensive operation.
+     *
+     * @param pageParameters given parameters to transform.
+     * @return parameters transformed to map
+     */
+    public static Map<String, List<String>> pageParametesAsMultiMap(final PageParameters pageParameters) {
+        final Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
+        if (pageParameters != null) {
+            for (String key : pageParameters.getNamedKeys()) {
+                if (!cmdInternalKeys.contains(key)) {
+                    final List<String> vals = new ArrayList<String>();
+                    for (final StringValue value : pageParameters.getValues(key)) {
+                        vals.add(value.toString());
+                    }
+                    map.put(key, vals);
+                }
+            }
+        }
+        return map;
+    }
+
+
+    /**
      * Get the filtered, from commands, request parameters,
      * that not contains given set of request parameter names
      *

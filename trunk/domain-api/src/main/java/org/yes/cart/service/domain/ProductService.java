@@ -102,8 +102,10 @@ public interface ProductService extends GenericService<Product> {
      * @param productTypeId product type id
      * @return hierarchy of attributes for this product or sku.
      */
-    Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(
-            String locale, long productId, long skuId, long productTypeId);
+    Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> getProductAttributes(String locale,
+                                                                                                          long productId,
+                                                                                                          long skuId,
+                                                                                                          long productTypeId);
 
     /**
      *
@@ -113,8 +115,10 @@ public interface ProductService extends GenericService<Product> {
      * @param attributeCode code
      * @return raw and display value pair
      */
-    Pair<String, String> getProductAttribute(
-            String locale, long productId, long skuId, String attributeCode);
+    Pair<String, String> getProductAttribute(String locale,
+                                             long productId,
+                                             long skuId,
+                                             String attributeCode);
 
     /**
      * @param attributeCode code
@@ -147,10 +151,9 @@ public interface ProductService extends GenericService<Product> {
      * @param maxResults  quantity results to return
      * @return list of products
      */
-    List<Product> getProductByCategory(
-            long categoryId,
-            int firtsResult,
-            int maxResults);
+    List<Product> getProductByCategory(long categoryId,
+                                       int firtsResult,
+                                       int maxResults);
 
     /**
      * Get the list of unique attribute values by given product type
@@ -207,12 +210,11 @@ public interface ProductService extends GenericService<Product> {
      * @param reverse       reverse the search result if true
      * @return list of products
      */
-    List<ProductSearchResultDTO> getProductSearchResultDTOByQuery(
-            Query query,
-            int firstResult,
-            int maxResults,
-            String sortFieldName,
-            boolean reverse);
+    List<ProductSearchResultDTO> getProductSearchResultDTOByQuery(Query query,
+                                                                  int firstResult,
+                                                                  int maxResults,
+                                                                  String sortFieldName,
+                                                                  boolean reverse);
 
     /**
      * Get the quantity of products in particular category.

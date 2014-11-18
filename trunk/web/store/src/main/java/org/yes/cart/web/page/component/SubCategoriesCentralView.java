@@ -18,7 +18,7 @@ package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
@@ -64,7 +64,7 @@ public class SubCategoriesCentralView extends AbstractCentralView {
      * @param categoryId   current category id.
      * @param booleanQuery boolean query.
      */
-    public SubCategoriesCentralView(String id, long categoryId, BooleanQuery booleanQuery) {
+    public SubCategoriesCentralView(String id, long categoryId, Query booleanQuery) {
         super(id, categoryId, booleanQuery);
     }
 
