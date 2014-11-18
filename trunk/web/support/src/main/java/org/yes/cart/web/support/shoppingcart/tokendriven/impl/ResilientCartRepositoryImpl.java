@@ -164,7 +164,9 @@ public class ResilientCartRepositoryImpl implements CartRepository {
                     CART_CACHE.put(shoppingCart.getGuid(), shoppingCart);
 
                 } finally {
-                     ShopCodeContext.clear();
+                    if (sccCode != null) {
+                        ShopCodeContext.clear();
+                    }
                 }
 
             }
