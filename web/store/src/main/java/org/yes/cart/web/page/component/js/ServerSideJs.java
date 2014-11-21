@@ -22,6 +22,9 @@ public class ServerSideJs extends BaseComponent {
             .append("<script type=\"text/javascript\">")
             .append("ctx.page = '").append(getPage().getClass().getSimpleName()).append("';\n")
             .append("ctx.root = '").append(WicketUtil.getHttpServletRequest().getContextPath()).append("';\n")
+            .append("ctx.resources['areYouSure'] = '").append(getLocalizer().getString("areYouSure", this)).append("';\n")
+            .append("ctx.resources['yes'] = '").append(getLocalizer().getString("yes", this)).append("';\n")
+            .append("ctx.resources['no'] = '").append(getLocalizer().getString("no", this)).append("';\n")
             .append("</script>").toString()).setEscapeModelStrings(false));
 
         super.onBeforeRender();

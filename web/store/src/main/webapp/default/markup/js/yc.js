@@ -2,6 +2,7 @@ var ctx = {
     url: document.URL,
     root: '/yes-shop', /* This is how it appears from WicketUtil.getHttpServletRequest().getContextPath() for default config, use ServerSideJs Wicket component to inject this. */
     page: 'HomePage',
+    resources: {},
     showModalWindow: function(){}
 };
 
@@ -187,11 +188,58 @@ $(document).ready(function() {
         })
     });
 
-    // create modal message
+    // -- WishList View ----------------------------------------------------------------------------
+
+    $('.js-wish-remove').click(function(event) {
+        event.preventDefault();
+
+        var _href = $(this).attr('href');
+
+        var _msgNode = createAreYouSure('', _href);
+        $('body').append(_msgNode);
+
+        _msgNode.modal();
+
+    });
+
+    // -- CartList View ----------------------------------------------------------------------------
+
+    $('.js-cart-remove').click(function(event) {
+        event.preventDefault();
+
+        var _href = $(this).attr('href');
+
+        var _msgNode = createAreYouSure('', _href);
+        $('body').append(_msgNode);
+
+        _msgNode.modal();
+
+    });
+
+    // -- Utility functions ------------------------------------------------------------------------
+
+    // modal messages
     var createModalMsg = function(node) {
         var _inner = $('<div class="modal-message-inner"/>');
         _inner.append(node);
         var _outer = $('<div class="modal-message"/>');
+        _outer.append(_inner);
+        return _outer;
+    };
+
+    var createAreYouSure = function(node, callback) {
+        var _inner = $('<div class="modal-dialog modal-sm">\
+            <div class="modal-content modal-dialog-inner">\
+                <div class="pull-left">' + ctx.resources['areYouSure'] + '</div>\
+                <div class="pull-right">\
+                    <a class="btn btn-default" data-dismiss="modal">' + ctx.resources['no'] + '</a>\
+                    <a class="btn btn-primary" href="' + callback + '">' + ctx.resources['yes'] + '</a>\
+                </div>\
+                <div class="clearfix"></div>\
+            </div>\
+        </div>');
+        _inner.append(node);
+        var _outer = $('<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true"/>');
         _outer.append(_inner);
         return _outer;
     };

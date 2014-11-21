@@ -40,6 +40,9 @@
     <entry key="addToCart">В кошик</entry>
     <entry key="preorderCart">Замовити</entry>
     <entry key="skuCode">Код</entry>
+    <entry key="areYouSure">Ви впевнені?</entry>
+    <entry key="yes">Так</entry>
+    <entry key="no">Ні</entry>
 
     <!-- AjaxAtbPage -->
     <entry key="itemAdded">товар {0} успішно додано до кошика</entry>
