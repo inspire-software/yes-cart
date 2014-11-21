@@ -23,26 +23,21 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.SkuPriceQuantityComparatorImpl;
 import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
-import org.yes.cart.domain.misc.navigation.price.impl.PriceTierNodeImpl;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordImpl;
-import org.yes.cart.service.domain.ExchangeRateService;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -56,7 +51,6 @@ public class PriceServiceImpl
         implements PriceService {
 
 
-    private final ExchangeRateService exchangeRateService;
     private final PriceNavigation priceNavigation;
     private final ProductService productService;
     private final GenericDAO<SkuPrice, Long> skuPriceDao;
@@ -65,18 +59,15 @@ public class PriceServiceImpl
     /**
      * Constructor.
      *
-     * @param exchangeRateService exchange rate service for handle not filled price lists
      * @param priceNavigation     price navigation composer
      * @param productService      product service
      * @param skuPriceDao         sku price dao service
      */
-    public PriceServiceImpl(final ExchangeRateService exchangeRateService,
-                            final PriceNavigation priceNavigation,
+    public PriceServiceImpl(final PriceNavigation priceNavigation,
                             final ProductService productService,
                             final GenericDAO<SkuPrice, Long> skuPriceDao
     ) {
         super(skuPriceDao);
-        this.exchangeRateService = exchangeRateService;
         this.priceNavigation = priceNavigation;
         this.productService = productService;
         this.skuPriceDao = skuPriceDao;
@@ -319,8 +310,6 @@ public class PriceServiceImpl
 
     /**
      * Get the sku prices filtered by shop.
-     * Exchange rate will be used if shop has not prices
-     * for given currency.
      *
      * @param skuCode      SKU code
      * @param shopId       shop filter
@@ -329,26 +318,12 @@ public class PriceServiceImpl
      */
     List<Pair<String, SkuPrice>> getSkuPrices(final String skuCode, final long shopId, final String currencyCode) {
 
-        List<Pair<String, SkuPrice>> rez = getSkuPriceFilteredByShopCurrency(skuCode, shopId, currencyCode);
+        return getSkuPriceFilteredByShopCurrency(skuCode, shopId, currencyCode);
 
-//        if (rez.isEmpty() && currencyCode != null && !currencyCode.equals(shop.getDefaultCurrency())) {
-//
-//            List<Pair<String, SkuPrice>> skuPrices = getSkuPriceFilteredByShopCurrency(skuCode, shop, shop.getDefaultCurrency());
-//            BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, shop.getDefaultCurrency(), currencyCode);
-//            if (exchangeRate == null) {
-//                skuPrices.clear();
-//            } else {
-//                skuPrices = recalculatePrices(currencyCode, skuPrices, exchangeRate);
-//            }
-//            rez = skuPrices;
-//        }
-        return rez;
     }
 
     /**
      * Get the sku prices filtered by shop.
-     * Exchange rate will be used if shop has not prices
-     * for given currency.
      *
      * @param productId    product PK
      * @param shopId       shop filter
@@ -357,58 +332,9 @@ public class PriceServiceImpl
      */
     List<Pair<String, SkuPrice>> getSkuPrices(final long productId, final long shopId, final String currencyCode) {
 
-        List<Pair<String, SkuPrice>> rez = getSkuPriceFilteredByShopCurrency(productId, shopId, currencyCode);
+        return getSkuPriceFilteredByShopCurrency(productId, shopId, currencyCode);
 
-//        if (rez.isEmpty() && currencyCode != null && !currencyCode.equals(shop.getDefaultCurrency())) {
-//
-//            List<Pair<String, SkuPrice>> skuPrices = getSkuPriceFilteredByShopCurrency(productId, shop, shop.getDefaultCurrency());
-//            BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, shop.getDefaultCurrency(), currencyCode);
-//            if (exchangeRate == null) {
-//                skuPrices.clear();
-//            } else {
-//                skuPrices = recalculatePrices(currencyCode, skuPrices, exchangeRate);
-//            }
-//            rez = skuPrices;
-//        }
-        return rez;
     }
-
-    /**
-     * Recalculate prices from default currency to given.
-     *
-     * @param currencyCode  given currency code
-     * @param baseSkuPrices prices in default currency
-     * @param exchangeRate  exchange rate
-     * @return list of skus with recalculated prices
-     */
-    private List<Pair<String, SkuPrice>> recalculatePrices(final String currencyCode,
-                                             final List<Pair<String, SkuPrice>> baseSkuPrices,
-                                             final BigDecimal exchangeRate) {
-
-        final List<Pair<String, SkuPrice>> skuPrices = new ArrayList<Pair<String, SkuPrice>>(baseSkuPrices.size());
-
-        for (Pair<String, SkuPrice> baseSkuPrice : baseSkuPrices) {
-
-            final SkuPrice skuPrice = skuPriceDao.getEntityFactory().getByIface(SkuPrice.class);
-
-
-            skuPrice.setRegularPrice(baseSkuPrice.getSecond().getRegularPrice().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
-            if (baseSkuPrice.getSecond().getSalePriceForCalculation() != null) {
-                skuPrice.setSalePrice(baseSkuPrice.getSecond().getSalePriceForCalculation().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
-            }
-            if (baseSkuPrice.getSecond().getMinimalPrice() != null) {
-                skuPrice.setMinimalPrice(baseSkuPrice.getSecond().getMinimalPrice().multiply(exchangeRate).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
-            }
-            skuPrice.setCurrency(currencyCode);
-            skuPrice.setQuantity(baseSkuPrice.getSecond().getQuantity());
-            skuPrice.setSku(baseSkuPrice.getSecond().getSku());
-
-            skuPrices.add(new Pair<String, SkuPrice>(baseSkuPrice.getFirst(), skuPrice));
-        }
-
-        return skuPrices;
-    }
-
 
     private List<Pair<String, SkuPrice>> getSkuPricesFilteredSkuCode(final List<Pair<String, SkuPrice>> prices, final String selectedSkuCode) {
         List<Pair<String, SkuPrice>> result = new ArrayList<Pair<String, SkuPrice>>();
@@ -541,19 +467,6 @@ public class PriceServiceImpl
     private List<PriceTierNode> getPriceTierNodes(final PriceTierTree priceTierTree, final String currency, final Shop shop) {
         List<PriceTierNode> priceTierNodes = priceTierTree.getPriceTierNodes(currency);
         if (priceTierNodes == null) {
-            AttrValueShop attrValueShop = shop.getAttributeByCode("PRICE_NAVIGATION_STRATEGY");
-
-            if (attrValueShop != null && "DYNAMIC".equalsIgnoreCase(attrValueShop.getVal())) {
-
-                final String defaultCurrency = shop.getDefaultCurrency();
-                final List<PriceTierNode> defTiers = priceTierTree.getPriceTierNodes(defaultCurrency);
-                final BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, defaultCurrency, currency);
-                final List<PriceTierNode> rez = createPriceTierNodes(
-                        defTiers,
-                        MoneyUtils.notNull(exchangeRate, BigDecimal.ONE));
-                priceTierTree.addPriceTierNode(currency, rez);
-                return rez;
-            }
             return Collections.emptyList();
         }
         return priceTierNodes;
@@ -578,61 +491,6 @@ public class PriceServiceImpl
 
         return new BigDecimal(intValue).setScale(-1 * tailZeroCount, BigDecimal.ROUND_HALF_UP);
     }
-
-    /**
-     * Create new price nodes from default currency and exchange rate
-     *
-     * @param priceTierNodes price tier in default currency
-     * @param exchangeRate   exchange rate
-     * @return list of priceTierNodes recalculated with given exchange rate
-     */
-    List<PriceTierNode> createPriceTierNodes(final List<PriceTierNode> priceTierNodes, final BigDecimal exchangeRate) {
-
-        if (priceTierNodes != null) {
-            final List<PriceTierNode> rez = new ArrayList<PriceTierNode>(priceTierNodes.size());
-            for (PriceTierNode priceTierNode : priceTierNodes) {
-                rez.add(new PriceTierNodeImpl(
-                        niceBigDecimal(priceTierNode.getFrom().multiply(exchangeRate)),
-                        niceBigDecimal(priceTierNode.getTo().multiply(exchangeRate))
-                ));
-            }
-            return rez;
-        }
-        return Collections.emptyList();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int updateDerivedPrices(final Shop shop, final String derivedCurrency) {
-        final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.US);
-        final DecimalFormat decimalFormat = new DecimalFormat(Constants.MONEY_FORMAT, formatSymbols);
-
-
-        final String defaultCurrency = shop.getDefaultCurrency();
-        final BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, defaultCurrency, derivedCurrency);
-        final String shopId = String.valueOf(shop.getShopId());
-        deleteDerivedPrices(shop, derivedCurrency);
-        String sql;
-
-
-        /**
-         * Native sql is used, because i have got from hibernate
-         * "number of select types did not match those for insert" this exception is incorrect.
-         */
-
-        sql = MessageFormat.format("insert into tskuprice (sku_id, shop_id, currency, qty, regular_price, sale_price, minimal_price, sale_from, sale_to, guid, version)" +
-                " select o.sku_id, o.shop_id, ''{0}'', o.qty, o.regular_price * {1}, o.sale_price * {1}, o.minimal_price * {1}, o.sale_from, o.sale_to, o.guid, 0 from tskuprice o" +
-                " where o.shop_id = {2} and o.currency = ''{3}''",
-                derivedCurrency,
-                decimalFormat.format(exchangeRate),
-                shopId,
-                defaultCurrency);
-
-
-        return skuPriceDao.executeNativeUpdate(sql);
-    }
-
 
     /**
      * {@inheritDoc}

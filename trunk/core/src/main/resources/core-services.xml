@@ -122,15 +122,6 @@
     </bean>
 
 
-    <bean id="shopExchangeRateService" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.service.domain.impl.ShopExchangeRateServiceImpl">
-                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopExchangeRateDao"/>
-            </bean>
-        </property>
-    </bean>
-
-
     <bean id="categoryService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.CategoryServiceImpl">
@@ -386,10 +377,9 @@
     <bean id="priceService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.PriceServiceImpl">
-                <constructor-arg index="0" type="org.yes.cart.service.domain.ExchangeRateService" ref="exchangeRateService"/>
-                <constructor-arg index="1" type="org.yes.cart.domain.query.PriceNavigation" ref="priceNavigation"/>
-                <constructor-arg index="2" type="org.yes.cart.service.domain.ProductService" ref="productService"/>
-                <constructor-arg index="3" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
+                <constructor-arg index="0" type="org.yes.cart.domain.query.PriceNavigation" ref="priceNavigation"/>
+                <constructor-arg index="1" type="org.yes.cart.service.domain.ProductService" ref="productService"/>
+                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
             </bean>
         </property>
     </bean>
@@ -411,15 +401,6 @@
             </bean>
         </property>
     </bean>
-
-
-    <bean id="exchangeRateService" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.service.domain.impl.ExchangeRateServiceImpl"/>
-        </property>
-    </bean>
-
-
 
 
     <bean id="shopCategoryService" parent="txProxyTemplate">
@@ -865,19 +846,6 @@
         </property>
     </bean>
 
-
-    <bean id="dtoShopExchangeRateService" parent="txProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.service.dto.impl.DtoShopExchangeRateServiceImpl">
-                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
-                <constructor-arg index="1" ref="shopExchangeRateService"/>
-                <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
-                <constructor-arg index="3" ref="shopService"/>
-                <constructor-arg index="4" ref="priceService"/>
-            </bean>
-        </property>
-    </bean>
-
     <bean id="dtoBrandService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoBrandServiceImpl">
@@ -1162,7 +1130,6 @@
                 <entry key="org.yes.cart.domain.dto.EtypeDTO" value="org.yes.cart.domain.dto.impl.EtypeDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ShopDTO" value="org.yes.cart.domain.dto.impl.ShopDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ShopUrlDTO" value="org.yes.cart.domain.dto.impl.ShopUrlDTOImpl"/>
-                <entry key="org.yes.cart.domain.dto.ShopExchangeRateDTO" value="org.yes.cart.domain.dto.impl.ShopExchangeRateDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CategoryDTO" value="org.yes.cart.domain.dto.impl.CategoryDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.BrandDTO" value="org.yes.cart.domain.dto.impl.BrandDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductTypeDTO" value="org.yes.cart.domain.dto.impl.ProductTypeDTOImpl"/>

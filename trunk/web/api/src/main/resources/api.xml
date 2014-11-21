@@ -35,7 +35,6 @@
                 <!--<entry key="org.yes.cart.domain.dto.EtypeDTO" value="org.yes.cart.domain.dto.impl.EtypeDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.ShopDTO" value="org.yes.cart.domain.dto.impl.ShopDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.ShopUrlDTO" value="org.yes.cart.domain.dto.impl.ShopUrlDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.ShopExchangeRateDTO" value="org.yes.cart.domain.dto.impl.ShopExchangeRateDTOImpl"/>-->
                 <entry key="org.yes.cart.domain.ro.BreadcrumbRO" value="org.yes.cart.domain.ro.BreadcrumbRO"/>
                 <entry key="org.yes.cart.domain.ro.CategoryRO" value="org.yes.cart.domain.ro.CategoryRO"/>
                 <entry key="org.yes.cart.domain.ro.ContentRO" value="org.yes.cart.domain.ro.ContentRO"/>

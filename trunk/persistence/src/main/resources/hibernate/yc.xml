@@ -1459,12 +1459,6 @@
             </key>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ShopUrlEntity"/>
         </set>
-        <bag name="exchangerates" inverse="false" lazy="false" cascade="all">
-            <key>
-                <column name="SHOP_ID" not-null="true"/>
-            </key>
-            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ShopExchangeRateEntity"/>
-        </bag>
         <bag name="advertisingPlaces" inverse="false" lazy="false" cascade="all">
             <key>
                 <column name="SHOP_ID" not-null="true"/>
@@ -1657,29 +1651,6 @@
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPURL_GUID" not-null="true"/>
-
-    </class>
-
-    <class name="org.yes.cart.domain.entity.impl.ShopExchangeRateEntity" table="TSHOPEXCHANGERATE">
-        <id name="shopexchangerateId" type="long" column="SHOPEXCHANGERATE_ID">
-            <generator class="native">
-                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
-                <param name="column">value</param>
-            </generator>
-        </id>
-        <version name="version" column="VERSION" type="long"/>
-
-        <property name="fromCurrency" type="string" length="3" not-null="true" column="FROMCURRENCY"/>
-        <property name="toCurrency" type="string" length="3" not-null="true" column="TOCURRENCY"/>
-        <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_ER_SHOP">
-            <column name="SHOP_ID" not-null="true"/>
-        </many-to-one>
-        <property name="rate" type="java.math.BigDecimal" not-null="true" column="RATE"/>
-        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
-        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
-        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
-        <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPEXRATE_GUID" not-null="true"/>
 
     </class>
 
