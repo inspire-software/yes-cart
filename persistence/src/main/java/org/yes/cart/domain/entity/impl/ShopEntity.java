@@ -36,7 +36,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private String description;
     private String fspointer;
     private Set<ShopUrl> shopUrl = new HashSet<ShopUrl>(0);
-    private Collection<ShopExchangeRate> exchangerates = new ArrayList<ShopExchangeRate>(0);
     private Collection<ShopAdvPlace> advertisingPlaces = new ArrayList<ShopAdvPlace>(0);
     private Collection<AttrValueShop> attributes = new ArrayList<AttrValueShop>(0);
     private SeoEntity seoInternal;
@@ -95,14 +94,6 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public void setShopUrl(Set<ShopUrl> shopUrl) {
         this.shopUrl = shopUrl;
-    }
-
-    public Collection<ShopExchangeRate> getExchangerates() {
-        return this.exchangerates;
-    }
-
-    public void setExchangerates(Collection<ShopExchangeRate> exchangerates) {
-        this.exchangerates = exchangerates;
     }
 
     public Collection<ShopAdvPlace> getAdvertisingPlaces() {

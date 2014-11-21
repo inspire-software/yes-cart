@@ -117,21 +117,6 @@ public interface Shop extends Auditable, Seoable, Codable {
      */
     void setShopUrl(Set<ShopUrl> shopUrl);
 
-
-    /**
-     * Get the currency exchange rates. All exchange rates from default to target currency.
-     *
-     * @return list of exchange rates.
-     */
-    Collection<ShopExchangeRate> getExchangerates();
-
-    /**
-     * Set currency exchange rates.
-     *
-     * @param exchangerates exchange rates.
-     */
-    void setExchangerates(Collection<ShopExchangeRate> exchangerates);
-
     /**
      * Get the named advertizing places.
      *

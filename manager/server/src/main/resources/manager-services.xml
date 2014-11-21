@@ -156,22 +156,6 @@
         </security:intercept-methods>
     </bean>
 
-    <bean id="remoteShopExchangeRateService" class="org.yes.cart.remote.service.impl.RemoteShopExchangeRateServiceImpl">
-        <constructor-arg index="0" ref="dtoShopExchangeRateService"/>
-        <flex:remoting-destination/>
-        <security:intercept-methods>
-            <security:protect method="create" access="ROLE_SMADMIN"/>
-            <security:protect method="update" access="ROLE_SMADMIN"/>
-            <security:protect method="remove" access="ROLE_SMADMIN"/>
-            <security:protect method="getNew" access="ROLE_SMADMIN"/>
-            <security:protect method="getAll" access="ROLE_SMADMIN"/>
-            <security:protect method="getById" access="ROLE_SMADMIN"/>
-            <security:protect method="getAllByShopId" access="ROLE_SMADMIN"/>
-            <security:protect method="updateDerivedPrices" access="ROLE_SMADMIN"/>
-        </security:intercept-methods>
-
-    </bean>
-
     <bean id="remoteShopUrlService" class="org.yes.cart.remote.service.impl.RemoteShopUrlServiceImpl">
         <constructor-arg index="0" ref="dtoShopUrlService"/>
         <flex:remoting-destination/>

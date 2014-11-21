@@ -36,8 +36,6 @@ public interface PriceService extends GenericService<SkuPrice> {
 
     /**
      * Get minimal price for given product skus (all), shop, currency and quantity.
-     * Exchange rate will be used for recalculate price if price does not present
-     * in price list for given currency.
      *
      *
      * @param productId    optional product to filter the prices. If null the price will be chosen by selectedSku.
@@ -84,18 +82,6 @@ public interface PriceService extends GenericService<SkuPrice> {
             PriceTierTree priceTierTree,
             String currency,
             Shop shop);
-
-    /**
-     * Recalculate derived prices. Derived prices - prices not in default currency, for example default shop currency is
-     * USD and shop support EUR also, but has not price lists for EUR currency and used currency exchange rate instead.
-     * Use delete / insert paradigm instead of insert/update.
-     *
-     * @param shop            shop
-     * @param derivedCurrency target currency
-     * @return quantity of created records.
-     */
-    int updateDerivedPrices(Shop shop, String derivedCurrency);
-
 
     /**
      * Delete derived prices in given shop.

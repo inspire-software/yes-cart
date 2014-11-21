@@ -31,7 +31,6 @@
         private var TAB_URL_IDX:int = 1;
         private var TAB_CURRENCY_IDX:int = 2;
         private var TAB_LANG_IDX:int = 3;
-//        private var TAB_CURRENCY_EXCHANGE_IDX:int = 3;
         private var TAB_CATEGORY_IDX:int = 4;
         private var TAB_WAREHOUSE_IDX:int = 5;
         private var TAB_CARRIERS_IDX:int = 6;
@@ -104,13 +103,6 @@
             storeSupportedCountryBillPanel.shopDTOImpl = _shopDTOImpl;
             billingTab.addChild(storeSupportedCountryBillPanel);
         }
-//
-//        private function currencyExcRateTabSelected(event:MouseEvent):void {
-//            currencyExcangeTab.removeAllChildren();
-//            var storeSupportedCurrencyPanel:StoreCurrencyExcahngePanel = new StoreCurrencyExcahngePanel();
-//            storeSupportedCurrencyPanel.shopDTOImpl = _shopDTOImpl;
-//            currencyExcangeTab.addChild(storeSupportedCurrencyPanel);
-//        }
 
         private function categoryTabSelected(event:MouseEvent):void {
             categoryTab.removeAllChildren();
@@ -175,11 +167,6 @@
                     countryBillTabSelected(null);
                     break;
                 }
-//                case TAB_CURRENCY_EXCHANGE_IDX:
-//                {
-//                    currencyExcRateTabSelected(null);
-//                    break;
-//                }
                 case TAB_CATEGORY_IDX:
                 {
                     categoryTabSelected(null);

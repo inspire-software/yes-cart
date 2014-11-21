@@ -110,15 +110,11 @@ public interface ServiceSpringKeys {
      * {@link org.yes.cart.service.domain.ProductAssociationService} bean key.
      */
     String PRODUCT_ASSOCIATIONS_SERVICE = "productAssociationService";
+
     /**
      * {@link org.yes.cart.service.domain.PriceService} bean key.
      */
     String PRICE_SERVICE = "priceService";
-    /**
-     * {@link org.yes.cart.service.domain.ExchangeRateService} bean key.
-     */
-    String EXCHANGE_RATE_SERVICE = "exchangeRateService";
-
 
 
     String USER_MANAGMENT_SERVICE = "userManagementService";

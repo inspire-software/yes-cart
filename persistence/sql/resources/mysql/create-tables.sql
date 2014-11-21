@@ -754,21 +754,6 @@
         primary key (SHOPCATEGORY_ID)
     ) ;
 
-    create table TSHOPEXCHANGERATE (
-        SHOPEXCHANGERATE_ID bigint not null auto_increment,
-        VERSION bigint not null default 0,
-        FROMCURRENCY varchar(3) not null,
-        TOCURRENCY varchar(3) not null,
-        SHOP_ID bigint not null,
-        RATE decimal(19,2) not null,
-        CREATED_TIMESTAMP datetime,
-        UPDATED_TIMESTAMP datetime,
-        CREATED_BY varchar(64),
-        UPDATED_BY varchar(64),
-        GUID varchar(36) not null unique,
-        primary key (SHOPEXCHANGERATE_ID)
-    ) ;
-
     create table TSHOPTOPSELLER (
         SHOPTOPSELLER_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
@@ -1409,15 +1394,6 @@
         add constraint FK_SC_CAT 
         foreign key (CATEGORY_ID) 
         references TCATEGORY (CATEGORY_ID);
-
-
-
-    alter table TSHOPEXCHANGERATE 
-        add index FK_ER_SHOP (SHOP_ID), 
-        add constraint FK_ER_SHOP 
-        foreign key (SHOP_ID) 
-        references TSHOP (SHOP_ID);
-
 
 
     alter table TSHOPTOPSELLER 

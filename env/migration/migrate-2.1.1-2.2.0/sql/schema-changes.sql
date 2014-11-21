@@ -585,3 +585,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
    'Search: newarrival tag days offset',  1006, 1002);
 
 
+--
+-- YC-476 Remove exchange rate API
+--
+
+drop table TSHOPEXCHANGERATE;
+delete from TSHOPATTRVALUE where CODE = 'PRICE_NAVIGATION_STRATEGY';
+delete from TATTRIBUTE where CODE = 'PRICE_NAVIGATION_STRATEGY';
