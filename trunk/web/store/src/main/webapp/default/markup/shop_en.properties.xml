@@ -40,6 +40,9 @@
     <entry key="addToCart">Add to cart</entry>
     <entry key="preorderCart">Preorder</entry>
     <entry key="skuCode">Code</entry>
+    <entry key="areYouSure">Are you sure?</entry>
+    <entry key="yes">Yes</entry>
+    <entry key="no">No</entry>
 
     <!-- AjaxAtbPage -->
     <entry key="itemAdded">item {0} successfully added to the cart</entry>

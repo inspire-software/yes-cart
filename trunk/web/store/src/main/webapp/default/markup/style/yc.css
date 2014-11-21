@@ -65,6 +65,15 @@ a {
     border-radius: 5px;
 }
 
+.modal-dialog-inner {
+    border: 5px solid #3d3d3d;
+    background-color: #fff;
+    padding: 10px 10px 10px 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
 .product-added-msg {
     font-size: 120%;
     font-weight: bold;
