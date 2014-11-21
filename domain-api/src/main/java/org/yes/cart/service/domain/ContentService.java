@@ -47,14 +47,6 @@ public interface ContentService extends GenericService<Category> {
     Category createRootContent(final long shopId);
 
     /**
-     * Get the "template variation" for given content with fail over to parent.
-     *
-     * @param content given content
-     * @return Template variation
-     */
-    String getContentTemplateVariation(Category content);
-
-    /**
      * Get the "template variation" template (No fail over).
      *
      * @param contentId given content PK
@@ -88,17 +80,6 @@ public interface ContentService extends GenericService<Category> {
      * @return list of child content
      */
     Set<Category> getChildContentRecursive(long contentId);
-
-
-    /**
-     * Get the items per page for particular content.
-     * See CATEGORY_ITEMS_PER_PAGE settings
-     * Failover to parent category if value does not exist
-     *
-     * @param content given content
-     * @return list of items per page settings
-     */
-    List<String> getItemsPerPage(Category content);
 
     /**
      * Get content body for a particular content.
@@ -153,12 +134,12 @@ public interface ContentService extends GenericService<Category> {
      *
      *
      * @param locale        locale for localised value (or null for raw value)
-     * @param content       given content
+     * @param contentId     given content
      * @param attributeName attribute name
      * @param defaultValue  default value will be returned if value not found in hierarchy
      * @return value of given attribute name or defaultValue if value not found in content hierarchy
      */
-    String getContentAttributeRecursive(String locale, Category content, String attributeName, String defaultValue);
+    String getContentAttributeRecursive(String locale, long contentId, String attributeName, String defaultValue);
 
     /**
      * Get the values of given attributes. If value not present in given category
@@ -167,11 +148,11 @@ public interface ContentService extends GenericService<Category> {
      *
      *
      * @param locale         locale for localised value (or null for raw value)
-     * @param content        given content
+     * @param contentId      given content
      * @param attributeNames set of attributes, to collect values.
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
-    String[] getContentAttributeRecursive(final String locale, Category content, String[] attributeNames);
+    String[] getContentAttributeRecursive(final String locale, long contentId, String[] attributeNames);
 
     /**
      * Get category by id.

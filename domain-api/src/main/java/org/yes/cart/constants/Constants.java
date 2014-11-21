@@ -101,6 +101,35 @@ public interface Constants {
      */
     String[] DEFAULT_THUMB_SIZE = new String[] { "80", "80" };
 
+    /**
+     * Default product image size
+     */
+    String[] DEFAULT_PRODUCTLIST_IMAGE_SIZE = new String[] { "280", "280" };
+
+    /**
+     * Default product image size
+     */
+    String[] DEFAULT_CATEGORYLIST_IMAGE_SIZE = new String[] { "280", "280" };
+
+    /**
+     * Default limit of featured panel
+     */
+    int FEATURED_LIST_SIZE = 15;
+
+    /**
+     * Default limit of recommendation panels (newarrival, recently viewed)
+     */
+    int RECOMMENDATION_SIZE = 5;
+
+    /**
+     * Default product count in one row on category and search pages
+     */
+    int PRODUCT_COLUMNS_SIZE = 2;
+
+    /**
+     * Default sub categories count in one row on category and search pages
+     */
+    int SUBCATEGORIES_COLUMNS_SIZE = 2;
 
     String CATEGORY_IMAGE_REPOSITORY_URL_PATTERN    = "/imgvault/category/";
     String BRAND_IMAGE_REPOSITORY_URL_PATTERN       = "/imgvault/brand/";

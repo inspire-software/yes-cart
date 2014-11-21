@@ -16,8 +16,6 @@
 
 package org.yes.cart.web.support.seo;
 
-import org.yes.cart.domain.entity.Product;
-
 /**
  * User: denispavlov
  * Date: 12-08-20

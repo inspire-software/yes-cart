@@ -19,12 +19,11 @@ package org.yes.cart.web.page.component.product;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +45,8 @@ public class SkuAttributesView extends BaseComponent {
     private final static String ATTR_GROUP = "attrGroup";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
-    private ProductService productService;
-
-    @SpringBean(name = ServiceSpringKeys.ATTRIBUTE_SERVICE)
-    private AttributeService attributeService;
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    private ProductServiceFacade productServiceFacade;
 
 
     private final List<Pair<String, List<Pair<String, String>>>> attributesToShow;
@@ -70,9 +66,9 @@ public class SkuAttributesView extends BaseComponent {
         final long productTypeId = sku.getProduct().getProducttype().getProducttypeId();
 
         if (productOnly) {
-            attributesToShow = adapt(productService.getProductAttributes(selectedLocale, sku.getProduct().getProductId(), 0L, productTypeId));
+            attributesToShow = adapt(productServiceFacade.getProductAttributes(selectedLocale, sku.getProduct().getProductId(), 0L, productTypeId));
         } else {
-            attributesToShow = adapt(productService.getProductAttributes(selectedLocale, sku.getProduct().getProductId(), sku.getSkuId(), productTypeId));
+            attributesToShow = adapt(productServiceFacade.getProductAttributes(selectedLocale, sku.getProduct().getProductId(), sku.getSkuId(), productTypeId));
         }
 
     }

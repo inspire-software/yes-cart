@@ -17,7 +17,6 @@
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.service.domain.ProductService;

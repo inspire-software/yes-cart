@@ -90,15 +90,15 @@ public class PriceServiceImpl
     @Cacheable(value = "priceService-minimalRegularPrice")
     public SkuPrice getMinimalRegularPrice(final Long productId,
                                            final String selectedSku,
-                                           final Shop shop,
+                                           final long shopId,
                                            final String currencyCode,
                                            final BigDecimal quantity) {
 
         final List<Pair<String, SkuPrice>> skuPrices;
         if (selectedSku == null && productId != null) {
-            skuPrices = getSkuPrices(productId, shop, currencyCode);
+            skuPrices = getSkuPrices(productId, shopId, currencyCode);
         } else if (selectedSku != null) {
-            skuPrices = getSkuPrices(selectedSku, shop, currencyCode);
+            skuPrices = getSkuPrices(selectedSku, shopId, currencyCode);
         } else {
             skuPrices = Collections.emptyList();
         }
@@ -140,13 +140,16 @@ public class PriceServiceImpl
      * {@inheritDoc}
      */
     @Cacheable(value = "priceService-allCurrentPrices")
-    public List<SkuPrice> getAllCurrentPrices(final Long productId, final String selectedSku, final Shop shop, final String currencyCode) {
+    public List<SkuPrice> getAllCurrentPrices(final Long productId,
+                                              final String selectedSku,
+                                              final long shopId,
+                                              final String currencyCode) {
 
         final List<Pair<String, SkuPrice>> skuPrices;
         if (selectedSku == null && productId != null) {
-            skuPrices = getSkuPrices(productId, shop, currencyCode);
+            skuPrices = getSkuPrices(productId, shopId, currencyCode);
         } else if (selectedSku != null) {
-            skuPrices = getSkuPrices(selectedSku, shop, currencyCode);
+            skuPrices = getSkuPrices(selectedSku, shopId, currencyCode);
         } else {
             skuPrices = Collections.emptyList();
         }
@@ -320,25 +323,25 @@ public class PriceServiceImpl
      * for given currency.
      *
      * @param skuCode      SKU code
-     * @param shop         shop filter
+     * @param shopId       shop filter
      * @param currencyCode currency code
      * @return list of sku prices
      */
-    List<Pair<String, SkuPrice>> getSkuPrices(final String skuCode, final Shop shop, final String currencyCode) {
+    List<Pair<String, SkuPrice>> getSkuPrices(final String skuCode, final long shopId, final String currencyCode) {
 
-        List<Pair<String, SkuPrice>> rez = getSkuPriceFilteredByShopCurrency(skuCode, shop, currencyCode);
+        List<Pair<String, SkuPrice>> rez = getSkuPriceFilteredByShopCurrency(skuCode, shopId, currencyCode);
 
-        if (rez.isEmpty() && currencyCode != null && !currencyCode.equals(shop.getDefaultCurrency())) {
-
-            List<Pair<String, SkuPrice>> skuPrices = getSkuPriceFilteredByShopCurrency(skuCode, shop, shop.getDefaultCurrency());
-            BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, shop.getDefaultCurrency(), currencyCode);
-            if (exchangeRate == null) {
-                skuPrices.clear();
-            } else {
-                skuPrices = recalculatePrices(currencyCode, skuPrices, exchangeRate);
-            }
-            rez = skuPrices;
-        }
+//        if (rez.isEmpty() && currencyCode != null && !currencyCode.equals(shop.getDefaultCurrency())) {
+//
+//            List<Pair<String, SkuPrice>> skuPrices = getSkuPriceFilteredByShopCurrency(skuCode, shop, shop.getDefaultCurrency());
+//            BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, shop.getDefaultCurrency(), currencyCode);
+//            if (exchangeRate == null) {
+//                skuPrices.clear();
+//            } else {
+//                skuPrices = recalculatePrices(currencyCode, skuPrices, exchangeRate);
+//            }
+//            rez = skuPrices;
+//        }
         return rez;
     }
 
@@ -348,25 +351,25 @@ public class PriceServiceImpl
      * for given currency.
      *
      * @param productId    product PK
-     * @param shop         shop filter
+     * @param shopId       shop filter
      * @param currencyCode currency code
      * @return list of sku prices
      */
-    List<Pair<String, SkuPrice>> getSkuPrices(final long productId, final Shop shop, final String currencyCode) {
+    List<Pair<String, SkuPrice>> getSkuPrices(final long productId, final long shopId, final String currencyCode) {
 
-        List<Pair<String, SkuPrice>> rez = getSkuPriceFilteredByShopCurrency(productId, shop, currencyCode);
+        List<Pair<String, SkuPrice>> rez = getSkuPriceFilteredByShopCurrency(productId, shopId, currencyCode);
 
-        if (rez.isEmpty() && currencyCode != null && !currencyCode.equals(shop.getDefaultCurrency())) {
-
-            List<Pair<String, SkuPrice>> skuPrices = getSkuPriceFilteredByShopCurrency(productId, shop, shop.getDefaultCurrency());
-            BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, shop.getDefaultCurrency(), currencyCode);
-            if (exchangeRate == null) {
-                skuPrices.clear();
-            } else {
-                skuPrices = recalculatePrices(currencyCode, skuPrices, exchangeRate);
-            }
-            rez = skuPrices;
-        }
+//        if (rez.isEmpty() && currencyCode != null && !currencyCode.equals(shop.getDefaultCurrency())) {
+//
+//            List<Pair<String, SkuPrice>> skuPrices = getSkuPriceFilteredByShopCurrency(productId, shop, shop.getDefaultCurrency());
+//            BigDecimal exchangeRate = exchangeRateService.getExchangeRate(shop, shop.getDefaultCurrency(), currencyCode);
+//            if (exchangeRate == null) {
+//                skuPrices.clear();
+//            } else {
+//                skuPrices = recalculatePrices(currencyCode, skuPrices, exchangeRate);
+//            }
+//            rez = skuPrices;
+//        }
         return rez;
     }
 
@@ -476,11 +479,11 @@ public class PriceServiceImpl
     }
 
     private List<Pair<String, SkuPrice>> getSkuPriceFilteredByShopCurrency(final String skuCode,
-                                                                           final Shop shop,
+                                                                           final long shopId,
                                                                            final String currencyCode) {
 
         final List<Object[]> prices = (List) getGenericDao().findQueryObjectByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP",
-                skuCode, currencyCode, shop.getShopId());
+                skuCode, currencyCode, shopId);
         if (CollectionUtils.isNotEmpty(prices)) {
             final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
             for (final Object[] price : prices) {
@@ -493,11 +496,11 @@ public class PriceServiceImpl
     }
 
     private List<Pair<String, SkuPrice>> getSkuPriceFilteredByShopCurrency(final long productId,
-                                                                           final Shop shop,
+                                                                           final long shopId,
                                                                            final String currencyCode) {
 
         final List<Object[]> prices = (List) getGenericDao().findQueryObjectByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP",
-                productId, currencyCode, shop.getShopId());
+                productId, currencyCode, shopId);
         if (CollectionUtils.isNotEmpty(prices)) {
             final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
             for (final Object[] price : prices) {

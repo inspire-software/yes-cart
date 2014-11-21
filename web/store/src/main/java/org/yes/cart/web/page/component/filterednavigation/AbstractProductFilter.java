@@ -23,13 +23,14 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
-import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.ArrayList;
@@ -63,6 +64,8 @@ public abstract class AbstractProductFilter extends BaseComponent {
     protected static final String FILTER = "filteredNavigation";
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
 
+    @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_SERVICE_FACADE)
+    private CategoryServiceFacade categoryServiceFacade;
 
     private final long categoryId;
     private Category category;
@@ -70,9 +73,6 @@ public abstract class AbstractProductFilter extends BaseComponent {
     private List<FilteredNavigationRecord> navigationRecords = null;
 
     private final List<Long> categories;
-
-    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
-    private CategoryService categoryService;
 
     private final Query query;
 
@@ -87,11 +87,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
         super(id);
         this.query = query;
         this.categoryId  = categoryId;
-        if (categoryId > 0) {
-            categories = new ArrayList<Long>(categoryService.getChildCategoriesRecursiveIds(categoryId));
-        } else {
-            categories = null;
-        }
+        this.categories = categoryServiceFacade.getSearchCategoriesIds(categoryId, ShopCodeContext.getShopId());
     }
 
     /**
@@ -101,7 +97,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
      */
     public Category getCategory() {
         if (category == null) {
-            category = categoryService.getById(categoryId);
+            category = categoryServiceFacade.getCategory(categoryId, ShopCodeContext.getShopId());
         }
         return category;
     }

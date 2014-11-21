@@ -21,14 +21,13 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductQuantityModel;
-import org.yes.cart.service.domain.ProductQuantityStrategy;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.math.BigDecimal;
 
@@ -39,11 +38,8 @@ import java.math.BigDecimal;
  */
 public class QuantityPickerPanel extends BaseComponent {
 
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
-    protected ProductService productService;
-
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_QUANTITY_STRATEGY)
-    protected ProductQuantityStrategy productQuantityStrategy;
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    protected ProductServiceFacade productServiceFacade;
 
     private final Long productId;
     private final String sku;
@@ -57,9 +53,9 @@ public class QuantityPickerPanel extends BaseComponent {
     protected void onBeforeRender() {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-        final Product product = productService.getProductById(productId, true);
+        final Product product = productServiceFacade.getProductById(productId);
         final BigDecimal cartQty = cart.getProductSkuQuantity(sku);
-        final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(cartQty, product);
+        final ProductQuantityModel pqm = productServiceFacade.getProductQuantity(cartQty, product);
 
         final String message;
         if (!pqm.canOrderMore()) {

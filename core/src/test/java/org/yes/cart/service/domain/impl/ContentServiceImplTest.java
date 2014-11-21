@@ -26,7 +26,6 @@ import org.yes.cart.service.domain.ContentService;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -64,75 +63,51 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
         assertEquals(rootContent.getGuid(), "SHOIP1");
     }
 
-    /**
-     * Test, that we able to getByKey value atrtibutes in category hierarchy
-     */
     @Test
     public void testGetCategoryAttributeRecursive() {
-        String val = contentService.getContentAttributeRecursive(null, contentService.findById(10105L), "SOME_NOT_EXISTING_ATTR", null);
+        String val = contentService.getContentAttributeRecursive(null, 10105L, "SOME_NOT_EXISTING_ATTR", null);
         assertNull(val);
-        val = contentService.getContentAttributeRecursive(null, contentService.findById(10105L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        val = contentService.getContentAttributeRecursive(null, 10105L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("10,20,50", val);
-        val = contentService.getContentAttributeRecursive(null, contentService.findById(10107L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        val = contentService.getContentAttributeRecursive(null, 10107L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("6,12,24", val);
     }
 
-    /**
-     * Test, that we able to getByKey the AttributeEnumeration.CATEGORY_ITEMS_PER_PAGE settings
-     */
     @Test
-    public void testGetItemsPerPageTest() {
-        // Category with set CATEGORY_ITEMS_PER_PAGE
-        Category content = contentService.findById(10105L);
-        assertNotNull(content);
-        assertNotNull(content.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE));
-        List<String> itemsPerPage = contentService.getItemsPerPage(content);
-        assertNotNull(itemsPerPage);
-        assertEquals(3, itemsPerPage.size());
-        assertEquals("10", itemsPerPage.get(0));
-        assertEquals("20", itemsPerPage.get(1));
-        assertEquals("50", itemsPerPage.get(2));
-        // Failover part
-        content = contentService.findById(10109L);
-        assertNotNull(content);
-        assertNull(content.getAttributesByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE));
-        itemsPerPage = contentService.getItemsPerPage(content);
-        assertNotNull(itemsPerPage);
-        assertEquals(3, itemsPerPage.size());
-        assertEquals("6", itemsPerPage.get(0));
-        assertEquals("12", itemsPerPage.get(1));
-        assertEquals("24", itemsPerPage.get(2));
-    }
-
-    /**
-     * UI template variation test. Prove that we are able to
-     * getByKey ui template from parent category on any level.
-     */
-    @Test
-    public void testGetUIVariationTestWithFailover() {
-        Category content = contentService.findById(10107L);
-        assertNotNull(content);
-        assertNull(content.getUitemplate());
-        String uiVariation = contentService.getContentTemplateVariation(content);
-        assertEquals("default", uiVariation);
+    public void testGetCategoryAttributeRecursiveMulti() {
+        String[] val = contentService.getContentAttributeRecursive(null, 10105L, new String[] { "SOME_NOT_EXISTING_ATTR",  "SOME_NOT_EXISTING_ATTR_2" });
+        assertNull(val);
+        val = contentService.getContentAttributeRecursive(null, 10105L, new String[] { "SOME_NOT_EXISTING_ATTR", AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE });
+        assertNotNull(val);
+        assertNull(val[0]);
+        assertEquals("10,20,50", val[1]);
     }
 
     @Test
     public void testGetUIVariationTestNoFailover() {
-        Category category = contentService.findById(10107L);
+        Category category = contentService.findById(10106L);
         assertNotNull(category);
         assertNull(category.getUitemplate());
-        String uiVariation = contentService.getContentTemplate(10107L);
+        String uiVariation = contentService.getContentTemplate(10106L);
         assertNull(uiVariation);
     }
 
     @Test
     public void testGetUIVariationTestExists() {
-        Category category = contentService.findById(10105L);
+        Category category = contentService.findById(10107L);
         assertNotNull(category);
-        assertEquals("default", category.getUitemplate());
-        String uiVariation = contentService.getContentTemplate(10105L);
+        assertEquals("content", category.getUitemplate());
+        String uiVariation = contentService.getContentTemplate(10107L);
         assertEquals(category.getUitemplate(), uiVariation);
+    }
+
+    @Test
+    public void testGetUIVariationTestFailover() {
+        Category category = contentService.findById(10108L);
+        assertNotNull(category);
+        assertNull(category.getUitemplate());
+        String uiVariation = contentService.getContentTemplate(10108L);
+        assertEquals("content", uiVariation);
     }
 
 

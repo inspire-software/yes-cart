@@ -20,7 +20,6 @@ package org.yes.cart.web.support.seo.impl;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.yes.cart.domain.entity.Product;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ProductService;

@@ -19,8 +19,9 @@ package org.yes.cart.web.page.component;
 import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.service.domain.ContentService;
+import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.ContentServiceFacade;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -28,8 +29,8 @@ import java.util.HashMap;
 public class DynoContentCentralView extends AbstractCentralView {
 
 
-    @SpringBean(name = ServiceSpringKeys.CONTENT_SERVICE)
-    protected ContentService contentService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    protected ContentServiceFacade contentServiceFacade;
 
     /**
      * Construct panel.
@@ -59,7 +60,7 @@ public class DynoContentCentralView extends AbstractCentralView {
         final String lang = getLocale().getLanguage();
         final String contentBody;
         if (getCategoryId() > 0l) {
-            contentBody = contentService.getDynamicContentBody(getCategoryId(), lang, new HashMap<String, Object>() {{
+            contentBody = contentServiceFacade.getDynamicContentBody(getCategoryId(), ShopCodeContext.getShopId(), lang, new HashMap<String, Object>() {{
                 put("datetime", new Date());  // This is just an example of passing a variable to template
             }});
         } else {

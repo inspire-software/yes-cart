@@ -21,12 +21,10 @@ import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.AttrValueProductSku;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.domain.entity.impl.ProductSkuEntity;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
@@ -47,7 +45,6 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
 
     private final ProductService productService;
     private final AttributableImageService productSkuImageService;
-    private final CategoryService categoryService;
     private final String httpServletContextPath;
     private final ImageService imageService;
     private final I18NWebSupport i18NWebSupport;
@@ -57,7 +54,6 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      *
      * @param imageService             image service to get the image seo info
      * @param productSkuImageService category image service to get the image.
-     * @param categoryService          to get image width and height
      * @param productSkuEntity         sku to decorate
      * @param httpServletContextPath   servlet context path
      * @param productService           product service
@@ -65,7 +61,6 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
      */
     public ProductSkuDecoratorImpl(final ImageService imageService,
                                    final AttributableImageService productSkuImageService,
-                                   final CategoryService categoryService,
                                    final ProductSku productSkuEntity,
                                    final String httpServletContextPath,
                                    final ProductService productService,
@@ -77,7 +72,6 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
         }
         this.httpServletContextPath = httpServletContextPath;
         this.productSkuImageService = productSkuImageService;
-        this.categoryService = categoryService;
         this.imageService = imageService;
     }
 
@@ -113,34 +107,13 @@ public class ProductSkuDecoratorImpl extends ProductSkuEntity implements Product
     public String getDefaultImage(final String width, final String height, final String lang) {
         final String imageAttributeName = getImageAttributeFileNames(lang).get(0).getFirst();
         return productSkuImageService.getImage(
-                    this,
-                    httpServletContextPath,
-                    lang,
-                    width,
-                    height,
-                    imageAttributeName,
-                    null);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public String [] getDefaultImageSize(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(
-                null, category,
-                ProductDecoratorImpl.defaultSize
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String [] getThumbnailImageSize(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(
-                null, category,
-                ProductDecoratorImpl.thumbnailSize
-        );
+                this,
+                httpServletContextPath,
+                lang,
+                width,
+                height,
+                imageAttributeName,
+                null);
     }
 
 

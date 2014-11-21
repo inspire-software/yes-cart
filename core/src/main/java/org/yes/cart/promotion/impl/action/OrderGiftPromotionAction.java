@@ -89,7 +89,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
             return priceService.getMinimalRegularPrice(
                     null,
                     sku,
-                    shopService.getById(cart.getShoppingContext().getShopId()),
+                    cart.getShoppingContext().getShopId(),
                     cart.getCurrencyCode(),
                     BigDecimal.ONE);
         } catch (Exception exp) {

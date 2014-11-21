@@ -103,4 +103,19 @@ public interface StorefrontServiceSpringKeys {
       */
      public String CHECKOUT_SERVICE_FACADE = "checkoutServiceFacade";
 
+     /**
+      * Category service facade
+      */
+     public String CATEGORY_SERVICE_FACADE = "categoryServiceFacade";
+
+     /**
+      * Catalog service facade
+      */
+     public String CONTENT_SERVICE_FACADE = "contentServiceFacade";
+
+     /**
+      * Product service facade
+      */
+     public String PRODUCT_SERVICE_FACADE = "productServiceFacade";
+
 }

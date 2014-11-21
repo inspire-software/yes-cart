@@ -2951,21 +2951,9 @@
        ]]>
     </query>
 
-    <query name="TEMPLATE.BY.CATEGORY.ID">
-        <![CDATA[
-                  select c.uitemplate from CategoryEntity c  where c.categoryId = ?1
-       ]]>
-    </query>
-
     <query name="SEO.URI.BY.CATEGORY.ID">
         <![CDATA[
                   select c.seoInternal.uri from CategoryEntity c  where c.categoryId = ?1
-       ]]>
-    </query>
-
-    <query name="CATEGORY.PRODUCT.COUNT">
-        <![CDATA[
-                  select count(pc.productCategoryId) from ProductCategoryEntity pc  where pc.category.categoryId = ?1
        ]]>
     </query>
 

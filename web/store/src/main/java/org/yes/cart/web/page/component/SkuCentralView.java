@@ -26,8 +26,8 @@ import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
@@ -39,7 +39,7 @@ import org.yes.cart.web.page.component.social.AddAnyButton;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.ObjectDecorator;
-import org.yes.cart.web.support.service.AttributableImageService;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.io.Serializable;
@@ -150,26 +150,8 @@ public class SkuCentralView extends AbstractCentralView {
     private final static String VOLUME_DISCOUNT_BODY_CONTAINER = "priceTiersView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
-    protected ProductService productService;
-
-    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
-    protected AttributableImageService attributableImageService;
-
-    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
-    protected ImageService imageService;
-
-    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
-    protected CategoryService categoryService;
-
-    @SpringBean(name = ServiceSpringKeys.PRICE_SERVICE)
-    protected PriceService priceService;
-
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_ASSOCIATIONS_SERVICE)
-    protected ProductAssociationService productAssociationService;
-
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
-    private ProductAvailabilityStrategy productAvailabilityStrategy;
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    protected ProductServiceFacade productServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
@@ -192,14 +174,15 @@ public class SkuCentralView extends AbstractCentralView {
     }
 
     private void configureContext() {
+        long shopId = ShopCodeContext.getShopId();
         String productId = getPage().getPageParameters().get(WebParametersKeys.PRODUCT_ID).toString();
         String skuId = getPage().getPageParameters().get(WebParametersKeys.SKU_ID).toString();
         if (skuId != null) {
             isProduct = false;
             try {
                 final Long skuPK = Long.valueOf(skuId);
-                sku = productService.getSkuById(skuPK);
-                product = productService.getProductById(sku.getProduct().getProductId(), true);
+                sku = productServiceFacade.getSkuById(skuPK);
+                product = productServiceFacade.getProductById(sku.getProduct().getProductId());
             } catch (Exception exp) {
                 throw new RestartResponseException(Application.get().getHomePage());
             }
@@ -207,9 +190,9 @@ public class SkuCentralView extends AbstractCentralView {
             isProduct = true;
             try {
                 final Long prodPK = Long.valueOf(productId);
-                product = productService.getProductById(prodPK, true);
-                final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), product);
-                sku = getDefault(product, pam);
+                product = productServiceFacade.getProductById(prodPK);
+                final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(product, shopId);
+                sku = getDefault(product, pam, shopId);
             } catch (Exception exp) {
                 throw new RestartResponseException(Application.get().getHomePage());
             }
@@ -243,9 +226,10 @@ public class SkuCentralView extends AbstractCentralView {
         add(new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false));
         add(new AddAnyButton(SOCIAL_ADD_TO_ANY_BUTTON, product));
 
-        final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), sku);
-
         final Shop shop = ApplicationDirector.getCurrentShop();
+
+        final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(sku, shop.getShopId());
+
         final AttrValue val = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER);
         final boolean qtyPickVisible = pam.isAvailable() && val != null && val.getVal() != null && Boolean.valueOf(val.getVal());
 
@@ -272,9 +256,9 @@ public class SkuCentralView extends AbstractCentralView {
         );
 
 
-        final List<Long> associatedProducts = productAssociationService.getProductAssociationsIds(
+        final List<ProductSearchResultDTO> associatedProducts = productServiceFacade.getProductAssociations(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
-                Association.ACCESSORIES
+                shop.getShopId(), Association.ACCESSORIES
         );
 
 
@@ -294,7 +278,7 @@ public class SkuCentralView extends AbstractCentralView {
             ).add(
                     new Fragment(ACCESSORIES_BODY_CONTAINER, ACCESSORIES_BODY, this)
                             .add(
-                                    new ProductAssociationsView(ACCESSORIES_VIEW, Association.ACCESSORIES)
+                                    new ProductAssociationsView(ACCESSORIES_VIEW, product.getProductId(), Association.ACCESSORIES)
                             )
             );
 
@@ -362,21 +346,21 @@ public class SkuCentralView extends AbstractCentralView {
      */
     private Collection<SkuPrice> getSkuPrices() {
         /* We always preselect a SKU */
-        return priceService.getAllCurrentPrices(
+        return productServiceFacade.getSkuPrices(
                 product.getProductId(),
                 sku.getCode(),
-                ApplicationDirector.getCurrentShop(),
-                ApplicationDirector.getShoppingCart().getCurrencyCode());
+                ApplicationDirector.getShoppingCart().getCurrencyCode(),
+                ApplicationDirector.getCurrentShop().getShopId());
     }
 
     /*
     * Return first available sku rather than default to improve customer experience.
     */
-    private ProductSku getDefault(final Product product, final ProductAvailabilityModel productPam) {
+    private ProductSku getDefault(final Product product, final ProductAvailabilityModel productPam, final long shopId) {
         if (productPam.isAvailable()) {
             if (product.isMultiSkuProduct()) {
                 for (final ProductSku sku : product.getSku()) {
-                    final ProductAvailabilityModel skuPam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), sku);
+                    final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(sku, shopId);
                     if (skuPam.isAvailable()) {
                         return sku;
                     }
@@ -396,12 +380,12 @@ public class SkuCentralView extends AbstractCentralView {
      * @return {@link SkuPrice}
      */
     private SkuPrice getSkuPrice() {
-        return priceService.getMinimalRegularPrice(
+        return productServiceFacade.getSkuPrice(
                 null,
                 sku.getCode(), /* We always preselect a SKU */
-                ApplicationDirector.getCurrentShop(),
+                BigDecimal.ONE,
                 ApplicationDirector.getShoppingCart().getCurrencyCode(),
-                BigDecimal.ONE
+                ApplicationDirector.getCurrentShop().getShopId()
         );
     }
 

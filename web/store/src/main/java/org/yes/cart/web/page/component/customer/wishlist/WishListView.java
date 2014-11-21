@@ -17,24 +17,17 @@
 package org.yes.cart.web.page.component.customer.wishlist;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.service.domain.PriceService;
-import org.yes.cart.service.domain.ProductAvailabilityStrategy;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -60,17 +53,8 @@ import java.util.*;
  */
 public class WishListView extends AbstractProductSearchResultList {
 
-    @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
-    private LuceneQueryFactory luceneQueryFactory;
-
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
     private CustomerServiceFacade customerServiceFacade;
-
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
-    private ProductAvailabilityStrategy productAvailabilityStrategy;
-
-    @SpringBean(name = ServiceSpringKeys.PRICE_SERVICE)
-    protected PriceService priceService;
 
     private List<ProductSearchResultDTO> products = null;
 
@@ -146,14 +130,8 @@ public class WishListView extends AbstractProductSearchResultList {
 
                 }
 
-                int limit = productIds.size();
-
-                final Query wish = luceneQueryFactory.getFilteredNavigationQueryChain(ShopCodeContext.getShopId(), null,
-                        Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
-                                (List) Arrays.asList(productIds)));
-
-                final List<ProductSearchResultDTO> uniqueProducts = productService.getProductSearchResultDTOByQuery(
-                        wish, 0, limit, null, false);
+                final List<ProductSearchResultDTO> uniqueProducts = productServiceFacade.getListProducts(
+                        productIds, -1L, ShopCodeContext.getShopId());
 
                 final List<ProductSearchResultDTO> wishListProducts = new ArrayList<ProductSearchResultDTO>();
 
@@ -192,15 +170,15 @@ public class WishListView extends AbstractProductSearchResultList {
     @Override
     protected void onBeforeRenderPopulateListItem(final ListItem<ProductSearchResultDTO> listItem,
                                                   final String selectedLocale,
-                                                  final Category category) {
-        super.onBeforeRenderPopulateListItem(listItem, selectedLocale, category);
+                                                  final Pair<String, String> thumbWidthHeight) {
+        super.onBeforeRenderPopulateListItem(listItem, selectedLocale, thumbWidthHeight);
 
         final LinksSupport links = getWicketSupportFacade().links();
 
         final ProductSearchResultDTO product = listItem.getModel().getObject();
         final CustomerWishList itemData = wishListDataByProduct.get(product);
 
-        final ProductAvailabilityModel pam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), product);
+        final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(product, ShopCodeContext.getShopId());
 
         final PageParameters params = new PageParameters();
         params.add(WebParametersKeys.SKU_ID, itemData.getSkus().getSkuId());
@@ -276,12 +254,12 @@ public class WishListView extends AbstractProductSearchResultList {
      * @return {@link org.yes.cart.domain.entity.SkuPrice}
      */
     private SkuPrice getSkuPrice(final String firstAvailableSkuCode, final BigDecimal quantity) {
-        return priceService.getMinimalRegularPrice(
+        return productServiceFacade.getSkuPrice(
                 null,
                 firstAvailableSkuCode,
-                ApplicationDirector.getCurrentShop(),
+                quantity,
                 ApplicationDirector.getShoppingCart().getCurrencyCode(),
-                quantity
+                ApplicationDirector.getCurrentShop().getShopId()
         );
     }
 

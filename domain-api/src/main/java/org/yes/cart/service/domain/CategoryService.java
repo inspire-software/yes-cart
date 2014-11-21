@@ -73,14 +73,6 @@ public interface CategoryService extends GenericService<Category> {
     Category getRootCategory();
 
     /**
-     * Get the "template variation" for given category with fail over to parent category.
-     *
-     * @param category given category
-     * @return Template variation
-     */
-    String getCategoryTemplateVariation(Category category);
-
-    /**
      * Get the "template variation" template (No fail over).
      *
      * @param categoryId given category PK
@@ -117,24 +109,6 @@ public interface CategoryService extends GenericService<Category> {
      * @return true if search in subcategories too
      */
     boolean isSearchInSubcategory(long categoryId, long shopId);
-
-    /**
-     * Count products in given category.
-     *
-     * @param categoryId   given categoryId
-     * @param includeChildren true if need include child categories
-     * @return quantity of products
-     */
-    int getProductQuantity(long categoryId, boolean includeChildren);
-
-    /**
-     * Does given this category have at least one product assigned to it.
-     *
-     * @param categoryId   given categoryId
-     * @param includeChildren true if need include child categories
-     * @return true if at least one product is reachable
-     */
-    boolean isCategoryHasProducts(long categoryId, boolean includeChildren);
 
     /**
      * Does given this category have at least one sub category.
@@ -181,16 +155,6 @@ public interface CategoryService extends GenericService<Category> {
      */
     Set<Long> getChildCategoriesRecursiveIds(long categoryId);
 
-    /**
-     * Get the items per page for particular category.
-     * See CATEGORY_ITEMS_PER_PAGE settings
-     * Failover to parent category if value does not exist
-     *
-     * @param category given category
-     * @return list of items per page settings
-     */
-    List<String> getItemsPerPage(Category category);
-
 
     /**
      * Get the value of given attribute. If value not present in given category
@@ -198,12 +162,12 @@ public interface CategoryService extends GenericService<Category> {
      *
      *
      * @param locale        locale for localised value (or null for raw value)
-     * @param category      given category
+     * @param categoryId    given category
      * @param attributeName attribute name
      * @param defaultValue  default value will be returned if value not found in hierarchy
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
-    String getCategoryAttributeRecursive(String locale, Category category, String attributeName, String defaultValue);
+    String getCategoryAttributeRecursive(String locale, long categoryId, String attributeName, String defaultValue);
 
     /**
      * Get the values of given attributes. If value not present in given category
@@ -212,11 +176,11 @@ public interface CategoryService extends GenericService<Category> {
      *
      *
      * @param locale         locale for localised value (or null for raw value)
-     * @param category       given category
+     * @param categoryId     given category
      * @param attributeNames set of attributes, to collect values.
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
-    String[] getCategoryAttributeRecursive(final String locale, Category category, String[] attributeNames);
+    String[] getCategoryAttributeRecursive(String locale, long categoryId, String[] attributeNames);
 
 
 

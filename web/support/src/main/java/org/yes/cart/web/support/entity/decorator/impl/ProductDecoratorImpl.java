@@ -20,10 +20,12 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.AttrValueProduct;
+import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.domain.entity.impl.ProductEntity;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.ProductDecorator;
@@ -42,21 +44,8 @@ import java.util.Map;
  */
 public class ProductDecoratorImpl extends ProductEntity implements ProductDecorator, Serializable {
 
-    final static  String [] defaultSize =
-            new String [] {
-                        AttributeNamesKeys.Category.PRODUCT_IMAGE_WIDTH,
-                        AttributeNamesKeys.Category.PRODUCT_IMAGE_HEIGHT
-            };
-
-    final static  String [] thumbnailSize =
-            new String [] {
-                        AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_WIDTH,
-                        AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_HEIGHT
-            };
-
     private final ProductService productService;
     private final AttributableImageService productImageService;
-    private final CategoryService categoryService;
     private final ImageService imageService;
 
     private final String httpServletContextPath;
@@ -70,7 +59,6 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      *
      * @param imageService image service to get the image seo info
      * @param productImageService category image service to get the image.
-     * @param categoryService          to get image width and height
      * @param productEntity            original product to decorate.
      * @param httpServletContextPath   servlet context path
      * @param productService           product service
@@ -78,7 +66,6 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      */
     public ProductDecoratorImpl(final ImageService imageService,
                                 final AttributableImageService productImageService,
-                                final CategoryService categoryService,
                                 final ProductService productService,
                                 final I18NWebSupport i18NWebSupport,
                                 final Product productEntity,
@@ -99,7 +86,6 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
         }
 
         this.productImageService = productImageService;
-        this.categoryService = categoryService;
         this.productService = productService;
         this.imageService = imageService;
 
@@ -156,28 +142,6 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
         return (AttrValueProduct) attrValueMap.get(attributeCode);
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
-    public String [] getDefaultImageSize(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(
-                null, category,
-                defaultSize
-        );
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public String [] getThumbnailImageSize(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(
-                null, category,
-                ProductDecoratorImpl.thumbnailSize
-        );
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -212,12 +176,15 @@ public class ProductDecoratorImpl extends ProductEntity implements ProductDecora
      * {@inheritDoc}
      */
     public String getDescription(final String locale) {
-        final Pair<String, String> desc = productService.getProductAttribute(
-                locale, getProductId(), 0L, AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
-        if (desc == null || StringUtils.isBlank(desc.getSecond())) {
-            return getDescription();
+        if (this.attrValueMap.isEmpty()) {
+            final Pair<String, String> desc = productService.getProductAttribute(
+                    locale, getProductId(), 0L, AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
+            if (desc == null || StringUtils.isBlank(desc.getSecond())) {
+                return getDescription();
+            }
+            return desc.getSecond();
         }
-        return desc.getSecond();
+        return getAttributeValue(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
     }
 
 

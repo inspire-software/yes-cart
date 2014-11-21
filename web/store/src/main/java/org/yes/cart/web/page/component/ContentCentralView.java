@@ -16,12 +16,12 @@
 
 package org.yes.cart.web.page.component;
 
-import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.service.domain.ContentService;
+import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.ContentServiceFacade;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -31,8 +31,8 @@ import org.yes.cart.service.domain.ContentService;
 public class ContentCentralView extends AbstractCentralView {
 
 
-    @SpringBean(name = ServiceSpringKeys.CONTENT_SERVICE)
-    protected ContentService contentService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    protected ContentServiceFacade contentServiceFacade;
 
     /**
      * Construct panel.
@@ -52,7 +52,7 @@ public class ContentCentralView extends AbstractCentralView {
      * @param categoryId ignored
      * @param booleanQuery     boolean query.
      */
-    public ContentCentralView(String id, long categoryId, BooleanQuery booleanQuery) {
+    public ContentCentralView(String id, long categoryId, Query booleanQuery) {
         super(id, categoryId, booleanQuery);
     }
 
@@ -62,7 +62,7 @@ public class ContentCentralView extends AbstractCentralView {
         final String lang = getLocale().getLanguage();
         final String contentBody;
         if (getCategoryId() > 0l) {
-            contentBody = contentService.getContentBody(getCategoryId(), lang);
+            contentBody = contentServiceFacade.getContentBody(getCategoryId(), ShopCodeContext.getShopId(), lang);
         } else {
             contentBody = "";
         }

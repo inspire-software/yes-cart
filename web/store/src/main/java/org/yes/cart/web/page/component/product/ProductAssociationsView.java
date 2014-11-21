@@ -16,19 +16,12 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.lucene.search.Query;
-import org.apache.wicket.Application;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.support.constants.WebParametersKeys;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,6 +38,7 @@ public class ProductAssociationsView extends AbstractProductSearchResultList {
     private LuceneQueryFactory luceneQueryFactory;
 
     private List<ProductSearchResultDTO> associatedProductList = null;
+    private final long productId;
     private final String associationType;
 
     /**
@@ -53,8 +47,9 @@ public class ProductAssociationsView extends AbstractProductSearchResultList {
      * @param id              component id
      * @param associationType type of association. See
      */
-    public ProductAssociationsView(final String id, final String associationType) {
+    public ProductAssociationsView(final String id, final long productId, final String associationType) {
         super(id, true);
+        this.productId = productId;
         this.associationType = associationType;
     }
 
@@ -64,19 +59,7 @@ public class ProductAssociationsView extends AbstractProductSearchResultList {
      * @return product id
      */
     protected long getProductId() {
-        final long productId;
-        String productIdStr = getPage().getPageParameters().get(WebParametersKeys.PRODUCT_ID).toString();
-        try {
-            if (productIdStr == null) {
-                long skuId = getPage().getPageParameters().get(WebParametersKeys.SKU_ID).toLong();
-                productId = productService.getSkuById(skuId).getProduct().getProductId();
-            } else {
-                productId = Long.valueOf(productIdStr);
-            }
-            return productId;
-        } catch (Exception exp) {
-            throw new RestartResponseException(Application.get().getHomePage());
-        }
+        return productId;
     }
 
     /**
@@ -84,23 +67,9 @@ public class ProductAssociationsView extends AbstractProductSearchResultList {
      */
     public List<ProductSearchResultDTO> getProductListToShow() {
         if (associatedProductList == null) {
-            final List<Long> productIds = productAssociationService.getProductAssociationsIds(
-                    getProductId(),
-                    associationType
-            );
 
-            if (productIds != null && !productIds.isEmpty()) {
-
-                final Query assoc = luceneQueryFactory.getFilteredNavigationQueryChain(ShopCodeContext.getShopId(), null,
-                        Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
-                                (List) Arrays.asList(productIds)));
-
-                associatedProductList = productService.getProductSearchResultDTOByQuery(
-                        assoc, 0, productIds.size(), null, false);
-            } else {
-
-                associatedProductList = Collections.emptyList();
-            }
+            associatedProductList = productServiceFacade.getProductAssociations(
+                    getProductId(), ShopCodeContext.getShopId(), associationType);
 
         }
         return associatedProductList;

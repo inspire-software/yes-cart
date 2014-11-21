@@ -32,23 +32,20 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ProductQuantityStrategy;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
+import org.yes.cart.web.support.service.CategoryServiceFacade;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
@@ -84,24 +81,14 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
-    private ProductSkuService productSkuService;
-
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
-    protected ProductService productService;
-
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_QUANTITY_STRATEGY)
-    protected ProductQuantityStrategy productQuantityStrategy;
-
-    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
-    protected CategoryService categoryService;
-
-
-    private final Category rootCategory;
-
-
     @SpringBean(name = StorefrontServiceSpringKeys.DECORATOR_FACADE)
     private DecoratorFacade decoratorFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_SERVICE_FACADE)
+    private CategoryServiceFacade categoryServiceFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    private ProductServiceFacade productServiceFacade;
 
 
     /**
@@ -112,8 +99,6 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
      */
     public ShoppingCartItemsList(final String id, final List<? extends CartItem> cartItems) {
         super(id, cartItems);
-        rootCategory = categoryService.getRootCategory();
-
     }
 
     /**
@@ -126,8 +111,8 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
         final String skuCode = cartItem.getProductSkuCode();
 
-        final ProductSku sku = productSkuService.getProductSkuBySkuCode(skuCode);
-        final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(cartItem.getQty(), sku);
+        final ProductSku sku = productServiceFacade.getProductSkuBySkuCode(skuCode);
+        final ProductQuantityModel pqm = productServiceFacade.getProductQuantity(cartItem.getQty(), sku);
 
         final ProductSkuDecorator productSkuDecorator = decoratorFacade.decorate(sku, WicketUtil.getHttpServletRequest().getContextPath(), true);
 
@@ -188,10 +173,10 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         );
 
 
-        final String [] size = productSkuDecorator.getThumbnailImageSize(rootCategory);
+        final Pair<String, String> size = categoryServiceFacade.getThumbnailSizeConfig(0L, ShopCodeContext.getShopId());
 
-        final String width = size[0];
-        final String height = size[1];
+        final String width = size.getFirst();
+        final String height = size.getSecond();
 
         final String lang = getLocale().getLanguage();
         final String defaultImageRelativePath = productSkuDecorator.getDefaultImage(width, height, lang);

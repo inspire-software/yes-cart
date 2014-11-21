@@ -30,7 +30,6 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**

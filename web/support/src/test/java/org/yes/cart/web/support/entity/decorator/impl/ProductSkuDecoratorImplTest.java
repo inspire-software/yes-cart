@@ -27,22 +27,14 @@ import org.yes.cart.domain.entity.impl.AttributeEntity;
 import org.yes.cart.domain.entity.impl.ProductEntity;
 import org.yes.cart.domain.entity.impl.ProductSkuEntity;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.i18n.impl.I18NWebSupportImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-
-import org.yes.cart.service.domain.ProductService;
 
 /**
  * User: igor
@@ -63,7 +55,7 @@ public class ProductSkuDecoratorImplTest {
         productSkuEntity.setDescription("Description");
 
         ProductSkuDecoratorImpl productSkuDecorator = new ProductSkuDecoratorImpl(
-                null, null, null,
+                null, null,
                 productSkuEntity,
                 null, null,
                 i18NWebSupport
@@ -96,7 +88,7 @@ public class ProductSkuDecoratorImplTest {
         productSkuEntity.setProduct(productEntity);
 
         ProductSkuDecoratorImpl productSkuDecorator = new ProductSkuDecoratorImpl(
-                null, null, null,
+                null, null,
                 productSkuEntity,
                 null, productService,
                 i18NWebSupport
@@ -135,7 +127,7 @@ public class ProductSkuDecoratorImplTest {
         productSkuEntity.setAttributes(skuAVCollection);
 
         ProductSkuDecoratorImpl productSkuDecorator = new ProductSkuDecoratorImpl(
-                null, null, null,
+                null, null,
                 productSkuEntity,
                 null, null,
                 i18NWebSupport
@@ -176,7 +168,7 @@ public class ProductSkuDecoratorImplTest {
         productSkuEntity.setProduct(productEntity);
 
         ProductSkuDecoratorImpl productSkuDecorator = new ProductSkuDecoratorImpl(
-                null, null, null,
+                null, null,
                 productSkuEntity,
                 null, productService,
                 i18NWebSupport

@@ -17,24 +17,22 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.data.SortableProductDataProvider;
 import org.yes.cart.web.page.component.navigation.ProductPerPageListView;
 import org.yes.cart.web.page.component.navigation.ProductSorter;
 import org.yes.cart.web.page.component.navigation.URLPagingNavigator;
 import org.yes.cart.web.page.component.product.ProductInListView;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
@@ -45,13 +43,6 @@ import java.util.List;
  * Time: 10:29 PM
  */
 public class ProductsCentralView extends AbstractCentralView {
-
-    final static String[] defaultSize =
-            new String[]{
-                    AttributeNamesKeys.Category.PRODUCT_IMAGE_WIDTH,
-                    AttributeNamesKeys.Category.PRODUCT_IMAGE_HEIGHT
-            };
-
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     /**
@@ -78,11 +69,8 @@ public class ProductsCentralView extends AbstractCentralView {
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
-    protected ProductService productService;
-
-    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
-    protected CategoryService categoryService;
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    protected ProductServiceFacade productServiceFacade;
 
     /**
      * Construct panel.
@@ -104,20 +92,18 @@ public class ProductsCentralView extends AbstractCentralView {
     @Override
     protected void onBeforeRender() {
 
-        final List<String> itemsPerPageValues =
-                getCategoryService().getItemsPerPage(getCategory());
+        final long shopId = ShopCodeContext.getShopId();
+        final long categoryId = getCategoryId();
 
-
-        final String[] widthHeight = getCategoryService().getCategoryAttributeRecursive(
-                null, getCategory(),
-                defaultSize
-        );
+        final List<String> itemsPerPageValues = categoryServiceFacade.getItemsPerPageOptionsConfig(categoryId, shopId);
+        final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, shopId);
+        final int columns = categoryServiceFacade.getProductListColumnOptionsConfig(categoryId, shopId);
 
         final int selectedItemPerPage = WicketUtil.getSelectedItemsPerPage(
                 getPage().getPageParameters(), itemsPerPageValues);
 
-        final SortableProductDataProvider dataProvider = new  SortableProductDataProvider(
-                productService,
+        final SortableProductDataProvider dataProvider = new SortableProductDataProvider(
+                productServiceFacade,
                 getNavigationQuery(),
                 getI18NSupport(),
                 getDecoratorFacade()
@@ -129,7 +115,7 @@ public class ProductsCentralView extends AbstractCentralView {
 
             protected void populateItem(Item<ProductSearchResultDTO> productItem) {
                 productItem.add(
-                        new ProductInListView(PRODUCT, productItem.getModelObject(), getCategory(), widthHeight)
+                        new ProductInListView(PRODUCT, productItem.getModelObject(), widthHeight)
                 );
             }
 
@@ -142,12 +128,6 @@ public class ProductsCentralView extends AbstractCentralView {
 
         };
 
-        final int columns = NumberUtils.toInt(
-                getCategoryService().getCategoryAttributeRecursive(
-                        null, getCategory(),
-                        AttributeNamesKeys.Category.CATEGORY_PRODUCTS_COLUMNS,
-                        "2")
-        );
 
         productDataView.setColumns(columns);
         productDataView.setRows(selectedItemPerPage / columns);
