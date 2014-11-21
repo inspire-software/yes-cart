@@ -43,7 +43,7 @@ public interface PriceService extends GenericService<SkuPrice> {
      * @param productId    optional product to filter the prices. If null the price will be chosen by selectedSku.
      * @param selectedSku  optional sku to filter the prices. if null all product skus will be  considered to
      *                     determine minimal price
-     * @param shop         shop            sku will be c
+     * @param shopId       shop
      * @param currencyCode desirable currency
      * @param quantity     quantity
      *
@@ -51,7 +51,7 @@ public interface PriceService extends GenericService<SkuPrice> {
      */
     SkuPrice getMinimalRegularPrice(final Long productId,
                                     final String selectedSku,
-                                    final Shop shop,
+                                    final long shopId,
                                     final String currencyCode,
                                     final BigDecimal quantity);
 
@@ -61,14 +61,14 @@ public interface PriceService extends GenericService<SkuPrice> {
      * @param productId    optional product to filter the prices. If null the price will be chosen by selectedSku.
      * @param selectedSku  optional sku to filter the prices. if null all product skus will be  considered to
      *                     determine minimal price
-     * @param shop         shop            sku will be c
+     * @param shopId       shop
      * @param currencyCode desirable currency
      *
      * @return lowest available sku price
      */
     List<SkuPrice> getAllCurrentPrices(final Long productId,
                                        final String selectedSku,
-                                       final Shop shop,
+                                       final long shopId,
                                        final String currencyCode);
 
 

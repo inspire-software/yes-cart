@@ -39,18 +39,6 @@ import java.util.List;
  */
 public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDecorator {
 
-    private final static String[] defaultSize =
-            new String[]{
-                    AttributeNamesKeys.Category.CATEGORY_IMAGE_WIDTH,
-                    AttributeNamesKeys.Category.CATEGORY_IMAGE_HEIGHT
-            };
-
-    private final static String[] thumbnailSize =
-            new String[]{
-                    AttributeNamesKeys.Category.CATEGORY_IMAGE_WIDTH,
-                    AttributeNamesKeys.Category.CATEGORY_IMAGE_HEIGHT
-            };
-
     private final AttributableImageService categoryImageService;
     private final CategoryService categoryService;
     private final String httpServletContextPath;
@@ -122,28 +110,6 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
     /**
      * {@inheritDoc}
      */
-    public String[] getDefaultImageSize(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(
-                null, category,
-                defaultSize
-        );
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public String[] getThumbnailImageSize(final Category category) {
-        return categoryService.getCategoryAttributeRecursive(
-                null, category,
-                thumbnailSize
-        );
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
     public SeoImage getSeoImage(final String fileName) {
         if (StringUtils.isBlank(fileName)) {
             return null;
@@ -156,24 +122,27 @@ public class CategoryDecoratorImpl extends CategoryEntity implements CategoryDec
         return i18NWebSupport.getFailoverModel(getDisplayName(), getName()).getValue(locale);
     }
 
+    private String getAttributeValue(final String locale, final String attribute, final String defaultValue) {
+        return categoryService.getCategoryAttributeRecursive(locale, this.getCategoryId(),
+                attribute,
+                defaultValue);
+    }
+
+
     /** {@inheritDoc} */
     public String getAttributeValue(final String attribute) {
-        return categoryService.getCategoryAttributeRecursive(null, this,
-                attribute,
-                getDescription());
+        return getAttributeValue(null, attribute, null);
     }
 
     /** {@inheritDoc} */
     public String getAttributeValue(final String locale, final String attribute) {
-        return categoryService.getCategoryAttributeRecursive(locale, this,
-                attribute,
-                getDescription());
+        return getAttributeValue(locale, attribute, null);
     }
 
     /**
      * {@inheritDoc}
      */
     public String getDescription(final String locale) {
-        return getAttributeValue(AttributeNamesKeys.Category.CATEGORY_DESCRIPTION_PREFIX + locale);
+        return getAttributeValue(null, AttributeNamesKeys.Category.CATEGORY_DESCRIPTION_PREFIX + locale, getDescription());
     }
 }

@@ -123,9 +123,6 @@
     <cache name="categoryService-rootCategory" maxElementsInMemory="2" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="categoryService-categoryTemplateVariation" maxElementsInMemory="200" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
     <cache name="categoryService-categoryTemplate" maxElementsInMemory="200" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
@@ -138,20 +135,11 @@
     <cache name="categoryService-categoryNewArrivalDate" maxElementsInMemory="1000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="categoryService-itemsPerPage" maxElementsInMemory="200" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
     <cache name="categoryService-categoryAttributeRecursive" maxElementsInMemory="200" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="categoryService-categoryAttributesRecursive" maxElementsInMemory="200" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
-    <cache name="categoryService-productQuantity" maxElementsInMemory="200" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
-
-    <cache name="categoryService-categoryHasProducts" maxElementsInMemory="200" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
     <cache name="categoryService-categoryHasChildren" maxElementsInMemory="200" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
@@ -175,13 +163,7 @@
     <cache name="contentService-rootContent" maxElementsInMemory="10" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="contentService-contentTemplateVariation" maxElementsInMemory="1000" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
     <cache name="contentService-contentTemplate" maxElementsInMemory="1000" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
-    <cache name="contentService-itemsPerPage" maxElementsInMemory="1000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="contentService-contentBody" maxElementsInMemory="1000" overflowToDisk="false"
@@ -252,6 +234,12 @@
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="productService-productAssociationsIds" maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="productService-featuredProducts" maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="productService-newProducts" maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="productService-productByQuery" maxElementsInMemory="2000" overflowToDisk="false"

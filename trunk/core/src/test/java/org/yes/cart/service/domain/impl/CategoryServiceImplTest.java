@@ -116,57 +116,24 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(found);
     }
 
-    /**
-     * Test, that we able to getByKey value atrtibutes in category hierarchy
-     */
     @Test
     public void testGetCategoryAttributeRecursive() {
-        String val = categoryService.getCategoryAttributeRecursive(null, categoryService.findById(105L), "SOME_NOT_EXISTING_ATTR", null);
+        String val = categoryService.getCategoryAttributeRecursive(null, 105L, "SOME_NOT_EXISTING_ATTR", null);
         assertNull(val);
-        val = categoryService.getCategoryAttributeRecursive(null, categoryService.findById(105L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        val = categoryService.getCategoryAttributeRecursive(null, 105L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("10,20,50", val);
-        val = categoryService.getCategoryAttributeRecursive(null, categoryService.findById(139L), AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        val = categoryService.getCategoryAttributeRecursive(null, 139L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("6,12,24", val);
     }
 
-    /**
-     * Test, that we able to getByKey the AttributeEnumeration.CATEGORY_ITEMS_PER_PAGE settings
-     */
     @Test
-    public void testGetItemsPerPageTest() {
-        // Category with seted CATEGORY_ITEMS_PER_PAGE
-        Category category = categoryService.findById(105L);
-        assertNotNull(category);
-        assertNotNull(category.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE));
-        List<String> itemsPerPage = categoryService.getItemsPerPage(category);
-        assertNotNull(itemsPerPage);
-        assertEquals(3, itemsPerPage.size());
-        assertEquals("10", itemsPerPage.get(0));
-        assertEquals("20", itemsPerPage.get(1));
-        assertEquals("50", itemsPerPage.get(2));
-        // Failover part
-        category = categoryService.findById(139L);
-        assertNotNull(category);
-        assertNull(category.getAttributesByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE));
-        itemsPerPage = categoryService.getItemsPerPage(category);
-        assertNotNull(itemsPerPage);
-        assertEquals(3, itemsPerPage.size());
-        assertEquals("6", itemsPerPage.get(0));
-        assertEquals("12", itemsPerPage.get(1));
-        assertEquals("24", itemsPerPage.get(2));
-    }
-
-    /**
-     * UI template variation test. Prove that we are able to
-     * getByKey ui template from parent category on any level.
-     */
-    @Test
-    public void testGetUIVariationTestWithFailover() {
-        Category category = categoryService.findById(139L);
-        assertNotNull(category);
-        assertNull(category.getUitemplate());
-        String uiVariation = categoryService.getCategoryTemplateVariation(category);
-        assertEquals("default", uiVariation);
+    public void testGetCategoryAttributeRecursiveMulti() {
+        String[] val = categoryService.getCategoryAttributeRecursive(null, 105L, new String[] { "SOME_NOT_EXISTING_ATTR", "SOME_NOT_EXISTING_ATTR_2" });
+        assertNull(val);
+        val = categoryService.getCategoryAttributeRecursive(null, 105L, new String[] { "SOME_NOT_EXISTING_ATTR", AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE });
+        assertNotNull(val);
+        assertNull(val[0]);
+        assertEquals("10,20,50", val[1]);
     }
 
     @Test
@@ -180,11 +147,20 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testGetUIVariationTestExists() {
-        Category category = categoryService.findById(100L);
+        Category category = categoryService.findById(101L);
         assertNotNull(category);
-        assertEquals("default", category.getUitemplate());
-        String uiVariation = categoryService.getCategoryTemplate(100L);
+        assertEquals("boys", category.getUitemplate());
+        String uiVariation = categoryService.getCategoryTemplate(101L);
         assertEquals(category.getUitemplate(), uiVariation);
+    }
+
+    @Test
+    public void testGetUIVariationTestFailover() {
+        Category category = categoryService.findById(107L);
+        assertNotNull(category);
+        assertNull(category.getUitemplate());
+        String uiVariation = categoryService.getCategoryTemplate(107L);
+        assertEquals("fun", uiVariation);
     }
 
     @Test
@@ -220,23 +196,6 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
 
         categoryService.delete(saved);
 
-    }
-
-    @Test
-    public void testIsCategoryHasProductsTrue() throws Exception {
-        assertTrue(categoryService.isCategoryHasProducts(101L, false));
-    }
-
-    @Test
-    public void testIsCategoryHasProductsFalse() throws Exception {
-        final Category newCategory = categoryService.getGenericDao().getEntityFactory().getByIface(Category.class);
-        newCategory.setGuid("TEST-PRODUCTS");
-        newCategory.setName("TEST-PRODUCTS");
-
-        final Category saved = categoryService.create(newCategory);
-        assertFalse(categoryService.isCategoryHasProducts(saved.getCategoryId(), false));
-
-        categoryService.delete(saved);
     }
 
     @Test

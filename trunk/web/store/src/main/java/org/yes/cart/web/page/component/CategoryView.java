@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 
@@ -40,12 +41,16 @@ public class CategoryView extends  BaseComponent {
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
 
 
+    private final Pair<String, String> imageSize;
+
     /**
      * Construct category view.
      * @param id component id
+     * @param imageSize image size
      */
-    public CategoryView(final String id) {
+    public CategoryView(final String id, final Pair<String, String> imageSize) {
         super(id);
+        this.imageSize = imageSize;
     }
 
     @Override
@@ -55,10 +60,8 @@ public class CategoryView extends  BaseComponent {
 
         final CategoryDecorator category = (CategoryDecorator) this.getParent().getDefaultModel().getObject();
 
-        final String [] defSize = category.getDefaultImageSize(category);
-
-        final String width = defSize[0];
-        final String height = defSize[1];
+        final String width = imageSize.getFirst();
+        final String height = imageSize.getSecond();
 
         final LinksSupport links = getWicketSupportFacade().links();
 

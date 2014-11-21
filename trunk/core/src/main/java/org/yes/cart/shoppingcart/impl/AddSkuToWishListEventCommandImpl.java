@@ -195,7 +195,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         final SkuPrice skuPrice = getPriceService().getMinimalRegularPrice(
                 null,
                 skuCode,
-                shop,
+                shop.getShopId(),
                 shoppingCart.getCurrencyCode(),
                 quantity
         );

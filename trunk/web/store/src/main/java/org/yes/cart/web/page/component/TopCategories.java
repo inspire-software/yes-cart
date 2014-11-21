@@ -19,15 +19,18 @@ package org.yes.cart.web.page.component;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
+import org.springframework.util.CollectionUtils;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.service.CategoryServiceFacade;
+import org.yes.cart.web.support.service.ContentServiceFacade;
 
 import java.util.List;
 
@@ -44,8 +47,11 @@ public class TopCategories extends BaseComponent {
     private final static String CATEGORY_NAME = "categoryName";
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
 
-    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
-    private CategoryService categoryService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_SERVICE_FACADE)
+    private CategoryServiceFacade categoryServiceFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    private ContentServiceFacade contentServiceFacade;
 
     /**
      * Construct top categories view.
@@ -64,9 +70,36 @@ public class TopCategories extends BaseComponent {
 
         final String selectedLocale = getLocale().getLanguage();
 
-        final List<Category> categories = categoryService.getTopLevelCategories(ShopCodeContext.getShopId());
-
         final long categoryId = NumberUtils.toLong(getPage().getPageParameters().get(WebParametersKeys.CATEGORY_ID).toString());
+        final long contentId = NumberUtils.toLong(getPage().getPageParameters().get(WebParametersKeys.CONTENT_ID).toString());
+        final long shopId = ShopCodeContext.getShopId();
+        final List<Category> categories;
+        final long currentCategoryId;
+        final boolean viewingCategory;
+        if (contentId > 0L) { // content menu
+            final List<Category> contentMenu = contentServiceFacade.getCurrentContentMenu(contentId, shopId);
+            if (CollectionUtils.isEmpty(contentMenu)) {
+                // if this content does not have sub content, display parent's menu
+                final Category content = contentServiceFacade.getContent(contentId, shopId);
+                categories = contentServiceFacade.getCurrentContentMenu(content.getParentId(), shopId);
+            } else {
+                categories = contentMenu;
+            }
+            currentCategoryId = contentId;
+            viewingCategory = false;
+        } else { // sub categories or top categories
+            final List<Category> categoryMenu = categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId);
+            if (CollectionUtils.isEmpty(categoryMenu)) {
+                // if this content does not have sub content, display parent's menu
+                final Category category = categoryServiceFacade.getCategory(categoryId, shopId);
+                categories = categoryServiceFacade.getCurrentCategoryMenu(category.getParentId(), shopId);
+            } else {
+                categories = categoryMenu;
+            }
+            currentCategoryId = categoryId;
+            viewingCategory = true;
+        }
+
 
         add(
                 new ListView<Category>(CATEGORY_LIST, categories) {
@@ -77,26 +110,24 @@ public class TopCategories extends BaseComponent {
                         final Category category = categoryListItem.getModelObject();
                         final I18NModel nameModel = getI18NSupport().getFailoverModel(category.getDisplayName(), category.getName());
 
-                        categoryListItem.add(
+                        final Link link;
+                        if (viewingCategory) {
+                            link = getWicketSupportFacade().links().newCategoryLink(CATEGORY_NAME_LINK, category.getCategoryId());
+                        } else {
+                            link = getWicketSupportFacade().links().newContentLink(CATEGORY_NAME_LINK, category.getCategoryId());
+                        }
 
-                                getWicketSupportFacade().links().newCategoryLink(CATEGORY_NAME_LINK, category.getCategoryId())
-                                .add(
+                        link
+                                .add(new Label(CATEGORY_NAME, nameModel.getValue(selectedLocale)).setEscapeModelStrings(false))
+                                .add(new AttributeModifier("class",
+                                        category.getCategoryId() == currentCategoryId ? "active-category" : ""
+                                ));
 
-                                        new Label(CATEGORY_NAME, nameModel.getValue(selectedLocale)).setEscapeModelStrings(false)
+                        categoryListItem.add(link);
 
-                                ).add(
-
-                                        new AttributeModifier(
-                                                "class",
-                                                /*categoryService.isCategoryHasSubcategory(category.getCategoryId(), categoryId)*/ category.getCategoryId() == categoryId ?
-                                                "active-category" : ""
-                                        )
-
-                                )
-
-                        );
-
-                        categoryListItem.add(new AttributeModifier("class", category.getCategoryId() == categoryId ? "list-group-item active-item" : "list-group-item"));
+                        categoryListItem.add(new AttributeModifier("class",
+                                category.getCategoryId() == currentCategoryId ? "list-group-item active-item" : "list-group-item"
+                        ));
 
                     }
                 }

@@ -19,8 +19,6 @@ package org.yes.cart.service.domain.impl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
@@ -133,54 +131,17 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentTemplateVariation" /*, key = "content.getCategoryId()"*/)
-    public String getContentTemplateVariation(final Category content) {
-        String variation = null;
-        if (StringUtils.isBlank(content.getUitemplate())) {
-            if (!content.isRoot()) {
-                Category parentCategory =
-                        proxy().getById(content.getParentId());
-                variation = proxy().getContentTemplateVariation(parentCategory);
-            }
-        } else {
-            variation = content.getUitemplate();
-        }
-        return variation;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Cacheable(value = "contentService-contentTemplate" )
     public String getContentTemplate(final long contentId) {
-        List<Object> count = categoryDao.findQueryObjectByNamedQuery("TEMPLATE.BY.CATEGORY.ID", contentId);
-        if (count != null && count.size() == 1) {
-            final String template = (String) count.get(0);
-            if (!StringUtils.isBlank(template)) {
-                return template;
+        final Category content = proxy().findById(contentId);
+        if (content != null && !content.isRoot()) {
+            if (StringUtils.isBlank(content.getUitemplate())) {
+                return proxy().getContentTemplate(content.getParentId());
+            } else {
+                return content.getUitemplate();
             }
         }
         return null;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "contentService-itemsPerPage" /*, key = "content.getCategoryId()"*/)
-    public List<String> getItemsPerPage(final Category content) {
-        final List<String> rez;
-        if (content == null) {
-            rez = Constants.DEFAULT_ITEMS_ON_PAGE;
-        } else {
-            final String val = proxy().getContentAttributeRecursive(null, content, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
-            if (val == null) {
-                rez = Constants.DEFAULT_ITEMS_ON_PAGE;
-            } else {
-                rez = Arrays.asList(val.split(","));
-            }
-        }
-        return rez;
     }
 
     /**
@@ -252,74 +213,15 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      * {@inheritDoc}
      */
     @Cacheable(value = "contentService-contentAttributeRecursive")
-    public String getContentAttributeRecursive(final String locale, final Category content, final String attributeName, final String defaultValue) {
-        final String value = getContentAttributeRecursive(locale, content, attributeName);
-        if (value == null) {
-            return defaultValue;
-        }
-        return value;
-    }
+    public String getContentAttributeRecursive(final String locale, final long contentId, final String attributeName, final String defaultValue) {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "contentService-contentAttributesRecursive" )
-    public String[] getContentAttributeRecursive(final String locale, final Category incontent, final String[] attributeNames) {
-        final String[] rez;
-        final Category content;
-        
-        if (incontent == null) {
-            return null;
-        } else {
-            content = incontent;
-        }
+        final Category content = proxy().getById(contentId);
 
-        final AttrValue attrValue = content.getAttributeByCode(attributeNames[0]);
-        if (attrValue == null
-                ||
-                StringUtils.isBlank(attrValue.getVal())) {
-            if (content.isRoot()) {
-                rez = null; //root of hierarchy
-            } else {
-                final Category parentCategory =
-                        proxy().getById(content.getParentId());
-                rez = getContentAttributeRecursive(null, parentCategory, attributeNames);
-            }
-        } else {
-            rez = new String[attributeNames.length];
-            int idx = 0;
-            for (String attrName : attributeNames) {
-                final AttrValue av = content.getAttributeByCode(attrName);
-                if (av != null) {
-                    rez[idx] = av.getVal();
-                } else {
-                    rez[idx] = null;
-
-                }
-                idx ++;
-
-
-            }
-        }
-
-        return rez;
-    }
-
-    /**
-     * Get the value of given attribute. If value not present in given category failover to parent category will be used.
-     *
-     * @param locale        locale for localisable value (or null for raw)
-     * @param category      given category
-     * @param attributeName attribute name
-     * @return value of given attribute name or null if value not found in category hierarchy
-     */
-    private String getContentAttributeRecursive(final String locale, final Category category, final String attributeName) {
-
-        if (category == null || attributeName == null) {
+        if (content == null || attributeName == null) {
             return null;
         }
 
-        final AttrValue attrValue = category.getAttributeByCode(attributeName);
+        final AttrValue attrValue = content.getAttributeByCode(attributeName);
         if (attrValue != null) {
             final String val;
             if (locale == null) {
@@ -332,12 +234,47 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             }
         }
 
-        if (category.isRoot()) {
-            return null; //root of hierarchy
+        if (content.isRoot()) {
+            return defaultValue; //root of hierarchy
         }
-        final Category parentCategory =
-                proxy().getById(category.getParentId());
-        return getContentAttributeRecursive(locale, parentCategory, attributeName);
+
+        return proxy().getContentAttributeRecursive(locale, content.getParentId(), attributeName, defaultValue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "contentService-contentAttributesRecursive" )
+    public String[] getContentAttributeRecursive(final String locale, final long contentId, final String[] attributeNames) {
+
+        final Category content;
+
+        if (contentId > 0L && attributeNames != null && attributeNames.length > 0) {
+            content = proxy().getById(contentId);
+        } else {
+            return null;
+        }
+
+        if (content == null) {
+            return null;
+        }
+
+        final String[] rez = new String[attributeNames.length];
+        boolean hasValue = false;
+        for (int i = 0; i < attributeNames.length; i++) {
+            final String attributeName = attributeNames[i];
+            final String val = proxy().getContentAttributeRecursive(locale, contentId, attributeName, null);
+            if (val != null) {
+                hasValue = true;
+            }
+            rez[i] = val;
+        }
+
+        if (hasValue) {
+            return rez;
+        }
+        return null;
+
     }
 
     /**
@@ -495,9 +432,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @CacheEvict(value = {
             "contentService-rootContent",
-            "contentService-contentTemplateVariation",
             "contentService-contentTemplate",
-            "contentService-itemsPerPage",
             "contentService-contentBody" ,
             "contentService-contentAttributeRecursive",
             "contentService-contentAttributesRecursive",
@@ -517,9 +452,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @CacheEvict(value ={
             "contentService-rootContent",
-            "contentService-contentTemplateVariation",
             "contentService-contentTemplate",
-            "contentService-itemsPerPage",
             "contentService-contentBody" ,
             "contentService-contentAttributeRecursive",
             "contentService-contentAttributesRecursive",

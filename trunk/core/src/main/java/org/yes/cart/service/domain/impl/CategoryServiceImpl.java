@@ -139,31 +139,14 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-categoryTemplateVariation"/*, key="category.categoryId"*/)
-    public String getCategoryTemplateVariation(final Category category) {
-        String variation = null;
-        if (StringUtils.isBlank(category.getUitemplate())) {
-            if (!category.isRoot()) {
-                Category parentCategory =
-                        proxy().findById(category.getParentId());
-                variation = getCategoryTemplateVariation(parentCategory);
-            }
-        } else {
-            variation = category.getUitemplate();
-        }
-        return variation;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Cacheable(value = "categoryService-categoryTemplate")
     public String getCategoryTemplate(final long categoryId) {
-        List<Object> count = categoryDao.findQueryObjectByNamedQuery("TEMPLATE.BY.CATEGORY.ID", categoryId);
-        if (count != null && count.size() == 1) {
-            final String template = (String) count.get(0);
-            if (!StringUtils.isBlank(template)) {
-                return template;
+        final Category category = proxy().findById(categoryId);
+        if (category != null && !category.isRoot()) {
+            if (StringUtils.isBlank(category.getUitemplate())) {
+                return proxy().getCategoryTemplate(category.getParentId());
+            } else {
+                return category.getUitemplate();
             }
         }
         return null;
@@ -176,20 +159,17 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     public int getCategoryNewArrivalLimit(final long categoryId, final long shopId) {
 
         if (categoryId > 0L) {
-            final Category category = proxy().getById(categoryId);
-            if (category != null) {
-                final String value = proxy().getCategoryAttributeRecursive(
-                        null, category, AttributeNamesKeys.Category.CATEGORY_ITEMS_NEW_ARRIVAL, null);
-                if (value != null) {
-                    final int limit = NumberUtils.toInt(value, 0);
-                    if (limit > 1) {
-                        return limit;
-                    }
+            final String value = proxy().getCategoryAttributeRecursive(
+                    null, categoryId, AttributeNamesKeys.Category.CATEGORY_ITEMS_NEW_ARRIVAL, null);
+            if (value != null) {
+                final int limit = NumberUtils.toInt(value, 0);
+                if (limit > 1) {
+                    return limit;
                 }
             }
         }
 
-        return 5;
+        return Constants.RECOMMENDATION_SIZE;
     }
 
     /**
@@ -199,21 +179,18 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     public Date getCategoryNewArrivalDate(final long categoryId, final long shopId) {
 
         if (categoryId > 0L) {
-            final Category category = proxy().getById(categoryId);
-            if (category != null) {
-                final String value = proxy().getCategoryAttributeRecursive(
-                        null, category, AttributeNamesKeys.Category.CATEGORY_ITEMS_NEW_ARRIVAL, null);
-                if (value != null) {
-                    final int days = NumberUtils.toInt(value, 0);
-                    if (days > 1) {
-                        final Calendar beforeDays = Calendar.getInstance();
-                        beforeDays.add(Calendar.DAY_OF_YEAR, -days);
-                        beforeDays.set(Calendar.HOUR, 0);
-                        beforeDays.set(Calendar.MINUTE, 0);
-                        beforeDays.set(Calendar.SECOND, 0);
-                        beforeDays.set(Calendar.MILLISECOND, 0);
-                        return beforeDays.getTime();
-                    }
+            final String value = proxy().getCategoryAttributeRecursive(
+                    null, categoryId, AttributeNamesKeys.Category.CATEGORY_ITEMS_NEW_ARRIVAL, null);
+            if (value != null) {
+                final int days = NumberUtils.toInt(value, 0);
+                if (days > 1) {
+                    final Calendar beforeDays = Calendar.getInstance();
+                    beforeDays.add(Calendar.DAY_OF_YEAR, -days);
+                    beforeDays.set(Calendar.HOUR, 0);
+                    beforeDays.set(Calendar.MINUTE, 0);
+                    beforeDays.set(Calendar.SECOND, 0);
+                    beforeDays.set(Calendar.MILLISECOND, 0);
+                    return beforeDays.getTime();
                 }
             }
         }
@@ -238,13 +215,10 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     public boolean isSearchInSubcategory(final long categoryId, final long shopId) {
 
         if (categoryId > 0L) {
-            final Category category = proxy().getById(categoryId);
-            if (category != null) {
-                final String value = proxy().getCategoryAttributeRecursive(
-                        null, category, AttributeNamesKeys.Category.CATEGORY_INCLUDE_SUBCATEGORIES_IN_SEARCH, null);
-                if (value != null) {
-                    return Boolean.valueOf(value);
-                }
+            final String value = proxy().getCategoryAttributeRecursive(
+                    null, categoryId, AttributeNamesKeys.Category.CATEGORY_INCLUDE_SUBCATEGORIES_IN_SEARCH, null);
+            if (value != null) {
+                return Boolean.valueOf(value);
             }
         }
 
@@ -257,106 +231,20 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "categoryService-itemsPerPage"/*, key="category.getCategoryId()"*/)
-    public List<String> getItemsPerPage(final Category category) {
-        final List<String> rez;
-        if (category == null) {
-            rez = Constants.DEFAULT_ITEMS_ON_PAGE;
-        } else {
-            final String val = proxy().getCategoryAttributeRecursive(null, category, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
-            if (val == null) {
-                rez = Constants.DEFAULT_ITEMS_ON_PAGE;
-            } else {
-                rez = Arrays.asList(val.split(","));
-            }
-        }
-        return rez;
-    }
-
-    /**
      * Get the value of given attribute. If value not present in given category
      * failover to parent category will be used.
      *
      *
      * @param locale        locale for localisable value (or null for raw)
-     * @param category      given category
+     * @param categoryId    given category
      * @param attributeName attribute name
      * @param defaultValue  default value will be returned if value not found in hierarchy
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
     @Cacheable(value = "categoryService-categoryAttributeRecursive")
-    public String getCategoryAttributeRecursive(final String locale, final Category category, final String attributeName, final String defaultValue) {
-        final String value = getCategoryAttributeRecursive(locale, category, attributeName);
-        if (value == null) {
-            return defaultValue;
-        }
-        return value;
-    }
+    public String getCategoryAttributeRecursive(final String locale, final long categoryId, final String attributeName, final String defaultValue) {
 
-    /**
-     * Get the values of given attributes. If value not present in given category
-     * failover to parent category will be used.  In case if attribute value for first
-     * attribute will be found, the rest values also will be collected form the same category.
-     *
-     *
-     * @param locale           locale for localisable value (or null for raw)
-     * @param incategory       given category
-     * @param attributeNames set of attributes, to collect values.
-     * @return value of given attribute name or defaultValue if value not found in category hierarchy
-     */
-    @Cacheable(value = "categoryService-categoryAttributesRecursive")
-    public String[] getCategoryAttributeRecursive(final String locale, final Category incategory, final String[] attributeNames) {
-        final String[] rez;
-        final Category category;
-        
-        if (incategory == null) {
-            category = getRootCategory();
-        } else {
-            category = incategory;
-        }
-
-        final AttrValue attrValue = category.getAttributeByCode(attributeNames[0]);
-        if (attrValue == null
-                ||
-                StringUtils.isBlank(attrValue.getVal())) {
-            if (category.isRoot()) {
-                rez = null; //root of hierarchy
-            } else {
-                final Category parentCategory =
-                        proxy().findById(category.getParentId());
-                rez = proxy().getCategoryAttributeRecursive(null, parentCategory, attributeNames);
-            }
-        } else {
-            rez = new String[attributeNames.length];
-            int idx = 0;
-            for (String attrName : attributeNames) {
-                final AttrValue av = category.getAttributeByCode(attrName);
-                if (av != null) {
-                    rez[idx] = av.getVal();
-                } else {
-                    rez[idx] = null;
-
-                }
-                idx ++;
-
-
-            }
-        }
-
-        return rez;
-    }
-
-    /**
-     * Get the value of given attribute. If value not present in given category failover to parent category will be used.
-     *
-     * @param locale        locale for localisable value (or null for raw)
-     * @param category      given category
-     * @param attributeName attribute name
-     * @return value of given attribute name or null if value not found in category hierarchy
-     */
-    private String getCategoryAttributeRecursive(final String locale, final Category category, final String attributeName) {
+        final Category category = proxy().getById(categoryId);
 
         if (category == null || attributeName == null) {
             return null;
@@ -376,57 +264,55 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         }
 
         if (category.isRoot()) {
-            return null; //root of hierarchy
+            return defaultValue; //root of hierarchy
         }
-        final Category parentCategory =
-                proxy().findById(category.getParentId());
-        return getCategoryAttributeRecursive(locale, parentCategory, attributeName);
-    }
 
+        return proxy().getCategoryAttributeRecursive(locale, category.getParentId(), attributeName, defaultValue);
 
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "categoryService-productQuantity")
-    public int getProductQuantity(final long categoryId, final boolean includeChildren) {
-        int qty = 0;
-        List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.PRODUCT.COUNT", categoryId);
-        if (count != null && count.size() == 1) {
-            qty = ((Number) count.get(0)).intValue();
-            if (includeChildren) {
-                List<Category> childs = proxy().getChildCategories(categoryId);
-                for (Category childCategory : childs) {
-                    qty += proxy().getProductQuantity(childCategory.getCategoryId(), includeChildren);
-                }
-
-            }
-        }
-        return qty;
     }
 
     /**
-     * {@inheritDoc}
+     * Get the values of given attributes. If value not present in given category
+     * failover to parent category will be used.  In case if attribute value for first
+     * attribute will be found, the rest values also will be collected form the same category.
+     *
+     *
+     * @param locale           locale for localisable value (or null for raw)
+     * @param categoryId       given category
+     * @param attributeNames set of attributes, to collect values.
+     * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
-    @Cacheable(value = "categoryService-categoryHasProducts")
-    public boolean isCategoryHasProducts(final long categoryId, final boolean includeChildren) {
-        List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.PRODUCT.COUNT", categoryId);
-        if (count != null && count.size() == 1) {
-            int qty = ((Number) count.get(0)).intValue();
-            if (qty > 0) {
-                return true;
-            }
-            if (includeChildren) {
-                List<Category> childs = proxy().getChildCategories(categoryId);
-                for (Category childCategory : childs) {
-                    final boolean childHasProducts = proxy().isCategoryHasProducts(childCategory.getCategoryId(), includeChildren);
-                    if (childHasProducts) {
-                        return true;
-                    }
-                }
+    @Cacheable(value = "categoryService-categoryAttributesRecursive")
+    public String[] getCategoryAttributeRecursive(final String locale, final long categoryId, final String[] attributeNames) {
 
-            }
+        final Category category;
+
+        if (categoryId > 0L && attributeNames != null && attributeNames.length > 0) {
+            category = proxy().getById(categoryId);
+        } else {
+            return null;
         }
-        return false;
+
+        if (category == null) {
+            return null;
+        }
+
+        final String[] rez = new String[attributeNames.length];
+        boolean hasValue = false;
+        for (int i = 0; i < attributeNames.length; i++) {
+            final String attributeName = attributeNames[i];
+            final String val = proxy().getCategoryAttributeRecursive(locale, categoryId, attributeName, null);
+            if (val != null) {
+                hasValue = true;
+            }
+            rez[i] = val;
+        }
+
+        if (hasValue) {
+            return rez;
+        }
+        return null;
+
     }
 
     /**
@@ -632,16 +518,12 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     @CacheEvict(value = {
             "categoryService-topLevelCategories",
             "categoryService-rootCategory",
-            "categoryService-categoryTemplateVariation",
             "categoryService-categoryTemplate",
             "categoryService-searchInSubcategory",
             "categoryService-categoryNewArrivalLimit",
             "categoryService-categoryNewArrivalDate",
-            "categoryService-itemsPerPage",
             "categoryService-categoryAttributeRecursive",
             "categoryService-categoryAttributesRecursive",
-            "categoryService-productQuantity",
-            "categoryService-categoryHasProducts",
             "categoryService-categoryHasChildren",
             "categoryService-childCategories",
             "categoryService-childCategoriesRecursive",
@@ -661,16 +543,12 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     @CacheEvict(value = {
             "categoryService-topLevelCategories",
             "categoryService-rootCategory",
-            "categoryService-categoryTemplateVariation",
             "categoryService-categoryTemplate",
             "categoryService-searchInSubcategory",
             "categoryService-categoryNewArrivalLimit",
             "categoryService-categoryNewArrivalDate",
-            "categoryService-itemsPerPage",
             "categoryService-categoryAttributeRecursive",
             "categoryService-categoryAttributesRecursive",
-            "categoryService-productQuantity",
-            "categoryService-categoryHasProducts",
             "categoryService-categoryHasChildren",
             "categoryService-childCategories",
             "categoryService-childCategoriesRecursive",

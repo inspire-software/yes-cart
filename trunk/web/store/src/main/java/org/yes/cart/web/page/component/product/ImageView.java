@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -24,14 +23,14 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.Depictable;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
+import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
@@ -54,10 +53,8 @@ public class ImageView extends BaseComponent {
     protected final static String ALT_IMAGE_REF = "altImageRef";
     // ------------------------------------- MARKUP IDs END   ---------------------------------- //
 
-
-    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
-    private CategoryService categoryService;
-
+    @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_SERVICE_FACADE)
+    protected CategoryServiceFacade categoryServiceFacade;
 
     private final Depictable depictable;
 
@@ -79,24 +76,19 @@ public class ImageView extends BaseComponent {
      */
     @Override
     protected void onBeforeRender() {
-        final Category category;
+
+        long shopId = ShopCodeContext.getShopId();
         long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
-        if (categoryId > 0) {
-            category = categoryService.getById(categoryId);
-        } else {
-            category = categoryService.getRootCategory();
-        }
 
-        final String[] defSize = depictable.getDefaultImageSize(category);
+        final Pair<String, String> imageSize = categoryServiceFacade.getProductListImageSizeConfig(categoryId, shopId);
+        final Pair<String, String> thumbSize = categoryServiceFacade.getThumbnailSizeConfig(categoryId, shopId);
 
-        final String width = defSize[0];
-        final String height = defSize[1];
+        final String width = imageSize.getFirst();
+        final String height = imageSize.getSecond();
 
+        final String tumbWidth = thumbSize.getFirst();
+        final String tumbHeight = thumbSize.getSecond();
 
-        final String[] size = depictable.getThumbnailImageSize(category);
-
-        final String tumbWidth = size[0];
-        final String tumbHeight = size[1];
         final String lang = getLocale().getLanguage();
 
         final List<Pair<String, String>> allImageAttrWithFileName = depictable.getImageAttributeFileNames(lang);
@@ -104,8 +96,6 @@ public class ImageView extends BaseComponent {
         final Pair<String, String> defaultImageAttrWithFileName = allImageAttrWithFileName.get(0);
         final List<Pair<String, String>> altImageAttrWithFileName =
                 allImageAttrWithFileName.size() > 1 ? allImageAttrWithFileName.subList(1, allImageAttrWithFileName.size()) : Collections.EMPTY_LIST;
-
-        final String defaultImageRelativePath = depictable.getDefaultImage(width, height, lang);
 
         add(
 

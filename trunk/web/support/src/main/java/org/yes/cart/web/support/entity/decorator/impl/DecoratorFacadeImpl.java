@@ -100,7 +100,6 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
         return new ProductDecoratorImpl(
                 imageService,
                 productImageService,
-                categoryService,
                 productService,
                 i18NWebSupport,
                 product,
@@ -114,7 +113,6 @@ public class DecoratorFacadeImpl implements DecoratorFacade {
         return new ProductSkuDecoratorImpl(
                 imageService,
                 skuImageService,
-                categoryService,
                 sku,
                 servletContextPath,
                 productService,

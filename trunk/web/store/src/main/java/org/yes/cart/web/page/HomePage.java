@@ -25,7 +25,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.AbstractCentralView;
@@ -44,13 +43,12 @@ import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
+import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.theme.WicketCentralViewProvider;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -71,8 +69,8 @@ public class HomePage extends AbstractWebPage {
     @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
     private LuceneQueryFactory luceneQueryFactory;
 
-    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
-    private CategoryService categoryService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_SERVICE_FACADE)
+    private CategoryServiceFacade categoryServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.SHOP_SERVICE)
     private ShopService shopService;
@@ -111,10 +109,7 @@ public class HomePage extends AbstractWebPage {
 
         final Shop shop = ApplicationDirector.getCurrentShop();
 
-
-        final boolean categoryProductsRecursive = categoryService.isSearchInSubcategory(categoryId, shop.getShopId());
-        final List<Long> currentCategoriesIds = getCategories(categoryId, categoryProductsRecursive);
-
+        final List<Long> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, shop.getShopId());
 
         final Query query = luceneQueryFactory.getFilteredNavigationQueryChain(
                 shop.getShopId(),
@@ -125,14 +120,14 @@ public class HomePage extends AbstractWebPage {
 
         add(new TopCategories("topCategories"));
 
-        if (CentralViewLabel.PRODUCT.equals(centralViewLabel) || CentralViewLabel.SKU.equals(centralViewLabel)) {
-            add(new Label("brandFilter"));
-            add(new Label("attributeFilter"));
-            add(new Label("priceFilter"));
-        } else {
+        if (CentralViewLabel.SEARCH_LIST.equals(centralViewLabel) || CentralViewLabel.PRODUCTS_LIST.equals(centralViewLabel)) {
             add(new BrandProductFilter("brandFilter", query, categoryId));
             add(new AttributeProductFilter("attributeFilter", query, categoryId));
             add(new PriceProductFilter("priceFilter", query, categoryId));
+        } else {
+            add(new Label("brandFilter"));
+            add(new Label("attributeFilter"));
+            add(new Label("priceFilter"));
         }
 
         add(new BreadCrumbsView("breadCrumbs", categoryId, shopService.getShopAllCategoriesIds(shop.getShopId())));
@@ -185,27 +180,6 @@ public class HomePage extends AbstractWebPage {
             itemId = HttpUtil.getSingleValue(mapParams.get(WebParametersKeys.PRODUCT_ID));
         }
         return itemId;
-    }
-
-
-    /**
-     * Get category sub tree as list, that starts from given category id.
-     *
-     *
-     * @param categoryId root of tree.
-     * @param includeSubCategories allow subcategories
-     * @return list of categories, that belong to sub tree.
-     */
-    private List<Long> getCategories(final Long categoryId, final boolean includeSubCategories) {
-        if (categoryId != null && categoryId > 0) {
-            if (includeSubCategories) {
-                // this will include the categoryId as well
-                return new ArrayList<Long>(categoryService.getChildCategoriesRecursiveIds(categoryId));
-            }
-            return Collections.singletonList(categoryId);
-        } else {
-            return Collections.emptyList();
-        }
     }
 
     /**

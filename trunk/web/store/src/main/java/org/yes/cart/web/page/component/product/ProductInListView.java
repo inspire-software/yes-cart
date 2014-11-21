@@ -23,12 +23,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -37,6 +35,7 @@ import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AttributableImageService;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
@@ -63,48 +62,26 @@ public class ProductInListView extends BaseComponent {
 
     private final ProductSearchResultDTO product;
 
-    private final Category category;
-
-
     @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
     private AttributableImageService attributableImageService;
 
-    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
-    private CategoryService categoryService;
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    private ProductServiceFacade productServiceFacade;
 
-    @SpringBean(name = ServiceSpringKeys.PRICE_SERVICE)
-    protected PriceService priceService;
-
-    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
-    protected ImageService imageService;
-
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
-    protected ProductService productService;
-
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_AVAILABILITY_STRATEGY)
-    private ProductAvailabilityStrategy productAvailabilityStrategy;
-
-    private final String[] defImgSize;
+    private final Pair<String, String> defImgSize;
 
 
     /**
      * Construct product view, that show product in grid.
      *
-     * @param id         view od
+     * @param id         view id
      * @param product    product model
-     * @param category   product in category, optional parameter
      * @param defImgSize image size in given category
      */
-    public ProductInListView(final String id, final ProductSearchResultDTO product, final Category category, final String[] defImgSize) {
+    public ProductInListView(final String id, final ProductSearchResultDTO product, final Pair<String, String> defImgSize) {
         super(id);
-        if (category == null) {
-            this.category = categoryService.getRootCategory();
-        } else {
-            this.category = category;
-        }
         this.product = product;
         this.defImgSize = defImgSize;
-
     }
 
     /**
@@ -120,8 +97,8 @@ public class ProductInListView extends BaseComponent {
         linkToProductParameters.set(WebParametersKeys.PRODUCT_ID, product.getId());
 
 
-        final String width = defImgSize[0];
-        final String height = defImgSize[1];
+        final String width = defImgSize.getFirst();
+        final String height = defImgSize.getSecond();
 
         add(links.newProductLink(PRODUCT_LINK_SKU, product.getId(), getPage().getPageParameters())
                 .add(new Label(SKU_CODE_LABEL, product.getCode()))
@@ -145,7 +122,7 @@ public class ProductInListView extends BaseComponent {
         );
 
 
-        final ProductAvailabilityModel skuPam = productAvailabilityStrategy.getAvailabilityModel(ShopCodeContext.getShopId(), product);
+        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(product, ShopCodeContext.getShopId());
 
         add(links.newAddToCartLink(ADD_TO_CART_LINK, skuPam.getFirstAvailableSkuCode(), null, getPage().getPageParameters())
                         .add(new Label(ADD_TO_CART_LINK_LABEL, skuPam.isInStock() || skuPam.isPerpetual() ?
@@ -171,26 +148,14 @@ public class ProductInListView extends BaseComponent {
      * @return {@link org.yes.cart.domain.entity.SkuPrice}
      */
     private SkuPrice getSkuPrice(final String firstAvailableSkuCode) {
-        return priceService.getMinimalRegularPrice(
+        return productServiceFacade.getSkuPrice(
                 null,
                 firstAvailableSkuCode,
-                ApplicationDirector.getCurrentShop(),
+                BigDecimal.ONE,
                 ApplicationDirector.getShoppingCart().getCurrencyCode(),
-                BigDecimal.ONE
+                ApplicationDirector.getCurrentShop().getShopId()
         );
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    /*public String getDescription(final String locale) {
-        final Pair<String, String> desc = productService.getProductAttribute(
-                locale, product.getId(), 0L, AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + locale);
-        if (desc == null) {
-            return product.getDescription();
-        }
-        return desc.getSecond();
-    }  */
 
     /**
      * {@inheritDoc}

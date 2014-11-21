@@ -17,14 +17,14 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.Query;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.data.SortableCategoryDataProvider;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
@@ -84,15 +84,15 @@ public class SubCategoriesCentralView extends AbstractCentralView {
     @Override
     protected void onBeforeRender() {
 
-        final List<CategoryDecorator> categories = decorate(getCategoryService().getChildCategories(getCategoryId()));
+        final long categoryId = getCategoryId();
+        final long shopId = ShopCodeContext.getShopId();
+
+        final List<CategoryDecorator> categories = decorate(categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId));
 
         final SortableDataProvider<CategoryDecorator> dataProvider = new SortableCategoryDataProvider(categories);
 
-        final String val = getCategoryService().getCategoryAttributeRecursive(null, getCategory(),
-                AttributeNamesKeys.Category.CATEGORY_SUBCATEGORIES_COLUMNS,
-                DEFAULT_SUBCATEGORIES_COLUMNS);
-
-        int subCatsQty = NumberUtils.createInteger(val);
+        final Pair<String, String> imageSize = categoryServiceFacade.getCategoryListImageSizeConfig(categoryId, shopId);
+        final int subCatsQty = categoryServiceFacade.getCategoryListColumnOptionsConfig(categoryId, shopId);
 
         add(
                 new GridView<CategoryDecorator>(CATEGORY_LIST, dataProvider) {
@@ -102,7 +102,7 @@ public class SubCategoriesCentralView extends AbstractCentralView {
 
                         categoryItem.add(
 
-                                new CategoryView(CATEGORY_VIEW)
+                                new CategoryView(CATEGORY_VIEW, imageSize)
 
                         );
 

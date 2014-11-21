@@ -119,6 +119,27 @@
         <constructor-arg index="5" ref="paymentModulesManager"/>
     </bean>
 
+    <bean id="categoryServiceFacade"  class="org.yes.cart.web.support.service.impl.CategoryServiceFacadeImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+        <constructor-arg index="1" ref="shopService"/>
+    </bean>
+
+    <bean id="contentServiceFacade"  class="org.yes.cart.web.support.service.impl.ContentServiceFacadeImpl">
+        <constructor-arg index="0" ref="contentService"/>
+        <constructor-arg index="1" ref="shopService"/>
+    </bean>
+
+    <bean id="productServiceFacade" class="org.yes.cart.web.support.service.impl.ProductServiceFacadeImpl">
+        <constructor-arg index="0" ref="productService"/>
+        <constructor-arg index="1" ref="productSkuService"/>
+        <constructor-arg index="2" ref="productAssociationService"/>
+        <constructor-arg index="3" ref="luceneQueryFactory"/>
+        <constructor-arg index="4" ref="productAvailabilityStrategy"/>
+        <constructor-arg index="5" ref="productQuantityStrategy"/>
+        <constructor-arg index="6" ref="priceService"/>
+        <constructor-arg index="7" ref="categoryServiceFacade"/>
+    </bean>
+
     <!-- ############################ Facades for web end ####################################################### -->
 
 

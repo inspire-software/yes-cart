@@ -24,23 +24,19 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
-import org.yes.cart.web.support.service.AttributableImageService;
+import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
@@ -89,24 +85,11 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
     @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
     private CheckoutServiceFacade checkoutServiceFacade;
 
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
-    private ProductSkuService productSkuService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_SERVICE_FACADE)
+    private CategoryServiceFacade categoryServiceFacade;
 
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
-    protected ProductService productService;
-
-    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
-    protected AttributableImageService attributableImageService;
-
-
-    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
-    protected CategoryService categoryService;
-
-    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
-    protected ImageService imageService;
-
-
-    private final Category rootCategory;
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    private ProductServiceFacade productServiceFacade;
 
     /**
      * Construct payment form verification view, that
@@ -119,13 +102,13 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                final String orderGuid) {
         super(id);
 
-        rootCategory = categoryService.getRootCategory();
-
         final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(orderGuid);
         final Total grandTotal = checkoutServiceFacade.getOrderTotal(customerOrder);
 
         final String selectedLocale = getLocale().getLanguage();
         final Set<String> allPromos = checkoutServiceFacade.getOrderPromoCodes(customerOrder);
+
+        final Pair<String, String> imageSize = categoryServiceFacade.getThumbnailSizeConfig(0L, ShopCodeContext.getShopId());
 
         add(
                 new ListView<CustomerOrderDelivery>(DELIVERY_LIST, new ArrayList<CustomerOrderDelivery>(customerOrder.getDelivery()))
@@ -159,14 +142,12 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                 final CustomerOrderDeliveryDet det = customerOrderDeliveryDetListItem.getModelObject();
 
                                                 final ProductSkuDecorator productSkuDecorator = getDecoratorFacade().decorate(
-                                                        productSkuService.getProductSkuBySkuCode(det.getProductSkuCode()),
+                                                        productServiceFacade.getProductSkuBySkuCode(det.getProductSkuCode()),
                                                         WicketUtil.getHttpServletRequest().getContextPath(),
                                                         true);
 
-                                                final String[] size = productSkuDecorator.getThumbnailImageSize(rootCategory);
-
-                                                final String width = size[0];
-                                                final String height = size[1];
+                                                final String width = imageSize.getFirst();
+                                                final String height = imageSize.getSecond();
 
                                                 final String lang = getLocale().getLanguage();
                                                 final String defaultImageRelativePath = productSkuDecorator.getDefaultImage(width, height, lang);

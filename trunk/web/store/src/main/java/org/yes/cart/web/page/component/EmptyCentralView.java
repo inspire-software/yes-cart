@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component;
 
-import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 
 /**

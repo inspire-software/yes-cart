@@ -34,7 +34,6 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
-import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.payment.PaymentProcessFacade;
@@ -47,6 +46,7 @@ import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
@@ -94,8 +94,8 @@ public class PaymentPage extends AbstractWebPage {
     @SpringBean(name = StorefrontServiceSpringKeys.CHECKOUT_SERVICE_FACADE)
     private CheckoutServiceFacade checkoutServiceFacade;
 
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
-    private ProductSkuService productSkuService;
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    private ProductServiceFacade productServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
@@ -195,7 +195,7 @@ public class PaymentPage extends AbstractWebPage {
      */
     private MarkupContainer createNegativeItemAllocationResultFragment(final String sku) {
 
-        final ProductSku productSku = productSkuService.getProductSkuBySkuCode(sku);
+        final ProductSku productSku = productServiceFacade.getProductSkuBySkuCode(sku);
         final String errorMessage =  new StringResourceModel(ALLOCATION_DETAIL, this, null,
                 new Object [] {
                         getI18NSupport().getFailoverModel(productSku.getDisplayName(), productSku.getName()).getValue(getLocale().getLanguage()),

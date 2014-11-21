@@ -16,22 +16,11 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.lucene.search.Query;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,9 +32,6 @@ import java.util.List;
  * Time: 11:45 AM
  */
 public class RecentlyViewedProducts extends AbstractProductSearchResultList {
-
-    @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
-    private LuceneQueryFactory luceneQueryFactory;
 
     private List<ProductSearchResultDTO> products = null;
 
@@ -69,28 +55,10 @@ public class RecentlyViewedProducts extends AbstractProductSearchResultList {
     public List<ProductSearchResultDTO> getProductListToShow() {
         if (products == null) {
 
-            List<String> productIds = ApplicationDirector.getShoppingCart().getShoppingContext().getLatestViewedSkus();
-            if (CollectionUtils.isNotEmpty(productIds)) {
-                final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
+            final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
+            final List<String> productIds = ApplicationDirector.getShoppingCart().getShoppingContext().getLatestViewedSkus();
 
-                int limit = getProductsLimit(categoryId);
-                if (limit > productIds.size()) {
-                    limit = productIds.size();
-                } else {
-                    productIds = productIds.subList(productIds.size() - limit, productIds.size());
-                }
-
-                final Query recent = luceneQueryFactory.getFilteredNavigationQueryChain(ShopCodeContext.getShopId(), null,
-                        Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
-                                (List) Arrays.asList(productIds)));
-
-                products = productService.getProductSearchResultDTOByQuery(
-                        recent, 0, limit, null, false);
-
-            } else {
-
-                products = Collections.emptyList();
-            }
+            products = productServiceFacade.getListProducts(productIds, categoryId, ShopCodeContext.getShopId());
 
         }
         return products;
@@ -102,19 +70,7 @@ public class RecentlyViewedProducts extends AbstractProductSearchResultList {
      * @return quantity limit
      */
     public int getProductsLimit(final long categoryId) {
-        final Category category = categoryService.getById(categoryId);
-        if (category != null) {
-            AttrValue av = category.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_NEW_ARRIVAL);
-            if (av != null) {
-                try {
-                    return Integer.valueOf(av.getVal());
-                } catch (Exception ex) {
-                    return 5;
-                }
-            }
-        }
-        return 5;
-
+        return categoryServiceFacade.getNewArrivalListSizeConfig(categoryId, ShopCodeContext.getShopId());
     }
 
 }

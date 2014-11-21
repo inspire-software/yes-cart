@@ -24,19 +24,17 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.service.domain.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AttributableImageService;
+import org.yes.cart.web.support.service.CategoryServiceFacade;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
@@ -49,13 +47,6 @@ import java.util.List;
  */
 public abstract class AbstractProductSearchResultList extends BaseComponent {
 
-    final static  String [] thumbnailSize =
-            new String [] {
-                    AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_WIDTH,
-                    AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_HEIGHT
-            };
-
-
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     protected final static String NAME = "name";
     protected final static String PRODUCT_LIST = "products";
@@ -64,23 +55,14 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
     protected final static String PRODUCT_IMAGE = "productDefaultImage";
     // ------------------------------------- MARKUP IDs END   ---------------------------------- //
 
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_ASSOCIATIONS_SERVICE)
-    protected ProductAssociationService productAssociationService;
-
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SKU_SERVICE)
-    protected ProductSkuService productSkuService;
-
-    @SpringBean(name = ServiceSpringKeys.PRODUCT_SERVICE)
-    protected ProductService productService;
-
     @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_IMAGE_SERVICE)
     protected AttributableImageService productImageService;
 
-    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
-    protected CategoryService categoryService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_SERVICE_FACADE)
+    protected CategoryServiceFacade categoryServiceFacade;
 
-    @SpringBean(name = ServiceSpringKeys.IMAGE_SERVICE)
-    protected ImageService imageService;
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    protected ProductServiceFacade productServiceFacade;
 
     private final boolean nameLinkVisible;
 
@@ -126,19 +108,8 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
 
         final String selectedLocale = getLocale().getLanguage();
 
-        final Category category;
-        final long categ_id = WicketUtil.getCategoryId(getPage().getPageParameters());
-        if (categ_id > 0) {
-            Category ccandidate = categoryService.getById(categ_id);
-            if (ccandidate == null) {
-                category = categoryService.getRootCategory();
-            } else {
-                category = ccandidate;
-            }
-        } else {
-            category = categoryService.getRootCategory();
-        }
-
+        final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
+        final Pair<String, String> thumbWidthHeight = categoryServiceFacade.getThumbnailSizeConfig(categoryId, ShopCodeContext.getShopId());
 
         addOrReplace(
                 new ListView<ProductSearchResultDTO>(PRODUCT_LIST, getProductListToShow())
@@ -146,7 +117,7 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
                     protected void populateItem(ListItem<ProductSearchResultDTO> listItem)
                     {
 
-                        onBeforeRenderPopulateListItem(listItem, selectedLocale, category);
+                        onBeforeRenderPopulateListItem(listItem, selectedLocale, thumbWidthHeight);
                     }
 
 
@@ -172,16 +143,16 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
      *
      * @param listItem list item
      * @param selectedLocale locale
-     * @param category current category
+     * @param thumbWidthHeight thum dimensions
      */
-    protected void onBeforeRenderPopulateListItem(final ListItem<ProductSearchResultDTO> listItem, final String selectedLocale, final Category category)
+    protected void onBeforeRenderPopulateListItem(final ListItem<ProductSearchResultDTO> listItem,
+                                                  final String selectedLocale,
+                                                  final Pair<String, String> thumbWidthHeight)
     {
         final ProductSearchResultDTO prod = listItem.getModelObject();
 
-        final String[] size = getThumbnailImageSize(category);
-
-        final String width = size[0];
-        final String height = size[1];
+        final String width = thumbWidthHeight.getFirst();
+        final String height = thumbWidthHeight.getSecond();
 
         final LinksSupport links = getWicketSupportFacade().links();
 
@@ -225,18 +196,6 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
 
 
         return  result;
-    }
-
-
-    public String[] getThumbnailImageSize(final Category category) {
-        final String[] size = categoryService.getCategoryAttributeRecursive(
-                null, category,
-                thumbnailSize
-        );
-        if (size == null || size.length != 2) {
-            return Constants.DEFAULT_THUMB_SIZE;
-        }
-        return size;
     }
 
 }

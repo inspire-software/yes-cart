@@ -72,18 +72,21 @@
             <url>http://repo1.maven.org/maven2</url>
             <snapshots><enabled>false</enabled></snapshots>
         </repository>
-        <repository>
-            <id>terracota</id>
-            <url>http://www.terracotta.org/download/reflector/releases</url>
-            <snapshots><enabled>false</enabled></snapshots>
-        </repository>
+        <!--<repository>-->
+            <!--<id>terracota</id>-->
+            <!--<url>http://www.terracotta.org/download/reflector/releases</url>-->
+            <!--<snapshots><enabled>false</enabled></snapshots>-->
+        <!--</repository>-->
         <repository>
             <id>spring-release</id>
             <url>http://maven.springframework.org/release</url>
             <snapshots><enabled>false</enabled></snapshots>
         </repository>
-
-
+        <repository>
+            <id>spring-release-external</id>
+            <url>http://repo.spring.io/ext-release-local</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
         <repository>
             <id>sonatype-public</id>
             <url>http://repository.sonatype.org/content/groups/public</url>

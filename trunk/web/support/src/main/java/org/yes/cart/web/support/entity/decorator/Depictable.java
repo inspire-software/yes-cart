@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.support.entity.decorator;
 
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.domain.misc.Pair;
 
@@ -53,7 +52,6 @@ public interface Depictable {
      */
     String getImage(String width, String height, String imageAttributeName, String lang);
 
-
     /**
      * Get product image with give width and height.
      *
@@ -64,21 +62,6 @@ public interface Depictable {
      * @return product image url, depending from strategy.
      */
     String getDefaultImage(String width, String height, String lang);
-
-
-    /**
-     * Get width and height of depictable in given category.
-     * @param category given category.
-     * @return width and height of depictable
-     */
-    String [] getDefaultImageSize(Category category);
-
-    /**
-     * Get width and height of depictable in given category.
-     * @param category given category.
-     * @return width and height of depictable
-     */
-    String [] getThumbnailImageSize(Category category);
 
 
     /**

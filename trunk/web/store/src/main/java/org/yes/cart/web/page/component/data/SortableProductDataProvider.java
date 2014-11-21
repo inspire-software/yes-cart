@@ -20,10 +20,9 @@ import org.apache.lucene.search.Query;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -38,7 +37,7 @@ import java.util.List;
 
 public class SortableProductDataProvider extends SortableDataProvider<ProductSearchResultDTO> {
 
-    private final ProductService productService;
+    private final ProductServiceFacade productService;
     private final Query query;
     private String sortFieldName = null;
     private boolean reverse = false;
@@ -55,7 +54,7 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductSea
      * @param i18NWebSupport  i18n
      * @param decoratorFacade decorator facade
      */
-    public SortableProductDataProvider(final ProductService productService,
+    public SortableProductDataProvider(final ProductServiceFacade productService,
                                        final Query query,
                                        final I18NWebSupport i18NWebSupport,
                                        final DecoratorFacade decoratorFacade) {
@@ -69,7 +68,7 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductSea
         if (query == null || size() == 0) {
             products = Collections.EMPTY_LIST;
         } else {
-            products = productService.getProductSearchResultDTOByQuery(
+            products = productService.getListProducts(
                     query,
                     first,
                     count,
@@ -97,7 +96,7 @@ public class SortableProductDataProvider extends SortableDataProvider<ProductSea
 
     public int size() {
         if (query != null) {
-            return productService.getProductQty(query);
+            return productService.getListProductsCount(query);
         }
         return 0;
     }

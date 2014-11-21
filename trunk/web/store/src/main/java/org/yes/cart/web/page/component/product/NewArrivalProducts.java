@@ -16,17 +16,10 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.lucene.search.Query;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,9 +31,6 @@ import java.util.List;
  * Time: 11:45 AM
  */
 public class NewArrivalProducts extends AbstractProductSearchResultList {
-
-    @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
-    private LuceneQueryFactory luceneQueryFactory;
 
     private List<ProductSearchResultDTO> products = null;
 
@@ -63,22 +53,11 @@ public class NewArrivalProducts extends AbstractProductSearchResultList {
     @Override
     public List<ProductSearchResultDTO> getProductListToShow() {
         if (products == null) {
+
             final long categoryId = WicketUtil.getCategoryId(getPage().getPageParameters());
-
             final long shopId = ShopCodeContext.getShopId();
-            final int limit = categoryService.getCategoryNewArrivalLimit(categoryId, shopId);
 
-            final List<Long> newArrivalCats;
-            if (categoryId > 0L) {
-                newArrivalCats = Arrays.asList(categoryId);
-            } else {
-                newArrivalCats = null;
-            }
-            final Query newarrival = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, newArrivalCats,
-                    Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
-                            (List) Arrays.asList(ProductSearchQueryBuilder.TAG_NEWARRIVAL)));
-
-            products = productService.getProductSearchResultDTOByQuery(newarrival, 0, limit, null, true);
+            products = productServiceFacade.getNewProducts(categoryId, shopId);
         }
         return products;
     }

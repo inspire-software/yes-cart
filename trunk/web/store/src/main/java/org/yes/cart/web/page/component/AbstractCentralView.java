@@ -20,11 +20,12 @@ import org.apache.lucene.search.Query;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.entity.Seoable;
-import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.CategoryServiceFacade;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -33,16 +34,14 @@ import org.yes.cart.service.domain.CategoryService;
  */
 public abstract class AbstractCentralView extends BaseComponent {
 
-    @SpringBean(name = ServiceSpringKeys.CATEGORY_SERVICE)
-    private CategoryService categoryService;
+    @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_SERVICE_FACADE)
+    protected CategoryServiceFacade categoryServiceFacade;
 
     private final long categoryId;
 
     private final Query booleanQuery;
 
-    private Category category;
-
-
+    private transient Category category;
 
     /**
       * Construct panel.
@@ -79,17 +78,9 @@ public abstract class AbstractCentralView extends BaseComponent {
      */
     public Category getCategory() {
         if (category == null) {
-            category = categoryService.getById(categoryId);
+            category = categoryServiceFacade.getCategory(categoryId, ShopCodeContext.getShopId());
         }
         return category;
-    }
-
-    /**
-     * Get category service
-     * @return    category id.
-     */
-    public CategoryService getCategoryService() {
-        return categoryService;
     }
 
 
