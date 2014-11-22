@@ -83,7 +83,7 @@ public class InventoryReportWorker implements ReportWorker {
                         if (comp == 0) {
                             comp = i1.getQuantity().compareTo(i2.getQuantity());
                             if (comp == 0) {
-                                return 1;
+                                return Long.valueOf(i1.getSkuWarehouseId()).compareTo(Long.valueOf(i2.getSkuWarehouseId()));
                             }
                         }
                         return comp;
