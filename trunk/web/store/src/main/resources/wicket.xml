@@ -21,12 +21,12 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean id="wicketMarkupCache" class="org.yes.cart.web.application.MultiMakupEhCacheProvider">
+    <bean id="wicketMarkupCache" class="org.yes.cart.web.application.MultiMarkupEhCacheProvider">
         <constructor-arg index="0" ref="cacheManager"/>
         <constructor-arg index="1" value="web.wicket-wicketMarkupCache"/>
     </bean>
 
-    <bean id="wicketMarkupKeyCache" class="org.yes.cart.web.application.MultiMakupEhCacheProvider">
+    <bean id="wicketMarkupKeyCache" class="org.yes.cart.web.application.MultiMarkupEhCacheProvider">
         <constructor-arg index="0" ref="cacheManager"/>
         <constructor-arg index="1" value="web.wicket-wicketMarkupKeyCache"/>
     </bean>
