@@ -274,7 +274,7 @@ public class HeaderTuplizerImpl extends AbstractCryptedTuplizerImpl implements C
     public <T extends Serializable> T toObject(final Map<String, List<String>> headers) throws CartDetuplizationException {
 
         final String input = assembleStringRepresentationOfObjectFromCookies(headers);
-        return toObject(input);
+        return (T) toObject(input);
 
     }
 
