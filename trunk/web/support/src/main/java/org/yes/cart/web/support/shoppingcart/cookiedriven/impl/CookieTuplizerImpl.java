@@ -313,7 +313,7 @@ public class CookieTuplizerImpl extends AbstractCryptedTuplizerImpl implements C
     private <T extends Serializable> T toObject(final Cookie[] cookies) throws CartDetuplizationException {
 
         final String input = assembleStringRepresentationOfObjectFromCookies(cookies);
-        return toObject(input);
+        return (T) toObject(input);
 
     }
 
