@@ -76,7 +76,7 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
      * 5. Country specific tax
      * 6. Shop specific tax
      */
-    private static final Comparator<TaxConfig> PRIORITY = new Comparator<TaxConfig>() {
+    static final Comparator<TaxConfig> PRIORITY = new Comparator<TaxConfig>() {
 
         private int UP = -1;
         private int DOWN = 1;
@@ -90,7 +90,7 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
                     // product state specific tax wins
                     return tc2.getProductCode() != null && tc2.getStateCode() != null ? DOWN : UP;
                 } // else product shop specific tax
-                return tc2.getProductCode() != null && (tc2.getCountryCode() != null || tc2.getStateCode() != null) ? UP : DOWN;
+                return tc2.getProductCode() != null && (tc2.getCountryCode() != null || tc2.getStateCode() != null) ? DOWN : UP;
             } else if (tc1.getStateCode() != null) { // state specific tax
                 if (tc2.getProductCode() != null) {
                     return DOWN; // product specific tax is higher up
@@ -100,6 +100,7 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
                 if (tc2.getProductCode() != null || tc2.getStateCode() != null) {
                     return DOWN; // product specific or state specific tax is higher up
                 }
+                return UP;
             } // else shop specific (all nulls)
             return DOWN;
         }

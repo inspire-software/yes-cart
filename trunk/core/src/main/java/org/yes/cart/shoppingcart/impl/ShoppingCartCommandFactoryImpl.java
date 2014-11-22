@@ -60,11 +60,7 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
         Collections.sort(ordered, new Comparator<ShoppingCartCommand>() {
             @Override
             public int compare(final ShoppingCartCommand cmd1, final ShoppingCartCommand cmd2) {
-                final int rez = cmd1.getPriority() - cmd2.getPriority();
-                if (rez == 0) {
-                    return -1;
-                }
-                return rez;
+                return cmd1.getPriority() - cmd2.getPriority();
             }
         });
         return ordered.toArray(new ShoppingCartCommand[ordered.size()]);
