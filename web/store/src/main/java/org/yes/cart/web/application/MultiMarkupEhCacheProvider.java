@@ -31,12 +31,12 @@ import java.util.List;
  * Date: 28/08/2014
  * Time: 13:58
  */
-public class MultiMakupEhCacheProvider<T> implements MarkupCache.ICache<String, T> {
+public class MultiMarkupEhCacheProvider<T> implements MarkupCache.ICache<String, T> {
 
     private final Cache CACHE;
 
-    public MultiMakupEhCacheProvider(final CacheManager cacheManager,
-                                     final String cacheKey) {
+    public MultiMarkupEhCacheProvider(final CacheManager cacheManager,
+                                      final String cacheKey) {
         this.CACHE = cacheManager.getCache(cacheKey);
     }
 

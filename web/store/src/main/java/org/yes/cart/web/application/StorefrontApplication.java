@@ -33,6 +33,7 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.ClassProvider;
 import org.apache.wicket.util.file.IResourceFinder;
 import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.resource.locator.ResourceStreamLocator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.yes.cart.service.misc.LanguageService;
@@ -40,9 +41,8 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.theme.WicketPagesMounter;
 import org.yes.cart.web.theme.WicketResourceMounter;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -66,11 +66,6 @@ public class StorefrontApplication
         implements
         IResourceFinder,
         IRequestCycleProvider {
-
-    private static Map<String, MultiWebApplicationPath> resourceResolvers =
-            new ConcurrentHashMap<String, MultiWebApplicationPath>();
-
-    private ThreadLocal<MultiWebApplicationPath> resolver = new ThreadLocal<MultiWebApplicationPath>();
 
     private SpringComponentInjector springComponentInjector;
 
@@ -107,8 +102,9 @@ public class StorefrontApplication
 
         super.init();
 
-        // dynamic shop markup support via specific refource finder
+        // dynamic shop markup support via specific resource finder
         getResourceSettings().setResourceFinder(this);
+        getResourceSettings().setResourceStreamLocator(new ResourceStreamLocator(this));
 
         setRequestCycleProvider(this);
 
@@ -244,36 +240,39 @@ public class StorefrontApplication
      * {@inheritDoc}
      */
     public IResourceStream find(final Class<?> aClass, final String s) {
-        return resolver.get().find(aClass, s);
+        return configureMultiWebApplicationPath().find(aClass, s);
     }
 
     /**
      * {@inheritDoc}
      */
     public RequestCycle get(final RequestCycleContext context) {
-        resolver.set(getMultiWebApplicationPath());
         return new RequestCycle(context);
     }
 
 
     /**
-     * Get exising or create new {@link MultiWebApplicationPath} for new request
+     * Get existing or create new {@link MultiWebApplicationPath} for new request
      *
      * @return instance of {@link MultiWebApplicationPath}
      */
-    private MultiWebApplicationPath getMultiWebApplicationPath() {
-        MultiWebApplicationPath multiWebApplicationPath = resourceResolvers.get(ShopCodeContext.getShopCode());
-        if (multiWebApplicationPath == null) { //first request to this shop, lets create a resolver
-            multiWebApplicationPath = new MultiWebApplicationPath(getServletContext());
+    private MultiWebApplicationPath configureMultiWebApplicationPath() {
+
+        HttpServletRequest rawRequest = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
+        final Object resolver = rawRequest.getAttribute("YC_APP_MULTIWEBAPP_RESOLVER");
+        if (resolver == null) {
+
+            MultiWebApplicationPath multiWebApplicationPath = new MultiWebApplicationPath(getServletContext());
 
             final List<String> themesChain = ApplicationDirector.getCurrentThemeChain();
             for (final String theme : themesChain) {
                 multiWebApplicationPath.add(theme + "/markup");  // shop specific markup folder
             }
 
-            resourceResolvers.put(ShopCodeContext.getShopCode(), multiWebApplicationPath);
+            rawRequest.setAttribute("YC_APP_MULTIWEBAPP_RESOLVER", multiWebApplicationPath);
+            return multiWebApplicationPath;
         }
-        return multiWebApplicationPath;
+        return (MultiWebApplicationPath) resolver;
     }
 
 }
