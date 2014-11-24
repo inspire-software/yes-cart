@@ -112,6 +112,20 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         this.attributes = attributes;
     }
 
+    public Collection<AttrValue> getAllAttributes() {
+        return new ArrayList<AttrValue>(attributes);
+    }
+
+    public Map<String, AttrValue> getAllAttributesAsMap() {
+        final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
+        for (AttrValue attrValue : getAllAttributes()) {
+            if (attrValue != null && attrValue.getAttribute() != null) {
+                rez.put(attrValue.getAttribute().getCode(), attrValue);
+            }
+        }
+        return rez;
+    }
+
     public SeoEntity getSeoInternal() {
         return this.seoInternal;
     }

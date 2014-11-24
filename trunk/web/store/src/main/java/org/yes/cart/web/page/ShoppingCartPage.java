@@ -24,6 +24,7 @@ import org.apache.wicket.util.string.StringValue;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartView;
 import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 
@@ -76,6 +77,8 @@ public class ShoppingCartPage extends AbstractWebPage {
                 new StandardHeader(HEADER)
         ).addOrReplace(
                 new ServerSideJs("serverSideJs")
+        ).addOrReplace(
+                new HeaderMetaInclude("headerInclude")
         );
 
         if (ApplicationDirector.getShoppingCart().getCartItemList().isEmpty()) {

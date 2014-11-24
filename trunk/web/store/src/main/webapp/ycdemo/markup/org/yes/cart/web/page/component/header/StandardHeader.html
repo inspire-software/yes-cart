@@ -13,15 +13,70 @@
   ~    See the License for the specific language governing permissions and
   ~    limitations under the License.
   -->
+
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
     <nav class="top-menu">
         <div class="container no-padding">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 no-margin">
-                <wicket:container wicket:id="headerNav">
-                    [header nav]
-                </wicket:container>
+                <ul>
+                    <li>
+                        <a href="tag/sale" rel="search">
+                            <span><wicket:message key="sale">[Sale]</wicket:message></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tag/specialoffer" rel="search">
+                            <span><wicket:message key="specialOffer">[Special offer]</wicket:message></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tag/newarrival" rel="search">
+                            <span><wicket:message key="newArrivals">[New products]</wicket:message></span>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" id="demoMenu" data-toggle="dropdown" href="#">
+                            <wicket:message key="demo">[Demo]</wicket:message>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="demoMenu">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/multisku" rel="search">
+                                    <span><wicket:message key="demoMultiSku">[Multi sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/preorder" rel="search">
+                                    <span><wicket:message key="demoPreorder">[Pre-order sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/backorder" rel="search">
+                                    <span><wicket:message key="demoBackorder">[Back order sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/always" rel="search">
+                                    <span><wicket:message key="demoAlways">[Back order sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <wicket:link>
+                            <a href="ContactPage.html" rel="search">
+                                <span><wicket:message key="contacts">[Contacts]</wicket:message></span>
+                            </a>
+                        </wicket:link>
+                    </li>
+                </ul>
+                <div class="invisible">
+                    <wicket:container wicket:id="headerNav">
+                        [header nav]
+                    </wicket:container>
+                </div>
             </div>
 
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 no-margin">
@@ -67,7 +122,10 @@
                 <div class="logo">
                     <wicket:link>
                         <a href="HomePage.html" rel="bookmark">
-                            <img wicket:id="headerLogo" class="center-block"  border="0"/>
+                            <wicket:link>
+                                <img class="center-block" src="../../../../../../../image/yes-logo.png" border="0"/>
+                            </wicket:link>
+                            <img wicket:id="headerLogo" class="center-block invisible" border="0"/>
                         </a>
                     </wicket:link>
                 </div>

@@ -26,12 +26,10 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -148,7 +146,15 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
 
         if (currentContentId > 0L && shopService.getShopContentIds(shopId).contains(currentContentId)) {
 
-            return contentService.getChildContent(currentContentId);
+            final List<Category> categories = new ArrayList<Category>(contentService.getChildContent(currentContentId));
+            final Iterator<Category> itCat = categories.iterator();
+            while (itCat.hasNext()) {
+                final Category cat = itCat.next();
+                if (CentralViewLabel.CONTENT_INCLUDE.equals(cat.getUitemplate())) {
+                    itCat.remove();
+                }
+            }
+            return categories;
 
         }
 

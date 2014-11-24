@@ -13,6 +13,7 @@
   ~    See the License for the specific language governing permissions and
   ~    limitations under the License.
   -->
+
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
@@ -61,7 +62,10 @@
             <div class="col-xs-12 col-sm-6 text-center">
                 <wicket:link>
                     <a href="HomePage.html" rel="bookmark">
-                        <img wicket:id="headerLogo" class="center-block"  border="0"/>
+                        <wicket:link>
+                            <img class="center-block" src="../../../../../../../image/yes-logo.png" border="0"/>
+                        </wicket:link>
+                        <img wicket:id="headerLogo" class="center-block invisible"  border="0"/>
                     </a>
                 </wicket:link>
             </div>

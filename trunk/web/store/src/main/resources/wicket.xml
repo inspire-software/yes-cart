@@ -175,6 +175,7 @@
                 <entry key="dynocontent"    value="org.yes.cart.web.page.component.DynoContentCentralView"/>
                 <entry key="category"       value="org.yes.cart.web.page.component.EmptyCentralView"/>
                 <entry key="default"        value="org.yes.cart.web.page.component.EmptyCentralView"/>
+                <entry key="include"        value="org.yes.cart.web.page.component.EmptyCentralView"/>
             </map>
         </constructor-arg>
         <constructor-arg index="3">

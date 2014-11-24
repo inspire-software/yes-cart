@@ -20,9 +20,6 @@
 <wicket:head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
-    <meta name="google-site-verification" content="rHZLga_ppoOy7iVYFQgRVDZOLa7fuT7cGs2t8TY4m6c" />
-    <meta name="robots" content="noindex" />
-
     <wicket:link>
 
         <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
@@ -53,19 +50,24 @@
     <span wicket:id="header">[header]</span>
 
     <div class="container">
-
-        <div class="col-xs-12">
-            <label wicket:id="feedback">[feedback panel]</label>
+        <div class="col-xs-12 faq-title">
+            <h2><wicket:message key="faq">[FAQ]</wicket:message></h2>
         </div>
 
-        <div class="col-xs-12">
-            <div class="shopping-cart-details">
-                <wicket:container wicket:id="shoppingCartView">
-                    [shopping cart]
-                </wicket:container>
-            </div>
+        <div class="col-xs-12 faq-body">
+            <h2>Документація</h2>
+            <p class="text-justify">
+                Детальна <a href="http://www.inspire-software.com/confluence/display/YC2R/Home" target="_blank"><b>документація</b></a> YC буде корисна бізнес користувачам, представникам технічної підтримки та розробникам.
+            </p>
+            <h2>Google группа</h2>
+            <p class="text-justify">
+                Складні питання та уточнення можуть бути задані в нашій Google <a href="https://groups.google.com/d/forum/yescart---open-source-ecommerce-platform" target="_blank"><b>групі</b></a>
+            </p>
+            <h2>JIRA</h2>
+            <p class="text-justify">
+                Для повідомлень про помилки та запитів нової функціональності використовуйте <a href="http://www.inspire-software.com/jira/browse/YC"  target="_blank"><b>jira</b></a>
+            </p>
         </div>
-
     </div>
 
     <span wicket:id="footer">[footer]</span>

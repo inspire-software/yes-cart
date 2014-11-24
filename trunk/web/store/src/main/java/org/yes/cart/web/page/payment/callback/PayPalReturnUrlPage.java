@@ -38,6 +38,7 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -211,9 +212,8 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
             add(new StandardHeader(HEADER));
             add(new StandardFooter(FOOTER));
 
-            add(
-                    new ServerSideJs("serverSideJs")
-            );
+            add(new ServerSideJs("serverSideJs"));
+            add(new HeaderMetaInclude("headerInclude"));
 
         } catch (IOException e) {
             ShopCodeContext.getLog(this).error("Cant call paypal gateway ", e);
