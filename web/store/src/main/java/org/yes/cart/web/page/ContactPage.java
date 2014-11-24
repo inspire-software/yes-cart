@@ -20,6 +20,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 
@@ -57,6 +58,8 @@ public class ContactPage  extends AbstractWebPage {
                 new StandardHeader(HEADER)
         ).add(
                 new ServerSideJs("serverSideJs")
+        ).add(
+                new HeaderMetaInclude("headerInclude")
         );
 
         super.onBeforeRender();

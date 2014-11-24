@@ -20,10 +20,7 @@
 
     <div class="search-bar-holder">
         <div class="contact-line">
-            <span class="glyphicon glyphicon-envelope blue"></span>
-            <a href="http://www.yes-cart.org/#contact" target="_blank">
-                <wicket:message key="contactForm">[contact form]</wicket:message>
-            </a>
+            <wicket:container wicket:id="contentInclude">[meta include]</wicket:container>
         </div>
         <div class="input-group input-group-lg">
             <input id="searchPhraze" type="text" class="form-control js-search-input" wicket:message="placeholder:searchHolder">

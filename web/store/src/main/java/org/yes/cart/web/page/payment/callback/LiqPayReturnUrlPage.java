@@ -26,6 +26,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -57,6 +58,7 @@ public class LiqPayReturnUrlPage  extends AbstractWebPage {
         add(new StandardFooter(FOOTER));
         add(new FeedbackPanel("feedback"));
         add(new ServerSideJs("serverSideJs"));
+        add(new HeaderMetaInclude("headerInclude"));
     }
 
     @Override

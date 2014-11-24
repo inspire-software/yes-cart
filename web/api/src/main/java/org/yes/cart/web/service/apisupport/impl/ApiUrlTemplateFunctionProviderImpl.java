@@ -44,7 +44,7 @@ public class ApiUrlTemplateFunctionProviderImpl implements ContentServiceTemplat
         final String defaultUrl = shop.getDefaultShopUrl();
         final StringBuilder url = new StringBuilder(defaultUrl);
         if (defaultUrl.endsWith("/")) {
-            url.append("yes-shop");
+            url.append("yes-shop"); // TODO: add attribute to SHOP to store this
         } else {
             url.append("/yes-shop");
         }

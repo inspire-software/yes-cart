@@ -1,0 +1,150 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+    <div class="footer-block">
+        <div class="link-list-row">
+            <div class="container no-padding">
+                <div class="col-xs-12 col-md-4">
+                    <div class="footer-logo">
+                        <wicket:link>
+                            <img src="../../../../../../../image/yes-logo.png" border="0" width="220px" wicket:message="alt:buildVersion,title:buildVersion"/>
+                        </wicket:link>
+                    </div>
+                    <div class="social-holder-small">
+                        <div class="g-plusone" data-size="medium"></div>
+                            <script type="text/javascript">
+                                (function () {
+                                    var po = document.createElement('script');
+                                    po.type = 'text/javascript';
+                                    po.async = true;
+                                    po.src = 'https://apis.google.com/js/plusone.js';
+                                    var s = document.getElementsByTagName('script')[0];
+                                    s.parentNode.insertBefore(po, s);
+                                })();
+                            </script>
+                            &nbsp;
+                            <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="yescart">Tweet</a>
+                            <script type="text/javascript">!function (d, s, id) {
+                                var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                                if (!d.getElementById(id)) {
+                                    js = d.createElement(s);
+                                    js.id = id;
+                                    js.src = p + '://platform.twitter.com/widgets.js';
+                                    fjs.parentNode.insertBefore(js, fjs);
+                                }
+                            }(document, 'script', 'twitter-wjs');</script>
+                            &nbsp;
+                            <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.yes-cart.org&amp;send=false&amp;layout=button_count&amp;width=100&amp;show_faces=false&amp;font&amp;colorscheme=light&amp;action=like&amp;height=21"
+                                    scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:110px; height:21px;"
+                                    allowTransparency="true">
+
+                            </iframe>
+                        </div>
+                </div>
+                <div class="col-xs-12 col-md-8 no-margin">
+                    <div class="links-col">
+                        <wicket:link>
+                            <a href="CustomerSelfCarePage.html" rel="nofollow"><span><wicket:message key="profile">[Profile]</wicket:message></span></a>
+                        </wicket:link><br>
+                        <wicket:link>
+                            <a href="ShoppingCartPage.html" rel="nofollow"><span><wicket:message key="cart">[View cart]</wicket:message></span></a>
+                        </wicket:link><br>
+                        <wicket:message key="orderGuide">[Order Guide]</wicket:message><br>
+                        <wicket:link>
+                            <a href="CustomerSelfCarePage.html" rel="nofollow"><span><wicket:message key="orderHistory">[Order history]</wicket:message></span></a>
+                        </wicket:link>
+                    </div>
+                    <div class="links-col">
+                        <wicket:link><a href="FaqPage.html" rel="bookmark"><span><wicket:message key="faq">[FAQ]</wicket:message></span></a></wicket:link><br>
+                        <wicket:message key="returnPolicy">[Return policy]</wicket:message><br>
+                        <wicket:message key="siteMap">[Site map]</wicket:message><br>
+                        <wicket:message key="callCenter">[Call center]</wicket:message><br>
+                    </div>
+                    <div class="links-col">
+                        <wicket:link><a href="ContactPage.html" rel="bookmark"><span><wicket:message key="contacts">[Contacts]</wicket:message></span></a></wicket:link><br>
+                        <a href="/yes-shop/content/license" rel="bookmark"><span><wicket:message key="licenceInfo">[licence info]</wicket:message></span></a><br>
+                        <a href="/yes-shop/content/sitemap" rel="bookmark"><span><wicket:message key="sitemapInfo">[sitemap info]</wicket:message></span></a><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="invisible">
+            <wicket:container wicket:id="footerNav">
+                [header nav]
+            </wicket:container>
+        </div>
+
+        <div class="copyright-bar">
+            <div class="container">
+                <div class="col-xs-12 col-sm-6 col-md-6 no-margin">
+                    <div class="copyright">
+                        <span class="btn-lg glyphicon glyphicon-copyright-mark blue"></span>
+                        <a href="http://www.yes-cart.org" target="_blank">YesCart.org</a> 2014
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6 no-margin">
+                    <div class="social-holder-large">
+                        <ul>
+                            <li>
+                                <a href="http://www.facebook.com/pages/Yes-Cart/426764944047166" target="_blank">
+                                    <wicket:link>
+                                        <img src="../../../../../../../image/f_logo.png"/>
+                                    </wicket:link>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://plus.google.com/u/0/111193184651984424251/posts" target="_blank">
+                                    <wicket:link>
+                                        <img src="../../../../../../../image/GooglePlus-512-Red.png"/>
+                                    </wicket:link>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="http://vk.com/yescart" target="_blank">
+                                    <wicket:link>
+                                        <img src="../../../../../../../image/vk_logo.png"/>
+                                    </wicket:link>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://twitter.com/i/#!/search/?q=%23yescart&src=hash" target="_blank">
+                                    <wicket:link>
+                                        <img src="../../../../../../../image/twitter-bird-white-on-blue.png"/>
+                                    </wicket:link>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="invisible">
+            <wicket:container wicket:id="footerCopyright">
+                [header nav]
+            </wicket:container>
+        </div>
+    </div>
+
+    <wicket:container wicket:id="footerInclude">
+        [Shop specific footer_include]
+    </wicket:container>
+</wicket:panel>
+</body>
+</html>

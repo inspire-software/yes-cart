@@ -16,7 +16,12 @@
 
 package org.yes.cart.web.page.component.footer;
 
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.ContentServiceFacade;
 
 /**
  * User: iazarny@yahoo.com
@@ -24,6 +29,9 @@ import org.yes.cart.web.page.component.BaseComponent;
  * Time: 8:15 PM
  */
 public class StandardFooter extends BaseComponent {
+
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    private ContentServiceFacade contentServiceFacade;
 
     /**
      * Construct view.
@@ -36,8 +44,25 @@ public class StandardFooter extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        addOrReplace(getWicketSupportFacade().links().newContentLink("licenseLink", "license"));
-        addOrReplace(getWicketSupportFacade().links().newContentLink("siteMapLink", "sitemap"));
+        final long shopId = ShopCodeContext.getShopId();
+        final String lang = getLocale().getLanguage();
+
+        String footerInclude = getContentInclude(shopId, "footer_include", lang);
+        addOrReplace(new Label("footerInclude", footerInclude).setEscapeModelStrings(false));
+        String footerNav = getContentInclude(shopId, "footer_nav_include", lang);
+        addOrReplace(new Label("footerNav", footerNav).setEscapeModelStrings(false));
+        String footerCopyright = getContentInclude(shopId, "footer_copy_include", lang);
+        addOrReplace(new Label("footerCopyright", footerCopyright).setEscapeModelStrings(false));
+
         super.onBeforeRender();
+    }
+
+    private String getContentInclude(long shopId, String contentUri, String lang) {
+        String content = contentServiceFacade.getContentBody(
+                contentUri, shopId, lang);
+        if (content == null) {
+            content = "";
+        }
+        return content;
     }
 }

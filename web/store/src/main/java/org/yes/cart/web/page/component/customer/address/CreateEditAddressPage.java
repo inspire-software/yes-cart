@@ -28,6 +28,7 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.CustomerSelfCarePage;
+import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -98,6 +99,10 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
         add(
                 new ServerSideJs("serverSideJs")
+        );
+
+        add(
+                new HeaderMetaInclude("headerInclude")
         );
     }
 

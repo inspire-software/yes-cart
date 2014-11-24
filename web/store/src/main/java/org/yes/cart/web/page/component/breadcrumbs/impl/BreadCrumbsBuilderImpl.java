@@ -28,6 +28,7 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsBuilder;
 import org.yes.cart.web.page.component.breadcrumbs.Crumb;
+import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.yes.cart.web.util.WicketUtil;
@@ -85,7 +86,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                                       final String tagPrefix) {
 
         final List<Crumb> crumbs = new ArrayList<Crumb>();
-        crumbs.addAll(getCategoriesCrumbs(categoryId, shopCategoryIds));
+        crumbs.addAll(getCategoriesCrumbs(categoryId, shopCategoryIds, pageParameters.getNamedKeys().contains(WebParametersKeys.CONTENT_ID)));
         crumbs.addAll(getFilteredNavigationCrumbs(locale, pageParameters, brandPrefix, pricePrefix, queryPrefix, tagPrefix));
         return crumbs;
     }
@@ -101,10 +102,10 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         return navigationCrumbs;
     }
 
-    private List<Crumb> getCategoriesCrumbs(final long categoryId, final Set<Long> shopCategoryIds) {
+    private List<Crumb> getCategoriesCrumbs(final long categoryId, final Set<Long> shopCategoryIds, final boolean isContent) {
         final List<Crumb> categoriesCrumbs = new ArrayList<Crumb>();
         if (categoryId > 0) {
-            fillCategories(categoriesCrumbs, categoryId, shopCategoryIds);
+            fillCategories(categoriesCrumbs, categoryId, shopCategoryIds, isContent);
             Collections.reverse(categoriesCrumbs);
         }
         return categoriesCrumbs;
@@ -116,20 +117,21 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
      *
      * @param categoriesCrumbs the crumbs list
      * @param categoryId       the current category id
+     * @param isContent        true if this is content hierarchy, category otherwise
      */
-    private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId, final Set<Long> shopCategoryIds) {
+    private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId, final Set<Long> shopCategoryIds, final boolean isContent) {
         if (categoryId > 0l) {
             final Category category = categoryService.getById(categoryId);
-            if (!category.isRoot()) {
+            if (!category.isRoot() && !CentralViewLabel.CONTENT_INCLUDE.equals(category.getUitemplate())) {
                 categoriesCrumbs.add(
                         new Crumb("category", category.getName(),
-                                category.getDisplayName(), getCategoryLinkParameters(categoryId),
-                                getRemoveCategoryLinkParameters(category, shopCategoryIds)
+                                category.getDisplayName(), getCategoryLinkParameters(categoryId, isContent),
+                                getRemoveCategoryLinkParameters(category, shopCategoryIds, isContent)
                         )
                 );
 
 
-                fillCategories(categoriesCrumbs, category.getParentId(), shopCategoryIds);
+                fillCategories(categoriesCrumbs, category.getParentId(), shopCategoryIds, isContent);
             }
         }
     }
@@ -137,24 +139,30 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     /**
      * Get {@link PageParameters}, that point to given category.
      *
+     *
      * @param categoryId given category id
+     * @param isContent  true if given category is content, false if given category is category
+     *
      * @return page parameters for link
      */
-    private PageParameters getCategoryLinkParameters(final long categoryId) {
-        return new PageParameters().add(WebParametersKeys.CATEGORY_ID, categoryId);
+    private PageParameters getCategoryLinkParameters(final long categoryId, final boolean isContent) {
+        return new PageParameters().add(isContent ? WebParametersKeys.CONTENT_ID : WebParametersKeys.CATEGORY_ID, categoryId);
     }
 
     /**
      * Get {@link PageParameters}, that point to parent, if any, of given category.
      *
+     *
      * @param category given category
+     * @param isContent  true if given category is content, false if given category is category
+     *
      * @return page parameter for point to parent.
      */
-    private PageParameters getRemoveCategoryLinkParameters(final Category category, final Set<Long> shopCategoryIds) {
+    private PageParameters getRemoveCategoryLinkParameters(final Category category, final Set<Long> shopCategoryIds, final boolean isContent) {
         if (shopCategoryIds.contains(category.getParentId())) {
             final Category parent = categoryService.getById(category.getParentId());
-            if (parent != null && !parent.isRoot()) {
-                return getCategoryLinkParameters(category.getParentId());
+            if (parent != null && !parent.isRoot() && !CentralViewLabel.CONTENT_INCLUDE.equals(parent.getUitemplate())) {
+                return getCategoryLinkParameters(parent.getCategoryId(), isContent);
             }
         }
         return new PageParameters();

@@ -592,3 +592,84 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 drop table TSHOPEXCHANGERATE;
 delete from TSHOPATTRVALUE where CODE = 'PRICE_NAVIGATION_STRATEGY';
 delete from TATTRIBUTE where CODE = 'PRICE_NAVIGATION_STRATEGY';
+
+--
+-- YC-452 Add Shop specific header/footer includes
+--
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10003, 10000, 0, 'header_include', 'Header include for SHOP10','include', 'SHOP10_header_include','SHOP10_header_include');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12022,'CONTENT_BODY_en_1','
+    <meta name="google-site-verification" content="rHZLga_ppoOy7iVYFQgRVDZOLa7fuT7cGs2t8TY4m6c" />
+',10003,'12022_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12023,'CONTENT_BODY_ru_1','
+    <meta name="google-site-verification" content="rHZLga_ppoOy7iVYFQgRVDZOLa7fuT7cGs2t8TY4m6c" />
+',10003,'12023_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12025,'CONTENT_BODY_uk_1','
+    <meta name="google-site-verification" content="rHZLga_ppoOy7iVYFQgRVDZOLa7fuT7cGs2t8TY4m6c" />
+',10003,'12025_CAV');
+
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10004, 10000, 0, 'footer_include', 'Footer include for SHOP10','include', 'SHOP10_footer_include','SHOP10_footer_include');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12032,'CONTENT_BODY_en_1','
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push([''_setAccount'', ''UA-4983157-12'']);
+        _gaq.push([''_setDomainName'', ''yes-cart.org'']);
+        _gaq.push([''_trackPageview'']);
+
+        (function() {
+            var ga = document.createElement(''script''); ga.type = ''text/javascript''; ga.async = true;
+            ga.src = (''https:'' == document.location.protocol ? ''https://ssl'' : ''http://www'') + ''.google-analytics.com/ga.js'';
+            var s = document.getElementsByTagName(''script'')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>',10004,'12032_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12033,'CONTENT_BODY_ru_1','
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push([''_setAccount'', ''UA-4983157-12'']);
+        _gaq.push([''_setDomainName'', ''yes-cart.org'']);
+        _gaq.push([''_trackPageview'']);
+
+        (function() {
+            var ga = document.createElement(''script''); ga.type = ''text/javascript''; ga.async = true;
+            ga.src = (''https:'' == document.location.protocol ? ''https://ssl'' : ''http://www'') + ''.google-analytics.com/ga.js'';
+            var s = document.getElementsByTagName(''script'')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>',10004,'12033_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12035,'CONTENT_BODY_uk_1','
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push([''_setAccount'', ''UA-4983157-12'']);
+        _gaq.push([''_setDomainName'', ''yes-cart.org'']);
+        _gaq.push([''_trackPageview'']);
+
+        (function() {
+            var ga = document.createElement(''script''); ga.type = ''text/javascript''; ga.async = true;
+            ga.src = (''https:'' == document.location.protocol ? ''https://ssl'' : ''http://www'') + ''.google-analytics.com/ga.js'';
+            var s = document.getElementsByTagName(''script'')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>',10004,'12035_CAV');
+
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10005, 10000, 0, 'header_search_include', 'Header search include for SHOP10','include', 'SHOP10_header_search_include','SHOP10_header_search_include');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12042,'CONTENT_BODY_en_1','
+<span class="glyphicon glyphicon-envelope blue"></span>
+<a href="http://www.yes-cart.org/#contact" target="_blank">Contact form</a>
+',10005,'12042_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12043,'CONTENT_BODY_ru_1','
+<span class="glyphicon glyphicon-envelope blue"></span>
+<a href="http://www.yes-cart.org/#contact" target="_blank">Контактная форма</a>
+',10005,'12043_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12045,'CONTENT_BODY_uk_1','
+<span class="glyphicon glyphicon-envelope blue"></span>
+<a href="http://www.yes-cart.org/#contact" target="_blank">Контактна форма</a>
+',10005,'12045_CAV');
+
+
+

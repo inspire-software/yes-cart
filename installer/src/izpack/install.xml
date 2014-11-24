@@ -111,7 +111,7 @@
         <pack name="Yes Cart StoreFront" required="no">
             <description>Demo storefront based on Yes-Cart platform</description>
 
-            <file src="target/izpack/yes-shop.war" targetdir="$INSTALL_PATH/webapps/yes-shop" unpack="true"/>
+            <file src="target/izpack/yes-shop.war" targetdir="$INSTALL_PATH/webapps/yes-shop" unpack="true" override="true"/>
 
             <!-- imported images -->
             <fileset dir="src/main/resources/imagevault"

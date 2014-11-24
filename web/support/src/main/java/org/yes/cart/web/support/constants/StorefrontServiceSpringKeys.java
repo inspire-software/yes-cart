@@ -69,6 +69,11 @@ public interface StorefrontServiceSpringKeys {
      public String PRODUCT_IMAGE_SERVICE = "productImageService";
 
      /**
+      * Shop image service .
+      */
+     public String SHOP_IMAGE_SERVICE = "shopImageService";
+
+     /**
       * Cart persister.
       */
      public String CART_PERSISTER = "shoppingCartPersister";

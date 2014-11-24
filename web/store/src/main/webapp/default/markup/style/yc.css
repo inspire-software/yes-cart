@@ -1559,3 +1559,7 @@ a:active {
 .top-menu ul > li a:hover {
     color: #3498db;
 }
+
+.invisible {
+    display: none;
+}
