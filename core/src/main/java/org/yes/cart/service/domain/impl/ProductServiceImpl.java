@@ -32,6 +32,8 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
+import org.yes.cart.domain.entityindexer.IndexFilter;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.i18n.impl.NonI18NModel;
@@ -64,6 +66,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     private final AttributeService attributeService;
     private final GenericDAO<ProductCategory, Long> productCategoryDao;
     private final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao;
+    private final ShopCategoryRelationshipSupport shopCategoryRelationshipSupport;
     private final Random rand;
     private final DtoFactory dtoFactory;
 
@@ -76,6 +79,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param attributeService   attribute service
      * @param productCategoryDao category dao to work with category information
      * @param productTypeAttrDao product type attributes need to work with range navigation
+     * @param shopCategoryRelationshipSupport shop product category relationship support
      */
     public ProductServiceImpl(final GenericDAO<Product, Long> productDao,
                               final ProductSkuService productSkuService,
@@ -83,6 +87,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                               final AttributeService attributeService,
                               final GenericDAO<ProductCategory, Long> productCategoryDao,
                               final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao,
+                              final ShopCategoryRelationshipSupport shopCategoryRelationshipSupport,
                               final DtoFactory dtoFactory) {
         super(productDao);
         this.productDao = productDao;
@@ -91,6 +96,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         this.attributeService = attributeService;
         this.productCategoryDao = productCategoryDao;
         this.productTypeAttrDao = productTypeAttrDao;
+        this.shopCategoryRelationshipSupport = shopCategoryRelationshipSupport;
         rand = new Random();
         rand.setSeed((new Date().getTime()));
         this.dtoFactory = dtoFactory;
@@ -765,6 +771,25 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     public int reindexProducts() {
         return productDao.fullTextSearchReindex(true);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public int reindexProducts(final Long shopId) {
+        final Set<Long> categories = shopCategoryRelationshipSupport.getShopCategoriesIds(shopId);
+        return productDao.fullTextSearchReindex(true, new IndexFilter<Product>() {
+            @Override
+            public boolean skipIndexing(final Product entity) {
+                for (final ProductCategory pcat : entity.getProductCategory()) {
+                    if (categories.contains(pcat.getCategory().getCategoryId())) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
     }
 
     /**

@@ -64,6 +64,13 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    public int reindexShopProducts(final long shopPk) {
+        throw new UnsupportedOperationException("YUM does nto support product index");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public int reindexProduct(final long productPk) {
         throw new UnsupportedOperationException("YUM does nto support product index");
     }
