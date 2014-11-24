@@ -151,31 +151,40 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
     /** {@inheritDoc} */
     @Override
     public String reindexAllProducts() {
-        return doJob(createAsyncContext(true));
+        return doJob(createAsyncContext(true, 0L));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String reindexShopProducts(final long shopPk) {
+        return doJob(createAsyncContext(true, shopPk));
     }
 
     /** {@inheritDoc} */
     @Override
     public Map<String, Integer> reindexProduct(long pk) {
-        return remoteBackdoorService.reindexProduct(createAsyncContext(false), pk);
+        return remoteBackdoorService.reindexProduct(createAsyncContext(false, 0L), pk);
     }
 
     /** {@inheritDoc} */
     @Override
     public Map<String, Integer> reindexProductSku(long pk) {
-        return remoteBackdoorService.reindexProductSku(createAsyncContext(false), pk);
+        return remoteBackdoorService.reindexProductSku(createAsyncContext(false, 0L), pk);
     }
 
     /** {@inheritDoc} */
     @Override
     public Map<String, Integer> reindexProductSkuCode(String code) {
-        return remoteBackdoorService.reindexProductSkuCode(createAsyncContext(false), code);
+        return remoteBackdoorService.reindexProductSkuCode(createAsyncContext(false, 0L), code);
     }
 
-    private JobContext createAsyncContext(final boolean bulk) {
+    private JobContext createAsyncContext(final boolean bulk, final long shopId) {
 
         final Map<String, Object> param = new HashMap<String, Object>();
         param.put(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE, new HashMap<String, Boolean>());
+        if (shopId > 0L) {
+            param.put(JobContextKeys.NODE_FULL_PRODUCT_INDEX_SHOP, shopId);
+        }
 
         final AsyncContext flex = new AsyncFlexContextImpl(param);
 

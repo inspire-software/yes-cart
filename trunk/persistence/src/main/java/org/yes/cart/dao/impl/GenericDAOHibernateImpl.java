@@ -39,6 +39,7 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entityindexer.IndexFilter;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.io.Serializable;
@@ -570,11 +571,18 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     public int fullTextSearchReindex(final boolean async) {
+        return fullTextSearchReindex(async, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int fullTextSearchReindex(final boolean async, final IndexFilter<T> indexFilter) {
 
         final int[] count = new int[] { 0 };
         final boolean runAsync = async && this.indexExecutor != null;
         if (!runAsync) {
-            createIndexingRunnable(false, count).run(); // sync
+            createIndexingRunnable(false, count, indexFilter).run(); // sync
             return count[0];
         }
 
@@ -601,12 +609,12 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             return currentIndexingCount.get();
         }
 
-        this.indexExecutor.execute(createIndexingRunnable(true, new int[1])); // async
+        this.indexExecutor.execute(createIndexingRunnable(true, new int[1], indexFilter)); // async
 
         return currentIndexingCount.get();
     }
 
-    private Runnable createIndexingRunnable(final boolean async, final int[] count) {
+    private Runnable createIndexingRunnable(final boolean async, final int[] count, final IndexFilter<T> filter) {
         final int BATCH_SIZE = 20;
         return new Runnable() {
             @Override
@@ -626,8 +634,12 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
 
                         final Logger log = ShopCodeContext.getLog(this);
                         while (results.next()) {
-                            index++;
-                            T entity = (T) HibernateHelper.unproxy(results.get(0));
+
+                            final T entity = (T) HibernateHelper.unproxy(results.get(0));
+
+                            if (filter != null && filter.skipIndexing(entity)) {
+                                continue; // skip this object
+                            }
 
                             if (entityIndexingInterceptor != null) {
                                 if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onAdd(entity)) {
@@ -636,6 +648,8 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                             } else {
                                 fullTextSession.index(entity);
                             }
+                            index++;
+
                             if (index % BATCH_SIZE == 0) {
                                 fullTextSession.flushToIndexes(); //apply changes to indexes
                                 fullTextSession.clear(); //clear since the queue is processed

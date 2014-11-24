@@ -27,6 +27,8 @@ public interface JobContextKeys {
 
     /** Holds Map<String, Boolean> to keep track which nodes have finished full index */
     String NODE_FULL_PRODUCT_INDEX_STATE = "nodeIndexState";
+    /** Long shop PK for the shop which products need reindexing */
+    String NODE_FULL_PRODUCT_INDEX_SHOP = "nodeIndexShop";
 
     //-- IMPORT JOBS ----------------------------------//
 

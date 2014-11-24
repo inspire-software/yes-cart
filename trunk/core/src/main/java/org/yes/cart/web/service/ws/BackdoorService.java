@@ -43,12 +43,16 @@ public interface BackdoorService {
     @WebResult(name = "ping")
     boolean ping();
 
+    /**
+     * Preload main caches.
+     */
     @WebMethod
     @WebResult(name = "warmUp")
     void warmUp();
 
     /**
      * Reindex all products.
+     *
      * @return quantity of objects in index
      */
     @WebMethod
@@ -56,8 +60,21 @@ public interface BackdoorService {
     int reindexAllProducts();
 
     /**
+     * Reindex all products.
+     *
+     * @param shopPk shop pk.
+     *
+     * @return quantity of objects in index
+     */
+    @WebMethod
+    @WebResult(name = "quantity")
+    int reindexShopProducts(@WebParam(name = "productPk") long shopPk);
+
+    /**
      * Reindex single products.
+     *
      * @param productPk product pk.
+     *
      * @return quantity of objects in index
      */
     @WebMethod
@@ -66,7 +83,9 @@ public interface BackdoorService {
 
     /**
      * Reindex single products.
+     *
      * @param productPk product pk.
+     *
      * @return quantity of objects in index
      */
     @WebMethod
@@ -75,7 +94,9 @@ public interface BackdoorService {
 
     /**
      * Reindex single products.
+     *
      * @param productCode product SKU code.
+     *
      * @return quantity of objects in index
      */
     @WebMethod
@@ -85,7 +106,9 @@ public interface BackdoorService {
 
     /**
      * Reindex given set of products.
+     *
      * @param productPks product PKs to reindex
+     *
      * @return quantity of objects in index
      */
     @WebMethod
@@ -108,6 +131,7 @@ public interface BackdoorService {
      * Execute hsql and return result.
      *
      * @param query query ot execute.
+     *
      * @return list of rows
      */
     @WebMethod
@@ -118,6 +142,7 @@ public interface BackdoorService {
      * Execute lucene and return result.
      *
      * @param query query ot execute.
+     *
      * @return list of rows
      */
     @WebMethod

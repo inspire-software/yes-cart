@@ -31,6 +31,7 @@ public interface ReindexService {
      * Get index job status by token.
      *
      * @param token job token
+     *
      * @return status of indexing
      */
     JobStatus getIndexAllStatus(final String token);
@@ -43,9 +44,19 @@ public interface ReindexService {
     String reindexAllProducts();
 
     /**
+     * Reindex all products.
+     *
+     * @param shopPk shop pk.
+     *
+     * @return quantity product in created index.
+     */
+    String reindexShopProducts(long shopPk);
+
+    /**
      * Reindex product by given primary key.
      *
      * @param pk product primary key
+     *
      * @return quantity of products in created index.
      */
     Map<String, Integer> reindexProduct(long pk);
@@ -54,6 +65,7 @@ public interface ReindexService {
      * Reindex product by given sku primary key.
      *
      * @param pk sku primary key
+     *
      * @return quantity of products in created index.
      */
     Map<String, Integer> reindexProductSku(long pk);
@@ -62,6 +74,7 @@ public interface ReindexService {
      * Reindex product by given sku primary key.
      *
      * @param code sku code
+     *
      * @return quantity of products in created index.
      */
     Map<String, Integer> reindexProductSkuCode(String code);

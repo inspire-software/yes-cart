@@ -96,6 +96,7 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      */
     public Map<String, Integer> reindexAllProducts(final AsyncContext context) {
         final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
+        final Long shopId = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_SHOP);
         if (indexFinished == null) {
             throw new IllegalArgumentException("Must have [" + JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE + "] attribute [Map<String, Boolean>] in async context");
         }
@@ -110,7 +111,11 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
                     BackdoorService service = factory.getService();
                     try {
-                        indexStatus.put(yesNode.getNodeId(), service.reindexAllProducts());
+                        if (shopId != null && shopId > 0L) {
+                            indexStatus.put(yesNode.getNodeId(), service.reindexShopProducts(shopId));
+                        } else {
+                            indexStatus.put(yesNode.getNodeId(), service.reindexAllProducts());
+                        }
                     } finally {
                         factory.release(service);
                         service = null;

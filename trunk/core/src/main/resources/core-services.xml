@@ -164,7 +164,8 @@
                 <constructor-arg index="3" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
                 <constructor-arg index="4" type="org.yes.cart.dao.GenericDAO" ref="productCategoryDao"/>
                 <constructor-arg index="5" type="org.yes.cart.dao.GenericDAO" ref="productTypeAttrDao"/>
-                <constructor-arg index="6" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="6" type="org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport" ref="shopCategoryRelationshipSupport"/>
+                <constructor-arg index="7" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <lookup-method name="getSelf" bean="productService"/>
             </bean>
         </property>

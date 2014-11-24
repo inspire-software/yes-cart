@@ -234,6 +234,15 @@ public interface ProductService extends GenericService<Product> {
     /**
      * Reindex the products.
      *
+     * @param shopId shop for which to reindex products.
+     *
+     * @return document quantity in index
+     */
+    int reindexProducts(Long shopId);
+
+    /**
+     * Reindex the products.
+     *
      * @param pk the product primary key
      * @return document quantity in index
      */

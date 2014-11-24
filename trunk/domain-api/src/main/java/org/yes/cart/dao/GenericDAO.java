@@ -17,6 +17,7 @@
 package org.yes.cart.dao;
 
 import org.hibernate.criterion.Criterion;
+import org.yes.cart.domain.entityindexer.IndexFilter;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -54,6 +55,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param id   primary key
      * @param lock true if need lock for update.
+     *
      * @return instance of T or null if not found
      */
     T findById(PK id, boolean lock);
@@ -62,6 +64,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Find entity by Id.
      *
      * @param id primary key
+     *
      * @return instance of T or null if not found
      */
     T findById(PK id);
@@ -85,6 +88,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param exampleInstance pattern
      * @param excludeProperty property to exclude
+     *
      * @return list of found entities
      */
     List<T> findByExample(T exampleInstance, String[] excludeProperty);
@@ -94,6 +98,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param namedQueryName name of query
      * @param parameters     optional parameters for named query
+     *
      * @return single entity   or null if not found
      */
     <T> T findSingleByNamedQuery(String namedQueryName, Object... parameters);
@@ -103,6 +108,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param namedQueryName name of query
      * @param parameters     optional parameters for named query
+     *
      * @return single entity   or null if not found
      */
     <T> T findSingleByNamedQueryCached(String namedQueryName, Object... parameters);
@@ -112,9 +118,10 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param hsqlQuery  query
      * @param parameters parameters
+     *
      * @return list of objects.
      */
-    /*List<T> ???*/List<Object> findByQuery(String hsqlQuery, Object... parameters);
+    List<Object> findByQuery(String hsqlQuery, Object... parameters);
 
 
     /**
@@ -122,16 +129,18 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param hsqlQuery  HSQL query string
      * @param parameters optional parameters for named query
+     *
      * @return single entity
      */
     Object findSingleByQuery(String hsqlQuery, Object... parameters);
 
 
     /**
-     * Executes agregate named query, that return single scalar value.
+     * Executes aggregate named query, that return single scalar value.
      *
      * @param namedQueryName name of query
      * @param parameters     optional parameters for named query
+     *
      * @return single entity
      */
     Object getScalarResultByNamedQuery(String namedQueryName, Object... parameters);
@@ -141,6 +150,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param namedQueryName      name of query
      * @param parameters          optional parameters for named query
+     *
      * @return single entity
      */
     Object getScalarResultByNamedQueryWithInit(String namedQueryName,  Object... parameters);
@@ -151,6 +161,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param namedQueryName name of query
      * @param parameters     optional parameters for named query
+     *
      * @return list of found entities
      */
     List<T> findByNamedQuery(String namedQueryName, Object... parameters);
@@ -160,6 +171,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param namedQueryName name of query
      * @param parameters     optional parameters for named query
+     *
      * @return list of found entities
      */
     ResultsIterator<T> findByNamedQueryIterator(String namedQueryName, Object... parameters);
@@ -170,6 +182,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param namedQueryName name of query
      * @param timeout timeout to lock object for
      * @param parameters     optional parameters for named query
+     *
      * @return list of found entities
      */
     List<T> findByNamedQueryForUpdate(String namedQueryName, int timeout, Object... parameters);
@@ -179,6 +192,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param namedQueryName name of query
      * @param parameters     optional parameters for named query
+     *
      * @return list of found entities
      */
     List<T> findByNamedQueryCached(String namedQueryName, Object... parameters);
@@ -188,6 +202,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param namedQueryName name of query
      * @param parameters     optional parameters for named query
+     *
      * @return list of found objects
      */
     List<Object> findQueryObjectByNamedQuery(String namedQueryName, Object... parameters);
@@ -199,6 +214,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param firstResult    first row of result
      * @param maxResults     size of result set
      * @param parameters     optional parameters for named query
+     *
      * @return list of found objects
      */
     List<Object> findQueryObjectRangeByNamedQuery(String namedQueryName,
@@ -211,6 +227,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param namedQueryName name of query
      * @param parameters     optional parameters for named query
+     *
      * @return list of found objects
      */
     List<Object[]> findQueryObjectsByNamedQuery(String namedQueryName, Object... parameters);
@@ -222,6 +239,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param firstResult    first row of result
      * @param maxResults     size of result set
      * @param parameters     optional parameters for named query
+     *
      * @return list of found objects
      */
     List<Object[]> findQueryObjectsRangeByNamedQuery(String namedQueryName,
@@ -237,6 +255,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param parameters     optional parameters for named query
      * @param firstResult    first row of result
      * @param maxResults     size of result set
+     *
      * @return list of found entities
      */
     List<T> findRangeByNamedQuery(String namedQueryName,
@@ -247,7 +266,8 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Find entities by criteria.
      *
-     * @param criterion given criterias
+     * @param criterion given criteria
+     *
      * @return list of found entities.
      */
     List<T> findByCriteria(Criterion... criterion);
@@ -256,7 +276,8 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Find entities by criteria.
      *
      * @param criteriaTuner optional criteria tuner.
-     * @param criterion     given criterias
+     * @param criterion     given criteria
+     *
      * @return list of found entities.
      */
     List<T> findByCriteria(CriteriaTuner criteriaTuner, Criterion... criterion);
@@ -264,7 +285,8 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Find single entity by criteria.
      *
-     * @param criterion given criterias
+     * @param criterion given criteria
+     *
      * @return single entity or null if not found.
      */
     T findSingleByCriteria(Criterion... criterion);
@@ -273,7 +295,8 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Find single entity by criteria.
      *
      * @param criteriaTuner optional criteria tuner.
-     * @param criterion     given criterias
+     * @param criterion     given criteria
+     *
      * @return single entity or null if not found.
      */
     T findSingleByCriteria(CriteriaTuner criteriaTuner, Criterion... criterion);
@@ -283,6 +306,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param firstResult scroll to first result.
      * @param criterion   given criteria
+     *
      * @return list of found entities.
      */
     T findUniqueByCriteria(int firstResult, Criterion... criterion);
@@ -292,6 +316,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Persist the new entity in DB.
      *
      * @param entity entity to persist
+     *
      * @return persisted entity.
      */
     T create(T entity);
@@ -300,6 +325,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Update the entity in DB.
      *
      * @param entity entity to update
+     *
      * @return updated entity.
      */
     T update(T entity);
@@ -308,6 +334,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Save or update the entity. Please, use #create or #update instead of this method.
      *
      * @param entity entity to update
+     *
      * @return updated entity.
      */
     T saveOrUpdate(T entity);
@@ -337,14 +364,26 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Force reindex the all entities.
      *
      * @param async true if async required
+     *
      * @return document quantity in index
      */
     int fullTextSearchReindex(boolean async);
 
     /**
+     * Force reindex the all entities.
+     *
+     * @param async true if async required
+     * @param filter indexing filter
+     *
+     * @return document quantity in index
+     */
+    int fullTextSearchReindex(boolean async, IndexFilter<T> filter);
+
+    /**
      * Force reindex given entity.
      *
      * @param primaryKey to reindex.
+     *
      * @return document quantity in index
      */
     int fullTextSearchReindex(PK primaryKey);
@@ -354,6 +393,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param primaryKey to reindex.
      * @param purgeOnly true in case if need purge without reindexing from search index
+     *
      * @return document quantity in index
      */
     int fullTextSearchReindex(PK primaryKey, boolean purgeOnly);
@@ -363,6 +403,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Get the full text search result.
      *
      * @param query lucene search query
+     *
      * @return list of found entities
      */
     List<T> fullTextSearch(org.apache.lucene.search.Query query);
@@ -373,6 +414,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param query       lucene search query
      * @param firstResult first row of result
      * @param maxResults  size of result set
+     *
      * @return list of found entities
      */
     List<T> fullTextSearch(org.apache.lucene.search.Query query,
@@ -387,6 +429,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param maxResults    size of result set
      * @param sortFieldName optional  sort field name
      * @param reverse       reverse the search result
+     *
      * @return list of found entities
      */
     List<T> fullTextSearch(final org.apache.lucene.search.Query query,
@@ -404,6 +447,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param sortFieldName optional  sort field name
      * @param reverse       reverse the search result
      * @param fields        list of fields for projections
+     *
      * @return list of found entities
      */
     List<Object[]> fullTextSearch(org.apache.lucene.search.Query query,
@@ -420,6 +464,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param firtsResult   first row of result
      * @param maxResults    size of result set
      * @param sortFieldName optional sort field name, result will be asc ordered
+     *
      * @return list of found entities
      */
     List<T> fullTextSearch(final org.apache.lucene.search.Query query,
@@ -432,7 +477,8 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Get the full text search result.
      *
      * @param query lucene search query
-     * @return count iterms in result
+     *
+     * @return count items in result
      */
     int getResultCount(org.apache.lucene.search.Query query);
 
@@ -440,6 +486,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Execute native delete / update sql.
      *
      * @param nativeQuery native sql
+     *
      * @return quantity of updated / deleted rows
      */
     int executeNativeUpdate(String nativeQuery);
@@ -448,6 +495,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Execute native sql.
      *
      * @param nativeQuery native sql
+     *
      * @return result of select.
      */
     List executeNativeQuery(String nativeQuery);
@@ -456,6 +504,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Execute hsql.
      *
      * @param hsql hibernate sql
+     *
      * @return result of select.
      */
     List executeHsqlQuery(String hsql);
@@ -465,6 +514,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param hsql       hibernate sql
      * @param parameters hsql query parameters.
+     *
      * @return quantity of updated records.
      */
     int executeHsqlUpdate(String hsql, Object... parameters);
@@ -472,9 +522,10 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Execute update.
      *
-     * @param namedQueryName named quesry name
+     * @param namedQueryName named query name
      * @param parameters     parameters
-     * @return quantity of updated resords.
+     *
+     * @return quantity of updated records.
      */
     int executeUpdate(String namedQueryName, Object... parameters);
 
@@ -483,6 +534,7 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @param nativeQuery native sql
      * @param parameters  sql query parameters.
+     *
      * @return quantity of updated / deleted rows
      */
     int executeNativeUpdate(String nativeQuery, Object... parameters);

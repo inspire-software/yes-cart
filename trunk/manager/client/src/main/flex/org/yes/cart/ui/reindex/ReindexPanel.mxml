@@ -22,14 +22,18 @@
 
 	<mx:Script>
 		<![CDATA[
+        import mx.collections.ArrayCollection;
         import mx.controls.Alert;
         import mx.events.CloseEvent;
 
         import org.yes.cart.impl.JobStatusImpl;
+        import org.yes.cart.impl.ShopDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.util.DomainUtils;
 
         private var indexJobToken:String;
 
@@ -37,15 +41,20 @@
 
         private function onReindexBtnClick(event:MouseEvent):void {
 
-            reindexBtn.enabled = false;
-            reindexService.reindexAllProducts();
+            allowReindex = false;
+            var _shop:ShopDTOImpl = storesComboBox.selectedItem as ShopDTOImpl;
+            if (_shop != null && DomainUtils.isPersistentPK(_shop.shopId)) {
+                reindexService.reindexShopProducts(_shop.shopId);
+            } else {
+                reindexService.reindexAllProducts();
+            }
 
         }
 
         private function onReindexAllProductsFault(event:FaultEvent):void {
 
             resultDetails.text += resourceManager.getString("ReindexPanel", "reindexFailedOk") + event.fault;
-            reindexBtn.enabled = true;
+            allowReindex = true;
         }
 
         private function onReindexAllProductsResult(event:ResultEvent):void {
@@ -57,6 +66,7 @@
 
         private function initIndexPanel():void {
 
+            remoteShopService.getAll();
             indexStatusTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onStatusTimerComplete);
 
         }
@@ -85,7 +95,7 @@
             if (status.state == 'INPROGRESS' || status.state == 'STARTED') {
                 indexStatusTimer.start(); // do another timed status update
             } else {
-                reindexBtn.enabled = true;
+                allowReindex = true;
                 Alert.show(resourceManager.getString('ReindexPanel', 'reindexStatusSuccess'),
                         resourceManager.getString('ShopManagerApplication', 'info'),
                         Alert.YES | Alert.CANCEL, this, onGetReindexStatusResultSuccess, null, Alert.YES);
@@ -102,15 +112,30 @@
             ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
         }
 
+        private function onGetAllShopsResult(event:ResultEvent):void {
+            var _result:ArrayCollection = ArrayCollection(event.result);
+            var _selection:ArrayCollection = new ArrayCollection();
+            var _allShops:ShopDTOImpl = new ShopDTOImpl();
+            _allShops.name = "";
+            _selection.addItem(_allShops);
+            _selection.addAll(_result);
+            storesComboBox.dataProvider = _selection;
+        }
+
         ]]>
 	</mx:Script>
 
+    <mx:Boolean id="allowReindex">true</mx:Boolean>
 
 	<mx:RemoteObject showBusyCursor="true"  id="reindexService"
 					 destination="reindexService"
 					 channelSet="{ShopManagerGlobal.instance.channelSet}">
 
         <mx:method id="reindexAllProducts" name="reindexAllProducts"
+                   result="onReindexAllProductsResult(event)"
+                   fault="onReindexAllProductsFault(event)"/>
+
+        <mx:method id="reindexShopProducts" name="reindexShopProducts"
                    result="onReindexAllProductsResult(event)"
                    fault="onReindexAllProductsFault(event)"/>
 
@@ -129,6 +154,19 @@
 
     </mx:RemoteObject>
 
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
+                     destination="remoteShopService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllShops" name="getAll"
+                   result="onGetAllShopsResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+
+    </mx:RemoteObject>
+
+
     <mx:Panel height="100%" width="100%" title="@Resource(bundle='ReindexPanel',key='reindexProducts')"
               paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
 
@@ -139,7 +177,15 @@
             <mx:Form width="100%" height="120">
                 <mx:FormHeading label="@Resource(bundle='ReindexPanel',key='reindexMessage')"/>
                 <mx:FormItem label="@Resource(bundle='ReindexPanel',key='startMessage')">
-                    <mx:Button id="reindexBtn" label="@Resource(bundle='ReindexPanel',key='start')" click="onReindexBtnClick(event)"/>
+                    <mx:HBox>
+                        <mx:ComboBox id="storesComboBox" width="200"
+                                     labelField="name" data="shopId"
+                                     enabled="{allowReindex}"
+                                     prompt="@Resource(bundle='ProductManagementPanel',key='selectStorePropmt')"/>
+                        <mx:Button id="reindexBtn" label="@Resource(bundle='ReindexPanel',key='start')"
+                                   enabled="{allowReindex}"
+                                   click="onReindexBtnClick(event)"/>
+                    </mx:HBox>
                 </mx:FormItem>
                 <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='jobToken')">
                     <mx:HBox>

@@ -119,6 +119,20 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    public int reindexShopProducts(final long shopPk) {
+        final int count;
+        if (isLuceneIndexDisabled()) {
+            count = -1; // signifies job's done
+        } else {
+            count = productService.reindexProducts(shopPk);
+        }
+        flushCache();
+        return count;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public int reindexProduct(final long productPk) {
         final int count;
         if (isLuceneIndexDisabled()) {
