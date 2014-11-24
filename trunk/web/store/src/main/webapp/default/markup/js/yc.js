@@ -83,10 +83,16 @@ $(document).ready(function() {
         var _add = _panel.find('.js-qty-add');
         var _val = _panel.find('.js-qty-value');
 
+        if (_val.length == 0) {
+            return; // picker value input is not enabled
+        }
+
         var _min = Number(_val.attr('yc-data-min'));
         var _max = Number(_val.attr('yc-data-max'));
         var _step = Number(_val.attr('yc-data-step'));
+
         var _stepStr = _val.attr('yc-data-step');
+
         var _stepDecimalPoint = _stepStr.indexOf('.') > -1 ? _stepStr.length - _stepStr.indexOf('.') - 1 : 0;
 
         if (isNaN(_max) || _max <= 0) {
