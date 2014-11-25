@@ -18,56 +18,9 @@
 <body>
 <wicket:panel>
 
-    <div id="home-page-carousel" class="carousel slide" data-ride="carousel">
-
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner">
-            <div class="item active">
-                <a href="/yes-shop/category/notebooks" rel="bookmark">
-                    <wicket:link>
-                        <img src="../../../../../../image/baner1.png">
-                    </wicket:link>
-                </a>
-            </div>
-            <div class="item">
-                <a href="/yes-shop/category/pc" rel="bookmark">
-                    <wicket:link>
-                        <img src="../../../../../../image/baner2.png">
-                    </wicket:link>
-                </a>
-            </div>
-            <div class="item">
-                <a href="/yes-shop/category/mice" rel="bookmark">
-                    <wicket:link>
-                        <img src="../../../../../../image/baner3.png">
-                    </wicket:link>
-                </a>
-            </div>
-            <div class="item">
-                <a href="/yes-shop/category/keyboards" rel="bookmark">
-                    <wicket:link>
-                        <img src="../../../../../../image/baner4.png">
-                    </wicket:link>
-                </a>
-            </div>
-        </div>
-
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-            <li data-target="#home-page-carousel" data-slide-to="0" class="active"></li>
-            <li data-target="#home-page-carousel" data-slide-to="1"></li>
-            <li data-target="#home-page-carousel" data-slide-to="2"></li>
-            <li data-target="#home-page-carousel" data-slide-to="3"></li>
-        </ol>
-
-        <!-- Controls -->
-        <a class="left carousel-control" href="#home-page-carousel" role="button" data-slide="prev">
-            <span class="glyphicon glyphicon-chevron-left blue"></span>
-        </a>
-        <a class="right carousel-control" href="#home-page-carousel" role="button" data-slide="next">
-            <span class="glyphicon glyphicon-chevron-right blue"></span>
-        </a>
-    </div>
+    <wicket:container wicket:id="homepageContent">
+        [homepage content]
+    </wicket:container>
 
 </wicket:panel>
 </body>

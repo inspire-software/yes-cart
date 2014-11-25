@@ -1,0 +1,80 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+
+    <div id="home-page-carousel" class="carousel slide" data-ride="carousel">
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <a href="/yes-shop/category/notebooks" rel="bookmark">
+                    <wicket:link>
+                        <img src="../../../../../../image/baner1.png">
+                    </wicket:link>
+                </a>
+            </div>
+            <div class="item">
+                <a href="/yes-shop/category/pc" rel="bookmark">
+                    <wicket:link>
+                        <img src="../../../../../../image/baner2.png">
+                    </wicket:link>
+                </a>
+            </div>
+            <div class="item">
+                <a href="/yes-shop/category/mice" rel="bookmark">
+                    <wicket:link>
+                        <img src="../../../../../../image/baner3.png">
+                    </wicket:link>
+                </a>
+            </div>
+            <div class="item">
+                <a href="/yes-shop/category/keyboards" rel="bookmark">
+                    <wicket:link>
+                        <img src="../../../../../../image/baner4.png">
+                    </wicket:link>
+                </a>
+            </div>
+        </div>
+
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#home-page-carousel" data-slide-to="0" class="active"></li>
+            <li data-target="#home-page-carousel" data-slide-to="1"></li>
+            <li data-target="#home-page-carousel" data-slide-to="2"></li>
+            <li data-target="#home-page-carousel" data-slide-to="3"></li>
+        </ol>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#home-page-carousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left blue"></span>
+        </a>
+        <a class="right carousel-control" href="#home-page-carousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right blue"></span>
+        </a>
+    </div>
+
+    <div class="invisible">
+        <wicket:container wicket:id="homepageContent">
+            [homepage content]
+        </wicket:container>
+    </div>
+
+</wicket:panel>
+</body>
+</html>

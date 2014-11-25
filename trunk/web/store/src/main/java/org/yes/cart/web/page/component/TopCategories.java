@@ -81,7 +81,11 @@ public class TopCategories extends BaseComponent {
             if (CollectionUtils.isEmpty(contentMenu)) {
                 // if this content does not have sub content, display parent's menu
                 final Category content = contentServiceFacade.getContent(contentId, shopId);
-                categories = contentServiceFacade.getCurrentContentMenu(content.getParentId(), shopId);
+                if (content != null) {
+                    categories = contentServiceFacade.getCurrentContentMenu(content.getParentId(), shopId);
+                } else {
+                    categories = contentMenu;
+                }
             } else {
                 categories = contentMenu;
             }
@@ -92,7 +96,11 @@ public class TopCategories extends BaseComponent {
             if (CollectionUtils.isEmpty(categoryMenu)) {
                 // if this content does not have sub content, display parent's menu
                 final Category category = categoryServiceFacade.getCategory(categoryId, shopId);
-                categories = categoryServiceFacade.getCurrentCategoryMenu(category.getParentId(), shopId);
+                if (category != null) {
+                    categories = categoryServiceFacade.getCurrentCategoryMenu(category.getParentId(), shopId);
+                } else {
+                    categories = categoryMenu;
+                }
             } else {
                 categories = categoryMenu;
             }
