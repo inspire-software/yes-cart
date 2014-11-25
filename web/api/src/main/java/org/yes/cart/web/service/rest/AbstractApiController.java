@@ -80,7 +80,7 @@ public class AbstractApiController {
      */
     protected <RO, Entity> RO map(final Entity object, final Class<RO> ro, final Class<Entity> entity) {
         if (entity != null) {
-            final RO dto = dtoFactory.getByIface(ro);
+            final RO dto = (RO) dtoFactory.getByIface(ro);
             DTOAssembler.newAssembler(ro, entity).assembleDto(dto, object, adaptersRepository.getAll(), dtoFactory);
             return dto;
         }
