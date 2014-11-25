@@ -17,6 +17,15 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.lucene.search.Query;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.ContentServiceFacade;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -24,6 +33,9 @@ import org.apache.lucene.search.Query;
  * Time: 9:04 AM
  */
 public class EmptyCentralView extends AbstractCentralView {
+
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    private ContentServiceFacade contentServiceFacade;
 
     /**
      * Construct panel.
@@ -46,5 +58,31 @@ public class EmptyCentralView extends AbstractCentralView {
     public EmptyCentralView(String id, long categoryId, Query booleanQuery) {
         super(id, 0l, booleanQuery);
     }
+
+
+    @Override
+    protected void onBeforeRender() {
+
+        final long shopId = ShopCodeContext.getShopId();
+        final String lang = getLocale().getLanguage();
+
+        String footerCopyright = getContentInclude(shopId, "homepage_content_include", lang);
+        addOrReplace(new Label("homepageContent", footerCopyright).setEscapeModelStrings(false));
+
+        super.onBeforeRender();
+    }
+
+    private String getContentInclude(long shopId, String contentUri, String lang) {
+        final Map<String, Object> homepageCtx = new HashMap<String, Object>();
+        homepageCtx.put("shop", ApplicationDirector.getCurrentShop());
+        homepageCtx.put("shoppingCart", ApplicationDirector.getShoppingCart());
+        String content = contentServiceFacade.getDynamicContentBody(
+                contentUri, shopId, lang, homepageCtx);
+        if (content == null) {
+            content = "";
+        }
+        return content;
+    }
+
 
 }
