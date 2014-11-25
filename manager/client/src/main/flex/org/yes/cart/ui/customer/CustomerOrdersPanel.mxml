@@ -175,6 +175,7 @@
             statuses.addItem(createStatusObject("os.cancelled"));
             statuses.addItem(createStatusObject("os.partially.shipped"));
             statuses.addItem(createStatusObject("os.completed"));
+            statuses.addItem(createStatusObject("os.returned"));
 
         }
 

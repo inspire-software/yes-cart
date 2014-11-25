@@ -319,7 +319,8 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      */
     public String cancelOrder(final CustomerOrder order) {
 
-        if (!CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus())) {
+        if (!CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus()) &&
+                !CustomerOrder.ORDER_STATUS_RETURNED.equals(order.getOrderStatus())) {
 
             boolean wasError = false;
 

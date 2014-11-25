@@ -348,7 +348,8 @@ public class PaymentProcessorSurrogate {
      */
     public String cancelOrder(final CustomerOrder order, boolean useRefund) {
 
-        if (!CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus())) {
+        if (!CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus()) &&
+                !CustomerOrder.ORDER_STATUS_RETURNED.equals(order.getOrderStatus())) {
 
             boolean wasError = false;
 

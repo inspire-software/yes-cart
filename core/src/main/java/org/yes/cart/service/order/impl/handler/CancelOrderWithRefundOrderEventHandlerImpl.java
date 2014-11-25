@@ -17,6 +17,7 @@
 package org.yes.cart.service.order.impl.handler;
 
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
@@ -74,6 +75,14 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
      * {@inheritDoc}
      */
     @Override
+    protected String getTransitionTarget(final OrderEvent orderEvent) {
+        return CustomerOrder.ORDER_STATUS_RETURNED;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
             final CustomerOrder order = orderEvent.getCustomerOrder();
@@ -92,5 +101,9 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
         }
     }
 
-
+    @Override
+    protected boolean isNeedCredit(final String deliveryStatus) {
+        return super.isNeedCredit(deliveryStatus)
+            || CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(deliveryStatus);
+    }
 }

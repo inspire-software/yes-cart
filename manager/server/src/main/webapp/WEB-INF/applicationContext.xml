@@ -84,22 +84,26 @@
         <constructor-arg index="7" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
         <constructor-arg index="8">
             <map>
-                <entry key="evt.order.cancel-os.cancelled" value="order-canceled"/> <!-- done -->
-                <entry key="evt.packing.complete-os.in.progress-ds.shipment.ready" value="order-delivery-readytoshipping"/>  <!-- done -->
-                <entry key="evt.payment.confirmed-os.in.progress" value="order-confirmed"/>  <!-- done -->
-                <entry key="evt.pending-os.in.progress" value="order-new"/>   <!-- done in shop -->
-                <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress" value="order-delivery-shipped"/>   <!-- done -->
-                <entry key="evt.shipment.complete-os.completed-ds.shipped" value="order-shipping-completed"/>  <!-- done -->
+                <entry key="evt.new.order.cancel.refund-os.cancelled" value="order-canceled"/>
+                <entry key="evt.order.cancel-os.cancelled" value="order-canceled"/>
+                <entry key="evt.order.cancel.refund-os.returned" value="order-returned"/>
+                <entry key="evt.packing.complete-os.in.progress-ds.shipment.ready" value="order-delivery-readytoshipping"/>
+                <entry key="evt.payment.confirmed-os.in.progress" value="order-confirmed"/>
+                <entry key="evt.pending-os.in.progress" value="order-new"/>
+                <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress" value="order-delivery-shipped"/>
+                <entry key="evt.shipment.complete-os.completed-ds.shipped" value="order-shipping-completed"/>
 
             </map>
         </constructor-arg>
         <constructor-arg index="9">
             <map>
-                <entry key="evt.order.cancel-os.cancelled" value="adm-order-canceled"/>  <!-- done -->
-                <entry key="evt.payment.confirmed-os.in.progress" value="adm-order-confirmed"/>  <!-- done -->
-                <entry key="evt.pending-os.in.progress" value="adm-order-new"/>  <!-- done in shop -->
-                <entry key="evt.pending-os.waiting" value="adm-order-wait-confirmation"/> <!-- done -->
-                <entry key="evt.shipment.complete-os.completed-ds.shipped" value="adm-order-shipping-completed"/> <!-- done -->
+                <entry key="evt.new.order.cancel.refund-os.cancelled" value="adm-order-canceled"/>
+                <entry key="evt.order.cancel-os.cancelled" value="adm-order-canceled"/>
+                <entry key="evt.order.cancel.refund-os.returned" value="adm-order-returned"/>
+                <entry key="evt.payment.confirmed-os.in.progress" value="adm-order-confirmed"/>
+                <entry key="evt.pending-os.in.progress" value="adm-order-new"/>
+                <entry key="evt.pending-os.waiting" value="adm-order-wait-confirmation"/>
+                <entry key="evt.shipment.complete-os.completed-ds.shipped" value="adm-order-shipping-completed"/>
             </map>
         </constructor-arg>
     </bean>

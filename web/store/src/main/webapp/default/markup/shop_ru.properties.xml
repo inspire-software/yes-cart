@@ -196,6 +196,7 @@
     <entry key="os.waiting">Необходимо подтверждение</entry>
     <entry key="os.in.progress">Выполняется</entry>
     <entry key="os.cancelled">Отменен</entry>
+    <entry key="os.returned">Возвращен</entry>
     <entry key="os.partially.shipped">Частично выполнен</entry>
     <entry key="os.completed">Выполнен</entry>
 
