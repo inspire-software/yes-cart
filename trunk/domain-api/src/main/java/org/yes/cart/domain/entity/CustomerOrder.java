@@ -58,6 +58,11 @@ public interface CustomerOrder extends Auditable {
     String ORDER_STATUS_CANCELLED = "os.cancelled";
 
     /**
+     * Order retunred. Quantity returned from credit.
+     */
+    String ORDER_STATUS_RETURNED = "os.returned";
+
+    /**
      * Order can have this state in case of shipment split. So at leas one shipment is incomplete.
      */
     String ORDER_STATUS_PARTIALLY_SHIPPED = "os.partially.shipped";

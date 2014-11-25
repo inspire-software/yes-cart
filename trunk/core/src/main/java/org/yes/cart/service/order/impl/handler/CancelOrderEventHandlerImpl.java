@@ -120,22 +120,22 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
         delivery.setDeliveryStatus(newStatus);
     }
 
-    private boolean isFulfillment(final String deliveryStatus) {
+    protected boolean isFulfillment(final String deliveryStatus) {
         return
                 CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT.equals(deliveryStatus);
     }
 
-    private boolean isWaitPreorder(final String deliveryStatus) {
+    protected boolean isWaitPreorder(final String deliveryStatus) {
         return
                 CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT.equals(deliveryStatus)
                         || CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT.equals(deliveryStatus);
     }
 
-    private boolean isNeedVoidReservation(final String deliveryStatus) {
+    protected boolean isNeedVoidReservation(final String deliveryStatus) {
         return CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED.equals(deliveryStatus);
     }
 
-    private boolean isNeedCredit(final String deliveryStatus) {
+    protected boolean isNeedCredit(final String deliveryStatus) {
         return
                 CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED.equals(deliveryStatus)
                         || CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED.equals(deliveryStatus)

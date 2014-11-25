@@ -74,14 +74,16 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
         skuWarehouse.setReserved(new BigDecimal("0.00"));
         skuWarehouse.setQuantity(new BigDecimal("7.00"));
         skuWarehouseService.update(skuWarehouse);
+
         assertTrue(handler.handle(new OrderEventImpl("", customerOrder, null, null)));
+
         skuWarehouse = skuWarehouseService.findById(31);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         assertEquals(new BigDecimal("1.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
         skuWarehouse = skuWarehouseService.findById(30);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         assertEquals(new BigDecimal("9.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
+        assertEquals(CustomerOrder.ORDER_STATUS_RETURNED, customerOrder.getOrderStatus());
     }
 
     /**
@@ -109,18 +111,15 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
         skuWarehouse.setReserved(new BigDecimal("0.00"));
         skuWarehouse.setQuantity(new BigDecimal("7.00"));
         skuWarehouseService.update(skuWarehouse);
-        try {
-            handler.handle(new OrderEventImpl("", customerOrder, null, null));
-            fail("Unable to handle cancellation for delivery 130830233414-2-0 with status ds.shipped");
-        } catch (OrderException oe) {
-            // ok
-        }
+
+        assertTrue(handler.handle(new OrderEventImpl("", customerOrder, null, null)));
+
         skuWarehouse = skuWarehouseService.findById(31);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(new BigDecimal("0.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
+        assertEquals(new BigDecimal("1.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
         skuWarehouse = skuWarehouseService.findById(30);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(new BigDecimal("7.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+        assertEquals(new BigDecimal("9.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
+        assertEquals(CustomerOrder.ORDER_STATUS_RETURNED, customerOrder.getOrderStatus());
     }
 }

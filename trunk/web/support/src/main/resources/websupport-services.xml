@@ -179,7 +179,9 @@
         <constructor-arg index="7" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
         <constructor-arg index="8">
             <map>
+                <entry key="evt.new.order.cancel.refund-os.cancelled" value="order-canceled"/>
                 <entry key="evt.order.cancel-os.cancelled" value="order-canceled"/>
+                <entry key="evt.order.cancel.refund-os.returned" value="order-returned"/>
                 <entry key="evt.packing.complete-os.in.progress-ds.shipment.ready"
                        value="order-delivery-readytoshipping"/>
                 <entry key="evt.payment.confirmed-os.in.progress" value="order-confirmed"/>
@@ -192,7 +194,9 @@
         </constructor-arg>
         <constructor-arg index="9">
             <map>
+                <entry key="evt.new.order.cancel.refund-os.cancelled" value="adm-order-canceled"/>
                 <entry key="evt.order.cancel-os.cancelled" value="adm-order-canceled"/>
+                <entry key="evt.order.cancel.refund-os.returned" value="adm-order-returned"/>
                 <entry key="evt.payment.confirmed-os.in.progress" value="adm-order-confirmed"/>
                 <entry key="evt.pending-os.in.progress" value="adm-order-new"/>
                 <entry key="evt.pending-os.waiting" value="adm-order-wait-confirmation"/>

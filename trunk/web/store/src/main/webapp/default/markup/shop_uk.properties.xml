@@ -195,9 +195,10 @@
     <entry key="os.pending">Підготовка</entry>
     <entry key="os.waiting">Необхідне підтвердження</entry>
     <entry key="os.in.progress">Виконується</entry>
-    <entry key="os.cancelled">Скасований</entry>
-    <entry key="os.partially.shipped">Частково виконаний</entry>
-    <entry key="os.completed">Виконаний</entry>
+    <entry key="os.cancelled">Скасовано</entry>
+    <entry key="os.returned">Повернено</entry>
+    <entry key="os.partially.shipped">Частково виконано</entry>
+    <entry key="os.completed">Виконано</entry>
 
     <entry key="orderNumHead">Номер</entry>
     <entry key="orderDateHead">Дата</entry>
