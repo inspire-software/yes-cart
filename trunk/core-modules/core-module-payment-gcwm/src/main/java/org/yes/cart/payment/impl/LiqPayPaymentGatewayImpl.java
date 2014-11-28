@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -208,15 +209,17 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
 
         final LiqPay api = getLiqPayAPI();
 
-        final HashMap<String, String> params = new HashMap<String, String>();
+        final HashMap<String, String> params = new LinkedHashMap<String, String>();
         params.put("amount", amount.setScale(2, RoundingMode.HALF_UP).toPlainString());
-        params.put("currency", currencyCode);
-        params.put("description", getDescription(payment));
-        params.put("order_id", orderGuid);
-        params.put("result_url", getParameterValue(LP_RESULT_URL));
         params.put("server_url", getParameterValue(LP_SERVER_URL));
-        params.put("type", "buy");
+        params.put("description", getDescription(payment));
         params.put("pay_way", getParameterValue(LP_PAYWAY_URL));
+        params.put("result_url", getParameterValue(LP_RESULT_URL));
+
+        params.put("type", "buy");
+        params.put("order_id", orderGuid);
+
+        params.put("currency", currencyCode);
         params.put("formDataOnly", "formDataOnly"); // YC specific
 
         return api.cnb_form(params);
