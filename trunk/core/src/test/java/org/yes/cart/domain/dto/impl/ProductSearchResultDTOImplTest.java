@@ -30,7 +30,9 @@ public class ProductSearchResultDTOImplTest {
         first.setAvailablefrom(new Date());
         first.setAvailableto(new Date());
         first.setAvailability(1);
-        first.setQtyOnWarehouse(new HashMap<Long, Map<String, BigDecimal>>());
+        first.setQtyOnWarehouse(new HashMap<Long, Map<String, BigDecimal>>() {{
+            put(10L, new HashMap<String, BigDecimal>());
+        }});
         first.setDefaultImage("FirstDefaultImage");
         first.setFeatured(true);
 
@@ -38,6 +40,7 @@ public class ProductSearchResultDTOImplTest {
 
         assertEquals(first.getId(), copy.getId());
         assertEquals(first.getCode(), copy.getCode());
+        assertEquals(first.isMultisku(), copy.isMultisku());
         assertEquals(first.getDefaultSkuCode(), copy.getDefaultSkuCode());
         assertEquals(first.getName(), copy.getName());
         assertEquals(first.getDisplayName(), copy.getDisplayName());
@@ -46,7 +49,7 @@ public class ProductSearchResultDTOImplTest {
         assertEquals(first.getAvailablefrom(), copy.getAvailablefrom());
         assertEquals(first.getAvailableto(), copy.getAvailableto());
         assertEquals(first.getAvailability(), copy.getAvailability());
-        assertEquals(first.getQtyOnWarehouse(), copy.getQtyOnWarehouse());
+        assertEquals(first.getQtyOnWarehouse(10L), copy.getQtyOnWarehouse(10L));
         assertEquals(first.getDefaultImage(), copy.getDefaultImage());
         assertEquals(first.getFeatured(), copy.getFeatured());
 

@@ -16,9 +16,9 @@
 
 package org.yes.cart.web.theme.impl;
 
-import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.DomainApiUtil;
@@ -64,63 +64,67 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
     public AbstractCentralView getCentralPanel(final String rendererLabel,
                                                final String wicketComponentId,
                                                final long categoryId,
-                                               final Query booleanQuery) {
+                                               final NavigationContext navigationContext) {
 
         Class<? extends AbstractCentralView> clz = rendererPanelMap.get(rendererLabel);
         try {
-            if (categoryId != 0 && clz != null) {
+            if (clz != null) {
+                if (categoryId > 0L) {
 
-                CategoryType type = categoryTypeMap.get(clz);
-                if (type == null) {
-                    type = CategoryType.ANY;
+                    CategoryType type = categoryTypeMap.get(clz);
+                    if (type == null) {
+                        type = CategoryType.ANY;
+                    }
+
+                    switch (type) {
+                        case CATEGORY:
+                            //check is this category allowed to open in this shop
+                            if (!isCategoryVisibleInShop(categoryId)) {
+                                final Logger log = ShopCodeContext.getLog(this);
+                                if (log.isWarnEnabled()) {
+                                    log.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
+                                }
+                                return new EmptyCentralView(wicketComponentId, navigationContext);
+                            }
+                            break;
+                        case CONTENT:
+                            //check is this content is allowed to open in this shop
+                            if (!isContentVisibleInShop(categoryId)) {
+                                final Logger log = ShopCodeContext.getLog(this);
+                                if (log.isWarnEnabled()) {
+                                    log.warn("Can not access content {} from shop {}", categoryId, ShopCodeContext.getShopId());
+                                }
+                                return new EmptyCentralView(wicketComponentId, navigationContext);
+                            }
+                            break;
+                        case ANY:
+                        default:
+                            //check is this category/content allowed to open in this shop
+                            if (!isCategoryVisibleInShop(categoryId) && !isContentVisibleInShop(categoryId)) {
+                                final Logger log = ShopCodeContext.getLog(this);
+                                if (log.isWarnEnabled()) {
+                                    log.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
+                                }
+                                return new EmptyCentralView(wicketComponentId, navigationContext);
+                            }
+                            break;
+
+                    }
+
                 }
 
-                switch (type) {
-                    case CATEGORY:
-                        //check is this category allowed to open in this shop
-                        if (!isCategoryVisibleInShop(categoryId)) {
-                            final Logger log = ShopCodeContext.getLog(this);
-                            if (log.isWarnEnabled()) {
-                                log.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
-                            }
-                            return new EmptyCentralView(wicketComponentId, booleanQuery);
-                        }
-                        break;
-                    case CONTENT:
-                        //check is this content is allowed to open in this shop
-                        if (!isContentVisibleInShop(categoryId)) {
-                            final Logger log = ShopCodeContext.getLog(this);
-                            if (log.isWarnEnabled()) {
-                                log.warn("Can not access content {} from shop {}", categoryId, ShopCodeContext.getShopId());
-                            }
-                            return new EmptyCentralView(wicketComponentId, booleanQuery);
-                        }
-                        break;
-                    case ANY:
-                    default:
-                        //check is this category/content allowed to open in this shop
-                        if (!isCategoryVisibleInShop(categoryId) && !isContentVisibleInShop(categoryId)) {
-                            final Logger log = ShopCodeContext.getLog(this);
-                            if (log.isWarnEnabled()) {
-                                log.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
-                            }
-                            return new EmptyCentralView(wicketComponentId, booleanQuery);
-                        }
-                        break;
-
-                }
-
+                Constructor<? extends AbstractCentralView> constructor =
+                        clz.getConstructor(String.class, long.class, NavigationContext.class);
+                return constructor.newInstance(wicketComponentId, categoryId, navigationContext);
             }
 
-            Constructor<? extends AbstractCentralView> constructor = clz.getConstructor(String.class,
-                    long.class,
-                    Query.class);
-            return constructor.newInstance(wicketComponentId, categoryId, booleanQuery);
+            ShopCodeContext.getLog(this).warn("Can not create instance of panel for label {0}", rendererLabel);
+            return new EmptyCentralView(wicketComponentId, navigationContext);
 
         } catch (Exception e) {
+
             ShopCodeContext.getLog(this).error(MessageFormat.format("Can not create instance of panel for label {0}", rendererLabel), e);
-            //e.printStackTrace();
-            return new EmptyCentralView(wicketComponentId, booleanQuery);
+            return new EmptyCentralView(wicketComponentId, navigationContext);
 
         }
     }

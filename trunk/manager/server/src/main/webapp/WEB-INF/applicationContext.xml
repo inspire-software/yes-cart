@@ -152,7 +152,6 @@
                 <!-- Disable hibernate search automatic support - since we do not have FT index in YUM -->
                 <prop key="hibernate.search.autoregister_listeners">false</prop>
                 <prop key="hibernate.search.indexing_strategy">manual</prop>
-
             </props>
         </property>
     </bean>

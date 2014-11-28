@@ -159,13 +159,14 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.ProductServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="productDao"/>
-                <constructor-arg index="1" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
-                <constructor-arg index="2" type="org.yes.cart.service.domain.ProductTypeAttrService" ref="productTypeAttrService"/>
-                <constructor-arg index="3" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
-                <constructor-arg index="4" type="org.yes.cart.dao.GenericDAO" ref="productCategoryDao"/>
-                <constructor-arg index="5" type="org.yes.cart.dao.GenericDAO" ref="productTypeAttrDao"/>
-                <constructor-arg index="6" type="org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport" ref="shopCategoryRelationshipSupport"/>
-                <constructor-arg index="7" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="productSkuDao"/>
+                <constructor-arg index="2" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
+                <constructor-arg index="3" type="org.yes.cart.service.domain.ProductTypeAttrService" ref="productTypeAttrService"/>
+                <constructor-arg index="4" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
+                <constructor-arg index="5" type="org.yes.cart.dao.GenericDAO" ref="productCategoryDao"/>
+                <constructor-arg index="6" type="org.yes.cart.dao.GenericDAO" ref="productTypeAttrDao"/>
+                <constructor-arg index="7" type="org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport" ref="shopCategoryRelationshipSupport"/>
+                <constructor-arg index="8" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <lookup-method name="getSelf" bean="productService"/>
             </bean>
         </property>
@@ -1588,72 +1589,6 @@
         </constructor-arg>
         <constructor-arg index="2" ref="shopService"/>
     </bean>
-
-
-    <!-- ########################################## bulk import ########################## -->
-
-    <import resource="core-federation-impex.xml"/>
-
-    <bean id="importDescriptorXStreamProvider" class="org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider"/>
-
-    <bean id="csvBulkImportService" parent="txProxyTemplate">
-        <property name="target">
-            <bean  class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl" scope="prototype">
-                <constructor-arg index="0" ref="importFederationFacade"/>
-                <property name="genericDAO" ref="genericDao"/>
-                <property name="extendedConversionService" ref="extendedConversionService"/>
-            </bean>
-        </property>
-    </bean>
-
-    <bean id="categoryImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.CategoryImageImportDomainObjectStrategyImpl">
-        <constructor-arg index="0" ref="importFederationFacade"/>
-        <constructor-arg index="1" ref="categoryService"/>
-        <constructor-arg index="2" ref="attributeService"/>
-    </bean>
-
-    <bean id="brandImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.BrandImageImportDomainObjectStrategyImpl">
-        <constructor-arg index="0" ref="importFederationFacade"/>
-        <constructor-arg index="1" ref="brandService"/>
-        <constructor-arg index="2" ref="attributeService"/>
-    </bean>
-
-    <bean id="shopImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ShopImageImportDomainObjectStrategyImpl">
-        <constructor-arg index="0" ref="importFederationFacade"/>
-        <constructor-arg index="1" ref="shopService"/>
-        <constructor-arg index="2" ref="attributeService"/>
-    </bean>
-
-    <bean id="productImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductImageImportDomainObjectStrategyImpl">
-        <constructor-arg index="0" ref="importFederationFacade"/>
-        <constructor-arg index="1" ref="productService"/>
-        <constructor-arg index="2" ref="attributeService"/>
-    </bean>
-
-    <bean id="productSkuImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductSkuImageImportDomainObjectStrategyImpl">
-        <constructor-arg index="0" ref="importFederationFacade"/>
-        <constructor-arg index="1" ref="productSkuService"/>
-        <constructor-arg index="2" ref="attributeService"/>
-    </bean>
-
-    <bean id="imagesBulkImportService" parent="txProxyTemplate">
-        <property name="target">
-            <bean  class="org.yes.cart.bulkimport.image.impl.ImagesBulkImportServiceImpl" scope="prototype">
-                <constructor-arg index="0" ref="importFederationFacade"/>
-                <constructor-arg index="1" ref="imageService"/>
-                <constructor-arg index="2">
-                    <array>
-                        <ref bean="productImageImportDomainObjectStrategy"/>
-                        <ref bean="productSkuImageImportDomainObjectStrategy"/>
-                        <ref bean="categoryImageImportDomainObjectStrategy"/>
-                        <ref bean="brandImageImportDomainObjectStrategy"/>
-                        <ref bean="shopImageImportDomainObjectStrategy"/>
-                    </array>
-                </constructor-arg>
-            </bean>
-        </property>
-    </bean>
-
 
     <!-- ########################################## WS support ########################## -->
 

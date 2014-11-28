@@ -47,11 +47,11 @@ public interface PriceService extends GenericService<SkuPrice> {
      *
      * @return lowest available sku price
      */
-    SkuPrice getMinimalRegularPrice(final Long productId,
-                                    final String selectedSku,
-                                    final long shopId,
-                                    final String currencyCode,
-                                    final BigDecimal quantity);
+    SkuPrice getMinimalPrice(final Long productId,
+                             final String selectedSku,
+                             final long shopId,
+                             final String currencyCode,
+                             final BigDecimal quantity);
 
     /**
      * Get all prices for given product skus (all), shop, currency and quantity.

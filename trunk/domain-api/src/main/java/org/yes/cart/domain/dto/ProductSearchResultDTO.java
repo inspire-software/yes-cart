@@ -52,6 +52,20 @@ public interface ProductSearchResultDTO extends Identifiable {
     void setCode(String code);
 
     /**
+     * Get multi SKU flag.
+     *
+     * @return true if this product has multiple SKU
+     */
+    boolean isMultisku();
+
+    /**
+     * Set multi SKU flag.
+     *
+     * @param multisku true if this product has multiple SKU
+     */
+    void setMultisku(boolean multisku);
+
+    /**
      * Get product default sku code.
      * @return product default sku code.
      */
@@ -65,7 +79,7 @@ public interface ProductSearchResultDTO extends Identifiable {
 
     /**
      * Get product name by specified locale.
-     * @param locale givem locale
+     * @param locale given locale
      * @return product name.
      */
     String getName(final String locale);
@@ -140,7 +154,7 @@ public interface ProductSearchResultDTO extends Identifiable {
      * Get available quantity on warehouses.
      * @return available qty on all warehouses.
      */
-    Map<Long, Map<String, BigDecimal>> getQtyOnWarehouse();
+    Map<String, BigDecimal> getQtyOnWarehouse(long shop);
 
     /**
      * Set available qty on all warehouses.

@@ -16,13 +16,15 @@
 
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
-import org.apache.lucene.search.Query;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.component.filterednavigation.BrandFilteredNavigationSupport;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,29 +45,24 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
      * {@inheritDoc}
      */
     @Cacheable(value = "filteredNavigationSupport-brandFilteredNavigationRecords")
-    public List<FilteredNavigationRecord> getFilteredNavigationRecords(final Query query,
-                                                                       final List<Long> categories,
-                                                                       final long shopId,
+    public List<FilteredNavigationRecord> getFilteredNavigationRecords(final NavigationContext navigationContext,
                                                                        final String locale,
                                                                        final String recordName) {
 
         final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
 
-        if (categories != null && !isAttributeAlreadyFiltered(query, ProductSearchQueryBuilder.BRAND_FIELD)) {
+        if (!navigationContext.isGlobal() && !navigationContext.isFilteredBy(ProductSearchQueryBuilder.BRAND_FIELD)) {
 
-            final List<FilteredNavigationRecord> allNavigationRecordsTemplates = getProductService().getDistinctBrands(locale, categories);
+            final List<FilteredNavigationRecord> allNavigationRecordsTemplates = getProductService().getDistinctBrands(locale, navigationContext.getCategories());
 
             for (final FilteredNavigationRecord recordTemplate : allNavigationRecordsTemplates) {
 
                 final FilteredNavigationRecord record = recordTemplate.clone();
-                final Query candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
-                        query, shopId, ProductSearchQueryBuilder.BRAND_FIELD, record.getValue()
+                final NavigationContext candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
+                        navigationContext, ProductSearchQueryBuilder.BRAND_FIELD, record.getValue()
                 );
-//                final Query candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
-//                        query,
-//                        queryBuilder.createQuery(categories, shopId, record.getValue())
-//                );
-                int candidateResultCount = getProductService().getProductQty(candidateQuery);
+
+                int candidateResultCount = getProductService().getProductQty(candidateQuery.getProductQuery());
                 if (candidateResultCount > 0) {
                     record.setName(recordName);
                     record.setCode(ProductSearchQueryBuilder.BRAND_FIELD);

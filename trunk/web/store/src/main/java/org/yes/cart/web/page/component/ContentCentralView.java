@@ -16,9 +16,9 @@
 
 package org.yes.cart.web.page.component;
 
-import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
@@ -35,25 +35,15 @@ public class ContentCentralView extends AbstractCentralView {
     protected ContentServiceFacade contentServiceFacade;
 
     /**
-     * Construct panel.
-     *
-     * @param id panel id
-     * @param booleanQuery     boolean query.
-     */
-    public ContentCentralView(String id, Query booleanQuery) {
-        super(id, 0l, booleanQuery);
-    }
-
-    /**
      * This is an internal constructor used by HomePage class. It disregards the
      * categoryId value.
      *
      * @param id panel id
      * @param categoryId ignored
-     * @param booleanQuery     boolean query.
+     * @param navigationContext navigation context.
      */
-    public ContentCentralView(String id, long categoryId, Query booleanQuery) {
-        super(id, categoryId, booleanQuery);
+    public ContentCentralView(final String id, final long categoryId, final NavigationContext navigationContext) {
+        super(id, categoryId, navigationContext);
     }
 
     @Override

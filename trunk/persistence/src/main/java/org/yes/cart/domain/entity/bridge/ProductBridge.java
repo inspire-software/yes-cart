@@ -16,24 +16,18 @@
 
 package org.yes.cart.domain.entity.bridge;
 
-import org.junit.Test;
-
-import java.math.BigDecimal;
-
-import static org.junit.Assert.assertEquals;
+import org.hibernate.search.bridge.StringBridge;
+import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Product;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 08-May-2011
- * Time: 11:12:54
+ * User: denispavlov
+ * Date: 27/11/2014
+ * Time: 00:06
  */
-public class PriceBridgeTest {
-
-    @Test
-    public void testPriceBridge() {
-        BigDecimalBridge bigDecimalBridge = new BigDecimalBridge();
-        assertEquals("00003210", bigDecimalBridge.objectToString(new BigDecimal("32.1")));
-        assertEquals("00000012", bigDecimalBridge.objectToString(new BigDecimal(".12")));
-        assertEquals("00009800", bigDecimalBridge.objectToString(new BigDecimal("98")));
+public class ProductBridge implements StringBridge {
+    /** {@inheritDoc} */
+    public String objectToString(final Object productObject) {
+        return String.valueOf(((Product) productObject).getProductId());
     }
 }

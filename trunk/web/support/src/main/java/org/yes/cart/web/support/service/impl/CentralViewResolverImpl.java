@@ -18,8 +18,8 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.lucene.search.Query;
 import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
@@ -105,9 +105,9 @@ public class CentralViewResolverImpl implements CentralViewResolver {
                 }
 
                 // Do not use shopId as it will bring all products
-                final Query hasProducts = luceneQueryFactory.getFilteredNavigationQueryChain(0L, catIds, null);
+                final NavigationContext hasProducts = luceneQueryFactory.getFilteredNavigationQueryChain(0L, catIds, null);
 
-                if (productService.getProductQty(hasProducts) > 0) {
+                if (productService.getProductQty(hasProducts.getProductQuery()) > 0) {
                     return CentralViewLabel.PRODUCTS_LIST;
                 } else if (categoryService.isCategoryHasChildren(categoryId)) {
                     return CentralViewLabel.SUBCATEGORIES_LIST;

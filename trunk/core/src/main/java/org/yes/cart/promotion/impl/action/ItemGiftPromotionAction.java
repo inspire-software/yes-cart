@@ -84,7 +84,7 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
 
     private SkuPrice getGiftPrices(final String sku, final ShoppingCart cart) {
         try {
-            return priceService.getMinimalRegularPrice(
+            return priceService.getMinimalPrice(
                     null,
                     sku,
                     cart.getShoppingContext().getShopId(),

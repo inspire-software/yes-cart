@@ -61,7 +61,7 @@ public class BackdoorServiceImpl implements BackdoorService {
      * to enforce changes to take immediate effect on the storefront.
      */
     private void flushCache() {
-        safeFlushCache(cacheManager.getCache("priceService-minimalRegularPrice"));
+        safeFlushCache(cacheManager.getCache("priceService-minimalPrice"));
         safeFlushCache(cacheManager.getCache("priceService-allCurrentPrices"));
         safeFlushCache(cacheManager.getCache("productService-productById"));
         safeFlushCache(cacheManager.getCache("productService-skuById"));
@@ -119,12 +119,40 @@ public class BackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
+    public int reindexAllProductsSku() {
+        final int count;
+        if (isLuceneIndexDisabled()) {
+            count = -1; // signifies job's done
+        } else {
+            count = productService.reindexProductsSku();
+        }
+        flushCache();
+        return count;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public int reindexShopProducts(final long shopPk) {
         final int count;
         if (isLuceneIndexDisabled()) {
             count = -1; // signifies job's done
         } else {
             count = productService.reindexProducts(shopPk);
+        }
+        flushCache();
+        return count;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int reindexShopProductsSku(final long shopPk) {
+        final int count;
+        if (isLuceneIndexDisabled()) {
+            count = -1; // signifies job's done
+        } else {
+            count = productService.reindexProductsSku(shopPk);
         }
         flushCache();
         return count;

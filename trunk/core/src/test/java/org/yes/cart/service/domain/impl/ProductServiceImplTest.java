@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.apache.lucene.search.Query;
 import org.hibernate.LazyInitializationException;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +30,7 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.BrandService;
 import org.yes.cart.service.domain.CategoryService;
@@ -259,15 +259,15 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
                 productService.getGenericDao().fullTextSearchReindex(false);
 
-                Query query = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L), null);
+                NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L), null);
                 final List<ProductSearchResultDTO> searchRes = productService.getProductSearchResultDTOByQuery(
-                        query,
+                        context.getProductQuery(),
                         0,
                         100,
                         null,
                         false
                 );
-                assertEquals("Failed [" + query.toString() + "]", 2, searchRes.size());
+                assertEquals("Failed [" + context.toString() + "]", 2, searchRes.size());
                 ProductSearchResultDTO bernder = searchRes.get(0);
                 assertEquals("Бендер Згибатель Родригес", bernder.getName("ru"));
                 assertEquals("Бендер Згинач Родріґес", bernder.getName("ua"));

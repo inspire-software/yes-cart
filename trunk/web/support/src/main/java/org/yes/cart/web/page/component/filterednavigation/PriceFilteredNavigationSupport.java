@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.page.component.filterednavigation;
 
-import org.apache.lucene.search.Query;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 
 import java.util.List;
@@ -31,20 +31,16 @@ public interface PriceFilteredNavigationSupport {
     /**
      * Get navigation records for specific filter.
      *
-     * @param query boolean query
+     * @param navigationContext navigation context.
      * @param categoryId current category
-     * @param categories current categories
-     * @param shopId current shop
      * @param currency currency
      * @param locale selected locale
      * @param recordName record localisable name
      *
      * @return distinct filter navigation records
      */
-    List<FilteredNavigationRecord> getFilteredNavigationRecords(final Query query,
+    List<FilteredNavigationRecord> getFilteredNavigationRecords(final NavigationContext navigationContext,
                                                                 final Long categoryId,
-                                                                final List<Long> categories,
-                                                                final long shopId,
                                                                 final String currency,
                                                                 final String locale,
                                                                 final String recordName);

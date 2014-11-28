@@ -78,12 +78,12 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "priceService-minimalRegularPrice")
-    public SkuPrice getMinimalRegularPrice(final Long productId,
-                                           final String selectedSku,
-                                           final long shopId,
-                                           final String currencyCode,
-                                           final BigDecimal quantity) {
+    @Cacheable(value = "priceService-minimalPrice")
+    public SkuPrice getMinimalPrice(final Long productId,
+                                    final String selectedSku,
+                                    final long shopId,
+                                    final String currencyCode,
+                                    final BigDecimal quantity) {
 
         final List<Pair<String, SkuPrice>> skuPrices;
         if (selectedSku == null && productId != null) {
@@ -99,7 +99,7 @@ public class PriceServiceImpl
 
     private SkuPrice getMinimalSkuPrice(List<Pair<String, SkuPrice>> skuPrices, final String selectedSku, final BigDecimal quantity) {
 
-        BigDecimal minimalRegularPrice = null;
+        BigDecimal overallMinimalRegularPrice = null;
 
         skuPrices = getSkuPricesFilteredByTimeFrame(skuPrices);
 
@@ -112,13 +112,13 @@ public class PriceServiceImpl
 
         Pair<String, SkuPrice> rez = null;
         for (Pair<String, SkuPrice> skuPrice : skuPrices) {
-            if ((selectedSku == null || skuPrice.getFirst().equals(selectedSku))
-                    && (minimalRegularPrice == null
-                    || MoneyUtils.isFirstBiggerThanOrEqualToSecond(minimalRegularPrice, skuPrice.getSecond().getRegularPrice())
-            )
-                    ) {
-                minimalRegularPrice = skuPrice.getSecond().getRegularPrice();
-                rez = skuPrice;
+            if ((selectedSku == null || skuPrice.getFirst().equals(selectedSku))) {
+                final BigDecimal minPrice = MoneyUtils.minPositive(skuPrice.getSecond().getRegularPrice(), skuPrice.getSecond().getSalePrice());
+                if (overallMinimalRegularPrice == null ||
+                        MoneyUtils.isFirstBiggerThanSecond(overallMinimalRegularPrice, minPrice)) {
+                    overallMinimalRegularPrice = minPrice;
+                    rez = skuPrice;
+                }
             }
         }
         if (rez == null) {
@@ -508,7 +508,7 @@ public class PriceServiceImpl
      */
     @CacheEvict(value = {
             "imageService-seoImage" ,
-            "priceService-minimalRegularPrice",
+            "priceService-minimalPrice",
             "priceService-allCurrentPrices"
     }, allEntries = true)
     public SkuPrice create(final SkuPrice instance) {
@@ -520,7 +520,7 @@ public class PriceServiceImpl
      */
     @CacheEvict(value = {
             "imageService-seoImage" ,
-            "priceService-minimalRegularPrice",
+            "priceService-minimalPrice",
             "priceService-allCurrentPrices"
     }, allEntries = true)
     public SkuPrice update(final SkuPrice instance) {
@@ -532,7 +532,7 @@ public class PriceServiceImpl
      */
     @CacheEvict(value = {
             "imageService-seoImage" ,
-            "priceService-minimalRegularPrice",
+            "priceService-minimalPrice",
             "priceService-allCurrentPrices"
     }, allEntries = true)
     public void delete(final SkuPrice instance) {

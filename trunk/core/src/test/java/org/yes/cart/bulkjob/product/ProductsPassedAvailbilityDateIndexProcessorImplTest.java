@@ -16,8 +16,6 @@
 
 package org.yes.cart.bulkjob.product;
 
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Query;
 import org.junit.Test;
 import org.springframework.cache.CacheManager;
 import org.springframework.transaction.TransactionStatus;
@@ -26,6 +24,7 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductService;
 
@@ -53,10 +52,10 @@ public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCor
 
         productService.reindexProduct(product.getId());
 
-        final Query query = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null,
+        final NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null,
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD, (List) Arrays.asList("9998")));
 
-        List<ProductSearchResultDTO> rez = productService.getProductSearchResultDTOByQuery(query, 0, 1, null, false);
+        List<ProductSearchResultDTO> rez = productService.getProductSearchResultDTOByQuery(context.getProductQuery(), 0, 1, null, false);
         assertNotNull(rez);
         assertEquals(1, rez.size());
 
@@ -87,7 +86,7 @@ public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCor
 
         mgr.getCache("productService-productSearchResultDTOByQuery").clear();
 
-        rez = productService.getProductSearchResultDTOByQuery(query, 0, 1, null, false);
+        rez = productService.getProductSearchResultDTOByQuery(context.getProductQuery(), 0, 1, null, false);
         assertNotNull(rez);
         assertEquals(0, rez.size());
 

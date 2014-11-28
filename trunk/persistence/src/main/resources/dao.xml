@@ -324,6 +324,17 @@
         <constructor-arg><value>org.yes.cart.domain.entity.impl.ProductSkuEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="indexExecutor">
+            <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+                <description>
+                    Thread pool (1) for product indexing since they may be slow. We only need
+                    one thread for this as we only anticipate one thread to be reindexing all
+                    products.
+                </description>
+                <property name="corePoolSize" value="1"/>
+                <property name="maxPoolSize" value="1"/>
+            </bean>
+        </property>
     </bean>
 
     <bean  id="productTypeDao"  class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">

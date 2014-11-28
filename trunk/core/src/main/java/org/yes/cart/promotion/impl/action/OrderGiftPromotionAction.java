@@ -86,7 +86,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
 
     private SkuPrice getGiftPrices(final String sku, final ShoppingCart cart) {
         try {
-            return priceService.getMinimalRegularPrice(
+            return priceService.getMinimalPrice(
                     null,
                     sku,
                     cart.getShoppingContext().getShopId(),

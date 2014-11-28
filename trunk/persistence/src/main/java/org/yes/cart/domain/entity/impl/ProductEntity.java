@@ -23,10 +23,9 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.bridge.ProductSkuCodeBridge;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.domain.interceptor.ProductEntityIndexingInterceptor;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -35,7 +34,7 @@ import java.util.*;
  * Time: 9:10 AM
  */
 
-@Indexed(index = "luceneindex/product", interceptor = org.yes.cart.domain.interceptor.ProductEntityIndexingInterceptor.class)
+@Indexed(index = "luceneindex/product", interceptor = ProductEntityIndexingInterceptor.class)
 @DynamicBoost(impl = ProductDynamicBoostStrategy.class)
 public class ProductEntity implements org.yes.cart.domain.entity.Product, java.io.Serializable {
 
@@ -121,10 +120,11 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     /** {@inheritDoc} */
     @Fields({
-        @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES),
-        @Field(name = "displayNameAsIs", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+        @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES,
+                bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class)),
+        @Field(name = "displayNameAsIs", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
+                bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class))
     })
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class)
     public String getDisplayName() {
         return this.displayName;
     }
@@ -171,8 +171,8 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.tag = tag;
     }
 
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
+            bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class))
     public Brand getBrand() {
         return this.brand;
     }
@@ -181,10 +181,8 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.brand = brand;
     }
 
-    /**
-     *      */
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
-    bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class))
+        bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class))
     public ProductType getProducttype() {
         return this.producttype;
     }
@@ -360,8 +358,9 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         if (defaultProductSku == null) {
             if (this.getSku() != null && !this.getSku().isEmpty()) {
                 if (isMultiSkuProduct()) { //multisku
+                    int rank = Integer.MIN_VALUE;
                     for (ProductSku productSku : this.getSku()) {
-                        if (productSku.getCode().endsWith(this.getCode())) {
+                        if (productSku.getRank() > rank) {
                             defaultProductSku = productSku;
                         }
                     }

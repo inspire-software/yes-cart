@@ -31,7 +31,7 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
+import java.math.RoundingMode;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -63,23 +63,10 @@ public class PriceView extends BaseComponent {
     private final boolean showCurrencySymbol;
     private final boolean showSavings;
 
-    private static final String DECIMAL_SEPARATOR; // to perform split operation
-    private static final String[] EMPTY_FORMATED_PRICE;
+    private static final String[] EMPTY_FORMATED_PRICE = new String[] { StringUtils.EMPTY, StringUtils.EMPTY };
 
     @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
-
-
-    static {
-        EMPTY_FORMATED_PRICE = new String[] {StringUtils.EMPTY, StringUtils.EMPTY};
-        DecimalFormat decimalFormat = new DecimalFormat(Constants.MONEY_FORMAT);
-        String separator =  String.valueOf(decimalFormat.getDecimalFormatSymbols().getDecimalSeparator());
-        if (".".equals(separator)) {
-            DECIMAL_SEPARATOR = "\\.";
-        } else {
-            DECIMAL_SEPARATOR = separator;
-        }
-    }
 
 
     /**
@@ -156,10 +143,8 @@ public class PriceView extends BaseComponent {
     String[] getFormattedPrice(BigDecimal price) {
         final String[] formatted;
         if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(price, BigDecimal.ZERO)) { // show zeros!
-            final DecimalFormat decimalFormat = new DecimalFormat(Constants.MONEY_FORMAT);
-            formatted = decimalFormat.format(
-                    MoneyUtils.notNull(price, BigDecimal.ZERO)
-            ).split(DECIMAL_SEPARATOR);
+            final String priceString = price.setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP).toPlainString();
+            formatted = StringUtils.split(priceString, '.');
         } else { // if price was null
             formatted = EMPTY_FORMATED_PRICE;
         }

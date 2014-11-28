@@ -17,13 +17,13 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.search.Query;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.data.SortableCategoryDataProvider;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
@@ -62,10 +62,10 @@ public class SubCategoriesCentralView extends AbstractCentralView {
      *
      * @param id           panel id
      * @param categoryId   current category id.
-     * @param booleanQuery boolean query.
+     * @param navigationContext navigation context.
      */
-    public SubCategoriesCentralView(String id, long categoryId, Query booleanQuery) {
-        super(id, categoryId, booleanQuery);
+    public SubCategoriesCentralView(final String id, final long categoryId, final NavigationContext navigationContext) {
+        super(id, categoryId, navigationContext);
     }
 
     private List<CategoryDecorator> decorate(final List<Category> categories) {

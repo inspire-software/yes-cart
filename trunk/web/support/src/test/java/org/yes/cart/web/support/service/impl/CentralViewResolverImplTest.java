@@ -22,6 +22,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.query.impl.ProductCategorySearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
@@ -171,13 +172,15 @@ public class CentralViewResolverImplTest {
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
         final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
 
+        final NavigationContext navigationContext = context.mock(NavigationContext.class, "navigationContext");
         final Query expected = new ProductCategorySearchQueryBuilder().createStrictQuery(0L, null, 10L);
 
         context.checking(new Expectations() {{
             one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
             one(categoryService).getCategoryTemplate(10L); will(returnValue(""));
             one(categoryService).isSearchInSubcategory(10L, 12L); will(returnValue(false));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L), null); will(returnValue(expected));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L), null); will(returnValue(navigationContext));
+            one(navigationContext).getProductQuery(); will(returnValue(expected));
             one(productService).getProductQty(expected); will(returnValue(1));
         }});
 
@@ -200,6 +203,7 @@ public class CentralViewResolverImplTest {
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
         final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
 
+        final NavigationContext navigationContext = context.mock(NavigationContext.class, "navigationContext");
         final Query expected = new ProductCategorySearchQueryBuilder().createStrictQuery(0L, null, Arrays.asList(10L, 11L));
 
         context.checking(new Expectations() {{
@@ -207,7 +211,8 @@ public class CentralViewResolverImplTest {
             one(categoryService).getCategoryTemplate(10L); will(returnValue(""));
             one(categoryService).isSearchInSubcategory(10L, 12L); will(returnValue(true));
             one(categoryService).getChildCategoriesRecursiveIds(10L); will(returnValue(new HashSet<Long>(Arrays.asList(10L, 11L))));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L, 11L), null); will(returnValue(expected));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L, 11L), null); will(returnValue(navigationContext));
+            one(navigationContext).getProductQuery(); will(returnValue(expected));
             one(productService).getProductQty(expected); will(returnValue(1));
         }});
 
@@ -231,13 +236,15 @@ public class CentralViewResolverImplTest {
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
         final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
 
+        final NavigationContext navigationContext = context.mock(NavigationContext.class, "navigationContext");
         final Query expected = new ProductCategorySearchQueryBuilder().createStrictQuery(0L, null, 10L);
 
         context.checking(new Expectations() {{
             one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
             one(categoryService).getCategoryTemplate(10L); will(returnValue(""));
             one(categoryService).isSearchInSubcategory(10L, 12L); will(returnValue(false));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L), null); will(returnValue(expected));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L), null); will(returnValue(navigationContext));
+            one(navigationContext).getProductQuery(); will(returnValue(expected));
             one(productService).getProductQty(expected); will(returnValue(0));
             one(categoryService).isCategoryHasChildren(10L); will(returnValue(true));
         }});
@@ -261,13 +268,15 @@ public class CentralViewResolverImplTest {
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
         final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
 
+        final NavigationContext navigationContext = context.mock(NavigationContext.class, "navigationContext");
         final Query expected = new ProductCategorySearchQueryBuilder().createStrictQuery(0L, null, 10L);
 
         context.checking(new Expectations() {{
             one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(navAttrs));
             one(categoryService).getCategoryTemplate(10L); will(returnValue(""));
             one(categoryService).isSearchInSubcategory(10L, 12L); will(returnValue(false));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L), null); will(returnValue(expected));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L), null); will(returnValue(navigationContext));
+            one(navigationContext).getProductQuery(); will(returnValue(expected));
             one(productService).getProductQty(expected); will(returnValue(0));
             one(categoryService).isCategoryHasChildren(10L); will(returnValue(false));
         }});

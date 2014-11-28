@@ -62,6 +62,15 @@ public interface BackdoorService {
     /**
      * Reindex all products.
      *
+     * @return quantity of objects in index
+     */
+    @WebMethod
+    @WebResult(name = "quantity")
+    int reindexAllProductsSku();
+
+    /**
+     * Reindex all products.
+     *
      * @param shopPk shop pk.
      *
      * @return quantity of objects in index
@@ -69,6 +78,17 @@ public interface BackdoorService {
     @WebMethod
     @WebResult(name = "quantity")
     int reindexShopProducts(@WebParam(name = "productPk") long shopPk);
+
+    /**
+     * Reindex all products.
+     *
+     * @param shopPk shop pk.
+     *
+     * @return quantity of objects in index
+     */
+    @WebMethod
+    @WebResult(name = "quantity")
+    int reindexShopProductsSku(@WebParam(name = "productPk") long shopPk);
 
     /**
      * Reindex single products.

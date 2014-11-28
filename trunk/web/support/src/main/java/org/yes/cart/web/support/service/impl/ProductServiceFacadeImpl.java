@@ -23,6 +23,7 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
@@ -117,12 +118,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         if (productIds != null && !productIds.isEmpty()) {
 
-            final Query assoc = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, null,
+            final NavigationContext assoc = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, null,
                     Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
                             (List) Arrays.asList(productIds)));
 
             return productService.getProductSearchResultDTOByQuery(
-                    assoc, 0, productIds.size(), null, false);
+                    assoc.getProductQuery(), 0, productIds.size(), null, false);
         }
 
         return Collections.emptyList();
@@ -143,11 +144,11 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, shopId);
 
-        final Query featured = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, categories,
+        final NavigationContext featured = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, categories,
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
                         (List) Arrays.asList("true")));
 
-        return productService.getProductSearchResultDTOByQuery(featured, 0, limit, null, false);
+        return productService.getProductSearchResultDTOByQuery(featured.getProductQuery(), 0, limit, null, false);
     }
 
     /**
@@ -164,11 +165,11 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         } else {
             newArrivalCats = null;
         }
-        final Query newarrival = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, newArrivalCats,
+        final NavigationContext newarrival = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, newArrivalCats,
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
                         (List) Arrays.asList(ProductSearchQueryBuilder.TAG_NEWARRIVAL)));
 
-        return productService.getProductSearchResultDTOByQuery(newarrival, 0, limit, null, true);
+        return productService.getProductSearchResultDTOByQuery(newarrival.getProductQuery(), 0, limit, null, true);
     }
 
     /**
@@ -187,12 +188,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 productIdsForCategory = productIds.subList(productIds.size() - limit, productIds.size());
             }
 
-            final Query recent = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, null,
+            final NavigationContext recent = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, null,
                     Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
                             (List) Arrays.asList(productIdsForCategory)));
 
             return productService.getProductSearchResultDTOByQuery(
-                    recent, 0, limit, null, false);
+                    recent.getProductQuery(), 0, limit, null, false);
 
         }
 
@@ -283,7 +284,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                 final BigDecimal quantity,
                                 final String currency,
                                 final long shopId) {
-        return priceService.getMinimalRegularPrice(productId, skuCode, shopId, currency, quantity);
+        return priceService.getMinimalPrice(productId, skuCode, shopId, currency, quantity);
     }
 
     /**

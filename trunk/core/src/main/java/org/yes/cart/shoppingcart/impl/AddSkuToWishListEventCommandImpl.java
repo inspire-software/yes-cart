@@ -192,7 +192,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
 
         final BigDecimal quantity = pqm.getValidAddQty(getQuantityValue(parameters));
 
-        final SkuPrice skuPrice = getPriceService().getMinimalRegularPrice(
+        final SkuPrice skuPrice = getPriceService().getMinimalPrice(
                 null,
                 skuCode,
                 shop.getShopId(),

@@ -26,10 +26,11 @@ import java.math.BigDecimal;
  * Time: 09:48:01
  */
 public interface PriceNavigation {
+
     /**
      * Expected value in following format CUR-LOW-HIGH format
      *
-     * @param val value rfom request
+     * @param val value from request
      * @return filled price tier node.
      */
     Pair<String, Pair<BigDecimal, BigDecimal>> decomposePriceRequestParams(String val);
@@ -50,13 +51,13 @@ public interface PriceNavigation {
      * @param currency           currency
      * @param lowBorder          low price
      * @param highBorder         high price
-     * @param currencyDelimitter delimitter between currency and prices
-     * @param priceDelimitter    price delimitter
+     * @param currencyDelimiter  delimiter between currency and prices
+     * @param priceDelimiter     price delimiter
      * @return string representation in CUR-LOW-HIGH format
      */
     String composePriceRequestParams(String currency,
                                      BigDecimal lowBorder,
                                      BigDecimal highBorder,
-                                     String currencyDelimitter,
-                                     String priceDelimitter);
+                                     String currencyDelimiter,
+                                     String priceDelimiter);
 }

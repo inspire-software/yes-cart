@@ -661,6 +661,7 @@
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>
+            <security:protect method="reindexAllProductsSku" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>
             <security:protect method="reindexProduct"     access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>
             <security:protect method="reindexProductSku"  access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>
             <security:protect method="reindexProductSkuCode" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>
@@ -673,6 +674,8 @@
             <security:protect method="warmUp"             access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
         </security:intercept-methods>
     </bean>
+
+    <import resource="manager-import.xml"/>
 
     <bean id="bulkImportExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
         <description>

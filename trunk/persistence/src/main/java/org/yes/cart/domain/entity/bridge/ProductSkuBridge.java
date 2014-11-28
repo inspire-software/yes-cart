@@ -41,9 +41,18 @@ public class ProductSkuBridge implements FieldBridge {
 
         if (value instanceof Collection) {
 
-            for (Object obj : (Collection) value) {
+            final Collection<ProductSku> skus = (Collection<ProductSku>) value;
 
-                ProductSku sku = (ProductSku) obj;
+            document.add(new Field(
+                    "multisku",
+                    skus.size() > 1 ? "true" : "false",
+                    luceneOptions.getStore(),
+                    Field.Index.NOT_ANALYZED,
+                    luceneOptions.getTermVector()
+            ));
+
+
+            for (final ProductSku sku : skus) {
 
                 document.add(new Field(
                         "sku.code",

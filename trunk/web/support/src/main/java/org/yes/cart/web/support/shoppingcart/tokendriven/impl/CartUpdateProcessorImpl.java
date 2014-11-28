@@ -17,7 +17,9 @@
 package org.yes.cart.web.support.shoppingcart.tokendriven.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.ShoppingCartState;
+import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.ShopCodeContext;
@@ -38,11 +40,14 @@ import java.util.Map;
 public class CartUpdateProcessorImpl implements CartUpdateProcessor {
 
     private final ShoppingCartStateService shoppingCartStateService;
+    private final AddressService addressService;
     private final ShoppingCartCommandFactory shoppingCartCommandFactory;
 
     public CartUpdateProcessorImpl(final ShoppingCartStateService shoppingCartStateService,
+                                   final AddressService addressService,
                                    final ShoppingCartCommandFactory shoppingCartCommandFactory) {
         this.shoppingCartStateService = shoppingCartStateService;
+        this.addressService = addressService;
         this.shoppingCartCommandFactory = shoppingCartCommandFactory;
     }
 
@@ -119,10 +124,16 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
             // Need to reinstate old addresses too because method may not be applicable for different address
             cmdParams.put(ShoppingCartCommand.CMD_SETCARRIERSLA, oldCartInfo.getCarrierSlaId().toString());
             if (oldCartInfo.getBillingAddressId() != null) {
-                cmdParams.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, oldCartInfo.getBillingAddressId().toString());
+                final Address billing = addressService.findById(oldCartInfo.getBillingAddressId());
+                if (billing != null) {
+                    cmdParams.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billing);
+                }
             }
             if (oldCartInfo.getDeliveryAddressId() != null) {
-                cmdParams.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, oldCartInfo.getDeliveryAddressId().toString());
+                final Address delivery = addressService.findById(oldCartInfo.getDeliveryAddressId());
+                if (delivery != null) {
+                    cmdParams.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
+                }
             }
 
             shoppingCartCommandFactory.execute(shoppingCart, cmdParams);

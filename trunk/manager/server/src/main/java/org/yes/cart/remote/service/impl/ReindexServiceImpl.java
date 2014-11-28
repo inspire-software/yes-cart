@@ -85,23 +85,27 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                 try {
                     ThreadLocalAsyncContextUtils.init(ctx);
 
-                    listener.notifyMessage("Indexing stared");
+                    long start = System.currentTimeMillis();
+
+                    listener.notifyMessage("Indexing stared\n");
 
                     final Map<String, Boolean> indexingFinished = ctx.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
                     final Map<String, Integer> lastPositive = new HashMap<String, Integer>();
                     Map<String, Integer> cnt = new HashMap<String, Integer>();
+
                     for (final Node yesNode : nodeService.getYesNodes()) {
                         indexingFinished.put(yesNode.getNodeId(), Boolean.FALSE);
                         lastPositive.put(yesNode.getNodeId(), 0);
                         cnt.put(yesNode.getNodeId(), 0);
                     }
+
                     while (isIndexingInProgress(cnt)) {
 
                         // This should call
                         cnt = remoteBackdoorService.reindexAllProducts(ctx);
                         if (isIndexingInProgress(cnt)) {
 
-                            final StringBuilder state = new StringBuilder("Indexed products so far:\n");
+                            final StringBuilder state = new StringBuilder("Indexing products:\n");
                             for (final Map.Entry<String, Integer> cntNode : cnt.entrySet()) {
                                 final String nodeUri = cntNode.getKey();
                                 final Integer nodeCnt = cntNode.getValue();
@@ -118,14 +122,58 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                         }
 
                     }
-                    final StringBuilder state = new StringBuilder("Indexing completed. Last traceable product count:\n");
+
+                    final StringBuilder summaryProd = new StringBuilder("Product indexing completed. Last traceable product count:\n");
                     for (final Map.Entry<String, Integer> cntNode : lastPositive.entrySet()) {
                         final String nodeUri = cntNode.getKey();
                         final Integer nodeCnt = cntNode.getValue();
-                        state.append(nodeUri).append(": ").append(nodeCnt).append(" ... finished\n");
+                        summaryProd.append(nodeUri).append(": ").append(nodeCnt).append(" ... finished\n");
                     }
-                    state.append("CAUTION this may not be the full count of products that was indexed.\n");
-                    listener.notifyMessage(state.toString());
+                    summaryProd.append("CAUTION this may not be the full count of products that was indexed.\n");
+                    listener.notifyMessage(summaryProd.toString());
+
+                    for (final Node yesNode : nodeService.getYesNodes()) {
+                        indexingFinished.put(yesNode.getNodeId(), Boolean.FALSE);
+                        lastPositive.put(yesNode.getNodeId(), 0);
+                        cnt.put(yesNode.getNodeId(), 0);
+                    }
+
+                    while (isIndexingInProgress(cnt)) {
+
+                        // This should call
+                        cnt = remoteBackdoorService.reindexAllProductsSku(ctx);
+                        if (isIndexingInProgress(cnt)) {
+
+                            final StringBuilder state = new StringBuilder("Indexing SKU:\n");
+                            for (final Map.Entry<String, Integer> cntNode : cnt.entrySet()) {
+                                final String nodeUri = cntNode.getKey();
+                                final Integer nodeCnt = cntNode.getValue();
+                                if (nodeCnt == null || nodeCnt < 0 || (lastPositive.containsKey(nodeUri) && lastPositive.get(nodeUri) > nodeCnt)) {
+                                    // this node finished
+                                    state.append(nodeUri).append(": ").append(lastPositive.get(nodeUri)).append(" ... finished\n");
+                                } else {
+                                    lastPositive.put(nodeUri, nodeCnt);
+                                    state.append(nodeUri).append(": ").append(lastPositive.get(nodeUri)).append(" ... in progress\n");
+                                }
+                            }
+                            listener.notifyPing(state.toString());
+                            Thread.sleep(5000l);
+                        }
+
+                    }
+                    final StringBuilder summarySku = new StringBuilder("SKU indexing completed. Last traceable SKU count:\n");
+                    for (final Map.Entry<String, Integer> cntNode : lastPositive.entrySet()) {
+                        final String nodeUri = cntNode.getKey();
+                        final Integer nodeCnt = cntNode.getValue();
+                        summarySku.append(nodeUri).append(": ").append(nodeCnt).append(" ... finished\n");
+                    }
+                    summarySku.append("CAUTION this may not be the full count of SKU that was indexed.\n");
+
+                    listener.notifyMessage(summarySku.toString());
+
+                    long finish = System.currentTimeMillis();
+
+                    listener.notifyMessage("\nIndexing completed (" + ((finish - start) / 1000) + "s)");
                     listener.notifyCompleted();
                 } catch (Throwable trw) {
                     LOG.error(trw.getMessage(), trw);

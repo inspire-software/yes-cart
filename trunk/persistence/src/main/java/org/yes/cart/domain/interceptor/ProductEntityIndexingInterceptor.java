@@ -21,7 +21,6 @@ import org.hibernate.search.indexes.interceptor.IndexingOverride;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
-import org.yes.cart.domain.entity.impl.ProductEntity;
 
 import java.util.Date;
 
@@ -30,7 +29,7 @@ import java.util.Date;
  * Date: 5/5/12
  * Time: 3:40 PM
  */
-public class ProductEntityIndexingInterceptor implements EntityIndexingInterceptor<ProductEntity> {
+public class ProductEntityIndexingInterceptor implements EntityIndexingInterceptor<Product> {
 
 
     /**
@@ -68,26 +67,26 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
 
 
     /** {@inheritDoc} */
-    public IndexingOverride onAdd(final ProductEntity entity) {
+    public IndexingOverride onAdd(final Product entity) {
         return isIncludeInLuceneIndex(entity)
                 ?IndexingOverride.APPLY_DEFAULT
                 :IndexingOverride.REMOVE;
     }
 
     /** {@inheritDoc} */
-    public IndexingOverride onUpdate(final ProductEntity entity) {
+    public IndexingOverride onUpdate(final Product entity) {
         return isIncludeInLuceneIndex(entity)
                 ?IndexingOverride.APPLY_DEFAULT
                 :IndexingOverride.REMOVE;
     }
 
     /** {@inheritDoc} */
-    public IndexingOverride onDelete(final ProductEntity entity) {
+    public IndexingOverride onDelete(final Product entity) {
         return IndexingOverride.APPLY_DEFAULT;
     }
 
     /** {@inheritDoc} */
-    public IndexingOverride onCollectionUpdate(final ProductEntity entity) {
+    public IndexingOverride onCollectionUpdate(final Product entity) {
         return isIncludeInLuceneIndex(entity)
                 ?IndexingOverride.APPLY_DEFAULT
                 :IndexingOverride.REMOVE;

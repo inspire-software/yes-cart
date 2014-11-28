@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component;
 
-import org.apache.lucene.search.Query;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,6 +27,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
@@ -167,10 +167,10 @@ public class SkuCentralView extends AbstractCentralView {
      *
      * @param id           panel id
      * @param categoryId   current category id.
-     * @param booleanQuery boolean query.
+     * @param navigationContext navigation context.
      */
-    public SkuCentralView(final String id, final long categoryId, final Query booleanQuery) {
-        super(id, categoryId, booleanQuery);
+    public SkuCentralView(final String id, final long categoryId, final NavigationContext navigationContext) {
+        super(id, categoryId, navigationContext);
     }
 
     private void configureContext() {

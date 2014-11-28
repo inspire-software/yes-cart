@@ -17,13 +17,13 @@
 package org.yes.cart.web.page.component;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.data.SortableProductDataProvider;
 import org.yes.cart.web.page.component.navigation.ProductPerPageListView;
@@ -77,10 +77,10 @@ public class ProductsCentralView extends AbstractCentralView {
      *
      * @param id           panel id
      * @param categoryId   current category id.
-     * @param booleanQuery boolean query.
+     * @param navigationContext navigation context.
      */
-    public ProductsCentralView(final String id, long categoryId, final Query booleanQuery) {
-        super(id, categoryId, booleanQuery);
+    public ProductsCentralView(final String id, final long categoryId, final NavigationContext navigationContext) {
+        super(id, categoryId, navigationContext);
 
     }
 
@@ -104,7 +104,7 @@ public class ProductsCentralView extends AbstractCentralView {
 
         final SortableProductDataProvider dataProvider = new SortableProductDataProvider(
                 productServiceFacade,
-                getNavigationQuery(),
+                getNavigationContext(),
                 getI18NSupport(),
                 getDecoratorFacade()
         );
