@@ -47,6 +47,14 @@ public interface RemoteBackdoorService {
     Map<String, Integer> reindexAllProducts(AsyncContext context);
 
     /**
+     * Reindex all products.
+     *
+     * @param context web service context
+     * @return quantity product in index.
+     */
+    Map<String, Integer> reindexAllProductsSku(AsyncContext context);
+
+    /**
      * Reindex single product.
      *
      * @param context web service context

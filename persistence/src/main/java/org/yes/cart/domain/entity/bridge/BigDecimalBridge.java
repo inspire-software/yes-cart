@@ -16,11 +16,12 @@
 
 package org.yes.cart.domain.entity.bridge;
 
+import org.hibernate.search.bridge.ParameterizedBridge;
 import org.hibernate.search.bridge.StringBridge;
 import org.yes.cart.constants.Constants;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
+import java.util.Map;
 
 /**
  *
@@ -32,10 +33,16 @@ import java.text.DecimalFormat;
  * Time: 16:13:01 *
  *
  */
-public class BigDecimalBridge implements StringBridge {
+public class BigDecimalBridge implements StringBridge, ParameterizedBridge {
 
+    private int scale = Constants.DEFAULT_SCALE;
 
-    private final DecimalFormat formatter = new DecimalFormat(Constants.MONEY_FORMAT_TOINDEX);
+    public BigDecimalBridge() {
+    }
+
+    public BigDecimalBridge(final int scale) {
+        this.scale = scale;
+    }
 
     /**
      * {@inheritDoc}
@@ -43,10 +50,18 @@ public class BigDecimalBridge implements StringBridge {
     public String objectToString(final Object bigDecimalPriceObject) {
         if (bigDecimalPriceObject instanceof BigDecimal) {
             BigDecimal bigDecimal = (BigDecimal) bigDecimalPriceObject;
-            long toIndex = bigDecimal.movePointRight(2).longValue();
-            return formatter.format(toIndex);
+            long toIndex = bigDecimal.movePointRight(scale).longValue();
+            final String str = String.valueOf(toIndex);
+            if (str.length() >= Constants.MONEY_FORMAT_TOINDEX.length()) {
+                return str;
+            }
+            return Constants.MONEY_FORMAT_TOINDEX.substring(0, Constants.MONEY_FORMAT_TOINDEX.length() - str.length()).concat(str);
         }
         return null;
     }
 
+    @Override
+    public void setParameterValues(final Map<String, String> parameters) {
+        this.scale = Integer.valueOf(parameters.get("scale"));
+    }
 }

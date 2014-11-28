@@ -22,7 +22,6 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.PriceNavigation;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 
 /**
  * PriceNavigation responsible for compose/decompose url parameter to  java objects. 
@@ -34,10 +33,7 @@ import java.text.DecimalFormat;
 public class PriceNavigationImpl implements PriceNavigation {
 
     /**
-     * Expected value in following format CUR-LOW-HIGH format
-     *
-     * @param val value from request
-     * @return filled price tier node.
+     * {@inheritDoc}
      */
     public Pair<String, Pair<BigDecimal, BigDecimal>> decomposePriceRequestParams(final String val) {
         final String[] currencyPriceBorders = StringUtils.split(val, Constants.RANGE_NAVIGATION_DELIMITER);
@@ -52,12 +48,7 @@ public class PriceNavigationImpl implements PriceNavigation {
     }
 
     /**
-     * Compose price tier into string representation.
-     *
-     * @param currency   currency
-     * @param lowBorder  low price
-     * @param highBorder high price
-     * @return string representation in CUR-LOW-HIGH format
+     * {@inheritDoc}
      */
     public String composePriceRequestParams(final String currency, final BigDecimal lowBorder, final BigDecimal highBorder) {
         return composePriceRequestParams(currency, lowBorder, highBorder, Constants.RANGE_NAVIGATION_DELIMITER, Constants.RANGE_NAVIGATION_DELIMITER);
@@ -65,28 +56,20 @@ public class PriceNavigationImpl implements PriceNavigation {
 
 
     /**
-     * Compoce price tier into string representation.
-     *
-     * @param currency           currency
-     * @param lowBorder          low price
-     * @param highBorder         high price
-     * @param currencyDelimitter delimitter between currency and prices
-     * @param priceDelimitter    price delimitter
-     * @return string representation in CUR-LOW-HIGH format
+     * {@inheritDoc}
      */
     public String composePriceRequestParams(final String currency,
                                             final BigDecimal lowBorder,
                                             final BigDecimal highBorder,
-                                            final String currencyDelimitter,
-                                            final String priceDelimitter) {
+                                            final String currencyDelimiter,
+                                            final String priceDelimiter) {
 
-        DecimalFormat decimalFormat = new DecimalFormat(Constants.MONEY_FORMAT_PRICE_NAVIGATION);
         StringBuilder builder = new StringBuilder();
         builder.append(currency);
-        builder.append(currencyDelimitter);
-        builder.append(decimalFormat.format(lowBorder));
-        builder.append(priceDelimitter);
-        builder.append(decimalFormat.format(highBorder));
+        builder.append(currencyDelimiter);
+        builder.append(lowBorder.toPlainString());
+        builder.append(priceDelimiter);
+        builder.append(highBorder.toPlainString());
         return builder.toString();
     }
 

@@ -149,7 +149,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
                                     final String skuCode,
                                     final BigDecimal qty) {
 
-        final SkuPrice skuPrice = getPriceService().getMinimalRegularPrice(
+        final SkuPrice skuPrice = getPriceService().getMinimalPrice(
                 null,
                 skuCode,
                 shop.getShopId(),

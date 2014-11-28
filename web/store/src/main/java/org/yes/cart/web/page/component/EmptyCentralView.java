@@ -16,9 +16,9 @@
 
 package org.yes.cart.web.page.component;
 
-import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -41,10 +41,10 @@ public class EmptyCentralView extends AbstractCentralView {
      * Construct panel.
      *
      * @param id panel id
-     * @param booleanQuery     boolean query.
+     * @param navigationContext navigation context.
      */
-    public EmptyCentralView(String id, Query booleanQuery) {
-        super(id, 0l, booleanQuery);
+    public EmptyCentralView(final String id, final NavigationContext navigationContext) {
+        super(id, 0l, navigationContext);
     }
 
     /**
@@ -53,10 +53,10 @@ public class EmptyCentralView extends AbstractCentralView {
      *
      * @param id panel id
      * @param categoryId ignored
-     * @param booleanQuery     boolean query.
+     * @param navigationContext navigation context.
      */
-    public EmptyCentralView(String id, long categoryId, Query booleanQuery) {
-        super(id, 0l, booleanQuery);
+    public EmptyCentralView(final String id, final long categoryId, final NavigationContext navigationContext) {
+        super(id, 0l, navigationContext);
     }
 
 

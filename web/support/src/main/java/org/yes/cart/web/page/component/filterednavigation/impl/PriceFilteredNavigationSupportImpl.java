@@ -16,13 +16,12 @@
 
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
-import org.apache.lucene.search.Query;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.PriceNavigation;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.CategoryService;
@@ -45,39 +44,32 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
     private final CategoryService categoryService;
     private final ShopService shopService;
     private final PriceService priceService;
-    private final PriceNavigation priceNavigation;
 
     public PriceFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
                                               final ProductService productService,
                                               final CategoryService categoryService,
                                               final ShopService shopService,
-                                              final PriceService priceService,
-                                              final PriceNavigation priceNavigation) {
+                                              final PriceService priceService) {
         super(luceneQueryFactory, productService);
         this.categoryService = categoryService;
         this.shopService = shopService;
         this.priceService = priceService;
-        this.priceNavigation = priceNavigation;
     }
 
     /**
      * {@inheritDoc}
      */
     @Cacheable(value = "filteredNavigationSupport-priceFilteredNavigationRecords")
-    public List<FilteredNavigationRecord> getFilteredNavigationRecords(final Query query,
+    public List<FilteredNavigationRecord> getFilteredNavigationRecords(final NavigationContext navigationContext,
                                                                        final Long categoryId,
-                                                                       final List<Long> categories,
-                                                                       final long shopId,
                                                                        final String currency,
                                                                        final String locale,
                                                                        final String recordName) {
 
         final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
-        if (!isAttributeAlreadyFiltered(query, ProductSearchQueryBuilder.PRODUCT_PRICE_AMOUNT)) {
 
-            if (categoryId <= 0) {
-                return Collections.emptyList();
-            }
+        if (!navigationContext.isGlobal() && !navigationContext.isFilteredBy(ProductSearchQueryBuilder.PRODUCT_PRICE)) {
+
             final Category category = categoryService.getById(categoryId);
             if (category == null) {
                 return Collections.emptyList();
@@ -90,27 +82,18 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
                 return Collections.emptyList();
             }
 
-            final Shop shop = shopService.getById(shopId);
+            final Shop shop = shopService.getById(navigationContext.getShopId());
             final List<FilteredNavigationRecord> allNavigationRecords = priceService.getPriceNavigationRecords(
                     priceTierTree,
                     currency,
                     shop);
 
             for (FilteredNavigationRecord record : allNavigationRecords) {
-//                Pair<String, Pair<BigDecimal, BigDecimal>> priceNavigationRecord = priceNavigation.decomposePriceRequestParams(record.getValue());
-//                Query candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
-//                        query,
-//                        queryBuilder.createQuery(
-//                                categories,
-//                                shop.getShopId(),
-//                                currency,
-//                                priceNavigationRecord.getSecond().getFirst(),
-//                                priceNavigationRecord.getSecond().getSecond())
-//                );
-                Query candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
-                        query, shopId, ProductSearchQueryBuilder.PRODUCT_PRICE, record.getValue()
+
+                NavigationContext candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
+                        navigationContext, ProductSearchQueryBuilder.PRODUCT_PRICE, record.getValue()
                 );
-                int candidateResultCount = getProductService().getProductQty(candidateQuery);
+                int candidateResultCount = getProductService().getProductQty(candidateQuery.getProductQuery());
                 if (candidateResultCount > 0) {
                     record.setName(recordName);
                     record.setCode(ProductSearchQueryBuilder.PRODUCT_PRICE);

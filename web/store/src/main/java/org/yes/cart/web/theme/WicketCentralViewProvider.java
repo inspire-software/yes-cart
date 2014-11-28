@@ -16,7 +16,7 @@
 
 package org.yes.cart.web.theme;
 
-import org.apache.lucene.search.Query;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.web.page.component.AbstractCentralView;
 
 /**
@@ -32,13 +32,13 @@ public interface WicketCentralViewProvider {
      * @param rendererLabel render view type
      * @param wicketComponentId component id
      * @param categoryId category id
-     * @param booleanQuery boolean query
+     * @param navigationContext navigation context
      *
      * @return central vie component
      */
     AbstractCentralView getCentralPanel(String rendererLabel,
                                         String wicketComponentId,
                                         long categoryId,
-                                        Query booleanQuery);
+                                        NavigationContext navigationContext);
 
 }

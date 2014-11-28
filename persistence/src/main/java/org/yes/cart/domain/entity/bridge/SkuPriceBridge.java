@@ -22,9 +22,9 @@ import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,14 +39,22 @@ import java.util.Map;
  * */
 public class SkuPriceBridge implements FieldBridge {
 
-    private final DecimalFormat formatter = new DecimalFormat(Constants.MONEY_FORMAT_TOINDEX);
+    private final BigDecimalBridge idBridge = new BigDecimalBridge(0);
+    private final BigDecimalBridge moneyBridge = new BigDecimalBridge(Constants.DEFAULT_SCALE);
 
     /** {@inheritDoc} */
     public void set(final String proposedFiledName, final Object value, final Document document, final LuceneOptions luceneOptions) {
         if (value instanceof Collection) {
             final Map<Long, Map<String, SkuPrice>> lowestQuantityPrice = new HashMap<Long, Map<String, SkuPrice>>();
+            final long time = System.currentTimeMillis();
             for (Object obj : (Collection)value) {
                 SkuPrice skuPrice = (SkuPrice) obj;
+
+                if ((skuPrice.getSalefrom() != null && skuPrice.getSalefrom().getTime() > time) ||
+                        (skuPrice.getSaleto() != null && skuPrice.getSaleto().getTime() < time)) {
+                    continue; // This price is not active
+                }
+
                 final Map<String, SkuPrice> lowestQuantityPriceByShop = lowestQuantityPrice.get(skuPrice.getShop().getShopId());
                 if (lowestQuantityPriceByShop == null) {
                     // if we do not have a "byShop" this is the new lowest price
@@ -58,16 +66,24 @@ public class SkuPriceBridge implements FieldBridge {
                     if (oldLowestQuantity == null) {
                         // if we do not have the lowest for this shop for this currency just add it
                         lowestQuantityPriceByShop.put(skuPrice.getCurrency(), skuPrice);
-                    } else if (oldLowestQuantity.getQuantity().compareTo(skuPrice.getQuantity()) < 0) {
-                        // if this sku price has lower quantity then this is probably better starting price
-                        lowestQuantityPriceByShop.put(skuPrice.getCurrency(), skuPrice);
+                    } else {
+                        final int compare = oldLowestQuantity.getQuantity().compareTo(skuPrice.getQuantity());
+                        if (compare < 0 || (compare == 0 && MoneyUtils.isFirstBiggerThanSecond(
+                                MoneyUtils.minPositive(oldLowestQuantity.getRegularPrice(), oldLowestQuantity.getSalePrice()),
+                                MoneyUtils.minPositive(skuPrice.getRegularPrice(), skuPrice.getSalePrice())
+                        ))) {
+                            // if this sku price has lower quantity then this is probably better starting price
+                            // if the quantity is the same lower price is more appealing to show
+                            lowestQuantityPriceByShop.put(skuPrice.getCurrency(), skuPrice);
+                        }
                     }
                 }
             }
-            if (lowestQuantityPrice != null) {
+            if (!lowestQuantityPrice.isEmpty()) {
                 for (final Map.Entry<Long, Map<String, SkuPrice>> shop : lowestQuantityPrice.entrySet()) {
                     for (final Map.Entry<String, SkuPrice> currency : shop.getValue().entrySet()) {
-                        String rez = objectToString(shop.getKey(), currency.getKey(), currency.getValue().getRegularPrice());
+                        String rez = objectToString(shop.getKey(), currency.getKey(),
+                                MoneyUtils.minPositive(currency.getValue().getRegularPrice(), currency.getValue().getSalePrice()));
                         Field field = new Field(
                                 proposedFiledName,
                                 rez,
@@ -92,12 +108,11 @@ public class SkuPriceBridge implements FieldBridge {
      */
     public String objectToString(final long shopId, final String currency, final BigDecimal regularPrice) {
         StringBuilder stringBuilder = new StringBuilder();
-        long price = regularPrice.movePointRight(Constants.MONEY_SCALE).longValue();
-        stringBuilder.append(formatter.format(shopId));
+        stringBuilder.append(idBridge.objectToString(new BigDecimal(shopId)));
         stringBuilder.append('_');
         stringBuilder.append(currency);
         stringBuilder.append('_');
-        stringBuilder.append(formatter.format(price));        
+        stringBuilder.append(moneyBridge.objectToString(regularPrice));
         return  stringBuilder.toString();
     }
 

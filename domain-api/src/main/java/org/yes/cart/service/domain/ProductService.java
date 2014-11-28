@@ -25,7 +25,6 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -147,12 +146,12 @@ public interface ProductService extends GenericService<Product> {
      * Get the all products in category.
      *
      * @param categoryId  category id
-     * @param firtsResult index of first result
+     * @param firstResult index of first result
      * @param maxResults  quantity results to return
      * @return list of products
      */
     List<Product> getProductByCategory(long categoryId,
-                                       int firtsResult,
+                                       int firstResult,
                                        int maxResults);
 
     /**
@@ -234,11 +233,27 @@ public interface ProductService extends GenericService<Product> {
     /**
      * Reindex the products.
      *
+     * @return document quantity in index
+     */
+    int reindexProductsSku();
+
+    /**
+     * Reindex the products.
+     *
      * @param shopId shop for which to reindex products.
      *
      * @return document quantity in index
      */
     int reindexProducts(Long shopId);
+
+    /**
+     * Reindex the products.
+     *
+     * @param shopId shop for which to reindex products.
+     *
+     * @return document quantity in index
+     */
+    int reindexProductsSku(Long shopId);
 
     /**
      * Reindex the products.

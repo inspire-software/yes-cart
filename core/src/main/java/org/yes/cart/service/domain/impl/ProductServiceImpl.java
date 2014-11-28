@@ -61,6 +61,7 @@ import java.util.*;
 public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implements ProductService {
 
     private final GenericDAO<Product, Long> productDao;
+    private final GenericDAO<ProductSku, Long> productSkuDao;
     private final ProductSkuService productSkuService;
     private final ProductTypeAttrService productTypeAttrService;
     private final AttributeService attributeService;
@@ -74,6 +75,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * Construct product service.
      *
      * @param productDao         product dao
+     * @param productSkuDao      product SKU dao
      * @param productSkuService  product service
      * @param productTypeAttrService     product type dao to deal with type information
      * @param attributeService   attribute service
@@ -82,6 +84,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param shopCategoryRelationshipSupport shop product category relationship support
      */
     public ProductServiceImpl(final GenericDAO<Product, Long> productDao,
+                              final GenericDAO<ProductSku, Long> productSkuDao,
                               final ProductSkuService productSkuService,
                               final ProductTypeAttrService productTypeAttrService,
                               final AttributeService attributeService,
@@ -91,6 +94,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                               final DtoFactory dtoFactory) {
         super(productDao);
         this.productDao = productDao;
+        this.productSkuDao = productSkuDao;
         this.productSkuService = productSkuService;
         this.productTypeAttrService = productTypeAttrService;
         this.attributeService = attributeService;
@@ -424,7 +428,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 ProductSearchQueryBuilder.PRODUCT_AVAILABILITY_TO_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_MIN_QTY_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_MAX_QTY_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_STEP_QTY_FIELD
+                ProductSearchQueryBuilder.PRODUCT_STEP_QTY_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_MULTISKU
                 );
 
         final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.size());
@@ -446,6 +451,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             dto.setMinOrderQuantity((BigDecimal) obj[13]);
             dto.setMaxOrderQuantity((BigDecimal) obj[14]);
             dto.setStepOrderQuantity((BigDecimal) obj[15]);
+            dto.setMultisku(obj[16] != null && Boolean.valueOf((String) obj[16]));
             rez.add(dto);
         }
 
@@ -468,10 +474,10 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      */
     public List<Product> getProductByCategory(
             final long categoryId,
-            final int firtsResult,
+            final int firstResult,
             final int maxResults) {
         return productDao.findRangeByNamedQuery("PRODUCTS.BY.CATEGORYID",
-                firtsResult,
+                firstResult,
                 maxResults,
                 categoryId,
                 new Date()   //TODO: V2 time machine
@@ -777,12 +783,39 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    public int reindexProductsSku() {
+        return productSkuDao.fullTextSearchReindex(true);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
     public int reindexProducts(final Long shopId) {
         final Set<Long> categories = shopCategoryRelationshipSupport.getShopCategoriesIds(shopId);
         return productDao.fullTextSearchReindex(true, new IndexFilter<Product>() {
             @Override
             public boolean skipIndexing(final Product entity) {
                 for (final ProductCategory pcat : entity.getProductCategory()) {
+                    if (categories.contains(pcat.getCategory().getCategoryId())) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public int reindexProductsSku(final Long shopId) {
+        final Set<Long> categories = shopCategoryRelationshipSupport.getShopCategoriesIds(shopId);
+        return productSkuDao.fullTextSearchReindex(true, new IndexFilter<ProductSku>() {
+            @Override
+            public boolean skipIndexing(final ProductSku entity) {
+                for (final ProductCategory pcat : entity.getProduct().getProductCategory()) {
                     if (categories.contains(pcat.getCategory().getCategoryId())) {
                         return false;
                     }
@@ -805,6 +838,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     public int reindexProductSku(final Long pk) {
         final ProductSku productSku = productSkuService.findById(pk);
         if (productSku != null) {
+            productSkuDao.fullTextSearchReindex(productSku.getSkuId());
             return productDao.fullTextSearchReindex(productSku.getProduct().getProductId());
         }
         return 0;
@@ -816,6 +850,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     public int reindexProductSku(final String code) {
         final ProductSku productSku = productSkuService.findProductSkuBySkuCode(code);
         if (productSku != null) {
+            productSkuDao.fullTextSearchReindex(productSku.getSkuId());
             return productDao.fullTextSearchReindex(productSku.getProduct().getProductId());
         }
         return 0;
@@ -886,6 +921,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         sku.setDisplayName(instance.getDisplayName());
         sku.setDescription(instance.getDescription());
         sku.setProduct(instance);
+        sku.setRank(500);
         instance.getSku().add(sku);
 
         return getGenericDao().create(instance);

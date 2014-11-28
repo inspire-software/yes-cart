@@ -16,10 +16,10 @@
 
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
-import org.apache.lucene.search.Query;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.component.filterednavigation.AttributeFilteredNavigationSupport;
@@ -43,33 +43,34 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
      * {@inheritDoc}
      */
     @Cacheable(value = "filteredNavigationSupport-attributeFilteredNavigationRecords")
-    public List<FilteredNavigationRecord> getFilteredNavigationRecords(final Query query,
-                                                                       final List<Long> categories,
-                                                                       final long shopId,
+    public List<FilteredNavigationRecord> getFilteredNavigationRecords(final NavigationContext navigationContext,
                                                                        final String locale,
                                                                        final long productTypeId) {
 
-        final List<FilteredNavigationRecord> allNavigationRecordsTemplates = getProductService().getDistinctAttributeValues(locale, productTypeId);
-
         final List<FilteredNavigationRecord> navigationList = new ArrayList<FilteredNavigationRecord>();
 
-        for (final FilteredNavigationRecord recordTemplate : allNavigationRecordsTemplates) {
+        if (!navigationContext.isGlobal()) {
 
-            final FilteredNavigationRecord record = recordTemplate.clone();
+            final List<FilteredNavigationRecord> allNavigationRecordsTemplates = getProductService().getDistinctAttributeValues(locale, productTypeId);
 
-            if (!isAttributeAlreadyFiltered(query, ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD + ":" + record.getCode())) {
+            for (final FilteredNavigationRecord recordTemplate : allNavigationRecordsTemplates) {
 
-                final Query candidateQuery = getLuceneQueryFactory().getSnowBallQuery(query, shopId, record.getCode(), record.getValue());
+                final FilteredNavigationRecord record = recordTemplate.clone();
 
-                final int candidateResultCount = getProductService().getProductQty(candidateQuery);
+                if (!navigationContext.isFilteredBy(record.getCode()) && StringUtils.isNotBlank(record.getValue())) {
 
-                if (candidateResultCount > 0) {
-                    record.setCount(candidateResultCount);
-                    navigationList.add(record);
+                    final NavigationContext candidateQuery = getLuceneQueryFactory().getSnowBallQuery(navigationContext, record.getCode(), record.getValue());
+
+                    final int candidateResultCount = getProductService().getProductQty(candidateQuery.getProductQuery());
+
+                    if (candidateResultCount > 0) {
+                        record.setCount(candidateResultCount);
+                        navigationList.add(record);
+                    }
+
                 }
 
             }
-
         }
 
         return navigationList;

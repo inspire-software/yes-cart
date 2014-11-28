@@ -124,7 +124,8 @@
                 <property name="target">
                     <bean class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.CartUpdateProcessorImpl">
                         <constructor-arg index="0" ref="shoppingCartStateService"/>
-                        <constructor-arg index="1" ref="shoppingCartCommandFactory"/>
+                        <constructor-arg index="1" ref="addressService"/>
+                        <constructor-arg index="2" ref="shoppingCartCommandFactory"/>
                     </bean>
                 </property>
             </bean>
@@ -200,7 +201,6 @@
         <constructor-arg index="2" ref="categoryService"/>
         <constructor-arg index="3" ref="shopService"/>
         <constructor-arg index="4" ref="priceService"/>
-        <constructor-arg index="5" ref="priceNavigation"/>
     </bean>
 
     <bean id="currencySymbolService" class="org.yes.cart.web.support.service.impl.CurrencySymbolServiceImpl">

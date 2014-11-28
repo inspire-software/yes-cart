@@ -30,17 +30,26 @@ import java.util.Date;
  */
 public class StringValueToDateConverter implements Converter<String, Date> {
 
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_TIME_FORMAT);
+    private final ThreadLocal<SimpleDateFormat> format = new ThreadLocal<SimpleDateFormat>();
 
     /** {@inheritDoc} */
     public Date convert(final String str) {
         if (str != null) {
             try {
-                return dateFormat.parse(str);
+                return getDateFormat().parse(str);
             } catch (ParseException e) {
                 return null;
             }            
         }
         return null;
+    }
+
+    private SimpleDateFormat getDateFormat() {
+        SimpleDateFormat dateFormat = format.get();
+        if (dateFormat == null) {
+            dateFormat = new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_TIME_FORMAT);
+            format.set(dateFormat);
+        }
+        return dateFormat;
     }
 }

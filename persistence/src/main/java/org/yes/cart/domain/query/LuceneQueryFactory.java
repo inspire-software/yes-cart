@@ -16,8 +16,6 @@
 
 package org.yes.cart.domain.query;
 
-import org.apache.lucene.search.Query;
-
 import java.util.List;
 import java.util.Map;
 
@@ -34,13 +32,12 @@ public interface LuceneQueryFactory {
      * Chain will be truncated if <code>currentQuery</code> already present in
      * list
      *
-     * @param allQueries   query chain as query
-     * @param shopId       shop ID (some builder require it to build correct search value)
+     * @param navigationContext navigation context.
      * @param param        additional filter parameter
      * @param value        additional filter value(s)
      * @return combined from chain query
      */
-    Query getSnowBallQuery(Query allQueries, long shopId, String param, Object value);
+    NavigationContext getSnowBallQuery(NavigationContext navigationContext, String param, Object value);
 
     /**
      * Get the queries chain.
@@ -54,6 +51,6 @@ public interface LuceneQueryFactory {
      * @param categories            given category ids
      * @return ordered by cookie name list of cookies
      */
-    Query getFilteredNavigationQueryChain(Long shopId, List<Long> categories, Map<String, List> requestParameters);
+    NavigationContext getFilteredNavigationQueryChain(Long shopId, List<Long> categories, Map<String, List> requestParameters);
 
 }

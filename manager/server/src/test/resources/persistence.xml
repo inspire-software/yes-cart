@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- HSQLDB Data Source -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+        <property name="url" value="jdbc:hsqldb:mem:testyesdb"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+        <property name="initialSize" value="50"/>
+        <property name="maxActive" value="1000"/>
+        <property name="poolPreparedStatements" value="true"/>
+        <property name="maxOpenPreparedStatements" value="1000"/>
+        <property name="defaultAutoCommit" value="true"/>
+        <property name="maxIdle" value="100"/>
+        <property name="maxWait" value="500"/>
+    </bean>
+
+    <!-- Hibernate Session Factory  -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mappingResources">
+            <list>
+                <value>hibernate/yc.xml</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.generate_statistics">false</prop>
+                <prop key="hibernate.use_sql_comments">false</prop>
+                <prop key="hibernate.connection.autocommit">true</prop>
+                <prop key="hibernate.jdbc.batch_size">100</prop>
+
+                <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+                <!-- Disable hibernate search automatic support - since we do not have FT index in YUM -->
+                <prop key="hibernate.search.autoregister_listeners">false</prop>
+                <prop key="hibernate.search.indexing_strategy">manual</prop>
+                <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.RAMDirectoryProvider</prop>
+                <!--prop key="hibernate.jdbc.batch_size">0</prop-->
+            </props>
+        </property>
+        <property name="entityInterceptor">
+            <bean class="org.yes.cart.domain.interceptor.AuditInterceptor"/>
+        </property>
+    </bean>
+
+    <bean id="productReindexer" class="org.yes.cart.domain.entityindexer.impl.ProductIndexerImpl">
+        <constructor-arg index="0" ref="productDao"/>
+        <constructor-arg index="1" value="128"/>
+        <constructor-arg index="2" value="4"/>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+</beans>

@@ -35,6 +35,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     private long id;
     private String code;
+    private boolean multisku;
     private String defaultSkuCode;
     private String name;
     private String displayName;
@@ -65,8 +66,8 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     }
 
     /** {@inheritDoc} */
-    public Map<Long, Map<String, BigDecimal>> getQtyOnWarehouse() {
-        return qtyOnWarehouse;
+    public Map<String, BigDecimal> getQtyOnWarehouse(final long shopId) {
+        return qtyOnWarehouse != null ? qtyOnWarehouse.get(shopId) : null;
     }
 
     /** {@inheritDoc} */
@@ -122,6 +123,16 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     /** {@inheritDoc} */
     public void setCode(final String code) {
         this.code = code;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isMultisku() {
+        return multisku;
+    }
+
+    /** {@inheritDoc} */
+    public void setMultisku(final boolean multisku) {
+        this.multisku = multisku;
     }
 
     /** {@inheritDoc} */
@@ -242,22 +253,23 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     /** {@inheritDoc} */
     public ProductSearchResultDTO copy() {
         final ProductSearchResultDTOImpl copy = new ProductSearchResultDTOImpl();
-        copy.setId(this.getId());
-        copy.setCode(this.getCode());
-        copy.setDefaultSkuCode(this.getDefaultSkuCode());
-        copy.setName(this.getName());
-        copy.setDisplayName(this.getDisplayName());
-        copy.setDescription(this.getDescription());
-        copy.setDisplayDescription(this.getDisplayDescription());
-        copy.setAvailablefrom(this.getAvailablefrom());
-        copy.setAvailableto(this.getAvailableto());
-        copy.setAvailability(this.getAvailability());
-        copy.setQtyOnWarehouse(this.getQtyOnWarehouse());
-        copy.setDefaultImage(this.getDefaultImage());
-        copy.setFeatured(this.getFeatured());
-        copy.setMaxOrderQuantity(this.getMaxOrderQuantity());
-        copy.setMinOrderQuantity(this.getMinOrderQuantity());
-        copy.setStepOrderQuantity(this.getStepOrderQuantity());
+        copy.setId(this.id);
+        copy.setCode(this.code);
+        copy.setMultisku(this.multisku);
+        copy.setDefaultSkuCode(this.defaultSkuCode);
+        copy.setName(this.name);
+        copy.setDisplayName(this.displayName);
+        copy.setDescription(this.description);
+        copy.setDisplayDescription(this.displayDescription);
+        copy.setAvailablefrom(this.availablefrom);
+        copy.setAvailableto(this.availableto);
+        copy.setAvailability(this.availability);
+        copy.setQtyOnWarehouse(this.qtyOnWarehouse);
+        copy.setDefaultImage(this.defaultImage);
+        copy.setFeatured(this.featured);
+        copy.setMaxOrderQuantity(this.maxOrderQuantity);
+        copy.setMinOrderQuantity(this.minOrderQuantity);
+        copy.setStepOrderQuantity(this.stepOrderQuantity);
         return copy;
     }
 }

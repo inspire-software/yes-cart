@@ -16,8 +16,6 @@
 
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.search.Query;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.service.domain.ProductService;
 
@@ -43,22 +41,6 @@ public class AbstractFilteredNavigationSupportImpl {
 
     public ProductService getProductService() {
         return productService;
-    }
-
-    /**
-     * @param luceneQuerySubString query substring
-     *
-     * @return true if filter already present in applied query
-     */
-    protected boolean isAttributeAlreadyFiltered(final Query query, final String luceneQuerySubString) {
-        boolean result = false;
-        if (query != null) {
-            final String appliedQueryString = query.toString();
-            if (StringUtils.isNotBlank(appliedQueryString)) {
-                result = appliedQueryString.contains(luceneQuerySubString);
-            }
-        }
-        return result;
     }
 
 }

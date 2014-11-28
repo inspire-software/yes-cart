@@ -16,10 +16,10 @@
 
 package org.yes.cart.web.page.component.filterednavigation;
 
-import org.apache.lucene.search.Query;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -51,14 +51,14 @@ public class PriceProductFilter extends AbstractProductFilter {
     private PriceFilteredNavigationSupport priceFilteredNavigationSupport;
 
 
-     /**
-      * Create price product filter component.
+    /**
+     * Create price product filter component.
      * @param id         panel id
-     * @param query      current query.
      * @param categoryId current category id
+     * @param navigationContext navigation context.
      */
-    public PriceProductFilter(final String id, final Query query, final long categoryId) {
-        super(id, query, categoryId);
+    public PriceProductFilter(final String id, final long categoryId, final NavigationContext navigationContext) {
+        super(id, categoryId, navigationContext);
     }
 
     /**
@@ -95,7 +95,7 @@ public class PriceProductFilter extends AbstractProductFilter {
 
                 setNavigationRecords(
                         priceFilteredNavigationSupport.getFilteredNavigationRecords(
-                                getQuery(), getCategoryId(), getCategories(), cart.getShoppingContext().getShopId(),
+                                getNavigationContext(), getCategoryId(),
                                 cart.getCurrencyCode(),
                                 cart.getCurrentLocale(),
                                 getLocalizer().getString("price", this)

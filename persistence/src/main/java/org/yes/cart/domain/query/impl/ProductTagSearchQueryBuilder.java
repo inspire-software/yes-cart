@@ -33,6 +33,9 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
 
     public static final String TAG_NEWARRIVAL = "newarrival";
 
+    private final ThreadLocal<SimpleDateFormat> format = new ThreadLocal<SimpleDateFormat>();
+
+
     /**
      * {@inheritDoc}
      */
@@ -40,7 +43,7 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
 
         if (value instanceof Date) {
 
-            final SimpleDateFormat toMinutes = new SimpleDateFormat("yyyyMMdd0000");
+            final SimpleDateFormat toMinutes = getDateFormat();
             final String fromDate = toMinutes.format((Date) value);
 
             BooleanQuery aggregateQuery = new BooleanQuery();
@@ -66,5 +69,14 @@ public class ProductTagSearchQueryBuilder extends AbstractSearchQueryBuilderImpl
      */
     public Query createRelaxedQuery(final long shopId, final String parameter, final Object value) {
         return createStrictQuery(shopId, parameter, value);
+    }
+
+    private SimpleDateFormat getDateFormat() {
+        SimpleDateFormat dateFormat = format.get();
+        if (dateFormat == null) {
+            dateFormat = new SimpleDateFormat("yyyyMMdd0000");
+            format.set(dateFormat);
+        }
+        return dateFormat;
     }
 }

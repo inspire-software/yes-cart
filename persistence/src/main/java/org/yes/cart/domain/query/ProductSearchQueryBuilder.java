@@ -21,7 +21,7 @@ package org.yes.cart.domain.query;
  * Date: 07-May-2011
  * Time: 16:13:01
  */
-public interface ProductSearchQueryBuilder {
+public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
 
     //can be used in sort order
     public final static String PRODUCT_NAME_FIELD = "name";
@@ -30,6 +30,7 @@ public interface ProductSearchQueryBuilder {
     public final static String PRODUCT_CODE_FIELD = "code";
     public final static String PRODUCT_DEFAULT_SKU_CODE_FIELD = "defaultSku";
     public final static String PRODUCT_CODE_STEM_FIELD = "code_stem";
+    public final static String PRODUCT_MULTISKU = "multisku";
 
     public final static String PRODUCT_CREATED_FIELD = "createdTimestamp"; //for projections only
     public final static String PRODUCT_FEATURED_FIELD = "featured"; //for projections only

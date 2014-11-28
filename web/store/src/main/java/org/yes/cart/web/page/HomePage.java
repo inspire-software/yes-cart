@@ -17,7 +17,6 @@
 package org.yes.cart.web.page;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -25,6 +24,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.AbstractCentralView;
@@ -112,7 +112,7 @@ public class HomePage extends AbstractWebPage {
 
         final List<Long> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, shop.getShopId());
 
-        final Query query = luceneQueryFactory.getFilteredNavigationQueryChain(
+        final NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(
                 shop.getShopId(),
                 currentCategoriesIds,
                 (Map) mapParams
@@ -122,9 +122,9 @@ public class HomePage extends AbstractWebPage {
         add(new TopCategories("topCategories"));
 
         if (CentralViewLabel.SEARCH_LIST.equals(centralViewLabel) || CentralViewLabel.PRODUCTS_LIST.equals(centralViewLabel)) {
-            add(new BrandProductFilter("brandFilter", query, categoryId));
-            add(new AttributeProductFilter("attributeFilter", query, categoryId));
-            add(new PriceProductFilter("priceFilter", query, categoryId));
+            add(new BrandProductFilter("brandFilter", categoryId, context));
+            add(new AttributeProductFilter("attributeFilter", categoryId, context));
+            add(new PriceProductFilter("priceFilter", categoryId, context));
         } else {
             add(new Label("brandFilter"));
             add(new Label("attributeFilter"));
@@ -139,7 +139,7 @@ public class HomePage extends AbstractWebPage {
 
         //add(new Carousel("featured"));
 
-        centralPanel = getCentralPanel(centralViewLabel, "centralView", categoryId, query);
+        centralPanel = getCentralPanel(centralViewLabel, "centralView", categoryId, context);
 
         add(centralPanel);
 
@@ -193,7 +193,7 @@ public class HomePage extends AbstractWebPage {
      * @param rendererLabel renderer label
      * @param id            component id
      * @param categoryId    category id
-     * @param booleanQuery  optional lucene query
+     * @param navigationContext  optional navigation context
      * @return concrete instance of {@link AbstractCentralView} if renderer found, otherwise
      *         instance of EmptyCentralView
      */
@@ -201,9 +201,9 @@ public class HomePage extends AbstractWebPage {
             final String rendererLabel,
             final String id,
             final long categoryId,
-            final Query booleanQuery) {
+            final NavigationContext navigationContext) {
 
-        return wicketCentralViewProvider.getCentralPanel(rendererLabel, id, categoryId, booleanQuery);
+        return wicketCentralViewProvider.getCentralPanel(rendererLabel, id, categoryId, navigationContext);
 
     }
 

@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.SearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
@@ -99,35 +100,45 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
     /**
      * {@inheritDoc}
      */
-    public Query getSnowBallQuery(final Query allQueries, final long shopId, final String param, final Object value) {
+    public NavigationContext getSnowBallQuery(final NavigationContext navigationContext, final String param, final Object value) {
 
         final BooleanQuery snowball = new BooleanQuery();
 
+        final Map<String, List<String>> navigationParameters = new HashMap<String, List<String>>(navigationContext.getFilterParameters());
+
         if (value != null) {
 
-            snowball.add(allQueries, BooleanClause.Occur.MUST);
+            snowball.add(navigationContext.getProductQuery(), BooleanClause.Occur.MUST);
 
             SearchQueryBuilder builder = builders.get(param);
             if (builder == null) {
                 builder = attributeBuilder; // use attribute builder by default
             }
 
-            final Query strictQuery = builder.createStrictQuery(shopId, param, value);
+            final Query strictQuery = builder.createStrictQuery(navigationContext.getShopId(), param, value);
             if (strictQuery != null) {
                 snowball.add(strictQuery, BooleanClause.Occur.MUST);
+
+                List<String> paramValues = navigationParameters.get(param);
+                if (paramValues == null) {
+                    paramValues = new ArrayList<String>(2);
+                    navigationParameters.put(param, paramValues);
+                }
+                paramValues.add(String.valueOf(value)); // record original value as string
+
             }
 
         }
 
-        return snowball;
+        return new NavigationContextImpl(navigationContext.getShopId(), navigationContext.getCategories(), navigationParameters, snowball);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Query getFilteredNavigationQueryChain(final Long shopId,
-                                                 final List<Long> categories,
-                                                 final Map<String, List> requestParameters) {
+    public NavigationContext getFilteredNavigationQueryChain(final Long shopId,
+                                                             final List<Long> categories,
+                                                             final Map<String, List> requestParameters) {
 
         final Set<String> allowedAttributeCodes = attributeService.getAllNavigatableAttributeCodes();
         final Set<String> allowedBuilderCodes = builders.keySet();
@@ -147,6 +158,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
             queryChainRelaxed.add(store);
         }
 
+        final Map<String, List<String>> navigationParameters = new HashMap<String, List<String>>();
         if (requestParameters != null) {
             for (Map.Entry<String, List> entry : requestParameters.entrySet()) {
                 final String decodedKeyName = entry.getKey();
@@ -174,6 +186,14 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
                             if (strictQuery == null) {
                                 continue; // no valid criteria
                             }
+
+                            List<String> paramValues = navigationParameters.get(decodedKeyName);
+                            if (paramValues == null) {
+                                paramValues = new ArrayList<String>(); // must be list to preserve order, as it influences the priority
+                                navigationParameters.put(decodedKeyName, paramValues);
+                            }
+                            paramValues.add(String.valueOf(valueItem)); // record original value as string
+
                             queryChainStrict.add(strictQuery);
 
                             if (useQueryRelaxation.contains(decodedKeyName)) {
@@ -203,7 +223,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
             LOG.debug("Constructed nav query: {}", out);
         }
 
-        return out;
+        return new NavigationContextImpl(shopId, categories, navigationParameters, out);
     }
 
     private Date earliestNewArrivalDate(final Long shopId, final List<Long> categories) {

@@ -64,7 +64,7 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
     /** {@inheritDoc} */
     public ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSearchResultDTO product) {
 
-        final Map<String, BigDecimal> skuInventory = product.getQtyOnWarehouse().get(shopId);
+        final Map<String, BigDecimal> skuInventory = product.getQtyOnWarehouse(shopId);
         final boolean availableNow = isAvailableNow(product.getAvailablefrom(), product.getAvailableto());
 
         return new ProductAvailabilityModelImpl(

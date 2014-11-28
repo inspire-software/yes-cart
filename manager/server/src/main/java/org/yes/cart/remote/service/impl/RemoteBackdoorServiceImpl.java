@@ -139,6 +139,51 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
     /**
      * {@inheritDoc}
      */
+    public Map<String, Integer> reindexAllProductsSku(final AsyncContext context) {
+        final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
+        final Long shopId = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_SHOP);
+        if (indexFinished == null) {
+            throw new IllegalArgumentException("Must have [" + JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE + "] attribute [Map<String, Boolean>] in async context");
+        }
+        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
+        for (final Node yesNode : nodeService.getYesNodes()) {
+            try {
+                final Boolean finished = indexFinished.get(yesNode) != null && indexFinished.get(yesNode);
+                if (!finished) {
+                    final WsClientFactory<BackdoorService> factory =
+                            getBackdoorService(context, yesNode.getBackdoorUri(),
+                                    AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
+
+                    BackdoorService service = factory.getService();
+                    try {
+                        if (shopId != null && shopId > 0L) {
+                            indexStatus.put(yesNode.getNodeId(), service.reindexShopProductsSku(shopId));
+                        } else {
+                            indexStatus.put(yesNode.getNodeId(), service.reindexAllProductsSku());
+                        }
+                    } finally {
+                        factory.release(service);
+                        service = null;
+                    }
+
+                }
+            } catch (Exception e) {
+                indexStatus.put(yesNode.getNodeId(), null);
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Cannot reindex products,  url ["
+                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
+                            + "] . Will try next one, if exists",
+                            e);
+                }
+            }
+
+        }
+        return indexStatus;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, Integer> reindexProduct(final AsyncContext context, final long productPk) {
         final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
         for (final Node yesNode : nodeService.getYesNodes()) {

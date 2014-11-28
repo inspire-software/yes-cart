@@ -18,13 +18,13 @@ package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.search.Query;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -74,18 +74,18 @@ public abstract class AbstractProductFilter extends BaseComponent {
 
     private final List<Long> categories;
 
-    private final Query query;
+    private final NavigationContext navigationContext;
 
     /**
      * Construct panel.
      *
      * @param id    panel id
-     * @param query current query.
      * @param categoryId current category id
+     * @param navigationContext navigation context.
      */
-    public AbstractProductFilter(final String id, final Query query, final long categoryId) {
+    public AbstractProductFilter(final String id, final long categoryId, final NavigationContext navigationContext) {
         super(id);
-        this.query = query;
+        this.navigationContext = navigationContext;
         this.categoryId  = categoryId;
         this.categories = categoryServiceFacade.getSearchCategoriesIds(categoryId, ShopCodeContext.getShopId());
     }
@@ -237,9 +237,10 @@ public abstract class AbstractProductFilter extends BaseComponent {
 
     /**
      * Get current lucene product  query.
+     *
      * @return current lucene product  query.
      */
-    public Query getQuery() {
-        return query;
+    public NavigationContext getNavigationContext() {
+        return navigationContext;
     }
 }

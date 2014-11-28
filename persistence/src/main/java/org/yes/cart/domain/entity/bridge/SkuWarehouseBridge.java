@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.entity.bridge;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Fieldable;
@@ -26,22 +27,23 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.entity.bridge.support.ShopWarehouseRelationshipSupport;
+import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.*;
 
 /**
  *
  * Bridge to product sku price.
  *
-* User: Igor Azarny iazarny@yahoo.com
+ * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 16:13:01
  * */
 public class SkuWarehouseBridge implements TwoWayFieldBridge {
 
-    private final DecimalFormat formatter = new DecimalFormat(Constants.INVENTORY_FORMAT_TOINDEX);
+    private final BigDecimalBridge idBridge = new BigDecimalBridge(0);
+    private final BigDecimalBridge qtyBridge = new BigDecimalBridge(Constants.INVENTORY_SCALE);
 
     /** {@inheritDoc} */
     public void set(final String proposedFiledName, final Object value, final Document document, final LuceneOptions luceneOptions) {
@@ -61,16 +63,17 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
                     final Set<Warehouse> warehouses = support.getShopWarehouses(shop);
                     final BigDecimal qtyForShop = sku.getQty(warehouses);
 
-                    String rez = objectToString(shop.getShopId(), sku.getCode(), qtyForShop);
-                    Field field = new Field(
-                            proposedFiledName,
-                            rez,
-                            Field.Store.YES,
-                            Field.Index.NOT_ANALYZED,
-                            luceneOptions.getTermVector()
-                    );
-                    document.add(field);
-
+                    if (MoneyUtils.isFirstBiggerThanSecond(qtyForShop, BigDecimal.ZERO)) {
+                        String rez = objectToString(shop.getShopId(), sku.getCode(), qtyForShop);
+                        Field field = new Field(
+                                proposedFiledName,
+                                rez,
+                                Field.Store.YES,
+                                Field.Index.NOT_ANALYZED,
+                                luceneOptions.getTermVector()
+                        );
+                        document.add(field);
+                    }
 
                 }
             }
@@ -83,7 +86,7 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
         final Fieldable[] fields = document.getFieldables(name);
         final Map<Long, Map<String, BigDecimal>> qty = new HashMap<Long, Map<String, BigDecimal>>();
         for (final Fieldable field : fields) {
-            final String[] value = field.stringValue().split("_");
+            final String[] value = StringUtils.split(field.stringValue(), '_');
             final Long shopId = new BigDecimal(value[0]).longValue();
             final String sku = value[1];
             final BigDecimal qtyValue = new BigDecimal(value[2]).movePointLeft(Constants.INVENTORY_SCALE);
@@ -113,12 +116,11 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
      */
     public String objectToString(final long shopId, final String skuCode, final BigDecimal quantity) {
         StringBuilder stringBuilder = new StringBuilder();
-        long price = quantity.movePointRight(Constants.INVENTORY_SCALE).longValue();
-        stringBuilder.append(formatter.format(shopId));
+        stringBuilder.append(idBridge.objectToString(new BigDecimal(shopId)));
         stringBuilder.append('_');
         stringBuilder.append(skuCode);
         stringBuilder.append('_');
-        stringBuilder.append(formatter.format(price));
+        stringBuilder.append(qtyBridge.objectToString(quantity));
         return  stringBuilder.toString();
     }
 

@@ -102,43 +102,43 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
 
-        SkuPrice skuPrice = priceService.getMinimalRegularPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", BigDecimal.ONE);
+        SkuPrice skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
 
-        skuPrice = priceService.getMinimalRegularPrice(10000L, null, shop.getShopId(), "EUR", BigDecimal.ONE);
+        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "EUR", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("150.00")).equals(skuPrice.getRegularPrice()));
 
-        skuPrice = priceService.getMinimalRegularPrice(10000L, null, shop.getShopId(), "EUR", new BigDecimal("2"));
+        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "EUR", new BigDecimal("2"));
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("145.00")).equals(skuPrice.getRegularPrice()));
 
-        skuPrice = priceService.getMinimalRegularPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", new BigDecimal("2"));
+        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", new BigDecimal("2"));
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
 
-        skuPrice = priceService.getMinimalRegularPrice(10000L, "SOBOT-LIGHT", shop.getShopId(), "EUR", new BigDecimal("2"));
+        skuPrice = priceService.getMinimalPrice(10000L, "SOBOT-LIGHT", shop.getShopId(), "EUR", new BigDecimal("2"));
         assertNotNull(skuPrice);
         assertNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("145.00")).equals(skuPrice.getRegularPrice()));
 
         //Test than we are can not getByKey the minimal price through price tiers for multisku product for not cofigured currency
-        skuPrice = priceService.getMinimalRegularPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "BYR", BigDecimal.ONE);
+        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "BYR", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePriceForCalculation());
         //Test than we are can getByKey the minimal price through price tiers for multisku product.
-        skuPrice = priceService.getMinimalRegularPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "UAH", BigDecimal.ONE);
+        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "UAH", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePriceForCalculation());
 
-        skuPrice = priceService.getMinimalRegularPrice(10000L, null, shop.getShopId(), "UAH", BigDecimal.ONE);
+        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "UAH", BigDecimal.ONE);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePriceForCalculation());
