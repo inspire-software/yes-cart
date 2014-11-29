@@ -252,7 +252,9 @@ public class OrderDiscountPromotionActionTest extends BaseCoreDBTestCase {
         assertEquals("301.17", shoppingCart.getTotal().getListSubTotal().toString());
         assertEquals("255.99", shoppingCart.getTotal().getSubTotal().toString());
         assertTrue(shoppingCart.getTotal().isOrderPromoApplied());
-        assertEquals("ALL_5%,ORDER_10%", shoppingCart.getTotal().getAppliedOrderPromo());
+        //assertEquals("ALL_5%,ORDER_10%", shoppingCart.getTotal().getAppliedOrderPromo());
+        assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains("ORDER_10%"));
+        assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains("ALL_5%"));
 
         // clean test
         promotionService.delete(discount10);
