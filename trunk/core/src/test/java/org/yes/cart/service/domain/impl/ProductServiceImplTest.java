@@ -31,6 +31,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.NavigationContext;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.BrandService;
 import org.yes.cart.service.domain.CategoryService;
@@ -264,7 +265,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
                         context.getProductQuery(),
                         0,
                         100,
-                        null,
+                        ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD,
                         false
                 );
                 assertEquals("Failed [" + context.toString() + "]", 2, searchRes.size());

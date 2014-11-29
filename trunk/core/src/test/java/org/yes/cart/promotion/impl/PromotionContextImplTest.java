@@ -100,7 +100,12 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
         assertEquals("411.51", shoppingCart.getTotal().getListSubTotal().toString());
         assertEquals("201.40", shoppingCart.getTotal().getPriceSubTotal().toString());
         assertTrue(shoppingCart.getTotal().isOrderPromoApplied());
-        assertEquals("ORDER_5%,ORDER_6_GIFT,ORDER_15", shoppingCart.getTotal().getAppliedOrderPromo());
+
+        //assertEquals("ORDER_5%,ORDER_6_GIFT,ORDER_15", shoppingCart.getTotal().getAppliedOrderPromo());
+        assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains("ORDER_5%"));
+        assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains("ORDER_6_GIFT"));
+        assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains("ORDER_15"));
+
         assertEquals("176.33", shoppingCart.getTotal().getSubTotal().toString());
         assertTrue(shoppingCart.getTotal().isDeliveryPromoApplied());
         assertEquals("SHIP_50%", shoppingCart.getTotal().getAppliedDeliveryPromo());
@@ -144,10 +149,16 @@ public class PromotionContextImplTest extends BaseCoreDBTestCase {
         assertEquals("3158.37", shoppingCart.getTotal().getListSubTotal().toString());
         assertEquals("1599.80", shoppingCart.getTotal().getPriceSubTotal().toString());
         assertTrue(shoppingCart.getTotal().isOrderPromoApplied());
-        assertEquals("ORDER_5%,ORDER_25%,ORDER_6_GIFT,ORDER_15", shoppingCart.getTotal().getAppliedOrderPromo());
+       // assertEquals("ORDER_5%,ORDER_25%,ORDER_6_GIFT,ORDER_15", shoppingCart.getTotal().getAppliedOrderPromo());
+        assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains("ORDER_5%"));
+        assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains("ORDER_25%"));
+        assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains("ORDER_6_GIFT"));
+        assertTrue(shoppingCart.getTotal().getAppliedOrderPromo().contains("ORDER_15"));
         assertEquals("1104.86", shoppingCart.getTotal().getSubTotal().toString());
         assertTrue(shoppingCart.getTotal().isDeliveryPromoApplied());
-        assertEquals("SHIP_100%,SHIP_50%", shoppingCart.getTotal().getAppliedDeliveryPromo());
+        //assertEquals("SHIP_100%,SHIP_50%", shoppingCart.getTotal().getAppliedDeliveryPromo());
+        assertTrue(shoppingCart.getTotal().getAppliedDeliveryPromo().contains("SHIP_100%"));
+        assertTrue(shoppingCart.getTotal().getAppliedDeliveryPromo().contains("SHIP_50%"));
         assertEquals("10.00", shoppingCart.getTotal().getDeliveryListCost().toString());
         assertEquals("0.00", shoppingCart.getTotal().getDeliveryCost().toString());
         assertEquals("1104.86", shoppingCart.getTotal().getTotal().toString());

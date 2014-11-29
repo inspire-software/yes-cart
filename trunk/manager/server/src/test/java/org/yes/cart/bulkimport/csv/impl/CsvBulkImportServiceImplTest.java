@@ -235,7 +235,8 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(1003L, attrGroupCodeFK);  // PRODUCT
             assertEquals(1000L, attrEtypeFK);      // String
             assertEquals("Keys", attrName);
-            assertEquals("en#~#Keys#~#ru#~#Клавиши#~#", attrDName);
+            assertTrue(attrDName.contains("en#~#Keys#~#"));
+            assertTrue(attrDName.contains("ru#~#Клавиши#~#"));
             assertEquals("Keys", attrDesc);
             assertEquals(500, attrRank);
             assertTrue(attrMandatory);
