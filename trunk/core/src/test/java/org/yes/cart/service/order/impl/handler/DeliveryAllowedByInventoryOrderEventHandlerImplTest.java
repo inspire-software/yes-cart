@@ -60,11 +60,10 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends Abstrac
         CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
         //initial 15120 has 9 items on 1 warehouse without reservation - pk 30
         //initial 15121 has 1 item  on 1 warehouse without reservation - pk 31
-        SkuWarehouse skuWarehouse = skuWarehouseService.findById(31);
-//        skuWarehouse.setReserved(BigDecimal.ONE);
-//        skuWarehouseService.update(skuWarehouse);
+        assertEquals("Expected one delivery for order", 1, customerOrder.getDelivery().size());
         assertTrue(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
-        skuWarehouse = skuWarehouseService.findById(31);
+
+        SkuWarehouse  skuWarehouse = skuWarehouseService.findById(31);
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
         assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         skuWarehouse = skuWarehouseService.findById(30);
@@ -74,15 +73,39 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends Abstrac
         //The equal order can not pefrorm transition , because 1 item on CC_TEST2 sku reserved
         customerOrder = orderService.createFromCart(getStdCard(customer.getEmail()), false);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
-        delivery = customerOrder.getDelivery().iterator().next();
-        assertFalse(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
-        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT, delivery.getDeliveryStatus());
+        assertEquals("Expected two deliveries for order", 2, customerOrder.getDelivery().size());
+
+        for (CustomerOrderDelivery cod : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.STANDARD_DELIVERY_GROUP == cod.getDeliveryGroup() ) {
+                assertTrue(handler.handle(new OrderEventImpl("", customerOrder, cod)));  //delivery allowed
+                assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, cod.getDeliveryStatus());
+            } else if (CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP == cod.getDeliveryGroup() ) {
+                assertFalse(handler.handle(new OrderEventImpl("", customerOrder, cod)));   // wait for inventory
+                assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT, cod.getDeliveryStatus());
+            }   else {
+                assertTrue("Not expected delivery group", false);
+            }
+        }
+
+
+
         // update qty
         skuWarehouse = skuWarehouseService.findById(31);
         skuWarehouse.setQuantity(new BigDecimal("2"));
         skuWarehouseService.update(skuWarehouse);
+
         //delivery, than not pass before, now can perform transition
-        assertTrue(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
-        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());
+
+        for (CustomerOrderDelivery cod : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.STANDARD_DELIVERY_GROUP == cod.getDeliveryGroup() ) {
+                assertTrue(handler.handle(new OrderEventImpl("", customerOrder, cod)));  //delivery allowed
+                assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, cod.getDeliveryStatus());
+            } else if (CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP == cod.getDeliveryGroup() ) {
+                assertTrue( "Enough qty on warehouse to allow delivery" , handler.handle(new OrderEventImpl("", customerOrder, cod)));
+                assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, cod.getDeliveryStatus());
+            }   else {
+                assertTrue("Not expected delivery group", false);
+            }
+        }
     }
 }
