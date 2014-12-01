@@ -17,8 +17,8 @@
 
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
                 layout="absolute"
-                width="380"
-                height="280"
+                width="400"
+                height="320"
 				title="@Resource(bundle='ProductManagementPanel',key='createProduct')"
                 showCloseButton="true" close="PopUpManager.removePopUp(this)" >
 

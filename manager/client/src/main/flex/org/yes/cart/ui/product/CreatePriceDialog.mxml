@@ -30,7 +30,7 @@
             <mx:ComboBox id="skuComboBox"
                          change="onSkuSelected(event)"
                          width="360"
-                         labelField="name"
+                         labelFunction="skuLabelFunction"
                          prompt="@Resource(bundle='ProductManagementPanel',key='selectSku')"
                     />
         </mx:FormItem>
@@ -128,6 +128,19 @@
 
         [Bindable]
         private var _skuPrice:SkuPriceDTOImpl;
+
+        /**
+         * Create label for given product sku.
+         * @param value product sku dto
+         * @return label for given sku
+         */
+        private function skuLabelFunction(value:Object):String {
+            var code:String = value.code;
+            if (value.code != value.barCode && value.barCode != null && value.barCode.length > 0) {
+                code += " / " + value.barCode;
+            }
+            return value.name + " ( " + code + " )";
+        }
 
         /**
          * Get the filled product sku price

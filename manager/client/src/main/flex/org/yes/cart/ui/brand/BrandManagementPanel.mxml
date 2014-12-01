@@ -189,6 +189,10 @@
             remoteBrandService.getAll();
             this.brandSelected = false;
         }
+
+        private function onRefreshBrandsClick(event:MouseEvent):void {
+            init();
+        }
         ]]>
     </mx:Script>
 
@@ -230,7 +234,10 @@
                            toolTip="@Resource(bundle='BrandManagementPanel',key='deleteBrandHint')"
                            enabled="{brandSelected}"
                            click="onDeleteBrandClick(event)"/>
-
+                <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='refreshCategories')"
+                           toolTip="@Resource(bundle='CategoryManagementPanel',key='refreshCategoriesHint')"
+                           click="onRefreshBrandsClick(event)"
+                        />
             </mx:HBox>
 
             <mx:DataGrid id="brandGrid"

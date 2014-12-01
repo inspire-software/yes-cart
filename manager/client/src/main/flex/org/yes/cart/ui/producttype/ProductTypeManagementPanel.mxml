@@ -39,6 +39,9 @@
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.util.CloneUtil;
 
+        import spark.collections.Sort;
+        import spark.collections.SortField;
+
         private var productTypeCreateDialog:ProductTypeCreateDialog;
         private var productTypeAttrCreateDialog:ProductTypeAttrCreateDialog;
 
@@ -353,7 +356,13 @@
         }
 
         private function onFindByAttributeGroupCodeResult(event:ResultEvent):void {
-            allProductAttributes = event.result as ArrayCollection;
+
+            var _attrs:ArrayCollection = event.result as ArrayCollection;
+            var _sort:Sort = new Sort();
+            _sort.fields = [ new SortField('name') ];
+            _attrs.sort = _sort;
+            _attrs.refresh();
+            allProductAttributes = _attrs;
         }
 
         private function onGetAllProductTypesResult(event:ResultEvent):void {
@@ -361,7 +370,20 @@
         }
 
         private function onGetByProductTypeIdAttributesResult(event:ResultEvent):void {
-            productTypeAttributes = event.result as ArrayCollection;
+
+            var _types:ArrayCollection = event.result as ArrayCollection;
+            var _sort:Sort = new Sort();
+            _sort.compareFunction = function (a:ProductTypeAttrDTOImpl, b:ProductTypeAttrDTOImpl, fields:Array = null):int {
+                if (a.attributeDTO.name == b.attributeDTO.name) {
+                    return 0;
+                } else if (a.attributeDTO.name > b.attributeDTO.name) {
+                    return 1;
+                }
+                return -1;
+            };
+            _types.sort = _sort;
+            _types.refresh();
+            productTypeAttributes = _types;
         }
 
         private function onGetByProductTypeIdGroupsResult(event:ResultEvent):void {

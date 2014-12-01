@@ -54,6 +54,9 @@
         import org.yes.cart.util.DataModelUtils;
         import org.yes.cart.util.DomainUtils;
 
+        import spark.collections.Sort;
+        import spark.collections.SortField;
+
         private var TAB_SUMMARY_IDX:int = 0;
         private var TAB_SEO_IDX:int = 1;
         private var TAB_PRODUCTS_IDX:int = 2;
@@ -568,7 +571,12 @@
 
         private function onGetAllProductTypesResult(event:ResultEvent):void {
 
-            this.categoryProductTypeList = event.result as ArrayCollection;
+            var _types:ArrayCollection = event.result as ArrayCollection;
+            var _sort:Sort = new Sort();
+            _sort.fields = [ new SortField('name') ];
+            _types.sort = _sort;
+            _types.refresh();
+            this.categoryProductTypeList = _types;
 
         }
 
