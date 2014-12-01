@@ -65,6 +65,10 @@
                                  data="producttypeId"
                                  prompt="@Resource(bundle='ProductManagementPanel',key='selectTypePropmt')"
                             />
+                    <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='refreshCategories')"
+                               toolTip="@Resource(bundle='CategoryManagementPanel',key='refreshCategoriesHint')"
+                               click="onRefreshProductsClick(event)"
+                            />
                 </mx:HBox>
                 <mx:DataGrid id="productGrid" width="100%" height="100%"
                              itemClick="onProductSelected(event)"
@@ -199,6 +203,9 @@
         import mx.rpc.AsyncToken;
         import mx.rpc.events.ResultEvent;
 
+        import spark.collections.Sort;
+        import spark.collections.SortField;
+
         private var TAB_SUMMARY_IDX:int = 0;
         private var TAB_SEO_IDX:int = 1;
         private var TAB_IMAGE_IDX:int = 2;
@@ -237,6 +244,10 @@
                      data:8}
             );
 
+        }
+
+        private function onRefreshProductsClick(event:MouseEvent):void {
+            init();
         }
 
         private function onProductSelected(event:ListEvent):void {
@@ -438,12 +449,20 @@
 
         private function onGetAllBrandsResult(event:ResultEvent):void {
             brandsList = event.result as ArrayCollection;
+            var _sort:Sort = new Sort();
+            _sort.fields = [ new SortField('name') ];
+            brandsList.sort = _sort;
+            brandsList.refresh();
             brandComboBox.selectedIndex = -1;
             brandComboBox.selectedItem = null;
         }
 
         private function onGetAllProductTypesResult(event:ResultEvent):void {
             productTypesList = event.result as ArrayCollection;
+            var _sort:Sort = new Sort();
+            _sort.fields = [ new SortField('name') ];
+            productTypesList.sort = _sort;
+            productTypesList.refresh();
             typeComboBox.selectedIndex = -1;
             typeComboBox.selectedItem = null;
         }

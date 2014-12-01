@@ -22,6 +22,8 @@
 		<![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
+        import mx.collections.ArrayCollection;
+
         import mx.core.FlexGlobals;
 
         import org.yes.cart.event.DtoEvent;
@@ -38,6 +40,9 @@
         import mx.managers.PopUpManager;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
+
+        import spark.collections.Sort;
+        import spark.collections.SortField;
 
         private var TAB_SUMMARY_IDX:int = 0;
         private var TAB_SEO_IDX:int = 1;
@@ -195,7 +200,12 @@
         }
 
         private function onGetAllProductSkusResult(event:ResultEvent):void {
-            skusComboBox.dataProvider = event.result;
+            var _skus:ArrayCollection = event.result as ArrayCollection;
+            var _sort:Sort = new Sort();
+            _sort.fields = [ new SortField('name') ];
+            _skus.sort = _sort;
+            _skus.refresh();
+            skusComboBox.dataProvider = _skus;
             if (skusComboBox.dataProvider != null && skusComboBox.dataProvider.length == 1) {
                 skusComboBox.selectedIndex = 1;
                 skusComboBox.dispatchEvent(new ListEvent("change"));
@@ -203,6 +213,18 @@
         }
 
 
+        /**
+         * Create label for given product sku.
+         * @param value product sku dto
+         * @return label for given sku
+         */
+        private function skuLabelFunction(value:Object):String {
+            var code:String = value.code;
+            if (value.code != value.barCode && value.barCode != null && value.barCode.length > 0) {
+                code += " / " + value.barCode;
+            }
+            return value.name + " ( " + code + " )";
+        }
 
         private function onCreateUpdateResult(event:ResultEvent):void {
             remoteProductSkuService.getAllProductSkus(_product.productId);
@@ -268,8 +290,8 @@
              paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
         <mx:HBox paddingTop="5" width="100%">
             <mx:Text text="@Resource(bundle='ProductSkuManagementPanel',key='productSku')"/>
-            <mx:ComboBox id="skusComboBox"
-                         labelField="name"
+            <mx:ComboBox id="skusComboBox" width="300"
+                         labelFunction="skuLabelFunction"
                          data="skuId"
                          prompt="@Resource(bundle='ProductSkuManagementPanel',key='selectSkuPropmt')"
                          dataProvider="{remoteProductSkuService.getAllProductSkus.lastResult}"
