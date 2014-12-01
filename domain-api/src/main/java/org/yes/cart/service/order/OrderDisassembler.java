@@ -13,38 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-
 package org.yes.cart.service.order;
 
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 /**
- * Assemble {@link CustomerOrder} from {@link org.yes.cart.shoppingcart.ShoppingCart}.
+ * Transform {@link org.yes.cart.domain.entity.CustomerOrder} to {@link org.yes.cart.shoppingcart.ShoppingCart}.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
- * Date: 07-May-2011
- * Time: 11:13:01
+ * Date: 01-Dec-2014
+ * Time: 21:51:01
  */
-public interface OrderAssembler {
-
-
-    /**
-     * Create and fill {@link CustomerOrder} from given {@link ShoppingCart}.
-     *
-     * @param shoppingCart given shopping cart
-     * @return order
-     */
-    CustomerOrder assembleCustomerOrder(ShoppingCart shoppingCart) throws OrderAssemblyException;
+public interface OrderDisassembler {
 
     /**
-     * Create and fill {@link CustomerOrder} from given {@link ShoppingCart}.
+     * Create {@link org.yes.cart.shoppingcart.ShoppingCart} from {@link org.yes.cart.domain.entity.CustomerOrder} for order adjustment.
      *
-     * @param shoppingCart given shopping cart
-     * @param temp         if set to true then order number is not generated and coupon usage is not created
-     * @return order
+     * @param customerOrder given order
+     * @return cart
      */
-    CustomerOrder assembleCustomerOrder(ShoppingCart shoppingCart, boolean temp) throws OrderAssemblyException;
-
+    ShoppingCart assembleCustomerOrder(CustomerOrder customerOrder) throws OrderAssemblyException;
 
 }
