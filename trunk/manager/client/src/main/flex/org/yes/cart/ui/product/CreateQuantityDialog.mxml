@@ -96,7 +96,7 @@
         }
 
         private function onSkuSelected(event:Event):void {
-            var selectedSku:ProductSkuDTOImpl = event.currentTarget.selectedItem as ProductSkuDTOImpl;
+            var selectedSku:ProductSkuDTOImpl = skuComboBox.selectedItem as ProductSkuDTOImpl;
             if (selectedSku != null) {
                 skuSelected = true;
                 skuQuantity.productSkuId = selectedSku.skuId;
@@ -121,7 +121,7 @@
             if (skuComboBox.dataProvider.length == 1) {//preselect for single sku product
                 skuComboBox.selectedIndex = 0;
                 skuComboBox.selectedItem = skuComboBox.dataProvider.getItemAt(0);
-                skuComboBox.dispatchEvent(new Event(Event.CHANGE));
+                onSkuSelected(null);
             }
 
 

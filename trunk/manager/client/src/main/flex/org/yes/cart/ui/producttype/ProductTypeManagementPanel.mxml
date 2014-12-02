@@ -379,6 +379,7 @@
                 } else if (a.attributeDTO.name > b.attributeDTO.name) {
                     return 1;
                 }
+
                 return -1;
             };
             _types.sort = _sort;

@@ -30,6 +30,10 @@
                                  change="onShopSelectionChanged(event)"
                                  prompt="@Resource(bundle='ProductManagementPanel',key='selectStorePropmt')"/>
                     <mx:ComboBox id="storeCurrencyComboBox" change="onShopCurrencyChange(event)"/>
+                    <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='refreshCategories')"
+                               toolTip="@Resource(bundle='CategoryManagementPanel',key='refreshCategoriesHint')"
+                               click="onRefreshShopsClick(event)"
+                            />
                 </mx:HBox>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='price')">
@@ -531,6 +535,10 @@
 
         private function onShopCurrencyChange(event:ListEvent):void {
             refreshSkuPrices();
+        }
+
+        private function onRefreshShopsClick(event:MouseEvent):void {
+            onPanelInit();
         }
         ]]>
    </mx:Script>

@@ -29,6 +29,10 @@
                                  change="onWarehouseSelectionChanged(event)"
                                  prompt="@Resource(bundle='ProductManagementPanel',key='selectWarehousePropmt')">
                     </mx:ComboBox>
+                    <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='refreshCategories')"
+                               toolTip="@Resource(bundle='CategoryManagementPanel',key='refreshCategoriesHint')"
+                               click="onRefreshWarehousesClick(event)"
+                            />
                 </mx:HBox>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='quantity')">
@@ -260,7 +264,7 @@
          * Quantity label function.
          * @param item row
          * @param column column
-         * @return string representatin of qty
+         * @return string representation of qty
          */
         public function quantityLabelFunction(item:Object, column:DataGridColumn):String {
             return quantityFormatter.format(item.quantity);
@@ -275,13 +279,12 @@
             warehouseComboBox.dataProvider = event.result;
             inventoryDataGrid.dataProvider = null;
             allowAddInventory = false;
-            // do preselect in case if only one wharehouse
+            // do preselect in case if only one warehouse
             if (warehouseComboBox.dataProvider.length == 1) {
 
                 warehouseComboBox.selectedIndex = 0;
                 warehouseComboBox.selectedItem = warehouseComboBox.dataProvider.getItemAt(0);
-                warehouseComboBox.dispatchEvent(new ListEvent(Event.CHANGE));
-
+                onWarehouseSelectionChanged(null);
 
             }
         }
@@ -315,6 +318,10 @@
 
         private function onRemoveSkuOnWarehouseResult(event:ResultEvent):void {
             refreshSkuWarehouseList();
+        }
+
+        private function onRefreshWarehousesClick(event:MouseEvent):void {
+            onPanelInit();
         }
         ]]></mx:Script>
 </mx:Canvas>
