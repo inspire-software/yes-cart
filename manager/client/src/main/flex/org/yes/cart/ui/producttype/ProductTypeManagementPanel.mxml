@@ -451,6 +451,11 @@
         private function onUpdateProductTypeGroupAssignmentsResult(event:ResultEvent):void {
             refreshAttributeLists();
         }
+
+
+        private function onRefreshAttributesClick(event:MouseEvent):void {
+            init();
+        }
         ]]>
     </mx:Script>
 
@@ -569,6 +574,10 @@
                                toolTip="@Resource(bundle='ProductTypeManagementPanel',key='deleteProductTypeHint')"
                                enabled="{productTypeSelected}"
                                click="onDeleteProductTypeClick(event)"
+                            />
+                    <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='refreshCategories')"
+                               toolTip="@Resource(bundle='CategoryManagementPanel',key='refreshCategoriesHint')"
+                               click="onRefreshAttributesClick(event)"
                             />
 
                 </mx:HBox>
