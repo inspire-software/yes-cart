@@ -592,7 +592,14 @@ public class ProductDAOTest extends AbstractTestDAO {
                 list = productDao.findQueryObjectsByNamedQuery("PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES",
                         map.keySet());
                 assertNotNull(list);
-                assertTrue(list.isEmpty());
+                final Map<String, List<String>> expectedSku = new HashMap<String, List<String>>();
+                expectedSku.put("SIZE", Arrays.asList("small", "large", "medium", "xxl"));
+                assertEquals(4, list.size());
+                for (final Object[] value : list) {
+                    final List<String> exp = expectedSku.get(value[0]);
+                    assertNotNull(exp);
+                    assertTrue(exp.contains(value[1]));
+                }
 
                 // no need to check for sorting by rank since this is done in code,
                 // in fact it should only be done in code as raking sort in SQL has low

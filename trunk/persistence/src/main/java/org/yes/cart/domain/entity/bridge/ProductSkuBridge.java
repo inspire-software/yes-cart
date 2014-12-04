@@ -46,7 +46,7 @@ public class ProductSkuBridge implements FieldBridge {
             document.add(new Field(
                     "multisku",
                     skus.size() > 1 ? "true" : "false",
-                    luceneOptions.getStore(),
+                    Field.Store.YES,
                     Field.Index.NOT_ANALYZED,
                     luceneOptions.getTermVector()
             ));
@@ -57,7 +57,7 @@ public class ProductSkuBridge implements FieldBridge {
                 document.add(new Field(
                         "sku.code",
                         sku.getCode(),
-                        luceneOptions.getStore(),
+                        Field.Store.NO,
                         Field.Index.NOT_ANALYZED,
                         luceneOptions.getTermVector()
                 ));
@@ -73,7 +73,7 @@ public class ProductSkuBridge implements FieldBridge {
                 document.add(new Field(
                         "sku.skuId",
                         String.valueOf(sku.getSkuId()),
-                        luceneOptions.getStore(),
+                        Field.Store.NO,
                         Field.Index.NOT_ANALYZED,
                         luceneOptions.getTermVector()
                 ));

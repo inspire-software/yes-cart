@@ -18,6 +18,7 @@ package org.yes.cart.dao;
 
 import org.hibernate.criterion.Criterion;
 import org.yes.cart.domain.entityindexer.IndexFilter;
+import org.yes.cart.domain.misc.Pair;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -411,19 +412,6 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Get the full text search result.
      *
-     * @param query       lucene search query
-     * @param firstResult first row of result
-     * @param maxResults  size of result set
-     *
-     * @return list of found entities
-     */
-    List<T> fullTextSearch(org.apache.lucene.search.Query query,
-                           int firstResult,
-                           int maxResults);
-
-    /**
-     * Get the full text search result.
-     *
      * @param query         lucene search query
      * @param firstResult   first row of result
      * @param maxResults    size of result set
@@ -450,28 +438,12 @@ public interface GenericDAO<T, PK extends Serializable> {
      *
      * @return list of found entities
      */
-    List<Object[]> fullTextSearch(org.apache.lucene.search.Query query,
-                                  int firstResult,
-                                  int maxResults,
-                                  String sortFieldName,
-                                  boolean reverse,
-                                  String ... fields);
-
-    /**
-     * Get the full text search result.
-     *
-     * @param query         lucene search query
-     * @param firtsResult   first row of result
-     * @param maxResults    size of result set
-     * @param sortFieldName optional sort field name, result will be asc ordered
-     *
-     * @return list of found entities
-     */
-    List<T> fullTextSearch(final org.apache.lucene.search.Query query,
-                           int firtsResult,
-                           int maxResults,
-                           String sortFieldName);
-
+    Pair<List<Object[]>, Integer> fullTextSearch(org.apache.lucene.search.Query query,
+                                                 int firstResult,
+                                                 int maxResults,
+                                                 String sortFieldName,
+                                                 boolean reverse,
+                                                 String ... fields);
 
     /**
      * Get the full text search result.

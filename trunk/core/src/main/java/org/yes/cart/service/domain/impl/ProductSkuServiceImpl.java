@@ -17,15 +17,19 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.lucene.search.Query;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
+import org.yes.cart.domain.dto.impl.ProductSkuSearchResultDTOImpl;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductSkuService;
 
 import java.util.ArrayList;
@@ -81,6 +85,42 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     @Cacheable(value = "productSkuService-productSkuBySkuCode")
     public ProductSku getProductSkuBySkuCode(final String skuCode) {
         return findProductSkuBySkuCode(skuCode);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "productSkuService-productSkuSearchResultDTOByQuery")
+    public List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(final Query query) {
+
+        final Pair<List<Object[]>, Integer> searchRez = getGenericDao().fullTextSearch(
+                query,
+                0,
+                -1, /* no limit */
+                null,
+                false,
+                "skuId",
+                ProductSearchQueryBuilder.SKU_PRODUCT_CODE_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_NAME_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_DEFAULTIMAGE_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_ID_FIELD
+        );
+
+        final List<ProductSkuSearchResultDTO> rez = new ArrayList<ProductSkuSearchResultDTO>(searchRez.getFirst().size());
+        for (Object[] obj : searchRez.getFirst()) {
+            final ProductSkuSearchResultDTO dto = new ProductSkuSearchResultDTOImpl();
+            dto.setId((Long) obj[0]);
+            dto.setCode((String) obj[1]);
+            dto.setName((String) obj[2]);
+            dto.setDefaultImage((String) obj[3]);
+            dto.setDisplayName((String) obj[4]);
+            dto.setProductId((Long) obj[5]);
+            rez.add(dto);
+        }
+
+        return rez;
+
     }
 
     /**

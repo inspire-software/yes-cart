@@ -27,6 +27,7 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
@@ -261,15 +262,15 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
                 productService.getGenericDao().fullTextSearchReindex(false);
 
                 NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L), null);
-                final List<ProductSearchResultDTO> searchRes = productService.getProductSearchResultDTOByQuery(
+                final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
                         context.getProductQuery(),
                         0,
                         100,
                         ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD,
                         false
                 );
-                assertEquals("Failed [" + context.toString() + "]", 2, searchRes.size());
-                ProductSearchResultDTO bernder = searchRes.get(0);
+                assertEquals("Failed [" + context.toString() + "]", 2, searchRes.getResults().size());
+                ProductSearchResultDTO bernder = searchRes.getResults().get(0);
                 assertEquals("Бендер Згибатель Родригес", bernder.getName("ru"));
                 assertEquals("Бендер Згинач Родріґес", bernder.getName("ua"));
 

@@ -79,4 +79,11 @@ public interface PaginationSupport {
      * @return current page index
      */
     int getCurrentPage(PageParameters pageParameters);
+
+    /**
+     * Remove page parameter.
+     *
+     * @param pageParameters copy current page parameters.
+     */
+    void removePageParam(PageParameters pageParameters);
 }

@@ -74,4 +74,11 @@ public interface NavigationContext extends Serializable {
      */
     Query getProductQuery();
 
+    /**
+     * Get product SKU navigation query.
+     *
+     * @return product SKU FT query
+     */
+    Query getProductSkuQuery();
+
 }

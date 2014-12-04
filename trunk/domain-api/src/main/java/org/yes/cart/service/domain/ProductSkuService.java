@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.domain;
 
+import org.apache.lucene.search.Query;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.SkuWarehouse;
@@ -55,6 +57,17 @@ public interface ProductSkuService extends GenericService<ProductSku> {
      * @return product sku if found, otherwise null
      */
     ProductSku getProductSkuBySkuCode(String skuCode);
+
+
+    /**
+     * Get the all products SKU, that match the given query
+     *
+     * @param query         lucene query
+     *
+     * @return list of products SKU
+     */
+    List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(Query query);
+
 
     /**
      * Get all sku prices for all shops.

@@ -40,6 +40,18 @@ public interface ProductSkuSearchResultDTO extends Identifiable {
     void setId(long id);
 
     /**
+     * Get product SKU id.
+     * @return product SKU id.
+     */
+    long getProductId();
+
+    /**
+     * Set product id.
+     * @param id product id.
+     */
+    void setProductId(long id);
+
+    /**
      * Get product SKU code.
      * @return product SKU code.
      */

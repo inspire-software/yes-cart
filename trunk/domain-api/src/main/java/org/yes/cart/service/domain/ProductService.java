@@ -19,6 +19,7 @@ package org.yes.cart.service.domain;
 import org.apache.lucene.search.Query;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
@@ -209,11 +210,11 @@ public interface ProductService extends GenericService<Product> {
      * @param reverse       reverse the search result if true
      * @return list of products
      */
-    List<ProductSearchResultDTO> getProductSearchResultDTOByQuery(Query query,
-                                                                  int firstResult,
-                                                                  int maxResults,
-                                                                  String sortFieldName,
-                                                                  boolean reverse);
+    ProductSearchResultPageDTO getProductSearchResultDTOByQuery(Query query,
+                                                                int firstResult,
+                                                                int maxResults,
+                                                                String sortFieldName,
+                                                                boolean reverse);
 
     /**
      * Get the quantity of products in particular category.

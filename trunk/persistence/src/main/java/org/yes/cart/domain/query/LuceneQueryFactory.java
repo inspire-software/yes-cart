@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.query;
 
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
+
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +39,19 @@ public interface LuceneQueryFactory {
      * @param value        additional filter value(s)
      * @return combined from chain query
      */
-    NavigationContext getSnowBallQuery(NavigationContext navigationContext, String param, Object value);
+    NavigationContext getProductSnowBallQuery(NavigationContext navigationContext, String param, Object value);
+
+    /**
+     * Get the combined from query chain query.
+     * The current query will be last in this chain.
+     * Chain will be truncated if <code>currentQuery</code> already present in
+     * list
+     *
+     * @param navigationContext navigation context.
+     * @param products          products for which to create sku navigation query
+     * @return combined from chain query
+     */
+    NavigationContext getSkuSnowBallQuery(NavigationContext navigationContext, List<ProductSearchResultDTO> products);
 
     /**
      * Get the queries chain.

@@ -17,9 +17,10 @@
 package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.lucene.search.Query;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
@@ -122,8 +123,8 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                     Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
                             (List) Arrays.asList(productIds)));
 
-            return productService.getProductSearchResultDTOByQuery(
-                    assoc.getProductQuery(), 0, productIds.size(), null, false);
+            return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
+                    assoc.getProductQuery(), 0, productIds.size(), null, false).getResults());
         }
 
         return Collections.emptyList();
@@ -148,7 +149,8 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
                         (List) Arrays.asList("true")));
 
-        return productService.getProductSearchResultDTOByQuery(featured.getProductQuery(), 0, limit, null, false);
+        return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
+                featured.getProductQuery(), 0, limit, null, false).getResults());
     }
 
     /**
@@ -169,7 +171,8 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
                         (List) Arrays.asList(ProductSearchQueryBuilder.TAG_NEWARRIVAL)));
 
-        return productService.getProductSearchResultDTOByQuery(newarrival.getProductQuery(), 0, limit, null, true);
+        return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
+                newarrival.getProductQuery(), 0, limit, null, true).getResults());
     }
 
     /**
@@ -192,8 +195,8 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                     Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
                             (List) Arrays.asList(productIdsForCategory)));
 
-            return productService.getProductSearchResultDTOByQuery(
-                    recent.getProductQuery(), 0, limit, null, false);
+            return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
+                    recent.getProductQuery(), 0, limit, null, false).getResults());
 
         }
 
@@ -203,22 +206,38 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
-    public List<ProductSearchResultDTO> getListProducts(final Query query,
-                                                        final int firstResult,
-                                                        final int maxResults,
-                                                        final String sortFieldName,
-                                                        final boolean descendingSort) {
+    public ProductSearchResultPageDTO getListProducts(final NavigationContext context,
+                                                      final int firstResult,
+                                                      final int maxResults,
+                                                      final String sortFieldName,
+                                                      final boolean descendingSort) {
 
-        return productService.getProductSearchResultDTOByQuery(query, firstResult, maxResults, sortFieldName, descendingSort);
+        final ProductSearchResultPageDTO result = productService.getProductSearchResultDTOByQuery(
+                context.getProductQuery(), firstResult, maxResults, sortFieldName, descendingSort
+        ).copy(); // MUST BE COPY for each search as we are setting relevant SKU list
 
-    }
+        if (!result.getResults().isEmpty()) {
 
-    /**
-     * {@inheritDoc}
-     */
-    public int getListProductsCount(final Query query) {
+            final NavigationContext skuContext = luceneQueryFactory.getSkuSnowBallQuery(context, result.getResults());
 
-        return productService.getProductQty(query);
+            final List<ProductSkuSearchResultDTO> skus = productSkuService.getProductSkuSearchResultDTOByQuery(
+                    skuContext.getProductSkuQuery()
+            );
+            // Need list of skus to maintain priority order
+            final Map<Long, List<ProductSkuSearchResultDTO>> skuMap = new HashMap<Long, List<ProductSkuSearchResultDTO>>();
+            for (ProductSkuSearchResultDTO sku : skus) {
+                List<ProductSkuSearchResultDTO> skuForProduct = skuMap.get(sku.getProductId());
+                if (skuForProduct == null) {
+                    skuForProduct = new ArrayList<ProductSkuSearchResultDTO>();
+                    skuMap.put(sku.getProductId(), skuForProduct);
+                }
+                skuForProduct.add(sku);
+            }
+            for (final ProductSearchResultDTO product : result.getResults()) {
+                product.setSkus(skuMap.get(product.getId()));
+            }
+        }
+        return result;
 
     }
 

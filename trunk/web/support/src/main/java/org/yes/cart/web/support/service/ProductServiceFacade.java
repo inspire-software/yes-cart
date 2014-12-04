@@ -16,10 +16,11 @@
 
 package org.yes.cart.web.support.service;
 
-import org.apache.lucene.search.Query;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.query.NavigationContext;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -143,28 +144,18 @@ public interface ProductServiceFacade {
     /**
      * Get the all products , that match the given query
      *
-     * @param query         lucene query
+     * @param context       navigation context
      * @param firstResult   index of first result
      * @param maxResults    quantity results to return
      * @param sortFieldName sort field name (specify null for no sorting)
      * @param descendingSort sort the search result in reverse if true
      * @return list of products
      */
-    List<ProductSearchResultDTO> getListProducts(Query query,
-                                                 int firstResult,
-                                                 int maxResults,
-                                                 String sortFieldName,
-                                                 boolean descendingSort);
-
-    /**
-     * Get the quantity of products in particular category.
-     *
-     * @param query lucene query
-     *
-     * @return quantity of products
-     */
-    int getListProductsCount(Query query);
-
+    ProductSearchResultPageDTO getListProducts(NavigationContext context,
+                                               int firstResult,
+                                               int maxResults,
+                                               String sortFieldName,
+                                               boolean descendingSort);
 
     /**
      * Get product availability.

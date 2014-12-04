@@ -24,6 +24,9 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.dao.impl.AbstractTestDAO;
+import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.ProductCategoryEntity;
 import org.yes.cart.domain.entity.impl.ProductEntity;
@@ -32,6 +35,8 @@ import org.yes.cart.domain.entity.impl.SkuWarehouseEntity;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ProductSkuService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -57,6 +62,8 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     private GenericDAO<SkuWarehouse, Long> skuWareHouseDao;
     private GenericDAO<Warehouse, Long> warehouseDao;
 
+    private ProductService productService;
+    private ProductSkuService productSkuService;
     private LuceneQueryFactory luceneQueryFactory;
 
     @Before
@@ -70,6 +77,9 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         skuWareHouseDao = (GenericDAO<SkuWarehouse, Long>) ctx().getBean(DaoServiceBeanKeys.SKU_WAREHOUSE_DAO);
         warehouseDao = (GenericDAO<Warehouse, Long>) ctx().getBean(DaoServiceBeanKeys.WAREHOUSE_DAO);
 
+
+        productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
+        productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
 
         luceneQueryFactory = ctx().getBean(ServiceSpringKeys.LUCENE_QUERY_FACTORY, LuceneQueryFactory.class);
 
@@ -266,6 +276,88 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 status.setRollbackOnly();
             }
         });
+    }
+
+
+    @Test
+    public void testSkuRelevancySearch() throws InterruptedException {
+
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+
+                productDao.fullTextSearchReindex(false);
+                productSkuDao.fullTextSearchReindex(false);
+
+                NavigationContext pContext;
+                NavigationContext sContext;
+
+                // Search for Sobot Light (it is name of SKU in Sobot product) only indexed attributes are considered
+
+                pContext = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null,
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("Sobot Light")));
+
+                // Get product search result
+                ProductSearchResultPageDTO page = productService.getProductSearchResultDTOByQuery(pContext.getProductQuery(), 0, 100, null, false);
+                List<ProductSearchResultDTO> products = page.getResults();
+                assertFalse("Failed [" + pContext.getProductQuery().toString() + "]", products.isEmpty());
+                assertEquals("SOBOT is best match", "SOBOT", products.get(0).getCode());
+
+                sContext = luceneQueryFactory.getSkuSnowBallQuery(pContext, products);
+
+                // Get relevant SKU
+                List<ProductSkuSearchResultDTO> skus = productSkuService.getProductSkuSearchResultDTOByQuery(sContext.getProductSkuQuery());
+                assertFalse("Failed [" + sContext.getProductSkuQuery().toString() + "]", skus.isEmpty());
+                assertEquals("SOBOT is best match", products.get(0).getId(), skus.get(0).getProductId());
+                assertEquals("There are 4 SKU", 4, skus.size());
+                assertEquals("SOBOT-LIGHT is best match", "SOBOT-LIGHT", skus.get(0).getCode());
+
+
+                // Search for Sobot xxl (it is size of a SOBOT-ORIG SKU in Sobot product) only indexed attributes are considered
+
+                pContext = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null,
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("Sobot xxl")));
+
+                // Get product search result
+                page = productService.getProductSearchResultDTOByQuery(pContext.getProductQuery(), 0, 100, null, false);
+                products = page.getResults();
+                assertFalse("Failed [" + pContext.getProductQuery().toString() + "]", products.isEmpty());
+                assertEquals("SOBOT is best match", "SOBOT", products.get(0).getCode());
+
+                sContext = luceneQueryFactory.getSkuSnowBallQuery(pContext, products);
+
+                // Get relevant SKU
+                skus = productSkuService.getProductSkuSearchResultDTOByQuery(sContext.getProductSkuQuery());
+                assertFalse("Failed [" + sContext.getProductSkuQuery().toString() + "]", skus.isEmpty());
+                assertEquals("SOBOT is best match", products.get(0).getId(), skus.get(0).getProductId());
+                assertEquals("There are 4 SKU", 4, skus.size());
+                assertEquals("SOBOT-ORIG is best match", "SOBOT-ORIG", skus.get(0).getCode());
+
+
+                // Search for Sobot small (it is size of a SOBOT-PINK SKU in Sobot product) only indexed attributes are considered
+
+                pContext = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null,
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("Sobot large")));
+
+                // Get product search result
+                page = productService.getProductSearchResultDTOByQuery(pContext.getProductQuery(), 0, 100, null, false);
+                products = page.getResults();
+                assertFalse("Failed [" + pContext.getProductQuery().toString() + "]", products.isEmpty());
+                assertEquals("SOBOT is best match", "SOBOT", products.get(0).getCode());
+
+                sContext = luceneQueryFactory.getSkuSnowBallQuery(pContext, products);
+
+                // Get relevant SKU
+                skus = productSkuService.getProductSkuSearchResultDTOByQuery(sContext.getProductSkuQuery());
+                assertFalse("Failed [" + sContext.getProductSkuQuery().toString() + "]", skus.isEmpty());
+                assertEquals("SOBOT is best match", products.get(0).getId(), skus.get(0).getProductId());
+                assertEquals("There are 4 SKU", 4, skus.size());
+                assertEquals("SOBOT-PINK is best match", "SOBOT-PINK", skus.get(0).getCode());
+
+                status.setRollbackOnly();
+            }
+        });
+
     }
 
     @Test

@@ -65,7 +65,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
             @Field(name = "sku.code", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES),
             @Field(name = "sku.code_stem", index = Index.YES, analyze = Analyze.YES, norms = Norms.NO, store = Store.NO)
     })
-
     public String getCode() {
         return this.code;
     }
