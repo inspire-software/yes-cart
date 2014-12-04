@@ -18,6 +18,7 @@ package org.yes.cart.web.page.component.breadcrumbs;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -25,6 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -41,6 +43,7 @@ import java.util.Set;
 public class BreadCrumbsView extends BaseComponent {
 
     private static final String BREADCRUMBS_LIST = "breadcrumbs";
+    private static final String BREADCRUMBS_HOME_LINK = "homeLink";
     private static final String BREADCRUMBS_LINK = "link";
     private static final String BREADCRUMBS_REMOVE_LINK = "remLink";
     private static final String BREADCRUMBS_LINK_NAME = "linkName";
@@ -95,6 +98,9 @@ public class BreadCrumbsView extends BaseComponent {
     /** {@inheritDoc} */
     protected void onBeforeRender() {
 
+        add(
+                new BookmarkablePageLink<HomePage>(BREADCRUMBS_HOME_LINK, HomePage.class)
+        );
         add(
                 new ListView<Crumb>(
                         BREADCRUMBS_LIST,
