@@ -351,6 +351,11 @@ public class CheckoutPage extends AbstractWebPage {
         final OrderInfo orderInfo = shoppingCart.getOrderInfo();
         final boolean showMultipleDelivery = checkoutServiceFacade.isMultipleDeliveryAllowedForCart(shoppingCart);
 
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL,
+                ApplicationDirector.getShoppingCart(),
+                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, null));
+        persistCartIfNecessary();
+
         rez.addOrReplace(new Label(PAYMENT_FRAGMENT_PAYMENT_FORM));
         rez.addOrReplace(new ShoppingCartPaymentVerificationView("orderVerificationView", shoppingCart.getGuid()));
 

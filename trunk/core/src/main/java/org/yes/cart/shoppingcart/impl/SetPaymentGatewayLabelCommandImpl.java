@@ -55,7 +55,8 @@ public class SetPaymentGatewayLabelCommandImpl extends AbstractCartCommandImpl  
     public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             final String value = (String) parameters.get(getCmdKey());
-            if (value != null && !value.equals(shoppingCart.getOrderInfo().getPaymentGatewayLabel())) {
+            if ((value != null && !value.equals(shoppingCart.getOrderInfo().getPaymentGatewayLabel()))
+                    || (value == null && shoppingCart.getOrderInfo().getPaymentGatewayLabel() != null)) {
                 shoppingCart.getOrderInfo().setPaymentGatewayLabel(value);
                 markDirty(shoppingCart);
             }
