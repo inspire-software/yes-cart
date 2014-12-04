@@ -55,7 +55,8 @@ public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCor
         final NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null,
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD, (List) Arrays.asList("9998")));
 
-        List<ProductSearchResultDTO> rez = productService.getProductSearchResultDTOByQuery(context.getProductQuery(), 0, 1, null, false);
+        List<ProductSearchResultDTO> rez = productService.getProductSearchResultDTOByQuery(
+                context.getProductQuery(), 0, 1, null, false).getResults();
         assertNotNull(rez);
         assertEquals(1, rez.size());
 
@@ -85,8 +86,9 @@ public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCor
         final CacheManager mgr = ctx().getBean("cacheManager", CacheManager.class);
 
         mgr.getCache("productService-productSearchResultDTOByQuery").clear();
+        mgr.getCache("productSkuService-productSkuSearchResultDTOByQuery").clear();
 
-        rez = productService.getProductSearchResultDTOByQuery(context.getProductQuery(), 0, 1, null, false);
+        rez = productService.getProductSearchResultDTOByQuery(context.getProductQuery(), 0, 1, null, false).getResults();
         assertNotNull(rez);
         assertEquals(0, rez.size());
 

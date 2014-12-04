@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -262,6 +263,19 @@ public interface ProductSearchResultDTO extends Identifiable {
      */
     void setStepOrderQuantity(BigDecimal stepOrderQuantity);
 
+    /**
+     * Get SKUs sorted by search priority from the FT search.
+     *
+     * @return list of SKU
+     */
+    List<ProductSkuSearchResultDTO> getSkus();
+
+    /**
+     * Set SKUs sorted by search priority from the FT search.
+     *
+     * @param skus list of SKU
+     */
+    void setSkus(List<ProductSkuSearchResultDTO> skus);
 
     /**
      * Creates copy of this object

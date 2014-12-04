@@ -30,7 +30,10 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
+import org.yes.cart.domain.dto.impl.ProductSearchResultPageDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
 import org.yes.cart.domain.entityindexer.IndexFilter;
@@ -400,14 +403,13 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     @Cacheable(value = "productService-productSearchResultDTOByQuery")
-    public List<ProductSearchResultDTO> getProductSearchResultDTOByQuery(
-            final Query query,
-            final int firstResult,
-            final int maxResults,
-            final String sortFieldName,
-            final boolean reverse) {
+    public ProductSearchResultPageDTO getProductSearchResultDTOByQuery(final Query query,
+                                                                       final int firstResult,
+                                                                       final int maxResults,
+                                                                       final String sortFieldName,
+                                                                       final boolean reverse) {
 
-        final List<Object[]> searchRez = productDao.fullTextSearch(
+        final Pair<List<Object[]>, Integer> searchRez = productDao.fullTextSearch(
                 query,
                 firstResult,
                 maxResults,
@@ -432,9 +434,9 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 ProductSearchQueryBuilder.PRODUCT_MULTISKU
                 );
 
-        final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.size());
-        for (Object[] obj : searchRez) {
-            final ProductSearchResultDTO dto = dtoFactory.getByIface(ProductSearchResultDTO.class);
+        final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.getFirst().size());
+        for (Object[] obj : searchRez.getFirst()) {
+            final ProductSearchResultDTO dto = new ProductSearchResultDTOImpl();
             dto.setId((Long) obj[0]);
             dto.setCode((String) obj[1]);
             dto.setDefaultSkuCode((String) obj[2]);
@@ -455,7 +457,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             rez.add(dto);
         }
 
-        return rez;
+        return new ProductSearchResultPageDTOImpl(rez, firstResult, maxResults, searchRez.getSecond(), sortFieldName, reverse);
 
     }
 

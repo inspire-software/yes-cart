@@ -90,7 +90,7 @@ public class PriceFilteredNavigationSupportImpl extends AbstractFilteredNavigati
 
             for (FilteredNavigationRecord record : allNavigationRecords) {
 
-                NavigationContext candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
+                NavigationContext candidateQuery = getLuceneQueryFactory().getProductSnowBallQuery(
                         navigationContext, ProductSearchQueryBuilder.PRODUCT_PRICE, record.getValue()
                 );
                 int candidateResultCount = getProductService().getProductQty(candidateQuery.getProductQuery());

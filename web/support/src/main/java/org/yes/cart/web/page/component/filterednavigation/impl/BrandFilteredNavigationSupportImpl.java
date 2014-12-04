@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.NavigationContext;
@@ -24,7 +23,6 @@ import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.component.filterednavigation.BrandFilteredNavigationSupport;
-import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +56,7 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
             for (final FilteredNavigationRecord recordTemplate : allNavigationRecordsTemplates) {
 
                 final FilteredNavigationRecord record = recordTemplate.clone();
-                final NavigationContext candidateQuery = getLuceneQueryFactory().getSnowBallQuery(
+                final NavigationContext candidateQuery = getLuceneQueryFactory().getProductSnowBallQuery(
                         navigationContext, ProductSearchQueryBuilder.BRAND_FIELD, record.getValue()
                 );
 

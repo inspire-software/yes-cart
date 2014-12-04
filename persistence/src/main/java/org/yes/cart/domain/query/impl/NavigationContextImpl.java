@@ -36,14 +36,17 @@ public class NavigationContextImpl implements NavigationContext {
     private final Map<String, List<String>> navigationParameters;
 
     private final Query productQuery;
+    private final Query productSkuQuery;
 
     public NavigationContextImpl(final long shopId,
                                  final List<Long> categories,
                                  final Map<String, List<String>> navigationParameters,
-                                 final Query productQuery) {
+                                 final Query productQuery,
+                                 final Query productSkuQuery) {
         this.shopId = shopId;
         this.categories = categories;
         this.navigationParameters = navigationParameters;
+        this.productSkuQuery = productSkuQuery;
         if (navigationParameters == null) {
             throw new NullPointerException();
         }
@@ -90,6 +93,13 @@ public class NavigationContextImpl implements NavigationContext {
      */
     public Query getProductQuery() {
         return productQuery;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Query getProductSkuQuery() {
+        return productSkuQuery;
     }
 
     @Override

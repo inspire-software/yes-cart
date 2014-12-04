@@ -83,4 +83,10 @@ public class PaginationSupportImpl implements PaginationSupport {
         }
         return currentPageIdx;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public void removePageParam(final PageParameters pageParameters) {
+        pageParameters.remove(WebParametersKeys.PAGE);
+    }
 }

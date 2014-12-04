@@ -20,8 +20,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.util.ShopCodeContext;
@@ -99,17 +101,23 @@ public class ProductsCentralView extends AbstractCentralView {
         final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, shopId);
         final int columns = categoryServiceFacade.getProductListColumnOptionsConfig(categoryId, shopId);
 
+        int currentPageIdx = getWicketSupportFacade().pagination().getCurrentPage(getPage().getPageParameters());
         final int selectedItemPerPage = WicketUtil.getSelectedItemsPerPage(
                 getPage().getPageParameters(), itemsPerPageValues);
+        final Pair<String, Boolean> sortResult = getSortField();
 
-        final SortableProductDataProvider dataProvider = new SortableProductDataProvider(
-                productServiceFacade,
-                getNavigationContext(),
-                getI18NSupport(),
-                getDecoratorFacade()
-        );
+        ProductSearchResultPageDTO products = productServiceFacade.getListProducts(
+                getNavigationContext(), currentPageIdx, selectedItemPerPage,
+                sortResult.getFirst(), sortResult.getSecond());
 
-        applySortFieldAndOrder(dataProvider);
+        if (currentPageIdx * selectedItemPerPage > products.getTotalHits()) {
+            // if we have gone overboard restart from 0 by redirect!
+            final PageParameters params = new PageParameters(getPage().getPageParameters());
+            getWicketSupportFacade().pagination().removePageParam(params);
+            setResponsePage(getPage().getClass(), params);
+        }
+
+        final SortableProductDataProvider dataProvider = new SortableProductDataProvider(products);
 
         final GridView<ProductSearchResultDTO> productDataView = new GridView<ProductSearchResultDTO>(PRODUCT_LIST, dataProvider) {
 
@@ -128,16 +136,8 @@ public class ProductsCentralView extends AbstractCentralView {
 
         };
 
-
         productDataView.setColumns(columns);
         productDataView.setRows(selectedItemPerPage / columns);
-
-        int currentPageIdx = getWicketSupportFacade().pagination().getCurrentPage(getPage().getPageParameters());
-        if (currentPageIdx < productDataView.getPageCount()) {
-            productDataView.setCurrentPage(currentPageIdx);
-        } else {
-            productDataView.setCurrentPage(0);
-        }
 
         add(new ProductSorter(SORTER));
         add(new URLPagingNavigator(PAGINATOR, productDataView, getPage().getPageParameters()));
@@ -146,16 +146,6 @@ public class ProductsCentralView extends AbstractCentralView {
         add(productDataView);
 
         super.onBeforeRender();
-    }
-
-
-    private void applySortFieldAndOrder(SortableProductDataProvider dataProvider) {
-        final Pair<String, Boolean> sortResult = getSortField();
-
-        if (sortResult != null) {
-            dataProvider.setSortFieldName(sortResult.getFirst());
-            dataProvider.setReverse(sortResult.getSecond());
-        }
     }
 
     /**
@@ -172,7 +162,7 @@ public class ProductsCentralView extends AbstractCentralView {
         if (sort != null) {
             return new Pair<String, Boolean>(sort, true);
         }
-        return null;
+        return new Pair<String, Boolean>(null, false);
     }
 
 

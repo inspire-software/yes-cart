@@ -40,6 +40,7 @@ import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entityindexer.IndexFilter;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.io.Serializable;
@@ -626,8 +627,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                         FullTextSession fullTextSession = Search.getFullTextSession(async ? sessionFactory.openSession() : sessionFactory.getCurrentSession());
                         fullTextSession.setFlushMode(FlushMode.MANUAL);
                         fullTextSession.setCacheMode(CacheMode.IGNORE);
-                        fullTextSession.purgeAll(getPersistentClass());
-                        fullTextSession.getSearchFactory().optimize(getPersistentClass());
+                        if (filter == null) {  // only purge global full reindex because this clears all entries
+                            fullTextSession.purgeAll(getPersistentClass());
+                        }
                         ScrollableResults results = fullTextSession.createCriteria(persistentClass)
                                 .setFetchSize(BATCH_SIZE)
                                 .scroll(ScrollMode.FORWARD_ONLY);
@@ -666,6 +668,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                         if (log.isInfoEnabled()) {
                             log.info("Indexed " + index + " items of " + persistentClass + " class");
                         }
+                        fullTextSession.getSearchFactory().optimize(getPersistentClass());
                     }
                 } catch (Exception exp) {
                     LOG.error("Error during indexing", exp);
@@ -698,37 +701,18 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         return Collections.EMPTY_LIST;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-    public List<T> fullTextSearch(final org.apache.lucene.search.Query query,
-                                  final int firstResult,
-                                  final int maxResults) {
-        return fullTextSearch(query, firstResult, maxResults, null);
-    }
+    private static final Pair<List<Object[]>, Integer> EMPTY = new Pair<List<Object[]>, Integer>(Collections.EMPTY_LIST, 0);
 
     /**
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public List<T> fullTextSearch(final org.apache.lucene.search.Query query,
-                                  final int firtsResult,
-                                  final int maxResults,
-                                  final String sortFieldName) {
-        return fullTextSearch(query, firtsResult, maxResults, sortFieldName, false);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-    public List<Object[]> fullTextSearch(final org.apache.lucene.search.Query query,
-                                         final int firstResult,
-                                         final int maxResults,
-                                         final String sortFieldName,
-                                         final boolean reverse,
-                                         final String ... fields) {
+    public Pair<List<Object[]>, Integer> fullTextSearch(final org.apache.lucene.search.Query query,
+                                                        final int firstResult,
+                                                        final int maxResults,
+                                                        final String sortFieldName,
+                                                        final boolean reverse,
+                                                        final String ... fields) {
 
         if (persistentClassIndexble) {
             if (LOGFTQ.isDebugEnabled()) {
@@ -739,11 +723,11 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
             fullTextQuery.setProjection(fields);
             final List<Object[]> list = fullTextQuery.list();
             if (list != null) {
-                return list;
+                return new Pair<List<Object[]>, Integer>(list, fullTextQuery.getResultSize());
             }
 
         }
-        return Collections.EMPTY_LIST;
+        return EMPTY;
 
     }
 
@@ -771,7 +755,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     }
 
     private FullTextQuery createFullTextQuery(final org.apache.lucene.search.Query query,
-                                              final int firtsResult,
+                                              final int firstResult,
                                               final int maxResults,
                                               final String sortFieldName,
                                               final boolean reverse) {
@@ -782,8 +766,10 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                     new SortField(sortFieldName, SortField.STRING, reverse));
             fullTextQuery.setSort(sort);
         }
-        fullTextQuery.setFirstResult(firtsResult);
-        fullTextQuery.setMaxResults(maxResults);
+        fullTextQuery.setFirstResult(firstResult);
+        if (maxResults > 0) {
+            fullTextQuery.setMaxResults(maxResults);
+        }
         return fullTextQuery;
     }
 

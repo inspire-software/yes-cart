@@ -59,7 +59,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
                 if (!navigationContext.isFilteredBy(record.getCode()) && StringUtils.isNotBlank(record.getValue())) {
 
-                    final NavigationContext candidateQuery = getLuceneQueryFactory().getSnowBallQuery(navigationContext, record.getCode(), record.getValue());
+                    final NavigationContext candidateQuery = getLuceneQueryFactory().getProductSnowBallQuery(navigationContext, record.getCode(), record.getValue());
 
                     final int candidateResultCount = getProductService().getProductQty(candidateQuery.getProductQuery());
 

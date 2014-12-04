@@ -18,11 +18,13 @@ package org.yes.cart.domain.dto.impl;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,12 +53,19 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private BigDecimal maxOrderQuantity;
     private BigDecimal stepOrderQuantity;
 
+    // This is dependent of FT search, so not part of the copy()
+    private List<ProductSkuSearchResultDTO> skus;
+
     private I18NModel i18NModelName;
     private I18NModel i18NModelDescription;
 
 
     /** {@inheritDoc} */
     public String getDefaultImage() {
+        if (multisku && skus != null && !skus.isEmpty()) {
+            // if this is multi SKU and we have relevancy list - use it
+            return skus.get(0).getDefaultImage();
+        }
         return defaultImage;
     }
 
@@ -137,6 +146,10 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     /** {@inheritDoc} */
     public String getDefaultSkuCode() {
+        if (multisku && skus != null && !skus.isEmpty()) {
+            // if this is multi SKU and we have relevancy list - use it
+            return skus.get(0).getCode();
+        }
         return defaultSkuCode;
     }
 
@@ -251,7 +264,21 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     }
 
     /** {@inheritDoc} */
+    public List<ProductSkuSearchResultDTO> getSkus() {
+        return skus;
+    }
+
+    /** {@inheritDoc} */
+    public void setSkus(final List<ProductSkuSearchResultDTO> skus) {
+        this.skus = skus;
+    }
+
+    /** {@inheritDoc} */
     public ProductSearchResultDTO copy() {
+        /*
+            DO NOT copy skus as this must be set through FT search - we need them to be
+            sorted by relevancy
+         */
         final ProductSearchResultDTOImpl copy = new ProductSearchResultDTOImpl();
         copy.setId(this.id);
         copy.setCode(this.code);

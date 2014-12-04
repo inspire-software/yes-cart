@@ -218,6 +218,9 @@
     <cache name="productSkuService-productSkuBySkuCode" maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
+    <cache name="productSkuService-productSkuSearchResultDTOByQuery" maxElementsInMemory="2000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="600" timeToIdleSeconds="300"/>
+
     <cache name="productService-defaultImage" maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
