@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component.breadcrumbs;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Application;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -26,7 +27,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
-import org.yes.cart.web.page.HomePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -99,7 +99,7 @@ public class BreadCrumbsView extends BaseComponent {
     protected void onBeforeRender() {
 
         add(
-                new BookmarkablePageLink<HomePage>(BREADCRUMBS_HOME_LINK, HomePage.class)
+                new BookmarkablePageLink(BREADCRUMBS_HOME_LINK, Application.get().getHomePage())
         );
         add(
                 new ListView<Crumb>(
