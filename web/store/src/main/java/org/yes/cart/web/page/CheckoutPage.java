@@ -171,8 +171,20 @@ public class CheckoutPage extends AbstractWebPage {
                 ((AuthenticatedWebSession) getSession()).isSignedIn()
         ) && ((AuthenticatedWebSession) getSession()).isSignedIn();
 
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         final String currentStep =
-                params.get(STEP).toString(threeStepsProcess ? STEP_ADDR : STEP_LOGIN);
+                params.get(STEP).toString(threeStepsProcess ? null : STEP_LOGIN);
+        if (currentStep == null) {
+            if (shippingServiceFacade.isSkippableAddress(cart)) {
+                final PageParameters parameters = new PageParameters(getPageParameters());
+                parameters.set(STEP, STEP_SHIPMENT);
+                setResponsePage(this.getClass(), parameters);
+            } else {
+                final PageParameters parameters = new PageParameters(getPageParameters());
+                parameters.set(STEP, STEP_ADDR);
+                setResponsePage(this.getClass(), parameters);
+            }
+        }
 
         add(
                 new FeedbackPanel(FEEDBACK)
@@ -219,7 +231,7 @@ public class CheckoutPage extends AbstractWebPage {
         }
 
         if (STEP_ADDR.equals(currentStep)) {
-            if (shippingServiceFacade.isSkippableAddress(cart)) {
+            if (cart.isBillingAddressNotRequired() && cart.isDeliveryAddressNotRequired()) {
                 final PageParameters parameters = new PageParameters(getPageParameters());
                 parameters.set(STEP, STEP_SHIPMENT);
                 setResponsePage(this.getClass(), parameters);
