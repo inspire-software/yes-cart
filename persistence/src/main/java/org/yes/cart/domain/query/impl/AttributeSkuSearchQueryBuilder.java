@@ -44,15 +44,15 @@ public class AttributeSkuSearchQueryBuilder extends AbstractSearchQueryBuilderIm
         final String escapedParameter = escapeValue(parameter);
 
         if (searchValue.contains(Constants.RANGE_NAVIGATION_DELIMITER)) { // value range navigation
-            final String[] attrValues = StringUtils.split(searchValue, Constants.RANGE_NAVIGATION_DELIMITER);
+            final String[] attrValues = StringUtils.splitByWholeSeparatorPreserveAllTokens(searchValue, Constants.RANGE_NAVIGATION_DELIMITER);
 
             final BooleanQuery aggregatedQuery = new BooleanQuery();
 
-            final String searchValueLo = attrValues.length > 0 ? escapedParameter + escapeValue(attrValues[0]) : null;
-            final String searchValueHi = attrValues.length > 1 ? escapedParameter + escapeValue(attrValues[1]) : null;
+            final String searchValueLo = attrValues[0].length() > 0 ? escapedParameter + escapeValue(attrValues[0]) : null;
+            final String searchValueHi = attrValues[1].length() > 0 ? escapedParameter + escapeValue(attrValues[1]) : null;
 
-            aggregatedQuery.add(createTermQuery(SKU_ATTRIBUTE_CODE_FIELD, escapedParameter), BooleanClause.Occur.SHOULD);
-            aggregatedQuery.add(createRangeQuery(SKU_ATTRIBUTE_VALUE_FIELD, searchValueLo, searchValueHi, 3.5f), BooleanClause.Occur.SHOULD);
+            aggregatedQuery.add(createTermQuery(ATTRIBUTE_CODE_FIELD, escapedParameter), BooleanClause.Occur.SHOULD);
+            aggregatedQuery.add(createRangeQuery(ATTRIBUTE_VALUE_FIELD, searchValueLo, searchValueHi, 3.5f), BooleanClause.Occur.SHOULD);
 
             return aggregatedQuery;
 
@@ -62,8 +62,8 @@ public class AttributeSkuSearchQueryBuilder extends AbstractSearchQueryBuilderIm
 
         final String ftSearchValue = escapedParameter + escapeValue(searchValue);
 
-        aggregatedQuery.add(createTermQuery(SKU_ATTRIBUTE_CODE_FIELD, escapedParameter), BooleanClause.Occur.SHOULD);
-        aggregatedQuery.add(createTermQuery(SKU_ATTRIBUTE_VALUE_FIELD, ftSearchValue, 3.5f), BooleanClause.Occur.SHOULD);
+        aggregatedQuery.add(createTermQuery(ATTRIBUTE_CODE_FIELD, escapedParameter), BooleanClause.Occur.SHOULD);
+        aggregatedQuery.add(createTermQuery(ATTRIBUTE_VALUE_FIELD, ftSearchValue, 3.5f), BooleanClause.Occur.SHOULD);
 
         return aggregatedQuery;
 

@@ -2692,7 +2692,14 @@
        select pta
        from  ProductTypeAttrEntity pta
             where pta.producttype.producttypeId = ?1
-            order by pta.attribute.code
+       ]]>
+    </query>
+
+    <query name="PRODUCT.TYPE.NAV.ATTR.BY.PROD.TYPE.ID">
+          <![CDATA[
+       select pta
+       from  ProductTypeAttrEntity pta
+            where pta.producttype.producttypeId = ?1 and pta.navigation = ?2
        ]]>
     </query>
 
@@ -2701,7 +2708,6 @@
        select attr
        from  ProductTypeAttrEntity pta  inner join pta.attribute attr
             where pta.producttype.producttypeId = ?1
-            order by attr.code
        ]]>
     </query>
 

@@ -120,7 +120,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 final Query query = queryBuilder.createStrictQuery(0L, null, Arrays.asList("SONY_PRODUCT_CODE", "SONY_PRODUCT_CODE2"));
 
                 // There are no SKU and inventory - should not be in index
-                assertEquals(0, productDao.getResultCount(query));
+                assertEquals(0, productDao.fullTextSearchCount(query));
 
                 status.setRollbackOnly();
 
@@ -192,7 +192,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(product.getProductId(), false);
 
                 //search in particular category
-                assertEquals("Failed search for sku [" + query + "] product was unassigned", 0, productDao.getResultCount(query));
+                assertEquals("Failed search for sku [" + query + "] product was unassigned", 0, productDao.fullTextSearchCount(query));
 
                 status.setRollbackOnly();
 
@@ -263,7 +263,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(product.getProductId(), false);
 
                 // on site global. must be empty, because quantity is 0
-                assertEquals("Failed SKU search [" + query + "] because products are out of stock", 0, productDao.getResultCount(query));
+                assertEquals("Failed SKU search [" + query + "] because products are out of stock", 0, productDao.fullTextSearchCount(query));
 
                 status.setRollbackOnly();
 

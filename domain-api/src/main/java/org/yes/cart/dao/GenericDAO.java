@@ -19,10 +19,11 @@ package org.yes.cart.dao;
 import org.hibernate.criterion.Criterion;
 import org.yes.cart.domain.entityindexer.IndexFilter;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -446,13 +447,28 @@ public interface GenericDAO<T, PK extends Serializable> {
                                                  String ... fields);
 
     /**
+     * Get the full text search result. The map returned by this method should be a single use only.
+     * i.e. DO NOT CACHE this method. There are no benefits to this as final FilterNavigationRecord's are already
+     * cached and it will make it harder to work with this map as some entries must be thrown away (e.g. zero counts
+     * for multi value), sorted (e.g. multivalue).
+     *
+     * @param query lucene search query
+     * @param facetingRequest faceting request context
+     *
+     * @return list of facets with values and their counts
+     */
+    Map<String, List<Pair<String, Integer>>> fullTextSearchNavigation(org.apache.lucene.search.Query query,
+                                                                      List<FilteredNavigationRecordRequest> facetingRequest);
+
+
+    /**
      * Get the full text search result.
      *
      * @param query lucene search query
      *
      * @return count items in result
      */
-    int getResultCount(org.apache.lucene.search.Query query);
+    int fullTextSearchCount(org.apache.lucene.search.Query query);
 
     /**
      * Execute native delete / update sql.

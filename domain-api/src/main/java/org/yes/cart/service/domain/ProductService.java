@@ -18,13 +18,13 @@ package org.yes.cart.service.domain;
 
 import org.apache.lucene.search.Query;
 import org.yes.cart.dao.CriteriaTuner;
-import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -215,6 +215,17 @@ public interface ProductService extends GenericService<Product> {
                                                                 int maxResults,
                                                                 String sortFieldName,
                                                                 boolean reverse);
+
+    /**
+     * Create filter navigation records counts.
+     *
+     * @param baseQuery base query for current given context
+     * @param request   request for filtered navigation
+     *
+     * @return list of facets with values and their counts
+     */
+    Map<String, List<Pair<String, Integer>>> findFilteredNavigationRecords(Query baseQuery,
+                                                                           List<FilteredNavigationRecordRequest> request);
 
     /**
      * Get the quantity of products in particular category.

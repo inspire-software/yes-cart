@@ -17,6 +17,7 @@
 package org.yes.cart.domain.query;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
+import org.yes.cart.domain.queryobject.NavigationContext;
 
 import java.util.List;
 import java.util.Map;

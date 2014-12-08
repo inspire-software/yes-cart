@@ -22,6 +22,7 @@ import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -39,7 +40,6 @@ import java.util.Map;
  * */
 public class SkuPriceBridge implements FieldBridge {
 
-    private final BigDecimalBridge idBridge = new BigDecimalBridge(0);
     private final BigDecimalBridge moneyBridge = new BigDecimalBridge(Constants.DEFAULT_SCALE);
 
     /** {@inheritDoc} */
@@ -82,16 +82,18 @@ public class SkuPriceBridge implements FieldBridge {
             if (!lowestQuantityPrice.isEmpty()) {
                 for (final Map.Entry<Long, Map<String, SkuPrice>> shop : lowestQuantityPrice.entrySet()) {
                     for (final Map.Entry<String, SkuPrice> currency : shop.getValue().entrySet()) {
-                        String rez = objectToString(shop.getKey(), currency.getKey(),
-                                MoneyUtils.minPositive(currency.getValue().getRegularPrice(), currency.getValue().getSalePrice()));
-                        Field field = new Field(
-                                proposedFiledName,
-                                rez,
-                                luceneOptions.getStore(),
+
+                        BigDecimal price = MoneyUtils.minPositive(currency.getValue().getRegularPrice(), currency.getValue().getSalePrice());
+                        Pair<String, String> rez = objectToString(shop.getKey(), currency.getKey(), price);
+
+                        Field facetField = new Field(
+                                rez.getFirst(),
+                                rez.getSecond(),
+                                Field.Store.NO,
                                 Field.Index.NOT_ANALYZED,
                                 luceneOptions.getTermVector()
                         );
-                        document.add(field);
+                        document.add(facetField);
                     }
                 }
             }
@@ -101,19 +103,16 @@ public class SkuPriceBridge implements FieldBridge {
 
     /**
      * Create index value for given shop currency and price.
+     *
      * @param shopId shop id
      * @param currency currency code
      * @param regularPrice regular price
-     * @return index value in following format shopid_currency_price. All digital value will be left padded according to formatter.
+     *
+     * @return pair where first is field name and second is the string representation of price. Field has format facet_price_shopid_currency.
+     *         All digital value will be left padded according to formatter.
      */
-    public String objectToString(final long shopId, final String currency, final BigDecimal regularPrice) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(idBridge.objectToString(new BigDecimal(shopId)));
-        stringBuilder.append('_');
-        stringBuilder.append(currency);
-        stringBuilder.append('_');
-        stringBuilder.append(moneyBridge.objectToString(regularPrice));
-        return  stringBuilder.toString();
+    public Pair<String, String> objectToString(final long shopId, final String currency, final BigDecimal regularPrice) {
+        return new Pair<String, String>("facet_price_" + shopId + "_" + currency, moneyBridge.objectToString(regularPrice));
     }
 
 }

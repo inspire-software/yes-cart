@@ -44,4 +44,12 @@ public interface ProductTypeAttrService extends GenericService<ProductTypeAttr> 
      */
     List<ProductTypeAttr> getByProductTypeId(long productTypeId);
 
+    /**
+     * Get the list of {@link ProductTypeAttr} , that belong to product type.
+     *
+     * @param productTypeId given product ype id
+     * @return list of {@link ProductTypeAttr}
+     */
+    List<ProductTypeAttr> getNavigatableByProductTypeId(long productTypeId);
+
 }

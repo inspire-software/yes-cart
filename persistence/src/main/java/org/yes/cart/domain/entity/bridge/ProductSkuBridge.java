@@ -79,7 +79,7 @@ public class ProductSkuBridge implements FieldBridge {
                 ));
 
 
-                skuPriceBridge.set("sku.skuPrice", sku.getSkuPrice(), document, luceneOptions);
+                skuPriceBridge.set("", sku.getSkuPrice(), document, luceneOptions);
                 attributeValueBridge.set("attribute", sku.getAttributes(), document, luceneOptions);
 
             }

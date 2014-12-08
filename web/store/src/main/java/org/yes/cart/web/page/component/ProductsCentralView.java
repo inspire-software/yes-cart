@@ -25,7 +25,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.query.NavigationContext;
+import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.data.SortableProductDataProvider;
 import org.yes.cart.web.page.component.navigation.ProductPerPageListView;
@@ -138,6 +138,7 @@ public class ProductsCentralView extends AbstractCentralView {
 
         productDataView.setColumns(columns);
         productDataView.setRows(selectedItemPerPage / columns);
+        productDataView.setCurrentPage(currentPageIdx);
 
         add(new ProductSorter(SORTER));
         add(new URLPagingNavigator(PAGINATOR, productDataView, getPage().getPageParameters()));

@@ -51,7 +51,7 @@ public class KeywordProductSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSearchQueryBuilder().createStrictQuery(10L, "query", "SearchWord");
         assertNotNull(query);
-        assertEquals("(name:SearchWord~0.6^3.0 displayName:SearchWord~0.6^4.0 brand:searchword~0.8^4.0 code:SearchWord~0.8^10.0 sku.code:SearchWord~0.8^10.0 attribute.val:SearchWord~0.65^2.0 sku.attribute.val:SearchWord~0.65^2.0)", query.toString());
+        assertEquals("(name:SearchWord~0.6^3.0 displayName:SearchWord~0.6^4.0 brand:searchword~0.8^4.0 code:SearchWord~0.8^10.0 sku.code:SearchWord~0.8^10.0 attribute.val:SearchWord~0.65^2.0)", query.toString());
 
     }
 
@@ -60,7 +60,7 @@ public class KeywordProductSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSearchQueryBuilder().createStrictQuery(10L, "query", "Search, Word");
         assertNotNull(query);
-        assertEquals("(name:Search, Word~0.6^3.0 displayName:Search, Word~0.6^4.0 brand:search, word~0.8^4.0 code:Search, Word~0.8^10.0 sku.code:Search, Word~0.8^10.0 attribute.val:Search, Word~0.65^2.0 sku.attribute.val:Search, Word~0.65^2.0) (name:search~0.6^2.5 displayName:search~0.6^3.0 brand:search~0.8^3.0 code:search~0.8^4.0 sku.code:search~0.8^4.0 attribute.attrvalsearch:search^0.5 sku.attribute.attrvalsearch:search^0.5) (name:word~0.6^2.5 displayName:word~0.6^3.0 brand:word~0.8^3.0 code:word~0.8^4.0 sku.code:word~0.8^4.0 attribute.attrvalsearch:word^0.5 sku.attribute.attrvalsearch:word^0.5)", query.toString());
+        assertEquals("(name:Search, Word~0.6^3.0 displayName:Search, Word~0.6^4.0 brand:search, word~0.8^4.0 code:Search, Word~0.8^10.0 sku.code:Search, Word~0.8^10.0 attribute.val:Search, Word~0.65^2.0) (name:search~0.6^2.5 displayName:search~0.6^3.0 brand:search~0.8^3.0 code:search~0.8^4.0 sku.code:search~0.8^4.0 attribute.attrvalsearch:search^0.5) (name:word~0.6^2.5 displayName:word~0.6^3.0 brand:word~0.8^3.0 code:word~0.8^4.0 sku.code:word~0.8^4.0 attribute.attrvalsearch:word^0.5)", query.toString());
 
     }
 
@@ -87,7 +87,7 @@ public class KeywordProductSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSearchQueryBuilder().createRelaxedQuery(10L, "query", "SearchWord");
         assertNotNull(query);
-        assertEquals("(name:searchword~0.5^2.5 displayName:searchword~0.5^3.0 brand:searchword~0.7^3.0 code:searchword~0.7^4.0 sku.code:searchword~0.7^4.0 code_stem:searchword~0.75 sku.code_stem:searchword~0.75 attribute.attrvalsearch:searchword^0.5 sku.attribute.attrvalsearch:searchword^0.5 description:searchword^0.8)", query.toString());
+        assertEquals("(name:searchword~0.5^2.5 displayName:searchword~0.5^3.0 brand:searchword~0.7^3.0 code:searchword~0.7^4.0 sku.code:searchword~0.7^4.0 code_stem:searchword~0.75 sku.code_stem:searchword~0.75 attribute.attrvalsearch:searchword^0.5 description_stem:searchword^0.8)", query.toString());
 
     }
 
@@ -96,7 +96,7 @@ public class KeywordProductSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSearchQueryBuilder().createRelaxedQuery(10L, "query", "Search, Word");
         assertNotNull(query);
-        assertEquals("(name:search~0.5^2.5 displayName:search~0.5^3.0 brand:search~0.7^3.0 code:search~0.7^4.0 sku.code:search~0.7^4.0 code_stem:search~0.75 sku.code_stem:search~0.75 attribute.attrvalsearch:search^0.5 sku.attribute.attrvalsearch:search^0.5 description:search^0.8) (name:word~0.5^2.5 displayName:word~0.5^3.0 brand:word~0.7^3.0 code:word~0.7^4.0 sku.code:word~0.7^4.0 code_stem:word~0.75 sku.code_stem:word~0.75 attribute.attrvalsearch:word^0.5 sku.attribute.attrvalsearch:word^0.5 description:word^0.8)", query.toString());
+        assertEquals("(name:search~0.5^2.5 displayName:search~0.5^3.0 brand:search~0.7^3.0 code:search~0.7^4.0 sku.code:search~0.7^4.0 code_stem:search~0.75 sku.code_stem:search~0.75 attribute.attrvalsearch:search^0.5 description_stem:search^0.8) (name:word~0.5^2.5 displayName:word~0.5^3.0 brand:word~0.7^3.0 code:word~0.7^4.0 sku.code:word~0.7^4.0 code_stem:word~0.75 sku.code_stem:word~0.75 attribute.attrvalsearch:word^0.5 description_stem:word^0.8)", query.toString());
 
     }
 }

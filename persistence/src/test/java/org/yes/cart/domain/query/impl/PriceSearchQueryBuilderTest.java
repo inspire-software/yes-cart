@@ -83,7 +83,7 @@ public class PriceSearchQueryBuilderTest {
 
         final Query query = buider.createStrictQuery(10L, "price", "EUR-_-10-_-20");
         assertNotNull(query);
-        assertEquals("sku.skuPrice:[00000010_EUR_00001000 TO 00000010_EUR_00002000}", query.toString());
+        assertEquals("facet_price_10_EUR:[00001000 TO 00002000}", query.toString());
 
     }
 
@@ -131,7 +131,7 @@ public class PriceSearchQueryBuilderTest {
 
         final Query query = buider.createRelaxedQuery(10L, "price", "EUR-_-10-_-20");
         assertNotNull(query);
-        assertEquals("sku.skuPrice:[00000010_EUR_00001000 TO 00000010_EUR_00002000}", query.toString());
+        assertEquals("facet_price_10_EUR:[00001000 TO 00002000}", query.toString());
 
     }
 }

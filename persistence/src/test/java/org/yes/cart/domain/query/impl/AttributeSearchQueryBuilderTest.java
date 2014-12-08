@@ -49,7 +49,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, "size", "30");
         assertNotNull(query);
-        assertEquals("+(attribute.attribute:size sku.attribute.attribute:size) +(attribute.val:size30^3.5 sku.attribute.val:size30^3.5)", query.toString());
+        assertEquals("+attribute.attribute:size +attribute.val:size30^3.5", query.toString());
 
     }
 
@@ -58,7 +58,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, "size", "30-_-50");
         assertNotNull(query);
-        assertEquals("+(attribute.attribute:size sku.attribute.attribute:size) +(attribute.val:[size30 TO size50}^3.5 sku.attribute.val:[size30 TO size50}^3.5)", query.toString());
+        assertEquals("+attribute.attribute:size +attribute.val:[size30 TO size50}^3.5", query.toString());
 
     }
 
@@ -67,7 +67,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, "size", "30-_-");
         assertNotNull(query);
-        assertEquals("+(attribute.attribute:size sku.attribute.attribute:size) +(attribute.val:[size30 TO *}^3.5 sku.attribute.val:[size30 TO *}^3.5)", query.toString());
+        assertEquals("+attribute.attribute:size +attribute.val:[size30 TO *}^3.5", query.toString());
 
     }
 
@@ -76,7 +76,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createStrictQuery(10L, "size", "-_-50");
         assertNotNull(query);
-        assertEquals("+(attribute.attribute:size sku.attribute.attribute:size) +(attribute.val:[size50 TO *}^3.5 sku.attribute.val:[size50 TO *}^3.5)", query.toString());
+        assertEquals("+attribute.attribute:size +attribute.val:[* TO size50}^3.5", query.toString());
 
     }
 
@@ -103,7 +103,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, "size", "30");
         assertNotNull(query);
-        assertEquals("+(attribute.attribute:size sku.attribute.attribute:size) +(attribute.val:size30^3.5 sku.attribute.val:size30^3.5)", query.toString());
+        assertEquals("+attribute.attribute:size +attribute.val:size30^3.5", query.toString());
 
 
     }
@@ -114,7 +114,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, "size", "30-_-50");
         assertNotNull(query);
-        assertEquals("+(attribute.attribute:size sku.attribute.attribute:size) +(attribute.val:[size30 TO size50}^3.5 sku.attribute.val:[size30 TO size50}^3.5)", query.toString());
+        assertEquals("+attribute.attribute:size +attribute.val:[size30 TO size50}^3.5", query.toString());
 
     }
 
@@ -123,7 +123,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, "size", "30-_-");
         assertNotNull(query);
-        assertEquals("+(attribute.attribute:size sku.attribute.attribute:size) +(attribute.val:[size30 TO *}^3.5 sku.attribute.val:[size30 TO *}^3.5)", query.toString());
+        assertEquals("+attribute.attribute:size +attribute.val:[size30 TO *}^3.5", query.toString());
 
     }
 
@@ -132,7 +132,7 @@ public class AttributeSearchQueryBuilderTest {
 
         final Query query = new AttributeSearchQueryBuilder().createRelaxedQuery(10L, "size", "-_-50");
         assertNotNull(query);
-        assertEquals("+(attribute.attribute:size sku.attribute.attribute:size) +(attribute.val:[size50 TO *}^3.5 sku.attribute.val:[size50 TO *}^3.5)", query.toString());
+        assertEquals("+attribute.attribute:size +attribute.val:[* TO size50}^3.5", query.toString());
 
     }
 

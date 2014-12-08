@@ -18,11 +18,17 @@ package org.yes.cart.web.page.component.navigation;
 
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.yes.cart.domain.entity.bridge.SkuPriceBridge;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+
+import java.math.BigDecimal;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -41,7 +47,7 @@ public class ProductSorter extends BaseComponent {
     private static final String PRODUCT_SORT_BY_CODE_ASC = "orderByCodeA";
     private static final String PRODUCT_SORT_BY_CODE_DESC = "orderByCodeD";
 
-
+    private static final SkuPriceBridge SKU_PRICE_BRIDGE = new SkuPriceBridge();
 
     /**
      * Construct product sorter.
@@ -57,12 +63,16 @@ public class ProductSorter extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        final Pair<String, String> priceSort = SKU_PRICE_BRIDGE.objectToString(cart.getShoppingContext().getShopId(), cart.getCurrencyCode(), null);
+
         add(getSortLink(PRODUCT_SORT_BY_NAME_ASC, WebParametersKeys.SORT, ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD));
         add(getSortLink(PRODUCT_SORT_BY_NAME_DESC, WebParametersKeys.SORT_REVERSE, ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD));
         add(getSortLink(PRODUCT_SORT_BY_CODE_ASC, WebParametersKeys.SORT, ProductSearchQueryBuilder.PRODUCT_CODE_FIELD));
         add(getSortLink(PRODUCT_SORT_BY_CODE_DESC, WebParametersKeys.SORT_REVERSE, ProductSearchQueryBuilder.PRODUCT_CODE_FIELD));
-        add(getSortLink(PRODUCT_SORT_BY_PRICE_ASC, WebParametersKeys.SORT, ProductSearchQueryBuilder.PRODUCT_PRICE_AMOUNT));
-        add(getSortLink(PRODUCT_SORT_BY_PRICE_DESC, WebParametersKeys.SORT_REVERSE, ProductSearchQueryBuilder.PRODUCT_PRICE_AMOUNT));
+        add(getSortLink(PRODUCT_SORT_BY_PRICE_ASC, WebParametersKeys.SORT, priceSort.getFirst()));
+        add(getSortLink(PRODUCT_SORT_BY_PRICE_DESC, WebParametersKeys.SORT_REVERSE, priceSort.getFirst()));
 
 
         super.onBeforeRender();

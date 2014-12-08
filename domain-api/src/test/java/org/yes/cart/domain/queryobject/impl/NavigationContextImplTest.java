@@ -14,9 +14,10 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.query.impl;
+package org.yes.cart.domain.queryobject.impl;
 
 import org.junit.Test;
+import org.yes.cart.domain.queryobject.impl.NavigationContextImpl;
 
 import java.util.*;
 

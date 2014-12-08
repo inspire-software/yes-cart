@@ -14,11 +14,11 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.query.impl;
+package org.yes.cart.domain.queryobject.impl;
 
 import org.apache.lucene.search.Query;
 import org.springframework.util.CollectionUtils;
-import org.yes.cart.domain.query.NavigationContext;
+import org.yes.cart.domain.queryobject.NavigationContext;
 
 import java.util.Collections;
 import java.util.List;

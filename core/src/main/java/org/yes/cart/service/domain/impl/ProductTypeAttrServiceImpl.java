@@ -60,12 +60,35 @@ public class ProductTypeAttrServiceImpl extends BaseGenericServiceImpl<ProductTy
     /** {@inheritDoc} */
     @Cacheable(value = "productTypeAttrService-byProductTypeId")
     public List<ProductTypeAttr> getByProductTypeId(final long productTypeId) {
-        return getGenericDao().findByNamedQuery("PRODUCT.TYPE.ATTR.BY.PROD.TYPE.ID", productTypeId);
+        final List<ProductTypeAttr> attrs = getGenericDao().findByNamedQuery("PRODUCT.TYPE.ATTR.BY.PROD.TYPE.ID", productTypeId);
+        // Need to sort this here as ordering has adverse effect on query - do not use "order by rank"
+        Collections.sort(attrs, new Comparator<ProductTypeAttr>() {
+            @Override
+            public int compare(final ProductTypeAttr a1, final ProductTypeAttr a2) {
+                return a1.getRank() - a2.getRank();
+            }
+        });
+        return attrs;
+    }
+
+    /** {@inheritDoc} */
+    @Cacheable(value = "productTypeAttrService-navigatableByProductTypeId")
+    public List<ProductTypeAttr> getNavigatableByProductTypeId(final long productTypeId) {
+        final List<ProductTypeAttr> attrs = getGenericDao().findByNamedQuery("PRODUCT.TYPE.NAV.ATTR.BY.PROD.TYPE.ID", productTypeId, Boolean.TRUE);
+        // Need to sort this here as ordering has adverse effect on query - do not use "order by rank"
+        Collections.sort(attrs, new Comparator<ProductTypeAttr>() {
+            @Override
+            public int compare(final ProductTypeAttr a1, final ProductTypeAttr a2) {
+                return a1.getRank() - a2.getRank();
+            }
+        });
+        return attrs;
     }
 
     /** {@inheritDoc}*/
     @CacheEvict(value ={
             "productTypeAttrService-byProductTypeId",
+            "productTypeAttrService-navigatableByProductTypeId",
             "productTypeAttrService-viewGroupsByProductTypeId"
     } , allEntries = true )
     public ProductTypeAttr create(ProductTypeAttr instance) {
@@ -75,6 +98,7 @@ public class ProductTypeAttrServiceImpl extends BaseGenericServiceImpl<ProductTy
     /** {@inheritDoc}*/
     @CacheEvict(value ={
             "productTypeAttrService-byProductTypeId",
+            "productTypeAttrService-navigatableByProductTypeId",
             "productTypeAttrService-viewGroupsByProductTypeId"
     } , allEntries = true )
     public ProductTypeAttr update(ProductTypeAttr instance) {
@@ -84,6 +108,7 @@ public class ProductTypeAttrServiceImpl extends BaseGenericServiceImpl<ProductTy
     /** {@inheritDoc}*/
     @CacheEvict(value ={
             "productTypeAttrService-byProductTypeId",
+            "productTypeAttrService-navigatableByProductTypeId",
             "productTypeAttrService-viewGroupsByProductTypeId"
     } , allEntries = true )
     public void delete(ProductTypeAttr instance) {

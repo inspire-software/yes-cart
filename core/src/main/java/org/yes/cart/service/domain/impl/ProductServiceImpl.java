@@ -47,6 +47,7 @@ import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.misc.navigation.range.RangeNode;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
 import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordImpl;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.ProductService;
@@ -461,13 +462,19 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, List<Pair<String, Integer>>> findFilteredNavigationRecords(final Query baseQuery, final List<FilteredNavigationRecordRequest> request) {
+        return productDao.fullTextSearchNavigation(baseQuery, request);
+    }
 
     /**
      * {@inheritDoc}
      */
     @Cacheable(value = "productService-productQtyByQuery")
     public int getProductQty(final Query query) {
-        return productDao.getResultCount(query);
+        return productDao.fullTextSearchCount(query);
     }
 
 
