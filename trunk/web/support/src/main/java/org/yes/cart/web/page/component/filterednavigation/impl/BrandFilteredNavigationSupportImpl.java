@@ -16,16 +16,20 @@
 
 package org.yes.cart.web.page.component.filterednavigation.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
+import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordRequestImpl;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.web.page.component.filterednavigation.BrandFilteredNavigationSupport;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -33,6 +37,8 @@ import java.util.List;
  * Time: 12:49 AM
  */
 public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigationSupportImpl implements BrandFilteredNavigationSupport {
+
+    private static final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
 
     public BrandFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
                                               final ProductService productService) {
@@ -53,19 +59,40 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
 
             final List<FilteredNavigationRecord> allNavigationRecordsTemplates = getProductService().getDistinctBrands(locale, navigationContext.getCategories());
 
+            final FilteredNavigationRecordRequest request = new FilteredNavigationRecordRequestImpl("brandFacet", ProductSearchQueryBuilder.BRAND_FIELD);
+
+            final Map<String, List<Pair<String, Integer>>> counts =
+                    getProductService().findFilteredNavigationRecords(navigationContext.getProductQuery(), Collections.singletonList(request));
+
+
+            final List<Pair<String, Integer>> rangeCounts = new ArrayList<Pair<String, Integer>>(counts.get("brandFacet"));
+
+            if (rangeCounts.isEmpty()) {
+                LOGFTQ.warn("Unable to get price filtered navigation for query: {}, request: {}", navigationContext.getProductQuery(), request);
+                return Collections.emptyList();
+            }
+
             for (final FilteredNavigationRecord recordTemplate : allNavigationRecordsTemplates) {
 
-                final FilteredNavigationRecord record = recordTemplate.clone();
-                final NavigationContext candidateQuery = getLuceneQueryFactory().getProductSnowBallQuery(
-                        navigationContext, ProductSearchQueryBuilder.BRAND_FIELD, record.getValue()
-                );
+                final Iterator<Pair<String, Integer>> rangeCountsIt = rangeCounts.iterator();
+                while (rangeCountsIt.hasNext()) {
 
-                int candidateResultCount = getProductService().getProductQty(candidateQuery.getProductQuery());
-                if (candidateResultCount > 0) {
-                    record.setName(recordName);
-                    record.setCode(ProductSearchQueryBuilder.BRAND_FIELD);
-                    record.setCount(candidateResultCount);
-                    navigationList.add(record);
+                    final Pair<String, Integer> rangeCount = rangeCountsIt.next();
+                    if (rangeCount.getFirst().equals(recordTemplate.getValue().toLowerCase())) {
+
+                        final Integer candidateResultCount = rangeCount.getSecond();
+                        if (candidateResultCount != null && candidateResultCount > 0) {
+                            final FilteredNavigationRecord record = recordTemplate.clone();
+                            record.setName(recordName);
+                            record.setCode(ProductSearchQueryBuilder.BRAND_FIELD);
+                            record.setCount(candidateResultCount);
+                            navigationList.add(record);
+                        }
+
+                        rangeCountsIt.remove(); // we no longer need this count
+                        break;
+
+                    }
                 }
             }
 

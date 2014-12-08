@@ -18,7 +18,7 @@ package org.yes.cart.web.theme.impl;
 
 import org.slf4j.Logger;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.query.NavigationContext;
+import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.DomainApiUtil;

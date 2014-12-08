@@ -22,8 +22,8 @@ import org.apache.lucene.document.Field;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.domain.entity.bridge.support.NavigatableAttributesSupport;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
 import java.util.Collection;
@@ -53,19 +53,17 @@ public class AttributeValueBridge implements FieldBridge {
                 // Only keep navigatable attributes in index
                 if (attrValue.getAttribute() != null && navAttrs.contains(attrValue.getAttribute().getCode())) {
 
-                    final String prefix = (obj instanceof AttrValueProductSku) ? "sku." : "";
-
                     if (isValidValue(attrValue)) {
                         document.add(new Field(
-                                prefix + ProductSearchQueryBuilder.ATTRIBUTE_VALUE_FIELD,
+                                ProductSearchQueryBuilder.ATTRIBUTE_VALUE_FIELD,
                                 (attrValue.getAttribute() == null ? "" : attrValue.getAttribute().getCode()) + attrValue.getVal(),
                                 luceneOptions.getStore(),
                                 Field.Index.NOT_ANALYZED,
                                 luceneOptions.getTermVector()
                         ));
                         document.add(new Field(
-                                prefix + ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
-                                attrValue.getVal(),
+                                ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
+                                getSearchValue(attrValue),
                                 luceneOptions.getStore(),
                                 Field.Index.ANALYZED,
                                 luceneOptions.getTermVector()
@@ -74,8 +72,16 @@ public class AttributeValueBridge implements FieldBridge {
                     }
 
                     document.add(new Field(
-                            prefix + ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD,
+                            ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD,
                             attrValue.getAttribute().getCode(),
+                            luceneOptions.getStore(),
+                            Field.Index.NOT_ANALYZED,
+                            luceneOptions.getTermVector()
+                    ));
+
+                    document.add(new Field(
+                            "facet_" + attrValue.getAttribute().getCode(),
+                            attrValue.getVal(),
                             luceneOptions.getStore(),
                             Field.Index.NOT_ANALYZED,
                             luceneOptions.getTermVector()
@@ -86,6 +92,13 @@ public class AttributeValueBridge implements FieldBridge {
             }
         }
 
+    }
+
+    private String getSearchValue(final AttrValue attrValue) {
+        if (StringUtils.isNotBlank(attrValue.getDisplayVal())) {
+            return attrValue.getDisplayVal().replace(StringI18NModel.SEPARATOR, " ").concat(" ").concat(attrValue.getVal());
+        }
+        return attrValue.getVal();
     }
 
     /**

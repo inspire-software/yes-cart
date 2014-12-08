@@ -53,9 +53,11 @@ public class PriceSearchQueryBuilder extends AbstractSearchQueryBuilderImpl impl
         final Pair<String, Pair<BigDecimal, BigDecimal>> priceParams =
                 priceNavigation.decomposePriceRequestParams(searchValue);
 
-        return createRangeQuery(PRODUCT_SKU_PRICE,
-                skuPriceBridge.objectToString(shopId, priceParams.getFirst(), priceParams.getSecond().getFirst()),
-                skuPriceBridge.objectToString(shopId, priceParams.getFirst(), priceParams.getSecond().getSecond()));
+        final Pair<String, String> from = skuPriceBridge.objectToString(shopId, priceParams.getFirst(), priceParams.getSecond().getFirst());
+        final Pair<String, String> to = skuPriceBridge.objectToString(shopId, priceParams.getFirst(), priceParams.getSecond().getSecond());
+
+        // field name for from and to will be the same
+        return createRangeQuery(from.getFirst(), from.getSecond(), to.getSecond());
     }
 
     /**

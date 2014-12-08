@@ -19,7 +19,7 @@ package org.yes.cart.web.support.service.impl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.NavigationContext;
+import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;

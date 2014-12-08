@@ -16,9 +16,12 @@
 
 package org.yes.cart.dao.impl;
 
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.SortField;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.*;
+import org.apache.lucene.util.FixedBitSet;
 import org.hibernate.*;
+import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
 import org.hibernate.proxy.HibernateProxy;
@@ -28,6 +31,12 @@ import org.hibernate.search.Search;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
 import org.hibernate.search.indexes.interceptor.IndexingOverride;
+import org.hibernate.search.query.dsl.DiscreteFacetContext;
+import org.hibernate.search.query.dsl.FacetRangeAboveBelowContext;
+import org.hibernate.search.query.dsl.QueryBuilder;
+import org.hibernate.search.query.engine.spi.FacetManager;
+import org.hibernate.search.query.facet.Facet;
+import org.hibernate.search.query.facet.FacetSortOrder;
 import org.hibernate.search.util.impl.ClassLoaderHelper;
 import org.hibernate.search.util.impl.HibernateHelper;
 import org.slf4j.Logger;
@@ -41,12 +50,12 @@ import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entityindexer.IndexFilter;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
 import org.yes.cart.util.ShopCodeContext;
 
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -773,18 +782,139 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         return fullTextQuery;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, List<Pair<String, Integer>>> fullTextSearchNavigation(final org.apache.lucene.search.Query query,
+                                                                             final List<FilteredNavigationRecordRequest> facetingRequest) {
+        if (persistentClassIndexble) {
+            if (LOGFTQ.isDebugEnabled()) {
+                LOGFTQ.debug("Run facet request qith base query {}", query);
+            }
+
+            if (facetingRequest == null || facetingRequest.isEmpty()) {
+                return Collections.emptyMap();
+            }
+
+            FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
+            QueryBuilder qb = fullTextSession.getSearchFactory().buildQueryBuilder().forEntity(getPersistentClass()).get();
+
+            FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, getPersistentClass());
+            fullTextQuery.setMaxResults(1);
+            final FacetManager facetManager = fullTextQuery.getFacetManager();
+            boolean hasMultivalue = false;
+            for (final FilteredNavigationRecordRequest facetingRequestItem : facetingRequest) {
+                if (facetingRequestItem.isRangeValue()) {
+                    final FacetRangeAboveBelowContext facetCtx = qb.facet().name(facetingRequestItem.getFacetName())
+                            .onField(facetingRequestItem.getField()).range();
+                    final Iterator<Pair<String, String>> rageIt = facetingRequestItem.getRangeValues().iterator();
+                    while (rageIt.hasNext()) {
+                        final Pair<String, String> range = rageIt.next();
+                        if (rageIt.hasNext()) {
+                            facetCtx.from(range.getFirst()).to(range.getSecond()).excludeLimit();
+                        } else {
+                            facetManager.enableFaceting(facetCtx.from(range.getFirst()).to(range.getSecond())
+                                    .orderedBy(FacetSortOrder.RANGE_DEFINITION_ODER).createFacetingRequest());
+                        }
+                    }
+                } else {
+                    final DiscreteFacetContext facetCtx = qb.facet().name(facetingRequestItem.getFacetName())
+                            .onField(facetingRequestItem.getField()).discrete();
+                    facetManager.enableFaceting(facetCtx
+                            .includeZeroCounts(facetingRequestItem.isMultiValue())
+                            .createFacetingRequest());
+                    if (facetingRequestItem.isMultiValue()) {
+                        hasMultivalue = true;
+                    }
+                }
+            }
+
+            final Map<String, List<Pair<String, Integer>>> out = new HashMap<String, List<Pair<String, Integer>>>();
+            IndexReader indexReader = null;
+            FixedBitSet baseBitSet = null;
+            try {
+
+                if (hasMultivalue) {
+                    indexReader = fullTextSession.getSearchFactory().getIndexReaderAccessor().open(getPersistentClass());
+                    CachingWrapperFilter baseQueryFilter = new CachingWrapperFilter(new QueryWrapperFilter(query));
+                    try {
+                        DocIdSet docIdSet = baseQueryFilter.getDocIdSet(indexReader);
+                        if (docIdSet instanceof FixedBitSet) {
+                            baseBitSet = (FixedBitSet) docIdSet;
+                        } else {
+                            baseBitSet = new FixedBitSet(1);
+                        }
+                    } catch (IOException e) {
+                        LOGFTQ.error("Unable to create base query bit set for query {} and faceting request {}", query, facetingRequest);
+                        LOGFTQ.error("Stacktrace:", e);
+                        baseBitSet = new FixedBitSet(1);
+                    }
+                }
+
+                for (final FilteredNavigationRecordRequest facetingRequestItem : facetingRequest) {
+
+                    final List<Pair<String, Integer>> facetsPairs =
+                            new ArrayList<Pair<String, Integer>>();
+
+                    final List<Facet> facets =  facetManager.getFacets(facetingRequestItem.getFacetName());
+
+                    LOGFTQ.debug("Faceting request request: {}", facetingRequestItem);
+
+                    if (facetingRequestItem.isMultiValue() && !facetingRequestItem.isRangeValue()) {
+                        // Multivalue black magic
+                        for (final Facet facet : facets) {
+
+                            final org.apache.lucene.search.Query facetQuery = new TermQuery(new Term(facet.getFieldName(), facet.getValue()));
+                            try {
+                                CachingWrapperFilter filter = new CachingWrapperFilter(new QueryWrapperFilter(facetQuery));
+                                DocIdSet docIdSet = filter.getDocIdSet(indexReader);
+                                if (docIdSet instanceof FixedBitSet) {
+                                    FixedBitSet filterBitSet = (FixedBitSet) docIdSet;
+                                    filterBitSet.and(baseBitSet);
+                                    long count = filterBitSet.cardinality();
+                                    if (count > 0L) {
+                                        LOGFTQ.debug("Has facet: {}", facet);
+                                        facetsPairs.add(new Pair<String, Integer>(facet.getValue(), (int) count));
+                                    }
+                                }
+                            } catch (IOException e) {
+                                LOGFTQ.error("Unable to create filter query bit set for query {} and faceting query {}", query, facetQuery);
+                                LOGFTQ.error("Stacktrace:", e);
+                            }
+
+                        }
+                    } else {
+                        // Standard discrete values and ranges
+                        for (final Facet facet : facets) {
+                            LOGFTQ.debug("Has facet: {}", facet);
+                            facetsPairs.add(new Pair<String, Integer>(facet.getValue(), facet.getCount()));
+                        }
+                    }
+                    out.put(facetingRequestItem.getFacetName(), facetsPairs);
+                }
+            } finally {
+                if (hasMultivalue) {
+                    fullTextSession.getSearchFactory().getIndexReaderAccessor().close(indexReader);
+                }
+            }
+            return out;
+        }
+        return Collections.emptyMap();
+    }
 
     /**
      * {@inheritDoc}
      */
-    public int getResultCount(final org.apache.lucene.search.Query query) {
+    public int fullTextSearchCount(final org.apache.lucene.search.Query query) {
         if (persistentClassIndexble) {
             if (LOGFTQ.isDebugEnabled()) {
                 LOGFTQ.debug("Count {}", query);
             }
 
             FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
-            return fullTextSession.createFullTextQuery(query, getPersistentClass()).getResultSize();
+            FullTextQuery fullTextQuery = fullTextSession.createFullTextQuery(query, getPersistentClass());
+            fullTextQuery.setMaxResults(1);
+            return fullTextQuery.getResultSize();
         }
         return 0;
     }

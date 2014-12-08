@@ -22,7 +22,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.entity.Seoable;
-import org.yes.cart.domain.query.NavigationContext;
+import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CategoryServiceFacade;

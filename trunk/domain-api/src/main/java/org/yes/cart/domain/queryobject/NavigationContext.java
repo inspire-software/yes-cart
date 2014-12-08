@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.query;
+package org.yes.cart.domain.queryobject;
 
 import org.apache.lucene.search.Query;
 
@@ -24,6 +24,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Navigation context that holds all necessary information to locate products
+ * with respect to users current URI location. This is an immutable object and
+ * return values of its getter MUST ONLY be used in read only mode.
+ *
  * User: denispavlov
  * Date: 25/11/2014
  * Time: 22:22

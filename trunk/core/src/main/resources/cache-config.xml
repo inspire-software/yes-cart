@@ -535,6 +535,10 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="productTypeAttrService-navigatableByProductTypeId"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="productTypeAttrService-viewGroupsByProductTypeId"/>
             <constructor-arg index="1" value="all"/>
         </bean>

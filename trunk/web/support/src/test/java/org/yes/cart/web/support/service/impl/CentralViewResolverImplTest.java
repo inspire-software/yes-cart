@@ -22,7 +22,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.NavigationContext;
+import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.domain.query.impl.ProductCategorySearchQueryBuilder;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;

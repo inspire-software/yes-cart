@@ -18,6 +18,8 @@ package org.yes.cart.domain.queryobject;
 
 import org.yes.cart.domain.entity.Rankable;
 
+import java.io.Serializable;
+
 /**
  * Filtered navigation record.
  * <p/>
@@ -25,7 +27,7 @@ import org.yes.cart.domain.entity.Rankable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface FilteredNavigationRecord extends Rankable, Cloneable {
+public interface FilteredNavigationRecord extends Rankable, Cloneable, Serializable {
 
     /**
      * Get attribute code.

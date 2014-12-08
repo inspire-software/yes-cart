@@ -24,7 +24,7 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.query.NavigationContext;
+import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductService;
 

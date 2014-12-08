@@ -188,6 +188,7 @@
     <bean id="attributeFilteredNavigationSupport" class="org.yes.cart.web.page.component.filterednavigation.impl.AttributeFilteredNavigationSupportImpl">
         <constructor-arg index="0" ref="luceneQueryFactory"/>
         <constructor-arg index="1" ref="productService"/>
+        <constructor-arg index="2" ref="productTypeAttrService"/>
     </bean>
 
     <bean id="brandFilteredNavigationSupport" class="org.yes.cart.web.page.component.filterednavigation.impl.BrandFilteredNavigationSupportImpl">
@@ -201,6 +202,7 @@
         <constructor-arg index="2" ref="categoryService"/>
         <constructor-arg index="3" ref="shopService"/>
         <constructor-arg index="4" ref="priceService"/>
+        <constructor-arg index="5" ref="priceNavigation"/>
     </bean>
 
     <bean id="currencySymbolService" class="org.yes.cart.web.support.service.impl.CurrencySymbolServiceImpl">

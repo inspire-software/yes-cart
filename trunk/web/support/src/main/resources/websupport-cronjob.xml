@@ -23,6 +23,32 @@
 
     <!-- ################################ Discontinued products  ###################################### -->
 
+    <bean id="productsGlobalIndexProcessor" parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.product.ProductsGlobalIndexProcessorImpl">
+                <constructor-arg index="0" ref="productService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean name="productsGlobalIndexProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobName" value="Reindex All Products" />
+                <entry key="job" value-ref="productsGlobalIndexProcessor" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="productsGlobalIndexProcessorTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="productsGlobalIndexProcessorJob" />
+        <!-- at 5:00 am -->
+        <property name="cronExpression" value="0 0 5 * * ?" />
+    </bean>
+
+
+
     <bean id="productsPassedAvailbilityDateIndexProcessor" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.product.ProductsPassedAvailbilityDateIndexProcessorImpl">
@@ -53,10 +79,15 @@
         <property name="triggers">
             <list>
                 <ref bean="reindexDiscontinuedProductsTrigger" />
+                <!-- CPOINT: Uncomment this if you need global reindex instead of
+                             only discontinued products.
+                     (This replaces reindexDiscontinuedProductsTrigger)
+
+                <ref bean="productsGlobalIndexProcessorTrigger" />
+                  -->
             </list>
         </property>
     </bean>
 
 
 </beans>
-        

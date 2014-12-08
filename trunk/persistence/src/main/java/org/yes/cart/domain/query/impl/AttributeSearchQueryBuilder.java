@@ -44,22 +44,15 @@ public class AttributeSearchQueryBuilder extends AbstractSearchQueryBuilderImpl 
         final String escapedParameter = escapeValue(parameter);
 
         if (searchValue.contains(Constants.RANGE_NAVIGATION_DELIMITER)) { // value range navigation
-            final String[] attrValues = StringUtils.split(searchValue, Constants.RANGE_NAVIGATION_DELIMITER);
+            final String[] attrValues = StringUtils.splitByWholeSeparatorPreserveAllTokens(searchValue, Constants.RANGE_NAVIGATION_DELIMITER);
 
             final BooleanQuery aggregatedQuery = new BooleanQuery();
 
-            final BooleanQuery productAttrNames = new BooleanQuery();
-            productAttrNames.add(createTermQuery(ATTRIBUTE_CODE_FIELD, escapedParameter), BooleanClause.Occur.SHOULD);
-            productAttrNames.add(createTermQuery(SKU_ATTRIBUTE_CODE_FIELD, escapedParameter), BooleanClause.Occur.SHOULD);
+            final String searchValueLo = attrValues[0].length() > 0 ? escapedParameter + escapeValue(attrValues[0]) : null;
+            final String searchValueHi = attrValues[1].length() > 0 ? escapedParameter + escapeValue(attrValues[1]) : null;
 
-            final String searchValueLo = attrValues.length > 0 ? escapedParameter + escapeValue(attrValues[0]) : null;
-            final String searchValueHi = attrValues.length > 1 ? escapedParameter + escapeValue(attrValues[1]) : null;
-            final BooleanQuery productAttrVal = new BooleanQuery();
-            productAttrVal.add(createRangeQuery(ATTRIBUTE_VALUE_FIELD, searchValueLo, searchValueHi, 3.5f), BooleanClause.Occur.SHOULD);
-            productAttrVal.add(createRangeQuery(SKU_ATTRIBUTE_VALUE_FIELD, searchValueLo, searchValueHi, 3.5f), BooleanClause.Occur.SHOULD);
-
-            aggregatedQuery.add(productAttrNames, BooleanClause.Occur.MUST);
-            aggregatedQuery.add(productAttrVal, BooleanClause.Occur.MUST);
+            aggregatedQuery.add(createTermQuery(ATTRIBUTE_CODE_FIELD, escapedParameter), BooleanClause.Occur.MUST);
+            aggregatedQuery.add(createRangeQuery(ATTRIBUTE_VALUE_FIELD, searchValueLo, searchValueHi, 3.5f), BooleanClause.Occur.MUST);
 
             return aggregatedQuery;
 
@@ -67,17 +60,10 @@ public class AttributeSearchQueryBuilder extends AbstractSearchQueryBuilderImpl 
 
         final BooleanQuery aggregatedQuery = new BooleanQuery();
 
-        final BooleanQuery productAttrNames = new BooleanQuery();
-        productAttrNames.add(createTermQuery(ATTRIBUTE_CODE_FIELD, escapedParameter), BooleanClause.Occur.SHOULD);
-        productAttrNames.add(createTermQuery(SKU_ATTRIBUTE_CODE_FIELD, escapedParameter), BooleanClause.Occur.SHOULD);
-
         final String ftSearchValue = escapedParameter + escapeValue(searchValue);
-        final BooleanQuery productAttrVal = new BooleanQuery();
-        productAttrVal.add(createTermQuery(ATTRIBUTE_VALUE_FIELD, ftSearchValue, 3.5f), BooleanClause.Occur.SHOULD);
-        productAttrVal.add(createTermQuery(SKU_ATTRIBUTE_VALUE_FIELD, ftSearchValue, 3.5f), BooleanClause.Occur.SHOULD);
 
-        aggregatedQuery.add(productAttrNames, BooleanClause.Occur.MUST);
-        aggregatedQuery.add(productAttrVal, BooleanClause.Occur.MUST);
+        aggregatedQuery.add(createTermQuery(ATTRIBUTE_CODE_FIELD, escapedParameter), BooleanClause.Occur.MUST);
+        aggregatedQuery.add(createTermQuery(ATTRIBUTE_VALUE_FIELD, ftSearchValue, 3.5f), BooleanClause.Occur.MUST);
 
         return aggregatedQuery;
 

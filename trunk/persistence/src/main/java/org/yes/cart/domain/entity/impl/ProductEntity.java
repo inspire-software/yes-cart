@@ -153,6 +153,19 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return attrCode.substring(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX.length());
     }
 
+    @Field(name = "description_stem", index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.NO)
+    public String getDescriptionStem() {
+        final String localisedDescription = getDescriptionAsIs();
+        final String description = getDescription();
+        if (StringUtils.isNotBlank(localisedDescription)) {
+            if (StringUtils.isNotBlank(description)) {
+                return localisedDescription.replace(StringI18NModel.SEPARATOR, " ").concat(" ").concat(description);
+            }
+            return localisedDescription.replace(StringI18NModel.SEPARATOR, " ");
+        }
+        return description;
+    }
+
     @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)
     public String getDescription() {
         return this.description;

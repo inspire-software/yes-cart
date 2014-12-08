@@ -17,7 +17,6 @@
 package org.yes.cart.domain.misc;
 
 import java.io.Serializable;
-import java.text.MessageFormat;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -79,11 +78,12 @@ public class Pair<FIRST, SECOND> implements Serializable {
         return (first == null   ? 0 : first.hashCode()) ^   (second == null ? 0 : second.hashCode());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
-        return MessageFormat.format("Pair first = [{0}] second = [{1}]", first, second);
+        return "Pair{" +
+                "first=" + first +
+                ", second=" + second +
+                '}';
     }
+
 }
