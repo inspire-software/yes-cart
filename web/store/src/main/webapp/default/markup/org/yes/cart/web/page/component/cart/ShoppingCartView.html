@@ -95,9 +95,11 @@
         </div>
 
         <div class="col-xs-12 col-md-3 no-padding shopping-cart-sidebar">
-            <div class="shopping-cart-title">
-                <h2><wicket:message key="shoppingCart">[Shopping cart]</wicket:message></h2>
-            </div>
+
+            <wicket:container wicket:id="subTotalInclude">
+                [sub total include]
+            </wicket:container>
+
             <label class="pull-left">
                 <wicket:message key="amountMsg">[Amount]</wicket:message>
             </label>
@@ -112,9 +114,10 @@
                 </a>
             </div>
 
-            <div class="coupons-title">
-                <h2><wicket:message key="addCouponsTitle">[Shopping cart]</wicket:message></h2>
-            </div>
+            <wicket:container wicket:id="couponsInclude">
+                [coupons include]
+            </wicket:container>
+
             <div wicket:id="couponsList">
                 <div class="single-coupon pull-left" wicket:id="couponsListItem">
                     [sub total]
@@ -125,7 +128,7 @@
                     </a>
                 </div>
             </div>
-            <div>
+            <div wicket:enclosure="couponInput">
                 <div class="form-group">
                     <input type="text" wicket:id="couponInput" class="form-control" wicket:message="placeholder:enterCouponLabel"/>
                 </div>
@@ -133,6 +136,20 @@
                     <input type="submit" class="btn btn-info" wicket:id="addCouponBtn" wicket:message="value:addCouponButtonLabel"/>
                 </div>
             </div>
+
+            <wicket:container wicket:id="orderMessageInclude">
+                [order message fragment]
+            </wicket:container>
+
+            <div wicket:enclosure="orderMessageInput">
+                <div class="form-group">
+                    <input type="text" wicket:id="orderMessageInput" class="form-control"/>
+                </div>
+                <div class="text-right">
+                    <input type="submit" class="btn btn-info" wicket:id="orderMessageBtn" wicket:message="value:edit"/>
+                </div>
+            </div>
+
         </div>
 
     </form>

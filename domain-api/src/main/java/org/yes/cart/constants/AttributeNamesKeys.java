@@ -265,6 +265,16 @@ public interface AttributeNamesKeys {
          */
         String SHOP_NEW_ARRIVAL_DAYS_OFFSET = "SHOP_NEW_ARRIVAL_DAYS_OFFSET";
 
+        /**
+         * Setting for whether to show coupons or not
+         */
+        String CART_UPDATE_ENABLE_COUPONS = "SHOP_CHECKOUT_ENABLE_COUPONS";
+
+        /**
+         * Setting for whether to show order message or not
+         */
+        String CART_UPDATE_ENABLE_ORDER_MSG = "SHOP_CHECKOUT_ENABLE_ORDER_MSG";
+
     }
 
     interface Brand {

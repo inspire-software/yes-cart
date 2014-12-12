@@ -232,6 +232,8 @@
                 <value>sku</value>
                 <value>wla</value>
                 <value>viewSkuInternalCmd</value>
+                <value>setPgLabelCmd</value>
+                <value>setOrderMsgCmd</value>
             </list>
         </property>
         <property name="cmdInternalKeys">
@@ -245,6 +247,7 @@
                 <value>setMultipleDeliveryCmd</value>
                 <value>setShopIdCmd</value>
                 <value>viewSkuInternalCmd</value>
+                <value>setPgLabelCmd</value>
             </list>
         </property>
     </bean>

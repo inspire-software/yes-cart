@@ -58,5 +58,9 @@ public class SetPaymentGatewayLabelCommandImplTest extends BaseCoreDBTestCase {
         commands.execute(shoppingCart, params);
         assertEquals("qwerty", shoppingCart.getOrderInfo().getPaymentGatewayLabel());
 
+        params.put(SetPaymentGatewayLabelCommandImpl.CMD_SETPGLABEL, null);
+
+        commands.execute(shoppingCart, params);
+        assertNull(shoppingCart.getOrderInfo().getPaymentGatewayLabel());
     }
 }

@@ -58,7 +58,7 @@ public interface CustomerOrder extends Auditable {
     String ORDER_STATUS_CANCELLED = "os.cancelled";
 
     /**
-     * Order retunred. Quantity returned from credit.
+     * Order returned. Quantity returned from credit.
      */
     String ORDER_STATUS_RETURNED = "os.returned";
 

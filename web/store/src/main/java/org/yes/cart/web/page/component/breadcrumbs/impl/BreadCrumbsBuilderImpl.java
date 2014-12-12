@@ -120,7 +120,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
      * @param isContent        true if this is content hierarchy, category otherwise
      */
     private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId, final Set<Long> shopCategoryIds, final boolean isContent) {
-        if (categoryId > 0l) {
+        if (categoryId > 0l && shopCategoryIds.contains(categoryId)) {
             final Category category = categoryService.getById(categoryId);
             if (!category.isRoot() && !CentralViewLabel.CONTENT_INCLUDE.equals(category.getUitemplate())) {
                 categoriesCrumbs.add(

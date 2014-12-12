@@ -927,8 +927,7 @@ a {
     display: inline;
 }
 
-.shopping-cart-sidebar .coupons-title > h2,
-.shopping-cart-sidebar .shopping-cart-title > h2 {
+.shopping-cart-sidebar .section-title > h2 {
     font-size: 24px;
     font-weight: 500;
     border-bottom: 1px solid #e0e0e0;
