@@ -16,22 +16,6 @@
 
 <Context path="/yes-api" crossContext="true" >
 
-<!--
-    <Resource name="mail/Session"
-              auth="Container"
-              type="javax.mail.Session"
-              username="yourusername"
-              password="yourpassword"
-              mail.debug="true"
-              mail.user="yourusername"
-              mail.password="yourpassword"
-              mail.transport.protocol="smtp"
-              mail.smtp.host="your.smtphost.com"
-              mail.smtp.auth="true"
-              mail.smtp.port="25"
-              mail.smtp.starttls.enable="true"/>
--->
-
     <Resource name="jdbc/yespayjndi"
               auth="Container"
               scope="Shareable"
@@ -75,10 +59,10 @@
            userRoleTable="TMANAGERROLE"
            roleNameCol="code"/>
 
-    <Parameter name="NODE_ID" value="YES1" override="false"/>
-    <Parameter name="BACKDOOR_URI" value="http://localhost:8080/yes-api/services/backdoor" override="false"/>
-    <Parameter name="CACHEDIRECTOR_URI" value="http://localhost:8080/yes-api/services/cachedirector" override="false"/>
-    <Parameter name="LUCENE_INDEX_DISABLED" value="true" override="false"/>
+    <Parameter name="NODE_ID" value="${cluster.config.yesapi.node_id}" override="false"/>
+    <Parameter name="BACKDOOR_URI" value="${cluster.config.yesapi.backdoor_uri}" override="false"/>
+    <Parameter name="CACHEDIRECTOR_URI" value="${cluster.config.yesapi.cachedirector_uri}" override="false"/>
+    <Parameter name="LUCENE_INDEX_DISABLED" value="${cluster.config.yesapi.lucene_index_disabled}" override="false"/>
 
 </Context>
 
