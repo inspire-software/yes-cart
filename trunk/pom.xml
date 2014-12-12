@@ -279,7 +279,12 @@
         </pluginManagement>
     </build>
     <profiles>
+
+        <!--
+            DATABASE PROFILES
+        -->
         <profile>
+            <!-- Use this profile to setup MySQL connection -->
             <id>mysql</id>
             <properties>
                 <db.config.yes.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</db.config.yes.hibernate.dialect>
@@ -297,6 +302,7 @@
             </properties>
         </profile>
         <profile>
+            <!-- Use this profile to setup Derby connection -->
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>derby</id>
             <properties>
@@ -313,14 +319,20 @@
             </properties>
         </profile>
 
+        <!--
+            HTTP/HTTPS PROFILES
+        -->
         <profile>
+            <!-- Use this profile in conjunction with tomcatBehindApache to setup HTTPS outside of Tomcat -->
             <id>secure</id>
             <properties>
                 <wicket.security.enabled>true</wicket.security.enabled>
                 <yum.transport.guarantee>CONFIDENTIAL</yum.transport.guarantee>
             </properties>
         </profile>
+
         <profile>
+            <!-- Use this profile in conjunction with tomcatDefault to setup HTTPS managed Tomcat -->
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>unsecure</id>
             <properties>
@@ -330,6 +342,7 @@
         </profile>
 
         <profile>
+            <!-- Use this profile in conjunction with unsecure to setup HTTPS managed Tomcat -->
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>tomcatDefault</id>
             <properties>
@@ -337,7 +350,9 @@
                 <wicket.unsecure.port>8080</wicket.unsecure.port>
             </properties>
         </profile>
+
         <profile>
+            <!-- Use this profile in conjunction with secure to setup HTTPS outside of Tomcat -->
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>tomcatBehindApache</id>
             <properties>
@@ -346,21 +361,57 @@
             </properties>
         </profile>
 
-
+        <!--
+            MAIL PROFILES
+        -->
         <profile>
+            <!-- Default mail config, use this template to setup others if required -->
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>mailProd</id>
             <properties>
-
-                <!-- yes cart manager -->
                 <yum.mail.host>localhost</yum.mail.host>
                 <yum.mail.port>25</yum.mail.port>
                 <yum.mail.username>username</yum.mail.username>
                 <yum.mail.password>password</yum.mail.password>
                 <yum.mail.smtp.starttls.enable>true</yum.mail.smtp.starttls.enable>
-
             </properties>
         </profile>
+
+        <!--
+            CLUSTER PROFILES
+
+            All nodes should be named YES[d], i.e. YES0, YES1, YES2 etc.
+
+            Backdoor and cache director URI are internal URI that YUM will call to trigger
+            commands on that node (i.e. self reference in cluster)
+
+            If lucene index is shared between nodes than only one must have index enabled,
+            the rest should have index disabled.
+        -->
+        <profile>
+            <!-- Default single node storefront, use this template to setup others if required -->
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>clusterYesNode0local</id>
+            <properties>
+                <cluster.config.yes.node_id>YES0</cluster.config.yes.node_id>
+                <cluster.config.yes.backdoor_uri>http://localhost:8080/yes-shop/services/backdoor</cluster.config.yes.backdoor_uri>
+                <cluster.config.yes.cachedirector_uri>http://localhost:8080/yes-shop/services/cachedirector</cluster.config.yes.cachedirector_uri>
+                <cluster.config.yes.lucene_index_disabled>false</cluster.config.yes.lucene_index_disabled>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Default single node storefront, use this template to setup others if required -->
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>clusterYesApiNode0local</id>
+            <properties>
+                <cluster.config.yesapi.node_id>YES1</cluster.config.yesapi.node_id>
+                <cluster.config.yesapi.backdoor_uri>http://localhost:8080/yes-shop/services/backdoor</cluster.config.yesapi.backdoor_uri>
+                <cluster.config.yesapi.cachedirector_uri>http://localhost:8080/yes-shop/services/cachedirector</cluster.config.yesapi.cachedirector_uri>
+                <cluster.config.yesapi.lucene_index_disabled>true</cluster.config.yesapi.lucene_index_disabled>
+            </properties>
+        </profile>
+
 
     </profiles>
 
