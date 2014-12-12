@@ -57,6 +57,14 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  10990,  'SHOP_NEW_ARRIVAL_DAYS_OFFSET', 'SHOP_NEW_ARRIVAL_DAYS_OFFSET',  0,  NULL,  'Search: newarrival tag days offset',
    'Search: newarrival tag days offset',  1006, 1001);
 
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10988,  'SHOP_CHECKOUT_ENABLE_ORDER_MSG', 'SHOP_CHECKOUT_ENABLE_ORDER_MSG',  0,  NULL,  'Checkout: enable order message',
+   'Checkout: enable order message',  1008, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10987,  'SHOP_CHECKOUT_ENABLE_COUPONS', 'SHOP_CHECKOUT_ENABLE_COUPONS',  0,  NULL,  'Checkout: enable coupons',
+   'Checkout: enable coupons',  1008, 1001);
+
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11000,  'SYSTEM_DEFAULT_SHOP', 'SYSTEM_DEFAULT_SHOP',  1,  NULL,  'System. Default shop',
@@ -253,6 +261,8 @@ INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (13, 'AU
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (14, 'AU,AT,BE,BG,CA,CN,HR,CY,CZ,DK,EE,FI,FR,DE,GR,HK,HU,IE,IM,IT,JP,LV,LT,LU,NL,NZ,NO,PL,PT,RO,RU,SE,CH,TR,UA,GB,US', 'COUNTRY_BILL', 10, 'COUNTRY_BILL_10');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (12, 'admin@at-shop-10.com', 'SHOP_ADMIN_EMAIL', 10, 'admin-email-guid');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (9, 'testPaymentGatewayLabel,courierPaymentGatewayLabel','SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL', 10, 'SHOP10_ACTIVE_PAYMENT_GATEWAYS_LABEL');
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (15, 'true','SHOP_CHECKOUT_ENABLE_COUPONS', 10, 'SHOP10_SHOP_CHECKOUT_ENABLE_COUPONS');
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (16, 'true','SHOP_CHECKOUT_ENABLE_ORDER_MSG', 10, 'SHOP10_SHOP_CHECKOUT_ENBL_ORDER_MSG');
 
 
 INSERT INTO TWAREHOUSE (WAREHOUSE_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1, 'Main', 'Main', 'Main warehouse', null);
@@ -444,6 +454,49 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 <span class="glyphicon glyphicon-envelope blue"></span>
 <a href="http://www.yes-cart.org/#contact" target="_blank">Контактна форма</a>
 ',10005,'12045_CAV');
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10006, 10000, 0, 'shopping_cart_checkout_include', 'Shopping cart checkout include for SHOP10','include', 'SHOP10_s_cart_checkout_include','SHOP10_shopping_cart_checkout_include');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12052,'CONTENT_BODY_en_1','
+<div class="section-title"><h2>Shopping cart</h2></div>
+',10006,'12052_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12053,'CONTENT_BODY_ru_1','
+<div class="section-title"><h2>Корзина</h2></div>
+',10006,'12053_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12055,'CONTENT_BODY_uk_1','
+<div class="section-title"><h2>Кошик</h2></div>
+',10006,'12055_CAV');
+
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10007, 10000, 0, 'shopping_cart_coupons_include', 'Shopping cart coupons include for SHOP10','include', 'SHOP10_shopping_cart_coupons_include','SHOP10_shopping_cart_coupons_include');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12062,'CONTENT_BODY_en_1','
+<div class="section-title"><h2>Add Coupons</h2></div>
+',10007,'12062_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12063,'CONTENT_BODY_ru_1','
+<div class="section-title"><h2>Добавить промо-код</h2></div>
+',10007,'12063_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12065,'CONTENT_BODY_uk_1','
+<div class="section-title"><h2>Додати промо-код</h2></div>
+',10007,'12065_CAV');
+
+
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10008, 10000, 0, 'shopping_cart_message_include', 'Shopping cart message include for SHOP10','include', 'SHOP10_shopping_cart_message_include','SHOP10_shopping_cart_message_include');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12072,'CONTENT_BODY_en_1','
+<div class="section-title"><h2>Order Message</h2></div>
+<div class="clearfix"><% if (shoppingCart.orderMessage != null) { %>
+Current message: "${shoppingCart.orderMessage}"<% } else { %>Add order message<% } %></div>
+',10008,'12072_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12073,'CONTENT_BODY_ru_1','
+<div class="section-title"><h2>Сообщение</h2></div>
+<div class="clearfix"><% if (shoppingCart.orderMessage != null) { %>
+Сообщение в заказе: "${shoppingCart.orderMessage}"<% } else { %>Добавьте сообщение<% } %></div>
+',10008,'12073_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12075,'CONTENT_BODY_uk_1','
+<div class="section-title"><h2>Повідомлення</h2></div>
+<div class="clearfix"><% if (shoppingCart.orderMessage != null) { %>
+Повідомлення у замовленні: "${shoppingCart.orderMessage}"<% } else { %>Додайте повідомлення<% } %></div>
+',10008,'12075_CAV');
+
 
 
 INSERT INTO TROLE (ROLE_ID, GUID, CODE, DESCRIPTION) VALUES (1, 'ROLE_SMADMIN',         'ROLE_SMADMIN', 'System admin');

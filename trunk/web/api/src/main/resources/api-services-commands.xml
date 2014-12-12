@@ -166,4 +166,10 @@
         <property name="priority" value="20"/>
     </bean>
 
+    <bean id="setOrderMsgCmd" class="org.yes.cart.shoppingcart.impl.SetOrderMessageCommandImpl">
+        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
+        <property name="priority" value="21"/>
+    </bean>
+
+
 </beans>
