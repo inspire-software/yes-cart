@@ -37,6 +37,15 @@
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
 
+    <bean id="inStorePaymentGateway"  class="org.yes.cart.payment.impl.InStorePaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
+    <bean id="prePaymentGateway"  class="org.yes.cart.payment.impl.PrePaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
+
+
     <bean id="testPaymentGateway" class="org.yes.cart.payment.impl.TestPaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
@@ -56,6 +65,20 @@
         <property name="description" value="Offline courier payment gateway"/>
     </bean>
 
+    <bean id="inStorePaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="inStorePaymentGatewayLabel"/>
+        <property name="url" value="inStorePaymentGateway"/>
+        <!--name without protocol mean spring context-->
+        <property name="description" value="Offline in store payment gateway"/>
+    </bean>
+
+    <bean id="prePaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="prePaymentGatewayLabel"/>
+        <property name="url" value="prePaymentGateway"/>
+        <!--name without protocol mean spring context-->
+        <property name="description" value="Offline pre-payment gateway"/>
+    </bean>
+
     <bean id="basePaymentModule" class="org.yes.cart.payment.impl.PaymentModuleBaseSetImpl">
         <property name="descriptor">
             <bean class="org.yes.cart.payment.persistence.entity.impl.DescriptorImpl">
@@ -68,6 +91,8 @@
             <map>
                 <entry key="testPaymentGateway" value-ref="testPaymentGatewayDescriptor"/>
                 <entry key="courierPaymentGateway" value-ref="courierPaymentGatewayDescriptor"/>
+                <entry key="inStorePaymentGateway" value-ref="inStorePaymentGatewayDescriptor"/>
+                <entry key="prePaymentGateway" value-ref="prePaymentGatewayDescriptor"/>
             </map>
         </property>
     </bean>

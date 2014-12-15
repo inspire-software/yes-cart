@@ -60,6 +60,7 @@
     <entry key="multipleDeliveryLabel">Множинна доставка</entry>
     <entry key="multipleDeliveryHint">Це замовлення може бути доставлене частинами</entry>
     <entry key="paymentSubmit">Сплатити</entry>
+    <entry key="orderPlace">Оформити замовлення</entry>
     <entry key="checkoutTitle">Оформлення покупки</entry>
     <entry key="selectAddr">Вкажіть адресу для доставки і рахунку</entry>
     <entry key="selectPayment">Оплата</entry>

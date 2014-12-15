@@ -222,3 +222,36 @@ VALUES (63, 'courierPaymentGateway', 'name_uk', 'Оплата кур''єру', '
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (64, 'courierPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
+
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (65, 'prePaymentGateway', 'name', 'Offline Pre-Payment', 'Gateway name (default)', 'Gateway name (default)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (66, 'prePaymentGateway', 'name_en', 'Offline Pre-Payment', 'Gateway name (EN)', 'Gateway name (EN)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (67, 'prePaymentGateway', 'name_ru', 'Предоплата', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (68, 'prePaymentGateway', 'name_uk', 'Попередня оплата', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (69, 'prePaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (70, 'inStorePaymentGateway', 'name', 'Payment in store', 'Gateway name (default)', 'Gateway name (default)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (71, 'inStorePaymentGateway', 'name_en', 'Payment in store', 'Gateway name (EN)', 'Gateway name (EN)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (72, 'inStorePaymentGateway', 'name_ru', 'Оплата в магазине', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (73, 'inStorePaymentGateway', 'name_uk', 'Оплата у магазині', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (74, 'inStorePaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
