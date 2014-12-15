@@ -78,7 +78,7 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
                     customerShops.add(shop.getCode());
                 }
                 shoppingCart.getShoppingContext().setCustomerEmail(customer.getEmail());
-                shoppingCart.getShoppingContext().setCustomerName(customer.getFirstname() + " " + customer.getLastname());
+                shoppingCart.getShoppingContext().setCustomerName(new NameFormatImpl().formatFullName(customer));
                 shoppingCart.getShoppingContext().setCustomerShops(customerShops);
                 setDefaultAddressesIfNecessary(shoppingCart, customer);
                 recalculate(shoppingCart);

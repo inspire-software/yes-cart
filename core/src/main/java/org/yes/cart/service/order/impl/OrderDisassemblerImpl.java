@@ -16,16 +16,18 @@
 
 package org.yes.cart.service.order.impl;
 
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.CustomerOrderDet;
-import org.yes.cart.domain.entity.PromotionCouponUsage;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
+import org.yes.cart.shoppingcart.MutableOrderInfo;
+import org.yes.cart.shoppingcart.MutableShoppingContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.impl.NameFormatImpl;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Transform {@link org.yes.cart.domain.entity.CustomerOrder} to {@link org.yes.cart.shoppingcart.ShoppingCart}.
@@ -48,6 +50,7 @@ public class OrderDisassemblerImpl {
 
         final ShoppingCartImpl shoppingCart = new ShoppingCartImpl();
 
+        //fill cart item list
         for (CustomerOrderDet orderDet :customerOrder.getOrderDetail()) {
             if(orderDet.isGift()) {
                 shoppingCart.addGiftToCart(orderDet.getProductSkuCode(), orderDet.getQty(), orderDet.getAppliedPromo());
@@ -56,20 +59,64 @@ public class OrderDisassemblerImpl {
             }
         }
 
-        for(PromotionCouponUsage coupons : customerOrder.getCoupons()) {
-            shoppingCart.addCoupon(coupons.getCoupon().getCode());
-        }
-
+        //fill deliveries
         for (CustomerOrderDelivery orderDelivery : customerOrder.getDelivery())  {
             shoppingCart.addShippingToCart(String.valueOf( orderDelivery.getCarrierSla().getCarrierslaId()), BigDecimal.ONE);
         }
 
+        //coupons
+        for(PromotionCouponUsage coupons : customerOrder.getCoupons()) {
+            shoppingCart.addCoupon(coupons.getCoupon().getCode());
+        }
+
+
+
         shoppingCart.setCurrentLocale(customerOrder.getLocale());
         shoppingCart.setCurrencyCode(customerOrder.getCurrency());
 
-        //todo mutable order info
+
+        MutableOrderInfo mutableOrderInfo = shoppingCart.getOrderInfo();
+        mutableOrderInfo.setOrderMessage(customerOrder.getOrderMessage());
+
+        mutableOrderInfo.setCarrierSlaId(getFirstDelivery(customerOrder).getCarrierSla().getCarrierslaId());
+
+        mutableOrderInfo.setSeparateBillingAddress(!customerOrder.getBillingAddress().equals(customerOrder.getShippingAddress()));
+
+        mutableOrderInfo.setDeliveryAddressId(null); //todo - how ???
+        mutableOrderInfo.setCarrierSlaId(null); //todo - how ???
+
+        mutableOrderInfo.setBillingAddressNotRequired(false);
+        mutableOrderInfo.setDeliveryAddressNotRequired(false);
+        mutableOrderInfo.setPaymentGatewayLabel(customerOrder.getPgLabel());
+        mutableOrderInfo.setMultipleDelivery(customerOrder.getDelivery().size() > 1);
+
+        MutableShoppingContext mutableShoppingContext = shoppingCart.getShoppingContext();
+        mutableShoppingContext.setCustomerEmail(customerOrder.getCustomer().getEmail());
+        mutableShoppingContext.setCustomerName(new NameFormatImpl().formatFullName(customerOrder.getCustomer()));
+
+        final List<String> customerShops = new ArrayList<String>();
+        for (final CustomerShop shop : customerOrder.getCustomer().getShops()) {
+            customerShops.add(shop.getShop().getCode());
+        }
+        mutableShoppingContext.setCustomerShops(customerShops);
+        mutableShoppingContext.setShopId(customerOrder.getShop().getShopId());
+        mutableShoppingContext.setShopCode(customerOrder.getShop().getCode());
+
+        final Address billing = customerOrder.getCustomer().getDefaultAddress(Address.ADDR_TYPE_BILLING);
+
+        mutableShoppingContext.setCountryCode(billing.getCountryCode());
+        mutableShoppingContext.setStateCode(billing.getStateCode());
+
+
+
 
 
         return shoppingCart;
+    }
+
+    private CustomerOrderDelivery getFirstDelivery(final CustomerOrder customerOrder) {
+
+        return customerOrder.getDelivery().iterator().next();
+
     }
 }
