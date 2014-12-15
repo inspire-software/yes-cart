@@ -511,7 +511,11 @@ public class CheckoutPage extends AbstractWebPage {
             rez = ((PaymentGatewayExternalForm) gateway).getSubmitButton();
         }
         if (StringUtils.isBlank(rez)) {
-            rez = "<input type=\"submit\" value=\"" + getLocalizer().getString("paymentSubmit", this) + "\">";
+            if (gateway.getPaymentGatewayFeatures().isOnlineGateway()) {
+                rez = "<input type=\"submit\" value=\"" + getLocalizer().getString("paymentSubmit", this) + "\">";
+            } else {
+                rez = "<input type=\"submit\" value=\"" + getLocalizer().getString("orderPlace", this) + "\">";
+            }
         }
         return rez;
     }

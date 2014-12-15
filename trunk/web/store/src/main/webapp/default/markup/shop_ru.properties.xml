@@ -60,6 +60,7 @@
     <entry key="multipleDeliveryLabel">Множественная доставка</entry>
     <entry key="multipleDeliveryHint">Этот заказ может быть доставлен по частям</entry>
     <entry key="paymentSubmit">Оплатить</entry>
+    <entry key="orderPlace">Оформить заказ</entry>
     <entry key="checkoutTitle">Оформление покупки</entry>
     <entry key="selectAddr">Укажите адреса для доставки и счета</entry>
     <entry key="selectPayment">Оплата</entry>

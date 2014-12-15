@@ -60,6 +60,7 @@
     <entry key="multipleDeliveryLabel">Multiple delivery</entry>
     <entry key="multipleDeliveryHint">This order may have several delivery</entry>
     <entry key="paymentSubmit">Pay</entry>
+    <entry key="orderPlace">Place order</entry>
     <entry key="checkoutTitle">Checkout</entry>
     <entry key="selectAddr">Provide shipping and billing addresses</entry>
     <entry key="selectPayment">Payment</entry>
