@@ -34,9 +34,9 @@
         <!-- Parent Category Id -->
         <column-descriptor>
             <column-index>0</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>LONG</data-type>
+            <field-type>FK_FIELD</field-type>
             <name>parentId</name>
+            <lookup-query>select c.categoryId from CategoryEntity c where c.guid = {parentId}</lookup-query>
         </column-descriptor>
 
         <!-- Name -->
