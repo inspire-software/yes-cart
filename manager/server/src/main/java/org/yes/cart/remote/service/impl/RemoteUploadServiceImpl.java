@@ -18,6 +18,8 @@ package org.yes.cart.remote.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.bulkimport.service.ImportDirectorService;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.remote.service.RemoteUploadService;
@@ -25,6 +27,8 @@ import org.yes.cart.remote.service.RemoteUploadService;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Upload file to server side.
@@ -50,14 +54,24 @@ public class RemoteUploadServiceImpl implements RemoteUploadService {
 
         final String folderPath = importDirectorService.getImportDirectory();
 
-        final File folder = new File(folderPath);
+        final SimpleDateFormat format = new SimpleDateFormat("_yyyy-MMM-dd-hh-mm-ss");
+        final String timestamp = format.format(new Date());
+        final SecurityContext sc = SecurityContextHolder.getContext();
+
+        final File folder;
+        if (sc != null && sc.getAuthentication() != null && sc.getAuthentication().getName() != null) {
+            folder = new File(folderPath + File.separator + sc.getAuthentication().getName() + timestamp);
+        } else {
+            folder = new File(folderPath + File.separator + "anonymous" + timestamp);
+        }
+
         folder.mkdirs();
 
         if (folder.exists()) {
 
             FileOutputStream fos = null;
             try {
-                final File file = new File(folderPath + File.separator + fileName);
+                final File file = new File(folder.getAbsolutePath() + File.separator + fileName);
                 if (file.exists()) {
                     throw new IllegalArgumentException("File: " + file.getName() + " is already being processed. If this is a different file - rename it and try again.");
                 }

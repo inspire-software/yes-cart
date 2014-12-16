@@ -149,13 +149,15 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         // Timeout - just in case runnable crashes and we need to unlock through timeout.
         final int timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_TIMEOUT_MS));
 
+        final String rootPath = resolveImportDirectory(fileName);
+
         return doJob(new JobContextImpl(async, new JobStatusListenerImpl(logSize, timeout),
                 new HashMap<String, Object>() {{
                     put(JobContextKeys.IMPORT_DESCRIPTOR_GROUP, descriptorGroup);
                     put(JobContextKeys.IMPORT_FILE, fileName);
                     put(JobContextKeys.IMPORT_FILE_SET, new HashSet<String>());
                     put(JobContextKeys.IMAGE_VAULT_PATH, imgVault);
-                    put(JobContextKeys.IMPORT_DIRECTORY_ROOT, pathToImportFolder);
+                    put(JobContextKeys.IMPORT_DIRECTORY_ROOT, rootPath);
                     putAll(flex.getAttributes());
                 }}));
     }
@@ -175,7 +177,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
                     if (file.matches("(.*)\\.zip(.*)")) {
                         importedFiles.add(file);
-                        zipUtils.unzipArchive(file, pathToImportFolder);
+                        zipUtils.unzipArchive(file, resolveImportDirectory(file));
                         final JobContext zipJob = new JobContextDecoratorImpl(context, new HashMap<String, Object>() {{
                             put(JobContextKeys.IMPORT_FILE, null); // remove individual file name
                         }});
@@ -248,10 +250,15 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
             final String fullPathToArchiveFolder = pathToArchiveFolder;
             File dir = new File(fullPathToArchiveFolder + File.separator + dateFormat.format(new Date()) + File.separator);
             dir.mkdirs();
+
+            String tempRoot = null;
             for (String importFileName : importedFiles) {
                 try {
                     File importFile = new File(importFileName);
                     FileUtils.copyFileToDirectory(importFile, dir, true);
+                    if (tempRoot == null) {
+                        tempRoot = resolveImportDirectory(importFile.getAbsolutePath());
+                    }
                     importFile.delete();
                 } catch (IOException e) {
                     LOG.error(
@@ -260,21 +267,18 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                     );
                 }
             }
+
+            if (!pathToImportFolder.equals(tempRoot)) {
+                new File(tempRoot).delete();
+            }
         }
     }
 
-    private String getOsAwarePath(String path) {
-        final String repoPath;
-        if (File.separatorChar == '/') {
-            repoPath = path.replace('\\', '/');
-        } else {
-            repoPath = path.replace('/', '\\');
+    private String resolveImportDirectory(String fileName) {
+        if (fileName.startsWith(pathToImportFolder)) {
+            return new File(fileName).getParentFile().getAbsolutePath();
         }
-
-        if (repoPath.endsWith(File.separator)) {
-            return repoPath;
-        }
-        return repoPath + File.separator;
+        return pathToImportFolder;
     }
 
     /**
