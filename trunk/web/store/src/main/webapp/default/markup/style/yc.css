@@ -537,6 +537,10 @@ a {
     text-decoration: underline;
 }
 
+.sale-price-currency {
+    color: #d9534f;
+}
+
 .sale-price-whole {
     font-size: 22px;
     color: #d9534f;

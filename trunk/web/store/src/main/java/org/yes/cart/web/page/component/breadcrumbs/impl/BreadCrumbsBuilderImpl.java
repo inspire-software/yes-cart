@@ -273,13 +273,18 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     private String getLinkName(final String key, final String value, final String displayValue) {
         if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(key)) {
             Pair<String, Pair<BigDecimal, BigDecimal>> pair = priceNavigation.decomposePriceRequestParams(value);
-            return priceNavigation.composePriceRequestParams(
-                    currencySymbolService.getCurrencySymbol(pair.getFirst()),
-                    pair.getSecond().getFirst(),
-                    pair.getSecond().getSecond(),
-                    " ",
-                    "..."
-            );
+            Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(pair.getFirst());
+            final StringBuilder displayPrice = new StringBuilder();
+            if (symbol.getSecond()) {
+                displayPrice.append(pair.getSecond().getFirst().toPlainString()).append(' ').append(symbol.getFirst());
+                displayPrice.append(" ... ");
+                displayPrice.append(pair.getSecond().getSecond().toPlainString()).append(' ').append(symbol.getFirst());
+            } else {
+                displayPrice.append(symbol.getFirst()).append(' ').append(pair.getSecond().getFirst().toPlainString());
+                displayPrice.append(" ... ");
+                displayPrice.append(symbol.getFirst()).append(' ').append(pair.getSecond().getSecond().toPlainString());
+            }
+            return displayPrice.toString();
         }
         return displayValue;
     }

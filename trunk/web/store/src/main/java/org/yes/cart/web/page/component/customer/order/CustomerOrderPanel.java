@@ -28,6 +28,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
@@ -36,6 +37,7 @@ import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
@@ -132,15 +134,18 @@ public class CustomerOrderPanel extends BaseComponent {
                                         protected void populateItem(final ListItem<CustomerOrder> customerOrderListItem) {
 
                                             final CustomerOrder order = customerOrderListItem.getModelObject();
+                                            final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(order.getCurrency());
+                                            final BigDecimal amount = customerOrderPaymentService.getOrderAmount(order.getOrdernum());
+
                                             customerOrderListItem
                                                     .add(new Label(ORDER_NUM, order.getOrdernum()))
                                                     .add(new Label(ORDER_DATE, dateFormat.format(order.getOrderTimestamp())))
                                                     .add(new Label(ORDER_STATE, getLocalizer().getString(order.getOrderStatus(), this)))
                                                     .add(new Label(ORDER_ITEMS, getItemsList(order)).setEscapeModelStrings(false))
                                                     .add(new Label(ORDER_AMOUNT,
-                                                            decimalFormat.format(
-                                                                    customerOrderPaymentService.getOrderAmount(order.getOrdernum())
-                                                            ) + " " + currencySymbolService.getCurrencySymbol(order.getCurrency())
+                                                            symbol.getSecond() ?
+                                                                    decimalFormat.format(amount) + " " + symbol.getFirst() :
+                                                                    symbol.getFirst() + " " + decimalFormat.format(amount)
                                                     ));
 
                                         }
