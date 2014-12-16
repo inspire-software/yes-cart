@@ -32,22 +32,22 @@ public interface CurrencySymbolService {
      * Get the currency symbol(s) in html unicode format for given currency code.
      *
      * @param currencyCode currency code
-     * @return currency symbol(s)
+     * @return currency symbol (first), after amount flag (second)
      */
-    String getCurrencySymbol(String currencyCode);
+    Pair<String, Boolean> getCurrencySymbol(String currencyCode);
 
     /**
      * Get currency to display.
-     * @param curensiesListString  given comma separated string of currency codes
+     * @param currenciesListString  given comma separated string of currency codes
      * @return list of currency code - currency label
      */
-    List<Pair<String, String>> getCurrencyToDisplayAsList(String curensiesListString);
+    List<Pair<String, String>> getCurrencyToDisplayAsList(String currenciesListString);
 
     /**
      * Get currency to display.
-     * @param curensiesListString  given comma separated string of currency codes
+     * @param currenciesListString  given comma separated string of currency codes
      * @return map of currency code - currency label
      */
-    Map<String, String> getCurrencyToDisplayAsMap(String curensiesListString);
+    Map<String, String> getCurrencyToDisplayAsMap(String currenciesListString);
 
 }

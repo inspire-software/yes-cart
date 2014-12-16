@@ -310,8 +310,7 @@
                 <entry key="TTD" value="&#x54;&#x54;&#x24;"/>
                 <entry key="TVD" value="&#x24;"/>
                 <entry key="TWD" value="&#x4e;&#x54;&#x24;"/>
-                <entry key="UAH" value="&#1075;&#1088;&#1085;."/>
-                <!-- not all browser support &#x20b4; -->
+                <entry key="UAH" value="&#1075;&#1088;&#1085;"/><!-- not all browsers support &#x20b4; -->
                 <entry key="USD" value="&#x24;"/>
                 <entry key="UYU" value="&#x24;&#x55;"/>
                 <entry key="UZS" value="&#x43b;&#x432;"/>
@@ -322,6 +321,23 @@
                 <entry key="ZAR" value="&#x52;"/>
                 <entry key="ZWD" value="&#x5a;&#x24;"/>
             </map>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <set>
+                <value>ALL</value>
+                <value>AZN</value>
+                <value>BGN</value>
+                <value>BYR</value>
+                <value>KGS</value>
+                <value>KZT</value>
+                <value>MKD</value>
+                <value>PLN</value>
+                <value>RON</value>
+                <value>RSD</value>
+                <value>RUB</value>
+                <value>UAH</value>
+                <value>UZS</value>
+            </set>
         </constructor-arg>
     </bean>
 

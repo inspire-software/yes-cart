@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -23,6 +24,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
@@ -78,25 +80,26 @@ public class Currency extends BaseComponent {
 
         final PageParameters basePageParameters = WicketUtil.getFilteredRequestParameters(getPage().getPageParameters());
         final String activeCurrencyCode = ApplicationDirector.getShoppingCart().getCurrencyCode();
-        final String activeCurrencySymbol =  currencySymbolService.getCurrencySymbol(activeCurrencyCode);
-        add(new Label(ACTIVE_CURRENCY_NAME, activeCurrencySymbol));
+        final Pair<String, Boolean> activeCurrencySymbol =  currencySymbolService.getCurrencySymbol(activeCurrencyCode);
+        add(new Label(ACTIVE_CURRENCY_NAME, activeCurrencySymbol.getFirst()));
 
         add( new ListView<String>(CURRENCY_LIST, supportedCurrencies) {
 
             protected void populateItem(ListItem<String> stringListItem) {
 
                 final String currencyCode = stringListItem.getModelObject();
-                final String currencySymbol = currencySymbolService.getCurrencySymbol(currencyCode);
+                final Pair<String, Boolean> currencySymbol = currencySymbolService.getCurrencySymbol(currencyCode);
 
                 final Link pageLink = getWicketSupportFacade().links().newChangeCurrencyLink(
                         CURRENCY_LINK,
                         currencyCode,
                         getPage().getPageClass(),
                         basePageParameters);
+                pageLink.add(new AttributeModifier("title", currencyCode));
 
                 final boolean isActiveCurrency = currencyCode.equals(activeCurrencyCode);
 
-                final Label currencyLabel = new Label(CURRENCY_NAME, currencySymbol);
+                final Label currencyLabel = new Label(CURRENCY_NAME, currencySymbol.getFirst());
 
                 currencyLabel.setEscapeModelStrings(false);
 

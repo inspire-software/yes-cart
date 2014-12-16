@@ -42,6 +42,7 @@ public class PriceView extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String CURRENCY_LABEL = "currency";
+    private static final String CURRENCY2_LABEL = "currency2";
     private static final String WHOLE_LABEL = "whole";
     private static final String DOT_LABEL = "dot";
     private static final String DECIMAL_LABEL = "decimal";
@@ -172,21 +173,29 @@ public class PriceView extends BaseComponent {
 
         addOrReplace(
                 new Label(WHOLE_LABEL, formatted[0])
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_WHOLE)))
-        .addOrReplace(
+                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_WHOLE)));
+        addOrReplace(
                 new Label(DOT_LABEL, ".")
                         .setVisible(StringUtils.isNotBlank(formatted[0]) || StringUtils.isNotBlank(formatted[1]))
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DOT)))
-        .addOrReplace(
+                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DOT)));
+        addOrReplace(
                 new Label(DECIMAL_LABEL, formatted[1])
                         .setVisible(StringUtils.isNotBlank(formatted[0]) || StringUtils.isNotBlank(formatted[1]))
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DECIMAL)))
-        .addOrReplace(
-                new Label(CURRENCY_LABEL, currencySymbolService.getCurrencySymbol(currencySymbol))
-                        .setVisible(showCurrencySymbol)
+                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DECIMAL)));
+
+        final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(currencySymbol);
+
+        addOrReplace(
+                new Label(CURRENCY_LABEL, symbol.getFirst())
+                        .setVisible(showCurrencySymbol && !symbol.getSecond())
                         .setEscapeModelStrings(false)
-                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_CURRENCY))
-        );
+                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_CURRENCY)));
+
+        addOrReplace(
+                new Label(CURRENCY2_LABEL, symbol.getFirst())
+                        .setVisible(showCurrencySymbol && symbol.getSecond())
+                        .setEscapeModelStrings(false)
+                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_CURRENCY)));
 
 
         addOrReplace(

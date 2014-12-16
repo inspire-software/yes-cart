@@ -30,21 +30,21 @@ import java.util.*;
  */
 public class CurrencySymbolServiceImpl implements CurrencySymbolService {
 
-    private Map<String, String> currencyCodeSymbol = new HashMap<String, String>();
+    private final Map<String, String> currencyCodeSymbol;
+    private final Set<String> currencySymbolAfterAmount;
 
     /**
      * Constructor.
      *
      * @param currencyCodeSymbol map to use
      */
-    public CurrencySymbolServiceImpl(final Map<String, String> currencyCodeSymbol) {
-        this.currencyCodeSymbol = currencyCodeSymbol;
+    public CurrencySymbolServiceImpl(final Map<String, String> currencyCodeSymbol,
+                                     final Set<String> currencySymbolAfterAmount) {
+        this.currencyCodeSymbol = new HashMap<String, String>(currencyCodeSymbol);
+        this.currencySymbolAfterAmount = new HashSet<String>(currencySymbolAfterAmount);
     }
 
-    /**
-     * {@inheritDoc
-     */
-    public String getCurrencySymbol(final String currencyCode) {
+    private String getCurrencySymbolInternal(final String currencyCode) {
         final String symbols = currencyCodeSymbol.get(currencyCode);
         if (symbols == null) {
             return currencyCode;
@@ -55,13 +55,24 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
     /**
      * {@inheritDoc
      */
-    public List<Pair<String, String>> getCurrencyToDisplayAsList(final String curensiesListString) {
-        if (StringUtils.isNotBlank(curensiesListString)) {
-            final String [] currCodes = curensiesListString.split(",");
+    public Pair<String, Boolean> getCurrencySymbol(final String currencyCode) {
+        final String symbols = currencyCodeSymbol.get(currencyCode);
+        if (symbols == null) {
+            return new Pair<String, Boolean>(currencyCode, false);
+        }
+        return new Pair<String, Boolean>(symbols, currencySymbolAfterAmount.contains(currencyCode));
+    }
+
+    /**
+     * {@inheritDoc
+     */
+    public List<Pair<String, String>> getCurrencyToDisplayAsList(final String currenciesListString) {
+        if (StringUtils.isNotBlank(currenciesListString)) {
+            final String [] currCodes = currenciesListString.split(",");
             final List<Pair<String, String>> rez = new ArrayList<Pair<String, String>>(currCodes.length);
             for (String currCode : currCodes) {
                 rez.add(
-                  new Pair<String, String>(currCode, getCurrencySymbol(currCode))
+                  new Pair<String, String>(currCode, getCurrencySymbolInternal(currCode))
                 );
             }
             return rez;
@@ -72,12 +83,12 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
     /**
      * {@inheritDoc
      */
-    public  Map<String, String> getCurrencyToDisplayAsMap(final String curensiesListString){
-        if (StringUtils.isNotBlank(curensiesListString)) {
-            final String [] currCodes = curensiesListString.split(",");
+    public  Map<String, String> getCurrencyToDisplayAsMap(final String currenciesListString){
+        if (StringUtils.isNotBlank(currenciesListString)) {
+            final String [] currCodes = currenciesListString.split(",");
             final Map<String, String> rez = new LinkedHashMap<String, String>(currCodes.length);
             for (String currCode : currCodes) {
-                rez.put(getCurrencySymbol(currCode), currCode);
+                rez.put(getCurrencySymbolInternal(currCode), currCode);
             }
             return rez;
         }
@@ -85,12 +96,4 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
 
     }
 
-    /**
-     * IoC. Set the
-     *
-     * @param currencyCodeSymbol to use.
-     */
-    public void setCurrencyCodeSymbol(final Map<String, String> currencyCodeSymbol) {
-        this.currencyCodeSymbol = currencyCodeSymbol;
-    }
 }

@@ -19,8 +19,8 @@ package org.yes.cart.web.page.component.filterednavigation;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.domain.query.PriceNavigation;
+import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -71,14 +71,18 @@ public class PriceProductFilter extends AbstractProductFilter {
      */
     protected String adaptValueForLinkLabel(final String valueToAdapt, final String displayValue) {
         Pair<String, Pair<BigDecimal, BigDecimal>> pair = priceNavigation.decomposePriceRequestParams(valueToAdapt);
-        return priceNavigation.composePriceRequestParams(
-                currencySymbolService.getCurrencySymbol(pair.getFirst()),
-                pair.getSecond().getFirst(),
-                pair.getSecond().getSecond(),
-                " ",
-                "..."
-        );
-
+        Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(pair.getFirst());
+        final StringBuilder displayPrice = new StringBuilder();
+        if (symbol.getSecond()) {
+            displayPrice.append(pair.getSecond().getFirst().toPlainString()).append(' ').append(symbol.getFirst());
+            displayPrice.append(" ... ");
+            displayPrice.append(pair.getSecond().getSecond().toPlainString()).append(' ').append(symbol.getFirst());
+        } else {
+            displayPrice.append(symbol.getFirst()).append(' ').append(pair.getSecond().getFirst().toPlainString());
+            displayPrice.append(" ... ");
+            displayPrice.append(symbol.getFirst()).append(' ').append(pair.getSecond().getSecond().toPlainString());
+        }
+        return displayPrice.toString();
     }
 
 
