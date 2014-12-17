@@ -21,7 +21,7 @@
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>warehouse(.*).csv(.*)</file-name-mask>
+        <file-name-mask>warehousenames(.*).csv(.*)</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
