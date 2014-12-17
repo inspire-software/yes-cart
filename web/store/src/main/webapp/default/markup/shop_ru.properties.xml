@@ -46,7 +46,7 @@
     <entry key="no">Нет</entry>
 
     <!-- AjaxAtbPage -->
-    <entry key="itemAdded">продукт {0} успешно добавлен в корзину</entry>
+    <entry key="itemAdded">товар {0} успешно добавлен в корзину</entry>
 
     <!-- CheckoutPage -->
     <entry key="addressStep">Ваш адрес</entry>
@@ -109,25 +109,29 @@
     <entry key="always">Демо: всегда</entry>
 
     <!-- ShoppingCartPaymentVerificationView -->
-    <entry key="productName">Продукт</entry>
+    <entry key="productName">Товар</entry>
     <entry key="amount">Всего</entry>
     <entry key="deliveryNum">Номер доставки</entry>
     <entry key="deliverySubTotal">Итого по доставке</entry>
-    <entry key="deliverySubTotalTax">в т.ч. НДС</entry>
-    <entry key="deliverySubTotalAmount">Всего</entry>
+    <entry key="deliverySubTotalTax">НДС</entry>
+    <entry key="deliverySubTotalAmount">Итого по доставке (с НДС)</entry>
     <entry key="deliveryCost">Доставка</entry>
-    <entry key="deliveryCostTax">в т.ч. НДС</entry>
-    <entry key="deliveryCostAmount">Всего</entry>
+    <entry key="deliveryCostTax">НДС</entry>
+    <entry key="deliveryCostAmount">Доставка (с НДС)</entry>
+    <entry key="deliveryMethod">Метод</entry>
+    <entry key="deliveryAddress">Адрес</entry>
     <entry key="grandTotal">Сумма</entry>
-    <entry key="grandTotalTax">в т.ч. НДС</entry>
-    <entry key="grandTotalAmount">Всего</entry>
+    <entry key="grandTotalTax">ПДВ</entry>
+    <entry key="grandTotalAmount">Сумма (с НДС)</entry>
+    <entry key="billingAddress">Адрес</entry>
     <entry key="orderVerification">Проверьте заказ и выберите метод оплаты</entry>
 
     <!-- ShoppingCartView -->
-    <entry key="product">Изделие</entry>
+    <entry key="product">Наименование</entry>
     <entry key="amountMsg">Всего</entry>
     <entry key="addOneLink">+1</entry>
     <entry key="removeOneLink">-1</entry>
+    <entry key="removeAllLink">X</entry>
     <entry key="addOneLinkHint">Добавить один</entry>
     <entry key="removeOneLinkHint">Удалить один</entry>
     <entry key="removeAllLinkHint">Удалить все</entry>
@@ -143,9 +147,9 @@
     <entry key="noEmptyCoupons">Введите пожалуйста промо-код</entry>
 
     <!-- SmallShoppingCartView -->
-    <entry key="itemForm0">{0} продукт</entry>
-    <entry key="itemForm1">{0} продукта</entry>
-    <entry key="itemForm2">{0} продуктов</entry>
+    <entry key="itemForm0">{0} товар</entry>
+    <entry key="itemForm1">{0} товара</entry>
+    <entry key="itemForm2">{0} товаров</entry>
     <entry key="noItem">Пустая корзина</entry>
     <entry key="yourCartTitle">Ваша корзина:</entry>
 
@@ -230,6 +234,7 @@
     <entry key="wishListPriceOnSaleNow">Акция. Скидка ${0}%</entry>
 
     <!-- StandardFooter, CheckoutFooter -->
+    <entry key="profile">Профиль</entry>
     <entry key="siteMap">Карта сайта</entry>
     <entry key="help">Справка</entry>
     <entry key="platform">Платформа</entry>

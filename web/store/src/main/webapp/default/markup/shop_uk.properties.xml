@@ -113,14 +113,17 @@
     <entry key="amount">Всього</entry>
     <entry key="deliveryNum">Номер доставки</entry>
     <entry key="deliverySubTotal">Разом доставка</entry>
-    <entry key="deliverySubTotalTax">в т.ч. ПДВ</entry>
-    <entry key="deliverySubTotalAmount">Всього</entry>
+    <entry key="deliverySubTotalTax">ПДВ</entry>
+    <entry key="deliverySubTotalAmount">Разом доставка (з ПДВ)</entry>
     <entry key="deliveryCost">Доставка</entry>
-    <entry key="deliveryCostTax">в т.ч. ПДВ</entry>
-    <entry key="deliveryCostAmount">Всього</entry>
+    <entry key="deliveryCostTax">ПДВ</entry>
+    <entry key="deliveryCostAmount">Доставка (з ПДВ)</entry>
+    <entry key="deliveryMethod">Спосіб</entry>
+    <entry key="deliveryAddress">Адреса</entry>
     <entry key="grandTotal">Сума</entry>
-    <entry key="grandTotalTax">в т.ч. ПДВ</entry>
-    <entry key="grandTotalAmount">Всього</entry>
+    <entry key="grandTotalTax">ПДВ</entry>
+    <entry key="grandTotalAmount">Сума (з ПДВ)</entry>
+    <entry key="billingAddress">Адреса</entry>
     <entry key="orderVerification">Перевірте замовлення та виберіть спосіб оплати</entry>
 
     <!-- ShoppingCartView -->
@@ -128,6 +131,7 @@
     <entry key="amountMsg">Всього</entry>
     <entry key="addOneLink">+1</entry>
     <entry key="removeOneLink">-1</entry>
+    <entry key="removeAllLink">X</entry>
     <entry key="addOneLinkHint">Додати один</entry>
     <entry key="removeOneLinkHint">Видалити один</entry>
     <entry key="removeAllLinkHint">Видалити усі</entry>
@@ -230,6 +234,7 @@
     <entry key="wishListPriceOnSaleNow">Акція. Знижка ${0}%</entry>
 
     <!-- StandardFooter, CheckoutFooter -->
+    <entry key="profile">Профіль</entry>
     <entry key="siteMap">Карта сайту</entry>
     <entry key="help">Довідка</entry>
     <entry key="platform">Платформа</entry>

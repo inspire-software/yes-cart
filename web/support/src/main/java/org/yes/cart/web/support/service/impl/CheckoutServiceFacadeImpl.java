@@ -32,6 +32,7 @@ import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
+import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
@@ -219,7 +220,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
     /** {@inheritDoc} */
     @Override
-    public Set<String> getOrderItemPromoCodes(final CustomerOrderDeliveryDet orderDeliveryDet) {
+    public Set<String> getOrderItemPromoCodes(final CartItem orderDeliveryDet) {
 
         final Set<String> allPromos = new HashSet<String>();
 
