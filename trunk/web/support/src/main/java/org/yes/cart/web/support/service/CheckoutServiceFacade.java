@@ -26,6 +26,7 @@ import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.order.OrderAssemblyException;
+import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
@@ -145,7 +146,7 @@ public interface CheckoutServiceFacade {
      *
      * @return set of unique promo codes
      */
-    Set<String> getOrderItemPromoCodes(CustomerOrderDeliveryDet orderDeliveryDet);
+    Set<String> getOrderItemPromoCodes(CartItem orderDeliveryDet);
 
     /**
      * Create customer order from shopping cart.

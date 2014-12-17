@@ -41,10 +41,15 @@
             </div>
         </div>
 
-        <div class="col-xs-12 no-padding">
-            <wicket:container wicket:id="priceView">
-                [price]
-            </wicket:container>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-2">
+                <wicket:container wicket:id="deliveryCost">[Delivery cost]</wicket:container>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <wicket:container wicket:id="priceView">
+                    [price]
+                </wicket:container>
+            </div>
         </div>
     </form>
 </wicket:panel>

@@ -56,6 +56,7 @@ public class ShippingView extends BaseComponent {
     private final static String SHIPPING_FORM = "shippingForm";
     private final static String CARRIER_LIST = "carrier";
     private final static String CARRIER_SLA_LIST = "carrierSla";
+    private final static String PRICE_LABEL = "deliveryCost";
     private final static String PRICE_VIEW = "priceView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
@@ -246,10 +247,10 @@ public class ShippingView extends BaseComponent {
         final Long slaId = cart.getCarrierSlaId();
 
         if (slaId == null) {
-            form.addOrReplace(
-                    new Label(PRICE_VIEW)
-            );
+            form.addOrReplace(new Label(PRICE_LABEL));
+            form.addOrReplace(new Label(PRICE_VIEW));
         } else {
+            form.addOrReplace(new Label(PRICE_LABEL, getLocalizer().getString(PRICE_LABEL, this)));
             form.addOrReplace(
                     new PriceView(
                             PRICE_VIEW,

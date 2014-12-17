@@ -32,13 +32,13 @@
                 <div class="col-xs-12 col-sm-6">
                     <span><wicket:message key="productName">[Product name]</wicket:message></span>
                 </div>
-                <div class="col-xs-12 col-sm-2">
+                <div class="col-xs-12 col-sm-2 text-right">
                     <wicket:message key="price">[price]</wicket:message>
                 </div>
-                <div class="col-xs-12 col-sm-2">
+                <div class="col-xs-12 col-sm-2 text-right">
                     <wicket:message key="qty">[qty]</wicket:message>
                 </div>
-                <div class="col-xs-12 col-sm-2">
+                <div class="col-xs-12 col-sm-2 text-right">
                     <wicket:message key="amount">[ amount ]</wicket:message>
                 </div>
             </div>
@@ -56,15 +56,15 @@
                         </div>
                         <span wicket:id="itemCode">[sku code]</span>
                     </div>
-                    <div class="col-xs-12 col-sm-2">
+                    <div class="col-xs-12 col-sm-2 text-right">
                         <wicket:container wicket:id="itemPrice">
                             [sku price]
                         </wicket:container>
                     </div>
-                    <div class="col-xs-12 col-sm-2">
+                    <div class="col-xs-12 col-sm-2 text-right">
                         <span wicket:id="itemQty">[qty]</span>
                     </div>
-                    <div class="col-xs-12 col-sm-2">
+                    <div class="col-xs-12 col-sm-2 text-right">
                         <wicket:container wicket:id="itemTotal">[total line]</wicket:container>
                     </div>
                 </div>
@@ -96,6 +96,12 @@
 
             <div class="delivery-block">
                 <div class="pull-left">
+                    <label><wicket:message key="deliveryMethod">[Delivery method]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
+                    <wicket:container wicket:id="deliveryMethod">[delivery method]</wicket:container>
+                </div>
+                <div class="pull-left">
                     <label><wicket:message key="deliveryCost">[Delivery sub total amount]</wicket:message></label>
                 </div>
                 <div class="text-right clearfix">
@@ -111,7 +117,10 @@
                     <label><wicket:message key="deliveryCostAmount">[Delivery sub total amount]</wicket:message></label>
                 </div>
                 <div class="text-right clearfix">
-                    <wicket:container wicket:id="deliveryCostAmount ">[delivery amount]</wicket:container>
+                    <wicket:container wicket:id="deliveryCostAmount">[delivery amount]</wicket:container>
+                </div>
+                <div class="pull-left clearfix">
+                    <wicket:container wicket:id="deliveryAddress">[delivery address]</wicket:container>
                 </div>
             </div>
         </div>
@@ -138,6 +147,12 @@
                 <wicket:container wicket:id="grandTotalAmount">
                     [grand total amount]
                 </wicket:container>
+            </div>
+            <div class="pull-left">
+                <label><wicket:message key="billingAddress">[Billing address]</wicket:message></label>
+            </div>
+            <div class="text-right clearfix">
+                <wicket:container wicket:id="billingAddress">[billing address]</wicket:container>
             </div>
         </div>
     </div>

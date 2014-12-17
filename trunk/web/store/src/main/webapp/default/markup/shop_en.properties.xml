@@ -114,14 +114,17 @@
     <entry key="amount">Amount</entry>
     <entry key="deliveryNum">Delivery number</entry>
     <entry key="deliverySubTotal">Delivery sub total</entry>
-    <entry key="deliverySubTotalTax">Delivery tax</entry>
-    <entry key="deliverySubTotalAmount">Delivery amount</entry>
-    <entry key="deliveryCost">Delivery cost</entry>
-    <entry key="deliveryCostTax">tax</entry>
-    <entry key="deliveryCostAmount">Amount</entry>
-    <entry key="grandTotal">Grand</entry>
-    <entry key="grandTotalTax">tax</entry>
-    <entry key="grandTotalAmount">Amount</entry>
+    <entry key="deliverySubTotalTax">Tax</entry>
+    <entry key="deliverySubTotalAmount">Sub total (inc. tax)</entry>
+    <entry key="deliveryCost">Shipping cost</entry>
+    <entry key="deliveryCostTax">Tax</entry>
+    <entry key="deliveryCostAmount">Shipping cost (inc. tax)</entry>
+    <entry key="deliveryMethod">Method</entry>
+    <entry key="deliveryAddress">Address</entry>
+    <entry key="grandTotal">Order total</entry>
+    <entry key="grandTotalTax">Tax</entry>
+    <entry key="grandTotalAmount">Order total (inc. tax)</entry>
+    <entry key="billingAddress">Address</entry>
     <entry key="orderVerification">Verify order and choose payment method</entry>
 
     <!-- ShoppingCartView -->
@@ -148,6 +151,7 @@
     <!-- SmallShoppingCartView -->
     <entry key="itemForm0">{0} item in cart</entry>
     <entry key="itemForm1">{0} items in cart</entry>
+    <entry key="itemForm2">{0} items in cart</entry>
     <entry key="noItem">Cart is empty</entry>
     <entry key="yourCartTitle">Your Cart:</entry>
 
@@ -327,7 +331,7 @@
     <entry key="confirmPayment">
         <![CDATA[
                     Payment amount is {0} {1}. Confirm payment to contnue.
-                     ]]>
+               ]]>
     </entry>
     <entry key="paymentOk">
         <![CDATA[

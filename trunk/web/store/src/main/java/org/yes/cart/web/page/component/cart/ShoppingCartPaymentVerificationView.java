@@ -24,9 +24,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.ShopCodeContext;
@@ -63,6 +61,10 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
     private static final String DELIVERY_SUB_TOTAL = "deliverySubTotal";
     private static final String DELIVERY_SUB_TOTAL_TAX = "deliverySubTotalTax";
     private static final String DELIVERY_SUB_TOTAL_AMOUNT = "deliverySubTotalAmount";
+    private static final String DELIVERY_METHOD = "deliveryMethod";
+    private static final String DELIVERY_ADDRESS = "deliveryAddress";
+
+    private static final String BILLING_ADDRESS = "billingAddress";
 
     public static final String DELIVERY_COST = "deliveryCost";
     private static final String DELIVERY_COST_TAX = "deliveryCostTax";
@@ -107,6 +109,15 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
         final String selectedLocale = getLocale().getLanguage();
         final Set<String> allPromos = checkoutServiceFacade.getOrderPromoCodes(customerOrder);
+        for (final CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
+            allPromos.addAll(checkoutServiceFacade.getOrderShippingPromoCodes(delivery));
+        }
+        for (final CustomerOrderDet orderDet : customerOrder.getOrderDetail()) {
+            allPromos.addAll(checkoutServiceFacade.getOrderItemPromoCodes(orderDet));
+        }
+
+        final String deliveryAddress = customerOrder.getShippingAddress();
+        final String billingAddress = customerOrder.getBillingAddress();
 
         final Pair<String, String> imageSize = categoryServiceFacade.getThumbnailSizeConfig(0L, ShopCodeContext.getShopId());
 
@@ -119,12 +130,13 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                     {
 
                         final CustomerOrderDelivery delivery = customerOrderDeliveryListItem.getModelObject();
+                        final CarrierSla sla = delivery.getCarrierSla();
+
+                        final String slaName = getI18NSupport().getFailoverModel(sla.getDisplayName(), sla.getName()).getValue(selectedLocale);
 
                         final List<CustomerOrderDeliveryDet> deliveryDet = new ArrayList<CustomerOrderDeliveryDet>(delivery.getDetail());
 
                         final Total total = checkoutServiceFacade.getOrderDeliveryTotal(customerOrder, delivery);
-
-                        allPromos.addAll(checkoutServiceFacade.getOrderShippingPromoCodes(delivery));
 
                         customerOrderDeliveryListItem
                                 .add(
@@ -132,12 +144,10 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                 )
                                 .add(
 
-                                        new ListView<CustomerOrderDeliveryDet>(ITEM_LIST, deliveryDet)
-                                        {
+                                        new ListView<CustomerOrderDeliveryDet>(ITEM_LIST, deliveryDet) {
 
                                             @Override
-                                            protected void populateItem(ListItem<CustomerOrderDeliveryDet> customerOrderDeliveryDetListItem)
-                                            {
+                                            protected void populateItem(ListItem<CustomerOrderDeliveryDet> customerOrderDeliveryDetListItem) {
 
                                                 final CustomerOrderDeliveryDet det = customerOrderDeliveryDetListItem.getModelObject();
 
@@ -155,8 +165,6 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                 final BigDecimal itemTotal = det.getPrice()
                                                         .multiply(det.getQty())
                                                         .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-
-                                                allPromos.addAll(checkoutServiceFacade.getOrderItemPromoCodes(det));
 
                                                 customerOrderDeliveryDetListItem
                                                         .add(
@@ -203,12 +211,21 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                 )
                                 .add(
                                         new Label(DELIVERY_COST_AMOUNT, total.getDeliveryCostAmount().toString())
+                                )
+                                .add(
+                                        new Label(DELIVERY_METHOD, slaName)
+                                )
+                                .add(
+                                        new Label(DELIVERY_ADDRESS, deliveryAddress)
                                 );
                     }
                 }
         )
                 .add(
                         new Label(DELIVERY_GRAND_TOTAL, grandTotal.getTotal().toString())
+                )
+                .add(
+                        new Label(BILLING_ADDRESS, billingAddress)
                 )
                 .add(
                         new Label(DELIVERY_GRAND_TAX, grandTotal.getTotalTax().toString())
@@ -218,7 +235,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                 DELIVERY_GRAND_AMOUNT,
                                 new Pair<BigDecimal, BigDecimal>(grandTotal.getListTotalAmount(), grandTotal.getTotalAmount()),
                                 customerOrder.getCurrency(),
-                                StringUtils.join(allPromos, ','), true, true)
+                                StringUtils.join(allPromos, ", "), true, true)
                 );
 
     }
