@@ -48,41 +48,6 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-        <column-descriptor>
-            <column-index>2</column-index>
-            <field-type>FIELD</field-type>
-            <name>name</name>
-            <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-group>1</value-regex-group>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>3</column-index>
-            <field-type>FIELD</field-type>
-            <name>displayName</name>
-            <language>en</language>
-            <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-group>1</value-regex-group>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>4</column-index>
-            <field-type>FIELD</field-type>
-            <name>displayName</name>
-            <language>ru</language>
-            <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-group>1</value-regex-group>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>5</column-index>
-            <field-type>FIELD</field-type>
-            <name>displayName</name>
-            <language>uk</language>
-            <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-group>1</value-regex-group>
-        </column-descriptor>
-
         <!-- product type -->
         <column-descriptor>
             <column-index>2</column-index>
@@ -94,42 +59,48 @@
             <lookup-query>select pt from ProductTypeEntity pt where pt.name = {productType}</lookup-query>
         </column-descriptor>
 
-        <!-- Description -->
         <column-descriptor>
-            <column-index>6</column-index>
+            <column-index>3</column-index>
             <field-type>FIELD</field-type>
-            <name>description</name>
-            <value-regex>(.{0,4000})(.*)</value-regex>
+            <name>name</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
+            <column-index>4</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>en</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>ru</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>6</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>uk</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!-- Description -->
+        <column-descriptor>
             <column-index>7</column-index>
-            <field-type>SLAVE_INLINE_FIELD</field-type>
-            <name/>
-            <import-descriptor>
-                <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
-                <import-file-descriptor>
-                    <file-encoding>UTF-8</file-encoding>
-                    <file-name-mask/>
-                    <ignore-first-line>false</ignore-first-line>
-                    <column-delimiter>,</column-delimiter>
-                    <text-qualifier>&quot;</text-qualifier>
-                </import-file-descriptor>
-                <select-sql/>
-                <insert-sql>
-                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_CATDESC_en';
-                    INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
-                        VALUES (0, {masterObjectId}, '{masterObjectId}_CATDESC_en', 'CATEGORY_DESCRIPTION_en','{val}')
-                </insert-sql>
-                <import-columns>
-                    <column-descriptor>
-                        <column-index>7</column-index>
-                        <field-type>FIELD</field-type>
-                        <name>val</name>
-                    </column-descriptor>
-                </import-columns>
-            </import-descriptor>
+            <field-type>FIELD</field-type>
+            <name>description</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
@@ -147,9 +118,9 @@
                 </import-file-descriptor>
                 <select-sql/>
                 <insert-sql>
-                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_CATDESC_ru';
+                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_CATDESC_en';
                     INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
-                        VALUES (0, {masterObjectId}, '{masterObjectId}_CATDESC_ru', 'CATEGORY_DESCRIPTION_ru','{val}')
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_CATDESC_en', 'CATEGORY_DESCRIPTION_en','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
@@ -176,9 +147,9 @@
                 </import-file-descriptor>
                 <select-sql/>
                 <insert-sql>
-                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_CATDESC_uk';
+                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_CATDESC_ru';
                     INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
-                        VALUES (0, {masterObjectId}, '{masterObjectId}_CATDESC_uk', 'CATEGORY_DESCRIPTION_uk','{val}')
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_CATDESC_ru', 'CATEGORY_DESCRIPTION_ru','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
@@ -190,9 +161,38 @@
             </import-descriptor>
         </column-descriptor>
 
-        <!-- Category SEO url -->
         <column-descriptor>
             <column-index>10</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_CATDESC_uk';
+                    INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_CATDESC_uk', 'CATEGORY_DESCRIPTION_uk','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>10</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
+
+        <!-- Category SEO url -->
+        <column-descriptor>
+            <column-index>11</column-index>
             <field-type>FIELD</field-type>
             <name>seo.uri</name>
             <value-regex>(.{0,255})(.*)</value-regex>
@@ -200,13 +200,13 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>11</column-index>
+            <column-index>12</column-index>
             <field-type>FIELD</field-type>
             <name>availablefrom</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>12</column-index>
+            <column-index>13</column-index>
             <field-type>FIELD</field-type>
             <name>availableto</name>
         </column-descriptor>
@@ -246,119 +246,6 @@
             <data-type>BOOLEAN</data-type>
             <name>navigationByPrice</name>
             <value-constant>true</value-constant>
-        </column-descriptor>
-
-        <!-- navigation by price. tiers description -->
-        <column-descriptor>
-            <column-index>-1</column-index>
-            <field-type>FIELD</field-type>
-            <name>navigationByPriceTiers</name>
-            <value-constant>
-                <![CDATA[
-
-<price-navigation>
-    <currencies>
-        <currency>
-            <name>EUR</name>
-            <price-tiers>
-                <price-tier>
-                    <from>0</from>
-                    <to>200</to>
-                </price-tier>
-                <price-tier>
-                    <from>200</from>
-                    <to>500</to>
-                </price-tier>
-                <price-tier>
-                    <from>500</from>
-                    <to>1000</to>
-                </price-tier>
-                <price-tier>
-                    <from>1000</from>
-                    <to>1300</to>
-                </price-tier>
-                <price-tier>
-                    <from>1300</from>
-                    <to>1500</to>
-                </price-tier>
-                <price-tier>
-                    <from>1500</from>
-                    <to>2000</to>
-                </price-tier>
-                <price-tier>
-                    <from>2000</from>
-                    <to>3000</to>
-                </price-tier>
-            </price-tiers>
-        </currency>
-        <currency>
-            <name>USD</name>
-            <price-tiers>
-                <price-tier>
-                    <from>0</from>
-                    <to>200</to>
-                </price-tier>
-                <price-tier>
-                    <from>200</from>
-                    <to>500</to>
-                </price-tier>
-                <price-tier>
-                    <from>500</from>
-                    <to>1000</to>
-                </price-tier>
-                <price-tier>
-                    <from>1000</from>
-                    <to>1300</to>
-                </price-tier>
-                <price-tier>
-                    <from>1300</from>
-                    <to>1500</to>
-                </price-tier>
-                <price-tier>
-                    <from>1500</from>
-                    <to>2000</to>
-                </price-tier>
-                <price-tier>
-                    <from>2000</from>
-                    <to>3000</to>
-                </price-tier>
-            </price-tiers>
-        </currency>
-        <currency>
-            <name>UAH</name>
-            <price-tiers>
-                <price-tier>
-                    <from>0</from>
-                    <to>5000</to>
-                </price-tier>
-                <price-tier>
-                    <from>5000</from>
-                    <to>6000</to>
-                </price-tier>
-                <price-tier>
-                    <from>6000</from>
-                    <to>8000</to>
-                </price-tier>
-                <price-tier>
-                    <from>8000</from>
-                    <to>10000</to>
-                </price-tier>
-                <price-tier>
-                    <from>10000</from>
-                    <to>16000</to>
-                </price-tier>
-                <price-tier>
-                    <from>16000</from>
-                    <to>24000</to>
-                </price-tier>
-            </price-tiers>
-        </currency>
-    </currencies>
-</price-navigation>
-
-
-                ]]>
-            </value-constant>
         </column-descriptor>
 
     </import-columns>

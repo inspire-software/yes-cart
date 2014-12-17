@@ -303,7 +303,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 performSubImport(statusListener, tuple, csvImportDescriptorName, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SLAVE_TUPLE_FIELD));
 
                 if (masterObject == null) {
-                    genericDAO.refresh(object);
                     // No need to validate sub imports
                     // This validation is after sub imports to facilitate objects with complex relationships to shop (e.g. products)
                     validateAccessAfterUpdate(object, importDescriptor.getEntityTypeClass());
