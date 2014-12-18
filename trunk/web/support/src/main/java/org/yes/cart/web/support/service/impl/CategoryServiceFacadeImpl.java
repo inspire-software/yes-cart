@@ -20,7 +20,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
@@ -83,10 +85,16 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
         return categoryService.getTopLevelCategories(shopId);
     }
 
-    private static final String[] THUMBNAIL_SIZE =
+    private static final String[] CATEGORY_THUMBNAIL_SIZE =
             new String[] {
-                    AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_WIDTH,
-                    AttributeNamesKeys.Category.PRODUCT_IMAGE_TUMB_HEIGHT
+                    AttributeNamesKeys.Category.PRODUCT_IMAGE_THUMB_WIDTH,
+                    AttributeNamesKeys.Category.PRODUCT_IMAGE_THUMB_HEIGHT
+            };
+
+    private static final String[] SHOP_THUMBNAIL_SIZE =
+            new String[] {
+                    AttributeNamesKeys.Shop.SHOP_PRODUCT_IMAGE_THUMB_WIDTH,
+                    AttributeNamesKeys.Shop.SHOP_PRODUCT_IMAGE_THUMB_HEIGHT
             };
 
     private static final Pair<String, String> DEFAULT_THUMB_SIZE =
@@ -97,14 +105,20 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      */
     public Pair<String, String> getThumbnailSizeConfig(final long categoryId, final long shopId) {
 
-        return getImageSizeConfig(categoryId, shopId, THUMBNAIL_SIZE, DEFAULT_THUMB_SIZE);
+        return getImageSizeConfig(categoryId, shopId, CATEGORY_THUMBNAIL_SIZE, SHOP_THUMBNAIL_SIZE, DEFAULT_THUMB_SIZE);
 
     }
 
-    private static final String[] PRODUCTLIST_IMAGE_SIZE =
+    private static final String[] CATEGORY_PRODUCTLIST_IMAGE_SIZE =
             new String[] {
                     AttributeNamesKeys.Category.PRODUCT_IMAGE_WIDTH,
                     AttributeNamesKeys.Category.PRODUCT_IMAGE_HEIGHT
+            };
+
+    private static final String[] SHOP_PRODUCTLIST_IMAGE_SIZE =
+            new String[] {
+                    AttributeNamesKeys.Shop.SHOP_PRODUCT_IMAGE_WIDTH,
+                    AttributeNamesKeys.Shop.SHOP_PRODUCT_IMAGE_HEIGHT
             };
 
     private static final Pair<String, String> DEFAULT_PRODUCTLIST_IMAGE_SIZE =
@@ -115,14 +129,20 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      */
     public Pair<String, String> getProductListImageSizeConfig(final long categoryId, final long shopId) {
 
-        return getImageSizeConfig(categoryId, shopId, PRODUCTLIST_IMAGE_SIZE, DEFAULT_PRODUCTLIST_IMAGE_SIZE);
+        return getImageSizeConfig(categoryId, shopId, CATEGORY_PRODUCTLIST_IMAGE_SIZE, SHOP_PRODUCTLIST_IMAGE_SIZE, DEFAULT_PRODUCTLIST_IMAGE_SIZE);
 
     }
 
-    private static final String[] CATEGORYLIST_IMAGE_SIZE =
+    private static final String[] CATEGORY_CATEGORYLIST_IMAGE_SIZE =
             new String[]{
                     AttributeNamesKeys.Category.CATEGORY_IMAGE_WIDTH,
                     AttributeNamesKeys.Category.CATEGORY_IMAGE_HEIGHT
+            };
+
+    private static final String[] SHOP_CATEGORYLIST_IMAGE_SIZE =
+            new String[]{
+                    AttributeNamesKeys.Shop.SHOP_CATEGORY_IMAGE_WIDTH,
+                    AttributeNamesKeys.Shop.SHOP_CATEGORY_IMAGE_HEIGHT
             };
 
     private static final Pair<String, String> DEFAULT_CATEGORYLIST_IMAGE_SIZE =
@@ -133,7 +153,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      */
     public Pair<String, String> getCategoryListImageSizeConfig(final long categoryId, final long shopId) {
 
-        return getImageSizeConfig(categoryId, shopId, CATEGORYLIST_IMAGE_SIZE, DEFAULT_CATEGORYLIST_IMAGE_SIZE);
+        return getImageSizeConfig(categoryId, shopId, CATEGORY_CATEGORYLIST_IMAGE_SIZE, SHOP_CATEGORYLIST_IMAGE_SIZE, DEFAULT_CATEGORYLIST_IMAGE_SIZE);
 
     }
 
@@ -169,6 +189,12 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
                 return Arrays.asList(StringUtils.split(size, ','));
             }
 
+        }
+
+        final Shop shop = shopService.getById(shopId);
+        final AttrValueShop attrValueShop = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CATEGORY_ITEMS_PER_PAGE);
+        if (attrValueShop != null && StringUtils.isNotBlank(attrValueShop.getVal())) {
+            return Arrays.asList(StringUtils.split(attrValueShop.getVal(), ','));
         }
 
         return Constants.DEFAULT_ITEMS_ON_PAGE;
@@ -217,6 +243,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     private Pair<String, String> getImageSizeConfig(final long categoryId,
                                                     final long shopId,
                                                     final String[] widthAndHeightAttribute,
+                                                    final String[] shopWidthAndHeightAttribute,
                                                     final Pair<String, String> defaultWidthAndHeight) {
 
         if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
@@ -226,6 +253,14 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
                 return new Pair<String, String>(size[0], size[1]);
             }
 
+        }
+
+        final Shop shop = shopService.getById(shopId);
+        final AttrValueShop widthAttrValueShop = shop.getAttributeByCode(shopWidthAndHeightAttribute[0]);
+        final AttrValueShop heightAttrValueShop = shop.getAttributeByCode(shopWidthAndHeightAttribute[1]);
+        if (widthAttrValueShop != null && heightAttrValueShop != null && StringUtils.isNotBlank(widthAttrValueShop.getVal())
+                && StringUtils.isNotBlank(heightAttrValueShop.getVal())) {
+            return new Pair<String, String>(widthAttrValueShop.getVal(), heightAttrValueShop.getVal());
         }
 
         return defaultWidthAndHeight;

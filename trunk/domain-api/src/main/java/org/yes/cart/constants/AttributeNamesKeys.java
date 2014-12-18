@@ -159,8 +159,8 @@ public interface AttributeNamesKeys {
         String PRODUCT_IMAGE_HEIGHT = "PRODUCT_IMAGE_HEIGHT";
 
         /** Product image width and height in category.  */
-        String PRODUCT_IMAGE_TUMB_WIDTH = "PRODUCT_IMAGE_TUMB_WIDTH";
-        String PRODUCT_IMAGE_TUMB_HEIGHT = "PRODUCT_IMAGE_TUMB_HEIGHT";
+        String PRODUCT_IMAGE_THUMB_WIDTH = "PRODUCT_IMAGE_THUMB_WIDTH";
+        String PRODUCT_IMAGE_THUMB_HEIGHT = "PRODUCT_IMAGE_THUMB_HEIGHT";
 
         /** Product columns in grid */
         String CATEGORY_PRODUCTS_COLUMNS = "CATEGORY_PRODUCTS_COLUMNS";
@@ -264,6 +264,20 @@ public interface AttributeNamesKeys {
          * Number of days for newarrival tag
          */
         String SHOP_NEW_ARRIVAL_DAYS_OFFSET = "SHOP_NEW_ARRIVAL_DAYS_OFFSET";
+
+        String SHOP_CATEGORY_ITEMS_PER_PAGE = "SHOP_CATEGORY_ITEMS_PER_PAGE";
+
+        /** Category images width and height.  */
+        String SHOP_CATEGORY_IMAGE_WIDTH = "SHOP_CATEGORY_IMAGE_WIDTH";
+        String SHOP_CATEGORY_IMAGE_HEIGHT = "SHOP_CATEGORY_IMAGE_HEIGHT";
+
+        /** Product image width and height in category.  */
+        String SHOP_PRODUCT_IMAGE_WIDTH = "SHOP_PRODUCT_IMAGE_WIDTH";
+        String SHOP_PRODUCT_IMAGE_HEIGHT = "SHOP_PRODUCT_IMAGE_HEIGHT";
+
+        /** Product image width and height in category.  */
+        String SHOP_PRODUCT_IMAGE_THUMB_WIDTH = "SHOP_PRODUCT_IMAGE_THUMB_WIDTH";
+        String SHOP_PRODUCT_IMAGE_THUMB_HEIGHT = "SHOP_PRODUCT_IMAGE_THUMB_HEIGHT";
 
         /**
          * Setting for whether to show coupons or not
