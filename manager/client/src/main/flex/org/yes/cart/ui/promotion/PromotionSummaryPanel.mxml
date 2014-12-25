@@ -189,10 +189,10 @@
                     displayDescription.setSourceObject(_promotion, 'displayDescriptions');
                     propertyWatchers.addItem(BindingUtils.bindProperty(promoEnabled, "selected", _promotion, "enabled"));
                     propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "enabled", promoEnabled, "selected"));
-                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "enabledFrom", enabledFrom, "selectedDate"));
                     propertyWatchers.addItem(BindingUtils.bindProperty(enabledFrom, "selectedDate", _promotion, "enabledFrom"));
-                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "enabledTo", enabledTo, "selectedDate"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "enabledFrom", enabledFrom, "selectedDate"));
                     propertyWatchers.addItem(BindingUtils.bindProperty(enabledTo, "selectedDate", _promotion, "enabledTo"));
+                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "enabledTo", enabledTo, "selectedDate"));
 
                 } catch (e:Error) {
 
