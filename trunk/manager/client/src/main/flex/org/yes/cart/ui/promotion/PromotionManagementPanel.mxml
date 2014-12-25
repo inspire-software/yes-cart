@@ -338,6 +338,30 @@
                         </mx:DataGridColumn>
                         <mx:DataGridColumn headerText="@Resource(bundle='PromotionManagementPanel',key='tags')"
                                            dataField="tag"/>
+                        <mx:DataGridColumn showDataTips="true" wordWrap="true" width="100"
+                                           headerText="@Resource(bundle='PromotionManagementPanel',key='enabledFrom')"
+                                           dataField="enabledFrom">
+                            <mx:itemRenderer>
+                                <mx:Component>
+                                    <mx:VBox>
+                                        <mx:DateFormatter id="formatDateTimeFrom" formatString="YYYY-MM-DD J:NN" ></mx:DateFormatter>
+                                        <mx:Label text="{formatDateTimeFrom.format(data.enabledFrom)}"/>
+                                    </mx:VBox>
+                                </mx:Component>
+                            </mx:itemRenderer>
+                        </mx:DataGridColumn>
+                        <mx:DataGridColumn showDataTips="true" wordWrap="true" width="100"
+                                           headerText="@Resource(bundle='PromotionManagementPanel',key='enabledTo')"
+                                           dataField="enabledTo">
+                            <mx:itemRenderer>
+                                <mx:Component>
+                                    <mx:VBox>
+                                        <mx:DateFormatter id="formatDateTimeTo" formatString="YYYY-MM-DD J:NN" ></mx:DateFormatter>
+                                        <mx:Label text="{formatDateTimeTo.format(data.enabledTo)}"/>
+                                    </mx:VBox>
+                                </mx:Component>
+                            </mx:itemRenderer>
+                        </mx:DataGridColumn>
                     </mx:columns>
                 </mx:DataGrid>
 

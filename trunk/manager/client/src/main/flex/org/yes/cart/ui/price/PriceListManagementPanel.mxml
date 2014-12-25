@@ -188,14 +188,34 @@
                                    dataField="salefrom"
                                    itemEditor="mx.controls.DateField"
                                    rendererIsEditor="false"
-                                   editorDataField="selectedDate"
-                        />
+                                   editorDataField="selectedDate">
+
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:VBox>
+                                <mx:DateFormatter id="formatDateTimeFrom" formatString="YYYY-MM-DD J:NN" ></mx:DateFormatter>
+                                <mx:Label text="{formatDateTimeFrom.format(data.salefrom)}"/>
+                            </mx:VBox>
+                        </mx:Component>
+                    </mx:itemRenderer>
+
+                </mx:DataGridColumn>
                 <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='saleTo')"
                                    dataField="saleto"
                                    itemEditor="mx.controls.DateField"
                                    rendererIsEditor="false"
-                                   editorDataField="selectedDate"
-                        />
+                                   editorDataField="selectedDate">
+
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:VBox>
+                                <mx:DateFormatter id="formatDateTimeTo" formatString="YYYY-MM-DD J:NN" ></mx:DateFormatter>
+                                <mx:Label text="{formatDateTimeTo.format(data.saleto)}"/>
+                            </mx:VBox>
+                        </mx:Component>
+                    </mx:itemRenderer>
+
+                </mx:DataGridColumn>
                 <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='minimalPrice')"
                                    editorDataField="returnMinimalPrice"
                                    rendererIsEditor="false"
