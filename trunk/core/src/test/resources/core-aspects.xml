@@ -30,6 +30,12 @@
     </bean>
     <bean id="passwordHashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
 
+    <bean id="managerRegistrationAspect" class="org.yes.cart.service.dto.impl.TestManagerRegistrationAspect">
+        <constructor-arg ref="passPhraseGenerator"/>
+        <constructor-arg ref="passwordHashHelper"/>
+
+    </bean>
+
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="localhost"/>
