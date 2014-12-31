@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto.impl;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.transaction.TransactionStatus;
@@ -188,7 +189,8 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
                     List<CategoryDTO> list = dtoService.getAllByShopId(50L);
                     assertNull(list); // No Content Root
                 } catch (Exception e) {
-                    fail(e.getMessage());
+
+                    fail(ExceptionUtils.getStackTrace(e));
 
                 }
 
