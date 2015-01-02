@@ -2,6 +2,11 @@
 -- @author Denys Pavlov
 
 CREATE DATABASE yes CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+SET character_set_client = utf8;
+SET character_set_results = utf8;
+SET character_set_connection = utf8;
+
 -- grant statement creates the user if the user does not exist (as long as the no_auto_create_user is not set).
 GRANT ALL ON yes.* TO yes@localhost IDENTIFIED BY 'y3$PaSs';
 
