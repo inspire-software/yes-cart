@@ -42,6 +42,8 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
 
     public static enum CategoryType { ANY, CATEGORY, CONTENT }
 
+    private static final String DEFAULT_PANEL = "default";
+
     private final Map<String, Class<? extends AbstractCentralView>> rendererPanelMap;
     private final Map<Class<? extends AbstractCentralView>, CategoryType> categoryTypeMap;
 
@@ -68,11 +70,14 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
 
         Class<? extends AbstractCentralView> clz = rendererPanelMap.get(rendererLabel);
         try {
+
             if (clz != null) {
+
                 if (categoryId > 0L) {
 
                     CategoryType type = categoryTypeMap.get(clz);
                     if (type == null) {
+                        ShopCodeContext.getLog(this).warn("No category type is specified for panel class {}", clz.getCanonicalName());
                         type = CategoryType.ANY;
                     }
 
@@ -84,7 +89,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
                                 if (log.isWarnEnabled()) {
                                     log.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
                                 }
-                                return new EmptyCentralView(wicketComponentId, navigationContext);
+                                clz = getDefaultPanel();
                             }
                             break;
                         case CONTENT:
@@ -94,7 +99,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
                                 if (log.isWarnEnabled()) {
                                     log.warn("Can not access content {} from shop {}", categoryId, ShopCodeContext.getShopId());
                                 }
-                                return new EmptyCentralView(wicketComponentId, navigationContext);
+                                clz = getDefaultPanel();
                             }
                             break;
                         case ANY:
@@ -105,7 +110,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
                                 if (log.isWarnEnabled()) {
                                     log.warn("Can not access category {} from shop {}", categoryId, ShopCodeContext.getShopId());
                                 }
-                                return new EmptyCentralView(wicketComponentId, navigationContext);
+                                clz = getDefaultPanel();
                             }
                             break;
 
@@ -113,13 +118,16 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
 
                 }
 
-                Constructor<? extends AbstractCentralView> constructor =
-                        clz.getConstructor(String.class, long.class, NavigationContext.class);
-                return constructor.newInstance(wicketComponentId, categoryId, navigationContext);
+            } else {
+
+                ShopCodeContext.getLog(this).warn("Can not create instance of panel for label {}", rendererLabel);
+                clz = getDefaultPanel();
+
             }
 
-            ShopCodeContext.getLog(this).warn("Can not create instance of panel for label {0}", rendererLabel);
-            return new EmptyCentralView(wicketComponentId, navigationContext);
+            Constructor<? extends AbstractCentralView> constructor =
+                    clz.getConstructor(String.class, long.class, NavigationContext.class);
+            return constructor.newInstance(wicketComponentId, categoryId, navigationContext);
 
         } catch (Exception e) {
 
@@ -127,6 +135,10 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
             return new EmptyCentralView(wicketComponentId, navigationContext);
 
         }
+    }
+
+    private Class<? extends AbstractCentralView> getDefaultPanel() {
+        return rendererPanelMap.get(DEFAULT_PANEL);
     }
 
 
