@@ -29,6 +29,7 @@
             <map>
                 <entry key="jobName" value="Inventory Awaiting Delivery Processing" />
                 <entry key="job" value-ref="bulkAwaitingInvetoryDeliveriesProcessor" />
+                <entry key="nodeService" value-ref="nodeService" />
             </map>
         </property>
     </bean>
@@ -47,6 +48,7 @@
             <map>
                 <entry key="jobName" value="Abandoned Shopping Cart State Clean Up" />
                 <entry key="job" value-ref="bulkAbandonedShoppingCartProcessor" />
+                <entry key="nodeService" value-ref="nodeService" />
             </map>
         </property>
     </bean>
@@ -66,6 +68,7 @@
             <map>
                 <entry key="jobName" value="Customer Tagging" />
                 <entry key="job" value-ref="bulkCustomerTagProcessor" />
+                <entry key="nodeService" value-ref="nodeService" />
             </map>
         </property>
     </bean>
@@ -94,6 +97,7 @@
             <map>
                 <entry key="jobName" value="Send Mail" />
                 <entry key="job" value-ref="bulkMailProcessor" />
+                <entry key="nodeService" value-ref="nodeService" />
             </map>
         </property>
     </bean>

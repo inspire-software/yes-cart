@@ -27,6 +27,7 @@
         <property name="target">
             <bean class="org.yes.cart.bulkjob.product.ProductsGlobalIndexProcessorImpl">
                 <constructor-arg index="0" ref="productService"/>
+                <constructor-arg index="1" ref="nodeService"/>
             </bean>
         </property>
     </bean>
@@ -37,6 +38,7 @@
             <map>
                 <entry key="jobName" value="Reindex All Products" />
                 <entry key="job" value-ref="productsGlobalIndexProcessor" />
+                <entry key="nodeService" value-ref="nodeService" />
             </map>
         </property>
     </bean>
@@ -53,6 +55,7 @@
         <property name="target">
             <bean class="org.yes.cart.bulkjob.product.ProductsPassedAvailbilityDateIndexProcessorImpl">
                 <constructor-arg index="0" ref="productService"/>
+                <constructor-arg index="1" ref="nodeService"/>
             </bean>
         </property>
     </bean>
@@ -63,6 +66,7 @@
             <map>
                 <entry key="jobName" value="Reindex Discontinued Products" />
                 <entry key="job" value-ref="productsPassedAvailbilityDateIndexProcessor" />
+                <entry key="nodeService" value-ref="nodeService" />
             </map>
         </property>
     </bean>
@@ -70,7 +74,7 @@
     <bean id="reindexDiscontinuedProductsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="reindexDiscontinuedProductsJob" />
         <!-- at 5:00 am -->
-        <property name="cronExpression" value="0 0 5 * * ?" />
+        <property name="cronExpression" value="0 0/1 * * * ?" />
     </bean>
 
     <!-- ################################ Scheduler  ####################################################### -->

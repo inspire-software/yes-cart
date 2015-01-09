@@ -19,6 +19,7 @@ package org.yes.cart.bulkjob.product;
 import org.slf4j.Logger;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.service.ws.node.NodeService;
 
 import java.util.Date;
 
@@ -36,9 +37,12 @@ import java.util.Date;
 public class ProductsGlobalIndexProcessorImpl implements Runnable {
 
     private final ProductService productService;
+    private final NodeService nodeService;
 
-    public ProductsGlobalIndexProcessorImpl(final ProductService productService) {
+    public ProductsGlobalIndexProcessorImpl(final ProductService productService,
+                                            final NodeService nodeService) {
         this.productService = productService;
+        this.nodeService = nodeService;
     }
 
 
@@ -48,13 +52,20 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
 
         final Logger log = ShopCodeContext.getLog(this);
 
+        final String nodeId = getNodeId();
+
+        if (isLuceneIndexDisabled()) {
+            log.info("Reindexing all products on {} ... disabled", nodeId);
+            return;
+        }
+
         final long start = System.currentTimeMillis();
 
-        log.info("Reindexing all products");
+        log.info("Reindexing all products on {}", nodeId);
 
         productService.reindexProducts();
 
-        log.info("Reindexing all SKU");
+        log.info("Reindexing all SKU on {}", nodeId);
 
         productService.reindexProductsSku();
 
@@ -62,9 +73,19 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
 
         final long ms = (finish - start);
 
-        log.info("Reindexing ... complete {}s", (ms > 0 ? ms / 1000 : 0));
+        log.info("Reindexing on {} ... complete {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
 
     }
+
+
+    protected String getNodeId() {
+        return nodeService.getCurrentNodeId();
+    }
+
+    protected Boolean isLuceneIndexDisabled() {
+        return Boolean.TRUE.toString().equals(nodeService.getConfiguration().get(NodeService.LUCENE_INDEX_DISABLED));
+    }
+
 
     protected Date now() {
         return new Date();
