@@ -838,7 +838,14 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     public int reindexProduct(final Long pk) {
-        return productDao.fullTextSearchReindex(pk);
+        final Product product = findById(pk);
+        if (product != null) {
+            for (final ProductSku sku : product.getSku()) {
+                productSkuDao.fullTextSearchReindex(sku.getSkuId());
+            }
+            return productDao.fullTextSearchReindex(pk);
+        }
+        return 0;
     }
 
     /**

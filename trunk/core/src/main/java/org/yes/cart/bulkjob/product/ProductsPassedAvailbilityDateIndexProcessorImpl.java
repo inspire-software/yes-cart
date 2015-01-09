@@ -19,6 +19,7 @@ package org.yes.cart.bulkjob.product;
 import org.slf4j.Logger;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.service.ws.node.NodeService;
 
 import java.util.Date;
 import java.util.List;
@@ -36,9 +37,12 @@ import java.util.List;
 public class ProductsPassedAvailbilityDateIndexProcessorImpl implements Runnable {
 
     private final ProductService productService;
+    private final NodeService nodeService;
 
-    public ProductsPassedAvailbilityDateIndexProcessorImpl(final ProductService productService) {
+    public ProductsPassedAvailbilityDateIndexProcessorImpl(final ProductService productService,
+                                                           final NodeService nodeService) {
         this.productService = productService;
+        this.nodeService = nodeService;
     }
 
 
@@ -48,14 +52,40 @@ public class ProductsPassedAvailbilityDateIndexProcessorImpl implements Runnable
 
         final Logger log = ShopCodeContext.getLog(this);
 
+        final String nodeId = getNodeId();
+
+        if (isLuceneIndexDisabled()) {
+            log.info("Reindexing discontinued products on {} ... disabled", nodeId);
+            return;
+        }
+
+        log.info("Reindexing discontinued products on {}", nodeId);
+
+        final long start = System.currentTimeMillis();
+
         final List<Object> discontinued = productService.getGenericDao().findQueryObjectByNamedQuery("DISCONTINUED.PRODUCTS.AFTER.DATE", now());
 
         for (final Object pk : discontinued) {
-            log.info("Reindexing discontinued product {}", pk);
+            log.info("Reindexing discontinued product {} on {}", pk, nodeId);
             productService.reindexProduct((Long) pk);
         }
 
+        final long finish = System.currentTimeMillis();
+
+        final long ms = (finish - start);
+
+        log.info("Reindexing discontinued on {} ... complete {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
+
     }
+
+    protected String getNodeId() {
+        return nodeService.getCurrentNodeId();
+    }
+
+    protected Boolean isLuceneIndexDisabled() {
+        return Boolean.TRUE.toString().equals(nodeService.getConfiguration().get(NodeService.LUCENE_INDEX_DISABLED));
+    }
+
 
     protected Date now() {
         return new Date();

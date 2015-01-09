@@ -74,7 +74,17 @@ public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCor
         assertTrue(product.getAvailableto().before(new Date()));
 
 
-        final ProductsPassedAvailbilityDateIndexProcessorImpl processor = new ProductsPassedAvailbilityDateIndexProcessorImpl(productService);
+        final ProductsPassedAvailbilityDateIndexProcessorImpl processor = new ProductsPassedAvailbilityDateIndexProcessorImpl(productService, null) {
+            @Override
+            protected String getNodeId() {
+                return "TEST";
+            }
+
+            @Override
+            protected Boolean isLuceneIndexDisabled() {
+                return false;
+            }
+        };
 
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override
