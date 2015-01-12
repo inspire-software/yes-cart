@@ -34,6 +34,7 @@ public interface MailTemplateResourcesProvider {
      * Get template as string.
      *
      * @param mailTemplateChain path to template folder
+     * @param shopCode          shop code
      * @param locale            locale
      * @param templateName      template name
      * @param ext               file extension
@@ -42,15 +43,17 @@ public interface MailTemplateResourcesProvider {
      *
      * @throws java.io.IOException in case of io errors.
      */
-    String getTemplate(final List<String> mailTemplateChain,
-                       final String locale,
-                       final String templateName,
-                       final String ext) throws IOException;
+    String getTemplate(List<String> mailTemplateChain,
+                       String shopCode,
+                       String locale,
+                       String templateName,
+                       String ext) throws IOException;
 
     /**
      * Get template as string.
      *
      * @param mailTemplateChain path to template folder
+     * @param shopCode          shop code
      * @param locale            locale
      * @param templateName      template name
      * @param resourceFilename  file name for the resource
@@ -59,10 +62,11 @@ public interface MailTemplateResourcesProvider {
      *
      * @throws java.io.IOException in case of io errors.
      */
-    byte[] getResource(final List<String> mailTemplateChain,
-                       final String locale,
-                       final String templateName,
-                       final String resourceFilename) throws IOException;
+    byte[] getResource(List<String> mailTemplateChain,
+                       String shopCode,
+                       String locale,
+                       String templateName,
+                       String resourceFilename) throws IOException;
 
 
 }
