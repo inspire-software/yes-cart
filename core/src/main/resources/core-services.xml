@@ -1287,7 +1287,29 @@
 
     <!-- ########################################### Mail ######################################## -->
 
-    <bean id="mailTemplateResourcesProvider" class="org.yes.cart.service.mail.impl.MailTemplateResourcesProviderImpl"/>
+    <bean id="mailTemplateResourcesProviderShopContent"
+          class="org.yes.cart.service.mail.impl.MailTemplateResourcesProviderShopContentImpl">
+        <constructor-arg index="0" ref="contentService"/>
+        <constructor-arg index="1" ref="systemService"/>
+        <constructor-arg index="2" ref="imageService"/>
+    </bean>
+
+    <bean id="mailTemplateResourcesProviderTheme"
+          class="org.yes.cart.service.mail.impl.MailTemplateResourcesProviderThemeImpl"/>
+
+    <bean id="mailTemplateResourcesProvider"
+          class="org.yes.cart.service.mail.impl.MailTemplateResourcesProviderFactoryImpl">
+        <constructor-arg index="0">
+            <list>
+                <!--
+                    Order here is important as factory will take the first provider that is able to
+                    provide non-empty value
+                -->
+                <ref bean="mailTemplateResourcesProviderShopContent"/>
+                <ref bean="mailTemplateResourcesProviderTheme"/>
+            </list>
+        </constructor-arg>
+    </bean>
 
     <bean id="mailComposer" class="org.yes.cart.service.mail.impl.MailComposerImpl">
         <constructor-arg index="0" ref="mailTemplateResourcesProvider"/>

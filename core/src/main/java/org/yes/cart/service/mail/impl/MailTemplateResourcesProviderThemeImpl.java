@@ -17,7 +17,6 @@
 package org.yes.cart.service.mail.impl;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.service.mail.MailTemplateResourcesProvider;
 
@@ -32,13 +31,13 @@ import java.util.List;
  *
  * Using shared resources bring a lot of complexity so it is better to keep all templates with each war
  * file thus giving a complete deployable. Updates still can be achieved by copying extra resources
- * (e.g. additional themes) staright into exploded war directory.
+ * (e.g. additional themes) straight into exploded war directory.
  *
  * User: denispavlov
  * Date: 03/09/2014
  * Time: 15:00
  */
-public class MailTemplateResourcesProviderImpl implements MailTemplateResourcesProvider, ServletContextAware {
+public class MailTemplateResourcesProviderThemeImpl implements MailTemplateResourcesProvider, ServletContextAware {
 
     private ServletContext servletContext;
 
@@ -46,8 +45,8 @@ public class MailTemplateResourcesProviderImpl implements MailTemplateResourcesP
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "themeService-mailTemplate")
     public String getTemplate(final List<String> mailTemplateChain,
+                              final String shopCode,
                               final String locale,
                               final String templateName,
                               final String ext) throws IOException {
@@ -65,15 +64,15 @@ public class MailTemplateResourcesProviderImpl implements MailTemplateResourcesP
             }
         }
 
-        throw new RuntimeException("mail template does not exist: " + templateName + ext);
+        return null;
 
     }
 
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "themeService-mailResource")
     public byte[] getResource(final List<String> mailTemplateChain,
+                              final String shopCode,
                               final String locale,
                               final String templateName,
                               final String resourceFilename) throws IOException {
@@ -89,7 +88,7 @@ public class MailTemplateResourcesProviderImpl implements MailTemplateResourcesP
             }
         }
 
-        throw new RuntimeException("mail resource does not exist: " + templateName + "/" + resourceFilename);
+        return null;
 
     }
 

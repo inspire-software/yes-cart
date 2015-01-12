@@ -126,9 +126,9 @@ public class MailComposerImpl implements MailComposer {
         }
 
 
-        final String textTemplate = getTemplate(mailTemplateChain, locale, templateName, ".txt");
-        final String htmlTemplate = getTemplate(mailTemplateChain, locale, templateName, ".html");
-        final String propString = getTemplate(mailTemplateChain, locale, templateName, ".properties");
+        final String textTemplate = getTemplate(mailTemplateChain, shopCode, locale, templateName, ".txt");
+        final String htmlTemplate = getTemplate(mailTemplateChain, shopCode, locale, templateName, ".html");
+        final String propString = getTemplate(mailTemplateChain, shopCode, locale, templateName, ".properties");
         final Properties prop = new Properties();
         if (propString != null) {
             prop.load(new StringReader(propString));
@@ -141,7 +141,7 @@ public class MailComposerImpl implements MailComposer {
             helper.setFrom(from);
         }
 
-        composeMessage(helper, textTemplate, htmlTemplate, mailTemplateChain, locale, templateName, model);
+        composeMessage(helper, textTemplate, htmlTemplate, mailTemplateChain, shopCode, locale, templateName, model);
 
     }
 
@@ -153,6 +153,7 @@ public class MailComposerImpl implements MailComposer {
      * @param textTemplate    optional text template
      * @param htmlTemplate    optional html template
      * @param mailTemplateChain path to template folder
+     * @param shopCode        shop code
      * @param locale          locale
      * @param templateName    template name
      * @param model           model
@@ -165,6 +166,7 @@ public class MailComposerImpl implements MailComposer {
                         final String textTemplate,
                         final String htmlTemplate,
                         final List<String> mailTemplateChain,
+                        final String shopCode,
                         final String locale,
                         final String templateName,
                         final Map<String, Object> model)
@@ -177,7 +179,7 @@ public class MailComposerImpl implements MailComposer {
 
             if (htmlTemplate != null) {
                 helper.setText(merge(htmlTemplate, model), true);
-                inlineResources(helper, htmlTemplate, mailTemplateChain, locale, templateName);
+                inlineResources(helper, htmlTemplate, mailTemplateChain, shopCode, locale, templateName);
             }
 
         } else {
@@ -185,7 +187,7 @@ public class MailComposerImpl implements MailComposer {
                     merge(textTemplate, model),
                     merge(htmlTemplate, model)
             );
-            inlineResources(helper, htmlTemplate, mailTemplateChain, locale, templateName);
+            inlineResources(helper, htmlTemplate, mailTemplateChain, shopCode, locale, templateName);
         }
 
     }
@@ -198,6 +200,8 @@ public class MailComposerImpl implements MailComposer {
      * @param helper          MimeMessageHelper, that has mail message
      * @param htmlTemplate    html message template
      * @param mailTemplateChain physical path to resources
+     * @param shopCode        shop code
+     * @param locale          locale
      * @param templateName    template name
      *
      * @throws javax.mail.MessagingException in case if resource can not be inlined
@@ -205,6 +209,7 @@ public class MailComposerImpl implements MailComposer {
     void inlineResources(final MimeMessageHelper helper,
                          final String htmlTemplate,
                          final List<String> mailTemplateChain,
+                         final String shopCode,
                          final String locale,
                          final String templateName) throws MessagingException, IOException {
 
@@ -213,7 +218,7 @@ public class MailComposerImpl implements MailComposer {
             if (!resourcesIds.isEmpty()) {
                 for (String resourceId : resourcesIds) {
                     final String resourceFilename = transformResourceIdToFileName(resourceId);
-                    final byte[] content = mailTemplateResourcesProvider.getResource(mailTemplateChain, locale, templateName, resourceFilename);
+                    final byte[] content = mailTemplateResourcesProvider.getResource(mailTemplateChain, shopCode, locale, templateName, resourceFilename);
                     helper.addInline(resourceId, new ByteArrayResource(content) {
                         @Override
                         public String getFilename() {
@@ -286,6 +291,7 @@ public class MailComposerImpl implements MailComposer {
      * Get template as string.
      *
      * @param mailTemplateChain path to template folder
+     * @param shopCode          shop code
      * @param locale            locale
      * @param fileName          file name
      * @param ext               file extension
@@ -293,12 +299,13 @@ public class MailComposerImpl implements MailComposer {
      * @return template if exists
      */
     String getTemplate(final List<String> mailTemplateChain,
+                       final String shopCode,
                        final String locale,
                        final String fileName,
                        final String ext) {
 
         try {
-            return mailTemplateResourcesProvider.getTemplate(mailTemplateChain, locale, fileName, ext);
+            return mailTemplateResourcesProvider.getTemplate(mailTemplateChain, shopCode, locale, fileName, ext);
         } catch (IOException e) {
             LOG.warn("No template found for locale {}, template: {}, ext: {}", new Object[] { locale, fileName, ext });
             return null;
@@ -331,9 +338,9 @@ public class MailComposerImpl implements MailComposer {
             mail.setBcc(bccEmail);
         }
 
-        final String textTemplate = getTemplate(mailTemplateChain, locale, templateName, ".txt");
-        final String htmlTemplate = getTemplate(mailTemplateChain, locale, templateName, ".html");
-        final String propString = getTemplate(mailTemplateChain, locale, templateName, ".properties");
+        final String textTemplate = getTemplate(mailTemplateChain, shopCode, locale, templateName, ".txt");
+        final String htmlTemplate = getTemplate(mailTemplateChain, shopCode, locale, templateName, ".html");
+        final String propString = getTemplate(mailTemplateChain, shopCode, locale, templateName, ".properties");
         final Properties prop = new Properties();
         if (propString != null) {
 
@@ -353,6 +360,7 @@ public class MailComposerImpl implements MailComposer {
                 textTemplate,
                 htmlTemplate,
                 mailTemplateChain,
+                shopCode,
                 locale,
                 templateName,
                 model);
@@ -368,6 +376,7 @@ public class MailComposerImpl implements MailComposer {
      * @param textTemplate    optional text template
      * @param htmlTemplate    optional html template
      * @param mailTemplateChain path to template folder
+     * @param shopCode        shop code
      * @param locale          locale
      * @param templateName    template name
      * @param model           model
@@ -380,6 +389,7 @@ public class MailComposerImpl implements MailComposer {
                         final String textTemplate,
                         final String htmlTemplate,
                         final List<String> mailTemplateChain,
+                        final String shopCode,
                         final String locale,
                         final String templateName,
                         final Map<String, Object> model)
@@ -391,13 +401,13 @@ public class MailComposerImpl implements MailComposer {
             }
             if (htmlTemplate != null) {
                 mail.setHtmlVersion(merge(htmlTemplate, model));
-                inlineResources(mail, htmlTemplate, mailTemplateChain, locale, templateName);
+                inlineResources(mail, htmlTemplate, mailTemplateChain, shopCode, locale, templateName);
             }
 
         } else {
             mail.setTextVersion(merge(textTemplate, model));
             mail.setHtmlVersion(merge(htmlTemplate, model));
-            inlineResources(mail, htmlTemplate, mailTemplateChain, locale, templateName);
+            inlineResources(mail, htmlTemplate, mailTemplateChain, shopCode, locale, templateName);
         }
 
     }
@@ -410,6 +420,7 @@ public class MailComposerImpl implements MailComposer {
      * @param mail            MimeMessageHelper, that has mail message
      * @param htmlTemplate    html message template
      * @param mailTemplateChain path to template folder
+     * @param shopCode          shop code
      * @param locale          locale
      * @param templateName    template name
      *
@@ -418,6 +429,7 @@ public class MailComposerImpl implements MailComposer {
     void inlineResources(final Mail mail,
                          final String htmlTemplate,
                          final List<String> mailTemplateChain,
+                         final String shopCode,
                          final String locale,
                          final String templateName) throws MessagingException, IOException {
 
@@ -426,7 +438,7 @@ public class MailComposerImpl implements MailComposer {
             if (!resourcesIds.isEmpty()) {
                 for (String resourceId : resourcesIds) {
                     final String resourceFilename = transformResourceIdToFileName(resourceId);
-                    final byte[] content = mailTemplateResourcesProvider.getResource(mailTemplateChain, locale, templateName, resourceFilename);
+                    final byte[] content = mailTemplateResourcesProvider.getResource(mailTemplateChain, shopCode, locale, templateName, resourceFilename);
                     final MailPart part = mail.addPart();
                     part.setResourceId(resourceId);
                     part.setFilename(resourceFilename);
