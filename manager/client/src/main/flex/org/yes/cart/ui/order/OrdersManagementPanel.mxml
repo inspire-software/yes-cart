@@ -289,8 +289,8 @@
                                                 msg = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation', [customerOrderDTO.ordernum]);
                                                 title = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation.title');
                                             } else if (orderStatus == "os.partially.shipped" || orderStatus == "os.completed") {
-                                                msg = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation', [customerOrderDTO.ordernum]);
-                                                title = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation.title');
+                                                msg = resourceManager.getString('CustomerOrderPanel', 'return.order.confirmation', [customerOrderDTO.ordernum]);
+                                                title = resourceManager.getString('CustomerOrderPanel', 'return.order.confirmation.title');
                                             }
                                             Alert.show(
                                                     msg, title,
@@ -298,7 +298,7 @@
                                         }
 
                                         /**
-                                         * User confirm cancel or return the order.
+                                         * User confirms cancel or return the order.
                                          * @param event
                                          */
                                         private function onCancelOrderClick(event:CloseEvent):void {
@@ -1028,7 +1028,7 @@
         private function onOrderResultStatusChanged(event:ResultEvent):void {
 
             if (event.result.errorCode == "0") {
-                performSearch(); //not sure what the best way re reread one order
+                performSearch(); //not sure what the best way to reread one order
 
             } else {
                 Alert.show(
