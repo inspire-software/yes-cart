@@ -42,7 +42,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
     Result updateOrderSetConfirmed(String orderNum);
 
     /**
-     * Cancel order. In case of order cancelation will be performed following actions:
+     * Cancel order. In case of order cancellation will be performed following actions:
      * <p/>
      * product quantity reservation in case of off line payment gateway will be voided.
      * product quantity in deliveries will be returned to main warehouse in case of online payments.

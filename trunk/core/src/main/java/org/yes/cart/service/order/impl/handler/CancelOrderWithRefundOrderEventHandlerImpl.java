@@ -76,7 +76,11 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
      */
     @Override
     protected String getTransitionTarget(final OrderEvent orderEvent) {
-        return CustomerOrder.ORDER_STATUS_RETURNED;
+        if (CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED.equals(orderEvent.getCustomerOrder().getOrderStatus()) ||
+                CustomerOrder.ORDER_STATUS_COMPLETED.equals(orderEvent.getCustomerOrder().getOrderStatus())) {
+            return CustomerOrder.ORDER_STATUS_RETURNED;
+        }
+        return CustomerOrder.ORDER_STATUS_CANCELLED;
     }
 
     /**

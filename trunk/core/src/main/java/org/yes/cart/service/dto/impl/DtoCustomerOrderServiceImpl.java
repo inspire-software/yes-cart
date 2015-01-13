@@ -154,13 +154,9 @@ public class DtoCustomerOrderServiceImpl
         }
 
         try {
-            final String paymentGateway = order.getPgLabel();
-            final String cancelOperation;
-            if (paymentModulesManager.getPaymentGateway(paymentGateway, order.getShop().getCode()).getPaymentGatewayFeatures().isOnlineGateway()) {
-                cancelOperation = OrderStateManager.EVT_CANCEL_WITH_REFUND;
-            } else {
-                cancelOperation = OrderStateManager.EVT_CANCEL;
-            }
+
+            // We always cancel with refund since we may have completed payments
+            final String cancelOperation = OrderStateManager.EVT_CANCEL_WITH_REFUND;
 
             if (orderStateManager.fireTransition(
                     new OrderEventImpl(cancelOperation, order))) {
