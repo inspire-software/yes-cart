@@ -42,6 +42,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
 
     private CustomerOrderService orderService;
     private OrderEventHandler pendingHandler;
+    private OrderEventHandler shippedHandler;
     private SkuWarehouseService skuWarehouseService;
     private OrderEventHandler handler;
 
@@ -50,12 +51,13 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
         orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
         skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
         pendingHandler = (OrderEventHandler) ctx().getBean("pendingOrderEventHandler");
+        shippedHandler = (OrderEventHandler) ctx().getBean("shipmentCompleteOrderEventHandler");
         handler = (OrderEventHandler) ctx().getBean("cancelOrderWithRefundOrderEventHandler");
         super.setUp();
     }
 
     /**
-     * Test on order , that not completed.
+     * Test on order that is not completed.
      */
     @Test
     public void testHandle0() throws Exception {
@@ -83,11 +85,11 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
         skuWarehouse = skuWarehouseService.findById(30);
         assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
         assertEquals(new BigDecimal("9.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(CustomerOrder.ORDER_STATUS_RETURNED, customerOrder.getOrderStatus());
+        assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
     }
 
     /**
-     * Test on order , that not completed.
+     * Test on order that is completed.
      */
     @Test
     public void testHandle1() throws Exception {
@@ -111,6 +113,9 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
         skuWarehouse.setReserved(new BigDecimal("0.00"));
         skuWarehouse.setQuantity(new BigDecimal("7.00"));
         skuWarehouseService.update(skuWarehouse);
+
+        assertTrue(shippedHandler.handle(new OrderEventImpl("", customerOrder, customerOrder.getDelivery().iterator().next(), null)));
+        assertEquals(CustomerOrder.ORDER_STATUS_COMPLETED, customerOrder.getOrderStatus());
 
         assertTrue(handler.handle(new OrderEventImpl("", customerOrder, null, null)));
 
