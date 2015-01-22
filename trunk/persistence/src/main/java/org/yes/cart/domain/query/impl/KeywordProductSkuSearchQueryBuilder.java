@@ -72,7 +72,7 @@ public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuil
 
             phrazeQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedSearchValue, 0.8f, 10f), BooleanClause.Occur.SHOULD);
 
-            phrazeQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_FIELD, escapedSearchValue, 0.65f, 2f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCH_FIELD, escapedSearchValue, 0.65f, 2f), BooleanClause.Occur.SHOULD);
 
             aggregateQuery.add(phrazeQuery, BooleanClause.Occur.SHOULD);
 
