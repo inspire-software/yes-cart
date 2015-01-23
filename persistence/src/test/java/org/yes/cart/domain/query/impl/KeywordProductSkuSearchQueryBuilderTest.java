@@ -51,7 +51,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, "query", "SearchWord");
         assertNotNull(query);
-        assertEquals("(name:SearchWord~0.6^3.0 displayName:SearchWord~0.6^4.0 sku.code:SearchWord~0.8^10.0 attribute.attrvalsearch:SearchWord~0.65^2.0)", query.toString());
+        assertEquals("(name:SearchWord~0.6^3.0 displayName:SearchWord~0.6^3.0 sku.code:SearchWord~0.8^10.0 attribute.attrvalsearch:SearchWord~0.65^4.0)", query.toString());
 
     }
 
@@ -60,7 +60,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSkuSearchQueryBuilder().createStrictQuery(10L, "query", "Search, Word");
         assertNotNull(query);
-        assertEquals("(name:Search, Word~0.6^3.0 displayName:Search, Word~0.6^4.0 sku.code:Search, Word~0.8^10.0 attribute.attrvalsearch:Search, Word~0.65^2.0) (name:search~0.6^2.5 displayName:search~0.6^3.0 sku.code:search~0.8^4.0 attribute.attrvalsearch:search^0.5) (name:word~0.6^2.5 displayName:word~0.6^3.0 sku.code:word~0.8^4.0 attribute.attrvalsearch:word^0.5)", query.toString());
+        assertEquals("(name:Search, Word~0.6^3.0 displayName:Search, Word~0.6^3.0 sku.code:Search, Word~0.8^10.0 attribute.attrvalsearch:Search, Word~0.65^4.0) (name:search~0.6^2.0 displayName:search~0.6^2.0 sku.code:search~0.8^10.0 attribute.attrvalsearch:search~0.65^4.0) (name:word~0.6^2.0 displayName:word~0.6^2.0 sku.code:word~0.8^10.0 attribute.attrvalsearch:word~0.65^4.0)", query.toString());
 
     }
 
@@ -87,7 +87,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, "query", "SearchWord");
         assertNotNull(query);
-        assertEquals("(name:searchword~0.5^2.5 displayName:searchword~0.5^3.0 sku.code:searchword~0.7^4.0 sku.code_stem:searchword~0.75 attribute.attrvalsearch:searchword^0.5)", query.toString());
+        assertEquals("(name:searchword~0.5^2.0 displayName:searchword~0.5^2.0 sku.code:searchword~0.7^10.0 sku.code_stem:searchword~0.75 attribute.attrvalsearch:searchword^4.0)", query.toString());
 
     }
 
@@ -96,7 +96,7 @@ public class KeywordProductSkuSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSkuSearchQueryBuilder().createRelaxedQuery(10L, "query", "Search, Word");
         assertNotNull(query);
-        assertEquals("(name:search~0.5^2.5 displayName:search~0.5^3.0 sku.code:search~0.7^4.0 sku.code_stem:search~0.75 attribute.attrvalsearch:search^0.5) (name:word~0.5^2.5 displayName:word~0.5^3.0 sku.code:word~0.7^4.0 sku.code_stem:word~0.75 attribute.attrvalsearch:word^0.5)", query.toString());
+        assertEquals("(name:search~0.5^2.0 displayName:search~0.5^2.0 sku.code:search~0.7^10.0 sku.code_stem:search~0.75 attribute.attrvalsearch:search^4.0) (name:word~0.5^2.0 displayName:word~0.5^2.0 sku.code:word~0.7^10.0 sku.code_stem:word~0.75 attribute.attrvalsearch:word^4.0)", query.toString());
 
     }
 

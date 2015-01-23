@@ -36,12 +36,18 @@ import java.util.List;
  * be fuzzy 0.5 on color, which is Russian has common ending for adjectives
  * in all colors
  *
- * In order to provide better matches we use the following boosts:
- * Name:            2.5
- * Display name:    3.0
- * CODE:            4.0
- * Attributes:      1.0
- * CODE Stems:      1.0
+ * In order to provide better matches we use the following strict boosts (phrase/words):
+ * Name:             3.0/ 2.0
+ * Display name:     3.0/ 2.0
+ * CODE:            10.0/10.0 (ensure sku match)
+ * Attributes:       4.0/ 4.0 (variation attributes are more important than name)
+ *
+ * In order to provide better matches we use the following relaxed boosts:
+ * Name:              2.0
+ * Display name:      2.0
+ * CODE:             10.0 (ensure sku match)
+ * CODE stem:         1.0 (ensure sku match)
+ * Attributes:        4.0 (variation attributes are more important than name)
  *
  * User: denispavlov
  * Date: 16/11/2014
@@ -68,11 +74,11 @@ public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuil
             final BooleanQuery phrazeQuery = new BooleanQuery();
 
             phrazeQuery.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedSearchValue, 0.6f, 3f), BooleanClause.Occur.SHOULD);
-            phrazeQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedSearchValue, 0.6f, 4f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedSearchValue, 0.6f, 3f), BooleanClause.Occur.SHOULD);
 
             phrazeQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedSearchValue, 0.8f, 10f), BooleanClause.Occur.SHOULD);
 
-            phrazeQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCH_FIELD, escapedSearchValue, 0.65f, 2f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCH_FIELD, escapedSearchValue, 0.65f, 4f), BooleanClause.Occur.SHOULD);
 
             aggregateQuery.add(phrazeQuery, BooleanClause.Occur.SHOULD);
 
@@ -83,12 +89,12 @@ public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuil
 
                     final BooleanQuery wordQuery = new BooleanQuery();
 
-                    wordQuery.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedWord, 0.6f, 2.5f), BooleanClause.Occur.SHOULD);
-                    wordQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedWord, 0.6f, 3f), BooleanClause.Occur.SHOULD);
+                    wordQuery.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedWord, 0.6f, 2f), BooleanClause.Occur.SHOULD);
+                    wordQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedWord, 0.6f, 2f), BooleanClause.Occur.SHOULD);
 
-                    wordQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedWord, 0.8f, 4f), BooleanClause.Occur.SHOULD);
+                    wordQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedWord, 0.8f, 10f), BooleanClause.Occur.SHOULD);
 
-                    wordQuery.add(createTermQuery(ATTRIBUTE_VALUE_SEARCH_FIELD, escapedWord, 0.5f), BooleanClause.Occur.SHOULD);
+                    wordQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCH_FIELD, escapedWord, 0.65f, 4f), BooleanClause.Occur.SHOULD);
 
                     aggregateQuery.add(wordQuery, BooleanClause.Occur.SHOULD);
                 }
@@ -121,14 +127,14 @@ public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuil
 
                 final BooleanQuery wordQuery = new BooleanQuery();
 
-                wordQuery.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedWord, 0.5f, 2.5f), BooleanClause.Occur.SHOULD);
-                wordQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedWord, 0.5f, 3f), BooleanClause.Occur.SHOULD);
+                wordQuery.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedWord, 0.5f, 2f), BooleanClause.Occur.SHOULD);
+                wordQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedWord, 0.5f, 2f), BooleanClause.Occur.SHOULD);
 
-                wordQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedWord, 0.7f, 4f), BooleanClause.Occur.SHOULD);
+                wordQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedWord, 0.7f, 10f), BooleanClause.Occur.SHOULD);
 
                 wordQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_STEM_FIELD, escapedWord, 0.75f, 1.0f), BooleanClause.Occur.SHOULD);
 
-                wordQuery.add(createTermQuery(ATTRIBUTE_VALUE_SEARCH_FIELD, escapedWord, 0.5f), BooleanClause.Occur.SHOULD);
+                wordQuery.add(createTermQuery(ATTRIBUTE_VALUE_SEARCH_FIELD, escapedWord, 4f), BooleanClause.Occur.SHOULD);
 
                 aggregateQuery.add(wordQuery, BooleanClause.Occur.SHOULD);
             }
