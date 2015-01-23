@@ -114,8 +114,16 @@ if %1.==pkgdemo. (
     call cd %RUNDIR%
 	goto finish
 )
+if %1.==luke. (
+    call cd %YC_HOME%
+	set comeBack=luke
+    goto start_luke
+:luke
+    call cd %RUNDIR%
+	goto finish
+)
 
-echo Provide command...
+echo Provide a command...
 goto show_help
 goto finish
         
@@ -149,7 +157,9 @@ rem Sub routines below this comment
     echo.                                                 
     echo   cpres     - copy extra resources to webapps
     echo.                                                 
-    echo   dbimysql  - initialise db for mysql           
+    echo   luke      - start luke
+    echo.
+    echo   dbimysql  - initialise db for mysql
     echo.                                                 
     echo   dbiderby  - initialise db for derby           
     echo   derbygo   - start derby server                
@@ -441,3 +451,17 @@ rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITS
 	goto %comeBack%
 
 :finish
+
+:start_luke
+
+    echo ================================================
+    echo  Starting Luke (lucene index browser)
+    echo ================================================
+
+    call java -jar "%YC_HOME%\env\luke\lukeall-3.5.0.jar"
+
+    goto %comeBack%
+
+:finish
+
+

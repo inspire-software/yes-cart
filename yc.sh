@@ -39,6 +39,8 @@ show_help() {
     echo "                                                ";
     echo "  cpres     - copy extra resources to webapps   ";
     echo "                                                ";
+    echo "  luke      - start luke                        ";
+    echo "                                                ";
     echo "  dbimysql  - initialise db for mysql           ";
     echo "                                                ";
     echo "  dbiderby  - initialise db for derby           ";
@@ -319,6 +321,16 @@ prepare_demo_pkg() {
 
 }
 
+start_luke() {
+
+    echo "================================================";
+    echo " Starting Luke (lucene index browser)           ";
+    echo "================================================";
+
+    java -jar $YC_HOME/env/luke/lukeall-3.5.0.jar &
+
+}
+
 
 if [ $1 ];
 then
@@ -393,8 +405,14 @@ then
         prepare_demo_pkg;
         cd $RUNDIR
         exit 0;
+    elif [ $1 = "luke" ];
+    then
+        cd $YC_HOME
+        start_luke;
+        cd $RUNDIR
+        exit 0;
     else
-        echo "Provide command..."; show_help; exit 100;
+        echo "Provide a command..."; show_help; exit 100;
     fi
-else echo "Provide command..."; show_help; exit 100;
+else echo "Provide a command..."; show_help; exit 100;
 fi
