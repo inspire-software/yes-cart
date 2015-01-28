@@ -32,6 +32,8 @@ public class ProductTypeAttrDTOImpl {
 
     public var similarity:Boolean;
 
+    public var search:Boolean;
+
     public var navigation:Boolean;
 
     public var navigationType:String;

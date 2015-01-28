@@ -46,21 +46,32 @@ public class AttributeValueBridge implements FieldBridge {
 
             final NavigatableAttributesSupport support = getNavigatableAttributesSupport();
             final Set<String> navAttrs = support.getAllNavigatableAttributeCodes();
+            final Set<String> searchAttrs = support.getAllSearchableAttributeCodes();
 
             for (Object obj : (Collection) value) {
                 final AttrValue attrValue = (AttrValue) obj;
 
+                if (attrValue.getAttribute() == null) {
+                    continue; // skip invalid ones
+                }
+
+                final boolean navigation = navAttrs.contains(attrValue.getAttribute().getCode());
+                final boolean search = searchAttrs.contains(attrValue.getAttribute().getCode());
+
                 // Only keep navigatable attributes in index
-                if (attrValue.getAttribute() != null && navAttrs.contains(attrValue.getAttribute().getCode())) {
+                if (search || navigation) {
 
                     if (isValidValue(attrValue)) {
-                        document.add(new Field(
-                                ProductSearchQueryBuilder.ATTRIBUTE_VALUE_FIELD,
-                                (attrValue.getAttribute() == null ? "" : attrValue.getAttribute().getCode()) + attrValue.getVal(),
-                                luceneOptions.getStore(),
-                                Field.Index.NOT_ANALYZED,
-                                luceneOptions.getTermVector()
-                        ));
+                        if (navigation) { // strict value only for navigation
+                            document.add(new Field(
+                                    ProductSearchQueryBuilder.ATTRIBUTE_VALUE_FIELD,
+                                    (attrValue.getAttribute() == null ? "" : attrValue.getAttribute().getCode()) + attrValue.getVal(),
+                                    luceneOptions.getStore(),
+                                    Field.Index.NOT_ANALYZED,
+                                    luceneOptions.getTermVector()
+                            ));
+                        }
+                        // searchable and navigatable terms
                         document.add(new Field(
                                 ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
                                 getSearchValue(attrValue),
@@ -71,21 +82,23 @@ public class AttributeValueBridge implements FieldBridge {
 
                     }
 
-                    document.add(new Field(
-                            ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD,
-                            attrValue.getAttribute().getCode(),
-                            luceneOptions.getStore(),
-                            Field.Index.NOT_ANALYZED,
-                            luceneOptions.getTermVector()
-                    ));
+                    if (navigation) { // attribute navigation only for navigatable
+                        document.add(new Field(
+                                ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD,
+                                attrValue.getAttribute().getCode(),
+                                luceneOptions.getStore(),
+                                Field.Index.NOT_ANALYZED,
+                                luceneOptions.getTermVector()
+                        ));
 
-                    document.add(new Field(
-                            "facet_" + attrValue.getAttribute().getCode(),
-                            attrValue.getVal(),
-                            luceneOptions.getStore(),
-                            Field.Index.NOT_ANALYZED,
-                            luceneOptions.getTermVector()
-                    ));
+                        document.add(new Field(
+                                "facet_" + attrValue.getAttribute().getCode(),
+                                attrValue.getVal(),
+                                luceneOptions.getStore(),
+                                Field.Index.NOT_ANALYZED,
+                                luceneOptions.getTermVector()
+                        ));
+                    }
 
                 }
 

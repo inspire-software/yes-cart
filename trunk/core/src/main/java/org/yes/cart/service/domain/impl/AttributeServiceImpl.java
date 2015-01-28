@@ -165,6 +165,16 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "attributeService-allSearchableAttributeCodes")
+    public Set<String> getAllSearchableAttributeCodes() {
+        final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.SEARCH.UNIQUE", Boolean.TRUE, Boolean.FALSE);
+        return new HashSet<String>(allowedAttributeNames);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
     @Cacheable(value = "attributeService-singleNavigatableAttributeCodesByProductType")
     public Map<String, Integer> getSingleNavigatableAttributeCodesByProductType(final long productTypeId) {
         final List<Object[]> allowedAttributeNames = attributeDao
@@ -243,6 +253,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-availableAttributesByGroupCodeStartsWith",
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
+            "attributeService-allSearchableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
             "attributeService-navigatableAttributeDisplayValue",
             "attributeService-attributeNamesByCodes",
@@ -258,6 +269,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-availableAttributesByGroupCodeStartsWith",
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
+            "attributeService-allSearchableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
             "attributeService-navigatableAttributeDisplayValue",
             "attributeService-attributeNamesByCodes",
@@ -273,6 +285,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-availableAttributesByGroupCodeStartsWith",
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
+            "attributeService-allSearchableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
             "attributeService-navigatableAttributeDisplayValue",
             "attributeService-attributeNamesByCodes",

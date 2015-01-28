@@ -51,4 +51,13 @@ public class NavigatableAttributesSupportImpl implements NavigatableAttributesSu
         allowedAttributeNames.add(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
         return new HashSet<String>(allowedAttributeNames);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "attributeService-allSearchableAttributeCodes")
+    public Set<String> getAllSearchableAttributeCodes() {
+        final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.SEARCH.UNIQUE", Boolean.TRUE, Boolean.FALSE);
+        return new HashSet<String>(allowedAttributeNames);
+    }
 }

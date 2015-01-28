@@ -46,6 +46,13 @@ public interface AttributeService extends GenericService<Attribute> {
     Set<String> getAllNavigatableAttributeCodes();
 
     /**
+     * Get all searchable attribute codes (navigatable are not included).
+     *
+     * @return set of attribute codes.
+     */
+    Set<String> getAllSearchableAttributeCodes();
+
+    /**
      * Get navigatable attribute display value from given value.
      *
      *

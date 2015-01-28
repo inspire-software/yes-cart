@@ -791,3 +791,11 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  12002,  'SHOP_CATEGORY_IMAGE_WIDTH',  'SHOP_CATEGORY_IMAGE_WIDTH',  0,  NULL,  'Category image  width ',   'Category image width thumbnail ',  1006, 1001);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  12003,  'SHOP_CATEGORY_IMAGE_HEIGHT',  'SHOP_CATEGORY_IMAGE_HEIGHT',  0,  NULL,  'Category image   height',   'Category image height thumbnail ',  1006, 1001);
+
+--
+-- YC-504 Product type attributes should define 'searchable' flag
+--
+
+alter table TPRODUCTTYPEATTR add column SEARCH bit default 0;
+-- alter table TPRODUCTTYPEATTR add column SEARCH smallint default 0;
+update TPRODUCTTYPEATTR set SEARCH = 0;
