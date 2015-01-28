@@ -59,6 +59,9 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     @DtoField(value = "similarity")
     private boolean similarity;
 
+    @DtoField(value = "search")
+    private boolean search;
+
     @DtoField(value = "navigation")
     private boolean navigation;
 
@@ -135,6 +138,15 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     public void setSimilarity(final boolean similarity) {
         this.similarity = similarity;
     }
+
+    public boolean isSearch() {
+        return search;
+    }
+
+    public void setSearch(final boolean search) {
+        this.search = search;
+    }
+
 
     /** {@inheritDoc} */
     public boolean isNavigation() {

@@ -115,6 +115,20 @@ public interface ProductTypeAttr extends Auditable, Rankable {
     void setSimilarity(boolean similarity);
 
     /**
+     * Use for attribute searching.
+     *
+     * @return true if attribute used for attribute search.
+     */
+    boolean isSearch();
+
+    /**
+     * Set to true if attribute will be indexed.
+     *
+     * @param search true if attribute will be indexed.
+     */
+    void setSearch(boolean search);
+
+    /**
      * Use for attribute navigation.
      *
      * @return true if attribute used for attribute navigation.

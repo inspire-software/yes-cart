@@ -103,6 +103,9 @@
     <cache name="attributeService-allNavigatableAttributeCodes" maxElementsInMemory="1" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="attributeService-allSearchableAttributeCodes" maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
     <cache name="attributeService-singleNavigatableAttributeCodesByProductType" maxElementsInMemory="100"
            overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>

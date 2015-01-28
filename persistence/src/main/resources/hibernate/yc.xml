@@ -753,7 +753,12 @@
         </property>
         <property name="similarity" type="boolean">
             <column name="SIMILARITY">
-                <comment>Is attribute will be used for calculate products similarity</comment>
+                <comment>Will attribute be used for calculate products similarity</comment>
+            </column>
+        </property>
+        <property name="search" type="boolean">
+            <column name="SEARCH">
+                <comment>Will attribute be used for searching</comment>
             </column>
         </property>
 
@@ -2802,6 +2807,12 @@
     <query name="ATTRIBUTE.CODES.NAVIGATION.UNIQUE">
         <![CDATA[
        select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.navigation = ?1
+       ]]>
+    </query>
+
+    <query name="ATTRIBUTE.CODES.SEARCH.UNIQUE">
+        <![CDATA[
+       select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.search = ?1 and pt.navigation = ?2
        ]]>
     </query>
 

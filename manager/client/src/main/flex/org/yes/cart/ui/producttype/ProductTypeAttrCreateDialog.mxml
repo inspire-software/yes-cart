@@ -45,6 +45,12 @@
                     />
         </mx:FormItem>
 
+        <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='search')">
+            <mx:CheckBox id="searchCheckBox"
+                         toolTip="@Resource(bundle='ProductTypeManagementPanel',key='searchHint')"
+                    />
+        </mx:FormItem>
+
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='navigation')">
             <mx:CheckBox id="navigationCheckBox"
                          toolTip="@Resource(bundle='ProductTypeManagementPanel',key='navigationHint')"
@@ -114,11 +120,13 @@
             BindingUtils.bindProperty(rankTextInput, "text", productTypeAttr, "rank");
             BindingUtils.bindProperty(visibleCheckBox, "selected", productTypeAttr, "visible");
             BindingUtils.bindProperty(similarityCheckBox, "selected", productTypeAttr, "similarity");
+            BindingUtils.bindProperty(searchCheckBox, "selected", productTypeAttr, "search");
             BindingUtils.bindProperty(navigationCheckBox, "selected", productTypeAttr, "navigation");
 
             BindingUtils.bindProperty(productTypeAttr, "rank", rankTextInput, "text");
             BindingUtils.bindProperty(productTypeAttr, "visible", visibleCheckBox, "selected");
             BindingUtils.bindProperty(productTypeAttr, "similarity", similarityCheckBox, "selected");
+            BindingUtils.bindProperty(productTypeAttr, "search", searchCheckBox, "selected");
             BindingUtils.bindProperty(productTypeAttr, "navigation", navigationCheckBox, "selected");
 
             if (DomainUtils.isPersistentPK(productTypeAttr.productTypeAttrId)) {

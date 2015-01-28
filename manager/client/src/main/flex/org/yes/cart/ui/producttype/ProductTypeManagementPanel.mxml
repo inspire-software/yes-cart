@@ -705,6 +705,15 @@
                                         headerText="@Resource(bundle='ProductTypeManagementPanel',key='navigationType')"
                                         dataField="navigationType"/>
                                 <mx:DataGridColumn
+                                        headerText="@Resource(bundle='ProductTypeManagementPanel',key='search')"
+                                        dataField="search" textAlign="center">
+                                    <mx:itemRenderer>
+                                        <mx:Component>
+                                            <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.search}"/></mx:HBox>
+                                        </mx:Component>
+                                    </mx:itemRenderer>
+                                </mx:DataGridColumn>
+                                <mx:DataGridColumn
                                         headerText="@Resource(bundle='ProductTypeManagementPanel',key='visible')"
                                         dataField="visible" textAlign="center">
                                     <mx:itemRenderer>

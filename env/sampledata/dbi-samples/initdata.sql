@@ -182,7 +182,7 @@ INSERT INTO TPRODUCTTYPE (PRODUCTTYPE_ID , NAME, DESCRIPTION, UISEARCHTEMPLATE, 
 INSERT INTO TPRODUCTTYPE (PRODUCTTYPE_ID , NAME, DESCRIPTION, UISEARCHTEMPLATE, SERVICE, ENSEMBLE, SHIPPABLE)  VALUES (500,'Laptop','Laptop','default', 0,0,1);
 INSERT INTO TPRODUCTTYPE (PRODUCTTYPE_ID , NAME, DESCRIPTION, UISEARCHTEMPLATE, SERVICE, ENSEMBLE, SHIPPABLE)  VALUES (501,'Laptop accessories','Laptop accessories','default', 0,0,1);
 
-INSERT INTO TPRODUCTTYPEATTR(PRODTYPEATTR_ID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, SIMILARITY, NAV, NAV_TYPE, RANGE_NAV)  VALUES (50000,          'WEIGHT',          500,      70 ,   1,         1,        1, 'R' ,
+INSERT INTO TPRODUCTTYPEATTR(PRODTYPEATTR_ID, CODE, PRODUCTTYPE_ID, RANK, VISIBLE, SIMILARITY, SEARCH, NAV, NAV_TYPE, RANGE_NAV)  VALUES (50000,          'WEIGHT',          500,      70 ,   1,         1,    0,    1, 'R' ,
 '<range-list><ranges><range><from>0.10</from><to>1.00</to></range><range><from>1.00</from><to>2.00</to></range><range><from>2.00</from><to>3.00</to></range><range><from>3.00</from><to>4.00</to></range><range><from>4.00</from><to>5.00</to></range><range><from>5.00</from><to>6.00</to></range><range><from>6.00</from><to>7.00</to></range><range><from>7.00</from><to>8.00</to></range><range><from>8.00</from><to>10.00</to></range><range><from>10.00</from><to>20.00</to></range></range-list>'
 );
 
