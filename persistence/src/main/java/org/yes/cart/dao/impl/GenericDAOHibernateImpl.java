@@ -728,10 +728,34 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                 LOGFTQ.debug("Run {}x{} {}@{} {}", new Object[] { firstResult, maxResults, sortFieldName, reverse, query });
             }
 
+            final boolean explain = LOGFTQ.isTraceEnabled();
             final FullTextQuery fullTextQuery = createFullTextQuery(query, firstResult, maxResults, sortFieldName, reverse);
-            fullTextQuery.setProjection(fields);
+            if (explain) {
+                final List<String> allFields = new ArrayList<String>(Arrays.asList(fields));
+                allFields.add(FullTextQuery.EXPLANATION);
+                fullTextQuery.setProjection(allFields.toArray(new String[allFields.size()]));
+            } else {
+                fullTextQuery.setProjection(fields);
+            }
             final List<Object[]> list = fullTextQuery.list();
             if (list != null) {
+                if (explain) {
+                    final StringBuilder explanation = new StringBuilder("\n");
+                    explanation.append("Query: ")
+                            .append(query).append("\n");
+                    explanation.append("First/Max/Sort/Reverse: ")
+                            .append(firstResult).append("/").append(maxResults).append("/").append(sortFieldName).append("/").append(reverse).append("\n");
+                    explanation.append(list.size()).append(" result(s): \n\n");
+                    for (int i = 0; i < list.size(); i++) {
+                        explanation.append(i).append(" =======================================================\n");
+                        final Object[] item = list.get(i);
+                        for (int ii = 0; ii < item.length - 1; ii++) {
+                            explanation.append(item[ii]).append(",");
+                        }
+                        explanation.append("\n\nreason: ").append(item[item.length - 1]).append("\n");
+                    }
+                    LOGFTQ.trace(explanation.toString());
+                }
                 return new Pair<List<Object[]>, Integer>(list, fullTextQuery.getResultSize());
             }
 
@@ -789,7 +813,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                                                                              final List<FilteredNavigationRecordRequest> facetingRequest) {
         if (persistentClassIndexble) {
             if (LOGFTQ.isDebugEnabled()) {
-                LOGFTQ.debug("Run facet request qith base query {}", query);
+                LOGFTQ.debug("Run facet request with base query {}", query);
             }
 
             if (facetingRequest == null || facetingRequest.isEmpty()) {
