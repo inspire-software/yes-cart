@@ -691,13 +691,13 @@
 
 
                                                     public function getEditActionLabel(customerOrderDeliveryDTO:Object):String {
-
-                                                        editDeliveryActionButton.visible = editDeliveryActionButton.includeInLayout =
+                                                         // TODO: see order amendment task notes: http://www.inspire-software.com/jira/browse/YC-457
+                                                        /* editDeliveryActionButton.visible = editDeliveryActionButton.includeInLayout =
                                                                         (!(customerOrderDeliveryDTO.deliveryStatus == "ds.shipment.inprogress"
                                                                         || customerOrderDeliveryDTO.deliveryStatus == "ds.shipped"))
                                                                         &&
                                                                         (customerOrderDeliveryDTO.supportCaptureMore
-                                                                        || customerOrderDeliveryDTO.supportCaptureLess);
+                                                                        || customerOrderDeliveryDTO.supportCaptureLess) */;
 
                                                         return resourceManager.getString('CustomerOrderPanel','shipmnet.edit');
 
