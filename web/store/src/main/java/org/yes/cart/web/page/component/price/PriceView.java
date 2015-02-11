@@ -110,7 +110,7 @@ public class PriceView extends BaseComponent {
                      final boolean showCurrencySymbol,
                      final boolean showSavings) {
         super(id);
-        this.pricePair = pricePair;
+        this.pricePair = pricePair != null ? pricePair : new Pair<BigDecimal, BigDecimal>(null, null);
         this.showCurrencySymbol = showCurrencySymbol;
         this.currencySymbol = currencySymbol;
         this.showSavings = showSavings;

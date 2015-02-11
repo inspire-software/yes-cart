@@ -266,6 +266,9 @@ public class OrderAssemblerImpl implements OrderAssembler {
             if (sku == null) {
                 throw new OrderAssemblyException("No order line sku for " + item.getProductSkuCode());
             }
+            if (Product.AVAILABILITY_SHOWROOM == sku.getProduct().getAvailability()) {
+                throw new OrderAssemblyException("Sku is for showroom only " + item.getProductSkuCode());
+            }
             customerOrderDet.setProductName(
                     new FailoverStringI18NModel(sku.getDisplayName(), sku.getName()).getValue(customerOrder.getLocale()));
 

@@ -48,6 +48,7 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
                                         final Map<String, BigDecimal> inventoryQty) {
         this.defaultSku = defaultSku;
         perpetual = availability == Product.AVAILABILITY_ALWAYS;
+        boolean notForSale = availability == Product.AVAILABILITY_SHOWROOM;
         if (perpetual) {
             inStock = false; // perpetual is used exactly for purpose of not needing to have stock
         }
@@ -70,7 +71,7 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
             inStock = false;
         }
 
-        available = availableNow && (inStock || (availability != Product.AVAILABILITY_STANDARD));
+        available = availableNow && !notForSale && (inStock || (availability != Product.AVAILABILITY_STANDARD));
     }
 
     /** {@inheritDoc} */

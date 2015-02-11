@@ -283,6 +283,65 @@ public class ProductAvailabilityStrategyImplTest {
     }
 
 
+    @Test
+    public void testGetAvailabilityModelForShowroomOne() throws Exception {
+
+        final int availability = Product.AVAILABILITY_SHOWROOM;
+        final BigDecimal qty = BigDecimal.ONE;
+        final BigDecimal max = new BigDecimal(Integer.MAX_VALUE);
+
+        setTestExpectations(availability, qty);
+
+        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, product);
+
+        assertNotNull(modelProduct);
+        assertFalse(modelProduct.isAvailable());
+        assertTrue(modelProduct.isInStock());
+        assertFalse(modelProduct.isPerpetual());
+        assertTrue(modelProduct.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
+
+        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, sku);
+
+        assertNotNull(modelSku);
+        assertFalse(modelSku.isAvailable());
+        assertTrue(modelSku.isInStock());
+        assertFalse(modelSku.isPerpetual());
+        assertTrue(modelSku.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
+
+        context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testGetAvailabilityModelForShowroomZero() throws Exception {
+
+        final int availability = Product.AVAILABILITY_SHOWROOM;
+        final BigDecimal qty = BigDecimal.ZERO;
+        final BigDecimal max = new BigDecimal(Integer.MAX_VALUE);
+
+        setTestExpectations(availability, qty);
+
+        final ProductAvailabilityModel modelProduct = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, product);
+
+        assertNotNull(modelProduct);
+        assertFalse(modelProduct.isAvailable());
+        assertFalse(modelProduct.isInStock());
+        assertFalse(modelProduct.isPerpetual());
+        assertTrue(modelProduct.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
+
+        final ProductAvailabilityModel modelSku = new ProductAvailabilityStrategyImpl(warehouseService, skuWarehouseService).getAvailabilityModel(shopId, sku);
+
+        assertNotNull(modelSku);
+        assertFalse(modelSku.isAvailable());
+        assertFalse(modelSku.isInStock());
+        assertFalse(modelSku.isPerpetual());
+        assertTrue(modelSku.getAvailableToSellQuantity(skuCode).compareTo(qty) == 0);
+
+        context.assertIsSatisfied();
+
+    }
+
+
     private void setTestExpectations(final int availability, final BigDecimal qty) {
 
         warehouseService = context.mock(WarehouseService.class, "warehouseService");

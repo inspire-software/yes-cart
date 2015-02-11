@@ -48,6 +48,10 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      * Always available
      */
     int AVAILABILITY_ALWAYS = 8;
+    /**
+     * Only available as product information (cannot be purchased)
+     */
+    int AVAILABILITY_SHOWROOM = 16;
 
     /**
      * Get product pk.
