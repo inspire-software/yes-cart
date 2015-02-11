@@ -184,42 +184,49 @@ public class WishListView extends AbstractProductSearchResultList {
         params.add(WebParametersKeys.SKU_ID, itemData.getSkus().getSkuId());
 
         final SkuPrice priceNow = getSkuPrice(product.getDefaultSkuCode(), itemData.getQuantity());
+        final boolean isPriceNowAvailable = priceNow != null && priceNow.getRegularPrice() != null;
+        final String currency = priceNow != null ? priceNow.getCurrency() : "";
         final String addedPriceCurr = itemData.getRegularPriceCurrencyWhenAdded();
         final Pair<BigDecimal, BigDecimal> price;
         String priceInfo = "";
-        if (ApplicationDirector.getShoppingCart().getCurrencyCode().equals(addedPriceCurr)) {
-            final BigDecimal addedPrice = itemData.getRegularPriceWhenAdded();
-            final BigDecimal saleNow = MoneyUtils.minPositive(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
-            if (MoneyUtils.isFirstEqualToSecond(addedPrice, saleNow)) {
-                // no change
-                if (MoneyUtils.isFirstBiggerThanSecond(priceNow.getRegularPrice(), addedPrice)) {
-                    price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), addedPrice);
-                    priceInfo = getLocalizer().getString("wishListPriceOnSaleNow", this, new Model<Object[]>(new Object[] {
-                            MoneyUtils.getDiscountDisplayValue(priceNow.getRegularPrice(), addedPrice).toPlainString()
+        if (isPriceNowAvailable) {
+            if (ApplicationDirector.getShoppingCart().getCurrencyCode().equals(addedPriceCurr)) {
+                final BigDecimal addedPrice = itemData.getRegularPriceWhenAdded();
+                final BigDecimal saleNow = MoneyUtils.minPositive(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
+                if (MoneyUtils.isFirstEqualToSecond(addedPrice, saleNow)) {
+                    // no change
+                    if (MoneyUtils.isFirstBiggerThanSecond(priceNow.getRegularPrice(), addedPrice)) {
+                        price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), addedPrice);
+                        priceInfo = getLocalizer().getString("wishListPriceOnSaleNow", this, new Model<Object[]>(new Object[] {
+                                MoneyUtils.getDiscountDisplayValue(priceNow.getRegularPrice(), addedPrice).toPlainString()
+                        }));
+                    } else {
+                        // not on sale
+                        price = new Pair<BigDecimal, BigDecimal>(addedPrice, null);
+                    }
+                } else if (MoneyUtils.isFirstBiggerThanSecond(addedPrice, saleNow)) {
+                    // price dropped since added
+                    price = new Pair<BigDecimal, BigDecimal>(addedPrice, saleNow);
+                    priceInfo = getLocalizer().getString("wishListPriceDecreased", this, new Model<Object[]>(new Object[] {
+                            MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).toPlainString()
                     }));
                 } else {
-                    // not on sale
-                    price = new Pair<BigDecimal, BigDecimal>(addedPrice, null);
+                    // price gone up
+                    price = new Pair<BigDecimal, BigDecimal>(saleNow, null);
+                    priceInfo = getLocalizer().getString("wishListPriceIncreased", this, new Model<Object[]>(new Object[] {
+                            MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).negate().toPlainString()
+                    }));
                 }
-            } else if (MoneyUtils.isFirstBiggerThanSecond(addedPrice, saleNow)) {
-                // price dropped since added
-                price = new Pair<BigDecimal, BigDecimal>(addedPrice, saleNow);
-                priceInfo = getLocalizer().getString("wishListPriceDecreased", this, new Model<Object[]>(new Object[] {
-                        MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).toPlainString()
-                }));
             } else {
-                // price gone up
-                price = new Pair<BigDecimal, BigDecimal>(saleNow, null);
-                priceInfo = getLocalizer().getString("wishListPriceIncreased", this, new Model<Object[]>(new Object[] {
-                        MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).negate().toPlainString()
-                }));
+                // no comparative price - different currency
+                price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
             }
         } else {
-            // no comparative price - different currency
-            price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
+            // Item is not priced now so it cannot be bought
+            price = new Pair<BigDecimal, BigDecimal>(BigDecimal.ZERO, null);
         }
 
-        final String qty = itemData.getQuantity().setScale(0, RoundingMode.CEILING).toString();
+        final String qty = itemData.getQuantity().stripTrailingZeros().toPlainString();
 
         listItem.add(
                 links.newAddToCartLink("addToCardFromWishListLink", product.getDefaultSkuCode(), qty, params)
@@ -236,7 +243,7 @@ public class WishListView extends AbstractProductSearchResultList {
         );
 
         listItem.add(
-                new PriceView("priceView", price, priceNow.getCurrency(), priceInfo, true, false)
+                new PriceView("priceView", price, currency, priceInfo, true, false).setVisible(isPriceNowAvailable)
         );
 
 

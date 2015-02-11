@@ -243,6 +243,10 @@
                     {name: resourceManager.getString('ProductManagementPanel','productAvailabilityAlways') ,
                      data:8}
             );
+            productAvailability.addItem(
+                    {name: resourceManager.getString('ProductManagementPanel','productAvailabilityShowroom') ,
+                     data:16}
+            );
 
         }
 

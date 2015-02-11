@@ -32,6 +32,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.misc.Pair;
@@ -112,27 +113,32 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         final String skuCode = cartItem.getProductSkuCode();
 
         final ProductSku sku = productServiceFacade.getProductSkuBySkuCode(skuCode);
+        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(sku, ShopCodeContext.getShopId());
         final ProductQuantityModel pqm = productServiceFacade.getProductQuantity(cartItem.getQty(), sku);
 
         final ProductSkuDecorator productSkuDecorator = decoratorFacade.decorate(sku, WicketUtil.getHttpServletRequest().getContextPath(), true);
 
         final boolean notGift = !cartItem.isGift();
+        final boolean available = skuPam.isAvailable();
 
         cartItemListItem.add(
-                createAddOneSkuLink(skuCode).setVisible(notGift && pqm.canOrderMore())
+                createAddOneSkuLink(skuCode).setVisible(available && notGift && pqm.canOrderMore())
         ).add(
                 createRemoveAllSkuLink(skuCode).setVisible(notGift)
         ).add(
-                createRemoveOneSkuLink(skuCode).setVisible(notGift && pqm.canOrderLess())
+                createRemoveOneSkuLink(skuCode).setVisible(available && notGift && pqm.canOrderLess())
         ).add(
                 new Label(SKU_NUM_LABEL, skuCode)
         ).add(
                 getProductLink(productSkuDecorator)
         ).add(
-                new PriceView(PRICE_VIEW, new Pair<BigDecimal, BigDecimal>(cartItem.getListPrice(), cartItem.getPrice()), null, cartItem.getAppliedPromo(), false, true)
+                new PriceView(PRICE_VIEW, new Pair<BigDecimal, BigDecimal>(
+                        cartItem.getListPrice(), cartItem.getPrice()), null, cartItem.getAppliedPromo(), false, true)
+                            .setVisible(available)
         ).add(
                 new PriceView(LINE_TOTAL_VIEW, new Pair<BigDecimal, BigDecimal>(
                         cartItem.getPrice().multiply(cartItem.getQty()), null), null, null, false, false)
+                            .setVisible(available)
         );
 
 
@@ -165,11 +171,11 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         quantity.add(new AttributeModifier("title", message));
 
         cartItemListItem.add(
-                quantity.setVisible(notGift)
+                quantity.setVisible(available && notGift)
         )
         .add(new Label(QUANTITY_TEXT_RO, pqm.getCartQty().toPlainString()).setVisible(!notGift))
         .add(
-                createAddSeveralSkuButton(skuCode, quantity).setVisible(notGift)
+                createAddSeveralSkuButton(skuCode, quantity).setVisible(available && notGift)
         );
 
 
