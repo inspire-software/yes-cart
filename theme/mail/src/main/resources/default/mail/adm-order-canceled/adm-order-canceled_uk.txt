@@ -1,0 +1,1 @@
+Замовлення $root.ordernum на $shop.name було скасовано на $customer.firstname $customer.email

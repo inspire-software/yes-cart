@@ -1,0 +1,4 @@
+Шановний (-на) $customer.firstname $customer.lastname !
+Доставка $deliveryNum для замовлення $root.ordernum at $shop.name підготовлена
+by $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>
+Будь ласка, перевірте інформацію на сторінці Вашого профілю на "<%out.print(shop.getDefaultShopUrl())%>" $shop.name

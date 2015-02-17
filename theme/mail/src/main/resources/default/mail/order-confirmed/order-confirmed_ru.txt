@@ -1,0 +1,3 @@
+Уважаемый (-ая) $customer.firstname $customer.lastname !
+Ваш заказ $root.ordernum на $shop.name был подтвержден.
+Дополнительная информация на странице Вашего профиля на "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
