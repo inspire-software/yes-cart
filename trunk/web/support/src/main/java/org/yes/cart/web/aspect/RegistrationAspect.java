@@ -20,6 +20,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.core.task.TaskExecutor;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.RegisteredPerson;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.message.RegistrationMessage;
@@ -125,7 +127,12 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
         registrationMessage.setTemplateName(newPerson ? "customer-registered" : "customer-change-password");
 
-        registrationMessage.setShopMailFrom(null); // will be used from properties at email template
+        final AttrValueShop attrVal = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
+        String fromEmail = null;
+        if (attrVal != null) {
+            fromEmail = attrVal.getVal();
+        }
+        registrationMessage.setShopMailFrom(fromEmail);
 
         registrationMessage.setShopId(shop.getShopId());
         registrationMessage.setShopCode(shop.getCode());

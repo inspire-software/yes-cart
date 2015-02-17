@@ -1,0 +1,3 @@
+Доставка $deliveryNum для замовлення $root.ordernum на $shop.name виконана
+для $customer.firstname $customer.email
+Метод доставки: $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>
