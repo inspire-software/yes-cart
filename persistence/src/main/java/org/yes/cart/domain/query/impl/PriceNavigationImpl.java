@@ -39,12 +39,21 @@ public class PriceNavigationImpl implements PriceNavigation {
         final String[] currencyPriceBorders = StringUtils.split(val, Constants.RANGE_NAVIGATION_DELIMITER);
         final Pair<BigDecimal, BigDecimal> priceBorders =
                 new Pair<BigDecimal, BigDecimal>(
-                        new BigDecimal(currencyPriceBorders[1]),
-                        new BigDecimal(currencyPriceBorders[2]));
+                        convertToDecimal(currencyPriceBorders[1]),
+                        convertToDecimal(currencyPriceBorders[2]));
         return new Pair<String, Pair<BigDecimal, BigDecimal>>(
                 currencyPriceBorders[0],
                 priceBorders
         );
+    }
+
+    private BigDecimal convertToDecimal(String currencyPriceBorder) {
+        try {
+            return new BigDecimal(currencyPriceBorder);
+        } catch (NumberFormatException ex) {
+            return BigDecimal.ZERO;
+        }
+
     }
 
     /**

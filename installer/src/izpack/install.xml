@@ -23,18 +23,21 @@
     <locale>
         <langpack iso3="eng"/>
         <langpack iso3="rus"/>
+        <langpack iso3="ukr"/>
     </locale>
 
     <resources>
         <res id="userInputSpec.xml" src="src/izpack/panels.xml"/>
         <res id="userInputLang.xml" src="src/izpack/userInputLang_eng.xml"/>
         <res id="userInputLang.xml_rus" src="src/izpack/userInputLang_rus.xml"/>
+        <res id="userInputLang.xml_ukr" src="src/izpack/userInputLang_ukr.xml"/>
 
         <!--<res id="ProcessPanel.Spec.xml" src="src/izpack/processPanelSpec.xml" />-->
         <!--<res id="ProcessPanel.Spec.xml_rus" src="src/izpack/processPanelSpec_rus.xml" />-->
 
         <res id="shortcutSpec.xml" src="src/izpack/shortcutSpec.xml"/>
         <res id="shortcutSpec.xml_rus" src="src/izpack/shortcutSpec_rus.xml"/>
+        <res id="shortcutSpec.xml_ukr" src="src/izpack/shortcutSpec_ukr.xml"/>
 
         <res id="RegistrySpec.xml" src="src/izpack/registrySpec.xml" />
 
@@ -115,7 +118,7 @@
 
             <!-- imported images -->
             <fileset dir="src/main/resources/imagevault"
-                     targetdir="$INSTALL_PATH/webapps/yes-shop/default/imagevault" override="update"/>
+                     targetdir="$INSTALL_PATH/webapps/imagevault" override="update"/>
             <!-- lucene indexes -->
             <fileset dir="src/main/resources/temp/yes-cart"
                      targetdir="$INSTALL_PATH/temp/yes-cart" override="update"/>
