@@ -503,6 +503,7 @@ a {
     margin: 5px 9px;
     text-align: right;
     color: #3d3d3d;
+    min-height: 51px;
 }
 
 .regular-price-currency,

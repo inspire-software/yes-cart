@@ -6,11 +6,11 @@
                   location="applications"/>
 
     <shortcut
-            name="Запустить Yes-Cart сервер"
+            name="Запустити Yes-Cart сервер"
             target="$INSTALL_PATH\yesbin\startcart.bat"
             commandLine=""
             workingDirectory="$INSTALL_PATH\yesbin"
-            description="Старт веб сервера и базы данных"
+            description="Запуск веб сервера та бази даних"
             iconFile="$INSTALL_PATH\yesbin\startcart.ico"
             iconIndex="0"
             initialState="normal"
@@ -22,11 +22,11 @@
     </shortcut>
 
     <shortcut
-            name="Остановить Yes-Cart сервер"
+            name="Зупинити Yes-Cart сервер"
             target="$INSTALL_PATH\yesbin\stopcart.bat"
             commandLine=""
             workingDirectory="$INSTALL_PATH\yesbin"
-            description="Остановка веб сервера и базы данных"
+            description="Зупинка веб сервера та бази даних"
             iconFile="$INSTALL_PATH\yesbin\stopcart.ico"
             iconIndex="0"
             initialState="normal"
@@ -38,11 +38,11 @@
     </shortcut>
 
     <shortcut
-            name="Документация по Yes-Cart"
+            name="Документація по Yes-Cart"
             target="$INSTALL_PATH\yesbin\opendoc_rus.bat"
             commandLine=""
             workingDirectory="$INSTALL_PATH\yesbin"
-            description="Открыть документацию"
+            description="Відкрити документацію"
             iconFile="$INSTALL_PATH\yesbin\opendoc.ico"
             iconIndex="0"
             initialState="normal"
@@ -54,11 +54,11 @@
     </shortcut>
 
     <shortcut
-            name="Открыть страничку магазина"
+            name="Відкрити сторінку магазину"
             target="$INSTALL_PATH\yesbin\opendemostore.bat"
             commandLine=""
             workingDirectory="$INSTALL_PATH\yesbin"
-            description="Открыть страничку магазина"
+            description="Відкрити сторінку магазину"
             iconFile="$INSTALL_PATH\yesbin\opendemostore.ico"
             iconIndex="0"
             initialState="normal"
@@ -70,11 +70,11 @@
     </shortcut>
 
     <shortcut
-            name="Открыть админ-приложение"
+            name="Відкрити адмін-додаток"
             target="$INSTALL_PATH\yesbin\openyum.bat"
             commandLine=""
             workingDirectory="$INSTALL_PATH\yesbin"
-            description="Открыть админ-приложение"
+            description="Відкрити адміністративний додаток"
             iconFile="$INSTALL_PATH\yesbin\openyum.ico"
             iconIndex="0"
             initialState="normal"

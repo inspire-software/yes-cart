@@ -31,7 +31,7 @@
     <str id="WebServerConfigurationPanel.ssl.keystore.password.validation.error" txt="Пароли не совпадают."/>
     <str id="WebServerConfigurationPanel.ssl.keystore.file.password.validation.error"
          txt="Валидация пароля на SSL ключ неуспешна."/>
-    <str id="WebServerConfigurationPanelValidator.validation.failed" txt="Следующие проверки заканчились неудачей:"/>
+    <str id="WebServerConfigurationPanelValidator.validation.failed" txt="Следующие проверки закончились неудачей:"/>
     <str id="WebServerConfigurationPanelValidator.http.port.unavailable" txt="HTTP порт не доступен."/>
     <str id="WebServerConfigurationPanelValidator.https.port.unavailable" txt="HTTPS порт не доступен."/>
     <str id="WebServerConfigurationPanelValidator.validation.confirmation" txt="Вы хотите продолжить?"/>
