@@ -49,6 +49,13 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
+        <!-- availability type -->
+        <column-descriptor>
+            <column-index>2</column-index>
+            <field-type>FIELD</field-type>
+            <name>availability</name>
+        </column-descriptor>
+
         <!-- brand -->
         <column-descriptor>
             <column-index>3</column-index>
@@ -69,6 +76,15 @@
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
             <lookup-query>select pt from ProductTypeEntity pt where pt.name = {producttype}</lookup-query>
+        </column-descriptor>
+
+        <!-- Product SEO url -->
+        <column-descriptor>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
+            <name>seo.uri</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <!--  Productname -->
@@ -105,14 +121,6 @@
             <language>uk</language>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-        </column-descriptor>
-
-        <!-- availability type -->
-        <column-descriptor>
-            <column-index>-1</column-index>
-            <field-type>FIELD</field-type>
-            <name>availability</name>
-            <value-constant>1</value-constant>
         </column-descriptor>
 
         <!-- Description -->
@@ -214,17 +222,9 @@
             </import-descriptor>
         </column-descriptor>
 
-        <!-- availability type -->
-        <column-descriptor>
-            <column-index>14</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>INT</data-type>
-            <name>availability</name>
-        </column-descriptor>
-
         <!--featured-->
         <column-descriptor>
-            <column-index>15</column-index>
+            <column-index>14</column-index>
             <field-type>FIELD</field-type>
             <data-type>BOOLEAN</data-type>
             <name>featured</name>
@@ -232,47 +232,47 @@
 
         <!--tags -->
         <column-descriptor>
-            <column-index>16</column-index>
+            <column-index>15</column-index>
             <field-type>FIELD</field-type>
             <data-type>STRING</data-type>
             <name>tag</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>17</column-index>
+            <column-index>16</column-index>
             <field-type>FIELD</field-type>
             <data-type>DECIMAL</data-type>
             <name>minOrderQuantity</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>18</column-index>
+            <column-index>17</column-index>
             <field-type>FIELD</field-type>
             <data-type>DECIMAL</data-type>
             <name>maxOrderQuantity</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>19</column-index>
+            <column-index>18</column-index>
             <field-type>FIELD</field-type>
             <data-type>DECIMAL</data-type>
             <name>stepOrderQuantity</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>20</column-index>
+            <column-index>19</column-index>
             <field-type>FIELD</field-type>
             <name>availablefrom</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>21</column-index>
+            <column-index>20</column-index>
             <field-type>FIELD</field-type>
             <name>availableto</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>22</column-index>
+            <column-index>21</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
@@ -300,7 +300,7 @@
                     </column-descriptor>
                     <!-- Category -->
                     <column-descriptor>
-                        <column-index>22</column-index>
+                        <column-index>21</column-index>
                         <field-type>FK_FIELD</field-type>
                         <entity-type>org.yes.cart.domain.entity.Category</entity-type>
                         <name>category</name>

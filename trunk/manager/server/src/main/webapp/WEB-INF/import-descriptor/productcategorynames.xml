@@ -44,7 +44,7 @@
 
         <!-- Category -->
         <column-descriptor>
-            <column-index>2</column-index>
+            <column-index>1</column-index>
             <field-type>FK_FIELD</field-type>
             <entity-type>org.yes.cart.domain.entity.Category</entity-type>
             <name>category</name>
@@ -55,11 +55,10 @@
 
         <!-- Product rank in category -->
         <column-descriptor>
-            <column-index>-1</column-index>
+            <column-index>2</column-index>
             <field-type>FIELD</field-type>
             <data-type>INT</data-type>
             <name>rank</name>
-            <value-constant>500</value-constant>
         </column-descriptor>
 
     </import-columns>

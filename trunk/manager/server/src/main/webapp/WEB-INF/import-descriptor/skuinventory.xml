@@ -51,7 +51,7 @@
 
 
         <column-descriptor>
-            <column-index>2</column-index>
+            <column-index>1</column-index>
             <field-type>FK_FIELD</field-type>
             <entity-type>org.yes.cart.domain.entity.Warehouse</entity-type>
             <name>warehouse</name>
@@ -62,7 +62,7 @@
 
 
         <column-descriptor>
-            <column-index>3</column-index>
+            <column-index>2</column-index>
             <field-type>FIELD</field-type>
             <data-type>DECIMAL</data-type>
             <name>quantity</name>

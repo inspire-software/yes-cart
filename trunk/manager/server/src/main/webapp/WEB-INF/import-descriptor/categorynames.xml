@@ -213,39 +213,34 @@
 
         <!-- Category rank in parent category -->
         <column-descriptor>
-            <column-index>-1</column-index>
+            <column-index>14</column-index>
             <field-type>FIELD</field-type>
             <data-type>INT</data-type>
             <name>rank</name>
-            <value-constant>500</value-constant>
         </column-descriptor>
 
         <!-- navigation by attributes -->
         <column-descriptor>
-            <column-index>-1</column-index>
+            <column-index>15</column-index>
             <field-type>FIELD</field-type>
             <data-type>BOOLEAN</data-type>
             <name>navigationByAttributes</name>
-            <value-constant>true</value-constant>
         </column-descriptor>
 
         <!-- navigation by brand -->
         <column-descriptor>
-            <column-index>-1</column-index>
+            <column-index>16</column-index>
             <field-type>FIELD</field-type>
             <data-type>BOOLEAN</data-type>
             <name>navigationByBrand</name>
-            <value-constant>true</value-constant>
         </column-descriptor>
-
 
         <!-- navigation by price -->
         <column-descriptor>
-            <column-index>-1</column-index>
+            <column-index>17</column-index>
             <field-type>FIELD</field-type>
             <data-type>BOOLEAN</data-type>
             <name>navigationByPrice</name>
-            <value-constant>true</value-constant>
         </column-descriptor>
 
     </import-columns>
