@@ -43,7 +43,7 @@
 
 
         <column-descriptor>
-            <column-index>2</column-index>
+            <column-index>1</column-index>
             <field-type>FK_FIELD</field-type>
             <entity-type>org.yes.cart.domain.entity.Shop</entity-type>
             <name>shop</name>
@@ -51,9 +51,16 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>3</column-index>
+            <column-index>2</column-index>
             <field-type>FIELD</field-type>
             <name>currency</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>3</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>DECIMAL</data-type>
+            <name>quantity</name>
         </column-descriptor>
 
         <column-descriptor>
@@ -67,30 +74,23 @@
             <column-index>5</column-index>
             <field-type>FIELD</field-type>
             <data-type>DECIMAL</data-type>
-            <name>quantity</name>
+            <name>salePrice</name>
         </column-descriptor>
 
         <column-descriptor>
             <column-index>6</column-index>
             <field-type>FIELD</field-type>
-            <data-type>DECIMAL</data-type>
-            <name>salePrice</name>
+            <name>salefrom</name>
         </column-descriptor>
 
         <column-descriptor>
             <column-index>7</column-index>
             <field-type>FIELD</field-type>
-            <name>salefrom</name>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>8</column-index>
-            <field-type>FIELD</field-type>
             <name>saleto</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>9</column-index>
+            <column-index>8</column-index>
             <field-type>FIELD</field-type>
             <name>tag</name>
         </column-descriptor>

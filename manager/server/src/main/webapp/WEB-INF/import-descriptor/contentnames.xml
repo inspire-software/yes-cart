@@ -21,7 +21,7 @@
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>contentnames.csv</file-name-mask>
+        <file-name-mask>contentnames(.*).csv(.*)</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
@@ -124,7 +124,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>8</column-index>
+            <column-index>7</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
@@ -141,6 +141,68 @@
                     DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_BODY_en_2';
                     INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
                         VALUES (0, {masterObjectId}, '{masterObjectId}_BODY_en_2', 'CONTENT_BODY_en_2','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>7</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                        <value-regex>(.{4000})(.{0,4000})(.*)</value-regex>
+                        <value-regex-group>2</value-regex-group>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>8</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_BODY_ru_1';
+                    INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_BODY_ru_1', 'CONTENT_BODY_ru_1','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>8</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                        <value-regex>(.{0,4000})(.*)</value-regex>
+                        <value-regex-group>1</value-regex-group>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>8</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_BODY_ru_2';
+                    INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_BODY_ru_2', 'CONTENT_BODY_ru_2','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
@@ -169,9 +231,9 @@
                 </import-file-descriptor>
                 <select-sql/>
                 <insert-sql>
-                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_BODY_ru_1';
+                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_BODY_uk_1';
                     INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
-                        VALUES (0, {masterObjectId}, '{masterObjectId}_BODY_ru_1', 'CONTENT_BODY_ru_1','{val}')
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_BODY_uk_1', 'CONTENT_BODY_uk_1','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
@@ -186,69 +248,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>10</column-index>
-            <field-type>SLAVE_INLINE_FIELD</field-type>
-            <name/>
-            <import-descriptor>
-                <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
-                <import-file-descriptor>
-                    <file-encoding>UTF-8</file-encoding>
-                    <file-name-mask/>
-                    <ignore-first-line>false</ignore-first-line>
-                    <column-delimiter>,</column-delimiter>
-                    <text-qualifier>&quot;</text-qualifier>
-                </import-file-descriptor>
-                <select-sql/>
-                <insert-sql>
-                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_BODY_ru_2';
-                    INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
-                        VALUES (0, {masterObjectId}, '{masterObjectId}_BODY_ru_2', 'CONTENT_BODY_ru_2','{val}')
-                </insert-sql>
-                <import-columns>
-                    <column-descriptor>
-                        <column-index>10</column-index>
-                        <field-type>FIELD</field-type>
-                        <name>val</name>
-                        <value-regex>(.{4000})(.{0,4000})(.*)</value-regex>
-                        <value-regex-group>2</value-regex-group>
-                    </column-descriptor>
-                </import-columns>
-            </import-descriptor>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>11</column-index>
-            <field-type>SLAVE_INLINE_FIELD</field-type>
-            <name/>
-            <import-descriptor>
-                <entity-type>org.yes.cart.domain.entity.AttrValueCategory</entity-type>
-                <import-file-descriptor>
-                    <file-encoding>UTF-8</file-encoding>
-                    <file-name-mask/>
-                    <ignore-first-line>false</ignore-first-line>
-                    <column-delimiter>,</column-delimiter>
-                    <text-qualifier>&quot;</text-qualifier>
-                </import-file-descriptor>
-                <select-sql/>
-                <insert-sql>
-                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_BODY_uk_1';
-                    INSERT INTO TCATEGORYATTRVALUE (VERSION, CATEGORY_ID, GUID, CODE, VAL)
-                        VALUES (0, {masterObjectId}, '{masterObjectId}_BODY_uk_1', 'CONTENT_BODY_uk_1','{val}')
-                </insert-sql>
-                <import-columns>
-                    <column-descriptor>
-                        <column-index>11</column-index>
-                        <field-type>FIELD</field-type>
-                        <name>val</name>
-                        <value-regex>(.{0,4000})(.*)</value-regex>
-                        <value-regex-group>1</value-regex-group>
-                    </column-descriptor>
-                </import-columns>
-            </import-descriptor>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>12</column-index>
+            <column-index>9</column-index>
             <field-type>SLAVE_INLINE_FIELD</field-type>
             <name/>
             <import-descriptor>
@@ -268,7 +268,7 @@
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
-                        <column-index>12</column-index>
+                        <column-index>9</column-index>
                         <field-type>FIELD</field-type>
                         <name>val</name>
                         <value-regex>(.{4000})(.{0,4000})(.*)</value-regex>
@@ -279,24 +279,23 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>13</column-index>
+            <column-index>10</column-index>
             <field-type>FIELD</field-type>
             <name>availablefrom</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>14</column-index>
+            <column-index>11</column-index>
             <field-type>FIELD</field-type>
             <name>availableto</name>
         </column-descriptor>
 
         <!-- Category rank in parent category -->
         <column-descriptor>
-            <column-index>-1</column-index>
+            <column-index>12</column-index>
             <field-type>FIELD</field-type>
             <data-type>INT</data-type>
             <name>rank</name>
-            <value-constant>500</value-constant>
         </column-descriptor>
 
         <!-- navigation by attributes -->

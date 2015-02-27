@@ -764,13 +764,14 @@
                         <value>producttypeattrnames.xml</value>
                     </list>
                 </entry>
-                <entry key="Product import (Products, SKUs and attributes)">
+                <entry key="Product import (Products, SKUs and attribute values)">
                     <list>
                         <value>productandcategorynames.xml</value>
                         <value>productnames.xml</value>
                         <value>productcategorynames.xml</value>
                         <value>productsku.xml</value>
                         <value>productsattributes.xml</value>
+                        <value>productskuattributes.xml</value>
                     </list>
                 </entry>
                 <entry key="Inventory import">

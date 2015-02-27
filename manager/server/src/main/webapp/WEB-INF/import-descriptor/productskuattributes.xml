@@ -40,6 +40,9 @@
       where locales match YeS locale settings.
     -->
     <insert-sql>
+        DELETE FROM TPRODUCTSKUATTRVALUE
+        WHERE SKU_ID = (SELECT p.SKU_ID FROM TSKU p WHERE p.GUID = '{product}')
+        AND CODE = '{attribute}' AND 0 = (SELECT a.ALLOWDUPLICATE FROM TATTRIBUTE a WHERE a.CODE = '{attribute}');
         INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL, DISPLAYVAL)
         VALUES (0,
         (SELECT p.SKU_ID FROM TSKU p WHERE p.GUID = '{product}'),
@@ -62,7 +65,7 @@
 
         <!-- Attr code -->
         <column-descriptor>
-            <column-index>1</column-index>
+            <column-index>3</column-index>
             <!-- field-type>FK_FIELD</field-type -->
             <field-type>FIELD</field-type>
             <name>attribute</name>
@@ -73,7 +76,7 @@
 
         <!-- Attr raw value -->
         <column-descriptor>
-            <column-index>2</column-index>
+            <column-index>4</column-index>
             <field-type>FIELD</field-type>
             <name>val</name>
             <value-regex>(.{0,4000})(.*)</value-regex>
@@ -82,7 +85,7 @@
 
         <!-- Attr EN value -->
         <column-descriptor>
-            <column-index>3</column-index>
+            <column-index>5</column-index>
             <field-type>FIELD</field-type>
             <name>displayValEn</name>
             <language>en</language>
@@ -92,7 +95,7 @@
 
         <!-- Attr RU value -->
         <column-descriptor>
-            <column-index>4</column-index>
+            <column-index>6</column-index>
             <field-type>FIELD</field-type>
             <name>displayValRu</name>
             <language>ru</language>
@@ -102,7 +105,7 @@
 
         <!-- Attr UK value -->
         <column-descriptor>
-            <column-index>5</column-index>
+            <column-index>7</column-index>
             <field-type>FIELD</field-type>
             <name>displayValUk</name>
             <language>uk</language>

@@ -60,14 +60,28 @@
         </column-descriptor>
 
         <column-descriptor>
+            <column-index>3</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>visible</name>
+        </column-descriptor>
+
+        <column-descriptor>
             <column-index>4</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>search</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>5</column-index>
             <field-type>FIELD</field-type>
             <data-type>BOOLEAN</data-type>
             <name>navigation</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>5</column-index>
+            <column-index>6</column-index>
             <field-type>FIELD</field-type>
             <name>navigationType</name>
             <value-regex>(.{1,1})(.*)</value-regex>
@@ -75,7 +89,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>6</column-index>
+            <column-index>7</column-index>
             <field-type>FIELD</field-type>
             <name>rangeNavigation</name>
             <value-regex>(.{0,4000})(.*)</value-regex>
