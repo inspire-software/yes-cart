@@ -704,13 +704,13 @@
                         <value>shopcurrencies-demo.xml</value>
                         <value>countrynames-demo.xml</value>
                         <value>statenames-demo.xml</value>
-                        <value>carriernames.xml</value>
+                        <value>carriernames-demo.xml</value>
                         <value>carriershopnames-demo.xml</value>
-                        <value>carrierslanames.xml</value>
-                        <value>promotionnames.xml</value>
-                        <value>promotioncouponnames.xml</value>
-                        <value>taxnames.xml</value>
-                        <value>taxconfignames.xml</value>
+                        <value>carrierslanames-demo.xml</value>
+                        <value>promotionnames-demo.xml</value>
+                        <value>promotioncouponnames-demo.xml</value>
+                        <value>taxnames-demo.xml</value>
+                        <value>taxconfignames-demo.xml</value>
                     </list>
                 </entry>
                 <entry key="YC DEMO: IceCat Catalog">
@@ -726,21 +726,21 @@
                         used in production unless this is the first time data load and the data is clean.
                       -->
                     <list>
-                        <value>brandnames.xml</value>
-                        <value>attributenames.xml</value>
-                        <value>attributegroupnames.xml</value>
-                        <value>producttypenames.xml</value>
+                        <value>brandnames-demo.xml</value>
+                        <value>attributenames-demo.xml</value>
+                        <value>attributegroupnames-demo.xml</value>
+                        <value>producttypenames-demo.xml</value>
                         <value>categorynames-demo.xml</value>
                         <value>shopcategory-demo.xml</value>
-                        <value>productypeattributeviewgroupnames.xml</value>
-                        <value>producttypeattrnames.xml</value>
+                        <value>productypeattributeviewgroupnames-demo.xml</value>
+                        <value>producttypeattrnames-demo.xml</value>
                         <value>productnames-demo.xml</value>
                         <value>productsku-demo.xml</value>
                         <value>productsattributes-demo.xml</value>
                         <value>productskuattributes-demo.xml</value>
-                        <value>skuinventory.xml</value>
-                        <value>skuprices.xml</value>
-                        <value>productcategorynames.xml</value>
+                        <value>skuinventory-demo.xml</value>
+                        <value>skuprices-demo.xml</value>
+                        <value>productcategorynames-demo.xml</value>
                     </list>
                 </entry>
                 <entry key="YC DEMO: Product images (IceCat)">
