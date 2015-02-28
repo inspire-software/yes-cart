@@ -52,8 +52,8 @@
           <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="2s delay for browsing clicks" enabled="true">
-          <stringProp name="ConstantTimer.delay">2000</stringProp>
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="1s delay for browsing clicks" enabled="true">
+          <stringProp name="ConstantTimer.delay">1000</stringProp>
         </ConstantTimer>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Home page" enabled="true">
@@ -624,8 +624,8 @@
           <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="3s delay for browsing clicks" enabled="false">
-          <stringProp name="ConstantTimer.delay">3000</stringProp>
+        <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="1s delay for browsing clicks" enabled="true">
+          <stringProp name="ConstantTimer.delay">1000</stringProp>
         </ConstantTimer>
         <hashTree/>
         <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="3 random product loop" enabled="true">
@@ -1226,10 +1226,10 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get carrier option value" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">carrierOptionValue</stringProp>
-            <stringProp name="RegexExtractor.regex">value.&quot;(.{1})</stringProp>
+            <stringProp name="RegexExtractor.regex">value.&quot;(.{1})&quot;&gt;Post</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">INVALID</stringProp>
-            <stringProp name="RegexExtractor.match_number">2</stringProp>
+            <stringProp name="RegexExtractor.match_number">1</stringProp>
           </RegexExtractor>
           <hashTree/>
         </hashTree>
@@ -1306,10 +1306,10 @@
           <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Get carrier sla option value" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">false</stringProp>
             <stringProp name="RegexExtractor.refname">carrierSlaOptionValue</stringProp>
-            <stringProp name="RegexExtractor.regex">value=&quot;(\d{1})</stringProp>
+            <stringProp name="RegexExtractor.regex">value=&quot;(\d{1})&quot;&gt;5\-12</stringProp>
             <stringProp name="RegexExtractor.template">$1$</stringProp>
             <stringProp name="RegexExtractor.default">INVALID</stringProp>
-            <stringProp name="RegexExtractor.match_number">3</stringProp>
+            <stringProp name="RegexExtractor.match_number">1</stringProp>
           </RegexExtractor>
           <hashTree/>
         </hashTree>
