@@ -3335,9 +3335,9 @@
         <![CDATA[
             select tc from TaxConfigEntity tc where
                 tc.tax in (?1) and
-                (tc.countryCode = ?2 or tc.countryCode is null) and
-                (tc.stateCode = ?3 or tc.stateCode is null) and
-                (tc.productCode = ?4 or tc.productCode is null)
+                (tc.countryCode = ?2 or tc.countryCode is null or tc.countryCode = '') and
+                (tc.stateCode = ?3 or tc.stateCode is null or tc.stateCode = '') and
+                (tc.productCode = ?4 or tc.productCode is null or tc.productCode = '')
         ]]>
     </query>
 
