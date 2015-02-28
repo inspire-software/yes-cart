@@ -1007,7 +1007,7 @@
         MAIL_ID bigint not null default 0,
         RESOURCE_ID varchar(255),
         FILENAME varchar(255),
-        PART_DATA blob,
+        PART_DATA MEDIUMBLOB,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),

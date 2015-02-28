@@ -799,3 +799,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 alter table TPRODUCTTYPEATTR add column SEARCH bit default 0;
 -- alter table TPRODUCTTYPEATTR add column SEARCH smallint default 0;
 update TPRODUCTTYPEATTR set SEARCH = 0;
+
+--
+-- YC-421 Increase size of mail part for larger attachments
+--
+alter table TMAILPART modify column PART_DATA MEDIUMBLOB;
+
+
