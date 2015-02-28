@@ -1537,5 +1537,5 @@
 
     alter table TTAXCONFIG
         add constraint FK_TAXCFG_TAX
-        foreign key FK_TAXCFG_TAX (TAX_ID)
-        references TAX (TAX_ID) on delete cascade;
+        foreign key (TAX_ID)
+        references TTAX (TAX_ID) on delete cascade;
