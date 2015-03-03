@@ -3,6 +3,24 @@ var ctx = {
     root: '/yes-shop', /* This is how it appears from WicketUtil.getHttpServletRequest().getContextPath() for default config, use ServerSideJs Wicket component to inject this. */
     page: 'HomePage',
     resources: {},
+    productBuyPanels: function() {
+
+        var _panels = [];
+
+        return {
+            addPanel: function(panel) {
+                _panels.push(panel);
+            },
+            getPanel: function(sku) {
+                for (var i = 0; i < _panels.length; i++) {
+                    if (_panels[i].SKU == sku) {
+                        return _panels[i];
+                    }
+                }
+                return null;
+            }
+        }
+    }(),
     showModalWindow: function(){}
 };
 
@@ -67,10 +85,34 @@ $(document).ready(function() {
                 if (_message.length > 0) {
                     ctx.showModalWindow(_message);
                 }
+
+                var _json = $.parseJSON($(data).filter('.jsajaxresponseobj').html());
+
+                $('.js-buy-panel').each(function() {
+
+                    var _panel = $(this);
+                    var _remove = _panel.find('.js-qty-remove');
+                    var _add = _panel.find('.js-qty-add');
+                    var _val = _panel.find('.js-qty-value');
+
+                    if (_val.length == 0) {
+                        return; // picker value input is not enabled
+                    }
+
+                    var _panelObj = ctx.productBuyPanels.getPanel(_json.SKU);
+
+                    if (_panelObj != null) {
+
+                        _panelObj.update(_json);
+
+                    }
+
+                });
+
             }).always(function() {
-                $('div.js-modal-spinner').remove();
-                $('body').removeClass("loading");
-            });
+            $('div.js-modal-spinner').remove();
+            $('body').removeClass("loading");
+        });
         return false;
     });
 
@@ -79,32 +121,36 @@ $(document).ready(function() {
     $('.js-buy-panel').each(function() {
 
         var _panel = $(this);
+
         var _remove = _panel.find('.js-qty-remove');
         var _add = _panel.find('.js-qty-add');
         var _val = _panel.find('.js-qty-value');
 
         if (_val.length == 0) {
-            return; // picker value input is not enabled
+            return null; // picker value input is not enabled
         }
 
-        var _min = Number(_val.attr('yc-data-min'));
-        var _max = Number(_val.attr('yc-data-max'));
-        var _step = Number(_val.attr('yc-data-step'));
-
-        var _stepStr = _val.attr('yc-data-step');
-
-        var _stepDecimalPoint = _stepStr.indexOf('.') > -1 ? _stepStr.length - _stepStr.indexOf('.') - 1 : 0;
-
-        if (isNaN(_max) || _max <= 0) {
-            _min = 0;
-            _max = 0;
-            _step = 0;
-        }
+        var _sku = _val.attr('yc-data-sku');
 
         var _logic = function(delta) {
 
+            var _min = Number(_val.attr('yc-data-min'));
+            var _max = Number(_val.attr('yc-data-max'));
+            var _step = Number(_val.attr('yc-data-step'));
+
+            var _stepStr = _val.attr('yc-data-step');
+
+            var _stepDecimalPoint = _stepStr.indexOf('.') > -1 ? _stepStr.length - _stepStr.indexOf('.') - 1 : 0;
+
+            if (isNaN(_max) || _max <= 0) {
+                _min = 0;
+                _max = 0;
+                _step = 0;
+            }
+
+
             var _oldVal = Number(_val.val());
-            var _newVal = _oldVal + delta;
+            var _newVal = _oldVal + delta * _step;
             if (_newVal == 0 && delta != 0) {
                 return;
             }
@@ -148,17 +194,49 @@ $(document).ready(function() {
 
         _add.click(function(e) {
             e.preventDefault();
-            _logic(_step);
+            _logic(1);
         });
         _remove.click(function(e) {
             e.preventDefault();
-            _logic(-_step);
+            _logic(-1);
         });
         _val.change(function(e) {
             _logic(0);
         });
 
         _logic(0); // init
+
+        var _this = {
+
+            SKU: _sku,
+
+            min: function() {
+                return Number(_val.attr('yc-data-min'));
+            },
+
+            max: function() {
+                return Number(_val.attr('yc-data-max'));
+            },
+
+            step: function() {
+                return Number(_val.attr('yc-data-step'));
+            },
+
+            update: function(json) {
+
+                _val.attr('yc-data-min', json.min);
+                _val.attr('yc-data-max', json.max);
+                _val.attr('yc-data-step', json.step);
+                _val.val(json.value);
+                _val.attr('title', json.title).tooltip('fixTitle');
+
+                _logic(0); // init
+
+            }
+
+        };
+
+        ctx.productBuyPanels.addPanel(_this);
 
     });
 

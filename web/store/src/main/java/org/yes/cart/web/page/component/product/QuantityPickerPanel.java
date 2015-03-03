@@ -82,11 +82,12 @@ public class QuantityPickerPanel extends BaseComponent {
 
         add(new ExternalLink("removeOneLink", "#"));
         add(new Label("quantity")
+                .add(new AttributeModifier("yc-data-sku", sku.replace("\"", "")))
                 .add(new AttributeModifier("yc-data-min", pqm.getMinOrder().toPlainString()))
                 .add(new AttributeModifier("yc-data-max", pqm.getMaxOrder().toPlainString()))
                 .add(new AttributeModifier("yc-data-step", pqm.getStep().toPlainString()))
                 .add(new AttributeModifier("value", pqm.getMinOrder().toPlainString()))
-                .add(new AttributeModifier("title", message)));
+                .add(new AttributeModifier("title", message.replace("\"", ""))));
         add(new ExternalLink("addOneLink", "#"));
 
         super.onBeforeRender();
