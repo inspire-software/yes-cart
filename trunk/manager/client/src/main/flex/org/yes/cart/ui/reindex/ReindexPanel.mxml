@@ -116,7 +116,7 @@
             var _result:ArrayCollection = ArrayCollection(event.result);
             var _selection:ArrayCollection = new ArrayCollection();
             var _allShops:ShopDTOImpl = new ShopDTOImpl();
-            _allShops.name = "";
+            _allShops.name = resourceManager.getString('ReindexPanel', 'allShops');
             _selection.addItem(_allShops);
             _selection.addAll(_result);
             storesComboBox.dataProvider = _selection;
