@@ -107,6 +107,9 @@
     <entry key="preorder">Демо: ожидаемые</entry>
     <entry key="backorder">Демо: заказные</entry>
     <entry key="always">Демо: всегда</entry>
+    <entry key="showroom">Demo: шоу-рум</entry>
+    <entry key="multibuy">Demo: оптовые скидки</entry>
+    <entry key="accessories">Demo: аксессуары</entry>
 
     <!-- ShoppingCartPaymentVerificationView -->
     <entry key="productName">Товар</entry>
@@ -253,6 +256,12 @@
     <entry key="demoPreorder">Ожидаемые</entry>
     <entry key="demoBackorder">Заказные</entry>
     <entry key="demoAlways">Всегда</entry>
+    <entry key="demoShowroom">Шоу-рум</entry>
+    <entry key="demoMultiBuy">Оптовые скидки</entry>
+    <entry key="demoAccessories">Аксессуары</entry>
+    <entry key="demoSearch">Неточный поиск</entry>
+    <entry key="searchVariant1">Глобальный: mini mouse red</entry>
+    <entry key="searchVariant2">Категория мыши: mini mouse red</entry>
     <entry key="menu">Меню</entry>
     <entry key="demo">Демо</entry>
     <entry key="contactForm">Контактная форма</entry>
