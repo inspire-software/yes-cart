@@ -193,25 +193,25 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     @Cacheable(value = "attributeService-navigatableAttributeDisplayValue")
     public I18NModel getNavigatableAttributeDisplayValue(final String attrCode, final String value) {
 
-        final List<Object> productDV = attributeDao.findQueryObjectRangeByNamedQuery(
-                "PRODUCT.ATTRIBUTE.DISPLAYVALUES.BY.VALUE", 0, 1, attrCode, value);
+        final List<Object> productSkuDV = attributeDao.findQueryObjectRangeByNamedQuery(
+                "PRODUCTSKU.ATTRIBUTE.DISPLAYVALUES.BY.VALUE", 0, 1, attrCode, value);
 
-        if (productDV == null || productDV.isEmpty()) {
-            // No product value, try SKU
-            final List<Object> productSkuDV = attributeDao.findQueryObjectRangeByNamedQuery(
-                    "PRODUCTSKU.ATTRIBUTE.DISPLAYVALUES.BY.VALUE", 0, 1, attrCode, value);
+        if (productSkuDV == null || productSkuDV.isEmpty()) {
+            // No SKU value, try product
+            final List<Object> productDV = attributeDao.findQueryObjectRangeByNamedQuery(
+                    "PRODUCT.ATTRIBUTE.DISPLAYVALUES.BY.VALUE", 0, 1, attrCode, value);
 
-            if (productSkuDV == null || productSkuDV.isEmpty()) {
+            if (productDV == null || productDV.isEmpty()) {
                 // no values at all - fail safe to raw
                 return new NonI18NModel(value);
             }
 
-            // SKU attribute value
-            return new FailoverStringI18NModel((String) productSkuDV.get(0), value);
+            // product attribute value
+            return new FailoverStringI18NModel((String) productDV.get(0), value);
 
         }
-        // product attribute value
-        return new FailoverStringI18NModel((String) productDV.get(0), value);
+        // SKU attribute value
+        return new FailoverStringI18NModel((String) productSkuDV.get(0), value);
     }
 
     @Cacheable(value = "attributeService-allAttributeNames")

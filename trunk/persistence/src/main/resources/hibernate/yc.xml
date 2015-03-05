@@ -2755,7 +2755,7 @@
     <query name="PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES">
         <![CDATA[
        select a.attribute.code, a.val, a.displayVal from  AttrValueEntityProduct a
-       where a.attribute.code in (?1)
+       where a.attribute.code in (?1) and a.product.producttype.producttypeId = ?2
             group by a.attribute.code, a.val, a.displayVal
        ]]>
     </query>
@@ -2763,7 +2763,7 @@
     <query name="PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES">
         <![CDATA[
        select a.attribute.code, a.val, a.displayVal from AttrValueEntityProductSku a
-       where a.attribute.code in (?1)
+       where a.attribute.code in (?1) and a.productSku.product.producttype.producttypeId = ?2
             group by a.attribute.code, a.val, a.displayVal
        ]]>
     </query>
