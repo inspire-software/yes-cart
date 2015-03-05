@@ -574,11 +574,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             final Map<String, I18NModel> attrNames = attributeService.getAllAttributeNames();
 
             list = productDao.findQueryObjectsByNamedQuery(
-                    "PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
+                    "PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet(), productTypeId);
             appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
 
             list = productDao.findQueryObjectsByNamedQuery(
-                    "PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
+                    "PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet(), productTypeId);
             appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
         }
         return new ArrayList<FilteredNavigationRecord>(records.values());
