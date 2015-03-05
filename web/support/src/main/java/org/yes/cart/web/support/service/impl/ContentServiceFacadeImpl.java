@@ -142,6 +142,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "categoryService-currentCategoryMenu")
     public List<Category> getCurrentContentMenu(final long currentContentId, final long shopId) {
 
         if (currentContentId > 0L && shopService.getShopContentIds(shopId).contains(currentContentId)) {
@@ -150,7 +151,7 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
             final Iterator<Category> itCat = categories.iterator();
             while (itCat.hasNext()) {
                 final Category cat = itCat.next();
-                if (CentralViewLabel.CONTENT_INCLUDE.equals(cat.getUitemplate())) {
+                if (CentralViewLabel.INCLUDE.equals(cat.getUitemplate())) {
                     itCat.remove();
                 }
             }

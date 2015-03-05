@@ -119,6 +119,14 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-currentCategoryMenu"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="breadCrumbBuilder-breadCrumbs"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="categoryService-rootCategory"/>
             <constructor-arg index="1" value="all"/>
         </bean>
@@ -235,6 +243,10 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-currentCategoryMenu"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="categoryService-rootCategory"/>
             <constructor-arg index="1" value="all"/>
         </bean>
@@ -306,6 +318,10 @@
     <util:set id="SeoImageAll">
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="categoryService-topLevelCategories"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-currentCategoryMenu"/>
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
