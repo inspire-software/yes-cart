@@ -107,6 +107,9 @@
     <entry key="preorder">Демо: очікуються</entry>
     <entry key="backorder">Демо: по замовленню</entry>
     <entry key="always">Демо: завжди</entry>
+    <entry key="showroom">Demo: шоу-рум</entry>
+    <entry key="multibuy">Demo: оптові знижки</entry>
+    <entry key="accessories">Demo: аксесуари</entry>
 
     <!-- ShoppingCartPaymentVerificationView -->
     <entry key="productName">Товар</entry>
@@ -253,6 +256,12 @@
     <entry key="demoPreorder">Очікуються</entry>
     <entry key="demoBackorder">По замовленню</entry>
     <entry key="demoAlways">Завжди</entry>
+    <entry key="demoShowroom">Шоу-рум</entry>
+    <entry key="demoMultiBuy">Оптові знижки</entry>
+    <entry key="demoAccessories">Аксесуари</entry>
+    <entry key="demoSearch">Неточний пошук</entry>
+    <entry key="searchVariant1">Глобальний: mini mouse red</entry>
+    <entry key="searchVariant2">Категорія миші: mini mouse red</entry>
     <entry key="menu">Меню</entry>
     <entry key="demo">Демо</entry>
     <entry key="contactForm">Контактна форма</entry>

@@ -741,6 +741,7 @@
                         <value>skuinventory-demo.xml</value>
                         <value>skuprices-demo.xml</value>
                         <value>productcategorynames-demo.xml</value>
+                        <value>productaccessories-demo.xml</value>
                     </list>
                 </entry>
                 <entry key="YC DEMO: Product images (IceCat)">
@@ -772,6 +773,7 @@
                         <value>productsku.xml</value>
                         <value>productsattributes.xml</value>
                         <value>productskuattributes.xml</value>
+                        <value>productaccessories.xml</value>
                     </list>
                 </entry>
                 <entry key="Inventory import">
