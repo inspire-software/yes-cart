@@ -86,6 +86,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @CacheEvict(value = {
             "categoryService-topLevelCategories",
+            "categoryService-currentCategoryMenu",
+            "breadCrumbBuilder-breadCrumbs",
             "shopService-shopByCode",
             "shopService-shopById",
             "shopService-shopByDomainName",
@@ -108,6 +110,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @CacheEvict(value = {
             "categoryService-topLevelCategories",
+            "categoryService-currentCategoryMenu",
+            "breadCrumbBuilder-breadCrumbs",
             "shopService-shopByCode",
             "shopService-shopById",
             "shopService-shopByDomainName",
@@ -498,6 +502,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @CacheEvict(value = {
             "categoryService-topLevelCategories",
+            "categoryService-currentCategoryMenu",
+            "breadCrumbBuilder-breadCrumbs",
             "categoryService-rootCategory",
             "categoryService-categoryHasChildren",
             "categoryService-childCategories",
@@ -517,6 +523,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @CacheEvict(value = {
             "categoryService-topLevelCategories",
+            "categoryService-currentCategoryMenu",
+            "breadCrumbBuilder-breadCrumbs",
             "categoryService-rootCategory",
             "categoryService-categoryTemplate",
             "categoryService-searchInSubcategory",
@@ -542,6 +550,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @CacheEvict(value = {
             "categoryService-topLevelCategories",
+            "categoryService-currentCategoryMenu",
+            "breadCrumbBuilder-breadCrumbs",
             "categoryService-rootCategory",
             "categoryService-categoryTemplate",
             "categoryService-searchInSubcategory",

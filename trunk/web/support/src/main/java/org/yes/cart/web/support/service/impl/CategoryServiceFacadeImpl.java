@@ -18,6 +18,7 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.AttrValueShop;
@@ -26,12 +27,10 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -74,15 +73,31 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "categoryService-currentCategoryMenu")
     public List<Category> getCurrentCategoryMenu(final long currentCategoryId, final long shopId) {
+
+        final List<Category> categories;
 
         if (currentCategoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(currentCategoryId)) {
 
-            return categoryService.getChildCategories(currentCategoryId);
+            categories = new ArrayList<Category>(categoryService.getChildCategories(currentCategoryId));
+
+        } else {
+
+            categories = new ArrayList<Category>(categoryService.getTopLevelCategories(shopId));
 
         }
 
-        return categoryService.getTopLevelCategories(shopId);
+        final Iterator<Category> itCat = categories.iterator();
+        while (itCat.hasNext()) {
+            final Category cat = itCat.next();
+            if (CentralViewLabel.INCLUDE.equals(cat.getUitemplate())) {
+                itCat.remove();
+            }
+        }
+        return categories;
+
+
     }
 
     private static final String[] CATEGORY_THUMBNAIL_SIZE =

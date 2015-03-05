@@ -123,6 +123,9 @@
     <cache name="categoryService-topLevelCategories" maxElementsInMemory="30" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="categoryService-currentCategoryMenu" maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
     <cache name="categoryService-rootCategory" maxElementsInMemory="2" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
@@ -528,7 +531,6 @@
            eternal="false"
            timeToLiveSeconds="86400"
            timeToIdleSeconds="7200"/>
-
 
     <cache name="web.addressBookFacade-customerHasAtLeastOneAddress"
            maxElementsInMemory="5000"

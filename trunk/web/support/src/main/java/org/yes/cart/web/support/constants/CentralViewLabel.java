@@ -26,7 +26,7 @@ package org.yes.cart.web.support.constants;
  */
 public interface CentralViewLabel {
 
-    public static final String CONTENT_INCLUDE = "include";
+    public static final String INCLUDE = "include";
 
     public static final String CONTENT = "content";
 

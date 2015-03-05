@@ -413,6 +413,8 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @CacheEvict(value = {
             "contentService-rootContent",
+            "categoryService-currentCategoryMenu",
+            "breadCrumbBuilder-breadCrumbs",
             "contentService-contentAttributeRecursive",
             "contentService-contentAttributesRecursive",
             "contentService-childContent",
@@ -432,6 +434,8 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @CacheEvict(value = {
             "contentService-rootContent",
+            "categoryService-currentCategoryMenu",
+            "breadCrumbBuilder-breadCrumbs",
             "contentService-contentTemplate",
             "contentService-contentBody" ,
             "contentService-contentAttributeRecursive",
@@ -452,6 +456,8 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      */
     @CacheEvict(value ={
             "contentService-rootContent",
+            "categoryService-currentCategoryMenu",
+            "breadCrumbBuilder-breadCrumbs",
             "contentService-contentTemplate",
             "contentService-contentBody" ,
             "contentService-contentAttributeRecursive",

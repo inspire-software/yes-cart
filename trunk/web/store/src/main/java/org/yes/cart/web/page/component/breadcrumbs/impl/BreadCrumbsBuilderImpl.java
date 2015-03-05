@@ -122,7 +122,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     private void fillCategories(final List<Crumb> categoriesCrumbs, final long categoryId, final Set<Long> shopCategoryIds, final boolean isContent) {
         if (categoryId > 0l && shopCategoryIds.contains(categoryId)) {
             final Category category = categoryService.getById(categoryId);
-            if (!category.isRoot() && !CentralViewLabel.CONTENT_INCLUDE.equals(category.getUitemplate())) {
+            if (!category.isRoot() && !CentralViewLabel.INCLUDE.equals(category.getUitemplate())) {
                 categoriesCrumbs.add(
                         new Crumb("category", category.getName(),
                                 category.getDisplayName(), getCategoryLinkParameters(categoryId, isContent),
@@ -161,7 +161,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     private PageParameters getRemoveCategoryLinkParameters(final Category category, final Set<Long> shopCategoryIds, final boolean isContent) {
         if (shopCategoryIds.contains(category.getParentId())) {
             final Category parent = categoryService.getById(category.getParentId());
-            if (parent != null && !parent.isRoot() && !CentralViewLabel.CONTENT_INCLUDE.equals(parent.getUitemplate())) {
+            if (parent != null && !parent.isRoot() && !CentralViewLabel.INCLUDE.equals(parent.getUitemplate())) {
                 return getCategoryLinkParameters(parent.getCategoryId(), isContent);
             }
         }
