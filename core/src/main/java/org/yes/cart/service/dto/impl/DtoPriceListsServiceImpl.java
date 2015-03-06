@@ -39,7 +39,9 @@ import org.yes.cart.service.dto.DtoPriceListsService;
 import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.dto.support.PriceListFilter;
+import org.yes.cart.util.MoneyUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -216,12 +218,23 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
 
         skuPriceAsm.assembleEntity(price, entity, adapters, dtoFactory);
 
+        ensureNonZeroPrices(entity);
+
         skuPriceDAO.saveOrUpdate(entity);
 
         skuPriceAsm.assembleDto(price, entity, adapters, dtoFactory);
 
         return price;
 
+    }
+
+    private void ensureNonZeroPrices(final SkuPrice entity) {
+        if (entity.getSalePrice() != null && MoneyUtils.isFirstEqualToSecond(entity.getSalePrice(), BigDecimal.ZERO)) {
+            entity.setSalePrice(null);
+        }
+        if (entity.getMinimalPrice() != null && MoneyUtils.isFirstEqualToSecond(entity.getMinimalPrice(), BigDecimal.ZERO)) {
+            entity.setMinimalPrice(null);
+        }
     }
 
     /** {@inheritDoc} */

@@ -512,6 +512,7 @@ public class PriceServiceImpl
             "priceService-allCurrentPrices"
     }, allEntries = true)
     public SkuPrice create(final SkuPrice instance) {
+        ensureNonZeroPrices(instance);
         return super.create(instance);
     }
 
@@ -524,7 +525,18 @@ public class PriceServiceImpl
             "priceService-allCurrentPrices"
     }, allEntries = true)
     public SkuPrice update(final SkuPrice instance) {
+        ensureNonZeroPrices(instance);
         return super.update(instance);
+    }
+
+
+    private void ensureNonZeroPrices(final SkuPrice entity) {
+        if (entity.getSalePrice() != null && MoneyUtils.isFirstEqualToSecond(entity.getSalePrice(), BigDecimal.ZERO)) {
+            entity.setSalePrice(null);
+        }
+        if (entity.getMinimalPrice() != null && MoneyUtils.isFirstEqualToSecond(entity.getMinimalPrice(), BigDecimal.ZERO)) {
+            entity.setMinimalPrice(null);
+        }
     }
 
     /**
