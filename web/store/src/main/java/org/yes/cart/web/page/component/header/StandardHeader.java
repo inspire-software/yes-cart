@@ -25,6 +25,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -37,6 +39,8 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
+
+import java.util.List;
 
 /**
  * User: iazarny@yahoo.com
@@ -82,12 +86,18 @@ public class StandardHeader  extends BaseComponent {
 
     private Component getLogoFragment() {
 
+        final Shop shop = ApplicationDirector.getCurrentShop();
+        final String lang = getLocale().getLanguage();
+
+        final List<Pair<String, String>> filenames = shopImageService.getImageAttributeFileNames(shop, lang);
+        final String defaultAttribute = filenames.get(0).getFirst();
+
         final String shopLogo = shopImageService.getImage(
-                ApplicationDirector.getCurrentShop(),
+                shop,
                 WicketUtil.getHttpServletRequest().getContextPath(),
-                getLocale().getLanguage(),
+                lang,
                 "as", "is",
-                AttributeNamesKeys.Shop.SHOP_IMAGE, null);
+                defaultAttribute, null);
 
         return new ContextImage("headerLogo", shopLogo)
                 .setVisible(shopLogo != null && !shopLogo.contains(Constants.NO_IMAGE));
