@@ -25,7 +25,6 @@ import org.yes.cart.remote.service.RemoteProductSkuService;
 import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -159,7 +158,6 @@ public class RemoteProductSkuServiceImpl
         } catch (UnableToCreateInstanceException e) {
             // ok
         }
-        setNullPrices(skuPriceDTO);
         long rez = dtoProductSkuService.createSkuPrice(skuPriceDTO);
         reindexService.reindexProductSku(skuPriceDTO.getProductSkuId());
         return rez;
@@ -180,27 +178,9 @@ public class RemoteProductSkuServiceImpl
         } catch (UnableToCreateInstanceException e) {
             // ok
         }
-        setNullPrices(skuPriceDTO);
         long rez = dtoProductSkuService.updateSkuPrice(skuPriceDTO);
         reindexService.reindexProductSku(skuPriceDTO.getProductSkuId());
         return rez;
-    }
-
-    /**
-     * Set minimal & sale price to null if they are 0
-     *
-     * @param skuPriceDTO {@link SkuPriceDTO}
-     */
-    private void setNullPrices(final SkuPriceDTO skuPriceDTO) {
-        if (skuPriceDTO.getMinimalPrice() != null
-                && BigDecimal.ZERO.floatValue() == skuPriceDTO.getMinimalPrice().floatValue()) {
-            skuPriceDTO.setMinimalPrice(null);
-        }
-        if (skuPriceDTO.getSalePrice() != null &&
-                BigDecimal.ZERO.floatValue() == skuPriceDTO.getSalePrice().floatValue()) {
-            skuPriceDTO.setSalePrice(null);
-        }
-
     }
 
     /** {@inheritDoc} */
