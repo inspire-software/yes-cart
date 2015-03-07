@@ -58,37 +58,41 @@
 
                     <div class="row js-buy-panel">
 
-                        <div class="col-md-12 col-xs-6 text-right">
+                        <div class="col-md-12 col-xs-12 text-right">
                             <wicket:container wicket:id="quantityPicker">
                                 [Quantity picker]
                             </wicket:container>
                         </div>
 
-                        <div class="col-md-12 col-xs-6 text-right">
+                        <div class="col-md-12 col-xs-12 text-right">
                             <a wicket:id="addToCartLink" class="btn btn-warning js-buy" rel="nofollow">
+                                <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;
                                 <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
                             </a>
                         </div>
 
-                        <div class="col-md-12 col-xs-12 text-right">
-                            <a wicket:id="addToWishListLink" class="btn btn-info" rel="nofollow">
-                                <span wicket:id="addToWishListLinkLabel">[add one to wish list]</span>
-                            </a>
-                        </div>
-
-                        <div class="col-md-12 col-xs-12 text-right">
+                        <div class="product-detail-price col-md-12 col-xs-12 text-right">
                             <wicket:container wicket:id="priceView">
                                 [price]
                             </wicket:container>
+                        </div>
+
+                        <div class="col-md-12 col-xs-12 text-right wishlist-btn">
+                            <a wicket:id="addToWishListLink" rel="nofollow">
+                                <span class="glyphicon glyphicon-heart"></span>&nbsp;
+                                <span wicket:id="addToWishListLinkLabel">[add one to wish list]</span>
+                            </a>
                         </div>
 
                     </div>
                 </div>
             </div>
 
-            <wicket:container wicket:id="addToAnyButton">
-                [Add to any social button]
-            </wicket:container>
+            <div class="margin-top10">
+                <wicket:container wicket:id="addToAnyButton">
+                    [Add to any social button]
+                </wicket:container>
+            </div>
         </div>
 
         <div class="col-xs-12">
