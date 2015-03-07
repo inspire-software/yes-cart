@@ -337,6 +337,7 @@
                                         popUp.attributeGroup = outerDocument.attributeGroup;
                                         popUp.windowTitle = data.attributeDTO.name;
                                         popUp.attributeCode = data.attributeDTO.code;
+                                        popUp.setInformation(data.attributeDTO.description);
 
                                         popUp.code = outerDocument.entityCode;
                                         popUp.value = data.val;

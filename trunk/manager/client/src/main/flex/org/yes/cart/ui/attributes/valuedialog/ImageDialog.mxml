@@ -30,6 +30,12 @@
                    borderStyle="solid"/>
 
         <mx:Form x="0" y="0" width="400">
+            <mx:FormItem>
+                <mx:Label id="infoLabel" maxWidth="250"
+                          visible="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
+                          includeInLayout="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
+                        />
+            </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='AttributesManagementPanel',key='value')">
                 <!-- Make this line editable false to make sure users do not mess with file name -->
                 <mx:TextInput width="250" id="valueTextInput" editable="false"/>
@@ -419,7 +425,7 @@
         }
 
         public function setInformation(value:String):void {
-            //do nothing
+            infoLabel.text = value;
         }
 
         protected function onRpcMethodFault(event:FaultEvent):void {
