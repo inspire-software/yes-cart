@@ -53,7 +53,7 @@ public class MultiMarkupCache extends MarkupCache {
         super();
         /**
          * MarkupCache invokes same method ({@link #newCacheImplementation()}) for both
-         * field therefor it is very unreliable to depend on the order of execution.
+         * fields therefore it is very unreliable to depend on the order of execution.
          *
          * Instead we use reflection to inject the caches so that we know for sure that we are
          * using the right implementation for the right fields.

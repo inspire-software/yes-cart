@@ -21,10 +21,22 @@ public class DefaultOrderAddressFormatterImpl implements OrderAddressFormatter {
 
     @Override
     public String formatAddress(final Address address) {
+        return formatAddressInternal(address, addressTemplate);
+    }
+
+    @Override
+    public String formatAddress(final Address address, final String format) {
+        if (StringUtils.isBlank(format)) {
+            return formatAddressInternal(address, addressTemplate);
+        }
+        return formatAddressInternal(address, format);
+    }
+
+    private String formatAddressInternal(final Address address, final String format) {
         if (address != null) {
 
             return MessageFormat.format(
-                    addressTemplate,
+                    format,
                     StringUtils.defaultString(address.getAddrline1()),
                     StringUtils.defaultString(address.getAddrline2()),
                     StringUtils.defaultString(address.getPostcode()),

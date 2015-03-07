@@ -151,7 +151,7 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      *
      * @return true is B2B profile is set.
      */
-    boolean isB2ProfileActive();
+    boolean isB2BProfileActive();
 
     /**
      * TODO: YC-420 Unify all themes into a separate module

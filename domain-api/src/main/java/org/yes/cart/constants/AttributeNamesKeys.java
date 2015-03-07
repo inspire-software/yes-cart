@@ -230,6 +230,16 @@ public interface AttributeNamesKeys {
         String SUPPORTED_COUNTRY_BILL = "COUNTRY_BILL";
 
         /**
+         * Supported by shop address formatter.
+         */
+        String ADDRESS_FORMATTER = "SHOP_ADDRESS_FORMATTER";
+
+        /**
+         * Supported by shop customer name formatter.
+         */
+        String CUSTOMER_NAME_FORMATTER = "SHOP_CUSTOMER_FORMATTER";
+
+        /**
          * Supported by shop storefront languages.
          */
         String SUPPORTED_LANGUAGES = "SUPPORTED_LANGUAGES";

@@ -134,6 +134,24 @@ public interface CustomerOrder extends Auditable {
 
 
     /**
+     * Get formatted billing address, that copied from customer profile.
+     * This need to prevent situation when address can be edited by customer in his
+     * profile during delivery, so need to copy billing address.
+     *
+     * @return formatted delivery address.
+     */
+    Address getBillingAddressDetails();
+
+    /**
+     * Set formatted address.
+     *
+     * @param billingAddress formatted address.
+     */
+    void setBillingAddressDetails(Address billingAddress);
+
+
+
+    /**
      * Get formatted shipping address.
      *
      * @return shipping address.
@@ -146,6 +164,20 @@ public interface CustomerOrder extends Auditable {
      * @param shippingAddress shipping address.
      */
     void setShippingAddress(String shippingAddress);
+
+    /**
+     * Get formatted shipping address.
+     *
+     * @return shipping address.
+     */
+    Address getShippingAddressDetails();
+
+    /**
+     * Set shipping address.
+     *
+     * @param shippingAddress shipping address.
+     */
+    void setShippingAddressDetails(Address shippingAddress);
 
     /**
      * Get the original cart guid.

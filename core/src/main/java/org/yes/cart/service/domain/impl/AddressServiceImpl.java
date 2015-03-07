@@ -61,7 +61,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, key = "#instance.customer.email")
+    }, allEntries = false, condition = "#instance.customer != null", key = "#instance.customer.email")
     public Address create(final Address instance) {
         setDefault(instance);
         return super.create(instance);
@@ -100,11 +100,13 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
     }
 
     private void setDefault(final Address instance) {
-        getGenericDao().executeUpdate(
-                "ADDRESSES.RESET.DEFAULT",
-                instance.getCustomer().getCustomerId(), instance.getAddressType(), false
-        );
-        instance.setDefaultAddress(true);
+        if (instance.getCustomer() != null) {
+            getGenericDao().executeUpdate(
+                    "ADDRESSES.RESET.DEFAULT",
+                    instance.getCustomer().getCustomerId(), instance.getAddressType(), false
+            );
+            instance.setDefaultAddress(true);
+        }
     }
 
 

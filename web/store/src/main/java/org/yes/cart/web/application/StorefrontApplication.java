@@ -195,8 +195,8 @@ public class StorefrontApplication
         getMarkupSettings().setCompressWhitespace(true);
         getMarkupSettings().setStripWicketTags(true); // true remove wicket:tags in development mode
         getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
-        //getMarkupSettings().setDefaultAfterDisabledLink("");
-        //getMarkupSettings().setDefaultBeforeDisabledLink("");
+        getMarkupSettings().setDefaultBeforeDisabledLink("<a>");
+        getMarkupSettings().setDefaultAfterDisabledLink("</a>");
         //getMarkupSettings().setAutomaticLinking(false);
     }
 

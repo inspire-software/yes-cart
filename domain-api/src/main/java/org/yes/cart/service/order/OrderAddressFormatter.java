@@ -18,4 +18,14 @@ public interface OrderAddressFormatter {
      */
     String formatAddress(final Address address);
 
+    /**
+     * Format address.
+     *
+     * @param address address to format
+     * @param format address format
+     *
+     * @return string representation of this address
+     */
+    String formatAddress(final Address address, final String format);
+
 }

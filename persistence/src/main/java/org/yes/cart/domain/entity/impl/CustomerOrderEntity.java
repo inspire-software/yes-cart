@@ -58,6 +58,8 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private Collection<PromotionCouponUsage> coupons = new ArrayList<PromotionCouponUsage>(0);
     private String billingAddress;
     private String shippingAddress;
+    private Address billingAddressDetails;
+    private Address shippingAddressDetails;
     private boolean multipleShipmentOption;
     private Date orderTimestamp;
     private Date createdTimestamp;
@@ -174,12 +176,28 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.billingAddress = billingAddress;
     }
 
+    public Address getBillingAddressDetails() {
+        return billingAddressDetails;
+    }
+
+    public void setBillingAddressDetails(final Address billingAddressDetails) {
+        this.billingAddressDetails = billingAddressDetails;
+    }
+
     public String getShippingAddress() {
         return this.shippingAddress;
     }
 
     public void setShippingAddress(String shippingAddress) {
         this.shippingAddress = shippingAddress;
+    }
+
+    public Address getShippingAddressDetails() {
+        return shippingAddressDetails;
+    }
+
+    public void setShippingAddressDetails(final Address shippingAddressDetails) {
+        this.shippingAddressDetails = shippingAddressDetails;
     }
 
     public boolean isMultipleShipmentOption() {

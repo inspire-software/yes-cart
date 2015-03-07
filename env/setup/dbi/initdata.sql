@@ -48,22 +48,31 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  10994,  'SUPPORTED_LANGUAGES', 'SUPPORTED_LANGUAGES',  0,  NULL,  'Languages',  'Supported shop languages',  1004, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  10993,  'CART_ADD_ENABLE_QTY_PICKER', 'CART_ADD_ENABLE_QTY_PICKER',  0,  NULL,  'Cart: Enable quantity picker for products',  'Cart: Enable quantity picker for products',  1008, 1001);
+  VALUES (  10993,  'CART_ADD_ENABLE_QTY_PICKER', 'CART_ADD_ENABLE_QTY_PICKER',  0,  NULL,  'Cart: Enable quantity picker for products',  'Enables quantity picker component on product pages',  1008, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  10992,  'INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP', 'INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP',  0,  NULL,  'Search: include sub categories',  'Search: include sub categories',  1008, 1001);
+  VALUES (  10992,  'INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP', 'INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP',  0,  NULL,  'Search: include sub categories',
+    'Allow search to be performed including sub categories. If set to false product are searched only in the immediate category',  1008, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10990,  'SHOP_NEW_ARRIVAL_DAYS_OFFSET', 'SHOP_NEW_ARRIVAL_DAYS_OFFSET',  0,  NULL,  'Search: newarrival tag days offset',
-   'Search: newarrival tag days offset',  1006, 1001);
+   'Dynamic newarrival tag setting. New products are products with date befor "now() - days offset"',  1006, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10988,  'SHOP_CHECKOUT_ENABLE_ORDER_MSG', 'SHOP_CHECKOUT_ENABLE_ORDER_MSG',  0,  NULL,  'Checkout: enable order message',
-   'Checkout: enable order message',  1008, 1001);
+   'Enable order message capture. This can be used for many different things. e.g. allow gift messaging, delivery instructions',  1008, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10987,  'SHOP_CHECKOUT_ENABLE_COUPONS', 'SHOP_CHECKOUT_ENABLE_COUPONS',  0,  NULL,  'Checkout: enable coupons',
-   'Checkout: enable coupons',  1008, 1001);
+   'Enable "Add coupon" section on the shopping cart page',  1008, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10986,  'SHOP_ADDRESS_FORMATTER', 'SHOP_ADDRESS_FORMATTER',  0,  NULL,  'Address: address format',
+   'E.g. {0} {1} {2} {3} {4} {5} {6} {7} {8}, where 0 - address line 1, 1 - address line 2, 2 - post(zip) code, 3 - city, 4 - country code, 5 - county/state/province/area code, 6 - first name, 7 - last name, 8 - contact phone(s) as string',  1000, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10985,  'SHOP_CUSTOMER_FORMATTER', 'SHOP_CUSTOMER_FORMATTER',  0,  NULL,  'Customer: name format',
+   'E.g. {0} {1} {2}, where 0 - first name, 1 - middle name, 2 - last name',  1000, 1001);
 
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
@@ -71,10 +80,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   'This value will be used for redirects when shop can not be resolved by http request', 1002,  1000);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  11040,  'SHOP_B2B', 'SHOP_B2B',  1,  NULL,  'Is B2B profile for this shop',  'Is B2B profile for this shop',  1000, 1001);
+  VALUES (  11040,  'SHOP_B2B', 'SHOP_B2B',  1,  NULL,  'Enable B2B profile',  'B2B profile flag for this shop',  1008, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, GUID)
-  VALUES (  11041,  'SHOP_ADMIN_EMAIL',  1,  NULL,  'Shop admin email',  'Shop admin email',  1010, 1001, 'SHOP_ADMIN_EMAIL');
+  VALUES (  11041,  'SHOP_ADMIN_EMAIL',  1,  NULL,  'Shop admin email',  'Email used for all CC messages (e.g. order updates)',  1010, 1001, 'SHOP_ADMIN_EMAIL');
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11042,  'IMPORT_JOB_LOG_SIZE', 'IMPORT_JOB_LOG_SIZE',  1,  NULL,  'System. Import log file size in YUM',
@@ -112,7 +121,7 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11100,  'SEARCH_ITEMS_PER_PAGE', 'SEARCH_ITEMS_PER_PAGE',  1,  NULL,  'Search items per page ',
-  'Search items per page', 1004,  1000);
+  'Search items per page (e.g. "10,20,40")', 1004,  1000);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11101,  'SYSTEM_PAYMENT_MODULES_URLS', 'SYSTEM_PAYMENT_MODULES_URLS',  1,  NULL,  'Payment modules list ',

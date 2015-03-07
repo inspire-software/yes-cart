@@ -16,17 +16,15 @@
 
 package org.yes.cart.web.page.component.header;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -62,14 +60,29 @@ public class StandardHeader  extends BaseComponent {
 
         addOrReplace(getHeaderNav());
         addOrReplace(getLogoFragment());
+        addOrReplace(getProfileFragment());
         addOrReplace(new SearchView("search"));
         addOrReplace(new SmallShoppingCartView("smallCart"));
 
         addOrReplace(new Currency("currency"));
         addOrReplace(new Language("language"));
-        addOrReplace(new LogoutPanel("logout"));
 
         super.onBeforeRender();
+    }
+
+    private Component getProfileFragment() {
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
+
+            return new Fragment("profile", "profileLoggedIn", this)
+                    .add(new Label("profileName", cart.getCustomerName()))
+                    .add(new LogoutPanel("logout"));
+
+        }
+
+        return new Fragment("profile", "profileLoggedOff", this);
     }
 
     private Component getHeaderNav() {

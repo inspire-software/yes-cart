@@ -59,6 +59,16 @@ public interface CustomerService extends GenericService<Customer> {
     List<Shop> getCustomerShopsByEmail(String email);
 
     /**
+     * Get name as specified by shop name formatting.
+     *
+     * @param customer customer
+     * @param shop shop
+     *
+     * @return name
+     */
+    String formatNameFor(Customer customer, Shop shop);
+
+    /**
      * Check is customer already registered.
      *
      * @param email email to check
