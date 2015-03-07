@@ -550,7 +550,7 @@
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
         <property name="defaultAddress" type="boolean" column="DEFAULT_ADDR" length="1"  not-null="false"/>
 
-        <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity"  not-null="true" column="CUSTOMER_ID"/>
+        <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity"  not-null="false" column="CUSTOMER_ID"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -1922,6 +1922,19 @@
         </many-to-one>
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_ORDER_SHOP" lazy="false">
             <column name="SHOP_ID" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="billingAddressDetails"
+                     class="org.yes.cart.domain.entity.impl.AddressEntity"
+                     foreign-key="FK_ORDER_BILLADDR" lazy="false"
+                     cascade="save-update,delete">
+            <column name="BILL_ADDRESS_ID" not-null="false"/>
+        </many-to-one>
+        <many-to-one name="shippingAddressDetails"
+                     class="org.yes.cart.domain.entity.impl.AddressEntity"
+                     foreign-key="FK_ORDER_SHIPADDR"
+                     lazy="false"
+                     cascade="save-update,delete">
+            <column name="SHIP_ADDRESS_ID" not-null="false"/>
         </many-to-one>
 
         <bag name="coupons" inverse="true" cascade="all" lazy="false">

@@ -26,26 +26,7 @@
 
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 no-margin">
                 <ul class="text-right">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" id="profileMenu" data-toggle="dropdown" href="#">
-                            <wicket:message key="profile">[Profile]</wicket:message>
-                            <span class="glyphicon glyphicon-user"></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="profileMenu">
-                            <li role="presentation">
-                                <wicket:link>
-                                    <a href="CustomerSelfCarePage.html" rel="nofollow">
-                                        <span><wicket:message key="profile">[Profile]</wicket:message></span>
-                                    </a>
-                                </wicket:link>
-                            </li>
-                            <li role="presentation">
-                                <wicket:container wicket:id="logout">
-                                    [logout language]
-                                </wicket:container>
-                            </li>
-                        </ul>
-                    </li>
+                    <wicket:container wicket:id="profile">[Profile]</wicket:container>
                     <li class="dropdown">
                         <wicket:container wicket:id="language">
                             [switch language]
@@ -87,6 +68,40 @@
 
         </div>
     </div>
+
+    <wicket:fragment wicket:id="profileLoggedIn">
+        <li class="dropdown">
+            <a class="dropdown-toggle" id="profileMenu" data-toggle="dropdown" href="#">
+                <span><wicket:container wicket:id="profileName">[Profile]</wicket:container></span>
+                <span class="glyphicon glyphicon-user"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="profileMenu">
+                <li role="presentation">
+                    <wicket:link>
+                        <a href="CustomerSelfCarePage.html" rel="nofollow">
+                            <span><wicket:message key="profile">[Profile]</wicket:message></span>
+                        </a>
+                    </wicket:link>
+                </li>
+                <li role="presentation">
+                    <wicket:container wicket:id="logout">
+                        [logout language]
+                    </wicket:container>
+                </li>
+            </ul>
+        </li>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="profileLoggedOff">
+        <li>
+            <wicket:link>
+                <a href="CustomerSelfCarePage.html" rel="nofollow">
+                    <span><wicket:message key="profileLogin">[Profile]</wicket:message></span>
+                    <span class="glyphicon glyphicon-user"></span>
+                </a>
+            </wicket:link>
+        </li>
+    </wicket:fragment>
 
 </wicket:panel>
 </body>

@@ -16,13 +16,15 @@
 
 package org.yes.cart.service.order.impl;
 
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.service.customer.CustomerNameFormatter;
 import org.yes.cart.service.order.OrderAssemblyException;
+import org.yes.cart.service.order.OrderDisassembler;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableOrderInfo;
 import org.yes.cart.shoppingcart.MutableShoppingContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.impl.NameFormatImpl;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 
 import java.math.BigDecimal;
@@ -36,9 +38,16 @@ import java.util.List;
  * Date: 01-Dec-2014
  * Time: 21:51:01
  */
-public class OrderDisassemblerImpl {
+public class OrderDisassemblerImpl implements OrderDisassembler {
 
-    private AmountCalculationStrategy amountCalculationStrategy; //todo get from spring
+    private final AmountCalculationStrategy amountCalculationStrategy;
+    private final CustomerNameFormatter customerNameFormatter;
+
+    public OrderDisassemblerImpl(final AmountCalculationStrategy amountCalculationStrategy,
+                                 final CustomerNameFormatter customerNameFormatter) {
+        this.amountCalculationStrategy = amountCalculationStrategy;
+        this.customerNameFormatter = customerNameFormatter;
+    }
 
     /**
      * Create {@link org.yes.cart.shoppingcart.ShoppingCart} from {@link org.yes.cart.domain.entity.CustomerOrder} for order adjustment.
@@ -69,30 +78,42 @@ public class OrderDisassemblerImpl {
             shoppingCart.addCoupon(coupons.getCoupon().getCode());
         }
 
-
-
         shoppingCart.setCurrentLocale(customerOrder.getLocale());
         shoppingCart.setCurrencyCode(customerOrder.getCurrency());
 
-
         MutableOrderInfo mutableOrderInfo = shoppingCart.getOrderInfo();
+        MutableShoppingContext mutableShoppingContext = shoppingCart.getShoppingContext();
+
         mutableOrderInfo.setOrderMessage(customerOrder.getOrderMessage());
 
         mutableOrderInfo.setCarrierSlaId(getFirstDelivery(customerOrder).getCarrierSla().getCarrierslaId());
 
         mutableOrderInfo.setSeparateBillingAddress(!customerOrder.getBillingAddress().equals(customerOrder.getShippingAddress()));
 
-        mutableOrderInfo.setDeliveryAddressId(null); //todo - how ???
-        mutableOrderInfo.setCarrierSlaId(null); //todo - how ???
+        if (customerOrder.getBillingAddressDetails() != null) {
+            mutableOrderInfo.setBillingAddressId(customerOrder.getBillingAddressDetails().getAddressId());
+            mutableShoppingContext.setCountryCode(customerOrder.getBillingAddressDetails().getCountryCode());
+            mutableShoppingContext.setStateCode(customerOrder.getBillingAddressDetails().getStateCode());
+            mutableOrderInfo.setBillingAddressNotRequired(false);
+        } else {
+            mutableOrderInfo.setBillingAddressNotRequired(true);
+        }
+        if (customerOrder.getShippingAddressDetails() != null) {
+            mutableOrderInfo.setDeliveryAddressId(customerOrder.getShippingAddressDetails().getAddressId());
+            if (mutableShoppingContext.getCountryCode() == null) {
+                mutableShoppingContext.setCountryCode(customerOrder.getShippingAddressDetails().getCountryCode());
+                mutableShoppingContext.setStateCode(customerOrder.getShippingAddressDetails().getStateCode());
+            }
+            mutableOrderInfo.setDeliveryAddressNotRequired(false);
+        } else {
+            mutableOrderInfo.setDeliveryAddressNotRequired(true);
+        }
 
-        mutableOrderInfo.setBillingAddressNotRequired(false);
-        mutableOrderInfo.setDeliveryAddressNotRequired(false);
         mutableOrderInfo.setPaymentGatewayLabel(customerOrder.getPgLabel());
         mutableOrderInfo.setMultipleDelivery(customerOrder.getDelivery().size() > 1);
 
-        MutableShoppingContext mutableShoppingContext = shoppingCart.getShoppingContext();
         mutableShoppingContext.setCustomerEmail(customerOrder.getCustomer().getEmail());
-        mutableShoppingContext.setCustomerName(new NameFormatImpl().formatFullName(customerOrder.getCustomer()));
+        mutableShoppingContext.setCustomerName(formatNameFor(customerOrder.getCustomer(), customerOrder.getShop()));
 
         final List<String> customerShops = new ArrayList<String>();
         for (final CustomerShop shop : customerOrder.getCustomer().getShops()) {
@@ -102,15 +123,6 @@ public class OrderDisassemblerImpl {
         mutableShoppingContext.setShopId(customerOrder.getShop().getShopId());
         mutableShoppingContext.setShopCode(customerOrder.getShop().getCode());
 
-        final Address billing = customerOrder.getCustomer().getDefaultAddress(Address.ADDR_TYPE_BILLING);
-
-        mutableShoppingContext.setCountryCode(billing.getCountryCode());
-        mutableShoppingContext.setStateCode(billing.getStateCode());
-
-
-
-
-
         return shoppingCart;
     }
 
@@ -119,4 +131,16 @@ public class OrderDisassemblerImpl {
         return customerOrder.getDelivery().iterator().next();
 
     }
+
+
+    private String formatNameFor(final Customer customer, final Shop shop) {
+
+        final AttrValue format = shop.getAttributeByCode(AttributeNamesKeys.Shop.CUSTOMER_NAME_FORMATTER);
+        if (format != null) {
+            return customerNameFormatter.formatName(customer, format.getVal());
+        }
+        return customerNameFormatter.formatName(customer);
+
+    }
+
 }

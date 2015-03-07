@@ -34,7 +34,7 @@
     <entry key="customerAdditional">Дополнительная информация</entry>
     <entry key="faq">ЧАВО</entry>
     <entry key="contacts">Контакты</entry>
-    <entry key="profile">Личный кабинет</entry>
+    <entry key="profileLogin">Вход / Регистрация</entry>
     <entry key="sale">Распродажа</entry>
     <entry key="newArrivals">Новые послупления</entry>
     <entry key="addToCart">В корзину</entry>
@@ -69,7 +69,7 @@
     <entry key="contact">Контактная информация</entry>
 
     <!-- CustomerSelfCarePage -->
-    <entry key="selfCare">Персональная страница</entry>
+    <entry key="selfCare">Ваш профиль</entry>
     <entry key="customerSummary">Основная информация</entry>
     <entry key="orderInfo">Покупки</entry>
     <entry key="wishlist">Список пожеланий</entry>

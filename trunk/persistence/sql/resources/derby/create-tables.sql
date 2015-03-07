@@ -13,7 +13,7 @@
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
         DEFAULT_ADDR smallint,
-        CUSTOMER_ID bigint not null,
+        CUSTOMER_ID bigint,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),
@@ -283,6 +283,8 @@
         ORDERSTATUS varchar(64) not null,
         CUSTOMER_ID bigint,
         SHOP_ID bigint not null,
+        BILL_ADDRESS_ID bigint,
+        SHIP_ADDRESS_ID bigint,
         BILLING_ADDRESS varchar(255),
         SHIPPING_ADDRESS varchar(255),
         MULTIPLE_SHIPMENT smallint default 0,
@@ -1194,6 +1196,17 @@
     create index CUSTOMERORDER_NUM on TCUSTOMERORDER (ORDERNUM);
     create index CUSTOMERORDER_CART on TCUSTOMERORDER (CART_GUID);
 
+
+    alter table TCUSTOMERORDER
+        add constraint FK_ORDER_BILLADDR
+        foreign key (BILL_ADDRESS_ID)
+        references TADDRESS;
+
+
+    alter table TCUSTOMERORDER
+        add constraint FK_ORDER_SHIPADDR
+        foreign key (SHIP_ADDRESS_ID)
+        references TADDRESS;
 
 
     alter table TCUSTOMERORDERDELIVERY 

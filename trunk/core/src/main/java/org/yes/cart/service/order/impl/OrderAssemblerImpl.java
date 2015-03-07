@@ -16,14 +16,12 @@
 
 package org.yes.cart.service.order.impl;
 
-import org.hibernate.criterion.Restrictions;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
-import org.yes.cart.service.domain.ProductSkuService;
-import org.yes.cart.service.domain.PromotionCouponService;
-import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -40,34 +38,40 @@ import java.util.List;
 public class OrderAssemblerImpl implements OrderAssembler {
 
     private final OrderNumberGenerator orderNumberGenerator;
-    private final GenericDAO<Customer, Long> customerDao;
     private final EntityFactory entityFactory;
     private final ShopService shopService;
     private final ProductSkuService productSkuService;
     private final OrderAddressFormatter addressFormatter;
     private final PromotionCouponService promotionCouponService;
+    private final AddressService addressService;
+    private final CustomerService customerService;
 
     /**
      * Create order assembler.
      *
      * @param orderNumberGenerator order number generator
-     * @param customerDao          customer dao to get customer from email
+     * @param genericDAO           generic DAO
+     * @param customerService      customer service
      * @param shopService          shop service
      * @param productSkuService    product sku service
-     * @param addressFormatter        format string to create address in one string from {@link org.yes.cart.domain.entity.Address} entity.
+     * @param addressFormatter     format string to create address in one string from {@link org.yes.cart.domain.entity.Address} entity.
      * @param promotionCouponService coupon service
+     * @param addressService       address service
      */
     public OrderAssemblerImpl(
             final OrderNumberGenerator orderNumberGenerator,
-            final GenericDAO<Customer, Long> customerDao,
+            final GenericDAO genericDAO,
+            final CustomerService customerService,
             final ShopService shopService,
             final ProductSkuService productSkuService,
             final OrderAddressFormatter addressFormatter,
-            final PromotionCouponService promotionCouponService) {
+            final PromotionCouponService promotionCouponService,
+            final AddressService addressService) {
         this.promotionCouponService = promotionCouponService;
-        this.entityFactory = customerDao.getEntityFactory();
+        this.entityFactory = genericDAO.getEntityFactory();
         this.orderNumberGenerator = orderNumberGenerator;
-        this.customerDao = customerDao;
+        this.customerService = customerService;
+        this.addressService = addressService;
         this.shopService = shopService;
         this.productSkuService = productSkuService;
         this.addressFormatter = addressFormatter;
@@ -95,6 +99,9 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
         final CustomerOrder customerOrder = entityFactory.getByIface(CustomerOrder.class);
 
+        // sets shop from cache
+        customerOrder.setShop(shopService.getById(shoppingCart.getShoppingContext().getShopId()));
+
         final Total cartTotal = shoppingCart.getTotal();
 
         if (cartTotal == null
@@ -105,9 +112,9 @@ public class OrderAssemblerImpl implements OrderAssembler {
             throw new OrderAssemblyException("No order total");
         }
 
-        fillCustomerData(customerOrder, shoppingCart);
+        fillCustomerData(customerOrder, shoppingCart, temp);
 
-        fillOrderDetails(customerOrder, shoppingCart);
+        fillOrderDetails(customerOrder, shoppingCart, temp);
 
         customerOrder.setLocale(shoppingCart.getCurrentLocale());
         customerOrder.setCurrency(shoppingCart.getCurrencyCode());
@@ -122,9 +129,6 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setAppliedPromo(cartTotal.getAppliedOrderPromo());
         customerOrder.setGrossPrice(cartTotal.getSubTotalAmount());
         customerOrder.setNetPrice(cartTotal.getSubTotalAmount().subtract(cartTotal.getSubTotalTax()));
-
-        // sets shop from cache
-        customerOrder.setShop(shopService.getById(shoppingCart.getShoppingContext().getShopId()));
 
         if (!temp) {
             customerOrder.setOrdernum(orderNumberGenerator.getNextOrderNumber());
@@ -154,7 +158,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
                         throw new CouponCodeInvalidException(code);
                     }
 
-                    final PromotionCouponUsage usage = customerDao.getEntityFactory().getByIface(PromotionCouponUsage.class);
+                    final PromotionCouponUsage usage = entityFactory.getByIface(PromotionCouponUsage.class);
                     usage.setCoupon(coupon);
                     usage.setCustomerEmail(shoppingCart.getCustomerEmail());
                     usage.setCustomerOrder(customerOrder);
@@ -174,11 +178,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
      *
      * @param customerOrder order to fill
      * @param shoppingCart  cart
+     * @param temp temporary flag
      */
-    private void fillCustomerData(final CustomerOrder customerOrder, final ShoppingCart shoppingCart) {
+    private void fillCustomerData(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final boolean temp) {
 
-        final Customer customer = customerDao.findSingleByCriteria(
-                Restrictions.eq("email", shoppingCart.getCustomerEmail()));
+        final Customer customer = customerService.getCustomerByEmail(shoppingCart.getCustomerEmail());
 
         if (customer != null) {
             long selectedBillingAddressId = shoppingCart.getOrderInfo().getBillingAddressId() != null ? shoppingCart.getOrderInfo().getBillingAddressId() : 0L;
@@ -206,13 +210,30 @@ public class OrderAssemblerImpl implements OrderAssembler {
                 shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
             }
 
-            customerOrder.setShippingAddress(formatAddress(shippingAddress));
+            final boolean sameAddress = !shoppingCart.isSeparateBillingAddress() || billingAddress == null;
 
-            if (!shoppingCart.isSeparateBillingAddress() || billingAddress == null) {
+            customerOrder.setShippingAddress(formatAddress(shippingAddress, customerOrder.getShop()));
+
+            if (sameAddress) {
                 billingAddress = shippingAddress;
             }
 
-            customerOrder.setBillingAddress(formatAddress(billingAddress));
+            customerOrder.setBillingAddress(formatAddress(billingAddress, customerOrder.getShop()));
+
+            if (!temp) {
+
+                final Address orderShippingAddress = createCopy(shippingAddress);
+                final Address orderBillingAddress;
+                if (sameAddress) {
+                    orderBillingAddress = orderShippingAddress;
+                } else {
+                    orderBillingAddress = createCopy(billingAddress);
+                }
+
+                customerOrder.setBillingAddressDetails(orderBillingAddress);
+                customerOrder.setShippingAddressDetails(orderShippingAddress);
+
+            }
 
             customerOrder.setCustomer(customer);
         }
@@ -226,8 +247,9 @@ public class OrderAssemblerImpl implements OrderAssembler {
      *
      * @param customerOrder order to fill
      * @param shoppingCart  cart
+     * @param temp temporary flag
      */
-    private void fillOrderDetails(final CustomerOrder customerOrder, final ShoppingCart shoppingCart) throws OrderAssemblyException {
+    private void fillOrderDetails(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final boolean temp) throws OrderAssemblyException {
 
         for (CartItem item : shoppingCart.getCartItemList()) {
 
@@ -276,15 +298,44 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
     }
 
+    private Address createCopy(final Address address) {
+        if (address != null) {
+            final Address copy = entityFactory.getByIface(Address.class);
+
+            copy.setAddressType(address.getAddressType());
+
+            copy.setAddrline1(address.getAddrline1());
+            copy.setAddrline2(address.getAddrline2());
+            copy.setCity(address.getCity());
+            copy.setStateCode(address.getStateCode());
+            copy.setPostcode(address.getPostcode());
+            copy.setCountryCode(address.getCountryCode());
+
+            copy.setFirstname(address.getFirstname());
+            copy.setLastname(address.getLastname());
+            copy.setMiddlename(address.getMiddlename());
+            copy.setPhoneList(address.getPhoneList());
+
+            return copy;
+        }
+        return null;
+    }
+
     /**
      * Format given address to string.
      *
-     * @param defaultAddress given address
+     * @param address given address
+     * @param shop shop for which to format it
+     *
      * @return formatted address
      */
-    private String formatAddress(final Address defaultAddress) {
+    private String formatAddress(final Address address, final Shop shop) {
 
-        return addressFormatter.formatAddress(defaultAddress);
+        final AttrValue format = shop.getAttributeByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER);
+        if (format != null) {
+            return addressFormatter.formatAddress(address, format.getVal());
+        }
+        return addressFormatter.formatAddress(address);
 
     }
 }

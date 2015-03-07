@@ -70,15 +70,20 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
             final boolean activate = shoppingCart.getLogonState() == ShoppingCart.INACTIVE_FOR_SHOP;
             if (authenticate(email, passw)) {
                 final Customer customer = customerService.getCustomerByEmail(email);
+                final String shopCode = shoppingCart.getShoppingContext().getShopCode();
                 if (activate) {
-                    customerService.update(email, shoppingCart.getShoppingContext().getShopCode());
+                    customerService.update(email, shopCode);
                 }
                 final List<String> customerShops = new ArrayList<String>();
+                Shop current = null;
                 for (final Shop shop : customerService.getCustomerShopsByEmail(email)) {
                     customerShops.add(shop.getCode());
+                    if (shopCode != null && shopCode.equals(shop.getCode())) {
+                        current = shop;
+                    }
                 }
                 shoppingCart.getShoppingContext().setCustomerEmail(customer.getEmail());
-                shoppingCart.getShoppingContext().setCustomerName(new NameFormatImpl().formatFullName(customer));
+                shoppingCart.getShoppingContext().setCustomerName(customerService.formatNameFor(customer, current));
                 shoppingCart.getShoppingContext().setCustomerShops(customerShops);
                 setDefaultAddressesIfNecessary(shoppingCart, customer);
                 recalculate(shoppingCart);

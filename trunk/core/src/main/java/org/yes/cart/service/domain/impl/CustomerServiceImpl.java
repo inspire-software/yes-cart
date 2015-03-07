@@ -25,8 +25,10 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeGroupNames;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.service.customer.CustomerNameFormatter;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.HashHelper;
@@ -53,6 +55,8 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
 
     private final ShopService shopService;
 
+    private final CustomerNameFormatter customerNameFormatter;
+
 
     /**
      * Construct customer service.
@@ -61,17 +65,20 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * @param hashHelper to generate password hash
      * @param customerShopDao    to delete
      * @param shopService shop service (reuse retrieval + caching)
+     * @param customerNameFormatter customer name formatter
      */
     public CustomerServiceImpl(final GenericDAO<Customer, Long> genericDao,
                                final HashHelper hashHelper,
                                final GenericDAO<Object, Long> customerShopDao,
                                final AttributeService attributeService,
-                               final ShopService shopService) {
+                               final ShopService shopService,
+                               final CustomerNameFormatter customerNameFormatter) {
         super(genericDao);
         this.hashHelper = hashHelper;
         this.customerShopDao = customerShopDao;
         this.attributeService = attributeService;
         this.shopService = shopService;
+        this.customerNameFormatter = customerNameFormatter;
     }
 
     /**
@@ -107,6 +114,21 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             }
         }
         return shops;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String formatNameFor(final Customer customer, final Shop shop) {
+
+        if (shop != null) {
+            final AttrValue format = shop.getAttributeByCode(AttributeNamesKeys.Shop.CUSTOMER_NAME_FORMATTER);
+            if (format != null) {
+                return customerNameFormatter.formatName(customer, format.getVal());
+            }
+        }
+        return customerNameFormatter.formatName(customer);
+
     }
 
     /**

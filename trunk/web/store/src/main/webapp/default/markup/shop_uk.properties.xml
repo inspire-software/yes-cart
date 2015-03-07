@@ -34,7 +34,7 @@
     <entry key="customerAdditional">Додаткова інформація</entry>
     <entry key="faq">Часті запитання</entry>
     <entry key="contacts">Контакти</entry>
-    <entry key="profile">Особистий кабінет</entry>
+    <entry key="profileLogin">Вхід / Реєстрація</entry>
     <entry key="sale">Розпродаж</entry>
     <entry key="newArrivals">Нові надходження</entry>
     <entry key="addToCart">В кошик</entry>
@@ -69,7 +69,7 @@
     <entry key="contact">Контактна інформація</entry>
 
     <!-- CustomerSelfCarePage -->
-    <entry key="selfCare">Особиста сторінка</entry>
+    <entry key="selfCare">Ваш профіль</entry>
     <entry key="customerSummary">Загальна інформація</entry>
     <entry key="orderInfo">Покупки</entry>
     <entry key="wishlist">Список побажань</entry>

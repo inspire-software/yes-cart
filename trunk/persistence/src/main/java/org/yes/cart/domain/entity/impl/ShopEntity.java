@@ -323,7 +323,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return this.getClass().getName() + this.getShopId();
     }
 
-    public boolean isB2ProfileActive() {
+    public boolean isB2BProfileActive() {
         final AttrValueShop avs = getAttributeByCode(
                 AttributeNamesKeys.Shop.SHOP_B2B);
         if (avs != null) {

@@ -34,7 +34,7 @@
     <entry key="customerAdditional">Additional information</entry>
     <entry key="faq">FAQ</entry>
     <entry key="contacts">Contacts</entry>
-    <entry key="profile">Profile / Wish list</entry>
+    <entry key="profileLogin">Login / Register</entry>
     <entry key="sale">Sale</entry>
     <entry key="newArrivals">New arrivals</entry>
     <entry key="addToCart">Add to cart</entry>
@@ -69,7 +69,7 @@
     <entry key="contact">Contact information</entry>
 
     <!-- CustomerSelfCarePage -->
-    <entry key="selfCare">Self care</entry>
+    <entry key="selfCare">You profile</entry>
     <entry key="customerSummary">Mandatory information</entry>
     <entry key="orderInfo">Orders</entry>
     <entry key="wishlist">Wish list</entry>
@@ -239,7 +239,7 @@
     <entry key="wishListPriceOnSaleNow">On sale now. Discount ${0}%</entry>
 
     <!-- StandardFooter, CheckoutFooter -->
-    <entry key="profile">Profile</entry>
+    <entry key="profile">Profile / Wish list</entry>
     <entry key="siteMap">Site map</entry>
     <entry key="help">Help</entry>
     <entry key="platform">Platform</entry>
