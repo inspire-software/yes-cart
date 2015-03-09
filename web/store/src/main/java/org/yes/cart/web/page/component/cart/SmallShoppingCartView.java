@@ -19,7 +19,6 @@ package org.yes.cart.web.page.component.cart;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.SkuPrice;
@@ -83,20 +82,6 @@ public class SmallShoppingCartView extends BaseComponent {
         skuPrice.setCurrency(cart.getCurrencyCode());
         skuPrice.setQuantity(BigDecimal.ONE);
 
-        final String resourceKey = pluralFormService.getPluralForm(
-                cart.getCurrentLocale(),
-                itemsInCart,
-                pluralForms);
-
-
-
-        add(
-                new Label(
-                        EMPTY_LABEL,
-                        new StringResourceModel("noItem", this, null, itemsInCart)
-                ).setVisible(isCartEmpty())
-        );
-
         add(
                 new ExternalLink(
                         CART_LINK,
@@ -107,17 +92,28 @@ public class SmallShoppingCartView extends BaseComponent {
                                         SUB_TOTAL_VIEW,
                                         new Model<SkuPrice>(skuPrice),
                                         true, false
-                                )
-                        )
-                        .add(
+                                ) {
+                                    @Override
+                                    public boolean isVisible() {
+                                        return true;
+                                    }
+                                }
+                        ).
+                        add(
                                 new Label(
-                                        QTY_LABEL,
-                                        isCartEmpty()?
-                                                new StringResourceModel("noItem", this, null, itemsInCart):
-                                                new StringResourceModel(resourceKey, this, null, itemsInCart)
+                                        QTY_LABEL, "(" + itemsInCart + ")"
                                 )
+                        ).
+                        add(
+                                new Label(
+                                        "cartIcon0", ""
+                                ).setVisible(isCartEmpty())
+                        ).
+                        add(
+                                new Label(
+                                        "cartIcon1", ""
+                                ).setVisible(!isCartEmpty())
                         )
-                        .setVisible(!isCartEmpty())
         );
 
         super.onBeforeRender();
