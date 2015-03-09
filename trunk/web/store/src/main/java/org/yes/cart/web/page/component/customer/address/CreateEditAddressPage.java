@@ -28,7 +28,11 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.CustomerSelfCarePage;
+import org.yes.cart.web.page.component.footer.CheckoutFooter;
+import org.yes.cart.web.page.component.footer.StandardFooter;
+import org.yes.cart.web.page.component.header.CheckoutHeader;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
+import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -74,16 +78,23 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
         final Address address = addressBookFacade.getAddress(customer, addrId, addrType);
 
-
-        final Class<? extends Page>  returnToPageClass = RETURN_TO_SELFCARE.equals(
-                params.get(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL).toString()) ?
-                CustomerSelfCarePage.class : CheckoutPage.class;
+        final boolean isCheckout = !RETURN_TO_SELFCARE.equals(params.get(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL).toString());
+        final Class<? extends Page>  returnToPageClass = isCheckout ?
+                CheckoutPage.class : CustomerSelfCarePage.class;
 
         final PageParameters successPageParameters = new PageParameters();
 
         add(
                 new FeedbackPanel(FEEDBACK)
         );
+
+        if (isCheckout) {
+            add(new CheckoutHeader(HEADER));
+            add(new CheckoutFooter(FOOTER));
+        } else {
+            add(new StandardHeader(HEADER));
+            add(new StandardFooter(FOOTER));
+        }
 
         add(
                 new AddressForm(
@@ -106,6 +117,12 @@ public class CreateEditAddressPage extends AbstractWebPage {
         );
     }
 
+    @Override
+    protected void onBeforeRender() {
+        executeHttpPostedCommands();
+        super.onBeforeRender();
+        persistCartIfNecessary();
+    }
 
     /**
      * Get page title.
