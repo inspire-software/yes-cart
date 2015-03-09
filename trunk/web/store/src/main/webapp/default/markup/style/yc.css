@@ -187,7 +187,7 @@ a {
 }
 
 .page-header .mini-cart-holder {
-    padding: 10px 0 0 55px;
+    padding: 25px 0 0 55px;
 }
 
 .page-header .mini-cart-holder .mini-cart-line {
@@ -195,6 +195,31 @@ a {
     display: inline-block;
     vertical-align: top;
     text-align: center;
+}
+
+.mini-cart-line a > .default,
+.mini-cart-line a > .orange {
+    font-size: 21px;
+}
+
+.mini-cart-line a > .orange {
+    color: #f0ad4e;
+}
+
+.mini-cart-line a > sup {
+    font-size: 1em;
+    top: -1em;
+    color: #777777;
+    margin-right: 5px;
+}
+
+.mini-cart-line .regular-price-currency,
+.mini-cart-line .regular-price-whole {
+    font-size: 30px;
+}
+
+.mini-cart-line .regular-price-decimal {
+    font-size: 16px;
 }
 
 /*===================================================================================*/
