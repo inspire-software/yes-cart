@@ -16,13 +16,16 @@
 
 package org.yes.cart.web.page;
 
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartView;
+import org.yes.cart.web.page.component.customer.wishlist.WishListNotification;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.header.StandardHeader;
@@ -70,7 +73,7 @@ public class ShoppingCartPage extends AbstractWebPage {
         addOrReplace(
                 new FeedbackPanel(FEEDBACK)
         ).addOrReplace(
-                new ShoppingCartView(CART_VIEW).setVisible(!ApplicationDirector.getShoppingCart().getCartItemList().isEmpty())
+                new ShoppingCartView(CART_VIEW)
         ).addOrReplace(
                 new StandardFooter(FOOTER)
         ).addOrReplace(
@@ -81,13 +84,23 @@ public class ShoppingCartPage extends AbstractWebPage {
                 new HeaderMetaInclude("headerInclude")
         );
 
-        if (ApplicationDirector.getShoppingCart().getCartItemList().isEmpty()) {
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        if (cart.getCartItemsCount() == 0) {
             info(getLocalizer().getString("emptyCart", this));
         }
 
+        addOrReplace(new WishListNotification("wishListNotification"));
+
         super.onBeforeRender();
 
+        final boolean cartModified = cart.isModified();
+
         persistCartIfNecessary();
+
+        if (cartModified) {
+            // redirect to clear all command parameters
+            throw new RestartResponseException(ShoppingCartPage.class);
+        }
     }
 
 

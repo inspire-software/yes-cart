@@ -236,6 +236,10 @@
     <entry key="wishListPriceDecreased">Цена уменьшилась на ${0}%</entry>
     <entry key="wishListPriceOnSaleNow">Акция. Скидка ${0}%</entry>
 
+    <!-- ShoppingCartSavedItemsList -->
+    <entry key="saveForLaterItems">Отложенные на потом</entry>
+    <entry key="saveForLaterNoItems">Список отложенных товаров пуст. Ви можете его пополнить нажав кнопку "Отложить на потом".</entry>
+
     <!-- StandardFooter, CheckoutFooter -->
     <entry key="profile">Профиль</entry>
     <entry key="siteMap">Карта сайта</entry>
@@ -299,7 +303,9 @@
 
     <!-- SkuCentralView -->
     <entry key="addToWishlist">В пожелания</entry>
-    <entry key="wishListItemAdded">Товар ${0} добавлен в пожелания. Увидеть лист пожеланий Вы можете в Вашем профиле.</entry>
+    <entry key="saveForLater">Отложить на потом</entry>
+    <entry key="wishListItemAddedW">Товар ${0} добавлен в пожелания. Просмотреть лист пожеланий Вы можете в Вашем профиле.</entry>
+    <entry key="wishListItemAddedC">Товар ${0} отложен. Просмотреть лист отложенных товаров Вы можете в Вашей корзине.</entry>
     <entry key="description">Описание</entry>
     <entry key="details">Детали</entry>
     <entry key="accessories">Аксессуары</entry>

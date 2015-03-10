@@ -23,18 +23,17 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -57,6 +56,7 @@ public class ShoppingCartView extends BaseComponent {
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String SUB_TOTAL_VIEW = "subTotalView";
     private static final String ITEMS_LIST = "itemsList";
+    private static final String SAVED_LIST = "savedList";
     private static final String CART_FORM = "cartForm";
 
     private static final String COUPON_INCLUDE = "couponsInclude";
@@ -114,8 +114,9 @@ public class ShoppingCartView extends BaseComponent {
 
         final Form cartForm = new StatelessForm(CART_FORM);
 
-        cartForm.addOrReplace(new ShoppingCartItemsList(ITEMS_LIST, cart.getCartItemList()));
-        cartForm.addOrReplace(new FeedbackPanel(FEEDBACK));
+        cartForm.addOrReplace(new ShoppingCartItemsList(ITEMS_LIST, cart.getCartItemList()).setVisible(cart.getCartItemsCount() > 0));
+        cartForm.addOrReplace(new ShoppingCartSavedItemsList(SAVED_LIST, new Model<String>(cart.getCustomerEmail()), new Model<String>(CustomerWishList.CART_SAVE_FOR_LATER), new Model<String>(null)).setVisible(cart.getLogonState() == ShoppingCart.LOGGED_IN));
+
         cartForm.addOrReplace(
                 new PriceView(
                         SUB_TOTAL_VIEW,
@@ -129,11 +130,11 @@ public class ShoppingCartView extends BaseComponent {
         cartForm.addOrReplace(couponsList);
 
         // TOTALS
-
+        final boolean cartIsNotEmpty = cart.getCartItemsCount() > 0;
         String subTotalInclude = getContentInclude(shopId, "shopping_cart_checkout_include", lang, dynaCtx);
-        cartForm.addOrReplace(new Label(SUBTOTAL_INCLUDE, subTotalInclude).setEscapeModelStrings(false));
+        cartForm.addOrReplace(new Label(SUBTOTAL_INCLUDE, subTotalInclude).setVisible(cartIsNotEmpty).setEscapeModelStrings(false));
 
-        cartForm.addOrReplace(new BookmarkablePageLink<CheckoutPage>(CHECKOUT_LINK, CheckoutPage.class).setVisible(!ApplicationDirector.getShoppingCart().getCartItemList().isEmpty()));
+        cartForm.addOrReplace(new BookmarkablePageLink<CheckoutPage>(CHECKOUT_LINK, CheckoutPage.class).setVisible(cartIsNotEmpty));
 
         // COUPONS
 

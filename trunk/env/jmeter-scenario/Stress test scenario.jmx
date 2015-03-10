@@ -773,7 +773,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: 3 items in cart" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="992210862">3 items in cart</stringProp>
+              <stringProp name="40062">(3)</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -819,7 +819,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: 4 items in cart" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-1795204625">4 items in cart</stringProp>
+              <stringProp name="40093">(4)</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
@@ -856,7 +856,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert: 5 items in cart" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-287652816">5 items in cart</stringProp>
+              <stringProp name="40124">(5)</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>

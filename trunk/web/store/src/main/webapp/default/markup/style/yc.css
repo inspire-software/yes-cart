@@ -730,7 +730,6 @@ a {
 
 .sub-categories-holder .thumbnail,
 .bottom-tabs-holder .thumbnail,
-.wishlist .thumbnail,
 .association .thumbnail {
     border: none;
     box-shadow: none;
@@ -944,6 +943,14 @@ a {
     color: #3498db;
 }
 
+.cart-items-holder .wishlist-btn {
+    margin-top: 5px;
+}
+
+.cart-items-holder .wishlist-btn .glyphicon {
+    color: #3498db;
+}
+
 .cart-items-holder .cart-item {
     margin-top: 15px;
     border-bottom: 1px solid #e0e0e0;
@@ -1042,6 +1049,24 @@ a {
 
 .payment-result-holder {
     margin-bottom: 30px;
+}
+
+.saved-for-later {
+    padding: 5px;
+}
+
+.saved-for-later .glyphicon {
+    color: #FFF;
+}
+
+.saved-for-later .saved-item-name {
+    height: 20px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.saved-for-later .product-price-holder {
+    margin-bottom: 7px;
 }
 
 /*===================================================================================*/
@@ -1306,8 +1331,12 @@ li > .feedbackPanelERROR {
     color: #3498db;
 }
 
+.profile-sections .wishlist {
+    padding: 5px;
+}
+
 .profile-sections .wishlist .wishlist-item-name {
-    height: 40px;
+    height: 20px;
     text-align: center;
     overflow: hidden;
 }
@@ -1320,11 +1349,13 @@ li > .feedbackPanelERROR {
     color: #3498db;
 }
 
-.profile-sections .wishlist .product-price-holder {
+.profile-sections .wishlist .product-price-holder,
+.saved-for-later .product-price-holder {
     min-height: 60px;
 }
 
-.profile-sections .wishlist .product-price-holder .sale-price-save {
+.profile-sections .wishlist .product-price-holder .sale-price-save,
+.saved-for-later .product-price-holder .sale-price-save {
     font-size: 75%;
 }
 

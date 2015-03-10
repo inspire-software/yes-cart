@@ -22,6 +22,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
@@ -123,7 +124,9 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
             final String tags = getTagsValue(parameters);
 
             createWishListItem(shoppingCart, productSku, type, parameters, tags);
-
+            if (CustomerWishList.CART_SAVE_FOR_LATER.equals(type)) {
+                getRemoveAllSku().execute(shoppingCart, (Map) Collections.singletonMap(ShoppingCartCommand.CMD_REMOVEALLSKU, productSku.getCode()));
+            }
             /*
                 We do not need it for demo but if we have dependency of promotions on wish list items
                 then this is how:
@@ -214,5 +217,14 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
 
         customerWishListService.create(customerWishList);
 
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @return remove sku lone from command
+     */
+    public ShoppingCartCommand getRemoveAllSku() {
+        return null;
     }
 }

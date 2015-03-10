@@ -21,7 +21,6 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -32,6 +31,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.component.customer.wishlist.WishListNotification;
 import org.yes.cart.web.page.component.price.PriceTierView;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.page.component.product.*;
@@ -42,7 +42,6 @@ import org.yes.cart.web.support.entity.decorator.ObjectDecorator;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -302,12 +301,7 @@ public class SkuCentralView extends AbstractCentralView {
             );
         }
 
-        final String wishListSkuAdded = getPage().getPageParameters().get(WebParametersKeys.WISHLIST_ITEM_ADDED).toString(null);
-        final boolean wishListAdded = wishListSkuAdded != null;
-        add(new Label("jsWishListItemAddedMsg", new StringResourceModel("wishListItemAdded", this, new Model<Serializable>(new Object[] {wishListSkuAdded})))
-                .setVisible(wishListAdded));
-        add(new Label("jsWishListItemAdded", "<script type=\"text/javascript\"> $(document).ready(function() {ctx.showModalWindow($('.jsWishListItemAddedMsg'));});</script>")
-                .setVisible(wishListAdded).setEscapeModelStrings(false));
+        add(new WishListNotification("wishListNotification"));
 
         super.onBeforeRender();
 

@@ -32,6 +32,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
@@ -42,7 +43,10 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
+import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
@@ -80,6 +84,12 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
     private static final String QUANTITY_ADJUST_BUTTON = "quantityButton";
 
+    private final static String ADD_TO_WISHLIST_LINK = "addToWishListLink";
+    private final static String ADD_TO_WISHLIST_LINK_LABEL = "addToWishListLinkLabel";
+
+    private final static String SAVE_FOR_LATER_LINK = "saveForLaterLink";
+    private final static String SAVE_FOR_LATER_LINK_LABEL = "saveForLaterLinkLabel";
+
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     @SpringBean(name = StorefrontServiceSpringKeys.DECORATOR_FACADE)
@@ -90,6 +100,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
     @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
     private ProductServiceFacade productServiceFacade;
+
+    @SpringBean(name = WicketServiceSpringKeys.WICKET_SUPPORT_FACADE)
+    private WicketSupportFacade wicketSupportFacade;
 
 
     /**
@@ -111,6 +124,9 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         final CartItem cartItem = cartItemListItem.getModelObject();
 
         final String skuCode = cartItem.getProductSkuCode();
+
+        final PageParameters params = new PageParameters();
+        params.add(WebParametersKeys.PAGE_TYPE, "cart");
 
         final ProductSku sku = productServiceFacade.getProductSkuBySkuCode(skuCode);
         final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(sku, ShopCodeContext.getShopId());
@@ -139,6 +155,12 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
                 new PriceView(LINE_TOTAL_VIEW, new Pair<BigDecimal, BigDecimal>(
                         cartItem.getPrice().multiply(cartItem.getQty()), null), null, null, false, false)
                             .setVisible(available)
+        ).add(
+                wicketSupportFacade.links().newAddToWishListLink(ADD_TO_WISHLIST_LINK, sku.getCode(), null, null, null, params)
+                        .add(new Label(ADD_TO_WISHLIST_LINK_LABEL, getLocalizer().getString("addToWishlist", this)))
+        ).add(
+                wicketSupportFacade.links().newAddToWishListLink(SAVE_FOR_LATER_LINK, sku.getCode(), cartItem.getQty().toPlainString(), CustomerWishList.CART_SAVE_FOR_LATER, null, params)
+                        .add(new Label(SAVE_FOR_LATER_LINK_LABEL, getLocalizer().getString("saveForLater", this)))
         );
 
 
