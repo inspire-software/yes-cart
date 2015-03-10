@@ -91,7 +91,7 @@
                 <entry key="brand"          value-ref="noopLuceneQueryBuilder"/>
                 <entry key="query"          value-ref="keywordProductSkuLuceneQueryBuilder"/>
                 <entry key="tag"            value-ref="noopLuceneQueryBuilder"/>
-                <entry key="price"          value-ref="noopLuceneQueryBuilder"/>
+                <entry key="price"          value-ref="priceLuceneQueryBuilder"/>
 
                 <!-- Internal -->
                 <entry key="attribute.attribute"           value-ref="attributeSkuLuceneQueryBuilder"/>
