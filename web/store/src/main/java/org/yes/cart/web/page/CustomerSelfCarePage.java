@@ -26,6 +26,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.util.StringUtils;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
 import org.yes.cart.web.page.component.customer.dynaform.DynaFormPanel;
@@ -91,7 +92,7 @@ public class CustomerSelfCarePage extends AbstractWebPage {
         add(new DynaFormPanel(ATTR_PANEL, customerModel));
         add(new SummaryPanel(SUMMARY_PANEL, customerModel));
         add(new CustomerOrderPanel(ORDERS_PANEL, customerModel));
-        add(new WishListView(WISHLIST_PANEL).setVisible(customer != null));
+        add(new WishListView(WISHLIST_PANEL, new Model<String>(email), new Model<String>(CustomerWishList.SIMPLE_WISH_ITEM), new Model<String>(null)).setVisible(customer != null));
         add(new StandardFooter(FOOTER));
         add(new StandardHeader(HEADER));
         add(new ServerSideJs("serverSideJs"));

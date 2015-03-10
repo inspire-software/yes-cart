@@ -5,6 +5,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.protocol.https.RequireHttps;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.ProductSku;
@@ -41,19 +42,29 @@ public class WishListItemAddPage extends AbstractWebPage {
 
         final PageParameters params = getPageParameters();
 
-        final String skuCode = params.get(ShoppingCartCommand.CMD_ADDTOWISHLIST).toString(null);
+        final String skuCode = params.get(ShoppingCartCommand.CMD_ADDTOWISHLIST).toString();
+        final String wlType = params.get(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TYPE).toString();
+        final String pageType = params.get(WebParametersKeys.PAGE_TYPE).toString();
 
         executeHttpPostedCommands();
         super.onBeforeRender();
         persistCartIfNecessary();
 
-        final PageParameters targetParams = WicketUtil.getFilteredRequestParameters(params);
 
+        if ("cart".equals(pageType)) {
+            if (StringUtils.isNotBlank(skuCode)) {
+                throw new RedirectToUrlException("/cart/" + WebParametersKeys.WISHLIST_ITEM_ADDED + "/" + skuCode + "/" + WebParametersKeys.WISHLIST_ITEM_TYPE + "/" + wlType);
+            }
+            throw new RedirectToUrlException("/cart");
+        }
+
+        final PageParameters targetParams = WicketUtil.getFilteredRequestParameters(params);
         if (StringUtils.isNotBlank(skuCode)) {
 
             final ProductSku sku = productServiceFacade.getProductSkuBySkuCode(skuCode);
             targetParams.set(WebParametersKeys.SKU_ID, sku.getSkuId());
             targetParams.set(WebParametersKeys.WISHLIST_ITEM_ADDED, skuCode);
+            targetParams.set(WebParametersKeys.WISHLIST_ITEM_TYPE, wlType);
 
         }
         throw new RestartResponseException(Application.get().getHomePage(), targetParams);

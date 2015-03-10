@@ -18,14 +18,14 @@
 <body>
 <wicket:panel>
     <div class="col-xs-12 no-padding">
-        <h2 id="wishlist" class="profile-title"><wicket:message key="wishlistItems">[Wish List]</wicket:message></h2>
+        <h2 id="saveForLater" class="saved-title"><wicket:message key="saveForLaterItems">[Wish List]</wicket:message></h2>
     </div>
-    <div wicket:id="products" class="col-xs-12 col-sm-4 col-md-3 wishlist">
+    <div wicket:id="products" class="col-xs-12 col-sm-4 col-md-3 saved-for-later">
         <div class="thumbnail">
             <a wicket:id="productLinkImage" rel="bookmark">
                 <img wicket:id="productDefaultImage"/>
             </a>
-            <p class="wishlist-item-name">
+            <p class="saved-item-name">
                 <a wicket:id="productLinkName" rel="bookmark">
                     <span wicket:id="name"/>
                 </a>
@@ -36,7 +36,7 @@
                 </wicket:container>
             </div>
             <p class="text-center">
-                <a wicket:id="addToCardFromWishListLink" class="btn btn-warning js-buy" rel="nofollow">
+                <a wicket:id="addToCardFromWishListLink" class="btn btn-warning" rel="nofollow">
                     <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;
                     <span wicket:id="addToCardFromWishListLinkLabel"/>
                 </a>

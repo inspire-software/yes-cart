@@ -236,6 +236,10 @@
     <entry key="wishListPriceDecreased">Ціна знизилась на ${0}%</entry>
     <entry key="wishListPriceOnSaleNow">Акція. Знижка ${0}%</entry>
 
+    <!-- ShoppingCartSavedItemsList -->
+    <entry key="saveForLaterItems">Відкладені на потім</entry>
+    <entry key="saveForLaterNoItems">Список відкладених товарів порожній. Ви можете його поповнити натиснувши кнопку "Відкласти на потім".</entry>
+
     <!-- StandardFooter, CheckoutFooter -->
     <entry key="profile">Профіль</entry>
     <entry key="siteMap">Карта сайту</entry>
@@ -299,7 +303,9 @@
 
     <!-- SkuCentralView -->
     <entry key="addToWishlist">До побажань</entry>
-    <entry key="wishListItemAdded">Товар ${0} доданий до побажань. Переглянути список побажань Ви можете у Вашому профілі.</entry>
+    <entry key="saveForLater">Відкласти на потім</entry>
+    <entry key="wishListItemAddedW">Товар ${0} доданий до побажань. Переглянути список побажань Ви можете у Вашому профілі.</entry>
+    <entry key="wishListItemAddedC">Товар ${0} відкладено. Переглянути список відкладених товарів Ви можете у Вашому кошику.</entry>
     <entry key="description">Опис</entry>
     <entry key="details">Деталі</entry>
     <entry key="accessories">Аксесуари</entry>

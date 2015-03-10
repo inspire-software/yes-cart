@@ -113,6 +113,20 @@ public class LinksSupportImpl implements LinksSupport {
     /** {@inheritDoc} */
     @Override
     @SuppressWarnings("unchecked")
+    public Link newAddToCartLink(final String linkId, final String skuCode, final String quantity, final String wishlistId, final Class<Page> target, final PageParameters pageParameters) {
+        final PageParameters params = getFilteredCurrentParameters(pageParameters);
+        params.set(ShoppingCartCommand.CMD_ADDTOCART, skuCode);
+        params.set(ShoppingCartCommand.CMD_REMOVEFROMWISHLIST, skuCode);
+        params.set(ShoppingCartCommand.CMD_REMOVEFROMWISHLIST_P_ID, wishlistId);
+        if (quantity != null) { // null quantity will pick min from product
+            params.set(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, quantity);
+        }
+        return new BookmarkablePageLink(linkId, target, params);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @SuppressWarnings("unchecked")
     public Link newAddToWishListLink(final String linkId, final String skuCode, final String quantity, final String wishList, final String tags, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST, skuCode);

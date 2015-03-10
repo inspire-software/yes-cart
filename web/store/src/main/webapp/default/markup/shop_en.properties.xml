@@ -230,13 +230,17 @@
 
     <!-- WishListView -->
     <entry key="wishlistItems">Wish list</entry>
-    <entry key="wishlistNoItems">There are no items in your wish list. You can them by clicking "Add to Wishlist" button on product pages.</entry>
+    <entry key="wishlistNoItems">There are no items in your wish list. You can add them by clicking "Add to Wishlist" button on product pages.</entry>
     <entry key="addToCartWlBtn">Add to cart (${0})</entry>
     <entry key="preorderCartWlBtn">Preorder (${0})</entry>
     <entry key="removeFromWishlist">Remove item</entry>
     <entry key="wishListPriceIncreased">Price increased by ${0}%</entry>
     <entry key="wishListPriceDecreased">Price dropped by ${0}%</entry>
     <entry key="wishListPriceOnSaleNow">On sale now. Discount ${0}%</entry>
+
+    <!-- ShoppingCartSavedItemsList -->
+    <entry key="saveForLaterItems">Saved for later</entry>
+    <entry key="saveForLaterNoItems">There are no items in your saved list. You can add them by clicking "Save for later" button.</entry>
 
     <!-- StandardFooter, CheckoutFooter -->
     <entry key="profile">Profile / Wish list</entry>
@@ -301,7 +305,9 @@
 
     <!-- SkuCentralView -->
     <entry key="addToWishlist">Add to wishlist</entry>
-    <entry key="wishListItemAdded">Product ${0} added to wish list. You can view wish list in your profile.</entry>
+    <entry key="saveForLater">Save for later</entry>
+    <entry key="wishListItemAddedW">Product ${0} added to wish list. You can view wish list in your profile.</entry>
+    <entry key="wishListItemAddedC">Product ${0} saved for later. You can view saved products in your cart.</entry>
     <entry key="description">Description</entry>
     <entry key="details">Details</entry>
     <entry key="accessories">Accessories</entry>

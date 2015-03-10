@@ -85,6 +85,7 @@
         <constructor-arg index="5" ref="customerWishListService"/>
         <constructor-arg index="6" ref="productQuantityStrategy"/>
         <property name="priority" value="9"/>
+        <lookup-method name="getRemoveAllSku" bean="removeAllSkuCmd"/>
     </bean>
 
     <bean id="removeFromWishListCmd" class="org.yes.cart.shoppingcart.impl.RemoveSkuFromWishListEventCommandImpl">

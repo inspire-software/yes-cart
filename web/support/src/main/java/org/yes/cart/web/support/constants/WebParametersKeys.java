@@ -132,6 +132,11 @@ public interface WebParametersKeys {
     String WISHLIST_ITEM_ADDED = "wla";
 
     /**
+     * Parameter set by WishListItemAddPage to notify that item had been added.
+     */
+    String WISHLIST_ITEM_TYPE = "wlt";
+
+    /**
      * Image height.
      */
     String HEIGHT = "h";
