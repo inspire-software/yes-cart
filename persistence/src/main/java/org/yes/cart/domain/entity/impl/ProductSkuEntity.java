@@ -22,6 +22,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.bridge.ProductBridge;
+import org.yes.cart.domain.entity.bridge.SkuPriceBridge;
 import org.yes.cart.domain.interceptor.ProductSkuEntityIndexingInterceptor;
 
 import java.math.BigDecimal;
@@ -130,6 +131,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.barCode = barCode;
     }
 
+    @Field(bridge = @FieldBridge(impl = SkuPriceBridge.class))
     public Collection<SkuPrice> getSkuPrice() {
         return this.skuPrice;
     }
