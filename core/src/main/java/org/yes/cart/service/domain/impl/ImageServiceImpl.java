@@ -20,7 +20,6 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.util.Assert;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.service.domain.ImageService;
@@ -32,7 +31,10 @@ import org.yes.cart.util.ShopCodeContext;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
@@ -188,7 +190,7 @@ public class ImageServiceImpl
             return bos.toByteArray();
 
         } catch (Exception exp) {
-            ShopCodeContext.getLog(this).error("Unable to resize image " + content, exp);
+            ShopCodeContext.getLog(this).error("Unable to resize image " + filename, exp);
         }
 
         return new byte[0];
