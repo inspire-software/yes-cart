@@ -140,7 +140,7 @@ public class ImageServiceImpl
 
             boolean doCropToFit = cropToFit || x < forceCropToFitOnSize || y < forceCropToFitOnSize;
 
-            final int imageType = supportsAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB;
+            final int imageType = originalImg.getType();
 
             final Image resizedImg;
 //            final BufferedImage resizedImg;
