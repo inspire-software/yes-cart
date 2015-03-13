@@ -33,7 +33,6 @@
         <module>theme</module>
         <module>web</module>
         <module>manager</module>
-        <module>installer</module>
     </modules>
     <properties>
         <hibernate.core.version>4.2.0.Final</hibernate.core.version>
@@ -412,6 +411,30 @@
             </properties>
         </profile>
 
+
+        <!--
+            BUILD PROCESS OPTIMISATION
+
+            Includes profiles to skip some steps of full build to save some time
+
+            skipInstaller - installer module is not built
+        -->
+
+        <profile>
+            <activation><activeByDefault>false</activeByDefault></activation>
+            <id>buildInstaller</id>
+            <modules>
+                <module>payment-api</module>
+                <module>domain-api</module>
+                <module>persistence</module>
+                <module>core-modules</module>
+                <module>core</module>
+                <module>theme</module>
+                <module>web</module>
+                <module>manager</module>
+                <module>installer</module>
+            </modules>
+        </profile>
 
     </profiles>
 
