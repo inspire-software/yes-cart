@@ -87,30 +87,35 @@ public class AuthenticationController extends AbstractApiController  {
 
     /**
      * Interface: PUT /yes-api/rest/login
-     *
-     *
+     * <p>
+     * <p>
      * Login interface that allows to authenticate user cart. The token for the authenticated cart is
      * returned back as response header and also as a cookie.
+     * <p>
      *
-     *
-     * Parameters for login PUT operation
-     * ==================================
+     * Parameters for login PUT operation<p>
+     * ==================================<p>
      * JSON example:
+     * <pre><code>
      * {
      *    "username": "bob11@bob.com",
      *    "password": "bBuyM-6-"
      * }
+     * </code></pre>
      *
      * XML example:
+     * <pre><code>
      * &lt;login&gt;
      *    &lt;username&gt;bob11@bob.com&lt;/username&gt;
      *    &lt;password&gt;bBuyM-6-&lt;/password&gt;
      * &lt;/login&gt;
+     * </code></pre>
      *
-     * Output
-     * ======
+     * Output<p>
+     * ======<p>
      *
      * JSON example (Accept=application/json):
+     * <pre><code>
      * {
      *    "success" : true,
      *    "greeting" : "Bob Doe",
@@ -119,8 +124,10 @@ public class AuthenticationController extends AbstractApiController  {
      *    },
      *    "error" : null
      * }
+     * </code></pre>
      *
      * XML example (Accept=application/xml):
+     * <pre><code>
      * &lt;authentication-result&gt;
      *    &lt;greeting&gt;Bob Doe&lt;/greeting&gt;
      *    &lt;success&gt;true&lt;/success&gt;
@@ -128,11 +135,14 @@ public class AuthenticationController extends AbstractApiController  {
      *       &lt;uuid&gt;1db8def2-21e0-44d2-aeb0-56baae761129&lt;/uuid&gt;
      *    &lt;/token&gt;
      * &lt;/authentication-result&gt;
+     * </code></pre>
      *
-     * Error codes
-     * ===========
-     * USER_FAILED      - user does not exist
-     * AUTH_FAILED      - user exists but credentials are not valid
+     * Error codes<p>
+     * ===========<p>
+     * <table>
+     *     <tr><td>USER_FAILED</td><td>user does not exist</td></tr>
+     *     <tr><td>AUTH_FAILED</td><td>user exists but credentials are not valid</td></tr>
+     * </table>
      *
      *
      * @param loginRO login parameters (see examples above)
@@ -174,30 +184,31 @@ public class AuthenticationController extends AbstractApiController  {
 
     /**
      * Interface: GET /yes-api/rest/logout
-     *
-     *
+     * <p>
+     * <p>
      * Logout interface that allows to de-authenticate user cart. The token for the authenticated cart is
      * returned back as response header and also as a cookie.
-     *
-     *
-     * Parameters for login PUT operation
-     * ==================================
+     * <p>
+     * <p>
+     * Parameters for login PUT operation<p>
+     * ==================================<p>
      * NONE
      *
-     * Output
-     * ======
+     * Output<p>
+     * ======<p>
      *
      * JSON example (Accept=application/json):
+     * <pre><code>
      * {
      *    "success" : true,
-     *    "greeting" : "Bob Doe",
-     *    "tokenRO" : {
-     *        "uuid" : "1db8def2-21e0-44d2-aeb0-56baae761129"
-     *    },
-     *    "error" : null
+     *    "greeting" : null,
+     *    "tokenRO" : null,
+     *    "error" : 'LOGOUT_SUCCESS'
      * }
+     * </code></pre>
      *
      * XML example (Accept=application/xml):
+     * <pre><code>
      * &lt;authentication-result&gt;
      *    &lt;greeting&gt;Bob Doe&lt;/greeting&gt;
      *    &lt;success&gt;true&lt;/success&gt;
@@ -205,10 +216,13 @@ public class AuthenticationController extends AbstractApiController  {
      *       &lt;uuid&gt;1db8def2-21e0-44d2-aeb0-56baae761129&lt;/uuid&gt;
      *    &lt;/token&gt;
      * &lt;/authentication-result&gt;
+     * </code></pre>
      *
-     * Error codes
-     * ===========
-     * LOGOUT_SUCCESS   - if logout was successful
+     * Error codes<p>
+     * ===========<p>
+     * <table>
+     *     <tr><td>LOGOUT_SUCCESS</td><td>if logout was successful</td></tr>
+     * </table>
      *
      *
      * @param request request
