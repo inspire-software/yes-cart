@@ -35,9 +35,6 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 public class URLPagingNavigation extends PagingNavigation {
 
 
-    /**
-     * {@inheritDoc}
-     */
     public URLPagingNavigation(final String s, final IPageable iPageable, final IPagingLabelProvider iPagingLabelProvider) {
         super(s, iPageable, iPagingLabelProvider);
         setViewSize(5);

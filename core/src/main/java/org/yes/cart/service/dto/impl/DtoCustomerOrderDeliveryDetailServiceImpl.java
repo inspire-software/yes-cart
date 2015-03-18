@@ -29,17 +29,17 @@ public class DtoCustomerOrderDeliveryDetailServiceImpl extends AbstractDtoServic
         super(dtoFactory, customerOrderDeliveryDetGenericService, adaptersRepository);
     }
 
-    /** {@inheritDoc */
+    /** {@inheritDoc} */
     public Class<CustomerOrderDeliveryDetailDTO> getDtoIFace() {
         return CustomerOrderDeliveryDetailDTO.class;
     }
 
-    /** {@inheritDoc */
+    /** {@inheritDoc} */
     public Class<CustomerOrderDeliveryDetailDTOImpl> getDtoImpl() {
         return CustomerOrderDeliveryDetailDTOImpl.class;
     }
 
-    /** {@inheritDoc */
+    /** {@inheritDoc} */
     public Class<CustomerOrderDeliveryDet> getEntityIFace() {
         return CustomerOrderDeliveryDet.class;
     }

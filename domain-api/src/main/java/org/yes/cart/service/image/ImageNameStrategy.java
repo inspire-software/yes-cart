@@ -33,7 +33,7 @@ public interface ImageNameStrategy {
     String getUrlPath();
 
     /**
-     * Get the internal image relative path root directory ended with {@see File#separator}. E.g. "category/"
+     * Get the internal image relative path root directory ended with {@link java.io.File#separator}. E.g. "category/"
      *
      * @return directory name
      */

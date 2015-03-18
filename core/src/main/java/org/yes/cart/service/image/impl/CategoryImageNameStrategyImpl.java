@@ -33,7 +33,7 @@ public class CategoryImageNameStrategyImpl extends AbstractImageNameStrategyImpl
     /**
      * Construct image name strategy
      *
-     * @param relativeInternalRootDirectory  internal image relative path root directory without {@see File#separator}. E.g. "category"
+     * @param relativeInternalRootDirectory  internal image relative path root directory without {@link java.io.File#separator}. E.g. "category"
      * @param attrValueCategoryDao           category attributes dao
      * @param languageService                language service
      */

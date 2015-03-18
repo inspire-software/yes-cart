@@ -318,14 +318,14 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     }
 
     /**
-     * {@inheritDoc}
+     * @return force group count
      */
     public int getForceGroupCount() {
         return forceGroupCount;
     }
 
     /**
-     * {@inheritDoc}
+     * @param forceGroupCount force group count
      */
     public void setForceGroupCount(final int forceGroupCount) {
         this.forceGroupCount = forceGroupCount;

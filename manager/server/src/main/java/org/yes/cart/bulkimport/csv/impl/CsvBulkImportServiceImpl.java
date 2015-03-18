@@ -97,7 +97,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      * regular expressions.
      *
      * @param context job context
-     * @return {@link BulkImportResult}
+     * @return result of the import
      */
     public BulkImportResult doImport(final JobContext context) {
 

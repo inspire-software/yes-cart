@@ -145,17 +145,18 @@ public interface PaymentGatewayFeature extends Serializable {
     void setAdditionalFeatures(final String additionalFeatures);
 
     /**
-     * {@inheritDoc }
+     * @return online payment flag
      */
     boolean isOnlineGateway();
 
     /**
-     * {@inheritDoc }
+     * @param onlineGateway online payment
      */
     void setOnlineGateway(boolean onlineGateway);
 
     /**
-     * Is deen to pass details in case of html for constrcution
+     * Is need to pass details in case of html for construction.
+     *
      * @return   true in case if need provide detail info
      */
      boolean isRequireDetails();

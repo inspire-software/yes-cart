@@ -30,8 +30,9 @@ public interface ImageNameStrategyResolver {
     /**
      * Get image name strategy by given image url
      *
-     * @param imageUrl
-     * @return particular instance of {@ImageNameStrategy}
+     * @param imageUrl URL
+     *
+     * @return particular instance of {@link ImageNameStrategy}
      */
     ImageNameStrategy getImageNameStrategy(String imageUrl);
 

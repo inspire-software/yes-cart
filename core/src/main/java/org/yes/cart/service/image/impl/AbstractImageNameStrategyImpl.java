@@ -41,7 +41,7 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
      * Construct image name strategy
      *
      * @param urlPath URL path that identifies this strategy
-     * @param relativeInternalRootDirectory  internal image relative path root directory without {@see File#separator}. E.g. "category"
+     * @param relativeInternalRootDirectory  internal image relative path root directory without {@link java.io.File#separator}. E.g. "category"
      * @param languageService language service
      */
     protected AbstractImageNameStrategyImpl(final String urlPath,

@@ -47,9 +47,8 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
     private ServletContext servletContext;
 
 
-    public ShopResolverFilter(
-            final ApplicationDirector applicationDirector,
-            final SystemService systemService) {
+    public ShopResolverFilter(final ApplicationDirector applicationDirector,
+                              final SystemService systemService) {
         super(applicationDirector);
         this.systemService = systemService;
     }

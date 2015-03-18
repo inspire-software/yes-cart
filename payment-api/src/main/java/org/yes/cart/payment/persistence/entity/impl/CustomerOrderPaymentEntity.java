@@ -74,14 +74,16 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     }
 
     /**
-     * {@inheritDoc}
+     * @return cart type
      */
     public String getCardType() {
         return this.cardType;
     }
 
     /**
-     * {@inheritDoc}
+     * Set cart type.
+     *
+     * @param cardType type
      */
     public void setCardType(final String cardType) {
         this.cardType = cardType;

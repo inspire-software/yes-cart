@@ -130,11 +130,6 @@ public interface ServiceSpringKeys {
     String ETYPE_SERVICE = "etypeService";
 
     /**
-     * {@link org.yes.cart.service.domain.SeoService} bean key.
-     */
-    String SEO_SERVICE = "seoService";
-
-    /**
      * {@link org.yes.cart.service.domain.ShopCategoryService} bean key.
      */
     String SHOP_CATEGORY_SERVICE = "shopCategoryService";

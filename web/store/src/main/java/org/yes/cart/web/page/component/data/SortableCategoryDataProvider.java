@@ -43,21 +43,21 @@ public class SortableCategoryDataProvider extends SortableDataProvider<CategoryD
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public Iterator<? extends CategoryDecorator> iterator(final int i, final int i1) {
         return categories.iterator();
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public int size() {
         return categories.size();
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public IModel<CategoryDecorator> model(final CategoryDecorator category) {
         IModel<CategoryDecorator> model = new IModel<CategoryDecorator>() {
