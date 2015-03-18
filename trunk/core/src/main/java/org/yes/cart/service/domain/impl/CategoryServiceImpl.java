@@ -436,10 +436,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         return getGenericDao().findById(pk);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Set<Long> transform(final Collection<Category> categories) {
+    private Set<Long> transform(final Collection<Category> categories) {
         final Set<Long> result = new LinkedHashSet<Long>(categories.size());
         for (Category category : categories) {
             result.add(category.getCategoryId());

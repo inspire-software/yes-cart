@@ -117,10 +117,12 @@ public abstract class AbstractGswmPaymentGatewayImpl implements ConfigurablePaym
         return null;
 
     }
-    
+
 
     /**
-     * {@inheritDoc}
+     * Parameter service for given gateway.
+     *
+     * @param paymentGatewayParameterService service
      */
     public void setPaymentGatewayParameterService(
             final PaymentGatewayParameterService paymentGatewayParameterService) {
@@ -159,30 +161,18 @@ public abstract class AbstractGswmPaymentGatewayImpl implements ConfigurablePaym
 
 
 
-    /**
-     * {@inheritDoc}
-     */
     protected String getHiddenField(final String fieldName, final Object value) {
         return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public Map<String, String> setExpressCheckoutMethod(BigDecimal amount, String currencyCode) throws IOException {
         return null;  //nothing
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public Map<String, String> doDoExpressCheckoutPayment(String token, String payerId, BigDecimal amount, String currencyCode) throws IOException {
         return null;  //nothing
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public Map<String, String> getExpressCheckoutDetails(String token) throws IOException {
         return null;  //nothing
     }

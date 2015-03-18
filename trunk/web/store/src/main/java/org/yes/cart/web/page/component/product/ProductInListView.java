@@ -192,10 +192,7 @@ public class ProductInListView extends BaseComponent {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getDefaultImage(final String width, final String height, final String lang) {
+    private String getDefaultImage(final String width, final String height, final String lang) {
 
         final Logger log = ShopCodeContext.getLog(this);
 

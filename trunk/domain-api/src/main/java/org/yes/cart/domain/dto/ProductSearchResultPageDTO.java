@@ -50,7 +50,7 @@ public interface ProductSearchResultPageDTO extends Serializable {
     /**
      * Count of total possible results.
      *
-     * @return
+     * @return total results count
      */
     int getTotalHits();
 

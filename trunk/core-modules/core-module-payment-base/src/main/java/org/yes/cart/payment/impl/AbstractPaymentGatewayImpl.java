@@ -196,7 +196,9 @@ public abstract class AbstractPaymentGatewayImpl implements ConfigurablePaymentG
     }
 
     /**
-     * {@inheritDoc}
+     * Parameter service for given gateway.
+     *
+     * @param paymentGatewayParameterService service
      */
     public void setPaymentGatewayParameterService(
             final PaymentGatewayParameterService paymentGatewayParameterService) {

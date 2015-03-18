@@ -53,7 +53,7 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public Pair<String, Boolean> getCurrencySymbol(final String currencyCode) {
         final String symbols = currencyCodeSymbol.get(currencyCode);
@@ -64,7 +64,7 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public List<Pair<String, String>> getCurrencyToDisplayAsList(final String currenciesListString) {
         if (StringUtils.isNotBlank(currenciesListString)) {
@@ -81,7 +81,7 @@ public class CurrencySymbolServiceImpl implements CurrencySymbolService {
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public  Map<String, String> getCurrencyToDisplayAsMap(final String currenciesListString){
         if (StringUtils.isNotBlank(currenciesListString)) {

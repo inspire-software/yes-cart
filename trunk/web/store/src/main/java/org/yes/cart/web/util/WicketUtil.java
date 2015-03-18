@@ -209,7 +209,7 @@ public class WicketUtil {
      *
      * @param pageParameters     page parameters from http request
      * @param itemsPerPageValues allowed values
-     * @return selected items per page value if it in allowed list otherwise {@see NavigationUtil.DEFAULT_ITEMS} vaule
+     * @return selected items per page value if it in allowed list otherwise {@link org.yes.cart.web.support.util.NavigationUtil#DEFAULT_ITEMS} value
      */
     public static int getSelectedItemsPerPage(final PageParameters pageParameters, final List<String> itemsPerPageValues) {
         int result = DEFAULT_ITEMS;

@@ -41,16 +41,10 @@ public class URLPagingNavigator   extends PagingNavigator {
     private final PageParameters pageParameters;
 
 
-    /**
-     * {@inheritDoc}
-     */
     public URLPagingNavigator(final String s, final IPageable iPageable, final PageParameters pageParameters) {
         this(s, iPageable, null, pageParameters);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public URLPagingNavigator(final String s,
                               final IPageable iPageable,
                               final IPagingLabelProvider iPagingLabelProvider,

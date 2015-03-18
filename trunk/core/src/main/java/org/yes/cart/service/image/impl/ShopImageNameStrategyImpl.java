@@ -34,7 +34,7 @@ public class ShopImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
     /**
      * Construct image name strategy
      *
-     * @param relativeInternalRootDirectory  internal image relative path root directory without {@see File#separator}. E.g. "brand"
+     * @param relativeInternalRootDirectory  internal image relative path root directory without {@link java.io.File#separator}. E.g. "brand"
      * @param attrValueShopDao               shop attribute dao
      * @param languageService                language service
      */

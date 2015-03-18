@@ -143,7 +143,7 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
      *
      * @param listItem list item
      * @param selectedLocale locale
-     * @param thumbWidthHeight thum dimensions
+     * @param thumbWidthHeight thumb dimensions
      */
     protected void onBeforeRenderPopulateListItem(final ListItem<ProductSearchResultDTO> listItem,
                                                   final String selectedLocale,
@@ -176,10 +176,7 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getDefaultImage(final ProductSearchResultDTO product, final String width, final String height, final String locale) {
+    private String getDefaultImage(final ProductSearchResultDTO product, final String width, final String height, final String locale) {
 
         final Logger log = ShopCodeContext.getLog(this);
 

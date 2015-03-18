@@ -458,13 +458,15 @@ public interface Payment extends Serializable {
 
     /**
      * Get ip address of shopper.
-     * @return
+     *
+     * @return IP address
      */
     String getShopperIpAddress();
 
     /**
      * Set shopper id address.
-     * @param shopperIpAddress
+     *
+     * @param shopperIpAddress IP address
      */
     void setShopperIpAddress( String shopperIpAddress);
 

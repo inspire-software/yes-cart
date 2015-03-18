@@ -112,10 +112,10 @@ public class OrderInfoImpl implements MutableOrderInfo {
     }
 
     /**
-         * Set billing address not required for this order flag.
-         *
-         * @param billingAddressRequired flag.
-         */
+     * Set billing address not required for this order flag.
+     *
+     * @param billingAddressNotRequired flag.
+     */
     public void setBillingAddressNotRequired(final boolean billingAddressNotRequired) {
         this.billingAddressNotRequired = billingAddressNotRequired;
     }
@@ -126,10 +126,10 @@ public class OrderInfoImpl implements MutableOrderInfo {
     }
 
     /**
-         * Set delivery address not required for this order flag.
-         *
-         * @param deliveryAddressRequired flag.
-         */
+     * Set delivery address not required for this order flag.
+     *
+     * @param deliveryAddressNotRequired flag.
+     */
     public void setDeliveryAddressNotRequired(final boolean deliveryAddressNotRequired) {
         this.deliveryAddressNotRequired = deliveryAddressNotRequired;
     }

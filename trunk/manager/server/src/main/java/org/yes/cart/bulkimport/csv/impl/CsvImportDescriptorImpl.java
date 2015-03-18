@@ -109,8 +109,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     }
 
 
-    /** {@inheritDoc} */
-    public ImportColumn getPrimaryKeyColumn() {
+    ImportColumn getPrimaryKeyColumn() {
         if (!initialised) {
             this.reloadMappings();
         }
@@ -222,7 +221,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     }
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public String toString() {
         return "CsvImportDescriptorImpl{" +

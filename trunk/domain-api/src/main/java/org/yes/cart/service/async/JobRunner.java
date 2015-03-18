@@ -27,17 +27,20 @@ import org.yes.cart.service.async.model.JobStatus;
 public interface JobRunner {
 
     /**
-     * Check current job status by given token
+     * Check current job status by given token.
      *
      * @param token job token
+     *
      * @return status
      */
     JobStatus getStatus(String token);
 
     /**
-     * Run a job with given context
+     * Run a job with given context.
+     *
      * @param ctx context
-     * @return token for this job ({@see #getStatus})
+     *
+     * @return token for this job ({@link #getStatus(String)})
      */
     String doJob(JobContext ctx);
 }

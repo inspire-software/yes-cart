@@ -267,11 +267,7 @@ public class HeaderTuplizerImpl extends AbstractCryptedTuplizerImpl implements C
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-    public <T extends Serializable> T toObject(final Map<String, List<String>> headers) throws CartDetuplizationException {
+    private <T extends Serializable> T toObject(final Map<String, List<String>> headers) throws CartDetuplizationException {
 
         final String input = assembleStringRepresentationOfObjectFromCookies(headers);
         return (T) toObject(input);

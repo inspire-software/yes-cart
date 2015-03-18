@@ -87,7 +87,11 @@ public class ProductSkuBridge implements FieldBridge {
     }
 
     /**
-     * {@inheritDoc}
+     * Object to string conversion.
+     *
+     * @param productSkuObject product SKU
+     *
+     * @return string PK
      */
     public String objectToString(final Object productSkuObject) {
         return String.valueOf(((ProductSku) productSkuObject).getSkuId());

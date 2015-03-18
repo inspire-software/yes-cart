@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * {@inheritDoc}
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54

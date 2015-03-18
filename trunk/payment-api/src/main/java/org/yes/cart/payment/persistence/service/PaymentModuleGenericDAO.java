@@ -103,8 +103,9 @@ public interface PaymentModuleGenericDAO<T, PK extends Serializable> {
     /**
      * Save or update the entity. Please, use #create or #update instead of this method.
      *
-     * @param entity
-     * @return
+     * @param entity entity to save
+     *
+     * @return saved entity
      */
     T saveOrUpdate(T entity);
 
