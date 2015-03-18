@@ -26,9 +26,10 @@ import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.ro.*;
 import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.ContentService;
-import org.yes.cart.util.DomainApiUtil;
+import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.seo.BookmarkService;
+import org.yes.cart.web.support.service.ContentServiceFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,7 +45,7 @@ import java.util.*;
 public class ContentController extends AbstractApiController {
 
     @Autowired
-    private ContentService contentService;
+    private ContentServiceFacade contentServiceFacade;
     @Autowired
     private BookmarkService bookmarkService;
     @Autowired
@@ -55,14 +56,17 @@ public class ContentController extends AbstractApiController {
                                           final Map<String, Object> contentParams) {
 
         final long contentId = resolveId(content);
+        final long shopId = ShopCodeContext.getShopId();
 
-        if (contentIsVisibleInShop(contentId)) {
+        final Category contentEntity = contentServiceFacade.getContent(contentId, shopId);
 
-            final ContentRO cnt = map(contentService.getById(contentId), ContentRO.class, Category.class);
-            cnt.setBreadcrumbs(generateBreadcrumbs(cnt.getCategoryId()));
-            removeContentBodyAttributes(cnt);
-            cnt.setContentBody(generateContentBody(cnt.getCategoryId(), contentParams));
-            return cnt;
+        if (contentEntity != null && !CentralViewLabel.INCLUDE.equals(contentEntity.getUitemplate())) {
+
+            final ContentRO cntRO = map(contentEntity, ContentRO.class, Category.class);
+            cntRO.setBreadcrumbs(generateBreadcrumbs(cntRO.getCategoryId(), shopId));
+            removeContentBodyAttributes(cntRO);
+            cntRO.setContentBody(generateContentBody(cntRO.getCategoryId(), shopId, contentParams));
+            return cntRO;
 
         }
 
@@ -116,21 +120,22 @@ public class ContentController extends AbstractApiController {
         return viewContentInternal(content, (Map) params.getParameters());
     }
 
-    private List<ContentRO> listContentInternal(final String content,
-                                                final Map<String, Object> contentParams) {
+    private List<ContentRO> listContentInternal(final String content) {
 
         final long contentId = resolveId(content);
+        final long shopId = ShopCodeContext.getShopId();
 
-        if (contentIsVisibleInShop(contentId)) {
+        final List<Category> menu = contentServiceFacade.getCurrentContentMenu(contentId, shopId);
 
-            final List<ContentRO> cnts = map(contentService.getChildContent(contentId), ContentRO.class, Category.class);
+        if (!menu.isEmpty()) {
+
+            final List<ContentRO> cnts = map(menu, ContentRO.class, Category.class);
             if (cnts.size() > 0) {
 
-                final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cnts.get(0).getCategoryId());
                 for (final ContentRO cnt : cnts) {
+                    final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cnt.getCategoryId(), shopId);
                     cnt.setBreadcrumbs(crumbs);
                     removeContentBodyAttributes(cnt);
-                    cnt.setContentBody(generateContentBody(cnt.getCategoryId(), contentParams));
                 }
 
             }
@@ -138,12 +143,13 @@ public class ContentController extends AbstractApiController {
             return cnts;
 
         }
+
         return new ArrayList<ContentRO>();
 
     }
 
     @RequestMapping(
-            value = "/list/{id}",
+            value = "/menu/{id}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -153,29 +159,12 @@ public class ContentController extends AbstractApiController {
 
         persistShoppingCart(request, response);
 
-        return listContentInternal(content, null);
+        return listContentInternal(content);
 
     }
 
     @RequestMapping(
-            value = "/list/{id}",
-            method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE
-    )
-    public @ResponseBody List<ContentRO> listContent(@PathVariable(value = "id") final String content,
-                                                     final Map<String, Object> contentParams,
-                                                     final HttpServletRequest request,
-                                                     final HttpServletResponse response) {
-
-        persistShoppingCart(request, response);
-
-        return listContentInternal(content, contentParams);
-
-    }
-
-    @RequestMapping(
-            value = "/list/{id}",
+            value = "/menu/{id}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_XML_VALUE
     )
@@ -185,24 +174,7 @@ public class ContentController extends AbstractApiController {
 
         persistShoppingCart(request, response);
 
-        return new ContentListRO(listContentInternal(category, null));
-
-    }
-
-    @RequestMapping(
-            value = "/list/{id}",
-            method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_XML_VALUE,
-            consumes = MediaType.APPLICATION_XML_VALUE
-    )
-    public @ResponseBody ContentListRO listContentXML(@PathVariable(value = "id") final String category,
-                                                      final XMLParamsRO contentParams,
-                                                      final HttpServletRequest request,
-                                                      final HttpServletResponse response) {
-
-        persistShoppingCart(request, response);
-
-        return new ContentListRO(listContentInternal(category, (Map) contentParams.getParameters()));
+        return new ContentListRO(listContentInternal(category));
 
     }
 
@@ -216,52 +188,26 @@ public class ContentController extends AbstractApiController {
         return NumberUtils.toLong(contentIdStr, 0L);
     }
 
-    private boolean contentIsVisibleInShop(long contentId) {
+    private List<BreadcrumbRO> generateBreadcrumbs(final long contentId, final long shopId) {
 
-        if (contentId > 0L) {
-
-            final String shopCode = getCurrentCart().getShoppingContext().getShopCode();
-
-            Category content = contentService.getById(contentId);
-            final Date now = new Date();
-
-            if (DomainApiUtil.isObjectAvailableNow(true, content.getAvailablefrom(), content.getAvailableto(), now)) {
-
-                while (content != null) {
-
-                    // If this belong to root content for this shop
-                    if (content.getGuid().equals(shopCode)) {
-
-                        return true;
-
-                    }
-
-                    content = contentService.getById(content.getParentId());
-
-                }
-
-            }
-        }
-
-        return false;
-    }
-
-    private List<BreadcrumbRO> generateBreadcrumbs(final long contentId) {
-
-        final String shopCode = getCurrentCart().getShoppingContext().getShopCode();
-        Category content = contentService.getById(contentId);
-        final Date now = new Date();
 
         final List<BreadcrumbRO> crumbs = new ArrayList<BreadcrumbRO>();
-        while (!shopCode.equals(content.getGuid())
-                && DomainApiUtil.isObjectAvailableNow(true, content.getAvailablefrom(), content.getAvailableto(), now)) {
 
-            content = contentService.getById(content.getParentId());
+        long current = contentId;
 
-            if (!shopCode.equals(content.getGuid())) {
-                final BreadcrumbRO crumb = map(content, BreadcrumbRO.class, Category.class);
-                crumbs.add(crumb);
+        while(true) {
+
+            Category cat = contentServiceFacade.getContent(current, shopId);
+
+            if (cat == null || CentralViewLabel.INCLUDE.equals(cat.getUitemplate()) || cat.isRoot()) {
+                break;
             }
+
+            final BreadcrumbRO crumb = map(cat, BreadcrumbRO.class, Category.class);
+            crumbs.add(crumb);
+
+            current = cat.getParentId();
+
         }
 
         Collections.reverse(crumbs);
@@ -296,17 +242,17 @@ public class ContentController extends AbstractApiController {
 
     }
 
-    private String generateContentBody(final long contentId, final Map<String, Object> parameters) {
+    private String generateContentBody(final long contentId, final long shopId, final Map<String, Object> parameters) {
 
         final String locale = getCurrentCart().getCurrentLocale();
 
         if (parameters != null && !parameters.isEmpty()) {
 
-            return contentService.getDynamicContentBody(contentId, locale, parameters);
+            return contentServiceFacade.getDynamicContentBody(contentId, shopId, locale, parameters);
 
         }
 
-        return contentService.getContentBody(contentId, locale);
+        return contentServiceFacade.getContentBody(contentId, shopId, locale);
 
     }
 

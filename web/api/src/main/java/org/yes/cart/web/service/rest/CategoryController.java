@@ -28,14 +28,16 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.ro.BreadcrumbRO;
 import org.yes.cart.domain.ro.CategoryListRO;
 import org.yes.cart.domain.ro.CategoryRO;
-import org.yes.cart.service.domain.CategoryService;
-import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.DomainApiUtil;
+import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.seo.BookmarkService;
+import org.yes.cart.web.support.service.CategoryServiceFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -47,23 +49,21 @@ import java.util.*;
 public class CategoryController extends AbstractApiController {
 
     @Autowired
-    private ShopService shopService;
-    @Autowired
-    private CategoryService categoryService;
+    private CategoryServiceFacade categoryServiceFacade;
     @Autowired
     private BookmarkService bookmarkService;
 
 
     private List<CategoryRO> listRootInternal() {
 
-        final List<Category> categories = categoryService.getTopLevelCategories(getCurrentCart().getShoppingContext().getShopId());
+        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0l, ShopCodeContext.getShopId());
         return map(categories, CategoryRO.class, Category.class);
 
     }
 
 
     @RequestMapping(
-            value = "/top",
+            value = "/menu",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -77,7 +77,7 @@ public class CategoryController extends AbstractApiController {
     }
 
     @RequestMapping(
-            value = "/top",
+            value = "/menu",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_XML_VALUE
     )
@@ -102,12 +102,15 @@ public class CategoryController extends AbstractApiController {
         persistShoppingCart(request, response);
 
         final long categoryId = resolveId(category);
+        final long shopId = ShopCodeContext.getShopId();
 
-        if (categoryIsVisibleInShop(categoryId)) {
+        final Category categoryEntity = categoryServiceFacade.getCategory(categoryId, shopId);
 
-            final CategoryRO cat = map(categoryService.getById(categoryId), CategoryRO.class, Category.class);
-            cat.setBreadcrumbs(generateBreadcrumbs(cat.getCategoryId()));
-            return cat;
+        if (categoryEntity != null && !CentralViewLabel.INCLUDE.equals(categoryEntity.getUitemplate())) {
+
+            final CategoryRO catRO = map(categoryEntity, CategoryRO.class, Category.class);
+            catRO.setBreadcrumbs(generateBreadcrumbs(catRO.getCategoryId(), shopId));
+            return catRO;
 
         }
 
@@ -118,14 +121,17 @@ public class CategoryController extends AbstractApiController {
     private List<CategoryRO> listCategoryInternal(final String category) {
 
         final long categoryId = resolveId(category);
+        final long shopId = ShopCodeContext.getShopId();
 
-        if (categoryIsVisibleInShop(categoryId)) {
+        final List<Category> menu = categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId);
 
-            final List<CategoryRO> cats = map(categoryService.getChildCategories(categoryId), CategoryRO.class, Category.class);
+        if (!menu.isEmpty()) {
+
+            final List<CategoryRO> cats = map(menu, CategoryRO.class, Category.class);
             if (cats.size() > 0) {
 
-                final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cats.get(0).getCategoryId());
                 for (final CategoryRO cat : cats) {
+                    final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cat.getCategoryId(), shopId);
                     cat.setBreadcrumbs(crumbs);
                 }
 
@@ -138,7 +144,7 @@ public class CategoryController extends AbstractApiController {
     }
 
     @RequestMapping(
-            value = "/list/{id}",
+            value = "/menu/{id}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -153,7 +159,7 @@ public class CategoryController extends AbstractApiController {
     }
 
     @RequestMapping(
-            value = "/list/{id}",
+            value = "/menu/{id}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_XML_VALUE
     )
@@ -177,50 +183,24 @@ public class CategoryController extends AbstractApiController {
         return NumberUtils.toLong(categoryIdStr, 0L);
     }
 
-    private boolean categoryIsVisibleInShop(long categoryId) {
-
-        if (categoryId > 0L) {
-
-            final Set<Long> catIds = shopService.getShopCategoriesIds(getCurrentCart().getShoppingContext().getShopId());
-
-            Category cat = categoryService.getById(categoryId);
-
-            final Date now = new Date();
-
-            while (cat != null
-                    && DomainApiUtil.isObjectAvailableNow(true, cat.getAvailablefrom(), cat.getAvailableto(), now)
-                    && cat.getId() != cat.getParentId()) { // while enabled and not reached root
-
-                if (catIds.contains(categoryId)) {
-
-                    return true;
-
-                }
-                cat = categoryService.getById(cat.getParentId());
-
-            }
-
-        }
-        return false;
-    }
-
-    private List<BreadcrumbRO> generateBreadcrumbs(final long categoryId) {
-
-        final List<Category> categories = categoryService.getTopLevelCategories(getCurrentCart().getShoppingContext().getShopId());
-        final List<Long> topCatIds = new ArrayList<Long>();
-        for (final Category cat : categories) {
-            topCatIds.add(cat.getId());
-        }
-
-        Category cat = categoryService.getById(categoryId);
+    private List<BreadcrumbRO> generateBreadcrumbs(final long categoryId, final long shopId) {
 
         final List<BreadcrumbRO> crumbs = new ArrayList<BreadcrumbRO>();
-        while (!topCatIds.contains(cat.getId())) {
 
-            cat = categoryService.getById(cat.getParentId());
+        long current = categoryId;
+
+        while(true) {
+
+            Category cat = categoryServiceFacade.getCategory(current, shopId);
+
+            if (cat == null || CentralViewLabel.INCLUDE.equals(cat.getUitemplate())) {
+                break;
+            }
 
             final BreadcrumbRO crumb = map(cat, BreadcrumbRO.class, Category.class);
             crumbs.add(crumb);
+
+            current = cat.getParentId();
 
         }
 
