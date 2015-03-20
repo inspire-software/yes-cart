@@ -25,6 +25,7 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.CustomerWishListService;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.util.*;
@@ -117,12 +118,36 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         customer.setLastname((String) registrationData.get("lastname"));
         customer.setPassword(password); // aspect will create hash
 
-        final AttrValueCustomer attrValueCustomer = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
-        attrValueCustomer.setCustomer(customer);
-        attrValueCustomer.setVal((String) registrationData.get("phone"));
-        attrValueCustomer.setAttribute(attributeService.findByAttributeCode(AttributeNamesKeys.CUSTOMER_PHONE));
+        final Map<String, Object> attrData = new HashMap<String, Object>(registrationData);
+        attrData.remove("firstname");
+        attrData.remove("lastname");
+        attrData.put(AttributeNamesKeys.CUSTOMER_PHONE, attrData.remove("phone"));
 
-        customer.getAttributes().add(attrValueCustomer);
+        for (final Map.Entry<String, Object> attrVal : attrData.entrySet()) {
+
+            if (attrVal.getValue() != null ||
+                    (attrVal.getValue() instanceof String && StringUtils.isNotBlank((String) attrVal.getValue()))) {
+
+                final Attribute attribute = attributeService.findByAttributeCode(attrVal.getKey());
+
+                if (attribute != null) {
+
+                    final AttrValueCustomer attrValueCustomer = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
+                    attrValueCustomer.setCustomer(customer);
+                    attrValueCustomer.setVal(String.valueOf(attrVal.getValue()));
+                    attrValueCustomer.setAttribute(attribute);
+
+                    customer.getAttributes().add(attrValueCustomer);
+
+                } else {
+
+                    ShopCodeContext.getLog(this).warn("Registration data contains unknown attribute: {}", attrVal.getKey());
+
+                }
+
+            }
+
+        }
 
         customerService.create(customer, registrationShop);
 

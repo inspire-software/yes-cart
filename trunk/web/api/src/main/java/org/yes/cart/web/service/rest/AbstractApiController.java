@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.ro.TokenRO;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -94,6 +95,15 @@ public class AbstractApiController {
      */
     protected ShoppingCart getCurrentCart() {
         return ApplicationDirector.getShoppingCart();
+    }
+
+    /**
+     * Retrieve current cart.
+     *
+     * @return cart object
+     */
+    protected Shop getCurrentShop() {
+        return ApplicationDirector.getCurrentShop();
     }
 
     /**
