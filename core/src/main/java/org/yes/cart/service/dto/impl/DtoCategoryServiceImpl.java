@@ -243,6 +243,16 @@ public class DtoCategoryServiceImpl
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public boolean isGuidAvailableForCategory(final String guid, final Long categoryId) {
+
+        final Long catId = ((CategoryService) service).findCategoryIdByGUID(guid);
+        return catId == null || catId.equals(categoryId);
+
+    }
+
+    /**
      * Get the dto interface.
      *
      * @return dto interface.

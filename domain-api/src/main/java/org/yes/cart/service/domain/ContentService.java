@@ -171,6 +171,14 @@ public interface ContentService extends GenericService<Category> {
     Long findContentIdBySeoUri(String seoUri);
 
     /**
+     * Get content id by given GUID
+     *
+     * @param guid given GUID
+     * @return content id if found otherwise null
+     */
+    Long findContentIdByGUID(String guid);
+
+    /**
      * Get content SEO uri by given id
      *
      * @param contentId given content id

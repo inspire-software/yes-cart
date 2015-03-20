@@ -30,7 +30,6 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
-import org.yes.cart.domain.dto.adapter.impl.EntityFactoryToBeanFactoryAdaptor;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProductDTOImpl;
 import org.yes.cart.domain.entity.*;
@@ -503,7 +502,27 @@ public class DtoProductServiceImpl
      */
     public boolean isUriAvailableForProduct(final String seoUri, final Long productId) {
 
-        final Long prodId = ((ProductService) service).getProductIdBySeoUri(seoUri);
+        final Long prodId = ((ProductService) service).findProductIdBySeoUri(seoUri);
+        return prodId == null || prodId.equals(productId);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isGuidAvailableForProduct(final String guid, final Long productId) {
+
+        final Long prodId = ((ProductService) service).findProductIdByGUID(guid);
+        return prodId == null || prodId.equals(productId);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isCodeAvailableForProduct(final String code, final Long productId) {
+
+        final Long prodId = ((ProductService) service).findProductIdByCode(code);
         return prodId == null || prodId.equals(productId);
 
     }
@@ -513,8 +532,30 @@ public class DtoProductServiceImpl
      */
     public boolean isUriAvailableForProductSku(final String seoUri, final Long productSkuId) {
 
-        final Long skuId = ((ProductService) service).getProductSkuIdBySeoUri(seoUri);
+        final Long skuId = ((ProductService) service).findProductSkuIdBySeoUri(seoUri);
         return skuId == null || skuId.equals(productSkuId);
 
     }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isGuidAvailableForProductSku(final String guid, final Long productSkuId) {
+
+        final Long skuId = ((ProductService) service).findProductSkuIdByGUID(guid);
+        return skuId == null || skuId.equals(productSkuId);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isCodeAvailableForProductSku(final String code, final Long productSkuId) {
+
+        final Long skuId = ((ProductService) service).findProductSkuIdByCode(code);
+        return skuId == null || skuId.equals(productSkuId);
+
+    }
+
 }

@@ -19,9 +19,11 @@ import static org.junit.Assert.assertFalse;
 public class ProductSearchResultDTOImplTest {
     @Test
     public void testCopy() throws Exception {
+
         final ProductSearchResultDTOImpl first = new ProductSearchResultDTOImpl();
         first.setId(1);
         first.setCode("First");
+        first.setManufacturerCode("ManFirst");
         first.setDefaultSkuCode("FirstCode");
         first.setName("FirstName");
         first.setDisplayName("FirstDisplayName");
@@ -40,6 +42,7 @@ public class ProductSearchResultDTOImplTest {
 
         assertEquals(first.getId(), copy.getId());
         assertEquals(first.getCode(), copy.getCode());
+        assertEquals(first.getManufacturerCode(), copy.getManufacturerCode());
         assertEquals(first.isMultisku(), copy.isMultisku());
         assertEquals(first.getDefaultSkuCode(), copy.getDefaultSkuCode());
         assertEquals(first.getName(), copy.getName());

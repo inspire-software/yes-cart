@@ -37,6 +37,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     private long id;
     private String code;
+    private String manufacturerCode;
     private boolean multisku;
     private String defaultSkuCode;
     private String name;
@@ -132,6 +133,16 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     /** {@inheritDoc} */
     public void setCode(final String code) {
         this.code = code;
+    }
+
+    /** {@inheritDoc} */
+    public String getManufacturerCode() {
+        return manufacturerCode;
+    }
+
+    /** {@inheritDoc} */
+    public void setManufacturerCode(final String manufacturerCode) {
+        this.manufacturerCode = manufacturerCode;
     }
 
     /** {@inheritDoc} */
@@ -282,6 +293,7 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         final ProductSearchResultDTOImpl copy = new ProductSearchResultDTOImpl();
         copy.setId(this.id);
         copy.setCode(this.code);
+        copy.setManufacturerCode(this.manufacturerCode);
         copy.setMultisku(this.multisku);
         copy.setDefaultSkuCode(this.defaultSkuCode);
         copy.setName(this.name);

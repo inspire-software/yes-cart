@@ -95,4 +95,16 @@ public interface DtoContentService extends GenericDTOService<CategoryDTO>, Gener
      * @return true if this URI is available
      */
     boolean isUriAvailableForContent(String seoUri, Long contentId);
+
+
+    /**
+     * Check if GUID is available to be set for given category.
+     *
+     * @param guid GUID to check
+     * @param contentId PK or null for transient
+     *
+     * @return true if this GUID is available
+     */
+    boolean isGuidAvailableForContent(String guid, Long contentId);
+
 }

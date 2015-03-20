@@ -24,7 +24,11 @@ public class ProductSkuDTOImpl {
     
     public var skuId:Number ;
 
+    public var guid : String;
+
     public var code:String ;
+
+    public var manufacturerCode:String ;
 
     public var name:String ;
 

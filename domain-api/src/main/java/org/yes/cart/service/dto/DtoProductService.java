@@ -107,6 +107,26 @@ public interface DtoProductService extends GenericDTOService<ProductDTO>, Generi
     boolean isUriAvailableForProduct(String seoUri, Long productId);
 
     /**
+     * Check if GUID is available to be set for given product.
+     *
+     * @param guid guid to check
+     * @param productId PK or null for transient
+     *
+     * @return true if this GUID is available
+     */
+    boolean isGuidAvailableForProduct(String guid, Long productId);
+
+    /**
+     * Check if code is available to be set for given product.
+     *
+     * @param code code to check
+     * @param productId PK or null for transient
+     *
+     * @return true if this code is available
+     */
+    boolean isCodeAvailableForProduct(String code, Long productId);
+
+    /**
      * Check if URI is available to be set for given product SKU.
      *
      * @param seoUri uri to check
@@ -115,4 +135,25 @@ public interface DtoProductService extends GenericDTOService<ProductDTO>, Generi
      * @return true if this URI is available
      */
     boolean isUriAvailableForProductSku(String seoUri, Long productSkuId);
+
+    /**
+     * Check if GUID is available to be set for given product SKU.
+     *
+     * @param guid guid to check
+     * @param productSkuId PK or null for transient
+     *
+     * @return true if this GUID is available
+     */
+    boolean isGuidAvailableForProductSku(String guid, Long productSkuId);
+
+    /**
+     * Check if code is available to be set for given product SKU.
+     *
+     * @param code code to check
+     * @param productSkuId PK or null for transient
+     *
+     * @return true if this code is available
+     */
+    boolean isCodeAvailableForProductSku(String code, Long productSkuId);
+
 }

@@ -18,6 +18,9 @@ package org.yes.cart.web.page.component.navigation;
 
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.bridge.SkuPriceBridge;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -46,6 +49,8 @@ public class ProductSorter extends BaseComponent {
     private static final String PRODUCT_SORT_BY_PRICE_DESC = "orderByPriceD";
     private static final String PRODUCT_SORT_BY_CODE_ASC = "orderByCodeA";
     private static final String PRODUCT_SORT_BY_CODE_DESC = "orderByCodeD";
+    private static final String PRODUCT_SORT_BY_MANUFACTURER_CODE_ASC = "orderByManCodeA";
+    private static final String PRODUCT_SORT_BY_MANUFACTURER_CODE_DESC = "orderByManCodeD";
 
     private static final SkuPriceBridge SKU_PRICE_BRIDGE = new SkuPriceBridge();
 
@@ -65,17 +70,27 @@ public class ProductSorter extends BaseComponent {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
+        final boolean isManufacturerCode = useManufactureCode();
+
         final Pair<String, String> priceSort = SKU_PRICE_BRIDGE.objectToString(cart.getShoppingContext().getShopId(), cart.getCurrencyCode(), null);
 
         add(getSortLink(PRODUCT_SORT_BY_NAME_ASC, WebParametersKeys.SORT, ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD));
         add(getSortLink(PRODUCT_SORT_BY_NAME_DESC, WebParametersKeys.SORT_REVERSE, ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD));
-        add(getSortLink(PRODUCT_SORT_BY_CODE_ASC, WebParametersKeys.SORT, ProductSearchQueryBuilder.PRODUCT_CODE_FIELD));
-        add(getSortLink(PRODUCT_SORT_BY_CODE_DESC, WebParametersKeys.SORT_REVERSE, ProductSearchQueryBuilder.PRODUCT_CODE_FIELD));
+        add(getSortLink(PRODUCT_SORT_BY_CODE_ASC, WebParametersKeys.SORT, ProductSearchQueryBuilder.PRODUCT_CODE_FIELD).setVisible(!isManufacturerCode));
+        add(getSortLink(PRODUCT_SORT_BY_CODE_DESC, WebParametersKeys.SORT_REVERSE, ProductSearchQueryBuilder.PRODUCT_CODE_FIELD).setVisible(!isManufacturerCode));
+        add(getSortLink(PRODUCT_SORT_BY_MANUFACTURER_CODE_ASC, WebParametersKeys.SORT, ProductSearchQueryBuilder.PRODUCT_MANUFACTURER_CODE_FIELD).setVisible(isManufacturerCode));
+        add(getSortLink(PRODUCT_SORT_BY_MANUFACTURER_CODE_DESC, WebParametersKeys.SORT_REVERSE, ProductSearchQueryBuilder.PRODUCT_MANUFACTURER_CODE_FIELD).setVisible(isManufacturerCode));
         add(getSortLink(PRODUCT_SORT_BY_PRICE_ASC, WebParametersKeys.SORT, priceSort.getFirst()));
         add(getSortLink(PRODUCT_SORT_BY_PRICE_DESC, WebParametersKeys.SORT_REVERSE, priceSort.getFirst()));
 
 
         super.onBeforeRender();
+    }
+
+    private boolean useManufactureCode() {
+        final Shop shop = ApplicationDirector.getCurrentShop();
+        final AttrValue displayAttrValue = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_DISPLAY_MANUFACTURER_CODE);
+        return displayAttrValue != null && displayAttrValue.getVal() != null && Boolean.valueOf(displayAttrValue.getVal());
     }
 
     /**

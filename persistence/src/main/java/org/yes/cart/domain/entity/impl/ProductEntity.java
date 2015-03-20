@@ -43,6 +43,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     private long version;
 
     private String code;
+    private String manufacturerCode;
     private Date availablefrom;
     private Date availableto;
     private String name;
@@ -83,6 +84,18 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    @Fields({
+            @Field(name = "manufacturerCode", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES),
+            @Field(name = "manufacturerCode_stem", index = Index.YES, analyze = Analyze.YES, norms = Norms.NO, store = Store.NO)
+    })
+    public String getManufacturerCode() {
+        return manufacturerCode;
+    }
+
+    public void setManufacturerCode(final String manufacturerCode) {
+        this.manufacturerCode = manufacturerCode;
     }
 
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)

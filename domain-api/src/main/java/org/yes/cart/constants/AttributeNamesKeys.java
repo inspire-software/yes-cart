@@ -271,6 +271,11 @@ public interface AttributeNamesKeys {
         String SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH = "INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP";
 
         /**
+         * Flag whether to use manufacturer code or seller code as primary UI property
+         */
+        String SHOP_PRODUCT_DISPLAY_MANUFACTURER_CODE = "PRODUCT_DISPLAY_MANUFACTURER_CODE_SHOP";
+
+        /**
          * Number of days for newarrival tag
          */
         String SHOP_NEW_ARRIVAL_DAYS_OFFSET = "SHOP_NEW_ARRIVAL_DAYS_OFFSET";

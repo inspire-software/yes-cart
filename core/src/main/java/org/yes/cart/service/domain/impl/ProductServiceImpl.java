@@ -432,7 +432,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 ProductSearchQueryBuilder.PRODUCT_MIN_QTY_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_MAX_QTY_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_STEP_QTY_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_MULTISKU
+                ProductSearchQueryBuilder.PRODUCT_MULTISKU,
+                ProductSearchQueryBuilder.PRODUCT_MANUFACTURER_CODE_FIELD
                 );
 
         final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.getFirst().size());
@@ -455,6 +456,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             dto.setMaxOrderQuantity((BigDecimal) obj[14]);
             dto.setStepOrderQuantity((BigDecimal) obj[15]);
             dto.setMultisku(obj[16] != null && Boolean.valueOf((String) obj[16]));
+            dto.setManufacturerCode((String) obj[17]);
             rez.add(dto);
         }
 
@@ -718,8 +720,38 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public Long getProductIdBySeoUri(final String seoUri) {
+    public Long findProductIdBySeoUri(final String seoUri) {
         List<Object> list = productDao.findQueryObjectByNamedQuery("PRODUCT.ID.BY.SEO.URI", seoUri);
+        if (list != null && !list.isEmpty()) {
+            final Object id = list.get(0);
+            if (id instanceof Long) {
+                return (Long) id;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public Long findProductIdByGUID(final String guid) {
+        List<Object> list = productDao.findQueryObjectByNamedQuery("PRODUCT.ID.BY.GUID", guid);
+        if (list != null && !list.isEmpty()) {
+            final Object id = list.get(0);
+            if (id instanceof Long) {
+                return (Long) id;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public Long findProductIdByCode(final String code) {
+        List<Object> list = productDao.findQueryObjectByNamedQuery("PRODUCT.ID.BY.CODE", code);
         if (list != null && !list.isEmpty()) {
             final Object id = list.get(0);
             if (id instanceof Long) {
@@ -732,7 +764,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public String getSeoUriByProductId(final Long productId) {
+    public String findSeoUriByProductId(final Long productId) {
         List<Object> list = productDao.findQueryObjectByNamedQuery("SEO.URI.BY.PRODUCT.ID", productId);
         if (list != null && !list.isEmpty()) {
             final Object uri = list.get(0);
@@ -746,7 +778,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public Long getProductSkuIdBySeoUri(final String seoUri) {
+    public Long findProductSkuIdBySeoUri(final String seoUri) {
         List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SKU.ID.BY.SEO.URI", seoUri);
         if (list != null && !list.isEmpty()) {
             final Object id = list.get(0);
@@ -760,7 +792,35 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public String getSeoUriByProductSkuId(final Long skuId) {
+    public Long findProductSkuIdByGUID(final String guid) {
+        List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SKU.ID.BY.GUID", guid);
+        if (list != null && !list.isEmpty()) {
+            final Object id = list.get(0);
+            if (id instanceof Long) {
+                return (Long) id;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Long findProductSkuIdByCode(final String code) {
+        List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SKU.ID.BY.CODE", code);
+        if (list != null && !list.isEmpty()) {
+            final Object id = list.get(0);
+            if (id instanceof Long) {
+                return (Long) id;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String findSeoUriByProductSkuId(final Long skuId) {
         List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SEO.URI.BY.SKU.ID", skuId);
         if (list != null && !list.isEmpty()) {
             final Object uri = list.get(0);

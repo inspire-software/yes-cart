@@ -230,7 +230,36 @@ public class RemoteProductServiceImpl
     /**
      * {@inheritDoc}
      */
+    public boolean isGuidAvailableForProduct(final String guid, final Long productId) {
+        return ((DtoProductService) getGenericDTOService()).isGuidAvailableForProduct(guid, productId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isCodeAvailableForProduct(final String code, final Long productId) {
+        return ((DtoProductService) getGenericDTOService()).isCodeAvailableForProduct(code, productId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public boolean isUriAvailableForProductSku(final String seoUri, final Long productSkuId) {
         return ((DtoProductService) getGenericDTOService()).isUriAvailableForProductSku(seoUri, productSkuId);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isGuidAvailableForProductSku(final String guid, final Long productSkuId) {
+        return ((DtoProductService) getGenericDTOService()).isGuidAvailableForProductSku(guid, productSkuId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isCodeAvailableForProductSku(final String code, final Long productSkuId) {
+        return ((DtoProductService) getGenericDTOService()).isCodeAvailableForProductSku(code, productSkuId);
+    }
+
 }

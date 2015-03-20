@@ -1043,6 +1043,11 @@
                 <comment>Product or product sku code</comment>
             </column>
         </property>
+        <property name="manufacturerCode" type="string" length="255" not-null="false">
+            <column name="MANUFACTURER_CODE" length="255" not-null="false">
+                <comment>Product or product sku code</comment>
+            </column>
+        </property>
         <property name="availablefrom" type="timestamp" not-null="false">
             <column name="AVAILABLEFROM">
                 <comment>
@@ -1179,6 +1184,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="code" column="CODE" type="string" length="255" index="SKU_CODE" not-null="true"/>
+        <property name="manufacturerCode" column="MANUFACTURER_CODE" type="string" length="255" not-null="false"/>
         <property name="name" type="string" length="255" not-null="true">
             <column name="NAME" length="255" not-null="true"/>
         </property>
@@ -2940,6 +2946,12 @@
        ]]>
     </query>
 
+    <query name="CATEGORY.ID.BY.GUID">
+        <![CDATA[
+                  select c.categoryId from CategoryEntity c  where c.guid = ?1
+       ]]>
+    </query>
+
     <query name="CATEGORY.BY.SEO.URI">
         <![CDATA[
                   select c from CategoryEntity c  where c.seoInternal.uri = ?1
@@ -2977,6 +2989,18 @@
         ]]>
     </query>
 
+    <query name="PRODUCT.ID.BY.GUID">
+        <![CDATA[
+                 select p.productId from ProductEntity p   where p.guid = ?1
+        ]]>
+    </query>
+
+    <query name="PRODUCT.ID.BY.CODE">
+        <![CDATA[
+                 select p.productId from ProductEntity p   where p.code = ?1
+        ]]>
+    </query>
+
     <query name="SEO.URI.BY.PRODUCT.ID">
         <![CDATA[
                  select p.seoInternal.uri from ProductEntity p   where p.productId = ?1
@@ -2993,6 +3017,18 @@
     <query name="SKU.ID.BY.SEO.URI">
         <![CDATA[
                  select ps.skuId from ProductSkuEntity ps   where ps.seoInternal.uri = ?1
+        ]]>
+    </query>
+
+    <query name="SKU.ID.BY.GUID">
+        <![CDATA[
+                 select ps.skuId from ProductSkuEntity ps   where ps.guid = ?1
+        ]]>
+    </query>
+
+    <query name="SKU.ID.BY.CODE">
+        <![CDATA[
+                 select ps.skuId from ProductSkuEntity ps   where ps.code = ?1
         ]]>
     </query>
 

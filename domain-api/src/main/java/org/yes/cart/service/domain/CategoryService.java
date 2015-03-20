@@ -201,6 +201,14 @@ public interface CategoryService extends GenericService<Category> {
     Long findCategoryIdBySeoUri(String seoUri);
 
     /**
+     * Get category id by given GUID
+     *
+     * @param guid given GUID
+     * @return category id if found otherwise null
+     */
+    Long findCategoryIdByGUID(String guid);
+
+    /**
      * Get category SEO uri by given id
      *
      * @param categoryId given category id

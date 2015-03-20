@@ -31,6 +31,7 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
     private long id;
     private long productId;
     private String code;
+    private String manufacturerCode;
     private String name;
     private String displayName;
     private String defaultImage;
@@ -80,6 +81,16 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
     }
 
     /** {@inheritDoc} */
+    public String getManufacturerCode() {
+        return manufacturerCode;
+    }
+
+    /** {@inheritDoc} */
+    public void setManufacturerCode(final String manufacturerCode) {
+        this.manufacturerCode = manufacturerCode;
+    }
+
+    /** {@inheritDoc} */
     public String getDisplayName() {
         return displayName;
     }
@@ -116,6 +127,7 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
         copy.setId(this.id);
         copy.setProductId(this.productId);
         copy.setCode(this.code);
+        copy.setManufacturerCode(this.manufacturerCode);
         copy.setName(this.name);
         copy.setDisplayName(this.displayName);
         copy.setDefaultImage(this.defaultImage);

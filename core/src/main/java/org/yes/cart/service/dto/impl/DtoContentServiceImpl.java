@@ -204,6 +204,17 @@ public class DtoContentServiceImpl
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isGuidAvailableForContent(final String guid, final Long contentId) {
+
+        final Long conId = ((ContentService) service).findContentIdByGUID(guid);
+        return conId == null || conId.equals(contentId);
+
+    }
+
     /**
      * Get the dto interface.
      *

@@ -177,6 +177,13 @@ public class RemoteContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    public boolean isGuidAvailableForContent(final String guid, final Long contentId) {
+        return ((DtoContentService) getGenericDTOService()).isGuidAvailableForContent(guid, contentId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<? extends AttrValueDTO> getEntityContentAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         if (federationFacade.isManageable(entityPk, CategoryDTO.class)) {
             return ((DtoContentService) getGenericDTOService()).getEntityContentAttributes(entityPk);

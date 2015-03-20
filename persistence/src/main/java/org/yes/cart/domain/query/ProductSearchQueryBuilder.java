@@ -28,8 +28,10 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     public final static String PRODUCT_DISPLAYNAME_FIELD = "displayName";
     public final static String PRODUCT_DISPLAYNAME_ASIS_FIELD = "displayNameAsIs"; //for projections only
     public final static String PRODUCT_CODE_FIELD = "code";
+    public final static String PRODUCT_MANUFACTURER_CODE_FIELD = "manufacturerCode";
     public final static String PRODUCT_DEFAULT_SKU_CODE_FIELD = "defaultSku";
     public final static String PRODUCT_CODE_STEM_FIELD = "code_stem";
+    public final static String PRODUCT_MANUFACTURER_CODE_STEM_FIELD = "manufacturerCode_stem";
     public final static String PRODUCT_MULTISKU = "multisku";
 
     public final static String PRODUCT_CREATED_FIELD = "createdTimestamp"; //for projections only
@@ -47,6 +49,8 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     public final static String PRODUCT_TAG_FIELD = "tag";
     public final static String SKU_PRODUCT_CODE_FIELD = "sku.code";
     public final static String SKU_PRODUCT_CODE_STEM_FIELD = "sku.code_stem";
+    public final static String SKU_PRODUCT_MANUFACTURER_CODE_FIELD = "sku.manufacturerCode";
+    public final static String SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD = "sku.manufacturerCode_stem";
     public final static String PRODUCT_NAME_SORT_FIELD = "name_sort";
     public final static String PRODUCT_DESCRIPTION_FIELD = "description";
     public final static String PRODUCT_DESCRIPTION_STEM_FIELD = "description_stem";

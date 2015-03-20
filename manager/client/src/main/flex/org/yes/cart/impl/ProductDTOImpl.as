@@ -25,7 +25,11 @@ public class ProductDTOImpl {
 
     public var productId:Number;
 
+    public var guid : String;
+
     public var code : String;
+
+    public var manufacturerCode : String;
 
     public var tag : String;
 
