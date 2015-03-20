@@ -38,6 +38,7 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -55,9 +56,70 @@ public class AuthenticationController extends AbstractApiController  {
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
 
+    /**
+     * Interface: GET /yes-api/rest/auth/check
+     * <p>
+     * <p>
+     * Check interface that allows to check authentication state of user. The token for the authenticated cart is
+     * returned back as response header and also as a cookie.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * NONE
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     *
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * {
+     *    "success" : true,
+     *    "greeting" : "Bob Doe",
+     *    "tokenRO" : {
+     *        "uuid" : "1db8def2-21e0-44d2-aeb0-56baae761129"
+     *    },
+     *    "error" : null
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;authentication-result&gt;
+     *    &lt;greeting&gt;Bob Doe&lt;/greeting&gt;
+     *    &lt;success&gt;true&lt;/success&gt;
+     *    &lt;token&gt;
+     *       &lt;uuid&gt;1db8def2-21e0-44d2-aeb0-56baae761129&lt;/uuid&gt;
+     *    &lt;/token&gt;
+     * &lt;/authentication-result&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Error codes</h3><p>
+     * <table border="1">
+     *     <tr><td>SESSION_EXPIRED</td><td>user session expired</td></tr>
+     *     <tr><td>INACTIVE_FOR_SHOP</td><td>user is inactive for shop</td></tr>
+     *     <tr><td>AUTH_FAILED</td><td>user exists but credentials are not valid</td></tr>
+     * </table>
+     *
+     *
+     * @param request request
+     * @param response response
+     *
+     * @return authentication result
+     */
     @RequestMapping(
             value = "/check",
-            method = RequestMethod.PUT,
+            method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody AuthenticationResultRO check(final HttpServletRequest request,
@@ -71,12 +133,19 @@ public class AuthenticationController extends AbstractApiController  {
                     cart.getCustomerName(),
                     new TokenRO(cart.getGuid()));
             case ShoppingCart.SESSION_EXPIRED:
-                final AuthenticationResultRO auth = new AuthenticationResultRO(
+                final AuthenticationResultRO authExpired = new AuthenticationResultRO(
                         cart.getCustomerName(),
                         new TokenRO(cart.getGuid()));
-                auth.setAuthenticated(false);
-                auth.setCode("SESSION_EXPIRED");
-                return auth;
+                authExpired.setAuthenticated(false);
+                authExpired.setCode("SESSION_EXPIRED");
+                return authExpired;
+            case ShoppingCart.INACTIVE_FOR_SHOP:
+                final AuthenticationResultRO authInactive = new AuthenticationResultRO(
+                        cart.getCustomerName(),
+                        new TokenRO(cart.getGuid()));
+                authInactive.setAuthenticated(false);
+                authInactive.setCode("INACTIVE_FOR_SHOP");
+                return authInactive;
             case ShoppingCart.NOT_LOGGED:
             default:
                 return new AuthenticationResultRO("AUTH_FAILED");
@@ -86,35 +155,47 @@ public class AuthenticationController extends AbstractApiController  {
     }
 
     /**
-     * Interface: PUT /yes-api/rest/login
+     * Interface: PUT /yes-api/rest/auth/login
      * <p>
      * <p>
      * Login interface that allows to authenticate user cart. The token for the authenticated cart is
      * returned back as response header and also as a cookie.
      * <p>
-     *
-     * Parameters for login PUT operation<p>
-     * ==================================<p>
-     * JSON example:
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for login PUT operation</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
      * <pre><code>
      * {
      *    "username": "bob11@bob.com",
-     *    "password": "bBuyM-6-"
+     *    "password": "bBuyM-6-",
+     *    "activate": true
      * }
      * </code></pre>
-     *
-     * XML example:
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
      * <pre><code>
      * &lt;login&gt;
      *    &lt;username&gt;bob11@bob.com&lt;/username&gt;
      *    &lt;password&gt;bBuyM-6-&lt;/password&gt;
+     *    &lt;activate&gt;true&lt;/activate&gt;
      * &lt;/login&gt;
      * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
      *
-     * Output<p>
-     * ======<p>
-     *
-     * JSON example (Accept=application/json):
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
      * <pre><code>
      * {
      *    "success" : true,
@@ -125,8 +206,8 @@ public class AuthenticationController extends AbstractApiController  {
      *    "error" : null
      * }
      * </code></pre>
-     *
-     * XML example (Accept=application/xml):
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
      * <pre><code>
      * &lt;authentication-result&gt;
      *    &lt;greeting&gt;Bob Doe&lt;/greeting&gt;
@@ -136,12 +217,15 @@ public class AuthenticationController extends AbstractApiController  {
      *    &lt;/token&gt;
      * &lt;/authentication-result&gt;
      * </code></pre>
-     *
-     * Error codes<p>
-     * ===========<p>
-     * <table>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Error codes</h3><p>
+     * <table border="1">
      *     <tr><td>USER_FAILED</td><td>user does not exist</td></tr>
      *     <tr><td>AUTH_FAILED</td><td>user exists but credentials are not valid</td></tr>
+     *     <tr><td>INACTIVE_FOR_SHOP</td><td>user exists but profile is active for given shop, use activate=true to force activation on login</td></tr>
      * </table>
      *
      *
@@ -163,16 +247,36 @@ public class AuthenticationController extends AbstractApiController  {
         final Customer customer = customerServiceFacade.getCustomerByEmail(loginRO.getUsername());
 
         if (customer != null) {
-            if (this.customerServiceFacade.authenticate(loginRO.getUsername(), loginRO.getPassword())) {
 
-                executeLoginCommand(customer);
+            do {
 
-                persistShoppingCart(request, response);
+                executeLoginCommand(loginRO.getUsername(), loginRO.getPassword());
 
-                return new AuthenticationResultRO(
-                        customer.getFirstname() + " " + customer.getLastname(),
-                        persistShoppingCart(request, response));
-            }
+                final TokenRO token = persistShoppingCart(request, response);
+
+                ShoppingCart cart = getCurrentCart();
+                final int logOnState = cart.getLogonState();
+                if (logOnState == ShoppingCart.LOGGED_IN) {
+
+                    return new AuthenticationResultRO(cart.getCustomerName(), token);
+
+                } else if (logOnState == ShoppingCart.INACTIVE_FOR_SHOP) {
+
+                    if (loginRO.isActivate()) {
+                        // Login again with inactive state adds customer to shop
+                        continue;
+                    }
+
+                    return new AuthenticationResultRO("INACTIVE_FOR_SHOP");
+
+                } else {
+
+                    // any other state should break to AUTH_FAILED
+                    break;
+
+                }
+
+            } while (true);
 
             return new AuthenticationResultRO("AUTH_FAILED");
 
@@ -183,21 +287,28 @@ public class AuthenticationController extends AbstractApiController  {
 
 
     /**
-     * Interface: GET /yes-api/rest/logout
+     * Interface: GET /yes-api/rest/auth/logout
      * <p>
      * <p>
      * Logout interface that allows to de-authenticate user cart. The token for the authenticated cart is
      * returned back as response header and also as a cookie.
      * <p>
      * <p>
-     * Parameters for login PUT operation<p>
-     * ==================================<p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for logout operation</h3><p>
      * NONE
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
      *
-     * Output<p>
-     * ======<p>
-     *
-     * JSON example (Accept=application/json):
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
      * <pre><code>
      * {
      *    "success" : true,
@@ -206,8 +317,8 @@ public class AuthenticationController extends AbstractApiController  {
      *    "error" : 'LOGOUT_SUCCESS'
      * }
      * </code></pre>
-     *
-     * XML example (Accept=application/xml):
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
      * <pre><code>
      * &lt;authentication-result&gt;
      *    &lt;greeting&gt;Bob Doe&lt;/greeting&gt;
@@ -217,10 +328,12 @@ public class AuthenticationController extends AbstractApiController  {
      *    &lt;/token&gt;
      * &lt;/authentication-result&gt;
      * </code></pre>
-     *
-     * Error codes<p>
-     * ===========<p>
-     * <table>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Error codes</h3><p>
+     * <table border="1">
      *     <tr><td>LOGOUT_SUCCESS</td><td>if logout was successful</td></tr>
      * </table>
      *
@@ -256,6 +369,105 @@ public class AuthenticationController extends AbstractApiController  {
             Pattern.compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)",
             Pattern.CASE_INSENSITIVE);
 
+
+    /**
+     * Interface: PUT /yes-api/rest/auth/register
+     * <p>
+     * <p>
+     * Login interface that allows to authenticate user cart. The token for the authenticated cart is
+     * returned back as response header and also as a cookie.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for register PUT operation</h3><p>
+     * <p>
+     * <p>
+     * <table border="1">
+     *     <tr><td>JSON example:</td><td>
+     * <pre><code>
+     * {
+     *    "email" : "bobdoe@yes-cart.org",
+     *    "firstname" : "Bob",
+     *    "lastname" : "Doe",
+     *    "phone" : "123123123123",
+     *    "custom" : {
+     *        "attr1": "value1",
+     *        "attr2": "value2",
+     *        ...
+     *        "attrN": "valueN"
+     *    }
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example:</td><td>
+     * <pre><code>
+     * &lt;login&gt;
+     *    &lt;email&gt;bobdoe@yes-cart.org&lt;/email&gt;
+     *    &lt;firstname&gt;Bob&lt;/firstname&gt;
+     *    &lt;lastname&gt;Doe&lt;/lastname&gt;
+     *    &lt;phone&gt;123123123123&lt;/phone&gt;
+     *    &lt;custom&gt;
+     *        &lt;entry key="attr1"&gt;value1&lt;/entry&gt;
+     *        &lt;entry key="attr2"&gt;value2&lt;/entry&gt;
+     *        ...
+     *        &lt;entry key="attrN"&gt;valueN&lt;/entry&gt;
+     *    &lt;/custom&gt;
+     * &lt;/login&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * {
+     *    "success" : true,
+     *    "greeting" : "Bob Doe",
+     *    "tokenRO" : {
+     *        "uuid" : "1db8def2-21e0-44d2-aeb0-56baae761129"
+     *    },
+     *    "error" : null
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;authentication-result&gt;
+     *    &lt;greeting&gt;Bob Doe&lt;/greeting&gt;
+     *    &lt;success&gt;true&lt;/success&gt;
+     *    &lt;token&gt;
+     *       &lt;uuid&gt;1db8def2-21e0-44d2-aeb0-56baae761129&lt;/uuid&gt;
+     *    &lt;/token&gt;
+     * &lt;/authentication-result&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Error codes</h3><p>
+     * <table border="1">
+     *     <tr><td>EMAIL_FAILED</td><td>email must be more than 6 and less than 256 chars (^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*((\.[A-Za-z]{2,}){1}$)) </td></tr>
+     *     <tr><td>FIRSTNAME_FAILED</td><td>must be not blank</td></tr>
+     *     <tr><td>LASTNAME_FAILED</td><td>must be not blank</td></tr>
+     *     <tr><td>PHONE_FAILED</td><td>phone must be more than 4 and less than 13 chars</td></tr>
+     *     <tr><td>USER_FAILED</td><td>email must not be already registered</td></tr>
+     * </table>
+     *
+     *
+     * @param registerRO register parameters (see examples above)
+     * @param request request
+     * @param response response
+     *
+     * @return authentication result
+     */
     @RequestMapping(
             value = "/register",
             method = RequestMethod.PUT,
@@ -301,13 +513,18 @@ public class AuthenticationController extends AbstractApiController  {
 
         }
 
+        final Map<String, Object> data = new HashMap<String, Object>();
+        if (registerRO.getCustom() != null) {
+            data.putAll(registerRO.getCustom());
+        }
+        data.put("firstname", registerRO.getFirstname());
+        data.put("lastname", registerRO.getLastname());
+        data.put("phone", registerRO.getPhone());
+
+
         final String password = customerServiceFacade.registerCustomer(
                 ApplicationDirector.getCurrentShop(),
-                registerRO.getEmail(), new HashMap<String, Object>() {{
-            put("firstname", registerRO.getFirstname());
-            put("lastname", registerRO.getLastname());
-            put("phone", registerRO.getPhone());
-        }}
+                registerRO.getEmail(), data
         );
 
         final LoginRO loginRO = new LoginRO();
@@ -321,13 +538,14 @@ public class AuthenticationController extends AbstractApiController  {
     /**
      * Execute login command.
      *
-     * @param customer     customer.
+     * @param email     customer.
+     * @param password  password.
      */
-    protected void executeLoginCommand(final Customer customer) {
+    protected void executeLoginCommand(final String email, final String password) {
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, getCurrentCart(),
                 new HashMap<String, Object>() {{
-                    put("email", customer.getEmail());
-                    put("name", customer.getFirstname() + " " + customer.getLastname());
+                    put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, email);
+                    put(ShoppingCartCommand.CMD_LOGIN_P_PASS, password);
                     put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
                 }}
         );

@@ -28,6 +28,7 @@ public class LoginRO {
 
     private String username;
     private String password;
+    private boolean activate;
 
     public String getUsername() {
         return username;
@@ -43,5 +44,13 @@ public class LoginRO {
 
     public void setPassword(final String password) {
         this.password = password;
+    }
+
+    public boolean isActivate() {
+        return activate;
+    }
+
+    public void setActivate(final boolean activate) {
+        this.activate = activate;
     }
 }

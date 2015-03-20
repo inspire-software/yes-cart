@@ -26,9 +26,12 @@ import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.ro.*;
 import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.CentralViewLabel;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.seo.BookmarkService;
+import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +47,8 @@ import java.util.*;
 @RequestMapping("/content")
 public class ContentController extends AbstractApiController {
 
+    @Autowired
+    private CentralViewResolver centralViewResolver;
     @Autowired
     private ContentServiceFacade contentServiceFacade;
     @Autowired
@@ -66,6 +71,7 @@ public class ContentController extends AbstractApiController {
             cntRO.setBreadcrumbs(generateBreadcrumbs(cntRO.getCategoryId(), shopId));
             removeContentBodyAttributes(cntRO);
             cntRO.setContentBody(generateContentBody(cntRO.getCategoryId(), shopId, contentParams));
+            cntRO.setUitemplate(resolveTemplate(cntRO));
             return cntRO;
 
         }
@@ -74,6 +80,107 @@ public class ContentController extends AbstractApiController {
 
     }
 
+    /**
+     * Interface: GET /yes-api/rest/content/view/{id}
+     * <p>
+     * <p>
+     * Display content. uitemplate is is correctly resolved using central view resolver.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>id</td><td>SEO URI or categoryId</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON object ContentRO</td><td>
+     * <pre><code>
+     * {
+     *         "availablefrom" : null,
+     *         "categoryId" : 10002,
+     *         "description" : "Dynamic Content Site Map Page",
+     *         "metakeywords" : null,
+     *         "uri" : "sitemap",
+     *         "metadescription" : null,
+     *         "contentBody" : "\n<p>This page demonstrates dynamic content featur ... \n\n\n",
+     *         "availableto" : null,
+     *         "breadcrumbs" : [
+     *             {
+     *                 "displayNames" : null,
+     *                 "categoryId" : 10002,
+     *                 "uri" : "sitemap",
+     *                 "name" : "Sitemap"
+     *             }
+     *         ],
+     *         "title" : null,
+     *         "rank" : 0,
+     *         "uitemplate" : "dynocontent",
+     *         "attributes" : [],
+     *         "displayTitles" : null,
+     *         "displayNames" : null,
+     *         "displayMetadescriptions" : null,
+     *         "displayMetakeywords" : null,
+     *         "name" : "Sitemap",
+     *         "parentId" : 10000
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML object ContentRO</td><td>
+     * <pre><code>
+     *         &lt;content category-id="10002" parent-id="10000"&gt;
+     *             &lt;breadcrumbs&gt;
+     *                 &lt;breadcrumb category-id="10002"&gt;
+     *                     &lt;name&gt;Sitemap&lt;/name&gt;
+     *                     &lt;uri&gt;sitemap&lt;/uri&gt;
+     *                 &lt;/breadcrumb&gt;
+     *             &lt;/breadcrumbs&gt;
+     *             &lt;content-body&gt;
+     *                &lt;!-- Escaped content body --&gt;
+     *
+     *                 &lt;p&gt;This page demonstrates dynamic content features&lt;/p&gt;
+     *
+     *                 &lt;p&gt;Links:
+     *                 &lt;ul&gt;
+     *                 &lt;li&gt;&lt;a href="${contentURL('license')}"&gt;License page (content link)&lt;/a&gt;&lt;/li&gt;
+     *                 &lt;li&gt;&lt;a href="${categoryURL('netbooks')}"&gt;Notebooks (category link)&lt;/a&gt;&lt;/li&gt;
+     *                 &lt;li&gt;&lt;a href="${URL('')}"&gt;Home (plain link)&lt;/a&gt;&lt;/li&gt;
+     *                 &lt;/ul&gt;
+     *                 &lt;/p&gt;
+     *
+     *                 &lt;p&gt;Dynamic variable: ${datetime}&lt;/p&gt;
+     *
+     *                 &lt;p&gt;Dynamic include:&lt;/p&gt;
+     *
+     *                 ${include('license')}
+     *
+     *
+     *             &lt;/content-body&gt;
+     *             &lt;description&gt;Dynamic Content Site Map Page&lt;/description&gt;
+     *             &lt;name&gt;Sitemap&lt;/name&gt;
+     *             &lt;rank&gt;0&lt;/rank&gt;
+     *             &lt;uitemplate&gt;dynocontent&lt;/uitemplate&gt;
+     *             &lt;uri&gt;sitemap&lt;/uri&gt;
+     *         &lt;/content&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     *
+     * @param content SEO URI or categoryId
+     * @param request request
+     * @param response response
+     *
+     * @return content object
+     */
     @RequestMapping(
             value = "/view/{id}",
             method = RequestMethod.GET,
@@ -88,6 +195,78 @@ public class ContentController extends AbstractApiController {
         return viewContentInternal(content, null);
     }
 
+
+    /**
+     * Interface: PUT /yes-api/rest/content/view/{id}
+     * <p>
+     * <p>
+     * Display dynamic content. uitemplate is is correctly resolved using central view resolver.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json</td></tr>
+     *     <tr><td>Content-Type</td><td>application/json</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>id</td><td>SEO URI or categoryId</td></tr>
+     *     <tr><td>JSON variables to dynamic content</td><td>
+     * <pre><code>
+     *         {
+     *             "datetime": "2015-01-01"
+     *         }
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON object ContentRO</td><td>
+     * <pre><code>
+     * {
+     *         "availablefrom" : null,
+     *         "categoryId" : 10002,
+     *         "description" : "Dynamic Content Site Map Page",
+     *         "metakeywords" : null,
+     *         "uri" : "sitemap",
+     *         "metadescription" : null,
+     *         "contentBody" : "\n<p>This page demonstrates dynamic content featur ... \n\n\n",
+     *         "availableto" : null,
+     *         "breadcrumbs" : [
+     *             {
+     *                 "displayNames" : null,
+     *                 "categoryId" : 10002,
+     *                 "uri" : "sitemap",
+     *                 "name" : "Sitemap"
+     *             }
+     *         ],
+     *         "title" : null,
+     *         "rank" : 0,
+     *         "uitemplate" : "dynocontent",
+     *         "attributes" : [],
+     *         "displayTitles" : null,
+     *         "displayNames" : null,
+     *         "displayMetadescriptions" : null,
+     *         "displayMetakeywords" : null,
+     *         "name" : "Sitemap",
+     *         "parentId" : 10000
+     * }
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     *
+     * @param content SEO URI or categoryId
+     * @param request request
+     * @param response response
+     *
+     * @return content object
+     */
     @RequestMapping(
             value = "/view/{id}",
             method = RequestMethod.PUT,
@@ -104,6 +283,83 @@ public class ContentController extends AbstractApiController {
         return viewContentInternal(content, params);
     }
 
+    /**
+     * Interface: PUT /yes-api/rest/content/view/{id}
+     * <p>
+     * <p>
+     * Display dynamic content. uitemplate is is correctly resolved using central view resolver.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/xml</td></tr>
+     *     <tr><td>Content-Type</td><td>application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>id</td><td>SEO URI or categoryId</td></tr>
+     *     <tr><td>XML variables to dynamic content</td><td>
+     * <pre><code>
+     *         &lt;parameters&gt;
+     *             &lt;entries&gt;
+     *                 &lt;entry key="datetime"&gt;2015-01-01&lt;/entry&gt;
+     *             &lt;/entries&gt;
+     *         &lt;/parameters&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>XML object ContentRO</td><td>
+     * <pre><code>
+     *         &lt;content category-id="10002" parent-id="10000"&gt;
+     *             &lt;breadcrumbs&gt;
+     *                 &lt;breadcrumb category-id="10002"&gt;
+     *                     &lt;name&gt;Sitemap&lt;/name&gt;
+     *                     &lt;uri&gt;sitemap&lt;/uri&gt;
+     *                 &lt;/breadcrumb&gt;
+     *             &lt;/breadcrumbs&gt;
+     *             &lt;content-body&gt;
+     *                &lt;!-- Escaped content body --&gt;
+     *
+     *                     &lt;p&gt;This page demonstrates dynamic content features&lt;/p&gt;
+     *
+     *                     &lt;p&gt;Links:
+     *                     &lt;ul&gt;
+     *                     &lt;li&gt;&lt;a href="http://testdevshop.yes-cart.org/yes-shop/content/license"&gt;License page (content link)&lt;/a&gt;&lt;/li&gt;
+     *                     &lt;li&gt;&lt;a href="http://testdevshop.yes-cart.org/yes-shop/category/netbooks"&gt;Notebooks (category link)&lt;/a&gt;&lt;/li&gt;
+     *                     &lt;li&gt;&lt;a href="http://testdevshop.yes-cart.org/yes-shop/"&gt;Home (plain link)&lt;/a&gt;&lt;/li&gt;
+     *                     &lt;/ul&gt;
+     *                     &lt;/p&gt;
+     *
+     *                     &lt;p&gt;Dynamic variable: 2015-01-01&lt;/p&gt;
+     *
+     *                     &lt;p&gt;Dynamic include:&lt;/p&gt;
+     *
+     *
+     *             &lt;/content-body&gt;
+     *             &lt;description&gt;Dynamic Content Site Map Page&lt;/description&gt;
+     *             &lt;name&gt;Sitemap&lt;/name&gt;
+     *             &lt;rank&gt;0&lt;/rank&gt;
+     *             &lt;uitemplate&gt;dynocontent&lt;/uitemplate&gt;
+     *             &lt;uri&gt;sitemap&lt;/uri&gt;
+     *         &lt;/content&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     *
+     * @param content SEO URI or categoryId
+     * @param request request
+     * @param response response
+     *
+     * @return content object
+     */
     @RequestMapping(
             value = "/view/{id}",
             method = RequestMethod.PUT,
@@ -148,6 +404,69 @@ public class ContentController extends AbstractApiController {
 
     }
 
+    /**
+     * Interface: GET /yes-api/rest/content/menu/{id}
+     * <p>
+     * <p>
+     * Display content menu. uitemplate is taken from the object without failover.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>id</td><td>SEO URI or categoryId</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     *
+     * <table border="1">
+     *     <tr><td>JSON array of object ContentRO</td><td>
+     * <pre><code>
+     * [{
+     *         "availablefrom" : null,
+     *         "categoryId" : 10002,
+     *         "description" : "Dynamic Content Site Map Page",
+     *         "metakeywords" : null,
+     *         "uri" : "sitemap",
+     *         "metadescription" : null,
+     *         "contentBody" : "\n<p>This page demonstrates dynamic content featur ... \n\n\n",
+     *         "availableto" : null,
+     *         "breadcrumbs" : [
+     *             {
+     *                 "displayNames" : null,
+     *                 "categoryId" : 10002,
+     *                 "uri" : "sitemap",
+     *                 "name" : "Sitemap"
+     *             }
+     *         ],
+     *         "title" : null,
+     *         "rank" : 0,
+     *         "uitemplate" : "dynocontent",
+     *         "attributes" : [],
+     *         "displayTitles" : null,
+     *         "displayNames" : null,
+     *         "displayMetadescriptions" : null,
+     *         "displayMetakeywords" : null,
+     *         "name" : "Sitemap",
+     *         "parentId" : 10000
+     * }]
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     * @param content SEO URI or categoryId
+     * @param request request
+     * @param response response
+     *
+     * @return content object
+     */
     @RequestMapping(
             value = "/menu/{id}",
             method = RequestMethod.GET,
@@ -163,20 +482,98 @@ public class ContentController extends AbstractApiController {
 
     }
 
+    /**
+     * Interface: GET /yes-api/rest/content/menu/{id}
+     * <p>
+     * <p>
+     * Display content menu. uitemplate is taken from the object without failover.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>id</td><td>SEO URI or categoryId</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>XML of objects ContentRO</td><td>
+     * <pre><code>
+     *   &lt;site&gt;
+     *         &lt;content category-id="10002" parent-id="10000"&gt;
+     *             &lt;breadcrumbs&gt;
+     *                 &lt;breadcrumb category-id="10002"&gt;
+     *                     &lt;name&gt;Sitemap&lt;/name&gt;
+     *                     &lt;uri&gt;sitemap&lt;/uri&gt;
+     *                 &lt;/breadcrumb&gt;
+     *             &lt;/breadcrumbs&gt;
+     *             &lt;content-body&gt;
+     *                &lt;!-- Escaped content body --&gt;
+     *
+     *                 &lt;p&gt;This page demonstrates dynamic content features&lt;/p&gt;
+     *
+     *                 &lt;p&gt;Links:
+     *                 &lt;ul&gt;
+     *                 &lt;li&gt;&lt;a href="${contentURL('license')}"&gt;License page (content link)&lt;/a&gt;&lt;/li&gt;
+     *                 &lt;li&gt;&lt;a href="${categoryURL('netbooks')}"&gt;Notebooks (category link)&lt;/a&gt;&lt;/li&gt;
+     *                 &lt;li&gt;&lt;a href="${URL('')}"&gt;Home (plain link)&lt;/a&gt;&lt;/li&gt;
+     *                 &lt;/ul&gt;
+     *                 &lt;/p&gt;
+     *
+     *                 &lt;p&gt;Dynamic variable: ${datetime}&lt;/p&gt;
+     *
+     *                 &lt;p&gt;Dynamic include:&lt;/p&gt;
+     *
+     *                 ${include('license')}
+     *
+     *
+     *             &lt;/content-body&gt;
+     *             &lt;description&gt;Dynamic Content Site Map Page&lt;/description&gt;
+     *             &lt;name&gt;Sitemap&lt;/name&gt;
+     *             &lt;rank&gt;0&lt;/rank&gt;
+     *             &lt;uitemplate&gt;dynocontent&lt;/uitemplate&gt;
+     *             &lt;uri&gt;sitemap&lt;/uri&gt;
+     *         &lt;/content&gt;
+     *   &lt;/site&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     * @param content SEO URI or categoryId
+     * @param request request
+     * @param response response
+     *
+     * @return content object
+     */
     @RequestMapping(
             value = "/menu/{id}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_XML_VALUE
     )
-    public @ResponseBody ContentListRO listContentXML(@PathVariable(value = "id") final String category,
+    public @ResponseBody ContentListRO listContentXML(@PathVariable(value = "id") final String content,
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
         persistShoppingCart(request, response);
 
-        return new ContentListRO(listContentInternal(category));
+        return new ContentListRO(listContentInternal(content));
 
     }
+
+
+    private String resolveTemplate(final ContentRO catRO) {
+        final Map params = new HashMap();
+        params.put(WebParametersKeys.CONTENT_ID, String.valueOf(catRO.getCategoryId()));
+        return centralViewResolver.resolveMainPanelRendererLabel(params);
+    }
+
 
     private long resolveId(final String content) {
         final long contentId = NumberUtils.toLong(content, 0L);
@@ -244,11 +641,17 @@ public class ContentController extends AbstractApiController {
 
     private String generateContentBody(final long contentId, final long shopId, final Map<String, Object> parameters) {
 
-        final String locale = getCurrentCart().getCurrentLocale();
+        final ShoppingCart cart = getCurrentCart();
+        final String locale = cart.getCurrentLocale();
 
         if (parameters != null && !parameters.isEmpty()) {
 
-            return contentServiceFacade.getDynamicContentBody(contentId, shopId, locale, parameters);
+            final Map<String, Object> params = new HashMap<String, Object>(parameters);
+
+            params.put("shop", getCurrentShop());
+            params.put("shoppingCart", cart);
+
+            return contentServiceFacade.getDynamicContentBody(contentId, shopId, locale, params);
 
         }
 

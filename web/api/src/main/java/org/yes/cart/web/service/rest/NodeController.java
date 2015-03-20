@@ -40,6 +40,46 @@ public class NodeController extends AbstractApiController {
     private NodeService nodeService;
 
 
+    /**
+     * Interface: GET /yes-api/rest/node
+     * <p>
+     * <p>
+     * Node interface returns basic node information.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * NONE
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * {
+     *    "shop-code" : "SHOP10",
+     *    "node-id" : "YES1"
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;node&gt;
+     *    &lt;node-id&gt;YES1&lt;/node-id&gt;
+     *    &lt;shop-code&gt;SHOP10&lt;/shop-code&gt;
+     * &lt;/node&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * @return node information
+     */
     @RequestMapping(
             value = "",
             method = RequestMethod.GET,
