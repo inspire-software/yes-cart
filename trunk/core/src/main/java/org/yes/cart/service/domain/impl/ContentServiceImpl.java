@@ -362,6 +362,20 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
+    public Long findContentIdByGUID(final String guid) {
+        List<Object> list = categoryDao.findQueryObjectByNamedQuery("CATEGORY.ID.BY.GUID", guid);
+        if (list != null && !list.isEmpty()) {
+            final Object id = list.get(0);
+            if (id instanceof Long) {
+                return (Long) id;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String findSeoUriByContentId(final Long contentId) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("SEO.URI.BY.CATEGORY.ID", contentId);
         if (list != null && !list.isEmpty()) {

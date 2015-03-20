@@ -849,3 +849,16 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
    'E.g. {0} {1} {2}, where 0 - first name, 1 - middle name, 2 - last name',  1000, 1001);
 
 
+--
+--  YC-541 Do unique checks on UI for SEO URI properties and GUIDs in YUM
+--
+
+alter table TPRODUCT add column MANUFACTURER_CODE varchar(255);
+alter table TSKU add column MANUFACTURER_CODE varchar(255);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10984,  'PRODUCT_DISPLAY_MAN_CODE_SHOP', 'PRODUCT_DISPLAY_MANUFACTURER_CODE_SHOP',  0,  NULL,  'Product: show manufacturer code',
+    'Flag whether to use manufacturer code or seller code as primary UI property',  1008, 1001);
+
+
+

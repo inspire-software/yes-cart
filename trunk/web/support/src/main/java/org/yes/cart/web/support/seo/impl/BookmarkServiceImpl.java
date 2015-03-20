@@ -177,7 +177,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         if (seoData == null) {
             final long productId = NumberUtils.toLong(bookmark, 0L);
             if (productId > 0L) {
-                final String productSeoUri = productService.getSeoUriByProductId(productId);
+                final String productSeoUri = productService.findSeoUriByProductId(productId);
                 seoData = DecoratorUtil.encodeId(
                         bookmark,
                         productSeoUri
@@ -200,7 +200,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         String id = getStringFromValueWrapper(PRODUCT_DECODE_CACHE.get(uri));
         if (id == null) {
-            final Long prodId = productService.getProductIdBySeoUri(uri);
+            final Long prodId = productService.findProductIdBySeoUri(uri);
             if (prodId != null) {
                 saveBookmarkForProduct(prodId.toString());
                 id = prodId.toString();
@@ -220,7 +220,7 @@ public class BookmarkServiceImpl implements BookmarkService {
         if (seoData == null) {
             final long skuId = NumberUtils.toLong(bookmark, 0L);
             if (skuId > 0L) {
-                final String productSkuUri = productService.getSeoUriByProductSkuId(skuId);
+                final String productSkuUri = productService.findSeoUriByProductSkuId(skuId);
                 seoData = DecoratorUtil.encodeId(
                         bookmark,
                         productSkuUri
@@ -243,7 +243,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         String id = getStringFromValueWrapper(SKU_DECODE_CACHE.get(uri));
         if (id == null) {
-            final Long skuId = productService.getProductSkuIdBySeoUri(uri);
+            final Long skuId = productService.findProductSkuIdBySeoUri(uri);
             if (skuId != null) {
                 saveBookmarkForSku(skuId.toString());
                 id = skuId.toString();

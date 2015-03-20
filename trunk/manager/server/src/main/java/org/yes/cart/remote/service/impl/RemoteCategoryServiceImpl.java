@@ -220,6 +220,13 @@ public class RemoteCategoryServiceImpl
     /**
      * {@inheritDoc}
      */
+    public boolean isGuidAvailableForCategory(final String guid, final Long categoryId) {
+        return ((DtoCategoryService) getGenericDTOService()).isGuidAvailableForCategory(guid, categoryId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<CategoryDTO> getByProductId(final long productId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<CategoryDTO> all = new ArrayList<CategoryDTO>(((DtoCategoryService) getGenericDTOService()).getByProductId(productId));
         federationFacade.applyFederationFilter(all, CategoryDTO.class);

@@ -48,8 +48,14 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     @DtoField(value = "skuId", readOnly = true)
     private long skuId;
 
+    @DtoField(value = "guid")
+    private String guid;
+
     @DtoField(value = "code")
     private String code;
+
+    @DtoField(value = "manufacturerCode")
+    private String manufacturerCode;
 
     @DtoField(value = "name")
     private String name;
@@ -142,6 +148,20 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     /**
      * {@inheritDoc}
      */
+    public String getGuid() {
+        return guid;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setGuid(final String guid) {
+        this.guid = guid;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getCode() {
         return code;
     }
@@ -151,6 +171,20 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
      */
     public void setCode(final String code) {
         this.code = code;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getManufacturerCode() {
+        return manufacturerCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setManufacturerCode(final String manufacturerCode) {
+        this.manufacturerCode = manufacturerCode;
     }
 
     /**

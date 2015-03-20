@@ -310,12 +310,28 @@ public interface ProductService extends GenericService<Product> {
 
 
     /**
-     * Get product id id by given seo uri
+     * Get product id by given seo uri
      *
      * @param seoUri given seo uri
      * @return product id if found otherwise null
      */
-    Long getProductIdBySeoUri(String seoUri);
+    Long findProductIdBySeoUri(String seoUri);
+
+    /**
+     * Get product id by given GUID
+     *
+     * @param guid given GUID
+     * @return product id if found otherwise null
+     */
+    Long findProductIdByGUID(String guid);
+
+    /**
+     * Get product id by given code
+     *
+     * @param code given code
+     * @return product id if found otherwise null
+     */
+    Long findProductIdByCode(String code);
 
     /**
      * Get product SEO uri id by given id
@@ -323,15 +339,31 @@ public interface ProductService extends GenericService<Product> {
      * @param productId given product id
      * @return product seo uri if found otherwise null
      */
-    String getSeoUriByProductId(Long productId);
+    String findSeoUriByProductId(Long productId);
 
     /**
-     * Get product sku id id by given seo uri
+     * Get product sku id by given seo uri
      *
      * @param seoUri given seo uri
      * @return product sku id if found otherwise null
      */
-    Long getProductSkuIdBySeoUri(String seoUri);
+    Long findProductSkuIdBySeoUri(String seoUri);
+
+    /**
+     * Get product sku id by given GUID
+     *
+     * @param guid given GUID
+     * @return product sku id if found otherwise null
+     */
+    Long findProductSkuIdByGUID(String guid);
+
+    /**
+     * Get product sku id by given code
+     *
+     * @param code given code
+     * @return product sku id if found otherwise null
+     */
+    Long findProductSkuIdByCode(String code);
 
     /**
      * Get product sku SEO uri by given id
@@ -339,7 +371,7 @@ public interface ProductService extends GenericService<Product> {
      * @param skuId given sku id
      * @return product sku uri if found otherwise null
      */
-    String getSeoUriByProductSkuId(Long skuId);
+    String findSeoUriByProductSkuId(Long skuId);
 
     /**
      * Clear empty product attributes, that can appear after bulk import.

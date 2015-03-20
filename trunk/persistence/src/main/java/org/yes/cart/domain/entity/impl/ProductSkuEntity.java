@@ -41,6 +41,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     private long version;
 
     private String code;
+    private String manufacturerCode;
     private String name;
     private String displayName;
     private String description;
@@ -72,6 +73,18 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    @Fields({
+            @Field(name = "sku.manufacturerCode", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES),
+            @Field(name = "sku.manufacturerCode_stem", index = Index.YES, analyze = Analyze.YES, norms = Norms.NO, store = Store.NO)
+    })
+    public String getManufacturerCode() {
+        return manufacturerCode;
+    }
+
+    public void setManufacturerCode(final String manufacturerCode) {
+        this.manufacturerCode = manufacturerCode;
     }
 
     @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)

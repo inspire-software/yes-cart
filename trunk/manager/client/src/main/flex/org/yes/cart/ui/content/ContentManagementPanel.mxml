@@ -270,6 +270,22 @@
 
         }
 
+        private function onGuidChange(event:Event):void {
+            remoteContentService.isGuidAvailableForContent(categoryGUIDTextInput.text, selectedCategoryDTOImpl.categoryId);
+        }
+
+
+        private function onGuidAvailableForCategoryResult(event:ResultEvent):void {
+
+            var _available:Boolean = Boolean(event.result);
+            if (_available) {
+                categoryGUIDTextInput.errorString = '';
+            } else {
+                categoryGUIDTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'guidIsNotAvailable', [ categoryGUIDTextInput.text ]);
+            }
+
+        }
+
         public function categoryDtoChanged(event:PropertyChangeEvent):void {
             if (!selectedCategoryDTOImpl.changed) {
                 selectedCategoryDTOImpl.changed = true;
@@ -508,6 +524,10 @@
                    result="onUriAvailableForCategoryResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="isGuidAvailableForContent" name="isGuidAvailableForContent"
+                   result="onGuidAvailableForCategoryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
     </mx:RemoteObject>
 
     <mx:Boolean id="categorySelected">false</mx:Boolean>
@@ -559,7 +579,7 @@
                                 <mx:Form>
                                     <mx:FormItem width="100%"
                                                  label="GUID">
-                                        <mx:TextInput id="categoryGUIDTextInput" width="300"/>
+                                        <mx:TextInput id="categoryGUIDTextInput" width="300" focusOut="onGuidChange(event)"/>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='name')">

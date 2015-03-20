@@ -17,6 +17,7 @@
 package org.yes.cart.domain.dto;
 
 
+import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
@@ -32,7 +33,7 @@ import java.util.Set;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface ProductDTO extends Identifiable {
+public interface ProductDTO extends Identifiable, Guidable {
 
     /**
      * Get product pk.
@@ -59,9 +60,24 @@ public interface ProductDTO extends Identifiable {
      * Product code.
      * Limitation code must not contains underscore
      *
-     * @param code
+     * @param code unique code
      */
     void setCode(String code);
+
+    /**
+     * Get the non unique product code.
+     *
+     * @return product code.
+     */
+    String getManufacturerCode();
+
+    /**
+     * Manufacturer non unique product code.
+     * Limitation code must not contains underscore
+     *
+     * @param code manufacturer code
+     */
+    void setManufacturerCode(String code);
 
     /**
      * Get the {@link org.yes.cart.domain.entity.Brand} of product.

@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.basic.Label;
@@ -214,18 +215,18 @@ public class SkuCentralView extends AbstractCentralView {
 
         configureContext();
 
+        final Shop shop = ApplicationDirector.getCurrentShop();
+
         final String selectedLocale = getLocale().getLanguage();
 
         final ObjectDecorator decorator = getDecorator();
 
         add(new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true, true));
         add(new SkuListView(SKU_LIST_VIEW, product.getSku(), sku, isProduct));
-        add(new Label(SKU_CODE_LABEL, sku.getCode()));
+        add(new Label(SKU_CODE_LABEL, getDisplaySkuCode(shop, sku)));
         add(new Label(PRODUCT_NAME_LABEL, decorator.getName(selectedLocale)));
         add(new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false));
         add(new AddAnyButton(SOCIAL_ADD_TO_ANY_BUTTON, product));
-
-        final Shop shop = ApplicationDirector.getCurrentShop();
 
         final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(sku, shop.getShopId());
 
@@ -304,6 +305,18 @@ public class SkuCentralView extends AbstractCentralView {
         add(new WishListNotification("wishListNotification"));
 
         super.onBeforeRender();
+
+    }
+
+    private String getDisplaySkuCode(final Shop shop, final ProductSku sku) {
+
+        if (StringUtils.isNotBlank(sku.getManufacturerCode())) {
+            final AttrValue displayAttrValue = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_DISPLAY_MANUFACTURER_CODE);
+            if (displayAttrValue != null && displayAttrValue.getVal() != null && Boolean.valueOf(displayAttrValue.getVal())) {
+                return sku.getManufacturerCode();
+            }
+        }
+        return sku.getCode();
 
     }
 

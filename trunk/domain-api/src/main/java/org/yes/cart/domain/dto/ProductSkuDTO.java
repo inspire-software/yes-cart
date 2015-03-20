@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.dto;
 
+import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.util.Collection;
@@ -28,7 +29,7 @@ import java.util.Map;
  * Date: Jan 22, 2011
  * Time: 10:37:01 PM
  */
-public interface ProductSkuDTO extends Identifiable {
+public interface ProductSkuDTO extends Identifiable, Guidable {
 
 
     /**
@@ -56,6 +57,21 @@ public interface ProductSkuDTO extends Identifiable {
      * @param code sku code
      */
     void setCode(final String code);
+
+    /**
+     * Get the non unique product code.
+     *
+     * @return product code.
+     */
+    String getManufacturerCode();
+
+    /**
+     * Manufacturer non unique product code.
+     * Limitation code must not contains underscore
+     *
+     * @param code manufacturer code
+     */
+    void setManufacturerCode(String code);
 
     /**
      * Get name.

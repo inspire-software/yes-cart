@@ -61,9 +61,18 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-        <!--  bar code -->
+        <!-- Manufacturer SKU code -->
         <column-descriptor>
             <column-index>2</column-index>
+            <field-type>FIELD</field-type>
+            <name>manufacturerCode</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <!--  bar code -->
+        <column-descriptor>
+            <column-index>3</column-index>
             <field-type>FIELD</field-type>
             <name>barCode</name>
             <value-regex>(.{0,128})(.*)</value-regex>
@@ -72,7 +81,7 @@
 
         <!-- SKU SEO url -->
         <column-descriptor>
-            <column-index>3</column-index>
+            <column-index>4</column-index>
             <field-type>FIELD</field-type>
             <name>seo.uri</name>
             <value-regex>(.{0,255})(.*)</value-regex>
@@ -81,18 +90,9 @@
 
         <!--  sku name -->
         <column-descriptor>
-            <column-index>4</column-index>
-            <field-type>FIELD</field-type>
-            <name>name</name>
-            <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-group>1</value-regex-group>
-        </column-descriptor>
-
-        <column-descriptor>
             <column-index>5</column-index>
             <field-type>FIELD</field-type>
-            <name>displayName</name>
-            <language>en</language>
+            <name>name</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
@@ -101,13 +101,22 @@
             <column-index>6</column-index>
             <field-type>FIELD</field-type>
             <name>displayName</name>
-            <language>ru</language>
+            <language>en</language>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
             <column-index>7</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>ru</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>8</column-index>
             <field-type>FIELD</field-type>
             <name>displayName</name>
             <language>uk</language>
@@ -117,41 +126,11 @@
 
         <!-- Description -->
         <column-descriptor>
-            <column-index>8</column-index>
+            <column-index>9</column-index>
             <field-type>FIELD</field-type>
             <name>description</name>
             <value-regex>(.{0,4000})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>9</column-index>
-            <field-type>SLAVE_INLINE_FIELD</field-type>
-            <name/>
-            <import-descriptor>
-                <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
-                <import-file-descriptor>
-                    <file-encoding>UTF-8</file-encoding>
-                    <file-name-mask/>
-                    <ignore-first-line>false</ignore-first-line>
-                    <column-delimiter>,</column-delimiter>
-                    <text-qualifier>&quot;</text-qualifier>
-                </import-file-descriptor>
-                <select-sql/>
-                <insert-sql>
-                    DELETE FROM TPRODUCTSKUATTRVALUE
-                        WHERE GUID = '{masterObjectId}_SKUDESC_en';
-                    INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL)
-                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_en', 'PRODUCT_DESCRIPTION_en','{val}')
-                </insert-sql>
-                <import-columns>
-                    <column-descriptor>
-                        <column-index>9</column-index>
-                        <field-type>FIELD</field-type>
-                        <name>val</name>
-                    </column-descriptor>
-                </import-columns>
-            </import-descriptor>
         </column-descriptor>
 
         <column-descriptor>
@@ -170,9 +149,9 @@
                 <select-sql/>
                 <insert-sql>
                     DELETE FROM TPRODUCTSKUATTRVALUE
-                        WHERE GUID = '{masterObjectId}_SKUDESC_ru';
+                        WHERE GUID = '{masterObjectId}_SKUDESC_en';
                     INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL)
-                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_ru', 'PRODUCT_DESCRIPTION_ru','{val}')
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_en', 'PRODUCT_DESCRIPTION_en','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
@@ -200,13 +179,43 @@
                 <select-sql/>
                 <insert-sql>
                     DELETE FROM TPRODUCTSKUATTRVALUE
+                        WHERE GUID = '{masterObjectId}_SKUDESC_ru';
+                    INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL)
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_ru', 'PRODUCT_DESCRIPTION_ru','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>11</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>12</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    DELETE FROM TPRODUCTSKUATTRVALUE
                         WHERE GUID = '{masterObjectId}_SKUDESC_uk';
                     INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL)
                         VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_uk', 'PRODUCT_DESCRIPTION_uk','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
-                        <column-index>11</column-index>
+                        <column-index>12</column-index>
                         <field-type>FIELD</field-type>
                         <name>val</name>
                     </column-descriptor>

@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.product;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.common.util.CollectionUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
@@ -25,9 +26,12 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
+import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
@@ -124,7 +128,7 @@ public class ProductInListView extends BaseComponent {
         } else {
             skuCodeLink = links.newProductLink(PRODUCT_LINK_SKU, product.getId(), getPage().getPageParameters());
         }
-        add(skuCodeLink.add(new Label(SKU_CODE_LABEL, product.getCode())));
+        add(skuCodeLink.add(new Label(SKU_CODE_LABEL, getDisplaySkuCode(ApplicationDirector.getCurrentShop(), product))));
 
         add(new Label(DESCRIPTION_LABEL, product.getDescription(selectedLocale)).setEscapeModelStrings(false));
 
@@ -172,6 +176,19 @@ public class ProductInListView extends BaseComponent {
 
 
         super.onBeforeRender();
+    }
+
+
+    private String getDisplaySkuCode(final Shop shop, final ProductSearchResultDTO product) {
+
+        if (StringUtils.isNotBlank(product.getManufacturerCode())) {
+            final AttrValue displayAttrValue = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_DISPLAY_MANUFACTURER_CODE);
+            if (displayAttrValue != null && displayAttrValue.getVal() != null && Boolean.valueOf(displayAttrValue.getVal())) {
+                return product.getManufacturerCode();
+            }
+        }
+        return product.getCode();
+
     }
 
 

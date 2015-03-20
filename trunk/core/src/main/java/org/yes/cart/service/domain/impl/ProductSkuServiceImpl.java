@@ -104,7 +104,8 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
                 ProductSearchQueryBuilder.PRODUCT_NAME_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_DEFAULTIMAGE_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD,
-                ProductSearchQueryBuilder.PRODUCT_ID_FIELD
+                ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
+                ProductSearchQueryBuilder.SKU_PRODUCT_MANUFACTURER_CODE_FIELD
         );
 
         final List<ProductSkuSearchResultDTO> rez = new ArrayList<ProductSkuSearchResultDTO>(searchRez.getFirst().size());
@@ -116,6 +117,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
             dto.setDefaultImage((String) obj[3]);
             dto.setDisplayName((String) obj[4]);
             dto.setProductId((Long) obj[5]);
+            dto.setManufacturerCode((String) obj[6]);
             rez.add(dto);
         }
 

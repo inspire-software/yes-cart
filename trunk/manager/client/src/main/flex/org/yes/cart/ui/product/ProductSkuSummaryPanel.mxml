@@ -20,8 +20,14 @@
            creationComplete="onInitPanel()">
 
     <mx:Form x="0" y="0">
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='guid')">
+            <mx:TextInput id="guidTextInput" width="300" focusOut="onGuidChange(event)"/>
+        </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='code')">
-            <mx:TextInput id="codeTextInput" width="300" enabled="{false}"/>
+            <mx:TextInput id="codeTextInput" width="300" focusOut="onCodeChange(event)"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='manufacturerCode')">
+            <mx:TextInput id="manCodeTextInput" width="300"/>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='name')">
             <mx:TextInput id="nameTextInput" width="300" />
@@ -71,11 +77,29 @@
 
     <mx:ArrayCollection id="propertyWatchers"/>
 
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+
+        <mx:method id="isGuidAvailableForProductSku" name="isGuidAvailableForProductSku"
+                   result="onGuidAvailableForProductResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="isCodeAvailableForProductSku" name="isCodeAvailableForProductSku"
+                   result="onCodeAvailableForProductResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+
     <mx:Script>
         <![CDATA[
         import com.hexagonstar.util.debug.Debug;
 
         import mx.events.FlexEvent;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
 
         import org.yes.cart.event.DtoEvent;
 
@@ -85,6 +109,8 @@
         import mx.binding.utils.ChangeWatcher;
         import mx.events.PropertyChangeEvent;
         import mx.validators.Validator;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         [Bindable]
         private var _productSku:ProductSkuDTOImpl;
@@ -100,6 +126,12 @@
             unbindProperties();
             _productSku = value;
             bindProperties();
+            if (guidTextInput != null) {
+                guidTextInput.errorString = '';
+            }
+            if (codeTextInput != null) {
+                codeTextInput.errorString = '';
+            }
         }
 
         private var validatorArr:Array;
@@ -123,7 +155,9 @@
 
                 displayNames.setSourceObject(_productSku, 'displayNames');
 
+                propertyWatchers.addItem(BindingUtils.bindProperty(guidTextInput, "text", _productSku, "guid"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(codeTextInput, "text", _productSku, "code"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(manCodeTextInput, "text", _productSku, "manufacturerCode"));
 
                 propertyWatchers.addItem(BindingUtils.bindProperty(nameTextInput, "text", _productSku, "name"));
 
@@ -131,14 +165,18 @@
                 propertyWatchers.addItem(BindingUtils.bindProperty(rankTextInput, "text", _productSku, "rank"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(descriptionTextInput, "text", _productSku, "description"));
 
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "guid", guidTextInput, "text"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "code", codeTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "manufacturerCode", manCodeTextInput, "text"));
 
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "name", nameTextInput, "text"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "barCode", barCodeTextInput, "text"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "rank", rankTextInput, "text"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "description", descriptionTextInput, "text"));
 
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "guid", productSkuChanged));
                 propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "code", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "manufacturerCode", productSkuChanged));
                 propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "name", productSkuChanged));
                 propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "barCode", productSkuChanged));
                 propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "rank", productSkuChanged));
@@ -163,6 +201,40 @@
             dispatchEvent(new DtoEvent(DtoEvent.UPDATE, _productSku));
             productSkuChangedFlag = false;
         }
+
+
+
+        private function onGuidChange(event:Event):void {
+            remoteProductService.isGuidAvailableForProductSku(guidTextInput.text, _productSku.skuId);
+        }
+
+        private function onCodeChange(event:Event):void {
+            remoteProductService.isCodeAvailableForProductSku(codeTextInput.text, _productSku.skuId);
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGuidAvailableForProductResult(event:ResultEvent):void {
+            var _available:Boolean = Boolean(event.result);
+            if (_available) {
+                guidTextInput.errorString = '';
+            } else {
+                guidTextInput.errorString = resourceManager.getString('ProductManagementPanel', 'guidIsNotAvailable', [ guidTextInput.text ]);
+            }
+        }
+
+        private function onCodeAvailableForProductResult(event:ResultEvent):void {
+            var _available:Boolean = Boolean(event.result);
+            if (_available) {
+                codeTextInput.errorString = '';
+            } else {
+                codeTextInput.errorString = resourceManager.getString('ProductManagementPanel', 'codeIsNotAvailable', [ codeTextInput.text ]);
+            }
+        }
+
+
         ]]>
 </mx:Script>
 </mx:Canvas>

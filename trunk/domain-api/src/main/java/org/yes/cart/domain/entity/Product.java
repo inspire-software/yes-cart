@@ -68,19 +68,34 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
     void setProductId(long productId);
 
     /**
-     * Get the product code.
+     * Get the unique product code.
      *
      * @return product code.
      */
     String getCode();
 
     /**
-     * Product code.
+     * Unique product code.
      * Limitation code must not contains underscore
      *
-     * @param code
+     * @param code unique code
      */
     void setCode(String code);
+
+    /**
+     * Get the non unique product code.
+     *
+     * @return product code.
+     */
+    String getManufacturerCode();
+
+    /**
+     * Manufacturer non unique product code.
+     * Limitation code must not contains underscore
+     *
+     * @param code manufacturer code
+     */
+    void setManufacturerCode(String code);
 
     /**
      * Get start of product availability.

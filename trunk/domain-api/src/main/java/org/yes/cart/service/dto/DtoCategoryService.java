@@ -93,5 +93,15 @@ public interface DtoCategoryService extends GenericDTOService<CategoryDTO>, Gene
      */
     boolean isUriAvailableForCategory(String seoUri, Long categoryId);
 
+    /**
+     * Check if GUID is available to be set for given category.
+     *
+     * @param guid GUID to check
+     * @param categoryId PK or null for transient
+     *
+     * @return true if this GUID is available
+     */
+    boolean isGuidAvailableForCategory(String guid, Long categoryId);
+
 
 }

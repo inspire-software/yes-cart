@@ -60,6 +60,21 @@ public interface ProductSku extends Auditable, Attributable, Rankable , Seoable,
     void setCode(String code);
 
     /**
+     * Get the non unique product code.
+     *
+     * @return product code.
+     */
+    String getManufacturerCode();
+
+    /**
+     * Manufacturer non unique product code.
+     * Limitation code must not contains underscore
+     *
+     * @param code manufacturer code
+     */
+    void setManufacturerCode(String code);
+
+    /**
      * Get the product.
      *
      * @return {@link Product}
