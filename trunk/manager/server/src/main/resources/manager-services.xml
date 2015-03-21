@@ -775,10 +775,16 @@
                     <list>
                         <value>productandcategorynames.xml</value>
                         <value>productnames.xml</value>
+                        <value>productcategorynames.delete.xml</value>
                         <value>productcategorynames.xml</value>
                         <value>productsku.xml</value>
+                        <value>productsattributes.delete.all.xml</value>
+                        <value>productsattributes.delete.xml</value>
                         <value>productsattributes.xml</value>
+                        <value>productskuattributes.delete.all.xml</value>
+                        <value>productskuattributes.delete.xml</value>
                         <value>productskuattributes.xml</value>
+                        <value>productaccessories.delete.xml</value>
                         <value>productaccessories.xml</value>
                     </list>
                 </entry>

@@ -17,11 +17,12 @@
 <import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
 
+    <mode>DELETE</mode>
     <entity-type>org.yes.cart.domain.entity.ProductAssociation</entity-type>
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>productaccessories(.*).csv(.*)</file-name-mask>
+        <file-name-mask>delete.productaccessories(.*).csv(.*)</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
@@ -56,14 +57,6 @@
             <entity-type>org.yes.cart.domain.entity.Product</entity-type>
             <name>productAssociated</name>
             <lookup-query>select p from ProductEntity p where p.guid = {productAssociated}</lookup-query>
-        </column-descriptor>
-
-        <!-- accessories rank -->
-        <column-descriptor>
-            <column-index>3</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>INT</data-type>
-            <name>rank</name>
         </column-descriptor>
 
     </import-columns>

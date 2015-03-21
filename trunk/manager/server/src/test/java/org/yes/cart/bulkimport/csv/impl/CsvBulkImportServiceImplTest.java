@@ -541,6 +541,45 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals("en#~#2 year(s)#~#ru#~#2 лет", productAttrDVal);
 
 
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/productsattributes.delete.native.xml", listener, importedFilesSet));
+            final long prodAttrsDelNative = System.currentTimeMillis() - dt;
+            System.out.println(" -20 products' attributes in " + prodAttrsDelNative + "millis (~" + (prodAttrsDelNative / 20) + " per item) native");
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCTATTRVALUE  ");
+            rs.next();
+            long cntProdValuesDelNative = rs.getLong(1);
+            rs.close();
+            assertEquals(3286L - 20L + cntBeforeProdValues, cntProdValuesDelNative);
+
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/productsattributes.delete.hbm.xml", listener, importedFilesSet));
+            final long prodAttrsDelHbm = System.currentTimeMillis() - dt;
+            System.out.println(" -20 products' attributes in " + prodAttrsDelHbm + "millis (~" + (prodAttrsDelHbm / 20) + " per item) hbm");
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCTATTRVALUE  ");
+            rs.next();
+            long cntProdValuesDelHbm = rs.getLong(1);
+            rs.close();
+            assertEquals(3286L - 40L + cntBeforeProdValues, cntProdValuesDelHbm);
+
+
+            dt = System.currentTimeMillis();
+            bulkImportService.doImport(createContext("src/test/resources/import/productsattributes.delete.native.all.xml", listener, importedFilesSet));
+            final long prodAttrsDelNativeAll = System.currentTimeMillis() - dt;
+            System.out.println(" -25 products' attributes in " + prodAttrsDelNativeAll + "millis (~" + (prodAttrsDelNativeAll / 25) + " per item) native all");
+
+            rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TPRODUCTATTRVALUE  ");
+            rs.next();
+            long cntProdValuesDelNativeAll = rs.getLong(1);
+            rs.close();
+            assertEquals(3286L - 65L + cntBeforeProdValues, cntProdValuesDelNativeAll);
+
+
+
+
             rs = getConnection().getConnection().createStatement().executeQuery ("select count(*) from TWAREHOUSE  ");
             rs.next();
             long cntBeforeWarehouse = rs.getLong(1);

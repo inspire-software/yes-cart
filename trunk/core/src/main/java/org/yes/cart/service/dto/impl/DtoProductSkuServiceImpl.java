@@ -296,7 +296,7 @@ public class DtoProductSkuServiceImpl
                         AttrValueProductSkuDTO attrValueDTO = getAssemblerDtoFactory().getByIface(AttrValueProductSkuDTO.class);
                         attrValueDTO.setAttributeDTO(available);
                         attrValueDTO.setSkuId(entityPk);
-                        attrValueDTO.setVal(prodValue.getVal());
+                        attrValueDTO.setVal("* " + prodValue.getVal());
                         full.add(attrValueDTO);
 
                     }

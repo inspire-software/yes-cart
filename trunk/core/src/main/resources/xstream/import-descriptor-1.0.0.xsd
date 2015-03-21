@@ -58,14 +58,29 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
+            <xs:element name="mode" type="ImportModeType" minOccurs="0"/>
             <xs:element name="entity-type" type="xs:string" minOccurs="1"/>
             <xs:element name="import-file-descriptor" type="ImportFileDescriptorType" minOccurs="1"/>
             <xs:element name="select-sql" type="xs:string" minOccurs="1"/>
             <xs:element name="insert-sql" type="xs:string" minOccurs="0"/>
+            <xs:element name="delete-sql" type="xs:string" minOccurs="0"/>
             <xs:element name="import-columns" type="ImportColumnsType" minOccurs="1"/>
         </xs:sequence>
 
     </xs:complexType>
+
+
+    <xs:simpleType name="ImportModeType">
+        <xs:annotation>
+            <xs:documentation>
+                This constraint corresponds to org.yes.cart.bulkimport.model.ImportDescriptor.ImportMode.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="MERGE"/>
+            <xs:enumeration value="DELETE"/>
+        </xs:restriction>
+    </xs:simpleType>
 
 
     <xs:complexType name="ImportFileDescriptorType">
@@ -84,6 +99,7 @@
             <xs:element name="text-qualifier" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
+
 
     <xs:complexType name="ImportColumnsType">
         <xs:sequence>
