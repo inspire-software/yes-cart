@@ -22,6 +22,7 @@ import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
 import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportColumn;
+import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.io.Serializable;
@@ -44,11 +45,13 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
 
     private String importDirectory;
 
+    private ImportMode mode;
     private String entityType;
     private Class entityTypeClass;
 
     private String selectSql;
     private String insertSql;
+    private String deleteSql;
 
     private boolean initialised = false;
 
@@ -58,6 +61,37 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     public CsvImportDescriptorImpl() {
         importFileDescriptor = new CsvImportFileImpl();
         importColumns = new ArrayList<CsvImportColumn>();
+        mode = ImportMode.MERGE;
+    }
+
+    /** {@inheritDoc} */
+    public ImportMode getMode() {
+        if (mode == null) {
+            mode = ImportMode.MERGE;
+        }
+        return mode;
+    }
+
+    /** {@inheritDoc} */
+    public void setMode(final ImportMode mode) {
+        if (mode == null) {
+            throw new IllegalArgumentException("Invalid import mode");
+        }
+        this.mode = mode;
+    }
+
+    /** {@inheritDoc} */
+    public String getModeName() {
+        return mode.name();
+    }
+
+    /** {@inheritDoc} */
+    public void setModeName(final String mode) {
+        try {
+            this.mode = ImportMode.valueOf(mode);
+        } catch (IllegalArgumentException iae) {
+            throw new IllegalArgumentException("Invalid import mode", iae);
+        }
     }
 
     /** {@inheritDoc} */
@@ -108,6 +142,15 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         this.insertSql = insertSql;
     }
 
+    /** {@inheritDoc} */
+    public String getDeleteSql() {
+        return deleteSql;
+    }
+
+    /** {@inheritDoc} */
+    public void setDeleteSql(final String deleteSql) {
+        this.deleteSql = deleteSql;
+    }
 
     ImportColumn getPrimaryKeyColumn() {
         if (!initialised) {

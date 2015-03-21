@@ -17,53 +17,41 @@
 <import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
 
-    <entity-type>org.yes.cart.domain.entity.ProductAssociation</entity-type>
+    <mode>DELETE</mode>
+    <entity-type>org.yes.cart.domain.entity.ProductCategory</entity-type>
 
     <import-file-descriptor>
         <file-encoding>UTF-8</file-encoding>
-        <file-name-mask>productaccessories(.*).csv(.*)</file-name-mask>
+        <file-name-mask>delete.productcategorynames(.*).csv(.*)</file-name-mask>
         <ignore-first-line>true</ignore-first-line>
         <column-delimiter>;</column-delimiter>
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
-    <select-sql>select p from ProductAssociationEntity p where p.association.code = {association} and p.product.guid = {product} and p.productAssociated.guid = {productAssociated}</select-sql>
+    <select-sql>select p from ProductCategoryEntity p where p.product.guid = {product} and p.category.guid = {category}</select-sql>
 
     <import-columns>
 
-        <!-- association code -->
+        <!-- Product -->
         <column-descriptor>
             <column-index>0</column-index>
             <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.Association</entity-type>
-            <name>association</name>
-            <lookup-query>select a from AssociationEntity a where a.code = {association}</lookup-query>
-        </column-descriptor>
-
-        <!-- product code -->
-        <column-descriptor>
-            <column-index>1</column-index>
-            <field-type>FK_FIELD</field-type>
             <entity-type>org.yes.cart.domain.entity.Product</entity-type>
             <name>product</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
             <lookup-query>select p from ProductEntity p where p.guid = {product}</lookup-query>
         </column-descriptor>
 
-        <!-- associated product code -->
+        <!-- Category -->
         <column-descriptor>
-            <column-index>2</column-index>
+            <column-index>1</column-index>
             <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.Product</entity-type>
-            <name>productAssociated</name>
-            <lookup-query>select p from ProductEntity p where p.guid = {productAssociated}</lookup-query>
-        </column-descriptor>
-
-        <!-- accessories rank -->
-        <column-descriptor>
-            <column-index>3</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>INT</data-type>
-            <name>rank</name>
+            <entity-type>org.yes.cart.domain.entity.Category</entity-type>
+            <name>category</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+            <lookup-query>select c from CategoryEntity c where c.guid = {category}</lookup-query>
         </column-descriptor>
 
     </import-columns>

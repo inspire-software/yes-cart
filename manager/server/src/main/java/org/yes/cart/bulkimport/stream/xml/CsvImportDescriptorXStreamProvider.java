@@ -60,6 +60,7 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
 
             xStream.alias("import-descriptor", CsvImportDescriptorImpl.class);
             xStream.addDefaultImplementation(CsvImportDescriptorImpl.class, ImportDescriptor.class);
+            xStream.aliasField("mode", CsvImportDescriptorImpl.class, "mode");
             xStream.aliasField("entity-type", CsvImportDescriptorImpl.class, "entityType");
             /*
                 "import-directory" is resolved by the ImportDirectorService and set programmatically, sice we
@@ -69,6 +70,7 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
             // xStream.aliasField("import-directory", CsvImportDescriptorImpl.class, "importDirectory");
             xStream.aliasField("select-sql", CsvImportDescriptorImpl.class, "selectSql");
             xStream.aliasField("insert-sql", CsvImportDescriptorImpl.class, "insertSql");
+            xStream.aliasField("delete-sql", CsvImportDescriptorImpl.class, "deleteSql");
 
             xStream.aliasField("import-file-descriptor", CsvImportDescriptorImpl.class, "importFileDescriptor");
             xStream.addDefaultImplementation(CsvImportFileImpl.class, CsvImportFile.class);

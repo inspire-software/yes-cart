@@ -265,7 +265,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                 return rez.get(0);
             }
             default: {
-                ShopCodeContext.getLog(this).error("#findSingleByQuery has more than one result for " + hsqlQuery);
+                ShopCodeContext.getLog(this).error("#findSingleByQuery has more than one result for {}, [{}]", hsqlQuery, parameters);
                 return rez.get(0);
             }
         }

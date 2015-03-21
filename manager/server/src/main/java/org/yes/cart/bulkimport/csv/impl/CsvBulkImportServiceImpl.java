@@ -17,6 +17,7 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.core.convert.TypeDescriptor;
@@ -177,6 +178,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
         for (File fileToImport : filesToImport) {
             importedFiles.add(fileToImport.getAbsolutePath());
         }
+
         for (File fileToImport : filesToImport) {
             doImport(statusListener, fileToImport, csvImportDescriptorName, csvImportDescriptor);
         }
@@ -196,7 +198,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                   final CsvImportDescriptor csvImportDescriptor) throws Exception {
 
         final Logger log = ShopCodeContext.getLog(this);
-        final String msgInfoImp = MessageFormat.format("import file : {0}", fileToImport.getAbsolutePath());
+        final ImportDescriptor.ImportMode mode = csvImportDescriptor.getMode();
+        final String msgInfoImp = MessageFormat.format("import file : {0} in {1} mode", fileToImport.getAbsolutePath(), mode);
         statusListener.notifyMessage(msgInfoImp);
         log.info(msgInfoImp);
 
@@ -215,7 +218,11 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
             String[] line;
             while ((line = csvFileReader.readLine()) != null) {
                 final CsvImportTuple tuple = new CsvImportTupleImpl(filename, lineNumber++, line);
-                doImport(statusListener, tuple, csvImportDescriptorName, csvImportDescriptor, null);
+                if (mode == ImportDescriptor.ImportMode.DELETE) {
+                    doImportDelete(statusListener, tuple, csvImportDescriptorName, csvImportDescriptor);
+                } else {
+                    doImportMerge(statusListener, tuple, csvImportDescriptorName, csvImportDescriptor, null);
+                }
             }
             final String msgInfoLines = MessageFormat.format("total data lines : {0}",
                     (csvImportDescriptor.getImportFileDescriptor().isIgnoreFirstLine() ? csvFileReader.getRowsRead() - 1 : csvFileReader.getRowsRead()));
@@ -248,44 +255,119 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
     }
 
-
-    /**
-     * Import single line.
-     * This method can be called recursive in case of sum imports.
-     *
-     * @param statusListener   error report
-     * @param tuple            single line from csv file
-     * @param csvImportDescriptorName file name of the descriptor
-     * @param descriptor       import descriptor
-     * @param masterObject     optional master object if found sub import
+    /*
+     * Delete single line.
      */
-    public void doImport(final JobStatusListener statusListener,
-                         final ImportTuple tuple,
-                         final String csvImportDescriptorName,
-                         final ImportDescriptor descriptor,
-                         final Object masterObject) throws Exception {
-        Object object = null;
+    void doImportDelete(final JobStatusListener statusListener,
+                        final CsvImportTuple tuple,
+                        final String csvImportDescriptorName,
+                        final CsvImportDescriptor descriptor) throws Exception {
+        List<Object> objects = null;
         final Logger log = ShopCodeContext.getLog(this);
-        final CsvImportDescriptor importDescriptor = (CsvImportDescriptor) descriptor;
         try {
 
 
-            if (importDescriptor.getInsertSql() != null) {
+            if (descriptor.getDeleteSql() != null) {
+
+                // No need to validate sub imports
+                validateAccessBeforeUpdate(null, null); // only allowed by system admins
+
+                executeNativeQuery(descriptor, null, tuple, descriptor.getDeleteSql());
+
+
+            } else {
+
+                objects = getExistingEntities(descriptor, descriptor.getSelectSql(), null, tuple);
+
+                if (CollectionUtils.isNotEmpty(objects)) {
+
+                    for (final Object object : objects) {
+                        /*
+                            Note: for correct data federation processing we need ALL-OR-NOTHING update for all import.
+                                  Once validation fails we fail the whole import with a rollback. Necessary to facilitate
+                                  objects with complex relationships to shop (e.g. products, SKU)
+                         */
+
+                        // No need to validate sub imports
+                        // Preliminary validation - not always applicable for transient object (e.g. products need category assignments)
+                        validateAccessBeforeUpdate(object, descriptor.getEntityTypeClass());
+
+                        genericDAO.delete(object);
+
+                        genericDAO.flushClear();
+                    }
+
+                }
+
+            }
+            statusListener.notifyPing("Deleting tuple: " + tuple.getSourceId()); // make sure we do not time out
+
+        } catch (AccessDeniedException ade) {
+
+            String message = MessageFormat.format(
+                    "Access denied during import row : {0} \ndescriptor {1} \nobject is {2}",
+                    tuple,
+                    csvImportDescriptorName,
+                    objects
+            );
+            log.error(message, ade);
+            statusListener.notifyError(message);
+            genericDAO.clear();
+
+            throw new Exception(message, ade);
+
+
+        } catch (Exception e) {
+
+            String additionalInfo = e.getMessage();
+            String message = MessageFormat.format(
+                    "during import row : {0} \ndescriptor {1} \nerror {2}\n{3} \nadditional info {4} \nobject is {5}",
+                    tuple,
+                    csvImportDescriptorName,
+                    e.getMessage(),
+                    ExceptionUtil.stackTraceToString(e),
+                    additionalInfo,
+                    objects
+            );
+            log.error(message, e);
+            statusListener.notifyError(message);
+            genericDAO.clear();
+
+            throw new Exception(message, e);
+        }
+    }
+
+
+    /*
+     * Import single line.
+     * This method can be called recursive in case of sub imports.
+     */
+    void doImportMerge(final JobStatusListener statusListener,
+                       final ImportTuple tuple,
+                       final String csvImportDescriptorName,
+                       final CsvImportDescriptor descriptor,
+                       final Object masterObject) throws Exception {
+        Object object = null;
+        final Logger log = ShopCodeContext.getLog(this);
+        try {
+
+
+            if (descriptor.getInsertSql() != null) {
                 // this is dirty hack , because of import speed
                 if (masterObject == null) {
                     // No need to validate sub imports
                     validateAccessBeforeUpdate(null, null); // only allowed by system admins
                 }
-                executeNativeInsert(importDescriptor, masterObject, tuple);
+                executeNativeQuery(descriptor, masterObject, tuple, descriptor.getInsertSql());
 
 
             } else {
 
-                object = getEntity(tuple, null, masterObject, importDescriptor);
+                object = getEntity(tuple, null, masterObject, descriptor);
 
 
-                fillEntityFields(tuple, object, importDescriptor.getImportColumns(FieldTypeEnum.FIELD));
-                fillEntityForeignKeys(tuple, object, importDescriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, importDescriptor);
+                fillEntityFields(tuple, object, descriptor.getImportColumns(FieldTypeEnum.FIELD));
+                fillEntityForeignKeys(tuple, object, descriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, descriptor);
 
                 /*
                     Note: for correct data federation processing we need ALL-OR-NOTHING update for all import.
@@ -296,16 +378,16 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 if (masterObject == null) {
                     // No need to validate sub imports
                     // Preliminary validation - not always applicable for transient object (e.g. products need category assignments)
-                    validateAccessBeforeUpdate(object, importDescriptor.getEntityTypeClass());
+                    validateAccessBeforeUpdate(object, descriptor.getEntityTypeClass());
                 }
                 genericDAO.saveOrUpdate(object);
-                performSubImport(statusListener, tuple, csvImportDescriptorName, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SLAVE_INLINE_FIELD));
-                performSubImport(statusListener, tuple, csvImportDescriptorName, importDescriptor, object, importDescriptor.getImportColumns(FieldTypeEnum.SLAVE_TUPLE_FIELD));
+                performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object, descriptor.getImportColumns(FieldTypeEnum.SLAVE_INLINE_FIELD));
+                performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object, descriptor.getImportColumns(FieldTypeEnum.SLAVE_TUPLE_FIELD));
 
                 if (masterObject == null) {
                     // No need to validate sub imports
                     // This validation is after sub imports to facilitate objects with complex relationships to shop (e.g. products)
-                    validateAccessAfterUpdate(object, importDescriptor.getEntityTypeClass());
+                    validateAccessAfterUpdate(object, descriptor.getEntityTypeClass());
                 }
 
                 genericDAO.flushClear();
@@ -350,13 +432,18 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
         }
     }
 
-    private void executeNativeInsert(final ImportDescriptor descriptor, final Object masterObject, final ImportTuple tuple) {
-        final LookUpQuery query = descriptorInsert.getQuery(descriptor, masterObject, tuple, valueStringAdapter, descriptor.getInsertSql());
+    private void executeNativeQuery(final ImportDescriptor descriptor,
+                                    final Object masterObject,
+                                    final ImportTuple tuple,
+                                    final String queryTemplate) {
+        final LookUpQuery query = descriptorInsert.getQuery(descriptor, masterObject, tuple, valueStringAdapter, queryTemplate);
         if (query.getQueryString().indexOf(";\n") == -1) {
             genericDAO.executeNativeUpdate(query.getQueryString());
         } else {
             for (final String statement : query.getQueryString().split(";\n")) {
-                genericDAO.executeNativeUpdate(statement);
+                if (StringUtils.isNotBlank(statement)) {
+                    genericDAO.executeNativeUpdate(statement);
+                }
             }
         }
     }
@@ -371,7 +458,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
             final List<ImportTuple> subTuples = tuple.getSubTuples(importDescriptor, slaveTable, valueDataAdapter);
             CsvImportDescriptor innerCsvImportDescriptor = (CsvImportDescriptor) slaveTable.getImportDescriptor();
             for (ImportTuple subTuple : subTuples) {
-                doImport(statusListener,
+                doImportMerge(statusListener,
                         subTuple,
                         csvImportDescriptorName,
                         innerCsvImportDescriptor,
@@ -391,10 +478,9 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      *                   InvocationTargetException,
      *                   IllegalAccessException)
      */
-    private void fillEntityFields(
-            final ImportTuple tuple,
-            final Object object,
-            final Collection<ImportColumn> importColumns) throws Exception {
+    private void fillEntityFields(final ImportTuple tuple,
+                                  final Object object,
+                                  final Collection<ImportColumn> importColumns) throws Exception {
 
         final Class clz = object.getClass();
 
@@ -597,6 +683,28 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
         final LookUpQuery query = columnLookUp.getQuery(importDescriptor, masterObject, tuple, valueDataAdapter, queryTemplate);
         final Object object = genericDAO.findSingleByQuery(query.getQueryString(), query.getParameters());
+        return object;
+
+    }
+
+    /**
+     * Try to get existing entity for update. In case of sub import master object will be used in parameters if
+     * {@link ImportColumn#isUseMasterObject()} set to true.
+     *
+     * @param importDescriptor descriptor
+     * @param queryTemplate    template to use with tuple columns as parameter values
+     * @param masterObject in case of subimport will be not null, but will be used with flag only
+     * @param tuple        csv row to get the parameter value for lookup query.
+     *
+     * @return existing entity or null if not found
+     */
+    private List<Object> getExistingEntities(final ImportDescriptor importDescriptor,
+                                             final String queryTemplate,
+                                             final Object masterObject,
+                                             final ImportTuple tuple) {
+
+        final LookUpQuery query = columnLookUp.getQuery(importDescriptor, masterObject, tuple, valueDataAdapter, queryTemplate);
+        final List<Object> object = genericDAO.findByQuery(query.getQueryString(), query.getParameters());
         return object;
 
     }

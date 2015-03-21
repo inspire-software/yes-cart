@@ -25,6 +25,36 @@ import java.util.Collection;
  */
 public interface ImportDescriptor {
 
+    enum ImportMode { MERGE, DELETE }
+
+    /**
+     * Get import mode for given descriptor.
+     *
+     * @return import mode
+     */
+    ImportMode getMode();
+
+    /**
+     * Set import mode.
+     *
+     * @param mode mode
+     */
+    void setMode(ImportMode mode);
+
+    /**
+     * Get import mode for given descriptor.
+     *
+     * @return import mode
+     */
+    String getModeName();
+
+    /**
+     * Set import mode.
+     *
+     * @param mode mode
+     */
+    void setModeName(String mode);
+
     /**
      * Get full qualified entity interface. For example - org.yes.cart.domain.entity.Brand
      *
@@ -100,6 +130,19 @@ public interface ImportDescriptor {
      * @param insertSql insert sql
      */
     void setInsertSql(String insertSql);
+
+    /**
+     * Get delete sql, which used instead of hibernate object delete to
+     * speed up bulk import.
+     *
+     * @return        delete sql
+     */
+    String getDeleteSql();
+
+    /**
+     * @param deleteSql delete sql
+     */
+    void setDeleteSql(String deleteSql);
 
 
 }
