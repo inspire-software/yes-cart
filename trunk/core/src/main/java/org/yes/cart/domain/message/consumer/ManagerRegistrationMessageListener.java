@@ -82,7 +82,7 @@ public class ManagerRegistrationMessageListener implements Runnable {
         final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
         mailComposer.composeMessage(
                 mail,
-                null,
+                "DEFAULT",
                 registrationMessage.getLocale(),
                 registrationMessage.getMailTemplatePathChain(),
                 registrationMessage.getTemplateName(),
