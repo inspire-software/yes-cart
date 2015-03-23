@@ -1,0 +1,1 @@
+$name lives in theme park with <% with.each{ out.print(it + ' ');}%>

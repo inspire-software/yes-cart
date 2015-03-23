@@ -1,0 +1,4 @@
+Уважаемый (-ая) $customer.firstname $customer.lastname !
+Доставка $deliveryNum по заказу $root.ordernum на $shop.name подготовлена.
+Метод доставки: $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>
+Пожалуйста, проверьте информацию на странице Вашего профиля на "<%out.print(shop.getDefaultShopUrl())%>" $shop.name

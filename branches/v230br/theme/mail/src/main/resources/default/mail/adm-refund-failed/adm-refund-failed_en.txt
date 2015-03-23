@@ -1,0 +1,1 @@
+Refund failed for $root.ordernum at $shop.name

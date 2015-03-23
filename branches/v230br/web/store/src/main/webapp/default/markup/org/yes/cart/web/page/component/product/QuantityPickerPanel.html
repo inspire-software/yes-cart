@@ -1,0 +1,29 @@
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+    <a wicket:id="removeOneLink" class="js-qty-pick js-qty-remove sku-qty-remove" href="#" rel="nofollow">
+        <span class="glyphicon glyphicon-minus"></span>
+    </a>
+    <input wicket:id="quantity" type="text" class="form-control js-qty-value sku-qty-value" data-toggle="tooltip" data-placement="top"/>
+    <a wicket:id="addOneLink" class="js-qty-pick js-qty-add sku-qty-add" href="#" rel="nofollow">
+        <span class="glyphicon glyphicon-plus"></span>
+    </a>
+</wicket:panel>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.yes</groupId>
+    <artifactId>yes-cart</artifactId>
+    <packaging>pom</packaging>
+    <version>2.2.0-SNAPSHOT</version>
+    <name>Yes Cart</name>
+    <url>http://code.google.com/p/yes-cart/</url>
+    <modules>
+        <module>payment-api</module>
+        <module>domain-api</module>
+        <module>persistence</module>
+        <module>core-modules</module>
+        <module>core</module>
+        <module>theme</module>
+        <module>web</module>
+        <module>manager</module>
+    </modules>
+    <properties>
+        <hibernate.core.version>4.2.0.Final</hibernate.core.version>
+        <hibernate.search.version>4.2.0.Final</hibernate.search.version>
+        <lucene.version>3.5.0</lucene.version>
+        <!--<lucene.version>4.3.0</lucene.version>-->
+        <cxf.version>2.5.2</cxf.version>
+        <spring-security.version>3.1.4.RELEASE</spring-security.version>
+        <spring.version>3.2.3.RELEASE</spring.version>
+        <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
+        <ehcache.version>2.6.6</ehcache.version>
+        <!--<ehcache.version>1.6.2</ehcache.version>-->
+
+        <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>
+        <db.config.yes.login>app</db.config.yes.login>
+        <db.config.yes.password>app</db.config.yes.password>
+        <db.config.yes.driver>org.apache.derby.jdbc.ClientDriver</db.config.yes.driver>
+        <db.config.yes.url>jdbc:derby://localhost:1527/yes;create=true</db.config.yes.url>
+        <db.config.yespay.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yespay.hibernate.dialect>
+        <db.config.yespay.login>app</db.config.yespay.login>
+        <db.config.yespay.password>app</db.config.yespay.password>
+        <db.config.yespay.driver>org.apache.derby.jdbc.ClientDriver</db.config.yespay.driver>
+        <db.config.yespay.url>jdbc:derby://localhost:1527/yespay;create=true</db.config.yespay.url>
+
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+    </properties>
+    <repositories>
+
+        <repository>
+            <id>maven-central</id>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <!--<repository>-->
+            <!--<id>terracota</id>-->
+            <!--<url>http://www.terracotta.org/download/reflector/releases</url>-->
+            <!--<snapshots><enabled>false</enabled></snapshots>-->
+        <!--</repository>-->
+        <repository>
+            <id>spring-release</id>
+            <url>http://maven.springframework.org/release</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>spring-release-external</id>
+            <url>http://repo.spring.io/ext-release-local</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>sonatype-public</id>
+            <url>http://repository.sonatype.org/content/groups/public</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>sonatype-flexgroup</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>jboss-public</id>
+            <url>http://repository.jboss.org/nexus/content/groups/public</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven-central</id>
+            <url>http://repo1.maven.org/maven2</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>sonatype-public</id>
+            <url>http://repository.sonatype.org/content/groups/public</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>sonatype-flexgroup</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+        </pluginRepository>
+    </pluginRepositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!--dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>${spring.version}</version>
+        </dependency-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <scope>runtime</scope>
+            <version>1.2.12</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit-dep</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit4</artifactId>
+            <version>2.5.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <version>1.3.RC2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>1.3.RC2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-integration</artifactId>
+            <version>1.3.RC2</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- XSLT 2.0 support -->
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.5.1-8</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.6</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.2.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>2.4.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.3</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.7</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.3.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.3.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.2.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.10</version>
+                    <configuration>
+                        <runOrder>hourly</runOrder>
+                        <argLine>-Xms512m -Xmx1024m</argLine>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.1.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>dbunit-maven-plugin</artifactId>
+                    <version>1.0-beta-3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>hibernate3-maven-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.flexmojos</groupId>
+                    <artifactId>flexmojos-maven-plugin</artifactId>
+                    <version>4.0-RC2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+    <profiles>
+
+        <!--
+            DATABASE PROFILES
+        -->
+        <profile>
+            <!-- Use this profile to setup MySQL connection -->
+            <id>mysql</id>
+            <properties>
+                <db.config.yes.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</db.config.yes.hibernate.dialect>
+                <db.config.yes.login>yes</db.config.yes.login>
+                <db.config.yes.password>y3$PaSs</db.config.yes.password>
+                <db.config.yes.driver>com.mysql.jdbc.Driver</db.config.yes.driver>
+                <db.config.yes.url>
+                    <![CDATA[jdbc:mysql://localhost/yes?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]></db.config.yes.url>
+                <db.config.yespay.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</db.config.yespay.hibernate.dialect>
+                <db.config.yespay.login>yespay</db.config.yespay.login>
+                <db.config.yespay.password>y3$PaSs</db.config.yespay.password>
+                <db.config.yespay.driver>com.mysql.jdbc.Driver</db.config.yespay.driver>
+                <db.config.yespay.url>
+                    <![CDATA[jdbc:mysql://localhost/yespay?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]></db.config.yespay.url>
+            </properties>
+        </profile>
+        <profile>
+            <!-- Use this profile to setup Derby connection -->
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>derby</id>
+            <properties>
+                <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>
+                <db.config.yes.login>app</db.config.yes.login>
+                <db.config.yes.password>app</db.config.yes.password>
+                <db.config.yes.driver>org.apache.derby.jdbc.ClientDriver</db.config.yes.driver>
+                <db.config.yes.url>jdbc:derby://localhost:1527/yes;create=true</db.config.yes.url>
+                <db.config.yespay.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yespay.hibernate.dialect>
+                <db.config.yespay.login>app</db.config.yespay.login>
+                <db.config.yespay.password>app</db.config.yespay.password>
+                <db.config.yespay.driver>org.apache.derby.jdbc.ClientDriver</db.config.yespay.driver>
+                <db.config.yespay.url>jdbc:derby://localhost:1527/yespay;create=true</db.config.yespay.url>
+            </properties>
+        </profile>
+
+        <!--
+            HTTP/HTTPS PROFILES
+        -->
+        <profile>
+            <!-- Use this profile in conjunction with tomcatBehindApache to setup HTTPS outside of Tomcat -->
+            <id>secure</id>
+            <properties>
+                <wicket.security.enabled>true</wicket.security.enabled>
+                <yum.transport.guarantee>CONFIDENTIAL</yum.transport.guarantee>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Use this profile in conjunction with tomcatDefault to setup HTTPS managed Tomcat -->
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>unsecure</id>
+            <properties>
+                <wicket.security.enabled>false</wicket.security.enabled>
+                <yum.transport.guarantee>NONE</yum.transport.guarantee>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Use this profile in conjunction with unsecure to setup HTTPS managed Tomcat -->
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>tomcatDefault</id>
+            <properties>
+                <wicket.secure.port>8443</wicket.secure.port>
+                <wicket.unsecure.port>8080</wicket.unsecure.port>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Use this profile in conjunction with secure to setup HTTPS outside of Tomcat -->
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>tomcatBehindApache</id>
+            <properties>
+                <wicket.secure.port>443</wicket.secure.port>
+                <wicket.unsecure.port>80</wicket.unsecure.port>
+            </properties>
+        </profile>
+
+        <!--
+            MAIL PROFILES
+        -->
+        <profile>
+            <!-- Default mail config, use this template to setup others if required -->
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>mailProd</id>
+            <properties>
+                <yum.mail.host>localhost</yum.mail.host>
+                <yum.mail.port>25</yum.mail.port>
+                <yum.mail.username>username</yum.mail.username>
+                <yum.mail.password>password</yum.mail.password>
+                <yum.mail.smtp.starttls.enable>true</yum.mail.smtp.starttls.enable>
+            </properties>
+        </profile>
+
+        <!--
+            CLUSTER PROFILES
+
+            All nodes should be named YES[d], i.e. YES0, YES1, YES2 etc.
+
+            Backdoor and cache director URI are internal URI that YUM will call to trigger
+            commands on that node (i.e. self reference in cluster)
+
+            If lucene index is shared between nodes than only one must have index enabled,
+            the rest should have index disabled.
+        -->
+        <profile>
+            <!-- Default single node storefront, use this template to setup others if required -->
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>clusterYesNode0local</id>
+            <properties>
+                <cluster.config.yes.node_id>YES0</cluster.config.yes.node_id>
+                <cluster.config.yes.backdoor_uri>http://localhost:8080/yes-shop/services/backdoor</cluster.config.yes.backdoor_uri>
+                <cluster.config.yes.cachedirector_uri>http://localhost:8080/yes-shop/services/cachedirector</cluster.config.yes.cachedirector_uri>
+                <cluster.config.yes.lucene_index_disabled>false</cluster.config.yes.lucene_index_disabled>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Default single node storefront, use this template to setup others if required -->
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>clusterYesApiNode0local</id>
+            <properties>
+                <cluster.config.yesapi.node_id>YES1</cluster.config.yesapi.node_id>
+                <cluster.config.yesapi.backdoor_uri>http://localhost:8080/yes-shop/services/backdoor</cluster.config.yesapi.backdoor_uri>
+                <cluster.config.yesapi.cachedirector_uri>http://localhost:8080/yes-shop/services/cachedirector</cluster.config.yesapi.cachedirector_uri>
+                <cluster.config.yesapi.lucene_index_disabled>true</cluster.config.yesapi.lucene_index_disabled>
+            </properties>
+        </profile>
+
+
+        <!--
+            BUILD PROCESS OPTIMISATION
+
+            Includes profiles to skip some steps of full build to save some time
+
+            skipInstaller - installer module is not built
+        -->
+
+        <profile>
+            <activation><activeByDefault>false</activeByDefault></activation>
+            <id>buildInstaller</id>
+            <modules>
+                <module>payment-api</module>
+                <module>domain-api</module>
+                <module>persistence</module>
+                <module>core-modules</module>
+                <module>core</module>
+                <module>theme</module>
+                <module>web</module>
+                <module>manager</module>
+                <module>installer</module>
+            </modules>
+        </profile>
+
+    </profiles>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring-security.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-expression</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-aop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jdbc</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                    </exclusion>
+                </exclusions>
+
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring-security.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-expression</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-aop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jdbc</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                    </exclusion>
+                </exclusions>
+
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${spring-security.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-expression</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-aop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jdbc</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                    </exclusion>
+
+                </exclusions>
+
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

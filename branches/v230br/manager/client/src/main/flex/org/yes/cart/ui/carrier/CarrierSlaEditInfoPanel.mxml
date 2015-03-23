@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*"
+                creationComplete="init()">
+
+    <mx:HBox>
+        <mx:Form>
+            <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='name')">
+                <mx:TextInput width="195" id="cname"/>
+            </mx:FormItem>
+            <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayName')">
+                <yci18n:i18nStringField id="displayNames"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='maxDays')">
+                <mx:TextInput width="195" id="maxDays"/>
+            </mx:FormItem>
+            <mx:FormItem width="100%">
+                <mx:HBox>
+                    <mx:CheckBox id="billingAddressNotRequired"/> <mx:Label text="@Resource(bundle='CarrierManagementPanel',key='billingAddressNotRequired')"/>
+                </mx:HBox>
+            </mx:FormItem>
+            <mx:FormItem width="100%">
+                <mx:HBox>
+                    <mx:CheckBox id="deliveryAddressNotRequired"/> <mx:Label text="@Resource(bundle='CarrierManagementPanel',key='deliveryAddressNotRequired')"/>
+                </mx:HBox>
+            </mx:FormItem>
+            <mx:FormItem>
+                <mx:Button id="saveBtn" label="@Resource(bundle='CarrierManagementPanel',key='update')"/>
+            </mx:FormItem>
+        </mx:Form>
+        <mx:Form>
+            <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='description')">
+                <mx:TextArea width="195" id="description"/>
+            </mx:FormItem>
+            <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayDescription')">
+                <yci18n:i18nStringField id="displayDescriptions"/>
+            </mx:FormItem>
+        </mx:Form>
+    </mx:HBox>
+
+    <mx:Script><![CDATA[
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.utils.StringUtil;
+
+        import org.yes.cart.impl.CarrierSlaDTOImpl;
+
+        private var _carrierSlaDTOImpl:CarrierSlaDTOImpl;
+        [Bindable]
+        private var slaTypes:Array;
+
+        private var _binding:Array = [];
+
+        public function get carrierSlaDTOImpl():CarrierSlaDTOImpl {
+            return _carrierSlaDTOImpl;
+        }
+
+        public function set carrierSlaDTOImpl(value:CarrierSlaDTOImpl):void {
+            _carrierSlaDTOImpl = value;
+            unbind();
+            bind();
+        }
+
+
+        private function init():void {
+
+        }
+
+        private function unbind():void {
+            for each (var _watch:ChangeWatcher in _binding) {
+                _watch.unwatch();
+            }
+            _binding = [];
+            displayNames.setSourceObject(null, 'displayNames');
+            displayDescriptions.setSourceObject(null, 'displayDescriptions');
+        }
+
+        private function bind():void {
+
+            displayNames.setSourceObject(_carrierSlaDTOImpl, 'displayNames');
+            displayDescriptions.setSourceObject(_carrierSlaDTOImpl, 'displayDescriptions');
+
+            _binding.push(BindingUtils.bindProperty(this.cname, "text", _carrierSlaDTOImpl, "name"));
+            _binding.push(BindingUtils.bindProperty(this.description, "text", _carrierSlaDTOImpl, "description"));
+            _binding.push(BindingUtils.bindProperty(this.maxDays, "text", _carrierSlaDTOImpl, "maxDays"));
+            _binding.push(BindingUtils.bindProperty(this.billingAddressNotRequired, "selected", _carrierSlaDTOImpl, "billingAddressNotRequired"));
+            _binding.push(BindingUtils.bindProperty(this.deliveryAddressNotRequired, "selected", _carrierSlaDTOImpl, "deliveryAddressNotRequired"));
+
+            _binding.push(BindingUtils.bindProperty(_carrierSlaDTOImpl, "name", this.cname, "text"));
+            _binding.push(BindingUtils.bindProperty(_carrierSlaDTOImpl, "description", this.description, "text"));
+            _binding.push(BindingUtils.bindProperty(_carrierSlaDTOImpl, "maxDays", this.maxDays, "text"));
+            _binding.push(BindingUtils.bindProperty(_carrierSlaDTOImpl, "billingAddressNotRequired", this.billingAddressNotRequired, "selected"));
+            _binding.push(BindingUtils.bindProperty(_carrierSlaDTOImpl, "deliveryAddressNotRequired", this.deliveryAddressNotRequired, "selected"));
+
+        }
+
+        public static function isBlank(str:String):Boolean {
+            return (str == null || StringUtil.trim(str).length == 0);
+        }
+
+        ]]>
+    </mx:Script>
+</mx:Canvas>
