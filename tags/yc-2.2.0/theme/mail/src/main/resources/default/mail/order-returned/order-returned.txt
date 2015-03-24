@@ -1,0 +1,3 @@
+Dear $customer.firstname $customer.lastname !
+Return for order $root.ordernum at $shop.name was processed
+More details on self care page at "<%out.print(shop.getDefaultShopUrl())%>" $shop.name

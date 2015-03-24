@@ -1,0 +1,455 @@
+<?xml version="1.0"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:prod="org.yes.cart.ui.product.*"
+           width="100%" height="100%" creationComplete="init();">
+    <mx:Panel width="100%" height="100%" title="@Resource(bundle='PaymentGateConfigManagementPanel',key='pgwconfig')"
+              paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+
+        <mx:VDividedBox width="100%" height="100%">
+            <mx:VBox width="100%" height="50%">
+                <mx:DataGrid id="gatewayGrid" dataProvider="{pgList}" width="100%" height="100%"
+                             itemClick="onGatewaySelected(event)">
+                    <mx:columns>
+
+                        <mx:DataGridColumn width="60"
+                                           editable="true"
+                                           headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='active')"
+                                           dataField="active"
+                                           editorDataField="selected"
+                                           textAlign="center"
+                                           rendererIsEditor="true">
+                            <mx:itemRenderer>
+                                <mx:Component>
+                                    <mx:HBox horizontalAlign="center">
+                                        <mx:Button id="activate"
+                                                   label="@Resource(bundle='PaymentGateConfigManagementPanel',key='deactivated')"
+                                                   toolTip="@Resource(bundle='PaymentGateConfigManagementPanel',key='activate')"
+                                                   click="onActivateClick(event)"
+                                                   visible="{!data.active}" includeInLayout="{!data.active}">
+                                            <mx:Script><![CDATA[
+                                                import com.hexagonstar.util.debug.Debug;
+
+                                                private function onActivateClick(event:MouseEvent):void {
+                                                    if (outerDocument.shopDTOImpl == null) {
+                                                        Debug.trace("DEBUG new active status is ON for " + data.name);
+                                                        outerDocument.remotePaymentModulesManagementService.allowPaymentGateway(data.label);
+                                                    } else {
+                                                        Debug.trace("DEBUG new active status is ON for " + data.name + " at shop " + outerDocument.shopDTOImpl.code);
+                                                        outerDocument.remotePaymentModulesManagementService.allowPaymentGatewayForShop(data.label, outerDocument.shopDTOImpl.code);
+                                                    }
+                                                    data.active = true;
+                                                    activate.visible = false;
+                                                    activate.includeInLayout = false;
+                                                    deactivate.visible = true;
+                                                    deactivate.includeInLayout = true;
+
+                                                }
+                                                ]]></mx:Script>
+                                        </mx:Button>
+                                        <mx:Button id="deactivate"
+                                                   label="@Resource(bundle='PaymentGateConfigManagementPanel',key='activated')"
+                                                   toolTip="@Resource(bundle='PaymentGateConfigManagementPanel',key='deactivate')"
+                                                   click="onDeactivateClick(event)"
+                                                   visible="{data.active}" includeInLayout="{data.active}">
+                                            <mx:Script><![CDATA[
+                                                private function onDeactivateClick(event:MouseEvent):void {
+                                                    if (outerDocument.shopDTOImpl == null) {
+                                                        Debug.trace("DEBUG new active status is OFF for " + data.name);
+                                                        outerDocument.remotePaymentModulesManagementService.disallowPaymentGateway(data.label);
+                                                    } else {
+                                                        Debug.trace("DEBUG new active status is OFF for " + data.name + " at shop " + outerDocument.shopDTOImpl.code);
+                                                        outerDocument.remotePaymentModulesManagementService.disallowPaymentGatewayForShop(data.label, outerDocument.shopDTOImpl.code);
+                                                    }
+                                                    data.active = false;
+                                                    activate.visible = true;
+                                                    activate.includeInLayout = true;
+                                                    deactivate.visible = false;
+                                                    deactivate.includeInLayout = false;
+                                                }
+                                                ]]></mx:Script>
+                                        </mx:Button>
+                                    </mx:HBox>
+                                </mx:Component>
+                            </mx:itemRenderer>
+                        </mx:DataGridColumn>
+
+                        <mx:DataGridColumn width="400" editable="false"
+                                           headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='name')"
+                                           dataField="name"/>
+
+                        <mx:DataGridColumn width="200" editable="false"
+                                           headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='label')"
+                                           dataField="label"/>
+
+
+                    </mx:columns>
+                </mx:DataGrid>
+            </mx:VBox>
+            <mx:VBox width="100%" height="50%">
+                <mx:DataGrid id="parameterGrid" dataProvider="{pgParameters}" width="100%" height="100%"
+                             itemEditEnd="onAttributeValueEditEnd(event);"
+                             visible="{pgSelected}">
+                    <mx:columns>
+                        <mx:DataGridColumn width="200"
+                                           headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='name')"
+                                           dataField="name"/>
+                        <mx:DataGridColumn width="400"
+                                           headerText="@Resource(bundle='PaymentGateConfigManagementPanel',key='value')"
+                                           dataField="value">
+
+                            <mx:itemRenderer>
+                                <mx:Component>
+                                    <mx:HBox>
+                                        <mx:TextInput id="valueTextInput" editable="false" width="100%"
+                                                      text="{data.value}"/>
+                                        <mx:Button id="editBtn" width="30"
+                                                   label="..."
+                                                   click="openPopup();"/>
+                                        <mx:Script><![CDATA[
+                                            import mx.controls.Alert;
+                                            import mx.controls.Button;
+                                            import mx.controls.DataGrid;
+                                            import mx.core.FlexGlobals;
+                                            import mx.core.IFlexDisplayObject;
+                                            import mx.events.DataGridEvent;
+                                            import mx.events.DataGridEventReason;
+                                            import mx.managers.PopUpManager;
+
+                                            import org.yes.cart.ui.attributes.valuedialog.SimpleTextAreaDialog;
+
+                                            import org.yes.cart.ui.attributes.valuedialog.SimpleTextDialog;
+
+                                            import org.yes.cart.ui.attributes.valuedialog.ValueDialog;
+
+
+                                            private var popUp:ValueDialog = null;
+
+                                            private function openPopup():void {
+                                                var clz:Class = getPopUpClassName();
+
+                                                popUp = ValueDialog(PopUpManager.createPopUp(
+                                                        DisplayObject(FlexGlobals.topLevelApplication), clz, true));
+                                                popUp.windowTitle = data.name;
+                                                popUp.value = data.value;
+                                                popUp.setInformation(data.description);
+
+                                                if (clz == SimpleTextDialog)  {   //not localizable
+                                                    (popUp as SimpleTextDialog).displayValFormItem.visible = false;
+                                                    (popUp as SimpleTextDialog).displayValFormItem.includeInLayout = false;
+
+                                                }
+
+                                                var btnSave:Button = popUp.getButtonSave();
+
+                                                btnSave.addEventListener(MouseEvent.CLICK, onSaveBtnclick);
+
+                                                PopUpManager.centerPopUp(IFlexDisplayObject(popUp));
+
+                                            }
+
+                                            private function onSaveBtnclick(event:MouseEvent):void {
+                                                if (popUp != null) {
+                                                    data.value = popUp.value;
+                                                    var dg:DataGrid = DataGrid(this.owner);
+                                                    dg.dataProvider.itemUpdated(data);
+
+                                                    var dataGridEvent:DataGridEvent =
+                                                            new DataGridEvent(DataGridEvent.ITEM_EDIT_END, false, true);
+                                                    dataGridEvent.columnIndex = /*editedItemPosition.columnIndex*/1;
+                                                    dataGridEvent.dataField = "value"/*_columns[editedItemPosition.columnIndex].dataField*/;
+                                                    dataGridEvent.rowIndex = dg.selectedIndex;
+                                                    dataGridEvent.itemRenderer = /*editedItemRenderer*/ null;
+                                                    dataGridEvent.reason == DataGridEventReason.OTHER;
+                                                    dg.dispatchEvent(dataGridEvent);
+
+                                                    popUp.getButtonSave().removeEventListener(MouseEvent.CLICK, onSaveBtnclick);
+                                                    PopUpManager.removePopUp(IFlexDisplayObject(popUp));
+                                                    popUp = null;
+                                                }
+                                            }
+
+                                            /**
+                                             * Factory method to create particular dialog.
+                                             * @return dialog to edit value.
+                                             */
+                                            private function getPopUpClassName():Class {
+
+                                                if (data.value.length > 100) {
+                                                    return SimpleTextAreaDialog;
+                                                }
+
+                                                return SimpleTextDialog;
+                                            }
+                                            ]]></mx:Script>
+                                    </mx:HBox>
+                                </mx:Component>
+                            </mx:itemRenderer>
+
+
+                        </mx:DataGridColumn>
+                    </mx:columns>
+                </mx:DataGrid>
+
+            </mx:VBox>
+        </mx:VDividedBox>
+
+</mx:Panel>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remotePaymentModulesManagementService"
+                     destination="remotePaymentModulesManagementService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getPaymentGateways" name="getPaymentGateways"
+                   result="onGetPaymentGatewaysResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="getPaymentGatewaysForShop" name="getPaymentGatewaysForShop"
+                   result="onGetPaymentGatewaysResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="getPaymentGatewayParameters" name="getPaymentGatewayParameters"
+                   result="onGetPaymentGatewayParametersResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="getPaymentGatewayParametersForShop" name="getPaymentGatewayParametersForShop"
+                   result="onGetPaymentGatewayParametersResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="allowPaymentGateway" name="allowPaymentGateway"
+                   result="onAllowPaymentGatewayResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="allowPaymentGatewayForShop" name="allowPaymentGatewayForShop"
+                   result="onAllowPaymentGatewayResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="disallowPaymentGateway" name="disallowPaymentGateway"
+                   result="onDisallowPaymentGatewayResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="disallowPaymentGatewayForShop" name="disallowPaymentGatewayForShop"
+                   result="onDisallowPaymentGatewayResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateConfigurationParameter" name="updateConfigurationParameter"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateConfigurationParameterForShop" name="updateConfigurationParameterForShop"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteDevService"
+                     destination="remoteDevService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="evictAllCache" name="evictAllCache"
+                   result="onEvictCacheResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="warmUp" name="warmUp"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:ArrayCollection id="pgList"/>
+    <mx:ArrayCollection id="pgParameters"/>
+    <mx:Boolean id="pgSelected"/>
+    <mx:String id="localeFilter"/>
+
+
+    <mx:Script><![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.controls.CheckBox;
+        import mx.events.CloseEvent;
+
+        import mx.events.DataGridEvent;
+        import mx.events.DataGridEventReason;
+        import mx.events.ListEvent;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+        import mx.controls.Alert;
+
+        import org.yes.cart.impl.ShopDTOImpl;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        private var _shopDTOImpl:ShopDTOImpl;
+
+
+        public function set shopDTOImpl(value:ShopDTOImpl):void {
+            _shopDTOImpl = value;
+        }
+
+        public function get shopDTOImpl():ShopDTOImpl {
+            return _shopDTOImpl;
+        }
+
+        /**
+         * Init created panel.
+         */
+        private function init():void {
+
+            localeFilter = resourceManager.getString('Common', 'localeFilter');
+
+            //Load list of payment gateways.
+            if (_shopDTOImpl == null) {
+                remotePaymentModulesManagementService.getPaymentGateways(localeFilter);
+            } else {
+                remotePaymentModulesManagementService.getPaymentGatewaysForShop(localeFilter, _shopDTOImpl.code);
+            }
+
+        }
+
+
+        /**
+         * Handle gateway selection event.
+         * @param event
+         */
+        private function onGatewaySelected(event:ListEvent):void {
+
+            var _item:Object = gatewayGrid.selectedItem;
+            pgSelected = _item != null;
+            if (pgSelected) {
+                if (_item.active) {
+                    if (_shopDTOImpl == null) {
+                        remotePaymentModulesManagementService.getPaymentGatewayParameters(_item.label, localeFilter);
+                    } else {
+                        remotePaymentModulesManagementService.getPaymentGatewayParametersForShop(_item.label, localeFilter, _shopDTOImpl.code);
+                    }
+                } else {
+                    pgParameters.refresh();
+                    pgParameters.removeAll();
+                }
+            }
+        }
+
+        private function onAllowPaymentGatewayResult(event:ResultEvent):void {
+            onActivationStatusResult(event);
+        }
+
+        private function onDisallowPaymentGatewayResult(event:ResultEvent):void {
+            onActivationStatusResult(event);
+        }
+
+        /**
+         * Handle obtain result.
+         * @param event event with result
+         */
+        private function onGetPaymentGatewaysResult(event:ResultEvent):void {
+            //assign loaded list of payment gateways to grid
+            pgList.refresh();
+            pgList.removeAll();
+            pgList.addAll(event.result as ArrayCollection);
+        }
+
+        /**
+         * Handle obtain result.
+         * @param event event with result
+         */
+        private function onGetPaymentGatewayParametersResult(event:ResultEvent):void {
+            //assign loaded list of payment gateways parameters to data grid.
+            pgParameters.refresh();
+            pgParameters.removeAll();
+            pgParameters.addAll(event.result as ArrayCollection);
+        }
+
+        /**
+         * Default fault handler.
+         * @param event
+         */
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+
+        /**
+         * Attribute value edit end.
+         * @param event grid event.
+         * @return nothing
+         */
+        private function onAttributeValueEditEnd(event:DataGridEvent):void {
+            if (event.reason == DataGridEventReason.CANCELLED) {
+                return; // Do not update cell.
+            }
+            event.preventDefault(); // Disable copying data back to the control.
+            var paymentGatewayParameter:Object = DataGrid(event.target).dataProvider[event.rowIndex];
+            onValueChanged(event, paymentGatewayParameter, /*textInput.text*/ paymentGatewayParameter.value);
+        }
+
+        /**
+         * Handle new data for payment gateway.
+         */
+        protected function onValueChanged(event:DataGridEvent, pgParameter:Object, newValue:Object):void {
+            if (_shopDTOImpl == null) {
+                Debug.trace("INFO new value " + pgParameter.value +
+                        " for " + pgParameter.label +
+                        " in gateway " + gatewayGrid.selectedItem.label +
+                        " at DEFAULT");
+
+                remotePaymentModulesManagementService.updateConfigurationParameter(
+                        gatewayGrid.selectedItem.label,
+                        pgParameter.label,
+                        pgParameter.value);
+            } else {
+                Debug.trace("INFO new value " + pgParameter.value +
+                        " for " + pgParameter.label +
+                        " in gateway " + gatewayGrid.selectedItem.label +
+                        " at shop " + _shopDTOImpl.code);
+
+                remotePaymentModulesManagementService.updateConfigurationParameterForShop(
+                        gatewayGrid.selectedItem.label,
+                        pgParameter.label,
+                        pgParameter.value,
+                        _shopDTOImpl.code
+                );
+            }
+        }
+
+        private function onActivationStatusResult(event:ResultEvent):void {
+            Alert.show(resourceManager.getString('PaymentGateConfigManagementPanel', 'evictCache'),
+                    resourceManager.getString('ShopManagerApplication', 'info'),
+                    Alert.YES | Alert.CANCEL, this, onGetImportStatusResultSuccess, null, Alert.YES);
+        }
+
+
+        private function onGetImportStatusResultSuccess(event:CloseEvent):void {
+            if (event.detail == Alert.YES) {
+                remoteDevService.evictAllCache();
+            }
+        }
+
+        private function onEvictCacheResult(event:ResultEvent):void {
+            Alert.show(resourceManager.getString('PaymentGateConfigManagementPanel', 'warmUpServers'),
+                    resourceManager.getString('ShopManagerApplication', 'info'),
+                    Alert.YES | Alert.CANCEL, this, onEvictCacheResultSuccess, null, Alert.YES);
+        }
+
+
+        private function onEvictCacheResultSuccess(event:CloseEvent):void {
+            if (event.detail == Alert.YES) {
+                remoteDevService.warmUp();
+            }
+        }
+
+
+        ]]></mx:Script>
+</mx:Canvas>

@@ -1,0 +1,2 @@
+Необходимо подтверждение заказа $root.ordernum на $shop.name
+для $customer.firstname $customer.lastname $customer.email

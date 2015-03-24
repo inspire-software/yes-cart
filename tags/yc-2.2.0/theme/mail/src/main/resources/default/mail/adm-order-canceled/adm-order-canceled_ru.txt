@@ -1,0 +1,1 @@
+Заказ $root.ordernum на $shop.name был отменен для $customer.firstname $customer.email

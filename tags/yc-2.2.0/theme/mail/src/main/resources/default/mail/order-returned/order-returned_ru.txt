@@ -1,0 +1,3 @@
+Уважаемый (-ая) $customer.firstname $customer.lastname !
+Возврат заказа $root.ordernum на $shop.name был выполнен.
+Пожалуйста, проверьте информацию на странице Вашего профиля на "<%out.print(shop.getDefaultShopUrl())%>" $shop.name

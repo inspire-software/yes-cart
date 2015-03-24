@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*"
+                creationComplete="init()"
+                creationCompleteEffect="Zoom"
+                title="@Resource(bundle='CarrierManagementPanel',key='newCarrierSlaDialogTitle')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                width="500">
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
+                     destination="remoteShopService"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllSupportedCurrenciesByShops" name="getAllSupportedCurrenciesByShops"
+                   result="onGetAllSupportedCurrenciesByShopsResult(event)"/>
+
+    </mx:RemoteObject>
+
+
+    <mx:Form>
+        <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='name')">
+            <mx:TextInput width="195" id="cname"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayName')">
+            <yci18n:i18nStringField id="displayNames"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='description')">
+            <mx:TextArea width="195" id="description"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayDescription')">
+            <yci18n:i18nStringField id="displayDescriptions"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='maxDays')">
+            <mx:TextInput width="195" id="maxDays"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%">
+            <mx:HBox>
+                <mx:CheckBox id="billingAddressNotRequired"/>  <mx:Label text="@Resource(bundle='CarrierManagementPanel',key='billingAddressNotRequired')"/>
+            </mx:HBox>
+        </mx:FormItem>
+        <mx:FormItem width="100%">
+            <mx:HBox>
+                <mx:CheckBox id="deliveryAddressNotRequired"/>  <mx:Label text="@Resource(bundle='CarrierManagementPanel',key='deliveryAddressNotRequired')"/>
+            </mx:HBox>
+        </mx:FormItem>
+
+        <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='currency')">
+            <mx:ComboBox id="currencyComboBox"
+                         change="currencyChangeEvt(event)"
+                         prompt="@Resource(bundle='CarrierManagementPanel',key='selectCurrency')"
+                         width="195"/>
+        </mx:FormItem>
+
+        <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='slaType')">
+            <mx:ComboBox id="slaTypeComboBox"
+                         change="slaTypeChangeEvt(event)"
+                         prompt="@Resource(bundle='CarrierManagementPanel',key='selectSlaType')"
+                         width="195"
+                         dataProvider="{slaTypes}"
+                    />
+        </mx:FormItem>
+
+        <mx:FormItem id="scriptFormItem" width="100%"
+                     label="@Resource(bundle='CarrierManagementPanel',key='script')"
+                     toolTip="@Resource(bundle='CarrierManagementPanel',key='scriptHint')"
+                >
+            <mx:TextInput width="195" id="script"
+                          toolTip="@Resource(bundle='CarrierManagementPanel',key='scriptHint')"/>
+        </mx:FormItem>
+
+        <mx:FormItem id="priceFormItem" width="100%" label="@Resource(bundle='CarrierManagementPanel',key='price')">
+            <mx:TextInput width="195" id="price"/>
+            <mx:Button id="priceBtn"
+                       label="@Resource(bundle='CarrierManagementPanel',key='priceMatrix')"
+                       toolTip="@Resource(bundle='CarrierManagementPanel',key='priceMatrixHint')"
+                       width="160" click="editPriceMatrix(event)"/>
+
+        </mx:FormItem>
+
+        <mx:FormItem id="priceNotLessFormItem" width="100%"
+                     label="@Resource(bundle='CarrierManagementPanel',key='priceNotLess')">
+            <mx:TextInput width="195" id="priceNotLess"/>
+        </mx:FormItem>
+
+        <mx:FormItem id="percentFormItem" width="100%" label="@Resource(bundle='CarrierManagementPanel',key='percent')">
+            <mx:TextInput width="195" id="percent"/>
+        </mx:FormItem>
+
+        <mx:FormItem id="percentNotLessFormItem" width="100%"
+                     label="@Resource(bundle='CarrierManagementPanel',key='percentNotLess')">
+            <mx:TextInput width="195" id="percentNotLess"/>
+        </mx:FormItem>
+
+        <mx:FormItem id="costNotLessFormItem" width="100%"
+                     label="@Resource(bundle='CarrierManagementPanel',key='costNotLess')">
+            <mx:TextInput width="195" id="costNotLess"/>
+        </mx:FormItem>
+
+    </mx:Form>
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
+
+
+    <mx:Script><![CDATA[
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.CarrierSlaDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.controls.Alert;
+        import mx.managers.PopUpManager;
+        import mx.utils.StringUtil;
+
+        public var newCarrierSlaFlag:Boolean;
+        private var _carrierSlaDTOImpl:CarrierSlaDTOImpl;
+        [Bindable]
+        private var slaTypes:Array;
+
+        public function get carrierSlaDTOImpl():CarrierSlaDTOImpl {
+            return _carrierSlaDTOImpl;
+        }
+
+        public function set carrierSlaDTOImpl(value:CarrierSlaDTOImpl):void {
+            _carrierSlaDTOImpl = value;
+        }
+
+
+        private function init():void {
+            slaTypes = new Array();
+            slaTypes.push(new SlaType("F", resourceManager.getString('CarrierManagementPanel', 'slaTypeFixed')));
+            // TODO: YC-154	CarrierSlaCreateEditDialog price matrix
+            // slaTypes.push(new SlaType("O", resourceManager.getString('CarrierManagementPanel', 'slaTypePerOrder')));
+            // slaTypes.push(new SlaType("P", resourceManager.getString('CarrierManagementPanel', 'slaTypePerPackage')));
+            slaTypes.push(new SlaType("R", resourceManager.getString('CarrierManagementPanel', 'slaTypeFree')));
+            // TODO: YC-449 CarrierSlaCreateEditDialog external script support
+            // slaTypes.push(new SlaType("E", resourceManager.getString('CarrierManagementPanel', 'slaTypeExternal')));
+
+            remoteShopService.getAllSupportedCurrenciesByShops();
+
+
+            if (newCarrierSlaFlag) {
+                this.title = resourceManager.getString('CarrierManagementPanel', 'newCarrierSlaDialogTitle');
+                saveBtn.label = resourceManager.getString('CarrierManagementPanel', 'create');
+            } else {
+                this.title = resourceManager.getString('CarrierManagementPanel', 'editCarrierSlaDialogTitle');
+                saveBtn.label = resourceManager.getString('CarrierManagementPanel', 'update');
+
+
+                for each (var slaType:SlaType in slaTypeComboBox.dataProvider) {
+                    if (slaType.data == _carrierSlaDTOImpl.slaType) {
+                        slaTypeComboBox.selectedItem = slaType;
+                        break;
+                    }
+                }
+            }
+
+            displayNames.setSourceObject(_carrierSlaDTOImpl, 'displayNames');
+            displayDescriptions.setSourceObject(_carrierSlaDTOImpl, 'displayDescriptions');
+
+            BindingUtils.bindProperty(this.cname, "text", _carrierSlaDTOImpl, "name");
+            BindingUtils.bindProperty(this.description, "text", _carrierSlaDTOImpl, "description");
+            BindingUtils.bindProperty(this.script, "text", _carrierSlaDTOImpl, "script");
+            BindingUtils.bindProperty(this.maxDays, "text", _carrierSlaDTOImpl, "maxDays");
+            BindingUtils.bindProperty(this.billingAddressNotRequired, "selected", _carrierSlaDTOImpl, "billingAddressNotRequired");
+            BindingUtils.bindProperty(this.deliveryAddressNotRequired, "selected", _carrierSlaDTOImpl, "deliveryAddressNotRequired");
+
+            BindingUtils.bindProperty(_carrierSlaDTOImpl, "name", this.cname, "text");
+            BindingUtils.bindProperty(_carrierSlaDTOImpl, "description", this.description, "text");
+            BindingUtils.bindProperty(_carrierSlaDTOImpl, "script", this.script, "text");
+            BindingUtils.bindProperty(_carrierSlaDTOImpl, "maxDays", this.maxDays, "text");
+            BindingUtils.bindProperty(_carrierSlaDTOImpl, "billingAddressNotRequired", this.billingAddressNotRequired, "selected");
+            BindingUtils.bindProperty(_carrierSlaDTOImpl, "deliveryAddressNotRequired", this.deliveryAddressNotRequired, "selected");
+
+            if (!isNaN(_carrierSlaDTOImpl.price) && (_carrierSlaDTOImpl.price > 0)) {
+                this.price.text = _carrierSlaDTOImpl.price.toString();
+            }
+            if (!isNaN(_carrierSlaDTOImpl.percent) && (_carrierSlaDTOImpl.percent > 0)) {
+                this.percent.text = _carrierSlaDTOImpl.percent.toString();
+            }
+            if (!isNaN(_carrierSlaDTOImpl.priceNotLess) && (_carrierSlaDTOImpl.priceNotLess > 0)) {
+                this.priceNotLess.text = _carrierSlaDTOImpl.priceNotLess.toString();
+            }
+            if (!isNaN(_carrierSlaDTOImpl.percentNotLess) && (_carrierSlaDTOImpl.percentNotLess > 0)) {
+                this.percentNotLess.text = _carrierSlaDTOImpl.percentNotLess.toString();
+            }
+            if (!isNaN(_carrierSlaDTOImpl.costNotLess) && (_carrierSlaDTOImpl.costNotLess > 0)) {
+                this.costNotLess.text = _carrierSlaDTOImpl.costNotLess.toString();
+            }
+            changeControlsVisibility(_carrierSlaDTOImpl.slaType);
+
+
+        }
+
+        public function updateModel():void {
+
+            if ("F" == _carrierSlaDTOImpl.slaType) { // fixed
+                this.costNotLess.text = this.percentNotLess.text = this.priceNotLess.text = this.percent.text = "0";
+            } else if ("O" == _carrierSlaDTOImpl.slaType) { // per order
+                this.price.text = "0";
+            } else if ("P" == _carrierSlaDTOImpl.slaType) { // per package
+                this.price.text = "0";
+            } else if ("R" == _carrierSlaDTOImpl.slaType) { // free
+                this.price.text = this.costNotLess.text = this.percentNotLess.text = this.priceNotLess.text = this.percent.text = "0";
+            } else if ("E" == _carrierSlaDTOImpl.slaType) { //external
+                this.price.text = this.costNotLess.text = this.percentNotLess.text = this.priceNotLess.text = this.percent.text = "0";
+            }
+
+            if (!isBlank(this.price.text)) {
+                _carrierSlaDTOImpl.price = new Number(this.price.text);
+            }
+            if (!isBlank(this.percent.text)) {
+                _carrierSlaDTOImpl.percent = new Number(this.percent.text);
+            }
+            if (!isBlank(this.priceNotLess.text)) {
+                _carrierSlaDTOImpl.priceNotLess = new Number(this.priceNotLess.text);
+            }
+            if (!isBlank(this.percentNotLess.text)) {
+                _carrierSlaDTOImpl.percentNotLess = new Number(this.percentNotLess.text);
+            }
+            if (!isBlank(this.costNotLess.text)) {
+                _carrierSlaDTOImpl.costNotLess = new Number(this.costNotLess.text);
+            }
+            _carrierSlaDTOImpl.currency = String(currencyComboBox.selectedItem);
+            _carrierSlaDTOImpl.slaType = SlaType(slaTypeComboBox.selectedItem).data;
+
+        }
+
+        public static function isBlank(str:String):Boolean {
+            return (str == null || StringUtil.trim(str).length == 0);
+        }
+
+        private function slaTypeChangeEvt(event:Event):void {
+            _carrierSlaDTOImpl.slaType = SlaType(event.currentTarget.selectedItem).data;
+            changeControlsVisibility(_carrierSlaDTOImpl.slaType);
+        }
+
+        private function currencyChangeEvt(event:Event):void {
+            _carrierSlaDTOImpl.currency = event.currentTarget.selectedItem;
+
+        }
+
+        private function changeControlsVisibility(slaType:String):void {
+
+            scriptFormItem.includeInLayout = scriptFormItem.visible = false;
+            priceFormItem.includeInLayout = priceFormItem.visible = false;
+            priceNotLessFormItem.includeInLayout = priceNotLessFormItem.visible = false;
+            percentFormItem.includeInLayout = percentFormItem.visible = false;
+            percentNotLessFormItem.includeInLayout = percentNotLessFormItem.visible = false;
+            costNotLessFormItem.includeInLayout = costNotLessFormItem.visible = false;
+
+
+            if ("F" == slaType) { // fixed
+                priceFormItem.includeInLayout = priceFormItem.visible = true;
+                price.includeInLayout = price.visible = true;
+                priceBtn.includeInLayout = priceBtn.visible = false;
+            } else if ("O" == slaType) { // per order
+                priceFormItem.includeInLayout = priceFormItem.visible = true;
+                price.includeInLayout = price.visible = false;
+                priceBtn.includeInLayout = priceBtn.visible = true;
+                priceNotLessFormItem.includeInLayout = priceNotLessFormItem.visible = true;
+                percentFormItem.includeInLayout = percentFormItem.visible = true;
+                percentNotLessFormItem.includeInLayout = percentNotLessFormItem.visible = true;
+                costNotLessFormItem.includeInLayout = costNotLessFormItem.visible = true;
+            } else if ("P" == slaType) { // per package
+                priceFormItem.includeInLayout = priceFormItem.visible = true;
+                price.includeInLayout = price.visible = false;
+                priceBtn.includeInLayout = priceBtn.visible = true;
+                priceNotLessFormItem.includeInLayout = priceNotLessFormItem.visible = true;
+                percentFormItem.includeInLayout = percentFormItem.visible = true;
+                percentNotLessFormItem.includeInLayout = percentNotLessFormItem.visible = true;
+                costNotLessFormItem.includeInLayout = costNotLessFormItem.visible = true;
+            } else if ("R" == slaType) { // free
+
+            } else if ("E" == slaType) { //external
+                scriptFormItem.includeInLayout = scriptFormItem.visible = true;
+            }
+        }
+
+
+        /**
+         * Create dialog to edit distance - weight and distance-volume matrix to price determination.
+         */
+        private function editPriceMatrix(event:MouseEvent):void {
+            Alert.show(
+                    resourceManager.getString('CarrierManagementPanel', 'notImplemented'),
+                    resourceManager.getString('ShopManagerApplication', 'warning')
+                    ); //TODO: YC-154 weight and distance-volume matrix to price determination
+
+        }
+
+        private function onGetAllSupportedCurrenciesByShopsResult(event:ResultEvent):void {
+            var curr:String = _carrierSlaDTOImpl.currency;
+            currencyComboBox.dataProvider = event.result;
+            currencyComboBox.selectedItem = curr;
+        }
+        ]]>
+    </mx:Script>
+</mx:TitleWindow>

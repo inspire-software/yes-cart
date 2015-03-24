@@ -1,0 +1,3 @@
+Шановний (-на) $customer.firstname $customer.lastname !
+Доставка номер $param1 для замовлення $root.ordernum завершена.
+Будь ласка, перевірте інформацію на сторінці Вашого профілю на "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
