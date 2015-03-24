@@ -18,7 +18,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
     <!-- All global properties should go here -->
-    <entry key="buildVersion">YC - 2.1.0</entry>
+    <entry key="buildVersion">YC - 2.2.0</entry>
     <entry key="home">Главная</entry>
     <entry key="continueShopping">За новыми покупками</entry>
     <entry key="brand">Производитель</entry>
