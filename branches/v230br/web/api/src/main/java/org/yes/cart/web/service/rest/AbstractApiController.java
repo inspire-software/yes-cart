@@ -159,4 +159,42 @@ public class AbstractApiController {
         final String contentIdStr = bookmarkService.getContentForURI(content);
         return NumberUtils.toLong(contentIdStr, 0L);
     }
+
+
+    /**
+     * Resolve product PK from string.
+     *
+     * @param product either PK or URI
+     *
+     * @return PK for product
+     */
+    protected long resolveProductId(final String product) {
+        final long productId = NumberUtils.toLong(product, 0L);
+        if (productId > 0L) {
+            bookmarkService.saveBookmarkForProduct(product);
+            return productId;
+        }
+        final String productIdStr = bookmarkService.getProductForURI(product);
+        return NumberUtils.toLong(productIdStr, 0L);
+    }
+
+
+    /**
+     * Resolve product SKU PK from string.
+     *
+     * @param sku either PK or URI
+     *
+     * @return PK for product SKU
+     */
+    protected long resolveSkuId(final String sku) {
+        final long skuId = NumberUtils.toLong(sku, 0L);
+        if (skuId > 0L) {
+            bookmarkService.saveBookmarkForProduct(sku);
+            return skuId;
+        }
+        final String skuIdStr = bookmarkService.getSkuForURI(sku);
+        return NumberUtils.toLong(skuIdStr, 0L);
+    }
+
+
 }

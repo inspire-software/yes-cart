@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -33,18 +34,20 @@ import java.util.Map;
  */
 @Dto
 @XmlRootElement(name = "breadcrumb")
-public class BreadcrumbRO {
+public class BreadcrumbRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     @DtoField(value = "categoryId", readOnly = true)
     private long categoryId;
 
-    @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo", readOnly = true)
     private String uri;
 
-    @DtoField(value = "name")
+    @DtoField(value = "name", readOnly = true)
     private String name;
 
-    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    @DtoField(value = "displayName", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> displayNames;
 
     public long getCategoryId() {

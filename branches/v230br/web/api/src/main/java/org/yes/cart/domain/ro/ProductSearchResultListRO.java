@@ -16,33 +16,36 @@
 
 package org.yes.cart.domain.ro;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * User: denispavlov
- * Date: 21/08/2014
- * Time: 15:11
+ * Date: 24/03/2015
+ * Time: 15:30
  */
-@XmlRootElement(name = "token")
-public class TokenRO implements Serializable {
+@XmlRootElement(name = "products")
+public class ProductSearchResultListRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
-    private String uuid;
+    private List<ProductSearchResultRO> products;
 
-    public TokenRO() {
+    public ProductSearchResultListRO() {
     }
 
-    public TokenRO(final String uuid) {
-        this.uuid = uuid;
+    public ProductSearchResultListRO(final List<ProductSearchResultRO> products) {
+        this.products = products;
     }
 
-    public String getUuid() {
-        return uuid;
+    @XmlElement(name = "product")
+    public List<ProductSearchResultRO> getProducts() {
+        return products;
     }
 
-    public void setUuid(final String uuid) {
-        this.uuid = uuid;
+    public void setProducts(final List<ProductSearchResultRO> products) {
+        this.products = products;
     }
 }

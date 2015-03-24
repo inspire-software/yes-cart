@@ -18,6 +18,7 @@ package org.yes.cart.domain.ro;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,7 +27,9 @@ import java.util.List;
  * Time: 00:26
  */
 @XmlRootElement(name = "categories")
-public class CategoryListRO {
+public class CategoryListRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     private List<CategoryRO> categories;
 

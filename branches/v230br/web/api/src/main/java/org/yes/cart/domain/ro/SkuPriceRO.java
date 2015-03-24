@@ -22,6 +22,7 @@ import org.yes.cart.util.MoneyUtils;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -31,7 +32,9 @@ import java.math.BigDecimal;
  */
 @Dto
 @XmlRootElement(name = "price")
-public class SkuPriceRO {
+public class SkuPriceRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     @DtoField(readOnly = true)
     private String currency;

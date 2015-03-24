@@ -18,12 +18,12 @@ package org.yes.cart.domain.ro;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -33,7 +33,9 @@ import java.util.Map;
  */
 @Dto
 @XmlRootElement(name = "sku-result")
-public class ProductSkuSearchResultRO {
+public class ProductSkuSearchResultRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     @DtoField(readOnly = true)
     private long id;
@@ -45,7 +47,7 @@ public class ProductSkuSearchResultRO {
     private String manufacturerCode;
     @DtoField(readOnly = true)
     private String name;
-    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    @DtoField(value = "displayName", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> displayName;
     @DtoField(readOnly = true)
     private String defaultImage;

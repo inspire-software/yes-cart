@@ -14,35 +14,19 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.ro;
+package org.yes.cart.domain.dto.matcher.impl;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
+import com.inspiresoftware.lib.dto.geda.adapter.DtoToEntityMatcher;
 
 /**
  * User: denispavlov
- * Date: 21/08/2014
- * Time: 15:11
+ * Date: 24/03/2015
+ * Time: 14:48
  */
-@XmlRootElement(name = "token")
-public class TokenRO implements Serializable {
+public class NoopMatcher implements DtoToEntityMatcher {
 
-    private static final long serialVersionUID = 20150301L;
-
-    private String uuid;
-
-    public TokenRO() {
-    }
-
-    public TokenRO(final String uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(final String uuid) {
-        this.uuid = uuid;
+    @Override
+    public boolean match(final Object o, final Object o1) {
+        return false;
     }
 }

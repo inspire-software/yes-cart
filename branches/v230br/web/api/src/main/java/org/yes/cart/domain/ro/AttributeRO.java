@@ -31,7 +31,7 @@ import java.util.Map;
 @XmlRootElement(name = "attribute")
 public class AttributeRO implements Serializable {
 
-    private static final long serialVersionUID = 20100717L;
+    private static final long serialVersionUID = 20150301L;
 
     @DtoField(value = "attributeId", readOnly = true)
     private long attributeId;

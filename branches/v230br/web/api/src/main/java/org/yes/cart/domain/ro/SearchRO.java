@@ -21,6 +21,7 @@ import org.yes.cart.domain.ro.xml.impl.RequestParameterMapAdapter;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,9 @@ import java.util.Map;
  * Time: 15:26
  */
 @XmlRootElement(name = "search")
-public class SearchRO {
+public class SearchRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     private String category;
 

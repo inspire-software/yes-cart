@@ -25,7 +25,7 @@
         <constructor-arg>
             <map>
                 <!--<entry key="org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO" value="org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.ProductSkuRO" value="org.yes.cart.domain.ro.ProductSkuRO"/>
                 <entry key="org.yes.cart.domain.ro.SkuPriceRO" value="org.yes.cart.domain.ro.SkuPriceRO"/>
                 <!--<entry key="org.yes.cart.domain.dto.PriceListDTO" value="org.yes.cart.domain.dto.impl.PriceListDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.ManagerDTO" value="org.yes.cart.domain.dto.impl.ManagerDTOImpl"/>-->
@@ -42,7 +42,7 @@
                 <!--<entry key="org.yes.cart.domain.dto.ProductTypeDTO" value="org.yes.cart.domain.dto.impl.ProductTypeDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.ProductTypeAttrDTO" value="org.yes.cart.domain.dto.impl.ProductTypeAttrDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.ProductCategoryDTO" value="org.yes.cart.domain.dto.impl.ProductCategoryDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.ProductDTO" value="org.yes.cart.domain.dto.impl.ProductDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.ProductRO" value="org.yes.cart.domain.ro.ProductRO"/>
                 <entry key="org.yes.cart.domain.ro.ProductSearchResultRO" value="org.yes.cart.domain.ro.ProductSearchResultRO"/>
                 <entry key="org.yes.cart.domain.ro.ProductSkuSearchResultRO" value="org.yes.cart.domain.ro.ProductSkuSearchResultRO"/>
                 <entry key="org.yes.cart.domain.ro.ProductAvailabilityModelRO" value="org.yes.cart.domain.ro.ProductAvailabilityModelRO"/>
@@ -52,9 +52,8 @@
                 <!--<entry key="org.yes.cart.domain.dto.CustomerDTO" value="org.yes.cart.domain.dto.impl.CustomerDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.CustomerCardDTO" value="org.yes.cart.domain.dto.impl.CustomerCardDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.CustomerWishListDTO" value="org.yes.cart.domain.dto.impl.CustomerWishListDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.AttrValueProductDTO" value="org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.AttrValueProductSkuDTO"-->
-                       <!--value="org.yes.cart.domain.dto.impl.AttrValueProductSkuDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.AttrValueProductRO" value="org.yes.cart.domain.ro.AttrValueProductRO"/>
+                <entry key="org.yes.cart.domain.ro.AttrValueProductSkuRO" value="org.yes.cart.domain.ro.AttrValueProductSkuRO"/>
                 <!--<entry key="org.yes.cart.domain.dto.AttrValueBrandDTO" value="org.yes.cart.domain.dto.impl.AttrValueBrandDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.AttrValueShopDTO" value="org.yes.cart.domain.dto.impl.AttrValueShopDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.AttrValueSystemDTO" value="org.yes.cart.domain.dto.impl.AttrValueSystemDTOImpl"/>-->

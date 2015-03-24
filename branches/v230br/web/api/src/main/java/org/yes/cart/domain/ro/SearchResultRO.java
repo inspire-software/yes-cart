@@ -19,6 +19,7 @@ package org.yes.cart.domain.ro;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -27,7 +28,9 @@ import java.util.List;
  * Time: 15:29
  */
 @XmlRootElement(name = "search-result")
-public class SearchResultRO {
+public class SearchResultRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     private SearchRO search;
 

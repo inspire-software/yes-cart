@@ -28,8 +28,8 @@ import java.io.Serializable;
 import java.util.Map;
 
 @Dto
-@XmlRootElement(name = "category-attribute")
-public class AttrValueCategoryRO implements Serializable {
+@XmlRootElement(name = "sku-attribute")
+public class AttrValueProductSkuRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
@@ -51,8 +51,8 @@ public class AttrValueCategoryRO implements Serializable {
     @DtoField(value = "attribute.displayName", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> attributeDisplayNames;
 
-    @DtoField(value = "category.categoryId", readOnly = true)
-    private long categoryId;
+    @DtoField(value = "productSku.skuId", readOnly = true)
+    private long skuId;
 
 
     @XmlAttribute(name = "attrvalue-id")
@@ -110,22 +110,23 @@ public class AttrValueCategoryRO implements Serializable {
         this.attributeDisplayNames = attributeDisplayNames;
     }
 
-    @XmlAttribute(name = "category-id")
-    public long getCategoryId() {
-        return categoryId;
+    @XmlAttribute(name = "sku-id")
+    public long getSkuId() {
+        return skuId;
     }
 
-    public void setCategoryId(final long categoryId) {
-        this.categoryId = categoryId;
+    /** {@inheritDoc} */
+    public void setSkuId(final long skuId) {
+        this.skuId = skuId;
     }
 
     @Override
     public String toString() {
-        return "AttrValueCategoryRO{" +
+        return "AttrValueProductSkuRO{" +
                 "attrvalueId=" + attrvalueId +
                 ", val='" + val + '\'' +
                 ", attributeId=" + attributeId +
-                ", categoryId=" + categoryId +
+                ", skuId=" + skuId +
                 '}';
     }
 }

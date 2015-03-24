@@ -20,13 +20,14 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
-import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
+import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,7 +41,9 @@ import java.util.Map;
  */
 @Dto
 @XmlRootElement(name = "product-result")
-public class ProductSearchResultRO {
+public class ProductSearchResultRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     @DtoField(readOnly = true)
     private long id;
@@ -85,7 +88,7 @@ public class ProductSearchResultRO {
             entityGenericType = ProductSkuSearchResultDTO.class,
             entityCollectionClass = ArrayList.class,
             dtoCollectionClass = ArrayList.class,
-            dtoToEntityMatcher = IdentifiableMatcher.class,
+            dtoToEntityMatcher = NoopMatcher.class,
             readOnly = true
     )
     private List<ProductSkuSearchResultRO> skus;

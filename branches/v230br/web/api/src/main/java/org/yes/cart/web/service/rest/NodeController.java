@@ -62,8 +62,8 @@ public class NodeController extends AbstractApiController {
      *     <tr><td>JSON example</td><td>
      * <pre><code>
      * {
-     *    "shop-code" : "SHOP10",
-     *    "node-id" : "YES1"
+     *    "shopCode" : "SHOP10",
+     *    "nodeId" : "YES1"
      * }
      * </code></pre>
      *     </td></tr>

@@ -20,36 +20,37 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
-import org.yes.cart.domain.entity.AttrValueCategory;
+import org.yes.cart.domain.entity.AttrValueProductSku;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * User: denispavlov
- * Date: 19/08/2014
- * Time: 23:44
+ * Date: 24/03/2015
+ * Time: 10:44
  */
 @Dto
-@XmlRootElement(name = "content")
-public class ContentRO implements Serializable {
+@XmlRootElement(name = "sku")
+public class ProductSkuRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
-    @DtoField(value = "categoryId", readOnly = true)
-    private long categoryId;
+    @DtoField(value = "skuId", readOnly = true)
+    private long skuId;
 
-    @DtoField(value = "parentId", readOnly = true)
-    private long parentId;
+    @DtoField(value = "code", readOnly = true)
+    private String code;
 
-    @DtoField(value = "rank", readOnly = true)
-    private int rank;
+    @DtoField(value = "manufacturerCode", readOnly = true)
+    private String manufacturerCode;
 
     @DtoField(value = "name", readOnly = true)
     private String name;
@@ -60,14 +61,14 @@ public class ContentRO implements Serializable {
     @DtoField(value = "description", readOnly = true)
     private String description;
 
-    @DtoField(value = "uitemplate", readOnly = true)
-    private String uitemplate;
+    @DtoField(value = "product.productId", readOnly = true)
+    private long productId;
 
-    @DtoField(value = "availablefrom", readOnly = true)
-    private Date availablefrom;
+    @DtoField(value = "rank", readOnly = true)
+    private int rank;
 
-    @DtoField(value = "availableto", readOnly = true)
-    private Date availableto;
+    @DtoField(value = "barCode", readOnly = true)
+    private String barCode;
 
     @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo", readOnly = true)
     private String uri;
@@ -90,64 +91,48 @@ public class ContentRO implements Serializable {
     @DtoField(value = "seo.displayMetadescription", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> displayMetadescriptions;
 
+    private ProductAvailabilityModelRO productAvailabilityModel;
+
+    private SkuPriceRO price;
+
+
     @DtoCollection(
             value = "attributes",
-            dtoBeanKey = "org.yes.cart.domain.ro.AttrValueCategoryRO",
-            entityGenericType = AttrValueCategory.class,
-            entityCollectionClass = HashSet.class,
-            dtoCollectionClass = HashSet.class,
+            dtoBeanKey = "org.yes.cart.domain.ro.AttrValueProductSkuRO",
+            entityGenericType = AttrValueProductSku.class,
+            entityCollectionClass = ArrayList.class,
+            dtoCollectionClass = ArrayList.class,
             dtoToEntityMatcher = NoopMatcher.class,
             readOnly = true
     )
-    private Set<AttrValueCategoryRO> attributes;
+    private Collection<AttrValueProductSkuRO> attributes;
 
-    private String contentBody;
 
-    private List<BreadcrumbRO> breadcrumbs = Collections.EMPTY_LIST;
 
-    @XmlElement(name = "content-body")
-    public String getContentBody() {
-        return contentBody;
+    @XmlElement(name = "sku-id")
+    public long getSkuId() {
+        return skuId;
     }
 
-    public void setContentBody(final String contentBody) {
-        this.contentBody = contentBody;
+    public void setSkuId(final long skuId) {
+        this.skuId = skuId;
     }
 
-    @XmlAttribute(name = "category-id")
-    public long getCategoryId() {
-        return categoryId;
+    public String getCode() {
+        return code;
     }
 
-    public void setCategoryId(final long categoryId) {
-        this.categoryId = categoryId;
+    public void setCode(final String code) {
+        this.code = code;
     }
 
-    @XmlAttribute(name = "parent-id")
-    public long getParentId() {
-        return parentId;
+    @XmlElement(name = "manufacturer-code")
+    public String getManufacturerCode() {
+        return manufacturerCode;
     }
 
-    public void setParentId(final long parentId) {
-        this.parentId = parentId;
-    }
-
-    @XmlElementWrapper(name = "breadcrumbs")
-    @XmlElement(name = "breadcrumb")
-    public List<BreadcrumbRO> getBreadcrumbs() {
-        return breadcrumbs;
-    }
-
-    public void setBreadcrumbs(final List<BreadcrumbRO> breadcrumbs) {
-        this.breadcrumbs = breadcrumbs;
-    }
-
-    public int getRank() {
-        return rank;
-    }
-
-    public void setRank(final int rank) {
-        this.rank = rank;
+    public void setManufacturerCode(final String manufacturerCode) {
+        this.manufacturerCode = manufacturerCode;
     }
 
     public String getName() {
@@ -176,38 +161,30 @@ public class ContentRO implements Serializable {
         this.description = description;
     }
 
-    public String getUitemplate() {
-        return uitemplate;
+    @XmlElement(name = "product-id")
+    public long getProductId() {
+        return productId;
     }
 
-    public void setUitemplate(final String uitemplate) {
-        this.uitemplate = uitemplate;
+    public void setProductId(final long productId) {
+        this.productId = productId;
     }
 
-    public Date getAvailablefrom() {
-        return availablefrom;
+    public int getRank() {
+        return rank;
     }
 
-    public void setAvailablefrom(final Date availablefrom) {
-        this.availablefrom = availablefrom;
+    public void setRank(final int rank) {
+        this.rank = rank;
     }
 
-    public Date getAvailableto() {
-        return availableto;
+    @XmlElement(name = "barcode")
+    public String getBarCode() {
+        return barCode;
     }
 
-    public void setAvailableto(final Date availableto) {
-        this.availableto = availableto;
-    }
-
-    @XmlElementWrapper(name = "attribute-values")
-    @XmlElement(name = "attribute-value")
-    public Set<AttrValueCategoryRO> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttributes(final Set<AttrValueCategoryRO> attributes) {
-        this.attributes = attributes;
+    public void setBarCode(final String barCode) {
+        this.barCode = barCode;
     }
 
     public String getUri() {
@@ -226,6 +203,22 @@ public class ContentRO implements Serializable {
         this.title = title;
     }
 
+    public String getMetakeywords() {
+        return metakeywords;
+    }
+
+    public void setMetakeywords(final String metakeywords) {
+        this.metakeywords = metakeywords;
+    }
+
+    public String getMetadescription() {
+        return metadescription;
+    }
+
+    public void setMetadescription(final String metadescription) {
+        this.metadescription = metadescription;
+    }
+
     @XmlJavaTypeAdapter(I18nMapAdapter.class)
     @XmlElement(name = "display-titles")
     public Map<String, String> getDisplayTitles() {
@@ -234,14 +227,6 @@ public class ContentRO implements Serializable {
 
     public void setDisplayTitles(final Map<String, String> displayTitles) {
         this.displayTitles = displayTitles;
-    }
-
-    public String getMetakeywords() {
-        return metakeywords;
-    }
-
-    public void setMetakeywords(final String metakeywords) {
-        this.metakeywords = metakeywords;
     }
 
     @XmlJavaTypeAdapter(I18nMapAdapter.class)
@@ -254,14 +239,6 @@ public class ContentRO implements Serializable {
         this.displayMetakeywords = displayMetakeywords;
     }
 
-    public String getMetadescription() {
-        return metadescription;
-    }
-
-    public void setMetadescription(final String metadescription) {
-        this.metadescription = metadescription;
-    }
-
     @XmlJavaTypeAdapter(I18nMapAdapter.class)
     @XmlElement(name = "display-metadescription")
     public Map<String, String> getDisplayMetadescriptions() {
@@ -272,5 +249,30 @@ public class ContentRO implements Serializable {
         this.displayMetadescriptions = displayMetadescriptions;
     }
 
+    @XmlElement(name = "product-availability")
+    public ProductAvailabilityModelRO getProductAvailabilityModel() {
+        return productAvailabilityModel;
+    }
 
+    public void setProductAvailabilityModel(final ProductAvailabilityModelRO productAvailabilityModel) {
+        this.productAvailabilityModel = productAvailabilityModel;
+    }
+
+    public SkuPriceRO getPrice() {
+        return price;
+    }
+
+    public void setPrice(final SkuPriceRO price) {
+        this.price = price;
+    }
+
+    @XmlElementWrapper(name = "attribute-values")
+    @XmlElement(name = "attribute-value")
+    public Collection<AttrValueProductSkuRO> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(final Collection<AttrValueProductSkuRO> attributes) {
+        this.attributes = attributes;
+    }
 }

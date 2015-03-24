@@ -18,6 +18,7 @@ package org.yes.cart.domain.ro;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /**
  * User: denispavlov
@@ -25,7 +26,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Time: 14:55
  */
 @XmlRootElement(name = "authentication-result")
-public class AuthenticationResultRO {
+public class AuthenticationResultRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     private boolean authenticated;
     private String code;

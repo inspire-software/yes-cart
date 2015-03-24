@@ -21,6 +21,7 @@ import org.yes.cart.domain.ro.xml.impl.StringMapAdapter;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -29,7 +30,9 @@ import java.util.Map;
  * Time: 16:21
  */
 @XmlRootElement(name = "register")
-public class RegisterRO {
+public class RegisterRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     private String email;
     private String firstname;

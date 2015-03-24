@@ -24,6 +24,7 @@ import org.yes.cart.domain.ro.xml.impl.QuantityMapAdapter;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.SortedSet;
@@ -35,7 +36,9 @@ import java.util.SortedSet;
  */
 @Dto
 @XmlRootElement(name = "product-availability")
-public class ProductAvailabilityModelRO {
+public class ProductAvailabilityModelRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     @DtoField(readOnly = true)
     private boolean available;

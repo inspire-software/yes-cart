@@ -657,7 +657,7 @@ public class SearchController extends AbstractApiController {
         result.setTotalResults(products.getTotalHits());
 
         final List<ProductSearchResultRO> ros = new ArrayList<ProductSearchResultRO>();
-        if (products.getResults() != null) {
+        if (CollectionUtils.isNotEmpty(products.getResults())) {
 
             final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
 
