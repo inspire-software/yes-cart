@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.ro;
+package org.yes.cart.domain.ro.xml;
 
 import org.yes.cart.domain.ro.xml.impl.StringMapAdapter;
 

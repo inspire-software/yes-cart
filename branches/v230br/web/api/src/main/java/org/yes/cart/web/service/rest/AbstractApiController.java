@@ -18,6 +18,7 @@ package org.yes.cart.web.service.rest;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -25,6 +26,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.ro.TokenRO;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.support.seo.BookmarkService;
 import org.yes.cart.web.support.shoppingcart.ShoppingCartPersister;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +50,8 @@ public class AbstractApiController {
     @Autowired
     @Qualifier("shoppingCartPersister")
     private ShoppingCartPersister shoppingCartPersister;
+    @Autowired
+    private BookmarkService bookmarkService;
 
     /**
      * Generic mapping method.
@@ -122,5 +126,37 @@ public class AbstractApiController {
 
     }
 
+    /**
+     * Resolve category PK from string.
+     *
+     * @param category either PK or URI
+     *
+     * @return PK for category
+     */
+    protected long resolveCategoryId(final String category) {
+        final long categoryId = NumberUtils.toLong(category, 0L);
+        if (categoryId > 0L) {
+            bookmarkService.saveBookmarkForCategory(category);
+            return categoryId;
+        }
+        final String categoryIdStr = bookmarkService.getCategoryForURI(category);
+        return NumberUtils.toLong(categoryIdStr, 0L);
+    }
 
+    /**
+     * Resolve content PK from string.
+     *
+     * @param content either PK or URI
+     *
+     * @return PK for content
+     */
+    protected long resolveContentId(final String content) {
+        final long contentId = NumberUtils.toLong(content, 0L);
+        if (contentId > 0L) {
+            bookmarkService.saveBookmarkForContent(content);
+            return contentId;
+        }
+        final String contentIdStr = bookmarkService.getContentForURI(content);
+        return NumberUtils.toLong(contentIdStr, 0L);
+    }
 }

@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.service.rest;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -31,7 +30,6 @@ import org.yes.cart.domain.ro.CategoryRO;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.seo.BookmarkService;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.CentralViewResolver;
 
@@ -52,8 +50,6 @@ public class CategoryController extends AbstractApiController {
     private CentralViewResolver centralViewResolver;
     @Autowired
     private CategoryServiceFacade categoryServiceFacade;
-    @Autowired
-    private BookmarkService bookmarkService;
 
 
     private List<CategoryRO> listRootInternal() {
@@ -374,7 +370,7 @@ public class CategoryController extends AbstractApiController {
 
         persistShoppingCart(request, response);
 
-        final long categoryId = resolveId(category);
+        final long categoryId = resolveCategoryId(category);
         final long shopId = ShopCodeContext.getShopId();
 
         final Category categoryEntity = categoryServiceFacade.getCategory(categoryId, shopId);
@@ -394,7 +390,7 @@ public class CategoryController extends AbstractApiController {
 
     private List<CategoryRO> listCategoryInternal(final String category) {
 
-        final long categoryId = resolveId(category);
+        final long categoryId = resolveCategoryId(category);
         final long shopId = ShopCodeContext.getShopId();
 
         final List<Category> menu = categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId);
@@ -599,16 +595,6 @@ public class CategoryController extends AbstractApiController {
 
         return new CategoryListRO(listCategoryInternal(category));
 
-    }
-
-    private long resolveId(final String category) {
-        final long categoryId = NumberUtils.toLong(category, 0L);
-        if (categoryId > 0L) {
-            bookmarkService.saveBookmarkForCategory(category);
-            return categoryId;
-        }
-        final String categoryIdStr = bookmarkService.getCategoryForURI(category);
-        return NumberUtils.toLong(categoryIdStr, 0L);
     }
 
     private String resolveTemplate(final CategoryRO catRO) {

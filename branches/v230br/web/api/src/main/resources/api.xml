@@ -26,7 +26,7 @@
             <map>
                 <!--<entry key="org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO" value="org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.SkuPriceDTO" value="org.yes.cart.domain.dto.impl.SkuPriceDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.SkuPriceRO" value="org.yes.cart.domain.ro.SkuPriceRO"/>
                 <!--<entry key="org.yes.cart.domain.dto.PriceListDTO" value="org.yes.cart.domain.dto.impl.PriceListDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.ManagerDTO" value="org.yes.cart.domain.dto.impl.ManagerDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.RoleDTO" value="org.yes.cart.domain.dto.impl.RoleDTOImpl"/>-->
@@ -43,7 +43,9 @@
                 <!--<entry key="org.yes.cart.domain.dto.ProductTypeAttrDTO" value="org.yes.cart.domain.dto.impl.ProductTypeAttrDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.ProductCategoryDTO" value="org.yes.cart.domain.dto.impl.ProductCategoryDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.ProductDTO" value="org.yes.cart.domain.dto.impl.ProductDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.ProductSearchResultDTO" value="org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.ProductSearchResultRO" value="org.yes.cart.domain.ro.ProductSearchResultRO"/>
+                <entry key="org.yes.cart.domain.ro.ProductSkuSearchResultRO" value="org.yes.cart.domain.ro.ProductSkuSearchResultRO"/>
+                <entry key="org.yes.cart.domain.ro.ProductAvailabilityModelRO" value="org.yes.cart.domain.ro.ProductAvailabilityModelRO"/>
                 <!--<entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>-->
                 <entry key="org.yes.cart.domain.ro.AttrValueCategoryRO" value="org.yes.cart.domain.ro.AttrValueCategoryRO"/>
                 <!--<entry key="org.yes.cart.domain.dto.AttrValueCustomerDTO" value="org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl"/>-->
@@ -106,10 +108,13 @@
                 <!--<entry key="attributeDTO2Attribute" value-ref="attributeDTO2Attribute"/>-->
 
                 <entry key="i18nStringConverter" value-ref="i18nStringConverter"/>
+                <entry key="productAvailabilityModelATSConverter" value-ref="productAvailabilityModelATSConverter"/>
 
             </map>
         </constructor-arg>
     </bean>
+
+    <bean id="productAvailabilityModelATSConverter" class="org.yes.cart.domain.dto.adapter.impl.ProductAvailabilityModelATSConverter"/>
 
     <bean id="apiSupportFacade" class="org.yes.cart.web.service.apisupport.impl.ApiSupportFacadeImpl">
         <constructor-arg index="0" ref="groovyContentServiceTemplateSupport"/>

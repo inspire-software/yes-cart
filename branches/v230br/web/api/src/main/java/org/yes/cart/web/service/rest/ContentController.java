@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.service.rest;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -25,6 +24,7 @@ import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.ro.*;
+import org.yes.cart.domain.ro.xml.XMLParamsRO;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
@@ -60,7 +60,7 @@ public class ContentController extends AbstractApiController {
     private ContentRO viewContentInternal(final String content,
                                           final Map<String, Object> contentParams) {
 
-        final long contentId = resolveId(content);
+        final long contentId = resolveContentId(content);
         final long shopId = ShopCodeContext.getShopId();
 
         final Category contentEntity = contentServiceFacade.getContent(contentId, shopId);
@@ -378,7 +378,7 @@ public class ContentController extends AbstractApiController {
 
     private List<ContentRO> listContentInternal(final String content) {
 
-        final long contentId = resolveId(content);
+        final long contentId = resolveContentId(content);
         final long shopId = ShopCodeContext.getShopId();
 
         final List<Category> menu = contentServiceFacade.getCurrentContentMenu(contentId, shopId);
@@ -574,16 +574,6 @@ public class ContentController extends AbstractApiController {
         return centralViewResolver.resolveMainPanelRendererLabel(params);
     }
 
-
-    private long resolveId(final String content) {
-        final long contentId = NumberUtils.toLong(content, 0L);
-        if (contentId > 0L) {
-            bookmarkService.saveBookmarkForContent(content);
-            return contentId;
-        }
-        final String contentIdStr = bookmarkService.getContentForURI(content);
-        return NumberUtils.toLong(contentIdStr, 0L);
-    }
 
     private List<BreadcrumbRO> generateBreadcrumbs(final long contentId, final long shopId) {
 

@@ -124,7 +124,7 @@ public interface FilteredNavigationRecord extends Rankable, Cloneable, Serializa
     int getRank();
 
     /**
-     * Set rank of atribute record
+     * Set rank of attribute record
      *
      * @param rank rank
      */

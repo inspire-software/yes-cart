@@ -166,6 +166,7 @@ public class AuthenticationController extends AbstractApiController  {
      * <table border="1">
      *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
      * </table>
      * <p>
      * <p>
@@ -382,6 +383,7 @@ public class AuthenticationController extends AbstractApiController  {
      * <table border="1">
      *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
      *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
      * </table>
      * <p>
      * <p>
