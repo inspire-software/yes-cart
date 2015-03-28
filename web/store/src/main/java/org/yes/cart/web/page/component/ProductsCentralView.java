@@ -107,7 +107,7 @@ public class ProductsCentralView extends AbstractCentralView {
         final Pair<String, Boolean> sortResult = getSortField();
 
         ProductSearchResultPageDTO products = productServiceFacade.getListProducts(
-                getNavigationContext(), currentPageIdx, selectedItemPerPage,
+                getNavigationContext(), currentPageIdx * selectedItemPerPage, selectedItemPerPage,
                 sortResult.getFirst(), sortResult.getSecond());
 
         if (currentPageIdx * selectedItemPerPage > products.getTotalHits()) {
