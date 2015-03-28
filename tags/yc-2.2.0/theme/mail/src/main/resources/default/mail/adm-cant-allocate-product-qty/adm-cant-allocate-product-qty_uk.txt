@@ -1,3 +1,0 @@
-Відсутній залишок для товара $sku.code $sku.name
-для замовлення $root.ordernum at $shop.name
-для $customer.firstname $customer.lastname $customer.email

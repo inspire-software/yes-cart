@@ -1,3 +1,0 @@
-Шановний (-на) $customer.firstname $customer.lastname !
-Повернення замовлення $root.ordernum at $shop.name було виконано.
-Будь ласка, перевірте інформацію на сторінці Вашого профілю на "<%out.print(shop.getDefaultShopUrl())%>" $shop.name

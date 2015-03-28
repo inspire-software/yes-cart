@@ -1,1 +1,0 @@
-Замовлення $root.ordernum на $shop.name повернено для $customer.firstname $customer.email
