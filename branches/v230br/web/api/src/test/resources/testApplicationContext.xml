@@ -42,6 +42,7 @@
     <import resource="websupport-tools.xml"/>
     <import resource="websupport-cronjob.xml"/>
     <import resource="websupport-storefront.xml"/>
+    <import resource="websupport-api.xml"/>
 
     <import resource="classpath*:payment-api.xml"/>
     <import resource="classpath*:core-module-payment-base.xml"/>

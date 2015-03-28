@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -42,14 +43,15 @@ import java.io.IOException;
  */
 public class ShopResolverFilter extends AbstractFilter implements Filter, ServletContextAware {
 
+    private final ShopService shopService;
     private final SystemService systemService;
 
     private ServletContext servletContext;
 
 
-    public ShopResolverFilter(final ApplicationDirector applicationDirector,
+    public ShopResolverFilter(final ShopService shopService,
                               final SystemService systemService) {
-        super(applicationDirector);
+        this.shopService = shopService;
         this.systemService = systemService;
     }
 
@@ -61,7 +63,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
         final String serverDomainName = servletRequest.getServerName().toLowerCase();
 
-        final Shop shop = getApplicationDirector().getShopByDomainName(serverDomainName);
+        final Shop shop = shopService.getShopByDomainName(serverDomainName);
 
         if (shop == null) {
             final String url = systemService.getDefaultShopURL();

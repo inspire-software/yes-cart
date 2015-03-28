@@ -51,16 +51,13 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
 
     /**
-     * @param applicationDirector app director.
      * @param tuplizerPool        pool of tuplizer to manage cookie to object to cookie transformation
      * @param calculationStrategy calculation strategy
      * @param cartCommandFactory  cart command factory
      */
-    public ShoppingCartFilter(final ApplicationDirector applicationDirector,
-                              final TargetSource tuplizerPool,
+    public ShoppingCartFilter(final TargetSource tuplizerPool,
                               final AmountCalculationStrategy calculationStrategy,
                               final ShoppingCartCommandFactory cartCommandFactory) {
-        super(applicationDirector);
         this.tuplizerPool = tuplizerPool;
         this.calculationStrategy = calculationStrategy;
         this.cartCommandFactory = cartCommandFactory;

@@ -25,49 +25,43 @@
     <!-- ################################### filter delegates begin ################################### -->
 
     <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
-        <constructor-arg index="0" ref="applicationDirector"/>
+        <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="systemService"/>
     </bean>
 
     <bean id="imageFilter" class="org.yes.cart.web.filter.ImageFilter">
-        <constructor-arg index="0" ref="applicationDirector"/>
-        <constructor-arg index="1" ref="imageService"/>
-        <constructor-arg index="2" ref="systemService"/>
+        <constructor-arg index="0" ref="imageService"/>
+        <constructor-arg index="1" ref="systemService"/>
     </bean>
 
     <bean id="shoppingCartFilter" class="org.yes.cart.web.filter.ShoppingCartFilter">
-        <constructor-arg index="0" ref="applicationDirector"/>
-        <constructor-arg index="1" ref="tuplizerPool"/>
-        <constructor-arg index="2" ref="amountCalculationStrategy"/>
-        <constructor-arg index="3" ref="shoppingCartCommandFactory"/>
+        <constructor-arg index="0" ref="tuplizerPool"/>
+        <constructor-arg index="1" ref="amountCalculationStrategy"/>
+        <constructor-arg index="2" ref="shoppingCartCommandFactory"/>
     </bean>
 
     <!--CPOINT do you need paypal express checkout ?-->
     <bean id="payPalExpressCheckoutFilter" class="org.yes.cart.web.filter.payment.PayPalExpressCheckoutFilter">
-        <constructor-arg index="0" ref="applicationDirector"/>
-        <constructor-arg index="1" ref="paymentProcessorFactory"/>
-        <constructor-arg index="2" ref="customerOrderService"/>
-        <constructor-arg index="3" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="0" ref="paymentProcessorFactory"/>
+        <constructor-arg index="1" ref="customerOrderService"/>
+        <constructor-arg index="2" ref="paymentCallBackHandlerFacade"/>
     </bean>
 
 
 
     <!-- CPOINT do you need authorize net ? -->
     <bean id="anetPaymentCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
-        <constructor-arg index="0" ref="applicationDirector"/>
-        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
     </bean>
 
     <!-- CPOINT do you need liq pay ? -->
     <bean id="liqPayCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
-        <constructor-arg index="0" ref="applicationDirector"/>
-        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
     </bean>
 
     <!-- CPOINT do you need liq pay ? -->
     <bean id="liqPayNoRefundCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
-        <constructor-arg index="0" ref="applicationDirector"/>
-        <constructor-arg index="1" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
     </bean>
 
     <!-- ################################### filter delegates end ################################### -->
@@ -170,6 +164,54 @@
 
     <bean id="shoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterDecoratorImpl">
         <constructor-arg index="0" ref="tokenShoppingCartPersister"/>
+    </bean>
+
+
+    <bean id="commandUtil" class="org.yes.cart.web.support.util.CommandUtils">
+        <property name="cmdKeys">
+            <list>
+                <value>addToCartCmd</value>
+                <value>addToWishListCmd</value>
+                <value>addCouponCmd</value>
+                <value>changeCurrencyCmd</value>
+                <value>changeLocaleCmd</value>
+                <value>cleanCartCmd</value>
+                <value>expireCartCmd</value>
+                <value>loginCmd</value>
+                <value>logoutCmd</value>
+                <value>removeCouponCmd</value>
+                <value>removeFromWishListCmd</value>
+                <value>removeAllSkuCmd</value>
+                <value>removeOneSkuCmd</value>
+                <value>setBillingAddressSeparateCmd</value>
+                <value>setCarrierSlaCmd</value>
+                <value>setAddressesCmd</value>
+                <value>setMultipleDeliveryCmd</value>
+                <value>setShopIdCmd</value>
+                <value>setQuantityToCartCmd</value>
+                <value>qty</value>
+                <value>type</value>
+                <value>sku</value>
+                <value>wla</value>
+                <value>viewSkuInternalCmd</value>
+                <value>setPgLabelCmd</value>
+                <value>setOrderMsgCmd</value>
+            </list>
+        </property>
+        <property name="cmdInternalKeys">
+            <list>
+                <value>cleanCartCmd</value>
+                <value>expireCartCmd</value>
+                <value>loginCmd</value>
+                <value>setBillingAddressSeparateCmd</value>
+                <value>setCarrierSlaCmd</value>
+                <value>setAddressesCmd</value>
+                <value>setMultipleDeliveryCmd</value>
+                <value>setShopIdCmd</value>
+                <value>viewSkuInternalCmd</value>
+                <value>setPgLabelCmd</value>
+            </list>
+        </property>
     </bean>
 
 

@@ -270,7 +270,7 @@ public class ContentController extends AbstractApiController {
     @RequestMapping(
             value = "/view/{id}",
             method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_JSON_VALUE,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public @ResponseBody ContentRO viewContent(@PathVariable(value = "id") final String content,
@@ -363,7 +363,7 @@ public class ContentController extends AbstractApiController {
     @RequestMapping(
             value = "/view/{id}",
             method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_XML_VALUE,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = MediaType.APPLICATION_XML_VALUE
     )
     public @ResponseBody ContentRO viewContentXML(@PathVariable(value = "id") final String content,

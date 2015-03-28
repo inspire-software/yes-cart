@@ -651,7 +651,7 @@ public class SearchController extends AbstractApiController {
                                        final ShoppingCart cart) {
 
         ProductSearchResultPageDTO products = productServiceFacade.getListProducts(
-                context, result.getSearch().getPageNumber(), result.getSearch().getPageSize(),
+                context, result.getSearch().getPageNumber() * result.getSearch().getPageSize(), result.getSearch().getPageSize(),
                 result.getSearch().getSortField(), result.getSearch().getSortDescending());
 
         result.setTotalResults(products.getTotalHits());
@@ -708,6 +708,9 @@ public class SearchController extends AbstractApiController {
         final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, shopId);
 
         result.setPageAvailableSize(itemsPerPageValues);
+        if (result.getSearch().getPageNumber() < 0) {
+            result.getSearch().setPageNumber(0); // do not allow negative start page
+        }
         result.getSearch().setPageSize(selectedItemPerPage);
         result.setProductImageWidth(widthHeight.getFirst());
         result.setProductImageHeight(widthHeight.getSecond());

@@ -204,55 +204,6 @@
         <constructor-arg index="2" ref="groovyContentServiceTemplateSupport"/>
     </bean>
 
-
-    <bean id="wicketUtil" class="org.yes.cart.web.util.WicketUtil">
-        <property name="cmdKeys">
-            <list>
-                <value>addToCartCmd</value>
-                <value>addToWishListCmd</value>
-                <value>addCouponCmd</value>
-                <value>changeCurrencyCmd</value>
-                <value>changeLocaleCmd</value>
-                <value>cleanCartCmd</value>
-                <value>expireCartCmd</value>
-                <value>loginCmd</value>
-                <value>logoutCmd</value>
-                <value>removeCouponCmd</value>
-                <value>removeFromWishListCmd</value>
-                <value>removeAllSkuCmd</value>
-                <value>removeOneSkuCmd</value>
-                <value>setBillingAddressSeparateCmd</value>
-                <value>setCarrierSlaCmd</value>
-                <value>setAddressesCmd</value>
-                <value>setMultipleDeliveryCmd</value>
-                <value>setShopIdCmd</value>
-                <value>setQuantityToCartCmd</value>
-                <value>qty</value>
-                <value>type</value>
-                <value>sku</value>
-                <value>wla</value>
-                <value>viewSkuInternalCmd</value>
-                <value>setPgLabelCmd</value>
-                <value>setOrderMsgCmd</value>
-            </list>
-        </property>
-        <property name="cmdInternalKeys">
-            <list>
-                <value>cleanCartCmd</value>
-                <value>expireCartCmd</value>
-                <value>loginCmd</value>
-                <value>setBillingAddressSeparateCmd</value>
-                <value>setCarrierSlaCmd</value>
-                <value>setAddressesCmd</value>
-                <value>setMultipleDeliveryCmd</value>
-                <value>setShopIdCmd</value>
-                <value>viewSkuInternalCmd</value>
-                <value>setPgLabelCmd</value>
-            </list>
-        </property>
-    </bean>
-
-
     <bean id="seoBookmarkablePageParametersEncoder" class="org.yes.cart.web.service.wicketsupport.impl.SeoBookmarkablePageParametersEncoder">
         <constructor-arg index="0" ref="bookmarkService"/>
         <constructor-arg index="1" value="true"/>

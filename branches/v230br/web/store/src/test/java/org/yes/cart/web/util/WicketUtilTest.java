@@ -19,6 +19,7 @@ package org.yes.cart.web.util;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.junit.Test;
+import org.yes.cart.web.support.util.CommandUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,12 +38,11 @@ public class WicketUtilTest {
 
     @Test
     public void testPageParametesAsMap() throws Exception {
-        WicketUtil wicketUtil = new WicketUtil();
-        wicketUtil.setCmdKeys(new ArrayList<String>() {{
+        new CommandUtils().setCmdKeys(new ArrayList<String>() {{
             add("cmd1");
             add("cmd2");
         }});
-        wicketUtil.setCmdInternalKeys(new ArrayList<String>() {{
+        new CommandUtils().setCmdInternalKeys(new ArrayList<String>() {{
             add("cmd1");
         }});
         PageParameters parametersToFilter = new PageParameters("cmd1=val1,asd=dsa,cmd2=ppp");
@@ -57,8 +57,7 @@ public class WicketUtilTest {
 
     @Test
     public void testGetFilteredRequestParameters() throws Exception {
-        WicketUtil wicketUtil = new WicketUtil();
-        wicketUtil.setCmdKeys(new ArrayList<String>() {{
+        new CommandUtils().setCmdKeys(new ArrayList<String>() {{
             add("cmd1");
             add("cmd2");
         }});
@@ -74,8 +73,7 @@ public class WicketUtilTest {
 
     @Test
     public void testGetFilteredRequestParametersNameFilter() throws Exception {
-        WicketUtil wicketUtil = new WicketUtil();
-        wicketUtil.setCmdKeys(new ArrayList<String>() {{
+        new CommandUtils().setCmdKeys(new ArrayList<String>() {{
             add("cmd1");
         }});
         assertNotNull(WicketUtil.getFilteredRequestParameters(null));
@@ -91,8 +89,7 @@ public class WicketUtilTest {
 
     @Test
     public void testGetFilteredRequestParametersKeyName() throws Exception {
-        WicketUtil wicketUtil = new WicketUtil();
-        wicketUtil.setCmdKeys(new ArrayList<String>() {{
+        new CommandUtils().setCmdKeys(new ArrayList<String>() {{
             add("cmd1");
         }});
         assertNotNull(WicketUtil.getFilteredRequestParameters(null));
@@ -122,8 +119,7 @@ public class WicketUtilTest {
 
     @Test
     public void testGetRetainedRequestParameters() throws Exception {
-        WicketUtil wicketUtil = new WicketUtil();
-        wicketUtil.setCmdKeys(new ArrayList<String>() {{
+        new CommandUtils().setCmdKeys(new ArrayList<String>() {{
             add("cmd1");
         }});
         assertNotNull(WicketUtil.getFilteredRequestParameters(null));

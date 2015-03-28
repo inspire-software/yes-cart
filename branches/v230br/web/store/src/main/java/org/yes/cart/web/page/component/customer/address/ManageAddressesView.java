@@ -31,6 +31,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -41,7 +42,9 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -92,6 +95,8 @@ public class ManageAddressesView extends BaseComponent {
 
         super(panelId);
 
+        final List<Address> allowed = determineAllowedAddresses(customerModel, addressType);
+
         add(
                 new Form(SELECT_ADDRESSES_FORM).add(
                         new RadioGroup<Address>(
@@ -139,7 +144,7 @@ public class ManageAddressesView extends BaseComponent {
                                         }.setDefaultFormProcessing(false)
                                 )
                                 .add(
-                                        new ListView<Address>(ADDRESSES_LIST, customerModel.getObject().getAddresses(addressType)) {
+                                        new ListView<Address>(ADDRESSES_LIST, allowed) {
                                             protected void populateItem(final ListItem<Address> addressListItem) {
                                                 populateAddress(addressListItem, addressListItem.getModelObject(), returnToCheckout);
                                             }
@@ -147,6 +152,23 @@ public class ManageAddressesView extends BaseComponent {
                                 )
                 )
         );
+
+    }
+
+    private List<Address> determineAllowedAddresses(final IModel<Customer> customerModel, final String addressType) {
+
+        final List<Address> allAvailable = customerModel.getObject().getAddresses(addressType);
+        final List<Address> allowed = new ArrayList<Address>();
+        final Shop shop = ApplicationDirector.getCurrentShop();
+        final List<String> allowedCountries = Address.ADDR_TYPE_BILLING.equals(addressType) ?
+                shop.getSupportedBillingCountriesAsList() : shop.getSupportedShippingCountriesAsList();
+
+        for (final Address address : allAvailable) {
+            if (allowedCountries.contains(address.getCountryCode())) {
+                allowed.add(address);
+            }
+        }
+        return allowed;
 
     }
 

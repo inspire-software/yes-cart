@@ -22,6 +22,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.util.CommandUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -35,21 +36,6 @@ public class WicketUtil {
 
 
     private static final int DEFAULT_ITEMS = 10;
-
-    /**
-     * Temporally fields will be removed from parameter maps
-     */
-    private static Set<String> cmdKeys = new HashSet<String>();
-    private static Set<String> cmdInternalKeys = new HashSet<String>();
-
-    public void setCmdKeys(final List<String> cmdKeys) {
-        WicketUtil.cmdKeys.addAll(cmdKeys);
-    }
-
-    public void setCmdInternalKeys(final List<String> cmdKeys) {
-        WicketUtil.cmdInternalKeys.addAll(cmdKeys);
-    }
-
 
     /**
      * Get  {@link HttpServletRequest} .
@@ -89,7 +75,7 @@ public class WicketUtil {
         final Map<String, String> map = new LinkedHashMap<String, String>();
         if (pageParameters != null) {
             for (String key : pageParameters.getNamedKeys()) {
-                if (!cmdInternalKeys.contains(key)) {
+                if (!CommandUtils.isInternalCommandKey(key)) {
                     map.put(key, pageParameters.get(key).toString());
                 }
             }
@@ -108,7 +94,7 @@ public class WicketUtil {
         final Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
         if (pageParameters != null) {
             for (String key : pageParameters.getNamedKeys()) {
-                if (!cmdInternalKeys.contains(key)) {
+                if (!CommandUtils.isInternalCommandKey(key)) {
                     final List<String> vals = new ArrayList<String>();
                     for (final StringValue value : pageParameters.getValues(key)) {
                         vals.add(value.toString());
@@ -133,8 +119,10 @@ public class WicketUtil {
         if (parameters != null) {
 
             final PageParameters rez = new PageParameters(parameters);
-            for (String paramName : cmdKeys) {
-                rez.remove(paramName);
+            for (final String key : parameters.getNamedKeys()) {
+                if (CommandUtils.isCommandKey(key)) {
+                    rez.remove(key);
+                }
             }
             return rez;
 
@@ -209,7 +197,7 @@ public class WicketUtil {
      *
      * @param pageParameters     page parameters from http request
      * @param itemsPerPageValues allowed values
-     * @return selected items per page value if it in allowed list otherwise {@link org.yes.cart.web.support.util.NavigationUtil#DEFAULT_ITEMS} value
+     * @return selected items per page value if it in allowed list otherwise {@link WicketUtil#DEFAULT_ITEMS} value
      */
     public static int getSelectedItemsPerPage(final PageParameters pageParameters, final List<String> itemsPerPageValues) {
         int result = DEFAULT_ITEMS;
@@ -256,7 +244,7 @@ public class WicketUtil {
      *
      * E.g.
      *  if values are "color", "blue" then "colorblue" will be result of this method.
-     *  if values are "color", "синий" then result is "colorblue".
+     *  if values are "color", "синий" then result is "color10891080108510801081".
      *
      * @param values array of string value
      *

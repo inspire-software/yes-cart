@@ -35,22 +35,29 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>payment-api</artifactId>
-            <version>2.3.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
-            <version>2.3.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core</artifactId>
-            <version>2.3.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>websupport</artifactId>
-            <version>2.3.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>persistence</artifactId>
+            <version>${project.parent.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -120,6 +127,25 @@
             <version>2.2.8</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>2.4.7</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>dumbster</groupId>
+            <artifactId>dumbster</artifactId>
+            <version>1.6</version>
+            <scope>test</scope>
+        </dependency>
+
 
         <dependency>
             <groupId>org.apache.cxf</groupId>
@@ -220,6 +246,13 @@
         <finalName>yes-api</finalName>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <argLine>-Xms512m -Xmx1280m -XX:MaxPermSize=256m</argLine>
+                    </configuration>
+                    <inherited>true</inherited>
+                </plugin>
                 <plugin>
                     <artifactId>maven-war-plugin</artifactId>
                     <configuration>

@@ -43,10 +43,8 @@ public class RequestLocaleResolverFilter extends  AbstractFilter implements Filt
 
     private ServletContext servletContext;
 
-    public RequestLocaleResolverFilter(final ApplicationDirector applicationDirector,
-                                       final LanguageService languageService,
+    public RequestLocaleResolverFilter(final LanguageService languageService,
                                        final ShoppingCartCommandFactory cartCommandFactory) {
-        super(applicationDirector);
         this.languageService = languageService;
         this.cartCommandFactory = cartCommandFactory;
     }

@@ -23,9 +23,8 @@
     <!-- ################################### filter delegates begin ################################### -->
 
     <bean id="requestLocaleResolverFilter" class="org.yes.cart.web.filter.RequestLocaleResolverFilter">
-        <constructor-arg index="0" ref="applicationDirector"/>
-        <constructor-arg index="1" ref="languageService"/>
-        <constructor-arg index="2" ref="shoppingCartCommandFactory"/>
+        <constructor-arg index="0" ref="languageService"/>
+        <constructor-arg index="1" ref="shoppingCartCommandFactory"/>
     </bean>
 
     <!-- ################################### filter delegates end ################################### -->

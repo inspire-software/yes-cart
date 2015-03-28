@@ -68,8 +68,8 @@
                 <!--<entry key="org.yes.cart.domain.dto.ProductAssociationDTO"  value="org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl"/>-->
 
                 <!--<entry key="org.yes.cart.domain.dto.AddressDTO"  value="org.yes.cart.domain.dto.impl.AddressDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.CarrierDTO"  value="org.yes.cart.domain.dto.impl.CarrierDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.CarrierSlaDTO"  value="org.yes.cart.domain.dto.impl.CarrierSlaDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.CarrierRO"  value="org.yes.cart.domain.ro.CarrierRO"/>
+                <entry key="org.yes.cart.domain.ro.CarrierSlaRO"  value="org.yes.cart.domain.ro.CarrierSlaRO"/>
 
                 <!--<entry key="org.yes.cart.domain.dto.CountryDTO"  value="org.yes.cart.domain.dto.impl.CountryDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.StateDTO"  value="org.yes.cart.domain.dto.impl.StateDTOImpl"/>-->
@@ -83,6 +83,12 @@
 
                 <!--<entry key="org.yes.cart.domain.dto.PromotionDTO"        value="org.yes.cart.domain.dto.impl.PromotionDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.PromotionCouponDTO"  value="org.yes.cart.domain.dto.impl.PromotionCouponDTOImpl"/>-->
+
+                <entry key="org.yes.cart.domain.ro.CartItemRO"  value="org.yes.cart.domain.ro.CartItemRO"/>
+                <entry key="org.yes.cart.domain.ro.CartOrderInfoRO"  value="org.yes.cart.domain.ro.CartOrderInfoRO"/>
+                <entry key="org.yes.cart.domain.ro.CartShoppingContextRO"  value="org.yes.cart.domain.ro.CartShoppingContextRO"/>
+                <entry key="org.yes.cart.domain.ro.CartTotalRO"  value="org.yes.cart.domain.ro.CartTotalRO"/>
+                <entry key="org.yes.cart.domain.ro.CartRO"  value="org.yes.cart.domain.ro.CartRO"/>
 
             </map>
         </constructor-arg>

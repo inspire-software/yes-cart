@@ -64,16 +64,13 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
     /**
      * Construct filter.
      *
-     * @param applicationDirector   app director.
      * @param paymentProcessorFactory payment processor.
      * @param customerOrderService  {@link CustomerOrderService}     to use
      * @param paymentCallBackHandlerFacade handler.
      */
-    public PayPalExpressCheckoutFilter(final ApplicationDirector applicationDirector,
-                                       final PaymentProcessorFactory paymentProcessorFactory,
+    public PayPalExpressCheckoutFilter(final PaymentProcessorFactory paymentProcessorFactory,
                                        final CustomerOrderService customerOrderService,
                                        final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade) {
-        super(applicationDirector);
         this.paymentProcessorFactory = paymentProcessorFactory;
         this.customerOrderService = customerOrderService;
         this.paymentCallBackHandlerFacade = paymentCallBackHandlerFacade;

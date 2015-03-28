@@ -18,7 +18,6 @@ package org.yes.cart.web.filter;
 
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.web.application.ApplicationDirector;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -34,24 +33,7 @@ public abstract class AbstractFilter implements Filter {
 
     private FilterConfig filterConfig = null;
 
-    private final ApplicationDirector applicationDirector;
     private Pattern skipUri = null;
-
-    /**
-     * Construct filter.
-     * @param applicationDirector app director.
-     */
-    public AbstractFilter(final ApplicationDirector applicationDirector) {
-        this.applicationDirector = applicationDirector;
-    }
-
-    /**
-     * Get app director.
-     * @return {@link ApplicationDirector}
-     */
-    public ApplicationDirector getApplicationDirector() {
-        return applicationDirector;
-    }
 
     /**
      * {@inheritDoc}

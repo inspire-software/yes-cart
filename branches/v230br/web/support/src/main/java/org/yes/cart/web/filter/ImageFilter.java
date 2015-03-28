@@ -23,7 +23,6 @@ import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.Filter;
@@ -74,11 +73,8 @@ public class ImageFilter extends AbstractFilter implements Filter {
 
     private Integer etagExpiration = null;
 
-    public ImageFilter(
-            final ApplicationDirector applicationDirector,
-            final ImageService imageService,
-            final SystemService systemService) {
-        super(applicationDirector);
+    public ImageFilter(final ImageService imageService,
+                       final SystemService systemService) {
         this.imageService = imageService;
         this.systemService = systemService;
         fileTypeMap = new MimetypesFileTypeMap();

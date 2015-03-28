@@ -51,12 +51,8 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
      * Construct filter.
      *
      * @param paymentCallBackHandlerFacade handler.
-     * @param applicationDirector app director
      */
-    public BasePaymentGatewayCallBackFilter(
-            final ApplicationDirector applicationDirector,
-            final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade) {
-        super(applicationDirector);
+    public BasePaymentGatewayCallBackFilter(final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade) {
         this.paymentCallBackHandlerFacade = paymentCallBackHandlerFacade;
     }
 
