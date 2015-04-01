@@ -19,6 +19,8 @@ package org.yes.cart.domain.ro;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
@@ -80,6 +82,7 @@ public class AddressRO implements Serializable {
     private long customerId;
 
 
+    @XmlAttribute(name = "address-id")
     public long getAddressId() {
         return addressId;
     }
@@ -120,6 +123,7 @@ public class AddressRO implements Serializable {
         this.addrline2 = addrline2;
     }
 
+    @XmlAttribute(name = "address-type")
     public String getAddressType() {
         return addressType;
     }
@@ -128,6 +132,7 @@ public class AddressRO implements Serializable {
         this.addressType = addressType;
     }
 
+    @XmlElement(name = "country-code")
     public String getCountryCode() {
         return countryCode;
     }
@@ -136,6 +141,7 @@ public class AddressRO implements Serializable {
         this.countryCode = countryCode;
     }
 
+    @XmlElement(name = "country-name")
     public String getCountryName() {
         return countryName;
     }
@@ -144,6 +150,7 @@ public class AddressRO implements Serializable {
         this.countryName = countryName;
     }
 
+    @XmlElement(name = "country-local-name")
     public String getCountryLocalName() {
         return countryLocalName;
     }
@@ -152,6 +159,7 @@ public class AddressRO implements Serializable {
         this.countryLocalName = countryLocalName;
     }
 
+    @XmlElement(name = "state-code")
     public String getStateCode() {
         return stateCode;
     }
@@ -160,6 +168,7 @@ public class AddressRO implements Serializable {
         this.stateCode = stateCode;
     }
 
+    @XmlElement(name = "state-name")
     public String getStateName() {
         return stateName;
     }
@@ -168,6 +177,7 @@ public class AddressRO implements Serializable {
         this.stateName = stateName;
     }
 
+    @XmlElement(name = "state-local-name")
     public String getStateLocalName() {
         return stateLocalName;
     }
@@ -200,6 +210,7 @@ public class AddressRO implements Serializable {
         this.middlename = middlename;
     }
 
+    @XmlAttribute(name = "default-address")
     public boolean isDefaultAddress() {
         return defaultAddress;
     }
@@ -208,6 +219,7 @@ public class AddressRO implements Serializable {
         this.defaultAddress = defaultAddress;
     }
 
+    @XmlElement(name = "phone-list")
     public String getPhoneList() {
         return phoneList;
     }
@@ -216,6 +228,7 @@ public class AddressRO implements Serializable {
         this.phoneList = phoneList;
     }
 
+    @XmlAttribute(name = "customer-id")
     public long getCustomerId() {
         return customerId;
     }

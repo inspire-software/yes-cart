@@ -25,8 +25,6 @@
         <constructor-arg>
             <map>
                 <!--<entry key="org.yes.cart.domain.dto.ProdTypeAttributeViewGroupDTO" value="org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl"/>-->
-                <entry key="org.yes.cart.domain.ro.ProductSkuRO" value="org.yes.cart.domain.ro.ProductSkuRO"/>
-                <entry key="org.yes.cart.domain.ro.SkuPriceRO" value="org.yes.cart.domain.ro.SkuPriceRO"/>
                 <!--<entry key="org.yes.cart.domain.dto.PriceListDTO" value="org.yes.cart.domain.dto.impl.PriceListDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.ManagerDTO" value="org.yes.cart.domain.dto.impl.ManagerDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.RoleDTO" value="org.yes.cart.domain.dto.impl.RoleDTOImpl"/>-->
@@ -45,11 +43,13 @@
                 <entry key="org.yes.cart.domain.ro.ProductRO" value="org.yes.cart.domain.ro.ProductRO"/>
                 <entry key="org.yes.cart.domain.ro.ProductSearchResultRO" value="org.yes.cart.domain.ro.ProductSearchResultRO"/>
                 <entry key="org.yes.cart.domain.ro.ProductSkuSearchResultRO" value="org.yes.cart.domain.ro.ProductSkuSearchResultRO"/>
+                <entry key="org.yes.cart.domain.ro.ProductWishlistRO" value="org.yes.cart.domain.ro.ProductWishlistRO"/>
                 <entry key="org.yes.cart.domain.ro.ProductAvailabilityModelRO" value="org.yes.cart.domain.ro.ProductAvailabilityModelRO"/>
-                <!--<entry key="org.yes.cart.domain.dto.ProductSkuDTO" value="org.yes.cart.domain.dto.impl.ProductSkuDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.ProductSkuRO" value="org.yes.cart.domain.ro.ProductSkuRO"/>
+                <entry key="org.yes.cart.domain.ro.SkuPriceRO" value="org.yes.cart.domain.ro.SkuPriceRO"/>
                 <entry key="org.yes.cart.domain.ro.AttrValueCategoryRO" value="org.yes.cart.domain.ro.AttrValueCategoryRO"/>
-                <!--<entry key="org.yes.cart.domain.dto.AttrValueCustomerDTO" value="org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.CustomerDTO" value="org.yes.cart.domain.dto.impl.CustomerDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.AttrValueCustomerRO" value="org.yes.cart.domain.ro.AttrValueCustomerRO"/>
+                <entry key="org.yes.cart.domain.ro.CustomerRO" value="org.yes.cart.domain.ro.CustomerRO"/>
                 <!--<entry key="org.yes.cart.domain.dto.CustomerCardDTO" value="org.yes.cart.domain.dto.impl.CustomerCardDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.CustomerWishListDTO" value="org.yes.cart.domain.dto.impl.CustomerWishListDTOImpl"/>-->
                 <entry key="org.yes.cart.domain.ro.AttrValueProductRO" value="org.yes.cart.domain.ro.AttrValueProductRO"/>
@@ -64,15 +64,11 @@
                 <!--<entry key="org.yes.cart.domain.dto.InventoryDTO" value="org.yes.cart.domain.dto.impl.InventoryDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.SeoImageDTO" value="org.yes.cart.domain.dto.impl.SeoImageDTOImpl"/>-->
 
-                <!--<entry key="org.yes.cart.domain.dto.AssociationDTO" value="org.yes.cart.domain.dto.impl.AssociationDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.ProductAssociationDTO"  value="org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl"/>-->
-
-                <!--<entry key="org.yes.cart.domain.dto.AddressDTO"  value="org.yes.cart.domain.dto.impl.AddressDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.AddressRO"  value="org.yes.cart.domain.ro.AddressRO"/>
+                <entry key="org.yes.cart.domain.ro.CountryRO"  value="org.yes.cart.domain.ro.CountryRO"/>
+                <entry key="org.yes.cart.domain.ro.StateRO"  value="org.yes.cart.domain.ro.StateRO"/>
                 <entry key="org.yes.cart.domain.ro.CarrierRO"  value="org.yes.cart.domain.ro.CarrierRO"/>
                 <entry key="org.yes.cart.domain.ro.CarrierSlaRO"  value="org.yes.cart.domain.ro.CarrierSlaRO"/>
-
-                <!--<entry key="org.yes.cart.domain.dto.CountryDTO"  value="org.yes.cart.domain.dto.impl.CountryDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.StateDTO"  value="org.yes.cart.domain.dto.impl.StateDTOImpl"/>-->
 
                 <!--<entry key="org.yes.cart.domain.entity.Seo"  value="org.yes.cart.domain.entity.impl.SeoEntity"/>-->
 

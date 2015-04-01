@@ -34,7 +34,7 @@ import org.yes.cart.web.service.ws.node.dto.Node;
  */
 @Controller
 @RequestMapping("/node")
-public class NodeController extends AbstractApiController {
+public class NodeController {
 
     @Autowired
     private NodeService nodeService;

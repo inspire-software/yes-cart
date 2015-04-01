@@ -98,7 +98,7 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
         if (!shoppingCart.getOrderInfo().isBillingAddressNotRequired()
                 || !shoppingCart.getOrderInfo().isDeliveryAddressNotRequired()) {
 
-            final Address delivery = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+            final Address delivery = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
             final Address billing = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
 
             if (!shoppingCart.getOrderInfo().isDeliveryAddressNotRequired() && delivery != null) {

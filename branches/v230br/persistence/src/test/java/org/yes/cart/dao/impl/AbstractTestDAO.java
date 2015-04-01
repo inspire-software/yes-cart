@@ -109,7 +109,9 @@ public abstract class AbstractTestDAO  {
     }
 
     protected IDataSet createDataSet() throws Exception {
-        return new FlatXmlDataSetBuilder().build(getClass().getClassLoader().getResourceAsStream("initialdata.xml"));
+        return new FlatXmlDataSetBuilder()
+                //.setColumnSensing(true) // This enables auto discovery of columns but breaks the tests, possibly our data needs clean up
+                .build(getClass().getClassLoader().getResourceAsStream("initialdata.xml"));
     }
 
     protected void dumpDataBase(final String prefix, final String ... tables) throws Exception {

@@ -265,7 +265,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         address.setAddrline1("line1");
         address.setAddrline2("shipping addr");
         address.setCountryCode("CA");
-        address.setAddressType(Address.ADDR_TYPE_SHIPING);
+        address.setAddressType(Address.ADDR_TYPE_SHIPPING);
         address.setCustomer(customer);
         address.setPhoneList("555-55-51");
         addressService.create(address);

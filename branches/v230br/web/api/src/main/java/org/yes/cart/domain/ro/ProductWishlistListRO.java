@@ -16,39 +16,36 @@
 
 package org.yes.cart.domain.ro;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * User: denispavlov
- * Date: 28/03/2015
- * Time: 18:54
+ * Date: 24/03/2015
+ * Time: 15:30
  */
-@XmlRootElement(name = "address-option")
-public class AddressOptionRO implements Serializable {
+@XmlRootElement(name = "wishlist")
+public class ProductWishlistListRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
-    private String addressId;
-    private boolean shippingSameAsBilling;
+    private List<ProductWishlistRO> products;
 
-    @XmlElement(name = "address-id")
-    public String getAddressId() {
-        return addressId;
+    public ProductWishlistListRO() {
     }
 
-    public void setAddressId(final String addressId) {
-        this.addressId = addressId;
+    public ProductWishlistListRO(final List<ProductWishlistRO> products) {
+        this.products = products;
     }
 
-    @XmlAttribute(name = "shipping-same-as-billing")
-    public boolean isShippingSameAsBilling() {
-        return shippingSameAsBilling;
+    @XmlElement(name = "product")
+    public List<ProductWishlistRO> getProducts() {
+        return products;
     }
 
-    public void setShippingSameAsBilling(final boolean shippingSameAsBilling) {
-        this.shippingSameAsBilling = shippingSameAsBilling;
+    public void setProducts(final List<ProductWishlistRO> products) {
+        this.products = products;
     }
 }

@@ -608,7 +608,7 @@ public class PaymentProcessorImplTest extends BaseCoreDBTestCase {
         address.setCity("LA");
         address.setAddrline1("line1");
         address.setCountryCode("US");
-        address.setAddressType(Address.ADDR_TYPE_SHIPING);
+        address.setAddressType(Address.ADDR_TYPE_SHIPPING);
         address.setCustomer(customer);
         addressService.create(address);
         address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);

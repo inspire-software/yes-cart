@@ -20,6 +20,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,6 +41,9 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.page.component.filterednavigation.AttributeFilteredNavigationSupport;
 import org.yes.cart.web.page.component.filterednavigation.BrandFilteredNavigationSupport;
 import org.yes.cart.web.page.component.filterednavigation.PriceFilteredNavigationSupport;
+import org.yes.cart.web.service.rest.impl.BookmarkMixin;
+import org.yes.cart.web.service.rest.impl.CartMixin;
+import org.yes.cart.web.service.rest.impl.RoMappingMixin;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.yes.cart.web.support.service.ProductServiceFacade;
@@ -59,7 +63,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/search")
-public class SearchController extends AbstractApiController {
+public class SearchController {
 
     @Autowired
     private CategoryServiceFacade categoryServiceFacade;
@@ -78,6 +82,13 @@ public class SearchController extends AbstractApiController {
     @Autowired
     private AttributeFilteredNavigationSupport attributeFilteredNavigationSupport;
 
+    @Autowired
+    private CartMixin cartMixin;
+    @Autowired
+    @Qualifier("restRoMappingMixin")
+    private RoMappingMixin mappingMixin;
+    @Autowired
+    private BookmarkMixin bookmarkMixin;
 
     /**
      * Interface: PUT /yes-api/rest/search
@@ -447,11 +458,11 @@ public class SearchController extends AbstractApiController {
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
-        final long categoryId = resolveCategoryId(search.getCategory());
-        final Shop shop = getCurrentShop();
-        final ShoppingCart cart = getCurrentCart();
+        final long categoryId = bookmarkMixin.resolveCategoryId(search.getCategory());
+        final Shop shop = cartMixin.getCurrentShop();
+        final ShoppingCart cart = cartMixin.getCurrentCart();
 
         final SearchResultRO result = new SearchResultRO();
         result.setSearch(search);
@@ -665,9 +676,9 @@ public class SearchController extends AbstractApiController {
 
                 final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(hit, context.getShopId());
 
-                final ProductSearchResultRO ro = map(hit, ProductSearchResultRO.class, ProductSearchResultDTO.class);
+                final ProductSearchResultRO ro = mappingMixin.map(hit, ProductSearchResultRO.class, ProductSearchResultDTO.class);
 
-                final ProductAvailabilityModelRO amRo = map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
+                final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
                 ro.setProductAvailabilityModel(amRo);
 
                 final SkuPrice price = productServiceFacade.getSkuPrice(
@@ -678,7 +689,7 @@ public class SearchController extends AbstractApiController {
                         context.getShopId()
                 );
 
-                final SkuPriceRO priceRo = map(price, SkuPriceRO.class, SkuPrice.class);
+                final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, SkuPrice.class);
                 priceRo.setSymbol(symbol.getFirst());
                 priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 

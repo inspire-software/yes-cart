@@ -101,7 +101,7 @@ public class AttrValueCategoryRO implements Serializable {
     }
 
     @XmlJavaTypeAdapter(I18nMapAdapter.class)
-    @XmlElement(name = "attribute-display-vals")
+    @XmlElement(name = "attribute-display-names")
     public Map<String, String> getAttributeDisplayNames() {
         return attributeDisplayNames;
     }

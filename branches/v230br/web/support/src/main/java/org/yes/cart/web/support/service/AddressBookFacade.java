@@ -16,10 +16,7 @@
 
 package org.yes.cart.web.support.service;
 
-import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.Country;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.State;
+import org.yes.cart.domain.entity.*;
 
 import java.util.List;
 
@@ -40,13 +37,25 @@ public interface AddressBookFacade {
      */
     boolean customerHasAtLeastOneAddress(String email);
 
+
+    /**
+     * Get addresses applicable for given shop.
+     *
+     * @param customer customer
+     * @param shop shop
+     * @param addressType address type
+     * @return list of applicable addresses
+     */
+    List<Address> getAddresses(Customer customer, Shop shop, String addressType);
+
     /**
      * Get existing address or create new instance object.
+     *
+     *
      *
      * @param customer customer of the address
      * @param addrId address PK
      * @param addressType type of address
-     *
      * @return address instance
      */
     Address getAddress(Customer customer, String addrId, String addressType);

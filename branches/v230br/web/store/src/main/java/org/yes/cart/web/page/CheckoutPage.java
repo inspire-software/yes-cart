@@ -569,7 +569,7 @@ public class CheckoutPage extends AbstractWebPage {
         final Model<Customer> customerModel = new Model<Customer>(customer);
 
         final ManageAddressesView shipppingAddress =
-                new ManageAddressesView(SHIPPING_ADDRESS_VIEW, customerModel, Address.ADDR_TYPE_SHIPING, true);
+                new ManageAddressesView(SHIPPING_ADDRESS_VIEW, customerModel, Address.ADDR_TYPE_SHIPPING, true);
 
         final ManageAddressesView billingAddress =
                 new ManageAddressesView(BILLING_ADDRESS_VIEW, customerModel, Address.ADDR_TYPE_BILLING, true);

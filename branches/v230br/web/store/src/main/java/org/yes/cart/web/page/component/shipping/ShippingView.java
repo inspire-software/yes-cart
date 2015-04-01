@@ -122,7 +122,7 @@ public class ShippingView extends BaseComponent {
                 if (customer != null &&
                         (!carrierSla.isBillingAddressNotRequired() || !carrierSla.isDeliveryAddressNotRequired())) {
                     final Address billingAddressTemp = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
-                    final Address shippingAddressTemp = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+                    final Address shippingAddressTemp = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
 
                     if (shippingAddressTemp != null) { //normal case when we entered shipping address
 

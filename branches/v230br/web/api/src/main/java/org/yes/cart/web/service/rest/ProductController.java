@@ -18,6 +18,7 @@ package org.yes.cart.web.service.rest;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,11 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.*;
 import org.yes.cart.service.domain.BrandService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.web.service.rest.impl.BookmarkMixin;
+import org.yes.cart.web.service.rest.impl.CartMixin;
+import org.yes.cart.web.service.rest.impl.RoMappingMixin;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
@@ -37,6 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -45,7 +52,7 @@ import java.util.List;
  * Time: 10:43
  */
 @Controller
-public class ProductController extends AbstractApiController {
+public class ProductController {
 
     @Autowired
     private BrandService brandService;
@@ -54,6 +61,17 @@ public class ProductController extends AbstractApiController {
     @Autowired
     private CurrencySymbolService currencySymbolService;
 
+    @Autowired
+    private ShoppingCartCommandFactory shoppingCartCommandFactory;
+
+
+    @Autowired
+    private CartMixin cartMixin;
+    @Autowired
+    @Qualifier("restRoMappingMixin")
+    private RoMappingMixin mappingMixin;
+    @Autowired
+    private BookmarkMixin bookmarkMixin;
 
     /**
      * Interface: GET /product/{id}
@@ -245,11 +263,11 @@ public class ProductController extends AbstractApiController {
      * 	            &lt;val&gt;Logitech Wireless Mini Mouse M187...&lt;/val&gt;
      * 	        &lt;/attribute-value&gt;
      * 	        &lt;attribute-value attribute-id="1423" attrvalue-id="19865" product-id="297"&gt;
-     * 	            &lt;attribute-display-vals&gt;
+     * 	            &lt;attribute-display-names&gt;
      * 	                &lt;entry lang="uk"&gt;Ресівер, що поставляється&lt;/entry&gt;
      * 	                &lt;entry lang="en"&gt;Receiver included&lt;/entry&gt;
      * 	                &lt;entry lang="ru"&gt;Поставляемый ресивер&lt;/entry&gt;
-     * 	            &lt;/attribute-display-vals&gt;
+     * 	            &lt;/attribute-display-names&gt;
      * 	            &lt;attribute-name&gt;Receiver included&lt;/attribute-name&gt;
      * 	            &lt;display-vals&gt;
      * 	                &lt;entry lang="uk"&gt;Да&lt;/entry&gt;
@@ -311,11 +329,11 @@ public class ProductController extends AbstractApiController {
      * 	        &lt;sku&gt;
      * 	            &lt;attribute-values&gt;
      * 	                &lt;attribute-value attribute-id="532" attrvalue-id="948" sku-id="308"&gt;
-     * 	                    &lt;attribute-display-vals&gt;
+     * 	                    &lt;attribute-display-names&gt;
      * 	                        &lt;entry lang="uk"&gt;Колір продукту&lt;/entry&gt;
      * 	                        &lt;entry lang="en"&gt;Color of product&lt;/entry&gt;
      * 	                        &lt;entry lang="ru"&gt;Цвет товара&lt;/entry&gt;
-     * 	                    &lt;/attribute-display-vals&gt;
+     * 	                    &lt;/attribute-display-names&gt;
      * 	                    &lt;attribute-name&gt;Color of product&lt;/attribute-name&gt;
      * 	                    &lt;display-vals&gt;
      * 	                        &lt;entry lang="uk"&gt;Білий&lt;/entry&gt;
@@ -380,19 +398,17 @@ public class ProductController extends AbstractApiController {
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
-
-        final long productId = resolveProductId(product);
+        final long productId = bookmarkMixin.resolveProductId(product);
 
         final Product productEntity = productServiceFacade.getProductById(productId);
 
         if (productEntity != null) {
 
-            final ShoppingCart cart = getCurrentCart();
+            final ShoppingCart cart = cartMixin.getCurrentCart();
             final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
 
 
-            final ProductRO prodRO = map(productEntity, ProductRO.class, Product.class);
+            final ProductRO prodRO = mappingMixin.map(productEntity, ProductRO.class, Product.class);
 
             // Brand is lazy so need to retrieve name manually
             final Brand brand = brandService.findById(prodRO.getBrandId());
@@ -400,7 +416,7 @@ public class ProductController extends AbstractApiController {
 
             final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productEntity, cart.getShoppingContext().getShopId());
 
-            final ProductAvailabilityModelRO amRo = map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
+            final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
             prodRO.setProductAvailabilityModel(amRo);
 
             final SkuPrice price = productServiceFacade.getSkuPrice(
@@ -411,7 +427,7 @@ public class ProductController extends AbstractApiController {
                     cart.getShoppingContext().getShopId()
             );
 
-            final SkuPriceRO priceRo = map(price, SkuPriceRO.class, SkuPrice.class);
+            final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, SkuPrice.class);
             priceRo.setSymbol(symbol.getFirst());
             priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 
@@ -428,10 +444,14 @@ public class ProductController extends AbstractApiController {
             }
             prodRO.setSkus(skuRo);
 
+            executeViewProductCommand(productEntity);
+            cartMixin.persistShoppingCart(request, response);
+
             return prodRO;
 
         }
 
+        cartMixin.persistShoppingCart(request, response);
         return null;
 
     }
@@ -439,8 +459,8 @@ public class ProductController extends AbstractApiController {
     private List<ProductSearchResultRO> viewProductAssociationsInternal(final String product,
                                                                         final String type) {
 
-        final long productId = resolveProductId(product);
-        final ShoppingCart cart = getCurrentCart();
+        final long productId = bookmarkMixin.resolveProductId(product);
+        final ShoppingCart cart = cartMixin.getCurrentCart();
 
         final List<ProductSearchResultDTO> productAssociations = productServiceFacade.getProductAssociations(productId, cart.getShoppingContext().getShopId(), type);
 
@@ -454,9 +474,9 @@ public class ProductController extends AbstractApiController {
 
                 final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(hit, cart.getShoppingContext().getShopId());
 
-                final ProductSearchResultRO ro = map(hit, ProductSearchResultRO.class, ProductSearchResultDTO.class);
+                final ProductSearchResultRO ro = mappingMixin.map(hit, ProductSearchResultRO.class, ProductSearchResultDTO.class);
 
-                final ProductAvailabilityModelRO amRo = map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
+                final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
                 ro.setProductAvailabilityModel(amRo);
 
                 final SkuPrice price = productServiceFacade.getSkuPrice(
@@ -467,7 +487,7 @@ public class ProductController extends AbstractApiController {
                         cart.getShoppingContext().getShopId()
                 );
 
-                final SkuPriceRO priceRo = map(price, SkuPriceRO.class, SkuPrice.class);
+                final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, SkuPrice.class);
                 priceRo.setSymbol(symbol.getFirst());
                 priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 
@@ -585,7 +605,7 @@ public class ProductController extends AbstractApiController {
                                                                              final HttpServletRequest request,
                                                                              final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return viewProductAssociationsInternal(product, type);
 
@@ -679,7 +699,7 @@ public class ProductController extends AbstractApiController {
                                                                               final HttpServletRequest request,
                                                                               final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return new ProductSearchResultListRO(viewProductAssociationsInternal(product, type));
 
@@ -687,11 +707,11 @@ public class ProductController extends AbstractApiController {
 
     private ProductSkuRO viewSkuInternal(final ProductSku productSku, final long shopId, final String currencyCode, final Pair<String, Boolean> symbol) {
 
-        final ProductSkuRO skuRO = map(productSku, ProductSkuRO.class, ProductSku.class);
+        final ProductSkuRO skuRO = mappingMixin.map(productSku, ProductSkuRO.class, ProductSku.class);
 
         final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productSku, shopId);
 
-        final ProductAvailabilityModelRO amRo = map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
+        final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
         skuRO.setProductAvailabilityModel(amRo);
 
         final SkuPrice price = productServiceFacade.getSkuPrice(
@@ -702,7 +722,7 @@ public class ProductController extends AbstractApiController {
                 shopId
         );
 
-        final SkuPriceRO priceRo = map(price, SkuPriceRO.class, SkuPrice.class);
+        final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, SkuPrice.class);
         priceRo.setSymbol(symbol.getFirst());
         priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 
@@ -809,11 +829,11 @@ public class ProductController extends AbstractApiController {
      * 	        &lt;sku&gt;
      * 	            &lt;attribute-values&gt;
      * 	                &lt;attribute-value attribute-id="532" attrvalue-id="948" sku-id="308"&gt;
-     * 	                    &lt;attribute-display-vals&gt;
+     * 	                    &lt;attribute-display-names&gt;
      * 	                        &lt;entry lang="uk"&gt;Колір продукту&lt;/entry&gt;
      * 	                        &lt;entry lang="en"&gt;Color of product&lt;/entry&gt;
      * 	                        &lt;entry lang="ru"&gt;Цвет товара&lt;/entry&gt;
-     * 	                    &lt;/attribute-display-vals&gt;
+     * 	                    &lt;/attribute-display-names&gt;
      * 	                    &lt;attribute-name&gt;Color of product&lt;/attribute-name&gt;
      * 	                    &lt;display-vals&gt;
      * 	                        &lt;entry lang="uk"&gt;Білий&lt;/entry&gt;
@@ -874,24 +894,43 @@ public class ProductController extends AbstractApiController {
                                               final HttpServletRequest request,
                                               final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
-
-        final long productId = resolveSkuId(sku);
+        final long productId = bookmarkMixin.resolveSkuId(sku);
 
         final ProductSku skuEntity = productServiceFacade.getSkuById(productId);
 
         if (skuEntity != null) {
 
-            final ShoppingCart cart = getCurrentCart();
+            final ShoppingCart cart = cartMixin.getCurrentCart();
             final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
+
+            executeViewProductCommand(skuEntity.getProduct());
+            cartMixin.persistShoppingCart(request, response);
 
             return viewSkuInternal(skuEntity, cart.getShoppingContext().getShopId(), cart.getCurrencyCode(), symbol);
 
         }
 
+        cartMixin.persistShoppingCart(request, response);
+
         return null;
 
     }
+
+
+
+    /**
+     * Execute login command.
+     *
+     * @param product product.
+     */
+    protected void executeViewProductCommand(final Product product) {
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, cartMixin.getCurrentCart(),
+                new HashMap<String, Object>() {{
+                    put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, product);
+                }}
+        );
+    }
+
 
 
 

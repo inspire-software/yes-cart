@@ -42,7 +42,6 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,18 +156,9 @@ public class ManageAddressesView extends BaseComponent {
 
     private List<Address> determineAllowedAddresses(final IModel<Customer> customerModel, final String addressType) {
 
-        final List<Address> allAvailable = customerModel.getObject().getAddresses(addressType);
-        final List<Address> allowed = new ArrayList<Address>();
         final Shop shop = ApplicationDirector.getCurrentShop();
-        final List<String> allowedCountries = Address.ADDR_TYPE_BILLING.equals(addressType) ?
-                shop.getSupportedBillingCountriesAsList() : shop.getSupportedShippingCountriesAsList();
 
-        for (final Address address : allAvailable) {
-            if (allowedCountries.contains(address.getCountryCode())) {
-                allowed.add(address);
-            }
-        }
-        return allowed;
+        return addressBookFacade.getAddresses(customerModel.getObject(), shop, addressType);
 
     }
 

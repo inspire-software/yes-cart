@@ -34,7 +34,7 @@ public interface Address extends Auditable {
     /**
      * Shipping address type.
      */
-    String ADDR_TYPE_SHIPING = "S";
+    String ADDR_TYPE_SHIPPING = "S";
 
     /**
      * Get pk value

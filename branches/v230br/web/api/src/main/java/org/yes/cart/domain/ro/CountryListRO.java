@@ -16,39 +16,37 @@
 
 package org.yes.cart.domain.ro;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * User: denispavlov
- * Date: 28/03/2015
- * Time: 18:54
+ * Date: 20/08/2014
+ * Time: 00:26
  */
-@XmlRootElement(name = "address-option")
-public class AddressOptionRO implements Serializable {
+@XmlRootElement(name = "countries")
+public class CountryListRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
-    private String addressId;
-    private boolean shippingSameAsBilling;
+    private List<CountryRO> countries;
 
-    @XmlElement(name = "address-id")
-    public String getAddressId() {
-        return addressId;
+    public CountryListRO() {
+
     }
 
-    public void setAddressId(final String addressId) {
-        this.addressId = addressId;
+    public CountryListRO(final List<CountryRO> countries) {
+        this.countries = countries;
     }
 
-    @XmlAttribute(name = "shipping-same-as-billing")
-    public boolean isShippingSameAsBilling() {
-        return shippingSameAsBilling;
+    @XmlElement(name = "country")
+    public List<CountryRO> getCountries() {
+        return countries;
     }
 
-    public void setShippingSameAsBilling(final boolean shippingSameAsBilling) {
-        this.shippingSameAsBilling = shippingSameAsBilling;
+    public void setCountries(final List<CountryRO> countries) {
+        this.countries = countries;
     }
 }

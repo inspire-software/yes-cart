@@ -33,7 +33,7 @@ public class AuthenticationResultRO implements Serializable {
     private boolean authenticated;
     private String code;
     private String greeting;
-    private TokenRO tokenRO;
+    private TokenRO token;
 
     public AuthenticationResultRO() {
     }
@@ -58,7 +58,7 @@ public class AuthenticationResultRO implements Serializable {
     public AuthenticationResultRO(final String greeting, final TokenRO token) {
         this.authenticated = true;
         this.greeting = greeting;
-        this.tokenRO = token;
+        this.token = token;
     }
 
     public boolean isAuthenticated() {
@@ -86,11 +86,11 @@ public class AuthenticationResultRO implements Serializable {
     }
 
     @XmlElement(name = "token")
-    public TokenRO getTokenRO() {
-        return tokenRO;
+    public TokenRO getToken() {
+        return token;
     }
 
-    public void setTokenRO(final TokenRO tokenRO) {
-        this.tokenRO = tokenRO;
+    public void setToken(final TokenRO token) {
+        this.token = token;
     }
 }

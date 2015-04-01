@@ -17,6 +17,7 @@
 package org.yes.cart.web.service.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,9 @@ import org.yes.cart.domain.ro.BreadcrumbRO;
 import org.yes.cart.domain.ro.CategoryListRO;
 import org.yes.cart.domain.ro.CategoryRO;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.service.rest.impl.BookmarkMixin;
+import org.yes.cart.web.service.rest.impl.CartMixin;
+import org.yes.cart.web.service.rest.impl.RoMappingMixin;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
@@ -44,18 +48,25 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/category")
-public class CategoryController extends AbstractApiController {
+public class CategoryController {
 
     @Autowired
     private CentralViewResolver centralViewResolver;
     @Autowired
     private CategoryServiceFacade categoryServiceFacade;
 
+    @Autowired
+    private CartMixin cartMixin;
+    @Autowired
+    @Qualifier("restRoMappingMixin")
+    private RoMappingMixin mappingMixin;
+    @Autowired
+    private BookmarkMixin bookmarkMixin;
 
     private List<CategoryRO> listRootInternal() {
 
-        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0l, ShopCodeContext.getShopId());
-        return map(categories, CategoryRO.class, Category.class);
+        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0l, cartMixin.getCurrentShopId());
+        return mappingMixin.map(categories, CategoryRO.class, Category.class);
 
     }
 
@@ -137,7 +148,7 @@ public class CategoryController extends AbstractApiController {
     public @ResponseBody List<CategoryRO> listRoot(final HttpServletRequest request,
                                                    final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return listRootInternal();
 
@@ -232,7 +243,7 @@ public class CategoryController extends AbstractApiController {
     public @ResponseBody CategoryListRO listRootXML(final HttpServletRequest request,
                                                     final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return new CategoryListRO(listRootInternal());
 
@@ -372,16 +383,16 @@ public class CategoryController extends AbstractApiController {
                                                  final HttpServletRequest request,
                                                  final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
-        final long categoryId = resolveCategoryId(category);
+        final long categoryId = bookmarkMixin.resolveCategoryId(category);
         final long shopId = ShopCodeContext.getShopId();
 
         final Category categoryEntity = categoryServiceFacade.getCategory(categoryId, shopId);
 
         if (categoryEntity != null && !CentralViewLabel.INCLUDE.equals(categoryEntity.getUitemplate())) {
 
-            final CategoryRO catRO = map(categoryEntity, CategoryRO.class, Category.class);
+            final CategoryRO catRO = mappingMixin.map(categoryEntity, CategoryRO.class, Category.class);
             catRO.setBreadcrumbs(generateBreadcrumbs(catRO.getCategoryId(), shopId));
             catRO.setUitemplate(resolveTemplate(catRO));
             return catRO;
@@ -394,14 +405,14 @@ public class CategoryController extends AbstractApiController {
 
     private List<CategoryRO> listCategoryInternal(final String category) {
 
-        final long categoryId = resolveCategoryId(category);
+        final long categoryId = bookmarkMixin.resolveCategoryId(category);
         final long shopId = ShopCodeContext.getShopId();
 
         final List<Category> menu = categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId);
 
         if (!menu.isEmpty()) {
 
-            final List<CategoryRO> cats = map(menu, CategoryRO.class, Category.class);
+            final List<CategoryRO> cats = mappingMixin.map(menu, CategoryRO.class, Category.class);
             if (cats.size() > 0) {
 
                 for (final CategoryRO cat : cats) {
@@ -501,7 +512,7 @@ public class CategoryController extends AbstractApiController {
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return listCategoryInternal(category);
 
@@ -597,7 +608,7 @@ public class CategoryController extends AbstractApiController {
                                                         final HttpServletRequest request,
                                                         final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return new CategoryListRO(listCategoryInternal(category));
 
@@ -623,7 +634,7 @@ public class CategoryController extends AbstractApiController {
                 break;
             }
 
-            final BreadcrumbRO crumb = map(cat, BreadcrumbRO.class, Category.class);
+            final BreadcrumbRO crumb = mappingMixin.map(cat, BreadcrumbRO.class, Category.class);
             crumbs.add(crumb);
 
             current = cat.getParentId();

@@ -27,6 +27,7 @@ import org.yes.cart.service.domain.*;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.service.AddressBookFacade;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -66,6 +67,24 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
+    public List<Address> getAddresses(final Customer customer, final Shop shop, final String addressType) {
+
+        final List<Address> allowed = new ArrayList<Address>();
+        if (customer != null) {
+            final List<Address> allAvailable = customer.getAddresses(addressType);
+            final List<String> allowedCountries = Address.ADDR_TYPE_BILLING.equals(addressType) ?
+                    shop.getSupportedBillingCountriesAsList() : shop.getSupportedShippingCountriesAsList();
+
+            for (final Address address : allAvailable) {
+                if (allowedCountries.contains(address.getCountryCode())) {
+                    allowed.add(address);
+                }
+            }
+        }
+        return allowed;
+    }
+
+    /** {@inheritDoc} */
     public Address getAddress(final Customer customer, final String addrId, final String addressType) {
         long pk;
         try {
@@ -88,6 +107,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
             final AttrValueCustomer attrValue = customer.getAttributeByCode(AttributeNamesKeys.CUSTOMER_PHONE);
             rez.setFirstname(customer.getFirstname());
+            rez.setMiddlename(customer.getMiddlename());
             rez.setLastname(customer.getLastname());
             rez.setPhoneList(attrValue == null ? StringUtils.EMPTY : attrValue.getVal());
         }

@@ -134,7 +134,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         Customer customer = createCustomer(prefix);
         assertFalse(customer.getAddress().isEmpty());
         assertNotNull(customer.getDefaultAddress(Address.ADDR_TYPE_BILLING));
-        assertNotNull(customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING));
+        assertNotNull(customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING));
 
         ShoppingCart shoppingCart = getEmptyCartByPrefix(getTestName() + prefix);
 

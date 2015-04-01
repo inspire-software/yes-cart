@@ -38,9 +38,11 @@ import org.slf4j.Logger;
 import org.springframework.core.convert.TypeDescriptor;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ExtendedConversionService;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.util.PairChoiceRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -98,9 +100,10 @@ public class DynaFormPanel extends BaseComponent {
 
         super(id);
 
+        final Shop shop = ApplicationDirector.getCurrentShop();
         final Customer customer = customerModel.getObject();
 
-        final List<? extends AttrValue> attrValueCollection = customerService.getCustomerRegistrationAttributes(customer);
+        final List<? extends AttrValue> attrValueCollection = customerService.getCustomerRegistrationAttributes(shop, customer);
 
         final Form form = new Form(FORM) {
 

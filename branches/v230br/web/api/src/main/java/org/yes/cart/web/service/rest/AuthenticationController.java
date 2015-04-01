@@ -33,6 +33,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,12 +49,15 @@ import java.util.regex.Pattern;
  */
 @Controller
 @RequestMapping("/auth")
-public class AuthenticationController extends AbstractApiController  {
+public class AuthenticationController {
 
     @Autowired
     private CustomerServiceFacade customerServiceFacade;
     @Autowired
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
+
+    @Autowired
+    private CartMixin cartMixin;
 
 
     /**
@@ -83,7 +87,7 @@ public class AuthenticationController extends AbstractApiController  {
      * {
      *    "success" : true,
      *    "greeting" : "Bob Doe",
-     *    "tokenRO" : {
+     *    "token" : {
      *        "uuid" : "1db8def2-21e0-44d2-aeb0-56baae761129"
      *    },
      *    "error" : null
@@ -125,7 +129,7 @@ public class AuthenticationController extends AbstractApiController  {
     public @ResponseBody AuthenticationResultRO check(final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
-        final ShoppingCart cart = getCurrentCart();
+        final ShoppingCart cart = cartMixin.getCurrentCart();
 
         switch (cart.getLogonState()) {
             case ShoppingCart.LOGGED_IN:
@@ -201,7 +205,7 @@ public class AuthenticationController extends AbstractApiController  {
      * {
      *    "success" : true,
      *    "greeting" : "Bob Doe",
-     *    "tokenRO" : {
+     *    "token" : {
      *        "uuid" : "1db8def2-21e0-44d2-aeb0-56baae761129"
      *    },
      *    "error" : null
@@ -253,9 +257,9 @@ public class AuthenticationController extends AbstractApiController  {
 
                 executeLoginCommand(loginRO.getUsername(), loginRO.getPassword());
 
-                final TokenRO token = persistShoppingCart(request, response);
+                final TokenRO token = cartMixin.persistShoppingCart(request, response);
 
-                ShoppingCart cart = getCurrentCart();
+                ShoppingCart cart = cartMixin.getCurrentCart();
                 final int logOnState = cart.getLogonState();
                 if (logOnState == ShoppingCart.LOGGED_IN) {
 
@@ -352,12 +356,12 @@ public class AuthenticationController extends AbstractApiController  {
     public @ResponseBody AuthenticationResultRO logout(final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
-        final ShoppingCart cart = getCurrentCart();
+        final ShoppingCart cart = cartMixin.getCurrentCart();
 
         if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
 
             executeLogoutCommand();
-            persistShoppingCart(request, response);
+            cartMixin.persistShoppingCart(request, response);
 
         }
 
@@ -433,7 +437,7 @@ public class AuthenticationController extends AbstractApiController  {
      * {
      *    "success" : true,
      *    "greeting" : "Bob Doe",
-     *    "tokenRO" : {
+     *    "token" : {
      *        "uuid" : "1db8def2-21e0-44d2-aeb0-56baae761129"
      *    },
      *    "error" : null
@@ -544,7 +548,7 @@ public class AuthenticationController extends AbstractApiController  {
      * @param password  password.
      */
     protected void executeLoginCommand(final String email, final String password) {
-        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, getCurrentCart(),
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, cartMixin.getCurrentCart(),
                 new HashMap<String, Object>() {{
                     put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, email);
                     put(ShoppingCartCommand.CMD_LOGIN_P_PASS, password);
@@ -557,7 +561,7 @@ public class AuthenticationController extends AbstractApiController  {
      * Execute logout command.
      */
     protected void executeLogoutCommand() {
-        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, getCurrentCart(),
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_LOGIN, cartMixin.getCurrentCart(),
                 new HashMap<String, Object>() {{
                     put(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
                 }}

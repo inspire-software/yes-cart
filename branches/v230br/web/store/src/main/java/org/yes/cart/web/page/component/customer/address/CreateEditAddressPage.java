@@ -24,6 +24,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
@@ -70,7 +71,9 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
         super(params);
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getShoppingCart().getCustomerEmail());
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getCustomerEmail());
 
         final String addrId = params.get(WebParametersKeys.ADDRESS_ID).toString();
 

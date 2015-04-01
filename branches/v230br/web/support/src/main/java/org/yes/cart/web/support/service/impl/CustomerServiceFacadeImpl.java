@@ -155,7 +155,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
-    public List<? extends AttrValue> getCustomerRegistrationAttributes(final Customer customer) {
+    public List<? extends AttrValue> getCustomerRegistrationAttributes(final Shop shop, final Customer customer) {
 
         final List<? extends AttrValue> attrValueCollection = customerService.getRankedAttributeValues(customer);
         if (CollectionUtils.isEmpty(attrValueCollection)) {

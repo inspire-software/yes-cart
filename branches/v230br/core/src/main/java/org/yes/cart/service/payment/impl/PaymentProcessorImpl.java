@@ -547,7 +547,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         if (customer != null) {
 
-            Address shippingAddr = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+            Address shippingAddr = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
             Address billingAddr = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
 
             if (billingAddr == null) {

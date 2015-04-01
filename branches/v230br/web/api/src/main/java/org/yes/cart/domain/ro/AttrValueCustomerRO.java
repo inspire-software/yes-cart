@@ -27,11 +27,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.Map;
 
+/**
+ * User: denispavlov
+ * Date: 30/03/2015
+ * Time: 07:57
+ */
 @Dto
-@XmlRootElement(name = "product-attribute")
-public class AttrValueProductRO implements Serializable {
+@XmlRootElement(name = "customer-attribute")
+public class AttrValueCustomerRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
+
 
     @DtoField(value = "attrvalueId", readOnly = true)
     private long attrvalueId;
@@ -51,9 +57,8 @@ public class AttrValueProductRO implements Serializable {
     @DtoField(value = "attribute.displayName", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> attributeDisplayNames;
 
-    @DtoField(value = "product.productId", readOnly = true)
-    private long productId;
-
+    @DtoField(value = "customer.customerId", readOnly = true)
+    private long customerId;
 
     @XmlAttribute(name = "attrvalue-id")
     public long getAttrvalueId() {
@@ -110,22 +115,12 @@ public class AttrValueProductRO implements Serializable {
         this.attributeDisplayNames = attributeDisplayNames;
     }
 
-    @XmlAttribute(name = "product-id")
-    public long getProductId() {
-        return productId;
+    @XmlAttribute(name = "customer-id")
+    public long getCustomerId() {
+        return customerId;
     }
 
-    public void setProductId(final long productId) {
-        this.productId = productId;
-    }
-
-    @Override
-    public String toString() {
-        return "AttrValueProductRO{" +
-                "attrvalueId=" + attrvalueId +
-                ", val='" + val + '\'' +
-                ", attributeId=" + attributeId +
-                ", productId=" + productId +
-                '}';
+    public void setCustomerId(final long customerId) {
+        this.customerId = customerId;
     }
 }

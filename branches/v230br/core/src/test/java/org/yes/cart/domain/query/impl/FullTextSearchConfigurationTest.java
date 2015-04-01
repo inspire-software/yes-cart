@@ -482,7 +482,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null, null);
 
                 // There should be the following products:
-                // BENDER-ua  --.--
+                // BENDER-ua  99.99 EUR
                 // BENDER     --.--
                 // SOBOT
                 //    BEER   150.85 EUR
@@ -568,7 +568,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertEquals("[00001500, 00001600)", priceFacetResults.get(1).getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(1).getSecond());
                 assertEquals("[00001600, 00030000)", priceFacetResults.get(2).getFirst());
-                assertEquals(Integer.valueOf(11), priceFacetResults.get(2).getSecond());
+                assertEquals(Integer.valueOf(12), priceFacetResults.get(2).getSecond());
                 assertEquals("[00025000, 00030000)", priceFacetResults.get(3).getFirst());
                 assertEquals(Integer.valueOf(1), priceFacetResults.get(3).getSecond());
                 assertEquals("[00030000, 00040000)", priceFacetResults.get(4).getFirst());
@@ -608,7 +608,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertEquals("[00002500, 00006000)", priceFacetResults.get(4).getFirst());
                 assertEquals(Integer.valueOf(4), priceFacetResults.get(4).getSecond());
                 assertEquals("[00006000, 00010000)", priceFacetResults.get(5).getFirst());
-                assertEquals(Integer.valueOf(2), priceFacetResults.get(5).getSecond());
+                assertEquals(Integer.valueOf(3), priceFacetResults.get(5).getSecond());
                 assertEquals("[00010000, 01000000]", priceFacetResults.get(6).getFirst());
                 assertEquals(Integer.valueOf(4), priceFacetResults.get(6).getSecond());
 

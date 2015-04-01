@@ -86,11 +86,13 @@ public interface CustomerServiceFacade {
      * CPOINT - This will be available to the shoppers to edit as they please, so
      * need to restrict attributes that should be hidden from shoppers.
      *
+     *
+     * @param shop shop
      * @param customer customer
      *
      * @return list of eligible attributes
      */
-    List<? extends AttrValue> getCustomerRegistrationAttributes(Customer customer);
+    List<? extends AttrValue> getCustomerRegistrationAttributes(Shop shop, Customer customer);
 
     /**
      * Update customer entry.

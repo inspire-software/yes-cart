@@ -136,7 +136,7 @@ public abstract class CappPaymentModuleDBTestCase extends BasePaymentModuleDBTes
         address.setCountryCode("US");
         address.setStateCode("CA");
         address.setPostcode("90555");
-        address.setAddressType(Address.ADDR_TYPE_SHIPING);
+        address.setAddressType(Address.ADDR_TYPE_SHIPPING);
         address.setDefaultAddress(true);
         return address;
     }

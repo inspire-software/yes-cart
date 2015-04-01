@@ -207,7 +207,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
                 billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
             }
             if (shippingAddress == null) {
-                shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+                shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
             }
 
             final boolean sameAddress = !shoppingCart.isSeparateBillingAddress() || billingAddress == null;
