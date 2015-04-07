@@ -57,7 +57,7 @@ public interface OrderEvent {
     CustomerOrderDelivery getCustomerOrderDelivery();
 
     /**
-     * Get oprional params
+     * Get optional params
      *
      * @return event params
      */

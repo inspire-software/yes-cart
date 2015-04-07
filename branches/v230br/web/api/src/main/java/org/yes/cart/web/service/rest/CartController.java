@@ -32,14 +32,19 @@ import org.yes.cart.domain.ro.xml.XMLParamsRO;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.order.CouponCodeInvalidException;
 import org.yes.cart.service.order.OrderAssemblyException;
+import org.yes.cart.service.order.OrderException;
+import org.yes.cart.service.order.OrderItemAllocationException;
+import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
@@ -77,6 +82,9 @@ public class CartController {
 
     @Autowired
     private AddressBookFacade addressBookFacade;
+
+    @Autowired
+    private PaymentProcessFacade paymentProcessFacade;
 
 
     @Autowired
@@ -2000,7 +2008,6 @@ public class CartController {
      *         "customerorderId": 1,
      *         "ordernum": "150407103424-1",
      *         "pgLabel": "courierPaymentGatewayLabel",
-     *         "pgName": "courierPaymentGateway",
      *         "billingAddress": "In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123",
      *         "shippingAddress": "In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123",
      *         "cartGuid": "a06cd0b1-b153-47ec-9cc1-12e30320a9c1",
@@ -2113,7 +2120,7 @@ public class CartController {
      * 	&lt;order cart-guid="e4d72c92-2f5f-4a4b-a5ca-97383c54152b" shop-code="SHOIP1" currency="EUR"
      * 	          customer-id="2" customer-order-id="2" multiple-shipment-option="false" order-status="os.none"
      * 	          order-timestamp="2015-04-07T10:34:27.809+01:00" ordernum="150407103427-2"
-     * 	          pg-label="courierPaymentGatewayLabel" pg-name="courierPaymentGateway" shop-id="10"&gt;
+     * 	          pg-label="courierPaymentGatewayLabel" shop-id="10"&gt;
      * 		&lt;billing-address&gt;In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123&lt;/billing-address&gt;
      * 		&lt;deliveries&gt;
      * 			&lt;delivery carrier-id="1" carriersla-id="4" customer-order-delivery-id="2" delivery-group="D1"
@@ -2159,6 +2166,19 @@ public class CartController {
      * </code></pre>
      *     </td></tr>
      * </table>
+     *
+     * <p>
+     * <h3>Error codes</h3><p>
+     * <table border="1">
+     *     <tr><td>CART_ITEMS</td><td>MISSING if no items present in the cart</td></tr>
+     *     <tr><td>BILLING_ADDRESS</td><td>MISSING if billing address is required and it is missing</td></tr>
+     *     <tr><td>DELIVERY_ADDRESS</td><td>MISSING if delivery address is required and it is missing</td></tr>
+     *     <tr><td>SHIPPING_METHOD</td><td>MISSING if carrier SLA is not set</td></tr>
+     *     <tr><td>PAYMENT_METHOD</td><td>MISSING if payment gateway is not set</td></tr>
+     *     <tr><td>ERROR_COUPON</td><td>coupon code, if coupon is not valid</td></tr>
+     *     <tr><td>CART_ITEMS</td><td>error message, if order cannot be created from cart items</td></tr>
+     * </table>
+     * <p>
      *
      * @param request request
      * @param response response
@@ -2265,10 +2285,10 @@ public class CartController {
             }
             if (StringUtils.isBlank(postActionUrl)) {
                 // Default behaviour for internal payment processing
-                postActionUrl = request.getRequestURI().replace("/order/preview", "/order/payment");
+                postActionUrl = request.getRequestURI().replace("/order/preview", "/order/place");
             } else if (!postActionUrl.startsWith("http")) {
                 // special behaviour handled by specific PG filters
-                postActionUrl = request.getRequestURI().replace("/order/preview", "/order/payment/").concat(postActionUrl);
+                postActionUrl = request.getRequestURI().replace("/order/preview", "/order/place/").concat(postActionUrl);
             } else {
                 // else this is an external url
                 isExternalFormPg = true;
@@ -2310,8 +2330,6 @@ public class CartController {
             review.setPgFormUrl(postActionUrl);
             review.setPgFormHtml(fullFormHtml);
 
-            ro.setPgName(gateway.getName(cart.getCurrentLocale()));
-
             review.setOrder(ro);
 
             return review;
@@ -2341,6 +2359,304 @@ public class CartController {
         }
 
     }
+
+
+    /**
+     * Interface: POST /order/place
+     * <p>
+     * <p>
+     * Submit payment for internal payment processor and place order.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * Parameters posted from card form from PUT /order/preview
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON object OrderPlacedRO</td><td>
+     * <pre><code>
+     * {
+     *     "success": true,
+     *     "problems": null,
+     *     "order": {
+     *         "customerorderId": 1,
+     *         "ordernum": "150407155547-1",
+     *         "pgLabel": "courierPaymentGatewayLabel",
+     *         "billingAddress": "In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123",
+     *         "shippingAddress": "In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123",
+     *         "cartGuid": "94bde080-612f-41b9-b566-d2bd1269559e",
+     *         "currency": "EUR",
+     *         "orderMessage": "My Message",
+     *         "orderStatus": "os.waiting",
+     *         "multipleShipmentOption": false,
+     *         "orderTimestamp": 1428418547773,
+     *         "email": "bob.doe@yc-checkout-json.com",
+     *         "firstname": "Bob",
+     *         "lastname": "Doe",
+     *         "middlename": null,
+     *         "customerId": 1,
+     *         "shopId": 10,
+     *         "code": "SHOIP1",
+     *         "total": {
+     *             "listSubTotal": 99.99,
+     *             "saleSubTotal": 99.99,
+     *             "nonSaleSubTotal": 99.99,
+     *             "priceSubTotal": 99.99,
+     *             "orderPromoApplied": false,
+     *             "appliedOrderPromo": null,
+     *             "subTotal": 99.99,
+     *             "subTotalTax": 16.67,
+     *             "subTotalAmount": 99.99,
+     *             "deliveryListCost": 10.00,
+     *             "deliveryCost": 10.00,
+     *             "deliveryPromoApplied": false,
+     *             "appliedDeliveryPromo": null,
+     *             "deliveryTax": 1.67,
+     *             "deliveryCostAmount": 10.00,
+     *             "total": 109.99,
+     *             "totalTax": 18.34,
+     *             "listTotalAmount": 109.99,
+     *             "totalAmount": 109.99
+     *         },
+     *         "deliveries": [{
+     *             "customerOrderDeliveryId": 1,
+     *             "deliveryNum": "150407155547-1-0",
+     *             "refNo": null,
+     *             "carrierSlaId": 4,
+     *             "carrierSlaName": "14",
+     *             "carrierSlaDisplayNames": null,
+     *             "carrierId": 1,
+     *             "carrierName": "Test carrier 1",
+     *             "carrierDisplayNames": null,
+     *             "deliveryStatus": "ds.inventory.reserved",
+     *             "deliveryGroup": "D1",
+     *             "total": {
+     *                 "listSubTotal": 99.99,
+     *                 "saleSubTotal": 99.99,
+     *                 "nonSaleSubTotal": 99.99,
+     *                 "priceSubTotal": 99.99,
+     *                 "orderPromoApplied": false,
+     *                 "appliedOrderPromo": null,
+     *                 "subTotal": 99.99,
+     *                 "subTotalTax": 16.67,
+     *                 "subTotalAmount": 99.99,
+     *                 "deliveryListCost": 10.00,
+     *                 "deliveryCost": 10.00,
+     *                 "deliveryPromoApplied": false,
+     *                 "appliedDeliveryPromo": null,
+     *                 "deliveryTax": 1.67,
+     *                 "deliveryCostAmount": 10.00,
+     *                 "total": 109.99,
+     *                 "totalTax": 18.34,
+     *                 "listTotalAmount": 109.99,
+     *                 "totalAmount": 109.99
+     *             },
+     *             "deliveryItems": [{
+     *                 "productSkuCode": "BENDER-ua",
+     *                 "quantity": 1.00,
+     *                 "price": 99.99,
+     *                 "salePrice": 99.99,
+     *                 "listPrice": 99.99,
+     *                 "netPrice": 83.32,
+     *                 "grossPrice": 99.99,
+     *                 "taxRate": 20.00,
+     *                 "taxCode": "VAT",
+     *                 "taxExclusiveOfPrice": false,
+     *                 "gift": false,
+     *                 "promoApplied": false,
+     *                 "appliedPromo": null,
+     *                 "customerOrderDeliveryDetId": 0
+     *             }]
+     *         }],
+     *         "orderItems": [{
+     *             "productSkuCode": "BENDER-ua",
+     *             "quantity": 1.00,
+     *             "price": 99.99,
+     *             "salePrice": 99.99,
+     *             "listPrice": 99.99,
+     *             "netPrice": 83.32,
+     *             "grossPrice": 99.99,
+     *             "taxRate": 20.00,
+     *             "taxCode": "VAT",
+     *             "taxExclusiveOfPrice": false,
+     *             "gift": false,
+     *             "promoApplied": false,
+     *             "appliedPromo": null,
+     *             "customerOrderDetId": 0
+     *         }]
+     *     }
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML object OrderPlacedRO</td><td>
+     * <pre><code>
+     * &lt;order-placed success="true"&gt;
+     * 	&lt;order cart-guid="54880429-628f-45fb-bc9b-6fb04667cded" shop-code="SHOIP1" currency="EUR" customer-id="2"
+     * 	          customer-order-id="2" multiple-shipment-option="false" order-status="os.waiting" order-timestamp="2015-04-07T15:55:50.540+01:00"
+     * 	          ordernum="150407155550-2" pg-label="courierPaymentGatewayLabel" shop-id="10"&gt;
+     * 		&lt;billing-address&gt;In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123&lt;/billing-address&gt;
+     * 		&lt;deliveries&gt;
+     * 			&lt;delivery carrier-id="1" carriersla-id="4" customer-order-delivery-id="2" delivery-group="D1"
+     * 		  	             delivery-num="150407155550-2-0" delivery-status="ds.inventory.reserved"&gt;
+     * 				&lt;carrier-name&gt;Test carrier 1&lt;/carrier-name&gt;
+     * 				&lt;carriersla-name&gt;14&lt;/carriersla-name&gt;
+     * 				&lt;delivery-items&gt;
+     * 					&lt;delivery-item customer-order-delivery-det-id="0" gift="false" gross-price="99.99" list-price="99.99"
+     * 				         	          net-price="83.32" price="99.99" product-sku-code="BENDER-ua" promo-applied="false"
+     * 				         	          quantity="1.00" sale-price="99.99" tax-code="VAT" tax-exclusive-of-price="false"
+     * 				         	          tax-rate="20.00"/&gt;
+     * 				&lt;/delivery-items&gt;
+     * 				&lt;total delivery-cost="10.00" delivery-cost-amount="10.00" delivery-list-cost="10.00"
+     * 				          delivery-promo-applied="false" delivery-tax="1.67" list-sub-total="99.99" list-total-amount="109.99"
+     * 				          non-sale-sub-total="99.99" promo-applied="false" price-sub-total="99.99" sale-sub-total="99.99"
+     * 				          sub-total="99.99" sub-total-amount="99.99" sub-total-tax="16.67" total="109.99" total-amount="109.99"
+     * 				          total-tax="18.34"/&gt;
+     * 			&lt;/delivery&gt;
+     * 		&lt;/deliveries&gt;
+     * 		&lt;email&gt;bob.doe@-checkout-xml.com&lt;/email&gt;
+     * 		&lt;firstname&gt;Bob&lt;/firstname&gt;
+     * 		&lt;lastname&gt;Doe&lt;/lastname&gt;
+     * 		&lt;order-items&gt;
+     * 			&lt;order-item customer-order-det-id="0" gift="false" gross-price="99.99" list-price="99.99" net-price="83.32"
+     * 			               price="99.99" product-sku-code="BENDER-ua" promo-applied="false" quantity="1.00" sale-price="99.99"
+     * 			               tax-code="VAT" tax-exclusive-of-price="false" tax-rate="20.00"/&gt;
+     * 		&lt;/order-items&gt;
+     * 		&lt;order-message&gt;My Message&lt;/order-message&gt;
+     * 		&lt;shipping-address&gt;In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123&lt;/shipping-address&gt;
+     * 		&lt;total delivery-cost="10.00" delivery-cost-amount="10.00" delivery-list-cost="10.00" delivery-promo-applied="false"
+     * 	 	          delivery-tax="1.67" list-sub-total="99.99" list-total-amount="109.99" non-sale-sub-total="99.99"
+     * 	 	          promo-applied="false" price-sub-total="99.99" sale-sub-total="99.99" sub-total="99.99"
+     * 	 	          sub-total-amount="99.99" sub-total-tax="16.67" total="109.99" total-amount="109.99" total-tax="18.34"/&gt;
+     * 	&lt;/order&gt;
+     * &lt;/order-placed&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <h3>Error codes</h3><p>
+     * <table border="1">
+     *     <tr><td>CART_ITEMS</td><td>MISSING if no items present in the cart</td></tr>
+     *     <tr><td>ORDER</td><td>MISSING if order has not been previewed</td></tr>
+     *     <tr><td>PAYMENT_METHOD</td><td>PAYMENT_FAILED if payment failed</td></tr>
+     *     <tr><td>CART_ITEM_OUT_OF_STOCK</td><td>sku code, if SKU is out of stock</td></tr>
+     *     <tr><td>ORDER</td><td>error message, for any other reason</td></tr>
+     * </table>
+     * <p>
+     *
+     * @param request request
+     * @param response response
+     *
+     * @return order placed object
+     */
+    @RequestMapping(
+            value = "/order/place",
+            method = RequestMethod.POST,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody OrderPlacedRO orderPlace(final HttpServletRequest request,
+                                                  final HttpServletResponse response) {
+
+        cartMixin.throwSecurityExceptionIfNotLoggedIn();
+
+        final Map param = request.getParameterMap();
+        final Map mparam = new HashMap();
+        mparam.putAll(param);
+        mparam.put(PaymentMiscParam.CLIENT_IP, ApplicationDirector.getShopperIPAddress());
+
+        final ShoppingCart cart = cartMixin.getCurrentCart();
+        final String guid = cart.getGuid();
+        final OrderPlacedRO placed = new OrderPlacedRO();
+
+        try {
+
+            if (cart.getCartItemsCount() > 0) {
+
+                final CustomerOrder order = checkoutServiceFacade.findByGuid(guid);
+
+                if (order == null) {
+
+                    placed.setSuccess(false);
+                    final Map<String, String> problems = new HashMap<String, String>();
+                    problems.put("ORDER", "MISSING");
+                    placed.setProblems(problems);
+
+                } else {
+
+                    boolean result = paymentProcessFacade.pay(cart, mparam);
+                    if (result) {
+
+                        final Total total = checkoutServiceFacade.getOrderTotal(order);
+                        final OrderRO ro = mappingMixin.map(order, OrderRO.class, CustomerOrder.class);
+                        ro.setTotal(mappingMixin.map(total, CartTotalRO.class, Total.class));
+
+                        for (final CustomerOrderDelivery delivery : order.getDelivery()) {
+                            final DeliveryRO dro = mappingMixin.map(delivery, DeliveryRO.class, CustomerOrderDelivery.class);
+                            final Total dtotal = checkoutServiceFacade.getOrderDeliveryTotal(order, delivery);
+                            dro.setTotal(mappingMixin.map(dtotal, CartTotalRO.class, Total.class));
+                            ro.getDeliveries().add(dro);
+                        }
+
+
+                        shoppingCartCommandFactory.execute(
+                                ShoppingCartCommand.CMD_CLEAN, ApplicationDirector.getShoppingCart(),
+                                Collections.singletonMap(
+                                        ShoppingCartCommand.CMD_CLEAN,
+                                        null)
+                        );
+
+                        placed.setOrder(ro);
+                        placed.setSuccess(true);
+
+                    } else {
+
+                        placed.setSuccess(false);
+                        final Map<String, String> problems = new HashMap<String, String>();
+                        problems.put("PAYMENT_METHOD", "PAYMENT_FAILED");
+                        placed.setProblems(problems);
+
+                    }
+                }
+            } else {
+
+                placed.setSuccess(false);
+                final Map<String, String> problems = new HashMap<String, String>();
+                problems.put("CART_ITEMS", "MISSING");
+                placed.setProblems(problems);
+
+            }
+
+
+        } catch (OrderItemAllocationException e) {
+
+            placed.setSuccess(false);
+            final Map<String, String> problems = new HashMap<String, String>();
+            problems.put("CART_ITEM_OUT_OF_STOCK", e.getProductSkuCode());
+            placed.setProblems(problems);
+
+        } catch (OrderException e) {
+
+            placed.setSuccess(false);
+            final Map<String, String> problems = new HashMap<String, String>();
+            problems.put("ORDER", e.getMessage());
+            placed.setProblems(problems);
+
+        }
+
+        cartMixin.persistShoppingCart(request, response);
+        return placed;
+    }
+
+
+
+
 
 
 }

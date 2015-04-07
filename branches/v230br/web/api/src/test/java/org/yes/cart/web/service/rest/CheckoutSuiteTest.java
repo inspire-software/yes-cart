@@ -31,12 +31,15 @@ import org.yes.cart.domain.ro.PaymentGatewayOptionRO;
 import org.yes.cart.domain.ro.ShippingOptionRO;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.junit.Assert.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -314,6 +317,46 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
             .andExpect(content().string(StringContains.containsString("customerorderId\":")))
             .andExpect(header().string("yc", uuid));
 
+
+        final MvcResult placed = mockMvc.perform(post("/order/place")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("success\":true")))
+                .andExpect(content().string(StringContains.containsString("customerorderId\":")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
+                .andReturn();
+
+        final String ycAfterPlacing = placed.getResponse().getHeader("yc");
+        assertFalse(ycAfterPlacing.equals(uuid));
+
+
+
+        mockMvc.perform(get("/customer/orders")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .locale(locale)
+                    .header("yc", ycAfterPlacing))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("customerorderId\":")))
+                .andExpect(header().string("yc", ycAfterPlacing));
+
+        mockMvc.perform(get("/customer/orders/2014-01-01")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .locale(locale)
+                    .header("yc", ycAfterPlacing))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("customerorderId\":")))
+                .andExpect(header().string("yc", ycAfterPlacing));
+
+
+
     }
 
     @Test
@@ -572,6 +615,41 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
                 .andExpect(header().string("yc", uuid));
 
+        final MvcResult placed = mockMvc.perform(post("/order/place")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("success=\"true")))
+                .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
+                .andReturn();
+
+        final String ycAfterPlacing = placed.getResponse().getHeader("yc");
+        assertFalse(ycAfterPlacing.equals(uuid));
+
+
+        mockMvc.perform(get("/customer/orders")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale)
+                    .header("yc", ycAfterPlacing))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
+                .andExpect(header().string("yc", ycAfterPlacing));
+
+        mockMvc.perform(get("/customer/orders/2014-01-01")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale)
+                    .header("yc", ycAfterPlacing))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
+                .andExpect(header().string("yc", ycAfterPlacing));
 
 
     }

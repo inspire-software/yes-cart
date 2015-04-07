@@ -51,7 +51,6 @@ public class OrderRO implements Serializable {
 
     @DtoField(value = "pgLabel", readOnly = true)
     private String pgLabel;
-    private String pgName;
 
     @DtoField(value = "billingAddress", readOnly = true)
     private String billingAddress;
@@ -139,15 +138,6 @@ public class OrderRO implements Serializable {
 
     public void setPgLabel(final String pgLabel) {
         this.pgLabel = pgLabel;
-    }
-
-    @XmlAttribute(name = "pg-name")
-    public String getPgName() {
-        return pgName;
-    }
-
-    public void setPgName(final String pgName) {
-        this.pgName = pgName;
     }
 
     @XmlElement(name = "billing-address")

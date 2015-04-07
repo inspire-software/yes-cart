@@ -27,22 +27,22 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.*;
+import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.utils.impl.CustomerOrderComparator;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
-import org.yes.cart.web.support.service.AddressBookFacade;
-import org.yes.cart.web.support.service.CurrencySymbolService;
-import org.yes.cart.web.support.service.CustomerServiceFacade;
-import org.yes.cart.web.support.service.ProductServiceFacade;
+import org.yes.cart.web.support.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -64,6 +64,12 @@ public class CustomerController {
 
     @Autowired
     private CurrencySymbolService currencySymbolService;
+
+    @Autowired
+    private CustomerOrderService customerOrderService;
+
+    @Autowired
+    private CheckoutServiceFacade checkoutServiceFacade;
 
 
     @Autowired
@@ -1553,5 +1559,458 @@ public class CustomerController {
 
     }
 
+
+
+    /**
+     * Interface: GET /customer/orders
+     * <p>
+     * <p>
+     * Display list of all customer orders.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <p>
+     * NONE
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON example of OrderHistoryRO</td><td>
+     * <pre><code>
+     * {
+     *     "since": null,
+     *     "orders": [{
+     *         "customerorderId": 1,
+     *         "ordernum": "150407172907-1",
+     *         "pgLabel": "courierPaymentGatewayLabel",
+     *         "billingAddress": "In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123",
+     *         "shippingAddress": "In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123",
+     *         "cartGuid": "47a030e4-a681-4f15-a851-ff150e0107c6",
+     *         "currency": "EUR",
+     *         "orderMessage": "My Message",
+     *         "orderStatus": "os.waiting",
+     *         "multipleShipmentOption": false,
+     *         "orderTimestamp": 1428424147489,
+     *         "email": "bob.doe@yc-checkout-json.com",
+     *         "firstname": "Bob",
+     *         "lastname": "Doe",
+     *         "middlename": null,
+     *         "customerId": 1,
+     *         "shopId": 10,
+     *         "code": "SHOIP1",
+     *         "total": {
+     *             "listSubTotal": 99.99,
+     *             "saleSubTotal": 99.99,
+     *             "nonSaleSubTotal": 99.99,
+     *             "priceSubTotal": 99.99,
+     *             "orderPromoApplied": false,
+     *             "appliedOrderPromo": null,
+     *             "subTotal": 99.99,
+     *             "subTotalTax": 16.67,
+     *             "subTotalAmount": 99.99,
+     *             "deliveryListCost": 10.00,
+     *             "deliveryCost": 10.00,
+     *             "deliveryPromoApplied": false,
+     *             "appliedDeliveryPromo": null,
+     *             "deliveryTax": 1.67,
+     *             "deliveryCostAmount": 10.00,
+     *             "total": 109.99,
+     *             "totalTax": 18.34,
+     *             "listTotalAmount": 109.99,
+     *             "totalAmount": 109.99
+     *         },
+     *         "deliveries": [{
+     *             "customerOrderDeliveryId": 1,
+     *             "deliveryNum": "150407172907-1-0",
+     *             "refNo": null,
+     *             "carrierSlaId": 4,
+     *             "carrierSlaName": "14",
+     *             "carrierSlaDisplayNames": null,
+     *             "carrierId": 1,
+     *             "carrierName": "Test carrier 1",
+     *             "carrierDisplayNames": null,
+     *             "deliveryStatus": "ds.inventory.reserved",
+     *             "deliveryGroup": "D1",
+     *             "total": {
+     *                 "listSubTotal": 99.99,
+     *                 "saleSubTotal": 99.99,
+     *                 "nonSaleSubTotal": 99.99,
+     *                 "priceSubTotal": 99.99,
+     *                 "orderPromoApplied": false,
+     *                 "appliedOrderPromo": null,
+     *                 "subTotal": 99.99,
+     *                 "subTotalTax": 16.67,
+     *                 "subTotalAmount": 99.99,
+     *                 "deliveryListCost": 10.00,
+     *                 "deliveryCost": 10.00,
+     *                 "deliveryPromoApplied": false,
+     *                 "appliedDeliveryPromo": null,
+     *                 "deliveryTax": 1.67,
+     *                 "deliveryCostAmount": 10.00,
+     *                 "total": 109.99,
+     *                 "totalTax": 18.34,
+     *                 "listTotalAmount": 109.99,
+     *                 "totalAmount": 109.99
+     *             },
+     *             "deliveryItems": [{
+     *                 "productSkuCode": "BENDER-ua",
+     *                 "quantity": 1.00,
+     *                 "price": 99.99,
+     *                 "salePrice": 99.99,
+     *                 "listPrice": 99.99,
+     *                 "netPrice": 83.32,
+     *                 "grossPrice": 99.99,
+     *                 "taxRate": 20.00,
+     *                 "taxCode": "VAT",
+     *                 "taxExclusiveOfPrice": false,
+     *                 "gift": false,
+     *                 "promoApplied": false,
+     *                 "appliedPromo": null,
+     *                 "customerOrderDeliveryDetId": 0
+     *             }]
+     *         }],
+     *         "orderItems": [{
+     *             "productSkuCode": "BENDER-ua",
+     *             "quantity": 1.00,
+     *             "price": 99.99,
+     *             "salePrice": 99.99,
+     *             "listPrice": 99.99,
+     *             "netPrice": 83.32,
+     *             "grossPrice": 99.99,
+     *             "taxRate": 20.00,
+     *             "taxCode": "VAT",
+     *             "taxExclusiveOfPrice": false,
+     *             "gift": false,
+     *             "promoApplied": false,
+     *             "appliedPromo": null,
+     *             "customerOrderDetId": 0
+     *         }]
+     *     }]
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example of OrderHistoryRO</td><td>
+     * <pre><code>
+     * &lt;order-history&gt;
+     * 	&lt;order cart-guid="83bdd599-1a0a-4cb6-95e9-77dbd724e886" shop-code="SHOIP1" currency="EUR" customer-id="2" customer-order-id="2"
+     * 	          multiple-shipment-option="false" order-status="os.waiting" order-timestamp="2015-04-07T17:29:11.530+01:00"
+     * 	          ordernum="150407172911-2" pg-label="courierPaymentGatewayLabel" shop-id="10"&gt;
+     * 		&lt;billing-address&gt;In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123&lt;/billing-address&gt;
+     * 		&lt;deliveries&gt;
+     * 			&lt;delivery carrier-id="1" carriersla-id="4" customer-order-delivery-id="2" delivery-group="D1" delivery-num="150407172911-2-0"
+     * 		       	         delivery-status="ds.inventory.reserved"&gt;
+     * 				&lt;carrier-name&gt;Test carrier 1&lt;/carrier-name&gt;
+     * 				&lt;carriersla-name&gt;14&lt;/carriersla-name&gt;
+     * 				&lt;delivery-items&gt;
+     * 					&lt;delivery-item customer-order-delivery-det-id="0" gift="false" gross-price="99.99" list-price="99.99" net-price="83.32"
+     * 					                  price="99.99" product-sku-code="BENDER-ua" promo-applied="false" quantity="1.00" sale-price="99.99"
+     * 					                  tax-code="VAT" tax-exclusive-of-price="false" tax-rate="20.00"/&gt;
+     * 				&lt;/delivery-items&gt;
+     * 				&lt;total delivery-cost="10.00" delivery-cost-amount="10.00" delivery-list-cost="10.00" delivery-promo-applied="false"
+     * 				          delivery-tax="1.67" list-sub-total="99.99" list-total-amount="109.99" non-sale-sub-total="99.99" promo-applied="false"
+     * 				          price-sub-total="99.99" sale-sub-total="99.99" sub-total="99.99" sub-total-amount="99.99" sub-total-tax="16.67"
+     * 				          total="109.99" total-amount="109.99" total-tax="18.34"/&gt;
+     * 			&lt;/delivery&gt;
+     * 		&lt;/deliveries&gt;
+     * 		&lt;email&gt;bob.doe@-checkout-xml.com&lt;/email&gt;
+     * 		&lt;firstname&gt;Bob&lt;/firstname&gt;
+     * 		&lt;lastname&gt;Doe&lt;/lastname&gt;
+     * 		&lt;order-items&gt;
+     * 			&lt;order-item customer-order-det-id="0" gift="false" gross-price="99.99" list-price="99.99" net-price="83.32" price="99.99"
+     * 			               product-sku-code="BENDER-ua" promo-applied="false" quantity="1.00" sale-price="99.99" tax-code="VAT"
+     * 			               tax-exclusive-of-price="false" tax-rate="20.00"/&gt;
+     * 		&lt;/order-items&gt;
+     * 		&lt;order-message&gt;My Message&lt;/order-message&gt;
+     * 		&lt;shipping-address&gt;In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123&lt;/shipping-address&gt;
+     * 		&lt;total delivery-cost="10.00" delivery-cost-amount="10.00" delivery-list-cost="10.00" delivery-promo-applied="false"
+     * 		          delivery-tax="1.67" list-sub-total="99.99" list-total-amount="109.99" non-sale-sub-total="99.99" promo-applied="false"
+     * 		          price-sub-total="99.99" sale-sub-total="99.99" sub-total="99.99" sub-total-amount="99.99" sub-total-tax="16.67"
+     * 		          total="109.99" total-amount="109.99" total-tax="18.34"/&gt;
+     * 	&lt;/order&gt;
+     * &lt;/order-history&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     * @param request request
+     * @param response response
+     *
+     * @return list of all orders
+     */
+    @RequestMapping(
+            value = "/orders",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }
+    )
+    public @ResponseBody OrderHistoryRO viewOrderHistory(final HttpServletRequest request,
+                                                         final HttpServletResponse response) {
+
+        return viewOrderHistorySince(null, request, response);
+
+    }
+
+    private static final String DATE = "yyyy-MM-dd";
+
+
+    /**
+     * Interface: GET /customer/orders/{date}
+     * <p>
+     * <p>
+     * Display list of all customer orders.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <p>
+     * <table border="1">
+     *     <tr><td>date</td><td>date in "yyyy-MM-dd" format</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON example of OrderHistoryRO</td><td>
+     * <pre><code>
+     * {
+     *     "since": 1388534400000,
+     *     "orders": [{
+     *         "customerorderId": 1,
+     *         "ordernum": "150407172907-1",
+     *         "pgLabel": "courierPaymentGatewayLabel",
+     *         "billingAddress": "In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123",
+     *         "shippingAddress": "In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123",
+     *         "cartGuid": "47a030e4-a681-4f15-a851-ff150e0107c6",
+     *         "currency": "EUR",
+     *         "orderMessage": "My Message",
+     *         "orderStatus": "os.waiting",
+     *         "multipleShipmentOption": false,
+     *         "orderTimestamp": 1428424147489,
+     *         "email": "bob.doe@yc-checkout-json.com",
+     *         "firstname": "Bob",
+     *         "lastname": "Doe",
+     *         "middlename": null,
+     *         "customerId": 1,
+     *         "shopId": 10,
+     *         "code": "SHOIP1",
+     *         "total": {
+     *             "listSubTotal": 99.99,
+     *             "saleSubTotal": 99.99,
+     *             "nonSaleSubTotal": 99.99,
+     *             "priceSubTotal": 99.99,
+     *             "orderPromoApplied": false,
+     *             "appliedOrderPromo": null,
+     *             "subTotal": 99.99,
+     *             "subTotalTax": 16.67,
+     *             "subTotalAmount": 99.99,
+     *             "deliveryListCost": 10.00,
+     *             "deliveryCost": 10.00,
+     *             "deliveryPromoApplied": false,
+     *             "appliedDeliveryPromo": null,
+     *             "deliveryTax": 1.67,
+     *             "deliveryCostAmount": 10.00,
+     *             "total": 109.99,
+     *             "totalTax": 18.34,
+     *             "listTotalAmount": 109.99,
+     *             "totalAmount": 109.99
+     *         },
+     *         "deliveries": [{
+     *             "customerOrderDeliveryId": 1,
+     *             "deliveryNum": "150407172907-1-0",
+     *             "refNo": null,
+     *             "carrierSlaId": 4,
+     *             "carrierSlaName": "14",
+     *             "carrierSlaDisplayNames": null,
+     *             "carrierId": 1,
+     *             "carrierName": "Test carrier 1",
+     *             "carrierDisplayNames": null,
+     *             "deliveryStatus": "ds.inventory.reserved",
+     *             "deliveryGroup": "D1",
+     *             "total": {
+     *                 "listSubTotal": 99.99,
+     *                 "saleSubTotal": 99.99,
+     *                 "nonSaleSubTotal": 99.99,
+     *                 "priceSubTotal": 99.99,
+     *                 "orderPromoApplied": false,
+     *                 "appliedOrderPromo": null,
+     *                 "subTotal": 99.99,
+     *                 "subTotalTax": 16.67,
+     *                 "subTotalAmount": 99.99,
+     *                 "deliveryListCost": 10.00,
+     *                 "deliveryCost": 10.00,
+     *                 "deliveryPromoApplied": false,
+     *                 "appliedDeliveryPromo": null,
+     *                 "deliveryTax": 1.67,
+     *                 "deliveryCostAmount": 10.00,
+     *                 "total": 109.99,
+     *                 "totalTax": 18.34,
+     *                 "listTotalAmount": 109.99,
+     *                 "totalAmount": 109.99
+     *             },
+     *             "deliveryItems": [{
+     *                 "productSkuCode": "BENDER-ua",
+     *                 "quantity": 1.00,
+     *                 "price": 99.99,
+     *                 "salePrice": 99.99,
+     *                 "listPrice": 99.99,
+     *                 "netPrice": 83.32,
+     *                 "grossPrice": 99.99,
+     *                 "taxRate": 20.00,
+     *                 "taxCode": "VAT",
+     *                 "taxExclusiveOfPrice": false,
+     *                 "gift": false,
+     *                 "promoApplied": false,
+     *                 "appliedPromo": null,
+     *                 "customerOrderDeliveryDetId": 0
+     *             }]
+     *         }],
+     *         "orderItems": [{
+     *             "productSkuCode": "BENDER-ua",
+     *             "quantity": 1.00,
+     *             "price": 99.99,
+     *             "salePrice": 99.99,
+     *             "listPrice": 99.99,
+     *             "netPrice": 83.32,
+     *             "grossPrice": 99.99,
+     *             "taxRate": 20.00,
+     *             "taxCode": "VAT",
+     *             "taxExclusiveOfPrice": false,
+     *             "gift": false,
+     *             "promoApplied": false,
+     *             "appliedPromo": null,
+     *             "customerOrderDetId": 0
+     *         }]
+     *     }]
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example of OrderHistoryRO</td><td>
+     * <pre><code>
+     * &lt;order-history since="2014-01-01T00:00:00Z"&gt;
+     * 	&lt;order cart-guid="83bdd599-1a0a-4cb6-95e9-77dbd724e886" shop-code="SHOIP1" currency="EUR" customer-id="2" customer-order-id="2"
+     * 	          multiple-shipment-option="false" order-status="os.waiting" order-timestamp="2015-04-07T17:29:11.530+01:00"
+     * 	          ordernum="150407172911-2" pg-label="courierPaymentGatewayLabel" shop-id="10"&gt;
+     * 		&lt;billing-address&gt;In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123&lt;/billing-address&gt;
+     * 		&lt;deliveries&gt;
+     * 			&lt;delivery carrier-id="1" carriersla-id="4" customer-order-delivery-id="2" delivery-group="D1" delivery-num="150407172911-2-0"
+     * 		       	         delivery-status="ds.inventory.reserved"&gt;
+     * 				&lt;carrier-name&gt;Test carrier 1&lt;/carrier-name&gt;
+     * 				&lt;carriersla-name&gt;14&lt;/carriersla-name&gt;
+     * 				&lt;delivery-items&gt;
+     * 					&lt;delivery-item customer-order-delivery-det-id="0" gift="false" gross-price="99.99" list-price="99.99" net-price="83.32"
+     * 					                  price="99.99" product-sku-code="BENDER-ua" promo-applied="false" quantity="1.00" sale-price="99.99"
+     * 					                  tax-code="VAT" tax-exclusive-of-price="false" tax-rate="20.00"/&gt;
+     * 				&lt;/delivery-items&gt;
+     * 				&lt;total delivery-cost="10.00" delivery-cost-amount="10.00" delivery-list-cost="10.00" delivery-promo-applied="false"
+     * 				          delivery-tax="1.67" list-sub-total="99.99" list-total-amount="109.99" non-sale-sub-total="99.99" promo-applied="false"
+     * 				          price-sub-total="99.99" sale-sub-total="99.99" sub-total="99.99" sub-total-amount="99.99" sub-total-tax="16.67"
+     * 				          total="109.99" total-amount="109.99" total-tax="18.34"/&gt;
+     * 			&lt;/delivery&gt;
+     * 		&lt;/deliveries&gt;
+     * 		&lt;email&gt;bob.doe@-checkout-xml.com&lt;/email&gt;
+     * 		&lt;firstname&gt;Bob&lt;/firstname&gt;
+     * 		&lt;lastname&gt;Doe&lt;/lastname&gt;
+     * 		&lt;order-items&gt;
+     * 			&lt;order-item customer-order-det-id="0" gift="false" gross-price="99.99" list-price="99.99" net-price="83.32" price="99.99"
+     * 			               product-sku-code="BENDER-ua" promo-applied="false" quantity="1.00" sale-price="99.99" tax-code="VAT"
+     * 			               tax-exclusive-of-price="false" tax-rate="20.00"/&gt;
+     * 		&lt;/order-items&gt;
+     * 		&lt;order-message&gt;My Message&lt;/order-message&gt;
+     * 		&lt;shipping-address&gt;In the middle of  0001 Nowhere GB GB-GB Bob Doe 123123123&lt;/shipping-address&gt;
+     * 		&lt;total delivery-cost="10.00" delivery-cost-amount="10.00" delivery-list-cost="10.00" delivery-promo-applied="false"
+     * 		          delivery-tax="1.67" list-sub-total="99.99" list-total-amount="109.99" non-sale-sub-total="99.99" promo-applied="false"
+     * 		          price-sub-total="99.99" sale-sub-total="99.99" sub-total="99.99" sub-total-amount="99.99" sub-total-tax="16.67"
+     * 		          total="109.99" total-amount="109.99" total-tax="18.34"/&gt;
+     * 	&lt;/order&gt;
+     * &lt;/order-history&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     * @param date date in "yyyy-MM-dd" format
+     * @param request request
+     * @param response response
+     *
+     * @return list of all orders since date
+     */
+    @RequestMapping(
+            value = "/orders/{date}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }
+    )
+    public @ResponseBody OrderHistoryRO viewOrderHistorySince(@PathVariable(value = "date") final String date,
+                                                              final HttpServletRequest request,
+                                                              final HttpServletResponse response) {
+
+        cartMixin.throwSecurityExceptionIfNotLoggedIn();
+        Date since = null;
+        if (StringUtils.isNotBlank(date)) {
+            try {
+                since = new SimpleDateFormat(DATE).parse(date);
+            } catch (ParseException e) {
+                ShopCodeContext.getLog(this).warn("Invalid date {} using now", date);
+            }
+        }
+
+        cartMixin.persistShoppingCart(request, response);
+        final ShoppingCart cart = cartMixin.getCurrentCart();
+
+        final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getCustomerEmail());
+        final OrderHistoryRO history = new OrderHistoryRO();
+        history.setSince(since);
+
+        if (customer != null) {
+
+            // all in DB
+            final List<CustomerOrder> orders = customerOrderService.findCustomerOrders(customer, null);
+
+            // remove temporary orders
+            final Iterator<CustomerOrder> ordersIt = orders.iterator();
+            while (ordersIt.hasNext()) {
+                final CustomerOrder order = ordersIt.next();
+                if (CustomerOrder.ORDER_STATUS_NONE.equals(order.getOrderStatus())) {
+                    ordersIt.remove();
+                }
+            }
+
+            // sort
+            Collections.sort(orders, new CustomerOrderComparator());
+
+            final List<OrderRO> ros = new ArrayList<OrderRO>();
+            for (final CustomerOrder order : orders) {
+
+                final Total total = checkoutServiceFacade.getOrderTotal(order);
+                final OrderRO ro = mappingMixin.map(order, OrderRO.class, CustomerOrder.class);
+                ro.setTotal(mappingMixin.map(total, CartTotalRO.class, Total.class));
+
+                for (final CustomerOrderDelivery delivery : order.getDelivery()) {
+                    final DeliveryRO dro = mappingMixin.map(delivery, DeliveryRO.class, CustomerOrderDelivery.class);
+                    final Total dtotal = checkoutServiceFacade.getOrderDeliveryTotal(order, delivery);
+                    dro.setTotal(mappingMixin.map(dtotal, CartTotalRO.class, Total.class));
+                    ro.getDeliveries().add(dro);
+                }
+
+                ros.add(ro);
+            }
+
+            history.setOrders(ros);
+
+        }
+
+        return history;
+
+    }
 
 }
