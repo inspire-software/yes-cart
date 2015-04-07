@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.rest;
 
+import org.hamcrest.CustomMatchers;
 import org.junit.Test;
 import org.junit.internal.matchers.StringContains;
 import org.junit.runner.RunWith;
@@ -25,6 +26,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
 import org.yes.cart.domain.ro.AddressOptionRO;
+import org.yes.cart.domain.ro.OrderDeliveryOptionRO;
+import org.yes.cart.domain.ro.PaymentGatewayOptionRO;
 import org.yes.cart.domain.ro.ShippingOptionRO;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
@@ -37,6 +40,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -71,9 +75,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .locale(locale)
                         .content(regBody))
                         .andDo(print())
-                        .andExpect(status().isOk())
-                        .andExpect(content().string(StringContains.containsString("uuid")))
-                        .andReturn();
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(StringContains.containsString("uuid")))
+                    .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
+                    .andReturn();
 
         final Matcher matcher = UUID_JSON.matcher(regResult.getResponse().getContentAsString());
         matcher.find();
@@ -84,9 +89,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
                 .header("yc", uuid))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("\"authenticated\":true")));
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
+            .andExpect(header().string("yc", uuid));
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
 
@@ -99,6 +105,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
+                .andExpect(header().string("yc", uuid))
                 .andReturn();
 
         final Matcher matcherS = ADDRESS_ID_JSON.matcher(shipAddress.getResponse().getContentAsString());
@@ -112,7 +119,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("UA")));
+                .andExpect(content().string(StringContains.containsString("UA")))
+                .andExpect(header().string("yc", uuid));
 
         final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
 
@@ -125,6 +133,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
+                .andExpect(header().string("yc", uuid))
                 .andReturn();
 
         final Matcher matcherB = ADDRESS_ID_JSON.matcher(billAddress.getResponse().getContentAsString());
@@ -138,7 +147,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("GB")));
+                .andExpect(content().string(StringContains.containsString("GB")))
+                .andExpect(header().string("yc", uuid));
 
         final byte[] addToCart = toJsonBytes(new HashMap<String, String>() {{
             put(ShoppingCartCommand.CMD_ADDTOCART, "BENDER-ua");
@@ -156,7 +166,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("currencyCode\":\"EUR\"")))
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
-                .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")));
+                .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
+                .andExpect(header().string("yc", uuid));
 
 
         final AddressOptionRO shipAddressOptionRO = new AddressOptionRO();
@@ -173,7 +184,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
-                .andExpect(content().string(StringContains.containsString("separateBillingAddress\":true")));
+                .andExpect(content().string(StringContains.containsString("separateBillingAddress\":true")))
+                .andExpect(header().string("yc", uuid));
 
         final AddressOptionRO billAddressOptionRO = new AddressOptionRO();
         billAddressOptionRO.setAddressId(billingAddressId);
@@ -189,7 +201,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
-                .andExpect(content().string(StringContains.containsString("separateBillingAddress\":true")));
+                .andExpect(content().string(StringContains.containsString("separateBillingAddress\":true")))
+                .andExpect(header().string("yc", uuid));
 
 
         final AddressOptionRO billAddressOptionROSame = new AddressOptionRO();
@@ -208,7 +221,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
-                .andExpect(content().string(StringContains.containsString("carrierSlaId\":null")));
+                .andExpect(content().string(StringContains.containsString("carrierSlaId\":null")))
+                .andExpect(header().string("yc", uuid));
 
 
         mockMvc.perform(get("/cart/options/shipping")
@@ -219,7 +233,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("\"carrierId\":1")))
-                .andExpect(content().string(StringContains.containsString("\"carrierslaId\":4")));
+                .andExpect(content().string(StringContains.containsString("\"carrierslaId\":4")))
+                .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
         shippingOptionRO.setCarrierslaId("4");
@@ -237,7 +252,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
-                .andExpect(content().string(StringContains.containsString("carrierSlaId\":4")));
+                .andExpect(content().string(StringContains.containsString("carrierSlaId\":4")))
+                .andExpect(header().string("yc", uuid));
 
 
         final byte[] addMessageToCart = toJsonBytes(new HashMap<String, String>() {{
@@ -250,10 +266,53 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .locale(locale)
                 .header("yc", uuid)
                 .content(addMessageToCart))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("\"orderMessage\":\"My Message\"")));
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("\"orderMessage\":\"My Message\"")))
+            .andExpect(header().string("yc", uuid));
 
+        mockMvc.perform(get("/cart/options/payment")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("testPaymentGatewayLabel")))
+            .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
+            .andExpect(header().string("yc", uuid));
+
+        final PaymentGatewayOptionRO pgOption = new PaymentGatewayOptionRO();
+        pgOption.setPgLabel("courierPaymentGatewayLabel");
+
+        final byte[] pgOptionBody = toJsonBytes(pgOption);
+
+        mockMvc.perform(put("/cart/options/payment")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid)
+                .content(pgOptionBody))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
+            .andExpect(header().string("yc", uuid));
+
+        final OrderDeliveryOptionRO delOption = new OrderDeliveryOptionRO();
+
+        final byte[] delOptionBody = toJsonBytes(delOption);
+
+        mockMvc.perform(put("/order/preview")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .header("yc", uuid)
+                .content(delOptionBody))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("success\":true")))
+            .andExpect(content().string(StringContains.containsString("customerorderId\":")))
+            .andExpect(header().string("yc", uuid));
 
     }
 
@@ -271,10 +330,11 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .accept(MediaType.APPLICATION_XML)
                         .locale(locale)
                         .content(regBody))
-                        .andDo(print())
-                        .andExpect(status().isOk())
-                        .andExpect(content().string(StringContains.containsString("uuid")))
-                        .andReturn();
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(StringContains.containsString("uuid")))
+                    .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
+                    .andReturn();
 
         final Matcher matcher = UUID_XML.matcher(regResult.getResponse().getContentAsString());
         matcher.find();
@@ -285,9 +345,10 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
                 .header("yc", uuid))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")));
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")))
+            .andExpect(header().string("yc", uuid));
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
 
@@ -300,6 +361,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("UA-UA")))
+                .andExpect(header().string("yc", uuid))
                 .andReturn();
 
         final Matcher matcherS = ADDRESS_ID_XML.matcher(shipAddress.getResponse().getContentAsString());
@@ -314,7 +376,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("UA")));
+                .andExpect(content().string(StringContains.containsString("UA")))
+                .andExpect(header().string("yc", uuid));
 
 
         final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
@@ -328,6 +391,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("GB")))
+                .andExpect(header().string("yc", uuid))
                 .andReturn();
 
         final Matcher matcherB = ADDRESS_ID_XML.matcher(billAddress.getResponse().getContentAsString());
@@ -341,7 +405,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("GB")));
+                .andExpect(content().string(StringContains.containsString("GB")))
+                .andExpect(header().string("yc", uuid));
 
 
 
@@ -359,7 +424,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("BENDER-ua")))
                 .andExpect(content().string(StringContains.containsString("currency=\"EUR\"")))
-                .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false\"")));
+                .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false\"")))
+                .andExpect(header().string("yc", uuid));
 
 
         final AddressOptionRO shipAddressOptionRO = new AddressOptionRO();
@@ -375,7 +441,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + shippingAddressId)))
-                .andExpect(content().string(StringContains.containsString("separate-billing-address=\"true")));
+                .andExpect(content().string(StringContains.containsString("separate-billing-address=\"true")))
+                .andExpect(header().string("yc", uuid));
 
         final AddressOptionRO billAddressOptionRO = new AddressOptionRO();
         billAddressOptionRO.setAddressId(billingAddressId);
@@ -391,7 +458,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + shippingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
-                .andExpect(content().string(StringContains.containsString("separate-billing-address=\"true")));
+                .andExpect(content().string(StringContains.containsString("separate-billing-address=\"true")))
+                .andExpect(header().string("yc", uuid));
 
 
         final AddressOptionRO billAddressOptionROSame = new AddressOptionRO();
@@ -409,7 +477,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
-                .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false")));
+                .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false")))
+                .andExpect(header().string("yc", uuid));
 
 
         mockMvc.perform(get("/cart/options/shipping")
@@ -420,7 +489,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("carrier-id=\"1")))
-                .andExpect(content().string(StringContains.containsString("carriersla-id=\"4")));
+                .andExpect(content().string(StringContains.containsString("carriersla-id=\"4")))
+                .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
         shippingOptionRO.setCarrierslaId("4");
@@ -438,7 +508,8 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false")))
-                .andExpect(content().string(StringContains.containsString("carrier-sla-id=\"4")));
+                .andExpect(content().string(StringContains.containsString("carrier-sla-id=\"4")))
+                .andExpect(header().string("yc", uuid));
 
 
         final byte[] addMessageToCart = toJsonBytes(new HashMap<String, String>() {{
@@ -453,7 +524,54 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .content(addMessageToCart))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("order-message>My Message</")));
+                .andExpect(content().string(StringContains.containsString("order-message>My Message</")))
+                .andExpect(header().string("yc", uuid));
+
+
+
+        mockMvc.perform(get("/cart/options/payment")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("testPaymentGatewayLabel")))
+                .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
+                .andExpect(header().string("yc", uuid));
+
+        final PaymentGatewayOptionRO pgOption = new PaymentGatewayOptionRO();
+        pgOption.setPgLabel("courierPaymentGatewayLabel");
+
+        final byte[] pgOptionBody = toJsonBytes(pgOption);
+
+        mockMvc.perform(put("/cart/options/payment")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale)
+                    .header("yc", uuid)
+                .content(pgOptionBody))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("courierPaymentGatewayLabel")))
+                .andExpect(header().string("yc", uuid));
+
+        final OrderDeliveryOptionRO delOption = new OrderDeliveryOptionRO();
+
+        final byte[] delOptionBody = toJsonBytes(delOption);
+
+        mockMvc.perform(put("/order/preview")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale)
+                    .header("yc", uuid)
+                .content(delOptionBody))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("success=\"true")))
+                .andExpect(content().string(StringContains.containsString("customer-order-id=\"")))
+                .andExpect(header().string("yc", uuid));
+
 
 
     }

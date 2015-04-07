@@ -70,12 +70,10 @@
                 <entry key="org.yes.cart.domain.ro.CarrierRO"  value="org.yes.cart.domain.ro.CarrierRO"/>
                 <entry key="org.yes.cart.domain.ro.CarrierSlaRO"  value="org.yes.cart.domain.ro.CarrierSlaRO"/>
 
-                <!--<entry key="org.yes.cart.domain.entity.Seo"  value="org.yes.cart.domain.entity.impl.SeoEntity"/>-->
-
-                <!--<entry key="org.yes.cart.domain.dto.CustomerOrderDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl"/>-->
-                <!--<entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>-->
+                <entry key="org.yes.cart.domain.ro.OrderRO"  value="org.yes.cart.domain.ro.OrderRO"/>
+                <entry key="org.yes.cart.domain.ro.OrderItemRO"  value="org.yes.cart.domain.ro.OrderItemRO"/>
+                <entry key="org.yes.cart.domain.ro.DeliveryRO" value="org.yes.cart.domain.ro.DeliveryRO"/>
+                <entry key="org.yes.cart.domain.ro.DeliveryItemRO" value="org.yes.cart.domain.ro.DeliveryItemRO"/>
 
                 <!--<entry key="org.yes.cart.domain.dto.PromotionDTO"        value="org.yes.cart.domain.dto.impl.PromotionDTOImpl"/>-->
                 <!--<entry key="org.yes.cart.domain.dto.PromotionCouponDTO"  value="org.yes.cart.domain.dto.impl.PromotionCouponDTOImpl"/>-->

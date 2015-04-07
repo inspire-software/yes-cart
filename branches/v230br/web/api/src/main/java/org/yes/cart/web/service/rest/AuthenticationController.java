@@ -130,6 +130,7 @@ public class AuthenticationController {
                                                       final HttpServletResponse response) {
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
+        cartMixin.persistShoppingCart(request, response);
 
         switch (cart.getLogonState()) {
             case ShoppingCart.LOGGED_IN:

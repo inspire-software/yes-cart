@@ -18,6 +18,8 @@ package org.yes.cart.web.service.rest;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.hamcrest.CustomMatchers;
+import org.hamcrest.Description;
 import org.junit.Test;
 import org.junit.internal.matchers.StringContains;
 import org.junit.runner.RunWith;
@@ -36,6 +38,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -64,7 +67,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("Fun Gadgets")))
-                .andReturn();
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
 
         mockMvc.perform(get("/category/menu/106")
@@ -73,7 +76,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .locale(locale))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("Retro Gadgets")));
+                .andExpect(content().string(StringContains.containsString("Retro Gadgets")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
         mockMvc.perform(get("/category/view/106")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -81,7 +85,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .locale(locale))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("Fun Gadgets")));
+                .andExpect(content().string(StringContains.containsString("Fun Gadgets")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
     }
 
@@ -94,7 +99,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .locale(locale))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("Fun Gadgets")));
+                .andExpect(content().string(StringContains.containsString("Fun Gadgets")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
         mockMvc.perform(get("/category/menu/106")
                     .contentType(MediaType.APPLICATION_XML)
@@ -102,7 +108,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .locale(locale))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("Retro Gadgets")));
+                .andExpect(content().string(StringContains.containsString("Retro Gadgets")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
         mockMvc.perform(get("/category/view/106")
                     .contentType(MediaType.APPLICATION_XML)
@@ -110,7 +117,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .locale(locale))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("Fun Gadgets")));
+                .andExpect(content().string(StringContains.containsString("Fun Gadgets")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
     }
 
@@ -129,6 +137,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .locale(locale))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
                 .andReturn();
 
         final Matcher matcher = UUID_JSON.matcher(firstLoad.getResponse().getContentAsString());
@@ -142,7 +151,21 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("BENDER-ua")));
+                .andExpect(content().string(StringContains.containsString("BENDER-ua")))
+                .andExpect(header().string("yc", uuid));
+
+        mockMvc.perform(get("/products/9998|9999")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"BENDER-ua\"")))
+                .andExpect(content().string(StringContains.containsString("9998")))
+                .andExpect(content().string(StringContains.containsString("\"BENDER\"")))
+                .andExpect(content().string(StringContains.containsString("9999")))
+                .andExpect(header().string("yc", uuid));
 
 
         mockMvc.perform(get("/sku/9998")
@@ -152,7 +175,28 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("BENDER-ua")));
+                .andExpect(content().string(StringContains.containsString("BENDER-ua")))
+                .andExpect(header().string("yc", uuid));
+
+        mockMvc.perform(get("/sku/BENDER-ua")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("BENDER-ua")))
+                .andExpect(header().string("yc", uuid));
+
+        mockMvc.perform(get("/skus/9998|9999")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("BENDER-ua")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/product/9999")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -161,7 +205,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")));
+                .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/sku/9999")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -170,7 +215,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")));
+                .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/product/9998/associations/accessories")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -179,7 +225,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")));
+                .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/customer/recentlyviewed")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -188,7 +235,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("BENDER-ua")));
+                .andExpect(content().string(StringContains.containsString("BENDER-ua")))
+                .andExpect(header().string("yc", uuid));
 
 
     }
@@ -206,6 +254,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .locale(locale))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
                 .andReturn();
 
         final Matcher matcher = UUID_XML.matcher(firstLoad.getResponse().getContentAsString());
@@ -220,7 +269,22 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("BENDER-ua")));
+                .andExpect(content().string(StringContains.containsString("BENDER-ua")))
+                .andExpect(header().string("yc", uuid));
+
+
+        mockMvc.perform(get("/products/9998|9999")
+                    .contentType(MediaType.APPLICATION_XML)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString(">BENDER-ua<")))
+                .andExpect(content().string(StringContains.containsString("9998")))
+                .andExpect(content().string(StringContains.containsString(">BENDER<")))
+                .andExpect(content().string(StringContains.containsString("9999")))
+                .andExpect(header().string("yc", uuid));
 
 
         mockMvc.perform(get("/sku/9998")
@@ -230,7 +294,31 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("BENDER-ua")));
+                .andExpect(content().string(StringContains.containsString("BENDER-ua")))
+                .andExpect(header().string("yc", uuid));
+
+        mockMvc.perform(get("/sku/BENDER-ua")
+                    .contentType(MediaType.APPLICATION_XML)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("BENDER-ua")))
+                .andExpect(header().string("yc", uuid));
+
+        mockMvc.perform(get("/skus/9998|9999")
+                    .contentType(MediaType.APPLICATION_XML)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale)
+                    .header("yc", uuid))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString(">BENDER-ua<")))
+                .andExpect(content().string(StringContains.containsString("9998")))
+                .andExpect(content().string(StringContains.containsString(">BENDER<")))
+                .andExpect(content().string(StringContains.containsString("9999")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/product/9999")
                     .contentType(MediaType.APPLICATION_XML)
@@ -239,7 +327,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")));
+                .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/sku/9999")
                     .contentType(MediaType.APPLICATION_XML)
@@ -248,7 +337,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")));
+                .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/product/9998/associations/accessories")
                     .contentType(MediaType.APPLICATION_XML)
@@ -257,7 +347,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")));
+                .andExpect(content().string(StringContains.containsString("Bender Bending Rodriguez")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/customer/recentlyviewed")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -266,7 +357,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("BENDER-ua")));
+                .andExpect(content().string(StringContains.containsString("BENDER-ua")))
+                .andExpect(header().string("yc", uuid));
 
 
     }
@@ -287,7 +379,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .content(body))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("BENDER-ua")));
+                .andExpect(content().string(StringContains.containsString("BENDER-ua")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
     }
 
@@ -308,7 +401,8 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                     .content(body))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("BENDER-ua")));
+                .andExpect(content().string(StringContains.containsString("BENDER-ua")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
     }
 

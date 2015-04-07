@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.rest;
 
+import org.hamcrest.CustomMatchers;
 import org.junit.Test;
 import org.junit.internal.matchers.StringContains;
 import org.junit.runner.RunWith;
@@ -36,6 +37,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -69,6 +71,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("uuid")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
                 .andReturn();
 
         final Matcher matcher = UUID_JSON.matcher(regResult.getResponse().getContentAsString());
@@ -82,7 +85,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("\"authenticated\":true")));
+                .andExpect(content().string(StringContains.containsString("\"authenticated\":true")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/customer/summary")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -91,7 +95,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("bob.doe@yc-account-json.com")));
+                .andExpect(content().string(StringContains.containsString("bob.doe@yc-account-json.com")))
+                .andExpect(header().string("yc", uuid));
 
 
         mockMvc.perform(get("/customer/addressbook/S")
@@ -101,7 +106,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("[]")));
+                .andExpect(content().string(StringContains.containsString("[]")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/customer/addressbook/S/options/countries")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -110,7 +116,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("UA")));
+                .andExpect(content().string(StringContains.containsString("UA")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/customer/addressbook/S/options/country/UA")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -119,7 +126,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("UA-UA")));
+                .andExpect(content().string(StringContains.containsString("UA-UA")))
+                .andExpect(header().string("yc", uuid));
 
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
@@ -132,7 +140,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .content(shippingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("UA-UA")));
+                .andExpect(content().string(StringContains.containsString("UA-UA")))
+                .andExpect(header().string("yc", uuid));
 
 
         mockMvc.perform(get("/customer/addressbook/B")
@@ -142,7 +151,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("[]")));
+                .andExpect(content().string(StringContains.containsString("[]")))
+                .andExpect(header().string("yc", uuid));
 
 
         mockMvc.perform(get("/customer/addressbook/B/options/countries")
@@ -150,18 +160,20 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
                 .header("yc", uuid))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("GB")));
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("GB")))
+            .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/customer/addressbook/B/options/country/GB")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
                 .header("yc", uuid))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("GB-GB")));
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("GB-GB")))
+            .andExpect(header().string("yc", uuid));
 
 
         final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
@@ -174,7 +186,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .content(billingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("GB")));
+                .andExpect(content().string(StringContains.containsString("GB")))
+                .andExpect(header().string("yc", uuid));
 
 
         mockMvc.perform(get("/customer/wishlist/W")
@@ -182,9 +195,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .locale(locale)
                 .header("yc", uuid))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("[]")));
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("[]")))
+            .andExpect(header().string("yc", uuid));
 
         final byte[] addToWishList = toJsonAddToWishListCommand("BENDER-ua");
 
@@ -195,7 +209,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                      .header("yc", uuid)
                      .content(addToWishList))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(header().string("yc", uuid));
 
          mockMvc.perform(get("/customer/wishlist/W")
                      .contentType(MediaType.APPLICATION_JSON)
@@ -204,7 +219,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                      .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("9998")));
+                .andExpect(content().string(StringContains.containsString("9998")))
+                .andExpect(header().string("yc", uuid));
 
 
     }
@@ -226,6 +242,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("uuid")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
                 .andReturn();
 
         final Matcher matcher = UUID_XML.matcher(regResult.getResponse().getContentAsString());
@@ -239,7 +256,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")));
+                .andExpect(content().string(StringContains.containsString("<authenticated>true</authenticated>")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/customer/summary")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -248,7 +266,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("bob.doe@yc-account-xml.com")));
+                .andExpect(content().string(StringContains.containsString("bob.doe@yc-account-xml.com")))
+                .andExpect(header().string("yc", uuid));
 
 
         mockMvc.perform(get("/customer/addressbook/S")
@@ -258,7 +277,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<addresses/>")));
+                .andExpect(content().string(StringContains.containsString("<addresses/>")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/customer/addressbook/S/options/countries")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -267,7 +287,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("UA")));
+                .andExpect(content().string(StringContains.containsString("UA")))
+                .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/customer/addressbook/S/options/country/UA")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -276,7 +297,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("UA-UA")));
+                .andExpect(content().string(StringContains.containsString("UA-UA")))
+                .andExpect(header().string("yc", uuid));
 
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
@@ -289,7 +311,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .content(shippingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("UA-UA")));
+                .andExpect(content().string(StringContains.containsString("UA-UA")))
+                .andExpect(header().string("yc", uuid));
 
 
         mockMvc.perform(get("/customer/addressbook/B")
@@ -299,7 +322,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<addresses/>")));
+                .andExpect(content().string(StringContains.containsString("<addresses/>")))
+                .andExpect(header().string("yc", uuid));
 
 
         mockMvc.perform(get("/customer/addressbook/B/options/countries")
@@ -307,18 +331,20 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
                 .header("yc", uuid))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("GB")));
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("GB")))
+            .andExpect(header().string("yc", uuid));
 
         mockMvc.perform(get("/customer/addressbook/B/options/country/GB")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
                 .header("yc", uuid))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("GB-GB")));
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("GB-GB")))
+            .andExpect(header().string("yc", uuid));
 
 
         final byte[] billingAddress = toJsonBytesAddressDetails("GB-GB", "GB");
@@ -331,7 +357,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                     .content(billingAddress))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("GB")));
+                .andExpect(content().string(StringContains.containsString("GB")))
+                .andExpect(header().string("yc", uuid));
 
 
         mockMvc.perform(get("/customer/wishlist/W")
@@ -339,9 +366,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .accept(MediaType.APPLICATION_XML)
                 .locale(locale)
                 .header("yc", uuid))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<wishlist/>")));
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(StringContains.containsString("<wishlist/>")))
+            .andExpect(header().string("yc", uuid));
 
         final byte[] addToWishList = toJsonAddToWishListCommand("BENDER-ua");
 
@@ -352,7 +380,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                      .header("yc", uuid)
                      .content(addToWishList))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(header().string("yc", uuid));
 
          mockMvc.perform(get("/customer/wishlist/W")
                      .contentType(MediaType.APPLICATION_JSON)
@@ -361,7 +390,8 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                      .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("9998")));
+                .andExpect(content().string(StringContains.containsString("9998")))
+                .andExpect(header().string("yc", uuid));
 
 
     }

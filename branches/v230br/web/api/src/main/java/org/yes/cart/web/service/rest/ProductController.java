@@ -17,6 +17,7 @@
 package org.yes.cart.web.service.rest;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -72,6 +73,68 @@ public class ProductController {
     private RoMappingMixin mappingMixin;
     @Autowired
     private BookmarkMixin bookmarkMixin;
+
+
+
+    private ProductRO viewProductInternal(final String product, final boolean recordViewed) {
+
+        final long productId = bookmarkMixin.resolveProductId(product);
+
+        final Product productEntity = productServiceFacade.getProductById(productId);
+
+        if (productEntity != null) {
+
+            final ShoppingCart cart = cartMixin.getCurrentCart();
+            final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
+
+
+            final ProductRO prodRO = mappingMixin.map(productEntity, ProductRO.class, Product.class);
+
+            // Brand is lazy so need to retrieve name manually
+            final Brand brand = brandService.findById(prodRO.getBrandId());
+            prodRO.setBrandName(brand.getName());
+
+            final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productEntity, cart.getShoppingContext().getShopId());
+
+            final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
+            prodRO.setProductAvailabilityModel(amRo);
+
+            final SkuPrice price = productServiceFacade.getSkuPrice(
+                    productEntity.getProductId(),
+                    null,
+                    BigDecimal.ONE,
+                    cart.getCurrencyCode(),
+                    cart.getShoppingContext().getShopId()
+            );
+
+            final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, SkuPrice.class);
+            priceRo.setSymbol(symbol.getFirst());
+            priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
+
+            prodRO.setPrice(priceRo);
+
+            final List<ProductSkuRO> skuRo = new ArrayList<ProductSkuRO>();
+            if (CollectionUtils.isNotEmpty(productEntity.getSku())) {
+                for (final ProductSku sku : productEntity.getSku()) {
+                    final ProductSkuRO skuRoItem = viewSkuInternal(sku, cart.getShoppingContext().getShopId(), cart.getCurrencyCode(), symbol);
+                    if (skuRoItem != null) {
+                        skuRo.add(skuRoItem);
+                    }
+                }
+            }
+            prodRO.setSkus(skuRo);
+
+            if (recordViewed) {
+                executeViewProductCommand(productEntity);
+            }
+
+            return prodRO;
+
+        }
+
+        return null;
+    }
+
 
     /**
      * Interface: GET /product/{id}
@@ -398,61 +461,403 @@ public class ProductController {
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
-        final long productId = bookmarkMixin.resolveProductId(product);
+        final ProductRO ro = viewProductInternal(product, true);
+        cartMixin.persistShoppingCart(request, response);
+        return ro;
 
-        final Product productEntity = productServiceFacade.getProductById(productId);
-
-        if (productEntity != null) {
-
-            final ShoppingCart cart = cartMixin.getCurrentCart();
-            final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
+    }
 
 
-            final ProductRO prodRO = mappingMixin.map(productEntity, ProductRO.class, Product.class);
+    private List<ProductRO> viewProductsInternal(final String products) {
 
-            // Brand is lazy so need to retrieve name manually
-            final Brand brand = brandService.findById(prodRO.getBrandId());
-            prodRO.setBrandName(brand.getName());
+        final String[] productsIds = StringUtils.split(products, '|');
 
-            final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productEntity, cart.getShoppingContext().getShopId());
+        final List<ProductRO> ros = new ArrayList<ProductRO>(productsIds.length);
 
-            final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
-            prodRO.setProductAvailabilityModel(amRo);
+        for (final String productId : productsIds) {
 
-            final SkuPrice price = productServiceFacade.getSkuPrice(
-                    productEntity.getProductId(),
-                    null,
-                    BigDecimal.ONE,
-                    cart.getCurrencyCode(),
-                    cart.getShoppingContext().getShopId()
-            );
-
-            final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, SkuPrice.class);
-            priceRo.setSymbol(symbol.getFirst());
-            priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
-
-            prodRO.setPrice(priceRo);
-
-            final List<ProductSkuRO> skuRo = new ArrayList<ProductSkuRO>();
-            if (CollectionUtils.isNotEmpty(productEntity.getSku())) {
-                for (final ProductSku sku : productEntity.getSku()) {
-                    final ProductSkuRO skuRoItem = viewSkuInternal(sku, cart.getShoppingContext().getShopId(), cart.getCurrencyCode(), symbol);
-                    if (skuRoItem != null) {
-                        skuRo.add(skuRoItem);
-                    }
-                }
+            final ProductRO ro = viewProductInternal(productId, false);
+            if (ro != null) {
+                ros.add(ro);
             }
-            prodRO.setSkus(skuRo);
-
-            executeViewProductCommand(productEntity);
-            cartMixin.persistShoppingCart(request, response);
-
-            return prodRO;
-
         }
 
+        return ros;
+    }
+
+    /**
+     * Interface: GET /products/{id}
+     * <p>
+     * <p>
+     * Display full product details.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>ids</td><td>SEO URI or product PK separated by pipe character ('|')</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * 	[{
+     * 	  "displayNames" : {
+     * 	    "uk" : "Mini Mouse M187",
+     * 	    "ru" : "Mini Mouse M187",
+     * 	    "en" : "Mini Mouse M187"
+     * 	  },
+     * 	  "maxOrderQuantity" : null,
+     * 	  "productTypeId" : 5,
+     * 	  "minOrderQuantity" : null,
+     * 	  "availability" : 1,
+     * 	  "code" : "910-002",
+     * 	  "title" : null,
+     * 	  "attributes" : [
+     * 	    {
+     * 	      "attrvalueId" : 891,
+     * 	      "productId" : 297,
+     * 	      "val" : "Logitech Wireless Mini Mouse M187...",
+     * 	      "displayVals" : null,
+     * 	      "attributeName" : "Опис Продукту (uk)",
+     * 	      "attributeId" : 11022,
+     * 	      "attributeDisplayNames" : null
+     * 	    },
+     * 	    {
+     * 	      "attrvalueId" : 19865,
+     * 	      "productId" : 297,
+     * 	      "val" : "Y",
+     * 	      "displayVals" : {
+     * 	        "uk" : "Да",
+     * 	        "ru" : "Да",
+     * 	        "en" : "Y"
+     * 	      },
+     * 	      "attributeName" : "Receiver included",
+     * 	      "attributeId" : 1423,
+     * 	      "attributeDisplayNames" : {
+     * 	        "uk" : "Ресівер, що поставляється",
+     * 	        "ru" : "Поставляемый ресивер",
+     * 	        "en" : "Receiver included"
+     * 	      }
+     * 	    },
+     * 	...
+     * 	  ],
+     * 	  "displayMetadescriptions" : {},
+     * 	  "displayTitles" : {},
+     * 	  "productId" : 297,
+     * 	  "name" : "Mini Mouse M187",
+     * 	  "stepOrderQuantity" : null,
+     * 	  "tag" : "multisku",
+     * 	  "brandName" : "Logitech",
+     * 	  "brandId" : 5,
+     * 	  "availablefrom" : null,
+     * 	  "uri" : null,
+     * 	  "availableto" : null,
+     * 	  "productTypeName" : "Mice",
+     * 	  "metakeywords" : null,
+     * 	  "manufacturerCode" : "M001",
+     * 	  "productAvailabilityModel" : {
+     * 	    "firstAvailableSkuCode" : "910-002-741",
+     * 	    "available" : true,
+     * 	    "defaultSkuCode" : "910-002-741",
+     * 	    "inStock" : true,
+     * 	    "skuCodes" : [
+     * 	      "910-002-741",
+     * 	      "910-002-742",
+     * 	      "910-002-743",
+     * 	      "910-002-744"
+     * 	    ],
+     * 	    "perpetual" : false,
+     * 	    "availableToSellQuantity" : {
+     * 	      "910-002-742" : 300,
+     * 	      "910-002-744" : 300,
+     * 	      "910-002-741" : 300,
+     * 	      "910-002-743" : 300
+     * 	    }
+     * 	  },
+     * 	  "skus" : [
+     * 	    {
+     * 	      "metakeywords" : null,
+     * 	      "productId" : 297,
+     * 	      "description" : "",
+     * 	      "metadescription" : null,
+     * 	      "uri" : null,
+     * 	      "price" : {
+     * 	        "symbol" : "€",
+     * 	        "quantity" : 1,
+     * 	        "regularPrice" : 387.56,
+     * 	        "salePrice" : null,
+     * 	        "discount" : null,
+     * 	        "currency" : "EUR",
+     * 	        "symbolPosition" : "before"
+     * 	      },
+     * 	      "attributes" : [
+     * 	        {
+     * 	          "attrvalueId" : 948,
+     * 	          "val" : "White",
+     * 	          "displayVals" : {
+     * 	            "uk" : "Білий",
+     * 	            "ru" : "Белый",
+     * 	            "en" : "White"
+     * 	          },
+     * 	          "attributeName" : "Color of product",
+     * 	          "attributeId" : 532,
+     * 	          "attributeDisplayNames" : {
+     * 	            "uk" : "Колір продукту",
+     * 	            "ru" : "Цвет товара",
+     * 	            "en" : "Color of product"
+     * 	          },
+     * 	          "skuId" : 308
+     * 	        },
+     * 			...
+     * 	      ],
+     * 	      "title" : null,
+     * 	      "manufacturerCode" : null,
+     * 	      "code" : "910-002-744",
+     * 	      "skuId" : 308,
+     * 	      "rank" : 0,
+     * 	      "displayTitles" : null,
+     * 	      "displayNames" : {
+     * 	        "uk" : "M187 Білий",
+     * 	        "ru" : "M187 Белый",
+     * 	        "en" : "M187 White"
+     * 	      },
+     * 	      "productAvailabilityModel" : {
+     * 	        "firstAvailableSkuCode" : "910-002-744",
+     * 	        "available" : true,
+     * 	        "defaultSkuCode" : "910-002-744",
+     * 	        "inStock" : true,
+     * 	        "skuCodes" : [
+     * 	          "910-002-744"
+     * 	        ],
+     * 	        "perpetual" : false,
+     * 	        "availableToSellQuantity" : {
+     * 	          "910-002-744" : 300
+     * 	        }
+     * 	      },
+     * 	      "barCode" : "",
+     * 	      "displayMetakeywords" : null,
+     * 	      "name" : "M187 White",
+     * 	      "displayMetadescriptions" : null
+     * 	    },
+     * 		...
+     * 	  ],
+     * 	  "price" : {
+     * 	    "symbol" : "€",
+     * 	    "quantity" : 1,
+     * 	    "regularPrice" : 387.56,
+     * 	    "salePrice" : null,
+     * 	    "discount" : null,
+     * 	    "currency" : "EUR",
+     * 	    "symbolPosition" : "before"
+     * 	  },
+     * 	  "featured" : false,
+     * 	  "displayMetakeywords" : {},
+     * 	  "metadescription" : null,
+     * 	  "description" : "Logitech Wireless Mini ..."
+     * 	}]
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     * @param products PK or SEO URI
+     * @param request request
+     * @param response response
+     *
+     * @return product
+     */
+    @RequestMapping(
+            value = "/products/{ids}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE }
+    )
+    public @ResponseBody List<ProductRO> viewProducts(@PathVariable(value = "ids") final String products,
+                                                      final HttpServletRequest request,
+                                                      final HttpServletResponse response) {
+
         cartMixin.persistShoppingCart(request, response);
-        return null;
+        return viewProductsInternal(products);
+
+    }
+
+    /**
+     * Interface: GET /products/{id}
+     * <p>
+     * <p>
+     * Display full product details.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>ids</td><td>SEO URI or product PK separated by pipe character ('|')</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * 	&lt;products&gt;
+     * 	&lt;product&gt;
+     * 	    &lt;attribute-values&gt;
+     * 	        &lt;attribute-value attribute-id="11022" attrvalue-id="891" product-id="297"&gt;
+     * 	            &lt;attribute-name&gt;Опис Продукту (uk)&lt;/attribute-name&gt;
+     * 	            &lt;val&gt;Logitech Wireless Mini Mouse M187...&lt;/val&gt;
+     * 	        &lt;/attribute-value&gt;
+     * 	        &lt;attribute-value attribute-id="1423" attrvalue-id="19865" product-id="297"&gt;
+     * 	            &lt;attribute-display-names&gt;
+     * 	                &lt;entry lang="uk"&gt;Ресівер, що поставляється&lt;/entry&gt;
+     * 	                &lt;entry lang="en"&gt;Receiver included&lt;/entry&gt;
+     * 	                &lt;entry lang="ru"&gt;Поставляемый ресивер&lt;/entry&gt;
+     * 	            &lt;/attribute-display-names&gt;
+     * 	            &lt;attribute-name&gt;Receiver included&lt;/attribute-name&gt;
+     * 	            &lt;display-vals&gt;
+     * 	                &lt;entry lang="uk"&gt;Да&lt;/entry&gt;
+     * 	                &lt;entry lang="en"&gt;Y&lt;/entry&gt;
+     * 	                &lt;entry lang="ru"&gt;Да&lt;/entry&gt;
+     * 	            &lt;/display-vals&gt;
+     * 	            &lt;val&gt;Y&lt;/val&gt;
+     * 	        &lt;/attribute-value&gt;
+     * 	        &lt;attribute-value attribute-id="11008" attrvalue-id="20509" product-id="297"&gt;
+     * 	            &lt;attribute-name&gt;Product default image&lt;/attribute-name&gt;
+     * 	            &lt;val&gt;Logitech-M187_910-002-744_a.jpg&lt;/val&gt;
+     * 	        &lt;/attribute-value&gt;
+     * 	        ...
+     * 	    &lt;/attribute-values&gt;
+     * 	    &lt;availability&gt;1&lt;/availability&gt;
+     * 	    &lt;brand-id&gt;5&lt;/brand-id&gt;
+     * 	    &lt;brand-name&gt;Logitech&lt;/brand-name&gt;
+     * 	    &lt;code&gt;910-002&lt;/code&gt;
+     * 	    &lt;description&gt;Logitech Wireless Mini Mouse M187...&lt;/description&gt;
+     * 	    &lt;display-metadescription/&gt;
+     * 	    &lt;display-metakeywords/&gt;
+     * 	    &lt;display-names&gt;
+     * 	        &lt;entry lang="uk"&gt;Mini Mouse M187&lt;/entry&gt;
+     * 	        &lt;entry lang="en"&gt;Mini Mouse M187&lt;/entry&gt;
+     * 	        &lt;entry lang="ru"&gt;Mini Mouse M187&lt;/entry&gt;
+     * 	    &lt;/display-names&gt;
+     * 	    &lt;display-titles/&gt;
+     * 	    &lt;featured&gt;false&lt;/featured&gt;
+     * 	    &lt;manufacturer-code&gt;M001&lt;/manufacturer-code&gt;
+     * 	    &lt;name&gt;Mini Mouse M187&lt;/name&gt;
+     * 	    &lt;price&gt;
+     * 	        &lt;currency&gt;EUR&lt;/currency&gt;
+     * 	        &lt;quantity&gt;1.00&lt;/quantity&gt;
+     * 	        &lt;regular-price&gt;387.56&lt;/regular-price&gt;
+     * 	        &lt;symbol&gt;€&lt;/symbol&gt;
+     * 	        &lt;symbol-position&gt;before&lt;/symbol-position&gt;
+     * 	    &lt;/price&gt;
+     * 	    &lt;product-availability&gt;
+     * 	        &lt;available&gt;true&lt;/available&gt;
+     * 	        &lt;ats-quantity&gt;
+     * 	            &lt;entry sku="910-002-742"&gt;300.00&lt;/entry&gt;
+     * 	            &lt;entry sku="910-002-741"&gt;300.00&lt;/entry&gt;
+     * 	            &lt;entry sku="910-002-744"&gt;300.00&lt;/entry&gt;
+     * 	            &lt;entry sku="910-002-743"&gt;300.00&lt;/entry&gt;
+     * 	        &lt;/ats-quantity&gt;
+     * 	        &lt;default-sku&gt;910-002-741&lt;/default-sku&gt;
+     * 	        &lt;first-available-sku&gt;910-002-741&lt;/first-available-sku&gt;
+     * 	        &lt;in-stock&gt;true&lt;/in-stock&gt;
+     * 	        &lt;perpetual&gt;false&lt;/perpetual&gt;
+     * 	        &lt;sku-codes&gt;910-002-741&lt;/sku-codes&gt;
+     * 	        &lt;sku-codes&gt;910-002-742&lt;/sku-codes&gt;
+     * 	        &lt;sku-codes&gt;910-002-743&lt;/sku-codes&gt;
+     * 	        &lt;sku-codes&gt;910-002-744&lt;/sku-codes&gt;
+     * 	    &lt;/product-availability&gt;
+     * 	    &lt;product-id&gt;297&lt;/product-id&gt;
+     * 	    &lt;product-type-id&gt;5&lt;/product-type-id&gt;
+     * 	    &lt;product-type-name&gt;Mice&lt;/product-type-name&gt;
+     * 	    &lt;skus&gt;
+     * 	        &lt;sku&gt;
+     * 	            &lt;attribute-values&gt;
+     * 	                &lt;attribute-value attribute-id="532" attrvalue-id="948" sku-id="308"&gt;
+     * 	                    &lt;attribute-display-names&gt;
+     * 	                        &lt;entry lang="uk"&gt;Колір продукту&lt;/entry&gt;
+     * 	                        &lt;entry lang="en"&gt;Color of product&lt;/entry&gt;
+     * 	                        &lt;entry lang="ru"&gt;Цвет товара&lt;/entry&gt;
+     * 	                    &lt;/attribute-display-names&gt;
+     * 	                    &lt;attribute-name&gt;Color of product&lt;/attribute-name&gt;
+     * 	                    &lt;display-vals&gt;
+     * 	                        &lt;entry lang="uk"&gt;Білий&lt;/entry&gt;
+     * 	                        &lt;entry lang="en"&gt;White&lt;/entry&gt;
+     * 	                        &lt;entry lang="ru"&gt;Белый&lt;/entry&gt;
+     * 	                    &lt;/display-vals&gt;
+     * 	                    &lt;val&gt;White&lt;/val&gt;
+     * 	                &lt;/attribute-value&gt;
+     * 	                ...
+     * 	            &lt;/attribute-values&gt;
+     * 	            &lt;barcode&gt;&lt;/barcode&gt;
+     * 	            &lt;code&gt;910-002-744&lt;/code&gt;
+     * 	            &lt;description&gt;&lt;/description&gt;
+     * 	            &lt;display-names&gt;
+     * 	                &lt;entry lang="uk"&gt;M187 Білий&lt;/entry&gt;
+     * 	                &lt;entry lang="en"&gt;M187 White&lt;/entry&gt;
+     * 	                &lt;entry lang="ru"&gt;M187 Белый&lt;/entry&gt;
+     * 	            &lt;/display-names&gt;
+     * 	            &lt;name&gt;M187 White&lt;/name&gt;
+     * 	            &lt;price&gt;
+     * 	                &lt;currency&gt;EUR&lt;/currency&gt;
+     * 	                &lt;quantity&gt;1.00&lt;/quantity&gt;
+     * 	                &lt;regular-price&gt;387.56&lt;/regular-price&gt;
+     * 	                &lt;symbol&gt;€&lt;/symbol&gt;
+     * 	                &lt;symbol-position&gt;before&lt;/symbol-position&gt;
+     * 	            &lt;/price&gt;
+     * 	            &lt;product-availability&gt;
+     * 	                &lt;available&gt;true&lt;/available&gt;
+     * 	                &lt;ats-quantity&gt;
+     * 	                    &lt;entry sku="910-002-744"&gt;300.00&lt;/entry&gt;
+     * 	                &lt;/ats-quantity&gt;
+     * 	                &lt;default-sku&gt;910-002-744&lt;/default-sku&gt;
+     * 	                &lt;first-available-sku&gt;910-002-744&lt;/first-available-sku&gt;
+     * 	                &lt;in-stock&gt;true&lt;/in-stock&gt;
+     * 	                &lt;perpetual&gt;false&lt;/perpetual&gt;
+     * 	                &lt;sku-codes&gt;910-002-744&lt;/sku-codes&gt;
+     * 	            &lt;/product-availability&gt;
+     * 	            &lt;product-id&gt;297&lt;/product-id&gt;
+     * 	            &lt;rank&gt;0&lt;/rank&gt;
+     * 	            &lt;sku-id&gt;308&lt;/sku-id&gt;
+     * 	        &lt;/sku&gt;
+     * 	        ...
+     * 	    &lt;/skus&gt;
+     * 	    &lt;tag&gt;multisku&lt;/tag&gt;
+     * 	&lt;/product&gt;
+     * 	&lt;/products&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     * @param products PK or SEO URI
+     * @param request request
+     * @param response response
+     *
+     * @return product
+     */
+    @RequestMapping(
+            value = "/products/{ids}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody ProductListRO viewProductsXML(@PathVariable(value = "ids") final String products,
+                                                       final HttpServletRequest request,
+                                                       final HttpServletResponse response) {
+
+        cartMixin.persistShoppingCart(request, response);
+        return new ProductListRO(viewProductsInternal(products));
 
     }
 
@@ -733,6 +1138,32 @@ public class ProductController {
     }
 
 
+    private ProductSkuRO viewSkuInternal(final String sku, final boolean recordViewed) {
+        final long productId = bookmarkMixin.resolveSkuId(sku);
+
+        final ProductSku skuEntity;
+        if (productId > 0L) {
+            skuEntity = productServiceFacade.getSkuById(productId);
+        } else {
+            skuEntity = productServiceFacade.getProductSkuBySkuCode(sku);
+        }
+
+        if (skuEntity != null) {
+
+            final ShoppingCart cart = cartMixin.getCurrentCart();
+            final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
+
+            if (recordViewed) {
+                executeViewProductCommand(skuEntity.getProduct());
+            }
+
+            return viewSkuInternal(skuEntity, cart.getShoppingContext().getShopId(), cart.getCurrencyCode(), symbol);
+
+        }
+
+        return null;
+    }
+
 
     /**
      * Interface: GET /sku/{id}
@@ -750,7 +1181,7 @@ public class ProductController {
      * <p>
      * <h3>Parameters for operation</h3><p>
      * <table border="1">
-     *     <tr><td>id</td><td>SEO URI or sku PK</td></tr>
+     *     <tr><td>id</td><td>SEO URI or sku PK or sku code</td></tr>
      * </table>
      * <p>
      * <p>
@@ -894,32 +1325,245 @@ public class ProductController {
                                               final HttpServletRequest request,
                                               final HttpServletResponse response) {
 
-        final long productId = bookmarkMixin.resolveSkuId(sku);
-
-        final ProductSku skuEntity = productServiceFacade.getSkuById(productId);
-
-        if (skuEntity != null) {
-
-            final ShoppingCart cart = cartMixin.getCurrentCart();
-            final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
-
-            executeViewProductCommand(skuEntity.getProduct());
-            cartMixin.persistShoppingCart(request, response);
-
-            return viewSkuInternal(skuEntity, cart.getShoppingContext().getShopId(), cart.getCurrencyCode(), symbol);
-
-        }
-
+        final ProductSkuRO ro = viewSkuInternal(sku, true);
         cartMixin.persistShoppingCart(request, response);
-
-        return null;
+        return ro;
 
     }
 
 
+    private List<ProductSkuRO> viewProductSkusInternal(final String skus) {
+
+        final String[] skuIds = StringUtils.split(skus, '|');
+
+        final List<ProductSkuRO> ros = new ArrayList<ProductSkuRO>(skuIds.length);
+
+        for (final String skuId : skuIds) {
+
+            final ProductSkuRO ro = viewSkuInternal(skuId, false);
+            if (ro != null) {
+                ros.add(ro);
+            }
+        }
+
+        return ros;
+    }
+
 
     /**
-     * Execute login command.
+     * Interface: GET /skus/{id}
+     * <p>
+     * <p>
+     * Display full product details.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>ids</td><td>SEO URI or sku PK or sku code separated by pipe character ('|')</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * 	   [ {
+     * 	      "metakeywords" : null,
+     * 	      "productId" : 297,
+     * 	      "description" : "",
+     * 	      "metadescription" : null,
+     * 	      "uri" : null,
+     * 	      "price" : {
+     * 	        "symbol" : "€",
+     * 	        "quantity" : 1,
+     * 	        "regularPrice" : 387.56,
+     * 	        "salePrice" : null,
+     * 	        "discount" : null,
+     * 	        "currency" : "EUR",
+     * 	        "symbolPosition" : "before"
+     * 	      },
+     * 	      "attributes" : [
+     * 	        {
+     * 	          "attrvalueId" : 948,
+     * 	          "val" : "White",
+     * 	          "displayVals" : {
+     * 	            "uk" : "Білий",
+     * 	            "ru" : "Белый",
+     * 	            "en" : "White"
+     * 	          },
+     * 	          "attributeName" : "Color of product",
+     * 	          "attributeId" : 532,
+     * 	          "attributeDisplayNames" : {
+     * 	            "uk" : "Колір продукту",
+     * 	            "ru" : "Цвет товара",
+     * 	            "en" : "Color of product"
+     * 	          },
+     * 	          "skuId" : 308
+     * 	        },
+     * 			...
+     * 	      ],
+     * 	      "title" : null,
+     * 	      "manufacturerCode" : null,
+     * 	      "code" : "910-002-744",
+     * 	      "skuId" : 308,
+     * 	      "rank" : 0,
+     * 	      "displayTitles" : null,
+     * 	      "displayNames" : {
+     * 	        "uk" : "M187 Білий",
+     * 	        "ru" : "M187 Белый",
+     * 	        "en" : "M187 White"
+     * 	      },
+     * 	      "productAvailabilityModel" : {
+     * 	        "firstAvailableSkuCode" : "910-002-744",
+     * 	        "available" : true,
+     * 	        "defaultSkuCode" : "910-002-744",
+     * 	        "inStock" : true,
+     * 	        "skuCodes" : [
+     * 	          "910-002-744"
+     * 	        ],
+     * 	        "perpetual" : false,
+     * 	        "availableToSellQuantity" : {
+     * 	          "910-002-744" : 300
+     * 	        }
+     * 	      },
+     * 	      "barCode" : "",
+     * 	      "displayMetakeywords" : null,
+     * 	      "name" : "M187 White",
+     * 	      "displayMetadescriptions" : null
+     * 	    } ]
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     * @param skus PK or SEO URI or code
+     * @param request request
+     * @param response response
+     *
+     * @return product sku
+     */
+    @RequestMapping(
+            value = "/skus/{ids}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE }
+    )
+    public @ResponseBody List<ProductSkuRO> viewSkus(@PathVariable(value = "ids") final String skus,
+                                                     final HttpServletRequest request,
+                                                     final HttpServletResponse response) {
+
+        cartMixin.persistShoppingCart(request, response);
+        return viewProductSkusInternal(skus);
+
+    }
+
+    /**
+     * Interface: GET /skus/{id}
+     * <p>
+     * <p>
+     * Display full product details.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>ids</td><td>SEO URI or sku PK or sku code separated by pipe character ('|')</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * 	        &lt;skus&gt;
+     * 	        &lt;sku&gt;
+     * 	            &lt;attribute-values&gt;
+     * 	                &lt;attribute-value attribute-id="532" attrvalue-id="948" sku-id="308"&gt;
+     * 	                    &lt;attribute-display-names&gt;
+     * 	                        &lt;entry lang="uk"&gt;Колір продукту&lt;/entry&gt;
+     * 	                        &lt;entry lang="en"&gt;Color of product&lt;/entry&gt;
+     * 	                        &lt;entry lang="ru"&gt;Цвет товара&lt;/entry&gt;
+     * 	                    &lt;/attribute-display-names&gt;
+     * 	                    &lt;attribute-name&gt;Color of product&lt;/attribute-name&gt;
+     * 	                    &lt;display-vals&gt;
+     * 	                        &lt;entry lang="uk"&gt;Білий&lt;/entry&gt;
+     * 	                        &lt;entry lang="en"&gt;White&lt;/entry&gt;
+     * 	                        &lt;entry lang="ru"&gt;Белый&lt;/entry&gt;
+     * 	                    &lt;/display-vals&gt;
+     * 	                    &lt;val&gt;White&lt;/val&gt;
+     * 	                &lt;/attribute-value&gt;
+     * 	                ...
+     * 	            &lt;/attribute-values&gt;
+     * 	            &lt;barcode&gt;&lt;/barcode&gt;
+     * 	            &lt;code&gt;910-002-744&lt;/code&gt;
+     * 	            &lt;description&gt;&lt;/description&gt;
+     * 	            &lt;display-names&gt;
+     * 	                &lt;entry lang="uk"&gt;M187 Білий&lt;/entry&gt;
+     * 	                &lt;entry lang="en"&gt;M187 White&lt;/entry&gt;
+     * 	                &lt;entry lang="ru"&gt;M187 Белый&lt;/entry&gt;
+     * 	            &lt;/display-names&gt;
+     * 	            &lt;name&gt;M187 White&lt;/name&gt;
+     * 	            &lt;price&gt;
+     * 	                &lt;currency&gt;EUR&lt;/currency&gt;
+     * 	                &lt;quantity&gt;1.00&lt;/quantity&gt;
+     * 	                &lt;regular-price&gt;387.56&lt;/regular-price&gt;
+     * 	                &lt;symbol&gt;€&lt;/symbol&gt;
+     * 	                &lt;symbol-position&gt;before&lt;/symbol-position&gt;
+     * 	            &lt;/price&gt;
+     * 	            &lt;product-availability&gt;
+     * 	                &lt;available&gt;true&lt;/available&gt;
+     * 	                &lt;ats-quantity&gt;
+     * 	                    &lt;entry sku="910-002-744"&gt;300.00&lt;/entry&gt;
+     * 	                &lt;/ats-quantity&gt;
+     * 	                &lt;default-sku&gt;910-002-744&lt;/default-sku&gt;
+     * 	                &lt;first-available-sku&gt;910-002-744&lt;/first-available-sku&gt;
+     * 	                &lt;in-stock&gt;true&lt;/in-stock&gt;
+     * 	                &lt;perpetual&gt;false&lt;/perpetual&gt;
+     * 	                &lt;sku-codes&gt;910-002-744&lt;/sku-codes&gt;
+     * 	            &lt;/product-availability&gt;
+     * 	            &lt;product-id&gt;297&lt;/product-id&gt;
+     * 	            &lt;rank&gt;0&lt;/rank&gt;
+     * 	            &lt;sku-id&gt;308&lt;/sku-id&gt;
+     * 	        &lt;/sku&gt;
+     * 	        &lt;/skus&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     *
+     * @param skus PK or SEO URI or code
+     * @param request request
+     * @param response response
+     *
+     * @return product sku
+     */
+    @RequestMapping(
+            value = "/skus/{ids}",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody ProductSkuListRO viewSkusXML(@PathVariable(value = "ids") final String skus,
+                                                      final HttpServletRequest request,
+                                                      final HttpServletResponse response) {
+
+        cartMixin.persistShoppingCart(request, response);
+        return new ProductSkuListRO(viewProductSkusInternal(skus));
+
+    }
+
+
+    /**
+     * Execute view product command.
      *
      * @param product product.
      */

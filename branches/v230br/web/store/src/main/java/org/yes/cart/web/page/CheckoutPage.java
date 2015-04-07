@@ -528,7 +528,8 @@ public class CheckoutPage extends AbstractWebPage {
      */
     private String getPostActionUrl(final PaymentGateway gateway) {
         if (gateway instanceof PaymentGatewayExternalForm) {
-            //paypal express checkout will return internal url , than mounted with "paymentpaypalexpress" url
+            // some pgs will point to local mounted page (e.g. paypal express points to paymentpaypalexpress)
+            // that triggers internal payment information processing via filter
             return ((PaymentGatewayExternalForm) gateway).getPostActionUrl();
         }
         /**
