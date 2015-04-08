@@ -70,10 +70,10 @@ public class StorefrontInterceptor extends AuditInterceptor implements Applicati
      * {@inheritDoc}
      */
     @Override
-    public boolean onFlushDirty(final Object entity, final Serializable serializable, final Object[] currentState,
+    public boolean onFlushDirty(final Object entity, final Serializable id, final Object[] currentState,
                                 final Object[] previousState, final String[] propertyNames, final Type[] types) {
 
-        final boolean onFlush = super.onFlushDirty(entity, serializable, currentState, previousState, propertyNames, types);
+        final boolean onFlush = super.onFlushDirty(entity, id, currentState, previousState, propertyNames, types);
 
         submitProductReindex(getProductId(entity));
 

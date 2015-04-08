@@ -83,9 +83,9 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
     }
 
     @Override
-    public boolean onFlushDirty(Object entity, Serializable serializable, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
+    public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
         try {
-            return super.onFlushDirty(entity, serializable, currentState, previousState, propertyNames, types);
+            return super.onFlushDirty(entity, id, currentState, previousState, propertyNames, types);
         } finally {
             if(isEntityInCache(entity)) {
                 invalidateCache(CacheDirector.EntityOperation.UPDATE, entity.getClass().getSimpleName(), getPk(entity) );
@@ -109,7 +109,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
         final AsyncContext async = getAsyncContext();
         if (async == null) {
             ShopCodeContext.getLog(this)
-                    .error("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
+                    .warn("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
             return;
         }
         String userName = async.getAttribute(AsyncContext.USERNAME);

@@ -44,7 +44,21 @@
             </props>
         </property>
         <property name="entityInterceptor">
-            <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor"/>
+            <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor">
+                <property name="prohibitedFields">
+                    <map key-type="java.lang.String" value-type="java.lang.String">
+                        <entry key="CustomerOrderPaymentEntity">
+                            <set>
+                                <value>cardExpireYear</value>
+                                <value>cardExpireMonth</value>
+                                <value>cardStartDate</value>
+                                <value>cardNumber</value>
+                                <value>cardIssueNumber</value>
+                            </set>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
         </property>
     </bean>
 

@@ -92,6 +92,19 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
     public void setDisplayMetadescription(final String displayMetadescription) {
         this.displayMetadescription = displayMetadescription;
     }
+
+    @Override
+    public String toString() {
+        return "SeoEntity{" +
+                "uri:'" + uri + '\'' +
+                ",title:'" + title + '\'' +
+                ",displayTitle:'" + displayTitle + '\'' +
+                ",metakeywords:'" + metakeywords + '\'' +
+                ",displayMetakeywords:'" + displayMetakeywords + '\'' +
+                ",metadescription:'" + metadescription + '\'' +
+                ",displayMetadescription:'" + displayMetadescription + '\'' +
+                '}';
+    }
 }
 
 
