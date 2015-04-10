@@ -23,6 +23,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.ShopService;
@@ -97,7 +98,7 @@ public class HomePage extends AbstractWebPage {
 
         final Map<String, List<String>> mapParams = WicketUtil.pageParametesAsMultiMap(getPageParameters());
 
-        final String centralViewLabel = centralViewResolver.resolveMainPanelRendererLabel(mapParams);
+        final Pair<String, String> centralViewLabel = centralViewResolver.resolveMainPanelRendererLabel(mapParams);
 
         final long categoryId;
         if (mapParams.containsKey(WebParametersKeys.CATEGORY_ID)) {
@@ -198,7 +199,7 @@ public class HomePage extends AbstractWebPage {
      *         instance of EmptyCentralView
      */
     private AbstractCentralView getCentralPanel(
-            final String rendererLabel,
+            final Pair<String, String> rendererLabel,
             final String id,
             final long categoryId,
             final NavigationContext navigationContext) {

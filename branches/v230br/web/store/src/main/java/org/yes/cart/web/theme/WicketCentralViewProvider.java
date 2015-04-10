@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.theme;
 
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.web.page.component.AbstractCentralView;
 
@@ -29,14 +30,14 @@ public interface WicketCentralViewProvider {
     /**
      * Central view resolution.
      *
-     * @param rendererLabel render view type
+     * @param rendererLabel render view type (fir)
      * @param wicketComponentId component id
      * @param categoryId category id
      * @param navigationContext navigation context
      *
-     * @return central vie component
+     * @return central view component
      */
-    AbstractCentralView getCentralPanel(String rendererLabel,
+    AbstractCentralView getCentralPanel(Pair<String, String> rendererLabel,
                                         String wicketComponentId,
                                         long categoryId,
                                         NavigationContext navigationContext);

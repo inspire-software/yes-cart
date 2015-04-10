@@ -52,10 +52,11 @@
         <constructor-arg index="1" ref="productTypeService"/>
         <constructor-arg index="2" ref="productTypeAttrService"/>
         <constructor-arg index="3" ref="productService"/>
-        <constructor-arg index="4" ref="shopService"/>
-        <constructor-arg index="5" ref="addressBookFacade"/>
-        <constructor-arg index="6" ref="promotionService"/>
-        <constructor-arg index="7" ref="promotionConditionParser"/>
+        <constructor-arg index="4" ref="attributeService"/>
+        <constructor-arg index="5" ref="shopService"/>
+        <constructor-arg index="6" ref="addressBookFacade"/>
+        <constructor-arg index="7" ref="promotionService"/>
+        <constructor-arg index="8" ref="promotionConditionParser"/>
     </bean>
 
     <bean id="backDoorBean" parent="txProxyTemplate">

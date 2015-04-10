@@ -37,6 +37,8 @@ import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.service.rest.impl.BookmarkMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
+import org.yes.cart.web.support.constants.WebParametersKeys;
+import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
@@ -46,6 +48,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -55,6 +58,8 @@ import java.util.List;
 @Controller
 public class ProductController {
 
+    @Autowired
+    private CentralViewResolver centralViewResolver;
     @Autowired
     private BrandService brandService;
     @Autowired
@@ -89,6 +94,12 @@ public class ProductController {
 
 
             final ProductRO prodRO = mappingMixin.map(productEntity, ProductRO.class, Product.class);
+
+            final Pair<String, String> templates = resolveTemplate(prodRO);
+            if (templates != null) {
+                prodRO.setUitemplate(templates.getFirst());
+                prodRO.setUitemplateFallback(templates.getSecond());
+            }
 
             // Brand is lazy so need to retrieve name manually
             final Brand brand = brandService.findById(prodRO.getBrandId());
@@ -134,6 +145,14 @@ public class ProductController {
 
         return null;
     }
+
+
+    private Pair<String, String> resolveTemplate(final ProductRO prodRO) {
+        final Map params = new HashMap();
+        params.put(WebParametersKeys.PRODUCT_ID, String.valueOf(prodRO.getProductId()));
+        return centralViewResolver.resolveMainPanelRendererLabel(params);
+    }
+
 
 
     /**
@@ -1114,6 +1133,12 @@ public class ProductController {
 
         final ProductSkuRO skuRO = mappingMixin.map(productSku, ProductSkuRO.class, ProductSku.class);
 
+        final Pair<String, String> templates = resolveTemplate(skuRO);
+        if (templates != null) {
+            skuRO.setUitemplate(templates.getFirst());
+            skuRO.setUitemplateFallback(templates.getSecond());
+        }
+
         final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productSku, shopId);
 
         final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
@@ -1135,6 +1160,13 @@ public class ProductController {
 
         return skuRO;
 
+    }
+
+
+    private Pair<String, String> resolveTemplate(final ProductSkuRO skuRO) {
+        final Map params = new HashMap();
+        params.put(WebParametersKeys.SKU_ID, String.valueOf(skuRO.getSkuId()));
+        return centralViewResolver.resolveMainPanelRendererLabel(params);
     }
 
 

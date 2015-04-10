@@ -68,6 +68,7 @@ public class CategoryRO implements Serializable {
 
     @DtoField(value = "uitemplate", readOnly = true)
     private String uitemplate;
+    private String uitemplateFallback;
 
     @DtoField(value = "availablefrom", readOnly = true)
     private Date availablefrom;
@@ -209,6 +210,15 @@ public class CategoryRO implements Serializable {
 
     public void setUitemplate(final String uitemplate) {
         this.uitemplate = uitemplate;
+    }
+
+    @XmlElement(name = "uitemplate-fallback")
+    public String getUitemplateFallback() {
+        return uitemplateFallback;
+    }
+
+    public void setUitemplateFallback(final String uitemplateFallback) {
+        this.uitemplateFallback = uitemplateFallback;
     }
 
     public Date getAvailablefrom() {

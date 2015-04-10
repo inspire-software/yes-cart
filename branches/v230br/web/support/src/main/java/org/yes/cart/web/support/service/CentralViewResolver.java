@@ -16,6 +16,8 @@
 
 package org.yes.cart.web.support.service;
 
+import org.yes.cart.domain.misc.Pair;
+
 import java.util.Map;
 
 /**
@@ -27,11 +29,13 @@ import java.util.Map;
 public interface CentralViewResolver {
 
     /**
-     * Resolve central renderer label.
+     * Resolve central renderer label pair. First key is for specific template
+     * that is resolved, second label is the default failover (to be used for
+     * themes that do not support customised template)
      *
      * @param parameters            request parameters map
      * @return resolved main panel renderer label if resolved, otherwise null
      */
-    String resolveMainPanelRendererLabel(Map parameters);
+    Pair<String, String> resolveMainPanelRendererLabel(Map parameters);
 
 }

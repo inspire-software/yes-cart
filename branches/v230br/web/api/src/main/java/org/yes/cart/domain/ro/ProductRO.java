@@ -63,6 +63,9 @@ public class ProductRO implements Serializable {
     @DtoField(value = "availability", readOnly = true)
     private int availability;
 
+    private String uitemplate;
+    private String uitemplateFallback;
+
     private ProductAvailabilityModelRO productAvailabilityModel;
 
     private SkuPriceRO price;
@@ -193,6 +196,24 @@ public class ProductRO implements Serializable {
 
     public void setAvailability(final int availability) {
         this.availability = availability;
+    }
+
+
+    public String getUitemplate() {
+        return uitemplate;
+    }
+
+    public void setUitemplate(final String uitemplate) {
+        this.uitemplate = uitemplate;
+    }
+
+    @XmlElement(name = "uitemplate-fallback")
+    public String getUitemplateFallback() {
+        return uitemplateFallback;
+    }
+
+    public void setUitemplateFallback(final String uitemplateFallback) {
+        this.uitemplateFallback = uitemplateFallback;
     }
 
     @XmlElement(name = "brand-id")

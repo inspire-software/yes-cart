@@ -40,6 +40,7 @@ public class WarmUpServiceImpl implements WarmUpService {
     private final ProductTypeService productTypeService;
     private final ProductTypeAttrService productTypeAttrService;
     private final ProductService productService;
+    private final AttributeService attributeService;
 
     private final ShopService shopService;
 
@@ -52,6 +53,7 @@ public class WarmUpServiceImpl implements WarmUpService {
                              final ProductTypeService productTypeService,
                              final ProductTypeAttrService productTypeAttrService,
                              final ProductService productService,
+                             final AttributeService attributeService,
                              final ShopService shopService,
                              final AddressBookFacade addressBookFacade,
                              final PromotionService promotionService,
@@ -60,6 +62,7 @@ public class WarmUpServiceImpl implements WarmUpService {
         this.productTypeService = productTypeService;
         this.productTypeAttrService = productTypeAttrService;
         this.productService = productService;
+        this.attributeService = attributeService;
         this.shopService = shopService;
         this.addressBookFacade = addressBookFacade;
         this.promotionService = promotionService;
@@ -104,6 +107,12 @@ public class WarmUpServiceImpl implements WarmUpService {
     }
 
     private void loadProductData() {
+
+        // Load all attribute data
+        attributeService.getAllNavigatableAttributeCodes();
+        attributeService.getAllAttributeCodes();
+        attributeService.getAllAttributeNames();
+
         final List<String> supportedLanguages = languageService.getSupportedLanguages();
         final List<ProductType> types = productTypeService.findAll();
         for (final ProductType type : types) {

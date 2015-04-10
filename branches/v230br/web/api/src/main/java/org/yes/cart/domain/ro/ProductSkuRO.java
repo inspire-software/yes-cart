@@ -91,6 +91,9 @@ public class ProductSkuRO implements Serializable {
     @DtoField(value = "seo.displayMetadescription", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> displayMetadescriptions;
 
+    private String uitemplate;
+    private String uitemplateFallback;
+
     private ProductAvailabilityModelRO productAvailabilityModel;
 
     private SkuPriceRO price;
@@ -247,6 +250,24 @@ public class ProductSkuRO implements Serializable {
 
     public void setDisplayMetadescriptions(final Map<String, String> displayMetadescriptions) {
         this.displayMetadescriptions = displayMetadescriptions;
+    }
+
+
+    public String getUitemplate() {
+        return uitemplate;
+    }
+
+    public void setUitemplate(final String uitemplate) {
+        this.uitemplate = uitemplate;
+    }
+
+    @XmlElement(name = "uitemplate-fallback")
+    public String getUitemplateFallback() {
+        return uitemplateFallback;
+    }
+
+    public void setUitemplateFallback(final String uitemplateFallback) {
+        this.uitemplateFallback = uitemplateFallback;
     }
 
     @XmlElement(name = "product-availability")

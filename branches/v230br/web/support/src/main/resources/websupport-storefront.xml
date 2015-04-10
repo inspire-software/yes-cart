@@ -219,12 +219,33 @@
 
     <!-- ################################### presentation layer support start ####################### -->
 
-    <bean id="centralViewResolver" class="org.yes.cart.web.support.service.impl.CentralViewResolverImpl">
-        <constructor-arg index="0" ref="categoryService"/>
-        <constructor-arg index="1" ref="contentService"/>
-        <constructor-arg index="2" ref="productService"/>
-        <constructor-arg index="3" ref="attributeService"/>
-        <constructor-arg index="4" ref="luceneQueryFactory"/>
+    <bean id="centralViewResolver" class="org.yes.cart.web.support.service.impl.CentralViewResolverFactoryImpl">
+        <constructor-arg index="0">
+            <!--
+                 Order of specific resolvers is important:
+                 1. Product specific since we want to view product pages no matter what parameters we have in request
+                 2. Check if we are on Search view if we are not viewing product
+                 3. Check if we are in category if we are not searching
+                 4. Content has least priority
+            -->
+            <list>
+                <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverProductImpl">
+                    <constructor-arg index="0" ref="productService"/>
+                </bean>
+                <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverSearchImpl">
+                    <constructor-arg index="0" ref="attributeService"/>
+                    <constructor-arg index="1" ref="categoryService"/>
+                </bean>
+                <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverCategoryImpl">
+                    <constructor-arg index="0" ref="categoryService"/>
+                    <constructor-arg index="1" ref="productService"/>
+                    <constructor-arg index="2" ref="luceneQueryFactory"/>
+                </bean>
+                <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverContentImpl">
+                    <constructor-arg index="0" ref="contentService"/>
+                </bean>
+            </list>
+        </constructor-arg>
     </bean>
 
     <bean id="attributeFilteredNavigationSupport" class="org.yes.cart.web.page.component.filterednavigation.impl.AttributeFilteredNavigationSupportImpl">

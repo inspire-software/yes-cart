@@ -44,7 +44,9 @@ import org.yes.cart.web.page.component.filterednavigation.PriceFilteredNavigatio
 import org.yes.cart.web.service.rest.impl.BookmarkMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
+import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
@@ -65,6 +67,8 @@ import java.util.Map;
 @RequestMapping("/search")
 public class SearchController {
 
+    @Autowired
+    private CentralViewResolver centralViewResolver;
     @Autowired
     private CategoryServiceFacade categoryServiceFacade;
     @Autowired
@@ -467,6 +471,13 @@ public class SearchController {
         final SearchResultRO result = new SearchResultRO();
         result.setSearch(search);
 
+        final Pair<String, String> templates = resolveTemplate(categoryId);
+        if (templates != null) {
+            result.setUitemplate(templates.getFirst());
+            result.setUitemplateFallback(templates.getSecond());
+        }
+
+
         final NavigationContext context = createNavigationContext(categoryId, shop.getShopId(), result);
 
         configureResultViewOptions(categoryId, shop.getShopId(), result);
@@ -489,6 +500,17 @@ public class SearchController {
         return result;
 
     }
+
+
+    private Pair<String, String> resolveTemplate(final long categoryId) {
+        final Map params = new HashMap();
+        params.put(WebParametersKeys.QUERY, WebParametersKeys.QUERY);
+        if (categoryId > 0L) {
+            params.put(WebParametersKeys.CATEGORY_ID, String.valueOf(categoryId));
+        }
+        return centralViewResolver.resolveMainPanelRendererLabel(params);
+    }
+
 
     private void populateFilteredNavigation(final long categoryId,
                                             final long shopId,

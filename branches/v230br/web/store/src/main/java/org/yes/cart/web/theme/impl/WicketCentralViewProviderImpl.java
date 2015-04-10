@@ -18,6 +18,7 @@ package org.yes.cart.web.theme.impl;
 
 import org.slf4j.Logger;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
@@ -63,12 +64,12 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
     /**
      * {@inheritDoc}
      */
-    public AbstractCentralView getCentralPanel(final String rendererLabel,
+    public AbstractCentralView getCentralPanel(final Pair<String, String> rendererLabel,
                                                final String wicketComponentId,
                                                final long categoryId,
                                                final NavigationContext navigationContext) {
 
-        Class<? extends AbstractCentralView> clz = rendererPanelMap.get(rendererLabel);
+        Class<? extends AbstractCentralView> clz = resolveCentralPanelClass(rendererLabel);
         try {
 
             if (clz != null) {
@@ -135,6 +136,16 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
             return new EmptyCentralView(wicketComponentId, navigationContext);
 
         }
+    }
+
+    private Class<? extends AbstractCentralView> resolveCentralPanelClass(final Pair<String, String> rendererLabel) {
+        // Attempt to use best match label (this label could refer to custom templates)
+        Class<? extends AbstractCentralView> clz = rendererPanelMap.get(rendererLabel.getFirst());
+        if (clz == null) {
+            // If custom template mapping is not available try default label mapping
+            clz = rendererPanelMap.get(rendererLabel.getSecond());
+        }
+        return clz;
     }
 
     private Class<? extends AbstractCentralView> getDefaultPanel() {

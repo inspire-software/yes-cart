@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.BreadcrumbRO;
 import org.yes.cart.domain.ro.CategoryListRO;
 import org.yes.cart.domain.ro.CategoryRO;
@@ -394,7 +395,11 @@ public class CategoryController {
 
             final CategoryRO catRO = mappingMixin.map(categoryEntity, CategoryRO.class, Category.class);
             catRO.setBreadcrumbs(generateBreadcrumbs(catRO.getCategoryId(), shopId));
-            catRO.setUitemplate(resolveTemplate(catRO));
+            final Pair<String, String> templates = resolveTemplate(catRO);
+            if (templates != null) {
+                catRO.setUitemplate(templates.getFirst());
+                catRO.setUitemplateFallback(templates.getSecond());
+            }
             return catRO;
 
         }
@@ -614,7 +619,7 @@ public class CategoryController {
 
     }
 
-    private String resolveTemplate(final CategoryRO catRO) {
+    private Pair<String, String> resolveTemplate(final CategoryRO catRO) {
         final Map params = new HashMap();
         params.put(WebParametersKeys.CATEGORY_ID, String.valueOf(catRO.getCategoryId()));
         return centralViewResolver.resolveMainPanelRendererLabel(params);

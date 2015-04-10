@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.AttrValueCategoryRO;
 import org.yes.cart.domain.ro.BreadcrumbRO;
 import org.yes.cart.domain.ro.ContentListRO;
@@ -85,7 +86,11 @@ public class ContentController {
             cntRO.setBreadcrumbs(generateBreadcrumbs(cntRO.getCategoryId(), shopId));
             removeContentBodyAttributes(cntRO);
             cntRO.setContentBody(generateContentBody(cntRO.getCategoryId(), shopId, contentParams));
-            cntRO.setUitemplate(resolveTemplate(cntRO));
+            final Pair<String, String> templates = resolveTemplate(cntRO);
+            if (templates != null) {
+                cntRO.setUitemplate(templates.getFirst());
+                cntRO.setUitemplateFallback(templates.getSecond());
+            }
             return cntRO;
 
         }
@@ -582,7 +587,7 @@ public class ContentController {
     }
 
 
-    private String resolveTemplate(final ContentRO catRO) {
+    private Pair<String, String> resolveTemplate(final ContentRO catRO) {
         final Map params = new HashMap();
         params.put(WebParametersKeys.CONTENT_ID, String.valueOf(catRO.getCategoryId()));
         return centralViewResolver.resolveMainPanelRendererLabel(params);

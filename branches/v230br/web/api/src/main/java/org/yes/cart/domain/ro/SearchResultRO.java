@@ -45,6 +45,9 @@ public class SearchResultRO implements Serializable {
 
     private FilteredNavigationRO filteredNavigation;
 
+    private String uitemplate;
+    private String uitemplateFallback;
+
     public SearchRO getSearch() {
         return search;
     }
@@ -106,4 +109,23 @@ public class SearchResultRO implements Serializable {
     public void setFilteredNavigation(final FilteredNavigationRO filteredNavigation) {
         this.filteredNavigation = filteredNavigation;
     }
+
+
+    public String getUitemplate() {
+        return uitemplate;
+    }
+
+    public void setUitemplate(final String uitemplate) {
+        this.uitemplate = uitemplate;
+    }
+
+    @XmlElement(name = "uitemplate-fallback")
+    public String getUitemplateFallback() {
+        return uitemplateFallback;
+    }
+
+    public void setUitemplateFallback(final String uitemplateFallback) {
+        this.uitemplateFallback = uitemplateFallback;
+    }
+
 }
