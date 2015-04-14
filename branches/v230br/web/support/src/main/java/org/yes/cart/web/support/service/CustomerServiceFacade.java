@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 
 import java.util.List;
 import java.util.Map;
@@ -81,6 +82,20 @@ public interface CustomerServiceFacade {
      */
     void resetPassword(Shop shop, Customer customer);
 
+
+    /**
+     * List of custom attributes eligible for profile edit form.
+     * CPOINT - This will be available to the shoppers to edit as they please, so
+     * need to restrict attributes that should be hidden from shoppers.
+     *
+     *
+     * @param shop shop
+     *
+     * @return list of eligible attributes
+     */
+    List<? extends AttrValue> getShopRegistrationAttributes(Shop shop);
+
+
     /**
      * List of custom attributes eligible for profile edit form.
      * CPOINT - This will be available to the shoppers to edit as they please, so
@@ -90,9 +105,9 @@ public interface CustomerServiceFacade {
      * @param shop shop
      * @param customer customer
      *
-     * @return list of eligible attributes
+     * @return list of eligible attributes (pair: 1) attribute, 2) read only flag)
      */
-    List<? extends AttrValue> getCustomerRegistrationAttributes(Shop shop, Customer customer);
+    List<Pair<? extends AttrValue, Boolean>> getCustomerProfileAttributes(Shop shop, Customer customer);
 
     /**
      * Update customer entry.
@@ -100,6 +115,13 @@ public interface CustomerServiceFacade {
      * @param customer customer
      */
     void updateCustomer(Customer customer);
+
+    /**
+     * Update customer entry.
+     *
+     * @param customer customer
+     */
+    void updateCustomerAttributes(Customer customer, Map<String, String> values);
 
     /**
      * Authenticate customer using username and password.

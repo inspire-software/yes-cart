@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.CustomerWishListService;
@@ -155,14 +156,65 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
-    public List<? extends AttrValue> getCustomerRegistrationAttributes(final Shop shop, final Customer customer) {
+    public List<? extends AttrValue> getShopRegistrationAttributes(final Shop shop) {
+
+        final List<String> allowed = shop.getSupportedRegistrationFormAttributesAsList();
+        if (CollectionUtils.isEmpty(allowed)) {
+            // must explicitly configure to avoid exposing personal data
+            return Collections.emptyList();
+        }
+
+        final List<? extends AttrValue> attrValueCollection = customerService.getRankedAttributeValues(null);
+        if (CollectionUtils.isEmpty(attrValueCollection)) {
+            return Collections.emptyList();
+        }
+
+        final List<AttrValue> registration = new ArrayList<AttrValue>();
+        final Map<String, AttrValue> map = new HashMap<String, AttrValue>(attrValueCollection.size());
+        for (final AttrValue av : attrValueCollection) {
+            map.put(av.getAttribute().getCode(), av);
+        }
+        for (final String code : allowed) {
+            final AttrValue av = map.get(code);
+            if (av != null) {
+                registration.add(av);
+            }
+        }
+
+        return registration;  // CPOINT - possibly need to filter some out
+    }
+
+
+    /** {@inheritDoc} */
+    public List<Pair<? extends AttrValue, Boolean>> getCustomerProfileAttributes(final Shop shop, final Customer customer) {
+
+        final List<String> allowed = shop.getSupportedProfileFormAttributesAsList();
+        if (CollectionUtils.isEmpty(allowed)) {
+            // must explicitly configure to avoid exposing personal data
+            return Collections.emptyList();
+        }
+
+        final List<String> readonly = shop.getSupportedProfileFormReadOnlyAttributesAsList();
 
         final List<? extends AttrValue> attrValueCollection = customerService.getRankedAttributeValues(customer);
         if (CollectionUtils.isEmpty(attrValueCollection)) {
             return Collections.emptyList();
         }
 
-        return new ArrayList<AttrValue>(attrValueCollection);  // CPOINT - possibly need to filter some out
+
+        final List<Pair<? extends AttrValue, Boolean>> profile = new ArrayList<Pair<? extends AttrValue, Boolean>>();
+        final Map<String, AttrValue> map = new HashMap<String, AttrValue>(attrValueCollection.size());
+        for (final AttrValue av : attrValueCollection) {
+            map.put(av.getAttribute().getCode(), av);
+        }
+        for (final String code : allowed) {
+            final AttrValue av = map.get(code);
+            if (av != null) {
+                profile.add(new Pair<AttrValue, Boolean>(av, readonly.contains(code)));
+            }
+        }
+
+        return profile;  // CPOINT - possibly need to filter some out
     }
 
     /** {@inheritDoc} */
@@ -170,6 +222,18 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
             "web.addressBookFacade-customerHasAtLeastOneAddress"
     }, key = "#customer.email")
     public void updateCustomer(final Customer customer) {
+        customerService.update(customer);
+    }
+
+    /** {@inheritDoc} */
+    public void updateCustomerAttributes(final Customer customer, final Map<String, String> values) {
+
+        for (final Map.Entry<String, String> entry : values.entrySet()) {
+
+            customerService.addAttribute(customer, entry.getKey(), entry.getValue());
+
+        }
+
         customerService.update(customer);
     }
 

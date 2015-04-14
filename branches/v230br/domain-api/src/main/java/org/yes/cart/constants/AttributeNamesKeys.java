@@ -304,6 +304,21 @@ public interface AttributeNamesKeys {
          */
         String CART_UPDATE_ENABLE_ORDER_MSG = "SHOP_CHECKOUT_ENABLE_ORDER_MSG";
 
+        /**
+         * Attributes to be used for the registration form
+         */
+        String CUSTOMER_REGISTRATION_ATTRIBUTES = "SHOP_CUSTOMER_REGISTRATION_ATTRIBUTES";
+
+        /**
+         * Attributes to be used for the profile editing (by customer) form
+         */
+        String CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE = "SHOP_CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE";
+
+        /**
+         * Attributes on the profile editing (by customer) form which must not editable
+         */
+        String CUSTOMER_PROFILE_ATTRIBUTES_READONLY = "SHOP_CUSTOMER_PROFILE_ATTRIBUTES_READONLY";
+
     }
 
     interface Brand {

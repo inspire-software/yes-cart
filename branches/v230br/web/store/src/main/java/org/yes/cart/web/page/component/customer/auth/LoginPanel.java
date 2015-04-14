@@ -19,6 +19,7 @@ package org.yes.cart.web.page.component.customer.auth;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.Page;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -27,15 +28,20 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.RegistrationPage;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.ContentServiceFacade;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -58,6 +64,8 @@ public class LoginPanel extends BaseComponent {
 
     private final boolean isCheckout;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    private ContentServiceFacade contentServiceFacade;
 
     /**
      * Construct login panel.
@@ -68,6 +76,21 @@ public class LoginPanel extends BaseComponent {
     public LoginPanel(final String id, final boolean isCheckout) {
         super(id);
         this.isCheckout = isCheckout;
+
+        final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget(this.isCheckout);
+        add(new LoginForm(LOGIN_FORM, target.getFirst(), target.getSecond()));
+
+    }
+
+
+    /**
+     * Extension hook to override classes for themes.
+     *
+     * @param isCheckout where this is checkout registration
+     *
+     * @return redirect target
+     */
+    protected Pair<Class<? extends Page>, PageParameters> determineRedirectTarget(boolean isCheckout) {
 
         final Class<? extends Page> successfulPage;
         final PageParameters parameters = new PageParameters();
@@ -83,12 +106,8 @@ public class LoginPanel extends BaseComponent {
             );
         } else {
             successfulPage = Application.get().getHomePage();
-
         }
-
-        add(
-                new LoginForm(LOGIN_FORM, successfulPage, parameters)
-        );
+        return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
     }
 
 
@@ -223,6 +242,24 @@ public class LoginPanel extends BaseComponent {
                     }
             );
 
+            final String lang = getLocale().getLanguage();
+            final long shopId = ShopCodeContext.getShopId();
+
+            String loginformInfo = getContentInclude(shopId, "login_loginform_content_include", lang);
+            add(new Label("regformContent", loginformInfo).setEscapeModelStrings(false));
+
+
+
+        }
+
+
+
+        private String getContentInclude(long shopId, String contentUri, String lang) {
+            String content = contentServiceFacade.getContentBody(contentUri, shopId, lang);
+            if (content == null) {
+                content = "";
+            }
+            return content;
         }
 
 

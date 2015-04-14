@@ -249,14 +249,14 @@ public interface AttributeDTO extends Identifiable {
      *
      * @return comma separated choices.
      */
-    String getChoiceData();
+    Map<String, String> getChoiceData();
 
     /**
      * Set comma separated choices.
      *
      * @param choiceData comma separated choices.
      */
-    void setChoiceData(String choiceData);
+    void setChoiceData(Map<String, String> choiceData);
 
 
 }

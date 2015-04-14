@@ -59,7 +59,7 @@
             <mx:TextInput width="160" id="rank"/>
         </mx:FormItem>
         <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='choiceData')">
-            <mx:TextArea width="160" id="choiceData"/>
+            <yci18n:i18nStringField id="choiceData"/>
         </mx:FormItem>
         <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='description')">
             <mx:TextArea  width="160" id="description"/>
@@ -94,6 +94,7 @@
         private function init():void {
 
             displayNames.setSourceObject(_attrbuteDTO, 'displayNames');
+            choiceData.setSourceObject(_attrbuteDTO, 'choiceData');
 
             if (newAttributeFlag) {
                 this.title = resourceManager.getString('AttributeCreateEditDialog', 'newAttribute');
@@ -111,9 +112,7 @@
             BindingUtils.bindProperty(_attrbuteDTO, "allowfailover", failover, "selected");
             BindingUtils.bindProperty(_attrbuteDTO, "regexp", regexp, "text");
             BindingUtils.bindProperty(_attrbuteDTO, "validationFailedMessage", validationFailedMessage, "text");
-            BindingUtils.bindProperty(_attrbuteDTO, "choiceData", choiceData, "text");
             BindingUtils.bindProperty(_attrbuteDTO, "rank", rank, "text");
-            //BindingUtils.bindProperty(attrbuteDTO, "etypeId", type, "selectedItem.etypeId");
         }
 
         public function editAttr(attrbuteDTO:AttributeDTOImpl):void {
@@ -128,7 +127,6 @@
             this.multiple.selected = attrbuteDTO.allowduplicate;
             this.regexp.text = attrbuteDTO.regexp;
             this.validationFailedMessage.text = attrbuteDTO.validationFailedMessage;
-            this.choiceData.text = attrbuteDTO.choiceData;
             this.rank.text = attrbuteDTO.rank.toString();
 
             for (var i:int = 0; i < type.dataProvider.length; i++) {

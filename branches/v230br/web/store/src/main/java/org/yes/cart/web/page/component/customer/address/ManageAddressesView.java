@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component.customer.address;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
@@ -32,6 +33,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -131,13 +133,10 @@ public class ManageAddressesView extends BaseComponent {
                                         new SubmitLink(CREATE_LINK) {
                                             @Override
                                             public void onSubmit() {
-                                                final PageParameters pageParameters = new PageParameters();
-                                                pageParameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL,
-                                                        returnToCheckout ? CreateEditAddressPage.RETURN_TO_CHECKOUT :
-                                                                CreateEditAddressPage.RETURN_TO_SELFCARE);
-                                                pageParameters.add(WebParametersKeys.ADDRESS_ID, "0");
-                                                pageParameters.add(WebParametersKeys.ADDRESS_TYPE, addressType);
-                                                setResponsePage(CreateEditAddressPage.class, pageParameters);
+
+                                                final Pair<Class<? extends Page>, PageParameters> target =
+                                                        determineAddressPage(returnToCheckout, 0L, addressType);
+                                                setResponsePage(target.getFirst(), target.getSecond());
 
                                             }
                                         }.setDefaultFormProcessing(false)
@@ -182,12 +181,9 @@ public class ManageAddressesView extends BaseComponent {
                             @Override
                             public void onSubmit() {
 
-                                final PageParameters pageParameters = new PageParameters();
-                                pageParameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL,
-                                        returnToCheckout ? CreateEditAddressPage.RETURN_TO_CHECKOUT : CreateEditAddressPage.RETURN_TO_SELFCARE);
-                                pageParameters.add(WebParametersKeys.ADDRESS_ID, String.valueOf(address.getAddressId()));
-                                pageParameters.add(WebParametersKeys.ADDRESS_TYPE, address.getAddressType());
-                                setResponsePage(CreateEditAddressPage.class, pageParameters);
+                                final Pair<Class<? extends Page>, PageParameters> target =
+                                        determineAddressPage(returnToCheckout, address.getAddressId(), address.getAddressType());
+                                setResponsePage(target.getFirst(), target.getSecond());
 
                             }
                         }.setDefaultFormProcessing(false)
@@ -203,5 +199,31 @@ public class ManageAddressesView extends BaseComponent {
                         }.setDefaultFormProcessing(false)
                 );
     }
+
+
+    /**
+     * Extension hook to override classes for themes.
+     *
+     * @param isCheckout is this checkout address panel
+     * @param addressId address PK or 0
+     * @param addressType address type
+     *
+     * @return redirect target
+     */
+    protected Pair<Class<? extends Page>, PageParameters> determineAddressPage(final boolean isCheckout,
+                                                                               final long addressId,
+                                                                               final String addressType) {
+
+        final Class<? extends Page> successfulPage = CreateEditAddressPage.class;
+        final PageParameters parameters = new PageParameters();
+
+        parameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL,
+                isCheckout ? CreateEditAddressPage.RETURN_TO_CHECKOUT : CreateEditAddressPage.RETURN_TO_SELFCARE);
+        parameters.add(WebParametersKeys.ADDRESS_ID, String.valueOf(addressId));
+        parameters.add(WebParametersKeys.ADDRESS_TYPE, addressType);
+
+        return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
+    }
+
 
 }

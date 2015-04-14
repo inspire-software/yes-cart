@@ -50,7 +50,7 @@ public class AttributeDTOImpl {
 
     public var rank:int;
 
-    public var  choiceData:String;
+    public var choiceData:Object;
 
 
 

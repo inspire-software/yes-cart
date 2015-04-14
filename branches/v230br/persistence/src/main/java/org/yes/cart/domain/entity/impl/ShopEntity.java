@@ -16,6 +16,7 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 
@@ -50,6 +51,10 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private List<String> supportedShippingCountriesAsList;
     private List<String> supportedBillingCountriesAsList;
     private List<String> supportedLanguagesAsList;
+
+    private List<String> supportedRegistrationFormAttributesAsList;
+    private List<String> supportedProfileFormAttributesAsList;
+    private List<String> supportedProfileFormReadOnlyAttributesAsList;
 
     public ShopEntity() {
     }
@@ -222,7 +227,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         if (supportedCurrenciesAsList == null) {
             final String currencies = getSupportedCurrencies();
             if (currencies != null) {
-                supportedCurrenciesAsList = Arrays.asList(currencies.split(","));
+                supportedCurrenciesAsList = Arrays.asList(StringUtils.split(currencies, ','));
             } else {
                 supportedCurrenciesAsList = Collections.emptyList();
             }
@@ -243,7 +248,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         if (supportedShippingCountriesAsList == null) {
             final String countries = getSupportedShippingCountries();
             if (countries != null) {
-                supportedShippingCountriesAsList = Arrays.asList(countries.split(","));
+                supportedShippingCountriesAsList = Arrays.asList(StringUtils.split(countries, ','));
             } else {
                 supportedShippingCountriesAsList = Collections.emptyList();
             }
@@ -264,7 +269,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         if (supportedBillingCountriesAsList == null) {
             final String countries = getSupportedBillingCountries();
             if (countries != null) {
-                supportedBillingCountriesAsList = Arrays.asList(countries.split(","));
+                supportedBillingCountriesAsList = Arrays.asList(StringUtils.split(countries, ','));
             } else {
                 supportedBillingCountriesAsList = Collections.emptyList();
             }
@@ -284,12 +289,72 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         if (supportedLanguagesAsList == null) {
             final String languages = getSupportedLanguages();
             if (languages != null) {
-                supportedLanguagesAsList = Arrays.asList(languages.split(","));
+                supportedLanguagesAsList = Arrays.asList(StringUtils.split(languages, ','));
             } else {
                 supportedLanguagesAsList = Collections.emptyList();
             }
         }
         return supportedLanguagesAsList;
+    }
+
+    public String getSupportedRegistrationFormAttributes() {
+        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.CUSTOMER_REGISTRATION_ATTRIBUTES);
+        if (attrValueShop != null) {
+            return attrValueShop.getVal();
+        }
+        return null;
+    }
+
+    public List<String> getSupportedRegistrationFormAttributesAsList() {
+        if (supportedRegistrationFormAttributesAsList == null) {
+            final String attrs = getSupportedRegistrationFormAttributes();
+            if (attrs != null) {
+                supportedRegistrationFormAttributesAsList = Arrays.asList(StringUtils.split(attrs, ','));
+            } else {
+                supportedRegistrationFormAttributesAsList = Collections.emptyList();
+            }
+        }
+        return supportedRegistrationFormAttributesAsList;
+    }
+
+    public String getSupportedProfileFormAttributes() {
+        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE);
+        if (attrValueShop != null) {
+            return attrValueShop.getVal();
+        }
+        return null;
+    }
+
+    public List<String> getSupportedProfileFormAttributesAsList() {
+        if (supportedProfileFormAttributesAsList == null) {
+            final String attrs = getSupportedProfileFormAttributes();
+            if (attrs != null) {
+                supportedProfileFormAttributesAsList = Arrays.asList(StringUtils.split(attrs, ','));
+            } else {
+                supportedProfileFormAttributesAsList = Collections.emptyList();
+            }
+        }
+        return supportedProfileFormAttributesAsList;
+    }
+
+    public String getSupportedProfileFormReadOnlyAttributes() {
+        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_READONLY);
+        if (attrValueShop != null) {
+            return attrValueShop.getVal();
+        }
+        return null;
+    }
+
+    public List<String> getSupportedProfileFormReadOnlyAttributesAsList() {
+        if (supportedProfileFormReadOnlyAttributesAsList == null) {
+            final String attrs = getSupportedProfileFormReadOnlyAttributes();
+            if (attrs != null) {
+                supportedProfileFormReadOnlyAttributesAsList = Arrays.asList(StringUtils.split(attrs, ','));
+            } else {
+                supportedProfileFormReadOnlyAttributesAsList = Collections.emptyList();
+            }
+        }
+        return supportedProfileFormReadOnlyAttributesAsList;
     }
 
     public Collection<AttrValueShop> getAttributesByCode(final String attributeCode) {

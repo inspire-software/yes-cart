@@ -2870,6 +2870,12 @@
        ]]>
     </query>
 
+    <query name="ATTRIBUTES.BY.GROUPCODE.IN.LIST">
+        <![CDATA[
+       select a from AttributeEntity a where a.attributeGroup.code = ?1 and a.code in (?2)
+       ]]>
+    </query>
+
 
     <query name="ATTRIBUTE.CODE.NAMES">
         <![CDATA[

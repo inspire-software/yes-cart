@@ -77,7 +77,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
     }
 
     /**
-     * Prove of availability to getByKey list of attributes, that can have mupliple values within given
+     * Prove of availability to getByKey list of attributes, that can have muptiple values within given
      * <code>attributeGroupCode</code>.
      */
     @Test
@@ -109,11 +109,16 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
         attributes = attributeService.findAvailableAttributes(AttributeGroupNames.CATEGORY, allCodes);
         assertNotNull(attributes);
         assertTrue(attributes.isEmpty());
-        // category already has all attributes
+        // get all except URI
         attributes = attributeService.findAvailableAttributes(AttributeGroupNames.CATEGORY, Arrays.asList("URI"));
         assertNotNull(attributes);
         assertFalse(attributes.isEmpty());
         assertEquals("CATEGORY_ITEMS_PER_PAGE", attributes.get(0).getCode());
+        // get just URI
+        attributes = attributeService.findAttributesByCodes(AttributeGroupNames.CATEGORY, Arrays.asList("URI"));
+        assertNotNull(attributes);
+        assertFalse(attributes.isEmpty());
+        assertEquals("URI", attributes.get(0).getCode());
     }
 
     @Test

@@ -164,7 +164,12 @@ public class CustomerController {
         final CustomerRO ro = mappingMixin.map(customer, CustomerRO.class, Customer.class);
 
         // Only map allowed attributes
-        ro.setAttributes(mappingMixin.map((List) customerServiceFacade.getCustomerRegistrationAttributes(shop, customer), AttrValueCustomerRO.class, AttrValueCustomer.class));
+        final List<AttrValueCustomerRO> profileAttrs = new ArrayList<AttrValueCustomerRO>();
+        for (final Object attr : (List) customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
+            final Pair<AttrValueCustomer, Boolean> av = (Pair<AttrValueCustomer, Boolean>) attr;
+            profileAttrs.add(mappingMixin.map(av.getFirst(), AttrValueCustomerRO.class, AttrValueCustomer.class));
+        }
+        ro.setAttributes(profileAttrs);
 
         return ro;
 

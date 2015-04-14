@@ -59,6 +59,20 @@
             </div>
         </div>
 
+        <div class="form-group" wicket:id="fields">
+
+            <label wicket:id="name" class="control-label col-xs-12 col-sm-3">
+
+            </label>
+            <div class="col-xs-12 col-sm-8" wicket:id="editor">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <wicket:container wicket:id="regformContent">[reg form content include]</wicket:container>
+        </div>
+
         <div class="form-group">
             <div class="col-xs-offset-3 col-xs-8 buttons">
                 <input type="submit" class="btn btn-primary" wicket:id="registerBtn" wicket:message="value:register"/>
@@ -66,6 +80,23 @@
         </div>
 
     </form>
+
+
+    <wicket:fragment wicket:id="booleanEditor">
+        <p><input type="checkbox" wicket:id="edit" class="form-control"/></p>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="stringEditor">
+        <p><input type="text"  wicket:id="edit" class="form-control"/></p>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="singleChoiceEditor">
+        <p><select wicket:id="edit"  class="form-control"></select></p>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="multipleChoicesEditor">
+        <p><span wicket:id="edit" class="form-control"></span></p>
+    </wicket:fragment>
 
 </wicket:panel>
 </body>

@@ -36,6 +36,10 @@
         </div>
 
         <div class="form-group">
+            <wicket:container wicket:id="dynaformContent">[dynaform content include]</wicket:container>
+        </div>
+
+        <div class="form-group">
             <div class="col-xs-12 col-sm-offset-2 col-sm-5">
                 <a wicket:id="saveLink" class="btn btn-primary" rel="nofollow">
                     <span>
@@ -49,19 +53,19 @@
 
 
     <wicket:fragment wicket:id="booleanEditor">
-        <p><input type="checkbox" wicket:id="edit"/></p>
+        <p><input type="checkbox" wicket:id="edit" class="form-control"/></p>
     </wicket:fragment>
 
     <wicket:fragment wicket:id="stringEditor">
-        <p><input type="text"  wicket:id="edit"/></p>
+        <p><input type="text"  wicket:id="edit" class="form-control"/></p>
     </wicket:fragment>
 
     <wicket:fragment wicket:id="singleChoiceEditor">
-        <p><select wicket:id="edit" ></select></p>
+        <p><select wicket:id="edit"  class="form-control"></select></p>
     </wicket:fragment>
 
     <wicket:fragment wicket:id="multipleChoicesEditor">
-        <p><span wicket:id="edit"></span></p>
+        <p><span wicket:id="edit" class="form-control"></span></p>
     </wicket:fragment>
 
 

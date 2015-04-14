@@ -24,6 +24,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
@@ -82,10 +83,9 @@ public class CreateEditAddressPage extends AbstractWebPage {
         final Address address = addressBookFacade.getAddress(customer, addrId, addrType);
 
         final boolean isCheckout = !RETURN_TO_SELFCARE.equals(params.get(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL).toString());
-        final Class<? extends Page>  returnToPageClass = isCheckout ?
-                CheckoutPage.class : CustomerSelfCarePage.class;
 
-        final PageParameters successPageParameters = new PageParameters();
+        final Pair<Class<? extends Page>, PageParameters> successTarget = determineSuccessTarget(isCheckout);
+        final Pair<Class<? extends Page>, PageParameters> cancelTarget = determineCancelTarget(isCheckout);
 
         add(
                 new FeedbackPanel(FEEDBACK)
@@ -104,10 +104,10 @@ public class CreateEditAddressPage extends AbstractWebPage {
                         ADDRESS_FORM,
                         new Model<Address>(address),
                         addrType,
-                        returnToPageClass,
-                        successPageParameters,
-                        returnToPageClass,
-                        successPageParameters
+                        successTarget.getFirst(),
+                        successTarget.getSecond(),
+                        cancelTarget.getFirst(),
+                        cancelTarget.getSecond()
                 )
         );
 
@@ -119,6 +119,42 @@ public class CreateEditAddressPage extends AbstractWebPage {
                 new HeaderMetaInclude("headerInclude")
         );
     }
+
+
+    /**
+     * Extension hook to override classes for themes.
+     *
+     * @param isCheckout where this is checkout registration
+     *
+     * @return redirect target
+     */
+    protected Pair<Class<? extends Page>, PageParameters> determineSuccessTarget(boolean isCheckout) {
+
+        final Class<? extends Page> successfulPage;
+        final PageParameters parameters = new PageParameters();
+
+        if (isCheckout) {
+            successfulPage = CheckoutPage.class;
+        } else {
+            successfulPage = CustomerSelfCarePage.class;
+        }
+        return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
+    }
+
+
+    /**
+     * Extension hook to override classes for themes.
+     *
+     * @param isCheckout where this is checkout registration
+     *
+     * @return redirect target
+     */
+    protected Pair<Class<? extends Page>, PageParameters> determineCancelTarget(boolean isCheckout) {
+
+        return determineSuccessTarget(isCheckout);
+
+    }
+
 
     @Override
     protected void onBeforeRender() {

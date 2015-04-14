@@ -16,39 +16,26 @@
 
 package org.yes.cart.web.page.component.customer.dynaform;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Application;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.ValidationError;
-import org.apache.wicket.validation.validator.PatternValidator;
 import org.slf4j.Logger;
-import org.springframework.core.convert.TypeDescriptor;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.utils.impl.ExtendedConversionService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
-import org.yes.cart.web.page.component.util.PairChoiceRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
-import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,14 +58,16 @@ public class DynaFormPanel extends BaseComponent {
     private final static String FIELDS = "fields";
     private final static String NAME = "name";
     private final static String EDITOR = "editor";
-    private final static String EDIT = "edit";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
-
-    private final static String VALUE_FILED = "val";
 
 
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
     private CustomerServiceFacade customerService;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    private ContentServiceFacade contentServiceFacade;
+
+    private final EditorFactory editorFactory = new EditorFactory();
 
 
     /**
@@ -98,42 +87,43 @@ public class DynaFormPanel extends BaseComponent {
      */
     public DynaFormPanel(final String id, final IModel<Customer> customerModel) {
 
-        super(id);
+        super(id, customerModel);
+
+    }
+
+    @Override
+    protected void onBeforeRender() {
 
         final Shop shop = ApplicationDirector.getCurrentShop();
-        final Customer customer = customerModel.getObject();
+        final Customer customer = (Customer) getDefaultModelObject();
 
-        final List<? extends AttrValue> attrValueCollection = customerService.getCustomerRegistrationAttributes(shop, customer);
+        final List<Pair<? extends AttrValue, Boolean>> attrValueCollection = customerService.getCustomerProfileAttributes(shop, customer);
 
         final Form form = new Form(FORM) {
 
             @Override
             protected void onSubmit() {
-                if (Application.get().getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
-                    final Logger log = ShopCodeContext.getLog(this);
-                    log.debug(
-                            MessageFormat.format(
-                                    "Attributes will be updated for customer [{0}]",
-                                    customer.getEmail()
-                            )
-                    );
+                final Logger log = ShopCodeContext.getLog(this);
+                log.debug("Attributes will be updated for customer [{}]", customer.getEmail());
 
-                    for (AttrValue attrValue : attrValueCollection) {
-                        log.debug(
-                                MessageFormat.format(
-                                        "Attribute with code [{0}] has value [{1}]",
-                                        attrValue.getAttribute().getCode(),
-                                        attrValue.getVal()
-                                )
-                        );
+                final Map<String, String> values = new HashMap<String, String>();
+                for (Pair<? extends AttrValue, Boolean> av : attrValueCollection) {
+                    log.debug("Attribute with code [{}] has value [{}], readonly [{}]",
+                            new Object[] {
+                                    av.getFirst().getAttribute().getCode(),
+                                    av.getFirst().getVal(),
+                                    av.getSecond()
+                            });
+                    if (av.getSecond() != null && !av.getSecond()) {
+                        values.put(av.getFirst().getAttribute().getCode(), av.getFirst().getVal());
                     }
                 }
 
-                customerService.updateCustomer(customer);
+                customerService.updateCustomerAttributes(customer, values);
             }
         };
 
-        add(form);
+        addOrReplace(form);
 
         RepeatingView fields = new RepeatingView(FIELDS);
 
@@ -141,13 +131,13 @@ public class DynaFormPanel extends BaseComponent {
 
         final String lang = getLocale().getLanguage();
 
-        for (AttrValue attrValue : attrValueCollection) {
+        for (Pair<? extends AttrValue, Boolean> attrValue : attrValueCollection) {
 
             WebMarkupContainer row = new WebMarkupContainer(fields.newChildId());
 
-            row.add(getLabel(attrValue, lang));
+            row.add(getLabel(attrValue.getFirst(), lang));
 
-            row.add(getEditor(attrValue));
+            row.add(getEditor(attrValue.getFirst(), attrValue.getSecond()));
 
             fields.add(row);
 
@@ -156,7 +146,23 @@ public class DynaFormPanel extends BaseComponent {
         form.add( new SubmitLink(SAVE_LINK) );
 
 
+        final long shopId = ShopCodeContext.getShopId();
+
+        String dynaformInfo = getContentInclude(shopId, "selfcare_dynaform_content_include", lang);
+        form.add(new Label("dynaformContent", dynaformInfo).setEscapeModelStrings(false));
+
+
+        super.onBeforeRender();
     }
+
+    private String getContentInclude(long shopId, String contentUri, String lang) {
+        String content = contentServiceFacade.getContentBody(contentUri, shopId, lang);
+        if (content == null) {
+            content = "";
+        }
+        return content;
+    }
+
 
     private Label getLabel(final AttrValue attrValue, final String lang) {
 
@@ -173,160 +179,14 @@ public class DynaFormPanel extends BaseComponent {
      * Get the particular editor for given attribute value. Type of editor depends from type of attribute value.
      *
      * @param attrValue give {@link org.yes.cart.domain.entity.AttrValue}
-     * @return editor;
+     * @param readOnly  if true this component is read only
+     *
+     * @return editor
      */
-    protected Component getEditor(final AttrValue attrValue) {
-        final String code = attrValue.getAttribute().getCode();
-        final IModel<String> labelModel = new Model<String>(code);
-        final String bType = attrValue.getAttribute().getEtype().getBusinesstype();
-        final ExtendedConversionService conversionService = new ExtendedConversionService();
+    protected Component getEditor(final AttrValue attrValue, final Boolean readOnly) {
 
-
-        if ("CommaSeparatedList".equals(bType)) {
-            final IModel<List<Pair<String, String>>> enumChoices = new AbstractReadOnlyModel<List<Pair<String, String>>>() {
-                public List<Pair<String, String>> getObject() {
-
-                    return (List<Pair<String, String>>)  conversionService.convert(
-                        attrValue.getAttribute().getChoiceData(),
-                        TypeDescriptor.valueOf(String.class),
-                        TypeDescriptor.valueOf(List.class)
-                    );
-
-                }
-            };
-            if (attrValue.getAttribute().isAllowduplicate()) {
-                final IModel model = new MultiplePairModel(new PropertyModel(attrValue, VALUE_FILED), enumChoices.getObject());
-                return new MultipleChoicesEditor(EDITOR, model, labelModel, enumChoices, attrValue);
-            } else {
-                final IModel model = new PairModel(new PropertyModel(attrValue, VALUE_FILED), enumChoices.getObject());
-                return new SingleChoiceEditor(EDITOR, model, labelModel, enumChoices, attrValue);
-            }
-        } else {
-            final IModel model = new PropertyModel(attrValue, VALUE_FILED);
-            return new StringEditor(EDITOR, model, labelModel, attrValue);
-        }
+        return editorFactory.getEditor(EDITOR, this, getLocale().getLanguage(), attrValue, readOnly);
     }
 
-
-    /**
-     * Simple text editor.
-     */
-    private class StringEditor extends Fragment {
-
-        /**
-         * Construct simple text editor.
-         *
-         * @param id         editor id.
-         * @param model      model.
-         * @param labelModel label model
-         * @param attrValue  {@link AttrValue}
-         */
-        public StringEditor(final String id,
-                            final IModel<String> model,
-                            final IModel labelModel,
-                            final AttrValue attrValue) {
-
-            super(id, "stringEditor", DynaFormPanel.this);
-
-            final TextField textField = new TextField(EDIT, model);
-            textField.setLabel(labelModel);
-            textField.add(new AttributeModifier("class", "form-control"));
-            textField.setRequired(attrValue.getAttribute().isMandatory());
-            if (StringUtils.isNotBlank(attrValue.getAttribute().getRegexp())) {
-                final PatternValidator patternValidator = new PatternValidator(attrValue.getAttribute().getRegexp()) {
-
-                    /** {@inheritDoc}*/
-                    public boolean validateOnNullValue() {
-                        return attrValue.getAttribute().isMandatory();
-                    }
-
-                    /** {@inheritDoc}*/
-                    public void error(final IValidatable<String> validatable, final String resourceKey,
-                        final Map<String, Object> vars) {
-
-                        if (validatable == null) {
-                            throw new IllegalArgumentException("Argument [[validatable]] cannot be null");
-                        }
-                        if (vars == null) {
-                            throw new IllegalArgumentException("Argument [[vars]] cannot be null");
-                        }
-
-                        ValidationError error = new ValidationError();
-                        error.setMessage(attrValue.getAttribute().getValidationFailedMessage());
-                        error.setVariables(vars);
-                        validatable.error(error);
-                    }
-                };
-
-                textField.add(patternValidator);
-            }
-            add(textField);
-        }
-
-    }
-
-
-    /**
-     * Drop down box.
-     */
-    private class SingleChoiceEditor extends Fragment {
-
-        /**
-         * Constrcuct drow down box to select single value.
-         *
-         * @param id         editor id.
-         * @param model      model.
-         * @param labelModel label model
-         * @param attrValue  {@link AttrValue}
-         * @param choices    list of strings {@link Pair}, that represent options to select one
-         */
-        public SingleChoiceEditor(final String id,
-                                  final IModel model,
-                                  final IModel<String> labelModel,
-                                  final IModel choices,
-                                  final AttrValue attrValue) {
-
-            super(id, "singleChoiceEditor", DynaFormPanel.this);
-
-            final DropDownChoice<Pair<String, String>> dropDownChoice =
-                    new DropDownChoice<Pair<String, String>>(EDIT, model, choices);
-            dropDownChoice.setLabel(labelModel);
-            dropDownChoice.setRequired(attrValue.getAttribute().isMandatory());
-            dropDownChoice.setChoiceRenderer(new PairChoiceRenderer());
-            add(dropDownChoice);
-
-        }
-
-    }
-
-    /**
-     * Multiple choises as set of checkboxes.
-     */
-    private class MultipleChoicesEditor extends Fragment {
-
-        /**
-         * Construct multiple choises editor
-         *
-         * @param id         editor id.
-         * @param model      model.
-         * @param labelModel label model
-         * @param attrValue  {@link AttrValue}
-         * @param choices    list of strings {@link Pair}, that represent options to select one
-         */
-        public MultipleChoicesEditor(final String id,
-                                     final IModel model,
-                                     final IModel<String> labelModel,
-                                     final IModel choices,
-                                     final AttrValue attrValue) {
-            super(id, "multipleChoicesEditor", DynaFormPanel.this);
-            final CheckBoxMultipleChoice<Pair<String, String>> checkBoxMultipleChoice =
-                    new CheckBoxMultipleChoice<Pair<String, String>>(EDIT, model, choices);
-            checkBoxMultipleChoice.setLabel(labelModel);
-            checkBoxMultipleChoice.setRequired(attrValue.getAttribute().isMandatory());
-            checkBoxMultipleChoice.setChoiceRenderer(new PairChoiceRenderer());
-            add(checkBoxMultipleChoice);
-        }
-
-    }
 
 }

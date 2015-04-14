@@ -78,8 +78,8 @@ public class AttributeRO implements Serializable {
     @DtoField(value = "rank")
     private int rank;
 
-    @DtoField(value = "choiceData")
-    private String choiceData;
+    @DtoField(value = "choiceData", converter = "i18nStringConverter")
+    private Map<String, String> choiceData;
 
     @DtoField(value = "displayName", converter = "i18nStringConverter")
     private Map<String, String> displayNames;
@@ -92,12 +92,13 @@ public class AttributeRO implements Serializable {
         this.rank = rank;
     }
 
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
     @XmlElement(name = "choice-data")
-    public String getChoiceData() {
+    public Map<String, String> getChoiceData() {
         return choiceData;
     }
 
-    public void setChoiceData(final String choiceData) {
+    public void setChoiceData(final Map<String, String> choiceData) {
         this.choiceData = choiceData;
     }
 

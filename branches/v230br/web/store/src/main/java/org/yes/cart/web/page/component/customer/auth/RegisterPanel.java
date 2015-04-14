@@ -16,20 +16,34 @@
 
 package org.yes.cart.web.page.component.customer.auth;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Component;
 import org.apache.wicket.Page;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.CustomerSelfCarePage;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.page.component.customer.dynaform.EditorFactory;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.ContentServiceFacade;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -47,7 +61,18 @@ public class RegisterPanel extends BaseComponent {
     private static final String PHONE_INPUT = "phone";
     private static final String REGISTER_BUTTON = "registerBtn";
     private static final String REGISTER_FORM = "registerForm";
+    private final static String FIELDS = "fields";
+    private final static String NAME = "name";
+    private final static String EDITOR = "editor";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
+
+
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    private ContentServiceFacade contentServiceFacade;
+
+    private final EditorFactory editorFactory = new EditorFactory();
+
+    private final boolean isCheckout;
 
     /**
      * Create register panel.
@@ -58,6 +83,19 @@ public class RegisterPanel extends BaseComponent {
     public RegisterPanel(final String id, final boolean isCheckout) {
 
         super(id);
+
+        this.isCheckout = isCheckout;
+
+    }
+
+    /**
+     * Extension hook to override classes for themes.
+     *
+     * @param isCheckout where this is checkout registration
+     *
+     * @return redirect target
+     */
+    protected Pair<Class<? extends Page>, PageParameters> determineRedirectTarget(boolean isCheckout) {
 
         final Class<? extends Page> successfulPage;
         final PageParameters parameters = new PageParameters();
@@ -74,11 +112,17 @@ public class RegisterPanel extends BaseComponent {
         } else {
             successfulPage = CustomerSelfCarePage.class;
         }
+        return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
+    }
 
-        add(
-                new RegisterForm(REGISTER_FORM, successfulPage, parameters)
-        );
 
+    @Override
+    protected void onBeforeRender() {
+
+        final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget(this.isCheckout);
+        addOrReplace(new RegisterForm(REGISTER_FORM, target.getFirst(), target.getSecond()));
+
+        super.onBeforeRender();
     }
 
     public class RegisterForm extends BaseAuthForm {
@@ -204,6 +248,33 @@ public class RegisterPanel extends BaseComponent {
                             .add(StringValidator.lengthBetween(4, 13))
             );
 
+
+            RepeatingView fields = new RepeatingView(FIELDS);
+
+            add(fields);
+
+            final String lang = getLocale().getLanguage();
+            final List<AttrValue> reg = (List<AttrValue>) getCustomerServiceFacade()
+                    .getShopRegistrationAttributes(ApplicationDirector.getCurrentShop());
+
+            for (final AttrValue attrValue : reg) {
+
+                WebMarkupContainer row = new WebMarkupContainer(fields.newChildId());
+
+                row.add(getLabel(attrValue, lang));
+
+                row.add(getEditor(attrValue, false));
+
+                fields.add(row);
+
+            }
+
+            final long shopId = ShopCodeContext.getShopId();
+
+            String regformInfo = getContentInclude(shopId, "registration_regform_content_include", lang);
+            add(new Label("regformContent", regformInfo).setEscapeModelStrings(false));
+
+
             add(
                     new Button(REGISTER_BUTTON) {
 
@@ -229,14 +300,20 @@ public class RegisterPanel extends BaseComponent {
 
                             } else {
 
+                                final Map<String, Object> data = new HashMap<String, Object>();
+                                data.put("firstname", getFirstname());
+                                data.put("lastname", getLastname());
+                                data.put("phone", getPhone());
+
+                                for (final AttrValue av : reg) {
+                                    if (StringUtils.isNotBlank(av.getVal())) {
+                                        data.put(av.getAttribute().getCode(), av.getVal());
+                                    }
+                                }
+
+
                                 final String password = getCustomerServiceFacade().registerCustomer(
-                                        ApplicationDirector.getCurrentShop(),
-                                        email, new HashMap<String, Object>() {{
-                                            put("firstname", getFirstname());
-                                            put("lastname", getLastname());
-                                            put("phone", getPhone());
-                                        }}
-                                );
+                                        ApplicationDirector.getCurrentShop(), email, data);
 
                                 if (signIn(getEmail(), password)) {
 
@@ -259,5 +336,40 @@ public class RegisterPanel extends BaseComponent {
         }
 
     }
+
+
+    private String getContentInclude(long shopId, String contentUri, String lang) {
+        String content = contentServiceFacade.getContentBody(contentUri, shopId, lang);
+        if (content == null) {
+            content = "";
+        }
+        return content;
+    }
+
+
+    private Label getLabel(final AttrValue attrValue, final String lang) {
+
+        final Label rez = new Label(NAME,
+                getI18NSupport().getFailoverModel(
+                        attrValue.getAttribute().getDisplayName(),
+                        attrValue.getAttribute().getName()).getValue(lang));
+
+        return rez;
+    }
+
+
+    /**
+     * Get the particular editor for given attribute value. Type of editor depends from type of attribute value.
+     *
+     * @param attrValue give {@link org.yes.cart.domain.entity.AttrValue}
+     * @param readOnly  if true this component is read only
+     *
+     * @return editor
+     */
+    protected Component getEditor(final AttrValue attrValue, final Boolean readOnly) {
+
+        return editorFactory.getEditor(EDITOR, this, getLocale().getLanguage(), attrValue, readOnly);
+    }
+
 
 }

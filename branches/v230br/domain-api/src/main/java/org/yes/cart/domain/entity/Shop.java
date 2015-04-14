@@ -271,6 +271,50 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     List<String> getSupportedLanguagesAsList();
 
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @return separated by comma all supported attributes.
+     */
+    String getSupportedRegistrationFormAttributes();
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @return list of attribute codes.
+     */
+    List<String> getSupportedRegistrationFormAttributesAsList();
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @return separated by comma all supported attributes.
+     */
+    String getSupportedProfileFormAttributes();
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @return list of attribute codes.
+     */
+    List<String> getSupportedProfileFormAttributesAsList();
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @return separated by comma all supported attributes.
+     */
+    String getSupportedProfileFormReadOnlyAttributes();
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @return list of attribute codes.
+     */
+    List<String> getSupportedProfileFormReadOnlyAttributesAsList();
+
+
 }
 
 

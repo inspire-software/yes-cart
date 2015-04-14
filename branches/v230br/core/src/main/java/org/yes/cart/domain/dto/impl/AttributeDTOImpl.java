@@ -77,8 +77,8 @@ public class AttributeDTOImpl implements AttributeDTO {
     @DtoField(value = "rank")
     private int rank;
 
-    @DtoField(value = "choiceData")
-    private String choiceData;
+    @DtoField(value = "choiceData", converter = "i18nStringConverter")
+    private Map<String, String> choiceData;
 
     @DtoField(value = "displayName", converter = "i18nStringConverter")
     private Map<String, String> displayNames;
@@ -94,12 +94,12 @@ public class AttributeDTOImpl implements AttributeDTO {
     }
 
     /** {@inheritDoc} */
-    public String getChoiceData() {
+    public Map<String, String> getChoiceData() {
         return choiceData;
     }
 
     /** {@inheritDoc} */
-    public void setChoiceData(final String choiceData) {
+    public void setChoiceData(final Map<String, String> choiceData) {
         this.choiceData = choiceData;
     }
 

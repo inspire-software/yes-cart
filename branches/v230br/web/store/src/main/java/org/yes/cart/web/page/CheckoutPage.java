@@ -375,7 +375,7 @@ public class CheckoutPage extends AbstractWebPage {
                 super.onSelectionChanged();
                 persistCartIfNecessary();
                 setResponsePage(
-                        CheckoutPage.class,
+                        this.getPage().getPageClass(),
                         new PageParameters().set(
                                 CheckoutPage.THREE_STEPS_PROCESS,
                                 "true"

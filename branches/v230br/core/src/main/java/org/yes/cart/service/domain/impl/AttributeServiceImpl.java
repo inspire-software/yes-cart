@@ -88,14 +88,30 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
      */
     public List<Attribute> findAvailableAttributes(
             final String attributeGroupCode,
-            final List<String> assignedAttributeCodes) {
-        if (assignedAttributeCodes == null || assignedAttributeCodes.isEmpty()) {
+            final List<String> exclude) {
+        if (exclude == null || exclude.isEmpty()) {
             return findByAttributeGroupCode(attributeGroupCode);
         } else {
             return attributeDao.findByNamedQuery(
                     "ATTRIBUTES.BY.GROUPCODE.NOT.IN.LIST",
                     attributeGroupCode,
-                    assignedAttributeCodes);
+                    exclude);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Attribute> findAttributesByCodes(
+            final String attributeGroupCode,
+            final List<String> codes) {
+        if (codes == null || codes.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return attributeDao.findByNamedQuery(
+                    "ATTRIBUTES.BY.GROUPCODE.IN.LIST",
+                    attributeGroupCode,
+                    codes);
         }
     }
 
