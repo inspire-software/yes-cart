@@ -65,11 +65,13 @@ public class EditorFactory implements Serializable {
         final String code = attrValue.getAttribute().getCode();
         final IModel<String> labelModel = new Model<String>(code);
         final String bType = attrValue.getAttribute().getEtype().getBusinesstype();
-        final String choices = new FailoverStringI18NModel(
-                attrValue.getAttribute().getChoiceData(),
-                attrValue.getAttribute().getChoiceData()).getValue(language);
 
         if ("CommaSeparatedList".equals(bType)) {
+
+            final String choices = new FailoverStringI18NModel(
+                    attrValue.getAttribute().getChoiceData(),
+                    attrValue.getAttribute().getChoiceData()).getValue(language);
+
             final IModel<List<Pair<String, String>>> enumChoices = new AbstractReadOnlyModel<List<Pair<String, String>>>() {
                 public List<Pair<String, String>> getObject() {
 
