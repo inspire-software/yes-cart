@@ -32,6 +32,7 @@ import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.ro.AddressRO;
+import org.yes.cart.domain.ro.CustomerRO;
 import org.yes.cart.domain.ro.RegisterRO;
 
 import javax.annotation.Resource;
@@ -127,6 +128,7 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
         return toJsonBytes(register);
 
     }
+
 
     /**
      * JSON bytes for address request object

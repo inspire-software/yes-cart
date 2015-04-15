@@ -16,18 +16,12 @@
 
 package org.yes.cart.web.page.component.customer.dynaform.editor;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.ValidationError;
-import org.apache.wicket.validation.validator.PatternValidator;
 import org.yes.cart.domain.entity.AttrValue;
-
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -65,34 +59,6 @@ public class BooleanEditor extends Fragment {
         checkboxField.setLabel(labelModel);
         checkboxField.setRequired(attrValue.getAttribute().isMandatory());
         checkboxField.setEnabled(!readOnly);
-        if (StringUtils.isNotBlank(attrValue.getAttribute().getRegexp())) {
-            final PatternValidator patternValidator = new PatternValidator(attrValue.getAttribute().getRegexp()) {
-
-                /** {@inheritDoc}*/
-                public boolean validateOnNullValue() {
-                    return attrValue.getAttribute().isMandatory();
-                }
-
-                /** {@inheritDoc}*/
-                public void error(final IValidatable<String> validatable, final String resourceKey,
-                                  final Map<String, Object> vars) {
-
-                    if (validatable == null) {
-                        throw new IllegalArgumentException("Argument [[validatable]] cannot be null");
-                    }
-                    if (vars == null) {
-                        throw new IllegalArgumentException("Argument [[vars]] cannot be null");
-                    }
-
-                    ValidationError error = new ValidationError();
-                    error.setMessage(attrValue.getAttribute().getValidationFailedMessage());
-                    error.setVariables(vars);
-                    validatable.error(error);
-                }
-            };
-
-            checkboxField.add(patternValidator);
-        }
         add(checkboxField);
     }
 

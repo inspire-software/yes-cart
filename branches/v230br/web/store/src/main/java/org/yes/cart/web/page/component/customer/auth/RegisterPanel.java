@@ -24,12 +24,15 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.AttrValueCustomer;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -64,6 +67,7 @@ public class RegisterPanel extends BaseComponent {
     private final static String FIELDS = "fields";
     private final static String NAME = "name";
     private final static String EDITOR = "editor";
+    private final static String CONTENT = "regformContent";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
@@ -86,6 +90,23 @@ public class RegisterPanel extends BaseComponent {
 
         this.isCheckout = isCheckout;
 
+        final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget(this.isCheckout);
+        add(new RegisterForm(REGISTER_FORM, target.getFirst(), target.getSecond()));
+
+    }
+
+    @Override
+    protected void onBeforeRender() {
+
+
+        final long shopId = ShopCodeContext.getShopId();
+        final String lang = getLocale().getLanguage();
+
+        // Refresh content
+        String regformInfo = getContentInclude(shopId, "registration_regform_content_include", lang);
+        get(REGISTER_FORM).get(CONTENT).replaceWith(new Label(CONTENT, regformInfo).setEscapeModelStrings(false));
+
+        super.onBeforeRender();
     }
 
     /**
@@ -115,15 +136,6 @@ public class RegisterPanel extends BaseComponent {
         return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
     }
 
-
-    @Override
-    protected void onBeforeRender() {
-
-        final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget(this.isCheckout);
-        addOrReplace(new RegisterForm(REGISTER_FORM, target.getFirst(), target.getSecond()));
-
-        super.onBeforeRender();
-    }
 
     public class RegisterForm extends BaseAuthForm {
 
@@ -254,7 +266,7 @@ public class RegisterPanel extends BaseComponent {
             add(fields);
 
             final String lang = getLocale().getLanguage();
-            final List<AttrValue> reg = (List<AttrValue>) getCustomerServiceFacade()
+            final List<AttrValueCustomer> reg = getCustomerServiceFacade()
                     .getShopRegistrationAttributes(ApplicationDirector.getCurrentShop());
 
             for (final AttrValue attrValue : reg) {
@@ -269,10 +281,7 @@ public class RegisterPanel extends BaseComponent {
 
             }
 
-            final long shopId = ShopCodeContext.getShopId();
-
-            String regformInfo = getContentInclude(shopId, "registration_regform_content_include", lang);
-            add(new Label("regformContent", regformInfo).setEscapeModelStrings(false));
+            add(new Label(CONTENT, ""));
 
 
             add(
@@ -349,10 +358,20 @@ public class RegisterPanel extends BaseComponent {
 
     private Label getLabel(final AttrValue attrValue, final String lang) {
 
-        final Label rez = new Label(NAME,
-                getI18NSupport().getFailoverModel(
-                        attrValue.getAttribute().getDisplayName(),
-                        attrValue.getAttribute().getName()).getValue(lang));
+        final I18NModel model = getI18NSupport().getFailoverModel(
+                attrValue.getAttribute().getDisplayName(),
+                attrValue.getAttribute().getName());
+
+        final Label rez = new Label(NAME, new AbstractReadOnlyModel<String>() {
+
+            private final I18NModel m = model;
+
+            @Override
+            public String getObject() {
+                final String lang = getLocale().getLanguage();
+                return m.getValue(lang);
+            }
+        });
 
         return rez;
     }

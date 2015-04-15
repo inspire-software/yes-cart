@@ -21,12 +21,15 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -58,6 +61,7 @@ public class DynaFormPanel extends BaseComponent {
     private final static String FIELDS = "fields";
     private final static String NAME = "name";
     private final static String EDITOR = "editor";
+    private final static String CONTENT = "dynaformContent";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
@@ -89,15 +93,10 @@ public class DynaFormPanel extends BaseComponent {
 
         super(id, customerModel);
 
-    }
-
-    @Override
-    protected void onBeforeRender() {
-
         final Shop shop = ApplicationDirector.getCurrentShop();
         final Customer customer = (Customer) getDefaultModelObject();
 
-        final List<Pair<? extends AttrValue, Boolean>> attrValueCollection = customerService.getCustomerProfileAttributes(shop, customer);
+        final List<Pair<AttrValueCustomer, Boolean>> attrValueCollection = customerService.getCustomerProfileAttributes(shop, customer);
 
         final Form form = new Form(FORM) {
 
@@ -119,7 +118,7 @@ public class DynaFormPanel extends BaseComponent {
                     }
                 }
 
-                customerService.updateCustomerAttributes(customer, values);
+                customerService.updateCustomerAttributes(ApplicationDirector.getCurrentShop(), customer, values);
             }
         };
 
@@ -145,11 +144,18 @@ public class DynaFormPanel extends BaseComponent {
 
         form.add( new SubmitLink(SAVE_LINK) );
 
+        form.add(new Label(CONTENT, ""));
+
+    }
+
+    @Override
+    protected void onBeforeRender() {
 
         final long shopId = ShopCodeContext.getShopId();
+        final String lang = getLocale().getLanguage();
 
         String dynaformInfo = getContentInclude(shopId, "selfcare_dynaform_content_include", lang);
-        form.add(new Label("dynaformContent", dynaformInfo).setEscapeModelStrings(false));
+        get(FORM).get(CONTENT).replaceWith(new Label(CONTENT, dynaformInfo).setEscapeModelStrings(false));
 
 
         super.onBeforeRender();
@@ -166,10 +172,20 @@ public class DynaFormPanel extends BaseComponent {
 
     private Label getLabel(final AttrValue attrValue, final String lang) {
 
-        final Label rez = new Label(NAME,
-                getI18NSupport().getFailoverModel(
-                        attrValue.getAttribute().getDisplayName(),
-                        attrValue.getAttribute().getName()).getValue(lang));
+        final I18NModel model = getI18NSupport().getFailoverModel(
+                attrValue.getAttribute().getDisplayName(),
+                attrValue.getAttribute().getName());
+
+        final Label rez = new Label(NAME, new AbstractReadOnlyModel<String>() {
+
+            private final I18NModel m = model;
+
+            @Override
+            public String getObject() {
+                final String lang = getLocale().getLanguage();
+                return m.getValue(lang);
+            }
+        });
 
         return rez;
     }

@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.payment.callback;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -79,7 +80,7 @@ public class ResultPage extends AbstractWebPage {
         add(
                 new Label(
                         "paymentResult",
-                        getLocalizer().getString(isPaymentSuccessful ? "paymentWasOk" : "paymentWasFailed", this)
+                        new StringResourceModel(isPaymentSuccessful ? "paymentWasOk" : "paymentWasFailed", this, null)
                 )
         );
 

@@ -71,8 +71,8 @@ public class AttributeDTOImpl implements AttributeDTO {
     @DtoField(value = "regexp")
     private String regexp;
 
-    @DtoField(value = "validationFailedMessage")
-    private String validationFailedMessage;
+    @DtoField(value = "validationFailedMessage", converter = "i18nStringConverter")
+    private Map<String, String> validationFailedMessage;
 
     @DtoField(value = "rank")
     private int rank;
@@ -104,12 +104,12 @@ public class AttributeDTOImpl implements AttributeDTO {
     }
 
     /** {@inheritDoc} */
-    public String getValidationFailedMessage() {
+    public Map<String, String> getValidationFailedMessage() {
         return validationFailedMessage;
     }
 
     /** {@inheritDoc} */
-    public void setValidationFailedMessage(final String validationFailedMessage) {
+    public void setValidationFailedMessage(final Map<String, String> validationFailedMessage) {
         this.validationFailedMessage = validationFailedMessage;
     }
 

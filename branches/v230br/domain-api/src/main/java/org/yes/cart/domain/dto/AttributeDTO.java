@@ -219,15 +219,15 @@ public interface AttributeDTO extends Identifiable {
      *
      * @return validation message.
      */
-    String getValidationFailedMessage();
+    Map<String, String> getValidationFailedMessage();
 
 
     /**
      * Set validation message.
      *
-     * @param validationFailedMessage messageto set.
+     * @param validationFailedMessage message to set.
      */
-    void setValidationFailedMessage(String validationFailedMessage);
+    void setValidationFailedMessage(Map<String, String> validationFailedMessage);
 
     /**
      * Get order in UI form.

@@ -151,6 +151,9 @@
                 <value>+*.ttf</value>
                 <value>+*.woff</value>
 
+                <!-- Support for JS dev mode tools -->
+                <value>+*.map</value>
+
                 <!-- PDF streams -->
                 <!--<value>+*.pdf</value>-->
 

@@ -17,8 +17,41 @@
 
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+    <!-- Core wicket -->
+    <entry key="Required">'${label}' is required</entry>
+    <entry key="IConverter">'${input}' is not a valid ${type}</entry>
+    <entry key="RangeValidator">${input} is not between ${minimum} and ${maximum}</entry>
+    <entry key="MinimumValidator">'${input}' is smaller than the minimum of ${minimum}</entry>
+    <entry key="MaximumValidator">'${input}' is larger than the maximum of ${maximum}</entry>
+    <entry key="NumberValidator.positive">'${input}' must be positive</entry>
+    <entry key="NumberValidator.negative">'${input}' must be negative</entry>
+    <entry key="StringValidator.range">'${input}' is not between ${minimum} and ${maximum} characters long</entry>
+    <entry key="StringValidator.minimum">'${input}' is shorter than the minimum of ${minimum} characters</entry>
+    <entry key="StringValidator.maximum">'${input}' is longer than the maximum of ${maximum} characters</entry>
+    <entry key="StringValidator.exact">'${input}' is not exactly ${exact} characters long</entry>
+    <entry key="DateValidator.range">'${input}' is not between ${minimum} and ${maximum}</entry>
+    <entry key="DateValidator.minimum">'${input}' is less than the minimum of ${minimum}</entry>
+    <entry key="DateValidator.maximum">'${input}' is larger than the maximum of ${maximum}</entry>
+    <entry key="PatternValidator">'${input}' does not match pattern '${pattern}'</entry>
+    <entry key="EmailAddressValidator">'${input}' is not a valid email address</entry>
+    <entry key="CreditCardValidator">The credit card number is invalid</entry>
+    <entry key="UrlValidator">'${input}' is not a valid URL</entry>
+    <entry key="EqualInputValidator">'${input0}' from ${label0} and '${input1}' from ${label1} must be equal</entry>
+    <entry key="EqualPasswordInputValidator">${label0} and ${label1} must be equal</entry>
+    <entry key="null">Choose One</entry>
+    <entry key="nullValid"></entry>
+    <entry key="PagingNavigator.first">Go to first page</entry>
+    <entry key="PagingNavigator.previous">Go to previous page</entry>
+    <entry key="PagingNavigator.next">Go to next page</entry>
+    <entry key="PagingNavigator.last">Go to last page</entry>
+    <entry key="PagingNavigator.page">Go to page ${page}</entry>
+    <entry key="org.apache.wicket.mfu.caption.unlimited">Files:</entry>
+    <entry key="org.apache.wicket.mfu.caption.limited">Files (maximum ${max}):</entry>
+    <entry key="org.apache.wicket.mfu.delete">Delete</entry>
+
+
     <!-- All global properties should go here -->
-    <entry key="buildVersion">YC - 2.1.0</entry>
+    <entry key="buildVersion">YC - 2.3.0</entry>
     <entry key="home">Home</entry>
     <entry key="continueShopping">Continue shopping</entry>
     <entry key="brand">Brand</entry>

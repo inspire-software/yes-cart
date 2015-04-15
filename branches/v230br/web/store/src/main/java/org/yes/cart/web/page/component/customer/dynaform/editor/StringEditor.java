@@ -44,6 +44,7 @@ public class StringEditor extends Fragment {
      * @param markupProvider markup object.
      * @param model      model.
      * @param labelModel label model
+     * @param errorLabelModel error label model
      * @param attrValue  {@link org.yes.cart.domain.entity.AttrValue}
      * @param readOnly  if true this component is read only
      */
@@ -51,6 +52,7 @@ public class StringEditor extends Fragment {
                         final MarkupContainer markupProvider,
                         final IModel<String> model,
                         final IModel<String> labelModel,
+                        final IModel<String> errorLabelModel,
                         final AttrValue attrValue,
                         final boolean readOnly) {
 
@@ -80,7 +82,7 @@ public class StringEditor extends Fragment {
                     }
 
                     ValidationError error = new ValidationError();
-                    error.setMessage(attrValue.getAttribute().getValidationFailedMessage());
+                    error.setMessage(errorLabelModel.getObject());
                     error.setVariables(vars);
                     validatable.error(error);
                 }

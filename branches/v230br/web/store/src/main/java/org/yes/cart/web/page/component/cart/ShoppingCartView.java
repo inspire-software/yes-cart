@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component.cart;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -95,8 +96,6 @@ public class ShoppingCartView extends BaseComponent {
         super(id);
 
         final Shop shop = ApplicationDirector.getCurrentShop();
-        final long shopId = shop.getShopId();
-        final String lang = getLocale().getLanguage();
 
         final AttrValue valCoupons = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS);
         final boolean allowCoupons = valCoupons != null && valCoupons.getVal() != null && Boolean.valueOf(valCoupons.getVal());
@@ -104,13 +103,9 @@ public class ShoppingCartView extends BaseComponent {
         final AttrValue valMessage = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG);
         final boolean allowMessages = valMessage != null && valMessage.getVal() != null && Boolean.valueOf(valMessage.getVal());
 
+
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         final Total total = cart.getTotal();
-
-        final Map<String, Object> dynaCtx = new HashMap<String, Object>();
-        dynaCtx.put("shop", shop);
-        dynaCtx.put("shoppingCart", cart);
-
 
         final Form cartForm = new StatelessForm(CART_FORM);
 
@@ -131,15 +126,12 @@ public class ShoppingCartView extends BaseComponent {
 
         // TOTALS
         final boolean cartIsNotEmpty = cart.getCartItemsCount() > 0;
-        String subTotalInclude = getContentInclude(shopId, "shopping_cart_checkout_include", lang, dynaCtx);
-        cartForm.addOrReplace(new Label(SUBTOTAL_INCLUDE, subTotalInclude).setVisible(cartIsNotEmpty).setEscapeModelStrings(false));
+        cartForm.addOrReplace(new Label(SUBTOTAL_INCLUDE, "").setVisible(cartIsNotEmpty));
 
         cartForm.addOrReplace(new BookmarkablePageLink<CheckoutPage>(CHECKOUT_LINK, CheckoutPage.class).setVisible(cartIsNotEmpty));
 
         // COUPONS
-
-        String couponsInclude = getContentInclude(shopId, "shopping_cart_coupons_include", lang, dynaCtx);
-        cartForm.addOrReplace(new Label(COUPON_INCLUDE, couponsInclude).setEscapeModelStrings(false).setVisible(allowCoupons));
+        cartForm.addOrReplace(new Label(COUPON_INCLUDE, "").setVisible(allowCoupons));
 
         final TextField<String> couponCode = new TextField<String>(COUPON_CODE_INPUT, new Model<String>());
         couponCode.setVisible(allowCoupons);
@@ -169,8 +161,7 @@ public class ShoppingCartView extends BaseComponent {
 
         // MESSAGING
 
-        String messageInclude = getContentInclude(shopId, "shopping_cart_message_include", lang, dynaCtx);
-        cartForm.addOrReplace(new Label(ORDERMSG_INCLUDE, messageInclude).setEscapeModelStrings(false).setVisible(allowMessages));
+        cartForm.addOrReplace(new Label(ORDERMSG_INCLUDE, "").setEscapeModelStrings(false).setVisible(allowMessages));
 
         final TextField<String> messageInput = new TextField<String>(ORDERMSG_INPUT, new Model<String>());
         messageInput.setVisible(allowMessages);
@@ -193,12 +184,44 @@ public class ShoppingCartView extends BaseComponent {
                 }
             }
         };
-        messageBtn.setVisible(allowCoupons);
+        messageBtn.setVisible(allowMessages);
         cartForm.addOrReplace(messageBtn);
 
 
         addOrReplace(cartForm);
 
+    }
+
+    @Override
+    protected void onBeforeRender() {
+
+
+        final Shop shop = ApplicationDirector.getCurrentShop();
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final long shopId = shop.getShopId();
+        final String lang = getLocale().getLanguage();
+
+        final Map<String, Object> dynaCtx = new HashMap<String, Object>();
+        dynaCtx.put("shop", shop);
+        dynaCtx.put("shoppingCart", cart);
+
+        final Component form = get(CART_FORM);
+
+        final boolean cartIsNotEmpty = cart.getCartItemsCount() > 0;
+        String subTotalInclude = getContentInclude(shopId, "shopping_cart_checkout_include", lang, dynaCtx);
+        form.get(SUBTOTAL_INCLUDE).replaceWith(new Label(SUBTOTAL_INCLUDE, subTotalInclude).setVisible(cartIsNotEmpty).setEscapeModelStrings(false));
+
+        final AttrValue valCoupons = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS);
+        final boolean allowCoupons = valCoupons != null && valCoupons.getVal() != null && Boolean.valueOf(valCoupons.getVal());
+        String couponsInclude = getContentInclude(shopId, "shopping_cart_coupons_include", lang, dynaCtx);
+        form.get(COUPON_INCLUDE).replaceWith(new Label(COUPON_INCLUDE, couponsInclude).setEscapeModelStrings(false).setVisible(allowCoupons));
+
+        final AttrValue valMessage = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG);
+        final boolean allowMessages = valMessage != null && valMessage.getVal() != null && Boolean.valueOf(valMessage.getVal());
+        String messageInclude = getContentInclude(shopId, "shopping_cart_message_include", lang, dynaCtx);
+        form.get(ORDERMSG_INCLUDE).replaceWith(new Label(ORDERMSG_INCLUDE, messageInclude).setEscapeModelStrings(false).setVisible(allowMessages));
+
+        super.onBeforeRender();
     }
 
     private String getContentInclude(long shopId, String contentUri, String lang, Map<String, Object> dynaCtx) {

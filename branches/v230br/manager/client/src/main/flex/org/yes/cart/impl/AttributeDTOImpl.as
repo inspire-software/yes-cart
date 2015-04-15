@@ -46,7 +46,7 @@ public class AttributeDTOImpl {
 
     public var regexp:String;
 
-    public var validationFailedMessage:String;
+    public var validationFailedMessage:Object;
 
     public var rank:int;
 

@@ -18,27 +18,31 @@ package org.yes.cart.web.service.rest;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yes.cart.domain.entity.AttrValueCustomer;
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.ro.AuthenticationResultRO;
-import org.yes.cart.domain.ro.LoginRO;
-import org.yes.cart.domain.ro.RegisterRO;
-import org.yes.cart.domain.ro.TokenRO;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.ro.*;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.rest.impl.CartMixin;
+import org.yes.cart.web.service.rest.impl.RoMappingMixin;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -58,6 +62,9 @@ public class AuthenticationController {
 
     @Autowired
     private CartMixin cartMixin;
+    @Autowired
+    @Qualifier("restRoMappingMixin")
+    private RoMappingMixin mappingMixin;
 
 
     /**
@@ -371,6 +378,119 @@ public class AuthenticationController {
     }
 
 
+    /**
+     * Interface: GET /yes-api/rest/auth/register
+     * <p>
+     * <p>
+     * Interface to list all attributes required for registration
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for register GET operation</h3><p>
+     * <p>
+     * NONE
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * {
+     *   "phone" : null,
+     *   "custom" : [
+     *     {
+     *       "attrvalueId" : 0,
+     *       "val" : null,
+     *       "displayVals" : null,
+     *       "attributeName" : "Marketing Opt in",
+     *       "attributeId" : 11051,
+     *       "attributeDisplayNames" : {},
+     *       "attributeDisplayChoices" : {},
+     *       "customerId" : 0
+     *     },
+     *     {
+     *       "attrvalueId" : 0,
+     *       "val" : null,
+     *       "displayVals" : null,
+     *       "attributeName" : "Customer Type",
+     *       "attributeId" : 1611,
+     *       "attributeDisplayNames" : {
+     *         "uk" : "тип пользователя",
+     *         "en" : "Customer Type"
+     *       },
+     *       "attributeDisplayChoices" : {
+     *         "uk" : "B-Покупатель,S-Продавец",
+     *         "ru" : "B-Покупатель,S-Продавец",
+     *         "en" : "B-Buyer,S-Seller"
+     *       },
+     *       "customerId" : 0
+     *     }
+     *   ],
+     *   "lastname" : null,
+     *   "firstname" : null,
+     *   "email" : null
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;register-form&gt;
+     *     &lt;custom&gt;
+     *         &lt;attribute attribute-id="11051" attrvalue-id="0" customer-id="0"&gt;
+     *             &lt;attribute-display-choices/&gt;
+     *             &lt;attribute-display-names/&gt;
+     *             &lt;attribute-name&gt;Marketing Opt in&lt;/attribute-name&gt;
+     *         &lt;/attribute&gt;
+     *         &lt;attribute attribute-id="1611" attrvalue-id="0" customer-id="0"&gt;
+     *             &lt;attribute-display-choices&gt;
+     *                 &lt;entry lang="uk"&gt;B-Покупатель,S-Продавец&lt;/entry&gt;
+     *                 &lt;entry lang="en"&gt;B-Buyer,S-Seller&lt;/entry&gt;
+     *                 &lt;entry lang="ru"&gt;B-Покупатель,S-Продавец&lt;/entry&gt;
+     *             &lt;/attribute-display-choices&gt;
+     *             &lt;attribute-display-names&gt;
+     *                 &lt;entry lang="uk"&gt;тип пользователя&lt;/entry&gt;
+     *                 &lt;entry lang="en"&gt;Customer Type&lt;/entry&gt;
+     *             &lt;/attribute-display-names&gt;
+     *             &lt;attribute-name&gt;Customer Type&lt;/attribute-name&gt;
+     *         &lt;/attribute&gt;
+     *     &lt;/custom&gt;
+     * &lt;/register-form&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     *
+     * @param request request
+     * @param response response
+     *
+     * @return registration data
+     */
+    @RequestMapping(
+            value = "/register",
+            method = RequestMethod.GET,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody RegisterFormRO register(final HttpServletRequest request,
+                                                 final HttpServletResponse response) {
+
+        cartMixin.persistShoppingCart(request, response);
+        final Shop shop = cartMixin.getCurrentShop();
+
+        final List<AttrValueCustomer> avs = customerServiceFacade.getShopRegistrationAttributes(shop);
+
+        final RegisterFormRO formRO = new RegisterFormRO();
+        formRO.setCustom(mappingMixin.map(avs, AttrValueCustomerRO.class, AttrValueCustomer.class));
+
+        return formRO;
+    }
+
     private static final Pattern EMAIL =
             Pattern.compile("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z]{2,}){1}$)",
             Pattern.CASE_INSENSITIVE);
@@ -380,7 +500,7 @@ public class AuthenticationController {
      * Interface: PUT /yes-api/rest/auth/register
      * <p>
      * <p>
-     * Login interface that allows to authenticate user cart. The token for the authenticated cart is
+     * Register interface that allows to register user. The token for the authenticated cart is
      * returned back as response header and also as a cookie.
      * <p>
      * <p>
@@ -465,6 +585,15 @@ public class AuthenticationController {
      *     <tr><td>FIRSTNAME_FAILED</td><td>must be not blank</td></tr>
      *     <tr><td>LASTNAME_FAILED</td><td>must be not blank</td></tr>
      *     <tr><td>PHONE_FAILED</td><td>phone must be more than 4 and less than 13 chars</td></tr>
+     *     <tr><td>[ATTRIBUTE CODE]:FAILED</td><td>
+     *         E.g. CUSTOMERTYPE_FAILED denoting that mandatory value was missing (could also happen if regex fails but there is no
+     *         validation message specified on the {@link org.yes.cart.domain.entity.Attribute#getValidationFailedMessage()})
+     *     </td></tr>
+     *     <tr><td>[ATTRIBUTE CODE]:FAILED:[Message]</td><td>
+     *         E.g. "CUSTOMERTYPE:FAILED:Please choose either Buyer or Seller (UK)" denoting that regex test failed.
+     *         RegEx and Message come from {@link org.yes.cart.domain.entity.Attribute#getRegexp()} and
+     *         {@link org.yes.cart.domain.entity.Attribute#getValidationFailedMessage()} respectively
+     *     </td></tr>
      *     <tr><td>USER_FAILED</td><td>email must not be already registered</td></tr>
      * </table>
      *
@@ -520,19 +649,46 @@ public class AuthenticationController {
 
         }
 
+        final ShoppingCart cart = cartMixin.getCurrentCart();
+        final Shop shop = cartMixin.getCurrentShop();
+
         final Map<String, Object> data = new HashMap<String, Object>();
         if (registerRO.getCustom() != null) {
-            data.putAll(registerRO.getCustom());
+
+            for (final AttrValueCustomer av : customerServiceFacade.getShopRegistrationAttributes(shop)) {
+
+                final Attribute attr = av.getAttribute();
+                final String value = registerRO.getCustom().get(attr.getCode());
+
+                if (attr.isMandatory() && StringUtils.isBlank(value)) {
+
+                    return new AuthenticationResultRO(attr.getCode() + ":FAILED");
+
+                } else if (StringUtils.isNotBlank(attr.getRegexp())
+                        && !Pattern.compile(attr.getRegexp()).matcher(value).matches()) {
+
+                    final String regexError = new FailoverStringI18NModel(
+                            attr.getValidationFailedMessage(),
+                            null).getValue(cart.getCurrentLocale());
+
+                    if (StringUtils.isBlank(regexError)) {
+                        return new AuthenticationResultRO(attr.getCode() + ":FAILED");
+                    }
+                    return new AuthenticationResultRO(attr.getCode() + ":FAILED:" + regexError);
+
+                } else {
+
+                    data.put(attr.getCode(), value);
+
+                }
+            }
         }
         data.put("firstname", registerRO.getFirstname());
         data.put("lastname", registerRO.getLastname());
         data.put("phone", registerRO.getPhone());
 
 
-        final String password = customerServiceFacade.registerCustomer(
-                ApplicationDirector.getCurrentShop(),
-                registerRO.getEmail(), data
-        );
+        final String password = customerServiceFacade.registerCustomer(shop, registerRO.getEmail(), data);
 
         final LoginRO loginRO = new LoginRO();
         loginRO.setUsername(registerRO.getEmail());

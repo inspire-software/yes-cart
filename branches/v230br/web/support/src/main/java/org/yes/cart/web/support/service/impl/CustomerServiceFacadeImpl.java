@@ -124,25 +124,38 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         attrData.remove("lastname");
         attrData.put(AttributeNamesKeys.CUSTOMER_PHONE, attrData.remove("phone"));
 
+        final List<String> allowed = registrationShop.getSupportedRegistrationFormAttributesAsList();
+        final List<String> allowedFull = new ArrayList<String>();
+        allowedFull.addAll(allowed);
+        allowedFull.add(AttributeNamesKeys.CUSTOMER_PHONE);
+
         for (final Map.Entry<String, Object> attrVal : attrData.entrySet()) {
 
             if (attrVal.getValue() != null ||
                     (attrVal.getValue() instanceof String && StringUtils.isNotBlank((String) attrVal.getValue()))) {
 
-                final Attribute attribute = attributeService.findByAttributeCode(attrVal.getKey());
+                if (allowedFull.contains(attrVal.getKey())) {
 
-                if (attribute != null) {
+                    final Attribute attribute = attributeService.findByAttributeCode(attrVal.getKey());
 
-                    final AttrValueCustomer attrValueCustomer = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
-                    attrValueCustomer.setCustomer(customer);
-                    attrValueCustomer.setVal(String.valueOf(attrVal.getValue()));
-                    attrValueCustomer.setAttribute(attribute);
+                    if (attribute != null) {
 
-                    customer.getAttributes().add(attrValueCustomer);
+                        final AttrValueCustomer attrValueCustomer = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
+                        attrValueCustomer.setCustomer(customer);
+                        attrValueCustomer.setVal(String.valueOf(attrVal.getValue()));
+                        attrValueCustomer.setAttribute(attribute);
+
+                        customer.getAttributes().add(attrValueCustomer);
+
+                    } else {
+
+                        ShopCodeContext.getLog(this).warn("Registration data contains unknown attribute: {}", attrVal.getKey());
+
+                    }
 
                 } else {
 
-                    ShopCodeContext.getLog(this).warn("Registration data contains unknown attribute: {}", attrVal.getKey());
+                    ShopCodeContext.getLog(this).warn("Registration data contains attribute that is not allowed: {}", attrVal.getKey());
 
                 }
 
@@ -156,7 +169,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
-    public List<? extends AttrValue> getShopRegistrationAttributes(final Shop shop) {
+    public List<AttrValueCustomer> getShopRegistrationAttributes(final Shop shop) {
 
         final List<String> allowed = shop.getSupportedRegistrationFormAttributesAsList();
         if (CollectionUtils.isEmpty(allowed)) {
@@ -164,18 +177,18 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
             return Collections.emptyList();
         }
 
-        final List<? extends AttrValue> attrValueCollection = customerService.getRankedAttributeValues(null);
+        final List<AttrValueCustomer> attrValueCollection = customerService.getRankedAttributeValues(null);
         if (CollectionUtils.isEmpty(attrValueCollection)) {
             return Collections.emptyList();
         }
 
-        final List<AttrValue> registration = new ArrayList<AttrValue>();
-        final Map<String, AttrValue> map = new HashMap<String, AttrValue>(attrValueCollection.size());
-        for (final AttrValue av : attrValueCollection) {
+        final List<AttrValueCustomer> registration = new ArrayList<AttrValueCustomer>();
+        final Map<String, AttrValueCustomer> map = new HashMap<String, AttrValueCustomer>(attrValueCollection.size());
+        for (final AttrValueCustomer av : attrValueCollection) {
             map.put(av.getAttribute().getCode(), av);
         }
         for (final String code : allowed) {
-            final AttrValue av = map.get(code);
+            final AttrValueCustomer av = map.get(code);
             if (av != null) {
                 registration.add(av);
             }
@@ -186,7 +199,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
 
     /** {@inheritDoc} */
-    public List<Pair<? extends AttrValue, Boolean>> getCustomerProfileAttributes(final Shop shop, final Customer customer) {
+    public List<Pair<AttrValueCustomer, Boolean>> getCustomerProfileAttributes(final Shop shop, final Customer customer) {
 
         final List<String> allowed = shop.getSupportedProfileFormAttributesAsList();
         if (CollectionUtils.isEmpty(allowed)) {
@@ -196,21 +209,21 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
         final List<String> readonly = shop.getSupportedProfileFormReadOnlyAttributesAsList();
 
-        final List<? extends AttrValue> attrValueCollection = customerService.getRankedAttributeValues(customer);
+        final List<AttrValueCustomer> attrValueCollection = customerService.getRankedAttributeValues(customer);
         if (CollectionUtils.isEmpty(attrValueCollection)) {
             return Collections.emptyList();
         }
 
 
-        final List<Pair<? extends AttrValue, Boolean>> profile = new ArrayList<Pair<? extends AttrValue, Boolean>>();
-        final Map<String, AttrValue> map = new HashMap<String, AttrValue>(attrValueCollection.size());
-        for (final AttrValue av : attrValueCollection) {
+        final List<Pair<AttrValueCustomer, Boolean>> profile = new ArrayList<Pair<AttrValueCustomer, Boolean>>();
+        final Map<String, AttrValueCustomer> map = new HashMap<String, AttrValueCustomer>(attrValueCollection.size());
+        for (final AttrValueCustomer av : attrValueCollection) {
             map.put(av.getAttribute().getCode(), av);
         }
         for (final String code : allowed) {
-            final AttrValue av = map.get(code);
+            final AttrValueCustomer av = map.get(code);
             if (av != null) {
-                profile.add(new Pair<AttrValue, Boolean>(av, readonly.contains(code)));
+                profile.add(new Pair<AttrValueCustomer, Boolean>(av, readonly.contains(code)));
             }
         }
 
@@ -226,12 +239,35 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
-    public void updateCustomerAttributes(final Customer customer, final Map<String, String> values) {
+    public void updateCustomerAttributes(final Shop profileShop, final Customer customer, final Map<String, String> values) {
 
-        for (final Map.Entry<String, String> entry : values.entrySet()) {
+        final List<String> allowed = profileShop.getSupportedProfileFormAttributesAsList();
 
-            customerService.addAttribute(customer, entry.getKey(), entry.getValue());
+        if (CollectionUtils.isNotEmpty(allowed)) {
+            // must explicitly configure to avoid exposing personal data
+            final List<String> readonly = profileShop.getSupportedProfileFormReadOnlyAttributesAsList();
 
+            for (final Map.Entry<String, String> entry : values.entrySet()) {
+
+                if (allowed.contains(entry.getKey())) {
+
+                    if (readonly.contains(entry.getKey())) {
+
+                        customerService.addAttribute(customer, entry.getKey(), entry.getValue());
+
+                    } else {
+
+                        ShopCodeContext.getLog(this).warn("Profile data contains attribute that is read only: {}", entry.getKey());
+
+                    }
+
+                } else {
+
+                    ShopCodeContext.getLog(this).warn("Profile data contains attribute that is not allowed: {}", entry.getKey());
+
+                }
+
+            }
         }
 
         customerService.update(customer);

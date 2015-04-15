@@ -89,9 +89,6 @@ public class StandardHeader  extends BaseComponent {
 
         String content = contentServiceFacade.getContentBody(
                 "header_nav_include", ShopCodeContext.getShopId(), getLocale().getLanguage());
-        if (content == null) {
-            new Label("headerNav");
-        }
 
         return new Label("headerNav", content).setEscapeModelStrings(false);
 

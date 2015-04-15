@@ -68,8 +68,6 @@ public class TopCategories extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        final String selectedLocale = getLocale().getLanguage();
-
         final long categoryId = NumberUtils.toLong(getPage().getPageParameters().get(WebParametersKeys.CATEGORY_ID).toString());
         final long contentId = NumberUtils.toLong(getPage().getPageParameters().get(WebParametersKeys.CONTENT_ID).toString());
         final long shopId = ShopCodeContext.getShopId();
@@ -115,6 +113,7 @@ public class TopCategories extends BaseComponent {
                     @Override
                     protected void populateItem(final ListItem<Category> categoryListItem) {
 
+                        final String selectedLocale = getLocale().getLanguage();
                         final Category category = categoryListItem.getModelObject();
                         final I18NModel nameModel = getI18NSupport().getFailoverModel(category.getDisplayName(), category.getName());
 

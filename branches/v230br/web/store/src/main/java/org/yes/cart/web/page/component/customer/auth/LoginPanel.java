@@ -60,6 +60,7 @@ public class LoginPanel extends BaseComponent {
     private static final String LOGIN_BUTTON = "loginBtn";
     private static final String REGISTRATION_LINK = "registrationLink";
     private static final String LOGIN_FORM = "loginForm";
+    private static final String CONTENT = "regformContent";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     private final boolean isCheckout;
@@ -82,6 +83,17 @@ public class LoginPanel extends BaseComponent {
 
     }
 
+    @Override
+    protected void onBeforeRender() {
+
+        final String lang = getLocale().getLanguage();
+        final long shopId = ShopCodeContext.getShopId();
+
+        String loginformInfo = getContentInclude(shopId, "login_loginform_content_include", lang);
+        get(LOGIN_FORM).get(CONTENT).replaceWith(new Label(CONTENT, loginformInfo).setEscapeModelStrings(false));
+
+        super.onBeforeRender();
+    }
 
     /**
      * Extension hook to override classes for themes.
@@ -242,24 +254,8 @@ public class LoginPanel extends BaseComponent {
                     }
             );
 
-            final String lang = getLocale().getLanguage();
-            final long shopId = ShopCodeContext.getShopId();
+            add(new Label(CONTENT, ""));
 
-            String loginformInfo = getContentInclude(shopId, "login_loginform_content_include", lang);
-            add(new Label("regformContent", loginformInfo).setEscapeModelStrings(false));
-
-
-
-        }
-
-
-
-        private String getContentInclude(long shopId, String contentUri, String lang) {
-            String content = contentServiceFacade.getContentBody(contentUri, shopId, lang);
-            if (content == null) {
-                content = "";
-            }
-            return content;
         }
 
 
@@ -274,5 +270,13 @@ public class LoginPanel extends BaseComponent {
         }
     }
 
+
+    private String getContentInclude(long shopId, String contentUri, String lang) {
+        String content = contentServiceFacade.getContentBody(contentUri, shopId, lang);
+        if (content == null) {
+            content = "";
+        }
+        return content;
+    }
 
 }

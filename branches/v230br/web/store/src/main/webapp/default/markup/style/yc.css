@@ -1286,7 +1286,7 @@ ul.feedbackPanel {
 }
 
 ul.feedbackPanel > li {
-    display: inline;
+  /*  display: inline; */
 }
 
 li > .feedbackPanelERROR {

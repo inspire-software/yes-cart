@@ -17,6 +17,37 @@
 
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+    <entry key="Required">'${label}' обязательное поле</entry>
+    <entry key="IConverter">Значение '${input}' не верно для ${type}</entry>
+    <entry key="RangeValidator">Значение ${input} должно быть между ${minimum} и ${maximum}</entry>
+    <entry key="MinimumValidator">Значение '${input}' менее минимального ${minimum}</entry>
+    <entry key="MaximumValidator">Значение '${input}' более максимального ${maximum}</entry>
+    <entry key="NumberValidator.positive">Значение '${input}' должно быть позитивным числом</entry>
+    <entry key="NumberValidator.negative">Значение '${input}' должно быть негативным числом</entry>
+    <entry key="StringValidator.range">Длина значения '${input}' должна быть между ${minimum} и ${maximum} символами</entry>
+    <entry key="StringValidator.minimum">Длина значения '${input}' должна быть не менее ${minimum} символа</entry>
+    <entry key="StringValidator.maximum">Длина значения '${input}' должна быть не более ${maximum} символа</entry>
+    <entry key="StringValidator.exact">Длина значения '${input}' должна быть точно ${exact} символа</entry>
+    <entry key="DateValidator.range">'${input}' должна быть между ${minimum} и ${maximum}</entry>
+    <entry key="DateValidator.minimum">'${input}' должна быть позже ${minimum}</entry>
+    <entry key="DateValidator.maximum">'${input}' должна быть ранее ${maximum}</entry>
+    <entry key="PatternValidator">Значение '${input}' не соответствует шаблону '${pattern}'</entry>
+    <entry key="EmailAddressValidator">'${input}' не является корректной электронной почтой</entry>
+    <entry key="CreditCardValidator">Номер платежной карты не является корректным</entry>
+    <entry key="UrlValidator">'${input}' не является корректным URL</entry>
+    <entry key="EqualInputValidator">Значения '${input0}' ( ${label0} ) и '${input1}' ( ${label1} ) должны совпадать</entry>
+    <entry key="EqualPasswordInputValidator">Значения ${label0} и ${label1} должны совпадать</entry>
+    <entry key="null">Пожалуйста выберите</entry>
+    <entry key="nullValid"></entry>
+    <entry key="PagingNavigator.first">На первую</entry>
+    <entry key="PagingNavigator.previous">На предидущую</entry>
+    <entry key="PagingNavigator.next">На следующую</entry>
+    <entry key="PagingNavigator.last">На последнюю</entry>
+    <entry key="PagingNavigator.page">На страницу ${page}</entry>
+    <entry key="org.apache.wicket.mfu.caption.unlimited">Файлы:</entry>
+    <entry key="org.apache.wicket.mfu.caption.limited">Файлы (максимум ${max}):</entry>
+    <entry key="org.apache.wicket.mfu.delete">Удалить</entry>
+
     <!-- All global properties should go here -->
     <entry key="buildVersion">YC - 2.1.0</entry>
     <entry key="home">Главная</entry>

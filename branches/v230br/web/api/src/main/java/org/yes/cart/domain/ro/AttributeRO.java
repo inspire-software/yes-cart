@@ -62,26 +62,26 @@ public class AttributeRO implements Serializable {
     @DtoField(value = "attributeGroup.attributegroupId", readOnly=true)
     private long attributegroupId;
 
-    @DtoField(value = "allowduplicate")
+    @DtoField(value = "allowduplicate", readOnly=true)
     private boolean allowduplicate;
 
-    @DtoField(value = "allowfailover")
+    @DtoField(value = "allowfailover", readOnly=true)
     private boolean allowfailover;
 
 
-    @DtoField(value = "regexp")
+    @DtoField(value = "regexp", readOnly=true)
     private String regexp;
 
-    @DtoField(value = "validationFailedMessage")
-    private String validationFailedMessage;
+    @DtoField(value = "validationFailedMessage", converter = "i18nStringConverter", readOnly=true)
+    private Map<String, String> validationFailedMessage;
 
     @DtoField(value = "rank")
     private int rank;
 
-    @DtoField(value = "choiceData", converter = "i18nStringConverter")
+    @DtoField(value = "choiceData", converter = "i18nStringConverter", readOnly=true)
     private Map<String, String> choiceData;
 
-    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    @DtoField(value = "displayName", converter = "i18nStringConverter", readOnly=true)
     private Map<String, String> displayNames;
 
     public int getRank() {
@@ -102,12 +102,13 @@ public class AttributeRO implements Serializable {
         this.choiceData = choiceData;
     }
 
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
     @XmlElement(name = "validation-failed-message")
-    public String getValidationFailedMessage() {
+    public Map<String, String> getValidationFailedMessage() {
         return validationFailedMessage;
     }
 
-    public void setValidationFailedMessage(final String validationFailedMessage) {
+    public void setValidationFailedMessage(final Map<String, String> validationFailedMessage) {
         this.validationFailedMessage = validationFailedMessage;
     }
 

@@ -25,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.*;
 import org.yes.cart.service.domain.CustomerOrderService;
@@ -43,6 +44,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * User: denispavlov
@@ -165,13 +167,284 @@ public class CustomerController {
 
         // Only map allowed attributes
         final List<AttrValueCustomerRO> profileAttrs = new ArrayList<AttrValueCustomerRO>();
-        for (final Object attr : (List) customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
-            final Pair<AttrValueCustomer, Boolean> av = (Pair<AttrValueCustomer, Boolean>) attr;
+        for (final Pair<AttrValueCustomer, Boolean> av : customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
             profileAttrs.add(mappingMixin.map(av.getFirst(), AttrValueCustomerRO.class, AttrValueCustomer.class));
         }
         ro.setAttributes(profileAttrs);
 
         return ro;
+
+    }
+
+    /**
+     * Interface: PUT /yes-api/rest/customer/summary
+     * <p>
+     * <p>
+     * Display customer profile information.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <p>
+     * <table border="1">
+     *     <tr><td>JSON object CustomerRO</td><td>
+     * <pre><code>
+     * {
+     *     "customerId": 1,
+     *     "email": "bob.doe@yc-json.com",
+     *     "firstname": "Bob",
+     *     "lastname": "Doe",
+     *     "middlename": null,
+     *     "tag": null,
+     *     "attributes": [{
+     *         "attrvalueId": 1,
+     *         "val": "123123123",
+     *         "displayVals": null,
+     *         "attributeId": 1030,
+     *         "attributeName": "Customer phone",
+     *         "attributeDisplayNames": null,
+     *         "customerId": 1
+     *     }]
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML object CustomerUpdatedRO</td><td>
+     * <pre><code>
+     * &lt;customer&gt;
+     * 	&lt;attribute-values&gt;
+     * 		&lt;attribute-value attribute-id="1030" attrvalue-id="2" customer-id="2"&gt;
+     * 			&lt;attribute-name&gt;Customer phone&lt;/attribute-name&gt;
+     * 			&lt;val&gt;123123123&lt;/val&gt;
+     * 		&lt;/attribute-value&gt;
+     * 	&lt;/attribute-values&gt;
+     * 	&lt;customerId&gt;2&lt;/customerId&gt;
+     * 	&lt;email&gt;bob.doe@yc-xml.com&lt;/email&gt;
+     * 	&lt;firstname&gt;Bob&lt;/firstname&gt;
+     * 	&lt;lastname&gt;Doe&lt;/lastname&gt;
+     * &lt;/customer&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON object CustomerUpdatedRO</td><td>
+     * <pre><code>
+     * {
+     *   "problems" : {},
+     *   "success" : true,
+     *   "customer" : {
+     *     "lastname" : "Doe",
+     *     "firstname" : "Bob",
+     *     "middlename" : null,
+     *     "email" : "bob1zzzzz@bob.com",
+     *     "customerId" : 25,
+     *     "tag" : null,
+     *     "attributes" : [
+     *       {
+     *         "attrvalueId" : 48,
+     *         "attributeCode" : "CUSTOMER_PHONE",
+     *         "val" : "1234",
+     *         "displayVals" : null,
+     *         "attributeName" : "Phone",
+     *         "attributeId" : 11050,
+     *         "attributeDisplayNames" : null,
+     *         "attributeDisplayChoices" : null,
+     *         "customerId" : 25
+     *       },
+     *       {
+     *         "attrvalueId" : 49,
+     *         "attributeCode" : "MARKETING_OPT_IN",
+     *         "val" : "true",
+     *         "displayVals" : null,
+     *         "attributeName" : "Marketing Opt in",
+     *         "attributeId" : 11051,
+     *         "attributeDisplayNames" : {},
+     *         "attributeDisplayChoices" : {},
+     *         "customerId" : 25
+     *       },
+     *       {
+     *         "attrvalueId" : 50,
+     *         "attributeCode" : "CUSTOMERTYPE",
+     *         "val" : "B",
+     *         "displayVals" : null,
+     *         "attributeName" : "Customer Type",
+     *         "attributeId" : 1611,
+     *         "attributeDisplayNames" : {
+     *           "uk" : "тип пользователя",
+     *           "en" : "Customer Type"
+     *         },
+     *         "attributeDisplayChoices" : {
+     *           "uk" : "B-Покупатель,S-Продавец",
+     *           "ru" : "B-Покупатель,S-Продавец",
+     *           "en" : "B-Buyer,S-Seller"
+     *         },
+     *         "customerId" : 25
+     *       }
+     *     ]
+     *   }
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML object CustomerUpdatedRO</td><td>
+     * &lt;customer-updated success="true"&gt;
+     *     &lt;customer&gt;
+     *         &lt;attribute-values&gt;
+     *             &lt;attribute-value attribute-code="CUSTOMER_PHONE" attribute-id="11050" attrvalue-id="48" customer-id="25"&gt;
+     *                 &lt;attribute-name&gt;Phone&lt;/attribute-name&gt;
+     *                 &lt;val&gt;1234&lt;/val&gt;
+     *             &lt;/attribute-value&gt;
+     *             &lt;attribute-value attribute-code="MARKETING_OPT_IN" attribute-id="11051" attrvalue-id="49" customer-id="25"&gt;
+     *                 &lt;attribute-display-choices/&gt;
+     *                 &lt;attribute-display-names/&gt;
+     *                 &lt;attribute-name&gt;Marketing Opt in&lt;/attribute-name&gt;
+     *                 &lt;val&gt;true&lt;/val&gt;
+     *             &lt;/attribute-value&gt;
+     *             &lt;attribute-value attribute-code="CUSTOMERTYPE" attribute-id="1611" attrvalue-id="50" customer-id="25"&gt;
+     *                 &lt;attribute-display-choices&gt;
+     *                     &lt;entry lang="uk"&gt;B-Покупатель,S-Продавец&lt;/entry&gt;
+     *                     &lt;entry lang="en"&gt;B-Buyer,S-Seller&lt;/entry&gt;
+     *                     &lt;entry lang="ru"&gt;B-Покупатель,S-Продавец&lt;/entry&gt;
+     *                 &lt;/attribute-display-choices&gt;
+     *                 &lt;attribute-display-names&gt;
+     *                     &lt;entry lang="uk"&gt;тип пользователя&lt;/entry&gt;
+     *                     &lt;entry lang="en"&gt;Customer Type&lt;/entry&gt;
+     *                 &lt;/attribute-display-names&gt;
+     *                 &lt;attribute-name&gt;Customer Type&lt;/attribute-name&gt;
+     *                 &lt;val&gt;B&lt;/val&gt;
+     *             &lt;/attribute-value&gt;
+     *         &lt;/attribute-values&gt;
+     *         &lt;customerId&gt;25&lt;/customerId&gt;
+     *         &lt;email&gt;bob1zzzzz@bob.com&lt;/email&gt;
+     *         &lt;firstname&gt;Bob&lt;/firstname&gt;
+     *         &lt;lastname&gt;Doe&lt;/lastname&gt;
+     *     &lt;/customer&gt;
+     *     &lt;problems/&gt;
+     * &lt;/customer-updated&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <h3>Error codes</h3><p>
+     * <table border="1">
+     *     <tr><td>FIRSTNAME_FAILED</td><td>must be not blank</td></tr>
+     *     <tr><td>LASTNAME_FAILED</td><td>must be not blank</td></tr>
+     *     <tr><td>[ATTRIBUTE CODE]_FAILED</td><td>
+     *         E.g. CUSTOMERTYPE_FAILED denoting that mandatory value was missing or regex is not matching.
+     *         RegEx and Message come from {@link org.yes.cart.domain.entity.Attribute#getRegexp()} and
+     *         {@link org.yes.cart.domain.entity.Attribute#getValidationFailedMessage()} respectively
+     *         Localised validation error message will be stored in problems under [ATTRIBUTE CODE]_FAILED key.
+     *     </td></tr>
+     * </table>
+     *
+     * @param update customer update object
+     * @param request request
+     * @param response response
+     *
+     * @return customer object
+     */
+    @RequestMapping(
+            value = "/summary",
+            method = RequestMethod.PUT,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+            consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody CustomerUpdatedRO updateSummary(@RequestBody final CustomerRO update,
+                                                         final HttpServletRequest request,
+                                                         final HttpServletResponse response) {
+
+        cartMixin.throwSecurityExceptionIfNotLoggedIn();
+        cartMixin.persistShoppingCart(request, response);
+
+        final Shop shop = cartMixin.getCurrentShop();
+        final ShoppingCart cart = cartMixin.getCurrentCart();
+
+        final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getCustomerEmail());
+
+        final CustomerUpdatedRO result = new CustomerUpdatedRO();
+        result.setSuccess(true);
+        final Map<String, String> problems = new HashMap<String, String>();
+        result.setProblems(problems);
+
+        if (StringUtils.isBlank(update.getFirstname())) {
+
+            result.setSuccess(false);
+            problems.put("firstname", "FIRSTNAME_FAILED");
+
+        }
+
+        if (StringUtils.isBlank(update.getLastname())) {
+
+            result.setSuccess(false);
+            problems.put("lastname", "LASTNAME_FAILED");
+
+        }
+
+        final Map<String, String> valuesToUpdate = new HashMap<String, String>();
+        if (CollectionUtils.isNotEmpty(update.getAttributes())) {
+
+            final Map<String, AttrValueCustomerRO> valuesInThisUpdate = new HashMap<String, AttrValueCustomerRO>();
+            for (final AttrValueCustomerRO avRO : update.getAttributes()) {
+                valuesInThisUpdate.put(avRO.getAttributeCode(), avRO);
+            }
+
+            final List<String> readonly = shop.getSupportedProfileFormReadOnlyAttributesAsList();
+            for (final Pair<AttrValueCustomer, Boolean> av : customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
+
+                final Attribute attr = av.getFirst().getAttribute();
+                final AttrValueCustomerRO avRO = valuesInThisUpdate.get(attr.getCode());
+                if (avRO != null && !readonly.contains(attr.getCode())) {
+
+                    if (attr.isMandatory() && StringUtils.isBlank(avRO.getVal())) {
+
+                        result.setSuccess(false);
+                        problems.put(attr.getCode(), attr.getCode() + "_FAILED");
+
+                    } else if (StringUtils.isNotBlank(attr.getRegexp())
+                            && !Pattern.compile(attr.getRegexp()).matcher(avRO.getVal()).matches()) {
+
+                        final String regexError = new FailoverStringI18NModel(
+                                attr.getValidationFailedMessage(),
+                                null).getValue(cart.getCurrentLocale());
+
+                        result.setSuccess(false);
+                        problems.put(attr.getCode(), attr.getCode() + "_FAILED");
+                        if (StringUtils.isNotBlank(regexError)) {
+                            problems.put(attr.getCode() + "_FAILED", regexError);
+                        }
+
+                    } else {
+
+                        valuesToUpdate.put(attr.getCode(), avRO.getVal());
+
+                    }
+
+                }
+
+            }
+        }
+
+        if (!result.isSuccess()) {
+
+            return result;
+
+        }
+
+
+        customer.setFirstname(update.getFirstname());
+        customer.setLastname(update.getLastname());
+        customerServiceFacade.updateCustomerAttributes(shop, customer, valuesToUpdate);
+
+        result.setCustomer(viewSummary(request, response));
+
+        return result;
 
     }
 

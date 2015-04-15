@@ -51,11 +51,17 @@ public class AttrValueCustomerRO implements Serializable {
     @DtoField(value = "attribute.attributeId", readOnly = true)
     private long attributeId;
 
+    @DtoField(value = "attribute.code", readOnly = true)
+    private String attributeCode;
+
     @DtoField(value = "attribute.name", readOnly = true)
     private String attributeName;
 
     @DtoField(value = "attribute.displayName", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> attributeDisplayNames;
+
+    @DtoField(value = "attribute.choiceData", converter = "i18nStringConverter", readOnly = true)
+    private Map<String, String> attributeDisplayChoices;
 
     @DtoField(value = "customer.customerId", readOnly = true)
     private long customerId;
@@ -96,6 +102,15 @@ public class AttrValueCustomerRO implements Serializable {
         this.attributeId = attributeId;
     }
 
+    @XmlAttribute(name = "attribute-code")
+    public String getAttributeCode() {
+        return attributeCode;
+    }
+
+    public void setAttributeCode(final String attributeCode) {
+        this.attributeCode = attributeCode;
+    }
+
     @XmlElement(name = "attribute-name")
     public String getAttributeName() {
         return attributeName;
@@ -113,6 +128,16 @@ public class AttrValueCustomerRO implements Serializable {
 
     public void setAttributeDisplayNames(final Map<String, String> attributeDisplayNames) {
         this.attributeDisplayNames = attributeDisplayNames;
+    }
+
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
+    @XmlElement(name = "attribute-display-choices")
+    public Map<String, String> getAttributeDisplayChoices() {
+        return attributeDisplayChoices;
+    }
+
+    public void setAttributeDisplayChoices(final Map<String, String> attributeDisplayChoices) {
+        this.attributeDisplayChoices = attributeDisplayChoices;
     }
 
     @XmlAttribute(name = "customer-id")

@@ -27,6 +27,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -127,7 +128,7 @@ public class ManageAddressesView extends BaseComponent {
 
                         }
                                 .add(
-                                        new Label(ADDRESS_LABEL, getLocalizer().getString("addressType" + addressType, this))
+                                        new Label(ADDRESS_LABEL, new StringResourceModel("addressType" + addressType, this, null))
                                 )
                                 .add(
                                         new SubmitLink(CREATE_LINK) {

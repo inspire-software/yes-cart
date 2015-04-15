@@ -17,8 +17,39 @@
 
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+    <entry key="Required">'${label}' обов'язкове поле</entry>
+    <entry key="IConverter">Значення '${input}' не вірно для ${type}</entry>
+    <entry key="RangeValidator">Значення ${input} має бути між ${minimum} та ${maximum}</entry>
+    <entry key="MinimumValidator">Значення '${input}' менше мінімального ${minimum}</entry>
+    <entry key="MaximumValidator">Значення '${input}' більш максимального ${maximum}</entry>
+    <entry key="NumberValidator.positive">Значення '${input}' має бути позитивним числом</entry>
+    <entry key="NumberValidator.negative">Значення '${input}' має бути негативним числом</entry>
+    <entry key="StringValidator.range">Довжина значення '${input}' повинна бути між ${minimum} та ${maximum} символами</entry>
+    <entry key="StringValidator.minimum">Довжина значення '${input}' повинна бути не менше ${minimum} символів</entry>
+    <entry key="StringValidator.maximum">Довжина значення '${input}' повинна бути не більше ${maximum} символів</entry>
+    <entry key="StringValidator.exact">Довжина значення '${input}' повинна бути точно ${exact} символів</entry>
+    <entry key="DateValidator.range">'${input}' повинна бути між ${minimum} та ${maximum}</entry>
+    <entry key="DateValidator.minimum">'${input}' повинна бути пізніше ${minimum}</entry>
+    <entry key="DateValidator.maximum">'${input}' повинна бути раніше ${maximum}</entry>
+    <entry key="PatternValidator">Значення '${input}' не відповідає шаблону '${pattern}'</entry>
+    <entry key="EmailAddressValidator">'${input}' не є коректною електронною поштою</entry>
+    <entry key="CreditCardValidator">Номер платіжної картки не є коректним</entry>
+    <entry key="UrlValidator">'${input}' не є коректним URL</entry>
+    <entry key="EqualInputValidator">Значення '${input0}' ( ${label0} ) та '${input1}' ( ${label1} ) повинні бути однакові</entry>
+    <entry key="EqualPasswordInputValidator">Значення ${label0} та ${label1} повинні бути однакові</entry>
+    <entry key="null">Будь ласка виберіть</entry>
+    <entry key="nullValid"></entry>
+    <entry key="PagingNavigator.first">На першу</entry>
+    <entry key="PagingNavigator.previous">На попередню</entry>
+    <entry key="PagingNavigator.next">На наступну</entry>
+    <entry key="PagingNavigator.last">На останню</entry>
+    <entry key="PagingNavigator.page">На сторінку ${page}</entry>
+    <entry key="org.apache.wicket.mfu.caption.unlimited">Файли:</entry>
+    <entry key="org.apache.wicket.mfu.caption.limited">Файли (максимум ${max}):</entry>
+    <entry key="org.apache.wicket.mfu.delete">Видалити</entry>
+
     <!-- All global properties should go here -->
-    <entry key="buildVersion">YC - 2.1.0</entry>
+    <entry key="buildVersion">YC - 2.3.0</entry>
     <entry key="home">Головна</entry>
     <entry key="continueShopping">За новими покупками</entry>
     <entry key="brand">Виробник</entry>

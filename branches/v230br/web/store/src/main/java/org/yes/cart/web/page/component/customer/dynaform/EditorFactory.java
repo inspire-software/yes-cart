@@ -24,6 +24,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.springframework.core.convert.TypeDescriptor;
 import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.utils.impl.ExtendedConversionService;
@@ -34,13 +35,12 @@ import org.yes.cart.web.page.component.customer.dynaform.editor.StringEditor;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 public class EditorFactory implements Serializable {
 
-    private final static String VALUE_FILED = "val";
+    private static final ExtendedConversionService CONVERSION_SERVICE = new ExtendedConversionService();
 
-    private final ExtendedConversionService conversionService = new ExtendedConversionService();
+    private final static String VALUE_FILED = "val";
 
     public EditorFactory() {
     }
@@ -62,21 +62,37 @@ public class EditorFactory implements Serializable {
                                final Boolean readOnly) {
 
         final boolean notEditable = readOnly == null || readOnly;
-        final String code = attrValue.getAttribute().getCode();
-        final IModel<String> labelModel = new Model<String>(code);
+
+        final I18NModel nameModel = new FailoverStringI18NModel(
+                attrValue.getAttribute().getDisplayName(),
+                attrValue.getAttribute().getName());
+
+        final IModel<String> labelModel = new AbstractReadOnlyModel<String>() {
+
+            private final I18NModel m = nameModel;
+
+            @Override
+            public String getObject() {
+                final String lang = markupContainer.getLocale().getLanguage();
+                return m.getValue(lang);
+            }
+        };
         final String bType = attrValue.getAttribute().getEtype().getBusinesstype();
 
         if ("CommaSeparatedList".equals(bType)) {
 
-            final String choices = new FailoverStringI18NModel(
+            final I18NModel choices = new FailoverStringI18NModel(
                     attrValue.getAttribute().getChoiceData(),
-                    attrValue.getAttribute().getChoiceData()).getValue(language);
+                    attrValue.getAttribute().getChoiceData());
 
             final IModel<List<Pair<String, String>>> enumChoices = new AbstractReadOnlyModel<List<Pair<String, String>>>() {
-                public List<Pair<String, String>> getObject() {
 
-                    return (List<Pair<String, String>>) conversionService.convert(
-                            choices,
+                private final I18NModel m = choices;
+
+                public List<Pair<String, String>> getObject() {
+                    final String lang = markupContainer.getLocale().getLanguage();
+                    return (List<Pair<String, String>>) CONVERSION_SERVICE.convert(
+                            choices.getValue(lang),
                             TypeDescriptor.valueOf(String.class),
                             TypeDescriptor.valueOf(List.class)
                     );
@@ -94,8 +110,13 @@ public class EditorFactory implements Serializable {
             final IModel model = new PropertyModel(attrValue, VALUE_FILED);
             return new BooleanEditor(id, markupContainer, model, labelModel, attrValue, notEditable);
         } else {
+
+            final String regexError = new FailoverStringI18NModel(
+                    attrValue.getAttribute().getValidationFailedMessage(),
+                    attrValue.getAttribute().getCode()).getValue(language);
+
             final IModel model = new PropertyModel(attrValue, VALUE_FILED);
-            return new StringEditor(id, markupContainer, model, labelModel, attrValue, notEditable);
+            return new StringEditor(id, markupContainer, model, labelModel, new Model<String>(regexError), attrValue, notEditable);
         }
     }
 }

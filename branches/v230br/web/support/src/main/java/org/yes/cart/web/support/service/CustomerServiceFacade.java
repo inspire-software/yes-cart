@@ -16,10 +16,7 @@
 
 package org.yes.cart.web.support.service;
 
-import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.CustomerWishList;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 
 import java.util.List;
@@ -93,7 +90,7 @@ public interface CustomerServiceFacade {
      *
      * @return list of eligible attributes
      */
-    List<? extends AttrValue> getShopRegistrationAttributes(Shop shop);
+    List<AttrValueCustomer> getShopRegistrationAttributes(Shop shop);
 
 
     /**
@@ -107,7 +104,7 @@ public interface CustomerServiceFacade {
      *
      * @return list of eligible attributes (pair: 1) attribute, 2) read only flag)
      */
-    List<Pair<? extends AttrValue, Boolean>> getCustomerProfileAttributes(Shop shop, Customer customer);
+    List<Pair<AttrValueCustomer, Boolean>> getCustomerProfileAttributes(Shop shop, Customer customer);
 
     /**
      * Update customer entry.
@@ -119,9 +116,11 @@ public interface CustomerServiceFacade {
     /**
      * Update customer entry.
      *
+     * @param profileShop current shop where profile is being updated
      * @param customer customer
+     * @param values attribute values
      */
-    void updateCustomerAttributes(Customer customer, Map<String, String> values);
+    void updateCustomerAttributes(Shop profileShop, Customer customer, Map<String, String> values);
 
     /**
      * Authenticate customer using username and password.

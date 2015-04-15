@@ -45,6 +45,9 @@ public class AttrValueProductRO implements Serializable {
     @DtoField(value = "attribute.attributeId", readOnly = true)
     private long attributeId;
 
+    @DtoField(value = "attribute.code", readOnly = true)
+    private String attributeCode;
+
     @DtoField(value = "attribute.name", readOnly = true)
     private String attributeName;
 
@@ -89,6 +92,15 @@ public class AttrValueProductRO implements Serializable {
 
     public void setAttributeId(final long attributeId) {
         this.attributeId = attributeId;
+    }
+
+    @XmlAttribute(name = "attribute-code")
+    public String getAttributeCode() {
+        return attributeCode;
+    }
+
+    public void setAttributeCode(final String attributeCode) {
+        this.attributeCode = attributeCode;
     }
 
     @XmlElement(name = "attribute-name")

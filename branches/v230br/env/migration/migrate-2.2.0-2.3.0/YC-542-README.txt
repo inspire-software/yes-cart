@@ -1,6 +1,8 @@
 REF: YC-542 Improve customer registration/account details field configuration.
 
-Attributes of business type CommaSeparatedList are now treated as localisable data.
+Attributes' choiceData of business type CommaSeparatedList and validationFailedMessage are now treated as
+localisable data.
+
 Therefore normal CommaSeparatedList: [Value1]-[DisplayName1],[Value2]-[DisplayName2], ... [ValueN]-[DisplayNameN]
 is now per locale and hence the format is: [locale1]#~#[CommaSeparatedList1]#~#[locale2]#~#[CommaSeparatedList2] ...
 

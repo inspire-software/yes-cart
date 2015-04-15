@@ -25,6 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
+import org.yes.cart.domain.ro.CustomerRO;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 
 import java.util.HashMap;
@@ -58,6 +59,16 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
     public void testCustomerJson() throws Exception {
 
         reindex();
+
+        mockMvc.perform(get("/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("custom")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
 
         final byte[] regBody = toJsonBytesRegistrationDetails("bob.doe@yc-account-json.com");
 
@@ -229,6 +240,18 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
     public void testCustomerXML() throws Exception {
 
         reindex();
+
+
+
+        mockMvc.perform(get("/auth/register")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_XML)
+                    .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("<custom")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
 
         final byte[] regBody = toJsonBytesRegistrationDetails("bob.doe@yc-account-xml.com");
 
