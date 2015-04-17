@@ -18,9 +18,18 @@
 <body>
 <wicket:panel>
 
-    <wicket:container wicket:id="homepageContent">
-        [homepage content]
-    </wicket:container>
+    <div class="container">
+        <div class="col-xs-12 col-sm-4 col-md-3">
+            <wicket:container wicket:id="topCategories">
+                [top categories]
+            </wicket:container>
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-9">
+            <wicket:container wicket:id="homepageContent">
+                [homepage content]
+            </wicket:container>
+        </div>
+    </div>
 
 </wicket:panel>
 </body>

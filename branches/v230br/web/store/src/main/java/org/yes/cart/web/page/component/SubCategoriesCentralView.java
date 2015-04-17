@@ -84,6 +84,8 @@ public class SubCategoriesCentralView extends AbstractCentralView {
     @Override
     protected void onBeforeRender() {
 
+        add(new TopCategories("topCategories"));
+
         final long categoryId = getCategoryId();
         final long shopId = ShopCodeContext.getShopId();
 

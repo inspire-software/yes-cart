@@ -17,7 +17,18 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <div class="col-xs-12" wicket:id="contentBody">[content]</div>
+
+    <div class="container">
+        <div class="col-xs-12 col-sm-4 col-md-3">
+            <wicket:container wicket:id="topCategories">
+                [top categories]
+            </wicket:container>
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-9">
+            <div wicket:id="contentBody">[content]</div>
+        </div>
+    </div>
+
 </wicket:panel>
 </body>
 </html>

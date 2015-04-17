@@ -184,7 +184,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
 
         if (categoryId > 0L) {
             final String value = proxy().getCategoryAttributeRecursive(
-                    null, categoryId, AttributeNamesKeys.Category.CATEGORY_ITEMS_NEW_ARRIVAL, null);
+                    null, categoryId, AttributeNamesKeys.Category.CATEGORY_NEW_ARRIVAL_DAYS_OFFSET, null);
             if (value != null) {
                 final int days = NumberUtils.toInt(value, 0);
                 if (days > 1) {
@@ -209,6 +209,10 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         }
         final Calendar beforeDays = Calendar.getInstance();
         beforeDays.add(Calendar.DAY_OF_YEAR, -days);
+        beforeDays.set(Calendar.HOUR, 0);
+        beforeDays.set(Calendar.MINUTE, 0);
+        beforeDays.set(Calendar.SECOND, 0);
+        beforeDays.set(Calendar.MILLISECOND, 0);
         return beforeDays.getTime();
     }
 

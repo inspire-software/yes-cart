@@ -215,6 +215,8 @@ public class SkuCentralView extends AbstractCentralView {
 
         configureContext();
 
+        add(new TopCategories("topCategories"));
+
         final Shop shop = ApplicationDirector.getCurrentShop();
 
         final String selectedLocale = getLocale().getLanguage();

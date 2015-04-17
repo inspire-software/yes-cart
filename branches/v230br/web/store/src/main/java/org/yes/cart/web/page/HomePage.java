@@ -17,7 +17,6 @@
 package org.yes.cart.web.page;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -29,11 +28,7 @@ import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.AbstractCentralView;
-import org.yes.cart.web.page.component.TopCategories;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsView;
-import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
-import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
-import org.yes.cart.web.page.component.filterednavigation.PriceProductFilter;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.header.StandardHeader;
@@ -41,7 +36,6 @@ import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.page.component.product.FeaturedProducts;
 import org.yes.cart.web.page.component.product.NewArrivalProducts;
 import org.yes.cart.web.page.component.product.RecentlyViewedProducts;
-import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
@@ -118,19 +112,6 @@ public class HomePage extends AbstractWebPage {
                 currentCategoriesIds,
                 (Map) mapParams
         );
-
-
-        add(new TopCategories("topCategories"));
-
-        if (CentralViewLabel.SEARCH_LIST.equals(centralViewLabel) || CentralViewLabel.PRODUCTS_LIST.equals(centralViewLabel)) {
-            add(new BrandProductFilter("brandFilter", categoryId, context));
-            add(new AttributeProductFilter("attributeFilter", categoryId, context));
-            add(new PriceProductFilter("priceFilter", categoryId, context));
-        } else {
-            add(new Label("brandFilter"));
-            add(new Label("attributeFilter"));
-            add(new Label("priceFilter"));
-        }
 
         add(new BreadCrumbsView("breadCrumbs", categoryId, shopService.getShopAllCategoriesIds(shop.getShopId())));
 

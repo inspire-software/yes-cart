@@ -142,6 +142,12 @@ public interface Constants {
      */
     List<String> DEFAULT_ITEMS_ON_PAGE = Arrays.asList("10", "20", "30");
 
+    /**
+     * Sort options on page. In case if default value in root category not set
+     * the default values will be used.
+     */
+    List<String> DEFAULT_PAGE_SORT = Arrays.asList("displayName", "sku", "basePrice");
+
 
     /**
      * Delimiter for range navigation value. Need to select this value carefully so that
@@ -149,6 +155,7 @@ public interface Constants {
      */
     String RANGE_NAVIGATION_DELIMITER = "-_-";
 
+    /** Root category PK. */
     long ROOT_CATEGORY_ID = 100L;
 
 }

@@ -52,6 +52,7 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     public final static String SKU_PRODUCT_MANUFACTURER_CODE_FIELD = "sku.manufacturerCode";
     public final static String SKU_PRODUCT_MANUFACTURER_CODE_STEM_FIELD = "sku.manufacturerCode_stem";
     public final static String PRODUCT_NAME_SORT_FIELD = "name_sort";
+    public final static String PRODUCT_DISPLAYNAME_SORT_FIELD = "displayName_sort";
     public final static String PRODUCT_DESCRIPTION_FIELD = "description";
     public final static String PRODUCT_DESCRIPTION_STEM_FIELD = "description_stem";
     public final static String BRAND_FIELD = "brand";
@@ -63,12 +64,6 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     public final static String PRODUCT_SHOP_FIELD = "productShopId";
     public final static String PRODUCT_ID_FIELD = "productId";
     public final static String SKU_ID_FIELD = "sku.skuId"; //////////////////////////////////////////////
-
-    //can be used in sort order
-    public final static String PRODUCT_PRICE_AMOUNT = "sku.skuPrice";
-
-    //aggregated index in SHOPID_CURRENCY_PRICE format
-    public final static String PRODUCT_SKU_PRICE = "sku.skuPrice";
 
     // not really a field, but used in query type determination
     public final static String PRODUCT_PRICE = "price";

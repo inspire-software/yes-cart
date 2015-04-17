@@ -16,14 +16,16 @@
 
 package org.yes.cart.web.page.component.navigation;
 
-import org.apache.wicket.Application;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
+import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -41,33 +43,15 @@ public class ProductPerPageListView extends ListView<String> {
      */
     private final static String ITEMS_PER_PAGE = "itemsPerPage";
 
-    private final String selectedItemPerPage;
-
-    private final PageParameters pageParameters;
-
-    private final Class homePage;
-
-
     /**
      * Constructor.
      *
-     * @param componentId componrnt id
+     * @param componentId component id
      * @param items       list of possible item per page values
-     * @param pageParameters page parameters.
      */
     public ProductPerPageListView(final String componentId,
-                                  final List<String> items,
-                                  final PageParameters pageParameters) {
+                                  final List<String> items) {
         super(componentId, items);
-
-        this.pageParameters = pageParameters;
-
-        this.selectedItemPerPage = String.valueOf(
-                WicketUtil.getSelectedItemsPerPage(pageParameters, items)
-        );
-
-        homePage = Application.get().getHomePage();
-
     }
 
     /**
@@ -75,23 +59,23 @@ public class ProductPerPageListView extends ListView<String> {
      */
     protected void populateItem(ListItem<String> stringListItem) {
 
-        final String quantity = stringListItem.getModelObject();
+        final String pageSize = stringListItem.getModelObject();
+        final Label label = new Label(WebParametersKeys.QUANTITY, pageSize);
 
-        final Label label = new Label(WebParametersKeys.QUANTITY, quantity);
-
-        final LinksSupport links = ((AbstractWebPage) getPage()).getWicketSupportFacade().links();
+        final AbstractWebPage page = ((AbstractWebPage) getPage());
+        final PageParameters pageParameters = page.getPageParameters();
+        final LinksSupport links = page.getWicketSupportFacade().links();
+        final PaginationSupport pagination = page.getWicketSupportFacade().pagination();
 
         final PageParameters params = links.getFilteredCurrentParameters(pageParameters);
-        params.set(WebParametersKeys.QUANTITY, quantity);
+        params.set(WebParametersKeys.QUANTITY, pageSize);
 
-        stringListItem.add(
-                links.newLink(ITEMS_PER_PAGE, params)
-                        .add(label)
-                        .add(new AttributeModifier("class", selectedItemPerPage.equalsIgnoreCase(quantity)?"items-per-page-active":"items-per-page")
-                        )
-        );
+        final Link pageSizeLink = links.newLink(ITEMS_PER_PAGE, params);
+        pageSizeLink.add(label);
+        pagination.markSelectedPageSizeLink(pageSizeLink, pageParameters, NumberUtils.toInt(pageSize));
+
+        stringListItem.add(pageSizeLink);
 
     }
-
 
 }

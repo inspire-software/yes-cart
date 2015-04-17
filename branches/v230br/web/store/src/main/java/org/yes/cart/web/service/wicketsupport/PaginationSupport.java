@@ -19,6 +19,8 @@ package org.yes.cart.web.service.wicketsupport;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import java.util.List;
+
 /**
  * Support for pagination
  *
@@ -72,13 +74,47 @@ public interface PaginationSupport {
                               PageParameters pageParameters, int pageIndex);
 
     /**
+     * Checks if current page is selected.
      *
+     * @param pageParameters current page parameters
+     * @param pageSize page size to check
+     *
+     * @return true if page index is currently active
+     */
+    boolean isPageSizeSelected(PageParameters pageParameters, int pageSize);
+
+
+    /**
+     * Marks link as selected by adding css class.
+     *
+     * @param link sorting link to check
+     * @param pageParameters current page parameters
+     * @param pageSize index to check
+     */
+    void markSelectedPageSizeLink(Link link,
+                                  PageParameters pageParameters, int pageSize);
+
+
+
+    /**
      * Get current page index
      *
      * @param pageParameters current page parameters
      * @return current page index
      */
     int getCurrentPage(PageParameters pageParameters);
+
+    /**
+     * Get current selected page size
+     *
+     * @param pageParameters current page parameters
+     * @param itemsPerPageOptions allowed page sizes
+     *
+     * @return current page index
+     */
+    int getSelectedItemsPerPage(PageParameters pageParameters, List<String> itemsPerPageOptions);
+
+
 
     /**
      * Remove page parameter.

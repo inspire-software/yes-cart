@@ -24,122 +24,132 @@
 
 <wicket:panel>
 
-    <div class="product-detail-holder">
-        <div class="col-xs-12 col-sm-5 no-margin">
-            <div>
-                <wicket:container wicket:id="imageView">
-                    [product image view]
-                </wicket:container>
-            </div>
+
+    <div class="container">
+        <div class="col-xs-12 col-sm-4 col-md-3">
+            <wicket:container wicket:id="topCategories">
+                [top categories]
+            </wicket:container>
         </div>
+        <div class="col-xs-12 col-sm-8 col-md-9 product-detail-holder">
 
-        <div class="col-xs-12 col-sm-7">
-
-            <div class="product-detail-name">
-                <span wicket:id="name">[product or sku name]</span>
-            </div>
-
-            <div class="row">
-                <div class="col-xs-12 product-sku-code">
-                    <wicket:message key="skuCode">[sku.code:]</wicket:message>
-                    <span class="sku-code" wicket:id="skuCode">[sku num]</span>
+            <div class="col-xs-12 col-sm-5 no-margin">
+                <div>
+                    <wicket:container wicket:id="imageView">
+                        [product image view]
+                    </wicket:container>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <div class="product-detail-sku-list">
-                        <wicket:container wicket:id="skuList">
-                            [product variation / sku list]
-                        </wicket:container>
+            <div class="col-xs-12 col-sm-7">
+
+                <div class="product-detail-name">
+                    <span wicket:id="name">[product or sku name]</span>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 product-sku-code">
+                        <wicket:message key="skuCode">[sku.code:]</wicket:message>
+                        <span class="sku-code" wicket:id="skuCode">[sku num]</span>
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-12">
 
-                    <div class="row js-buy-panel">
-
-                        <div class="col-md-12 col-xs-12 text-right">
-                            <wicket:container wicket:id="quantityPicker">
-                                [Quantity picker]
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="product-detail-sku-list">
+                            <wicket:container wicket:id="skuList">
+                                [product variation / sku list]
                             </wicket:container>
                         </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
 
-                        <div class="col-md-12 col-xs-12 text-right">
-                            <a wicket:id="addToCartLink" class="btn btn-warning js-buy" rel="nofollow">
-                                <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;
-                                <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
-                            </a>
+                        <div class="row js-buy-panel">
+
+                            <div class="col-md-12 col-xs-12 text-right">
+                                <wicket:container wicket:id="quantityPicker">
+                                    [Quantity picker]
+                                </wicket:container>
+                            </div>
+
+                            <div class="col-md-12 col-xs-12 text-right">
+                                <a wicket:id="addToCartLink" class="btn btn-warning js-buy" rel="nofollow">
+                                    <span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;
+                                    <span wicket:id="addToCartLinkLabel">[add one to cart]</span>
+                                </a>
+                            </div>
+
+                            <div class="product-detail-price col-md-12 col-xs-12 text-right">
+                                <wicket:container wicket:id="priceView">
+                                    [price]
+                                </wicket:container>
+                            </div>
+
+                            <div class="col-md-12 col-xs-12 text-right wishlist-btn">
+                                <a wicket:id="addToWishListLink" rel="nofollow">
+                                    <span class="glyphicon glyphicon-heart"></span>&nbsp;
+                                    <span wicket:id="addToWishListLinkLabel">[add one to wish list]</span>
+                                </a>
+                            </div>
+
                         </div>
+                    </div>
+                </div>
 
-                        <div class="product-detail-price col-md-12 col-xs-12 text-right">
-                            <wicket:container wicket:id="priceView">
-                                [price]
+                <div class="margin-top10">
+                    <wicket:container wicket:id="addToAnyButton">
+                        [Add to any social button]
+                    </wicket:container>
+                </div>
+            </div>
+
+            <div class="col-xs-12">
+
+                <div class="product-detail-tabs">
+                    <ul class="nav nav-tabs responsive" id="productDetailsTabs" role="tablist">
+                        <li class="active">
+                            <a href="#description" role="tab" data-toggle="tab">
+                                <wicket:message key="description">[description]</wicket:message>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#details" role="tab" data-toggle="tab">
+                                <wicket:message key="details">[details]</wicket:message>
+                            </a>
+                        </li>
+                        <wicket:container wicket:id="accessoriesHeadContainer">
+                            [accessories view]
+                        </wicket:container>
+                        <wicket:container wicket:id="volumeDiscountsHeadContainer">
+                            [discounts view]
+                        </wicket:container>
+                    </ul>
+                    <div class="tab-content responsive">
+                        <div class="tab-pane fade in active" id="description">
+                            <wicket:container wicket:id="description">
+                                [product or sku description]
                             </wicket:container>
                         </div>
-
-                        <div class="col-md-12 col-xs-12 text-right wishlist-btn">
-                            <a wicket:id="addToWishListLink" rel="nofollow">
-                                <span class="glyphicon glyphicon-heart"></span>&nbsp;
-                                <span wicket:id="addToWishListLinkLabel">[add one to wish list]</span>
-                            </a>
+                        <div class="tab-pane fade" id="details">
+                            <wicket:container wicket:id="skuAttrView">
+                                [attributes view]
+                            </wicket:container>
                         </div>
-
+                        <wicket:container wicket:id="accessoriesBodyContainer">
+                            [accessories]
+                        </wicket:container>
+                        <wicket:container wicket:id="priceTiersView">
+                            [price tiers view]
+                        </wicket:container>
                     </div>
                 </div>
             </div>
 
-            <div class="margin-top10">
-                <wicket:container wicket:id="addToAnyButton">
-                    [Add to any social button]
-                </wicket:container>
-            </div>
+            <wicket:container wicket:id="wishListNotification">
+                [wish list notification]
+            </wicket:container>
         </div>
 
-        <div class="col-xs-12">
-
-            <div class="product-detail-tabs">
-                <ul class="nav nav-tabs responsive" id="productDetailsTabs" role="tablist">
-                    <li class="active">
-                        <a href="#description" role="tab" data-toggle="tab">
-                            <wicket:message key="description">[description]</wicket:message>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#details" role="tab" data-toggle="tab">
-                            <wicket:message key="details">[details]</wicket:message>
-                        </a>
-                    </li>
-                    <wicket:container wicket:id="accessoriesHeadContainer">
-                        [accessories view]
-                    </wicket:container>
-                    <wicket:container wicket:id="volumeDiscountsHeadContainer">
-                        [discounts view]
-                    </wicket:container>
-                </ul>
-                <div class="tab-content responsive">
-                    <div class="tab-pane fade in active" id="description">
-                        <wicket:container wicket:id="description">
-                            [product or sku description]
-                        </wicket:container>
-                    </div>
-                    <div class="tab-pane fade" id="details">
-                        <wicket:container wicket:id="skuAttrView">
-                            [attributes view]
-                        </wicket:container>
-                    </div>
-                    <wicket:container wicket:id="accessoriesBodyContainer">
-                        [accessories]
-                    </wicket:container>
-                    <wicket:container wicket:id="priceTiersView">
-                        [price tiers view]
-                    </wicket:container>
-                </div>
-            </div>
-        </div>
-
-        <wicket:container wicket:id="wishListNotification">
-            [wish list notification]
-        </wicket:container>
     </div>
 
     <script type="text/javascript">

@@ -24,6 +24,8 @@ import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.util.WicketUtil;
 
+import java.util.List;
+
 /**
  * User: denispavlov
  * Date: 13-06-28
@@ -70,6 +72,25 @@ public class PaginationSupportImpl implements PaginationSupport {
 
     /** {@inheritDoc} */
     @Override
+    public boolean isPageSizeSelected(final PageParameters pageParameters, final int pageSize) {
+        String selectedItemPerPage = pageParameters.get(WebParametersKeys.QUANTITY).toString();
+        return pageSize == NumberUtils.toInt(selectedItemPerPage);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void markSelectedPageSizeLink(final Link link,
+                                         final PageParameters pageParameters, final int pageSize) {
+        if (isPageSizeSelected(pageParameters, pageSize)) {
+            link.add(new AttributeModifier("class", "items-per-page-active"));
+        } else {
+            link.add(new AttributeModifier("class", "items-per-page"));
+
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public int getCurrentPage(PageParameters pageParameters) {
 
         final String currentPage = pageParameters.get(WebParametersKeys.PAGE).toString();
@@ -82,6 +103,12 @@ public class PaginationSupportImpl implements PaginationSupport {
             return 0;
         }
         return currentPageIdx;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getSelectedItemsPerPage(final PageParameters pageParameters, final List<String> itemsPerPageOptions) {
+        return WicketUtil.getSelectedItemsPerPage(pageParameters, itemsPerPageOptions);
     }
 
     /** {@inheritDoc} */

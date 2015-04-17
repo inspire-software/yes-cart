@@ -16,11 +16,15 @@
 
 package org.yes.cart.domain.ro;
 
+import org.yes.cart.domain.ro.xml.impl.StringMapAdapter;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -40,6 +44,7 @@ public class SearchResultRO implements Serializable {
     private String productImageHeight;
 
     private List<String> pageAvailableSize;
+    private Map<String, String> pageAvailableSort;
 
     private List<ProductSearchResultRO> products;
 
@@ -91,6 +96,16 @@ public class SearchResultRO implements Serializable {
 
     public void setPageAvailableSize(final List<String> pageAvailableSize) {
         this.pageAvailableSize = pageAvailableSize;
+    }
+
+    @XmlJavaTypeAdapter(StringMapAdapter.class)
+    @XmlElement(name = "page-available-sort")
+    public Map<String, String> getPageAvailableSort() {
+        return pageAvailableSort;
+    }
+
+    public void setPageAvailableSort(final Map<String, String> pageAvailableSort) {
+        this.pageAvailableSort = pageAvailableSort;
     }
 
     public List<ProductSearchResultRO> getProducts() {

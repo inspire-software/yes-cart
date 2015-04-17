@@ -49,6 +49,8 @@ public class ContentCentralView extends AbstractCentralView {
     @Override
     protected void onBeforeRender() {
 
+        add(new TopCategories("topCategories"));
+
         final String lang = getLocale().getLanguage();
         final String contentBody;
         if (getCategoryId() > 0l) {

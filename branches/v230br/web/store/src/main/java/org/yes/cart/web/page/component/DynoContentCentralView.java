@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 
@@ -47,16 +48,21 @@ public class DynoContentCentralView extends AbstractCentralView {
     @Override
     protected void onBeforeRender() {
 
+        add(new TopCategories("topCategories"));
+
         final String lang = getLocale().getLanguage();
         final String contentBody;
         if (getCategoryId() > 0l) {
             contentBody = contentServiceFacade.getDynamicContentBody(getCategoryId(), ShopCodeContext.getShopId(), lang, new HashMap<String, Object>() {{
-                put("datetime", new Date());  // This is just an example of passing a variable to template
+                put("shoppingCart", ApplicationDirector.getShoppingCart());
+                put("shop", ApplicationDirector.getCurrentShop());
+                put("datetime", new Date());
             }});
         } else {
             contentBody = "";
         }
         add(new Label("contentBody", contentBody).setEscapeModelStrings(false));
+
         super.onBeforeRender();
     }
 }

@@ -68,7 +68,6 @@
     <entry key="faq">FAQ</entry>
     <entry key="contacts">Contacts</entry>
     <entry key="profileLogin">Login / Register</entry>
-    <entry key="profile">Profile / Wish list</entry>
     <entry key="sale">Sale</entry>
     <entry key="newArrivals">New arrivals</entry>
     <entry key="addToCart">Add to cart</entry>
@@ -264,7 +263,7 @@
 
     <!-- WishListView -->
     <entry key="wishlistItems">Wish list</entry>
-    <entry key="wishlistNoItems">There are no items in your wish list. You can them by clicking "Add to Wishlist" button on product pages.</entry>
+    <entry key="wishlistNoItems">There are no items in your wish list. You can add them by clicking "Add to Wishlist" button on product pages.</entry>
     <entry key="addToCartWlBtn">Add to cart (${0})</entry>
     <entry key="preorderCartWlBtn">Preorder (${0})</entry>
     <entry key="removeFromWishlist">Remove item</entry>
@@ -277,7 +276,7 @@
     <entry key="saveForLaterNoItems">There are no items in your saved list. You can add them by clicking "Save for later" button.</entry>
 
     <!-- StandardFooter, CheckoutFooter -->
-    <entry key="profile">Profile</entry>
+    <entry key="profile">Profile / Wish list</entry>
     <entry key="siteMap">Site map</entry>
     <entry key="help">Help</entry>
     <entry key="platform">Platform</entry>
@@ -305,9 +304,12 @@
 
     <!-- ProductSorter -->
     <entry key="sort">Sort:</entry>
-    <entry key="byName">by name</entry>
-    <entry key="byCode">by code</entry>
-    <entry key="byPrice">by price</entry>
+    <entry key="byName">name</entry>
+    <entry key="byCode">code</entry>
+    <entry key="bySKU">SKU</entry>
+    <entry key="byPrice">price</entry>
+    <entry key="byAvailability">availability</entry>
+    <entry key="byCreation">time</entry>
 
     <!-- PriceTierView -->
     <entry key="priceTierLabel">Price of one item</entry>

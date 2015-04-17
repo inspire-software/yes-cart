@@ -49,14 +49,12 @@ import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 import org.yes.cart.web.support.service.ProductServiceFacade;
+import org.yes.cart.web.support.util.ProductSortingUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -170,6 +168,11 @@ public class SearchController {
      *     "20",
      *     "30"
      *   ],
+     *   "pageAvailableSort" : {
+     *     "byName" : "displayName_sorten",
+     *     "bySKU" : "sku.code",
+     *     "byPrice" : "facet_price_10_EUR"
+     *   },
      *   "products" : [
      *     {
      *       "maxOrderQuantity" : null,
@@ -352,6 +355,11 @@ public class SearchController {
      *         &lt;page-available-size&gt;20&lt;/page-available-size&gt;
      *         &lt;page-available-size&gt;30&lt;/page-available-size&gt;
      *     &lt;/page-available-sizes&gt;
+     *     &lt;page-available-sort&gt;
+     *         &lt;entry key="byName"&gt;displayName_sorten&lt;/entry&gt;
+     *         &lt;entry key="bySKU"&gt;sku.code&lt;/entry&gt;
+     *         &lt;entry key="byPrice"&gt;facet_price_10_EUR&lt;/entry&gt;
+     *     &lt;/page-available-sort&gt;
      *     &lt;product-image-height&gt;280&lt;/product-image-height&gt;
      *     &lt;product-image-width&gt;280&lt;/product-image-width&gt;
      *     &lt;products&gt;
@@ -480,7 +488,7 @@ public class SearchController {
 
         final NavigationContext context = createNavigationContext(categoryId, shop.getShopId(), result);
 
-        configureResultViewOptions(categoryId, shop.getShopId(), result);
+        configureResultViewOptions(categoryId, shop.getShopId(), cart.getCurrentLocale(), cart.getCurrencyCode(), result);
 
         populateSearchResults(context, result, cart);
 
@@ -727,10 +735,11 @@ public class SearchController {
 
     private void configureResultViewOptions(final long categoryId,
                                             final long shopId,
+                                            final String locale,
+                                            final String currency,
                                             final SearchResultRO result) {
 
         final List<String> itemsPerPageValues = categoryServiceFacade.getItemsPerPageOptionsConfig(categoryId, shopId);
-
         final int selectedItemPerPage;
         if (itemsPerPageValues.contains(String.valueOf(result.getSearch().getPageSize()))) {
             selectedItemPerPage = result.getSearch().getPageSize();
@@ -738,9 +747,22 @@ public class SearchController {
             selectedItemPerPage = NumberUtils.toInt(itemsPerPageValues.get(0), 10);
         }
 
+        final List<String> pageSortingValues = categoryServiceFacade.getPageSortingOptionsConfig(categoryId, shopId);
+        final Map<String, String> sortPageValues = new LinkedHashMap<String, String>();
+        for (final String pageSortingValue : pageSortingValues) {
+            final ProductSortingUtils.SupportedSorting sorting = ProductSortingUtils.getConfiguration(pageSortingValue);
+            if (sorting != null) {
+                sortPageValues.put(
+                        sorting.resolveLabelKey(shopId, locale, currency),
+                        sorting.resolveSortField(shopId, locale, currency)
+                );
+            }
+        }
+
         final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, shopId);
 
         result.setPageAvailableSize(itemsPerPageValues);
+        result.setPageAvailableSort(sortPageValues);
         if (result.getSearch().getPageNumber() < 0) {
             result.getSearch().setPageNumber(0); // do not allow negative start page
         }

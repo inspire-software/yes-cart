@@ -17,6 +17,7 @@
 
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
+    <!-- Core wicket -->
     <entry key="Required">'${label}' обов'язкове поле</entry>
     <entry key="IConverter">Значення '${input}' не вірно для ${type}</entry>
     <entry key="RangeValidator">Значення ${input} має бути між ${minimum} та ${maximum}</entry>
@@ -302,7 +303,11 @@
     <entry key="sort">Сортувати:</entry>
     <entry key="byName">ім'я</entry>
     <entry key="byCode">код</entry>
+    <entry key="bySKU">SKU</entry>
     <entry key="byPrice">ціна</entry>
+    <entry key="byAvailability">склад</entry>
+    <entry key="byCreation">час</entry>
+
 
     <!-- PriceTierView -->
     <entry key="priceTierLabel">Ціна за одиницю</entry>

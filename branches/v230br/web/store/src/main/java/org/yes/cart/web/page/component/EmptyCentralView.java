@@ -66,6 +66,8 @@ public class EmptyCentralView extends AbstractCentralView {
         final long shopId = ShopCodeContext.getShopId();
         final String lang = getLocale().getLanguage();
 
+        add(new TopCategories("topCategories"));
+
         String footerCopyright = getContentInclude(shopId, "homepage_content_include", lang);
         addOrReplace(new Label("homepageContent", footerCopyright).setEscapeModelStrings(false));
 

@@ -195,24 +195,25 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      */
     public List<String> getItemsPerPageOptionsConfig(final long categoryId, final long shopId) {
 
-        if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
+        return getCSVConfig(categoryId,
+                            shopId,
+                            AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE,
+                            AttributeNamesKeys.Shop.SHOP_CATEGORY_ITEMS_PER_PAGE,
+                            Constants.DEFAULT_ITEMS_ON_PAGE);
 
-            final String size = categoryService.getCategoryAttributeRecursive(
-                    null, categoryId, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null
-            );
-            if (StringUtils.isNotBlank(size)) {
-                return Arrays.asList(StringUtils.split(size, ','));
-            }
+    }
 
-        }
+    /**
+     * {@inheritDoc}
+     */
+    public List<String> getPageSortingOptionsConfig(final long categoryId, final long shopId) {
 
-        final Shop shop = shopService.getById(shopId);
-        final AttrValueShop attrValueShop = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CATEGORY_ITEMS_PER_PAGE);
-        if (attrValueShop != null && StringUtils.isNotBlank(attrValueShop.getVal())) {
-            return Arrays.asList(StringUtils.split(attrValueShop.getVal(), ','));
-        }
 
-        return Constants.DEFAULT_ITEMS_ON_PAGE;
+        return getCSVConfig(categoryId,
+                            shopId,
+                            AttributeNamesKeys.Category.CATEGORY_SORT_OPTIONS,
+                            AttributeNamesKeys.Shop.SHOP_CATEGORY_SORT_OPTIONS,
+                            Constants.DEFAULT_PAGE_SORT);
 
     }
 
@@ -234,6 +235,35 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
         return getLimitSizeConfig(categoryId, shopId, AttributeNamesKeys.Category.CATEGORY_SUBCATEGORIES_COLUMNS, Constants.SUBCATEGORIES_COLUMNS_SIZE);
 
     }
+
+
+    private List<String> getCSVConfig(final long categoryId,
+                                      final long shopId,
+                                      final String categoryCsvAttribute,
+                                      final String shopCsvAttribute,
+                                      final List<String> defaultCsv) {
+
+        if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
+
+            final String csv = categoryService.getCategoryAttributeRecursive(
+                    null, categoryId, categoryCsvAttribute, null
+            );
+            if (StringUtils.isNotBlank(csv)) {
+                return Arrays.asList(StringUtils.split(csv, ','));
+            }
+
+        }
+
+        final Shop shop = shopService.getById(shopId);
+        final AttrValueShop attrValueShop = shop.getAttributeByCode(shopCsvAttribute);
+        if (attrValueShop != null && StringUtils.isNotBlank(attrValueShop.getVal())) {
+            return Arrays.asList(StringUtils.split(attrValueShop.getVal(), ','));
+        }
+
+        return defaultCsv;
+
+    }
+
 
     private int getLimitSizeConfig(final long categoryId,
                                    final long shopId,

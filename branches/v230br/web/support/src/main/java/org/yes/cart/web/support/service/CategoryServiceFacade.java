@@ -123,6 +123,16 @@ public interface CategoryServiceFacade {
     List<String> getItemsPerPageOptionsConfig(long categoryId, long shopId);
 
     /**
+     * Get sorting options configuration.
+     *
+     * @param categoryId category PK
+     * @param shopId     current shop
+     *
+     * @return sorting options
+     */
+    List<String> getPageSortingOptionsConfig(long categoryId, long shopId);
+
+    /**
      * Get number of columns options configuration.
      *
      * @param categoryId category PK

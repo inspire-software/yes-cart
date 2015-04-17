@@ -28,10 +28,14 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.data.SortableProductDataProvider;
+import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
+import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
+import org.yes.cart.web.page.component.filterednavigation.PriceProductFilter;
 import org.yes.cart.web.page.component.navigation.ProductPerPageListView;
 import org.yes.cart.web.page.component.navigation.ProductSorter;
 import org.yes.cart.web.page.component.navigation.URLPagingNavigator;
 import org.yes.cart.web.page.component.product.ProductInListView;
+import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.ProductServiceFacade;
@@ -94,20 +98,29 @@ public class ProductsCentralView extends AbstractCentralView {
     @Override
     protected void onBeforeRender() {
 
+
         final long shopId = ShopCodeContext.getShopId();
         final long categoryId = getCategoryId();
+        final NavigationContext context = getNavigationContext();
+
+        add(new TopCategories("topCategories"));
+        add(new BrandProductFilter("brandFilter", categoryId, context));
+        add(new AttributeProductFilter("attributeFilter", categoryId, context));
+        add(new PriceProductFilter("priceFilter", categoryId, context));
 
         final List<String> itemsPerPageValues = categoryServiceFacade.getItemsPerPageOptionsConfig(categoryId, shopId);
+        final List<String> pageSortingValues = categoryServiceFacade.getPageSortingOptionsConfig(categoryId, shopId);
         final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, shopId);
         final int columns = categoryServiceFacade.getProductListColumnOptionsConfig(categoryId, shopId);
 
-        int currentPageIdx = getWicketSupportFacade().pagination().getCurrentPage(getPage().getPageParameters());
-        final int selectedItemPerPage = WicketUtil.getSelectedItemsPerPage(
-                getPage().getPageParameters(), itemsPerPageValues);
+        final PageParameters pageParameters = getPage().getPageParameters();
+        final PaginationSupport pagination = getWicketSupportFacade().pagination();
+        int currentPageIdx = pagination.getCurrentPage(pageParameters);
+        final int selectedItemPerPage = pagination.getSelectedItemsPerPage(pageParameters, itemsPerPageValues);
         final Pair<String, Boolean> sortResult = getSortField();
 
         ProductSearchResultPageDTO products = productServiceFacade.getListProducts(
-                getNavigationContext(), currentPageIdx, selectedItemPerPage,
+                context, currentPageIdx * selectedItemPerPage, selectedItemPerPage,
                 sortResult.getFirst(), sortResult.getSecond());
 
         if (currentPageIdx * selectedItemPerPage > products.getTotalHits()) {
@@ -140,10 +153,10 @@ public class ProductsCentralView extends AbstractCentralView {
         productDataView.setRows(selectedItemPerPage / columns);
         productDataView.setCurrentPage(currentPageIdx);
 
-        add(new ProductSorter(SORTER));
+        add(new ProductSorter(SORTER, pageSortingValues));
         add(new URLPagingNavigator(PAGINATOR, productDataView, getPage().getPageParameters()));
         add(new URLPagingNavigator(PAGINATOR2, productDataView, getPage().getPageParameters()));
-        add(new ProductPerPageListView(ITEMS_PER_PAGE_LIST, itemsPerPageValues, getPage().getPageParameters()));
+        add(new ProductPerPageListView(ITEMS_PER_PAGE_LIST, itemsPerPageValues));
         add(productDataView);
 
         super.onBeforeRender();

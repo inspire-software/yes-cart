@@ -23,6 +23,8 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
+import java.util.Map;
+
 /**
  * User: denispavlov
  * Date: 12-08-15
@@ -42,6 +44,12 @@ public class DisplayNameBridge implements TwoWayFieldBridge/*FieldBridge*/ {
                 }
             } else if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD.equals(name)) {
                 luceneOptions.addFieldToDocument(name, (String) value, document);
+            } else if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_SORT_FIELD.equals(name)) {
+                final I18NModel model = new StringI18NModel((String) value);
+                for (Map.Entry<String, String> displayName : model.getAllValues().entrySet()) {
+                    // add all sort names to index
+                    luceneOptions.addFieldToDocument(name + displayName.getKey(), displayName.getValue(), document);
+                }
             }
         }
     }

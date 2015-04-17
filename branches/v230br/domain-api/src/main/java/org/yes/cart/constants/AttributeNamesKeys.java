@@ -125,12 +125,29 @@ public interface AttributeNamesKeys {
 
     interface Category {
 
+        /**
+         * Pagination option for category
+         */
         String CATEGORY_ITEMS_PER_PAGE = "CATEGORY_ITEMS_PER_PAGE";
 
+        /**
+         * Comma separated list of product sorting options
+         */
+        String CATEGORY_SORT_OPTIONS = "CATEGORY_SORT_OPTIONS";
+
+        /**
+         * Number of categories to be displayed in one row for grid view
+         */
         String CATEGORY_SUBCATEGORIES_COLUMNS = "CATEGORY_SUBCATEGORIES_COLUMNS";
 
+        /**
+         * Max count of featured products to be shown for category
+         */
         String CATEGORY_ITEMS_FEATURED = "CATEGORY_ITEMS_FEATURED";
 
+        /**
+         * Max count of new arrival products for category
+         */
         String CATEGORY_ITEMS_NEW_ARRIVAL = "CATEGORY_ITEMS_NEW_ARRIVAL";
 
         /**
@@ -150,16 +167,19 @@ public interface AttributeNamesKeys {
          */
         String CATEGORY_IMAGE_RETRIEVE_STRATEGY = "CATEGORY_IMAGE_RETRIEVE_STRATEGY";
 
-        /** Category images width and height.  */
+        /** Category images width.  */
         String CATEGORY_IMAGE_WIDTH = "CATEGORY_IMAGE_WIDTH";
+        /** Category images height.  */
         String CATEGORY_IMAGE_HEIGHT = "CATEGORY_IMAGE_HEIGHT";
 
-        /** Product image width and height in category.  */
+        /** Product image width in category.  */
         String PRODUCT_IMAGE_WIDTH = "PRODUCT_IMAGE_WIDTH";
+        /** Product image height in category.  */
         String PRODUCT_IMAGE_HEIGHT = "PRODUCT_IMAGE_HEIGHT";
 
-        /** Product image width and height in category.  */
+        /** Product image width in category.  */
         String PRODUCT_IMAGE_THUMB_WIDTH = "PRODUCT_IMAGE_THUMB_WIDTH";
+        /** Product image height in category.  */
         String PRODUCT_IMAGE_THUMB_HEIGHT = "PRODUCT_IMAGE_THUMB_HEIGHT";
 
         /** Product columns in grid */
@@ -280,18 +300,29 @@ public interface AttributeNamesKeys {
          */
         String SHOP_NEW_ARRIVAL_DAYS_OFFSET = "SHOP_NEW_ARRIVAL_DAYS_OFFSET";
 
+        /**
+         * Comma separated list of page size options
+         */
         String SHOP_CATEGORY_ITEMS_PER_PAGE = "SHOP_CATEGORY_ITEMS_PER_PAGE";
 
-        /** Category images width and height.  */
+        /**
+         * Comma separated list of product sorting options
+         */
+        String SHOP_CATEGORY_SORT_OPTIONS = "SHOP_CATEGORY_SORT_OPTIONS";
+
+        /** Category images width.  */
         String SHOP_CATEGORY_IMAGE_WIDTH = "SHOP_CATEGORY_IMAGE_WIDTH";
+        /** Category images height.  */
         String SHOP_CATEGORY_IMAGE_HEIGHT = "SHOP_CATEGORY_IMAGE_HEIGHT";
 
-        /** Product image width and height in category.  */
+        /** Product image width in category.  */
         String SHOP_PRODUCT_IMAGE_WIDTH = "SHOP_PRODUCT_IMAGE_WIDTH";
+        /** Product image height in category.  */
         String SHOP_PRODUCT_IMAGE_HEIGHT = "SHOP_PRODUCT_IMAGE_HEIGHT";
 
-        /** Product image width and height in category.  */
+        /** Product image width in category.  */
         String SHOP_PRODUCT_IMAGE_THUMB_WIDTH = "SHOP_PRODUCT_IMAGE_THUMB_WIDTH";
+        /** Product image height in category.  */
         String SHOP_PRODUCT_IMAGE_THUMB_HEIGHT = "SHOP_PRODUCT_IMAGE_THUMB_HEIGHT";
 
         /**
