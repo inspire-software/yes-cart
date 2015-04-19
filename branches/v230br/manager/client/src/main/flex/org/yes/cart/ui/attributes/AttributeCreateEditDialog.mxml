@@ -85,6 +85,8 @@
 
         import com.hexagonstar.util.debug.Debug;
 
+        import org.yes.cart.util.DomainUtils;
+
 
         private var _attrbuteDTO:AttributeDTOImpl;
 
@@ -119,7 +121,7 @@
         }
 
         public function editAttr(attrbuteDTO:AttributeDTOImpl):void {
-            newAttributeFlag = false;
+            newAttributeFlag = DomainUtils.isNewPK(attrbuteDTO.attributeId);
             this._attrbuteDTO = attrbuteDTO;
             this.code.text = attrbuteDTO.code;
             this.attrName.text = attrbuteDTO.name;

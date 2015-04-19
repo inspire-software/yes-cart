@@ -141,6 +141,18 @@
             }
         }
 
+        private function onCopyAttributeClick(event:Event):void {
+            if (attributeSelected && attributesGrid.selectedItem != null) {
+                var currentAttributeDTO:AttributeDTOImpl = AttributeDTOImpl(CloneUtil.clone(attributesGrid.selectedItem));
+                currentAttributeDTO.attributeId = 0;
+                newAttrPopUp = AttributeCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeCreateEditDialog, true));
+                newAttrPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onCreateAttributeSaveClick);
+                newAttrPopUp.type.dataProvider = etypesList;
+                newAttrPopUp.editAttr(currentAttributeDTO);
+                PopUpManager.centerPopUp(newAttrPopUp);
+            }
+        }
+
 
         private function onUpdateAttributeClick(event:Event):void {
             if (attributeSelected && attributesGrid.selectedItem != null) {
@@ -153,7 +165,6 @@
 
             }
         }
-
 
         private function onUpdateAttributeSaveClick(event:Event):void {
             if (newAttrPopUp != null) {
@@ -341,6 +352,11 @@
                            toolTip="@Resource(bundle='AttributesManagementPanel',key='addNewHint')"
                            enabled="{groupSelected}"
                            click="onCreateAttributeClick(event)"
+                        />
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='copy')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='copyHint')"
+                           enabled="{attributeSelected}"
+                           click="onCopyAttributeClick(event)"
                         />
                 <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='edit')"
                            toolTip="@Resource(bundle='AttributesManagementPanel',key='editHint')"
