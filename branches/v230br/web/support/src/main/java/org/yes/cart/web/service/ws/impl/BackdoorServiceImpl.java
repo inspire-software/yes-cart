@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.service.ws.impl;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
@@ -229,11 +230,11 @@ public class BackdoorServiceImpl implements BackdoorService {
 
                 if (query.toLowerCase().contains("select ")) {
 
-                    return getGenericDao().executeNativeQuery(query);
+                    return escapeXml(getGenericDao().executeNativeQuery(query));
 
                 } else {
 
-                    return Collections.singletonList(new Object[]{getGenericDao().executeNativeUpdate(query)});
+                    return Collections.singletonList(escapeXml(new Object[]{getGenericDao().executeNativeUpdate(query)}));
 
                 }
             }
@@ -263,7 +264,7 @@ public class BackdoorServiceImpl implements BackdoorService {
                     return transformTypedResultListToArrayList(queryRez);
 
                 } else {
-                    return Collections.singletonList(new Object[]{getGenericDao().executeHsqlQuery(query)});
+                    return Collections.singletonList(escapeXml(new Object[]{getGenericDao().executeHsqlQuery(query)}));
                 }
             }
             return Collections.EMPTY_LIST;
@@ -311,6 +312,29 @@ public class BackdoorServiceImpl implements BackdoorService {
 
         }
         return rezList;
+    }
+
+    private List<Object[]> escapeXml(List<Object[]> raw) {
+
+        final List<Object[]> rezList = new ArrayList<Object[]>(raw.size());
+
+        for (Object[] obj : raw) {
+
+            rezList.add(escapeXml(obj));
+
+        }
+        return rezList;
+
+    }
+
+    private Object[] escapeXml(Object[] raw) {
+
+        final Object[] escaped = new Object[raw.length];
+        for (int i = 0; i < raw.length; i++) {
+            escaped[i] = StringEscapeUtils.escapeXml(String.valueOf(raw[i]));
+        }
+        return escaped;
+
     }
 
     /**

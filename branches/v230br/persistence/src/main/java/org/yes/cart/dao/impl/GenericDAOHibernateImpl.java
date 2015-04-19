@@ -686,7 +686,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                     if (async) {
                         asyncRunningState.set(COMPLETED);
                         try {
-                            sessionFactory.getCurrentSession().close();
+                            if (persistentClassIndexble) {
+                                sessionFactory.getCurrentSession().close();
+                            }
                         } catch (Exception exp) { }
                     }
                 }

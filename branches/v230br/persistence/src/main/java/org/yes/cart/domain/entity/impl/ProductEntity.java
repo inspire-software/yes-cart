@@ -21,7 +21,6 @@ import org.hibernate.search.annotations.*;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.entity.bridge.ProductSkuCodeBridge;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.interceptor.ProductEntityIndexingInterceptor;
 
@@ -209,8 +208,11 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.brand = brand;
     }
 
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
-        bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.ProductTypeValueBridge.class))
+    @Field(name = "producttype", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
+    public String getProducttypeId() {
+        return String.valueOf(getProducttype().getProducttypeId());
+    }
+
     public ProductType getProducttype() {
         return this.producttype;
     }
@@ -380,8 +382,15 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         return attr.getVal();
     }
 
-    @Field(index = Index.YES, analyze = Analyze.NO, store = Store.YES,
-            bridge = @FieldBridge(impl = ProductSkuCodeBridge.class))
+    @Field(name = "defaultSku", index = Index.YES, analyze = Analyze.NO, store = Store.YES)
+    public String getDefaultSkuCode() {
+        final ProductSku sku = getDefaultSku();
+        if (sku != null) {
+            return sku.getCode();
+        }
+        return null;
+    }
+
     public ProductSku getDefaultSku() {
         if (defaultProductSku == null) {
             if (this.getSku() != null && !this.getSku().isEmpty()) {

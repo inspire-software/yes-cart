@@ -36,10 +36,17 @@ public class ObjectUtilTest {
         assertNotNull(ObjectUtil.toObjectArray(null));
 
 
+        // Object transformation
         Object [] objarr = ObjectUtil.toObjectArray(new Pair<String, Integer>("first", 10));
         assertEquals("first", objarr[1]);
-        assertEquals(10, objarr[2]);
+        assertEquals("10", objarr[2]);
 
+        // Object transformation with XML escaping (we are sending this over WebServices!!!)
+        Object [] objarrXML = ObjectUtil.toObjectArray(new Pair<String, Integer>("<first>", 10));
+        assertEquals("&lt;first&gt;", objarrXML[1]);
+        assertEquals("10", objarrXML[2]);
+
+        // Single entry transformation
         assertEquals(1, ObjectUtil.toObjectArray(12).length);
         assertEquals("12" , ObjectUtil.toObjectArray(12)[0]);
     }

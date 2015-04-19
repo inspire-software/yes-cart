@@ -61,40 +61,33 @@ public class AttributeValueBridge implements FieldBridge {
                 // Only keep navigatable attributes in index
                 if (search || navigation) {
 
-                    if (isValidValue(attrValue)) {
-                        if (navigation) { // strict value only for navigation
-                            document.add(new Field(
-                                    ProductSearchQueryBuilder.ATTRIBUTE_VALUE_FIELD,
-                                    (attrValue.getAttribute() == null ? "" : attrValue.getAttribute().getCode()) + attrValue.getVal(),
-                                    luceneOptions.getStore(),
-                                    Field.Index.NOT_ANALYZED,
-                                    luceneOptions.getTermVector()
-                            ));
-                        }
-                        // searchable and navigatable terms
+                    if (StringUtils.isNotBlank(attrValue.getVal())) {
+                        // searchable and navigatable terms for global search tokenised
                         document.add(new Field(
                                 ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
                                 getSearchValue(attrValue),
-                                luceneOptions.getStore(),
+                                Field.Store.NO,
                                 Field.Index.ANALYZED,
+                                luceneOptions.getTermVector()
+                        ));
+
+                        // searchable and navigatable terms for global search full phrase
+                        document.add(new Field(
+                                ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
+                                getSearchValue(attrValue),
+                                Field.Store.NO,
+                                Field.Index.NOT_ANALYZED,
                                 luceneOptions.getTermVector()
                         ));
 
                     }
 
-                    if (navigation) { // attribute navigation only for navigatable
-                        document.add(new Field(
-                                ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD,
-                                attrValue.getAttribute().getCode(),
-                                luceneOptions.getStore(),
-                                Field.Index.NOT_ANALYZED,
-                                luceneOptions.getTermVector()
-                        ));
-
+                    if (navigation) {
+                        // strict attribute navigation only for filtered navigation
                         document.add(new Field(
                                 "facet_" + attrValue.getAttribute().getCode(),
                                 attrValue.getVal(),
-                                luceneOptions.getStore(),
+                                Field.Store.NO,
                                 Field.Index.NOT_ANALYZED,
                                 luceneOptions.getTermVector()
                         ));
@@ -112,22 +105,6 @@ public class AttributeValueBridge implements FieldBridge {
             return attrValue.getDisplayVal().replace(StringI18NModel.SEPARATOR, " ").concat(" ").concat(attrValue.getVal());
         }
         return attrValue.getVal();
-    }
-
-    /**
-     * Is value may be in index ans searchable.
-     * @param attrValue given attribute value
-     * @return true if value must be in index.
-     */
-    private boolean isValidValue(final AttrValue attrValue) {
-        return StringUtils.isNotBlank(attrValue.getVal())
-                &&
-                !attrValue.getVal().contains("±")  //ice cat hack
-                &&
-                !attrValue.getVal().contains("+")  //ice cat hack
-                &&
-                !attrValue.getVal().contains("/")  //ice cat hack
-                ;
     }
 
     private NavigatableAttributesSupport getNavigatableAttributesSupport() {

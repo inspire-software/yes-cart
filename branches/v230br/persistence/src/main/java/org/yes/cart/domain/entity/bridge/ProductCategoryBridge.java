@@ -50,9 +50,9 @@ public class ProductCategoryBridge implements FieldBridge {
                 document.add(new Field(
                         "productCategory.category",
                         String.valueOf(productCategory.getCategory().getCategoryId()),
-                        luceneOptions.getStore(),
+                        Field.Store.NO,
                         Field.Index.NOT_ANALYZED,
-                        luceneOptions.getTermVector()
+                        Field.TermVector.NO
                 ));
 
             }
@@ -80,7 +80,7 @@ public class ProductCategoryBridge implements FieldBridge {
                         document.add(new Field(
                                 ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD,
                                 String.valueOf(shop.getShopId()),
-                                luceneOptions.getStore(),
+                                Field.Store.NO,
                                 Field.Index.NOT_ANALYZED,
                                 luceneOptions.getTermVector()
                         ));

@@ -48,11 +48,10 @@ public class AttributeSkuSearchQueryBuilder extends AbstractSearchQueryBuilderIm
 
             final BooleanQuery aggregatedQuery = new BooleanQuery();
 
-            final String searchValueLo = attrValues[0].length() > 0 ? escapedParameter + escapeValue(attrValues[0]) : null;
-            final String searchValueHi = attrValues[1].length() > 0 ? escapedParameter + escapeValue(attrValues[1]) : null;
+            final String searchValueLo = attrValues[0].length() > 0 ? escapeValue(attrValues[0]) : null;
+            final String searchValueHi = attrValues[1].length() > 0 ? escapeValue(attrValues[1]) : null;
 
-            aggregatedQuery.add(createTermQuery(ATTRIBUTE_CODE_FIELD, escapedParameter), BooleanClause.Occur.SHOULD);
-            aggregatedQuery.add(createRangeQuery(ATTRIBUTE_VALUE_FIELD, searchValueLo, searchValueHi, 3.5f), BooleanClause.Occur.SHOULD);
+            aggregatedQuery.add(createRangeQuery("facet_" + escapedParameter, searchValueLo, searchValueHi, 3.5f), BooleanClause.Occur.SHOULD);
 
             return aggregatedQuery;
 
@@ -60,10 +59,9 @@ public class AttributeSkuSearchQueryBuilder extends AbstractSearchQueryBuilderIm
 
         final BooleanQuery aggregatedQuery = new BooleanQuery();
 
-        final String ftSearchValue = escapedParameter + escapeValue(searchValue);
+        final String ftSearchValue = escapeValue(searchValue);
 
-        aggregatedQuery.add(createTermQuery(ATTRIBUTE_CODE_FIELD, escapedParameter), BooleanClause.Occur.SHOULD);
-        aggregatedQuery.add(createTermQuery(ATTRIBUTE_VALUE_FIELD, ftSearchValue, 3.5f), BooleanClause.Occur.SHOULD);
+        aggregatedQuery.add(createTermQuery("facet_" + escapedParameter, ftSearchValue, 3.5f), BooleanClause.Occur.SHOULD);
 
         return aggregatedQuery;
 

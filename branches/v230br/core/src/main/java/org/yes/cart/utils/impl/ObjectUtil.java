@@ -16,6 +16,8 @@
 
 package org.yes.cart.utils.impl;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.collection.internal.AbstractPersistentCollection;
 import org.hibernate.proxy.HibernateProxy;
 import org.yes.cart.domain.entity.Auditable;
@@ -52,7 +54,7 @@ public class ObjectUtil {
      * Split given object to array of his field values.
      *
      * @param obj object to convert
-     * @return array of fileds values.
+     * @return array of fields values.
      */
     public static Object[] toObjectArray(final Object obj) {
 
@@ -89,6 +91,8 @@ public class ObjectUtil {
                         || rez[i] instanceof Auditable
                         ) {
                     rez[i] = fields[i].getName();
+                } else {
+                    rez[i] = StringEscapeUtils.escapeXml(String.valueOf(rez[i]));
                 }
 
             } catch (Exception ex) {
