@@ -17,6 +17,7 @@
 package org.yes.cart.web.page;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -71,8 +72,6 @@ public class HomePage extends AbstractWebPage {
     @SpringBean(name = ServiceSpringKeys.SHOP_SERVICE)
     private ShopService shopService;
 
-    private AbstractCentralView centralPanel;
-
     /**
      * Construct home page.
      *
@@ -113,31 +112,27 @@ public class HomePage extends AbstractWebPage {
                 (Map) mapParams
         );
 
-        add(new BreadCrumbsView("breadCrumbs", categoryId, shopService.getShopAllCategoriesIds(shop.getShopId())));
+        addOrReplace(new BreadCrumbsView("breadCrumbs", categoryId, shopService.getShopAllCategoriesIds(shop.getShopId())));
 
 
-        add(new RecentlyViewedProducts("recentlyViewed"));
-        add(new NewArrivalProducts("newArrival"));
+        addOrReplace(new RecentlyViewedProducts("recentlyViewed"));
+        addOrReplace(new NewArrivalProducts("newArrival"));
 
-        //add(new Carousel("featured"));
+        addOrReplace(getCentralPanel(centralViewLabel, "centralView", categoryId, context));
 
-        centralPanel = getCentralPanel(centralViewLabel, "centralView", categoryId, context);
-
-        add(centralPanel);
-
-        add(
+        addOrReplace(
                 new StandardHeader(HEADER)
         );
 
-        add(
+        addOrReplace(
                 new StandardFooter(FOOTER)
         );
 
-        add(
+        addOrReplace(
                 new ServerSideJs("serverSideJs")
         );
 
-        add(
+        addOrReplace(
                 new HeaderMetaInclude("headerInclude")
         );
 
@@ -189,12 +184,21 @@ public class HomePage extends AbstractWebPage {
 
     }
 
+    private AbstractCentralView getCentralPanel() {
+        final Component comp = get("centralView");
+        if (comp instanceof AbstractCentralView) {
+            return (AbstractCentralView) comp;
+        }
+        return null;
+    }
+
     /**
      * Get page title.
      *
      * @return page title
      */
     public IModel<String> getPageTitle() {
+        final AbstractCentralView centralPanel = getCentralPanel();
         if (centralPanel != null) {
             final IModel<String> rez = centralPanel.getPageTitle();
             if (rez == null) {
@@ -207,11 +211,12 @@ public class HomePage extends AbstractWebPage {
 
 
     /**
-     * Get opage description
+     * Get page description
      *
      * @return description
      */
     public IModel<String> getDescription() {
+        final AbstractCentralView centralPanel = getCentralPanel();
         if (centralPanel != null) {
             final IModel<String> rez = centralPanel.getDescription();
             if (rez == null) {
@@ -228,6 +233,7 @@ public class HomePage extends AbstractWebPage {
      * @return keywords
      */
     public IModel<String> getKeywords() {
+        final AbstractCentralView centralPanel = getCentralPanel();
         if (centralPanel != null) {
             final IModel<String> rez = centralPanel.getKeywords();
             if (rez == null) {

@@ -72,16 +72,17 @@ public class PaginationSupportImpl implements PaginationSupport {
 
     /** {@inheritDoc} */
     @Override
-    public boolean isPageSizeSelected(final PageParameters pageParameters, final int pageSize) {
-        String selectedItemPerPage = pageParameters.get(WebParametersKeys.QUANTITY).toString();
-        return pageSize == NumberUtils.toInt(selectedItemPerPage);
+    public boolean isPageSizeSelected(final PageParameters pageParameters, final List<String> itemsPerPageOptions, final int pageSize) {
+
+        final int selectedItemPerPage = getCurrentItemsPerPage(pageParameters, itemsPerPageOptions);
+        return pageSize == selectedItemPerPage;
     }
 
     /** {@inheritDoc} */
     @Override
     public void markSelectedPageSizeLink(final Link link,
-                                         final PageParameters pageParameters, final int pageSize) {
-        if (isPageSizeSelected(pageParameters, pageSize)) {
+                                         final PageParameters pageParameters, final List<String> itemsPerPageOptions, final int pageSize) {
+        if (isPageSizeSelected(pageParameters, itemsPerPageOptions, pageSize)) {
             link.add(new AttributeModifier("class", "items-per-page-active"));
         } else {
             link.add(new AttributeModifier("class", "items-per-page"));
@@ -107,7 +108,7 @@ public class PaginationSupportImpl implements PaginationSupport {
 
     /** {@inheritDoc} */
     @Override
-    public int getSelectedItemsPerPage(final PageParameters pageParameters, final List<String> itemsPerPageOptions) {
+    public int getCurrentItemsPerPage(final PageParameters pageParameters, final List<String> itemsPerPageOptions) {
         return WicketUtil.getSelectedItemsPerPage(pageParameters, itemsPerPageOptions);
     }
 

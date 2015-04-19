@@ -77,11 +77,12 @@ public interface PaginationSupport {
      * Checks if current page is selected.
      *
      * @param pageParameters current page parameters
+     * @param itemsPerPageOptions allowed page sizes
      * @param pageSize page size to check
      *
      * @return true if page index is currently active
      */
-    boolean isPageSizeSelected(PageParameters pageParameters, int pageSize);
+    boolean isPageSizeSelected(PageParameters pageParameters, List<String> itemsPerPageOptions, int pageSize);
 
 
     /**
@@ -89,10 +90,11 @@ public interface PaginationSupport {
      *
      * @param link sorting link to check
      * @param pageParameters current page parameters
+     * @param itemsPerPageOptions allowed page sizes
      * @param pageSize index to check
      */
     void markSelectedPageSizeLink(Link link,
-                                  PageParameters pageParameters, int pageSize);
+                                  PageParameters pageParameters, List<String> itemsPerPageOptions, int pageSize);
 
 
 
@@ -112,7 +114,7 @@ public interface PaginationSupport {
      *
      * @return current page index
      */
-    int getSelectedItemsPerPage(PageParameters pageParameters, List<String> itemsPerPageOptions);
+    int getCurrentItemsPerPage(PageParameters pageParameters, List<String> itemsPerPageOptions);
 
 
 

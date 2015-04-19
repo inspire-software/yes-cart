@@ -17,7 +17,6 @@
 package org.yes.cart.web.page.component.navigation;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -27,7 +26,6 @@ import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
 
@@ -72,7 +70,7 @@ public class ProductPerPageListView extends ListView<String> {
 
         final Link pageSizeLink = links.newLink(ITEMS_PER_PAGE, params);
         pageSizeLink.add(label);
-        pagination.markSelectedPageSizeLink(pageSizeLink, pageParameters, NumberUtils.toInt(pageSize));
+        pagination.markSelectedPageSizeLink(pageSizeLink, pageParameters, getModelObject(), NumberUtils.toInt(pageSize));
 
         stringListItem.add(pageSizeLink);
 

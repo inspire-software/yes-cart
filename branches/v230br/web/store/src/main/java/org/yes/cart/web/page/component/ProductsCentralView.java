@@ -39,7 +39,6 @@ import org.yes.cart.web.service.wicketsupport.PaginationSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.ProductServiceFacade;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
 
@@ -116,7 +115,7 @@ public class ProductsCentralView extends AbstractCentralView {
         final PageParameters pageParameters = getPage().getPageParameters();
         final PaginationSupport pagination = getWicketSupportFacade().pagination();
         int currentPageIdx = pagination.getCurrentPage(pageParameters);
-        final int selectedItemPerPage = pagination.getSelectedItemsPerPage(pageParameters, itemsPerPageValues);
+        final int selectedItemPerPage = pagination.getCurrentItemsPerPage(pageParameters, itemsPerPageValues);
         final Pair<String, Boolean> sortResult = getSortField();
 
         ProductSearchResultPageDTO products = productServiceFacade.getListProducts(
