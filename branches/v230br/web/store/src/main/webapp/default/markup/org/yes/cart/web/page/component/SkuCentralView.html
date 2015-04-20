@@ -120,6 +120,15 @@
                         <wicket:container wicket:id="accessoriesHeadContainer">
                             [accessories view]
                         </wicket:container>
+                        <wicket:container wicket:id="expendableHeadContainer">
+                            [expendable view]
+                        </wicket:container>
+                        <wicket:container wicket:id="upcrosssellHeadContainer">
+                            [up/cross sell view]
+                        </wicket:container>
+                        <wicket:container wicket:id="buywiththisHeadContainer">
+                            [buy with this view]
+                        </wicket:container>
                         <wicket:container wicket:id="volumeDiscountsHeadContainer">
                             [discounts view]
                         </wicket:container>
@@ -137,6 +146,15 @@
                         </div>
                         <wicket:container wicket:id="accessoriesBodyContainer">
                             [accessories]
+                        </wicket:container>
+                        <wicket:container wicket:id="expendableBodyContainer">
+                            [expendables]
+                        </wicket:container>
+                        <wicket:container wicket:id="upcrosssellBodyContainer">
+                            [up/cross sell]
+                        </wicket:container>
+                        <wicket:container wicket:id="buywiththisBodyContainer">
+                            [buy with this]
                         </wicket:container>
                         <wicket:container wicket:id="priceTiersView">
                             [price tiers view]
@@ -174,12 +192,28 @@
     </li>
 </wicket:fragment>
 
-<wicket:fragment wicket:id="accessoriesBody">
-    <div class="tab-pane fade" id="accessories">
-        <wicket:container wicket:id="accessoriesView">
-            [accessories]
-        </wicket:container>
-    </div>
+<wicket:fragment wicket:id="expendableHead">
+    <li>
+        <a href="#expendable" role="tab" data-toggle="tab">
+            <wicket:message key="expendable">[expendable]</wicket:message>
+        </a>
+    </li>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="upcrosssellHead">
+    <li>
+        <a href="#upcrosssell" role="tab" data-toggle="tab">
+            <wicket:message key="upcrosssell">[up/cross sell]</wicket:message>
+        </a>
+    </li>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="buywiththisHead">
+    <li>
+        <a href="#buywiththis" role="tab" data-toggle="tab">
+            <wicket:message key="buywiththis">[buy with this]</wicket:message>
+        </a>
+    </li>
 </wicket:fragment>
 
 <wicket:fragment wicket:id="volumeDiscountsHead">
@@ -189,6 +223,40 @@
         </a>
     </li>
 </wicket:fragment>
+
+
+<wicket:fragment wicket:id="accessoriesBody">
+    <div class="tab-pane fade" id="accessories">
+        <wicket:container wicket:id="productsView">
+            [accessories]
+        </wicket:container>
+    </div>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="expendableBody">
+    <div class="tab-pane fade" id="expendable">
+        <wicket:container wicket:id="productsView">
+            [expendables]
+        </wicket:container>
+    </div>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="upcrosssellBody">
+    <div class="tab-pane fade" id="upcrosssell">
+        <wicket:container wicket:id="productsView">
+            [up/cross sell]
+        </wicket:container>
+    </div>
+</wicket:fragment>
+
+<wicket:fragment wicket:id="buywiththisBody">
+    <div class="tab-pane fade" id="buywiththis">
+        <wicket:container wicket:id="productsView">
+            [buy with this]
+        </wicket:container>
+    </div>
+</wicket:fragment>
+
 
 </body>
 </html>

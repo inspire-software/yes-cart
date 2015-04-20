@@ -49,6 +49,7 @@
     <entry key="org.apache.wicket.mfu.caption.limited">Файли (максимум ${max}):</entry>
     <entry key="org.apache.wicket.mfu.delete">Видалити</entry>
 
+
     <!-- All global properties should go here -->
     <entry key="buildVersion">YC - 2.3.0</entry>
     <entry key="home">Головна</entry>
@@ -133,15 +134,15 @@
     <!-- COMPONENTS -->
     <!-- BreadCrumbsView -->
     <entry key="query">Пошук</entry>
+    <entry key="sale">Розпродаж</entry>
     <entry key="specialoffer">Спеціальна пропозиція</entry>
     <entry key="newarrival">Нові надходження</entry>
-    <entry key="multisku">Демо: мульти-sku</entry>
-    <entry key="preorder">Демо: очікуються</entry>
-    <entry key="backorder">Демо: по замовленню</entry>
-    <entry key="always">Демо: завжди</entry>
-    <entry key="showroom">Demo: шоу-рум</entry>
-    <entry key="multibuy">Demo: оптові знижки</entry>
-    <entry key="accessories">Demo: аксесуари</entry>
+    <entry key="multisku">Мульти-sku</entry>
+    <entry key="preorder">Очікуються</entry>
+    <entry key="backorder">По замовленню</entry>
+    <entry key="always">Завжди</entry>
+    <entry key="showroom">Шоу-рум</entry>
+    <entry key="multibuy">Оптові знижки</entry>
 
     <!-- ShoppingCartPaymentVerificationView -->
     <entry key="productName">Товар</entry>
@@ -173,6 +174,7 @@
     <entry key="refreshLinkHint">Оновити кількість</entry>
     <entry key="nonZeroDigits">Введіть позитивне ціле число</entry>
     <entry key="skuNumber">Код</entry>
+    <entry key="productsInCart">Товари у кошику</entry>
     <entry key="addCouponsTitle">Додати промо-код</entry>
     <entry key="removeCouponCodeLabel">Видалити промо-код</entry>
     <entry key="addCouponButtonLabel">Додати промо-код</entry>
@@ -308,7 +310,6 @@
     <entry key="byAvailability">склад</entry>
     <entry key="byCreation">час</entry>
 
-
     <!-- PriceTierView -->
     <entry key="priceTierLabel">Ціна за одиницю</entry>
     <entry key="discountRule">Купуючи більше однієї одиниці товару, ви отримуєте знижку. Чим більше однотипних товарів Ви купуєте, тим більше знижка</entry>
@@ -343,8 +344,11 @@
     <entry key="wishListItemAddedW">Товар ${0} доданий до побажань. Переглянути список побажань Ви можете у Вашому профілі.</entry>
     <entry key="wishListItemAddedC">Товар ${0} відкладено. Переглянути список відкладених товарів Ви можете у Вашому кошику.</entry>
     <entry key="description">Опис</entry>
-    <entry key="details">Деталі</entry>
+    <entry key="details">Специфікація</entry>
     <entry key="accessories">Аксесуари</entry>
+    <entry key="expendable">Розхідники</entry>
+    <entry key="upcrosssell">Альтернативи</entry>
+    <entry key="buywiththis">Рекомендації</entry>
     <entry key="volumeDiscount">Оптові знижки</entry>
     <entry key="quantityPickerTooltip">Мінімальна кількість для покупки ${0} з кроком ${1} до ${2}. ${3} у кошику.</entry>
     <entry key="quantityPickerTooltipNoMax">Мінімальна кількість для покупки ${0} з кроком ${1}. ${2} у кошику.</entry>

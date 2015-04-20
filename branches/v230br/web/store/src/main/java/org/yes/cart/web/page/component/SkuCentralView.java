@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
@@ -77,10 +78,6 @@ public class SkuCentralView extends AbstractCentralView {
      */
     private final static String ADD_TO_WISHLIST_LINK = "addToWishListLink";
     /**
-     * Add single item to wish list
-     */
-    private final static String LOGIN_LINK = "addToWishListLink";
-    /**
      * Quantity picker
      */
     private final static String QTY_PICKER = "quantityPicker";
@@ -123,7 +120,7 @@ public class SkuCentralView extends AbstractCentralView {
     /**
      * Product accessories or cross sell
      */
-    private final static String ACCESSORIES_VIEW = "accessoriesView";
+    private final static String PRODUCTS_VIEW = "productsView";
 
     /**
      * Product accessories head container name
@@ -141,12 +138,69 @@ public class SkuCentralView extends AbstractCentralView {
      * Product accessories body container name
      */
     private final static String ACCESSORIES_BODY = "accessoriesBody";
-    
+
+    /**
+     * Product exprendables head container name
+     */
+    private final static String EXPENDABLES_HEAD_CONTAINER = "expendableHeadContainer";
+    /**
+     * Product exprendables body container name
+     */
+    private final static String EXPENDABLES_BODY_CONTAINER = "expendableBodyContainer";
+    /**
+     * Product exprendables head container name
+     */
+    private final static String EXPENDABLES_HEAD = "expendableHead";
+    /**
+     * Product exprendables body container name
+     */
+    private final static String EXPENDABLES_BODY = "expendableBody";
+
+    /**
+     * Product upcrosssell head container name
+     */
+    private final static String SELL_HEAD_CONTAINER = "upcrosssellHeadContainer";
+    /**
+     * Product upcrosssell body container name
+     */
+    private final static String SELL_BODY_CONTAINER = "upcrosssellBodyContainer";
+    /**
+     * Product upcrosssell head container name
+     */
+    private final static String SELL_HEAD = "upcrosssellHead";
+    /**
+     * Product upcrosssell body container name
+     */
+    private final static String SELL_BODY = "upcrosssellBody";
+
+    /**
+     * Product buywiththis head container name
+     */
+    private final static String BUY_HEAD_CONTAINER = "buywiththisHeadContainer";
+    /**
+     * Product buywiththis body container name
+     */
+    private final static String BUY_BODY_CONTAINER = "buywiththisBodyContainer";
+    /**
+     * Product buywiththis head container name
+     */
+    private final static String BUY_HEAD = "buywiththisHead";
+    /**
+     * Product buywiththis body container name
+     */
+    private final static String BUY_BODY = "buywiththisBody";
+
    /**
      * Product accessories head container name
      */
     private final static String VOLUME_DISCOUNT_HEAD_CONTAINER = "volumeDiscountsHeadContainer";
+    /**
+     * Product accessories head container name
+     */
     private final static String VOLUME_DISCOUNT_HEAD = "volumeDiscountsHead";
+    /**
+     * Product accessories head container name
+     */
     private final static String VOLUME_DISCOUNT_BODY_CONTAINER = "priceTiersView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
@@ -258,51 +312,76 @@ public class SkuCentralView extends AbstractCentralView {
         );
 
 
-        final List<ProductSearchResultDTO> associatedProducts = productServiceFacade.getProductAssociations(
+        final List<ProductSearchResultDTO> productsAccessories = productServiceFacade.getProductAssociations(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
                 shop.getShopId(), Association.ACCESSORIES
         );
 
-
-        if (associatedProducts.isEmpty()  /*|| false is accessory*/) {
-
-            add(
-                    new Label(ACCESSORIES_HEAD_CONTAINER, "")
-            ).add(
-                    new Label(ACCESSORIES_BODY_CONTAINER, "")
-            );
-
-        } else {
+        final boolean accessoriesVisible = CollectionUtils.isNotEmpty(productsAccessories);
+        add(new Fragment(ACCESSORIES_HEAD_CONTAINER, ACCESSORIES_HEAD, this).setVisible(accessoriesVisible));
+        add(new Fragment(ACCESSORIES_BODY_CONTAINER, ACCESSORIES_BODY, this)
+                .add(
+                        new ProductAssociationsView(PRODUCTS_VIEW, productsAccessories)
+                ).setVisible(accessoriesVisible));
 
 
-            add(
-                    new Fragment(ACCESSORIES_HEAD_CONTAINER, ACCESSORIES_HEAD, this)
-            ).add(
-                    new Fragment(ACCESSORIES_BODY_CONTAINER, ACCESSORIES_BODY, this)
-                            .add(
-                                    new ProductAssociationsView(ACCESSORIES_VIEW, product.getProductId(), Association.ACCESSORIES)
-                            )
-            );
+        final List<ProductSearchResultDTO> productsExpendables = productServiceFacade.getProductAssociations(
+                isProduct ? product.getProductId() : sku.getProduct().getProductId(),
+                shop.getShopId(), Association.EXPENDABLE
+        );
 
+        final boolean expendablesVisible = CollectionUtils.isNotEmpty(productsExpendables);
+        add(new Fragment(EXPENDABLES_HEAD_CONTAINER, EXPENDABLES_HEAD, this).setVisible(expendablesVisible));
+        add(new Fragment(EXPENDABLES_BODY_CONTAINER, EXPENDABLES_BODY, this)
+                .add(
+                        new ProductAssociationsView(PRODUCTS_VIEW, productsExpendables)
+                ).setVisible(expendablesVisible));
+
+
+        final List<ProductSearchResultDTO> productsUp = productServiceFacade.getProductAssociations(
+                isProduct ? product.getProductId() : sku.getProduct().getProductId(),
+                shop.getShopId(), Association.UP_SELL
+        );
+        final List<ProductSearchResultDTO> productsCross = productServiceFacade.getProductAssociations(
+                isProduct ? product.getProductId() : sku.getProduct().getProductId(),
+                shop.getShopId(), Association.CROSS_SELL
+        );
+
+        final List<ProductSearchResultDTO> productsSell = new ArrayList<ProductSearchResultDTO>();
+        if (productsUp != null) {
+            productsSell.addAll(productsUp);
+        }
+        if (productsCross != null) {
+            productsSell.addAll(productsCross);
         }
 
+        final boolean sellVisible = CollectionUtils.isNotEmpty(productsSell);
+        add(new Fragment(SELL_HEAD_CONTAINER, SELL_HEAD, this).setVisible(sellVisible));
+        add(new Fragment(SELL_BODY_CONTAINER, SELL_BODY, this)
+                .add(
+                        new ProductAssociationsView(PRODUCTS_VIEW, productsSell)
+                ).setVisible(sellVisible));
 
-        if (isPriceTiersPresents()) {
 
-            add(
-                    new Fragment(VOLUME_DISCOUNT_HEAD_CONTAINER, VOLUME_DISCOUNT_HEAD, this)
-            ).add(
-                    new PriceTierView(VOLUME_DISCOUNT_BODY_CONTAINER, getSkuPrices())
-            );
 
-        } else {
+        final List<ProductSearchResultDTO> productsBuy = productServiceFacade.getProductAssociations(
+                isProduct ? product.getProductId() : sku.getProduct().getProductId(),
+                shop.getShopId(), Association.BUY_WITH_THIS
+        );
 
-            add(
-                    new Label(VOLUME_DISCOUNT_HEAD_CONTAINER, "")
-            ).add(
-                    new Label(VOLUME_DISCOUNT_BODY_CONTAINER, "")
-            );
-        }
+        final boolean buyVisible = CollectionUtils.isNotEmpty(productsBuy);
+        add(new Fragment(BUY_HEAD_CONTAINER, BUY_HEAD, this).setVisible(buyVisible));
+        add(new Fragment(BUY_BODY_CONTAINER, BUY_BODY, this)
+                .add(
+                        new ProductAssociationsView(PRODUCTS_VIEW, productsBuy)
+                ).setVisible(buyVisible));
+
+
+
+        final Collection<SkuPrice> prices = getSkuPrices();
+        final boolean multibuy = CollectionUtils.isNotEmpty(prices) && prices.size() > 1;
+        add(new Fragment(VOLUME_DISCOUNT_HEAD_CONTAINER, VOLUME_DISCOUNT_HEAD, this).setVisible(multibuy));
+        add(new PriceTierView(VOLUME_DISCOUNT_BODY_CONTAINER, getSkuPrices()));
 
         add(new WishListNotification("wishListNotification"));
 
@@ -320,25 +399,6 @@ public class SkuCentralView extends AbstractCentralView {
         }
         return sku.getCode();
 
-    }
-
-
-    /**
-     * Check is product has several prices in current shop currency.
-     *
-     * @return true in case if product has several prices in current shop currency.
-     */
-    private boolean isPriceTiersPresents() {
-        boolean addPriceTier;
-        final String currency = ApplicationDirector.getShoppingCart().getCurrencyCode();
-        final List<SkuPrice> skuPricesInCurrentCurrency = new ArrayList<SkuPrice>();
-        for (SkuPrice skuPrice : getSkuPrices()) {
-            if (skuPrice.getCurrency().equals(currency)) {
-                skuPricesInCurrentCurrency.add(skuPrice);
-            }
-        }
-        addPriceTier = skuPricesInCurrentCurrency.size() > 1;
-        return addPriceTier;
     }
 
     private ObjectDecorator getDecorator() {

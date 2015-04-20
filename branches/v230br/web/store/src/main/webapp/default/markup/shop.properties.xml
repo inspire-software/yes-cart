@@ -102,7 +102,7 @@
     <entry key="contact">Contact information</entry>
 
     <!-- CustomerSelfCarePage -->
-    <entry key="selfCare">Self care</entry>
+    <entry key="selfCare">Your profile</entry>
     <entry key="customerSummary">Mandatory information</entry>
     <entry key="orderInfo">Orders</entry>
     <entry key="wishlist">Wish list</entry>
@@ -137,13 +137,12 @@
     <entry key="sale">Sale</entry>
     <entry key="specialoffer">Special offer</entry>
     <entry key="newarrival">New arrivals</entry>
-    <entry key="multisku">Demo: multi-sku</entry>
-    <entry key="preorder">Demo: preorder</entry>
-    <entry key="backorder">Demo: backorder</entry>
-    <entry key="always">Demo: always</entry>
-    <entry key="showroom">Demo: showroom</entry>
-    <entry key="multibuy">Demo: multi-buy</entry>
-    <entry key="accessories">Demo: accessories</entry>
+    <entry key="multisku">multi-sku</entry>
+    <entry key="preorder">preorder</entry>
+    <entry key="backorder">backorder</entry>
+    <entry key="always">always</entry>
+    <entry key="showroom">showroom</entry>
+    <entry key="multibuy">multi-buy</entry>
 
     <!-- ShoppingCartPaymentVerificationView -->
     <entry key="productName">Product</entry>
@@ -345,8 +344,11 @@
     <entry key="wishListItemAddedW">Product ${0} added to wish list. You can view wish list in your profile.</entry>
     <entry key="wishListItemAddedC">Product ${0} saved for later. You can view saved products in your cart.</entry>
     <entry key="description">Description</entry>
-    <entry key="details">Details</entry>
+    <entry key="details">Specification</entry>
     <entry key="accessories">Accessories</entry>
+    <entry key="expendable">Spares</entry>
+    <entry key="upcrosssell">Alternatives</entry>
+    <entry key="buywiththis">We recommend</entry>
     <entry key="volumeDiscount">Multi buy</entry>
     <entry key="quantityPickerTooltip">Minimum order is ${0} with step ${1} up to ${2}. ${3} in cart.</entry>
     <entry key="quantityPickerTooltipNoMax">Minimum order is ${0} with step ${1}. ${2} in cart.</entry>

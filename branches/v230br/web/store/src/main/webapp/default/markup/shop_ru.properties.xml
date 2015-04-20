@@ -49,8 +49,9 @@
     <entry key="org.apache.wicket.mfu.caption.limited">Файлы (максимум ${max}):</entry>
     <entry key="org.apache.wicket.mfu.delete">Удалить</entry>
 
+
     <!-- All global properties should go here -->
-    <entry key="buildVersion">YC - 2.1.0</entry>
+    <entry key="buildVersion">YC - 2.3.0</entry>
     <entry key="home">Главная</entry>
     <entry key="continueShopping">За новыми покупками</entry>
     <entry key="brand">Производитель</entry>
@@ -133,15 +134,15 @@
     <!-- COMPONENTS -->
     <!-- BreadCrumbsView -->
     <entry key="query">Поиск</entry>
+    <entry key="sale">Распродажа</entry>
     <entry key="specialoffer">Специальное предложение</entry>
     <entry key="newarrival">Новые поступления</entry>
-    <entry key="multisku">Демо: мульти-sku</entry>
-    <entry key="preorder">Демо: ожидаемые</entry>
-    <entry key="backorder">Демо: заказные</entry>
-    <entry key="always">Демо: всегда</entry>
-    <entry key="showroom">Demo: шоу-рум</entry>
-    <entry key="multibuy">Demo: оптовые скидки</entry>
-    <entry key="accessories">Demo: аксессуары</entry>
+    <entry key="multisku">Мульти-sku</entry>
+    <entry key="preorder">Ожидаемые</entry>
+    <entry key="backorder">Заказные</entry>
+    <entry key="always">Всегда</entry>
+    <entry key="showroom">Шоу-рум</entry>
+    <entry key="multibuy">Оптовые скидки</entry>
 
     <!-- ShoppingCartPaymentVerificationView -->
     <entry key="productName">Товар</entry>
@@ -173,6 +174,7 @@
     <entry key="refreshLinkHint">Обновить количество</entry>
     <entry key="nonZeroDigits">Введите положительное целое количество</entry>
     <entry key="skuNumber">Код</entry>
+    <entry key="productsInCart">Товары в корзине</entry>
     <entry key="addCouponsTitle">Добавить промо-код</entry>
     <entry key="removeCouponCodeLabel">Убрать промо-код</entry>
     <entry key="addCouponButtonLabel">Добавить промо-код</entry>
@@ -224,7 +226,7 @@
     <entry key="register">Регистрация</entry>
     <entry key="phone">Телефон</entry>
     <entry key="customerExists">Такой покупатель уже зарегистрирован</entry>
-    <entry key="canNotRegister">Невозможно зарегистрировать. </entry>
+    <entry key="canNotRegister">Невозможно зарегистрировать.</entry>
 
     <!-- LogoutPanel -->
     <entry key="logoffLabel">Выйти</entry>
@@ -342,8 +344,11 @@
     <entry key="wishListItemAddedW">Товар ${0} добавлен в пожелания. Просмотреть лист пожеланий Вы можете в Вашем профиле.</entry>
     <entry key="wishListItemAddedC">Товар ${0} отложен. Просмотреть лист отложенных товаров Вы можете в Вашей корзине.</entry>
     <entry key="description">Описание</entry>
-    <entry key="details">Детали</entry>
+    <entry key="details">Спецификация</entry>
     <entry key="accessories">Аксессуары</entry>
+    <entry key="expendable">Расходники</entry>
+    <entry key="upcrosssell">Альтернативы</entry>
+    <entry key="buywiththis">Рекомендации</entry>
     <entry key="volumeDiscount">Оптовые скидки</entry>
     <entry key="quantityPickerTooltip">Минимальное кол-во для покупки ${0} с шагом ${1} до ${2}. ${3} в корзине.</entry>
     <entry key="quantityPickerTooltipNoMax">Минимальное кол-во для покупки ${0} с шагом ${1}. ${2} в корзине.</entry>

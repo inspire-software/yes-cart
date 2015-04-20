@@ -16,11 +16,7 @@
 
 package org.yes.cart.web.page.component.product;
 
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.List;
 
@@ -34,44 +30,23 @@ import java.util.List;
  */
 public class ProductAssociationsView extends AbstractProductSearchResultList {
 
-    @SpringBean(name = ServiceSpringKeys.LUCENE_QUERY_FACTORY)
-    private LuceneQueryFactory luceneQueryFactory;
-
     private List<ProductSearchResultDTO> associatedProductList = null;
-    private final long productId;
-    private final String associationType;
 
     /**
      * Construct product association view.
      *
      * @param id              component id
-     * @param associationType type of association. See
+     * @param associatedProductList associated list
      */
-    public ProductAssociationsView(final String id, final long productId, final String associationType) {
+    public ProductAssociationsView(final String id, final List<ProductSearchResultDTO> associatedProductList) {
         super(id, true);
-        this.productId = productId;
-        this.associationType = associationType;
-    }
-
-    /**
-     * Get product id from page parameters or from sku.
-     *
-     * @return product id
-     */
-    protected long getProductId() {
-        return productId;
+        this.associatedProductList = associatedProductList;
     }
 
     /**
      * {@inheritDoc}
      */
     public List<ProductSearchResultDTO> getProductListToShow() {
-        if (associatedProductList == null) {
-
-            associatedProductList = productServiceFacade.getProductAssociations(
-                    getProductId(), ShopCodeContext.getShopId(), associationType);
-
-        }
         return associatedProductList;
     }
 
