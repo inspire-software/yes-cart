@@ -16,6 +16,8 @@
 
 package org.yes.cart.web.page;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
@@ -27,6 +29,8 @@ import org.springframework.util.StringUtils;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerWishList;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
 import org.yes.cart.web.page.component.customer.dynaform.DynaFormPanel;
@@ -81,6 +85,10 @@ public class CustomerSelfCarePage extends AbstractWebPage {
             customer = customerServiceFacade.getCustomerByEmail(email);
         } else {
             customer = null;
+            // Redirect away from profile!
+            final PageParameters rparams = new PageParameters();
+            rparams.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
+            setResponsePage(Application.get().getHomePage(), rparams);
         }
 
         final Model<Customer> customerModel = new Model<Customer>(customer);
@@ -105,6 +113,16 @@ public class CustomerSelfCarePage extends AbstractWebPage {
      */
     @Override
     protected void onBeforeRender() {
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        if ((!((AuthenticatedWebSession) getSession()).isSignedIn()
+                || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {
+            final PageParameters params = new PageParameters();
+            params.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
+            setResponsePage(Application.get().getHomePage(), params);
+        }
+
         executeHttpPostedCommands();
         super.onBeforeRender();
         persistCartIfNecessary();

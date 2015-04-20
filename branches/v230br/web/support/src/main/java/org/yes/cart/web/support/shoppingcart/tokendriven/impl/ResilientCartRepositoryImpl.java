@@ -17,16 +17,23 @@
 package org.yes.cart.web.support.shoppingcart.tokendriven.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.core.task.TaskExecutor;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShoppingCartState;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.shoppingcart.tokendriven.CartRepository;
 import org.yes.cart.web.support.shoppingcart.tokendriven.CartUpdateProcessor;
+
+import java.util.Date;
 
 /**
  * User: denispavlov
@@ -39,16 +46,19 @@ public class ResilientCartRepositoryImpl implements CartRepository {
 
     private final int sessionExpiryInSeconds;
     private final ShoppingCartStateService shoppingCartStateService;
+    private final ShopService shopService;
     private final CartUpdateProcessor cartUpdateProcessor;
     private final TaskExecutor taskExecutor;
 
     public ResilientCartRepositoryImpl(final ShoppingCartStateService shoppingCartStateService,
+                                       final ShopService shopService,
                                        final CartUpdateProcessor cartUpdateProcessor,
                                        final int sessionExpiryInSeconds,
                                        final CacheManager cacheManager,
                                        final TaskExecutor taskExecutor) {
 
         this.shoppingCartStateService = shoppingCartStateService;
+        this.shopService = shopService;
         this.cartUpdateProcessor = cartUpdateProcessor;
         this.sessionExpiryInSeconds = sessionExpiryInSeconds;
         this.taskExecutor = taskExecutor;
@@ -57,11 +67,12 @@ public class ResilientCartRepositoryImpl implements CartRepository {
     }
 
     public ResilientCartRepositoryImpl(final ShoppingCartStateService shoppingCartStateService,
+                                       final ShopService shopService,
                                        final CartUpdateProcessor cartUpdateProcessor,
                                        final int sessionExpiryInSeconds,
                                        final CacheManager cacheManager) {
 
-        this(shoppingCartStateService, cartUpdateProcessor, sessionExpiryInSeconds, cacheManager, null);
+        this(shoppingCartStateService, shopService, cartUpdateProcessor, sessionExpiryInSeconds, cacheManager, null);
     }
 
     /** {@inheritDoc} */
@@ -72,25 +83,69 @@ public class ResilientCartRepositoryImpl implements CartRepository {
             return null;
         }
 
+        // Try cache
         final ShoppingCart cachedCart = getFromValueWrapper(CART_CACHE.get(token));
         if (cachedCart != null) {
-            return cachedCart;
+
+            final boolean invalidateLogin =
+                    cachedCart.getLogonState() == ShoppingCart.LOGGED_IN &&
+                    determineIfLoginInvalidationRequired(
+                        cachedCart.getModifiedTimestamp(),
+                        cachedCart.getShoppingContext().getShopId()
+                    );
+
+            if (invalidateLogin) {
+
+                if (cachedCart instanceof MutableShoppingCart) {
+                    // if need to invalidate and it is mutable - then invalidate
+                    ((MutableShoppingCart) cachedCart).getShoppingContext().setCustomerEmail(null);
+                    storeAsynchronously(cachedCart);
+                    return cachedCart;
+                } else {
+                    // Otherwise if we cannot invalidate - remove from cache and try db
+                    CART_CACHE.evict(token);
+                }
+
+            } else {
+                // Cached cart is still good to use
+                return cachedCart;
+
+            }
         }
 
+        // Try DB
         final ShoppingCartState state = shoppingCartStateService.findByGuid(token);
         if (state != null) {
 
             final ShoppingCart dbCart = cartUpdateProcessor.restoreState(state.getState());
             if (dbCart == null) {
+
                 // invalid byte data - remove this
                 shoppingCartStateService.delete(state);
+
             } else {
 
-                final boolean invalidateLogin = determineIfLoginInvalidationRequired(state);
-                if (invalidateLogin && dbCart instanceof MutableShoppingCart) {
-                    ((MutableShoppingCart) dbCart).getShoppingContext().setCustomerEmail(null);
-                    storeAsynchronously(dbCart);
+                final boolean invalidateLogin =
+                        dbCart.getLogonState() == ShoppingCart.LOGGED_IN &&
+                        determineIfLoginInvalidationRequired(
+                            state,
+                            dbCart.getShoppingContext().getShopId()
+                        );
+
+                if (invalidateLogin) {
+
+                    if (dbCart instanceof MutableShoppingCart) {
+                        // if need to invalidate and it is mutable - then invalidate
+                        ((MutableShoppingCart) dbCart).getShoppingContext().setCustomerEmail(null);
+                        storeAsynchronously(dbCart);
+                    } else {
+                        // Otherwise if we cannot invalidate - remove the whole cart
+                        CART_CACHE.evict(dbCart.getGuid());
+                        return null;
+                    }
+
                 }
+                // Update cache
                 CART_CACHE.put(dbCart.getGuid(), dbCart);
                 return dbCart;
 
@@ -101,22 +156,47 @@ public class ResilientCartRepositoryImpl implements CartRepository {
         return null;
     }
 
-    private boolean determineIfLoginInvalidationRequired(final ShoppingCartState state) {
-        final boolean invalidateLogin;
+    private boolean determineIfLoginInvalidationRequired(final ShoppingCartState state, final long shopId) {
+
         if (state.getUpdatedTimestamp() != null) {
-            invalidateLogin = state.getUpdatedTimestamp().getTime() + sessionExpiryInSeconds * 1000 < System.currentTimeMillis();
-        } else {
-            invalidateLogin = state.getCreatedTimestamp().getTime() + sessionExpiryInSeconds * 1000 < System.currentTimeMillis();
+            return determineIfLoginInvalidationRequired(state.getUpdatedTimestamp().getTime(), shopId);
         }
-        return invalidateLogin;
+        return determineIfLoginInvalidationRequired(state.getCreatedTimestamp().getTime(), shopId);
+
+    }
+
+    private boolean determineIfLoginInvalidationRequired(final long lastModified, final long shopId) {
+
+        int expiry = determineExpiryInSeconds(shopId);
+
+        return lastModified + expiry * 1000 < System.currentTimeMillis();
+
+    }
+
+    private int determineExpiryInSeconds(final long shopId) {
+
+        int expiry = this.sessionExpiryInSeconds;
+
+        final Shop shop = shopService.getById(shopId);
+        if (shop != null) {
+            final AttrValue av = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS);
+            if (av != null && StringUtils.isNotBlank(av.getVal())) {
+                expiry = NumberUtils.toInt(av.getVal(), this.sessionExpiryInSeconds);
+            }
+        }
+
+        return expiry;
+
     }
 
 
     private ShoppingCart getFromValueWrapper(final Cache.ValueWrapper wrapper) {
+
         if (wrapper != null) {
             return (ShoppingCart) wrapper.get();
         }
         return null;
+
     }
 
     /** {@inheritDoc} */

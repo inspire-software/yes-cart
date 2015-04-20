@@ -104,7 +104,7 @@ public class WishListView extends AbstractProductSearchResultList {
     @Override
     protected void onBeforeRender() {
 
-        showRemoveLink = ApplicationDirector.getShoppingCart().getCustomerEmail().equals(customerEmail.getObject());
+        showRemoveLink = customerEmail.getObject().equals(ApplicationDirector.getShoppingCart().getCustomerEmail());
 
         addOrReplace(new Label("noProducts", new StringResourceModel("wishlistNoItems", this, null)).setVisible(getProductListToShow().isEmpty()));
         super.onBeforeRender();

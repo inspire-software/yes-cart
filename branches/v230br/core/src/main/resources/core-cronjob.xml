@@ -59,6 +59,7 @@
         <property name="target">
             <bean class="org.yes.cart.bulkjob.shoppingcart.BulkAbandonedShoppingCartProcessorImpl">
                 <constructor-arg index="0" ref="shoppingCartStateService"/>
+                <constructor-arg index="1" ref="systemService"/>
                 <property name="abandonedTimeoutDays" value="30"/> <!-- CPOINT -->
             </bean>
         </property>

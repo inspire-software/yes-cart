@@ -113,7 +113,8 @@
 
     <bean id="cartRepository" class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.ResilientCartRepositoryImpl">
         <constructor-arg index="0" ref="shoppingCartStateService"/>
-        <constructor-arg index="1">
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2">
             <bean parent="txProxyTemplate">
                 <property name="target">
                     <bean class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.CartUpdateProcessorImpl">
@@ -124,8 +125,8 @@
                 </property>
             </bean>
         </constructor-arg>
-        <constructor-arg index="2" value="21600"/>
-        <constructor-arg index="3" ref="cacheManager"/>
+        <constructor-arg index="3" value="21600"/>
+        <constructor-arg index="4" ref="cacheManager"/>
         <!--<constructor-arg index="4">-->
             <!--<bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">-->
                 <!--<description>-->

@@ -16,9 +16,14 @@
 
 package org.yes.cart.bulkjob.shoppingcart;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.ShoppingCartStateService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Date;
@@ -37,10 +42,13 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
     private static final long MS_IN_DAY = 86400000L;
 
     private final ShoppingCartStateService shoppingCartStateService;
-    private int abandonedTimeoutDays = 30;
+    private final SystemService systemService;
+    private long abandonedTimeoutMs = 30;
 
-    public BulkAbandonedShoppingCartProcessorImpl(final ShoppingCartStateService shoppingCartStateService) {
+    public BulkAbandonedShoppingCartProcessorImpl(final ShoppingCartStateService shoppingCartStateService,
+                                                  final SystemService systemService) {
         this.shoppingCartStateService = shoppingCartStateService;
+        this.systemService = systemService;
     }
 
     /** {@inheritDoc} */
@@ -50,7 +58,8 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
         final Logger log = ShopCodeContext.getLog(this);
 
         final Date lastModification =
-                new Date(System.currentTimeMillis() - abandonedTimeoutDays * MS_IN_DAY);
+                new Date(System.currentTimeMillis() - determineExpiryInMs());
+
 
         final List<ShoppingCartState> abandoned = this.shoppingCartStateService.findByModificationPrior(lastModification);
 
@@ -65,12 +74,28 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
 
     }
 
+
+    private long determineExpiryInMs() {
+
+        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.CART_ABANDONED_TIMEOUT_SECONDS);
+
+        if (av != null && StringUtils.isNotBlank(av)) {
+            long expiry = NumberUtils.toInt(av) * 1000L;
+            if (expiry > 0) {
+                return expiry;
+            }
+        }
+        return this.abandonedTimeoutMs;
+
+    }
+
+
     /**
      * Set number of days after which the cart is considered to be abandoned.
      *
      * @param abandonedTimeoutDays number of days
      */
     public void setAbandonedTimeoutDays(final int abandonedTimeoutDays) {
-        this.abandonedTimeoutDays = abandonedTimeoutDays;
+        this.abandonedTimeoutMs = abandonedTimeoutDays * MS_IN_DAY;
     }
 }

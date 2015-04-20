@@ -402,7 +402,17 @@ public class CheckoutPage extends AbstractWebPage {
             /** {@inheritDoc} */
             protected void onSelectionChanged(final Pair<PaymentGatewayDescriptor, String> descriptor) {
 
-                final CustomerOrder order = checkoutServiceFacade.findByGuid(ApplicationDirector.getShoppingCart().getGuid());
+                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+                if ((!((AuthenticatedWebSession) getSession()).isSignedIn()
+                                || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {
+                    // Make sure we are logged in on the very last step
+                    final PageParameters parameters = new PageParameters(getPageParameters());
+                    parameters.set(STEP, STEP_LOGIN);
+                    setResponsePage(this.getPage().getClass(), parameters);
+                }
+
+                final CustomerOrder order = checkoutServiceFacade.findByGuid(cart.getGuid());
                 final Total total = checkoutServiceFacade.getOrderTotal(order);
                 final BigDecimal grandTotal = total.getTotalAmount();
 

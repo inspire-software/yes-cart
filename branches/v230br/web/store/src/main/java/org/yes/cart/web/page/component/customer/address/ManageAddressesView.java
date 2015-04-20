@@ -45,9 +45,7 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -103,7 +101,7 @@ public class ManageAddressesView extends BaseComponent {
                 new Form(SELECT_ADDRESSES_FORM).add(
                         new RadioGroup<Address>(
                                 ADDRESS_RADIO_GROUP,
-                                new Model<Address>(customerModel.getObject().getDefaultAddress(addressType))) {
+                                new Model<Address>(customerModel.getObject() != null ? customerModel.getObject().getDefaultAddress(addressType) : null)) {
 
                             @Override
                             protected void onSelectionChanged(final Object o) {
@@ -149,7 +147,7 @@ public class ManageAddressesView extends BaseComponent {
                                             }
                                         }
                                 )
-                )
+                ).setVisible(customerModel.getObject() != null)
         );
 
     }

@@ -174,13 +174,16 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
     private void mergeCouponCodes(final ShoppingCart shoppingCart, final ShoppingCart oldCart, final Map<String, Object> cmdParams) {
 
         for (final String coupon : oldCart.getCoupons()) {
+            // Only add coupon codes that are not in the current cart
+            if (!shoppingCart.getCoupons().contains(coupon)) {
 
-            cmdParams.clear();
+                cmdParams.clear();
 
-            cmdParams.put(ShoppingCartCommand.CMD_ADDCOUPON, coupon);
+                cmdParams.put(ShoppingCartCommand.CMD_ADDCOUPON, coupon);
 
-            shoppingCartCommandFactory.execute(shoppingCart, cmdParams);
+                shoppingCartCommandFactory.execute(shoppingCart, cmdParams);
 
+            }
 
         }
     }
@@ -188,7 +191,8 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
     private void mergeNonGiftSKU(final ShoppingCart shoppingCart, final ShoppingCart oldCart, final Map<String, Object> cmdParams) {
 
         for (final CartItem cartItem : oldCart.getCartItemList()) {
-            if (!cartItem.isGift()) {
+            // Only merge non gifts and items that are NOT already in the cart
+            if (!cartItem.isGift() && shoppingCart.indexOfProductSku(cartItem.getProductSkuCode()) == -1) {
 
                 cmdParams.clear();
 

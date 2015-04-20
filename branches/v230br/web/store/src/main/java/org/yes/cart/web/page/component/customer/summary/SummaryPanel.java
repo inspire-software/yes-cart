@@ -70,14 +70,14 @@ public class SummaryPanel extends BaseComponent {
                         super.onSubmit();
                     }
                 }.add(
-                        new Label(EMAIL_LABEL, customer.getEmail())
+                        new Label(EMAIL_LABEL, customer != null ? customer.getEmail() : "")
                 ).add(
-                        new TextField(FIRSTNAME_INPUT, new PropertyModel(customer, "firstname")).setRequired(true)
+                        new TextField(FIRSTNAME_INPUT, customer != null ? new PropertyModel(customer, "firstname") : null).setRequired(true)
                 ).add(
-                        new TextField(LASTNAME_INPUT, new PropertyModel(customer, "lastname")).setRequired(true)
+                        new TextField(LASTNAME_INPUT, customer != null ? new PropertyModel(customer, "lastname") : null).setRequired(true)
                 ).add(
                         new SubmitLink(SAVE_LINK)
-                )
+                ).setVisible(customer != null)
         );
     }
 

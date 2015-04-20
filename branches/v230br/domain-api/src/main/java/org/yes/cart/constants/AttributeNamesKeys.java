@@ -120,6 +120,12 @@ public interface AttributeNamesKeys {
          * Default (failover) directory for resources.
          */
         String SYSTEM_MAILTEMPLATES_FSPOINTER = "SYSTEM_MAILTEMPLATES_FSPOINTER";
+
+        /**
+         * Time in seconds for abandoned carts
+         */
+        String CART_ABANDONED_TIMEOUT_SECONDS = "CART_ABANDONED_TIMEOUT_SECONDS";
+
     }
 
 
@@ -349,6 +355,11 @@ public interface AttributeNamesKeys {
          * Attributes on the profile editing (by customer) form which must not editable
          */
         String CUSTOMER_PROFILE_ATTRIBUTES_READONLY = "SHOP_CUSTOMER_PROFILE_ATTRIBUTES_READONLY";
+
+        /**
+         * Time in seconds since last cart modification before session expires
+         */
+        String CART_SESSION_EXPIRY_SECONDS = "CART_SESSION_EXPIRY_SECONDS";
 
     }
 
