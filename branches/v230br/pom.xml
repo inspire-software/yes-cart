@@ -35,6 +35,8 @@
         <module>manager</module>
     </modules>
     <properties>
+
+        <!-- Core frameworks globals versions -->
         <hibernate.core.version>4.2.0.Final</hibernate.core.version>
         <hibernate.search.version>4.2.0.Final</hibernate.search.version>
         <lucene.version>3.5.0</lucene.version>
@@ -45,6 +47,25 @@
         <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
         <ehcache.version>2.6.6</ehcache.version>
         <!--<ehcache.version>1.6.2</ehcache.version>-->
+        <jackson.version>1.9.13</jackson.version>
+        <GeDA.version>3.1.0</GeDA.version>
+        <mysql-connector.version>5.1.13</mysql-connector.version>
+        <servlet-api.version>2.5</servlet-api.version>
+
+        <!-- Storefront global versions -->
+        <wicket.version>1.5.11</wicket.version>
+        <jetty.version>6.1.4</jetty.version>
+
+        <!-- Storefront API global versions -->
+        <spring-ws.version>2.2.0.RELEASE</spring-ws.version>
+        <spring-oxm.version>1.5.10</spring-oxm.version>
+
+        <!-- YUM global versions -->
+        <backport-util-concurrent.version>3.1</backport-util-concurrent.version>
+        <!-- <blazeds.version>3.2.0.3978</blazeds.version>-->
+        <blazeds.version>4.0.0.14931</blazeds.version>
+        <spring-flex.version>1.5.2.RELEASE</spring-flex.version>
+
 
         <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>
         <db.config.yes.login>app</db.config.yes.login>
@@ -147,6 +168,12 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

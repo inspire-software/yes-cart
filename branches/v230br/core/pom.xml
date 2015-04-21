@@ -24,9 +24,6 @@
     </parent>
     <artifactId>core</artifactId>
     <name>Yes cart core</name>
-    <properties>
-        <GeDA.version>3.1.0</GeDA.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>

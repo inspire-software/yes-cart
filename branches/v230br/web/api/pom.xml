@@ -25,12 +25,6 @@
     <artifactId>yes-api</artifactId>
     <packaging>war</packaging>
     <name>Yes cart storefront API</name>
-    <properties>
-        <spring-ws.version>2.2.0.RELEASE</spring-ws.version>
-        <spring-oxm.version>1.5.10</spring-oxm.version>
-        <jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
-        <mysql-connector.version>5.1.13</mysql-connector.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>
@@ -117,7 +111,7 @@
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <version>${jackson-mapper-asl.version}</version>
+            <version>${jackson.version}</version>
         </dependency>
 
 

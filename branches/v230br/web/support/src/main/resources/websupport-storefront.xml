@@ -121,6 +121,17 @@
                         <constructor-arg index="0" ref="shoppingCartStateService"/>
                         <constructor-arg index="1" ref="addressService"/>
                         <constructor-arg index="2" ref="shoppingCartCommandFactory"/>
+                        <constructor-arg index="3">
+                            <!--
+                                 Cart state serialiser allows to persists the cart state as bytes.
+                                 See documenttation and tests for all implementation for guidance.
+                                 Jackson JSON serialiser seems to be ~30% faster. If any problems will
+                                 appear we can always switch back to Java SDK serialisation, just swap
+                                 the commented out bean.
+                            -->
+                            <bean class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.ShoppingCartStateSerializerJacksonImpl"/>
+                            <!--<bean class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.ShoppingCartStateSerializerSdkImpl"/>-->
+                        </constructor-arg>
                     </bean>
                 </property>
             </bean>

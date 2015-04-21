@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.util.MoneyUtils;
 
@@ -37,6 +38,7 @@ public class CartItemImpl implements CartItem {
 
     private String productSkuCode;
 
+    @JsonProperty("qty")
     private BigDecimal quantity = DEFAULT_QUANTITY;
 
     private BigDecimal price = BigDecimal.ZERO;

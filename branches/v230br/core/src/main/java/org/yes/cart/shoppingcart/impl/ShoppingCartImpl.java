@@ -17,6 +17,8 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
@@ -43,9 +45,13 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
     private static final long serialVersionUID =  20110509L;
 
+    @JsonProperty
     private List<CartItemImpl> items = new ArrayList<CartItemImpl>();
+    @JsonProperty
     private List<CartItemImpl> gifts = new ArrayList<CartItemImpl>();
+    @JsonProperty
     private Set<String> coupons = new TreeSet<String>();
+    @JsonProperty
     private List<CartItemImpl> shipping = new ArrayList<CartItemImpl>();
 
     private String guid = java.util.UUID.randomUUID().toString();
@@ -103,21 +109,25 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public boolean isSeparateBillingAddress() {
         return getOrderInfo().isSeparateBillingAddress();
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public boolean isBillingAddressNotRequired() {
         return getOrderInfo().isBillingAddressNotRequired();
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public boolean isDeliveryAddressNotRequired() {
         return getOrderInfo().isDeliveryAddressNotRequired();
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public String getOrderMessage() {
         return getOrderInfo().getOrderMessage();
     }
@@ -128,11 +138,13 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public Long getCarrierSlaId() {
         return getOrderInfo().getCarrierSlaId();
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public List<CartItem> getCartItemList() {
         final List<CartItem> immutableItems = new ArrayList<CartItem>(getItems().size());
         // first items (in the order they were added)
@@ -147,6 +159,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public List<CartItem> getShippingList() {
         final List<CartItem> immutableItems = new ArrayList<CartItem>(getShipping().size());
         // all shipping lines
@@ -427,6 +440,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public List<String> getAppliedCoupons() {
 
         final List<String> all = new ArrayList<String>(coupons);
@@ -490,6 +504,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public int getCartItemsCount() {
         BigDecimal quantity = BigDecimal.ZERO;
         for (CartItem cartItem : getItems()) {
@@ -575,6 +590,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public String getCustomerName() {
         return getShoppingContext().getCustomerName();
     }
@@ -585,16 +601,19 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public boolean isModified() {
         return processingStartTimestamp < modifiedTimestamp;
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public String getCustomerEmail() {
         return  getShoppingContext().getCustomerEmail();
     }
 
     /** {@inheritDoc} */
+    @JsonIgnore
     public int getLogonState() {
         if (StringUtils.isBlank(getCustomerEmail())
                    && StringUtils.isNotBlank(getCustomerName())) {

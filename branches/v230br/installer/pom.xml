@@ -31,8 +31,6 @@
         <tomcat.version>7.0.30</tomcat.version>
         <derby.version>10.8.1.2</derby.version>
         <guava.version>r09</guava.version>
-        <junit.version>4.10</junit.version>
-        <jmock.version>2.5.1</jmock.version>
         <project.build.izpack.directory>${project.build.directory}/izpack</project.build.izpack.directory>
     </properties>
     <dependencies>
@@ -55,18 +53,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jmock</groupId>
-            <artifactId>jmock-junit4</artifactId>
-            <version>${jmock.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
