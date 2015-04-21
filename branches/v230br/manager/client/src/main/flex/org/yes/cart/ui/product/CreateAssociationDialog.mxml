@@ -118,7 +118,7 @@
                 var selected:Array = productFinderPopUp.productSelection;
                 if (selected != null && selected.length > 0) {
                     selectedProductDTOImpl = selected[0];
-                    productLabel.text = selectedProductDTOImpl.name  + ' (' + selectedProductDTOImpl.code + ')';
+                    productLabel.text = selectedProductDTOImpl.code + ': ' + selectedProductDTOImpl.name;
                     productLabel.toolTip = selectedProductDTOImpl.description;
                     productFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
                     PopUpManager.removePopUp(productFinderPopUp);
