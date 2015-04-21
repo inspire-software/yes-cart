@@ -1,6 +1,7 @@
 package org.yes.cart.service.domain.impl;
 
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.domain.misc.Pair;
@@ -107,7 +108,9 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
 
         // if we have customer usage limit
         if (couponEntity.getUsageLimitPerCustomer() > 0) {
-            final List<Object> count = getGenericDao().findQueryObjectByNamedQuery("COUPON.USAGE.BY.ID.AND.EMAIL", couponEntity.getPromotioncouponId(), customerEmail);
+            final List<Object> count = getGenericDao()
+                    .findQueryObjectByNamedQuery("COUPON.USAGE.BY.ID.AND.EMAIL",
+                            couponEntity.getPromotioncouponId(), customerEmail, CustomerOrder.ORDER_STATUS_NONE);
             if (!count.isEmpty()) {
 
                 final Number usage = (Number) count.get(0);
