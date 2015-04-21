@@ -1575,6 +1575,26 @@
     </bean>
 
 
+    <bean id="txProxyOrderStateTransitionListenerTemplate" abstract="true"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="onEvent">PROPAGATION_REQUIRED,-Throwable</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <bean id="couponUsageTrackingListener" parent="txProxyOrderStateTransitionListenerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.listener.CouponUsageTrackingListenerImpl">
+                <constructor-arg index="0" ref="promotionCouponService"/>
+                <property name="usageOffset" value="1"/>
+            </bean>
+        </property>
+    </bean>
+
 
     <bean id="orderStateManager" class="org.yes.cart.service.order.impl.OrderStateManagerImpl">
         <constructor-arg index="0">
@@ -1598,7 +1618,9 @@
             </map>
         </constructor-arg>
         <constructor-arg index="1">
-            <map/>
+            <map>
+                <entry key="evt.pending"                   value-ref="couponUsageTrackingListener"/>
+            </map>
         </constructor-arg>
         <constructor-arg index="2">
             <map/>

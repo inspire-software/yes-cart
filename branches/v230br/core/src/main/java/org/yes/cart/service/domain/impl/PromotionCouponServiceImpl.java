@@ -128,7 +128,9 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
     /** {@inheritDoc} */
     public void updateUsage(final PromotionCoupon promotionCoupon, final int offset) {
 
-        final List<Object> count = getGenericDao().findQueryObjectByNamedQuery("COUPON.USAGE.BY.COUPON.ID", promotionCoupon.getPromotioncouponId());
+        final List<Object> count = getGenericDao()
+                .findQueryObjectByNamedQuery("COUPON.USAGE.BY.COUPON.ID",
+                        promotionCoupon.getPromotioncouponId(), CustomerOrder.ORDER_STATUS_NONE);
 
         int usage = offset;
         if (!count.isEmpty()) {

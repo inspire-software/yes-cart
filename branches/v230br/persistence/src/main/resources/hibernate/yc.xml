@@ -3369,7 +3369,7 @@
     <query name="COUPON.USAGE.BY.COUPON.ID">
         <![CDATA[
             select count(c.promotioncouponusageId) from PromotionCouponUsageEntity c
-            where c.coupon.promotioncouponId = ?1
+            where c.coupon.promotioncouponId = ?1 and c.customerOrder.orderStatus <> ?2
         ]]>
     </query>
 

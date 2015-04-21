@@ -163,9 +163,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
                     usage.setCustomerEmail(shoppingCart.getCustomerEmail());
                     usage.setCustomerOrder(customerOrder);
 
-                    customerOrder.getCoupons().add(usage);
-
-                    promotionCouponService.updateUsage(coupon, 1);
+                    customerOrder.getCoupons().add(usage); // Usage is tracked by order state manager listener
 
                 }
             }

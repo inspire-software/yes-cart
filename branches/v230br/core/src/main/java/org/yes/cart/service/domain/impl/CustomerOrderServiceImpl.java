@@ -22,7 +22,6 @@ import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.PromotionCouponUsage;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.PromotionCouponService;
@@ -34,7 +33,6 @@ import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -206,14 +204,6 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
                                 customerOrderToDelete.getOrderStatus()
                         )
                 );
-            }
-
-            final Collection<PromotionCouponUsage> couponUsages = customerOrderToDelete.getCoupons();
-
-            for (final PromotionCouponUsage usage : couponUsages) {
-
-                promotionCouponService.updateUsage(usage.getCoupon(), -1);
-
             }
 
             getGenericDao().delete(customerOrderToDelete);
