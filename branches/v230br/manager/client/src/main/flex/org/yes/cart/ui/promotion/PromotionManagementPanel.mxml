@@ -37,6 +37,7 @@
         import org.yes.cart.impl.PromotionDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.util.CloneUtil;
+        import org.yes.cart.util.DomainUtils;
 
         private var TAB_SUMMARY_IDX:int = 0;
         private var TAB_CONDITION_IDX:int = 1;
@@ -46,6 +47,8 @@
 
         [Bindable]
         private var promotionDTOImpl:PromotionDTOImpl;
+        [Bindable]
+        private var promotionDTOImplEnabled:Boolean;
 
         public function initPanel():void {
             typeFilterValue.dataProvider = [
@@ -72,7 +75,8 @@
         private function onPromotionSelected(event:ListEvent):void {
             promotionSelected = this.promotionGrid.selectedItem != null;
             if (promotionSelected) {
-                promotionDTOImpl = PromotionDTOImpl(CloneUtil.clone(event.currentTarget.selectedItem));
+                promotionDTOImpl = PromotionDTOImpl(CloneUtil.clone(this.promotionGrid.selectedItem));
+                promotionDTOImplEnabled = DomainUtils.isPersistentPK(promotionDTOImpl.promotionId) && promotionDTOImpl.enabled;
                 initTabs(promotionTabNavigator.selectedIndex);
             }
         }
@@ -123,6 +127,7 @@
 
         private function conditionTabSelected():void {
             Debug.trace("INFO Condition tab selected for promotion id" + promotionDTOImpl.promotionId);
+            promotionRule.promotionEnabled = promotionDTOImplEnabled;
             promotionRule.promotion = promotionDTOImpl;
         }
 
@@ -201,6 +206,15 @@
             initTabs(promotionTabNavigator.selectedIndex);
         }
 
+        private function onCopyBtnClick(event:MouseEvent):void {
+            promotionSelected = this.promotionGrid.selectedItem != null;
+            if (promotionSelected) {
+                promotionDTOImpl = PromotionDTOImpl(CloneUtil.clone(this.promotionGrid.selectedItem));
+                promotionDTOImpl.code = resourceManager.getString('PromotionManagementPanel', 'copyPromo', [ promotionDTOImpl.code ]);
+                promotionDTOImpl.promotionId = 0;
+                initTabs(promotionTabNavigator.selectedIndex);
+            }
+        }
 
         ]]>
 
@@ -236,6 +250,10 @@
                                 <mx:GridItem>
                                     <mx:Button label="@Resource(bundle='PromotionManagementPanel',key='createPromotion')"
                                                click="onCreateBtnClick(event)"/>
+                                    <mx:Button label="@Resource(bundle='PromotionManagementPanel',key='copyPromotion')"
+                                               click="onCopyBtnClick(event)"
+                                               enabled="{promotionSelected}"
+                                            />
                                     <mx:Button label="@Resource(bundle='PromotionManagementPanel',key='deletePromotion')"
                                                click="onRemoveBtnClick(event)"
                                                enabled="{promotionSelected}"

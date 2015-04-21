@@ -68,24 +68,25 @@ public class DtoPromotionServiceImpl
     }
 
     @Override
-    public PromotionDTO create(final PromotionDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Promotion iface = (Promotion) getPersistenceEntityFactory().getByIface(getEntityIFace());
-        assembler.assembleEntity(instance, iface, getAdaptersRepository(), getAssemblerDtoFactory());
-
+    protected void createPostProcess(final PromotionDTO dto, final Promotion entity) {
         // we store comma separated lists of promo codes on cart item, so we cannot allow commas
-        iface.setCode(instance.getCode().replace(',','_'));
-        iface.setShopCode(instance.getShopCode());
-        iface.setCurrency(instance.getCurrency());
-        iface.setPromoType(instance.getPromoType());
-        iface.setPromoAction(instance.getPromoAction());
-        iface.setEligibilityCondition(instance.getEligibilityCondition());
-        iface.setPromoActionContext(instance.getPromoActionContext());
-        iface.setCanBeCombined(instance.isCanBeCombined());
-        iface.setCouponTriggered(instance.isCouponTriggered());
+        entity.setCode(dto.getCode().replace(',','_'));
+        entity.setShopCode(dto.getShopCode());
+        entity.setCurrency(dto.getCurrency());
+        entity.setPromoType(dto.getPromoType());
+        entity.setPromoAction(dto.getPromoAction());
+        entity.setEligibilityCondition(dto.getEligibilityCondition());
+        entity.setPromoActionContext(dto.getPromoActionContext());
+        entity.setCanBeCombined(dto.isCanBeCombined());
+        entity.setCouponTriggered(dto.isCouponTriggered());
+    }
 
-        iface = service.create(iface);
-        return getById(iface.getId());
-
+    @Override
+    protected void updatePostProcess(final PromotionDTO dto, final Promotion entity) {
+        if (!entity.isEnabled()) { // We allow modifications if entity is disabled
+            entity.setEligibilityCondition(dto.getEligibilityCondition());
+            entity.setPromoActionContext(dto.getPromoActionContext());
+        }
     }
 
     /** {@inheritDoc} */

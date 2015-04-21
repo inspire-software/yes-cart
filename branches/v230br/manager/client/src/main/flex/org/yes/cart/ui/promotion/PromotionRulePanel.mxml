@@ -48,7 +48,7 @@
         public function set promotion(value:PromotionDTOImpl):void {
             unbindProperties();
             _promotion = value;
-            entityIsNew = DomainUtils.isNewPK(_promotion.promotionId);
+            allowEditing = DomainUtils.isNewPK(_promotion.promotionId) || (!promotionEnabled && !_promotion.enabled);
             bindProperties();
             formChanged = false;
         }
@@ -66,6 +66,7 @@
 
         private function onChange(event:Event):void {
             formChanged = true;
+            allowEditing = DomainUtils.isNewPK(_promotion.promotionId) || (!promotionEnabled && !_promotion.enabled);
         }
 
         private function onSaveCondition(event:MouseEvent):void {
@@ -97,7 +98,6 @@
         private function bindProperties():void {
 
 
-
             try {
 
                 propertyWatchers.addItem(BindingUtils.bindProperty(eligibilityCondition, "text", _promotion, "eligibilityCondition"));
@@ -105,15 +105,13 @@
                 propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "eligibilityCondition", eligibilityCondition, "text"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "promoActionContext", promoActionContext, "text"));
 
-            } catch(e:Error) {
+            } catch (e:Error) {
 
                 Alert.show("" + e.toString());
 
             }
 
         }
-
-
         ]]></mx:Script>
 
 
@@ -133,15 +131,17 @@
 
     <mx:ArrayCollection id="propertyWatchers"/>
     <mx:Boolean id="formChanged"/>
-    <mx:Boolean id="entityIsNew"/>
+    <mx:Boolean id="allowEditing"/>
+    <mx:Boolean id="promotionEnabled"/>
 
     <mx:VBox>
         <mx:Form>
             <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='eligibilityCondition')">
-                <mx:TextArea id="eligibilityCondition" width="250" height="100" editable="{entityIsNew}" change="onChange(event)"/>
+                <mx:TextArea id="eligibilityCondition" width="400" height="200" editable="{allowEditing}" change="onChange(event)"/>
+                <mx:Text text="@Resource(bundle='PromotionManagementPanel',key='eligibilityConditionEditHint')" visible="{!allowEditing}" includeInLayout="{!allowEditing}"/>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='promoActionContext')">
-                <mx:TextInput id="promoActionContext" width="150" editable="{entityIsNew}" change="onChange(event)" toolTip="{promoActionContextTooltip()}"/>
+                <mx:TextInput id="promoActionContext" width="150" editable="{allowEditing}" change="onChange(event)" toolTip="{promoActionContextTooltip()}"/>
             </mx:FormItem>
         </mx:Form>
         <mx:ControlBar horizontalAlign="right" width="100%">
