@@ -66,3 +66,45 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10980,  'CART_SESSION_EXPIRY_SECONDS', 'CART_SESSION_EXPIRY_SECONDS',  0,  NULL,  'Cart: session expiry in seconds',
     'Cart session expiry in seconds. Invalidates login when session expires. Default: 21600s (6h)',  1006, 1001);
+
+
+--
+-- YC-538 Add cookie policy check support (EU)
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10979,  'SHOP_COOKIE_POLICY_ENABLE', 'SHOP_COOKIE_POLICY_ENABLE',  0,  NULL,  'Shop: Cookie policy enable',
+    'Enables notification for use of cookie on this site (search the Internet for ''The EU cookie law (e-Privacy Directive)'').',  1008, 1001);
+
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (118, 'true','SHOP_COOKIE_POLICY_ENABLE', 10, 'SHOP_COOKIE_POLICY_ENABLE');
+
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10009, 10000, 0, 'cookie_policy_include', 'Cookie policy message include for SHOP10','include', 'SHOP10_cookie_policy_include','SHOP10_cookie_policy_include');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12080,'CONTENT_BODY_en_1','
+<small><b>Cookie Policy</b><br>
+ We may store information about you using cookies (files which are sent by us to your computer or other access device) which
+ we can access when you visit our site in future. We do this to enhance user experience. If you want to delete any cookies that
+ are already on your computer, please refer to the instructions for your file management software to locate the file or directory
+ that stores cookies. Our cookies will have the file names JSESSIONID, yc and yccookiepolicy. Information on deleting or controlling
+ cookies is available at <a href="http://www.AboutCookies.org" target="_blank">www.AboutCookies.org</a>. Please note that by
+ deleting our cookies or disabling future cookies you may not be able to access certain areas or features of our site.</small>
+',10009,'12080_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12081,'CONTENT_BODY_ru_1','
+<small><b>Cookie Policy</b><br>
+ We may store information about you using cookies (files which are sent by us to your computer or other access device) which
+ we can access when you visit our site in future. We do this to enhance user experience. If you want to delete any cookies that
+ are already on your computer, please refer to the instructions for your file management software to locate the file or directory
+ that stores cookies. Our cookies will have the file names JSESSIONID, yc and yccookiepolicy. Information on deleting or controlling
+ cookies is available at <a href="http://www.AboutCookies.org" target="_blank">www.AboutCookies.org</a>. Please note that by
+ deleting our cookies or disabling future cookies you may not be able to access certain areas or features of our site.</small>
+',10009,'12081_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12082,'CONTENT_BODY_uk_1','
+<small><b>Cookie Policy</b><br>
+ We may store information about you using cookies (files which are sent by us to your computer or other access device) which
+ we can access when you visit our site in future. We do this to enhance user experience. If you want to delete any cookies that
+ are already on your computer, please refer to the instructions for your file management software to locate the file or directory
+ that stores cookies. Our cookies will have the file names JSESSIONID, yc and yccookiepolicy. Information on deleting or controlling
+ cookies is available at <a href="http://www.AboutCookies.org" target="_blank">www.AboutCookies.org</a>. Please note that by
+ deleting our cookies or disabling future cookies you may not be able to access certain areas or features of our site.</small>
+',10009,'12082_CAV');
+

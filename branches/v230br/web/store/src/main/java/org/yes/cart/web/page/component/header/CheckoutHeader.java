@@ -49,6 +49,7 @@ public class CheckoutHeader extends BaseComponent {
      */
     protected void onBeforeRender() {
 
+        addOrReplace(new CookiePolicyInclude("cookiePolicy"));
         addOrReplace(getProfileFragment());
         addOrReplace(getLogoFragment());
         addOrReplace(new SmallShoppingCartView("smallCart"));

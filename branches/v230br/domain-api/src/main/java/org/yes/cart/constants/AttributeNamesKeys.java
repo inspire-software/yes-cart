@@ -361,6 +361,10 @@ public interface AttributeNamesKeys {
          */
         String CART_SESSION_EXPIRY_SECONDS = "CART_SESSION_EXPIRY_SECONDS";
 
+        /**
+         * Enable cookie policy (aka The EU cookie law (e-Privacy Directive))
+         */
+        String SHOP_COOKIE_POLICY_ENABLE = "SHOP_COOKIE_POLICY_ENABLE";
     }
 
     interface Brand {

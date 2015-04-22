@@ -58,6 +58,7 @@ public class StandardHeader  extends BaseComponent {
      */
     protected void onBeforeRender() {
 
+        addOrReplace(new CookiePolicyInclude("cookiePolicy"));
         addOrReplace(getHeaderNav());
         addOrReplace(getLogoFragment());
         addOrReplace(getProfileFragment());
