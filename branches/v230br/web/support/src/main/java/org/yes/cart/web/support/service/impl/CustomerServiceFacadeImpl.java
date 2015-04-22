@@ -101,7 +101,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
     /** {@inheritDoc} */
     public void resetPassword(final Shop shop, final Customer customer) {
-        customerService.resetPassword(customer, shop);
+        customerService.resetPassword(customer, shop, null);
     }
 
     /** {@inheritDoc} */
@@ -117,7 +117,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         customer.setEmail(email);
         customer.setFirstname((String) registrationData.get("firstname"));
         customer.setLastname((String) registrationData.get("lastname"));
-        customer.setPassword(password); // aspect will create hash
+        customer.setPassword(password); // aspect will create hash but we need to generate password to be able to auto-login
 
         final Map<String, Object> attrData = new HashMap<String, Object>(registrationData);
         attrData.remove("firstname");

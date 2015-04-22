@@ -18,6 +18,7 @@ package org.yes.cart.web.page;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -140,8 +141,9 @@ public class HomePage extends AbstractWebPage {
                 new FeaturedProducts("featured")
         );
 
-
-
+        addOrReplace(
+                new FeedbackPanel(FEEDBACK)
+        );
 
         super.onBeforeRender();
 

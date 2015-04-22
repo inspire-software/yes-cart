@@ -33,7 +33,7 @@
                 <input wicket:id="email" type="text" class="form-control" id="loginEmail"  wicket:message="placeholder:email">
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" wicket:enclosure="password">
             <label for="loginPassword" class="control-label col-xs-12 col-sm-3">
                 <wicket:message key="password">[password]</wicket:message>
             </label>
@@ -44,8 +44,10 @@
         <div class="form-group">
             <div class="col-xs-offset-3 col-xs-8 buttons">
                 <input type="submit" class="btn btn-info" wicket:id="restorePasswordBtn"  wicket:message="value:restorePassword"/>
+                <input type="submit" class="btn btn-link" wicket:id="cancelRestorePasswordBtn"  wicket:message="value:cancel"/>
                 <input type="submit" class="btn btn-warning" wicket:id="loginBtn"  wicket:message="value:signIn"/>
                 <a wicket:id="registrationLink"  class="btn btn-primary" rel="nofollow"><wicket:message key="registration">[registration]</wicket:message></a>
+                <input type="submit" class="btn btn-link" wicket:id="tryRestorePasswordBtn"  wicket:message="value:tryRestorePassword"/>
             </div>
         </div>
         <div class="form-group">

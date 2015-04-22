@@ -81,14 +81,25 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     }
 
     /**
-     * Get customer by email.
-     *
-     * @param email email
-     * @return {@link Customer}
+     * {@inheritDoc}
      */
     @Cacheable(value = "customerService-customerByEmail")
     public Customer getCustomerByEmail(final String email) {
         Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("email", email));
+        if (customer != null) {
+            Hibernate.initialize(customer.getAttributes());
+            for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
+                Hibernate.initialize(attrValueCustomer.getAttribute().getEtype());
+            }
+        }
+        return customer;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Customer getCustomerByToken(final String token) {
+        Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("authToken", token));
         if (customer != null) {
             Hibernate.initialize(customer.getAttributes());
             for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
@@ -309,7 +320,10 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    public void resetPassword(final Customer customer, final Shop shop) {
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, key = "#customer.email")
+    public void resetPassword(final Customer customer, final Shop shop, final String authToken) {
         getGenericDao().update(customer);
     }
 

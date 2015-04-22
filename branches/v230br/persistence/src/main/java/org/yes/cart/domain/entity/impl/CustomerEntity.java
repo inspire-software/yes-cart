@@ -35,6 +35,8 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private String lastname;
     private String middlename;
     private String password;
+    private String authToken;
+    private Date authTokenExpiry;
     private String tag;
 
     private Collection<CustomerOrder> orders = new ArrayList<CustomerOrder>(0);
@@ -91,6 +93,22 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(final String authToken) {
+        this.authToken = authToken;
+    }
+
+    public Date getAuthTokenExpiry() {
+        return authTokenExpiry;
+    }
+
+    public void setAuthTokenExpiry(final Date authTokenExpiry) {
+        this.authTokenExpiry = authTokenExpiry;
     }
 
     public String getTag() {

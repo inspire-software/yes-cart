@@ -43,6 +43,7 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     private String firstname;
     private String lastname;
     private String password;
+    private String authToken;
     private List<String> mailTemplatePathChain;
     private String templateName;
 
@@ -105,6 +106,16 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     /** {@inheritDoc} */
     public void setPassword(final String password) {
         this.password = password;
+    }
+
+    /** {@inheritDoc} */
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    /** {@inheritDoc} */
+    public void setAuthToken(final String authToken) {
+        this.authToken = authToken;
     }
 
     /** {@inheritDoc} */

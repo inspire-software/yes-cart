@@ -36,6 +36,8 @@
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
         <property name="password" length="255" type="java.lang.String" column="PASSWORD" not-null="true"/>
+        <property name="authToken" length="255" type="java.lang.String" column="AUTHTOKEN" not-null="false"/>
+        <property name="authTokenExpiry" type="timestamp" column="AUTHTOKENEXPIRY" not-null="false"/>
 
         <bag name="shops" inverse="true" lazy="true" cascade="all,delete-orphan" >
             <key column="MANAGER_ID" on-delete="cascade"/>
@@ -1738,6 +1740,8 @@
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
         <property name="password" length="255" type="java.lang.String" column="PASSWORD" not-null="true"/>
+        <property name="authToken" length="255" type="java.lang.String" column="AUTHTOKEN" not-null="false"/>
+        <property name="authTokenExpiry" type="timestamp" column="AUTHTOKENEXPIRY" not-null="false"/>
 
         <property name="tag" type="string" length="255">
             <column name="TAG">

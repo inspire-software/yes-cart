@@ -33,7 +33,11 @@
     <bean id="managerRegistrationAspect" class="org.yes.cart.service.dto.impl.TestManagerRegistrationAspect">
         <constructor-arg ref="passPhraseGenerator"/>
         <constructor-arg ref="passwordHashHelper"/>
+    </bean>
 
+    <bean id="customerRegistrationAspect" class="org.yes.cart.service.dto.impl.TestCustomerRegistrationAspect">
+        <constructor-arg ref="passPhraseGenerator"/>
+        <constructor-arg ref="passwordHashHelper"/>
     </bean>
 
 

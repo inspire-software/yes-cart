@@ -16,11 +16,15 @@
 
 package org.yes.cart.web.aspect;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.RegisteredPerson;
 import org.yes.cart.domain.entity.Shop;
@@ -38,6 +42,8 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -101,38 +107,73 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
         final RegisteredPerson registeredPerson = (RegisteredPerson) args[0];
         final Shop shop = (Shop) args[1];
+        final String token = !newPerson ? (String) args[2] : null;
 
 
         final String generatedPassword;
-        if (newPerson && registeredPerson.getPassword() != null) {
-            generatedPassword = registeredPerson.getPassword();
+        final String generatedPasswordHash;
+        final String generatedToken;
+        final Date generatedTokenExpiry;
+        if (newPerson) {
+
+            if (StringUtils.isNotBlank(registeredPerson.getPassword())) {
+                // We need to use password from RegisteredPerson because we auto-login using it during registration
+                generatedPassword = registeredPerson.getPassword();
+            } else {
+                // fallback as we must have a password (worst case customer will need to reset the password)
+                generatedPassword = phrazeGenerator.getNextPassPhrase();
+            }
+            // regenerate hash for new password
+            generatedPasswordHash = hashHelper.getHash(generatedPassword);
+            generatedToken = null;
+            generatedTokenExpiry = null;
+
         } else {
-            generatedPassword = phrazeGenerator.getNextPassPhrase();
+            if (StringUtils.isNotBlank(token)) {
+                // Token is present so need to actually reset
+                if (!isCallcenterToken(shop, token)) {
+                    if (!token.equals(registeredPerson.getAuthToken())
+                            || registeredPerson.getAuthTokenExpiry() == null
+                            || new Date().after(registeredPerson.getAuthTokenExpiry())) {
+                        throw new BadCredentialsException(Constants.PASSWORD_RESET_AUTH_TOKEN_INVALID);
+                    }
+                }
+
+                // regenerate password
+                generatedPassword = phrazeGenerator.getNextPassPhrase();
+                generatedPasswordHash = hashHelper.getHash(generatedPassword);
+                generatedToken = null;
+                generatedTokenExpiry = null;
+
+            } else {
+                // Token is null so this is a new password reset request
+                generatedPassword = null;
+                generatedPasswordHash = registeredPerson.getPassword(); // same as before
+                generatedToken = phrazeGenerator.getNextPassPhrase();
+                generatedTokenExpiry = determineExpiryTime(shop);
+            }
         }
-        final String passwordHash = hashHelper.getHash(generatedPassword);
-        registeredPerson.setPassword(passwordHash);
+
+        registeredPerson.setPassword(generatedPasswordHash);
+        registeredPerson.setAuthToken(generatedToken);
+        registeredPerson.setAuthTokenExpiry(generatedTokenExpiry);
 
         final RegistrationMessage registrationMessage = new RegistrationMessageImpl();
         registrationMessage.setEmail(registeredPerson.getEmail());
         registrationMessage.setFirstname(registeredPerson.getFirstname());
         registrationMessage.setLastname(registeredPerson.getLastname());
         registrationMessage.setPassword(generatedPassword);
+        registrationMessage.setAuthToken(generatedToken);
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         if (cart != null) {
             registrationMessage.setLocale(cart.getCurrentLocale());
         }
 
-
         registrationMessage.setMailTemplatePathChain(themeService.getMailTemplateChainByShopId(shop.getShopId()));
 
         registrationMessage.setTemplateName(newPerson ? "customer-registered" : "customer-change-password");
 
-        final AttrValueShop attrVal = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
-        String fromEmail = null;
-        if (attrVal != null) {
-            fromEmail = attrVal.getVal();
-        }
-        registrationMessage.setShopMailFrom(fromEmail);
+        registrationMessage.setShopMailFrom(determineFromEmail(shop));
 
         registrationMessage.setShopId(shop.getShopId());
         registrationMessage.setShopCode(shop.getCode());
@@ -144,6 +185,34 @@ public class RegistrationAspect extends BaseNotificationAspect {
         ShopCodeContext.getLog(this).info("Person message was send to queue {}", registrationMessage);
 
         return pjp.proceed();
+    }
+
+    private String determineFromEmail(final Shop shop) {
+        final AttrValueShop attrVal = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
+        if (attrVal != null) {
+            return attrVal.getVal();
+        }
+        return null;
+    }
+
+    private Date determineExpiryTime(final Shop shop) {
+
+        int secondsTimeout = Constants.DEFAULT_CUSTOMER_TOKEN_EXPIRY_SECONDS;
+        final AttrValueShop attrVal = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS);
+        if (attrVal != null) {
+            secondsTimeout = NumberUtils.toInt(attrVal.getVal(), secondsTimeout);
+        }
+        final Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, secondsTimeout);
+        return calendar.getTime();
+
+    }
+
+    private boolean isCallcenterToken(final Shop shop, final String token) {
+
+        final AttrValueShop attrVal = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_PASSWORD_RESET_CC);
+        return attrVal != null && StringUtils.isNotBlank(attrVal.getVal()) && attrVal.getVal().equals(token);
+
     }
 
     /**

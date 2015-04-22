@@ -19,6 +19,7 @@ package org.yes.cart.web.page.component.customer.password;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -33,7 +34,7 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
  */
 public class PasswordPanel extends BaseComponent {
 
-    private static final String PASSWORD_SENT = "newPasswordSent";
+    private static final String PASSWORD_SENT = "newPasswordRequestEmailSent";
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String PASSWORD_FORM = "passwordForm";
@@ -60,7 +61,7 @@ public class PasswordPanel extends BaseComponent {
                     @Override
                     protected void onSubmit() {
                         customerServiceFacade.resetPassword(ApplicationDirector.getCurrentShop(), getModelObject());
-                        info(getLocalizer().getString(PASSWORD_SENT, this));
+                        info(new StringResourceModel("newPasswordRequestEmailSent", this, null, new Object[] {getModelObject().getEmail()}).getString());
                         super.onSubmit();
                     }
 

@@ -365,6 +365,16 @@ public interface AttributeNamesKeys {
          * Enable cookie policy (aka The EU cookie law (e-Privacy Directive))
          */
         String SHOP_COOKIE_POLICY_ENABLE = "SHOP_COOKIE_POLICY_ENABLE";
+
+        /**
+         * Special token for customer password reset from YUM
+         */
+        String SHOP_CUSTOMER_PASSWORD_RESET_CC = "SHOP_CUSTOMER_PASSWORD_RESET_CC";
+
+        /**
+         * Special token for customer password reset from YUM
+         */
+        String SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS = "SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS";
     }
 
     interface Brand {

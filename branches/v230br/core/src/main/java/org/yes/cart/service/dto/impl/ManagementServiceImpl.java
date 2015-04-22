@@ -74,8 +74,6 @@ public class ManagementServiceImpl implements ManagementService {
 
     private final AdaptersRepository adaptersRepository;
 
-    private final PassPhrazeGenerator passPhrazeGenerator;
-
 
     /**
      * Construct user management service.
@@ -84,22 +82,19 @@ public class ManagementServiceImpl implements ManagementService {
      * @param managerRoleDao      manager roles dao
      * @param roleDao             role dao
      * @param dtoFactory          {@link DtoFactory}
-     * @param passPhrazeGenerator pass praze generator
      */
     public ManagementServiceImpl(final ManagerService managerService,
                                     final GenericDAO<ManagerRole, Long> managerRoleDao,
                                     final GenericDAO<Role, Long> roleDao,
                                     final GenericDAO<Shop, Long> shopDao,
                                     final DtoFactory dtoFactory,
-                                    final AdaptersRepository adaptersRepository,
-                                    final PassPhrazeGenerator passPhrazeGenerator) {
+                                    final AdaptersRepository adaptersRepository) {
         this.managerService = managerService;
         this.managerRoleDao = managerRoleDao;
         this.roleDao = roleDao;
         this.shopDao = shopDao;
         this.dtoFactory = dtoFactory;
         this.adaptersRepository = adaptersRepository;
-        this.passPhrazeGenerator = passPhrazeGenerator;
 
         managerAssembler = DTOAssembler.newAssembler(ManagerDTOImpl.class, Manager.class);
         roleAssembler = DTOAssembler.newAssembler(RoleDTOImpl.class, Role.class);
@@ -199,7 +194,7 @@ public class ManagementServiceImpl implements ManagementService {
         manager.setEmail(userId);
         manager.setFirstname(firstName);
         manager.setLastname(lastName);
-        manager.setPassword(passPhrazeGenerator.getNextPassPhrase());
+        // manager.setPassword(); No need to set password as we already generating it in the aspect
 
         final Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.CODE", shopCode);
         if (shop == null) {

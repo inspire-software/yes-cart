@@ -87,6 +87,20 @@ public interface RegistrationMessage extends Serializable {
     void setPassword(String password);
 
     /**
+     * Authorisation token.
+     *
+     * @return auth token (for resetting passwords)
+     */
+    String getAuthToken();
+
+    /**
+     * Authorisation token.
+     *
+     * @param authToken auth token (for resetting passwords)
+     */
+    void setAuthToken(String authToken);
+
+    /**
      * Get shop mail from addr.
      *
      * @return shop mail from addr.

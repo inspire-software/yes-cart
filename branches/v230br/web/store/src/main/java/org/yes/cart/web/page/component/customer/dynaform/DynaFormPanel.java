@@ -119,6 +119,7 @@ public class DynaFormPanel extends BaseComponent {
                 }
 
                 customerService.updateCustomerAttributes(ApplicationDirector.getCurrentShop(), customer, values);
+                info(getLocalizer().getString("profileUpdated", this));
             }
         };
 

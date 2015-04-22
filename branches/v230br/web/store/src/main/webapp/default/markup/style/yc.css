@@ -1289,15 +1289,17 @@ ul.feedbackPanel > li {
   /*  display: inline; */
 }
 
-li > .feedbackPanelERROR {
+.feedbackPanelERROR {
     padding: 10px;
-    color: #a94442;
+    /* color: #a94442; */
+    background-color: #f2dede;
     margin-bottom:10px;
 }
 
 .feedbackPanelINFO {
     padding: 10px;
-    color: #3c763d;
+    /* color: #3c763d; */
+    background-color: #dff0d8;
     margin-bottom:10px;
 }
 

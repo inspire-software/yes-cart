@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeGroupNames;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -33,7 +34,6 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.GenericService;
-import org.yes.cart.service.domain.PassPhrazeGenerator;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCustomerService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
@@ -60,8 +60,6 @@ public class DtoCustomerServiceImpl
 
     private final Assembler shopAssembler;
 
-    private final PassPhrazeGenerator passPhrazeGenerator;
-
     /**
      * Construct base remote service.
      *
@@ -71,7 +69,6 @@ public class DtoCustomerServiceImpl
      * @param dtoAttributeService      {@link DtoAttributeService}
      * @param attrValueEntityCustomerDao       link to customer attribute values dao
      * @param shopDao shop dao
-     * @param passPhrazeGenerator pass praze generator
      */
     public DtoCustomerServiceImpl(
             final DtoFactory dtoFactory,
@@ -79,17 +76,13 @@ public class DtoCustomerServiceImpl
             final AdaptersRepository adaptersRepository,
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityCustomer, Long> attrValueEntityCustomerDao,
-            final GenericDAO<Shop, Long> shopDao,
-            final PassPhrazeGenerator passPhrazeGenerator) {
+            final GenericDAO<Shop, Long> shopDao) {
 
         super(dtoFactory, customerGenericService, adaptersRepository);
 
         this.dtoAttributeService = dtoAttributeService;
 
         this.attrValueEntityCustomerDao = attrValueEntityCustomerDao;
-
-        this.passPhrazeGenerator = passPhrazeGenerator;
-
 
         this.shopDao = shopDao;
 
@@ -107,7 +100,6 @@ public class DtoCustomerServiceImpl
     public CustomerDTO create(final CustomerDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         Customer customer = getPersistenceEntityFactory().getByIface(getEntityIFace());
         assembler.assembleEntity(instance, customer, null, dtoFactory);
-        customer.setPassword(passPhrazeGenerator.getNextPassPhrase());
         customer = ((CustomerService)service).create(customer, null);
         return getById(customer.getCustomerId());
     }
@@ -226,7 +218,12 @@ public class DtoCustomerServiceImpl
         final Customer cust = service.findById(customer.getCustomerId());
         if (cust != null) {
             final Shop shop = shopDao.findById(shopId);
-            ((CustomerService)service).resetPassword(cust, shop);
+            final AttrValue av = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_PASSWORD_RESET_CC);
+            String authToken = "invalid";
+            if (av != null && StringUtils.isNotBlank(av.getVal())) {
+                authToken = av.getVal();
+            }
+            ((CustomerService)service).resetPassword(cust, shop, authToken);
         }
     }
 

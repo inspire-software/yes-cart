@@ -217,9 +217,12 @@
     <entry key="customerNotActiveInShop">E-mail не активований для цього магазину. Для активації введіть логін і пароль ще раз і натісніть "Вхід".</entry>
     <entry key="existingUser">Зареєстрований покупець</entry>
     <entry key="restorePassword">Відновити пароль</entry>
+    <entry key="tryRestorePassword">Забули пароль?</entry>
     <entry key="signIn">Вхід</entry>
-    <entry key="tryToRestore">Натисніть "Відновити пароль" і він буде висланий на Ваш e-mail {0}</entry>
-    <entry key="emailSent">Новий пароль відправлено на пошту {0}</entry>
+    <entry key="tryToRestore">Натисніть "Відновити пароль" і він буде висланий на Ваш e-mail</entry>
+    <entry key="newPasswordRequestEmailSent">Запит на новий пароль відправлено на пошту {0}</entry>
+    <entry key="newPasswordEmailSent">Новий пароль відправлено на пошту</entry>
+    <entry key="newPasswordInvalidToken">Невірний код авторизації. Неможливо згенерувати новий пароль.</entry>
 
     <!-- RegisterPanel -->
     <entry key="newUser">Новий покупець</entry>
@@ -252,13 +255,13 @@
     <entry key="noOrders">Немає записів в історії замовлень.</entry>
 
     <!-- PasswordPanel -->
-    <entry key="changePassword">Політика безпеки магазину - тільки автоматично згенерований пароль. Новий пароль буде висланий на Ваш email після натискання кнопки "Змінити пароль"</entry>
+    <entry key="changePassword">Політика безпеки магазину - тільки автоматично згенерований пароль. Запит на новий пароль буде висланий на Ваш email після натискання кнопки "Змінити пароль"</entry>
     <entry key="changePasswordBtn">Змінити пароль</entry>
     <entry key="newPasswordSent">Новий пароль відправленний на email</entry>
 
     <!-- SummaryPanel -->
     <entry key="customerSummary">Загальна інформація</entry>
-    <entry key="profileUpdated">Особиста сторінка оновлена</entry>
+    <entry key="profileUpdated">Ваші дані оновлені</entry>
 
     <!-- WishListView -->
     <entry key="wishlistItems">Список побажань</entry>

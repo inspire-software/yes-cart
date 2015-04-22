@@ -108,3 +108,26 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
  deleting our cookies or disabling future cookies you may not be able to access certain areas or features of our site.</small>
 ',10009,'12082_CAV');
 
+--
+-- YC-539 Rework 'reset password' functionality
+--
+
+alter table TCUSTOMER add column AUTHTOKEN varchar(255);
+alter table TCUSTOMER add column AUTHTOKENEXPIRY datetime;
+-- alter table TCUSTOMER add column AUTHTOKENEXPIRY timestamp;
+
+alter table TMANAGER add column AUTHTOKEN varchar(255);
+alter table TMANAGER add column AUTHTOKENEXPIRY datetime;
+-- alter table TMANAGER add column AUTHTOKENEXPIRY timestamp;
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10978,  'SHOP_CUSTOMER_PASSWORD_RESET_CC', 'SHOP_CUSTOMER_PASSWORD_RESET_CC',  0,  NULL,  'Customer: Password reset token',
+    'Authorisation token to reset password immediately by call center operative.',  1000, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10977,  'SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS', 'SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS',  0,  NULL,  'Customer: Password reset token validity (s)',
+    'Authorisation token validity if reset is requested by customer in second. Default is 86400s (1 day)',  1006, 1001);
+
+
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (119, 'r@nD()mTok3n4Pa$$Re$3+','SHOP_CUSTOMER_PASSWORD_RESET_CC', 10, 'SHOP_CUSTOMER_PASSWORD_RESET_CC');
+

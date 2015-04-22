@@ -212,14 +212,17 @@
     <entry key="addressTypeB">Billing address</entry>
 
     <!-- LoginPanel -->
-    <entry key="wrongPassword">Wrong password</entry>
-    <entry key="customerNotExists">Unknown user. Register please</entry>
+    <entry key="wrongPassword">Password is not valid</entry>
+    <entry key="customerNotExists">Email is not registered. Please register.</entry>
     <entry key="customerNotActiveInShop">E-mail is not active for this shop. To activate please enter login and password again and click "Sign In".</entry>
     <entry key="existingUser">Registered customer</entry>
     <entry key="restorePassword">Restore password</entry>
+    <entry key="tryRestorePassword">Forgot password?</entry>
     <entry key="signIn">Sign In</entry>
-    <entry key="tryToRestore">Try to restore password. It will be send to your email {0}</entry>
-    <entry key="emailSent">New password was sent to {0}. Check email please.</entry>
+    <entry key="tryToRestore">Try to restore password. It will be send to your email.</entry>
+    <entry key="newPasswordRequestEmailSent">New password request was sent to {0}. Check email please.</entry>
+    <entry key="newPasswordEmailSent">New password was sent. Check email please.</entry>
+    <entry key="newPasswordInvalidToken">Invalid token. Unable to reset password.</entry>
 
     <!-- RegisterPanel -->
     <entry key="newUser">New customer</entry>
@@ -252,13 +255,13 @@
     <entry key="noOrders">There is no order history to display.</entry>
 
     <!-- PasswordPanel -->
-    <entry key="changePassword">New password will be send to you email after "Change password" click</entry>
+    <entry key="changePassword">New password request will be send to you email after "Change password" click</entry>
     <entry key="changePasswordBtn">Change password</entry>
     <entry key="newPasswordSent">New password sent</entry>
 
     <!-- SummaryPanel -->
     <entry key="customerSummary">Mandatory information</entry>
-    <entry key="profileUpdated">Customer profile updated</entry>
+    <entry key="profileUpdated">Your profile was updated</entry>
 
     <!-- WishListView -->
     <entry key="wishlistItems">Wish list</entry>

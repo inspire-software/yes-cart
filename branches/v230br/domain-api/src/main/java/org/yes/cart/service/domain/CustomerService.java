@@ -51,6 +51,14 @@ public interface CustomerService extends GenericService<Customer> {
     Customer getCustomerByEmail(String email);
 
     /**
+     * Get customer by auth token.
+     *
+     * @param token email
+     * @return {@link Customer} or null if customer not found
+     */
+    Customer getCustomerByToken(String token);
+
+    /**
      * Get customer shops by email.
      *
      * @param email email
@@ -90,8 +98,9 @@ public interface CustomerService extends GenericService<Customer> {
      *
      * @param customer customer to create
      * @param shop     shop to assign
+     * @param authToken authentication token for password reset
      */
-    void resetPassword(Customer customer, final Shop shop);
+    void resetPassword(Customer customer, Shop shop, String authToken);
 
 
     /**
@@ -101,7 +110,7 @@ public interface CustomerService extends GenericService<Customer> {
      * @param shop     shop to assign
      * @return customer instance
      */
-    Customer create(final Customer customer, final Shop shop);
+    Customer create(Customer customer, Shop shop);
 
 
     /**
@@ -111,7 +120,7 @@ public interface CustomerService extends GenericService<Customer> {
      * @param shopCode shop to assign
      * @return customer instance
      */
-    Customer update(final String email, final String shopCode);
+    Customer update(String email, String shopCode);
 
 
     /**
@@ -132,7 +141,7 @@ public interface CustomerService extends GenericService<Customer> {
      * @param attributeCode given attribute code
      * @param attributeValue given attribute value
      */
-    void addAttribute(final Customer customer, final String attributeCode, final String attributeValue);
+    void addAttribute(Customer customer, String attributeCode, String attributeValue);
 
 
 }

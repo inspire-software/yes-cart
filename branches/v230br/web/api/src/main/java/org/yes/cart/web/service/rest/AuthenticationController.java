@@ -20,11 +20,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Customer;
@@ -34,7 +32,6 @@ import org.yes.cart.domain.ro.*;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
@@ -698,6 +695,110 @@ public class AuthenticationController {
 
     }
 
+
+    /**
+     * Interface: POST /yes-api/rest/auth/resetpassword
+     * <p>
+     * <p>
+     * Reset password interface that allows to request password to be reset and reset it.
+     * Password reset is a two step process. First step is to provide valid email of registered
+     * customer and generate authToken. Second step is to use authToken in order to confirm password
+     * reset.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>email</td><td>
+     *         E-mail of a registered customer. Supplying this parameter will trigger an email
+     *         with authToken.
+     *     </td></tr>
+     *     <tr><td>authToken</td><td>
+     *         E-mail of a registered customer.  Supplying this parameter will trigger an
+     *         email with new password.
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <p>
+     * Output that does not have error code indicates successful processing.
+     * <p>
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * {
+     *    "success" : false,
+     *    "greeting" : null,
+     *    "token" : null,
+     *    "error" : null
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;authentication-result&gt;
+     *    &lt;greeting/&gt;
+     *    &lt;success&gt;false&lt;/success&gt;
+     *    &lt;token/&gt;
+     * &lt;/authentication-result&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Error codes</h3><p>
+     * <table border="1">
+     *     <tr><td>INVALID_PARAMETERS</td><td>if either "email" or "authToken" was not sent</td></tr>
+     *     <tr><td>INVALID_TOKEN</td><td>Supplied authToken is not valid or expired</td></tr>
+     *     <tr><td>INVALID_EMAIL</td><td>Supplied email does not belong to a registered customer</td></tr>
+     * </table>
+     *
+     *
+     * @param request request
+     * @param response response
+     *
+     * @return authentication result
+     */
+    @RequestMapping(
+            value = "/resetpassword",
+            method = RequestMethod.POST,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody AuthenticationResultRO resetPassword(@RequestParam(value = "email", required = false) final String email,
+                                                              @RequestParam(value = "authToken", required = false) final String authToken,
+                                                              final HttpServletRequest request,
+                                                              final HttpServletResponse response) {
+
+        cartMixin.persistShoppingCart(request, response);
+
+        if (StringUtils.isNotBlank(authToken)) {
+
+            if (executePasswordResetCommand(authToken)) {
+                return new AuthenticationResultRO();
+            }
+            return new AuthenticationResultRO("INVALID_TOKEN");
+
+        } else if (StringUtils.isNotBlank(email)) {
+
+            final Shop shop = cartMixin.getCurrentShop();
+            final Customer customer = customerServiceFacade.getCustomerByEmail(email);
+            if (customer == null) {
+                return new AuthenticationResultRO("INVALID_EMAIL");
+            }
+            customerServiceFacade.resetPassword(shop, customer);
+            return new AuthenticationResultRO();
+
+        }
+        return new AuthenticationResultRO("INVALID_PARAMETERS");
+    }
+
     /**
      * Execute login command.
      *
@@ -723,6 +824,22 @@ public class AuthenticationController {
                     put(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
                 }}
         );
+    }
+
+    /**
+     * Execute password reset command.
+     */
+    protected boolean executePasswordResetCommand(final String token) {
+        try {
+            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RESET_PASSWORD, cartMixin.getCurrentCart(),
+                    new HashMap<String, Object>() {{
+                        put(ShoppingCartCommand.CMD_RESET_PASSWORD, token);
+                    }}
+            );
+            return true;
+        } catch (BadCredentialsException bce) {
+            return false;
+        }
     }
 
 

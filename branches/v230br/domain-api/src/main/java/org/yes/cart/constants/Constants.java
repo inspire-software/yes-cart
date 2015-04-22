@@ -148,6 +148,15 @@ public interface Constants {
      */
     List<String> DEFAULT_PAGE_SORT = Arrays.asList("displayName", "sku", "basePrice");
 
+    /**
+     * Default customer password reset token expiry.
+     */
+    int DEFAULT_CUSTOMER_TOKEN_EXPIRY_SECONDS = 86400;
+
+    /**
+     * Constant to determine unsuccessful reset password command
+     */
+    String PASSWORD_RESET_AUTH_TOKEN_INVALID = "PASSWORD_RESET_AUTH_TOKEN_INVALID";
 
     /**
      * Delimiter for range navigation value. Need to select this value carefully so that

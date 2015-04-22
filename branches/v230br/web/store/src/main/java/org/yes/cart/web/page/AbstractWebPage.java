@@ -30,6 +30,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.slf4j.Logger;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.entity.Shop;
@@ -173,7 +175,26 @@ public class AbstractWebPage extends WebPage {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
         final PageParameters params = getPageParameters();
-        getShoppingCartCommandFactory().execute(cart, (Map) WicketUtil.pageParametesAsMap(params));
+        final Map<String, String> paramsMap = WicketUtil.pageParametesAsMap(params);
+        try {
+
+            getShoppingCartCommandFactory().execute(cart, (Map) paramsMap);
+
+            if (paramsMap.containsKey(ShoppingCartCommand.CMD_RESET_PASSWORD)) {
+                info(getLocalizer().getString("newPasswordEmailSent", this));
+            }
+
+        } catch (BadCredentialsException bce) {
+
+            if (Constants.PASSWORD_RESET_AUTH_TOKEN_INVALID.equals(bce.getMessage())) {
+                error(getLocalizer().getString("newPasswordInvalidToken", this));
+            }
+
+        } catch (Exception exp) {
+
+            ShopCodeContext.getLog(this).error("Could not execute shopping cart command", exp);
+
+        }
 
     }
 

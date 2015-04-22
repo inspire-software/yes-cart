@@ -208,6 +208,7 @@
                 <value>viewSkuInternalCmd</value>
                 <value>setPgLabelCmd</value>
                 <value>setOrderMsgCmd</value>
+                <value>resetPasswordCmd</value>
             </list>
         </property>
         <property name="cmdInternalKeys">

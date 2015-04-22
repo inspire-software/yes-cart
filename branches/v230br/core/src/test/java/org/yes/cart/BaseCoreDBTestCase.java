@@ -237,25 +237,12 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         String prefix = getTestName() + number;
         ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         CustomerService customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
-        AttributeService attributeService = (AttributeService) ctx().getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
         AddressService addressService = (AddressService) ctx().getBean(ServiceSpringKeys.ADDRESS_SERVICE);
-        HashHelper hashHelper = (HashHelper) ctx().getBean("hashHelper");
-        GenericDAO<Customer, Long> customerDao = (GenericDAO<Customer, Long>) ctx().getBean("customerDao");
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
         customer.setEmail(prefix + "jd@domain.com");
         customer.setFirstname(prefix + "John");
         customer.setLastname(prefix + "Doe");
-        try {
-            final String passw = hashHelper.getHash("rawpassword");
-            customer.setPassword(passw);
-        } catch (Exception exp) {
-            fail("Unable to generate password hash");
-        }
-        //AttrValueCustomer attrValueCustomer = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
-        //attrValueCustomer.setCustomer(customer);
-        //attrValueCustomer.setVal("555-55-51");
-        //attrValueCustomer.setAttribute(attributeService.findByAttributeCode(AttributeNamesKeys.CUSTOMER_PHONE));
-        //customer.getAttribute().add(attrValueCustomer);
+        customer.setPassword("rawpassword");
         customerService.addAttribute(customer, AttributeNamesKeys.CUSTOMER_PHONE, "555-55-51");
         customer = customerService.create(customer, shopService.getById(10L));
         Address address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);

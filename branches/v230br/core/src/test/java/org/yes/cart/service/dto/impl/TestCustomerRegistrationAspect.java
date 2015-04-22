@@ -1,5 +1,5 @@
 /*
- * Copyright 2009, 2014 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Igor Azarnyi, Denys Pavlov
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -15,10 +15,11 @@
  */
 package org.yes.cart.service.dto.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.yes.cart.domain.entity.Manager;
+import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.PassPhrazeGenerator;
 
@@ -31,14 +32,14 @@ import java.security.NoSuchAlgorithmException;
  * Test aspect to prove, that real aspect will be applied too.
  */
 @Aspect
-public class TestManagerRegistrationAspect {
+public class TestCustomerRegistrationAspect {
 
     private final HashHelper hashHelper;
 
     private final PassPhrazeGenerator phrazeGenerator;
 
 
-    public TestManagerRegistrationAspect(final HashHelper hashHelper, final PassPhrazeGenerator phrazeGenerator) {
+    public TestCustomerRegistrationAspect(final HashHelper hashHelper, final PassPhrazeGenerator phrazeGenerator) {
         this.hashHelper = hashHelper;
         this.phrazeGenerator = phrazeGenerator;
     }
@@ -48,35 +49,35 @@ public class TestManagerRegistrationAspect {
     /**
      * Handle reset password operation.
      *
-     * @param pjp {@link ProceedingJoinPoint}
+     * @param pjp {@link org.aspectj.lang.ProceedingJoinPoint}
      * @return Object
      * @throws Throwable in case of target method errors
      */
-    @Around("execution(* org.yes.cart.service.domain.impl.ManagerServiceImpl.create(..))")
+    @Around("execution(* org.yes.cart.service.domain.impl.CustomerServiceImpl.create(..))")
     public Object doSetPassword(final ProceedingJoinPoint pjp) throws Throwable {
-        setPassword((Manager) pjp.getArgs()[0]);
+        setPassword((Customer) pjp.getArgs()[0]);
         return pjp.proceed();
     }
 
     /**
      * Handle reset password operation.
      *
-     * @param pjp {@link ProceedingJoinPoint}
+     * @param pjp {@link org.aspectj.lang.ProceedingJoinPoint}
      * @return Object
      * @throws Throwable in case of target method errors
      */
-    @Around("execution(* org.yes.cart.service.domain.impl.ManagerServiceImpl.resetPassword(..))")
+    @Around("execution(* org.yes.cart.service.domain.impl.CustomerServiceImpl.resetPassword(..))")
     public Object doResetPassword(final ProceedingJoinPoint pjp) throws Throwable {
-        setPassword((Manager) pjp.getArgs()[0]);
+        setPassword((Customer) pjp.getArgs()[0]);
         return pjp.proceed();
     }
 
-    private void setPassword(final Manager manager) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    private void setPassword(final Customer customer) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
-        final String generatedPassword  = phrazeGenerator.getNextPassPhrase();
+        final String generatedPassword  = StringUtils.isNotBlank(customer.getPassword()) ? customer.getPassword() : phrazeGenerator.getNextPassPhrase();
 
         final String passwordHash = hashHelper.getHash(generatedPassword);
 
-        manager.setPassword(passwordHash);
+        customer.setPassword(passwordHash);
     }
 }
