@@ -39,7 +39,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
-import org.yes.cart.web.page.CustomerSelfCarePage;
+import org.yes.cart.web.page.ProfilePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -193,7 +193,7 @@ public class ManageAddressesView extends BaseComponent {
                             @Override
                             public void onSubmit() {
                                 addressBookFacade.remove(address);
-                                setResponsePage(CustomerSelfCarePage.class);
+                                setResponsePage(ProfilePage.class);
                             }
                         }.setDefaultFormProcessing(false)
                 );

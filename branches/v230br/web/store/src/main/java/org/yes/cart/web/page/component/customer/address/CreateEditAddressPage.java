@@ -29,7 +29,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
-import org.yes.cart.web.page.CustomerSelfCarePage;
+import org.yes.cart.web.page.ProfilePage;
 import org.yes.cart.web.page.component.footer.CheckoutFooter;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.CheckoutHeader;
@@ -48,7 +48,7 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
  */
 public class CreateEditAddressPage extends AbstractWebPage {
 
-    public final static String RETURN_TO_SELFCARE = "selfcare";
+    public final static String RETURN_TO_SELFCARE = "profile";
     public final static String RETURN_TO_CHECKOUT = "checkout";
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
@@ -136,7 +136,7 @@ public class CreateEditAddressPage extends AbstractWebPage {
         if (isCheckout) {
             successfulPage = CheckoutPage.class;
         } else {
-            successfulPage = CustomerSelfCarePage.class;
+            successfulPage = ProfilePage.class;
         }
         return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
     }

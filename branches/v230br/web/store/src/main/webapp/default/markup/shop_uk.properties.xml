@@ -101,12 +101,18 @@
     <!-- ContactPage -->
     <entry key="contact">Контактна інформація</entry>
 
-    <!-- CustomerSelfCarePage -->
-    <entry key="selfCare">Ваш профіль</entry>
+    <!-- ProfilePage -->
+    <entry key="profileSummary">Ваш профіль</entry>
+    <entry key="ordersSummary">Ваші замовлення</entry>
     <entry key="customerSummary">Загальна інформація</entry>
     <entry key="orderInfo">Покупки</entry>
     <entry key="wishlist">Список побажань</entry>
     <entry key="addresses">Адресна книга</entry>
+    <entry key="viewOrdersFor">Подивитися замовлення</entry>
+    <entry key="viewOrdersForWeek">за тиждень</entry>
+    <entry key="viewOrdersForMonth">за місяць</entry>
+    <entry key="viewOrdersForYear">за рік</entry>
+    <entry key="viewOrdersForAll">всі замовлення</entry>
 
     <!-- FaqPage -->
     <entry key="faqTitle">Часті запитання</entry>
@@ -251,8 +257,10 @@
     <entry key="orderStatusHead">Статус</entry>
     <entry key="orderItemsHead">Товар</entry>
     <entry key="orderAmountHead">Сума</entry>
-    <entry key="orderInfo">Покупки</entry>
+    <entry key="orderInfo">Замовлення</entry>
     <entry key="noOrders">Немає записів в історії замовлень.</entry>
+    <entry key="orderNotFound">Замовлення не знайдено.</entry>
+    <entry key="orderNoTitle">Замовлення {0}</entry>
 
     <!-- PasswordPanel -->
     <entry key="changePassword">Політика безпеки магазину - тільки автоматично згенерований пароль. Запит на новий пароль буде висланий на Ваш email після натискання кнопки "Змінити пароль"</entry>
@@ -288,7 +296,7 @@
     <entry key="orderHistory">Історія замовлень</entry>
     <entry key="location">Розташування</entry>
     <entry key="licenceInfo">Ліцензії</entry>
-    <entry key="cart">Покупки</entry>
+    <entry key="cart">Подивитись кошик</entry>
     <entry key="sitemapInfo">Карта сайту</entry>
 
     <!-- StandardHeader -->
@@ -389,7 +397,7 @@
     <entry key="paymentOk">
         <![CDATA[
                     Оплата пройшла успішно. Номер замовлення {0}.
-                    Статус можна перевірити <a href="selfcare">на цій сторінці</a>.
+                    Статус можна перевірити <a href="orders">на цій сторінці</a>.
                      <br>
                     <a href=".">За новими покупками !</a>.
                ]]>

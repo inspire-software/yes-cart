@@ -73,9 +73,19 @@
                         <entry key="default" value="org.yes.cart.web.page.ShoppingCartPage"/>
                     </map>
                 </entry>
-                <entry key="/selfcare">
+                <entry key="/profile">
                     <map>
-                        <entry key="default" value="org.yes.cart.web.page.CustomerSelfCarePage"/>
+                        <entry key="default" value="org.yes.cart.web.page.ProfilePage"/>
+                    </map>
+                </entry>
+                <entry key="/orders">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.OrdersPage"/>
+                    </map>
+                </entry>
+                <entry key="/order">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.OrderPage"/>
                     </map>
                 </entry>
                 <entry key="/faq">

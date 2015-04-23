@@ -155,7 +155,7 @@ public class DynaFormPanel extends BaseComponent {
         final long shopId = ShopCodeContext.getShopId();
         final String lang = getLocale().getLanguage();
 
-        String dynaformInfo = getContentInclude(shopId, "selfcare_dynaform_content_include", lang);
+        String dynaformInfo = getContentInclude(shopId, "profile_dynaform_content_include", lang);
         get(FORM).get(CONTENT).replaceWith(new Label(CONTENT, dynaformInfo).setEscapeModelStrings(false));
 
 

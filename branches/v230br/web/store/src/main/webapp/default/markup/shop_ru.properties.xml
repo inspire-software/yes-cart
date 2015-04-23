@@ -101,12 +101,18 @@
     <!-- ContactPage -->
     <entry key="contact">Контактная информация</entry>
 
-    <!-- CustomerSelfCarePage -->
-    <entry key="selfCare">Ваш профиль</entry>
+    <!-- ProfilePage -->
+    <entry key="profileSummary">Ваш профиль</entry>
+    <entry key="ordersSummary">Ваши заказы</entry>
     <entry key="customerSummary">Основная информация</entry>
     <entry key="orderInfo">Покупки</entry>
     <entry key="wishlist">Список пожеланий</entry>
     <entry key="addresses">Адресная книга</entry>
+    <entry key="viewOrdersFor">Просмотреть заказы</entry>
+    <entry key="viewOrdersForWeek">за неделю</entry>
+    <entry key="viewOrdersForMonth">за месяц</entry>
+    <entry key="viewOrdersForYear">за год</entry>
+    <entry key="viewOrdersForAll">все заказы</entry>
 
     <!-- FaqPage -->
     <entry key="faqTitle">Часто задаваемые вопросы</entry>
@@ -251,8 +257,10 @@
     <entry key="orderStatusHead">Статус</entry>
     <entry key="orderItemsHead">Товар</entry>
     <entry key="orderAmountHead">Сумма</entry>
-    <entry key="orderInfo">Покупки</entry>
+    <entry key="orderInfo">Заказы</entry>
     <entry key="noOrders">Нет записей в истории заказов.</entry>
+    <entry key="orderNotFound">Заказ не найден.</entry>
+    <entry key="orderNoTitle">Заказ {0}</entry>
 
     <!-- PasswordPanel -->
     <entry key="changePassword">Политика безопасности магазина - только автоматически сгенерированный пароль. Запрос на новый пароль будет выслан по почте после нажатия кнопки "Сменить пароль"</entry>
@@ -288,7 +296,7 @@
     <entry key="orderHistory">История заказов</entry>
     <entry key="location">Расположение</entry>
     <entry key="licenceInfo">Лицензии</entry>
-    <entry key="cart">Покупки</entry>
+    <entry key="cart">Посмотреть корзину</entry>
     <entry key="sitemapInfo">Карта сайта</entry>
 
     <!-- StandardHeader -->
@@ -389,7 +397,7 @@
     <entry key="paymentOk">
         <![CDATA[
                     Оплата прошла успешно. Номер заказа {0}.
-                    Статус можно проверить <a href="selfcare">на этой странице</a>.
+                    Статус можно проверить <a href="orders">на этой странице</a>.
                      <br>
                     <a href=".">За новыми покупками !</a>.
                ]]>

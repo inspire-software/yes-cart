@@ -65,9 +65,8 @@
                 <ul class="nav nav-tabs nav-stacked affix-top" data-spy="affix" data-offset-top="150">
                     <li class="active"><a href="#customerSummary"><wicket:message key="customerSummary">[summary]</wicket:message></a></li>
                     <li><a href="#customerAdditional"><wicket:message key="customerAdditional">[additional]</wicket:message></a></li>
-                    <li><a href="#wishlist"><wicket:message key="wishlist">[wish list]</wicket:message></a></li>
-                    <li><a href="#orderInfo"><wicket:message key="orderInfo">[order history]</wicket:message></a></li>
                     <li><a href="#password"><wicket:message key="password">[password]</wicket:message></a></li>
+                    <li><a href="#wishlist"><wicket:message key="wishlist">[wish list]</wicket:message></a></li>
                     <li><a href="#addresses"><wicket:message key="addresses">[addresses]</wicket:message></a></li>
                 </ul>
             </div>
@@ -79,7 +78,7 @@
                 </div>
 
                 <div class="row">
-                    <h2><wicket:message key="selfCare">[selfCare]</wicket:message></h2>
+                    <h2><wicket:message key="profileSummary">[profileSummary]</wicket:message></h2>
                 </div>
                 <div class="row">
                     <wicket:container wicket:id="summaryView">
@@ -92,18 +91,13 @@
                     </wicket:container>
                 </div>
                 <div class="row">
-                    <wicket:container wicket:id="wishlistView">
-                        [wishlist items]
-                    </wicket:container>
-                </div>
-                <div class="row">
-                    <wicket:container wicket:id="ordersView">
-                        [list of orders]
-                    </wicket:container>
-                </div>
-                <div class="row">
                     <wicket:container wicket:id="passwordView">
                         [change password]
+                    </wicket:container>
+                </div>
+                <div class="row">
+                    <wicket:container wicket:id="wishlistView">
+                        [wishlist items]
                     </wicket:container>
                 </div>
                 <div class="row">

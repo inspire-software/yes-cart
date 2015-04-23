@@ -55,7 +55,7 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
  */
 @RequireHttps
 @AuthorizeInstantiation("USER")
-public class CustomerSelfCarePage extends AbstractWebPage {
+public class ProfilePage extends AbstractWebPage {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String SUMMARY_PANEL = "summaryView";
@@ -63,7 +63,6 @@ public class CustomerSelfCarePage extends AbstractWebPage {
     private final static String PASSWORD_PANEL = "passwordView";
     private final static String SHIPPING_ADDR_PANEL = "shippingAddressesView";
     private final static String BILLING_ADDR_PANEL = "billingAddressesView";
-    private final static String ORDERS_PANEL = "ordersView";
     private final static String WISHLIST_PANEL = "wishlistView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
@@ -76,7 +75,7 @@ public class CustomerSelfCarePage extends AbstractWebPage {
      *
      * @param params page parameters
      */
-    public CustomerSelfCarePage(final PageParameters params) {
+    public ProfilePage(final PageParameters params) {
         super(params);
 
         final String email = ApplicationDirector.getShoppingCart().getCustomerEmail();
@@ -99,7 +98,6 @@ public class CustomerSelfCarePage extends AbstractWebPage {
         add(new ManageAddressesView(BILLING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_BILLING, false));
         add(new DynaFormPanel(ATTR_PANEL, customerModel));
         add(new SummaryPanel(SUMMARY_PANEL, customerModel));
-        add(new CustomerOrderPanel(ORDERS_PANEL, customerModel));
         add(new WishListView(WISHLIST_PANEL, new Model<String>(email), new Model<String>(CustomerWishList.SIMPLE_WISH_ITEM), new Model<String>(null)).setVisible(customer != null));
         add(new StandardFooter(FOOTER));
         add(new StandardHeader(HEADER));
@@ -134,7 +132,7 @@ public class CustomerSelfCarePage extends AbstractWebPage {
      * @return page title
      */
     public IModel<String> getPageTitle() {
-        return new Model<String>(getLocalizer().getString("selfCare",this));
+        return new Model<String>(getLocalizer().getString("profileSummary",this));
     }
 
 

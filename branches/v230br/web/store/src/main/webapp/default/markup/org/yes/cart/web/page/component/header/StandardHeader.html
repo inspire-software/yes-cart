@@ -83,8 +83,15 @@
             <ul class="dropdown-menu" role="menu" aria-labelledby="profileMenu">
                 <li role="presentation">
                     <wicket:link>
-                        <a href="CustomerSelfCarePage.html" rel="nofollow">
+                        <a href="ProfilePage.html" rel="nofollow">
                             <span><wicket:message key="profile">[Profile]</wicket:message></span>
+                        </a>
+                    </wicket:link>
+                </li>
+                <li role="presentation">
+                    <wicket:link>
+                        <a href="OrdersPage.html" rel="nofollow">
+                            <span><wicket:message key="orderHistory">[Orders]</wicket:message></span>
                         </a>
                     </wicket:link>
                 </li>
@@ -100,7 +107,7 @@
     <wicket:fragment wicket:id="profileLoggedOff">
         <li>
             <wicket:link>
-                <a href="CustomerSelfCarePage.html" rel="nofollow">
+                <a href="ProfilePage.html" rel="nofollow">
                     <span><wicket:message key="profileLogin">[Profile]</wicket:message></span>
                     <span class="glyphicon glyphicon-user"></span>
                 </a>

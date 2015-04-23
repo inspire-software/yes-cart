@@ -38,7 +38,7 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
-import org.yes.cart.web.page.CustomerSelfCarePage;
+import org.yes.cart.web.page.ProfilePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.customer.dynaform.EditorFactory;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -131,7 +131,7 @@ public class RegisterPanel extends BaseComponent {
                     CheckoutPage.STEP_ADDR
             );
         } else {
-            successfulPage = CustomerSelfCarePage.class;
+            successfulPage = ProfilePage.class;
         }
         return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
     }

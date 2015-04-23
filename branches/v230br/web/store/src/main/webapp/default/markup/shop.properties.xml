@@ -101,12 +101,18 @@
     <!-- ContactPage -->
     <entry key="contact">Contact information</entry>
 
-    <!-- CustomerSelfCarePage -->
-    <entry key="selfCare">Your profile</entry>
+    <!-- ProfilePage -->
+    <entry key="profileSummary">Your profile</entry>
+    <entry key="ordersSummary">Your orders</entry>
     <entry key="customerSummary">Mandatory information</entry>
     <entry key="orderInfo">Orders</entry>
     <entry key="wishlist">Wish list</entry>
     <entry key="addresses">Address book</entry>
+    <entry key="viewOrdersFor">View orders</entry>
+    <entry key="viewOrdersForWeek">this week</entry>
+    <entry key="viewOrdersForMonth">this month</entry>
+    <entry key="viewOrdersForYear">this year</entry>
+    <entry key="viewOrdersForAll">all orders</entry>
 
     <!-- FaqPage -->
     <entry key="faqTitle">Frequently Asked Question(s)</entry>
@@ -253,6 +259,8 @@
     <entry key="orderAmountHead">Sum</entry>
     <entry key="orderInfo">Orders</entry>
     <entry key="noOrders">There is no order history to display.</entry>
+    <entry key="orderNotFound">Order not found.</entry>
+    <entry key="orderNoTitle">Order {0}</entry>
 
     <!-- PasswordPanel -->
     <entry key="changePassword">New password request will be send to you email after "Change password" click</entry>
@@ -288,7 +296,7 @@
     <entry key="orderHistory">Order history</entry>
     <entry key="location">Location</entry>
     <entry key="licenceInfo">Licences</entry>
-    <entry key="cart">View cart</entry>
+    <entry key="cart">View shopping cart</entry>
     <entry key="sitemapInfo">Site map</entry>
 
     <!-- StandardHeader -->
@@ -389,7 +397,7 @@
     <entry key="paymentOk">
         <![CDATA[
                     The payment was successful. Order number {0} .
-                    Check order status on <a href="selfcare">this page</a>.
+                    Check order status on <a href="orders">this page</a>.
                     <br>
                     <a href=".">Continue shopping !</a>.
                ]]>

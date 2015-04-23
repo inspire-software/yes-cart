@@ -58,8 +58,8 @@
             [step navigation panel]
         </wicket:container>
 
-        <div class="row">
-            <div wicket:id="feedback" class="col-xs-12">[feedback panel]</div>
+        <div class="col-xs-12">
+            <span wicket:id="feedback">[feedback panel]</span>
         </div>
 
         <div class="col-xs-12">
@@ -304,6 +304,10 @@
     </div>
 
     <div class="container active-step-holder">
+
+        <div class="col-xs-12 payment-title">
+            <h2><wicket:message key="orderVerification">[Check order and select payment method]</wicket:message></h2>
+        </div>
 
         <wicket:container wicket:id="orderVerificationView">
             [Order verification]

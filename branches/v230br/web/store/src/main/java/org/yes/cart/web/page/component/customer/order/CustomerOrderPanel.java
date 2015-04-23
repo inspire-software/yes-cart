@@ -18,10 +18,13 @@ package org.yes.cart.web.page.component.customer.order;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -33,6 +36,7 @@ import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.utils.impl.CustomerOrderComparator;
+import org.yes.cart.web.page.OrderPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
@@ -41,10 +45,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Show customer orders and order states.
@@ -57,6 +58,7 @@ public class CustomerOrderPanel extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String ORDER_LIST = "orders";
+    private final static String ORDER_VIEW_LINK = "orderViewLink";
     private final static String ORDER_NUM = "orderNum";
     private final static String ORDER_DATE = "orderDate";
     private final static String ORDER_STATE = "orderStatus";
@@ -117,7 +119,8 @@ public class CustomerOrderPanel extends BaseComponent {
         final DecimalFormatSymbols formatSymbols = new DecimalFormatSymbols(Locale.US);
         final DecimalFormat decimalFormat = new DecimalFormat(Constants.MONEY_FORMAT, formatSymbols);
 
-        final List<CustomerOrder> orders = getValidCustomerOrderInChronologicalOrder(customer);
+        final Date date = determineDate(getPage().getPageParameters());
+        final List<CustomerOrder> orders = getValidCustomerOrderInChronologicalOrder(customer, date);
 
         if (orders.isEmpty()) {
 
@@ -138,6 +141,7 @@ public class CustomerOrderPanel extends BaseComponent {
                                             final BigDecimal amount = customerOrderPaymentService.getOrderAmount(order.getOrdernum());
 
                                             customerOrderListItem
+                                                    .add(determineOrderPageLink(order, CustomerOrderPanel.ORDER_VIEW_LINK))
                                                     .add(new Label(ORDER_NUM, order.getOrdernum()))
                                                     .add(new Label(ORDER_DATE, dateFormat.format(order.getOrderTimestamp())))
                                                     .add(new Label(ORDER_STATE, getLocalizer().getString(order.getOrderStatus(), this)))
@@ -159,10 +163,67 @@ public class CustomerOrderPanel extends BaseComponent {
         super.onBeforeRender();
     }
 
-    private List<CustomerOrder> getValidCustomerOrderInChronologicalOrder(final Customer customer) {
+    /**
+     * Extension hook.
+     *
+     * @param order order
+     *
+     * @return view order page link
+     */
+    protected Link determineOrderPageLink(final CustomerOrder order, final String linkId) {
+
+        final PageParameters viewOrder = new PageParameters();
+        viewOrder.set("order", order.getCartGuid());
+        return new BookmarkablePageLink(linkId, OrderPage.class, viewOrder);
+
+    }
+
+    private final static Set<String> SUPPORTED_VIEWS = new HashSet<String>(Arrays.asList("week", "month", "year", "all"));
+    private final static String DEFAULT_VIEW = "week";
+
+    private Date determineDate(final PageParameters pageParameters) {
+        String viewTime = pageParameters.get("view").toString();
+        if (viewTime == null || !SUPPORTED_VIEWS.contains(viewTime)) {
+            viewTime = DEFAULT_VIEW;
+        }
+
+        if ("all".equals(viewTime)) {
+            return null;
+        }
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        if ("month".equals(viewTime)) {
+
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        } else if ("year".equals(viewTime)) {
+
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            calendar.set(Calendar.MONTH, 0);
+
+        } else {
+
+            calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+
+            final Calendar now = Calendar.getInstance();
+            if (now.before(calendar)) {
+                calendar.add(Calendar.DATE, -7);
+            }
+
+        }
+
+        return calendar.getTime();
+    }
+
+    private List<CustomerOrder> getValidCustomerOrderInChronologicalOrder(final Customer customer, final Date date) {
 
         // all in DB
-        final List<CustomerOrder> orders = customerOrderService.findCustomerOrders(customer, null);
+        final List<CustomerOrder> orders = customerOrderService.findCustomerOrders(customer, date);
 
         // remove temporary orders
         final Iterator<CustomerOrder> ordersIt = orders.iterator();
@@ -174,7 +235,7 @@ public class CustomerOrderPanel extends BaseComponent {
         }
 
         // sort
-        Collections.sort(orders, new CustomerOrderComparator());
+        Collections.sort(orders, Collections.reverseOrder(new CustomerOrderComparator()));
 
         return orders;
     }
