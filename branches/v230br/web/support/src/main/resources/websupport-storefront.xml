@@ -203,6 +203,7 @@
                 <value>setQuantityToCartCmd</value>
                 <value>qty</value>
                 <value>type</value>
+                <value>wlv</value>
                 <value>sku</value>
                 <value>wla</value>
                 <value>viewSkuInternalCmd</value>

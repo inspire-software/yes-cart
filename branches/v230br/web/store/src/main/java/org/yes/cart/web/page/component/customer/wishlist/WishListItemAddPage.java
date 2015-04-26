@@ -56,6 +56,11 @@ public class WishListItemAddPage extends AbstractWebPage {
                 throw new RedirectToUrlException("/cart/" + WebParametersKeys.WISHLIST_ITEM_ADDED + "/" + skuCode + "/" + WebParametersKeys.WISHLIST_ITEM_TYPE + "/" + wlType);
             }
             throw new RedirectToUrlException("/cart");
+        } else if ("wishlist".equals(pageType)) {
+            if (StringUtils.isNotBlank(skuCode)) {
+                throw new RedirectToUrlException("/wishlist?" + WebParametersKeys.WISHLIST_ITEM_ADDED + "=" + skuCode);
+            }
+            throw new RedirectToUrlException("/wishlist");
         }
 
         final PageParameters targetParams = WicketUtil.getFilteredRequestParameters(params);

@@ -20,12 +20,14 @@
     <div class="col-xs-12 no-padding">
         <h2 id="wishlist" class="profile-title"><wicket:message key="wishlistItems">[Wish List]</wicket:message></h2>
     </div>
-    <div wicket:id="products" class="col-xs-12 col-sm-4 col-md-3 wishlist">
+    <div wicket:id="products" class="col-xs-12 col-sm-4 col-md-3 wishlist jsWishlist">
         <div class="thumbnail">
             <a wicket:id="productLinkImage" rel="bookmark">
                 <img wicket:id="productDefaultImage"/>
             </a>
             <p class="wishlist-item-name">
+                <a wicket:id="shareItemLink" rel="nofollow" wicket:message="title:wishListShare" class="js-wish-visibility" data-toggle="tooltip"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></a>
+                <a wicket:id="hideItemLink" rel="nofollow" wicket:message="title:wishListHide" class="js-wish-visibility" data-toggle="tooltip"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span></a>
                 <a wicket:id="productLinkName" rel="bookmark">
                     <span wicket:id="name"/>
                 </a>

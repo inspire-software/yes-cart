@@ -112,6 +112,20 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    public Customer getCustomerByPublicKey(final String publicKey, final String lastName) {
+        Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("publicKey", publicKey), Restrictions.eq("lastname", lastName));
+        if (customer != null) {
+            Hibernate.initialize(customer.getAttributes());
+            for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
+                Hibernate.initialize(attrValueCustomer.getAttribute().getEtype());
+            }
+        }
+        return customer;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<Shop> getCustomerShopsByEmail(final String email) {
         Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("email", email));
         final List<Shop> shops = new ArrayList<Shop>();
@@ -296,6 +310,14 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
+    @Override
+    public Customer create(final Customer instance) {
+        throw new UnsupportedOperationException("Please use create(final Customer customer, final Shop shop)");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @CacheEvict(value = {
             "customerService-customerByEmail"
     }, allEntries = false, key = "#email")
@@ -324,7 +346,17 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             "customerService-customerByEmail"
     }, allEntries = false, key = "#customer.email")
     public void resetPassword(final Customer customer, final Shop shop, final String authToken) {
-        getGenericDao().update(customer);
+        super.update(customer);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, key = "#customer.email")
+    public Customer update(final Customer customer) {
+        return super.update(customer);
     }
 
     /**

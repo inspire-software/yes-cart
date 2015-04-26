@@ -156,6 +156,19 @@ public interface LinksSupport {
     /**
      * @param linkId wicket link component id
      * @param skuCode SKU to add to cart
+     * @param quantity quantity to add
+     * @param wishList wish list type
+     * @param tags wish list tags
+     * @param visibility wish list item visibility
+     * @param pageParameters current request parameters that will be filtered and carried over to new link
+     *
+     * @return bookmarkable link
+     */
+    Link newAddToWishListLink(String linkId, String skuCode, String quantity, String wishList, String tags, String visibility, PageParameters pageParameters);
+
+    /**
+     * @param linkId wicket link component id
+     * @param skuCode SKU to add to cart
      * @param itemId wish list item pk
      * @param target target page
      * @param pageParameters current request parameters that will be filtered and carried over to new link

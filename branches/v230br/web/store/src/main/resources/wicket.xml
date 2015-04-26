@@ -58,6 +58,11 @@
                         <entry key="default" value="org.yes.cart.web.page.AjaxAtbPage"/>
                     </map>
                 </entry>
+                <entry key="/ajaxwl">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.AjaxWlPage"/>
+                    </map>
+                </entry>
                 <entry key="/login">
                     <map>
                         <entry key="default" value="org.yes.cart.web.page.LoginPage"/>
@@ -76,6 +81,11 @@
                 <entry key="/profile">
                     <map>
                         <entry key="default" value="org.yes.cart.web.page.ProfilePage"/>
+                    </map>
+                </entry>
+                <entry key="/wishlist">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.WishListPage"/>
                     </map>
                 </entry>
                 <entry key="/orders">
@@ -147,6 +157,7 @@
             <list>
                 <value>/</value>
                 <value>/ajaxatb</value>
+                <value>/ajaxwl</value>
                 <value>/cart</value>
             </list>
         </constructor-arg>

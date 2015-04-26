@@ -1742,6 +1742,7 @@
         <property name="password" length="255" type="java.lang.String" column="PASSWORD" not-null="true"/>
         <property name="authToken" length="255" type="java.lang.String" column="AUTHTOKEN" not-null="false"/>
         <property name="authTokenExpiry" type="timestamp" column="AUTHTOKENEXPIRY" not-null="false"/>
+        <property name="publicKey" length="255" type="java.lang.String" column="PUBLICKEY" not-null="false"/>
 
         <property name="tag" type="string" length="255">
             <column name="TAG">

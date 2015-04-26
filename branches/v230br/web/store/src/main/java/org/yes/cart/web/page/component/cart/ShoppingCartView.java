@@ -110,7 +110,7 @@ public class ShoppingCartView extends BaseComponent {
         final Form cartForm = new StatelessForm(CART_FORM);
 
         cartForm.addOrReplace(new ShoppingCartItemsList(ITEMS_LIST, cart.getCartItemList()).setVisible(cart.getCartItemsCount() > 0));
-        cartForm.addOrReplace(new ShoppingCartSavedItemsList(SAVED_LIST, new Model<String>(cart.getCustomerEmail()), new Model<String>(CustomerWishList.CART_SAVE_FOR_LATER), new Model<String>(null)).setVisible(cart.getLogonState() == ShoppingCart.LOGGED_IN));
+        cartForm.addOrReplace(new ShoppingCartSavedItemsList(SAVED_LIST, new Model<String>(cart.getCustomerEmail())));
 
         cartForm.addOrReplace(
                 new PriceView(

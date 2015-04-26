@@ -1119,8 +1119,7 @@ public class CustomerController {
         final long shopId = cartMixin.getCurrentShopId();
 
         final List<CustomerWishList> wishList = customerServiceFacade.getCustomerWishListByEmail(
-                cart.getCustomerEmail(),
-                type,
+                type, cart.getCustomerEmail(), null,
                 tag != null ? new String[] { tag } : null);
 
         if (CollectionUtils.isNotEmpty(wishList)) {

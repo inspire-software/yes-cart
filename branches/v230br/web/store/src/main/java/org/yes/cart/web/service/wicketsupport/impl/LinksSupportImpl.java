@@ -21,6 +21,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.page.component.customer.wishlist.WishListItemAddPage;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
@@ -128,12 +129,24 @@ public class LinksSupportImpl implements LinksSupport {
     @Override
     @SuppressWarnings("unchecked")
     public Link newAddToWishListLink(final String linkId, final String skuCode, final String quantity, final String wishList, final String tags, final PageParameters pageParameters) {
+        return newAddToWishListLink(linkId, skuCode, quantity, wishList, tags, null, pageParameters);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    @SuppressWarnings("unchecked")
+    public Link newAddToWishListLink(final String linkId, final String skuCode, final String quantity, final String wishList, final String tags, final String visibility, final PageParameters pageParameters) {
         final PageParameters params = getFilteredCurrentParameters(pageParameters);
         params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST, skuCode);
         if (quantity != null) { // null quantity will pick min from product
             params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_QTY, quantity);
         }
-        params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TYPE, wishList != null ? wishList : "W");
+        params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TYPE, wishList != null ? wishList : CustomerWishList.SIMPLE_WISH_ITEM);
+        if (visibility != null) {
+            params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_VISIBILITY, visibility);
+        } else {
+            params.remove(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_VISIBILITY);
+        }
         if (tags != null) {
             params.set(ShoppingCartCommand.CMD_ADDTOWISHLIST_P_TAGS, tags);
         } else {

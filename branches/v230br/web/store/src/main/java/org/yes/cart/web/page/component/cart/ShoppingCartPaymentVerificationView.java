@@ -30,6 +30,7 @@ import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
+import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
@@ -77,6 +78,8 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
     private static final String ITEM_LIST = "itemList";
 
     private static final String ITEM_NAME = "itemName";
+    private static final String ITEM_NAME_LINK = "itemNameLink";
+    private static final String ITEM_NAME_LINK_NAME = "itemNameLinkName";
     private static final String ITEM_CODE = "itemCode";
     private static final String ITEM_PRICE = "itemPrice";
     private static final String ITEM_QTY = "itemQty";
@@ -101,7 +104,8 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
      * @param orderGuid  order guid
      */
     public ShoppingCartPaymentVerificationView(final String id,
-                                               final String orderGuid) {
+                                               final String orderGuid,
+                                               final boolean enableProductLinks) {
         super(id);
 
         final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(orderGuid);
@@ -166,9 +170,15 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                         .multiply(det.getQty())
                                                         .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
+                                                final LinksSupport links = getWicketSupportFacade().links();
+
                                                 customerOrderDeliveryDetListItem
                                                         .add(
-                                                                new Label(ITEM_NAME, productSkuDecorator.getName(selectedLocale))
+                                                                links.newProductSkuLink(ITEM_NAME_LINK, productSkuDecorator.getId())
+                                                                        .add(new Label(ITEM_NAME_LINK_NAME, productSkuDecorator.getName(selectedLocale)))
+                                                                        .setVisible(enableProductLinks)
+                                                        ).add(
+                                                                new Label(ITEM_NAME, productSkuDecorator.getName(selectedLocale)).setVisible(!enableProductLinks)
                                                         )
                                                         .add(
                                                                 new Label(ITEM_CODE, det.getProductSkuCode())
@@ -220,23 +230,18 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                 );
                     }
                 }
-        )
-                .add(
-                        new Label(DELIVERY_GRAND_TOTAL, grandTotal.getTotal().toString())
-                )
-                .add(
-                        new Label(BILLING_ADDRESS, billingAddress)
-                )
-                .add(
-                        new Label(DELIVERY_GRAND_TAX, grandTotal.getTotalTax().toString())
-                )
-                .add(
-                        new PriceView(
-                                DELIVERY_GRAND_AMOUNT,
-                                new Pair<BigDecimal, BigDecimal>(grandTotal.getListTotalAmount(), grandTotal.getTotalAmount()),
-                                customerOrder.getCurrency(),
-                                StringUtils.join(allPromos, ", "), true, true)
-                );
+        );
+
+        add(new Label(DELIVERY_GRAND_TOTAL, grandTotal.getTotal().toString()));
+        add(new Label(BILLING_ADDRESS, billingAddress));
+        add(new Label(DELIVERY_GRAND_TAX, grandTotal.getTotalTax().toString()));
+        add(
+            new PriceView(
+                    DELIVERY_GRAND_AMOUNT,
+                    new Pair<BigDecimal, BigDecimal>(grandTotal.getListTotalAmount(), grandTotal.getTotalAmount()),
+                    customerOrder.getCurrency(),
+                    StringUtils.join(allPromos, ", "), true, true)
+            );
 
     }
 }

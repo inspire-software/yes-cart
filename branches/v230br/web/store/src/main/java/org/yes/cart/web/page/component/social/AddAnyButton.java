@@ -37,9 +37,6 @@ public class AddAnyButton extends BaseComponent {
 
         final String name = getI18NSupport().getFailoverModel(product.getDisplayName(), product.getName()).getValue(lang);
 
-        /*
-            <a class="a2a_dd" href="http://www.addtoany.com/share_save?linkurl=www.abc-style.com.ua&amp;linkname=Some%20page%20name">Share</a>
-         */
         final StringBuilder anchor = new StringBuilder()
                 .append("<a class=\"a2a_dd\" href=\"http://www.addtoany.com/share_save?linkurl=")
                 .append(absUri)
@@ -47,20 +44,6 @@ public class AddAnyButton extends BaseComponent {
                 .append(name)
                 .append("\">Share</a>");
 
-        /*
-
-            <script type="text/javascript">
-                var a2a_config = a2a_config || {};
-                a2a_config.linkname = "Some page name";
-                a2a_config.linkurl = "www.abc-style.com.ua";
-                a2a_config.locale = "uk";
-                a2a_config.color_main = "D7E5ED";
-                a2a_config.color_border = "AECADB";
-                a2a_config.color_link_text = "333333";
-                a2a_config.color_link_text_hover = "333333";
-            </script>
-
-         */
         final StringBuilder js = new StringBuilder()
                 .append("<script type=\"text/javascript\">\n")
                 .append("            var a2a_config = a2a_config || {};\n")

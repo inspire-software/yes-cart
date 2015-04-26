@@ -48,13 +48,15 @@
         [Shop specific header_include]
     </wicket:container>
 
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('body').scrollspy({ target: '#profileScroll' });
+        });
+    </script>
+
 </wicket:head>
 
 <body>
-
-    <script type="text/javascript">
-        $('body').scrollspy({ target: '#profileScroll' });
-    </script>
 
     <span wicket:id="header">[header]</span>
 
@@ -66,7 +68,6 @@
                     <li class="active"><a href="#customerSummary"><wicket:message key="customerSummary">[summary]</wicket:message></a></li>
                     <li><a href="#customerAdditional"><wicket:message key="customerAdditional">[additional]</wicket:message></a></li>
                     <li><a href="#password"><wicket:message key="password">[password]</wicket:message></a></li>
-                    <li><a href="#wishlist"><wicket:message key="wishlist">[wish list]</wicket:message></a></li>
                     <li><a href="#addresses"><wicket:message key="addresses">[addresses]</wicket:message></a></li>
                 </ul>
             </div>
@@ -77,30 +78,25 @@
                     <span wicket:id="feedback">[feedback panel]</span>
                 </div>
 
-                <div class="row">
+                <div class="col-xs-12">
                     <h2><wicket:message key="profileSummary">[profileSummary]</wicket:message></h2>
                 </div>
-                <div class="row">
+                <div class="col-xs-12">
                     <wicket:container wicket:id="summaryView">
                         [summary info]
                     </wicket:container>
                 </div>
-                <div class="row">
+                <div class="col-xs-12">
                     <wicket:container wicket:id="attributesView">
                         [optional info]
                     </wicket:container>
                 </div>
-                <div class="row">
+                <div class="col-xs-12">
                     <wicket:container wicket:id="passwordView">
                         [change password]
                     </wicket:container>
                 </div>
-                <div class="row">
-                    <wicket:container wicket:id="wishlistView">
-                        [wishlist items]
-                    </wicket:container>
-                </div>
-                <div class="row">
+                <div class="col-xs-12">
                     <h2 class="col-xs-12 profile-title address-title">
                         <wicket:message key="addresses">[addresses]</wicket:message>
                     </h2>

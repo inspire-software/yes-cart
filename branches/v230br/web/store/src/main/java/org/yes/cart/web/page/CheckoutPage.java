@@ -357,7 +357,7 @@ public class CheckoutPage extends AbstractWebPage {
         persistCartIfNecessary();
 
         rez.addOrReplace(new Label(PAYMENT_FRAGMENT_PAYMENT_FORM));
-        rez.addOrReplace(new ShoppingCartPaymentVerificationView("orderVerificationView", shoppingCart.getGuid()));
+        rez.addOrReplace(new ShoppingCartPaymentVerificationView("orderVerificationView", shoppingCart.getGuid(), false));
 
         final Component multiDelivery = new CheckBox(PAYMENT_FRAGMENT_MD_CHECKBOX, new PropertyModel(orderInfo, "multipleDelivery")) {
 

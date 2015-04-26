@@ -222,6 +222,10 @@ a {
     font-size: 16px;
 }
 
+#mini-cart.loading {
+    background: url('../image/loading.gif') left center no-repeat
+}
+
 /*===================================================================================*/
 /*	FEATURED PANEL
 /*===================================================================================*/
@@ -1373,6 +1377,91 @@ ul.feedbackPanel > li {
 .profile-sections .wishlist .product-price-holder .sale-price-save,
 .saved-for-later .product-price-holder .sale-price-save {
     font-size: 75%;
+}
+
+.wl-tag-cloud li {
+    list-style-type: none;
+    margin: 2px;
+    float: left;
+}
+
+.wl-tag-cloud a.selected {
+    padding: 1px;
+    margin: 1px;
+    /*color: #d9534f;*/
+    font-weight: bold;
+    border: 1px #3498db solid;
+    /* text-decoration: line-through; */
+}
+
+.wl-tag-cloud .tag0 {
+    font-size: 100%;
+}
+
+.wl-tag-cloud .tag1 {
+    font-size: 105%;
+}
+
+.wl-tag-cloud .tag2 {
+    font-size: 110%;
+}
+
+.wl-tag-cloud .tag3 {
+    font-size: 115%;
+}
+
+.wl-tag-cloud .tag4 {
+    font-size: 120%;
+}
+
+.wl-tag-cloud .tag5 {
+    font-size: 125%;
+}
+
+.wl-tag-cloud .tag6 {
+    font-size: 130%;
+}
+
+.wl-tag-cloud .tag7 {
+    font-size: 135%;
+}
+
+.wl-tag-cloud .tag8 {
+    font-size: 140%;
+}
+
+.wl-tag-cloud .tag9 {
+    font-size: 145%;
+}
+
+.wl-tag-cloud .tag10 {
+    font-size: 150%;
+}
+
+.bootstrap-tagsinput {
+    width: 100%;
+    min-height: 60px;
+    max-height: 60px;
+    overflow-y: scroll;
+}
+
+.wishlist a.tagpod {
+    padding: 1px;
+    margin: 1px;
+    font-size: 80%;
+    border: 1px #3498db solid;
+}
+
+.wl-share-links {
+    margin-top: 10px;
+}
+
+.bootstrap-tagsinput .tag.label {
+    line-height: 2em;
+}
+
+.bootstrap-tagsinput.loading {
+    background: url(../image/loading.gif) right bottom no-repeat
 }
 
 .profile-sections .form-group label {

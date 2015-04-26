@@ -17,7 +17,9 @@
 package org.yes.cart.web.page.component.customer.wishlist;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
@@ -40,7 +42,6 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -64,7 +65,7 @@ public class WishListView extends AbstractProductSearchResultList {
     private final Model<String> wishListType;
     private final Model<String> wishListTag;
 
-    private boolean showRemoveLink = false;
+    private boolean ownerViewing = false;
 
 
     /**
@@ -104,8 +105,11 @@ public class WishListView extends AbstractProductSearchResultList {
     @Override
     protected void onBeforeRender() {
 
-        showRemoveLink = customerEmail.getObject().equals(ApplicationDirector.getShoppingCart().getCustomerEmail());
-
+        boolean oldOwnerViewing = ownerViewing;
+        ownerViewing = !getPage().getPageParameters().getNamedKeys().contains("token") && customerEmail.getObject().equals(ApplicationDirector.getShoppingCart().getCustomerEmail());
+        if (ownerViewing != oldOwnerViewing) {
+            products = null; // reset products just in case
+        }
         addOrReplace(new Label("noProducts", new StringResourceModel("wishlistNoItems", this, null)).setVisible(getProductListToShow().isEmpty()));
         super.onBeforeRender();
     }
@@ -115,10 +119,9 @@ public class WishListView extends AbstractProductSearchResultList {
     public List<ProductSearchResultDTO> getProductListToShow() {
         if (products == null) {
 
-            final List<CustomerWishList> wishList = customerServiceFacade.getCustomerWishListByEmail(
-                    this.customerEmail.getObject(),
-                    this.wishListType.getObject(),
-                    this.wishListTag.getObject() != null ? new String[] { this.wishListTag.getObject() } : null);
+            final List<CustomerWishList> wishList = new ArrayList<CustomerWishList>(customerServiceFacade.getCustomerWishListByEmail(
+                    this.wishListType.getObject(), this.customerEmail.getObject(),
+                    ownerViewing ? null : CustomerWishList.SHARED, this.wishListTag.getObject() != null ? new String[] { this.wishListTag.getObject() } : null));
 
             if (CollectionUtils.isNotEmpty(wishList)) {
 
@@ -180,9 +183,6 @@ public class WishListView extends AbstractProductSearchResultList {
 
         final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(product, ShopCodeContext.getShopId());
 
-        final PageParameters params = new PageParameters();
-        params.add(WebParametersKeys.SKU_ID, itemData.getSkus().getSkuId());
-
         final SkuPrice priceNow = getSkuPrice(product.getDefaultSkuCode(), itemData.getQuantity());
         final boolean isPriceNowAvailable = priceNow != null && priceNow.getRegularPrice() != null;
         final String currency = priceNow != null ? priceNow.getCurrency() : "";
@@ -228,8 +228,22 @@ public class WishListView extends AbstractProductSearchResultList {
 
         final String qty = itemData.getQuantity().stripTrailingZeros().toPlainString();
 
+        final boolean simpleWishList = CustomerWishList.SIMPLE_WISH_ITEM.equals(itemData.getWlType());
+        final boolean share = CustomerWishList.PRIVATE.equals(itemData.getVisibility());
+        final PageParameters visibilityLinks = new PageParameters();
+        visibilityLinks.add(WebParametersKeys.PAGE_TYPE, "wishlist");
+
         listItem.add(
-                links.newAddToCartLink("addToCardFromWishListLink", product.getDefaultSkuCode(), qty, params)
+                links.newAddToWishListLink("shareItemLink", product.getDefaultSkuCode(), "0", itemData.getWlType(), null, CustomerWishList.SHARED, visibilityLinks)
+                        .setVisible(ownerViewing && simpleWishList && share)
+        );
+        listItem.add(
+                links.newAddToWishListLink("hideItemLink", product.getDefaultSkuCode(), "0", itemData.getWlType(), null, CustomerWishList.PRIVATE, visibilityLinks)
+                        .setVisible(ownerViewing && simpleWishList && !share)
+        );
+
+        listItem.add(
+                determineAtbLink(links, "addToCardFromWishListLink", product, itemData, qty)
                         .add(new Label("addToCardFromWishListLinkLabel", pam.isInStock() || pam.isPerpetual() ?
                                 getLocalizer().getString("addToCartWlBtn", this, new Model<Serializable>(new String[] { qty })) :
                                 getLocalizer().getString("preorderCartWlBtn", this, new Model<Serializable>(new String[] { qty }))))
@@ -238,8 +252,8 @@ public class WishListView extends AbstractProductSearchResultList {
 
         listItem.add(
                 links.newRemoveFromWishListLink("removeFromWishListLink", product.getDefaultSkuCode(), itemData.getCustomerwishlistId(), (Class) getPage().getClass(), null)
-                        .add(new Label("removeFromWishListLinkLabel", getLocalizer().getString("removeFromWishlist", this))
-                                .setVisible(showRemoveLink))
+                        .add(new Label("removeFromWishListLinkLabel", getLocalizer().getString("removeFromWishlist", this)))
+                                .setVisible(ownerViewing)
         );
 
         listItem.add(
@@ -247,7 +261,35 @@ public class WishListView extends AbstractProductSearchResultList {
         );
 
 
+        listItem.add(new AttributeModifier("data-tag", itemData.getTag()));
+        listItem.add(new AttributeModifier("data-visibility", itemData.getVisibility()));
+        listItem.add(new AttributeModifier("data-type", itemData.getWlType()));
+        listItem.add(new AttributeModifier("data-sku", product.getDefaultSkuCode()));
+        listItem.add(new AttributeModifier("data-qty", itemData.getQuantity().toPlainString()));
+
     }
+
+    /**
+     * Extension hook for sub classes.
+     *
+     * @param links links support
+     * @param linkId link id
+     * @param product product
+     * @param itemData wish list item
+     * @param qty quantity as string
+     *
+     * @return link
+     */
+    protected Link determineAtbLink(final LinksSupport links,
+                                    final String linkId,
+                                    final ProductSearchResultDTO product,
+                                    final CustomerWishList itemData,
+                                    final String qty) {
+        final PageParameters params = new PageParameters();
+        params.add(WebParametersKeys.SKU_ID, itemData.getSkus().getSkuId());
+        return links.newAddToCartLink(linkId, product.getDefaultSkuCode(), qty, params);
+    }
+
 
 
     /**

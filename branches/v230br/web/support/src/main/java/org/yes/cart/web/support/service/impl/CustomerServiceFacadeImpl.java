@@ -64,12 +64,16 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
-    public List<CustomerWishList> getCustomerWishListByEmail(final String email, final String type, final String... tags) {
+    public List<CustomerWishList> getCustomerWishListByEmail(final String type, final String email, final String visibility, final String... tags) {
 
         final List<CustomerWishList> allItems = customerWishListService.getWishListByCustomerEmail(email);
 
         final List<CustomerWishList> filtered = new ArrayList<CustomerWishList>();
         for (final CustomerWishList item : allItems) {
+
+            if (visibility != null && !visibility.equals(item.getVisibility())) {
+                continue;
+            }
 
             if (type != null && !type.equals(item.getWlType())) {
                 continue;
@@ -90,6 +94,8 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
                         continue;
                     }
                 }
+            } else if (CustomerWishList.SHARED.equals(visibility)) {
+                continue; // Do not allow shared lists without tag
             }
 
             filtered.add(item);
@@ -277,5 +283,26 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     public boolean authenticate(final String username, final String password) {
         return customerService.isCustomerExists(username) &&
                 customerService.isPasswordValid(username, password);
+    }
+
+    /** {@inheritDoc} */
+    public String getCustomerPublicKey(final Customer customer) {
+        if (StringUtils.isBlank(customer.getPublicKey())) {
+            final String phrase = phrazeGenerator.getNextPassPhrase();
+            customer.setPublicKey(phrase);
+            customerService.update(customer);
+        }
+        return customer.getPublicKey().concat("-").concat(customer.getLastname());
+    }
+
+    /** {@inheritDoc} */
+    public Customer getCustomerByPublicKey(final String publicKey) {
+        if (StringUtils.isNotBlank(publicKey)) {
+            int lastDashPos = publicKey.lastIndexOf('-');
+            final String key = publicKey.substring(0, lastDashPos);
+            final String lastName = publicKey.substring(lastDashPos + 1);
+            return customerService.getCustomerByPublicKey(key, lastName);
+        }
+        return null;
     }
 }

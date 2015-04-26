@@ -131,3 +131,55 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (119, 'r@nD()mTok3n4Pa$$Re$3+','SHOP_CUSTOMER_PASSWORD_RESET_CC', 10, 'SHOP_CUSTOMER_PASSWORD_RESET_CC');
 
+
+--
+-- YC-397 Display wish list items grouped by tags
+--
+
+alter table TCUSTOMER add column PUBLICKEY varchar(255);
+
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10010, 10000, 0, 'profile_wishlist_owner_include', 'Profile wishlist owner include for SHOP10','include', 'SHOP10_profile_wishlist_o_include','SHOP10_profile_wishlist_owner_include');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12090,'CONTENT_BODY_en_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<div class="col-xs-12"><ul class="wl-tag-cloud jsWishlistTagCloud"></ul></div>
+</div>
+',10010,'12090_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12091,'CONTENT_BODY_ru_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<div class="col-xs-12"><ul class="wl-tag-cloud jsWishlistTagCloud"></ul></div>
+</div>
+',10010,'12091_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12092,'CONTENT_BODY_uk_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<div class="col-xs-12"><ul class="wl-tag-cloud jsWishlistTagCloud"></ul></div>
+</div>
+',10010,'12092_CAV');
+
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10011, 10000, 0, 'profile_wishlist_viewer_include', 'Profile wishlist viewer include for SHOP10','include', 'SHOP10_profile_wishlist_v_include','SHOP10_profile_wishlist_viewer_include');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12095,'CONTENT_BODY_en_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<p>You are viewing a shared wish list</p>
+</div>
+',10011,'12095_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12096,'CONTENT_BODY_ru_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<p>Вы просматриваете открытый список пожеланий</p>
+</div>
+',10011,'12096_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12097,'CONTENT_BODY_uk_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<p>Ви переглядаєте відкритий список побажань</p>
+</div>
+',10011,'12097_CAV');
+
+
+
+

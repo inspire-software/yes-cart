@@ -280,13 +280,20 @@
     <entry key="wishListPriceIncreased">Price increased by ${0}%</entry>
     <entry key="wishListPriceDecreased">Price dropped by ${0}%</entry>
     <entry key="wishListPriceOnSaleNow">On sale now. Discount ${0}%</entry>
+    <entry key="wishListShare">This item is only visible to you. Click this icon to share.</entry>
+    <entry key="wishListHide">This item is visible by everyone via share link. Click this icon to hide.</entry>
+    <entry key="wishListNotFound">Wish list not found.</entry>
+    <entry key="wishlistTagsInfo">Use this box to add tags. You can use tags to filter and share your list.</entry>
+    <entry key="wishlistTagLinkOffInfo">Click this link to view only tagged items (you can select more than one tag).</entry>
+    <entry key="wishlistTagLinkOnInfo">Click this link to de-select tag.</entry>
+    <entry key="wishlistTagShareLinkInfo">Copy this link to share wish list. Only shared items will be visible.</entry>
 
     <!-- ShoppingCartSavedItemsList -->
     <entry key="saveForLaterItems">Saved for later</entry>
     <entry key="saveForLaterNoItems">There are no items in your saved list. You can add them by clicking "Save for later" button.</entry>
 
     <!-- StandardFooter, CheckoutFooter -->
-    <entry key="profile">Profile / Wish list</entry>
+    <entry key="profile">Profile</entry>
     <entry key="siteMap">Site map</entry>
     <entry key="help">Help</entry>
     <entry key="platform">Platform</entry>

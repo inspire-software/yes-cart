@@ -677,6 +677,47 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
  deleting our cookies or disabling future cookies you may not be able to access certain areas or features of our site.</small>
 ',10009,'12082_CAV');
 
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10010, 10000, 0, 'profile_wishlist_owner_include', 'Profile wishlist owner include for SHOP10','include', 'SHOP10_profile_wishlist_o_include','SHOP10_profile_wishlist_owner_include');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12090,'CONTENT_BODY_en_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<div class="col-xs-12"><ul class="wl-tag-cloud jsWishlistTagCloud"></ul></div>
+</div>
+',10010,'12090_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12091,'CONTENT_BODY_ru_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<div class="col-xs-12"><ul class="wl-tag-cloud jsWishlistTagCloud"></ul></div>
+</div>
+',10010,'12091_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12092,'CONTENT_BODY_uk_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<div class="col-xs-12"><ul class="wl-tag-cloud jsWishlistTagCloud"></ul></div>
+</div>
+',10010,'12092_CAV');
+
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10011, 10000, 0, 'profile_wishlist_viewer_include', 'Profile wishlist viewer include for SHOP10','include', 'SHOP10_profile_wishlist_v_include','SHOP10_profile_wishlist_viewer_include');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12095,'CONTENT_BODY_en_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<p>You are viewing a shared wish list</p>
+</div>
+',10011,'12095_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12096,'CONTENT_BODY_ru_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<p>Вы просматриваете открытый список пожеланий</p>
+</div>
+',10011,'12096_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12097,'CONTENT_BODY_uk_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<p>Ви переглядаєте відкритий список побажань</p>
+</div>
+',10011,'12097_CAV');
+
 
 
 INSERT INTO TROLE (ROLE_ID, GUID, CODE, DESCRIPTION) VALUES (1, 'ROLE_SMADMIN',         'ROLE_SMADMIN', 'System admin');

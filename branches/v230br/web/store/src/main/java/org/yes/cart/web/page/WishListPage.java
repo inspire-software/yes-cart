@@ -16,33 +16,30 @@
 
 package org.yes.cart.web.page;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Application;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.util.StringUtils;
-import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
-import org.yes.cart.web.page.component.customer.dynaform.DynaFormPanel;
-import org.yes.cart.web.page.component.customer.order.CustomerOrderPanel;
-import org.yes.cart.web.page.component.customer.password.PasswordPanel;
-import org.yes.cart.web.page.component.customer.summary.SummaryPanel;
 import org.yes.cart.web.page.component.customer.wishlist.WishListView;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 /**
@@ -54,19 +51,17 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
  * Time: 9:51 PM
  */
 @RequireHttps
-@AuthorizeInstantiation("USER")
-public class ProfilePage extends AbstractWebPage {
+public class WishListPage extends AbstractWebPage {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
-    private final static String SUMMARY_PANEL = "summaryView";
-    private final static String ATTR_PANEL = "attributesView";
-    private final static String PASSWORD_PANEL = "passwordView";
-    private final static String SHIPPING_ADDR_PANEL = "shippingAddressesView";
-    private final static String BILLING_ADDR_PANEL = "billingAddressesView";
+    private final static String WISHLIST_PANEL = "wishlistView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
     private CustomerServiceFacade customerServiceFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    private ContentServiceFacade contentServiceFacade;
 
 
     /**
@@ -74,33 +69,73 @@ public class ProfilePage extends AbstractWebPage {
      *
      * @param params page parameters
      */
-    public ProfilePage(final PageParameters params) {
+    public WishListPage(final PageParameters params) {
         super(params);
 
-        final String email = ApplicationDirector.getShoppingCart().getCustomerEmail();
+        final String email;
         final Customer customer;
-        if (StringUtils.hasLength(email)) {
-            customer = customerServiceFacade.getCustomerByEmail(email);
+        final String publicKey;
+        final String key = params.get("token").toString();
+        final String tag = params.get("tag").toString();
+
+        if (StringUtils.isBlank(key)) {
+            // Trying to view own wish list
+            final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+            if (cart.getLogonState() == ShoppingCart.LOGGED_IN && ((AuthenticatedWebSession) getSession()).isSignedIn()) {
+                email = cart.getCustomerEmail();
+                customer = customerServiceFacade.getCustomerByEmail(email);
+                publicKey = customerServiceFacade.getCustomerPublicKey(customer);
+            } else {
+                email = "";
+                customer = null;
+                publicKey = null;
+                // Redirect away from profile!
+                final PageParameters rparams = new PageParameters();
+                rparams.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
+                setResponsePage(Application.get().getHomePage(), rparams);
+            }
         } else {
-            customer = null;
-            // Redirect away from profile!
-            final PageParameters rparams = new PageParameters();
-            rparams.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
-            setResponsePage(Application.get().getHomePage(), rparams);
+            publicKey = null;
+            customer = customerServiceFacade.getCustomerByPublicKey(key);
+            if (customer == null) {
+                info(getLocalizer().getString("wishListNotFound", this));
+                email = "";
+            } else {
+                email = customer.getEmail();
+            }
+
         }
 
-        final Model<Customer> customerModel = new Model<Customer>(customer);
 
         add(new FeedbackPanel(FEEDBACK));
-        add(new PasswordPanel(PASSWORD_PANEL, customerModel));
-        add(new ManageAddressesView(SHIPPING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_SHIPPING, false));
-        add(new ManageAddressesView(BILLING_ADDR_PANEL, customerModel, Address.ADDR_TYPE_BILLING, false));
-        add(new DynaFormPanel(ATTR_PANEL, customerModel));
-        add(new SummaryPanel(SUMMARY_PANEL, customerModel));
+        add(
+                new WishListView(WISHLIST_PANEL, new Model<String>(email), new Model<String>(CustomerWishList.SIMPLE_WISH_ITEM), new Model<String>(tag))
+                    .setVisible(customer != null)
+                    .add(new AttributeModifier("data-publickey", publicKey))
+        );
         add(new StandardFooter(FOOTER));
         add(new StandardHeader(HEADER));
         add(new ServerSideJs("serverSideJs"));
         add(new HeaderMetaInclude("headerInclude"));
+
+        if (StringUtils.isNotBlank(publicKey)) {
+
+            String content = contentServiceFacade.getContentBody(
+                    "profile_wishlist_owner_include", ShopCodeContext.getShopId(), getLocale().getLanguage());
+
+            add(new Label("wishListOwnerInfo", content).setEscapeModelStrings(false));
+            add(new Label("wishListViewerInfo", ""));
+
+        } else {
+
+            String content = contentServiceFacade.getContentBody(
+                    "profile_wishlist_viewer_include", ShopCodeContext.getShopId(), getLocale().getLanguage());
+
+            add(new Label("wishListOwnerInfo", ""));
+            add(new Label("wishListViewerInfo", content).setEscapeModelStrings(false));
+
+        }
 
     }
 
@@ -109,16 +144,6 @@ public class ProfilePage extends AbstractWebPage {
      */
     @Override
     protected void onBeforeRender() {
-
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-
-        if ((!((AuthenticatedWebSession) getSession()).isSignedIn()
-                || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {
-            final PageParameters params = new PageParameters();
-            params.set(ShoppingCartCommand.CMD_LOGOUT, ShoppingCartCommand.CMD_LOGOUT);
-            setResponsePage(Application.get().getHomePage(), params);
-        }
-
         executeHttpPostedCommands();
         super.onBeforeRender();
         persistCartIfNecessary();
@@ -130,7 +155,7 @@ public class ProfilePage extends AbstractWebPage {
      * @return page title
      */
     public IModel<String> getPageTitle() {
-        return new Model<String>(getLocalizer().getString("profileSummary",this));
+        return new Model<String>(getLocalizer().getString("wishlist",this));
     }
 
 

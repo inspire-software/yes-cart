@@ -38,10 +38,14 @@
         <![endif]-->
         <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
         <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/bootstrap-tagsinput.css"/>
         <link rel="stylesheet" href="../../../../../style/fonts.css"/>
         <link rel="stylesheet" href="../../../../../style/yc.css"/>
 
+        <script type="text/javascript" src="../../../../../js/bootstrap-tagsinput.min.js"></script>
         <script type="text/javascript" src="../../../../../js/yc.js"></script>
+
+        <script type="text/javascript" src="//static.addtoany.com/menu/page.js"></script>
     </wicket:link>
     <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
     <wicket:container wicket:id="headerInclude">
@@ -49,28 +53,7 @@
     </wicket:container>
 
     <script type="text/javascript">
-        $(document).ready(function() {
 
-            // Submit form on dropdown change
-            $('#view').change(function() {
-                $('#views').submit();
-            });
-
-            // Preselect dropdown from request parameters
-            var queryString = window.location.search;
-            if (queryString != null && queryString.length > 0) {
-                console.log(queryString);
-                var varArray = queryString.substring(1).split("&");
-                for (var i=0;i<varArray.length;i++) {
-                    console.log(varArray[i]);
-                    var param = varArray[i].split("=");
-                    if (param[0] == 'view') {
-                        $("#view option[value=" + param[1] + "]").attr("selected", "selected");
-                        return;
-                    }
-                }
-            }
-        });
     </script>
 
 </wicket:head>
@@ -82,37 +65,62 @@
     <div class="container">
 
         <div class="profile-page">
-
-            <div class="col-xs-12 col-sm-6">
-                <form id="views" method="get">
-                    <div class="form-group">
-                        <label for="view" class="control-label col-xs-12 col-sm-6">
-                            <wicket:message key="viewOrdersFor">[user email]</wicket:message>
-                        </label>
-                        <div class="col-xs-12 col-sm-6">
-                            <select type="text" id="view" name="view" class="form-control">
-                                <option value="week" selected="selected"><wicket:message key="viewOrdersForWeek">[last week]</wicket:message></option>
-                                <option value="month"><wicket:message key="viewOrdersForMonth">[last month]</wicket:message></option>
-                                <option value="year"><wicket:message key="viewOrdersForYear">[last year]</wicket:message></option>
-                                <option value="all"><wicket:message key="viewOrdersForAll">[all orders]</wicket:message></option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
+            <div class="col-xs-12 col-md-3">
+                <div>
+                    <wicket:container wicket:id="wishListOwnerInfo">
+                        [wishlist explanation owner]
+                        <ul class="wl-tag-cloud jsWishlistTagCloud"/>
+                    </wicket:container>
+                    <wicket:container wicket:id="wishListViewerInfo">
+                        [wishlist explanation viewer]
+                    </wicket:container>
+                </div>
             </div>
 
-            <div class="col-xs-12 profile-sections">
+            <div class="col-xs-12 col-md-9 profile-sections">
 
                 <div class="col-xs-12">
                     <span wicket:id="feedback">[feedback panel]</span>
                 </div>
 
-                <div class="col-xs-12">
-                    <wicket:container wicket:id="ordersView">
-                        [list of orders]
-                    </wicket:container>
+                <div class="col-xs-12" id="jsWishlistTagCloudShare" style="display:none">
+                    <div class="input-group" data-toggle="tooltip" wicket:message="title:wishlistTagShareLinkInfo">
+                      <div class="input-group-addon"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;<span id="jsWishlistTagCloudShareTag">&nbsp;</span></div>
+                      <input type="text" class="form-control" id="jsWishlistTagCloudShareLink">
+                    </div>
+                    <div class="wl-share-links">
+                        <!-- AddToAny BEGIN -->
+                        <div class="a2a_kit a2a_kit_size_32 a2a_default_style" id="jsWishlistTagCloudShareA2A">
+                        <a class="a2a_dd" href="https://www.addtoany.com/share_save"></a>
+                        <a class="a2a_button_facebook"></a>
+                        <a class="a2a_button_twitter"></a>
+                        <a class="a2a_button_google_plus"></a>
+                        </div>
+                        <script type="text/javascript">
+
+                        function addtoany_onshare(share_data) {
+                            var _share = $('#jsWishlistTagCloudShareA2A').data('share');
+                            return {
+                                url: _share
+                            }
+                        }
+
+                        var a2a_config = a2a_config || {};
+                        // a2a_config.linkurl = "";
+
+                        a2a_config.callbacks = a2a_config.callbacks || [];
+                        a2a_config.callbacks.push({
+                            share: addtoany_onshare
+                        });
+
+                        </script>
+                        <!-- AddToAny END -->
+                    </div>
                 </div>
 
+                <div class="col-xs-12" wicket:id="wishlistView">
+                    [wishlist items]
+                </div>
             </div>
         </div>
     </div>

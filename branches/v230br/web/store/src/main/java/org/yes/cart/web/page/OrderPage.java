@@ -96,7 +96,7 @@ public class OrderPage extends AbstractWebPage {
         add(new FeedbackPanel(FEEDBACK));
         if (customerOrder != null) {
             add(new Label(ORDER_NUM, new StringResourceModel("orderNoTitle", this, null, new Object[] {customerOrder.getOrdernum()})));
-            add(new ShoppingCartPaymentVerificationView(ORDER_PANEL, orderGuid));
+            add(new ShoppingCartPaymentVerificationView(ORDER_PANEL, orderGuid, true));
         } else {
             add(new Label(ORDER_NUM, ""));
             add(new Label(ORDER_PANEL, ""));

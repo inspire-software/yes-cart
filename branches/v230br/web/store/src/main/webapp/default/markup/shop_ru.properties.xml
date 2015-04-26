@@ -280,6 +280,13 @@
     <entry key="wishListPriceIncreased">Цена увеличилась на ${0}%</entry>
     <entry key="wishListPriceDecreased">Цена уменьшилась на ${0}%</entry>
     <entry key="wishListPriceOnSaleNow">Акция. Скидка ${0}%</entry>
+    <entry key="wishListShare">Этот товар виден только Вам. Нажмите эту иконку, чтобы поделиться с друзьями.</entry>
+    <entry key="wishListHide">Этот товар виден Всем у кого есть ссылка. Нажмите эту иконку, чтобы спрятать.</entry>
+    <entry key="wishListNotFound">Список пожеланий не найден.</entry>
+    <entry key="wishlistTagsInfo">Используйте это поле, чтобы добавить теги. Вы можете использовать теги для поиска, а также, чтобы поделиться своим списком.</entry>
+    <entry key="wishlistTagLinkOffInfo">Нажмите эту ссылку, чтобы посмотреть элементы содержащие тег (можно выбрать несколько тегов).</entry>
+    <entry key="wishlistTagLinkOnInfo">Нажмите эту ссылку, чтобы отменить выбор тега.</entry>
+    <entry key="wishlistTagShareLinkInfo">Скопируйте эту ссылку, чтобы поделиться списоком пожеланий. Только открытые товары будут видны.</entry>
 
     <!-- ShoppingCartSavedItemsList -->
     <entry key="saveForLaterItems">Отложенные на потом</entry>

@@ -38,6 +38,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private String authToken;
     private Date authTokenExpiry;
     private String tag;
+    private String publicKey;
 
     private Collection<CustomerOrder> orders = new ArrayList<CustomerOrder>(0);
     private Collection<CustomerWishList> wishList = new ArrayList<CustomerWishList>(0);
@@ -119,6 +120,13 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.tag = tag;
     }
 
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(final String publicKey) {
+        this.publicKey = publicKey;
+    }
 
     public Collection<CustomerOrder> getOrders() {
         return this.orders;

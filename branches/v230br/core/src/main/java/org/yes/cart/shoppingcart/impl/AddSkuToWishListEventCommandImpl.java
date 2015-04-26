@@ -87,7 +87,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                 ShopCodeContext.getLog(this).error("Invalid quantity in add to cart command", exp);
             }
         }
-        return null;
+        return BigDecimal.ONE; // if no parameter specified assume 1 unit
     }
 
 
@@ -110,6 +110,22 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         return null;
     }
 
+    private boolean isTagsValueReplace(final Map parameters) {
+        final Object strType = parameters.get(CMD_ADDTOWISHLIST_P_TAGS_REPLACE);
+
+        return strType instanceof String && CMD_ADDTOWISHLIST_P_TAGS_REPLACE.equals(strType);
+    }
+
+
+    private String getVisibilityValue(final Map parameters) {
+        final Object strVisibility = parameters.get(CMD_ADDTOWISHLIST_P_VISIBILITY);
+
+        if (CustomerWishList.SHARED.equals(strVisibility)) {
+            return CustomerWishList.SHARED;
+        }
+        return CustomerWishList.PRIVATE;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -122,8 +138,10 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
 
             final String type = getTypeValue(parameters);
             final String tags = getTagsValue(parameters);
+            final boolean tagsr = isTagsValueReplace(parameters);
+            final String visibility = getVisibilityValue(parameters);
 
-            createWishListItem(shoppingCart, productSku, type, parameters, tags);
+            createWishListItem(shoppingCart, productSku, type, tags, tagsr, visibility, parameters);
             if (CustomerWishList.CART_SAVE_FOR_LATER.equals(type)) {
                 getRemoveAllSku().execute(shoppingCart, (Map) Collections.singletonMap(ShoppingCartCommand.CMD_REMOVEALLSKU, productSku.getCode()));
             }
@@ -145,8 +163,10 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
     private void createWishListItem(final ShoppingCart shoppingCart,
                                     final ProductSku productSku,
                                     final String type,
-                                    final Map<String, Object> parameters,
-                                    final String tags) {
+                                    final String tags,
+                                    final boolean tagsr,
+                                    final String visibility,
+                                    final Map<String, Object> parameters) {
 
         final List<CustomerWishList> wishList = customerWishListService.getWishListByCustomerEmail(shoppingCart.getCustomerEmail());
 
@@ -161,11 +181,11 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                     return; // cannot add more
                 }
 
-                final BigDecimal quantity = pqm.getValidAddQty(getQuantityValue(parameters));
-                item.setQuantity(item.getQuantity().add(quantity));
+                final BigDecimal quantity = pqm.getValidSetQty(item.getQuantity().add(getQuantityValue(parameters)));
+                item.setQuantity(quantity);
 
                 final Set<String> tag = new TreeSet<String>();
-                if (StringUtils.isNotBlank(item.getTag())) {
+                if (!tagsr && StringUtils.isNotBlank(item.getTag())) {
                     tag.addAll(Arrays.asList(StringUtils.split(item.getTag(), ' ')));
                 }
                 if (StringUtils.isNotBlank(tags)) {
@@ -176,6 +196,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                 } else {
                     item.setTag(StringUtils.join(tag, ' '));
                 }
+                item.setVisibility(visibility);
 
                 customerWishListService.update(item);
                 return;
@@ -210,7 +231,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         customerWishList.setSkus(productSku);
         customerWishList.setWlType(type);
         customerWishList.setTag(tags);
-        customerWishList.setVisibility(CustomerWishList.PRIVATE);
+        customerWishList.setVisibility(visibility);
         customerWishList.setQuantity(quantity);
         customerWishList.setRegularPriceWhenAdded(price);
         customerWishList.setRegularPriceCurrencyWhenAdded(shoppingCart.getCurrencyCode());

@@ -46,6 +46,7 @@ public interface CustomerService extends GenericService<Customer> {
      * Get customer by email.
      *
      * @param email email
+     *
      * @return {@link Customer} or null if customer not found
      */
     Customer getCustomerByEmail(String email);
@@ -53,10 +54,21 @@ public interface CustomerService extends GenericService<Customer> {
     /**
      * Get customer by auth token.
      *
-     * @param token email
+     * @param token auth token
+     *
      * @return {@link Customer} or null if customer not found
      */
     Customer getCustomerByToken(String token);
+
+    /**
+     * Get customer by public key exact match.
+     *
+     * @param publicKey public key
+     * @param lastName last name
+     *
+     * @return {@link Customer} or null if customer not found
+     */
+    Customer getCustomerByPublicKey(String publicKey, String lastName);
 
     /**
      * Get customer shops by email.

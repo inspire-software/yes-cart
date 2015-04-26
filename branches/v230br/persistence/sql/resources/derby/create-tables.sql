@@ -241,6 +241,7 @@
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
         PASSWORD varchar(255) not null,
+        PUBLICKEY varchar(255),
         AUTHTOKEN varchar(255),
         AUTHTOKENEXPIRY timestamp,
         TAG varchar(255),

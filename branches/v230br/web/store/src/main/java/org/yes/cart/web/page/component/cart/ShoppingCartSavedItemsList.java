@@ -16,31 +16,16 @@
 
 package org.yes.cart.web.page.component.cart;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.CustomerWishList;
-import org.yes.cart.domain.entity.ProductAvailabilityModel;
-import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.page.component.price.PriceView;
-import org.yes.cart.web.page.component.product.AbstractProductSearchResultList;
+import org.yes.cart.web.page.component.customer.wishlist.WishListView;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
-import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.service.CustomerServiceFacade;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.*;
 
 /**
  * Show new arrival. Current category will be selected to pick up
@@ -50,35 +35,7 @@ import java.util.*;
  * Date: 9/18/11
  * Time: 11:45 AM
  */
-public class ShoppingCartSavedItemsList extends AbstractProductSearchResultList {
-
-    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
-    private CustomerServiceFacade customerServiceFacade;
-
-    private List<ProductSearchResultDTO> products = null;
-
-    private Map<ProductSearchResultDTO, CustomerWishList> wishListDataByProduct = new HashMap<ProductSearchResultDTO, CustomerWishList>();
-
-    private final Model<String> customerEmail;
-    private final Model<String> wishListType;
-    private final Model<String> wishListTag;
-
-    private boolean showRemoveLink = false;
-
-
-    /**
-     * Construct wish list to show for current user.
-     *
-     * @param id component id.
-     */
-    public ShoppingCartSavedItemsList(final String id) {
-        this(
-                id,
-                new Model<String>(ApplicationDirector.getShoppingCart().getCustomerEmail()),
-                new Model<String>(null),
-                new Model<String>(null)
-        );
-    }
+public class ShoppingCartSavedItemsList extends WishListView {
 
 
     /**
@@ -87,186 +44,39 @@ public class ShoppingCartSavedItemsList extends AbstractProductSearchResultList 
      * @param id component id.
      *
      * @param customerEmail customer email
-     * @param wishListType wishlist type
-     * @param wishListTag tags
      */
     public ShoppingCartSavedItemsList(final String id,
-                                      final Model<String> customerEmail,
-                                      final Model<String> wishListType,
-                                      final Model<String> wishListTag) {
-        super(id, true);
-        this.customerEmail = customerEmail;
-        this.wishListType = wishListType;
-        this.wishListTag = wishListTag;
+                                      final Model<String> customerEmail) {
+        super(id, customerEmail, new Model<String>(CustomerWishList.CART_SAVE_FOR_LATER), new Model<String>(null));
     }
 
-    @Override
-    protected void onBeforeRender() {
-
-        showRemoveLink = ApplicationDirector.getShoppingCart().getCustomerEmail().equals(customerEmail.getObject());
-        addOrReplace(new Label("noProducts", new StringResourceModel("saveForLaterNoItems", this, null)).setVisible(getProductListToShow().isEmpty()));
-        super.onBeforeRender();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public List<ProductSearchResultDTO> getProductListToShow() {
-        if (products == null) {
-
-            final List<CustomerWishList> wishList = customerServiceFacade.getCustomerWishListByEmail(
-                    this.customerEmail.getObject(),
-                    this.wishListType.getObject(),
-                    this.wishListTag.getObject() != null ? new String[] { this.wishListTag.getObject() } : null);
-
-            if (CollectionUtils.isNotEmpty(wishList)) {
-
-                final List<String> productIds = new ArrayList<String>();
-
-                for (final CustomerWishList item : wishList) {
-
-                    productIds.add(String.valueOf(item.getSkus().getProduct().getProductId()));
-
-                }
-
-                final List<ProductSearchResultDTO> uniqueProducts = productServiceFacade.getListProducts(
-                        productIds, -1L, ShopCodeContext.getShopId());
-
-                final List<ProductSearchResultDTO> wishListProducts = new ArrayList<ProductSearchResultDTO>();
-
-                for (final CustomerWishList item : wishList) {
-
-                    for (final ProductSearchResultDTO uniqueProduct : uniqueProducts) {
-
-                        if (uniqueProduct.getId() == item.getSkus().getProduct().getProductId()) {
-                            final ProductSearchResultDTO copy = uniqueProduct.copy();
-                            copy.setDefaultSkuCode(item.getSkus().getCode());
-                            wishListProducts.add(copy);
-                            wishListDataByProduct.put(copy, item);
-
-                        }
-
-                    }
-
-                }
-
-                products = wishListProducts;
-
-            } else {
-
-                products = Collections.emptyList();
-            }
-
-        }
-        setVisible(!products.isEmpty());
-        return products;
-    }
 
     @Override
     protected void onBeforeRenderSetVisibility() {
-        // do nothing, should be visible always
+        // do not show anything if we do not have items
+        setVisible(ApplicationDirector.getShoppingCart().getLogonState() == ShoppingCart.LOGGED_IN
+                && !getProductListToShow().isEmpty());
     }
-
-    @Override
-    protected void onBeforeRenderPopulateListItem(final ListItem<ProductSearchResultDTO> listItem,
-                                                  final String selectedLocale,
-                                                  final Pair<String, String> thumbWidthHeight) {
-        super.onBeforeRenderPopulateListItem(listItem, selectedLocale, thumbWidthHeight);
-
-        final LinksSupport links = getWicketSupportFacade().links();
-
-        final ProductSearchResultDTO product = listItem.getModel().getObject();
-        final CustomerWishList itemData = wishListDataByProduct.get(product);
-
-        final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(product, ShopCodeContext.getShopId());
-
-        final PageParameters params = new PageParameters();
-        params.add(WebParametersKeys.SKU_ID, itemData.getSkus().getSkuId());
-
-        final SkuPrice priceNow = getSkuPrice(product.getDefaultSkuCode(), itemData.getQuantity());
-        final boolean isPriceNowAvailable = priceNow != null && priceNow.getRegularPrice() != null;
-        final String currency = priceNow != null ? priceNow.getCurrency() : "";
-        final String addedPriceCurr = itemData.getRegularPriceCurrencyWhenAdded();
-        final Pair<BigDecimal, BigDecimal> price;
-        String priceInfo = "";
-        if (isPriceNowAvailable) {
-            if (ApplicationDirector.getShoppingCart().getCurrencyCode().equals(addedPriceCurr)) {
-                final BigDecimal addedPrice = itemData.getRegularPriceWhenAdded();
-                final BigDecimal saleNow = MoneyUtils.minPositive(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
-                if (MoneyUtils.isFirstEqualToSecond(addedPrice, saleNow)) {
-                    // no change
-                    if (MoneyUtils.isFirstBiggerThanSecond(priceNow.getRegularPrice(), addedPrice)) {
-                        price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), addedPrice);
-                        priceInfo = getLocalizer().getString("wishListPriceOnSaleNow", this, new Model<Object[]>(new Object[] {
-                                MoneyUtils.getDiscountDisplayValue(priceNow.getRegularPrice(), addedPrice).toPlainString()
-                        }));
-                    } else {
-                        // not on sale
-                        price = new Pair<BigDecimal, BigDecimal>(addedPrice, null);
-                    }
-                } else if (MoneyUtils.isFirstBiggerThanSecond(addedPrice, saleNow)) {
-                    // price dropped since added
-                    price = new Pair<BigDecimal, BigDecimal>(addedPrice, saleNow);
-                    priceInfo = getLocalizer().getString("wishListPriceDecreased", this, new Model<Object[]>(new Object[] {
-                            MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).toPlainString()
-                    }));
-                } else {
-                    // price gone up
-                    price = new Pair<BigDecimal, BigDecimal>(saleNow, null);
-                    priceInfo = getLocalizer().getString("wishListPriceIncreased", this, new Model<Object[]>(new Object[] {
-                            MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).negate().toPlainString()
-                    }));
-                }
-            } else {
-                // no comparative price - different currency
-                price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
-            }
-        } else {
-            // Item is not priced now so it cannot be bought
-            price = new Pair<BigDecimal, BigDecimal>(BigDecimal.ZERO, null);
-        }
-
-        final String qty = itemData.getQuantity().stripTrailingZeros().toPlainString();
-
-        listItem.add(
-                links.newAddToCartLink("addToCardFromWishListLink", product.getDefaultSkuCode(), qty, String.valueOf(itemData.getCustomerwishlistId()), (Class) getPage().getClass(), params)
-                        .add(new Label("addToCardFromWishListLinkLabel", pam.isInStock() || pam.isPerpetual() ?
-                                getLocalizer().getString("addToCartWlBtn", this, new Model<Serializable>(new String[] { qty })) :
-                                getLocalizer().getString("preorderCartWlBtn", this, new Model<Serializable>(new String[] { qty }))))
-                        .setVisible(pam.isAvailable())
-        );
-
-        listItem.add(
-                links.newRemoveFromWishListLink("removeFromWishListLink", product.getDefaultSkuCode(), itemData.getCustomerwishlistId(), (Class) getPage().getClass(), null)
-                        .add(new Label("removeFromWishListLinkLabel", getLocalizer().getString("removeFromWishlist", this))
-                                .setVisible(showRemoveLink))
-        );
-
-        listItem.add(
-                new PriceView("priceView", price, currency, priceInfo, true, false).setVisible(isPriceNowAvailable)
-        );
-
-
-    }
-
 
     /**
-     * Get product or his sku price.
-     * In case of multisku product the minimal regular price from multiple sku was used for single item.
+     * Extension hook for sub classes.
      *
+     * @param links links support
+     * @param linkId link id
+     * @param product product
+     * @param itemData wish list item
+     * @param qty quantity as string
      *
-     * @param firstAvailableSkuCode first available sku code.
-     * @param quantity quantity of wish list item
-     *
-     * @return {@link org.yes.cart.domain.entity.SkuPrice}
+     * @return link
      */
-    private SkuPrice getSkuPrice(final String firstAvailableSkuCode, final BigDecimal quantity) {
-        return productServiceFacade.getSkuPrice(
-                null,
-                firstAvailableSkuCode,
-                quantity,
-                ApplicationDirector.getShoppingCart().getCurrencyCode(),
-                ApplicationDirector.getCurrentShop().getShopId()
-        );
+    protected Link determineAtbLink(final LinksSupport links,
+                                    final String linkId,
+                                    final ProductSearchResultDTO product,
+                                    final CustomerWishList itemData,
+                                    final String qty) {
+        final PageParameters params = new PageParameters();
+        params.add(WebParametersKeys.SKU_ID, itemData.getSkus().getSkuId());
+        return links.newAddToCartLink(linkId, product.getDefaultSkuCode(), qty, String.valueOf(itemData.getCustomerwishlistId()), (Class) getPage().getClass(), params);
     }
 
 }
