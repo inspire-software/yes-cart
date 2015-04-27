@@ -43,7 +43,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
     private SkuWarehouseService skuWarehouseService;
     private ProductSkuService productSkuService;
 
-    private Runnable bulkAwaitingInvetoryDeliveriesProcessor;
+    private Runnable bulkAwaitingInventoryDeliveriesProcessor;
 
 
 
@@ -55,7 +55,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         warehouseService =  ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE, WarehouseService.class);
         skuWarehouseService =  ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE, SkuWarehouseService.class);
         productSkuService =  ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE, ProductSkuService.class);
-        bulkAwaitingInvetoryDeliveriesProcessor =  ctx().getBean("bulkAwaitingInvetoryDeliveriesProcessor", Runnable.class);
+        bulkAwaitingInventoryDeliveriesProcessor =  ctx().getBean("bulkAwaitingInventoryDeliveriesProcessor", Runnable.class);
         super.setUp();
     }
 
@@ -99,7 +99,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT, delivery.getDeliveryStatus());
         }
 
-        bulkAwaitingInvetoryDeliveriesProcessor.run();
+        bulkAwaitingInventoryDeliveriesProcessor.run();
 
         //No changes
         order = customerOrderService.findByGuid(order.getCartGuid());
@@ -110,7 +110,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
 
         Thread.sleep(5000);
 
-        bulkAwaitingInvetoryDeliveriesProcessor.run();
+        bulkAwaitingInventoryDeliveriesProcessor.run();
 
         //wait for inventory
         order = customerOrderService.findByGuid(order.getCartGuid());
@@ -132,7 +132,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         skuWarehouse.setQuantity(BigDecimal.TEN);
         skuWarehouseService.create(skuWarehouse);
 
-        bulkAwaitingInvetoryDeliveriesProcessor.run();
+        bulkAwaitingInventoryDeliveriesProcessor.run();
 
         // inventory allocated
         order = customerOrderService.findByGuid(order.getCartGuid());

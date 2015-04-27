@@ -360,8 +360,13 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
                 }
             } catch (Exception exp) {
-                waitForInventory.close();
                 ShopCodeContext.getLog(this).error(exp.getMessage(), exp);
+            } finally {
+                try {
+                    waitForInventory.close();
+                } catch (Exception exp) {
+                    ShopCodeContext.getLog(this).error("Error closing iterator: " + exp.getMessage(), exp);
+                }
             }
 
         }

@@ -56,6 +56,8 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
 
         final Logger log = ShopCodeContext.getLog(this);
 
+        final long start = System.currentTimeMillis();
+
         log.info("Processing tagging for customer");
 
         final ResultsIterator<Customer> customerIterator = customerService.getGenericDao().findAllIterator();
@@ -92,11 +94,20 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
 
             }
         } catch (Exception exp){
-            customerIterator.close();
             log.error("Processing tagging for customer exception " + exp.getMessage(), exp);
+        } finally {
+            try {
+                customerIterator.close();
+            } catch (Exception exp) {
+                log.error("Processing tagging for customer exception, error closing iterator: " + exp.getMessage(), exp);
+            }
         }
 
-        log.info("Processing tagging for customer ... completed");
+        final long finish = System.currentTimeMillis();
+
+        final long ms = (finish - start);
+
+        log.info("Processing tagging for customer ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
 
     }
 }

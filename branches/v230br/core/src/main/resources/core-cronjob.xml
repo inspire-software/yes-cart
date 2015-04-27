@@ -33,7 +33,7 @@
         </property>
     </bean>
 
-    <bean id="bulkAwaitingInvetoryDeliveriesProcessor" parent="txJobProxyTemplate">
+    <bean id="bulkAwaitingInventoryDeliveriesProcessor" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.order.BulkAwaitingInventoryDeliveriesProcessorImpl">
                 <constructor-arg index="0" ref="customerOrderService"/>
@@ -59,7 +59,8 @@
         <property name="target">
             <bean class="org.yes.cart.bulkjob.shoppingcart.BulkAbandonedShoppingCartProcessorImpl">
                 <constructor-arg index="0" ref="shoppingCartStateService"/>
-                <constructor-arg index="1" ref="systemService"/>
+                <constructor-arg index="1" ref="customerOrderService"/>
+                <constructor-arg index="2" ref="systemService"/>
                 <property name="abandonedTimeoutDays" value="30"/> <!-- CPOINT -->
             </bean>
         </property>

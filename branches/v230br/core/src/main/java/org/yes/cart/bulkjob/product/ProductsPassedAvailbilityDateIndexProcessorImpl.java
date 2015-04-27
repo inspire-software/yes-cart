@@ -74,7 +74,7 @@ public class ProductsPassedAvailbilityDateIndexProcessorImpl implements Runnable
 
         final long ms = (finish - start);
 
-        log.info("Reindexing discontinued on {} ... complete {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
+        log.info("Reindexing discontinued on {} ... completeed {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
 
     }
 
@@ -85,7 +85,6 @@ public class ProductsPassedAvailbilityDateIndexProcessorImpl implements Runnable
     protected Boolean isLuceneIndexDisabled() {
         return Boolean.TRUE.toString().equals(nodeService.getConfiguration().get(NodeService.LUCENE_INDEX_DISABLED));
     }
-
 
     protected Date now() {
         return new Date();

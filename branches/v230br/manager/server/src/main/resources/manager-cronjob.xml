@@ -28,7 +28,7 @@
         <property name="jobDataAsMap">
             <map>
                 <entry key="jobName" value="Inventory Awaiting Delivery Processing" />
-                <entry key="job" value-ref="bulkAwaitingInvetoryDeliveriesProcessor" />
+                <entry key="job" value-ref="bulkAwaitingInventoryDeliveriesProcessor" />
                 <entry key="nodeService" value-ref="nodeService" />
             </map>
         </property>

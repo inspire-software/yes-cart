@@ -78,7 +78,9 @@ public class BulkMailProcessorImpl implements Runnable {
 
         final Logger log = ShopCodeContext.getLog(this);
 
-        log.info("Starting bulk send mail");
+        final long start = System.currentTimeMillis();
+
+        log.info("Bulk send mail");
 
         int exceptionsThreshold = this.cycleExceptionsThreshold;
 
@@ -118,7 +120,11 @@ public class BulkMailProcessorImpl implements Runnable {
 
         }
 
-        log.info("Finished bulk send mail");
+        final long finish = System.currentTimeMillis();
+
+        final long ms = (finish - start);
+
+        log.info("Bulk send mail ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
 
     }
 

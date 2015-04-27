@@ -21,8 +21,6 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.node.NodeService;
 
-import java.util.Date;
-
 /**
  * This is a full product reindex job that allows to ensure that indexes are in full sync
  * over time. Indexes can go out of sync due to order placement, inventory changes, price changes
@@ -73,7 +71,7 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
 
         final long ms = (finish - start);
 
-        log.info("Reindexing on {} ... complete {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
+        log.info("Reindexing on {} ... completed in {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
 
     }
 
@@ -86,8 +84,4 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
         return Boolean.TRUE.toString().equals(nodeService.getConfiguration().get(NodeService.LUCENE_INDEX_DISABLED));
     }
 
-
-    protected Date now() {
-        return new Date();
-    }
 }

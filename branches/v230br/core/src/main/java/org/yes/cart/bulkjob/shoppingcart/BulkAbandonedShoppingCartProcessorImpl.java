@@ -20,8 +20,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ShoppingCartState;
+import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
@@ -42,12 +43,15 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
     private static final long MS_IN_DAY = 86400000L;
 
     private final ShoppingCartStateService shoppingCartStateService;
+    private final CustomerOrderService customerOrderService;
     private final SystemService systemService;
     private long abandonedTimeoutMs = 30;
 
     public BulkAbandonedShoppingCartProcessorImpl(final ShoppingCartStateService shoppingCartStateService,
+                                                  final CustomerOrderService customerOrderService,
                                                   final SystemService systemService) {
         this.shoppingCartStateService = shoppingCartStateService;
+        this.customerOrderService = customerOrderService;
         this.systemService = systemService;
     }
 
@@ -56,6 +60,8 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
     public void run() {
 
         final Logger log = ShopCodeContext.getLog(this);
+
+        final long start = System.currentTimeMillis();
 
         final Date lastModification =
                 new Date(System.currentTimeMillis() - determineExpiryInMs());
@@ -67,10 +73,26 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
 
         for (final ShoppingCartState scs : abandoned) {
 
-            log.info("Removed abandoned basket for {}, guid {}", scs.getCustomerEmail(), scs.getGuid());
+            final String guid = scs.getGuid();
+
+            log.info("Removing abandoned cart for {}, guid {}", scs.getCustomerEmail(), guid);
             this.shoppingCartStateService.delete(scs);
+            log.info("Removed abandoned cart for {}, guid {}", scs.getCustomerEmail(), guid);
+
+            final CustomerOrder tempOrder = this.customerOrderService.findByGuid(guid);
+            if (CustomerOrder.ORDER_STATUS_NONE.equals(tempOrder.getOrderStatus())) {
+                log.info("Removing temporary order for cart guid {}", guid);
+                this.customerOrderService.delete(tempOrder);
+                log.info("Removed temporary order for cart guid {}", guid);
+            }
 
         }
+
+        final long finish = System.currentTimeMillis();
+
+        final long ms = (finish - start);
+
+        log.info("Processing abandoned baskets ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
 
     }
 

@@ -21,7 +21,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- ################################ Discontinued products  ###################################### -->
+    <!-- ################################ Regular Global/Discontinued products indexing  ####################### -->
 
     <bean id="productsGlobalIndexProcessor" parent="txJobProxyTemplate">
         <property name="target">
@@ -51,7 +51,7 @@
 
 
 
-    <bean id="productsPassedAvailbilityDateIndexProcessor" parent="txJobProxyTemplate">
+    <bean id="productsPassedAvailabilityDateIndexProcessor" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.product.ProductsPassedAvailbilityDateIndexProcessorImpl">
                 <constructor-arg index="0" ref="productService"/>
@@ -65,7 +65,7 @@
         <property name="jobDataAsMap">
             <map>
                 <entry key="jobName" value="Reindex Discontinued Products" />
-                <entry key="job" value-ref="productsPassedAvailbilityDateIndexProcessor" />
+                <entry key="job" value-ref="productsPassedAvailabilityDateIndexProcessor" />
                 <entry key="nodeService" value-ref="nodeService" />
             </map>
         </property>
@@ -76,6 +76,39 @@
         <!-- at 5:00 am -->
         <property name="cronExpression" value="0 0 5 * * ?" />
     </bean>
+
+    <!-- ################################ Inventory updates products indexing  ############################# -->
+
+    <bean id="productInventoryChangedProcessor" parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.product.ProductInventoryChangedProcessorImpl">
+                <constructor-arg index="0" ref="skuWarehouseService"/>
+                <constructor-arg index="1" ref="productService"/>
+                <constructor-arg index="2" ref="nodeService"/>
+                <constructor-arg index="3" ref="systemService"/>
+                <constructor-arg index="4" ref="runtimeAttributeService"/>
+                <property name="batchSize" value="20"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean name="productInventoryChangedProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobName" value="Inventory Changes Product Indexing" />
+                <entry key="job" value-ref="productInventoryChangedProcessor" />
+                <entry key="nodeService" value-ref="nodeService" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="productInventoryChangedProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="productInventoryChangedProcessorJob" />
+        <!-- each 5 minute 0,5,10 ... 55 -->
+        <property name="cronExpression" value="0 0/5 * * * ?" />
+    </bean>
+
 
     <!-- ################################ Scheduler  ####################################################### -->
 
@@ -89,6 +122,7 @@
 
                 <ref bean="productsGlobalIndexProcessorTrigger" />
                   -->
+                <ref bean="productInventoryChangedProcessorJobCronTrigger" />
             </list>
         </property>
     </bean>

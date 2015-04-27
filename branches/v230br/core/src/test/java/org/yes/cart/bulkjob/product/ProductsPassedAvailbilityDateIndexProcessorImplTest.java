@@ -48,7 +48,9 @@ public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCor
         final ProductService productService = ctx().getBean("productService", ProductService.class);
         final LuceneQueryFactory luceneQueryFactory = ctx().getBean("luceneQueryFactory", LuceneQueryFactory.class);
 
-        Product product = productService.findById(9998L); // bender available to 2040
+        Product product = productService.findById(9998L);
+        assertNotNull(product.getAvailableto());
+        assertTrue(product.getAvailableto().after(new Date()));
 
         productService.reindexProduct(product.getId());
 
@@ -68,7 +70,7 @@ public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCor
             }
         });
 
-        product = productService.findById(9998L); // bender available to 2040
+        product = productService.findById(9998L);
 
         assertNotNull(product.getAvailableto());
         assertTrue(product.getAvailableto().before(new Date()));
