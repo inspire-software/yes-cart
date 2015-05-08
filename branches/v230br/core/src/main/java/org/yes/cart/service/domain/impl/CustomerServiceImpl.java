@@ -354,9 +354,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, key = "#customer.email")
-    public Customer update(final Customer customer) {
-        return super.update(customer);
+    }, allEntries = false, key = "#instance.email")
+    public Customer update(final Customer instance) {
+        return super.update(instance);
     }
 
     /**
@@ -364,11 +364,11 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, key = "#customer.email")
-    public void delete(final Customer customer) {
-        for(CustomerShop cshop : customer.getShops()) {
+    }, allEntries = false, key = "#instance.email")
+    public void delete(final Customer instance) {
+        for(CustomerShop cshop : instance.getShops()) {
             customerShopDao.delete(cshop);
         }
-        super.delete(customer);
+        super.delete(instance);
     }
 }
