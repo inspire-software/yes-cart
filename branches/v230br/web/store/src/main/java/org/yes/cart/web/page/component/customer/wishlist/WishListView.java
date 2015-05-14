@@ -106,7 +106,7 @@ public class WishListView extends AbstractProductSearchResultList {
     protected void onBeforeRender() {
 
         boolean oldOwnerViewing = ownerViewing;
-        ownerViewing = !getPage().getPageParameters().getNamedKeys().contains("token") && customerEmail.getObject().equals(ApplicationDirector.getShoppingCart().getCustomerEmail());
+        ownerViewing = !getPage().getPageParameters().getNamedKeys().contains("token") && customerEmail.getObject() != null && customerEmail.getObject().equals(ApplicationDirector.getShoppingCart().getCustomerEmail());
         if (ownerViewing != oldOwnerViewing) {
             products = null; // reset products just in case
         }
