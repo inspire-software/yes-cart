@@ -73,6 +73,55 @@
         <constructor-arg index="4" ref="mailComposer"/>
     </bean>
 
+
+    <bean id="paymentNotificationAspect" class="org.yes.cart.service.domain.aspect.impl.PaymentAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" ref="productService"/>
+        <constructor-arg index="2" type="org.yes.cart.service.domain.MailService" ref="mailService"/>
+        <constructor-arg index="3" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
+        <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <constructor-arg index="6" type="org.yes.cart.service.theme.ThemeService" ref="themeService"/>
+        <constructor-arg index="7" type="org.yes.cart.service.payment.PaymentModulesManager" ref="paymentModulesManager"/>
+        <property name="authoriseShopperTemplates">
+            <map>
+                <entry key="Ok" value="payment"/>
+            </map>
+        </property>
+        <property name="authoriseAdminTemplates">
+            <map>
+                <entry key="Ok" value="adm-payment"/>
+                <entry key="Processing" value="adm-payment"/>
+                <entry key="Failed" value="adm-payment-failed"/>
+                <entry key="Manual processing required" value="adm-payment-failed"/>
+            </map>
+        </property>
+        <property name="cancelShopperTemplates">
+            <map/>
+        </property>
+        <property name="cancelAdminTemplates">
+            <map>
+                <entry key="Ok" value="adm-refund"/>
+                <entry key="Processing" value="adm-refund"/>
+                <entry key="Failed" value="adm-refund-failed"/>
+                <entry key="Manual processing required" value="adm-refund-failed"/>
+            </map>
+        </property>
+        <property name="shipmentShopperTemplates">
+            <map>
+                <entry key="Ok" value="shipment-complete"/>
+            </map>
+        </property>
+        <property name="shipmentAdminTemplates">
+            <map>
+                <entry key="Ok" value="adm-payment-shipped"/>
+                <entry key="Processing" value="adm-payment-shipped"/>
+                <entry key="Failed" value="adm-payment-shipped-failed"/>
+                <entry key="Manual processing required" value="adm-payment-shipped-failed"/>
+            </map>
+        </property>
+    </bean>
+
     <bean id="orderStateChangeAspect" class="org.yes.cart.service.domain.aspect.impl.OrderStateChangeListenerAspect">
         <constructor-arg ref="aspectExecutor"/>
         <constructor-arg index="1" type="org.yes.cart.service.domain.MailService" ref="mailService"/>
@@ -84,27 +133,48 @@
         <constructor-arg index="7" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
         <constructor-arg index="8">
             <map>
-                <entry key="evt.new.order.cancel.refund-os.cancelled" value="order-canceled"/>
-                <entry key="evt.order.cancel-os.cancelled" value="order-canceled"/>
-                <entry key="evt.order.cancel.refund-os.cancelled" value="order-canceled"/>
-                <entry key="evt.order.cancel.refund-os.returned" value="order-returned"/>
-                <entry key="evt.packing.complete-os.in.progress-ds.shipment.ready" value="order-delivery-readytoshipping"/>
-                <entry key="evt.payment.confirmed-os.in.progress" value="order-confirmed"/>
                 <entry key="evt.pending-os.in.progress" value="order-new"/>
+                <entry key="evt.pending-os.waiting" value="order-new"/>
+                <entry key="evt.pending-os.in.progress" value="order-new"/>
+
+                <entry key="evt.order.cancel-os.cancelled" value="order-canceled"/>
+                <entry key="evt.new.order.cancel.refund-os.cancelled" value="order-canceled"/>
+                <entry key="evt.new.order.cancel.refund-os.cancelled.waiting.payment" value="order-canceled"/>
+
+                <entry key="evt.payment.confirmed-os.in.progress" value="order-confirmed"/>
+
+                <entry key="evt.order.cancel.refund-os.cancelled" value="order-canceled"/>
+                <entry key="evt.order.cancel.refund-os.cancelled.waiting.payment" value="order-canceled"/>
+                <entry key="evt.order.cancel.refund-os.returned" value="order-returned"/>
+                <entry key="evt.order.cancel.refund-os.returned.waiting.payment" value="order-returned"/>
+
+                <entry key="evt.packing.complete-os.in.progress-ds.shipment.ready" value="order-delivery-readytoshipping"/>
                 <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress" value="order-delivery-shipped"/>
+                <entry key="evt.release.to.shipment-os.partially.shipped-ds.shipment.inprogress" value="order-delivery-shipped"/>
                 <entry key="evt.shipment.complete-os.completed-ds.shipped" value="order-shipping-completed"/>
 
             </map>
         </constructor-arg>
         <constructor-arg index="9">
             <map>
-                <entry key="evt.new.order.cancel.refund-os.cancelled" value="adm-order-canceled"/>
-                <entry key="evt.order.cancel-os.cancelled" value="adm-order-canceled"/>
-                <entry key="evt.order.cancel.refund-os.cancelled" value="adm-order-canceled"/>
-                <entry key="evt.order.cancel.refund-os.returned" value="adm-order-returned"/>
-                <entry key="evt.payment.confirmed-os.in.progress" value="adm-order-confirmed"/>
                 <entry key="evt.pending-os.in.progress" value="adm-order-new"/>
+                <entry key="evt.pending-os.waiting.payment" value="adm-order-new"/>
                 <entry key="evt.pending-os.waiting" value="adm-order-wait-confirmation"/>
+
+                <entry key="evt.order.cancel-os.cancelled" value="adm-order-canceled"/>
+                <entry key="evt.new.order.cancel.refund-os.cancelled" value="adm-order-canceled"/>
+                <entry key="evt.new.order.cancel.refund-os.cancelled.waiting.payment" value="adm-order-canceled"/>
+
+                <entry key="evt.payment.confirmed-os.in.progress" value="adm-order-confirmed"/>
+
+                <entry key="evt.order.cancel.refund-os.cancelled" value="adm-order-canceled"/>
+                <entry key="evt.order.cancel.refund-os.cancelled.waiting.payment" value="adm-order-canceled"/>
+                <entry key="evt.order.cancel.refund-os.returned" value="adm-order-returned"/>
+                <entry key="evt.order.cancel.refund-os.returned.waiting.payment" value="adm-order-returned"/>
+
+                <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress.waiting.payment" value="adm-order-wait-confirmation"/>
+                <entry key="evt.release.to.shipment-os.partially.shipped-ds.shipment.inprogress.waiting.payment" value="adm-order-wait-confirmation"/>
+
                 <entry key="evt.shipment.complete-os.completed-ds.shipped" value="adm-order-shipping-completed"/>
             </map>
         </constructor-arg>

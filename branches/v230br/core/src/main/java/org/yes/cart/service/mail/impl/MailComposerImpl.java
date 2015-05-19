@@ -350,7 +350,7 @@ public class MailComposerImpl implements MailComposer {
         }
 
         if (model.get("root") instanceof CustomerOrder) {
-            mail.setSubject(prop.getProperty("subject") + " " + ((CustomerOrder)model.get("root")).getOrdernum());
+            mail.setSubject(((CustomerOrder)model.get("root")).getOrdernum() + ": " + prop.getProperty("subject"));
         } else {
             mail.setSubject(prop.getProperty("subject"));
         }

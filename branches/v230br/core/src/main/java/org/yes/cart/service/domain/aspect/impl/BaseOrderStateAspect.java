@@ -72,6 +72,7 @@ public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
 
                 if (orderEvent.getCustomerOrderDelivery() != null) {
                     final CustomerOrderDelivery delivery = orderEvent.getCustomerOrderDelivery();
+                    map.put(StandardMessageListener.DELIVERY, delivery);
                     final I18NModel carrierName = new FailoverStringI18NModel(
                             delivery.getCarrierSla().getCarrier().getDisplayName(),
                             delivery.getCarrierSla().getCarrier().getName());

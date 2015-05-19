@@ -1,0 +1,1 @@
+Оплата по заказу $root.ordernum на $shop.name для $customer.firstname $customer.email подтверждена

@@ -1,0 +1,1 @@
+Payment failed for $root.ordernum at $shop.name

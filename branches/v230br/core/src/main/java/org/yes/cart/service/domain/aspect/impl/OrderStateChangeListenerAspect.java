@@ -161,7 +161,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
 
     /**
-     * Get ematil template key by given order event.
+     * Get email template key by given order event.
      *
      * @param orderEvent given order event
      * @return mail template key.

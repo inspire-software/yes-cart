@@ -1,0 +1,1 @@
+Не вдалося виконати оплату для $root.ordernum на $shop.name

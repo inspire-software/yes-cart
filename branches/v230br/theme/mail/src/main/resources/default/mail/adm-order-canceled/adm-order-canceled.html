@@ -34,7 +34,11 @@
                         <td>&nbsp;</td>
                         <td>
                             Order $root.ordernum at <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a> was cancelled <br>
-                            for $customer.firstname $customer.email
+                            for $customer.firstname $customer.email  <br>
+
+                            <% if ($root.orderStatus.endsWith("waiting.payment")) { %>
+                            Refund was not processed. Require manual processing
+                            <% } %>
                         </td>
                         <td>&nbsp;</td>
                     </tr>

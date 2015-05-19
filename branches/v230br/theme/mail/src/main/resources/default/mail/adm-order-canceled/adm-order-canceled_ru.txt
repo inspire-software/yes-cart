@@ -1,1 +1,4 @@
 Заказ $root.ordernum на $shop.name был отменен для $customer.firstname $customer.email
+<% if ($root.orderStatus.endsWith("waiting.payment")) { %>
+Возврат средств не совершен. Необходимо провести возврат.
+<% } %>

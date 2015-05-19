@@ -93,6 +93,11 @@ public class StandardMessageListener implements Runnable {
     /**
      * Carrier name.
      */
+    public static final String DELIVERY = "delivery";
+
+    /**
+     * Carrier name.
+     */
     public static final String DELIVERY_CARRIER = "deliveryCarrierName";
 
     /**

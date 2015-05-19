@@ -1,1 +1,4 @@
 Order $root.ordernum at $shop.name was cancelled for $customer.firstname $customer.email
+<% if ($root.orderStatus.endsWith("waiting.payment")) { %>
+Refund was not processed. Require manual processing.
+<% } %>

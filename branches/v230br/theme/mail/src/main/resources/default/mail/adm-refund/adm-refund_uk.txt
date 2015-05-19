@@ -1,0 +1,1 @@
+Виконано повернення для $root.ordernum на $shop.name
