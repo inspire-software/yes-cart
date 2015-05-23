@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 1/22/12
@@ -109,16 +111,16 @@ public class LiqPayPaymentGatewayImplTest extends TestCase {
     public void testIsSuccess() {
 
 
-        testIsSuccessWithStatus("success", true);
-        testIsSuccessWithStatus("wait_secure", true);
-        testIsSuccessWithStatus("sandbox", true);
-        testIsSuccessWithStatus("failure", false);
-        testIsSuccessWithStatus("zxcvzxcvzxcv", false);
+        testIsSuccessWithStatus("success", Payment.PAYMENT_STATUS_OK);
+        testIsSuccessWithStatus("wait_secure", Payment.PAYMENT_STATUS_OK);
+        testIsSuccessWithStatus("sandbox", Payment.PAYMENT_STATUS_OK);
+        testIsSuccessWithStatus("failure", Payment.PAYMENT_STATUS_FAILED);
+        testIsSuccessWithStatus("zxcvzxcvzxcv", Payment.PAYMENT_STATUS_FAILED);
 
 
     }
 
-    private void testIsSuccessWithStatus(final String status, final boolean expectedOk) {
+    private void testIsSuccessWithStatus(final String status, final String expectedStatus) {
         final Map<String, String> params = new HashMap<String, String>();
         params.put(LiqPayPaymentGatewayImpl.LP_MERCHANT_ID, "00001");
         params.put(LiqPayPaymentGatewayImpl.LP_MERCHANT_KEY, "secret");
@@ -173,13 +175,13 @@ public class LiqPayPaymentGatewayImplTest extends TestCase {
 
         }};
 
-        assertFalse(gatewayImpl.isSuccess(callBackresult));
+        assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
 
 
         callBackresult.put("signature", validSignature);
 
 
-        assertEquals(expectedOk, gatewayImpl.isSuccess(callBackresult));
+        assertEquals(expectedStatus, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
     }
 
 

@@ -63,5 +63,12 @@ public interface OrderEvent {
      */
     Map getParams();
 
+    /**
+     * Get runtime params (populated within handlers to give extra info)
+     *
+     * @return event runtime params
+     */
+    Map getRuntimeParams();
+
 
 }

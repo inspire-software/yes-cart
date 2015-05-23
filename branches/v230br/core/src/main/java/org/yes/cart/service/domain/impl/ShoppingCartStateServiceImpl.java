@@ -17,6 +17,7 @@
 package org.yes.cart.service.domain.impl;
 
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 
@@ -54,8 +55,8 @@ public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<Shoppin
     /**
      * {@inheritDoc}
      */
-    public List<ShoppingCartState> findByModificationPrior(final Date lastModification) {
-        return shoppingCartStateDao.findByNamedQuery("SHOPPINGCARTSTATE.BY.LASTMODIFIED", lastModification);
+    public ResultsIterator<ShoppingCartState> findByModificationPrior(final Date lastModification) {
+        return shoppingCartStateDao.findByNamedQueryIterator("SHOPPINGCARTSTATE.BY.LASTMODIFIED", lastModification);
     }
 
 }

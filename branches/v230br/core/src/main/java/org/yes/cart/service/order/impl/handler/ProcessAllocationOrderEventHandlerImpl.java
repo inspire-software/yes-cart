@@ -66,7 +66,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
      */
     public boolean handle(final OrderEvent orderEvent) throws OrderItemAllocationException {
         synchronized (OrderEventHandler.syncMonitor) {
-            reserveQuantity(orderEvent.getCustomerOrderDelivery());
+            allocateQuantity(orderEvent.getCustomerOrderDelivery());
             return true;
         }
     }
@@ -98,7 +98,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
      * @param orderDelivery reserve for this delivery
      * @throws OrderItemAllocationException in case if can not allocate quantity for each sku
      */
-    void reserveQuantity(final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
+    void allocateQuantity(final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
 
 
         final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
@@ -112,7 +112,7 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
             BigDecimal toAllocate = det.getQty();
 
             for (Warehouse warehouse : warehouses) {
-
+                // TODO: YC-562 Review inventory reservation mechanism
                 skuWarehouseService.voidReservation(warehouse, skuCode, toAllocate);
 
                 toAllocate = skuWarehouseService.debit(warehouse, skuCode, toAllocate);
@@ -127,7 +127,8 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
                 final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
 
-                if (product == null || Product.AVAILABILITY_STANDARD == product.getAvailability()) {
+                if (product == null
+                        || Product.AVAILABILITY_STANDARD == product.getAvailability()) {
 
                     /**
                      * Availability.AVAILABILITY_BACKORDER -  can get more stock

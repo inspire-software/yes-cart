@@ -18,47 +18,170 @@ package org.yes.cart.service.order.impl.handler;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import java.util.Collections;
+
+import static org.junit.Assert.*;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * Test covers flow from Order in progress, Delivery packing flow.
+ * The flow from this state leads to:
+ * <p/>
+ * Order in progress, Delivery shipment ready<p/>
+ * <p/>
+ * This integration test covers work of the following transitional handlers:<p/>
+ * PackCompleteOrderEventHandlerImpl simple transition of state to support business process. This state denotes the
+ * action of warehouse workers assembled the delivery items and they are ready for logistics department to arrange
+ * for shipping<p/>
+ * <p/>
+ *
+ * User: denispavlov
+ * Date: 19/05/2015
+ * Time: 19:43
  */
 public class PackCompleteOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
-    private CustomerOrderService orderService;
+    private OrderEventHandler pendingHandler;
+    private OrderEventHandler allocationHandler;
+    private OrderEventHandler packingHandler;
     private OrderEventHandler handler;
 
+    private CustomerOrderService orderService;
+
     @Before
-    public void setUp() {
-        handler = (OrderEventHandler) ctx().getBean("packCompleteOrderEventHandler");
-        orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
+    public void setUp()  {
         super.setUp();
+        pendingHandler = (OrderEventHandler) ctx().getBean("pendingOrderEventHandler");
+        allocationHandler = (OrderEventHandler) ctx().getBean("processAllocationOrderEventHandler");
+        packingHandler = (OrderEventHandler) ctx().getBean("releaseToPackOrderEventHandler");
+        handler = (OrderEventHandler) ctx().getBean("packCompleteOrderEventHandler");
+        orderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
+    }
+
+
+    @Override
+    protected CustomerOrder createTestOrder(final TestOrderType orderType, final String pgLabel, final boolean onePhysicalDelivery) throws Exception {
+
+        final CustomerOrder customerOrder = super.createTestOrder(orderType, pgLabel, onePhysicalDelivery);
+
+        assertTrue(pendingHandler.handle(
+                new OrderEventImpl("", //evt.pending
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        assertTrue(allocationHandler.handle(
+                new OrderEventImpl("", //evt.process.allocation
+                        customerOrder,
+                        customerOrder.getDelivery().iterator().next(),
+                        Collections.EMPTY_MAP)));
+
+        assertTrue(packingHandler.handle(
+                new OrderEventImpl("", //evt.release.to.pack
+                        customerOrder,
+                        customerOrder.getDelivery().iterator().next(),
+                        Collections.EMPTY_MAP)));
+
+        // Make sure we are in progress state at this point
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+
+        orderService.update(customerOrder);
+
+        return customerOrder;
+
+    }
+
+
+    @Test
+    public void testHandleStandardOnlineAuth() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.STANDARD, label, false);
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "7.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_PACKING);
+
+        CustomerOrderDelivery delivery = null;
+        for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.DELIVERY_STATUS_PACKING.equals(orderDelivery.getDeliveryStatus())) {
+                assertNull(delivery); // make sure there is only one!
+                delivery = orderDelivery;
+            }
+        }
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.packing.complete
+                        customerOrder,
+                        delivery,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "7.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "689.74", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
     }
 
     @Test
-    public void testHandle() throws Exception {
-        Customer customer = createCustomer();
-        assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(customer.getEmail()), false);
-        assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
-        CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
-        handler.handle(
-                new OrderEventImpl(
-                        "", //evt.payment.offline
+    public void testHandleStandardOnlineCapture() throws Exception {
+
+        configureTestPG(false, true);
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, false, true);
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.STANDARD, label, false);
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "7.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_PACKING);
+
+        CustomerOrderDelivery delivery = null;
+        for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.DELIVERY_STATUS_PACKING.equals(orderDelivery.getDeliveryStatus())) {
+                assertNull(delivery); // make sure there is only one!
+                delivery = orderDelivery;
+            }
+        }
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.packing.complete
                         customerOrder,
-                        delivery
-                )
-        );
-        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY, delivery.getDeliveryStatus());
+                        delivery,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "7.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "689.74", PaymentGateway.AUTH_CAPTURE, Payment.PAYMENT_STATUS_OK, true);
+        assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("689.74", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
     }
+
 }

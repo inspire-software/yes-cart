@@ -97,27 +97,6 @@ public abstract class AbstractGswmPaymentGatewayImpl implements ConfigurablePaym
         paymentGatewayParameterService.update(paymentGatewayParameter);
     }
 
-    /**
-     * Work around problem with wicket param values, when it can return
-     * parameter value as string or as array of strings with single value.
-     * This behavior depends on url encoding strategy.
-     *
-     * @param param parameters
-     *
-     * @return value
-     */
-    public static String getSingleValue(final Object param) {
-        if (param instanceof String) {
-            return (String) param;
-        } else if (param instanceof String[]) {
-            if (((String[])param).length > 0) {
-                return ((String [])param)[0];
-            }
-        }
-        return null;
-
-    }
-
 
     /**
      * Parameter service for given gateway.

@@ -52,6 +52,11 @@
                 <prop key="fireTransition">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="handle">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="reservation*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <!-- order transitions -->
+                <prop key="updateOrderSetConfirmed*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="updateOrderSetCancelled*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="updateDeliveryStatus*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="transitionOrder*">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
                 <!-- Content special -->
                 <prop key="createRootContent">PROPAGATION_REQUIRED,-Throwable</prop>
                 <!-- Full text search -->

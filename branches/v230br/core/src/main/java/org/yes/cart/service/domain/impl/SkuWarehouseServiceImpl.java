@@ -253,7 +253,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
             skuWarehouse.setQuantity(skuWarehouse.getQuantity().add(addQty));
             update(skuWarehouse);
         }
-        updateOrdersAwaitingForInventory(productSkuCode);
         return BigDecimal.ZERO;
 
     }

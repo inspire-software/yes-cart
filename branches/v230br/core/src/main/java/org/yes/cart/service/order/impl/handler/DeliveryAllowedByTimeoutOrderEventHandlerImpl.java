@@ -69,7 +69,7 @@ public class DeliveryAllowedByTimeoutOrderEventHandlerImpl implements OrderEvent
             }
 
             orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
-            getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY, orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery()));
+            getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY, orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery()));
 
             return true;
         }

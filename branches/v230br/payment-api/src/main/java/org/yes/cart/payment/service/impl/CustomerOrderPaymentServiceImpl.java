@@ -21,14 +21,13 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -51,25 +50,57 @@ public class CustomerOrderPaymentServiceImpl
     }
 
     /**
-     * Get order amount.
+     * Get order payment amount.
+     * <p>
+     * If no payments were made then the amount is equal to sum of all AUTH less REVERSE_AUTH.
+     * <p>
+     * Otherwise amount is sum of  CAPTURE or  AUTH_CAPTURE less VOID_CAPTURE and REFUND.
      *
      * @param orderNumber given order number.
+     *
      * @return order amount
      */
     public BigDecimal getOrderAmount(final String orderNumber) {
-        BigDecimal rez = BigDecimal.ZERO;
-        final List<CustomerOrderPayment> payments = findBy(orderNumber, null, null, null);
+
+        final List<CustomerOrderPayment> payments = findBy(orderNumber, null,
+                new String[] { Payment.PAYMENT_STATUS_OK },
+                new String[] { PaymentGateway.AUTH_CAPTURE, PaymentGateway.CAPTURE, PaymentGateway.VOID_CAPTURE, PaymentGateway.REFUND });
+
+        BigDecimal credit = BigDecimal.ZERO;
+        BigDecimal debit = BigDecimal.ZERO;
+        BigDecimal voided = BigDecimal.ZERO;
+
+        List<BigDecimal> credited = new ArrayList<BigDecimal>();
+
         for (CustomerOrderPayment payment : payments) {
-            if (
-                    payment.getTransactionOperation().equals(PaymentGateway.AUTH)
-                    || payment.getTransactionOperation().equals(PaymentGateway.AUTH_CAPTURE)   //external processing of payment form
-                    ) {
-                // We have two payment records AUTH and CAPTURE for the same amount.
-                // Therefore we only need to sum up AUTH to get total payment value of the order.
-                rez = rez.add(payment.getPaymentAmount());
+            // only tracking real payments (including unsettled)
+            if (PaymentGateway.AUTH_CAPTURE.equals(payment.getTransactionOperation()) || PaymentGateway.CAPTURE.equals(payment.getTransactionOperation())) {
+                credit = credit.add(payment.getPaymentAmount());
+                credited.add(payment.getPaymentAmount());
             }
+
         }
-        return rez.setScale(DEFAULT_SCALE);
+
+        for (CustomerOrderPayment payment : payments) {
+            if (PaymentGateway.REFUND.equals(payment.getTransactionOperation())) {
+                // refund is always tracked as it could be manual
+                debit = debit.add(payment.getPaymentAmount());
+            } else if (PaymentGateway.VOID_CAPTURE.equals(payment.getTransactionOperation())) {
+                // There could be VOID_CAPTURE Ok for CAPTURE Processing, so we need to skip them, so we do not get negative
+                final Iterator<BigDecimal> creditedIt = credited.iterator();
+                while (creditedIt.hasNext()) {
+                    // if this is VOID_CAPTURE for known CAPTURE
+                    if (creditedIt.next().compareTo(payment.getPaymentAmount()) == 0) {
+                        debit = debit.add(payment.getPaymentAmount());
+                        creditedIt.remove();
+                    }
+
+                }
+            }
+
+        }
+
+        return credit.subtract(debit).setScale(DEFAULT_SCALE);
     }
 
 
@@ -121,35 +152,60 @@ public class CustomerOrderPaymentServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<CustomerOrderPayment> findBy(
-            final String orderNumber,
-            final String shipmentNumber,
-            final String paymentProcessorResult,
-            final String transactionOperation) {
+    public List<CustomerOrderPayment> findBy(final String orderNumber,
+                                             final String shipmentNumber,
+                                             final String paymentProcessorResult,
+                                             final String transactionOperation) {
 
-        final ArrayList<Criterion> creterias = new ArrayList<Criterion>(4);
+        final ArrayList<Criterion> creteria = new ArrayList<Criterion>(4);
 
         if (orderNumber != null) {
-            creterias.add(Restrictions.eq("orderNumber", orderNumber));
+            creteria.add(Restrictions.eq("orderNumber", orderNumber));
         }
 
         if (shipmentNumber != null) {
-            creterias.add(Restrictions.eq("orderShipment", shipmentNumber));
+            creteria.add(Restrictions.eq("orderShipment", shipmentNumber));
         }
 
         if (paymentProcessorResult != null) {
-            creterias.add(Restrictions.eq("paymentProcessorResult", paymentProcessorResult));
+            creteria.add(Restrictions.eq("paymentProcessorResult", paymentProcessorResult));
         }
 
         if (transactionOperation != null) {
-            creterias.add(Restrictions.eq("transactionOperation", transactionOperation));
+            creteria.add(Restrictions.eq("transactionOperation", transactionOperation));
         }
 
-        return getGenericDao().findByCriteria(
-                creterias.toArray(new Criterion[creterias.size()])
+        return getGenericDao().findByCriteria(creteria.toArray(new Criterion[creteria.size()]));
 
-        );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public List<CustomerOrderPayment> findBy(final String orderNumber,
+                                             final String shipmentNumber,
+                                             final String[] paymentProcessorResult,
+                                             final String[] transactionOperation) {
 
+        final ArrayList<Criterion> creteria = new ArrayList<Criterion>(4);
+
+        if (orderNumber != null) {
+            creteria.add(Restrictions.eq("orderNumber", orderNumber));
+        }
+
+        if (shipmentNumber != null) {
+            creteria.add(Restrictions.eq("orderShipment", shipmentNumber));
+        }
+
+        if (paymentProcessorResult != null) {
+            creteria.add(Restrictions.in("paymentProcessorResult", paymentProcessorResult));
+        }
+
+        if (transactionOperation != null) {
+            creteria.add(Restrictions.in("transactionOperation", transactionOperation));
+        }
+
+        return getGenericDao().findByCriteria(creteria.toArray(new Criterion[creteria.size()]));
+
+    }
 }

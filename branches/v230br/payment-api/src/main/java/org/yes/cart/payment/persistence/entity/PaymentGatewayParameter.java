@@ -26,7 +26,7 @@ import java.io.Serializable;
  * Date: 07-May-2011
  * Time: 10:22:53
  */
-public interface PaymentGatewayParameter extends Serializable, Descriptor {
+public interface PaymentGatewayParameter extends Serializable, Descriptor, Auditable {
 
     /**
      * @return pk value

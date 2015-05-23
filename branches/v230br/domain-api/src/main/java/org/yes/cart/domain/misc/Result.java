@@ -30,6 +30,10 @@ public final class Result {
 
     private  String errorCode;
 
+    private  String orderNum;
+
+    private  String shippingNum;
+
     private  String localizationKey;
 
     private  Object [] localizedMessageParameters;
@@ -39,52 +43,61 @@ public final class Result {
 
     /**
      * Construct result object.
+     *
+     * @param ordernum order number
+     * @param shippingnum shipping number (or null if non delivery specific)
      * @param errorCode error code.
      * @param errorMessage message
      * @param localizationKey localization key
      * @param localizedMessageParameters message parameters to format message.
      */
-    public Result(final String errorCode,
+    public Result(final String ordernum,
+                  final String shippingnum,
+                  final String errorCode,
                   final String errorMessage,
                   final String localizationKey,
-                  final Object ... localizedMessageParameters) {
+                  final Object... localizedMessageParameters) {
+        this.orderNum = ordernum;
+        this.shippingNum = shippingnum;
         this.errorCode = errorCode;
         this.localizationKey = localizationKey;
         this.localizedMessageParameters = localizedMessageParameters;
         this.errorMessage = errorMessage;
     }
 
+
     /**
      * Construct result object.
-     * @param errorCode error code.
-     * @param errorMessage message
-     * @param localizationKey localization key
+     *
+     * @param ordernum order number
+     * @param shippingnum shipping number (or null if non delivery specific)
      */
-    public Result(final String errorCode,
-                  final String errorMessage,
-                  final String localizationKey
-    ) {
-        this.errorCode = errorCode;
-        this.localizationKey = localizationKey;
-        this.errorMessage = errorMessage;
-        this.localizedMessageParameters = null;
-    }
-
-
-    /**
-     * Construct result object.
-     * @param errorCode error code.
-     * @param errorMessage message
-    */
-    public Result(final String errorCode, final String errorMessage) {
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
-        localizationKey = null;
-        localizedMessageParameters = null;
+    public Result(final String ordernum,
+                  final String shippingnum) {
+        this(ordernum, shippingnum, Result.OK, null, null);
     }
 
     /**
-     * Getr erro rocde.
+     * Order number.
+     *
+     * @return order number
+     */
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    /**
+     * Shipping number.
+     *
+     * @return shipping number
+     */
+    public String getShippingNum() {
+        return shippingNum;
+    }
+
+    /**
+     * Get error code.
+     *
      * @return error code.
      */
     public String getErrorCode() {
@@ -92,7 +105,8 @@ public final class Result {
     }
 
     /**
-     * Get error localizetion key.
+     * Get error localization key.
+     *
      * @return error localization key
      */
     public String getLocalizationKey() {
@@ -100,7 +114,8 @@ public final class Result {
     }
 
     /**
-     * Get localiztion mesage paraeters.
+     * Get localization message parameters.
+     *
      * @return localization message parameters
      */
     public Object[] getLocalizedMessageParameters() {
@@ -108,13 +123,21 @@ public final class Result {
     }
 
     /**
-     * Get non localized erro message.
+     * Get non localized error message.
+     *
      * @return non localized error message
      */
     public String getErrorMessage() {
         return errorMessage;
     }
 
+    public void setOrderNum(final String orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public void setShippingNum(final String shippingNum) {
+        this.shippingNum = shippingNum;
+    }
 
     public void setErrorCode(final String errorCode) {
         this.errorCode = errorCode;

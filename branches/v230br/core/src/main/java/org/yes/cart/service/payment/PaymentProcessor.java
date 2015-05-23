@@ -54,20 +54,23 @@ public interface PaymentProcessor {
     /**
      * Cancel order. All authorized payments will be reversed, captured funds will be void of refunded.
      * No rollback operations will be performed if order already has cancel state
+     *
      * @param order order to cancel.
+     * @param params for payment gateway to create template from.
      * @return status of operation.
      */
-    String cancelOrder(CustomerOrder order);
+    String cancelOrder(CustomerOrder order, Map params);
 
 
     /**
-     * Particular shimment is complete. Funds can be captured.
+     * Particular shipment is complete. Funds can be captured.
+     *
      * @param order order
-     * @param orderShipmentNumber internal shipment number.
-     * Each order has at least one delivery.
+     * @param orderShipmentNumber internal shipment number. Each order has at least one delivery.
+     * @param params for payment gateway to create template from.
      * @return status of operation.
      */
-    String shipmentComplete(CustomerOrder order, String orderShipmentNumber);
+    String shipmentComplete(CustomerOrder order, String orderShipmentNumber, Map params);
 
 
     /**

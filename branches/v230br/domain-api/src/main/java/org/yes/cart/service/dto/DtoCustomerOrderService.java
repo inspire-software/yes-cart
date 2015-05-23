@@ -25,6 +25,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -49,7 +50,7 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * <p/>
      * reverse auth in case if no shipment was performed;
      * void capture if fund/money was captured, but not yet settled to merchant account;
-     * refund in case if money were settleled to merchant account.
+     * refund in case if money were settled to merchant account.
      * <p/>
      * Please refer how works particular payment gateway, which are you using, because of some difference.
      * For more details see org.yes.cart.payment.PaymentGateway interface and his implementations.
@@ -58,6 +59,16 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * @return result object
      */
     Result updateOrderSetCancelled(String orderNum);
+
+    /**
+     * This is manual refund operation of cancelled orders that are "stuck"
+     *
+     *
+     * @param orderNum             unique order number. not pk value.
+     * @param message              manual operation message
+     * @return result object
+     */
+    Result updateOrderSetCancelledManual(String orderNum, String message);
 
 
     /**
@@ -82,6 +93,19 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
      * @return result object
      */
     Result updateDeliveryStatus(String orderNum, String deliveryNum, String currentStatus, String destinationStatus);
+
+    /**
+     * Fire transition for single delivery. This method may lead to
+     * change status for whole order , not only for single delivery.
+     *
+     * @param orderNum          unique order number. not pk value.
+     * @param deliveryNum       unique delivery number in order scope. not pk value.
+     * @param currentStatus     from status
+     * @param destinationStatus to status
+     * @param message           manual operation message
+     * @return result object
+     */
+    Result updateDeliveryStatusManual(String orderNum, String deliveryNum, String currentStatus, String destinationStatus, String message);
 
     /**
      * Get list of delivery details for given order number.
@@ -124,9 +148,6 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
 
 
 
-
-
-
     /**
      * Find customer's order by given criteria.
      *
@@ -151,5 +172,14 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
             String orderNum
     ) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+
+    /**
+     * Get localized name for all payment gateways on this server.
+     *
+     * @param locale locale for which to provide name
+     *
+     * @return pgLabel to name map
+     */
+    Map<String, String> getOrderPgLabels(String locale);
 
 }

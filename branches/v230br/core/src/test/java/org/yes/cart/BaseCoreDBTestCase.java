@@ -67,6 +67,12 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
     @After
     public void tearDown() throws Exception {
+
+        final CacheManager cacheManager = (CacheManager) ctx().getBean("cacheManager");
+        for (final String name : cacheManager.getCacheNames()) {
+            // clear all cache between the tests
+            cacheManager.getCache(name).clear();
+        }
         //sharedContext =  null;
     }
 

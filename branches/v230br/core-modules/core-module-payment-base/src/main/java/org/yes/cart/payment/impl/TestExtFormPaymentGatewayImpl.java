@@ -17,18 +17,22 @@
 package org.yes.cart.payment.impl;
 
 
+import org.apache.commons.lang.SerializationUtils;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
+import org.yes.cart.util.HttpParamsUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -39,8 +43,30 @@ import java.util.UUID;
  */
 public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl implements PaymentGatewayExternalForm {
 
-    public static String ORDER_GUID_PARAM_KEY = "do-a-barrel-roll";
-    public static String RESPONSE_CODE_PARAM_KEY = "do-a-barrel-roll-response-code";
+    public static String ORDER_GUID_PARAM_KEY = "ext-order-guid";
+    public static String AUTH_RESPONSE_CODE_PARAM_KEY = "ext-auth-response-code";
+    public static String REFUND_RESPONSE_CODE_PARAM_KEY = "ext-refund-response-code";
+
+    private static final PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+            false, false, false, true,
+            false, false, false,
+            true, true, false,
+            null,
+            false, false
+    );
+
+
+    private static final Map<String, PaymentGatewayParameter> gatewayConfig = new HashMap<String, PaymentGatewayParameter>();
+
+
+    /**
+     * Getter for unit testing.
+     *
+     * @return gateway additional parameters (e.g. failure scenario simulation)
+     */
+    public static Map<String, PaymentGatewayParameter> getGatewayConfig() {
+        return gatewayConfig;
+    }
 
     /**
      * {@inheritDoc}
@@ -53,13 +79,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
      * {@inheritDoc}
      */
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
-        return new PaymentGatewayFeatureImpl(
-                false, false, false, true,
-                false, false, false, true,
-                true,  false,
-                null,
-                false, false
-        );
+        return paymentGatewayFeature;
     }
 
     /**
@@ -109,40 +129,53 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
     /**
      * {@inheritDoc}
      */
-    public boolean isSuccess(final Map<String, String> nvpCallResult) {
-        return true;
+    public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+
+        String responseCode = callbackResult.get(AUTH_RESPONSE_CODE_PARAM_KEY);
+        if (responseCode == null) {
+            responseCode = callbackResult.get(REFUND_RESPONSE_CODE_PARAM_KEY);
+        }
+        if ("1".equals(responseCode)) {
+            return CallbackResult.OK;
+        } else if ("2".equals(responseCode)) {
+            return CallbackResult.UNSETTLED;
+        } else if ("3".equals(responseCode)) {
+            return CallbackResult.PROCESSING;
+        } else if ("4".equals(responseCode)) {
+            return CallbackResult.MANUAL_REQUIRED;
+        } else {
+            return CallbackResult.FAILED;
+        }
+
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public void handleNotification(final HttpServletRequest request, final HttpServletResponse response) {
         //nothing to do
     }
 
     /**
-     * Process public call back request from payment gateway.
-     *
-     * @param privateCallBackParameters get/post parameters
-     * @return true in case in payment was ok, false in case if payment failed
+     * {@inheritDoc}
      */
-    public Payment createPaymentPrototype(final Map privateCallBackParameters) {
+    public Payment createPaymentPrototype(final String operation, final Map privateCallBackParameters) {
         final Payment payment = new PaymentImpl();
 
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
 
+        final Map<String, String> params = HttpParamsUtils.createSingleValueMap(privateCallBackParameters);
+        final CallbackResult res = getExternalCallbackResult(params);
 
-        String responseCode = (String) privateCallBackParameters.get(RESPONSE_CODE_PARAM_KEY);
-        if ("1".equalsIgnoreCase(responseCode)) {
-            payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
-        } else {
-            payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
-        }
-        payment.setTransactionOperationResultCode(responseCode);
+        payment.setPaymentProcessorResult(res.getStatus());
+        payment.setPaymentProcessorBatchSettlement(res.isSettled());
+        payment.setTransactionOperationResultCode(params.get(AUTH_RESPONSE_CODE_PARAM_KEY));
         payment.setTransactionOperationResultMessage(
-                "Everything is ok, Boss"
+                HttpParamsUtils.stringify("Params: ", params)
         );
         payment.setCardNumber("4111111111111111");
-        payment.setShopperIpAddress(getSingleValue(privateCallBackParameters.get(PaymentMiscParam.CLIENT_IP)));
+        payment.setShopperIpAddress(params.get(PaymentMiscParam.CLIENT_IP));
 
         return payment;
     }
@@ -151,42 +184,82 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
     /**
      * {@inheritDoc}
      */
-    public Payment authorizeCapture(final Payment payment) {
+    public Payment authorizeCapture(final Payment paymentIn) {
+        return (Payment) SerializationUtils.clone(paymentIn);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment authorize(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(AUTH);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Payment authorize(final Payment payment) {
+    public Payment reverseAuthorization(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(REVERSE_AUTH);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Payment reverseAuthorization(final Payment payment) {
+    public Payment capture(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(CAPTURE);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Payment capture(final Payment payment) {
+    public Payment voidCapture(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(VOID_CAPTURE);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Payment voidCapture(final Payment payment) {
-        return payment;
-    }
+    public Payment refund(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(REFUND);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
 
-    /**
-     * {@inheritDoc}
-     */
-    public Payment refund(final Payment payment) {
+        final String responseCode = gatewayConfig.containsKey(REFUND_RESPONSE_CODE_PARAM_KEY) ?
+                gatewayConfig.get(REFUND_RESPONSE_CODE_PARAM_KEY).getValue() : Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED;
+
+        final CallbackResult res = getExternalCallbackResult(new HashMap<String, String>() {{
+            put(REFUND_RESPONSE_CODE_PARAM_KEY, responseCode);
+        }});
+
+        payment.setTransactionGatewayLabel(getLabel());
+        payment.setTransactionOperationResultCode(responseCode);
+        payment.setPaymentProcessorResult(res.getStatus());
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 

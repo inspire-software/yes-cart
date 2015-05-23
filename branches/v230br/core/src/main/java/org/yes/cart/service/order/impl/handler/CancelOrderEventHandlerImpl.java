@@ -83,64 +83,62 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
 
     private void creditQuantity(final CustomerOrderDelivery delivery) throws OrderException {
 
-        final List<Warehouse> warehouses = warehouseService.getByShopId(
-                delivery.getCustomerOrder().getShop().getShopId());
+        final String newStatus;
 
-        String newStatus = null;
-        if (isNeedVoidReservation(delivery.getDeliveryStatus())) {
+        final boolean voidReservation = isNeedVoidReservation(delivery.getDeliveryStatus());
+        final boolean voidCredit = isNeedCredit(delivery.getDeliveryStatus());
+
+        if (voidReservation) {
             newStatus = CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_RESERVATION;
-        } else if (isNeedCredit(delivery.getDeliveryStatus())) {
+        } else if (voidCredit) {
             newStatus = CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_DEALLOCATED;
-        } else if (isWaitPreorder(delivery.getDeliveryStatus())) {
-            newStatus = CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_WAIT;
         } else if (isFulfillment(delivery.getDeliveryStatus())) {
             newStatus = CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_WAIT;
         } else {
             throw new OrderException("Unable to handle cancellation for delivery " + delivery.getDeliveryNum() + " with status " + delivery.getDeliveryStatus());
         }
 
-        for (CustomerOrderDeliveryDet det : delivery.getDetail()) {
-            final String skuCode = det.getProductSkuCode();
-            BigDecimal toCredit = det.getQty();
-            for (Warehouse wh : warehouses) {
-                if (isNeedVoidReservation(delivery.getDeliveryStatus())) {
-                    // this delivery was not completed, so can just void reservation
-                    toCredit = skuWarehouseService.voidReservation(wh, skuCode, toCredit);
-                } else if (isNeedCredit(delivery.getDeliveryStatus())) {
-                    // this delivery is completed, so need to credit qty
+        if (voidCredit || voidReservation) {
+            final List<Warehouse> warehouses = warehouseService.getByShopId(
+                    delivery.getCustomerOrder().getShop().getShopId());
 
-                    toCredit = skuWarehouseService.credit(wh, skuCode, toCredit);
+            for (CustomerOrderDeliveryDet det : delivery.getDetail()) {
+                final String skuCode = det.getProductSkuCode();
+                BigDecimal toCredit = det.getQty();
+                for (Warehouse wh : warehouses) {
+                    if (voidReservation) {
+                        // this delivery was not completed, so can just void reservation
+                        toCredit = skuWarehouseService.voidReservation(wh, skuCode, toCredit);
+                    } else if (voidCredit) {
+                        // this delivery is completed, so need to credit qty
+                        toCredit = skuWarehouseService.credit(wh, skuCode, toCredit);
+                    }
+                    if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), toCredit.setScale(Constants.DEFAULT_SCALE))) {
+                        break;
+                    }
                 }
-                if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), toCredit.setScale(Constants.DEFAULT_SCALE))) {
-                    break;
-                }
+
             }
-
         }
         delivery.setDeliveryStatus(newStatus);
     }
 
     protected boolean isFulfillment(final String deliveryStatus) {
-        return
-                CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT.equals(deliveryStatus);
-    }
-
-    protected boolean isWaitPreorder(final String deliveryStatus) {
-        return
-                CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT.equals(deliveryStatus)
-                        || CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT.equals(deliveryStatus);
+        return CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT.equals(deliveryStatus);
     }
 
     protected boolean isNeedVoidReservation(final String deliveryStatus) {
-        return CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED.equals(deliveryStatus);
+        return CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED.equals(deliveryStatus)
+                || CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT.equals(deliveryStatus)
+                || CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT.equals(deliveryStatus)
+                || CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT.equals(deliveryStatus);
     }
 
     protected boolean isNeedCredit(final String deliveryStatus) {
-        return
-                CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED.equals(deliveryStatus)
-                        || CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED.equals(deliveryStatus)
-                        || CustomerOrderDelivery.DELIVERY_STATUS_PACKING.equals(deliveryStatus)
-                        || CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY.equals(deliveryStatus);
+        return CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED.equals(deliveryStatus)
+                || CustomerOrderDelivery.DELIVERY_STATUS_PACKING.equals(deliveryStatus)
+                || CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY.equals(deliveryStatus)
+                || CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT.equals(deliveryStatus);
 
     }
 

@@ -18,94 +18,340 @@ package org.yes.cart.service.order.impl.handler;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
-import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * Test covers flow from Order in progress, Delivery waiting for inventory flow (i.e. Backordered items delivery).
+ * The flow from this state may lead to:
+ * <p/>
+ * Order in progress, Delivery waiting for inventory state if no inventory available<p/>
+ * Order in progress, Delivery inventory allocated state if inventory was allocated<p/>
+ * <p/>
+ * This integration test covers work of the following transitional handlers:<p/>
+ * DeliveryAllowedByInventoryOrderEventHandlerImpl checking if inventory is sufficient to fulfill the order<p/>
+ * <p/>
+ *
+ * User: denispavlov
+ * Date: 19/05/2015
+ * Time: 19:43
  */
 public class DeliveryAllowedByInventoryOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
-    private CustomerOrderService orderService;
+    private OrderEventHandler pendingHandler;
     private OrderEventHandler handler;
-    private SkuWarehouseService skuWarehouseService;
+
+    private CustomerOrderService orderService;
 
     @Before
     public void setUp()  {
-        handler = (OrderEventHandler) ctx().getBean("deliveryAllowedByInventoryOrderEventHandler");
-        orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
-        skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
         super.setUp();
+        pendingHandler = (OrderEventHandler) ctx().getBean("pendingOrderEventHandler");
+        handler = (OrderEventHandler) ctx().getBean("deliveryAllowedByInventoryOrderEventHandler");
+        orderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
+    }
+
+
+
+    @Override
+    protected CustomerOrder createTestOrder(final TestOrderType orderType, final String pgLabel, final boolean onePhysicalDelivery) throws Exception {
+
+        final CustomerOrder customerOrder = super.createTestOrder(orderType, pgLabel, onePhysicalDelivery);
+
+        assertTrue(pendingHandler.handle(
+                new OrderEventImpl("", //evt.pending
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        // Make sure we are in progress state at this point
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+
+        return customerOrder;
+
+    }
+
+
+
+    @Test
+    public void testHandleBackorderInventorySurplus() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00");
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.BACKORDER, label, false);
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "84.77", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("84.77", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+
+        CustomerOrderDelivery delivery = null;
+        for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT.equals(orderDelivery.getDeliveryStatus())) {
+                assertNull(delivery); // make sure there is only one!
+                delivery = orderDelivery;
+            }
+        }
+
+        // make sure we have enough
+        creditInventoryAndAssert(WAREHOUSE_ID, "CC_TEST5-NOINV", "10.00", "10.00", "0.00");  // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.delivery.allowed.quantity
+                        customerOrder,
+                        delivery,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "6.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "84.77", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("84.77", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+    }
+
+
+
+    @Test
+    public void testHandleBackorderInventorySufficient() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00");
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.BACKORDER, label, false);
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "84.77", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("84.77", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+
+        CustomerOrderDelivery delivery = null;
+        for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT.equals(orderDelivery.getDeliveryStatus())) {
+                assertNull(delivery); // make sure there is only one!
+                delivery = orderDelivery;
+            }
+        }
+
+        // make sure we have just enough
+        creditInventoryAndAssert(WAREHOUSE_ID, "CC_TEST5-NOINV", "4.00", "4.00", "0.00");  // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.delivery.allowed.quantity
+                        customerOrder,
+                        delivery,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "84.77", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("84.77", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
     }
 
     @Test
-    public void testHandle() throws Exception {
-        Customer customer = createCustomer();
-        assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(customer.getEmail()), false);
-        assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
-        CustomerOrderDelivery delivery = customerOrder.getDelivery().iterator().next();
-        //initial 15120 has 9 items on 1 warehouse without reservation - pk 30
-        //initial 15121 has 1 item  on 1 warehouse without reservation - pk 31
-        assertEquals("Expected one delivery for order", 1, customerOrder.getDelivery().size());
-        assertTrue(handler.handle(new OrderEventImpl("", customerOrder, delivery)));
+    public void testHandleBackorderInventoryEnoughForOneOrder() throws Exception {
 
-        SkuWarehouse  skuWarehouse = skuWarehouseService.findById(31);
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
-        skuWarehouse = skuWarehouseService.findById(30);
-        assertEquals(new BigDecimal("7.00"), skuWarehouse.getQuantity().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(new BigDecimal("0.00"), skuWarehouse.getReserved().setScale(Constants.DEFAULT_SCALE));
-        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());
-        //The equal order can not pefrorm transition , because 1 item on CC_TEST2 sku reserved
-        customerOrder = orderService.createFromCart(getStdCard(customer.getEmail()), false);
-        assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
-        assertEquals("Expected two deliveries for order", 2, customerOrder.getDelivery().size());
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
 
-        for (CustomerOrderDelivery cod : customerOrder.getDelivery()) {
-            if (CustomerOrderDelivery.STANDARD_DELIVERY_GROUP == cod.getDeliveryGroup() ) {
-                assertTrue(handler.handle(new OrderEventImpl("", customerOrder, cod)));  //delivery allowed
-                assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, cod.getDeliveryStatus());
-            } else if (CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP == cod.getDeliveryGroup() ) {
-                assertFalse(handler.handle(new OrderEventImpl("", customerOrder, cod)));   // wait for inventory
-                assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT, cod.getDeliveryStatus());
-            }   else {
-                assertTrue("Not expected delivery group", false);
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00");
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.BACKORDER, label, false);
+        createTestOrder(TestOrderType.BACKORDER, label, false); // second order to double reserve
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "84.77", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("84.77", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+
+        CustomerOrderDelivery delivery = null;
+        for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT.equals(orderDelivery.getDeliveryStatus())) {
+                assertNull(delivery); // make sure there is only one!
+                delivery = orderDelivery;
             }
         }
 
+        // make sure we have just enough
+        creditInventoryAndAssert(WAREHOUSE_ID, "CC_TEST5-NOINV", "4.00", "4.00", "0.00");  // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
 
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.delivery.allowed.quantity
+                        customerOrder,
+                        delivery,
+                        Collections.EMPTY_MAP)));
 
-        // update qty
-        skuWarehouse = skuWarehouseService.findById(31);
-        skuWarehouse.setQuantity(new BigDecimal("2"));
-        skuWarehouseService.update(skuWarehouse);
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
 
-        //delivery, than not pass before, now can perform transition
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
 
-        for (CustomerOrderDelivery cod : customerOrder.getDelivery()) {
-            if (CustomerOrderDelivery.STANDARD_DELIVERY_GROUP == cod.getDeliveryGroup() ) {
-                assertTrue(handler.handle(new OrderEventImpl("", customerOrder, cod)));  //delivery allowed
-                assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, cod.getDeliveryStatus());
-            } else if (CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP == cod.getDeliveryGroup() ) {
-                assertTrue( "Enough qty on warehouse to allow delivery" , handler.handle(new OrderEventImpl("", customerOrder, cod)));
-                assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, cod.getDeliveryStatus());
-            }   else {
-                assertTrue("Not expected delivery group", false);
-            }
-        }
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "84.77", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("84.77", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
     }
+
+    @Test
+    public void testHandleBackorderInventoryInsufficient() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00");
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.BACKORDER, label, false);
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "84.77", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("84.77", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+
+        CustomerOrderDelivery delivery = null;
+        for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT.equals(orderDelivery.getDeliveryStatus())) {
+                assertNull(delivery); // make sure there is only one!
+                delivery = orderDelivery;
+            }
+        }
+
+        assertFalse(handler.handle(
+                new OrderEventImpl("", //evt.delivery.allowed.quantity
+                        customerOrder,
+                        delivery,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "84.77", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("84.77", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+    }
+
+
+    @Test
+    public void testHandleMixedSingleInventorySurplus() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        changeAvailabilityDatesAndAssert("CC_TEST6", new Date(0L), true);
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00");
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.MIXED, label, true);
+
+        // check reserved quantity
+        // standard
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
+        // preorder
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        // backorder
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+
+        assertTrue(customerOrder.getDelivery().size() == 1); // Single mixed delivery
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "1000.71", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("1000.71", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+
+        CustomerOrderDelivery delivery = null;
+        for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT.equals(orderDelivery.getDeliveryStatus())) {
+                assertNull(delivery); // make sure there is only one!
+                delivery = orderDelivery;
+            }
+        }
+
+        // make sure we have enough
+        creditInventoryAndAssert(WAREHOUSE_ID, "CC_TEST5-NOINV", "10.00", "10.00", "0.00");  // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.delivery.allowed.quantity
+                        customerOrder,
+                        delivery,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        // standard
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "7.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "0.00");
+        // preorder
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "497.00", "0.00");
+        // backorder
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "6.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "1000.71", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("1000.71", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+    }
+
 }

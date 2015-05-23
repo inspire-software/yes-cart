@@ -104,7 +104,7 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
 
         final String redirectUrl;
         
-        if (paymentGatewayExternalForm.isSuccess(nvpCallResult)) {
+        if (Payment.PAYMENT_STATUS_OK.equals(paymentGatewayExternalForm.getExternalCallbackResult(nvpCallResult))) {
             /*not encoded answer will be like this
             TOKEN=EC%2d8DX631540T256421Y&TIMESTAMP=2011%2d12%2d21T20%3a12%3a37Z&CORRELATIONID=2d2aa98bcd550&ACK=Success&VERSION=2%2e3&BUILD=2271164
              Redirect url  to paypal for perform login and payment */

@@ -189,7 +189,7 @@
                                              */
                                             private function getPopUpClassName():Class {
 
-                                                if (data.value.length > 100) {
+                                                if (data.value != null && data.value.length > 100) {
                                                     return SimpleTextAreaDialog;
                                                 }
 

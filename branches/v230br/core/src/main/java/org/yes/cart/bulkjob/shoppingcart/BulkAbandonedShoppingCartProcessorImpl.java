@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.CustomerOrderService;
@@ -46,6 +47,7 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
     private final CustomerOrderService customerOrderService;
     private final SystemService systemService;
     private long abandonedTimeoutMs = 30;
+    private int batchSize = 20;
 
     public BulkAbandonedShoppingCartProcessorImpl(final ShoppingCartStateService shoppingCartStateService,
                                                   final CustomerOrderService customerOrderService,
@@ -66,26 +68,47 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
         final Date lastModification =
                 new Date(System.currentTimeMillis() - determineExpiryInMs());
 
+        log.info("Look up all ShoppingCartStates not modified since {}", lastModification);
 
-        final List<ShoppingCartState> abandoned = this.shoppingCartStateService.findByModificationPrior(lastModification);
+        final ResultsIterator<ShoppingCartState> abandoned = this.shoppingCartStateService.findByModificationPrior(lastModification);
 
-        log.info("Look up all ShoppingCartStates not modified since {} ... found {}", lastModification, abandoned.size());
+        try {
+            int count = 0;
+            int removedOrders = 0;
+            while (abandoned.hasNext()) {
 
-        for (final ShoppingCartState scs : abandoned) {
+                final ShoppingCartState scs = abandoned.next();
 
-            final String guid = scs.getGuid();
+                final String guid = scs.getGuid();
 
-            log.info("Removing abandoned cart for {}, guid {}", scs.getCustomerEmail(), guid);
-            this.shoppingCartStateService.delete(scs);
-            log.info("Removed abandoned cart for {}, guid {}", scs.getCustomerEmail(), guid);
+                log.debug("Removing abandoned cart for {}, guid {}", scs.getCustomerEmail(), guid);
+                this.shoppingCartStateService.delete(scs);
+                log.debug("Removed abandoned cart for {}, guid {}", scs.getCustomerEmail(), guid);
 
-            final CustomerOrder tempOrder = this.customerOrderService.findByGuid(guid);
-            if (CustomerOrder.ORDER_STATUS_NONE.equals(tempOrder.getOrderStatus())) {
-                log.info("Removing temporary order for cart guid {}", guid);
-                this.customerOrderService.delete(tempOrder);
-                log.info("Removed temporary order for cart guid {}", guid);
+                final CustomerOrder tempOrder = this.customerOrderService.findByGuid(guid);
+                if (CustomerOrder.ORDER_STATUS_NONE.equals(tempOrder.getOrderStatus())) {
+                    log.debug("Removing temporary order for cart guid {}", guid);
+                    this.customerOrderService.delete(tempOrder);
+                    removedOrders++;
+                    log.debug("Removed temporary order for cart guid {}", guid);
+                }
+
+                if (++count % this.batchSize == 0 ) {
+                    //flush a batch of updates and release memory:
+                    shoppingCartStateService.getGenericDao().flush();
+                    shoppingCartStateService.getGenericDao().clear();
+                }
+
             }
 
+            log.info("Removed {} carts and {} temporary orders", count, removedOrders);
+
+        } finally {
+            try {
+                abandoned.close();
+            } catch (Exception exp) {
+                log.error("Processing abandoned baskets exception, error closing iterator: " + exp.getMessage(), exp);
+            }
         }
 
         final long finish = System.currentTimeMillis();
@@ -120,4 +143,15 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
     public void setAbandonedTimeoutDays(final int abandonedTimeoutDays) {
         this.abandonedTimeoutMs = abandonedTimeoutDays * MS_IN_DAY;
     }
+
+
+    /**
+     * Batch size for remote index update.
+     *
+     * @param batchSize batch size
+     */
+    public void setBatchSize(final int batchSize) {
+        this.batchSize = batchSize;
+    }
+
 }

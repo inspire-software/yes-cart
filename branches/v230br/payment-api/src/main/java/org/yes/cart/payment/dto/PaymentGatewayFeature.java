@@ -55,7 +55,7 @@ public interface PaymentGatewayFeature extends Serializable {
     boolean isSupportCapture();
 
     /**
-     * Is payment gateway supports imediate sale operation, without delivery confirmation.
+     * Is payment gateway supports immediate sale operation, without delivery confirmation.
      *
      * @return true if supports
      */

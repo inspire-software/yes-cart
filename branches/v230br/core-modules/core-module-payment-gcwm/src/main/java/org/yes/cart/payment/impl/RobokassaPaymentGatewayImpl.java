@@ -24,12 +24,14 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.util.HttpParamsUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * User: iazarny@yahoo.com Igor Azarny
@@ -61,8 +63,8 @@ public class RobokassaPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
-            false, false, false, true,
-            true, false,
+            false, false, false,
+            true, true, false,
             null ,
             false, false
     );
@@ -95,12 +97,12 @@ public class RobokassaPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
      * {@inheritDoc}
      * Will be called by ResultURL handler.
      */
-    public boolean isSuccess(final Map<String, String> nvpCallResult) {
+    public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
-        final String outSumm = nvpCallResult.get("OutSum");
-        final String invId = nvpCallResult.get("InvId");
-        final String signatureValue = nvpCallResult.get("SignatureValue");
-        final String shpOrderId = nvpCallResult.get(SHP_ORDER_ID);
+        final String outSumm = callbackResult.get("OutSum");
+        final String invId = callbackResult.get("InvId");
+        final String signatureValue = callbackResult.get("SignatureValue");
+        final String shpOrderId = callbackResult.get(SHP_ORDER_ID);
         final String mrhPass2 = getParameterValue(RB_MERCHANT_PASS2);
 
         final String toCheck = outSumm + ":"
@@ -110,7 +112,10 @@ public class RobokassaPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
 
         final String md5 = DigestUtils.md5Hex(toCheck);
 
-        return signatureValue.equalsIgnoreCase(md5);
+        if (signatureValue.equalsIgnoreCase(md5)) {
+            return CallbackResult.OK;
+        }
+        return CallbackResult.FAILED;
 
     }
 
@@ -190,45 +195,80 @@ public class RobokassaPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
      * Shipment not included. Will be added at capture operation.
      */
     public Payment authorize(final Payment paymentIn) {
-        return (Payment) SerializationUtils.clone(paymentIn);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment reverseAuthorization(final Payment payment) {
-        return payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment capture(final Payment payment) {
-        payment.setTransactionOperation(CAPTURE);
-        return payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment voidCapture(final Payment payment) {
-        return payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment refund(final Payment payment) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(AUTH);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Payment createPaymentPrototype(final Map map) {
+    public Payment reverseAuthorization(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(REVERSE_AUTH);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment capture(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(CAPTURE);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment voidCapture(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(VOID_CAPTURE);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment refund(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(REFUND);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment createPaymentPrototype(final String operation, final Map map) {
+
         final Payment payment = new PaymentImpl();
-        payment.setShopperIpAddress(getSingleValue(map.get(PaymentMiscParam.CLIENT_IP)));
+        final Map<String, String> params = HttpParamsUtils.createSingleValueMap(map);
+
+        final CallbackResult res = getExternalCallbackResult(params);
+        payment.setPaymentProcessorResult(res.getStatus());
+        payment.setPaymentProcessorBatchSettlement(res.isSettled());
+
+        payment.setShopperIpAddress(params.get(PaymentMiscParam.CLIENT_IP));
         return payment;
     }
 

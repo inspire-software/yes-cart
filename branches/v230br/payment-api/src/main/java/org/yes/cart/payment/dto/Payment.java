@@ -77,6 +77,20 @@ public interface Payment extends Serializable {
      */
     void setPaymentProcessorResult(final String paymentProcessorResult);
 
+    /**
+     * If AUTH or AUTH_CAPTURE payment was submitted to bank for batch settlement.
+     *
+     * @return true if payment was submitted to bank for batch settlement.
+     */
+    boolean isPaymentProcessorBatchSettlement();
+
+    /**
+     * Set batch settlement flag.
+     *
+     * @param paymentProcessorBatchSettlement
+     *         batch settlement flag
+     */
+    void setPaymentProcessorBatchSettlement(boolean paymentProcessorBatchSettlement);
 
     /**
      * Get cart type.

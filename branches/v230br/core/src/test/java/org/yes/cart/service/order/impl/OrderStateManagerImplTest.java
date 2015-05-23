@@ -18,7 +18,6 @@ package org.yes.cart.service.order.impl;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.service.order.*;
 
 import java.util.ArrayList;
@@ -34,8 +33,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-// TODO: YC-64 simplify using JMock
-public class OrderStateManagerImplTest extends BaseCoreDBTestCase {
+public class OrderStateManagerImplTest {
 
     private Map<String, OrderEventHandler> handlersOk;
     private Map<String, OrderEventHandler> handlersFailed;
@@ -86,8 +84,6 @@ public class OrderStateManagerImplTest extends BaseCoreDBTestCase {
         beforeListenersMapOk = new HashMap<String, List<? extends OrderStateTransitionListener>>() {{
             put("payment.ok", orderStateBeforeTransitionListeners);
         }};
-
-        super.setUp();
     }
 
     /**
@@ -98,11 +94,14 @@ public class OrderStateManagerImplTest extends BaseCoreDBTestCase {
     @Test
     public void testFireTransitionUnmappedEvent() throws Exception {
         OrderStateManagerImpl orderStateManager = new OrderStateManagerImpl(handlersOk, beforeListenersMapOk, afterListenersMapOk);
-        assertFalse(orderStateManager.fireTransition(
-                new OrderEventImpl("some.unhandled.cart.event", null)
-        ));
+
+        final OrderEvent event = new OrderEventImpl("some.unhandled.cart.event", null);
+
+        assertFalse(orderStateManager.fireTransition(event));
+
         assertFalse(afterTransitionListenerWasFired);
         assertFalse(beforeTransitionListenerWasFired);
+        assertFalse(event.getRuntimeParams().containsKey("handled"));
     }
 
     /**
@@ -113,11 +112,14 @@ public class OrderStateManagerImplTest extends BaseCoreDBTestCase {
     @Test
     public void testFireTransitionHandledEvent() throws Exception {
         OrderStateManagerImpl orderStateManager = new OrderStateManagerImpl(handlersOk, beforeListenersMapOk, afterListenersMapOk);
-        assertTrue(orderStateManager.fireTransition(
-                new OrderEventImpl("payment.ok", null)
-        ));
+
+        final OrderEvent event = new OrderEventImpl("payment.ok", null);
+
+        assertTrue(orderStateManager.fireTransition(event));
+
         assertTrue(afterTransitionListenerWasFired);
         assertTrue(beforeTransitionListenerWasFired);
+        assertTrue(Boolean.TRUE.equals(event.getRuntimeParams().get("handled")));
     }
 
     /**
@@ -128,11 +130,14 @@ public class OrderStateManagerImplTest extends BaseCoreDBTestCase {
     @Test
     public void testFireTransitionUnhandledEvent() throws Exception {
         OrderStateManagerImpl orderStateManager = new OrderStateManagerImpl(handlersFailed, beforeListenersMapOk, afterListenersMapOk);
-        assertFalse(orderStateManager.fireTransition(
-                new OrderEventImpl("payment.ok", null)
-        ));
+
+        final OrderEvent event = new OrderEventImpl("payment.ok", null);
+
+        assertFalse(orderStateManager.fireTransition(event));
+
         assertTrue(beforeTransitionListenerWasFired);
-        assertFalse(afterTransitionListenerWasFired);
+        assertTrue(afterTransitionListenerWasFired);
+        assertTrue(Boolean.FALSE.equals(event.getRuntimeParams().get("handled")));
     }
 
     /**
@@ -147,24 +152,28 @@ public class OrderStateManagerImplTest extends BaseCoreDBTestCase {
                 orderStateManager.getAfterListenersMap().get("payment.ok");
         afterTransitionEventHandlers.add(new OrderStateAfterTransitionListener() {
             public boolean onEvent(OrderEvent orderEvent) {
+                assertTrue(orderEvent.getRuntimeParams().containsKey("handled"));
+                assertTrue(Boolean.TRUE.equals(orderEvent.getRuntimeParams().get("handled")));
                 afterTransitionDynamicListenerWasFired = true;
                 return true;
             }
         });
         List<OrderStateTransitionListener> beforeTransitionEventHandlers =
                 (List<OrderStateTransitionListener>) orderStateManager.getBeforeListenersMap().get("payment.ok");
-        beforeTransitionEventHandlers.add(
-                new OrderStateBeforeTransitionListener() {
-                    public boolean onEvent(OrderEvent orderEvent) {
-                        beforeTransitionDynamicListenerWasFired = true;
-                        return true;
-                    }
-                }
-        );
-        assertTrue(orderStateManager.fireTransition(
-                new OrderEventImpl("payment.ok", null)
-        ));
+        beforeTransitionEventHandlers.add(new OrderStateBeforeTransitionListener() {
+            public boolean onEvent(OrderEvent orderEvent) {
+                assertFalse(orderEvent.getRuntimeParams().containsKey("handled"));
+                beforeTransitionDynamicListenerWasFired = true;
+                return true;
+            }
+        });
+
+        final OrderEvent event = new OrderEventImpl("payment.ok", null);
+
+        assertTrue(orderStateManager.fireTransition(event));
+
         assertTrue(afterTransitionDynamicListenerWasFired);
         assertTrue(beforeTransitionDynamicListenerWasFired);
+        assertTrue(Boolean.TRUE.equals(event.getRuntimeParams().get("handled")));
     }
 }

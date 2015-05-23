@@ -216,6 +216,15 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
         this.orderTimestamp = orderTimestamp;
     }
 
+    public BigDecimal getOrderTotal() {
+        BigDecimal total = getPrice();
+        // deliveries are eagerly fetched so there should not be a lazy init issue
+        for (final CustomerOrderDelivery delivery : getDelivery()) {
+            total = total.add(delivery.getPrice());
+        }
+        return total;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }

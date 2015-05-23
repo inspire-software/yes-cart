@@ -28,7 +28,7 @@ import org.yes.cart.payment.dto.PaymentAddress;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
-import org.yes.cart.payment.exception.PaymentException;
+import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.RoundingMode;
@@ -142,8 +142,8 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             true, true, true, false,
-            true, true, true, false,
-            true, false,
+            true, true, true,
+            false, true, false,
             null ,
             false, true
     );
@@ -235,7 +235,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
             }
 
             /**
-             * Commented out becaues of
+             * Commented out because of
              * invalidField_0=billTo_phoneNumber
              * invalidField_1=shipTo_phoneNumber
 
@@ -377,27 +377,47 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCappPaymentGatewayImp
         final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(operation);
 
+        final Logger log = ShopCodeContext.getLog(this);
         try {
-            displayMap("Cybersource requset:", request);
+            if (log.isDebugEnabled()) {
+                log.debug(HttpParamsUtils.stringify("Cybersource request:", request));
+            }
+
             HashMap<String, String> reply = Client.runTransaction(request, getProperties());
-            displayMap("Cybersource responce:", reply);
+
+            if (log.isDebugEnabled()) {
+                log.debug(HttpParamsUtils.stringify("Cybersource response:", reply));
+            }
+
+            /*
+                See http://apps.cybersource.com/library/documentation/sbc/SB_API_SP_UG/html/api.htm#API_8156_59537
+
+                ACCEPT: The request succeeded
+                ERROR: There was a system error
+                REJECT: The request was rejected
+             */
             if ("ACCEPT".equalsIgnoreCase(reply.get("decision"))) {
                 payment.setTransactionAuthorizationCode(reply.get("requestID"));
                 payment.setTransactionRequestToken(reply.get("requestToken"));
                 payment.setTransactionReferenceId(reply.get("requestID"));
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+                payment.setPaymentProcessorBatchSettlement(CAPTURE.equals(operation) || AUTH_CAPTURE.equals(operation));
             } else {
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+                payment.setPaymentProcessorBatchSettlement(false);
             }
             payment.setTransactionOperationResultCode(reply.get("reasonCode"));
             payment.setTransactionOperationResultMessage(ERROR_CODE_DESC_MAP.get(reply.get("reasonCode")));
 
         } catch (ClientException e) {
             ShopCodeContext.getLog(this).error("Can not execute transaction. Client exception : " + payment, e);
-            throw new PaymentException("Can not execute transaction. Client exception : " + payment, e);
+            payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+            payment.setPaymentProcessorBatchSettlement(false);
+            payment.setTransactionOperationResultMessage(e.getMessage());
         } catch (FaultException e) {
             ShopCodeContext.getLog(this).error("Can not execute transaction. Fault exception : " + payment, e);
-            throw new PaymentException("Can not execute transaction. Client exception : " + payment, e);
+            payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+            payment.setTransactionOperationResultMessage(e.getMessage());
         }
         return payment;
     }

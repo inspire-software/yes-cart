@@ -292,7 +292,7 @@ public interface CustomerOrderPayment extends Auditable {
     void setPaymentProcessorResult(String paymentProcessorResult);
 
     /**
-     * Is AUTH or AUTH_CAPTURE payment was submitted to bank for batch settlement.
+     * If AUTH or AUTH_CAPTURE payment was submitted to bank for batch settlement.
      *
      * @return true if payment was submitted to bank for batch settlement.
      */

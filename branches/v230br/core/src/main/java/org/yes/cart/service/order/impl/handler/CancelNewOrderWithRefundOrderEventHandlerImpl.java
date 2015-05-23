@@ -18,12 +18,15 @@ package org.yes.cart.service.order.impl.handler;
 
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
-import org.yes.cart.util.ShopCodeContext;
+
+import java.util.Collections;
 
 /**
  * Cancel new order transition with funds return.
@@ -38,7 +41,7 @@ import org.yes.cart.util.ShopCodeContext;
  * <p/>
  * User: Denis Pavlov
  */
-public class CancelNewOrderWithRefundOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl implements OrderEventHandler {
+public class CancelNewOrderWithRefundOrderEventHandlerImpl extends CancelOrderEventHandlerImpl implements OrderEventHandler {
 
     private final PaymentProcessorFactory paymentProcessorFactory;
 
@@ -46,10 +49,15 @@ public class CancelNewOrderWithRefundOrderEventHandlerImpl extends AbstractOrder
      * Construct cancel transition.
      *
      * @param paymentProcessorFactory to funds return
+     * @param warehouseService        to locate warehouse, that belong to shop where order was created
+     * @param skuWarehouseService     to credit quantity on warehouse
      */
     public CancelNewOrderWithRefundOrderEventHandlerImpl(
-            final PaymentProcessorFactory paymentProcessorFactory) {
+            final PaymentProcessorFactory paymentProcessorFactory,
+            final WarehouseService warehouseService,
+            final SkuWarehouseService skuWarehouseService) {
 
+        super(warehouseService, skuWarehouseService);
         this.paymentProcessorFactory = paymentProcessorFactory;
 
     }
@@ -65,24 +73,19 @@ public class CancelNewOrderWithRefundOrderEventHandlerImpl extends AbstractOrder
 
             final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
 
-            boolean handled = true;
-            if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
-                if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams()))) {
+            if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isExternalFormProcessing()) {
+                final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
+                if (Payment.PAYMENT_STATUS_OK.equals(result) || Payment.PAYMENT_STATUS_PROCESSING.equals(result)) {
                     //payment was ok, but we are out of stock
-                    if (!Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.cancelOrder(order))) {
-                        /**
-                         * Administrative notification will be send via email. See appropriate aspect
-                         */
-                        ShopCodeContext.getLog(this).error("Can not cancel order, because of error on payment gateway.");
-                        handled = false;
+                    final String resultCancel = paymentProcessor.cancelOrder(order, Collections.emptyMap());
+                    if (!Payment.PAYMENT_STATUS_OK.equals(resultCancel)) {
+                        orderEvent.getRuntimeParams().put("cancelFailed", Boolean.TRUE);
                     }
 
                 } //else payment failed, but we have not reserved anything and we cancelled
             } // else we have offline payment, so no money yet
 
-            handleInternal(orderEvent);
-
-            return handled;
+            return super.handle(orderEvent);
         }
     }
 
@@ -90,7 +93,11 @@ public class CancelNewOrderWithRefundOrderEventHandlerImpl extends AbstractOrder
     /**
      * {@inheritDoc}
      */
+    @Override
     protected String getTransitionTarget(final OrderEvent orderEvent) {
+        if (orderEvent.getRuntimeParams().containsKey("cancelFailed")) {
+            return CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT;
+        }
         return CustomerOrder.ORDER_STATUS_CANCELLED;
     }
 

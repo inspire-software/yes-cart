@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.order.impl.handler;
 
+import org.slf4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -29,12 +30,13 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Perform separate processing of order deliveries.
  * <p/>
+ * Delivery types and corresponding events are defined by LinkedHashMap, so the priority is preserved.
+ * The order is: 1: D1 standard, 2: D2 pre order, 3: D3 backorder, 4: D5 mixed, 5: D4 electronic
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -45,14 +47,13 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
     private OrderStateManager orderStateManager = null;
     private ApplicationContext applicationContext;
 
-    private static final Map<String, String> GROUP_TRIGGER_MAP = new HashMap<String, String>() {{
-
-        put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_ALLOCATION);
+    private static final Map<String, String> GROUP_TRIGGER_MAP = new LinkedHashMap<String, String>() {{
+        // Need to use LinkedHashMap since it preserves the order of entries when iterating over the map
+        put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_ALLOCATION_WAIT);
         put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_TIME_WAIT);
         put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_INVENTORY_WAIT);
-        put(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, OrderStateManager.EVT_SHIPMENT_COMPLETE);
         put(CustomerOrderDelivery.MIX_DELIVERY_GROUP, OrderStateManager.EVT_PROCESS_TIME_WAIT);
-
+        put(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, OrderStateManager.EVT_RELEASE_TO_SHIPMENT);
     }};
 
 
@@ -77,12 +78,33 @@ public class PaymentOkOrderEventHandlerImpl extends AbstractOrderEventHandlerImp
         synchronized (OrderEventHandler.syncMonitor) {
             handleInternal(orderEvent);
             CustomerOrder order = orderEvent.getCustomerOrder();
-            for (CustomerOrderDelivery delivery : order.getDelivery()) {
-                final String eventId = GROUP_TRIGGER_MAP.get(delivery.getDeliveryGroup());
-                ShopCodeContext.getLog(this).info(MessageFormat.format("Delivery {0} for order {1} event {2}",
-                        delivery.getDeliveryNum(), order.getOrdernum(), eventId));
-                final OrderEvent deliveryEvent = new OrderEventImpl(eventId, order, delivery);
-                getOrderStateManager().fireTransition(deliveryEvent);
+
+            final Set<CustomerOrderDelivery> allDeliveriesToConsider = new HashSet<CustomerOrderDelivery>(order.getDelivery());
+
+            // go through map entries (since it is linked hash map order is preserved)
+            for (final Map.Entry<String, String> deliveryGroupEvent : GROUP_TRIGGER_MAP.entrySet()) {
+
+                final Iterator<CustomerOrderDelivery> allIt = allDeliveriesToConsider.iterator();
+                while (allIt.hasNext()) {
+                    // for all deliveries to consider
+                    final CustomerOrderDelivery delivery = allIt.next();
+
+                    if (deliveryGroupEvent.getKey().equals(delivery.getDeliveryGroup())) {
+
+                        final String eventId = deliveryGroupEvent.getValue();
+
+                        final Logger log = ShopCodeContext.getLog(this);
+                        if (log.isInfoEnabled()) {
+                            log.info(MessageFormat.format("Delivery {0} for order {1} event {2}",
+                                    delivery.getDeliveryNum(), order.getOrdernum(), eventId));
+                        }
+                        final OrderEvent deliveryEvent = new OrderEventImpl(orderEvent, eventId, order, delivery);
+                        getOrderStateManager().fireTransition(deliveryEvent);
+
+                        allIt.remove(); // remove this entry as it is processed
+                    }
+
+                }
             }
             return true;
         }

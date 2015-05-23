@@ -16,9 +16,14 @@
 
 package org.yes.cart.service.order.impl.handler;
 
+import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.service.order.OrderException;
+import org.yes.cart.service.payment.PaymentProcessor;
+import org.yes.cart.service.payment.PaymentProcessorFactory;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -27,12 +32,62 @@ import org.yes.cart.service.order.OrderEventHandler;
  */
 public class ReleaseToShipmentOrderEventHandlerImpl implements OrderEventHandler {
 
+    private final PaymentProcessorFactory paymentProcessorFactory;
+
+    /**
+     * Construct to shipment transition handler.
+     *
+     * @param paymentProcessorFactory to get the payment processor
+     */
+    public ReleaseToShipmentOrderEventHandlerImpl(final PaymentProcessorFactory paymentProcessorFactory) {
+        this.paymentProcessorFactory = paymentProcessorFactory;
+    }
+
+
     /**
      * {@inheritDoc}
      */
-    public boolean handle(final OrderEvent orderEvent) {
+    public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
-            orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
+
+            final CustomerOrder order = orderEvent.getCustomerOrder();
+            final CustomerOrderDelivery delivery = orderEvent.getCustomerOrderDelivery();
+
+            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
+
+            if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize()) {
+                // this is payment on shipping/delivery
+
+                if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
+
+                    // need to capture before shipping
+                    if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.shipmentComplete(order, delivery.getDeliveryNum(), orderEvent.getParams()))) {
+
+                        // payment was ok so continue
+                        delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
+
+                    } else {
+
+                        // payment was not ok so we mark the order as waiting payment and we do NOT proceed to shipping
+                        delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT);
+
+                    }
+
+                } else {
+
+                    // this is offline PG, so CAPTURE will happen on delivery (i.e. next phase)
+                    delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS_WAITING_PAYMENT);
+
+                }
+
+            } else {
+
+                // this is pre-paid, so we proceed to shipping in progress
+                // Electronic also proceed to shipping in progress since shipped status is when it is downloaded
+                delivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
+
+            }
+
             return true;
         }
     }

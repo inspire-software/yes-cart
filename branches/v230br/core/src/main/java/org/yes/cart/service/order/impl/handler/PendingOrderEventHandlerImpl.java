@@ -97,17 +97,20 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
             final CustomerOrder order = orderEvent.getCustomerOrder();
             final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
-                if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams()))) {
+                final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
+                if (Payment.PAYMENT_STATUS_OK.equals(result)) {
                     //payment was ok, so quantity on warehouses will be decreased
-                    getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_PAYMENT_OK, orderEvent.getCustomerOrder()));
+                    getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_PAYMENT_OK, orderEvent.getCustomerOrder()));
+                } else if (Payment.PAYMENT_STATUS_PROCESSING.equals(result)) {
+                    // Payment is still processing
+                    getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_PAYMENT_PROCESSING, orderEvent.getCustomerOrder()));
                 } else {
                     //in case of bad payment reserved product quantity will be returned from reservation
-                    getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_CANCEL, orderEvent.getCustomerOrder()));
+                    getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_CANCEL, orderEvent.getCustomerOrder()));
                 }
             } else {
                 // wait for confirmation about payment
-                paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
-                getOrderStateManager().fireTransition(new OrderEventImpl(OrderStateManager.EVT_PAYMENT_OFFLINE, orderEvent.getCustomerOrder()));
+                getOrderStateManager().fireTransition(new OrderEventImpl(orderEvent, OrderStateManager.EVT_PAYMENT_OFFLINE, orderEvent.getCustomerOrder()));
             }
 
             return true;
@@ -145,7 +148,8 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
 
                 final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
 
-                if (product == null || Product.AVAILABILITY_STANDARD == product.getAvailability()) {
+                if (product == null
+                        || Product.AVAILABILITY_STANDARD == product.getAvailability()) {
 
                     /**
                      * Availability.AVAILABILITY_BACKORDER -  can get more stock

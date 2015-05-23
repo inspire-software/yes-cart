@@ -26,7 +26,8 @@ import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
-import org.yes.cart.util.ShopCodeContext;
+
+import java.util.Collections;
 
 /**
  * Cancel order transition with funds return.
@@ -55,7 +56,7 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
 
 
     /**
-     * Constracu cancel transition.
+     * Construct cancel transition.
      *
      * @param paymentProcessorFactory to funds return
      * @param warehouseService        to locate warehouse, that belong to shop where order was created
@@ -75,34 +76,51 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
      * {@inheritDoc}
      */
     @Override
-    protected String getTransitionTarget(final OrderEvent orderEvent) {
-        if (CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED.equals(orderEvent.getCustomerOrder().getOrderStatus()) ||
-                CustomerOrder.ORDER_STATUS_COMPLETED.equals(orderEvent.getCustomerOrder().getOrderStatus())) {
-            return CustomerOrder.ORDER_STATUS_RETURNED;
+    public boolean handle(final OrderEvent orderEvent) throws OrderException {
+        synchronized (OrderEventHandler.syncMonitor) {
+            final CustomerOrder order = orderEvent.getCustomerOrder();
+
+            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
+            if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
+
+                // We need to attempt to cancel first as this may throw an exception, then we should not make any payment refunds
+                creditQuantity(orderEvent.getCustomerOrder());
+
+                final String resultCancel = paymentProcessor.cancelOrder(order, Collections.emptyMap());
+                if (!Payment.PAYMENT_STATUS_OK.equals(resultCancel)) {
+                    orderEvent.getRuntimeParams().put("cancelFailed", Boolean.TRUE);
+                }
+            } else {
+                // offline PG should always work
+                final String resultCancel = paymentProcessor.cancelOrder(order, Collections.emptyMap());
+                if (!Payment.PAYMENT_STATUS_OK.equals(resultCancel)) {
+                    return false;
+                }
+                creditQuantity(orderEvent.getCustomerOrder());
+
+            }
+
+            handleInternal(orderEvent);
+            return true;
         }
-        return CustomerOrder.ORDER_STATUS_CANCELLED;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean handle(final OrderEvent orderEvent) throws OrderException {
-        synchronized (OrderEventHandler.syncMonitor) {
-            final CustomerOrder order = orderEvent.getCustomerOrder();
-
-            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
-
-            if (Payment.PAYMENT_STATUS_OK.equals(paymentProcessor.cancelOrder(order))) {
-
-                return super.handle(orderEvent);
+    protected String getTransitionTarget(final OrderEvent orderEvent) {
+        if (CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED.equals(orderEvent.getCustomerOrder().getOrderStatus()) ||
+                CustomerOrder.ORDER_STATUS_COMPLETED.equals(orderEvent.getCustomerOrder().getOrderStatus())) {
+            if (orderEvent.getRuntimeParams().containsKey("cancelFailed")) {
+                return CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT;
             }
-            /**
-             * Administrative notification will be send via email. See appropriate aspect
-             */
-            ShopCodeContext.getLog(this).error("Can not cancel order, because of error on payment gateway.");
-            return false;
+            return CustomerOrder.ORDER_STATUS_RETURNED;
         }
+        if (orderEvent.getRuntimeParams().containsKey("cancelFailed")) {
+            return CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT;
+        }
+        return CustomerOrder.ORDER_STATUS_CANCELLED;
     }
 
     @Override

@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.order.impl;
 
+import org.slf4j.Logger;
 import org.yes.cart.service.order.*;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -60,27 +61,35 @@ public class OrderStateManagerImpl implements OrderStateManager {
     public boolean fireTransition(final OrderEvent orderEvent) throws OrderException {
         final OrderEventHandler handler = handlers.get(orderEvent.getEventId());
 
+        final Logger log = ShopCodeContext.getLog(this);
+
         if (handler == null) {
-            ShopCodeContext.getLog(this).warn(MessageFormat.format(
-                    "No handler registered for {0} event", orderEvent.getEventId()
-            ));
+
+            log.warn("No handler registered for event {}", orderEvent);
+
         } else {
             fireEventListeners(beforeListenersMap, orderEvent);
             boolean result;
             try {
+
+                log.debug("{} ... handling", orderEvent);
+
                 result = handler.handle(orderEvent);
-                if (result) {
-                    fireEventListeners(afterListenersMap, orderEvent);
-                }
+                orderEvent.getRuntimeParams().put("handled", result);
+
+                log.debug("{} ... handled={}", orderEvent, result);
+
+                fireEventListeners(afterListenersMap, orderEvent);
                 return result;
             } catch (OrderException e) {
-                ShopCodeContext.getLog(this).error(
-                        MessageFormat.format("Cant handle {0} event for {1} order because of {2}",
-                                orderEvent.getEventId(),
-                                orderEvent.getCustomerOrder().getOrdernum(),
+                log.error(
+                        MessageFormat.format("Can't handle event {0}, because of {1}",
+                                orderEvent,
                                 e.getMessage()),
                         e
                 );
+                orderEvent.getRuntimeParams().put("handledException", e);
+                fireEventListeners(afterListenersMap, orderEvent);
                 throw e;
             }
 

@@ -338,6 +338,17 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
+    public ResultsIterator<Object> findQueryObjectByNamedQueryIterator(final String namedQueryName, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
+        setQueryParameters(query, parameters);
+        final ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
+        return new ResultsIteratorImpl<Object>(results);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
     public List<Object> findQueryObjectRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         setQueryParameters(query, parameters);

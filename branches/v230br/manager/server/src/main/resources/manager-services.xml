@@ -548,13 +548,16 @@
         <security:intercept-methods>
             <security:protect method="update" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="getOrderPgLabels" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="findCustomerOrdersByCriteria" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="findDeliveryDetailsByOrderNumber" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="findDeliveryByOrderNumber" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="updateDeliveryStatus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="updateDeliveryStatusManual" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="updateExternalDeliveryRefNo" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="updateOrderSetCancelled" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
+            <security:protect method="updateOrderSetCancelledManual" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
             <security:protect method="updateOrderSetConfirmed" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER"/>
         </security:intercept-methods>
     </bean>

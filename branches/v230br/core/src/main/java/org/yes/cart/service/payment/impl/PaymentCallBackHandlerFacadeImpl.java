@@ -70,17 +70,55 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
         if (StringUtils.isNotBlank(orderGuid)) {
 
-            try {
-                handleNewOrderToPending(parameters, orderGuid, log);
-            } catch (OrderItemAllocationException oiae) {
-                handleNewOrderToCancelWithRefund(parameters, orderGuid, log);
+            final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
+
+            if (order == null) {
+
+                if (log.isWarnEnabled()) {
+                    log.warn("Can not get order with guid {}", orderGuid);
+                }
+                return;
             }
+
+            if (log.isInfoEnabled()) {
+                log.warn("Processing callback for order with guid {}", orderGuid);
+            }
+
+            if (CustomerOrder.ORDER_STATUS_NONE.endsWith(order.getOrderStatus())) {
+
+                // New order flow (this should AUTH or AUTH_CAPTURE)
+
+                try {
+                    handleNewOrderToPending(parameters, orderGuid, log);
+                } catch (OrderItemAllocationException oiae) {
+                    handleNewOrderToCancelWithRefund(parameters, orderGuid, log);
+                }
+
+            } else if (CustomerOrder.ORDER_STATUS_WAITING_PAYMENT.endsWith(order.getOrderStatus())) {
+
+                handleWaitingPaymentToPending(parameters, orderGuid, log);
+
+            } else if (CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT.endsWith(order.getOrderStatus()) ||
+                    CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT.endsWith(order.getOrderStatus())) {
+
+                handleWaitingRefundToPending(parameters, orderGuid, log);
+
+            } else {
+
+                if (log.isWarnEnabled()) {
+                    log.warn("Can not handle state {} for order with guid {}", order.getOrderStatus(), orderGuid);
+                }
+
+            }
+
+
 
         }
     }
 
     private void handleNewOrderToCancelWithRefund(final Map parameters, final String orderGuid, final Logger log) throws OrderException {
 
+        // Need to get fresh order instance from db so that we have a clean object
         final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
 
         if (order == null) {
@@ -145,11 +183,94 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
                 customerOrderService.update(order);
 
             } else {
+
                 log.warn("Order with guid {} not in NONE state, but {}", orderGuid, order.getOrderStatus());
+
             }
 
         }
     }
+
+
+    private void handleWaitingPaymentToPending(final Map parameters, final String orderGuid, final Logger log) throws OrderException {
+
+        final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
+
+        if (order == null) {
+
+            if (log.isWarnEnabled()) {
+                log.warn("Can not get order with guid {}", orderGuid);
+            }
+
+        } else {
+
+            if (CustomerOrder.ORDER_STATUS_WAITING_PAYMENT.endsWith(order.getOrderStatus())) {
+
+                // Another call possibly to confirm payment that was processing
+                OrderEvent orderEvent = new OrderEventImpl(
+                        OrderStateManager.EVT_PAYMENT_PROCESSED,
+                        order,
+                        null,
+                        parameters
+                );
+
+                boolean rez = orderStateManager.fireTransition(orderEvent);
+
+                log.info("Order state transition performed for {} . Result is {}", orderGuid, rez);
+
+                customerOrderService.update(order);
+
+
+            } else {
+
+                log.warn("Order with guid {} not in WAITING_PAYMENT state, but {}", orderGuid, order.getOrderStatus());
+
+            }
+
+        }
+    }
+
+
+    private void handleWaitingRefundToPending(final Map parameters, final String orderGuid, final Logger log) throws OrderException {
+
+        final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
+
+        if (order == null) {
+
+            if (log.isWarnEnabled()) {
+                log.warn("Can not get order with guid {}", orderGuid);
+            }
+
+        } else {
+
+            if (CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT.endsWith(order.getOrderStatus()) ||
+                    CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT.endsWith(order.getOrderStatus())) {
+
+                // Another call possibly to confirm payment that was processing
+                OrderEvent orderEvent = new OrderEventImpl(
+                        OrderStateManager.EVT_REFUND_PROCESSED,
+                        order,
+                        null,
+                        parameters
+                );
+
+                boolean rez = orderStateManager.fireTransition(orderEvent);
+
+                log.info("Order state transition performed for {} . Result is {}", orderGuid, rez);
+
+                customerOrderService.update(order);
+
+
+            } else {
+
+                log.warn("Order with guid {} not in CANCELLED_WAITING_PAYMENT or RETURNED_WAITING_PAYMENT state, but {}", orderGuid, order.getOrderStatus());
+
+            }
+
+        }
+    }
+
+
 
     private String getOrderGuid(final Map privateCallBackParameters, final String paymentGatewayLabel) {
         final PaymentGatewayExternalForm paymentGateway = getPaymentGateway(paymentGatewayLabel);

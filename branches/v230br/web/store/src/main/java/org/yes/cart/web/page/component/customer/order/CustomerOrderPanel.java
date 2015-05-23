@@ -32,7 +32,6 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDet;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.utils.impl.CustomerOrderComparator;
@@ -73,9 +72,6 @@ public class CustomerOrderPanel extends BaseComponent {
 
     @SpringBean(name = ServiceSpringKeys.CUSTOMER_ORDER_SERVICE)
     private CustomerService customerService;
-
-    @SpringBean(name = ServiceSpringKeys.ORDER_PAYMENT_SERICE)
-    private CustomerOrderPaymentService customerOrderPaymentService;
 
     @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
@@ -138,7 +134,7 @@ public class CustomerOrderPanel extends BaseComponent {
 
                                             final CustomerOrder order = customerOrderListItem.getModelObject();
                                             final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(order.getCurrency());
-                                            final BigDecimal amount = customerOrderPaymentService.getOrderAmount(order.getOrdernum());
+                                            final BigDecimal amount = order.getOrderTotal();
 
                                             customerOrderListItem
                                                     .add(determineOrderPageLink(order, CustomerOrderPanel.ORDER_VIEW_LINK))

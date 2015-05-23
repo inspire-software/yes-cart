@@ -22,7 +22,6 @@ import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
-import org.yes.cart.payment.exception.PaymentException;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.RoundingMode;
@@ -70,8 +69,8 @@ public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl im
     private static final Map<Integer, String> ERROR_CODE_DESC_MAP;
     private static final PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             true, true, true, true,
-            true, true, true, false,
-            true, false,
+            true, true, true,
+            false, true, false,
             null,
             true, true
     );
@@ -431,22 +430,24 @@ public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl im
 
 
     /**
-     * Run transaction and process responce.
+     * Run transaction and process response.
      *
      * @param payment        payment
      * @param trans          transaction
-     * @param withClientInfo process responce wiht client info
+     * @param withClientInfo process response with client info
      */
     private void runTransaction(final Payment payment,
                                 final paypal.payflow.BaseTransaction trans,
                                 final boolean withClientInfo) {
         try {
-            paypal.payflow.Response responce = trans.submitTransaction();
-            if (responce == null) {
+            paypal.payflow.Response response = trans.submitTransaction();
+            if (response == null) {
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
-                throw new PaymentException("Can not get the response, try to increase TIMEOUT parameter");
+                payment.setPaymentProcessorBatchSettlement(false);
+                payment.setTransactionOperationResultMessage("Can not get the response, try to increase TIMEOUT parameter");
+                ShopCodeContext.getLog(this).error("Can not get the response, try to increase TIMEOUT parameter");
             } else {
-                paypal.payflow.TransactionResponse trxnResponse = responce.getTransactionResponse();
+                paypal.payflow.TransactionResponse trxnResponse = response.getTransactionResponse();
 
                 if (withClientInfo) {
                     // Create a new Client Information data object.
@@ -456,23 +457,29 @@ public class PayflowPaymentGatewayImpl extends AbstractCappPaymentGatewayImpl im
                 }
 
                 payment.setTransactionAuthorizationCode(trxnResponse.getAuthCode());
+                /*
+                  See https://developer.paypal.com/docs/classic/payflow/integration-guide/#result-values-and-respmsg-text
+                 */
                 if (PF_RESULT_CODE_ACCEPTED == trxnResponse.getResult()
                     /*|| PF_RESULT_CODE_ACCEPTED_WITH_FRAUD == trxnResponse.getResult()*/) {
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+                    payment.setPaymentProcessorBatchSettlement(true);
                     payment.setTransactionAuthorizationCode(trxnResponse.getPnref());
                 } else {
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+                    payment.setPaymentProcessorBatchSettlement(false);
                 }
                 payment.setTransactionOperationResultCode(String.valueOf(trxnResponse.getResult()));
                 payment.setTransactionOperationResultMessage(
-                        responce.getTransactionResponse().getRespMsg()
+                        response.getTransactionResponse().getRespMsg()
                                 + ' '
                                 + ERROR_CODE_DESC_MAP.get(trxnResponse.getResult()));
             }
         } catch (Throwable th) {
-            th.printStackTrace();
             ShopCodeContext.getLog(this).error("Can not execute transaction. Client exception : " + payment, th);
-            throw new PaymentException("Can not execute transaction. Client exception : " + payment, th);
+            payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+            payment.setPaymentProcessorBatchSettlement(false);
+            payment.setTransactionOperationResultMessage(th.getMessage());
         }
     }
 

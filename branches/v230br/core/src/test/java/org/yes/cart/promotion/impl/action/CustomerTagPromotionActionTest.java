@@ -63,26 +63,28 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
         promotionService.create(firstTimeBuyer);
 
 
-        final Customer newCustomer = createCustomer();
-        final PromotionContext promotionContext = promotionContextFactory.getInstance("SHOIP1", "EUR");
+        try {
+            final Customer newCustomer = createCustomer();
+            final PromotionContext promotionContext = promotionContextFactory.getInstance("SHOIP1", "EUR");
 
-        // Promotion context is not transactional and therefore we need surrounding
-        // transaction and fresh from db customer object to be able deeply navigate the object graph
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
+            // Promotion context is not transactional and therefore we need surrounding
+            // transaction and fresh from db customer object to be able deeply navigate the object graph
+            getTx().execute(new TransactionCallbackWithoutResult() {
+                public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null);
-                assertFalse(fromDb.isEmpty());
-                promotionContext.applyCustomerPromo(fromDb.get(0), null);
-                assertEquals("first", fromDb.get(0).getTag());
-                status.setRollbackOnly();
+                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null);
+                    assertFalse(fromDb.isEmpty());
+                    promotionContext.applyCustomerPromo(fromDb.get(0), null);
+                    assertEquals("first", fromDb.get(0).getTag());
+                    status.setRollbackOnly();
 
-            }
-        });
+                }
+            });
 
-        // clean test
-        promotionService.delete(firstTimeBuyer);
-
+        } finally {
+            // clean test
+            promotionService.delete(firstTimeBuyer);
+        }
 
     }
 
@@ -109,27 +111,27 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
 
         promotionService.create(activeShopper);
 
+        try {
+            final Customer newCustomer = createCustomer();
+            final PromotionContext promotionContext = promotionContextFactory.getInstance("SHOIP1", "EUR");
 
-        final Customer newCustomer = createCustomer();
-        final PromotionContext promotionContext = promotionContextFactory.getInstance("SHOIP1", "EUR");
+            // Promotion context is not transactional and therefore we need surrounding
+            // transaction and fresh from db customer object to be able deeply navigate the object graph
+            getTx().execute(new TransactionCallbackWithoutResult() {
+                public void doInTransactionWithoutResult(TransactionStatus status) {
 
-        // Promotion context is not transactional and therefore we need surrounding
-        // transaction and fresh from db customer object to be able deeply navigate the object graph
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
+                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null);
+                    assertFalse(fromDb.isEmpty());
+                    promotionContext.applyCustomerPromo(fromDb.get(0), null);
+                    assertNull(fromDb.get(0).getTag());
+                    status.setRollbackOnly();
 
-                final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null);
-                assertFalse(fromDb.isEmpty());
-                promotionContext.applyCustomerPromo(fromDb.get(0), null);
-                assertNull(fromDb.get(0).getTag());
-                status.setRollbackOnly();
-
-            }
-        });
-
-        // clean test
-        promotionService.delete(activeShopper);
-
+                }
+            });
+        } finally {
+            // clean test
+            promotionService.delete(activeShopper);
+        }
 
     }
 
@@ -172,27 +174,28 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
         promotionService.create(firstTimeBuyer);
 
 
-        final Customer newCustomer = createCustomer();
-        final PromotionContext promotionContext = promotionContextFactory.getInstance("SHOIP1", "EUR");
+        try {
+            final Customer newCustomer = createCustomer();
+            final PromotionContext promotionContext = promotionContextFactory.getInstance("SHOIP1", "EUR");
 
-        // Promotion context is not transactional and therefore we need surrounding
-        // transaction and fresh from db customer object to be able deeply navigate the object graph
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
+            // Promotion context is not transactional and therefore we need surrounding
+            // transaction and fresh from db customer object to be able deeply navigate the object graph
+            getTx().execute(new TransactionCallbackWithoutResult() {
+                public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null);
-                assertFalse(fromDb.isEmpty());
-                promotionContext.applyCustomerPromo(fromDb.get(0), null);
-                assertEquals("first john", fromDb.get(0).getTag());
-                status.setRollbackOnly();
+                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null);
+                    assertFalse(fromDb.isEmpty());
+                    promotionContext.applyCustomerPromo(fromDb.get(0), null);
+                    assertEquals("first john", fromDb.get(0).getTag());
+                    status.setRollbackOnly();
 
-            }
-        });
-
-        // clean test
-        promotionService.delete(nameJohn);
-        promotionService.delete(firstTimeBuyer);
-
+                }
+            });
+        } finally {
+            // clean test
+            promotionService.delete(nameJohn);
+            promotionService.delete(firstTimeBuyer);
+        }
 
     }
 
@@ -238,28 +241,28 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
         promotionService.create(firstTimeBuyer);
 
 
-        final Customer newCustomer = createCustomer();
-        final PromotionContext promotionContext = promotionContextFactory.getInstance("SHOIP1", "EUR");
+        try {
+            final Customer newCustomer = createCustomer();
+            final PromotionContext promotionContext = promotionContextFactory.getInstance("SHOIP1", "EUR");
 
-        // Promotion context is not transactional and therefore we need surrounding
-        // transaction and fresh from db customer object to be able deeply navigate the object graph
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
+            // Promotion context is not transactional and therefore we need surrounding
+            // transaction and fresh from db customer object to be able deeply navigate the object graph
+            getTx().execute(new TransactionCallbackWithoutResult() {
+                public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null);
-                assertFalse(fromDb.isEmpty());
-                promotionContext.applyCustomerPromo(fromDb.get(0), null);
-                assertEquals("first", fromDb.get(0).getTag());
-                status.setRollbackOnly();
+                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null);
+                    assertFalse(fromDb.isEmpty());
+                    promotionContext.applyCustomerPromo(fromDb.get(0), null);
+                    assertEquals("first", fromDb.get(0).getTag());
+                    status.setRollbackOnly();
 
-            }
-        });
-
-        // clean test
-        promotionService.delete(nameJohn);
-        promotionService.delete(firstTimeBuyer);
-
-
+                }
+            });
+        } finally {
+            // clean test
+            promotionService.delete(nameJohn);
+            promotionService.delete(firstTimeBuyer);
+        }
 
     }
 

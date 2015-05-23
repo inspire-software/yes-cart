@@ -22,7 +22,6 @@ import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
-import org.yes.cart.payment.exception.PaymentException;
 import org.yes.cart.util.ShopCodeContext;
 
 
@@ -37,8 +36,8 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             true, true, true, true,
-            true, true, true, false,
-            true, false,
+            true, true, true,
+            false, true, false,
             null,
             false, true
     );
@@ -212,14 +211,18 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
                     net.authorize.ResponseCode.ERROR == transTez.getReasonResponseCode().getResponseCode()
                     ) {
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+                payment.setPaymentProcessorBatchSettlement(false);
             } else if (
                     net.authorize.ResponseCode.APPROVED == transTez.getReasonResponseCode().getResponseCode()
                     ) {
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+                payment.setPaymentProcessorBatchSettlement(true);
             } else if (net.authorize.ResponseCode.REVIEW == transTez.getReasonResponseCode().getResponseCode()) {
-                payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+                payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_PROCESSING);
+                payment.setPaymentProcessorBatchSettlement(false);
             } else {
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+                payment.setPaymentProcessorBatchSettlement(false);
             }
             payment.setTransactionReferenceId(transTez.getTarget().getTransactionId());
             payment.setTransactionAuthorizationCode(transTez.getTarget().getAuthorizationCode());
@@ -234,8 +237,9 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
             }
         } catch (Throwable th) {
             ShopCodeContext.getLog(this).error("Can not execute transaction. Client exception : " + payment, th);
-            throw new PaymentException("Can not execute transaction. Client exception : " + payment, th);
-
+            payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+            payment.setPaymentProcessorBatchSettlement(false);
+            payment.setTransactionOperationResultMessage(th.getMessage());
         }
         return payment;
     }

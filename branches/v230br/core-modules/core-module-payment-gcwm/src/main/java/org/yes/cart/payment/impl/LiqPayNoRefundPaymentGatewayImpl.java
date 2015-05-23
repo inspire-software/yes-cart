@@ -16,9 +16,12 @@
 
 package org.yes.cart.payment.impl;
 
+import org.apache.commons.lang.SerializationUtils;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
+
+import java.util.UUID;
 
 /**
  * User: denispavlov
@@ -30,8 +33,8 @@ public class LiqPayNoRefundPaymentGatewayImpl extends LiqPayPaymentGatewayImpl {
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
-            false, false, false, true,
-            true, true,
+            false, false, false,
+            true, true, true,
             null,
             false, false
     );
@@ -39,12 +42,14 @@ public class LiqPayNoRefundPaymentGatewayImpl extends LiqPayPaymentGatewayImpl {
 
     /** {@inheritDoc} */
     @Override
-    public Payment refund(final Payment payment) {
-
+    public Payment refund(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(REFUND);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
-
     }
 
 

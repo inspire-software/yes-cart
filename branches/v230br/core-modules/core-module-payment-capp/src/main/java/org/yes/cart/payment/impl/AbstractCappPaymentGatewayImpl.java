@@ -26,10 +26,12 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.ConfigurablePaymentGateway;
 import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
+import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -136,80 +138,27 @@ public abstract class AbstractCappPaymentGatewayImpl implements ConfigurablePaym
     /**
      * {@inheritDoc}
      */
-    public Payment createPaymentPrototype(final Map parametersMap) {
+    public Payment createPaymentPrototype(final String operation, final Map parametersMap) {
+
+        final Map<String, String> params = HttpParamsUtils.createSingleValueMap(parametersMap);
         final Payment payment = new PaymentImpl();
 
-        payment.setCardHolderName(getSingleValue(parametersMap.get("ccHolderName")));
-        payment.setCardNumber(getSingleValue(parametersMap.get("ccNumber")));
-        payment.setCardExpireMonth(getSingleValue(parametersMap.get("ccExpireMonth")));
-        payment.setCardExpireYear(getSingleValue(parametersMap.get("ccExpireYear")));
-        payment.setCardCvv2Code(getSingleValue(parametersMap.get("ccSecCode")));
-        payment.setCardType(getSingleValue(parametersMap.get("ccType")));
-        payment.setShopperIpAddress(getSingleValue(parametersMap.get(PaymentMiscParam.CLIENT_IP)));
+        payment.setCardHolderName(params.get("ccHolderName"));
+        payment.setCardNumber(params.get("ccNumber"));
+        payment.setCardExpireMonth(params.get("ccExpireMonth"));
+        payment.setCardExpireYear(params.get("ccExpireYear"));
+        payment.setCardCvv2Code(params.get("ccSecCode"));
+        payment.setCardType(params.get("ccType"));
+        payment.setShopperIpAddress(params.get(PaymentMiscParam.CLIENT_IP));
 
         final Logger log = ShopCodeContext.getLog(this);
         if (log.isDebugEnabled()) {
-            displayMap("Payment prototype from map", parametersMap);
+            log.debug(HttpParamsUtils.stringify("Payment prototype from map", parametersMap));
         }
 
 
         return payment;
     }
-
-    /**
-     * Work around for problem with wicket param values, when it can return
-     * parameter value as string or as array of strings with single value.
-     * This behavior depends on url encoding strategy.
-     *
-     * @param param parameters
-     *
-     * @return value
-     */
-    public static String getSingleValue(final Object param) {
-        if (param instanceof String) {
-            return (String) param;
-        } else if (param instanceof String[]) {
-            if (((String[])param).length > 0) {
-                return ((String [])param)[0];
-            }
-        }
-        return null;
-
-    }
-    
-
-    /**
-     * Displays the content of the Map object.
-     *
-     * @param header Header text.
-     * @param map    Map object to display.
-     */
-    protected void displayMap(final String header, final Map<String, String> map) {
-        StringBuilder dest = new StringBuilder();
-        dest.append(header);
-        if (map != null && !map.isEmpty()) {
-            List<String> keys = new ArrayList<String>(map.keySet());
-            Collections.sort(keys);
-
-            Iterator<String> iter = keys.iterator();
-
-            String key, val;
-            while (iter.hasNext()) {
-                key = iter.next();
-                val = getSingleValue(map.get(key));
-                dest.append(key);
-                dest.append('=');
-                dest.append(val);
-                dest.append('\n');
-            }
-        }
-        final Logger log = ShopCodeContext.getLog(this);
-        if (log.isDebugEnabled()) {
-            log.debug(dest.toString());
-        }
-
-    }
-
 
     /**
      * Parameter service for given gateway.

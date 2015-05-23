@@ -23,7 +23,7 @@ package org.yes.cart.service.order;
  */
 public interface OrderEventHandler {
 
-    String syncMonitor = "syncMonitorOrderEventHandler";
+    Object syncMonitor = new Object();
 
     /**
      * Event handler.

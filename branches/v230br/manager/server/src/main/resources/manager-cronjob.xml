@@ -37,7 +37,7 @@
     <bean id="preOrderJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="preorderJob" />
         <!-- each 15 minute 0,15,30 and 45 -->
-        <property name="cronExpression" value="0 0/15 * * * ?" />
+        <property name="cronExpression" value="0 0/2 * * * ?" />
     </bean>
 
     <!-- ################################ Abandon shopping cart clean up  ################################### -->

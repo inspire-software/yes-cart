@@ -67,6 +67,7 @@ public class PaymentImpl implements Payment {
     private String billingAddressString;
 
     private String paymentProcessorResult = Payment.PAYMENT_STATUS_PROCESSING;
+    private boolean paymentProcessorBatchSettlement;
 
     private PaymentAddress shippingAddress;
 
@@ -125,6 +126,20 @@ public class PaymentImpl implements Payment {
      */
     public void setPaymentProcessorResult(final String paymentProcessorResult) {
         this.paymentProcessorResult = paymentProcessorResult;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isPaymentProcessorBatchSettlement() {
+        return paymentProcessorBatchSettlement;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setPaymentProcessorBatchSettlement(final boolean paymentProcessorBatchSettlement) {
+        this.paymentProcessorBatchSettlement = paymentProcessorBatchSettlement;
     }
 
     /**

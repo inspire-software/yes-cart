@@ -22,7 +22,7 @@
                 layout="vertical"
                 creationComplete="init();">
 
-    <mx:Label id="infoLabel" maxWidth="250"
+    <mx:Text  id="infoLabel" maxWidth="250"
               visible="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
               includeInLayout="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
             />

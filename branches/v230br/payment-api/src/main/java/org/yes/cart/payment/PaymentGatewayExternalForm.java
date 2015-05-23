@@ -94,17 +94,18 @@ public interface PaymentGatewayExternalForm extends PaymentGateway {
 
     /**
      * Check the result for success attributes.
-     * @param nvpCallResult  call result
+     *
+     * @param callbackResult  call result
      * @return  true in case of success
      */
-    boolean isSuccess(Map<String, String> nvpCallResult);
+    CallbackResult getExternalCallbackResult(Map<String, String> callbackResult);
 
 
     /**
      * Handle raw request. Call to this method will be delegated from particular filter if
      * gateway support several commands / notification via single call back filter. Like google checkout.
      * @param request http request
-     * @param response http responce.
+     * @param response http response.
      */
     void handleNotification(final HttpServletRequest request, final HttpServletResponse response);
 
@@ -112,7 +113,7 @@ public interface PaymentGatewayExternalForm extends PaymentGateway {
      * Process public call back request from payment gateway.
      *
      * Warning !!! Implementation of this method MUST NOT perform any order/payment state modification.
-     * I.e. do not use this  as successfult payment determination method
+     * I.e. do not use this  as successful payment determination method
      *
      * @param publicCallBackParameters get/post parameters
      * @return true in case in payment was ok, false in case if payment failed

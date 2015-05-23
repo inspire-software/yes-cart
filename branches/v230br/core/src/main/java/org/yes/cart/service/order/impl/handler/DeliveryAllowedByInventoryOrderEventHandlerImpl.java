@@ -75,9 +75,9 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
                             det.getProductSkuCode()
                     );
                     if (MoneyUtils.isFirstBiggerThanSecond(
-                            qtyPair.getSecond().add(det.getQty()),
+                            det.getQty(),
                             qtyPair.getFirst())) {
-                        return false; //reserved plus to reserve bigger, than on warehouses
+                        return false; //inventory is less than we can give for this order
                     }
                 }
             }

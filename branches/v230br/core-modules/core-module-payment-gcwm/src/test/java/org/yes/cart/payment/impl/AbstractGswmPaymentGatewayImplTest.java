@@ -111,7 +111,7 @@ public class AbstractGswmPaymentGatewayImplTest {
             }
 
             @Override
-            public Payment createPaymentPrototype(final Map map) {
+            public Payment createPaymentPrototype(final String operation, final Map map) {
                 return null;
             }
         };

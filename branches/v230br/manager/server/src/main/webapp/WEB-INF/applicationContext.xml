@@ -133,49 +133,71 @@
         <constructor-arg index="7" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
         <constructor-arg index="8">
             <map>
-                <entry key="evt.pending-os.in.progress" value="order-new"/>
                 <entry key="evt.pending-os.waiting" value="order-new"/>
+                <entry key="evt.pending-os.waiting.payment" value="order-new"/>
                 <entry key="evt.pending-os.in.progress" value="order-new"/>
 
-                <entry key="evt.order.cancel-os.cancelled" value="order-canceled"/>
                 <entry key="evt.new.order.cancel.refund-os.cancelled" value="order-canceled"/>
                 <entry key="evt.new.order.cancel.refund-os.cancelled.waiting.payment" value="order-canceled"/>
 
                 <entry key="evt.payment.confirmed-os.in.progress" value="order-confirmed"/>
 
-                <entry key="evt.order.cancel.refund-os.cancelled" value="order-canceled"/>
-                <entry key="evt.order.cancel.refund-os.cancelled.waiting.payment" value="order-canceled"/>
-                <entry key="evt.order.cancel.refund-os.returned" value="order-returned"/>
-                <entry key="evt.order.cancel.refund-os.returned.waiting.payment" value="order-returned"/>
-
                 <entry key="evt.packing.complete-os.in.progress-ds.shipment.ready" value="order-delivery-readytoshipping"/>
+                <entry key="evt.packing.complete-os.partially.shipped-ds.shipment.ready" value="order-delivery-readytoshipping"/>
+                <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.ready.waiting.payment" value="order-delivery-readytoshipping"/>
+                <entry key="evt.release.to.shipment-os.partially.shipped-ds.shipment.ready.waiting.payment" value="order-delivery-readytoshipping"/>
+
                 <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress" value="order-delivery-shipped"/>
                 <entry key="evt.release.to.shipment-os.partially.shipped-ds.shipment.inprogress" value="order-delivery-shipped"/>
+                <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress.waiting.payment" value="order-delivery-shipped"/>
+                <entry key="evt.release.to.shipment-os.partially.shipped-ds.shipment.inprogress.waiting.payment" value="order-delivery-shipped"/>
+
+                <entry key="evt.shipment.complete-os.partially.shipped-ds.shipped" value="order-shipping-completed"/>
                 <entry key="evt.shipment.complete-os.completed-ds.shipped" value="order-shipping-completed"/>
 
+                <entry key="evt.order.cancel-os.cancelled" value="order-canceled"/>
+                <entry key="evt.order.cancel.refund-os.cancelled" value="order-canceled"/>
+                <entry key="evt.order.cancel.refund-os.returned" value="order-returned"/>
             </map>
         </constructor-arg>
         <constructor-arg index="9">
             <map>
-                <entry key="evt.pending-os.in.progress" value="adm-order-new"/>
-                <entry key="evt.pending-os.waiting.payment" value="adm-order-new"/>
                 <entry key="evt.pending-os.waiting" value="adm-order-wait-confirmation"/>
+                <entry key="evt.pending-os.waiting.payment" value="adm-order-new"/>
+                <entry key="evt.pending-os.in.progress" value="adm-order-new"/>
 
-                <entry key="evt.order.cancel-os.cancelled" value="adm-order-canceled"/>
                 <entry key="evt.new.order.cancel.refund-os.cancelled" value="adm-order-canceled"/>
                 <entry key="evt.new.order.cancel.refund-os.cancelled.waiting.payment" value="adm-order-canceled"/>
 
                 <entry key="evt.payment.confirmed-os.in.progress" value="adm-order-confirmed"/>
+                <entry key="evt.payment.processed-os.in.progress" value="adm-order-payment-confirmed"/>
 
-                <entry key="evt.order.cancel.refund-os.cancelled" value="adm-order-canceled"/>
-                <entry key="evt.order.cancel.refund-os.cancelled.waiting.payment" value="adm-order-canceled"/>
-                <entry key="evt.order.cancel.refund-os.returned" value="adm-order-returned"/>
-                <entry key="evt.order.cancel.refund-os.returned.waiting.payment" value="adm-order-returned"/>
+                <entry key="evt.process.allocation-os.in.progress-ds.inventory.allocated" value="adm-order-delivery-allocated"/>
+                <entry key="evt.process.allocation-os.partially.shipped-ds.inventory.allocated" value="adm-order-delivery-allocated"/>
+                <entry key="evt.delivery.allowed.quantity-os.in.progress-ds.inventory.allocated" value="adm-order-delivery-allocated"/>
+                <entry key="evt.delivery.allowed.quantity-os.partially.shipped-ds.inventory.allocated" value="adm-order-delivery-allocated"/>
 
-                <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress.waiting.payment" value="adm-order-wait-confirmation"/>
-                <entry key="evt.release.to.shipment-os.partially.shipped-ds.shipment.inprogress.waiting.payment" value="adm-order-wait-confirmation"/>
+                <entry key="evt.release.to.pack-os.in.progress-ds.packing" value="adm-order-delivery-packing"/>
+                <entry key="evt.release.to.pack-os.partially.shipped-ds.packing" value="adm-order-delivery-packing"/>
 
+                <entry key="evt.packing.complete-os.in.progress-ds.shipment.ready" value="adm-order-delivery-ready"/>
+                <entry key="evt.packing.complete-os.partially.shipped-ds.shipment.ready" value="adm-order-delivery-ready"/>
+
+                <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.ready.waiting.payment" value="adm-order-delivery-ready-wait"/>
+                <entry key="evt.release.to.shipment-os.partially.shipped-ds.shipment.ready.waiting.payment" value="adm-order-delivery-ready-wait"/>
+
+                <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress" value="adm-order-delivery-inprogress"/>
+                <entry key="evt.release.to.shipment-os.partially.shipped-ds.shipment.inprogress" value="adm-order-delivery-inprogress"/>
+
+                <entry key="evt.release.to.shipment-os.in.progress-ds.shipment.inprogress.waiting.payment" value="adm-order-delivery-inprogress-wait"/>
+                <entry key="evt.release.to.shipment-os.partially.shipped-ds.shipment.inprogress.waiting.payment" value="adm-order-delivery-inprogress-wait"/>
+
+                <entry key="evt.shipment.complete-os.partially.shipped-ds.shipped" value="adm-order-shipping-completed"/>
                 <entry key="evt.shipment.complete-os.completed-ds.shipped" value="adm-order-shipping-completed"/>
+
+                <entry key="evt.order.cancel-os.cancelled" value="adm-order-canceled"/>
+                <entry key="evt.order.cancel.refund-os.cancelled" value="adm-order-canceled"/>
+                <entry key="evt.order.cancel.refund-os.returned" value="adm-order-returned"/>
             </map>
         </constructor-arg>
     </bean>

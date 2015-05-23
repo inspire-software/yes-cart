@@ -39,27 +39,126 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
     @Test
     public void testFindBy() {
         CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
-        CustomerOrderPayment payment = getCustomerOrderPayment(new BigDecimal("123.00"), "123-45", "123-45-0");
+        CustomerOrderPayment payment = getCustomerOrderPayment(new BigDecimal("123.00"), "123-45", "123-45-0", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK);
         payment = service.create(payment);
         assertTrue(payment.getCustomerOrderPaymentId() > 0);
-        assertEquals(1, service.findBy(null, null, null, null).size());
-        assertEquals("5678", service.findBy(null, null, null, null).get(0).getCardNumber());
+        assertEquals(1, service.findBy(null, null, (String) null, (String) null).size());
+        assertEquals("5678", service.findBy(null, null, (String) null, (String) null).get(0).getCardNumber());
         assertEquals(1, service.findBy(null, null, Payment.PAYMENT_STATUS_OK, null).size());
         assertEquals(1, service.findBy(null, null, null, PaymentGateway.AUTH).size());
-        assertEquals(1, service.findBy("123-45", null, null, null).size());
-        assertEquals(1, service.findBy(null, "123-45-0", null, null).size());
+        assertEquals(1, service.findBy("123-45", null, (String) null, (String) null).size());
+        assertEquals(1, service.findBy(null, "123-45-0", (String) null, (String) null).size());
         assertEquals(1, service.findBy("123-45", "123-45-0", Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH).size());
     }
 
     @Test
-    public void testGetOrderAmount() {
+    public void testFindByArray() {
         CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
-        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0"));
-        service.create(getCustomerOrderPayment(new BigDecimal("0.45"), "223-45", "223-45-1"));
-        assertEquals(new BigDecimal("223.45"), service.getOrderAmount("223-45"));
+        CustomerOrderPayment payment = getCustomerOrderPayment(new BigDecimal("123.00"), "123-45", "123-45-0", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK);
+        payment = service.create(payment);
+        assertTrue(payment.getCustomerOrderPaymentId() > 0);
+        assertEquals(1, service.findBy(null, null, (String[]) null, (String[]) null).size());
+        assertEquals("5678", service.findBy(null, null, (String[]) null, (String[]) null).get(0).getCardNumber());
+        assertEquals(1, service.findBy(null, null, new String[] { Payment.PAYMENT_STATUS_OK }, (String[]) null).size());
+        assertEquals(1, service.findBy(null, null, null, new String[] { PaymentGateway.AUTH }).size());
+        assertEquals(1, service.findBy("123-45", null, (String[]) null, (String[]) null).size());
+        assertEquals(1, service.findBy(null, "123-45-0", (String[]) null, (String[]) null).size());
+        assertEquals(1, service.findBy("123-45", "123-45-0", new String[] { Payment.PAYMENT_STATUS_OK }, new String[] { PaymentGateway.AUTH }).size());
     }
 
-    private CustomerOrderPayment getCustomerOrderPayment(final BigDecimal amount, final String orderNum, final String shipmentNum) {
+    @Test
+    public void testGetOrderAmountAuth() {
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK));
+        service.create(getCustomerOrderPayment(new BigDecimal("0.45"), "223-45", "223-45-1", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK));
+        assertEquals("0.00", service.getOrderAmount("223-45").toPlainString());
+    }
+
+    @Test
+    public void testGetOrderAmountAuthCaptureOk() {
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0", PaymentGateway.AUTH_CAPTURE, Payment.PAYMENT_STATUS_OK));
+        service.create(getCustomerOrderPayment(new BigDecimal("0.45"), "223-45", "223-45-1", PaymentGateway.AUTH_CAPTURE, Payment.PAYMENT_STATUS_OK));
+        assertEquals("223.45", service.getOrderAmount("223-45").toPlainString());
+    }
+
+    @Test
+    public void testGetOrderAmountAuthCaptureNotOk() {
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0", PaymentGateway.AUTH_CAPTURE, Payment.PAYMENT_STATUS_FAILED));
+        service.create(getCustomerOrderPayment(new BigDecimal("0.45"), "223-45", "223-45-1", PaymentGateway.AUTH_CAPTURE, Payment.PAYMENT_STATUS_OK));
+        assertEquals("0.45", service.getOrderAmount("223-45").toPlainString());
+    }
+
+    @Test
+    public void testGetOrderAmountCaptureOk() {
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0", PaymentGateway.CAPTURE, Payment.PAYMENT_STATUS_OK));
+        service.create(getCustomerOrderPayment(new BigDecimal("0.45"), "223-45", "223-45-1", PaymentGateway.CAPTURE, Payment.PAYMENT_STATUS_OK));
+        assertEquals("223.45", service.getOrderAmount("223-45").toPlainString());
+    }
+
+    @Test
+    public void testGetOrderAmountCaptureNotOk() {
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0", PaymentGateway.CAPTURE, Payment.PAYMENT_STATUS_PROCESSING));
+        service.create(getCustomerOrderPayment(new BigDecimal("0.45"), "223-45", "223-45-1", PaymentGateway.CAPTURE, Payment.PAYMENT_STATUS_OK));
+        assertEquals("0.45", service.getOrderAmount("223-45").toPlainString());
+    }
+
+    @Test
+    public void testGetOrderAmountCaptureRefundOk() {
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0", PaymentGateway.CAPTURE, Payment.PAYMENT_STATUS_OK));
+        service.create(getCustomerOrderPayment(new BigDecimal("0.45"), "223-45", "223-45-1", PaymentGateway.REFUND, Payment.PAYMENT_STATUS_OK));
+        assertEquals("222.55", service.getOrderAmount("223-45").toPlainString());
+    }
+
+    @Test
+    public void testGetOrderAmountCaptureRefundFailed() {
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0", PaymentGateway.CAPTURE, Payment.PAYMENT_STATUS_OK));
+        service.create(getCustomerOrderPayment(new BigDecimal("0.45"), "223-45", "223-45-1", PaymentGateway.REFUND, Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED));
+        assertEquals("223.00", service.getOrderAmount("223-45").toPlainString());
+    }
+
+    @Test
+    public void testGetOrderAmountCaptureVoidNotMatching() {
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0", PaymentGateway.CAPTURE, Payment.PAYMENT_STATUS_OK));
+        service.create(getCustomerOrderPayment(new BigDecimal("0.45"), "223-45", "223-45-1", PaymentGateway.VOID_CAPTURE, Payment.PAYMENT_STATUS_OK));
+        assertEquals("223.00", service.getOrderAmount("223-45").toPlainString());
+    }
+
+    @Test
+    public void testGetOrderAmountCaptureVoidOk() {
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0", PaymentGateway.CAPTURE, Payment.PAYMENT_STATUS_OK));
+        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-1", PaymentGateway.VOID_CAPTURE, Payment.PAYMENT_STATUS_OK));
+        assertEquals("0.00", service.getOrderAmount("223-45").toPlainString());
+    }
+
+    @Test
+    public void testGetOrderAmountCaptureVoidNotOk() {
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0", PaymentGateway.CAPTURE, Payment.PAYMENT_STATUS_OK));
+        service.create(getCustomerOrderPayment(new BigDecimal("0.45"), "223-45", "223-45-1", PaymentGateway.VOID_CAPTURE, Payment.PAYMENT_STATUS_PROCESSING));
+        assertEquals("223.00", service.getOrderAmount("223-45").toPlainString());
+    }
+
+    @Test
+    public void testGetOrderAmountCaptureProcessingVoid() {
+        CustomerOrderPaymentService service = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        service.create(getCustomerOrderPayment(new BigDecimal("223.00"), "223-45", "223-45-0", PaymentGateway.CAPTURE, Payment.PAYMENT_STATUS_PROCESSING));
+        service.create(getCustomerOrderPayment(new BigDecimal("0.45"), "223-45", "223-45-1", PaymentGateway.VOID_CAPTURE, Payment.PAYMENT_STATUS_OK));
+        assertEquals("0.00", service.getOrderAmount("223-45").toPlainString());
+    }
+
+    private CustomerOrderPayment getCustomerOrderPayment(final BigDecimal amount,
+                                                         final String orderNum,
+                                                         final String shipmentNum,
+                                                         final String operation,
+                                                         final String result) {
         CustomerOrderPayment payment = new CustomerOrderPaymentEntity();
         payment.setCardExpireMonth("02");
         payment.setCardExpireYear("2020");
@@ -74,10 +173,10 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
         payment.setShopCode("SHOIP1");
         payment.setOrderShipment(shipmentNum);
         payment.setPaymentProcessorBatchSettlement(false);
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorResult(result);
         payment.setTransactionAuthorizationCode("0987654321");
         payment.setTransactionGatewayLabel("testPg");
-        payment.setTransactionOperation(PaymentGateway.AUTH);
+        payment.setTransactionOperation(operation);
         payment.setTransactionOperationResultCode("100");
         payment.setTransactionOperationResultMessage("Ok");
         payment.setTransactionReferenceId("123-45-0");

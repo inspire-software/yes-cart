@@ -18,7 +18,6 @@ package org.yes.cart.bulkjob.order;
 
 import org.slf4j.Logger;
 import org.yes.cart.bulkjob.cron.AbstractLastRunDependentProcessorImpl;
-import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.domain.CustomerOrderService;
@@ -30,10 +29,7 @@ import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.util.ShopCodeContext;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Processor that scrolls though all order deliveries that are waiting for
@@ -48,7 +44,7 @@ import java.util.List;
  * Time: 15:42
  */
 public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRunDependentProcessorImpl
-        implements Runnable {
+        implements BulkAwaitingInventoryDeliveriesProcessorInternal {
 
     private static final String LAST_RUN_PREF = "JOB_DEL_WAITING_INV_LAST_RUN";
 
@@ -82,6 +78,14 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
         final long start = System.currentTimeMillis();
 
+        log.info("Check orders awaiting allocation start date");
+
+        final int allocWaiting = processAwaitingOrders(log, null,
+                CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT,
+                OrderStateManager.EVT_PROCESS_ALLOCATION);
+
+        log.info("Transitioned {} deliveries awaiting allocation", allocWaiting);
+
         log.info("Check orders awaiting preorder start date");
 
         final int dateWaiting = processAwaitingOrders(log, null,
@@ -97,21 +101,26 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
             log.info("Inventory changed for {} SKU", productSkus.size());
 
-            final List<String> waitingSkus = new ArrayList<String>();
-            for (final String skuCode : productSkus) {
-                if (skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(skuCode, true)) {
-                    waitingSkus.add(skuCode);
+            final int batch = 100;
+            int skustart = 0;
+
+            while (true) {
+
+                final List<String> waitingSkus = buildSkuBatch(productSkus, skustart, batch);
+                if (waitingSkus.isEmpty()) {
+                    break;
                 }
-            }
 
-            log.info("Inventory changed for {} preorder/backorder SKUs: {}", waitingSkus.size(), waitingSkus);
+                log.info("Inventory changed for {} preorder/backorder SKUs: {}", waitingSkus.size(), waitingSkus);
 
-            if (!waitingSkus.isEmpty()) {
                 final int inventoryWaiting = processAwaitingOrders(log, productSkus,
                         CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                         OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY);
 
                 log.info("Transitioned {} deliveries awaiting inventory", inventoryWaiting);
+
+                skustart += batch; // next batch
+
             }
 
         }
@@ -121,6 +130,25 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
         final long ms = (finish - start);
 
         log.info("Check orders awaiting preorder start date ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
+
+    }
+
+    /*
+        Need to batch the SKU inventory updates so that we do not create query with 000's of sku in SQL 'in' clause
+        This could happen if the inventory update will have huge amount of updates, so the recommendation is to do
+        inventory import incrementally
+     */
+    List<String> buildSkuBatch(final List<String> original, final int start, final int batch) {
+
+        if (start >= original.size()) {
+            return Collections.emptyList();
+        }
+
+        if (start + batch >= original.size()) {
+            return original.subList(start, original.size());
+        }
+
+        return original.subList(start, start + batch);
 
     }
 
@@ -141,45 +169,70 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
         int cnt = 0;
 
-        final ResultsIterator<CustomerOrderDelivery> awaitingDeliveries = customerOrderService.findAwaitingDeliveries(
+        final List<Long> awaitingDeliveries = customerOrderService.findAwaitingDeliveriesIds(
                 productSkus,
                 status,
                 Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED));
 
 
         try {
-            while (awaitingDeliveries.hasNext()) {
-
-                final CustomerOrderDelivery delivery = awaitingDeliveries.next();
+            for (final Long deliveryId : awaitingDeliveries) {
 
                 try {
-                    if (orderStateManager.fireTransition(
-                            new OrderEventImpl(event, delivery.getCustomerOrder(), delivery)
-                    )) {
+                    // We want to isolate delivery updates, since we want to process others if one fails
+                    proxy().processDeliveryEvent(event, deliveryId);
 
-                        customerOrderService.update(delivery.getCustomerOrder());
-                        log.info("Updated customer order {} delivery {}", delivery.getCustomerOrder().getOrdernum(), delivery.getDeliveryNum());
-                        cnt++;
+                } catch (OrderException oexp) {
 
-                    }
+                    log.warn("Cannot process delivery " + deliveryId, oexp);
 
+                } catch (Exception exp) {
 
-                } catch (OrderException e) {
-                    log.warn("Cannot process delivery " + delivery.getDeliveryNum());
+                    log.error("Cannot process delivery " + deliveryId, exp);
+
                 }
 
             }
         } catch (Exception exp){
             log.error(exp.getMessage(), exp);
-        } finally {
-            try {
-                awaitingDeliveries.close();
-            } catch (Exception exp) {
-                log.error("Error closing iterator: " + exp.getMessage(), exp);
-            }
         }
 
         return cnt;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void processDeliveryEvent(final String event, final long deliveryId) throws OrderException {
+
+        final Logger log = ShopCodeContext.getLog(this);
+
+        final CustomerOrderDelivery delivery = customerOrderService.findDelivery(deliveryId);
+
+        if (delivery != null && orderStateManager.fireTransition(
+                    new OrderEventImpl(event, delivery.getCustomerOrder(), delivery))) {
+
+                customerOrderService.update(delivery.getCustomerOrder());
+                log.info("Updated customer order {} delivery {}", delivery.getCustomerOrder().getOrdernum(), delivery.getDeliveryNum());
+
+        }
+    }
+
+    private BulkAwaitingInventoryDeliveriesProcessorInternal proxy;
+
+    BulkAwaitingInventoryDeliveriesProcessorInternal proxy() {
+        if (proxy == null) {
+            proxy = getSelfProxy();
+        }
+        return proxy;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @return self proxy
+     */
+    public BulkAwaitingInventoryDeliveriesProcessorInternal getSelfProxy() {
+        return null;
     }
 
 

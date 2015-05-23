@@ -245,7 +245,8 @@
     <!-- order statuses from CustomerOrder interface -->
     <entry key="os.none">-</entry>
     <entry key="os.pending">Pending</entry>
-    <entry key="os.waiting">Wait for confirmation</entry>
+    <entry key="os.waiting">Awaiting confirmation</entry>
+    <entry key="os.waiting.payment">Awaiting payment</entry>
     <entry key="os.in.progress">In progress</entry>
     <entry key="os.cancelled">Cancelled</entry>
     <entry key="os.returned">Returned</entry>

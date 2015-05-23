@@ -26,6 +26,7 @@ import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,7 @@ import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * LiqPay payment gateway implementation.
@@ -48,8 +50,8 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
-            false, false, true, true,
-            true, true,
+            false, false, true,
+            true, true, true,
             null,
             false, false
     );
@@ -98,20 +100,22 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
 
         if (privateCallBackParameters != null) {
 
+            final Map<String, String> params = HttpParamsUtils.createSingleValueMap(privateCallBackParameters);
+
             final LiqPay api = getLiqPayAPI();
 
             final String privateKey = getParameterValue(LP_MERCHANT_KEY);
             final String publicKey = getParameterValue(LP_MERCHANT_ID);
 
-            final String amount = getSingleValue(privateCallBackParameters.get("amount"));
-            final String currency = getSingleValue(privateCallBackParameters.get("currency"));
-            final String description = getSingleValue(privateCallBackParameters.get("description"));
-            final String order_id = getSingleValue(privateCallBackParameters.get("order_id"));
-            final String type = getSingleValue(privateCallBackParameters.get("type"));
-            final String sender_phone = getSingleValue(privateCallBackParameters.get("sender_phone"));
-            final String status = getSingleValue(privateCallBackParameters.get("status"));
-            final String transaction_id = getSingleValue(privateCallBackParameters.get("transaction_id"));
-            final String signature = getSingleValue(privateCallBackParameters.get("signature"));
+            final String amount = params.get("amount");
+            final String currency = params.get("currency");
+            final String description = params.get("description");
+            final String order_id = params.get("order_id");
+            final String type = params.get("type");
+            final String sender_phone = params.get("sender_phone");
+            final String status = params.get("status");
+            final String transaction_id = params.get("transaction_id");
+            final String signature = params.get("signature");
 
             final String validSignature = api.str_to_sign(privateKey +
                     amount  +
@@ -137,26 +141,26 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
-    public boolean isSuccess(final Map<String, String> liqPayCallResult) {
+    public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
         String statusRes = null;
 
-        if (liqPayCallResult != null) {
+        if (callbackResult != null) {
 
             final LiqPay api = getLiqPayAPI();
 
             final String privateKey = getParameterValue(LP_MERCHANT_KEY);
             final String publicKey = getParameterValue(LP_MERCHANT_ID);
 
-            final String amount = liqPayCallResult.get("amount");
-            final String currency = liqPayCallResult.get("currency");
-            final String description = liqPayCallResult.get("description");
-            final String order_id = liqPayCallResult.get("order_id");
-            final String type = liqPayCallResult.get("type");
-            final String sender_phone = liqPayCallResult.get("sender_phone");
-            final String status = liqPayCallResult.get("status");
-            final String transaction_id = liqPayCallResult.get("transaction_id");
-            final String signature = liqPayCallResult.get("signature");
+            final String amount = callbackResult.get("amount");
+            final String currency = callbackResult.get("currency");
+            final String description = callbackResult.get("description");
+            final String order_id = callbackResult.get("order_id");
+            final String type = callbackResult.get("type");
+            final String sender_phone = callbackResult.get("sender_phone");
+            final String status = callbackResult.get("status");
+            final String transaction_id = callbackResult.get("transaction_id");
+            final String signature = callbackResult.get("signature");
 
             final String validSignature = api.str_to_sign(privateKey +
                     amount  +
@@ -182,9 +186,18 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
                   || "sandbox".equalsIgnoreCase(statusRes));
 
 
-        ShopCodeContext.getLog(this).info("LiqPayPaymentGatewayImpl#isSuccess {}, {}", statusRes, liqPayCallResult);
+        final Logger log = ShopCodeContext.getLog(this);
+        if (log.isDebugEnabled()) {
+            log.debug(HttpParamsUtils.stringify("LiqPay callback", callbackResult));
+        }
 
-        return success;
+        if (success) {
+            if ("wait_secure".equalsIgnoreCase(statusRes)) {
+                return CallbackResult.UNSETTLED;
+            }
+            return CallbackResult.OK;
+        }
+        return CallbackResult.FAILED;
 
     }
 
@@ -263,28 +276,51 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
      * Shipment not included. Will be added at capture operation.
      */
     public Payment authorize(final Payment paymentIn) {
-        return (Payment) SerializationUtils.clone(paymentIn);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment reverseAuthorization(final Payment payment) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(AUTH);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Payment capture(final Payment payment) {
+    public Payment reverseAuthorization(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(REVERSE_AUTH);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment capture(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
         payment.setTransactionOperation(CAPTURE);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Payment voidCapture(final Payment payment) {
+    public Payment voidCapture(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(VOID_CAPTURE);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
@@ -309,28 +345,29 @@ public class LiqPayPaymentGatewayImpl extends AbstractGswmPaymentGatewayImpl
         }
         payment.setTransactionOperation(REFUND);
         payment.setPaymentProcessorResult(success ? Payment.PAYMENT_STATUS_OK : Payment.PAYMENT_STATUS_FAILED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Payment createPaymentPrototype(final Map map) {
-        final Payment payment = new PaymentImpl();
-        if (map.containsKey("signature")) {
-            payment.setPaymentAmount(new BigDecimal(getSingleValue(map.get("amount"))));
-            payment.setOrderCurrency(getSingleValue(map.get("currency")));
-            payment.setTransactionReferenceId(getSingleValue(map.get("transaction_id")));
-            payment.setTransactionAuthorizationCode(getSingleValue(map.get("order_id"))); // this is order guid - we need it for refunds
-            final String status = getSingleValue(map.get("status"));
-            final boolean success = status != null &&
-                    ("success".equalsIgnoreCase(status)
-                            || "wait_secure".equalsIgnoreCase(status)
-                            || "sandbox".equalsIgnoreCase(status));
-            payment.setPaymentProcessorResult(success ? Payment.PAYMENT_STATUS_OK : Payment.PAYMENT_STATUS_FAILED);
-        }
+    public Payment createPaymentPrototype(final String operation, final Map map) {
 
-        payment.setShopperIpAddress(getSingleValue(map.get(PaymentMiscParam.CLIENT_IP)));
+        final Payment payment = new PaymentImpl();
+        final Map<String, String> singleParamMap = HttpParamsUtils.createSingleValueMap(map);
+
+        payment.setPaymentAmount(new BigDecimal(singleParamMap.get("amount")));
+        payment.setOrderCurrency(singleParamMap.get("currency"));
+        payment.setTransactionReferenceId(singleParamMap.get("transaction_id"));
+        payment.setTransactionAuthorizationCode(singleParamMap.get("order_id")); // this is order guid - we need it for refunds
+
+        final CallbackResult res = getExternalCallbackResult(singleParamMap);
+        payment.setPaymentProcessorResult(res.getStatus());
+        payment.setPaymentProcessorBatchSettlement(res.isSettled());
+
+        payment.setShopperIpAddress(singleParamMap.get(PaymentMiscParam.CLIENT_IP));
+
         return payment;
     }
 

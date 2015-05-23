@@ -90,7 +90,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
 
             log.info("Inventory changed for {} since {}", productSkus.size(), lastRun);
 
-            int count=0;
+            int count = 0;
             for (final String sku : productSkus) {
 
                 productService.reindexProductSku(sku);
@@ -98,15 +98,14 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
                     //flush a batch of updates and release memory:
                     productService.getGenericDao().flush();
                     productService.getGenericDao().clear();
-
-                    log.info("Reindexed {} SKU", this.batchSize);
                 }
 
             }
 
-            log.info("Reindexed {} SKU", productSkus.size() % this.batchSize);
+            log.info("Reindexed {} SKU", count);
 
         }
+
 
         final long finish = System.currentTimeMillis();
 

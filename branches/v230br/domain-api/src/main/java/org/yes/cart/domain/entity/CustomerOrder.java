@@ -41,6 +41,11 @@ public interface CustomerOrder extends Auditable {
     String ORDER_STATUS_PENDING = "os.pending";
 
     /**
+     * Waiting for payment confirmation.
+     */
+    String ORDER_STATUS_WAITING_PAYMENT = "os.waiting.payment";
+
+    /**
      * Waiting for approval, because of offline payment system is selected for payment.
      * It can be bank of currier payment.
      */
@@ -52,15 +57,26 @@ public interface CustomerOrder extends Auditable {
      */
     String ORDER_STATUS_IN_PROGRESS = "os.in.progress";
 
+
     /**
      * Order canceled. Quantity returned from reservation.
      */
     String ORDER_STATUS_CANCELLED = "os.cancelled";
 
     /**
+     * Order canceled. Quantity returned from reservation. But refund failed.
+     */
+    String ORDER_STATUS_CANCELLED_WAITING_PAYMENT = "os.cancelled.waiting.payment";
+
+    /**
      * Order returned. Quantity returned from credit.
      */
     String ORDER_STATUS_RETURNED = "os.returned";
+
+    /**
+     * Order returned. Quantity returned from credit. But refund failed.
+     */
+    String ORDER_STATUS_RETURNED_WAITING_PAYMENT = "os.returned.waiting.payment";
 
     /**
      * Order can have this state in case of shipment split. So at leas one shipment is incomplete.
@@ -354,6 +370,13 @@ public interface CustomerOrder extends Auditable {
      */
     void setOrderTimestamp(Date orderTimestamp);
 
+    /**
+     * Get sum of order details prices less promotion discounts applied
+     * (included delivery).
+     *
+     * @return order price.
+     */
+    BigDecimal getOrderTotal();
 
     /**
      * Get sum of order details prices less promotion discounts applied

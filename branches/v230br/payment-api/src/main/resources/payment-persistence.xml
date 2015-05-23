@@ -56,6 +56,11 @@
                                 <value>cardIssueNumber</value>
                             </set>
                         </entry>
+                        <entry key="PaymentGatewayParameterEntity">
+                            <set>
+                                <value>value</value>
+                            </set>
+                        </entry>
                     </map>
                 </property>
             </bean>

@@ -16,32 +16,38 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.misc.Result;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.PromotionCouponService;
-import org.yes.cart.service.order.DeliveryAssembler;
-import org.yes.cart.service.order.OrderAssembler;
-import org.yes.cart.service.order.OrderAssemblyException;
+import org.yes.cart.service.order.*;
+import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrder> implements CustomerOrderService {
+public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrder> implements CustomerOrderService, ApplicationContextAware {
 
     private final OrderAssembler orderAssembler;
 
@@ -56,6 +62,11 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     private final CustomerOrderPaymentService customerOrderPaymentService;
 
     private final PromotionCouponService promotionCouponService;
+
+    private ApplicationContext applicationContext;
+
+    private OrderStateManager orderStateManager;
+
 
     /**
      * Construct order service.
@@ -95,6 +106,35 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      */
     public BigDecimal getOrderAmount(final String orderNumber) {
         return customerOrderPaymentService.getOrderAmount(orderNumber);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public CustomerOrderDelivery findDelivery(final long deliveryId) {
+        return customerOrderDeliveryDao.findById(deliveryId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Long> findAwaitingDeliveriesIds(final List<String> skuCodes, final String deliveryStatus, final List<String> orderStatus) {
+
+        final List<Long> waitingDeliveries;
+
+        if (skuCodes != null) {
+            waitingDeliveries = (List) customerOrderDeliveryDao.findQueryObjectByNamedQuery("DELIVERIES.IDS.WAITING.FOR.INVENTORY.BY.SKU",
+                    deliveryStatus,
+                    orderStatus,
+                    skuCodes);
+        } else {
+            waitingDeliveries = (List) customerOrderDeliveryDao.findByNamedQuery("DELIVERIES.IDS.WAITING.FOR.INVENTORY",
+                    deliveryStatus,
+                    orderStatus);
+        }
+
+        return waitingDeliveries;
+
     }
 
     /**
@@ -222,6 +262,40 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    public boolean transitionOrder(final String event,
+                                   final String orderNumber,
+                                   final String deliveryNumber,
+                                   final Map params) throws OrderException {
+
+        final CustomerOrder order = findSingleByCriteria(Restrictions.eq("ordernum", orderNumber));
+        if (order == null) {
+            return false;
+        }
+
+        final CustomerOrderDelivery delivery;
+        if (StringUtils.isNotBlank(deliveryNumber)) {
+            delivery = order.getCustomerOrderDelivery(deliveryNumber);
+        } else {
+            delivery = null;
+        }
+
+        final Map safe = new HashMap();
+        if (params != null) {
+            safe.putAll(params);
+        }
+
+        if (getOrderStateManager().fireTransition(
+                new OrderEventImpl(event, order, delivery, safe))) {
+            update(order);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public CustomerOrder findByGuid(final String shoppingCartGuid) {
         return getGenericDao().findSingleByCriteria(
                 Restrictions.eq("cartGuid", shoppingCartGuid)
@@ -246,4 +320,17 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         }
         super.delete(instance);
     }
+
+
+    private OrderStateManager getOrderStateManager() {
+        if (orderStateManager == null) {
+            orderStateManager = applicationContext.getBean("orderStateManager", OrderStateManager.class);
+        }
+        return orderStateManager;
+    }
+
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
 }

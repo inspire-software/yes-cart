@@ -43,6 +43,10 @@
                    result="onUpdateDeliveryStatusResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="updateDeliveryStatusManual" name="updateDeliveryStatusManual"
+                   result="onUpdateDeliveryStatusResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
         <mx:method id="updateExternalDeliveryRefNo" name="updateExternalDeliveryRefNo"
                    result="onUpdateDeliveryExternalRefNoResult(event)"
                    fault="onRpcMethodFault(event)"/>
@@ -51,8 +55,16 @@
                    result="onOrderResultStatusChanged(event)"
                    fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="updateOrderSetCancelledManual" name="updateOrderSetCancelledManual"
+                   result="onOrderResultStatusChanged(event)"
+                   fault="onRpcMethodFault(event)"/>
+
         <mx:method id="updateOrderSetConfirmed" name="updateOrderSetConfirmed"
                    result="onOrderResultStatusChanged(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="getOrderPgLabels" name="getOrderPgLabels"
+                   result="onGetOrderPgLabels(event)"
                    fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
@@ -90,7 +102,7 @@
 
 
 
-
+    <mx:Object id="pgLabels"/>
     <mx:ArrayCollection id="attrValues"/>
 
     <mx:VDividedBox height="100%" width="100%">
@@ -240,9 +252,38 @@
                         </mx:itemRenderer>
                     </mx:DataGridColumn>
 
-                    <mx:DataGridColumn showDataTips="true" width="100"
-                                       headerText="@Resource(bundle='CustomerOrderPanel',key='status')"
-                                       labelFunction="statusLabelFunction"/>
+                    <mx:DataGridColumn showDataTips="true"  width="100"
+                                       headerText="@Resource(bundle='CustomerOrderPanel',key='status')">
+                        <mx:itemRenderer>
+                            <mx:Component>
+                                <mx:VBox horizontalAlign="left" horizontalScrollPolicy="off">
+                                    <mx:Label text="{statusLabelFunction(data)}"/>
+                                    <mx:Label text="{pgLabelFunction(data)}"/>
+                                    <mx:Script><![CDATA[
+
+                                        private function statusLabelFunction(item:Object):String {
+                                            var label:String = resourceManager.getString('Common', item.orderStatus);
+                                            if (label == null) {
+                                                label = item.orderStatus;
+                                            }
+                                            return label;
+                                        }
+
+                                        private function pgLabelFunction(item:Object):String {
+                                            var labelKey:String = item.pgLabel;
+                                            if (labelKey == null) {
+                                                return '';
+                                            } else if (outerDocument.pgLabels.hasOwnProperty(labelKey)) {
+                                                return outerDocument.pgLabels[labelKey];
+                                            }
+                                            return labelKey;
+                                        }
+
+                                        ]]></mx:Script>
+                                </mx:VBox>
+                            </mx:Component>
+                        </mx:itemRenderer>
+                    </mx:DataGridColumn>
                     <mx:DataGridColumn showDataTips="true" wordWrap="true" width="100"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='date')"
                                        dataField="orderTimestamp">
@@ -270,11 +311,13 @@
 
                                             var orderStatus:String = customerOrderDTO.orderStatus;
                                             orderCancelButton.visible = orderCancelButton.includeInLayout = true;
-                                            if (orderStatus == "os.waiting" || orderStatus == "os.in.progress") {
+                                            if (orderStatus == "os.waiting" || orderStatus == "os.waiting.payment" || orderStatus == "os.in.progress") {
                                                 return resourceManager.getString('CustomerOrderPanel', 'cancel.order');
                                             } else if (orderStatus == "os.partially.shipped" || orderStatus == "os.completed") {
                                                 return resourceManager.getString('CustomerOrderPanel', 'return.order');
 
+                                            } else if (orderStatus == "os.cancelled.waiting.payment" || orderStatus == "os.returned.waiting.payment") {
+                                                return resourceManager.getString('CustomerOrderPanel', 'cancel.order.refund');
                                             }
                                             orderCancelButton.visible = orderCancelButton.includeInLayout = false;
                                             return  orderStatus;
@@ -285,12 +328,15 @@
                                             var title:String;
                                             var orderStatus:String = customerOrderDTO.orderStatus;
 
-                                            if (orderStatus == "os.waiting" || orderStatus == "os.in.progress") {
+                                            if (orderStatus == "os.waiting" || orderStatus == "os.waiting.payment" || orderStatus == "os.in.progress") {
                                                 msg = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation', [customerOrderDTO.ordernum]);
                                                 title = resourceManager.getString('CustomerOrderPanel', 'cancel.order.confirmation.title');
                                             } else if (orderStatus == "os.partially.shipped" || orderStatus == "os.completed") {
                                                 msg = resourceManager.getString('CustomerOrderPanel', 'return.order.confirmation', [customerOrderDTO.ordernum]);
                                                 title = resourceManager.getString('CustomerOrderPanel', 'return.order.confirmation.title');
+                                            } else if (orderStatus == "os.cancelled.waiting.payment" || orderStatus == "os.returned.waiting.payment") {
+                                                msg = resourceManager.getString('CustomerOrderPanel', 'cancel.order.refund.confirmation', [customerOrderDTO.ordernum]);
+                                                title = resourceManager.getString('CustomerOrderPanel', 'cancel.order.refund.confirmation.title');
                                             }
                                             Alert.show(
                                                     msg, title,
@@ -306,6 +352,45 @@
                                                 outerDocument.remoteCustomerOrderService.updateOrderSetCancelled(data.ordernum);
                                             }
                                         }
+
+
+                                        public function getOrderCancelManualLabel(customerOrderDTO:Object):String {
+
+                                            var orderStatus:String = customerOrderDTO.orderStatus;
+                                            orderCancelManualButton.visible = orderCancelManualButton.includeInLayout = true;
+                                            if (orderStatus == "os.cancelled.waiting.payment" || orderStatus == "os.returned.waiting.payment") {
+                                                return resourceManager.getString('CustomerOrderPanel', 'cancel.order.manual.refund');
+                                            }
+                                            orderCancelManualButton.visible = orderCancelManualButton.includeInLayout = false;
+                                            return  orderStatus;
+                                        }
+
+
+                                        public function onOrderCancelManualButtonClick(customerOrderDTO:Object):void {
+                                            var msg:String;
+                                            var title:String;
+                                            var orderStatus:String = customerOrderDTO.orderStatus;
+
+                                            if (orderStatus == "os.cancelled.waiting.payment" || orderStatus == "os.returned.waiting.payment") {
+                                                msg = resourceManager.getString('CustomerOrderPanel', 'cancel.order.manual.refund.confirmation', [customerOrderDTO.ordernum]);
+                                                title = resourceManager.getString('CustomerOrderPanel', 'cancel.order.manual.refund.confirmation.title');
+                                                Alert.show(
+                                                        msg, title,
+                                                        Alert.YES | Alert.NO, null, onCancelOrderManualClick, null, Alert.NO);
+                                            }
+                                        }
+
+
+                                        /**
+                                         * User confirms cancel or return the order.
+                                         * @param event
+                                         */
+                                        private function onCancelOrderManualClick(event:CloseEvent):void {
+                                            if (event.detail == Alert.YES) { //cancel/return order
+                                                outerDocument.remoteCustomerOrderService.updateOrderSetCancelledManual(data.ordernum, 'TODO prompt!!!!');
+                                            }
+                                        }
+
 
 
                                         public function getOrderConfirmLabel(customerOrderDTO:Object):String {
@@ -334,6 +419,9 @@
                                     <mx:Button id="orderCancelButton"
                                                label="{getOrderCancelLabel(data)}"
                                                click="callLater(onOrderCancelButtonClick, new Array(data))"/>
+                                    <mx:Button id="orderCancelManualButton"
+                                               label="{getOrderCancelManualLabel(data)}"
+                                               click="callLater(onOrderCancelManualButtonClick, new Array(data))"/>
                                     <mx:Button id="orderConfirmButton"
                                                label="{getOrderConfirmLabel(data)}"
                                                click="callLater(onOrderConfirmButtonClick, new Array(data))"/>
@@ -495,6 +583,13 @@
                         );
 
                     }
+
+                    private function onGetOrderPgLabels(event:ResultEvent):void {
+
+                        pgLabels = event.result;
+
+                    }
+
                     ]]>
 
                 </mx:Script>
@@ -577,6 +672,7 @@
                                                     import mx.controls.DataGrid;
                                                     import mx.core.FlexGlobals;
                                                     import mx.core.IFlexDisplayObject;
+                                                    import mx.events.CloseEvent;
                                                     import mx.events.DataGridEvent;
                                                     import mx.events.DataGridEventReason;
                                                     import mx.managers.PopUpManager;
@@ -600,19 +696,49 @@
                                                             destinationDeliveryStatus = "ds.shipment.ready";
                                                         } else if (deliveryStatus == "ds.shipment.ready") {
                                                             destinationDeliveryStatus = "ds.shipment.inprogress";
-                                                        } else if (deliveryStatus == "ds.shipment.inprogress") {
+                                                        } else if (deliveryStatus == "ds.shipment.ready.waiting.payment") {
+                                                            destinationDeliveryStatus = "ds.shipment.inprogress";
+                                                        } else if (deliveryStatus == "ds.shipment.inprogress"
+                                                                || deliveryStatus == "ds.shipment.inprogress.waiting.payment") {
                                                             destinationDeliveryStatus = "ds.shipped";
                                                         }
 
+                                                        var _doUpdate:Function = function(customerOrderDeliveryDTO:Object, deliveryStatus:String, destinationDeliveryStatus:String):void {
+                                                            outerDocument.remoteCustomerOrderService.updateDeliveryStatus(
 
-                                                        outerDocument.remoteCustomerOrderService.updateDeliveryStatus(
+                                                                    customerOrderDeliveryDTO.ordernum,
+                                                                    customerOrderDeliveryDTO.deliveryNum,
+                                                                    deliveryStatus,
+                                                                    destinationDeliveryStatus
 
-                                                                customerOrderDeliveryDTO.ordernum,
-                                                                customerOrderDeliveryDTO.deliveryNum,
-                                                                deliveryStatus,
-                                                                destinationDeliveryStatus
+                                                            );
+                                                        };
 
-                                                        );
+                                                        if (deliveryStatus == "ds.shipment.inprogress.waiting.payment") {
+                                                            // confirming that pay on delivery was successful
+                                                            Alert.show(
+                                                                    resourceManager.getString('CustomerOrderPanel', 'delivery.to.shipped.pay.on.delivery.confirmation'),
+                                                                    resourceManager.getString('Common', 'info'),
+                                                                    Alert.YES | Alert.NO, null, function(event:CloseEvent):void {
+                                                                        if (event.detail == Alert.YES) { //confirm
+                                                                            _doUpdate(customerOrderDeliveryDTO, deliveryStatus, destinationDeliveryStatus);
+                                                                        }
+                                                                    }, null, Alert.NO);
+
+                                                        } else if (deliveryStatus == "ds.shipment.ready.waiting.payment") {
+                                                            // previous payment went bad - retry?
+                                                            Alert.show(
+                                                                    resourceManager.getString('CustomerOrderPanel', 'delivery.to.ship.waiting.payment.confirmation'),
+                                                                    resourceManager.getString('Common', 'info'),
+                                                                    Alert.YES | Alert.NO, null, function(event:CloseEvent):void {
+                                                                        if (event.detail == Alert.YES) { //confirm
+                                                                            _doUpdate(customerOrderDeliveryDTO, deliveryStatus, destinationDeliveryStatus);
+                                                                        }
+                                                                    }, null, Alert.NO);
+                                                        } else {
+                                                            _doUpdate(customerOrderDeliveryDTO, deliveryStatus, destinationDeliveryStatus);
+                                                        }
+
 
                                                     }
 
@@ -625,26 +751,75 @@
                                                             return resourceManager.getString('CustomerOrderPanel', 'action.ready.4.shippind');
                                                         } else if (deliveryStatus == "ds.shipment.ready") {
                                                             return resourceManager.getString('CustomerOrderPanel', 'action.start.shipping');
-                                                        } else if (deliveryStatus == "ds.shipment.inprogress") {
+                                                        } else if (deliveryStatus == "ds.shipment.ready.waiting.payment") {
+                                                            return resourceManager.getString('CustomerOrderPanel', 'action.start.shipping.wait.payment');
+                                                        } else if (deliveryStatus == "ds.shipment.inprogress" || deliveryStatus == "ds.shipment.inprogress.waiting.payment") {
                                                             return resourceManager.getString('CustomerOrderPanel', 'action.shipped');
                                                         }
                                                         deliveryActionButton.visible = deliveryActionButton.includeInLayout = false;
                                                         return "NA";
                                                     }
 
+                                                    public function onDeliveryActionManualButtonClick(customerOrderDeliveryDTO:Object):void {
 
-                                                    //---------------------------------------------------------------------------------------------------------------
+                                                        var deliveryStatus:String = customerOrderDeliveryDTO.deliveryStatus;
+
+                                                        if (deliveryStatus == "ds.shipment.ready.waiting.payment") {
+                                                            // confirming manual payment override
+
+                                                            var _msg:String = resourceManager.getString('CustomerOrderPanel', 'delivery.to.shipped.pay.manual.confirmation', [ customerOrderDeliveryDTO.deliveryNum, customerOrderDeliveryDTO.shippingAddress]);
+
+                                                            openPopup(
+                                                                    resourceManager.getString('Common', 'info'),
+                                                                    _msg,
+                                                                    "",
+                                                                    onSaveDeliveryManualPaymentBtnclick
+                                                            );
+
+                                                        }
+
+
+                                                    }
+
+                                                    public function getDeliveryManualActionLabel(customerOrderDeliveryDTO:Object):String {
+                                                        var deliveryStatus:String = customerOrderDeliveryDTO.deliveryStatus;
+                                                        deliveryManualActionButton.visible = deliveryManualActionButton.includeInLayout = true;
+                                                        if (deliveryStatus == "ds.shipment.ready.waiting.payment") {
+                                                            return resourceManager.getString('CustomerOrderPanel', 'action.start.shipping.manual.payment');
+                                                        }
+                                                        deliveryManualActionButton.visible = deliveryManualActionButton.includeInLayout = false;
+                                                        return "NA";
+                                                    }
+
+                                                    private function onSaveDeliveryManualPaymentBtnclick(event:MouseEvent):void {
+                                                        if (popUp != null) {
+
+                                                            outerDocument.remoteCustomerOrderService.updateDeliveryStatusManual(
+
+                                                                    data.ordernum,
+                                                                    data.deliveryNum,
+                                                                    data.deliveryStatus,
+                                                                    "ds.shipment.inprogress",
+                                                                    popUp.value
+
+                                                            );
+
+                                                            popUp.getButtonSave().removeEventListener(MouseEvent.CLICK, onSaveDeliveryManualPaymentBtnclick);
+                                                            PopUpManager.removePopUp(IFlexDisplayObject(popUp));
+                                                            popUp = null;
+                                                        }
+                                                    }
 
                                                     private var popUp:ValueDialog = null;
 
-                                                    private function openPopup():void {
+                                                    private function openPopup(title:String, message:String, value:String, callback:Function):void {
                                                         var clz:Class = SimpleTextDialog;
 
                                                         popUp = ValueDialog(PopUpManager.createPopUp(
                                                                 DisplayObject(FlexGlobals.topLevelApplication), clz, true));
-                                                        popUp.windowTitle = data.deliveryNum;
-                                                        popUp.value = data.refNo;
-                                                        popUp.setInformation(data.shippingAddress);
+                                                        popUp.windowTitle = title;
+                                                        popUp.value = value;
+                                                        popUp.setInformation(message);
                                                         (popUp as SimpleTextDialog).displayVal.visible = false;
                                                         (popUp as SimpleTextDialog).displayVal.includeInLayout = false;
                                                         (popUp as SimpleTextDialog).displayValFormItem.visible = false;
@@ -652,13 +827,13 @@
 
                                                         var btnSave:Button = popUp.getButtonSave();
 
-                                                        btnSave.addEventListener(MouseEvent.CLICK, onSaveBtnclick);
+                                                        btnSave.addEventListener(MouseEvent.CLICK, callback);
 
                                                         PopUpManager.centerPopUp(IFlexDisplayObject(popUp));
 
                                                     }
 
-                                                    private function onSaveBtnclick(event:MouseEvent):void {
+                                                    private function onSaveDeliveryTrackingRefBtnclick(event:MouseEvent):void {
                                                         if (popUp != null) {
                                                             data.refNo = popUp.value;
                                                             var dg:DataGrid = DataGrid(this.owner);
@@ -673,7 +848,7 @@
                                                             dataGridEvent.reason == DataGridEventReason.OTHER;
                                                             dg.dispatchEvent(dataGridEvent);
 
-                                                            popUp.getButtonSave().removeEventListener(MouseEvent.CLICK, onSaveBtnclick);
+                                                            popUp.getButtonSave().removeEventListener(MouseEvent.CLICK, onSaveDeliveryTrackingRefBtnclick);
                                                             PopUpManager.removePopUp(IFlexDisplayObject(popUp));
                                                             popUp = null;
                                                         }
@@ -684,7 +859,12 @@
                                                      * @param customerOrderDeliveryDTO
                                                      */
                                                     public function onRefNumberActionButtonClick(customerOrderDeliveryDTO:Object):void {
-                                                        openPopup();
+                                                        openPopup(
+                                                                customerOrderDeliveryDTO.deliveryNum,
+                                                                customerOrderDeliveryDTO.shippingAddress,
+                                                                customerOrderDeliveryDTO.refNo,
+                                                                onSaveDeliveryTrackingRefBtnclick
+                                                        );
 
                                                     }
 
@@ -749,6 +929,11 @@
                                                 <mx:Button width="135" id="deliveryActionButton"
                                                            label="{getDeliveryActionLabel(data)}"
                                                            click="callLater(onDeliveryActionButtonClick, new Array(data))"
+                                                        >
+                                                </mx:Button>
+                                                <mx:Button width="135" id="deliveryManualActionButton"
+                                                           label="{getDeliveryManualActionLabel(data)}"
+                                                           click="callLater(onDeliveryActionManualButtonClick, new Array(data))"
                                                         >
                                                 </mx:Button>
                                                 <mx:Button width="135"
@@ -902,11 +1087,14 @@
             statuses.addItem(createStatusObject("os.none"));
             statuses.addItem(createStatusObject("os.pending"));
             statuses.addItem(createStatusObject("os.waiting"));
+            statuses.addItem(createStatusObject("os.waiting.payment"));
             statuses.addItem(createStatusObject("os.in.progress"));
             statuses.addItem(createStatusObject("os.cancelled"));
             statuses.addItem(createStatusObject("os.partially.shipped"));
             statuses.addItem(createStatusObject("os.completed"));
             statuses.addItem(createStatusObject("os.returned"));
+
+            remoteCustomerOrderService.getOrderPgLabels(resourceManager.getString('Common', 'localeFilter'));
 
         }
 
@@ -938,6 +1126,15 @@
          */
         private function onFindCustomerOrdersByCriteriaResult(event:ResultEvent):void {
             customerOrderGrid.dataProvider = event.result;
+            if (event.result.length == 1) {
+                customerOrderGrid.selectedIndex = 0;
+                customerOrderGrid.validateNow();
+                if (customerOrderDetailTabNavigator.selectedIndex >= 0) {
+                    initTab(customerOrderDetailTabNavigator.selectedIndex);
+                } else {
+                    initTab(1); // delivery
+                }
+            }
         }
 
         /**
@@ -1027,15 +1224,12 @@
          */
         private function onOrderResultStatusChanged(event:ResultEvent):void {
 
-            if (event.result.errorCode == "0") {
-                performSearch(); //not sure what the best way to reread one order
+            if (!createOrderErrorAlert(event)) {
 
-            } else {
-                Alert.show(
-                        resourceManager.getString('CustomerOrderPanel', event.result.localizationKey, event.result.localizedMessageParameters),
-                        resourceManager.getString('Common', 'error')
-                );
+                performSearchByOrderNum(event.result.orderNum);
+
             }
+
         }
 
 
@@ -1044,12 +1238,9 @@
          * @param event event with result
          */
         private function onUpdateDeliveryExternalRefNoResult(event:ResultEvent):void {
-            if (remoteCustomerOrderService.updateExternalDeliveryRefNo.lastResult.errorCode != "0") {
-                Alert.show(
-                        resourceManager.getString('CustomerOrderPanel', event.result.localizationKey, event.result.localizedMessageParameters),
-                        resourceManager.getString('Common', 'error')
-                );
-            }
+
+            createOrderErrorAlert(event);
+
         }
 
 
@@ -1058,14 +1249,49 @@
          * @param event event with result
          */
         private function onUpdateDeliveryStatusResult(event:ResultEvent):void {
-            if (remoteCustomerOrderService.updateDeliveryStatus.lastResult.errorCode != "0") {
-                Alert.show(
-                        resourceManager.getString('CustomerOrderPanel', event.result.localizationKey, event.result.localizedMessageParameters),
-                        resourceManager.getString('Common', 'error')
-                );
-            } else {
-                initTab(customerOrderDetailTabNavigator.selectedIndex);
+
+            if (!createOrderErrorAlert(event)) {
+
+                performSearchByOrderNum(event.result.orderNum);
+
             }
+
+        }
+
+        private function createOrderErrorAlert(event:ResultEvent):Boolean {
+            if (event.result.errorCode != "0") {
+                var _message:String = null;
+                if (event.result.localizedMessageParameters != null) {
+
+                    var _params:Array = [];
+                    var _origin:Array = event.result.localizedMessageParameters as Array;
+
+                    for (var i:int = 0; i < _origin.length; i++) {
+                        // Sometimes we send order/delivery status keys as parameters - they are in Common bundle
+                        var _translation:String = resourceManager.getString('Common', _origin[i]);
+                        if (_translation == null) { // try order bundle as well
+                            _translation = resourceManager.getString('CustomerOrderPanel', _origin[i]);
+                        }
+                        if (_translation != null) {
+                            _params.push(_translation);
+                        } else {
+                            _params.push(_origin[i]);
+                        }
+                    }
+
+                    _message = resourceManager.getString('CustomerOrderPanel', event.result.localizationKey, _params);
+
+                } else {
+
+                    _message = resourceManager.getString('CustomerOrderPanel', event.result.localizationKey);
+
+                }
+
+                Alert.show(_message, resourceManager.getString('Common', 'error'));
+
+                return true;
+            }
+            return false;
         }
 
 
@@ -1226,20 +1452,6 @@
         }
 
 
-        /**
-         * Get status.
-         * @param item
-         * @param column
-         * @return  status.
-         */
-        private function statusLabelFunction(item:Object, column:DataGridColumn):String {
-            var label:String = resourceManager.getString('Common', item.orderStatus);
-            if (label == null) {
-                label = item.orderStatus;
-            }
-            return label;
-        }
-
         private function orderToolTip(item:Object):String {
             var toolTip:String = "";
             if (item != null) {
@@ -1288,7 +1500,27 @@
 
         /**
          * Perform search by given criteria
-         * @return nothign
+         * @return nothing
+         */
+        public function performSearchByOrderNum(orderNum:String):void {
+
+            remoteCustomerOrderService.findCustomerOrdersByCriteria(
+                    0,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    orderNum
+            );
+
+        }
+
+
+        /**
+         * Perform search by given criteria
+         * @return nothing
          */
         public function performSearch():void {
 

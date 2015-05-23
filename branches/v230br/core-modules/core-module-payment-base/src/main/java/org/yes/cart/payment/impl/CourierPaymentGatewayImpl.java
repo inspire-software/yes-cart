@@ -35,9 +35,9 @@ public class CourierPaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
 
 
     private static final PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
-            true, true, true, true,
             true, true, true, false,
-            false, false,
+            false, true, true,
+            false, false, false,
             null,
             true, true
     );
@@ -69,6 +69,7 @@ public class CourierPaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
@@ -81,6 +82,7 @@ public class CourierPaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
@@ -93,6 +95,7 @@ public class CourierPaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorBatchSettlement(true);
         return payment;
     }
 
@@ -104,7 +107,8 @@ public class CourierPaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
         payment.setTransactionOperation(AUTH_CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
@@ -116,7 +120,8 @@ public class CourierPaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
         payment.setTransactionOperation(VOID_CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
@@ -129,6 +134,7 @@ public class CourierPaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 }

@@ -28,23 +28,23 @@ import static org.junit.Assert.assertTrue;
  * Date: 24/08/2014
  * Time: 12:51
  */
-public class DomainApiUtilTest {
+public class DomainApiUtilsTest {
 
     @Test
     public void testIsObjectAvailableNow() throws Exception {
 
         final Date now = new Date();
 
-        assertFalse(DomainApiUtil.isObjectAvailableNow(false, null, null, now));
-        assertTrue(DomainApiUtil.isObjectAvailableNow(true, null, null, now));
+        assertFalse(DomainApiUtils.isObjectAvailableNow(false, null, null, now));
+        assertTrue(DomainApiUtils.isObjectAvailableNow(true, null, null, now));
 
-        assertFalse(DomainApiUtil.isObjectAvailableNow(true, new Date(now.getTime() + 1L), null, now));
-        assertTrue(DomainApiUtil.isObjectAvailableNow(true, new Date(now.getTime() - 1L), null, now));
+        assertFalse(DomainApiUtils.isObjectAvailableNow(true, new Date(now.getTime() + 1L), null, now));
+        assertTrue(DomainApiUtils.isObjectAvailableNow(true, new Date(now.getTime() - 1L), null, now));
 
-        assertFalse(DomainApiUtil.isObjectAvailableNow(true, null, new Date(now.getTime() - 1L), now));
-        assertTrue(DomainApiUtil.isObjectAvailableNow(true, null, new Date(now.getTime() + 1L), now));
+        assertFalse(DomainApiUtils.isObjectAvailableNow(true, null, new Date(now.getTime() - 1L), now));
+        assertTrue(DomainApiUtils.isObjectAvailableNow(true, null, new Date(now.getTime() + 1L), now));
 
-        assertTrue(DomainApiUtil.isObjectAvailableNow(true, new Date(now.getTime() - 1L), new Date(now.getTime() + 1L), now));
+        assertTrue(DomainApiUtils.isObjectAvailableNow(true, new Date(now.getTime() - 1L), new Date(now.getTime() + 1L), now));
 
     }
 

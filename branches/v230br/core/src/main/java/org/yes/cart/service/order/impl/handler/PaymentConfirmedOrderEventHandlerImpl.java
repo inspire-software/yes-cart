@@ -16,14 +16,53 @@
 
 package org.yes.cart.service.order.impl.handler;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.service.order.OrderException;
+import org.yes.cart.service.order.OrderStateManager;
+import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.service.payment.PaymentProcessor;
+import org.yes.cart.service.payment.PaymentProcessorFactory;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class PaymentConfirmedOrderEventHandlerImpl extends PaymentOkOrderEventHandlerImpl implements OrderEventHandler {
+public class PaymentConfirmedOrderEventHandlerImpl extends PaymentOkOrderEventHandlerImpl implements OrderEventHandler, ApplicationContextAware {
 
+
+    private final PaymentProcessorFactory paymentProcessorFactory;
+
+    public PaymentConfirmedOrderEventHandlerImpl(final PaymentProcessorFactory paymentProcessorFactory) {
+        this.paymentProcessorFactory = paymentProcessorFactory;
+    }
+
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean handle(final OrderEvent orderEvent) throws OrderException {
+
+        final CustomerOrder order = orderEvent.getCustomerOrder();
+        final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
+
+        if (!paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
+
+            final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
+            if (Payment.PAYMENT_STATUS_OK.equals(result)) {
+                return super.handle(orderEvent);
+            }
+
+        }
+
+        return false;
+    }
 
 }

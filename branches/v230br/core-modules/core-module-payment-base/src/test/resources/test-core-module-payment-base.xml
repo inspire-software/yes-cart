@@ -34,25 +34,36 @@
     <import resource="classpath*:test-payment-api.xml"/>
 
 
-    <bean id="testPaymentGateway" class="org.yes.cart.payment.impl.TestPaymentGatewayImpl" scope="prototype"/>
+    <bean id="testPaymentGateway" class="org.yes.cart.payment.impl.TestPaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
 
     <bean id="testExtFormPaymentGateway" class="org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl" scope="prototype"/>
 
     <bean id="courierPaymentGateway" class="org.yes.cart.payment.impl.CourierPaymentGatewayImpl" scope="prototype"/>
 
+    <bean id="prePaymentGateway" class="org.yes.cart.payment.impl.PrePaymentGatewayImpl" scope="prototype"/>
+
 
     <bean id="courierPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="courierPaymentGatewayLabel"/>
         <property name="url" value="courierPaymentGateway"/>
-        <!--name without protocol mean spring context-->
+        <!--name without protocol means spring context-->
         <property name="description" value="Offline courier payment gateway"/>
+    </bean>
+
+    <bean id="prePaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="prePaymentGatewayLabel"/>
+        <property name="url" value="prePaymentGateway"/>
+        <!--name without protocol means spring context-->
+        <property name="description" value="Offline pre payment gateway"/>
     </bean>
 
 
     <bean id="testPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="testPaymentGatewayLabel"/>
         <property name="url" value="testPaymentGateway"/>
-        <!--name without protocol mean spring context-->
+        <!--name without protocol means spring context-->
         <property name="description" value="test payment module used for test purposes only in test content only"/>
     </bean>
 
@@ -75,6 +86,7 @@
             <map>
                 <entry key="testPaymentGateway" value-ref="testPaymentGatewayDescriptor"/>
                 <entry key="courierPaymentGateway" value-ref="courierPaymentGatewayDescriptor"/>
+                <entry key="prePaymentGateway" value-ref="prePaymentGatewayDescriptor"/>
                 <entry key="testExtFormPaymentGateway" value-ref="testExtFormPaymentGatewayDescriptor"/>
             </map>
         </property>

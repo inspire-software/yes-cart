@@ -42,6 +42,8 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
     private final CustomerService customerService;
     private final PromotionContextFactory promotionContextFactory;
 
+    private int batchSize = 20;
+
     public BulkCustomerTagProcessorImpl(final ShopService shopService,
                                         final CustomerService customerService,
                                         final PromotionContextFactory promotionContextFactory) {
@@ -63,12 +65,16 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
         final ResultsIterator<Customer> customerIterator = customerService.getGenericDao().findAllIterator();
 
         try {
+
+            int count = 0;
+            int updated = 0;
+
             while (customerIterator.hasNext())  {
 
                 final Customer customer = customerIterator.next();
                 final String tagsBefore = customer.getTag();
 
-                log.info("Processing tagging for customer {} with tags {}", customer.getEmail(), tagsBefore);
+                log.debug("Processing tagging for customer {} with tags {}", customer.getEmail(), tagsBefore);
 
                 for (final CustomerShop customerShop : customer.getShops()) {
 
@@ -86,13 +92,23 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
 
                 if (!StringUtils.equals(tagsBefore, customer.getTag())) {
                     customerService.update(customer);
-                    log.info("Tags changed for customer {} with tags {} to {}",
+                    log.debug("Tags changed for customer {} with tags {} to {}",
                             new Object[] { customer.getEmail(), tagsBefore, customer.getTag() });
+                    updated++;
                 } else {
-                    log.info("No tag change for customer {} with tags {}", customer.getEmail(), tagsBefore);
+                    log.debug("No tag change for customer {} with tags {}", customer.getEmail(), tagsBefore);
+                }
+
+                if (++count % this.batchSize == 0 ) {
+                    //flush a batch of updates and release memory:
+                    customerService.getGenericDao().flush();
+                    customerService.getGenericDao().clear();
                 }
 
             }
+
+            log.info("Processed tagging for {} customers, updated {}", count, updated);
+
         } catch (Exception exp){
             log.error("Processing tagging for customer exception " + exp.getMessage(), exp);
         } finally {
@@ -110,4 +126,15 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
         log.info("Processing tagging for customer ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
 
     }
+
+    /**
+     * Batch size for remote index update.
+     *
+     * @param batchSize batch size
+     */
+    public void setBatchSize(final int batchSize) {
+        this.batchSize = batchSize;
+    }
+
+
 }

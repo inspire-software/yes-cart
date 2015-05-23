@@ -245,7 +245,8 @@
     <!-- order statuses from CustomerOrder interface -->
     <entry key="os.none">-</entry>
     <entry key="os.pending">Підготовка</entry>
-    <entry key="os.waiting">Необхідне підтвердження</entry>
+    <entry key="os.waiting">Очікує підтвердження</entry>
+    <entry key="os.waiting.payment">Очікує платіж</entry>
     <entry key="os.in.progress">Виконується</entry>
     <entry key="os.cancelled">Скасовано</entry>
     <entry key="os.returned">Повернено</entry>

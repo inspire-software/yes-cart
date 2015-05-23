@@ -14,27 +14,23 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.payment.exception;
+package org.yes.cart.bulkjob.order;
 
+import org.yes.cart.service.order.OrderException;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 07-May-2011
- * Time: 10:21:53
+ * User: denispavlov
+ * Date: 07/05/2015
+ * Time: 12:42
  */
-public class PaymentException extends RuntimeException {
+public interface BulkAwaitingInventoryDeliveriesProcessorInternal extends Runnable {
 
     /**
-     * Payment API exception.
+     * This method allows to isolate transaction to single delivery update.
+     *
+     * @param event event to process
+     * @param deliveryId delivery to update
      */
-    public PaymentException(final String message) {
-        super(message);
-    }
+    void processDeliveryEvent(final String event, final long deliveryId) throws OrderException;
 
-    /**
-     * Payment API exception.
-     */
-    public PaymentException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
 }

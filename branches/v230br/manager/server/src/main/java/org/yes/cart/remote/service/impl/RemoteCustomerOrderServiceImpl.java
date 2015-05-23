@@ -28,10 +28,7 @@ import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.dto.GenericDTOService;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -137,7 +134,20 @@ public class RemoteCustomerOrderServiceImpl
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
+    public Result updateOrderSetCancelledManual(final String orderNum, final String message) {
+        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
+            return ((DtoCustomerOrderService) getGenericDTOService()).updateOrderSetCancelledManual(orderNum, message);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Result updateExternalDeliveryRefNo(String orderNum, String deliveryNum, String newRefNo) {
         if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
             return ((DtoCustomerOrderService) getGenericDTOService()).updateExternalDeliveryRefNo(orderNum, deliveryNum, newRefNo) ;
@@ -146,13 +156,31 @@ public class RemoteCustomerOrderServiceImpl
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     public Result updateDeliveryStatus(final String orderNum, final String deliveryNum,
                                        final String currentStatus, final String destinationStatus) {
 
         if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
             return ((DtoCustomerOrderService) getGenericDTOService())
                 .updateDeliveryStatus(orderNum, deliveryNum, currentStatus, destinationStatus);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Result updateDeliveryStatusManual(final String orderNum, final String deliveryNum,
+                                             final String currentStatus, final String destinationStatus,
+                                             final String message) {
+
+        if (federationFacade.isManageable(orderNum, CustomerOrderDTO.class)) {
+            return ((DtoCustomerOrderService) getGenericDTOService())
+                    .updateDeliveryStatusManual(orderNum, deliveryNum, currentStatus, destinationStatus, message);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -177,4 +205,8 @@ public class RemoteCustomerOrderServiceImpl
         return Collections.emptyList();
     }
 
+    /** {@inheritDoc} */
+    public Map<String, String> getOrderPgLabels(final String locale) {
+        return ((DtoCustomerOrderService) getGenericDTOService()).getOrderPgLabels(locale);
+    }
 }

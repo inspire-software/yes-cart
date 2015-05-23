@@ -17,6 +17,7 @@
 package org.yes.cart.payment.impl;
 
 import org.apache.commons.lang.SerializationUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import org.yes.cart.constants.Constants;
@@ -33,14 +34,13 @@ import org.yes.cart.payment.dto.impl.PaymentLineImpl;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This is surrogate for real processor, need to keep common processing logic during different pg tests.
@@ -93,7 +93,7 @@ public class PaymentProcessorSurrogate {
 
 
     /**
-     * AuthCapture or immediate sale operation wil be use if payment gateway not supports normal flow authorize - delivery - capture.
+     * AuthCapture or immediate sale operation will be be used if payment gateway does not support normal flow authorize - delivery - capture.
      *
      * @param order  to authorize payments.
      * @param params for payment gateway to create template from. Also if this map contains key
@@ -110,6 +110,9 @@ public class PaymentProcessorSurrogate {
 
         String paymentResult = null;
 
+        boolean atLeastOneProcessing = false;
+        boolean atLeastOneOk = false;
+        boolean atLeastOneError = false;
         for (Payment payment : paymentsToAuthorize) {
             try {
                 payment = getPaymentGateway().authorizeCapture(payment);
@@ -117,6 +120,7 @@ public class PaymentProcessorSurrogate {
             } catch (Throwable th) {
                 paymentResult = Payment.PAYMENT_STATUS_FAILED;
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+                payment.setPaymentProcessorBatchSettlement(false);
                 payment.setTransactionOperationResultMessage(th.getMessage());
 
             } finally {
@@ -125,15 +129,29 @@ public class PaymentProcessorSurrogate {
                 BeanUtils.copyProperties(payment, authCaptureOrderPayment); //from PG object to persisted
                 authCaptureOrderPayment.setPaymentProcessorResult(paymentResult);
                 authCaptureOrderPayment.setShopCode(order.getShop().getCode());
-                // FIXME: YC-390 we assume that funds are settled, but this is not guaranteed
-                authCaptureOrderPayment.setPaymentProcessorBatchSettlement(Payment.PAYMENT_STATUS_OK.equals(paymentResult));
                 customerOrderPaymentService.create(authCaptureOrderPayment);
+                if (Payment.PAYMENT_STATUS_PROCESSING.equals(paymentResult)) {
+                    atLeastOneProcessing = true;
+                } else if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
+                    // all other statuses - we fail
+                    atLeastOneError = true;
+                } else {
+                    atLeastOneOk = true;
+                }
             }
 
         }
 
-        return paymentResult;
+        if (atLeastOneError) {
+            if (atLeastOneOk) {
+                // we need to put this in processing since this will move order to waiting payment
+                // from there we have cancellation flow (with manual refund)
+                return Payment.PAYMENT_STATUS_PROCESSING;
+            }
+            return Payment.PAYMENT_STATUS_FAILED;
+        }
 
+        return atLeastOneProcessing ? Payment.PAYMENT_STATUS_PROCESSING : Payment.PAYMENT_STATUS_OK;
 
     }
 
@@ -151,14 +169,26 @@ public class PaymentProcessorSurrogate {
                     params,
                     PaymentGateway.AUTH);
 
+            boolean atLeastOneProcessing = false;
+            boolean atLeastOneError = false;
+
             for (Payment payment : paymentsToAuthorize) {
                 String paymentResult = null;
                 try {
-                    payment = getPaymentGateway().authorize(payment);
-                    paymentResult = payment.getPaymentProcessorResult();
+                    if (atLeastOneError) {
+                        // no point in order auths as we reverse all in case of at least one failure
+                        paymentResult = Payment.PAYMENT_STATUS_FAILED;
+                        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+                        payment.setPaymentProcessorBatchSettlement(false);
+                        payment.setTransactionOperationResultMessage("skipped due to previous errors");
+                    } else {
+                        payment = getPaymentGateway().authorize(payment);
+                        paymentResult = payment.getPaymentProcessorResult();
+                    }
                 } catch (Throwable th) {
                     paymentResult = Payment.PAYMENT_STATUS_FAILED;
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+                    payment.setPaymentProcessorBatchSettlement(false);
                     payment.setTransactionOperationResultMessage(th.getMessage());
                 } finally {
                     final CustomerOrderPayment authOrderPayment = new CustomerOrderPaymentEntity();
@@ -167,19 +197,28 @@ public class PaymentProcessorSurrogate {
                     authOrderPayment.setPaymentProcessorResult(paymentResult);
                     authOrderPayment.setShopCode(order.getShop().getCode());
                     customerOrderPaymentService.create(authOrderPayment);
-                    if (Payment.PAYMENT_STATUS_FAILED.equals(paymentResult)) {
-                        reverseAuthorizations(order.getOrdernum());
-                        return Payment.PAYMENT_STATUS_FAILED;
+                    if (Payment.PAYMENT_STATUS_PROCESSING.equals(paymentResult)) {
+                        atLeastOneProcessing = true;
+                    } else if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
+                        // all other statuses - we fail
+                        atLeastOneError = true;
                     }
                 }
             }
-            return Payment.PAYMENT_STATUS_OK;
+            if (atLeastOneError) {
+                reverseAuthorizations(order.getOrdernum());
+                return Payment.PAYMENT_STATUS_FAILED;
+            }
+            return atLeastOneProcessing ? Payment.PAYMENT_STATUS_PROCESSING : Payment.PAYMENT_STATUS_OK;
+
         } else if (getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizeCapture()) {
+
             return authorizeCapture(order, params);
+
         }
         throw new RuntimeException(
                 MessageFormat.format(
-                        "Payment gateway {0}  must supports authorize and/ authorize capture operations",
+                        "Payment gateway {0}  must supports 'authorize' or 'authorize-capture' operations",
                         getPaymentGateway().getLabel()
                 )
         );
@@ -187,84 +226,45 @@ public class PaymentProcessorSurrogate {
 
 
     /**
-     * Check is reverse auth operation available for given auth op.
-     * Auth can be reversed in case if op has not other successful operation.
-     *
-     * @param authToReverce order payment to check
-     * @param checkRevAuth  set set of all operations with ok status.
-     * @return true if reverse operation can be performed.
-     */
-    boolean canPerformReverseAuth(final CustomerOrderPayment authToReverce, final List<CustomerOrderPayment> checkRevAuth) {
-        final String shipmentNo = authToReverce.getOrderShipment();
-        for (CustomerOrderPayment paymentOp : checkRevAuth) {
-            if (shipmentNo.equals(paymentOp.getOrderShipment())) {
-                if (!PaymentGateway.AUTH.equals(paymentOp.getTransactionOperation())) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-
-    /**
      * Reverse authorized payments. This can be when one of the payments from whole set is failed.
-     * Reverse authorization will applied to authorized payments only
+     * Reverse authorization will be applied to authorized payments only
      *
      * @param orderNum order with some authorized payments
      */
     public void reverseAuthorizations(final String orderNum) {
-        if (getPaymentGateway().getPaymentGatewayFeatures().isSupportReverseAuthorization()) {
-            final List<CustomerOrderPayment> paymentsToRevAuth = customerOrderPaymentService.findBy(
-                    orderNum,
-                    null,
-                    Payment.PAYMENT_STATUS_OK,
-                    PaymentGateway.AUTH
-            );
 
-            final List<CustomerOrderPayment> checkRevAuth = customerOrderPaymentService.findBy(
-                    orderNum,
-                    null,
-                    Payment.PAYMENT_STATUS_OK,
-                    null
-            );
+        if (getPaymentGateway().getPaymentGatewayFeatures().isSupportReverseAuthorization()) {
+
+            final List<CustomerOrderPayment> paymentsToRevAuth = determineOpenAuthorisations(orderNum, null);
 
             for (CustomerOrderPayment customerOrderPayment : paymentsToRevAuth) {
-                if (canPerformReverseAuth(customerOrderPayment, checkRevAuth)) {
-                    Payment payment = new PaymentImpl();
-                    BeanUtils.copyProperties(customerOrderPayment, payment); //from persisted to PG object
+                Payment payment = new PaymentImpl();
+                BeanUtils.copyProperties(customerOrderPayment, payment); //from persisted to PG object
 
-                    String paymentResult = null;
-                    try {
-                        payment = getPaymentGateway().reverseAuthorization(payment); //pass "original" to perform reverse authorization.
-                        paymentResult = payment.getPaymentProcessorResult();
-                    } catch (Throwable th) {
-                        paymentResult = Payment.PAYMENT_STATUS_FAILED;
-                        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
-                        payment.setTransactionOperationResultMessage(th.getMessage());
+                String paymentResult = null;
+                try {
+                    payment = getPaymentGateway().reverseAuthorization(payment); //pass "original" to perform reverse authorization.
+                    paymentResult = payment.getPaymentProcessorResult();
+                } catch (Throwable th) {
+                    paymentResult = Payment.PAYMENT_STATUS_FAILED;
+                    payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+                    payment.setPaymentProcessorBatchSettlement(false);
+                    payment.setTransactionOperationResultMessage(th.getMessage());
 
-                    } finally {
-                        final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
-                        //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
-                        BeanUtils.copyProperties(payment, authReversedOrderPayment); //from PG object to persisted
-                        authReversedOrderPayment.setPaymentProcessorResult(paymentResult);
-                        authReversedOrderPayment.setShopCode(customerOrderPayment.getShopCode());
-                        customerOrderPaymentService.create(authReversedOrderPayment);
-                    }
-
+                } finally {
+                    final CustomerOrderPayment authReversedOrderPayment = new CustomerOrderPaymentEntity();
+                    //customerOrderPaymentService.getGenericDao().getEntityFactory().getByIface(CustomerOrderPayment.class);
+                    BeanUtils.copyProperties(payment, authReversedOrderPayment); //from PG object to persisted
+                    authReversedOrderPayment.setPaymentProcessorResult(paymentResult);
+                    authReversedOrderPayment.setShopCode(customerOrderPayment.getShopCode());
+                    customerOrderPaymentService.create(authReversedOrderPayment);
                 }
             }
         }
     }
 
     /**
-     * Particular shipment is complete. Funds can be captured.
-     * In case of multiple delivery and single payment, capture on last delivery.
-     *
-     * @param order               order
-     * @param orderShipmentNumber internal shipment number.
-     *                            Each order has at least one delivery.
-     * @return status of operation.
+     * {@inheritDoc}
      */
     public String shipmentComplete(final CustomerOrder order, final String orderShipmentNumber) {
         return shipmentComplete(order, orderShipmentNumber, null);
@@ -282,44 +282,68 @@ public class PaymentProcessorSurrogate {
      */
     public String shipmentComplete(final CustomerOrder order, final String orderShipmentNumber, final BigDecimal addToPayment) {
 
-        final boolean isMultiplePaymentsSupports = getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment();
-        final List<CustomerOrderPayment> paymentsToCapture = customerOrderPaymentService.findBy(
-                order.getOrdernum(),
-                isMultiplePaymentsSupports ? orderShipmentNumber : order.getOrdernum(),
-                Payment.PAYMENT_STATUS_OK,
-                PaymentGateway.AUTH
-        );
-        if (
-                paymentsToCapture.size() > 1
-                        ||
-                        (paymentsToCapture.isEmpty() && !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize())) {
-            ShopCodeContext.getLog(this).warn( //must be only one record
-                    MessageFormat.format(
-                            "Payment gateway {0} with features {1}. Found {2} records to capture, but expected 1 only. Order num {3} Shipment num {4}",
-                            getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), paymentsToCapture.size(), order.getOrdernum(), orderShipmentNumber
-                    )
-            );
-        }
+        if (getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorize()) {
 
-        boolean wasError = false;
-        String paymentResult = null;
+            final boolean isMultiplePaymentsSupports = getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment();
 
-        if (isMultiplePaymentsSupports || isLastShipmentComplete(order)) { //each completed delivery or last in case of single pay for several delivery
+            final List<CustomerOrderPayment> paymentsToCapture =
+                    determineOpenAuthorisations(order.getOrdernum(), isMultiplePaymentsSupports ? orderShipmentNumber : order.getOrdernum());
+
+            final Logger log = ShopCodeContext.getLog(this);
+            log.debug("Attempting to capture funds for Order num {} Shipment num {}", order.getOrdernum(), orderShipmentNumber);
+
+            if (paymentsToCapture.size() > 1) {
+                log.warn( //must be only one record
+                        MessageFormat.format(
+                                "Payment gateway {0} with features {1}. Found {2} records to capture, but expected 1 only. Order num {3} Shipment num {4}",
+                                getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), paymentsToCapture.size(), order.getOrdernum(), orderShipmentNumber
+                        )
+                );
+            } else if (paymentsToCapture.isEmpty()) {
+                log.debug( //this could be a single payment PG and it was already captured
+                        MessageFormat.format(
+                                "Payment gateway {0} with features {1}. Found 0 records to capture, possibly already captured all payments. Order num {2} Shipment num {3}",
+                                getPaymentGateway().getLabel(), getPaymentGateway().getPaymentGatewayFeatures(), order.getOrdernum(), orderShipmentNumber
+                        )
+                );
+
+            }
+
+            final boolean forceManualProcessing = false; // Boolean.TRUE.equals(params.get("forceManualProcessing"));
+            final String forceManualProcessingMessage = null; // (String) params.get("forceManualProcessingMessage");
+            boolean wasError = false;
+            String paymentResult = null;
+
+            // We always attempt to Capture funds at this stage.
+            // Funds are captured either:
+            // 1. for delivery for authorise per shipment PG; or
+            // 2. captured as soon as first delivery is shipped (thereafter there will be no AUTHs to CAPTURE,
+            // so all subsequent deliveries will not have any paymentsToCapture)
+
             for (CustomerOrderPayment paymentToCapture : paymentsToCapture) {
                 Payment payment = new PaymentImpl();
                 BeanUtils.copyProperties(paymentToCapture, payment); //from persisted to PG object
                 payment.setTransactionOperation(PaymentGateway.CAPTURE);
+                payment.setPaymentAmount(payment.getPaymentAmount().add(addToPayment).setScale(2, BigDecimal.ROUND_HALF_UP));
 
 
                 try {
-                    if (addToPayment != null) {
-                        payment.setPaymentAmount(payment.getPaymentAmount().add(addToPayment).setScale(2, BigDecimal.ROUND_HALF_UP));
+                    if (forceManualProcessing) {
+                        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+                        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+                        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+                        payment.setPaymentProcessorBatchSettlement(true);
+                        payment.setTransactionGatewayLabel("forceManualProcessing");
+                        payment.setTransactionOperationResultCode("forceManualProcessing");
+                        payment.setTransactionOperationResultMessage(forceManualProcessingMessage);
+                    } else {
+                        payment = getPaymentGateway().capture(payment); //pass "original" to perform fund capture.
                     }
-                    payment = getPaymentGateway().capture(payment); //pass "original" to perform fund capture.
                     paymentResult = payment.getPaymentProcessorResult();
                 } catch (Throwable th) {
                     paymentResult = Payment.PAYMENT_STATUS_FAILED;
                     payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+                    payment.setPaymentProcessorBatchSettlement(false);
                     payment.setTransactionOperationResultMessage(th.getMessage());
                     ShopCodeContext.getLog(this).error("Cannot capture " + payment, th);
 
@@ -329,17 +353,16 @@ public class PaymentProcessorSurrogate {
                     BeanUtils.copyProperties(payment, captureOrderPayment); //from PG object to persisted
                     captureOrderPayment.setPaymentProcessorResult(paymentResult);
                     captureOrderPayment.setShopCode(paymentToCapture.getShopCode());
-                    // FIXME: YC-390 we assume that funds are settled, but this is not guaranteed
-                    captureOrderPayment.setPaymentProcessorBatchSettlement(Payment.PAYMENT_STATUS_OK.equals(paymentResult));
                     customerOrderPaymentService.create(captureOrderPayment);
                 }
                 if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
                     wasError = true;
                 }
             }
-        }
 
-        return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
+            return wasError ? Payment.PAYMENT_STATUS_FAILED : Payment.PAYMENT_STATUS_OK;
+        }
+        return Payment.PAYMENT_STATUS_OK;
     }
 
 
@@ -351,16 +374,18 @@ public class PaymentProcessorSurrogate {
         if (!CustomerOrder.ORDER_STATUS_CANCELLED.equals(order.getOrderStatus()) &&
                 !CustomerOrder.ORDER_STATUS_RETURNED.equals(order.getOrderStatus())) {
 
+            reverseAuthorizations(order.getOrdernum());
+
+            final boolean forceManualProcessing = false; // Boolean.TRUE.equals(params.get("forceManualProcessing"));
+            final String forceManualProcessingMessage = null; // (String) params.get("forceManualProcessingMessage");
             boolean wasError = false;
 
-            final List<CustomerOrderPayment> paymentsToRollBack = new ArrayList<CustomerOrderPayment>();
+            final List<CustomerOrderPayment> paymentsToRollBack = determineOpenCaptures(order.getOrdernum(), null);
 
-            paymentsToRollBack.addAll(
-                    customerOrderPaymentService.findBy(order.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, PaymentGateway.AUTH_CAPTURE));
-            paymentsToRollBack.addAll(
-                    customerOrderPaymentService.findBy(order.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, PaymentGateway.CAPTURE));
-
-            reverseAuthorizations(order.getOrdernum());
+            /*
+               We do NOT need to check for features (isSupportRefund(), isSupportVoid()). PG must create payments with
+               Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED for audit purposes and manual flow support.
+            */
 
             for (CustomerOrderPayment customerOrderPayment : paymentsToRollBack) {
                 Payment payment = null;
@@ -368,17 +393,27 @@ public class PaymentProcessorSurrogate {
                 try {
                     payment = new PaymentImpl();
                     BeanUtils.copyProperties(customerOrderPayment, payment); //from persisted to PG object
-                    if (useRefund /* customerOrderPayment.isPaymentProcessorBatchSettlement()*/) {
-                        // refund
+                    if (forceManualProcessing) {
                         payment.setTransactionOperation(PaymentGateway.REFUND);
-                        payment = getPaymentGateway().refund(payment);
-                        paymentResult = payment.getPaymentProcessorResult();
+                        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+                        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+                        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+                        payment.setPaymentProcessorBatchSettlement(false);
+                        payment.setTransactionGatewayLabel("forceManualProcessing");
+                        payment.setTransactionOperationResultCode("forceManualProcessing");
+                        payment.setTransactionOperationResultMessage(forceManualProcessingMessage);
                     } else {
-                        //void
-                        payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
-                        payment = getPaymentGateway().voidCapture(payment);
-                        paymentResult = payment.getPaymentProcessorResult();
+                        if (useRefund /* customerOrderPayment.isPaymentProcessorBatchSettlement()*/) {
+                            // refund
+                            payment.setTransactionOperation(PaymentGateway.REFUND);
+                            payment = getPaymentGateway().refund(payment);
+                        } else {
+                            //void
+                            payment.setTransactionOperation(PaymentGateway.VOID_CAPTURE);
+                            payment = getPaymentGateway().voidCapture(payment);
+                        }
                     }
+                    paymentResult = payment.getPaymentProcessorResult();
                 } catch (Throwable th) {
                     ShopCodeContext.getLog(this).error(
                             MessageFormat.format(
@@ -387,6 +422,7 @@ public class PaymentProcessorSurrogate {
                                     payment
                             ), th
                     );
+                    paymentResult = Payment.PAYMENT_STATUS_FAILED;
                     wasError = true;
                 } finally {
                     final CustomerOrderPayment captureReversedOrderPayment = new CustomerOrderPaymentEntity();
@@ -396,8 +432,7 @@ public class PaymentProcessorSurrogate {
                     captureReversedOrderPayment.setShopCode(customerOrderPayment.getShopCode());
                     customerOrderPaymentService.create(captureReversedOrderPayment);
                 }
-                if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult) &&
-                        !Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED.equals(paymentResult)) {
+                if (!Payment.PAYMENT_STATUS_OK.equals(paymentResult)) {
                     wasError = true;
                 }
 
@@ -417,17 +452,16 @@ public class PaymentProcessorSurrogate {
      * Create list of payment to authorize.
      *
      * @param order                order
-     * @param params
+     * @param params               parameters
      * @param transactionOperation operation in term of payment processor
      * @param forceSinglePaymentIn flag is true for authCapture operation, when payment gateway not supports several payments per
      *                             order
      * @return list of  payments with details
      */
-    public List<Payment> createPaymentsToAuthorize(
-            final CustomerOrder order,
-            final boolean forceSinglePaymentIn,
-            final Map params,
-            final String transactionOperation) {
+    public List<Payment> createPaymentsToAuthorize(final CustomerOrder order,
+                                                   final boolean forceSinglePaymentIn,
+                                                   final Map params,
+                                                   final String transactionOperation) {
 
         Assert.notNull(order, "Customer order expected");
 
@@ -435,23 +469,32 @@ public class PaymentProcessorSurrogate {
 
         final Payment templatePayment = fillPaymentPrototype(
                 order,
-                getPaymentGateway().createPaymentPrototype(params),
+                getPaymentGateway().createPaymentPrototype(transactionOperation, params),
                 transactionOperation,
                 getPaymentGateway().getLabel());
 
         final List<Payment> rez = new ArrayList<Payment>();
         if (forceSinglePayment || !getPaymentGateway().getPaymentGatewayFeatures().isSupportAuthorizePerShipment()) {
-            Payment payment = (Payment) SerializationUtils.clone(templatePayment);
-            for (CustomerOrderDelivery delivery : order.getDelivery()) {
-                fillPayment(order, delivery, payment, true);
+
+            final List<CustomerOrderPayment> existing = customerOrderPaymentService.findBy(order.getOrdernum(), null, Payment.PAYMENT_STATUS_OK, transactionOperation);
+            if (existing.isEmpty()) {
+
+                Payment payment = (Payment) SerializationUtils.clone(templatePayment);
+                for (CustomerOrderDelivery delivery : order.getDelivery()) {
+                    fillPayment(order, delivery, payment, true);
+                }
+                rez.add(payment);
+
             }
-            rez.add(payment);
 
         } else {
             for (CustomerOrderDelivery delivery : order.getDelivery()) {
-                Payment payment = (Payment) SerializationUtils.clone(templatePayment);
-                fillPayment(order, delivery, payment, false);
-                rez.add(payment);
+                final List<CustomerOrderPayment> existing = customerOrderPaymentService.findBy(order.getOrdernum(), delivery.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, transactionOperation);
+                if (existing.isEmpty()) {
+                    Payment payment = (Payment) SerializationUtils.clone(templatePayment);
+                    fillPayment(order, delivery, payment, false);
+                    rez.add(payment);
+                }
             }
         }
         return rez;
@@ -491,10 +534,10 @@ public class PaymentProcessorSurrogate {
                                    final CustomerOrderDelivery delivery,
                                    final Payment payment) {
         BigDecimal rez = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
-        PaymentLine shipmentLine = null;
         for (PaymentLine paymentLine : payment.getOrderItems()) {
             if (paymentLine.isShipment()) {
-                shipmentLine = paymentLine;
+                // shipping price already includes shipping level promotions
+                rez = rez.add(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
             } else {
                 // unit price already includes item level promotions
                 rez = rez.add(paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
@@ -516,10 +559,6 @@ public class PaymentProcessorSurrogate {
             final BigDecimal discount = orderTotalList.subtract(orderTotal).divide(orderTotalList, 10, RoundingMode.HALF_UP);
             // scale delivery items total in accordance with order level discount percentage
             rez = rez.multiply(BigDecimal.ONE.subtract(discount)).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        }
-        if (shipmentLine != null) {
-            // shipping price already includes shipping level promotions
-            rez = rez.add(shipmentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
         }
         payment.setPaymentAmount(rez);
         payment.setOrderCurrency(order.getCurrency());
@@ -612,20 +651,107 @@ public class PaymentProcessorSurrogate {
         return templatePayment;
     }
 
-    /**
-     * Is all shipments were completed and given the last one, that completed.
-     *
-     * @param order order
-     * @return true in case if all shipments,
-     */
 
-    boolean isLastShipmentComplete(final CustomerOrder order) {
-        for (CustomerOrderDelivery delivery : order.getDelivery()) {
-            if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(delivery.getDeliveryStatus())) {
-                return false;
-            }
+
+    private List<CustomerOrderPayment> determineOpenAuthorisations(final String orderNumber, final String orderShipmentNumber) {
+
+        final List<CustomerOrderPayment> paymentsToCapture = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+                orderNumber,
+                orderShipmentNumber,
+                Payment.PAYMENT_STATUS_OK,
+                PaymentGateway.AUTH
+        ));
+
+        if (!paymentsToCapture.isEmpty()) {
+
+            final List<CustomerOrderPayment> paymentsCapturedOrReversedAuth = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+                    orderNumber,
+                    orderShipmentNumber,
+                    new String[] { Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_PROCESSING },
+                    new String[] { PaymentGateway.CAPTURE, PaymentGateway.REVERSE_AUTH }
+            ));
+
+            filterOutAlreadyProcessed(paymentsToCapture, paymentsCapturedOrReversedAuth);
+
         }
-        return true;
+
+        return paymentsToCapture;
     }
+
+
+    private List<CustomerOrderPayment> determineOpenCaptures(final String orderNumber, final String orderShipmentNumber) {
+
+        final List<CustomerOrderPayment> paymentsCaptured = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+                orderNumber,
+                orderShipmentNumber,
+                new String[] { Payment.PAYMENT_STATUS_OK },
+                new String[] { PaymentGateway.CAPTURE, PaymentGateway.AUTH_CAPTURE }
+        ));
+
+        final List<CustomerOrderPayment> paymentsProcessing = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+                orderNumber,
+                orderShipmentNumber,
+                new String[] { Payment.PAYMENT_STATUS_PROCESSING },
+                new String[] { PaymentGateway.CAPTURE, PaymentGateway.AUTH_CAPTURE }
+        ));
+
+        if (!paymentsProcessing.isEmpty()) {
+
+            final List<CustomerOrderPayment> paymentsFailed = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+                    orderNumber,
+                    orderShipmentNumber,
+                    new String[] { Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED },
+                    new String[] { PaymentGateway.CAPTURE, PaymentGateway.AUTH_CAPTURE }
+            ));
+
+            // Remove all captured from processing
+            filterOutAlreadyProcessed(paymentsProcessing, paymentsCaptured);
+            // Remove all failed from processing
+            filterOutAlreadyProcessed(paymentsProcessing, paymentsFailed);
+            // Add all processing to captured
+            paymentsCaptured.addAll(paymentsProcessing);
+
+        }
+
+        if (!paymentsCaptured.isEmpty()) {
+
+            final List<CustomerOrderPayment> paymentsRefunded = new ArrayList<CustomerOrderPayment>(customerOrderPaymentService.findBy(
+                    orderNumber,
+                    orderShipmentNumber,
+                    new String[] { Payment.PAYMENT_STATUS_OK },
+                    new String[] { PaymentGateway.VOID_CAPTURE, PaymentGateway.REFUND }
+            ));
+
+            filterOutAlreadyProcessed(paymentsCaptured, paymentsRefunded);
+
+        }
+
+        return paymentsCaptured;
+
+    }
+
+
+    private void filterOutAlreadyProcessed(final List<CustomerOrderPayment> candidates, final List<CustomerOrderPayment> processed) {
+
+        final Iterator<CustomerOrderPayment> candidatesIt = candidates.iterator();
+        while(candidatesIt.hasNext()) {
+
+            final CustomerOrderPayment candidate = candidatesIt.next();
+
+            for (final CustomerOrderPayment payment : processed) {
+
+                if (candidate.getOrderNumber().equals(payment.getOrderNumber())
+                        && candidate.getOrderShipment().equals(payment.getOrderShipment())
+                        && MoneyUtils.isFirstEqualToSecond(candidate.getPaymentAmount(), payment.getPaymentAmount())) {
+                    // This is an exact match of already processed payment - need to remove it
+                    candidatesIt.remove();
+                    break;
+                }
+
+            }
+
+        }
+    }
+
 
 }

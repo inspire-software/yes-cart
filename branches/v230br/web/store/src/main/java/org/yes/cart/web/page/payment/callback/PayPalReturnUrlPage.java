@@ -133,7 +133,8 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
 
             final String payerStatus = nvpCallResult.get("PAYERSTATUS");
 
-            final boolean checkoutDetailOk = paymentGatewayExternalForm.isSuccess(nvpCallResult)
+            final boolean checkoutDetailOk =
+                    Payment.PAYMENT_STATUS_OK.equals(paymentGatewayExternalForm.getExternalCallbackResult(nvpCallResult))
                     && "verified".equalsIgnoreCase(payerStatus);
 
             final SubmitLink payLink = new SubmitLink(PAY_LINK);

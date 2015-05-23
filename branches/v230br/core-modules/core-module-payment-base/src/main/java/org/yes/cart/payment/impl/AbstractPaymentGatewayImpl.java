@@ -25,6 +25,7 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.ConfigurablePaymentGateway;
 import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
+import org.yes.cart.util.HttpParamsUtils;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -123,47 +124,26 @@ public abstract class AbstractPaymentGatewayImpl implements ConfigurablePaymentG
     /**
      * {@inheritDoc}
      */
-    public Payment createPaymentPrototype(final Map parametersMap) {
+    public Payment createPaymentPrototype(final String operation, final Map parametersMap) {
 
         final Payment payment = new PaymentImpl();
+        final Map<String, String> params = HttpParamsUtils.createSingleValueMap(parametersMap);
 
-        payment.setCardHolderName(getSingleValue(parametersMap.get("ccHolderName")));
-        payment.setCardNumber(getSingleValue(parametersMap.get("ccNumber")));
-        payment.setCardExpireMonth(getSingleValue(parametersMap.get("ccExpireMonth")));
-        payment.setCardExpireYear(getSingleValue(parametersMap.get("ccExpireYear")));
-        payment.setCardCvv2Code(getSingleValue(parametersMap.get("ccSecCode")));
-        payment.setCardType(getSingleValue(parametersMap.get("ccType")));
-        payment.setShopperIpAddress(getSingleValue(parametersMap.get(PaymentMiscParam.CLIENT_IP)));
+        payment.setCardHolderName(params.get("ccHolderName"));
+        payment.setCardNumber(params.get("ccNumber"));
+        payment.setCardExpireMonth(params.get("ccExpireMonth"));
+        payment.setCardExpireYear(params.get("ccExpireYear"));
+        payment.setCardCvv2Code(params.get("ccSecCode"));
+        payment.setCardType(params.get("ccType"));
+        payment.setShopperIpAddress(params.get(PaymentMiscParam.CLIENT_IP));
 
 
         return payment;
     }
 
     /**
-     * Work around for problem with wicket param values, when it can return
-     * parameter value as string or as array of strings with single value.
-     * This behavior depends on url encoding strategy
-     *
-     * @param param parameters
-     *
-     * @return value
-     */
-    public String getSingleValue(final Object param) {
-        if (param instanceof String) {
-            return (String) param;
-        } else if (param instanceof String[]) {
-            if (((String[])param).length > 0) {
-                return ((String [])param)[0];
-            }
-        }
-        return null;
-
-    }
-
-    /**
      * {@inheritDoc}
      */
-
     public Collection<PaymentGatewayParameter> getPaymentGatewayParameters() {
         if (allParameters == null) {
             allParameters = paymentGatewayParameterService.findAll(getLabel(), shopCode);

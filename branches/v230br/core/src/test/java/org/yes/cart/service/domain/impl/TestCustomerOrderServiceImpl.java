@@ -27,6 +27,7 @@ import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.payment.impl.TestPaymentGatewayImpl;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.order.OrderEventHandler;
@@ -40,6 +41,7 @@ import java.util.*;
 
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -174,7 +176,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
                         null,
                         Collections.EMPTY_MAP)));
 
-        BigDecimal amount = customerOrderService.getOrderAmount(order.getOrdernum());
+        BigDecimal amount = order.getOrderTotal();
 
         assertTrue("payment must be 16.77 + 3 * 190.01 + 2 * 70.99 = 728.78, but was  " + amount
                 , new BigDecimal("728.78").compareTo(amount) == 0);
@@ -248,12 +250,21 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+
+                List<Long> rezIds = customerOrderService.findAwaitingDeliveriesIds(
+                        Arrays.asList(productSkuService.findById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+
                 ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(
                         Arrays.asList(productSkuService.findById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                         Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+
                 for (count[0] = 0; rez.hasNext(); rez.next()) {
                     count[0]++;
+                    assertTrue(rezIds.contains(rez.next().getCustomerOrderDeliveryId()));
                 }
+                assertEquals(count[0], rezIds.size());
+
                 transactionStatus.setRollbackOnly();
             }
         });
@@ -262,12 +273,21 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+
+                List<Long> rezIds  = customerOrderService.findAwaitingDeliveriesIds(
+                        Arrays.asList(productSkuService.findById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+
                 ResultsIterator<CustomerOrderDelivery> rez  = customerOrderService.findAwaitingDeliveries(
                         Arrays.asList(productSkuService.findById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                         Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+
                 for (count[0] = 0; rez.hasNext(); rez.next()) {
                     count[0]++;
+                    assertTrue(rezIds.contains(rez.next().getCustomerOrderDeliveryId()));
                 }
+                assertEquals(count[0], rezIds.size());
+
                 transactionStatus.setRollbackOnly();
             }
         });
@@ -276,12 +296,21 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+
+                List<Long> rezIds = customerOrderService.findAwaitingDeliveriesIds(
+                        Arrays.asList(productSkuService.findById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+
                 ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(
                         Arrays.asList(productSkuService.findById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                         Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+
                 for (count[0] = 0; rez.hasNext(); rez.next()) {
                     count[0]++;
+                    assertTrue(rezIds.contains(rez.next().getCustomerOrderDeliveryId()));
                 }
+                assertEquals(count[0], rezIds.size());
+
                 transactionStatus.setRollbackOnly();
             }
         });
@@ -290,11 +319,19 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
+
+                List<Long> rezIds = customerOrderService.findAwaitingDeliveriesIds(null, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+
                 ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(null, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                         Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
+
                 for (count[0] = 0; rez.hasNext(); rez.next()) {
                     count[0]++;
+                    assertTrue(rezIds.contains(rez.next().getCustomerOrderDeliveryId()));
                 }
+                assertEquals(count[0], rezIds.size());
+
                 transactionStatus.setRollbackOnly();
             }
         });

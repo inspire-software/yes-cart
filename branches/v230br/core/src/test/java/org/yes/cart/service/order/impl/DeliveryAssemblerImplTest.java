@@ -28,9 +28,7 @@ import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.*;
@@ -56,7 +54,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testGetDeliveryGroups() throws Exception {
+    public void testGetDeliveryGroupsStandard() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart1(customer.getEmail());
@@ -66,61 +64,118 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(1, dgroups.size());
         assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
         assertEquals(2, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
+    }
+
+    @Test
+    public void testGetDeliveryGroupsStandardInsufficient() throws Exception {
+        Customer customer = createCustomer();
+        assertFalse(customer.getAddress().isEmpty());
         //two delivery will be planed , because of of the sku has not enough quantity
-        shoppingCart = getShoppingCart2(customer.getEmail());
-        customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
-        assertEquals(2, dgroups.size());
-        assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
-        assertNotNull(dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
-        assertEquals(1, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
-        assertEquals(1, dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).size());
-        //Standard and back order with inventory. Only one delivery must be planned
-        shoppingCart = getShoppingCart3(customer.getEmail());
-        customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
+        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
         assertEquals(1, dgroups.size());
         assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
         assertEquals(2, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
-        //Standard and back order with inventory. Ordered qty of back order product more that existing inventory.
-        // so two delivery must be planned
-        shoppingCart = getShoppingCart4(customer.getEmail());
-        customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+    }
+
+    @Test
+    public void testGetDeliveryGroupsStandardAndBackorderSufficient() throws Exception {
+        Customer customer = createCustomer();
+        assertFalse(customer.getAddress().isEmpty());
+        //Standard and back order with inventory. Only one delivery must be planned
+        ShoppingCart shoppingCart = getShoppingCart3(customer.getEmail());
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
+        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
+        assertEquals(1, dgroups.size());
+        assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+        assertEquals(2, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
+    }
+
+    @Test
+    public void testGetDeliveryGroupsStandardAndBackorder() throws Exception {
+        Customer customer = createCustomer();
+        assertFalse(customer.getAddress().isEmpty());
+        ShoppingCart shoppingCart = getShoppingCart4(customer.getEmail());
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
+        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
         assertEquals(2, dgroups.size());
         assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
         assertNotNull(dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
         assertEquals(1, dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).size());
         assertEquals(1, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
-        //Standard and back order with inventory. Ordered qty of both products more that existing inventory.
-        // so one delivery must be planned
-        shoppingCart = getShoppingCart5(customer.getEmail());
-        customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+
+        // Ensure that they are ordered
+        final Iterator<String> sequence = Arrays.asList(
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
+                CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).iterator();
+        for (final Map.Entry<String, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
+            assertEquals(sequence.next(), entry.getKey());
+        }
+
+    }
+
+    @Test
+    public void testGetDeliveryGroupsBackorder() throws Exception {
+        Customer customer = createCustomer();
+        assertFalse(customer.getAddress().isEmpty());
+        ShoppingCart shoppingCart = getShoppingCart5(customer.getEmail());
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
-        assertEquals(1, dgroups.size());
+        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
+        assertEquals(2, dgroups.size());
+        assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
         assertNotNull(dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
-        assertEquals(2, dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).size());
-        //Standard, back order & pre order with inventory. Ordered qty covered by inventory.
-        //Two  deliveries must be planned, because of pre order will wait 
-        shoppingCart = getShoppingCart6(customer.getEmail());
-        customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        assertEquals(1, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
+        assertEquals(1, dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).size());
+
+        // Ensure that they are ordered
+        final Iterator<String> sequence = Arrays.asList(
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
+                CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).iterator();
+        for (final Map.Entry<String, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
+            assertEquals(sequence.next(), entry.getKey());
+        }
+    }
+
+    @Test
+    public void testGetDeliveryGroupsPreorder() throws Exception {
+        Customer customer = createCustomer();
+        assertFalse(customer.getAddress().isEmpty());
+        ShoppingCart shoppingCart = getShoppingCart6(customer.getEmail());
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
+        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
         assertEquals(2, dgroups.size());
         assertNotNull(dgroups.get(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
         assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
         assertEquals(1, dgroups.get(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP).size());
         assertEquals(2, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
+
+        // Ensure that they are ordered
+        final Iterator<String> sequence = Arrays.asList(
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
+                CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP).iterator();
+        for (final Map.Entry<String, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
+            assertEquals(sequence.next(), entry.getKey());
+        }
+    }
+
+    @Test
+    public void testGetDeliveryGroupsFull() throws Exception {
+        Customer customer = createCustomer();
+        assertFalse(customer.getAddress().isEmpty());
+        //Standard, back order & pre order with inventory. Ordered qty covered by inventory.
+        //Two  deliveries must be planned, because of pre order will wait 
         //Standard, back order without inventory & pre order with inventory. Ordered qty not covered by inventory.
         // 4 deliveries must be planned, because of pre order will wait
-        shoppingCart = getShoppingCart7(customer.getEmail());
-        customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        ShoppingCart shoppingCart = getShoppingCart7(customer.getEmail());
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
+        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
         assertEquals(4, dgroups.size());
         assertNotNull(dgroups.get(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
         assertNotNull(dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
@@ -130,6 +185,16 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(1, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
         assertEquals(1, dgroups.get(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP).size());
         assertEquals(1, dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).size());
+
+        // Ensure that they are ordered
+        final Iterator<String> sequence = Arrays.asList(
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
+                CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP,
+                CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP,
+                CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP).iterator();
+        for (final Map.Entry<String, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
+            assertEquals(sequence.next(), entry.getKey());
+        }
     }
 
     @Test

@@ -29,7 +29,6 @@ import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
-import org.yes.cart.payment.exception.PaymentException;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.RoundingMode;
@@ -47,8 +46,8 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImp
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             true, true, true, false,
-            true, true, true, false,
-            true, false,
+            true, true, true,
+            false, true, false,
             null,
             false, true
     );
@@ -239,6 +238,7 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImp
                 payment.setTransactionOperationResultCode(nvpDecoder.get("L_ERRORCODE0"));
                 payment.setTransactionOperationResultMessage(responce);
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+                payment.setPaymentProcessorBatchSettlement(false);
             } else {
                 final String transactionId = nvpDecoder.get("TRANSACTIONID");
 
@@ -249,6 +249,7 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImp
                 payment.setTransactionReferenceId(transactionId);
                 payment.setTransactionAuthorizationCode(transactionId);
                 payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+                payment.setPaymentProcessorBatchSettlement(CAPTURE.equals(operation) || AUTH_CAPTURE.equals(operation));
             }
         } catch (PayPalException e) {
             String message = MessageFormat.format(
@@ -259,7 +260,9 @@ public class PayPalNvpPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImp
                     e.getMessage()
             );
             log.error(message, e);
-            throw new PaymentException(message, e);
+            payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
+            payment.setPaymentProcessorBatchSettlement(false);
+            payment.setTransactionOperationResultMessage(message);
         }
         return payment;
     }

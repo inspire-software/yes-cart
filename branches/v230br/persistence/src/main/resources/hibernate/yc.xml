@@ -2667,6 +2667,26 @@
        order by d.customerOrderDeliveryId
        ]]>
     </query>
+
+    <query  name="DELIVERIES.IDS.WAITING.FOR.INVENTORY.BY.SKU">
+        <![CDATA[
+       select d.customerOrderDeliveryId from CustomerOrderDeliveryEntity d inner join d.detail dd
+       where  d.deliveryStatus = ?1
+       and d.customerOrder.orderStatus in ?2
+       and dd.productSkuCode in ?3
+       order by d.customerOrderDeliveryId
+       ]]>
+    </query>
+
+    <query  name="DELIVERIES.IDS.WAITING.FOR.INVENTORY">
+        <![CDATA[
+       select d.customerOrderDeliveryId from CustomerOrderDeliveryEntity d inner join d.detail dd
+       where  d.deliveryStatus = ?1
+       and d.customerOrder.orderStatus in ?2
+       order by d.customerOrderDeliveryId
+       ]]>
+    </query>
+
     <query name="PRODUCT.ATTRIBUTE.VALUES.BY.CODE">
         <![CDATA[
        select a.val, a.displayVal

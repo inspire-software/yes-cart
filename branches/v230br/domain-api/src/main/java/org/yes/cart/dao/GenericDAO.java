@@ -213,6 +213,16 @@ public interface GenericDAO<T, PK extends Serializable> {
      * Find "query objects" within named query .
      *
      * @param namedQueryName name of query
+     * @param parameters     optional parameters for named query
+     *
+     * @return list of found objects
+     */
+    ResultsIterator<Object> findQueryObjectByNamedQueryIterator(String namedQueryName, Object... parameters);
+
+    /**
+     * Find "query objects" within named query .
+     *
+     * @param namedQueryName name of query
      * @param firstResult    first row of result
      * @param maxResults     size of result set
      * @param parameters     optional parameters for named query

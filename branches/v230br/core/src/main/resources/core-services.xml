@@ -1017,8 +1017,7 @@
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="customerOrderService"/>
                 <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
-                <constructor-arg index="3" ref="orderStateManager"/>
-                <constructor-arg index="4" ref="paymentModulesManager"/>
+                <constructor-arg index="3" ref="paymentModulesManager"/>
             </bean>
         </property>
     </bean>
@@ -1477,8 +1476,29 @@
     <bean id="paymentOfflineOrderEventHandler"
           class="org.yes.cart.service.order.impl.handler.PaymentOfflineOrderEventHandlerImpl"/>
 
+    <!--Payment is in processing state so we wait until we get confirmation-->
+    <bean id="paymentProcessingOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.PaymentProcessingOrderEventHandlerImpl"/>
 
-    <!--Pefrom separate processing of order deliveries-->
+    <!--Handler to check pg update for payment in processing state-->
+    <bean id="paymentProcessedOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.PaymentProcessedOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--Handler to check pg update for payment in processing state-->
+    <bean id="refundProcessedOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.RefundProcessedOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--Perform separate processing of order deliveries-->
     <bean id="paymentOkOrderEventHandler"
           class="org.yes.cart.service.order.impl.handler.PaymentOkOrderEventHandlerImpl"/>
 
@@ -1495,8 +1515,13 @@
     </bean>
 
     <!--Order , that wait confirmation approved-->
-    <bean id="paymentConfirmedOrderEventHandler"
-          class="org.yes.cart.service.order.impl.handler.PaymentConfirmedOrderEventHandlerImpl" />
+    <bean id="paymentConfirmedOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.PaymentConfirmedOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+            </bean>
+        </property>
+    </bean>
 
     <!--Cancel order-->
     <bean id="cancelOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
@@ -1507,6 +1532,10 @@
             </bean>
         </property>
     </bean>
+
+    <!-- Simple transition to allocation wait state, because we need to break continuous flow from payment to allocation -->
+    <bean id="processAllocationWaitOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ProcessAllocationWaitOrderEventHandlerImpl"/>
 
     <!-- Simple transition to time wait state, because of mixed delivery of pre order -->
     <bean id="processTimeWaitOrderEventHandler"
@@ -1544,7 +1573,9 @@
 
     <!-- Shipment in progress -->
     <bean id="releaseToShipmentOrderEventHandler"
-          class="org.yes.cart.service.order.impl.handler.ReleaseToShipmentOrderEventHandlerImpl"/>
+          class="org.yes.cart.service.order.impl.handler.ReleaseToShipmentOrderEventHandlerImpl">
+        <constructor-arg index="0" ref="paymentProcessorFactory"/>
+    </bean>
 
     <!-- Shipment completed -->
     <bean id="shipmentCompleteOrderEventHandler"
@@ -1568,6 +1599,8 @@
         <property name="target">
             <bean class="org.yes.cart.service.order.impl.handler.CancelNewOrderWithRefundOrderEventHandlerImpl">
                 <constructor-arg index="0" ref="paymentProcessorFactory"/>
+                <constructor-arg index="1" ref="warehouseService"/>
+                <constructor-arg index="2" ref="skuWarehouseService"/>
             </bean>
         </property>
     </bean>
@@ -1598,11 +1631,14 @@
         <constructor-arg index="0">
             <map>
                 <entry key="evt.pending"                   value-ref="pendingOrderEventHandler"/>
+                <entry key="evt.payment.processing"        value-ref="paymentProcessingOrderEventHandler"/>
+                <entry key="evt.payment.processed"         value-ref="paymentProcessedOrderEventHandler"/>
                 <entry key="evt.payment.offline"           value-ref="paymentOfflineOrderEventHandler"/>
                 <entry key="evt.payment.confirmed"         value-ref="paymentConfirmedOrderEventHandler"/>
                 <entry key="evt.payment.ok"                value-ref="paymentOkOrderEventHandler"/>
                 <entry key="evt.process.allocation"        value-ref="processAllocationOrderEventHandler"/>
                 <entry key="evt.order.cancel"              value-ref="cancelOrderEventHandler"/>
+                <entry key="evt.process.allocation.wait"   value-ref="processAllocationWaitOrderEventHandler"/>
                 <entry key="evt.process.date.wait"         value-ref="processTimeWaitOrderEventHandler"/>
                 <entry key="evt.process.inventory.wait"    value-ref="processInventoryWaitOrderEventHandler"/>
                 <entry key="evt.delivery.allowed.timeout"  value-ref="deliveryAllowedByTimeoutOrderEventHandler"/>
@@ -1613,6 +1649,7 @@
                 <entry key="evt.shipment.complete"         value-ref="shipmentCompleteOrderEventHandler"/>
                 <entry key="evt.order.cancel.refund"       value-ref="cancelOrderWithRefundOrderEventHandler"/>
                 <entry key="evt.new.order.cancel.refund"   value-ref="cancelNewOrderWithRefundOrderEventHandler"/>
+                <entry key="evt.refund.processed"          value-ref="refundProcessedOrderEventHandler"/>
             </map>
         </constructor-arg>
         <constructor-arg index="1">

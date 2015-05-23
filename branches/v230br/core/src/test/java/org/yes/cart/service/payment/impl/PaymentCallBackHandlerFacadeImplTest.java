@@ -82,16 +82,16 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
         paymentCallBackHandlerFacade.handlePaymentCallback(
                 new HashMap<String, String>() {{
                     put(TestExtFormPaymentGatewayImpl.ORDER_GUID_PARAM_KEY, ordGuid);
-                    put(TestExtFormPaymentGatewayImpl.RESPONSE_CODE_PARAM_KEY, "1"); // 1 - means ok
+                    put(TestExtFormPaymentGatewayImpl.AUTH_RESPONSE_CODE_PARAM_KEY, "1"); // 1 - means ok
                 }},
                 "testExtFormPaymentGatewayLabel");
         ShopCodeContext.clear();
         customerOrder = customerOrderService.findByGuid(customerOrder.getCartGuid());
-        assertEquals("Order must be in ORDER_STATUS_PARTIALLY_SHIPPED state",  //because one of the delivery is electronic delivery
-                CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED,
+        assertEquals("Order must be in ORDER_STATUS_IN_PROGRESS state",
+                CustomerOrder.ORDER_STATUS_IN_PROGRESS,
                 customerOrder.getOrderStatus());
 
-        final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null);
+        final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, (String) null, (String) null);
         assertNotNull(payments);
         assertEquals(payments.size(), 1);
         assertEquals(PaymentGateway.AUTH_CAPTURE, payments.get(0).getTransactionOperation());
@@ -123,22 +123,22 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
         paymentCallBackHandlerFacade.handlePaymentCallback(
                 new HashMap<String, String>() {{
                     put(TestExtFormPaymentGatewayImpl.ORDER_GUID_PARAM_KEY, ordGuid);
-                    put(TestExtFormPaymentGatewayImpl.RESPONSE_CODE_PARAM_KEY, "1"); // 1 - means ok
+                    put(TestExtFormPaymentGatewayImpl.AUTH_RESPONSE_CODE_PARAM_KEY, "1"); // 1 - means ok
                 }},
                 "testExtFormPaymentGatewayLabel");
         ShopCodeContext.clear();
         customerOrder = customerOrderService.findByGuid(customerOrder.getCartGuid());
-        assertEquals("Order must be in ORDER_STATUS_CANCELLED state",  //because item is out of stock
-                CustomerOrder.ORDER_STATUS_CANCELLED,
+        assertEquals("Order must be in ORDER_STATUS_CANCELLED_WAITING_PAYMENT state",  //because item is out of stock and we have AUTH_CAPTURE so we need a REFUND
+                CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT,
                 customerOrder.getOrderStatus());
 
-        final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null);
+        final List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, (String) null, (String) null);
         assertNotNull(payments);
         assertEquals(payments.size(), 2);
         assertEquals(PaymentGateway.AUTH_CAPTURE, payments.get(0).getTransactionOperation());
         assertEquals("1", payments.get(0).getTransactionOperationResultCode());
         assertEquals(PaymentGateway.REFUND, payments.get(1).getTransactionOperation());
-        assertEquals("1", payments.get(1).getTransactionOperationResultCode());
+        assertEquals("Manual processing required", payments.get(1).getTransactionOperationResultCode());
 
 
     }

@@ -19,11 +19,13 @@ package org.yes.cart.payment.impl;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.payment.dto.Payment;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -58,7 +60,8 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends CappPaymentModu
                         "USD"
                 );
 
-                assertTrue("Express checkout call must be ok for setExpressCheckoutMethod ", paymentGateway.isSuccess(nvpCallResult));
+                assertEquals("Express checkout call must be ok for setExpressCheckoutMethod ",
+                        Payment.PAYMENT_STATUS_OK, paymentGateway.getExternalCallbackResult(nvpCallResult));
                 final String token = nvpCallResult.get(AbstractPayPalPaymentGatewayImpl.PP_EC_TOKEN);
                 assertTrue("The TOKEN must be not exmpty", StringUtils.isNotBlank(token));
 
@@ -67,7 +70,8 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends CappPaymentModu
                         token
                 );
 
-                assertTrue("Express checkout call must be ok for getExpressCheckoutDetails", paymentGateway.isSuccess(nvpCallResult));
+                assertEquals("Express checkout call must be ok for getExpressCheckoutDetails",
+                        Payment.PAYMENT_STATUS_OK, paymentGateway.getExternalCallbackResult(nvpCallResult));
                 final String payerId = "asdasd"; //nvpCallResult.get(AbstractPayPalPaymentGatewayImpl.PP_EC_PAYERID);
                 assertTrue("The payerId must be not exmpty", StringUtils.isNotBlank(payerId));
 
@@ -78,7 +82,8 @@ public class PayPalExpressCheckoutPaymentGatewayImplTest extends CappPaymentModu
                         "USD"
                 );
 
-                assertTrue("Express checkout call must be ok for doDoExpressCheckoutPayment", !paymentGateway.isSuccess(nvpCallResult));
+                assertEquals("Express checkout call must be ok for doDoExpressCheckoutPayment",
+                        Payment.PAYMENT_STATUS_FAILED, paymentGateway.getExternalCallbackResult(nvpCallResult));
 
 
             } finally {

@@ -18,13 +18,17 @@ package org.yes.cart.service.order.impl.handler;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
 import java.math.BigDecimal;
@@ -33,55 +37,246 @@ import java.util.Collections;
 import static org.junit.Assert.*;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * Test covers flow from Order in progress, Delivery waiting for allocation flow (i.e. Standard items delivery).
+ * The flow from this state may lead to:
+ * <p/>
+ * Order in progress, Delivery inventory allocated state if inventory was allocated<p/>
+ * <p/>
+ * This integration test covers work of the following transitional handlers:<p/>
+ * ProcessAllocationOrderEventHandlerImpl attempt to allocate the necessary quantity, if cannot allocate and exception is raised<p/>
+ * <p/>
+ *
+ * User: denispavlov
+ * Date: 19/05/2015
+ * Time: 19:43
  */
 public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHandlerImplTest {
 
-    private CustomerOrderService orderService;
+    private OrderEventHandler pendingHandler;
     private OrderEventHandler handler;
-    private WarehouseService warehouseService;
-    private ProductSkuService productSkuService;
-    private SkuWarehouseService skuWarehouseService;
+
+    private CustomerOrderService orderService;
 
     @Before
     public void setUp()  {
-        handler = (OrderEventHandler) ctx().getBean("processAllocationOrderEventHandler");
-        orderService = (CustomerOrderService) ctx().getBean("customerOrderService");
-        productSkuService = (ProductSkuService) ctx().getBean("productSkuService");
-        skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
-        warehouseService = (WarehouseService) ctx().getBean("warehouseService");
         super.setUp();
+        pendingHandler = (OrderEventHandler) ctx().getBean("pendingOrderEventHandler");
+        handler = (OrderEventHandler) ctx().getBean("processAllocationOrderEventHandler");
+        orderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
     }
 
-    @Test
-    public void testHandle() throws Exception {
-        Customer customer = createCustomer();
-        assertFalse(customer.getAddress().isEmpty());
-        CustomerOrder customerOrder = orderService.createFromCart(getStdCard(customer.getEmail()), false);
-        assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
-        customerOrder.setPgLabel("testPaymentGatewayLabel");
+
+    @Override
+    protected CustomerOrder createTestOrder(final TestOrderType orderType, final String pgLabel, final boolean onePhysicalDelivery) throws Exception {
+
+        final CustomerOrder customerOrder = super.createTestOrder(orderType, pgLabel, onePhysicalDelivery);
+
+        assertTrue(pendingHandler.handle(
+                new OrderEventImpl("", //evt.pending
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        // Make sure we are in progress state at this point
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+
         orderService.update(customerOrder);
-        CustomerOrderDelivery customerOrderDelivery = customerOrder.getDelivery().iterator().next();
-        assertTrue(handler.handle(new OrderEventImpl("", customerOrder, customerOrderDelivery)));
-        final Warehouse warehouse = warehouseService.findById(1);
-        // check reserved quantity
-        ProductSku sku = productSkuService.getProductSkuBySkuCode("CC_TEST1");
-        Pair<BigDecimal, BigDecimal> qty = skuWarehouseService.getQuantity(
-                Collections.singletonList(warehouse),
-                sku.getCode()
-        );
-        assertEquals(new BigDecimal("7.00"), qty.getFirst());
-        assertEquals(new BigDecimal("0.00"), qty.getSecond());
-        sku = productSkuService.getProductSkuBySkuCode("CC_TEST2");
-        qty = skuWarehouseService.getQuantity(
-                Collections.singletonList(warehouse),
-                sku.getCode()
-        );
-        assertEquals(new BigDecimal("0.00"), qty.getFirst());
-        assertEquals(new BigDecimal("0.00"), qty.getSecond());
-        assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED,
-                customerOrderDelivery.getDeliveryStatus());
+
+        return customerOrder;
+
     }
+
+
+
+    @Test
+    public void testHandleStandardInventorySurplus() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.STANDARD, label, false);
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT);
+
+        CustomerOrderDelivery delivery = null;
+        for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT.equals(orderDelivery.getDeliveryStatus())) {
+                assertNull(delivery); // make sure there is only one!
+                delivery = orderDelivery;
+            }
+        }
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.process.allocation
+                        customerOrder,
+                        delivery,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "7.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "689.74", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+    }
+
+
+    @Test
+    public void testHandleStandardInventorySufficient() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        debitInventoryAndAssert(WAREHOUSE_ID, "CC_TEST1", "7.00", "2.00", "0.00");
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.STANDARD, label, false);
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "2.00", "2.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT);
+
+        CustomerOrderDelivery delivery = null;
+        for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT.equals(orderDelivery.getDeliveryStatus())) {
+                assertNull(delivery); // make sure there is only one!
+                delivery = orderDelivery;
+            }
+        }
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.process.allocation
+                        customerOrder,
+                        delivery,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "0.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "689.74", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+    }
+
+
+
+    @Test
+    public void testHandleStandardInventoryEnoughForOneOrder() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        // create enough for 2 orders
+        creditInventoryAndAssert(WAREHOUSE_ID, "CC_TEST2", "1.00", "2.00", "0.00");
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.STANDARD, label, false);
+        createTestOrder(TestOrderType.STANDARD, label, false);
+
+        // create enough only for one order
+        debitInventoryAndAssert(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00", "2.00");
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "4.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "2.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT);
+
+        CustomerOrderDelivery delivery = null;
+        for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT.equals(orderDelivery.getDeliveryStatus())) {
+                assertNull(delivery); // make sure there is only one!
+                delivery = orderDelivery;
+            }
+        }
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.process.allocation
+                        customerOrder,
+                        delivery,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "7.00", "2.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "1.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "689.74", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+    }
+
+
+    @Test
+    public void testHandleStandardInventoryInsufficient() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        CustomerOrder customerOrder = createTestOrder(TestOrderType.STANDARD, label, false);
+
+        // create enough only for one order
+        debitInventoryAndAssert(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00", "1.00");
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "1.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT);
+
+        CustomerOrderDelivery delivery = null;
+        for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT.equals(orderDelivery.getDeliveryStatus())) {
+                assertNull(delivery); // make sure there is only one!
+                delivery = orderDelivery;
+            }
+        }
+
+        try {
+            handler.handle(
+                new OrderEventImpl("", //evt.process.allocation
+                        customerOrder,
+                        delivery,
+                        Collections.EMPTY_MAP));
+            fail("Should fail as the inventory has depleted");
+        } catch (OrderItemAllocationException oiae) {
+            // expected
+        }
+
+        // Need to check everything has rolled back!
+
+        final CustomerOrder orderAfterException = orderService.findByOrderNumber(customerOrder.getOrdernum());
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "1.00");
+
+        assertDeliveryStates(orderAfterException.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT);
+
+        // Authorisation
+        assertSinglePaymentEntry(orderAfterException.getOrdernum(), "689.74", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("689.74", orderAfterException.getOrderTotal().toPlainString());
+        assertEquals("0.00", orderService.getOrderAmount(orderAfterException.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, orderAfterException.getOrderStatus());
+    }
+
+
+
 }

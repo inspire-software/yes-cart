@@ -35,9 +35,9 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
 
 
     private static final PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
-            true, true, true, true,
-            true, true, true, false,
-            false, false,
+            false, false, false, true,
+            false, false, true,
+            false, false, false,
             null,
             true, true
     );
@@ -68,7 +68,8 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
         payment.setTransactionOperation(AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
@@ -80,7 +81,8 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
         payment.setTransactionOperation(REVERSE_AUTH);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
@@ -92,7 +94,8 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
         payment.setTransactionOperation(CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
@@ -105,6 +108,7 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorBatchSettlement(true);
         return payment;
     }
 
@@ -116,7 +120,8 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
         payment.setTransactionOperation(VOID_CAPTURE);
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
@@ -129,6 +134,7 @@ public class PrePaymentGatewayImpl extends AbstractPaymentGatewayImpl implements
         payment.setTransactionReferenceId(UUID.randomUUID().toString());
         payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 }

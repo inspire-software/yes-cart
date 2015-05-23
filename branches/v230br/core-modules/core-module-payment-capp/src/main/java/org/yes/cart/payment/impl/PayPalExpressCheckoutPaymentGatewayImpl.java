@@ -28,6 +28,7 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +43,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -55,8 +57,8 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
-            false, false, false, true,
-            true,  false,
+            false, false, false,
+            true, true,  false,
             null,
             false , false
     );
@@ -100,12 +102,13 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
                     payment.getTransactionRequestToken(),
                     payment.getTransactionReferenceId(),
                     payment.getPaymentAmount(), payment.getOrderCurrency());
-            payment.setPaymentProcessorResult( isSuccess(paymentResult)
-                    ? Payment.PAYMENT_STATUS_OK
-                    : Payment.PAYMENT_STATUS_FAILED);
+            final CallbackResult res = getExternalCallbackResult(paymentResult);
+            payment.setPaymentProcessorResult(res.getStatus());
+            payment.setPaymentProcessorBatchSettlement(res.isSettled());
 
         } catch (IOException e) {
             payment.setPaymentProcessorResult( Payment.PAYMENT_STATUS_FAILED);
+            payment.setPaymentProcessorBatchSettlement(false);
             ShopCodeContext.getLog(this).error(e.getMessage(), e);
         }
         return payment;
@@ -114,37 +117,65 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
     /**
      * {@inheritDoc}
      */
-    public Payment authorize(final Payment payment) {
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_PROCESSING); // because no actually ok and not failed
-        return payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment reverseAuthorization(final Payment payment) {
-        return payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment capture(final Payment payment) {
-        return payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment voidCapture(final Payment payment) {
-        return payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment refund(final Payment payment) {
+    public Payment authorize(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(AUTH);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment reverseAuthorization(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(REVERSE_AUTH);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment capture(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(CAPTURE);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment voidCapture(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(VOID_CAPTURE);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment refund(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(REFUND);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
@@ -152,7 +183,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      * {@inheritDoc}
      */
     public String restoreOrderGuid(final Map privateCallBackParameters) {
-        return AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get(ORDER_GUID));
+        return HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID));
     }
 
 
@@ -355,11 +386,15 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
     /**
      * Check the result for success attributes.
      *
-     * @param nvpCallResult call result
+     *
+     * @param callbackResult call result
      * @return true in case of success
      */
-    public boolean isSuccess(final Map<String, String> nvpCallResult) {
-        return nvpCallResult.get("ACK") != null && nvpCallResult.get("ACK").equalsIgnoreCase("Success");
+    public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+        if ((callbackResult.get("ACK") != null && callbackResult.get("ACK").equalsIgnoreCase("Success"))) {
+            return CallbackResult.OK;
+        }
+        return  CallbackResult.FAILED;
     }
 
     /** {@inheritDoc} */
@@ -411,13 +446,21 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
     /**
      * {@inheritDoc}
      */
-    public Payment createPaymentPrototype(final Map parametersMap) {
+    public Payment createPaymentPrototype(final String operation, final Map parametersMap) {
+
         final Payment payment = new PaymentImpl();
-        payment.setTransactionRequestToken((String) parametersMap.get("TOKEN"));
-        payment.setTransactionReferenceId((String) parametersMap.get("PAYERID"));
-        payment.setTransactionAuthorizationCode((String) parametersMap.get("CORRELATIONID"));
-        payment.setShopperIpAddress(getSingleValue(parametersMap.get(PaymentMiscParam.CLIENT_IP)));
+        final Map<String, String> params = HttpParamsUtils.createSingleValueMap(parametersMap);
+        payment.setTransactionRequestToken(params.get("TOKEN"));
+        payment.setTransactionReferenceId(params.get("PAYERID"));
+        payment.setTransactionAuthorizationCode(params.get("CORRELATIONID"));
+
+        final CallbackResult res = getExternalCallbackResult(parametersMap);
+        payment.setPaymentProcessorResult(res.getStatus());
+        payment.setPaymentProcessorBatchSettlement(res.isSettled());
+
+        payment.setShopperIpAddress(params.get(PaymentMiscParam.CLIENT_IP));
         return payment;
+
     }
 
     /**

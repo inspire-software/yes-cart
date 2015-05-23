@@ -29,7 +29,7 @@ import java.util.Map;
  * <p/>
  * Util class for domain objects.
  */
-public class DomainApiUtil {
+public class DomainApiUtils {
 
     /**
      * Get the value of attribute from attribute value map.
@@ -38,7 +38,7 @@ public class DomainApiUtil {
      * @param values   map of attribute name and {@link AttrValue}
      * @return null if attribute not present in map, otherwise value of attribute
      */
-    public static String getAttirbuteValue(final String attrName, final Map<String, AttrValue> values) {
+    public static String getAttributeValue(final String attrName, final Map<String, AttrValue> values) {
         AttrValue attrValue = values.get(attrName);
         if (attrValue != null) {
             return attrValue.getVal();
@@ -53,7 +53,7 @@ public class DomainApiUtil {
      * @param attributes collection of attribute
      * @return value if fount otherwise null
      */
-    public static String getAttirbuteValue(final String attrName, final Collection<? extends AttrValue> attributes) {
+    public static String getAttributeValue(final String attrName, final Collection<? extends AttrValue> attributes) {
         for (AttrValue attrValue : attributes) {
             if (attrName.equals(attrValue.getAttribute().getName())) {
                 return attrValue.getVal();
@@ -93,7 +93,7 @@ public class DomainApiUtil {
 
     }
 
-    private DomainApiUtil() {
+    private DomainApiUtils() {
         
     }
 }

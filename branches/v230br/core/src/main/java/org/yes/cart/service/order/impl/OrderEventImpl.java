@@ -20,6 +20,8 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.order.OrderEvent;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -34,22 +36,41 @@ public class OrderEventImpl  implements OrderEvent {
 
     private final String eventId;
     private final CustomerOrder customerOrder;
+    private final String customerOrderOriginalStatus;
     private final CustomerOrderDelivery customerOrderDelivery;
+    private final String customerOrderDeliveryOriginalStatus;
     private final Map params;
+    private final Map runtimeParams = new HashMap();
+
+    private final OrderEvent parent;
 
     /**
      * Construct order event.
+     *
      * @param eventId trigger name
      * @param customerOrder order
      */
     public OrderEventImpl(final String eventId,
                           final CustomerOrder customerOrder) {
-        this(eventId, customerOrder, null, null);
-
+        this(null, eventId, customerOrder, null, null);
     }
 
     /**
      * Construct order event.
+     *
+     * @param parent parent event
+     * @param eventId trigger name
+     * @param customerOrder order
+     */
+    public OrderEventImpl(final OrderEvent parent,
+                          final String eventId,
+                          final CustomerOrder customerOrder) {
+        this(parent, eventId, customerOrder, null, null);
+    }
+
+    /**
+     * Construct order event.
+     *
      * @param eventId trigger name
      * @param customerOrder order
      * @param customerOrderDelivery optional delivery
@@ -57,11 +78,27 @@ public class OrderEventImpl  implements OrderEvent {
     public OrderEventImpl(final String eventId,
                           final CustomerOrder customerOrder,
                           final CustomerOrderDelivery customerOrderDelivery) {
-        this(eventId, customerOrder, customerOrderDelivery, null);
+        this(null, eventId, customerOrder, customerOrderDelivery, null);
     }
 
     /**
      * Construct order event.
+     *
+     * @param parent parent event
+     * @param eventId trigger name
+     * @param customerOrder order
+     * @param customerOrderDelivery optional delivery
+     */
+    public OrderEventImpl(final OrderEvent parent,
+                          final String eventId,
+                          final CustomerOrder customerOrder,
+                          final CustomerOrderDelivery customerOrderDelivery) {
+        this(parent, eventId, customerOrder, customerOrderDelivery, null);
+    }
+
+    /**
+     * Construct order event.
+     *
      * @param eventId trigger name
      * @param customerOrder order
      * @param customerOrderDelivery optional delivery
@@ -71,10 +108,30 @@ public class OrderEventImpl  implements OrderEvent {
                           final CustomerOrder customerOrder,
                           final CustomerOrderDelivery customerOrderDelivery,
                           final Map params) {
+        this(null, eventId, customerOrder, customerOrderDelivery, params);
+    }
+
+    /**
+     * Construct order event.
+     *
+     * @param parent parent event
+     * @param eventId trigger name
+     * @param customerOrder order
+     * @param customerOrderDelivery optional delivery
+     * @param params optional params
+     */
+    public OrderEventImpl(final OrderEvent parent,
+                          final String eventId,
+                          final CustomerOrder customerOrder,
+                          final CustomerOrderDelivery customerOrderDelivery,
+                          final Map params) {
+        this.parent = parent;
         this.eventId = eventId;
         this.customerOrder = customerOrder;
+        this.customerOrderOriginalStatus = customerOrder != null ? customerOrder.getOrderStatus() : "-";
         this.customerOrderDelivery = customerOrderDelivery;
-        this.params = params;
+        this.customerOrderDeliveryOriginalStatus = customerOrderDelivery != null ? customerOrderDelivery.getDeliveryStatus() : "-";
+        this.params = params == null ? Collections.emptyMap() : Collections.unmodifiableMap(params);
     }
 
     /** {@inheritDoc}*/
@@ -97,13 +154,22 @@ public class OrderEventImpl  implements OrderEvent {
         return params;
     }
 
+    /** {@inheritDoc}*/
+    public Map getRuntimeParams() {
+        return runtimeParams;
+    }
+
     @Override
     public String toString() {
-        return "OrderEventImpl{"
-                + "eventId='" + eventId + '\''
-                + ", customerOrder=" +  (customerOrder == null ? "" : customerOrder.getOrdernum())
-                + " order status " + (customerOrder == null ? "" : customerOrder.getOrderStatus() )
-                + (customerOrderDelivery==null?"":", customerOrderDelivery=" + customerOrderDelivery.getDeliveryNum() + " delivery status = " + customerOrderDelivery.getDeliveryStatus()) +
+        final String event = "OrderEventImpl{"
+                + eventId
+                + ", order=" +  (customerOrder == null ? "" : customerOrder.getOrdernum())
+                + "@" + (customerOrder == null ? "-" : customerOrderOriginalStatus + "-" + customerOrder.getOrderStatus() )
+                + (customerOrderDelivery==null?"":", delivery=" + customerOrderDelivery.getDeliveryNum() + "@" + customerOrderDeliveryOriginalStatus + "-" + customerOrderDelivery.getDeliveryStatus()) +
                 '}';
+        if (parent != null) {
+            return parent.toString() + " -> " + event;
+        }
+        return event;
     }
 }

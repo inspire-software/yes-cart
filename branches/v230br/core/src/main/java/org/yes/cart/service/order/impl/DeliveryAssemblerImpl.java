@@ -252,7 +252,8 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
         final List<Warehouse> warehouses = warehouseService.getByShopId(order.getShop().getShopId());
 
-        final Map<String, List<CustomerOrderDet>> deliveryGroups = new HashMap<String, List<CustomerOrderDet>>();
+        // use tree map to preserve natural order by delivery group i.e. D1, D2, D3 etc.
+        final Map<String, List<CustomerOrderDet>> deliveryGroups = new TreeMap<String, List<CustomerOrderDet>>();
 
         for (CustomerOrderDet customerOrderDet : order.getOrderDetail()) {
 
@@ -358,30 +359,18 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
             return CustomerOrderDelivery.STANDARD_DELIVERY_GROUP;
         }
 
-        if (MoneyUtils.isFirstBiggerThanSecond(rest, BigDecimal.ZERO)) {
-            //inventory available
-            if (availability == Product.AVAILABILITY_PREORDER) {
-                final Date availableFrom = product.getAvailablefrom();
-                if ((availableFrom != null) && (now.getTime() < availableFrom.getTime())) {
-                    return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
-                }
+        if (availability == Product.AVAILABILITY_PREORDER) {
+            final Date availableFrom = product.getAvailablefrom();
+            if ((availableFrom != null) && (now.getTime() < availableFrom.getTime())) {
+                return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
             }
-            if (MoneyUtils.isFirstBiggerThanSecond(customerOrderDet.getQty(), rest)) {
-                return CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP; //we can not cover all ordered qty from warehouses. TODO: V2 here possible additional split
-            }
-            return CustomerOrderDelivery.STANDARD_DELIVERY_GROUP;
-        } else {
-            //inventory NOT available
-            if (availability == Product.AVAILABILITY_PREORDER) {
-                final Date availableFrom = product.getAvailablefrom();
-                if ((availableFrom != null) && (now.getTime() < availableFrom.getTime())) {
-                    return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
-                }
-            }
-            return CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP;
-
         }
-
+        if ((availability == Product.AVAILABILITY_PREORDER || availability == Product.AVAILABILITY_BACKORDER)
+                && MoneyUtils.isFirstBiggerThanSecond(customerOrderDet.getQty(), rest)) {
+            // Only allow wait of inventory on back orders
+            return CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP; //we can not cover all ordered qty from warehouses.
+        }
+        return CustomerOrderDelivery.STANDARD_DELIVERY_GROUP;
 
     }
 

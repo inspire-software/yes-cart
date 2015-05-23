@@ -66,9 +66,11 @@ public class ProductsPassedAvailbilityDateIndexProcessorImpl implements Runnable
         final List<Object> discontinued = productService.getGenericDao().findQueryObjectByNamedQuery("DISCONTINUED.PRODUCTS.AFTER.DATE", now());
 
         for (final Object pk : discontinued) {
-            log.info("Reindexing discontinued product {} on {}", pk, nodeId);
+            log.debug("Reindexing discontinued product {} on {}", pk, nodeId);
             productService.reindexProduct((Long) pk);
         }
+
+        log.info("Reindexing discontinued products on {}, reindexed {}", nodeId, discontinued.size());
 
         final long finish = System.currentTimeMillis();
 

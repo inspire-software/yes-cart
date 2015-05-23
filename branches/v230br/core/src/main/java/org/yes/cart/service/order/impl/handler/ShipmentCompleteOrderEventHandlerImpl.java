@@ -36,7 +36,7 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
     private final PaymentProcessorFactory paymentProcessorFactory;
 
     /**
-     * Construct shipment complete transition hanler.
+     * Construct shipment complete transition handler.
      *
      * @param paymentProcessorFactory to get the payment processor
      */
@@ -53,33 +53,54 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
             final Logger log = ShopCodeContext.getLog(this);
 
             final CustomerOrder order = orderEvent.getCustomerOrder();
+            final CustomerOrderDelivery thisDelivery = orderEvent.getCustomerOrderDelivery();
 
             final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
 
-            final boolean fundCaptured = Payment.PAYMENT_STATUS_OK.equals(
-                    paymentProcessor.shipmentComplete(orderEvent.getCustomerOrder(), orderEvent.getCustomerOrderDelivery().getDeliveryNum())
-            );
-            if (fundCaptured) {
-                if (log.isInfoEnabled()) {
-                    log.info("Funds captured for delivery {}", orderEvent.getCustomerOrderDelivery().getDeliveryNum());
-                }
-                orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED);
-                for (CustomerOrderDelivery delivery : orderEvent.getCustomerOrder().getDelivery()) {
-                    if (!CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(delivery.getDeliveryStatus())) {
-                        orderEvent.getCustomerOrder().setOrderStatus(CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED);
-                        return true;
-                    }
-                }
-                orderEvent.getCustomerOrder().setOrderStatus(CustomerOrder.ORDER_STATUS_COMPLETED);
-                if (log.isInfoEnabled()) {
-                    log.info("Order {} completed ", orderEvent.getCustomerOrder().getOrdernum());
-                }
+            if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
+
+                // online capture should be done before shipping in progress
+                processDeliveryStates(orderEvent, log);
                 return true;
+
+            } else {
+
+                final String result = paymentProcessor.shipmentComplete(order, thisDelivery.getDeliveryNum(), orderEvent.getParams());
+
+                if (Payment.PAYMENT_STATUS_OK.equals(result)) {
+                    // payment was ok so continue
+                    if (log.isInfoEnabled()) {
+                        log.info("Funds captured for delivery {}", thisDelivery.getDeliveryNum());
+                    }
+
+                    processDeliveryStates(orderEvent, log);
+                    return true;
+
+
+                } else {
+
+                    // must be OK this is offline
+                    return false;
+
+                }
+
             }
-            if (log.isErrorEnabled()) {
-                log.error("Funds not captured for delivery {}", orderEvent.getCustomerOrderDelivery().getDeliveryNum());
+
+        }
+    }
+
+    private void processDeliveryStates(final OrderEvent orderEvent, final Logger log) {
+
+        orderEvent.getCustomerOrderDelivery().setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED);
+        for (CustomerOrderDelivery delivery : orderEvent.getCustomerOrder().getDelivery()) {
+            if (!CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(delivery.getDeliveryStatus())) {
+                orderEvent.getCustomerOrder().setOrderStatus(CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED);
+                return;
             }
-            return false;
+        }
+        orderEvent.getCustomerOrder().setOrderStatus(CustomerOrder.ORDER_STATUS_COMPLETED);
+        if (log.isInfoEnabled()) {
+            log.info("Order {} completed ", orderEvent.getCustomerOrder().getOrdernum());
         }
     }
 

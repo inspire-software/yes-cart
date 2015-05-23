@@ -22,7 +22,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.DomainApiUtil;
+import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.AbstractCentralView;
 import org.yes.cart.web.page.component.EmptyCentralView;
@@ -171,7 +171,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
         final Date now = new Date();
 
         while (category != null
-                && DomainApiUtil.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)
+                && DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)
                 && category.getCategoryId() != category.getParentId()) { // while enabled and not reached root
 
             if (catIds.contains(categoryId)) {
@@ -205,7 +205,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
         Category content = categoryService.getById(contentId);
         final Date now = new Date();
 
-        if (DomainApiUtil.isObjectAvailableNow(true, content.getAvailablefrom(), content.getAvailableto(), now)) {
+        if (DomainApiUtils.isObjectAvailableNow(true, content.getAvailablefrom(), content.getAvailableto(), now)) {
 
             while (content != null && content.getCategoryId() != content.getParentId()) {
 

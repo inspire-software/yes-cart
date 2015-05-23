@@ -17,6 +17,7 @@
 package org.yes.cart.payment.impl;
 
 import net.authorize.sim.Fingerprint;
+import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
@@ -24,15 +25,13 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.util.HttpParamsUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -46,8 +45,8 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
-            false, false, false, true,
-            true, false,
+            false, false, false,
+            true, true, false,
             null ,
             false, false
     );
@@ -94,36 +93,65 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
-    public Payment authorize(final Payment payment) {
-        return payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment reverseAuthorization(final Payment payment) {
-        return payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment capture(final Payment payment) {
-        return payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment voidCapture(final Payment payment) {
-        return payment;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Payment refund(final Payment payment) {
+    public Payment authorize(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(AUTH);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
         payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment reverseAuthorization(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(REVERSE_AUTH);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment capture(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(CAPTURE);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment voidCapture(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(VOID_CAPTURE);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
+        return payment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment refund(final Payment paymentIn) {
+        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
+        payment.setTransactionOperation(REFUND);
+        payment.setTransactionReferenceId(UUID.randomUUID().toString());
+        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
+        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
+        payment.setPaymentProcessorBatchSettlement(false);
         return payment;
     }
 
@@ -131,7 +159,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     public String restoreOrderGuid(final Map privateCallBackParameters) {
-        return AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get(ORDER_GUID));
+        return HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID));
     }
 
     /**
@@ -160,8 +188,23 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
-    public boolean isSuccess(final Map<String, String> nvpCallResult) {
-        return true; //nothing to do
+    public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+        /*
+           See http://developer.authorize.net/guides/SIM/wwhelp/wwhimpl/js/html/wwhelp.htm#href=SIM_Trans_response.09.2.html
+
+           1—Approved
+           2—Declined
+           3—Error
+           4—Held for Review
+        */
+        String responseCode = callbackResult.get("x_response_code");
+        if ("1".equals(responseCode)) {
+            return CallbackResult.OK;
+        } else if ("4".equals(responseCode)) {
+            return CallbackResult.PROCESSING;
+        } else {
+            return CallbackResult.FAILED;
+        }
     }
 
     /** {@inheritDoc} */
@@ -225,30 +268,32 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * Process public call back request from payment gateway.
      *
+     *
+     * @param operation
      * @param privateCallBackParameters get/post parameters
      * @return true in case in payment was ok, false in case if payment failed
      */
-    public Payment createPaymentPrototype(final Map privateCallBackParameters) {
+    public Payment createPaymentPrototype(final String operation, final Map privateCallBackParameters) {
+
         final Payment payment = new PaymentImpl();
 
-        payment.setTransactionReferenceId(AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_trans_id")));
-        payment.setTransactionAuthorizationCode(AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_auth_code")));
+        final Map<String, String> params = HttpParamsUtils.createSingleValueMap(privateCallBackParameters);
 
+        payment.setTransactionReferenceId(params.get("x_trans_id"));
+        payment.setTransactionAuthorizationCode(params.get("x_auth_code"));
 
-        String responseCode = AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_response_code"));
-        if ("1".equalsIgnoreCase(responseCode)) {
-            payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_OK);
-        } else {
-            payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_FAILED);
-        }
-        payment.setTransactionOperationResultCode(responseCode);
+        final CallbackResult res = getExternalCallbackResult(params);
+
+        payment.setPaymentProcessorResult(res.getStatus());
+        payment.setPaymentProcessorBatchSettlement(res.isSettled());
+        payment.setTransactionOperationResultCode(params.get("x_response_code"));
         payment.setTransactionOperationResultMessage(
-                AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_response_reason_code"))
+                params.get("x_response_reason_code")
                         + " "
-                        + AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_response_reason_text"))
+                        + params.get("x_response_reason_text")
         );
-        payment.setCardNumber(AbstractCappPaymentGatewayImpl.getSingleValue(privateCallBackParameters.get("x_account_number")));
-        payment.setShopperIpAddress(getSingleValue(privateCallBackParameters.get(PaymentMiscParam.CLIENT_IP)));
+        payment.setCardNumber(params.get("x_account_number"));
+        payment.setShopperIpAddress(params.get(PaymentMiscParam.CLIENT_IP));
 
         return payment;
     }

@@ -65,30 +65,31 @@ public class ItemAmountOffPromotionActionTest extends BaseCoreDBTestCase {
 
         promotionService.create(amount80);
 
+        try {
+            // add qualifying items
+            Map<String, String> param = new HashMap<String, String>();
+            param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+            commands.execute(shoppingCart, (Map) param);
 
-        // add qualifying items
-        Map<String, String> param = new HashMap<String, String>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
-        commands.execute(shoppingCart, (Map) param);
+            assertEquals(1, shoppingCart.getCartItemList().size());
 
-        assertEquals(1, shoppingCart.getCartItemList().size());
+            final CartItem cc_test4 = shoppingCart.getCartItemList().get(0);
 
-        final CartItem cc_test4 = shoppingCart.getCartItemList().get(0);
+            assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
+            assertTrue(cc_test4.isPromoApplied());
+            assertEquals("CC_TEST_80", cc_test4.getAppliedPromo());
+            assertEquals("2", cc_test4.getQty().toString());
+            assertEquals("123.00", cc_test4.getListPrice().toString());
+            assertEquals("123.00", cc_test4.getSalePrice().toString());
+            assertEquals("43.00", cc_test4.getPrice().toString());
 
-        assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
-        assertTrue(cc_test4.isPromoApplied());
-        assertEquals("CC_TEST_80", cc_test4.getAppliedPromo());
-        assertEquals("2", cc_test4.getQty().toString());
-        assertEquals("123.00", cc_test4.getListPrice().toString());
-        assertEquals("123.00", cc_test4.getSalePrice().toString());
-        assertEquals("43.00", cc_test4.getPrice().toString());
-
-        assertEquals("246.00", shoppingCart.getTotal().getListSubTotal().toString());
-        assertEquals("86.00", shoppingCart.getTotal().getSubTotal().toString());
-
-        // clean test
-        promotionService.delete(amount80);
+            assertEquals("246.00", shoppingCart.getTotal().getListSubTotal().toString());
+            assertEquals("86.00", shoppingCart.getTotal().getSubTotal().toString());
+        } finally {
+            // clean test
+            promotionService.delete(amount80);
+        }
 
     }
 
@@ -121,46 +122,48 @@ public class ItemAmountOffPromotionActionTest extends BaseCoreDBTestCase {
 
         promotionService.create(amount200);
 
+        try {
+            // add qualifying items
+            Map<String, String> paramQ = new HashMap<String, String>();
+            paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+            commands.execute(shoppingCart, (Map) paramQ);
 
-        // add qualifying items
-        Map<String, String> paramQ = new HashMap<String, String>();
-        paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-        paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
-        commands.execute(shoppingCart, (Map) paramQ);
+            // add non-qualifying items
+            Map<String, String> paramNQ = new HashMap<String, String>();
+            paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
+            paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+            commands.execute(shoppingCart, (Map) paramNQ);
 
-        // add non-qualifying items
-        Map<String, String> paramNQ = new HashMap<String, String>();
-        paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
-        paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
-        commands.execute(shoppingCart, (Map) paramNQ);
+            assertEquals(2, shoppingCart.getCartItemList().size());
 
-        assertEquals(2, shoppingCart.getCartItemList().size());
+            final CartItem cc_test4 = shoppingCart.getCartItemList().get(0);
 
-        final CartItem cc_test4 = shoppingCart.getCartItemList().get(0);
+            assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
+            assertTrue(cc_test4.isPromoApplied());
+            assertEquals("CC_TEST_200", cc_test4.getAppliedPromo());
+            assertEquals("2", cc_test4.getQty().toString());
+            assertEquals("123.00", cc_test4.getListPrice().toString());
+            assertEquals("123.00", cc_test4.getSalePrice().toString());
+            assertEquals("0.00", cc_test4.getPrice().toString());
 
-        assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
-        assertTrue(cc_test4.isPromoApplied());
-        assertEquals("CC_TEST_200", cc_test4.getAppliedPromo());
-        assertEquals("2", cc_test4.getQty().toString());
-        assertEquals("123.00", cc_test4.getListPrice().toString());
-        assertEquals("123.00", cc_test4.getSalePrice().toString());
-        assertEquals("0.00", cc_test4.getPrice().toString());
+            final CartItem cc_test6 = shoppingCart.getCartItemList().get(1);
 
-        final CartItem cc_test6 = shoppingCart.getCartItemList().get(1);
+            assertEquals("CC_TEST6", cc_test6.getProductSkuCode());
+            assertFalse(cc_test6.isPromoApplied());
+            assertNull(cc_test6.getAppliedPromo());
+            assertEquals("1", cc_test6.getQty().toString());
+            assertEquals("55.17", cc_test6.getListPrice().toString());
+            assertEquals("55.17", cc_test6.getSalePrice().toString());
+            assertEquals("55.17", cc_test6.getPrice().toString());
 
-        assertEquals("CC_TEST6", cc_test6.getProductSkuCode());
-        assertFalse(cc_test6.isPromoApplied());
-        assertNull(cc_test6.getAppliedPromo());
-        assertEquals("1", cc_test6.getQty().toString());
-        assertEquals("55.17", cc_test6.getListPrice().toString());
-        assertEquals("55.17", cc_test6.getSalePrice().toString());
-        assertEquals("55.17", cc_test6.getPrice().toString());
+            assertEquals("301.17", shoppingCart.getTotal().getListSubTotal().toString());
+            assertEquals("55.17", shoppingCart.getTotal().getSubTotal().toString());
 
-        assertEquals("301.17", shoppingCart.getTotal().getListSubTotal().toString());
-        assertEquals("55.17", shoppingCart.getTotal().getSubTotal().toString());
-
-        // clean test
-        promotionService.delete(amount200);
+        } finally {
+            // clean test
+            promotionService.delete(amount200);
+        }
 
     }
 
@@ -209,46 +212,48 @@ public class ItemAmountOffPromotionActionTest extends BaseCoreDBTestCase {
         promotionService.create(amount15);
 
 
-        // add qualifying items
-        Map<String, String> paramQ = new HashMap<String, String>();
-        paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-        paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
-        commands.execute(shoppingCart, (Map) paramQ);
+        try {
+            // add qualifying items
+            Map<String, String> paramQ = new HashMap<String, String>();
+            paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+            commands.execute(shoppingCart, (Map) paramQ);
 
-        // add non-qualifying items
-        Map<String, String> paramNQ = new HashMap<String, String>();
-        paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
-        paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
-        commands.execute(shoppingCart, (Map) paramNQ);
+            // add non-qualifying items
+            Map<String, String> paramNQ = new HashMap<String, String>();
+            paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
+            paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+            commands.execute(shoppingCart, (Map) paramNQ);
 
-        assertEquals(2, shoppingCart.getCartItemList().size());
+            assertEquals(2, shoppingCart.getCartItemList().size());
 
-        final CartItem cc_test4 = shoppingCart.getCartItemList().get(0);
+            final CartItem cc_test4 = shoppingCart.getCartItemList().get(0);
 
-        assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
-        assertTrue(cc_test4.isPromoApplied());
-        assertEquals("CC_TEST_80,ALL_15", cc_test4.getAppliedPromo());
-        assertEquals("2", cc_test4.getQty().toString());
-        assertEquals("123.00", cc_test4.getListPrice().toString());
-        assertEquals("123.00", cc_test4.getSalePrice().toString());
-        assertEquals("28.00", cc_test4.getPrice().toString()); // 123 - 80 - 15
+            assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
+            assertTrue(cc_test4.isPromoApplied());
+            assertEquals("CC_TEST_80,ALL_15", cc_test4.getAppliedPromo());
+            assertEquals("2", cc_test4.getQty().toString());
+            assertEquals("123.00", cc_test4.getListPrice().toString());
+            assertEquals("123.00", cc_test4.getSalePrice().toString());
+            assertEquals("28.00", cc_test4.getPrice().toString()); // 123 - 80 - 15
 
-        final CartItem cc_test6 = shoppingCart.getCartItemList().get(1);
+            final CartItem cc_test6 = shoppingCart.getCartItemList().get(1);
 
-        assertEquals("CC_TEST6", cc_test6.getProductSkuCode());
-        assertTrue(cc_test6.isPromoApplied());
-        assertEquals("ALL_15", cc_test6.getAppliedPromo());
-        assertEquals("1", cc_test6.getQty().toString());
-        assertEquals("55.17", cc_test6.getListPrice().toString());
-        assertEquals("55.17", cc_test6.getSalePrice().toString());
-        assertEquals("40.17", cc_test6.getPrice().toString());
+            assertEquals("CC_TEST6", cc_test6.getProductSkuCode());
+            assertTrue(cc_test6.isPromoApplied());
+            assertEquals("ALL_15", cc_test6.getAppliedPromo());
+            assertEquals("1", cc_test6.getQty().toString());
+            assertEquals("55.17", cc_test6.getListPrice().toString());
+            assertEquals("55.17", cc_test6.getSalePrice().toString());
+            assertEquals("40.17", cc_test6.getPrice().toString());
 
-        assertEquals("301.17", shoppingCart.getTotal().getListSubTotal().toString());
-        assertEquals("96.17", shoppingCart.getTotal().getSubTotal().toString());
-
-        // clean test
-        promotionService.delete(amount80);
-        promotionService.delete(amount15);
+            assertEquals("301.17", shoppingCart.getTotal().getListSubTotal().toString());
+            assertEquals("96.17", shoppingCart.getTotal().getSubTotal().toString());
+        } finally {
+            // clean test
+            promotionService.delete(amount80);
+            promotionService.delete(amount15);
+        }
 
     }
 
@@ -312,47 +317,49 @@ public class ItemAmountOffPromotionActionTest extends BaseCoreDBTestCase {
         promotionService.create(amount50);
 
 
-        // add qualifying items
-        Map<String, String> paramQ = new HashMap<String, String>();
-        paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-        paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
-        commands.execute(shoppingCart, (Map) paramQ);
+        try {
+            // add qualifying items
+            Map<String, String> paramQ = new HashMap<String, String>();
+            paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
+            paramQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
+            commands.execute(shoppingCart, (Map) paramQ);
 
-        // add non-qualifying items
-        Map<String, String> paramNQ = new HashMap<String, String>();
-        paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
-        paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
-        commands.execute(shoppingCart, (Map) paramNQ);
+            // add non-qualifying items
+            Map<String, String> paramNQ = new HashMap<String, String>();
+            paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST6");
+            paramNQ.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
+            commands.execute(shoppingCart, (Map) paramNQ);
 
-        assertEquals(2, shoppingCart.getCartItemList().size());
+            assertEquals(2, shoppingCart.getCartItemList().size());
 
-        final CartItem cc_test4 = shoppingCart.getCartItemList().get(0);
+            final CartItem cc_test4 = shoppingCart.getCartItemList().get(0);
 
-        assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
-        assertTrue(cc_test4.isPromoApplied());
-        assertEquals("CC_TEST_80,ALL_15", cc_test4.getAppliedPromo());
-        assertEquals("2", cc_test4.getQty().toString());
-        assertEquals("123.00", cc_test4.getListPrice().toString());
-        assertEquals("123.00", cc_test4.getSalePrice().toString());
-        assertEquals("28.00", cc_test4.getPrice().toString()); // Best deal: 123 - 80 - 15
+            assertEquals("CC_TEST4", cc_test4.getProductSkuCode());
+            assertTrue(cc_test4.isPromoApplied());
+            assertEquals("CC_TEST_80,ALL_15", cc_test4.getAppliedPromo());
+            assertEquals("2", cc_test4.getQty().toString());
+            assertEquals("123.00", cc_test4.getListPrice().toString());
+            assertEquals("123.00", cc_test4.getSalePrice().toString());
+            assertEquals("28.00", cc_test4.getPrice().toString()); // Best deal: 123 - 80 - 15
 
-        final CartItem cc_test6 = shoppingCart.getCartItemList().get(1);
+            final CartItem cc_test6 = shoppingCart.getCartItemList().get(1);
 
-        assertEquals("CC_TEST6", cc_test6.getProductSkuCode());
-        assertTrue(cc_test6.isPromoApplied());
-        assertEquals("ALL_50", cc_test6.getAppliedPromo());
-        assertEquals("1", cc_test6.getQty().toString());
-        assertEquals("55.17", cc_test6.getListPrice().toString());
-        assertEquals("55.17", cc_test6.getSalePrice().toString());
-        assertEquals("5.17", cc_test6.getPrice().toString()); // Best deal: 55.17 - 50
+            assertEquals("CC_TEST6", cc_test6.getProductSkuCode());
+            assertTrue(cc_test6.isPromoApplied());
+            assertEquals("ALL_50", cc_test6.getAppliedPromo());
+            assertEquals("1", cc_test6.getQty().toString());
+            assertEquals("55.17", cc_test6.getListPrice().toString());
+            assertEquals("55.17", cc_test6.getSalePrice().toString());
+            assertEquals("5.17", cc_test6.getPrice().toString()); // Best deal: 55.17 - 50
 
-        assertEquals("301.17", shoppingCart.getTotal().getListSubTotal().toString());
-        assertEquals("61.17", shoppingCart.getTotal().getSubTotal().toString());
-
-        // clean test
-        promotionService.delete(amount80);
-        promotionService.delete(amount50);
-        promotionService.delete(amount15);
+            assertEquals("301.17", shoppingCart.getTotal().getListSubTotal().toString());
+            assertEquals("61.17", shoppingCart.getTotal().getSubTotal().toString());
+        } finally {
+            // clean test
+            promotionService.delete(amount80);
+            promotionService.delete(amount50);
+            promotionService.delete(amount15);
+        }
 
     }
 }

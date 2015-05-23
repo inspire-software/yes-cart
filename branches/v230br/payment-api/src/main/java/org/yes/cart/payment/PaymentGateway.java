@@ -70,16 +70,19 @@ public interface PaymentGateway extends Serializable {
     String getHtmlForm(String cardHolderName, String locale, BigDecimal amount, String currencyCode, String orderGuid, Payment payment);
 
     /**
-     * Authorize and capture payment. Not all gataways allow to capture payment without order delivery.
+     * Authorize and capture payment. Not all gateways allow to capture payment without order delivery.
      * A credit card transaction request to authorize and capture, or settle,
      * funds for a purchase. The payment gateway submits the request to the card issuing bank
      * for authorization and upon approval, will automatically submit the
      * transaction for settlement.
      * <p/>
-     * Also this method must be used in case of external form
+     * This method must be used in case of external form
      * processing like Authorize.net Sim method & etc.
+     * <p/>
+     * If operation is not supported payment status must be {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
      *
      * @param payment to capture.
+     *
      * @return payment
      */
     Payment authorizeCapture(Payment payment);
@@ -89,42 +92,55 @@ public interface PaymentGateway extends Serializable {
      * Authorize a payment. The response from a card issuing bank to a
      * merchant's transaction authorization request indicating that payment information is valid
      * and funds are available on the customer's credit card.
+     * <p/>
+     * If operation is not supported payment status must be {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
      *
      * @param payment to authorize.
-     * @return payment. Gateways can return reference id , token , etc
+     *
+     * @return payment. Gateways can return reference id, token, etc.
      */
     Payment authorize(Payment payment);
 
     /**
-     * Reverse the authorization.
+     * Reverse the authorization. Not always supported by payment gateways. Used to cancel
+     * AUTH transaction (see {@link #authorize(org.yes.cart.payment.dto.Payment)}).
+     * <p/>
+     * If operation is not supported payment status must be {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
      *
      * @param payment payment
+     *
      * @return payment.
      */
     Payment reverseAuthorization(Payment payment);
 
     /**
      * Payment capture on authorized card.
-     * Prior Authorization Capture A credit card transaction request to capture funds for
-     * a separate, previously authorized authorization-only transaction.
+     * Capture of prior authorization of credit card transaction request to capture funds.
      * With this type of transaction, the merchant will submit an authorization code
      * that was received from the issuing bank at the time of the original authorization-only
-     * transaction.
+     * transaction. (see {@link #authorize(org.yes.cart.payment.dto.Payment)}
+     * <p/>
+     * If operation is not supported payment status must be {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
      *
      * @param payment to capture.
+     *
      * @return payment
      */
     Payment capture(Payment payment);
 
 
     /**
-     * Void transactions of this type are used to cancel original charge transactions
+     * Void transactions are used to cancel original charge transactions (CAPTURE or AUTH_CAPTURE)
      * that have not yet been submitted for batch settlement. For this type of transaction,
      * the merchant must submit the transaction ID of the original charge transaction against
-     * which the Void is being submitted.
+     * which the Void is being submitted (see {@link #capture(org.yes.cart.payment.dto.Payment)}
+     * and {@link #authorizeCapture(org.yes.cart.payment.dto.Payment)}).
      * <p/>
      * No further action may be taken for Void transactions.
+     *
      * To cancel a transaction that has already settled, a <b>refund</b> must be submitted.
+     * <p/>
+     * If operation is not supported payment status must be {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
      *
      * @param payment to void capture.
      * @return payment
@@ -133,13 +149,15 @@ public interface PaymentGateway extends Serializable {
 
 
     /**
-     * A credit card transaction request to post funds from the merchant's
+     * A credit card transaction request to refunds from the merchant's
      * bank account back to the customer's credit card account as a
      * refund for a previous charge transaction. For this type of
      * transaction, the merchant must submit the transaction ID of the
      * original charge transaction against which the refund is being applied.
      * <p/>
      * AKA as Credit operation.
+     * <p/>
+     * If operation is not supported payment status must be {@link Payment#PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED}
      *
      * @param payment to refund
      * @return payment
@@ -148,15 +166,18 @@ public interface PaymentGateway extends Serializable {
 
 
     /**
-     * Create payment prototype from given map.
+     * Create payment prototype from given map (of HTTP parameters).
      * In case of external form processing return value must be completely filled , because  #authorizeCapture
-     * will simple return given argument
+     * will simply return given argument
      *
+     *
+     * @param operation operation for which to create prototype for
      * @param map given map of parameters, from http request. Each Payment gateway know how to
      *            create template payment from HttpServletRequest#getParameterMap and configuration parameters.
+     *
      * @return payment template.
      */
-    Payment createPaymentPrototype(Map map);
+    Payment createPaymentPrototype(String operation, Map map);
 
 
     /**
@@ -209,5 +230,36 @@ public interface PaymentGateway extends Serializable {
      * @return value or null if not found
      */
     String getParameterValue(String valueLabel);
+
+    enum CallbackResult {
+
+        OK(Payment.PAYMENT_STATUS_OK, true),
+        UNSETTLED(Payment.PAYMENT_STATUS_OK, false),
+        PROCESSING(Payment.PAYMENT_STATUS_PROCESSING, false),
+        FAILED(Payment.PAYMENT_STATUS_FAILED, false),
+        MANUAL_REQUIRED(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED, false);
+
+        private String status;
+        private boolean settled;
+
+        private CallbackResult(final String status, final boolean settled) {
+            this.status = status;
+            this.settled = settled;
+        }
+
+        /**
+         * @return payment result (see {@link Payment})
+         */
+        public String getStatus() {
+            return status;
+        }
+
+        /**
+         * @return AUTH_CAPTURE and CAPTURE operations only (denotes if funds were captured)
+         */
+        public boolean isSettled() {
+            return settled;
+        }
+    }
 
 }
