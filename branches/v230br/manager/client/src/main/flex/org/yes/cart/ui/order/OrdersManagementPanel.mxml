@@ -305,7 +305,14 @@
                                 <mx:VBox horizontalAlign="left" horizontalScrollPolicy="off" verticalScrollPolicy="off">
                                     <mx:Script><![CDATA[
                                         import mx.controls.Alert;
+                                        import mx.core.FlexGlobals;
+                                        import mx.core.IFlexDisplayObject;
                                         import mx.events.CloseEvent;
+                                        import mx.managers.PopUpManager;
+
+                                        import org.yes.cart.ui.attributes.valuedialog.SimpleTextDialog;
+
+                                        import org.yes.cart.ui.attributes.valuedialog.ValueDialog;
 
                                         public function getOrderCancelLabel(customerOrderDTO:Object):String {
 
@@ -374,23 +381,51 @@
                                             if (orderStatus == "os.cancelled.waiting.payment" || orderStatus == "os.returned.waiting.payment") {
                                                 msg = resourceManager.getString('CustomerOrderPanel', 'cancel.order.manual.refund.confirmation', [customerOrderDTO.ordernum]);
                                                 title = resourceManager.getString('CustomerOrderPanel', 'cancel.order.manual.refund.confirmation.title');
-                                                Alert.show(
-                                                        msg, title,
-                                                        Alert.YES | Alert.NO, null, onCancelOrderManualClick, null, Alert.NO);
+
+                                                openPopup(
+                                                        title,
+                                                        msg,
+                                                        "",
+                                                        onSaveDeliveryManualRefundBtnclick
+                                                );
+
+                                            }
+                                        }
+
+                                        private function onSaveDeliveryManualRefundBtnclick(event:MouseEvent):void {
+                                            if (popUp != null) {
+
+                                                outerDocument.remoteCustomerOrderService.updateOrderSetCancelledManual(data.ordernum, popUp.value);
+
+                                                popUp.getButtonSave().removeEventListener(MouseEvent.CLICK, onSaveDeliveryManualRefundBtnclick);
+                                                PopUpManager.removePopUp(IFlexDisplayObject(popUp));
+                                                popUp = null;
                                             }
                                         }
 
 
-                                        /**
-                                         * User confirms cancel or return the order.
-                                         * @param event
-                                         */
-                                        private function onCancelOrderManualClick(event:CloseEvent):void {
-                                            if (event.detail == Alert.YES) { //cancel/return order
-                                                outerDocument.remoteCustomerOrderService.updateOrderSetCancelledManual(data.ordernum, 'TODO prompt!!!!');
-                                            }
-                                        }
+                                        private var popUp:ValueDialog = null;
 
+                                        private function openPopup(title:String, message:String, value:String, callback:Function):void {
+                                            var clz:Class = SimpleTextDialog;
+
+                                            popUp = ValueDialog(PopUpManager.createPopUp(
+                                                    DisplayObject(FlexGlobals.topLevelApplication), clz, true));
+                                            popUp.windowTitle = title;
+                                            popUp.value = value;
+                                            popUp.setInformation(message);
+                                            (popUp as SimpleTextDialog).displayVal.visible = false;
+                                            (popUp as SimpleTextDialog).displayVal.includeInLayout = false;
+                                            (popUp as SimpleTextDialog).displayValFormItem.visible = false;
+                                            (popUp as SimpleTextDialog).displayValFormItem.includeInLayout = false;
+
+                                            var btnSave:Button = popUp.getButtonSave();
+
+                                            btnSave.addEventListener(MouseEvent.CLICK, callback);
+
+                                            PopUpManager.centerPopUp(IFlexDisplayObject(popUp));
+
+                                        }
 
 
                                         public function getOrderConfirmLabel(customerOrderDTO:Object):String {

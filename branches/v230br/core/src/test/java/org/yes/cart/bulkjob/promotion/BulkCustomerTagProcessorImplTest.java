@@ -41,10 +41,6 @@ public class BulkCustomerTagProcessorImplTest extends BaseCoreDBTestCase {
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
         final Runnable bulkCustomerTagProcessor = ctx().getBean("bulkCustomerTagProcessor", Runnable.class);
 
-        for (int i = 0; i < 20; i++) {
-            createCustomer(" other " + i);
-        }
-
         final Customer customer1 = createCustomer(" cust1 ");
         final Customer customer2 = createCustomer(" cust2 ");
         final Customer customer3 = createCustomer(" cust3 ");
@@ -58,7 +54,7 @@ public class BulkCustomerTagProcessorImplTest extends BaseCoreDBTestCase {
         cust1Tag.setName("tag all cust1");
         cust1Tag.setPromoType(Promotion.TYPE_CUSTOMER_TAG);
         cust1Tag.setPromoAction(Promotion.ACTION_TAG);
-        cust1Tag.setEligibilityCondition("customer?.firstname?.indexOf(' cust1 ') != -1");
+        cust1Tag.setEligibilityCondition("customer.firstname.indexOf(' cust1 ') != -1");
         cust1Tag.setPromoActionContext("tag1");
         cust1Tag.setCanBeCombined(true);
         cust1Tag.setEnabled(true);
@@ -73,7 +69,7 @@ public class BulkCustomerTagProcessorImplTest extends BaseCoreDBTestCase {
         cust3Tag.setName("tag all cust3");
         cust3Tag.setPromoType(Promotion.TYPE_CUSTOMER_TAG);
         cust3Tag.setPromoAction(Promotion.ACTION_TAG);
-        cust3Tag.setEligibilityCondition("customer?.firstname?.indexOf(' cust3 ') != -1");
+        cust3Tag.setEligibilityCondition("customer.firstname.indexOf(' cust3 ') != -1");
         cust3Tag.setPromoActionContext("tag3");
         cust3Tag.setCanBeCombined(true);
         cust3Tag.setEnabled(true);
@@ -88,7 +84,7 @@ public class BulkCustomerTagProcessorImplTest extends BaseCoreDBTestCase {
         cust1or3Tag.setName("tag all cust1 and cust3");
         cust1or3Tag.setPromoType(Promotion.TYPE_CUSTOMER_TAG);
         cust1or3Tag.setPromoAction(Promotion.ACTION_TAG);
-        cust1or3Tag.setEligibilityCondition("customer?.firstname?.indexOf(' cust1 ') != -1 || customer?.firstname?.indexOf(' cust3 ') != -1");
+        cust1or3Tag.setEligibilityCondition("customer.firstname.indexOf(' cust1 ') != -1 || customer.firstname.indexOf(' cust3 ') != -1");
         cust1or3Tag.setPromoActionContext("tag1or3");
         cust1or3Tag.setCanBeCombined(true);
         cust1or3Tag.setEnabled(true);
@@ -103,7 +99,7 @@ public class BulkCustomerTagProcessorImplTest extends BaseCoreDBTestCase {
         cust3FirstTimeTag.setName("tag all cust3 with no orders"); // test lazy walking
         cust3FirstTimeTag.setPromoType(Promotion.TYPE_CUSTOMER_TAG);
         cust3FirstTimeTag.setPromoAction(Promotion.ACTION_TAG);
-        cust3FirstTimeTag.setEligibilityCondition("customer?.firstname?.indexOf(' cust3 ') != -1 && customer?.orders?.isEmpty()");
+        cust3FirstTimeTag.setEligibilityCondition("customer.firstname.indexOf(' cust3 ') != -1 && customer.orders.isEmpty()");
         cust3FirstTimeTag.setPromoActionContext("first3");
         cust3FirstTimeTag.setCanBeCombined(true);
         cust3FirstTimeTag.setEnabled(true);

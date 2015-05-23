@@ -111,6 +111,7 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
 
         } catch (Exception exp){
             log.error("Processing tagging for customer exception " + exp.getMessage(), exp);
+            throw new RuntimeException(exp);  // exception will make the transaction rollback anyway
         } finally {
             try {
                 customerIterator.close();
