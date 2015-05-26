@@ -233,7 +233,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
 
@@ -259,7 +259,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
 
@@ -315,9 +315,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertTrue(customerOrder.getDelivery().size() == 1);
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -348,9 +348,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertTrue(customerOrder.getDelivery().size() > 1);
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -381,9 +381,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -443,7 +443,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
 
@@ -470,7 +470,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
 
@@ -528,9 +528,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertTrue(customerOrder.getDelivery().size() == 1);
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -563,9 +563,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertTrue(customerOrder.getDelivery().size() > 1);
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -597,9 +597,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -658,7 +658,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
 
@@ -684,7 +684,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
 
@@ -769,9 +769,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertTrue(customerOrder.getDelivery().size() == 1); // Single mixed delivery
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
@@ -804,9 +804,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), new HashMap<String, String>() {{
@@ -842,9 +842,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), new HashMap<String, String>() {{
@@ -887,9 +887,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -929,9 +929,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -970,9 +970,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -1013,9 +1013,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -1054,9 +1054,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -1102,9 +1102,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -1179,7 +1179,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
 
@@ -1208,7 +1208,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
 
@@ -1272,9 +1272,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertTrue(customerOrder.getDelivery().size() == 1); // Single mixed delivery
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
@@ -1309,9 +1309,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), new HashMap<String, String>() {{
@@ -1350,9 +1350,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), new HashMap<String, String>() {{
@@ -1397,9 +1397,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -1438,9 +1438,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -1480,9 +1480,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -1556,7 +1556,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
 
@@ -1588,7 +1588,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT);
 
@@ -1655,9 +1655,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), new HashMap<String, String>() {{
@@ -1696,9 +1696,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), new HashMap<String, String>() {{
@@ -1741,9 +1741,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), new HashMap<String, String>() {{
@@ -1787,9 +1787,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertTrue(customerOrder.getDelivery().size() == 1); // Single mixed delivery
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT);
@@ -1850,7 +1850,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
 
@@ -1879,7 +1879,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
 
@@ -1942,9 +1942,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertTrue(customerOrder.getDelivery().size() == 1); // Single mixed delivery
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -1978,9 +1978,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -2016,9 +2016,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -2056,9 +2056,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -2098,9 +2098,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -2137,9 +2137,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -2175,9 +2175,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -2219,9 +2219,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -2289,7 +2289,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
 
@@ -2318,7 +2318,7 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
 
@@ -2381,9 +2381,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertTrue(customerOrder.getDelivery().size() == 1); // Single mixed delivery
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -2418,9 +2418,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -2456,9 +2456,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -2495,9 +2495,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -2535,9 +2535,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -2573,9 +2573,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -2610,9 +2610,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -2653,9 +2653,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
@@ -3364,9 +3364,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00"); // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
 
         assertEquals(customerOrder.getDelivery().size(), 3);
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
@@ -3525,9 +3525,9 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
         assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
         // preorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");   // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 3?
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "3.00");
         // backorder
-        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00");  // TODO: YC-562 Review inventory reservation mechanism, should this be 0 or 4?
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "4.00");
         // electronic
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 

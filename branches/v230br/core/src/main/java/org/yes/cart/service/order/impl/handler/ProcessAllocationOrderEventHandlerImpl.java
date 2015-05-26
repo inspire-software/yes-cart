@@ -112,10 +112,15 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
             BigDecimal toAllocate = det.getQty();
 
             for (Warehouse warehouse : warehouses) {
-                // TODO: YC-562 Review inventory reservation mechanism
-                skuWarehouseService.voidReservation(warehouse, skuCode, toAllocate);
 
+                BigDecimal toAllocateInitial = toAllocate;
+                // We debit the inventory first to see how much we can take
                 toAllocate = skuWarehouseService.debit(warehouse, skuCode, toAllocate);
+
+                if (MoneyUtils.isFirstBiggerThanSecond(toAllocateInitial, toAllocate)) {
+                    // Then if we have taken something that is how much we void in reserve
+                    skuWarehouseService.voidReservation(warehouse, skuCode, toAllocateInitial.subtract(toAllocate));
+                }
 
                 if (MoneyUtils.isFirstEqualToSecond(toAllocate, BigDecimal.ZERO, Constants.DEFAULT_SCALE)) {
 

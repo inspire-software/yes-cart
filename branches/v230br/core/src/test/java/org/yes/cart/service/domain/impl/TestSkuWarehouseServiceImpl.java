@@ -166,11 +166,30 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("4.00"), rez.getSecond());
     }
 
+    @Test
+    public void testReserveBackorderQuantity() {
+        final Warehouse warehouse = warehouseService.findById(1L);
+        ProductSku productSku = productSkuService.findById(10004L); // 4 items on 1 warehouse
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), skuWarehouseService.reservation(warehouse, productSku.getCode(), new BigDecimal("3.00"))); // 4 total and 3 reserved
+        Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
+            add(warehouse);
+        }}, productSku.getCode());
+
+        assertEquals(new BigDecimal("4.00"), rez.getFirst());
+        assertEquals(new BigDecimal("3.00"), rez.getSecond());
+        assertEquals(new BigDecimal("0.00"), skuWarehouseService.reservation(warehouse, productSku.getCode(), new BigDecimal("11.00"), true)); // 4 total and 14 reserved 0 to reserve
+        rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
+            add(warehouse);
+        }}, productSku.getCode());
+        assertEquals(new BigDecimal("4.00"), rez.getFirst());
+        assertEquals(new BigDecimal("14.00"), rez.getSecond());
+    }
+
     /**
-     * Need to reduce reverved quantity and reduct available quantity
+     * Need to reduce reserved quantity and reduce available quantity
      */
     @Test
-    public void testReservationandVoidReservation() {
+    public void testReservationAndVoidReservation() {
         final Warehouse warehouse = warehouseService.findById(1L);
         ProductSku productSku = productSkuService.findById(10004L); // 4 items on 1 warehouse
         //3 items reservation
@@ -200,6 +219,47 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         // void 5 items
         toVoidReserve = skuWarehouseService.voidReservation(warehouse, productSku.getCode(), new BigDecimal("5.00"));
         assertEquals(new BigDecimal("5.00"), toVoidReserve);
+        rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
+            add(warehouse);
+        }}, productSku.getCode());
+        assertEquals(new BigDecimal("4.00"), rez.getFirst());
+        assertEquals(new BigDecimal("0.00"), rez.getSecond());
+    }
+
+    /**
+     * Need to reduce reserved quantity and reduce available quantity
+     */
+    @Test
+    public void testReservationBackorderAndVoidReservation() {
+        final Warehouse warehouse = warehouseService.findById(1L);
+        ProductSku productSku = productSkuService.findById(10004L); // 4 items on 1 warehouse
+        //3 items reservation
+        BigDecimal toReserve = skuWarehouseService.reservation(warehouse, productSku.getCode(), new BigDecimal("10.00"), true);
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), toReserve); // 4 total and 10 reserved
+        Pair<BigDecimal, BigDecimal> rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
+            add(warehouse);
+        }}, productSku.getCode());
+        assertEquals(new BigDecimal("4.00"), rez.getFirst());
+        assertEquals(new BigDecimal("10.00"), rez.getSecond());
+        // void 2 items
+        BigDecimal toVoidReserve = skuWarehouseService.voidReservation(warehouse, productSku.getCode(), new BigDecimal("2.00"));
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), toVoidReserve); // 4 total and 8 reserved
+        rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
+            add(warehouse);
+        }}, productSku.getCode());
+        assertEquals(new BigDecimal("4.00"), rez.getFirst());
+        assertEquals(new BigDecimal("8.00"), rez.getSecond());
+        // void 5 item
+        toVoidReserve = skuWarehouseService.voidReservation(warehouse, productSku.getCode(), new BigDecimal("5.00"));
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), toVoidReserve); // 4 total and 3 reserved
+        rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
+            add(warehouse);
+        }}, productSku.getCode());
+        assertEquals(new BigDecimal("4.00"), rez.getFirst());
+        assertEquals(new BigDecimal("3.00"), rez.getSecond());
+        // void 5 items
+        toVoidReserve = skuWarehouseService.voidReservation(warehouse, productSku.getCode(), new BigDecimal("5.00"));
+        assertEquals(new BigDecimal("2.00"), toVoidReserve);
         rez = skuWarehouseService.getQuantity(new ArrayList<Warehouse>() {{
             add(warehouse);
         }}, productSku.getCode());

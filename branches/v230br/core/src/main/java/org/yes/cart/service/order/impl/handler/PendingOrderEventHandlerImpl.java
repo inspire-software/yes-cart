@@ -19,6 +19,7 @@ package org.yes.cart.service.order.impl.handler;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.util.CollectionUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.payment.dto.Payment;
@@ -30,6 +31,7 @@ import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -131,6 +133,16 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
         final List<Warehouse> warehouses = warehouseService.getByShopId(
                 orderDelivery.getCustomerOrder().getShop().getShopId());
 
+        if (CollectionUtils.isEmpty(warehouses)) {
+
+            ShopCodeContext.getLog(this).error("No warehouses assigned to shop {}", orderDelivery.getCustomerOrder().getShop().getCode());
+
+            throw new OrderItemAllocationException(
+                    "N/A",
+                    BigDecimal.ZERO,
+                    "PendingOrderEventHandlerImpl. No warehouses assigned to " + orderDelivery.getCustomerOrder().getShop().getCode());
+        }
+
 
         for (CustomerOrderDeliveryDet det : deliveryDetails) {
             String skuCode = det.getProductSkuCode();
@@ -142,7 +154,6 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                     break; // quantity allocated
                 }
             }
-
 
             if (MoneyUtils.isFirstBiggerThanSecond(toReserve, BigDecimal.ZERO)) {
 
@@ -162,6 +173,14 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
                             "PendingOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
                             + " for sku = " + skuCode
                             + " in delivery " + orderDelivery.getDeliveryNum());
+
+                } else if (Product.AVAILABILITY_PREORDER == product.getAvailability()
+                        || Product.AVAILABILITY_BACKORDER == product.getAvailability()) {
+
+                    // If we have preorder or backorder we need to record reservations
+                    final Warehouse first = warehouses.iterator().next();
+                    skuWarehouseService.reservation(first, skuCode, toReserve, true);
+
                 }
             }
         }

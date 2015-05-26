@@ -190,14 +190,41 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      */
     public BigDecimal reservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal reserveQty) {
 
+        return reservation(warehouse, productSkuCode, reserveQty, false);
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal reservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal reserveQty, final boolean allowBackorder) {
+
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
         if (skuWarehouse == null) {
-            return reserveQty.setScale(Constants.DEFAULT_SCALE);
-        } else {
-            BigDecimal canReserve = skuWarehouse.getAvailableToSell();
 
-            BigDecimal rest = canReserve.subtract(reserveQty);
+            if (allowBackorder) {
+                final SkuWarehouse newSkuEntry = getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
+                newSkuEntry.setWarehouse(warehouse);
+                newSkuEntry.setSku(productService.getProductSkuByCode(productSkuCode));
+                newSkuEntry.setQuantity(BigDecimal.ZERO);
+                newSkuEntry.setReserved(reserveQty);
+                create(newSkuEntry);
+                return BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+            }
+            return reserveQty.setScale(Constants.DEFAULT_SCALE);
+
+        } else {
+
+            final BigDecimal rest;
+            if (allowBackorder) {
+                rest = BigDecimal.ZERO; // the remainder is zero
+            } else {
+                BigDecimal canReserve = skuWarehouse.getAvailableToSell();
+                rest = canReserve.subtract(reserveQty);
+            }
+
             if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(rest, BigDecimal.ZERO)) {
                 skuWarehouse.setReserved(
                         MoneyUtils.notNull(skuWarehouse.getReserved(), BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE)).add(reserveQty));
@@ -211,7 +238,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         }
 
     }
-
 
     /**
      * {@inheritDoc}
@@ -246,6 +272,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
             final ProductSku sku = productService.getProductSkuByCode(productSkuCode);
             final SkuWarehouse newSkuWarehouse = getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
             newSkuWarehouse.setQuantity(addQty);
+            newSkuWarehouse.setReserved(BigDecimal.ZERO);
             newSkuWarehouse.setSku(sku);
             newSkuWarehouse.setWarehouse(warehouse);
             create(newSkuWarehouse);

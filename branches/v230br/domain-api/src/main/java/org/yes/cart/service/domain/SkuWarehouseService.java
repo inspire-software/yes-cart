@@ -78,6 +78,21 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
     BigDecimal reservation(Warehouse warehouse, String productSkuCode, BigDecimal reserveQty);
 
     /**
+     * Reserve quantity of skus on warehouse. Method returns the rest to reserve if quantity of skus is not enough
+     * to satisfy this request. Example particular shop has two warehouses with 5 and 7 particular skus,
+     * but need to reserve 9 skus. In this case return value will be 4 if first warehouse to reserve was with 5 skus.
+     * Second example 10 skus on warehouse and 3 reserved will allow to reserve 7 skus only
+     *
+     * @param warehouse  warehouse
+     * @param productSkuCode sku to reserve
+     * @param reserveQty quantity to reserve
+     * @param allowBackorder true indicates that we allow over-reservation as this is backorderable sku, false indicates
+     *                       that reserve will not exceed inventory.
+     * @return the rest to reserve or BigDecimal.ZERO if was reserved successful.
+     */
+    BigDecimal reservation(Warehouse warehouse, String productSkuCode, BigDecimal reserveQty, boolean allowBackorder);
+
+    /**
      * Credit quantity on warehouse after order cancel.
      *
      * @param warehouse  warehouse
