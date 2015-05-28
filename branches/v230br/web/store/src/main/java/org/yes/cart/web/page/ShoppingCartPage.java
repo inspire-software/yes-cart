@@ -64,6 +64,8 @@ public class ShoppingCartPage extends AbstractWebPage {
 
            if ("ec".equals(checkoutError.toString())) {
                 warn(getLocalizer().getString("orderErrorCouponInvalid", this, new Model<Object[]>(new Object[] { params.get("ec").toString() })));
+           } else if ("es".equals(checkoutError.toString())) {
+               warn(getLocalizer().getString("orderErrorSkuInvalid", this, new Model<Object[]>(new Object[] { params.get("es").toString() })));
            } else {
                 error(getLocalizer().getString("orderErrorGeneral", this));
            }

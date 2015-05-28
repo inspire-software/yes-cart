@@ -26,10 +26,13 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryAssembler;
 import org.yes.cart.service.order.OrderAssemblyException;
+import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -234,9 +237,13 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      */
     public boolean isOrderMultipleDeliveriesAllowed(final CustomerOrder order) {
 
-        final Map<String, List<CustomerOrderDet>> deliveryGroups = getDeliveryGroups(order, false);
-
-        return (getPhysicalDeliveriesQty(deliveryGroups) > 1);
+        try {
+            final Map<String, List<CustomerOrderDet>> deliveryGroups = getDeliveryGroups(order, false);
+            return (getPhysicalDeliveriesQty(deliveryGroups) > 1);
+        } catch (SkuUnavailableException e) {
+            ShopCodeContext.getLog(this).warn("Unable to determine multi delivery, order contains unavailable sku. {}", order.getOrdernum(), e.getMessage());
+        }
+        return false;
 
     }
 
@@ -248,7 +255,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      * @param onePhysicalDelivery true if need to create one physical delivery.
      * @return true in case if order can has single delivery.
      */
-    Map<String, List<CustomerOrderDet>> getDeliveryGroups(final CustomerOrder order, final boolean onePhysicalDelivery) {
+    Map<String, List<CustomerOrderDet>> getDeliveryGroups(final CustomerOrder order, final boolean onePhysicalDelivery) throws SkuUnavailableException {
 
         final List<Warehouse> warehouses = warehouseService.getByShopId(order.getShop().getShopId());
 
@@ -257,13 +264,13 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
         for (CustomerOrderDet customerOrderDet : order.getOrderDetail()) {
 
-            final Pair<BigDecimal, BigDecimal> quantity = skuWarehouseService.getQuantity(
+            final Pair<BigDecimal, BigDecimal> quantity = skuWarehouseService.findQuantity(
                     warehouses,
                     customerOrderDet.getProductSkuCode()
             );
 
             // qty on warehouse minus reserved qty.
-            // actual reservation when payment was successful or courier payment gw was selected for payment.
+            // allocation occurs when payment was successful or offline payment was approved.
             final BigDecimal rest = MoneyUtils.notNull(quantity.getFirst(), BigDecimal.ZERO)
                     .add(MoneyUtils.notNull(quantity.getSecond(), BigDecimal.ZERO).negate());
 
@@ -336,42 +343,59 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      * @param customerOrderDet order detail record
      * @return delivery group label
      */
-    String getDeliveryGroup(final BigDecimal rest, final CustomerOrderDet customerOrderDet) {
+    String getDeliveryGroup(final BigDecimal rest, final CustomerOrderDet customerOrderDet) throws SkuUnavailableException {
 
-        final Date now = new Date(); //TODO: V2 time machine
+        final Date now = now();
 
         final Product product = productService.getProductBySkuCode(customerOrderDet.getProductSkuCode());
-        final int availability = product.getAvailability();
+        final int availability;
+        final Date availableFrom;
+        final Date availableTo;
+        final boolean digital;
+        if (product != null) {
+            availability = product.getAvailability();
+            availableFrom = product.getAvailablefrom();
+            availableTo = product.getAvailableto();
+            digital = product.getProducttype().isDigital();
+        } else { // default behaviour for SKU not in PIM
+            availability = Product.AVAILABILITY_STANDARD;
+            availableFrom = null;
+            availableTo = null;
+            digital = false;
+        }
+
+        final boolean isAvailableNow = DomainApiUtils.isObjectAvailableNow(true, availableFrom, availableTo, now);
+        final boolean isAvailableLater = availability == Product.AVAILABILITY_PREORDER && DomainApiUtils.isObjectAvailableNow(true, null, availableTo, now);
+
+        // Must not create orders with items that are unavailable
+        if (!isAvailableNow && !isAvailableLater) {
+            throw new SkuUnavailableException(customerOrderDet.getProductSkuCode(), customerOrderDet.getProductName());
+        }
 
         if (availability == Product.AVAILABILITY_ALWAYS) {
 
-            final Date availableFrom = product.getAvailablefrom();
-            if ((availableFrom != null)
-                    &&
-                    (now.getTime() < availableFrom.getTime())) {
-
-                return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
-            }
-
-            if (product.getProducttype().isDigital()) {
+            if (digital) {
                 return CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP;
             }
             return CustomerOrderDelivery.STANDARD_DELIVERY_GROUP;
         }
 
-        if (availability == Product.AVAILABILITY_PREORDER) {
-            final Date availableFrom = product.getAvailablefrom();
-            if ((availableFrom != null) && (now.getTime() < availableFrom.getTime())) {
-                return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
-            }
+        if (availability == Product.AVAILABILITY_PREORDER && !isAvailableNow) {
+            // preorders that are launched become standard
+            return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
         }
+
         if ((availability == Product.AVAILABILITY_PREORDER || availability == Product.AVAILABILITY_BACKORDER)
                 && MoneyUtils.isFirstBiggerThanSecond(customerOrderDet.getQty(), rest)) {
-            // Only allow wait of inventory on back orders
-            return CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP; //we can not cover all ordered qty from warehouses.
+            // Only allow wait of inventory on back orders and preorders if we do not have enough stock
+            return CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP;
         }
         return CustomerOrderDelivery.STANDARD_DELIVERY_GROUP;
 
+    }
+
+    Date now() {
+        return new Date();
     }
 
 }

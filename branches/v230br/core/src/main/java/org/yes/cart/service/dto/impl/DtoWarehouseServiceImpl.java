@@ -167,6 +167,7 @@ public class DtoWarehouseServiceImpl
                 skuWarehouse,
                 getAdaptersRepository(),
                 getAssemblerEntityFactory());
+        skuWarehouse.setSkuCode(skuWarehouseDTO.getSkuCode());
         skuWarehouse = skuWarehouseService.create(skuWarehouse);
         // skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouseDTO.getSkuCode());
         return assembleSkuWarehouseDTO(skuWarehouse);
@@ -209,7 +210,7 @@ public class DtoWarehouseServiceImpl
     public void removeSkuOnWarehouse(final long skuWarehouseId) {
         final SkuWarehouse skuWarehouse = skuWarehouseService.findById(skuWarehouseId);
         skuWarehouse.setQuantity(BigDecimal.ZERO);
-        skuWarehouse.setReserved(BigDecimal.ZERO);
+        // skuWarehouse.setReserved(BigDecimal.ZERO); Must not remove reservation!
         skuWarehouseService.update(skuWarehouse);
     }
 

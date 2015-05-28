@@ -56,7 +56,7 @@ public class PriceListDTOImpl {
                ",salePrice=" + String(salePrice) +
                ",salefrom=" + String(salefrom) +
                ",saleto=" + String(saleto) +
-               ",productSkuId=" + skuCode +
+               ",skuCode=" + skuCode +
                ",shopId=" + shopCode +
                ",quantity=" + String(quantity) +
                ",currency=" + String(currency) +

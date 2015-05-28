@@ -532,6 +532,13 @@
         </property>
     </bean>
 
+    <bean id="skuWarehouseRelationshipSupport" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.domain.entity.bridge.support.impl.SkuWarehouseRelationshipSupportImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="skuWarehouseDao"/>
+            </bean>
+        </property>
+    </bean>
 
 
 </beans>

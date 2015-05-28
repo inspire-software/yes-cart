@@ -45,6 +45,7 @@ import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.order.CouponCodeInvalidException;
 import org.yes.cart.service.order.OrderAssemblyException;
+import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -121,6 +122,7 @@ public class CheckoutPage extends AbstractWebPage {
 
     public static final String ERROR = "e";
     public static final String ERROR_COUPON = "ec";
+    public static final String ERROR_SKU = "es";
 
     public static final String STEP = "step";
 
@@ -281,6 +283,19 @@ public class CheckoutPage extends AbstractWebPage {
                             new PageParameters()
                                     .set(ERROR, ERROR_COUPON)
                                     .set(ERROR_COUPON, invalidCoupon.getCoupon())
+                    ), RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT
+            );
+
+        } catch (SkuUnavailableException skuUnavailable) {
+
+            ShopCodeContext.getLog(this).error(skuUnavailable.getMessage(), skuUnavailable);
+
+            throw new RestartResponseException(
+                    new PageProvider(
+                            ShoppingCartPage.class,
+                            new PageParameters()
+                                    .set(ERROR, ERROR_SKU)
+                                    .set(ERROR_SKU, "(" + skuUnavailable.getSkuCode() + ") " + skuUnavailable.getSkuName())
                     ), RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT
             );
 

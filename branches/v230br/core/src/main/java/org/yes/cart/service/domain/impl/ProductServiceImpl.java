@@ -385,7 +385,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     public Product getProductById(final Long productId) {
-        return proxy().getProductById(productId, false);
+        // by default we use product with attributes, so true is better for caching
+        return proxy().getProductById(productId, true);
     }
 
     /**

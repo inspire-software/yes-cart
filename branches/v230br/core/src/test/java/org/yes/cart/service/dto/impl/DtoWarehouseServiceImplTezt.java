@@ -130,7 +130,7 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
         SkuWarehouseDTO skuWarehouseDTO = dtoFactory.getByIface(SkuWarehouseDTO.class);
         skuWarehouseDTO.setQuantity(BigDecimal.TEN);
         skuWarehouseDTO.setWarehouseId(1L);
-        skuWarehouseDTO.setProductSkuId(9999L);
+        skuWarehouseDTO.setSkuCode("BENDER");
         skuWarehouseDTO = dtoService.createSkuOnWarehouse(skuWarehouseDTO);
         assertTrue(skuWarehouseDTO.getSkuWarehouseId() > 0);
     }
@@ -140,7 +140,7 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
         SkuWarehouseDTO skuWarehouseDTO = dtoFactory.getByIface(SkuWarehouseDTO.class);
         skuWarehouseDTO.setQuantity(BigDecimal.TEN);
         skuWarehouseDTO.setWarehouseId(1L);
-        skuWarehouseDTO.setProductSkuId(9999L);
+        skuWarehouseDTO.setSkuCode("BENDER");
         skuWarehouseDTO = dtoService.createSkuOnWarehouse(skuWarehouseDTO);
         assertTrue(skuWarehouseDTO.getSkuWarehouseId() > 0);
         skuWarehouseDTO.setQuantity(BigDecimal.ONE);

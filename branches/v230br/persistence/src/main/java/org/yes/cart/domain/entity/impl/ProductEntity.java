@@ -358,15 +358,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.version = version;
     }
 
-    @Override
-    public Map<String, BigDecimal> getQtyOnWarehouse(final Collection<Warehouse> warehouses) {
-        final Map<String, BigDecimal> qty = new HashMap<String, BigDecimal>();
-        for (ProductSku sku : getSku()) {
-            qty.put(sku.getCode(), sku.getQty(warehouses));
-        }
-        return qty;
-    }
-
     /**
      * Get default image, which is stored into lucene index, to reduce db hit.
      * @return default product image if found, otherwise no image constant.

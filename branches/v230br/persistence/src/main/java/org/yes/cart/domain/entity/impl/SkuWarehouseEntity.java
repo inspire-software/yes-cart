@@ -36,6 +36,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
 
     private Warehouse warehouse;
     private ProductSku sku;
+    private String skuCode;
     private BigDecimal quantity;
     private BigDecimal reserved;
     private Date createdTimestamp;
@@ -58,6 +59,15 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
 
     public ProductSku getSku() {
         return this.sku;
+    }
+
+
+    public String getSkuCode() {
+        return skuCode;
+    }
+
+    public void setSkuCode(final String skuCode) {
+        this.skuCode = skuCode;
     }
 
     public void setSku(ProductSku sku) {

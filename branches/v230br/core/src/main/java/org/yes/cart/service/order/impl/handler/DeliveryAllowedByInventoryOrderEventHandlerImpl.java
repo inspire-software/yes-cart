@@ -70,7 +70,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
                 // there may not be this product anymore potentially!
                 if (product != null && !product.getProducttype().isDigital()) {
 
-                    final Pair<BigDecimal, BigDecimal> qtyPair = getSkuWarehouseService().getQuantity(
+                    final Pair<BigDecimal, BigDecimal> qtyPair = getSkuWarehouseService().findQuantity(
                             warehouses,
                             det.getProductSkuCode()
                     );

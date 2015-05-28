@@ -180,6 +180,25 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 </div>
 ',10011,'12097_CAV');
 
+--
+-- YC-561 Decouple SkuWarehouseEntity and ProductSkuEntity
+--
+
+alter table TSKUWAREHOUSE add column SKU_CODE varchar(255);
+update TSKUWAREHOUSE w set w.SKU_CODE = (select CODE from TSKU where SKU_ID = w.SKU_ID);
+-- verify using this: select w.SKU_CODE, s.CODE from TSKUWAREHOUSE w, TSKU s where w.SKU_ID = s.SKU_ID;
+-- drop FK
+alter table TSKUWAREHOUSE drop foreign key FKAC00F89A4EC4B749;
+alter table TSKUWAREHOUSE drop constraint FKAC00F89A4EC4B749;
+-- drop old unique warehouse-sku index
+alter table TSKUWAREHOUSE drop constraint U_SKUINVENTORY;
+-- drop column
+alter table TSKUWAREHOUSE drop column SKU_ID;
+-- add new unique warehouse-sku index
+alter table TSKUWAREHOUSE add constraint SKUWAREHOUSE_SKU unique (WAREHOUSE_ID, SKU_CODE);
+-- add index to improve selects
+create index SKUWAREHOUSE_SKUCODE on TSKUWAREHOUSE (SKU_CODE);
+
 
 
 

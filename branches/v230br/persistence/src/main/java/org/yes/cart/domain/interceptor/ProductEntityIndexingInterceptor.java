@@ -21,6 +21,9 @@ import org.hibernate.search.indexes.interceptor.IndexingOverride;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.domain.entity.bridge.HibernateSearchBridgeStaticLocator;
+import org.yes.cart.domain.entity.bridge.support.SkuWarehouseRelationshipSupport;
+import org.yes.cart.util.DomainApiUtils;
 
 import java.util.Date;
 
@@ -41,26 +44,48 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
      *
      *
      * @param entity entity to check
+     * @param checkInventory check inventory (performs select that causes flush)
+     *
      * @return true if entity need to be in lucene index.
      */
-    public boolean isIncludeInLuceneIndex(final Product entity) {
+    public boolean isIncludeInLuceneIndex(final Product entity, final boolean checkInventory) {
         if (entity != null) {
             if (entity.getProductCategory().isEmpty()) {
                 return false; // if it is not assigned to category, no way to determine the shop
             }
-            if (entity.getAvailableto() == null || (entity.getAvailableto() != null && entity.getAvailableto().after(new Date()))) {
-               if (Product.AVAILABILITY_STANDARD == entity.getAvailability()) {
-                   for (final ProductSku sku : entity.getSku()) {
-                       for (final SkuWarehouse inventory : sku.getQuantityOnWarehouse()) {
-                           if (inventory.isAvailableToSell()) {
-                               return true; // has stock
-                           }
-                       }
-                   }
-                   return false; // no
-               }
-               return true;
+
+            final int availability = entity.getAvailability();
+            switch (availability) {
+                case Product.AVAILABILITY_ALWAYS:
+                case Product.AVAILABILITY_BACKORDER:
+                case Product.AVAILABILITY_SHOWROOM:
+                    // showroom, always and backorder must be in product date range
+                    return DomainApiUtils.isObjectAvailableNow(true, entity.getAvailablefrom(), entity.getAvailableto(), new Date());
+                case Product.AVAILABILITY_PREORDER:
+                    // For preorders check only available to date since that is the whole point of preorders
+                    return DomainApiUtils.isObjectAvailableNow(true, null, entity.getAvailableto(), new Date());
+                case Product.AVAILABILITY_STANDARD:
+                default:
+                    // For standard make sure product is in availability date range
+                    if (DomainApiUtils.isObjectAvailableNow(true, entity.getAvailablefrom(), entity.getAvailableto(), new Date())) {
+
+                        if (checkInventory) {
+                            // select causes transaction flush - must be used only for update, never for insert
+                            SkuWarehouseRelationshipSupport support = getSkuWarehouseRelationshipSupport();
+
+                            // and has at least one inventory record that is available
+                            for (final ProductSku sku : entity.getSku()) {
+                                for (final SkuWarehouse inventory : support.getQuantityOnWarehouse(sku.getCode())) {
+                                    if (inventory.isAvailableToSell()) {
+                                        return true; // has stock
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return false; // no
             }
+
         }
         return false;
     }
@@ -68,14 +93,14 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
 
     /** {@inheritDoc} */
     public IndexingOverride onAdd(final Product entity) {
-        return isIncludeInLuceneIndex(entity)
+        return isIncludeInLuceneIndex(entity, false)
                 ?IndexingOverride.APPLY_DEFAULT
                 :IndexingOverride.REMOVE;
     }
 
     /** {@inheritDoc} */
     public IndexingOverride onUpdate(final Product entity) {
-        return isIncludeInLuceneIndex(entity)
+        return isIncludeInLuceneIndex(entity, true)
                 ?IndexingOverride.APPLY_DEFAULT
                 :IndexingOverride.REMOVE;
     }
@@ -87,9 +112,14 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
 
     /** {@inheritDoc} */
     public IndexingOverride onCollectionUpdate(final Product entity) {
-        return isIncludeInLuceneIndex(entity)
+        return isIncludeInLuceneIndex(entity, true)
                 ?IndexingOverride.APPLY_DEFAULT
                 :IndexingOverride.REMOVE;
+    }
+
+
+    private SkuWarehouseRelationshipSupport getSkuWarehouseRelationshipSupport() {
+        return HibernateSearchBridgeStaticLocator.getSkuWarehouseRelationshipSupport();
     }
 
 }

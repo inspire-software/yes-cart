@@ -41,13 +41,6 @@
 
     <aop:aspectj-autoproxy/>
 
-    <bean id="productReindexer" class="org.yes.cart.domain.entityindexer.impl.ProductIndexerImpl">
-        <constructor-arg index="0" ref="productDao"/>
-        <constructor-arg index="1" value="128"/>
-        <constructor-arg index="2" value="4"/>
-    </bean>
-
-
     <import resource="classpath*:core-config.xml"/>
     <import resource="classpath*:core-io.xml"/>
     <import resource="classpath*:core-services.xml"/>
@@ -134,8 +127,7 @@
 
 
 
-    <bean id="paySessionFactory"
-          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <bean id="paySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="payDataSource"/>
         <property name="mappingResources">
             <list>
@@ -148,6 +140,9 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">create</prop>
                 <prop key="hibernate.connection.autocommit">true</prop>
+                <!-- Disable hibernate search automatic support - no indexing for payments -->
+                <prop key="hibernate.search.autoregister_listeners">false</prop>
+                <prop key="hibernate.search.indexing_strategy">manual</prop>
             </props>
         </property>
         <property name="entityInterceptor">
@@ -166,7 +161,7 @@
             </list>
         </property>
         <property name="entityInterceptor">
-            <bean class="org.yes.cart.domain.interceptor.StorefrontInterceptor"/>
+            <bean class="org.yes.cart.domain.interceptor.AuditInterceptor"/>
         </property>
         <property name="hibernateProperties">
             <props>
@@ -178,7 +173,9 @@
                 <prop key="hibernate.search.worker.execution">async</prop>
                 <prop key="hibernate.search.worker.thread_pool.size">2</prop>
                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
-
+                <!-- Disable hibernate search automatic support - since we do indexing manually -->
+                <prop key="hibernate.search.autoregister_listeners">true</prop>
+                <prop key="hibernate.search.indexing_strategy">manual</prop>
             </props>
         </property>
     </bean>

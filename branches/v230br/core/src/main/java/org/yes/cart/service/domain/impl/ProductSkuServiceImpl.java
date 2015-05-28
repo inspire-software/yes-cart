@@ -185,8 +185,8 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * {@inheritDoc}
      */
     @CacheEvict(value = {
-            "productSkuService-productSkuBySkuCode",
-            "productService-skuById"
+            "skuWarehouseService-productSkusOnWarehouse",
+            "skuWarehouseService-productOnWarehouse"
     }, allEntries = true)
     public void removeAllInventory(final long productId) {
         final List<ProductSku> skus = getGenericDao().findByCriteria(Restrictions.eq("product.productId" , productId));
@@ -199,21 +199,50 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * {@inheritDoc}
      */
     @CacheEvict(value = {
-        "productSkuService-productSkuBySkuCode",
-        "productService-skuById"
+        "skuWarehouseService-productSkusOnWarehouse",
+        "skuWarehouseService-productOnWarehouse"
     }, allEntries = true)
     public void removeAllInventory(final ProductSku sku) {
-            getGenericDao().executeUpdate("REMOVE.ALL.SKU.INVENTORY", sku);
+            getGenericDao().executeUpdate("REMOVE.ALL.SKU.INVENTORY", sku.getCode());
     }
 
     /**
      * {@inheritDoc}
      */
-    /*public void delete(ProductSku instance) {
-        getGenericDao().executeUpdate("REMOVE.ALL.SKU.PRICES", instance);
-        getGenericDao().executeUpdate("REMOVE.ALL.SKU.INVENTORY", instance);
-        getGenericDao().evict(instance.getProduct());
+    @CacheEvict(value = {
+            "skuWarehouseService-productSkusOnWarehouse",
+            "skuWarehouseService-productOnWarehouse",
+            "productSkuService-productSkuBySkuCode",
+            "productService-skuById",
+            "productService-productById"
+    }, allEntries = true)
+    public ProductSku create(final ProductSku instance) {
+        return super.create(instance);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "productSkuService-productSkuBySkuCode",
+            "productService-skuById"
+    }, allEntries = true)
+    public ProductSku update(final ProductSku instance) {
+        return super.update(instance);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "skuWarehouseService-productSkusOnWarehouse",
+            "skuWarehouseService-productOnWarehouse",
+            "productSkuService-productSkuBySkuCode",
+            "productService-skuById",
+            "productService-productById"
+    }, allEntries = true)
+    public void delete(final ProductSku instance) {
         super.delete(instance);
-        instance.getProduct().getSku().remove(instance);
-    }*/
+    }
+
 }

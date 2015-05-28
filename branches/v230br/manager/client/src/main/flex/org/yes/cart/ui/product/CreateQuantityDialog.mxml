@@ -99,10 +99,10 @@
             var selectedSku:ProductSkuDTOImpl = skuComboBox.selectedItem as ProductSkuDTOImpl;
             if (selectedSku != null) {
                 skuSelected = true;
-                skuQuantity.productSkuId = selectedSku.skuId;
+                skuQuantity.skuCode = selectedSku.code;
             } else {
                 skuSelected = false;
-                skuQuantity.productSkuId = Number.NaN;
+                skuQuantity.skuCode = null;
             }
         }
 
@@ -152,7 +152,7 @@
             if (DomainUtils.isPersistentPK(skuWarehouse.skuWarehouseId)) {
                 for (var i:int = 0; i < skuComboBox.dataProvider.length; i++) {
                     var candidate:ProductSkuDTOImpl = ProductSkuDTOImpl(skuComboBox.dataProvider[i]);
-                    if (candidate.skuId == skuWarehouse.productSkuId) {
+                    if (candidate.code == skuWarehouse.skuCode) {
                         skuComboBox.selectedIndex = i;
                         skuComboBox.enabled = false;
                         skuSelected = true;

@@ -1114,14 +1114,12 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         product.getSku().add(productSku);
         productDao.saveOrUpdate(product);
         productSkuDao.saveOrUpdate(productSku);
-        productSkuDao.saveOrUpdate(productSku);
         // add quantity on warehouses
         SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
-        skuWarehouse.setSku(productSku);
+        skuWarehouse.setSkuCode(productSku.getCode());
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouse.setWarehouse(warehouseDao.findById(2L));
         skuWareHouseDao.create(skuWarehouse);
-        productSku.getQuantityOnWarehouse().add(skuWarehouse);
         productDao.fullTextSearchReindex(product.getProductId());
         skuWareHouseDao.flushClear();
         return pk;

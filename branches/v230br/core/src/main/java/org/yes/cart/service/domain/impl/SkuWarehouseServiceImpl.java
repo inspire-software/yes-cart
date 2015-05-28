@@ -33,6 +33,7 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -70,9 +71,14 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      */
     @Cacheable(value = "skuWarehouseService-productSkusOnWarehouse")
     public List<SkuWarehouse> getProductSkusOnWarehouse(final long productId, final long warehouseId) {
+        final Product product = productService.getProductById(productId, true);
+        final Set<String> skus = new HashSet<String>();
+        for (final ProductSku productSku : product.getSku()) {
+            skus.add(productSku.getCode());
+        }
         return getGenericDao().findByNamedQuery(
-                "SKUS.ON.WAREHOUSE",
-                productId,
+                "SKUS.ON.WAREHOUSE.IN.SKUCODE.WAREHOUSEID",
+                skus,
                 warehouseId);
     }
 
@@ -80,11 +86,15 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
      * {@inheritDoc}
      */
     @Cacheable(value = "skuWarehouseService-productOnWarehouse")
-    public Map<String, BigDecimal> getProductAvailableToSellQuantity(final Product product, final Collection<Warehouse> warehouses) {
+    public Map<String, BigDecimal> getProductAvailableToSellQuantity(final long productId, final Collection<Warehouse> warehouses) {
+
+        final Product product = productService.getProductById(productId, true);
 
         final Map<String, BigDecimal> qty = new HashMap<String, BigDecimal>();
+        final Set<String> skuCodes = new HashSet<String>();
         for (final ProductSku sku : product.getSku()) {
             qty.put(sku.getCode(), BigDecimal.ZERO);
+            skuCodes.add(sku.getCode());
         }
 
         if (qty.isEmpty() || CollectionUtils.isEmpty(warehouses)) {
@@ -97,8 +107,8 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         }
 
         final List<Object[]> skuQtyList = getGenericDao().findQueryObjectsByNamedQuery(
-                "PRODUCT.SKU.QTY.ON.WAREHOUSES.BY.SHOP",
-                product.getProductId(),
+                "PRODUCT.SKU.QTY.ON.WAREHOUSES.IN.SKUCODE.IN.WAREHOUSEID",
+                skuCodes,
                 whIds);
 
         for (final Object[] skuQty : skuQtyList) {
@@ -116,33 +126,20 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
-    public Map<String, BigDecimal> findProductSkuAvailableToSellQuantity(final ProductSku productSku, final Collection<Warehouse> warehouses) {
+    @Cacheable(value = "skuWarehouseService-productOnWarehouse")
+    public Map<String, BigDecimal> getProductSkuAvailableToSellQuantity(final String productSku, final Collection<Warehouse> warehouses) {
 
         final Map<String, BigDecimal> qty = new HashMap<String, BigDecimal>();
-        qty.put(productSku.getCode(), BigDecimal.ZERO);
+        qty.put(productSku, BigDecimal.ZERO);
 
         if (CollectionUtils.isEmpty(warehouses)) {
             return qty;
         }
 
-        final List<Long> whIds = new ArrayList<Long>();
-        for (final Warehouse wh : warehouses) {
-            whIds.add(wh.getWarehouseId());
-        }
+        final Pair<BigDecimal, BigDecimal> qtyAndReserve = findQuantity(warehouses, productSku);
 
-        final List<Object[]> skuQtyList = getGenericDao().findQueryObjectsByNamedQuery(
-                "SKU.QTY.ON.WAREHOUSES.BY.SHOP",
-                productSku.getSkuId(),
-                whIds);
-
-        for (final Object[] skuQty : skuQtyList) {
-            final String skuCode = (String) skuQty[0];
-            final BigDecimal stock = (BigDecimal) skuQty[1];
-            final BigDecimal reserved = (BigDecimal) skuQty[2];
-
-            BigDecimal total = qty.get(skuCode);
-            qty.put(skuCode, total.add(MoneyUtils.notNull(stock)).subtract(MoneyUtils.notNull(reserved)));
-        }
+        qty.put(productSku,
+                MoneyUtils.notNull(qtyAndReserve.getFirst()).subtract(MoneyUtils.notNull(qtyAndReserve.getSecond())));
 
         return qty;
     }
@@ -150,11 +147,12 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * Get the sku's Quantity - Reserved quantity pair.
      *
+     *
      * @param warehouses list of warehouses where
      * @param productSkuCode sku
      * @return pair of available and reserved quantity
      */
-    public Pair<BigDecimal, BigDecimal> getQuantity(final List<Warehouse> warehouses, final String productSkuCode) {
+    public Pair<BigDecimal, BigDecimal> findQuantity(final Collection<Warehouse> warehouses, final String productSkuCode) {
 
         final List<Object> warehouseIdList = new ArrayList<Object>(warehouses.size());
         for (Warehouse wh : warehouses) {
@@ -162,7 +160,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         }
 
         final List rez = getGenericDao().findQueryObjectsByNamedQuery(
-                "SKU.QTY.ON.WAREHOUSES",
+                "SKU.QTY.ON.WAREHOUSES.IN.WAREHOUSEID.BY.SKUCODE",
                 productSkuCode,
                 warehouseIdList
         );
@@ -188,6 +186,10 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
+    }, allEntries = true)
     public BigDecimal reservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal reserveQty) {
 
         return reservation(warehouse, productSkuCode, reserveQty, false);
@@ -198,6 +200,10 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
+    }, allEntries = true)
     public BigDecimal reservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal reserveQty, final boolean allowBackorder) {
 
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
@@ -207,7 +213,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
             if (allowBackorder) {
                 final SkuWarehouse newSkuEntry = getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
                 newSkuEntry.setWarehouse(warehouse);
-                newSkuEntry.setSku(productService.getProductSkuByCode(productSkuCode));
+                newSkuEntry.setSkuCode(productSkuCode);
                 newSkuEntry.setQuantity(BigDecimal.ZERO);
                 newSkuEntry.setReserved(reserveQty);
                 create(newSkuEntry);
@@ -242,6 +248,10 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
+    }, allEntries = true)
     public BigDecimal voidReservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal voidQty) {
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
@@ -265,15 +275,18 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
+    }, allEntries = true)
     public BigDecimal credit(final Warehouse warehouse, final String productSkuCode, final BigDecimal addQty) {
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
         if (skuWarehouse == null) {
-            final ProductSku sku = productService.getProductSkuByCode(productSkuCode);
             final SkuWarehouse newSkuWarehouse = getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
             newSkuWarehouse.setQuantity(addQty);
             newSkuWarehouse.setReserved(BigDecimal.ZERO);
-            newSkuWarehouse.setSku(sku);
+            newSkuWarehouse.setSkuCode(productSkuCode);
             newSkuWarehouse.setWarehouse(warehouse);
             create(newSkuWarehouse);
         } else {
@@ -308,6 +321,10 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
+    @CacheEvict(value = {
+            "skuWarehouseService-productOnWarehouse",
+            "skuWarehouseService-productSkusOnWarehouse"
+    }, allEntries = true)
     public BigDecimal debit(final Warehouse warehouse, final String productSkuCode, final BigDecimal debitQty) {
 
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
@@ -340,7 +357,7 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /** {@inheritDoc} */
     public SkuWarehouse findByWarehouseSku(final Warehouse warehouse, final String productSkuCode) {
         return getGenericDao().findSingleByNamedQuery(
-                "SKUS.ON.WAREHOUSE.BY.SKUCODE",
+                "SKUS.ON.WAREHOUSE.BY.SKUCODE.WAREHOUSEID",
                 productSkuCode,
                 warehouse.getWarehouseId());
     }
@@ -405,19 +422,12 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         ProductSku sku = productService.getProductSkuByCode(productSkuCode);
         if (sku != null) {
             Product product = sku.getProduct();
-            if (Product.AVAILABILITY_PREORDER == product.getAvailability() || Product.AVAILABILITY_BACKORDER == product.getAvailability()) {
-                if (checkAvailabilityDates) {
-                    if (product.getAvailablefrom() != null || product.getAvailableto() != null) {
-                        final Date now = new Date();
-                        if (product.getAvailablefrom() != null) {
-                            return now.after(product.getAvailablefrom());
-                        }
-                        if (product.getAvailableto() != null) {
-                            return now.before(product.getAvailableto());
-                        }
-                    }
-                }
-                return true;
+            if (Product.AVAILABILITY_PREORDER == product.getAvailability()) {
+                // for preorder do not check from date
+                return !checkAvailabilityDates || DomainApiUtils.isObjectAvailableNow(true, null, product.getAvailableto(), new Date());
+            } else if (Product.AVAILABILITY_BACKORDER == product.getAvailability()) {
+                // for back order check both dates
+                return !checkAvailabilityDates || DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), new Date());
             }
         }
         return false;

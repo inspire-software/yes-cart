@@ -44,8 +44,7 @@
 
 
 
-    <bean id="paySessionFactory"
-          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <bean id="paySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="payDataSource"/>
         <property name="mappingResources">
             <list>
@@ -59,6 +58,9 @@
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">create</prop>
                 <prop key="hibernate.connection.autocommit">true</prop>
+                <!-- Disable hibernate search automatic support - no indexing for payments -->
+                <prop key="hibernate.search.autoregister_listeners">false</prop>
+                <prop key="hibernate.search.indexing_strategy">manual</prop>
             </props>
         </property>
         <property name="entityInterceptor">

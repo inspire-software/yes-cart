@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.domain;
 
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.misc.Pair;
@@ -47,12 +45,12 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
     /**
      * Find ATS value per product sku for product.
      *
-     * @param product product
+     * @param productId product PK
      * @param warehouses warehouses to consider
      *
      * @return SKU code -> ATS map
      */
-    Map<String, BigDecimal> getProductAvailableToSellQuantity(Product product, Collection<Warehouse> warehouses);
+    Map<String, BigDecimal> getProductAvailableToSellQuantity(long productId, Collection<Warehouse> warehouses);
 
     /**
      * Find ATS value per product sku for product.
@@ -62,7 +60,7 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      *
      * @return SKU code -> ATS map
      */
-    Map<String, BigDecimal> findProductSkuAvailableToSellQuantity(ProductSku productSku, Collection<Warehouse> warehouses);
+    Map<String, BigDecimal> getProductSkuAvailableToSellQuantity(String productSku, Collection<Warehouse> warehouses);
 
     /**
      * Reserve quantity of skus on warehouse. Method returns the rest to reserve if quantity of skus is not enough
@@ -131,11 +129,12 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
     /**
      * Get the sku's Quantity - Reserved quantity pair.
      *
+     *
      * @param warehouses list of warehouses where
      * @param productSkuCode sku code
      * @return pair of available and reserved quantity
      */
-    Pair<BigDecimal, BigDecimal> getQuantity(List<Warehouse> warehouses, String productSkuCode);
+    Pair<BigDecimal, BigDecimal> findQuantity(Collection<Warehouse> warehouses, String productSkuCode);
 
 
     /**

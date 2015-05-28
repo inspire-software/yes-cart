@@ -121,13 +121,13 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
 
         //add inventory
         SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSku(productSkuService.findById(15350L)); //need 2 items to push order back to life cycle
+        skuWarehouse.setSkuCode("PREORDER-BACK-TO-FLOW4"); //need 2 items to push order back to life cycle
         skuWarehouse.setWarehouse(warehouseService.findById(1L));
         skuWarehouse.setQuantity(BigDecimal.TEN);
         skuWarehouseService.create(skuWarehouse);
 
         skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSku(productSkuService.findById(15360L)); //need 2 items to push order back to life cycle
+        skuWarehouse.setSkuCode("PREORDER-BACK-TO-FLOW5"); //need 2 items to push order back to life cycle
         skuWarehouse.setWarehouse(warehouseService.findById(1L));
         skuWarehouse.setQuantity(BigDecimal.TEN);
         skuWarehouseService.create(skuWarehouse);

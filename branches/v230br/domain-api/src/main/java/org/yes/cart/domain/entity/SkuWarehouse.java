@@ -58,18 +58,19 @@ public interface SkuWarehouse extends Auditable {
     void setWarehouse(Warehouse warehouse);
 
     /**
-     * Set {@link ProductSku}.
+     * Get SKU code.
      *
-     * @return {@link ProductSku}
+     * @return sku
      */
-    ProductSku getSku();
+    String getSkuCode();
 
     /**
-     * Set {@link ProductSku}.
+     * Set SKU code.
      *
-     * @param sku {@link ProductSku}
+     * @param skuCode SKU code
      */
-    void setSku(ProductSku sku);
+    void setSkuCode(String skuCode);
+
 
     /**
      * Get the available quantity.

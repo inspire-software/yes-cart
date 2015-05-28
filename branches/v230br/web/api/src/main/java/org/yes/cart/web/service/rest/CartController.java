@@ -34,10 +34,7 @@ import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
-import org.yes.cart.service.order.CouponCodeInvalidException;
-import org.yes.cart.service.order.OrderAssemblyException;
-import org.yes.cart.service.order.OrderException;
-import org.yes.cart.service.order.OrderItemAllocationException;
+import org.yes.cart.service.order.*;
 import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -2176,6 +2173,7 @@ public class CartController {
      *     <tr><td>SHIPPING_METHOD</td><td>MISSING if carrier SLA is not set</td></tr>
      *     <tr><td>PAYMENT_METHOD</td><td>MISSING if payment gateway is not set</td></tr>
      *     <tr><td>ERROR_COUPON</td><td>coupon code, if coupon is not valid</td></tr>
+     *     <tr><td>ERROR_SKU</td><td>sku code, if sku is unavailable</td></tr>
      *     <tr><td>CART_ITEMS</td><td>error message, if order cannot be created from cart items</td></tr>
      * </table>
      * <p>
@@ -2342,6 +2340,17 @@ public class CartController {
             review.setSuccess(false);
             final Map<String, String> problems = new HashMap<String, String>();
             problems.put("ERROR_COUPON", invalidCoupon.getCoupon());
+            review.setProblems(problems);
+            return review;
+
+        } catch (SkuUnavailableException skuUnavailable) {
+
+            ShopCodeContext.getLog(this).error(skuUnavailable.getMessage(), skuUnavailable);
+
+            final OrderPreviewRO review = new OrderPreviewRO();
+            review.setSuccess(false);
+            final Map<String, String> problems = new HashMap<String, String>();
+            problems.put("ERROR_SKU", skuUnavailable.getSkuCode());
             review.setProblems(problems);
             return review;
 

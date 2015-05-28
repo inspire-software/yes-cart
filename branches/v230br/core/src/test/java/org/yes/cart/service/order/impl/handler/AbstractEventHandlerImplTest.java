@@ -470,7 +470,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
                                    final String expectedAvailable,
                                    final String expectedReserved) {
         ProductSku sku = productSkuService.getProductSkuBySkuCode(skuCode);
-        Pair<BigDecimal, BigDecimal> qty = skuWarehouseService.getQuantity(
+        Pair<BigDecimal, BigDecimal> qty = skuWarehouseService.findQuantity(
                 new ArrayList<Warehouse>() {{
                     add(warehouseService.findById(warehouseId));
                 }},

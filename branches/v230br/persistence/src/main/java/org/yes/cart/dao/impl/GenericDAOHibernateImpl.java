@@ -554,7 +554,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                     final T unproxied = (T) HibernateHelper.unproxy(entity);
 
                     if (entityIndexingInterceptor != null) {
-                        if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onAdd(unproxied)) {
+                        if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onUpdate(unproxied)) {
                             fullTextSession.index(unproxied);
                         }
                     } else {
@@ -664,7 +664,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                             }
 
                             if (entityIndexingInterceptor != null) {
-                                if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onAdd(entity)) {
+                                if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onUpdate(entity)) {
                                     fullTextSession.index(entity);
                                 }
                             } else {

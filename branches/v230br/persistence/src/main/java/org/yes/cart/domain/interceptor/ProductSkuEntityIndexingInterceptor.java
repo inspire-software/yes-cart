@@ -34,23 +34,25 @@ public class ProductSkuEntityIndexingInterceptor implements EntityIndexingInterc
      *
      *
      * @param entity entity to check
+     * @param checkInventory check inventory (performs select that causes flush)
+     *
      * @return true if entity need to be in lucene index.
      */
-    public boolean isIncludeInLuceneIndex(final ProductSku entity) {
-        return entity != null && productInterceptor.isIncludeInLuceneIndex(entity.getProduct());
+    public boolean isIncludeInLuceneIndex(final ProductSku entity, final boolean checkInventory) {
+        return entity != null && productInterceptor.isIncludeInLuceneIndex(entity.getProduct(), checkInventory);
     }
 
 
     /** {@inheritDoc} */
     public IndexingOverride onAdd(final ProductSku entity) {
-        return isIncludeInLuceneIndex(entity)
+        return isIncludeInLuceneIndex(entity, false)
                 ?IndexingOverride.APPLY_DEFAULT
                 :IndexingOverride.REMOVE;
     }
 
     /** {@inheritDoc} */
     public IndexingOverride onUpdate(final ProductSku entity) {
-        return isIncludeInLuceneIndex(entity)
+        return isIncludeInLuceneIndex(entity, true)
                 ?IndexingOverride.APPLY_DEFAULT
                 :IndexingOverride.REMOVE;
     }
@@ -62,7 +64,7 @@ public class ProductSkuEntityIndexingInterceptor implements EntityIndexingInterc
 
     /** {@inheritDoc} */
     public IndexingOverride onCollectionUpdate(final ProductSku entity) {
-        return isIncludeInLuceneIndex(entity)
+        return isIncludeInLuceneIndex(entity, true)
                 ?IndexingOverride.APPLY_DEFAULT
                 :IndexingOverride.REMOVE;
     }

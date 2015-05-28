@@ -26,7 +26,6 @@ import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
-import org.yes.cart.service.domain.impl.ProductAvailabilityStrategyImpl;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -356,15 +355,17 @@ public class ProductAvailabilityStrategyImplTest {
         context.checking(new Expectations() {{
             allowing(warehouseService).getByShopId(shopId); will(returnValue(warehouses));
             allowing(sku).getProduct(); will(returnValue(product));
+            allowing(sku).getCode(); will(returnValue("ABC"));
+            allowing(product).getProductId(); will(returnValue(123L));
             allowing(product).getAvailablefrom(); will(returnValue(null));
             allowing(product).getAvailableto(); will(returnValue(null));
             allowing(product).getAvailability(); will(returnValue(availability));
             allowing(product).getDefaultSku(); will(returnValue(sku));
             allowing(sku).getCode(); will(returnValue(skuCode));
-            allowing(skuWarehouseService).getProductAvailableToSellQuantity(product, warehouses); will(returnValue(new HashMap<String, BigDecimal>() {{
+            allowing(skuWarehouseService).getProductAvailableToSellQuantity(123L, warehouses); will(returnValue(new HashMap<String, BigDecimal>() {{
                 put(skuCode, qty);
             }}));
-            allowing(skuWarehouseService).findProductSkuAvailableToSellQuantity(sku, warehouses); will(returnValue(new HashMap<String, BigDecimal>() {{
+            allowing(skuWarehouseService).getProductSkuAvailableToSellQuantity("ABC", warehouses); will(returnValue(new HashMap<String, BigDecimal>() {{
                 put(skuCode, qty);
             }}));
         }});

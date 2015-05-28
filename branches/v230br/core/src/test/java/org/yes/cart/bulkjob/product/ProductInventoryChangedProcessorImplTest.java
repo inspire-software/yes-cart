@@ -63,8 +63,8 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         Product product = productService.findById(9998L);
         assertEquals(Product.AVAILABILITY_STANDARD, product.getAvailability());
 
-        final Long skuId = product.getDefaultSku().getSkuId();
-        Pair<BigDecimal, BigDecimal> quantity = skuWarehouseService.getQuantity(warehouses, product.getDefaultSku().getCode());
+        final String skuCode = product.getDefaultSku().getCode();
+        Pair<BigDecimal, BigDecimal> quantity = skuWarehouseService.findQuantity(warehouses, product.getDefaultSku().getCode());
         assertTrue(quantity.getFirst().compareTo(BigDecimal.ZERO) > 0);
         assertTrue(quantity.getFirst().compareTo(quantity.getSecond()) > 0);
 
@@ -87,14 +87,14 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
                 for (final Warehouse warehouse : warehouses) {
                     productService.getGenericDao().executeNativeUpdate("update TSKUWAREHOUSE set QUANTITY = 0"
                             + ", UPDATED_TIMESTAMP = '2099-01-01 00:00:00' where WAREHOUSE_ID = "
-                            + warehouse.getWarehouseId() + " and SKU_ID = " + skuId);
+                            + warehouse.getWarehouseId() + " and SKU_CODE = '" + skuCode + "'");
                 }
             }
         });
 
         product = productService.findById(9998L);
 
-        quantity = skuWarehouseService.getQuantity(warehouseService.getByShopId(10L), product.getDefaultSku().getCode());
+        quantity = skuWarehouseService.findQuantity(warehouseService.getByShopId(10L), product.getDefaultSku().getCode());
         assertTrue(quantity.getFirst().compareTo(BigDecimal.ZERO) == 0);
         assertTrue(quantity.getFirst().compareTo(quantity.getSecond()) <= 0);
 
@@ -133,14 +133,14 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
                 for (final Warehouse warehouse : warehouses) {
                     productService.getGenericDao().executeNativeUpdate("update TSKUWAREHOUSE set QUANTITY = " + oldQuantity.toPlainString()
                             + ", UPDATED_TIMESTAMP = '2099-01-01 00:00:00' where WAREHOUSE_ID = "
-                            + warehouse.getWarehouseId() + " and SKU_ID = " + skuId);
+                            + warehouse.getWarehouseId() + " and SKU_CODE = '" + skuCode + "'");
                 }
             }
         });
 
         product = productService.findById(9998L);
 
-        quantity = skuWarehouseService.getQuantity(warehouseService.getByShopId(10L), product.getDefaultSku().getCode());
+        quantity = skuWarehouseService.findQuantity(warehouseService.getByShopId(10L), product.getDefaultSku().getCode());
         assertTrue(quantity.getFirst().compareTo(BigDecimal.ZERO) > 0);
         assertTrue(quantity.getFirst().compareTo(quantity.getSecond()) > 0);
 

@@ -25,6 +25,7 @@ import org.yes.cart.domain.entity.impl.ProductAvailabilityModelImpl;
 import org.yes.cart.service.domain.ProductAvailabilityStrategy;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
+import org.yes.cart.util.DomainApiUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -51,8 +52,8 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
     public ProductAvailabilityModel getAvailabilityModel(final long shopId, final Product product) {
 
         final List<Warehouse> warehouses = warehouseService.getByShopId(shopId);
-        final Map<String, BigDecimal> qty = skuWarehouseService.getProductAvailableToSellQuantity(product, warehouses);
-        final boolean availableNow = isAvailableNow(product.getAvailablefrom(), product.getAvailableto());
+        final Map<String, BigDecimal> qty = skuWarehouseService.getProductAvailableToSellQuantity(product.getProductId(), warehouses);
+        final boolean availableNow = isAvailableNow(product.getAvailability(), product.getAvailablefrom(), product.getAvailableto());
 
         return new ProductAvailabilityModelImpl(
                 product.getDefaultSku().getCode(),
@@ -65,7 +66,7 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
     public ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSearchResultDTO product) {
 
         final Map<String, BigDecimal> skuInventory = product.getQtyOnWarehouse(shopId);
-        final boolean availableNow = isAvailableNow(product.getAvailablefrom(), product.getAvailableto());
+        final boolean availableNow = isAvailableNow(product.getAvailability(), product.getAvailablefrom(), product.getAvailableto());
 
         return new ProductAvailabilityModelImpl(
                 product.getDefaultSkuCode(),
@@ -79,8 +80,8 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
 
         final Product product = sku.getProduct();
         final List<Warehouse> warehouses = warehouseService.getByShopId(shopId);
-        final Map<String, BigDecimal> qty = skuWarehouseService.findProductSkuAvailableToSellQuantity(sku, warehouses);
-        final boolean availableNow = isAvailableNow(product.getAvailablefrom(), product.getAvailableto());
+        final Map<String, BigDecimal> qty = skuWarehouseService.getProductSkuAvailableToSellQuantity(sku.getCode(), warehouses);
+        final boolean availableNow = isAvailableNow(product.getAvailability(), product.getAvailablefrom(), product.getAvailableto());
 
         return new ProductAvailabilityModelImpl(
                 sku.getCode(),
@@ -89,9 +90,12 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
                 qty);
     }
 
-    private boolean isAvailableNow(final Date from, final Date to) {
+    private boolean isAvailableNow(final int availability, final Date from, final Date to) {
         final Date now = new Date();
-        return (from == null || now.after(from)) && (to == null || now.before(to));
+        if (availability == Product.AVAILABILITY_PREORDER) {
+            return DomainApiUtils.isObjectAvailableNow(true, null, to, now);
+        }
+        return DomainApiUtils.isObjectAvailableNow(true, from, to, now);
     }
 
 }

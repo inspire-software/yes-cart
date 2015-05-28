@@ -1307,6 +1307,13 @@ ul.feedbackPanel > li {
     margin-bottom:10px;
 }
 
+.feedbackPanelWARNING {
+    padding: 10px;
+    /* color: #3c763d; */
+    background-color: #fcf8e3;
+    margin-bottom:10px;
+}
+
 /*===================================================================================*/
 /*	COOKIE POLICY
 /*===================================================================================*/

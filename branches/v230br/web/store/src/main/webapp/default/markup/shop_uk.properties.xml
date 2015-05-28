@@ -136,6 +136,7 @@
     <entry key="emptyCart">Кошик порожній</entry>
     <entry key="orderErrorGeneral">Сталася помилка при створені Вашого замовлення. Спробуйте ще раз.</entry>
     <entry key="orderErrorCouponInvalid">Промо-код '${0}' не може бути прийнятий. Будь-ласка видаліть його із кошика.</entry>
+    <entry key="orderErrorSkuInvalid">${0} знятий з продажу. Будь-ласка видаліть його із кошика.</entry>
 
     <!-- COMPONENTS -->
     <!-- BreadCrumbsView -->

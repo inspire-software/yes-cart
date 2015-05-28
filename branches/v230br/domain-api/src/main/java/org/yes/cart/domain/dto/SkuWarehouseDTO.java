@@ -44,20 +44,6 @@ public interface SkuWarehouseDTO extends Identifiable {
     void setSkuWarehouseId(long skuWarehouseId);
 
     /**
-     * The sku pk.
-     *
-     * @return sku pk.
-     */
-    long getProductSkuId();
-
-    /**
-     * Set sku pk.
-     *
-     * @param productSkuId sku pk value.
-     */
-    void setProductSkuId(long productSkuId);
-
-    /**
      * Get sku code.
      *
      * @return sku code.

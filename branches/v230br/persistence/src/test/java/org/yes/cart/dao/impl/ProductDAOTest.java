@@ -165,12 +165,11 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 // add quantity on warehouses
                 SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
-                skuWarehouse.setSku(productSku);
+                skuWarehouse.setSkuCode(productSku.getCode());
                 skuWarehouse.setQuantity(BigDecimal.ONE);
                 skuWarehouse.setWarehouse(warehouseDao.findById(2L));
 
                 skuWarehouse = skuWareHouseDao.create(skuWarehouse);
-                productSku.getQuantityOnWarehouse().add(skuWarehouse);
 
                 // assign it to category
                 ProductCategory productCategory = assignToCategory(product, 128L);
@@ -235,13 +234,11 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 // add quantity on warehouses
                 SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
-                skuWarehouse.setSku(productSku);
+                skuWarehouse.setSkuCode(productSku.getCode());
                 skuWarehouse.setQuantity(BigDecimal.ONE);
                 skuWarehouse.setWarehouse(warehouseDao.findById(2L));
 
                 skuWarehouse = skuWareHouseDao.create(skuWarehouse);
-
-                productSkuDao.refresh(productSku);
 
                 // assign it to category
                 ProductCategory productCategory = assignToCategory(product, 128L);
@@ -522,11 +519,10 @@ public class ProductDAOTest extends AbstractTestDAO {
         productSkuDao.saveOrUpdate(productSku);
         // add quantity on warehouses
         SkuWarehouse skuWarehouse = new SkuWarehouseEntity();
-        skuWarehouse.setSku(productSku);
+        skuWarehouse.setSkuCode(productSku.getCode());
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouse.setWarehouse(warehouseDao.findById(2L));
         skuWareHouseDao.create(skuWarehouse);
-        productSku.getQuantityOnWarehouse().add(skuWarehouse);
         productDao.fullTextSearchReindex(product.getProductId());
         skuWareHouseDao.flushClear();
         return pk;

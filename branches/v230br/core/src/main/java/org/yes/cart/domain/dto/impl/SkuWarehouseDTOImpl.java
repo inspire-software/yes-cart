@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 
 import java.math.BigDecimal;
@@ -35,17 +36,10 @@ public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
     @DtoField(value = "skuWarehouseId", readOnly = true)
     private long skuWarehouseId;
 
-    @DtoField(
-            value = "sku",
-            converter = "skuId2Sku",
-            entityBeanKeys = "org.yes.cart.domain.entity.ProductSku"
-    )
-    private long productSkuId;
-
-    @DtoField(value = "sku.code", readOnly = true)
+    @DtoField(value = "skuCode", readOnly = true)
     private String skuCode;
 
-    @DtoField(value = "sku.name", readOnly = true)
+    @DtoVirtualField(converter = "skuCodeToName", readOnly = true)
     private String skuName;
 
     @DtoField(
@@ -76,20 +70,9 @@ public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
     public void setSkuWarehouseId(final long skuWarehouseId) {
         this.skuWarehouseId = skuWarehouseId;
     }
-
-    /** {@inheritDoc} */
-    public long getProductSkuId() {
-        return productSkuId;
-    }
-
      /** {@inheritDoc}*/
     public long getId() {
-        return productSkuId;
-    }
-
-    /** {@inheritDoc} */
-    public void setProductSkuId(final long productSkuId) {
-        this.productSkuId = productSkuId;
+        return skuWarehouseId;
     }
 
     /** {@inheritDoc} */
@@ -166,7 +149,6 @@ public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
     public String toString() {
         return "SkuWarehouseDTOImpl{" +
                 "skuWarehouseId=" + skuWarehouseId +
-                ", productSkuId=" + productSkuId +
                 ", skuCode='" + skuCode + '\'' +
                 ", skuName='" + skuName + '\'' +
                 ", warehouseId=" + warehouseId +

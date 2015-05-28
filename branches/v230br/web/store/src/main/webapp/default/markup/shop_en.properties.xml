@@ -136,6 +136,7 @@
     <entry key="emptyCart">Cart is empty</entry>
     <entry key="orderErrorGeneral">An error occurred while trying to create your order. Please try again.</entry>
     <entry key="orderErrorCouponInvalid">Coupon '${0}' is no longer valid please remove it from the cart.</entry>
+    <entry key="orderErrorSkuInvalid">${0} is no longer available please remove it from the cart.</entry>
 
     <!-- COMPONENTS -->
     <!-- BreadCrumbsView -->

@@ -855,7 +855,7 @@
         SKUWAREHOUSE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         WAREHOUSE_ID bigint not null,
-        SKU_ID bigint not null,
+        SKU_CODE varchar(255) not null,
         QUANTITY decimal(19,2) not null comment 'Current quantity',
         RESERVED decimal(19,2) default 0 comment 'Reserved by payment transaction quantity.',
         CREATED_TIMESTAMP datetime,
@@ -1469,19 +1469,15 @@
 
 
     alter table TSKUWAREHOUSE 
-        add index FKAC00F89A4EC4B749 (SKU_ID), 
-        add constraint FKAC00F89A4EC4B749 
-        foreign key (SKU_ID) 
-        references TSKU (SKU_ID);
-
-    alter table TSKUWAREHOUSE 
         add index FKAC00F89A1C1544FC (WAREHOUSE_ID), 
         add constraint FKAC00F89A1C1544FC 
         foreign key (WAREHOUSE_ID) 
         references TWAREHOUSE (WAREHOUSE_ID);
 
     alter table TSKUWAREHOUSE
-        add constraint U_SKUINVENTORY unique (WAREHOUSE_ID, SKU_ID);
+        add constraint SKUWAREHOUSE_SKU unique (WAREHOUSE_ID, SKU_CODE);
+
+    create index SKUWAREHOUSE_SKUCODE on TSKUWAREHOUSE (SKU_CODE);
 
     alter table TSYSTEMATTRVALUE 
         add index FK_SYS_ATTRIBUTE (CODE), 

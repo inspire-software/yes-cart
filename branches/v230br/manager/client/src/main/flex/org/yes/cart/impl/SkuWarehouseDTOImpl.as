@@ -22,8 +22,6 @@ public class SkuWarehouseDTOImpl {
     
     public var skuWarehouseId:Number;
 
-    public var productSkuId:Number;
-
     public var skuCode:String;
 
     public var skuName:String;
@@ -42,8 +40,7 @@ public class SkuWarehouseDTOImpl {
     }
 
     public function toString():String {
-        return "SkuWarehouseDTOImpl{productSkuId=" + String(productSkuId) +
-               ",skuCode=" + String(skuCode) +
+        return "SkuWarehouseDTOImpl{skuCode=" + String(skuCode) +
                ",skuName=" + String(skuName) +
                ",warehouseId=" + String(warehouseId) +
                ",warehouseCode=" + String(warehouseCode) +

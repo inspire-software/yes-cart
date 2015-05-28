@@ -904,7 +904,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoInventoryServiceImpl">
                 <constructor-arg index="0" ref="dtoWarehouseService"/>
-                <constructor-arg index="1" ref="skuWarehouseDao"/>
+                <constructor-arg index="1" ref="skuWarehouseService"/>
                 <constructor-arg index="2" ref="productSkuDao"/>
                 <constructor-arg index="3" ref="warehouseDao"/>
                 <constructor-arg index="4" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
@@ -1231,6 +1231,10 @@
         <constructor-arg index="0" ref="productSkuDao"/>
     </bean>
 
+    <bean id="skuCodeToName" class="org.yes.cart.domain.dto.adapter.impl.SkuWarehouseSkuCodeToNameConverter">
+        <constructor-arg index="0" ref="genericDao"/>
+    </bean>
+
     <bean id="shopId2Shop" class="org.yes.cart.domain.dto.adapter.impl.ShopIdToEntityConverter">
         <constructor-arg index="0" ref="shopDao"/>
     </bean>
@@ -1264,6 +1268,7 @@
                 <entry key="productTypeDTO2ProductType" value-ref="productTypeDTO2ProductType"/>
                 <entry key="productId2Product" value-ref="productId2Product"/>
                 <entry key="skuId2Sku" value-ref="skuId2Sku"/>
+                <entry key="skuCodeToName" value-ref="skuCodeToName"/>
                 <entry key="shopId2Shop" value-ref="shopId2Shop"/>
                 <entry key="warehouseId2Warehouse" value-ref="warehouseId2Warehouse"/>
                 <entry key="carrierId2Carrier" value-ref="carrierId2Carrier"/>

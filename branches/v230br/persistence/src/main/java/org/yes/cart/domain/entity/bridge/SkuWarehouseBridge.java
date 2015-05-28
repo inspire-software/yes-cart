@@ -16,7 +16,6 @@
 
 package org.yes.cart.domain.entity.bridge;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Fieldable;
@@ -25,8 +24,10 @@ import org.hibernate.search.bridge.TwoWayFieldBridge;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.entity.bridge.support.ShopWarehouseRelationshipSupport;
+import org.yes.cart.domain.entity.bridge.support.SkuWarehouseRelationshipSupport;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -48,7 +49,8 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
     /** {@inheritDoc} */
     public void set(final String proposedFiledName, final Object value, final Document document, final LuceneOptions luceneOptions) {
 
-        final ShopWarehouseRelationshipSupport support = getShopWarehouseRelationshipSupport();
+        final ShopWarehouseRelationshipSupport shopSupport = getShopWarehouseRelationshipSupport();
+        final SkuWarehouseRelationshipSupport skuSupport = getSkuWarehouseRelationshipSupport();
 
         if (value instanceof Collection) {
 
@@ -56,12 +58,17 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
 
                 final ProductSku sku = (ProductSku) obj;
 
-                final List<Shop> shops = support.getAll();
+                final List<Shop> shops = shopSupport.getAll();
 
                 for (final Shop shop : shops) {
 
-                    final Set<Warehouse> warehouses = support.getShopWarehouses(shop);
-                    final BigDecimal qtyForShop = sku.getQty(warehouses);
+                    final Set<Warehouse> warehouses = shopSupport.getShopWarehouses(shop);
+
+                    final List<SkuWarehouse> inventory = skuSupport.getQuantityOnWarehouses(sku.getCode(), warehouses);
+                    BigDecimal qtyForShop = BigDecimal.ZERO;
+                    for (final SkuWarehouse stock : inventory) {
+                        qtyForShop = qtyForShop.add(stock.getAvailableToSell());
+                    }
 
                     if (MoneyUtils.isFirstBiggerThanSecond(qtyForShop, BigDecimal.ZERO)) {
                         String rez = objectToString(shop.getShopId(), sku.getCode(), qtyForShop);
@@ -128,6 +135,10 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
 
     private ShopWarehouseRelationshipSupport getShopWarehouseRelationshipSupport() {
         return HibernateSearchBridgeStaticLocator.getShopWarehouseRelationshipSupport();
+    }
+
+    private SkuWarehouseRelationshipSupport getSkuWarehouseRelationshipSupport() {
+        return HibernateSearchBridgeStaticLocator.getSkuWarehouseRelationshipSupport();
     }
 
 }

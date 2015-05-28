@@ -175,16 +175,16 @@ public interface ProductSku extends Auditable, Attributable, Rankable , Seoable,
     void setRank(int rank);
 
     /**
-     * Get collection of sku prive tiers.
+     * Get collection of sku price tiers.
      *
-     * @return collection of sku prive tiers.
+     * @return collection of sku price tiers.
      */
     Collection<SkuPrice> getSkuPrice();
 
     /**
-     * Set collection of sku prive tiers.
+     * Set collection of sku price tiers.
      *
-     * @param skuPrice collection of sku prive tiers.
+     * @param skuPrice collection of sku price tiers.
      */
     void setSkuPrice(Collection<SkuPrice> skuPrice);
 
@@ -201,27 +201,6 @@ public interface ProductSku extends Auditable, Attributable, Rankable , Seoable,
      * @param barCode bar code.
      */
     void setBarCode(String barCode);
-
-    /**
-     * Get quantity of sku on warehouse.
-     * @return quantity of sku on warehouse.
-     */
-    Collection<SkuWarehouse> getQuantityOnWarehouse();
-
-    /**
-     * Set quantity of sku on warehouse.
-     * @param quantityOnWarehouse quantity of sku on warehouse.
-     */
-    void setQuantityOnWarehouse(Collection<SkuWarehouse> quantityOnWarehouse);
-
-    /**
-     * Get total quantity of skus on all warehouses.
-     *
-     * @param warehouses warehouse to consider
-     *
-     * @return total quantity
-     */
-    BigDecimal getQty(Collection<Warehouse> warehouses);
 
 }
 

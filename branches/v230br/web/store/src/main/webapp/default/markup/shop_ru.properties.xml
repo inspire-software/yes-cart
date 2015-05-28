@@ -136,6 +136,7 @@
     <entry key="emptyCart">Корзина пуста</entry>
     <entry key="orderErrorGeneral">Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.</entry>
     <entry key="orderErrorCouponInvalid">Промо-код '${0}' не может быть применен. Пожалуйста удалите его из корзины.</entry>
+    <entry key="orderErrorSkuInvalid">${0} снят с продаж. Пожалуйста удалите его из корзины.</entry>
 
     <!-- COMPONENTS -->
     <!-- BreadCrumbsView -->

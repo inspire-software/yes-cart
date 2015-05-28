@@ -35,6 +35,7 @@ import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.dto.DtoInventoryService;
 import org.yes.cart.service.dto.DtoWarehouseService;
 import org.yes.cart.service.dto.support.InventoryFilter;
@@ -52,6 +53,7 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
 
     private final DtoWarehouseService dtoWarehouseService;
 
+    private final SkuWarehouseService skuWarehouseService;
     private final GenericDAO<SkuWarehouse, Long> skuWarehouseDAO;
     private final GenericDAO<ProductSku, Long> productSkuDAO;
     private final GenericDAO<Warehouse, Long> warehouseDAO;
@@ -61,13 +63,14 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
     private final Assembler skuWarehouseAsm;
 
     public DtoInventoryServiceImpl(final DtoWarehouseService dtoWarehouseService,
-                                   final GenericDAO<SkuWarehouse, Long> skuWarehouseDAO,
+                                   final SkuWarehouseService skuWarehouseService,
                                    final GenericDAO<ProductSku, Long> productSkuDAO,
                                    final GenericDAO<Warehouse, Long> warehouseDAO,
                                    final DtoFactory dtoFactory,
                                    final AdaptersRepository adaptersRepository) {
         this.dtoWarehouseService = dtoWarehouseService;
-        this.skuWarehouseDAO = skuWarehouseDAO;
+        this.skuWarehouseService = skuWarehouseService;
+        this.skuWarehouseDAO = skuWarehouseService.getGenericDao();
         this.productSkuDAO = productSkuDAO;
         this.warehouseDAO = warehouseDAO;
         this.dtoFactory = dtoFactory;
@@ -86,36 +89,75 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
         if (filter.getWarehouse() != null) {
             // only allow lists for warehouse inventory lists
 
+
+
             final List<Criterion> criteria = new ArrayList<Criterion>();
             criteria.add(Restrictions.eq("warehouse.warehouseId", filter.getWarehouse().getWarehouseId()));
             if (StringUtils.hasLength(filter.getProductCode())) {
+
                 if (filter.getProductCodeExact()) {
-                    criteria.add(
+
+                    final List<ProductSku> skus = productSkuDAO.findByCriteria(new CriteriaTuner() {
+                        public void tune(final Criteria crit) {
+                            crit.createAlias("product", "prod");
+                            crit.setFetchMode("prod", FetchMode.JOIN);
+                        }
+                    }, Restrictions.or(
                             Restrictions.or(
-                                Restrictions.eq("prod.code", filter.getProductCode()),
-                                Restrictions.eq("sku.code", filter.getProductCode())
+                                    Restrictions.eq("prod.code", filter.getProductCode()),
+                                    Restrictions.eq("code", filter.getProductCode())
+                            ),
+                            Restrictions.or(
+                                    Restrictions.eq("prod.name", filter.getProductCode()),
+                                    Restrictions.eq("name", filter.getProductCode())
                             )
-                    );
+                    ));
+
+                    final List<String> skuCodes = new ArrayList<String>();
+                    skuCodes.add(filter.getProductCode()); // original for standalone inventory
+                    for (final ProductSku sku : skus) {
+                        skuCodes.add(sku.getCode()); // sku codes from product match
+                    }
+
+                    criteria.add(Restrictions.in("skuCode", skuCodes));
+
                 } else {
-                    criteria.add(
+
+                    final List<ProductSku> skus = productSkuDAO.findByCriteria(new CriteriaTuner() {
+                        public void tune(final Criteria crit) {
+                            crit.createAlias("product", "prod");
+                            crit.setFetchMode("prod", FetchMode.JOIN);
+                        }
+                    }, Restrictions.or(
                             Restrictions.or(
                                     Restrictions.ilike("prod.code", filter.getProductCode(), MatchMode.ANYWHERE),
-                                    Restrictions.ilike("sku.code", filter.getProductCode(), MatchMode.ANYWHERE)
+                                    Restrictions.ilike("code", filter.getProductCode(), MatchMode.ANYWHERE)
+                            ),
+                            Restrictions.or(
+                                    Restrictions.ilike("prod.name", filter.getProductCode(), MatchMode.ANYWHERE),
+                                    Restrictions.ilike("name", filter.getProductCode(), MatchMode.ANYWHERE)
                             )
-                    );
+                    ));
+
+                    final List<String> skuCodes = new ArrayList<String>();
+                    for (final ProductSku sku : skus) {
+                        skuCodes.add(sku.getCode()); // sku codes from product match
+                    }
+
+                    if (skuCodes.isEmpty()) {
+                        criteria.add(Restrictions.ilike("skuCode", filter.getProductCode(), MatchMode.ANYWHERE));
+                    } else {
+                        criteria.add(
+                                Restrictions.or(
+                                        Restrictions.ilike("skuCode", filter.getProductCode(), MatchMode.ANYWHERE),
+                                        Restrictions.in("skuCode", skuCodes)
+                                )
+                        );
+                    }
                 }
             }
 
-            final List<SkuWarehouse> entities = skuWarehouseDAO.findByCriteria(new CriteriaTuner() {
-                public void tune(final Criteria crit) {
-                    crit.createAlias("sku", "sku");
-                    crit.createAlias("warehouse", "warehouse");
-                    crit.createAlias("sku.product", "prod");
-                    crit.setFetchMode("warehouse", FetchMode.JOIN);
-                    crit.setFetchMode("sku", FetchMode.JOIN);
-                    crit.setFetchMode("prod", FetchMode.JOIN);
-                }
-            }, criteria.toArray(new Criterion[criteria.size()]));
+            final List<SkuWarehouse> entities = skuWarehouseDAO.findByCriteria(criteria.toArray(new Criterion[criteria.size()]));
 
             final Map<String, Object> adapters = adaptersRepository.getAll();
             for (final SkuWarehouse entity : entities) {
@@ -168,17 +210,18 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
             entity = skuWarehouseDAO.findById(inventory.getSkuWarehouseId());
         }
         if (entity == null) {
+
+
+
             // check by unique combination
             final List<Criterion> criteria = new ArrayList<Criterion>();
             criteria.add(Restrictions.eq("warehouse.code", inventory.getWarehouseCode()));
-            criteria.add(Restrictions.eq("sku.code", inventory.getSkuCode()));
+            criteria.add(Restrictions.eq("skuCode", inventory.getSkuCode()));
 
             final List<SkuWarehouse> candidates = skuWarehouseDAO.findByCriteria(new CriteriaTuner() {
                 public void tune(final Criteria crit) {
-                    crit.createAlias("sku", "sku");
                     crit.createAlias("warehouse", "warehouse");
                     crit.setFetchMode("warehouse", FetchMode.JOIN);
-                    crit.setFetchMode("sku", FetchMode.JOIN);
                     crit.setMaxResults(1);
                 }
             }, criteria.toArray(new Criterion[criteria.size()]));
@@ -190,25 +233,25 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
         }
 
         if (entity == null) {
-            final List<ProductSku> skus = productSkuDAO.findByCriteria(Restrictions.eq("code", inventory.getSkuCode()));
-            if (skus == null || skus.size() != 1) {
-                throw new UnableToCreateInstanceException("Invalid SKU: " + inventory.getSkuCode(), null);
-            }
             final List<Warehouse> warehouses = warehouseDAO.findByCriteria(Restrictions.eq("code", inventory.getWarehouseCode()));
             if (warehouses == null || warehouses.size() != 1) {
                 throw new UnableToCreateInstanceException("Invalid warehouse: " + inventory.getWarehouseCode(), null);
             }
 
             entity = skuWarehouseDAO.getEntityFactory().getByIface(SkuWarehouse.class);
-            entity.setSku(skus.get(0));
+            entity.setSkuCode(inventory.getSkuCode());
             entity.setWarehouse(warehouses.get(0));
         }
 
         final Map<String, Object> adapters = adaptersRepository.getAll();
 
         skuWarehouseAsm.assembleEntity(inventory, entity, adapters, dtoFactory);
-
-        skuWarehouseDAO.saveOrUpdate(entity);
+        // use service since we flush cache there
+        if (entity.getSkuWarehouseId() > 0L) {
+            skuWarehouseService.update(entity);
+        } else {
+            skuWarehouseService.create(entity);
+        }
         // dtoWarehouseService.getSkuWarehouseService().updateOrdersAwaitingForInventory(inventory.getSkuCode());
 
         skuWarehouseAsm.assembleDto(inventory, entity, adapters, dtoFactory);

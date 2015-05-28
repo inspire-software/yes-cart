@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.yes.cart.domain.dto.InventoryDTO;
 
 import java.math.BigDecimal;
@@ -35,10 +36,10 @@ public class InventoryDTOImpl implements InventoryDTO {
     @DtoField(value = "skuWarehouseId", readOnly = true)
     private long skuWarehouseId;
 
-    @DtoField(value = "sku.code", readOnly = true)
+    @DtoField(value = "skuCode", readOnly = true)
     private String skuCode;
 
-    @DtoField(value = "sku.name", readOnly = true)
+    @DtoVirtualField(converter = "skuCodeToName", readOnly = true)
     private String skuName;
 
     @DtoField(value = "warehouse.code", readOnly = true)
