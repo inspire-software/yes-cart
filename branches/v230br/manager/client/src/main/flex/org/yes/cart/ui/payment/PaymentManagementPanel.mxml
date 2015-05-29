@@ -247,7 +247,7 @@
 
                     </mx:DataGridColumn>
 
-                    <mx:DataGridColumn showDataTips="true"
+                    <mx:DataGridColumn showDataTips="true" textAlign="right"
                                        headerText="@Resource(bundle='PaymentManagementPanel',key='paymentAmount')"
                                        dataField="paymentAmount"/>
 

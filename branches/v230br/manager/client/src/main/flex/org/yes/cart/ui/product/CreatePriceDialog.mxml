@@ -213,15 +213,7 @@
         private function onSkuSelected(event:Event):void {
 
             selectedSku = event.currentTarget.selectedItem;
-            _skuPrice.productSkuId = selectedSku.skuId;
-            var validationArray:Array = new Array();
-            for each (var priceCandidate:SkuPriceDTOImpl in selectedSku.price) {
-                if (priceCandidate.shopId == shopId
-                        && priceCandidate.currency == currency) {
-                    validationArray.push(priceCandidate.quantity.toString());
-                }
-            }
-            //quantityValidator.inValues = validationArray;
+            _skuPrice.skuCode = selectedSku.code;
 
         }
 

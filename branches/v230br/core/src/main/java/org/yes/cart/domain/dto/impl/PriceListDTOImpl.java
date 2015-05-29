@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.yes.cart.domain.dto.PriceListDTO;
 
 import java.math.BigDecimal;
@@ -59,10 +60,10 @@ public class PriceListDTOImpl implements PriceListDTO {
     @DtoField(value = "currency", readOnly = true)
     private String currency;
 
-    @DtoField(value = "sku.code", readOnly = true)
+    @DtoField(value = "skuCode", readOnly = true)
     private String skuCode;
 
-    @DtoField(value = "sku.name", readOnly = true)
+    @DtoVirtualField(converter = "priceSkuCodeToName", readOnly = true)
     private String skuName;
 
     @DtoField(value = "shop.code", readOnly = true)

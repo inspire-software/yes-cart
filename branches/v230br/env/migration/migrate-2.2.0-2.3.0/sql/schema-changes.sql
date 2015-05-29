@@ -200,5 +200,23 @@ alter table TSKUWAREHOUSE add constraint SKUWAREHOUSE_SKU unique (WAREHOUSE_ID, 
 create index SKUWAREHOUSE_SKUCODE on TSKUWAREHOUSE (SKU_CODE);
 
 
+--
+-- YC-564 Decouple SkuPriceEntity and ProductSkuEntity
+--
+
+alter table TSKUPRICE add column SKU_CODE varchar(255);
+update TSKUPRICE p set p.SKU_CODE = (select CODE from TSKU where SKU_ID = p.SKU_ID);
+-- verify using this: select p.SKU_CODE, s.CODE from TSKUPRICE p, TSKU s where p.SKU_ID = s.SKU_ID;
+-- drop FK
+alter table TSKUPRICE drop foreign key FK_SP_SKU;
+alter table TSKUPRICE drop constraint FK_SP_SKU;
+-- drop column
+alter table TSKUPRICE drop column SKU_ID;
+-- add index to improve selects
+create index SKUPRICE_SKUCODE on TSKUPRICE (SKU_CODE);
+
+
+
+
 
 

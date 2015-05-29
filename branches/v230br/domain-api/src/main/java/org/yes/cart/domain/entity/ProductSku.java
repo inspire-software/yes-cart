@@ -175,20 +175,6 @@ public interface ProductSku extends Auditable, Attributable, Rankable , Seoable,
     void setRank(int rank);
 
     /**
-     * Get collection of sku price tiers.
-     *
-     * @return collection of sku price tiers.
-     */
-    Collection<SkuPrice> getSkuPrice();
-
-    /**
-     * Set collection of sku price tiers.
-     *
-     * @param skuPrice collection of sku price tiers.
-     */
-    void setSkuPrice(Collection<SkuPrice> skuPrice);
-
-    /**
      * Get the sku bar code.
      *
      * @return Sku bar code

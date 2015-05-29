@@ -169,7 +169,6 @@ public class DtoWarehouseServiceImpl
                 getAssemblerEntityFactory());
         skuWarehouse.setSkuCode(skuWarehouseDTO.getSkuCode());
         skuWarehouse = skuWarehouseService.create(skuWarehouse);
-        // skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouseDTO.getSkuCode());
         return assembleSkuWarehouseDTO(skuWarehouse);
     }
 
@@ -187,7 +186,6 @@ public class DtoWarehouseServiceImpl
                 getAdaptersRepository(),
                 getAssemblerEntityFactory());
         skuWarehouse = skuWarehouseService.update(skuWarehouse);
-        // skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouseDTO.getSkuCode());
         return assembleSkuWarehouseDTO(skuWarehouse);
 
     }

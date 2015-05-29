@@ -71,6 +71,19 @@ public interface PriceService extends GenericService<SkuPrice> {
 
 
     /**
+     * Get all prices gor given product skus (all), no date or shop filtering.
+     *
+     * @param productId    optional product to filter the prices. If null the price will be chosen by selectedSku.
+     * @param selectedSku  optional sku to filter the prices. if null all product skus will be  considered.
+     * @param currencyCode desirable currency
+     *
+     * @return all sku prices
+     */
+    List<SkuPrice> getAllPrices(final Long productId,
+                                final String selectedSku,
+                                final String currencyCode);
+
+    /**
      * Get navigation records for prices
      *
      * @param priceTierTree given price tier tree

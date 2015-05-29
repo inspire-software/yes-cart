@@ -138,8 +138,8 @@
                     </mx:itemEditor>
                     <mx:itemRenderer>
                         <mx:Component>
-                            <mx:Text selectable="false" width="100%"
-                                     text="{data.regularPrice==0?'':data.regularPrice}"
+                            <mx:Text selectable="false" width="100%" textAlign="right"
+                                     text="{isNaN(data.regularPrice) || data.regularPrice == 0?'':Number(data.regularPrice).toFixed(2)}"
                                     />
                         </mx:Component>
                     </mx:itemRenderer>
@@ -178,8 +178,8 @@
                     </mx:itemEditor>
                     <mx:itemRenderer>
                         <mx:Component>
-                            <mx:Text selectable="false" width="100%"
-                                     text="{data.salePrice==0?'':data.salePrice}"
+                            <mx:Text selectable="false" width="100%" textAlign="right"
+                                     text="{isNaN(data.salePrice) || data.salePrice == 0?'':Number(data.salePrice).toFixed(2)}"
                                     />
                         </mx:Component>
                     </mx:itemRenderer>
@@ -250,8 +250,8 @@
                     </mx:itemEditor>
                     <mx:itemRenderer>
                         <mx:Component>
-                            <mx:Text selectable="false" width="100%"
-                                     text="{data.minimalPrice==0?'':data.minimalPrice}"
+                            <mx:Text selectable="false" width="100%" textAlign="right"
+                                     text="{isNaN(data.minimalPrice) || data.minimalPrice == 0?'':Number(data.minimalPrice).toFixed(2)}"
                                     />
                         </mx:Component>
                     </mx:itemRenderer>

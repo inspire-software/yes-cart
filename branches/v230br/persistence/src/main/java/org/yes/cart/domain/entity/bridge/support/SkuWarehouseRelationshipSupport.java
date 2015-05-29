@@ -36,7 +36,7 @@ public interface SkuWarehouseRelationshipSupport {
      *
      * @return all inventory for given sku on the system
      */
-    List<SkuWarehouse> getQuantityOnWarehouse(final String sku);
+    List<SkuWarehouse> getQuantityOnWarehouse(String sku);
 
     /**
      * Get quantities for given sku on given warehouse.
@@ -46,7 +46,7 @@ public interface SkuWarehouseRelationshipSupport {
      *
      * @return all inventory for given sku on the warehouse
      */
-    List<SkuWarehouse> getQuantityOnWarehouse(final String sku, final Warehouse warehouse);
+    List<SkuWarehouse> getQuantityOnWarehouse(String sku, Warehouse warehouse);
 
     /**
      * Get quantities for given sku on given warehouses.
@@ -56,6 +56,6 @@ public interface SkuWarehouseRelationshipSupport {
      *
      * @return all inventory for given sku on the warehouses
      */
-    List<SkuWarehouse> getQuantityOnWarehouses(final String sku, final Collection<Warehouse> warehouses);
+    List<SkuWarehouse> getQuantityOnWarehouses(String sku, Collection<Warehouse> warehouses);
 
 }

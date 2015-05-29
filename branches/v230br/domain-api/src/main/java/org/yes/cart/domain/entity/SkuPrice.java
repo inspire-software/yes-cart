@@ -26,24 +26,24 @@ import java.util.Date;
  * <p/>
  * Product sku prices per shop, currency and quantity of skus. Quantity of sku shows
  * what price per single sku if shopper gonna buy more that 1 item. Regular price - price without
- * any discounts and promotional. Sale price will be show in particular time frame or everytime if
- * time frame not present. Minimal price will be used in "name-your-price" pricing strategy.
+ * any discounts and promotional. Sale price will be show in particular time frame or every time if
+ * time frame is not present. Minimal price will be used in "name-your-price" pricing strategy.
  */
 public interface SkuPrice extends Auditable, Taggable {
 
     /**
-     * Get the product sku.
+     * Get SKU code.
      *
-     * @return {@link ProductSku}
+     * @return sku
      */
-    ProductSku getSku();
+    String getSkuCode();
 
     /**
-     * Set product sku.
+     * Set SKU code.
      *
-     * @param sku {@link ProductSku}
+     * @param skuCode SKU code
      */
-    void setSku(ProductSku sku);
+    void setSkuCode(String skuCode);
 
     /**
      * Get shop.
@@ -132,7 +132,7 @@ public interface SkuPrice extends Auditable, Taggable {
     /**
      * Set minimal price
      *
-     * @param minimalPrice
+     * @param minimalPrice minimal price
      */
     void setMinimalPrice(BigDecimal minimalPrice);
 

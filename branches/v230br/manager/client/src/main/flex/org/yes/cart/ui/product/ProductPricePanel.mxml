@@ -71,7 +71,7 @@
                 <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='id')"
                                    dataField="skuPriceId" editable="false"/>
                 <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagementPanel',key='skuCode')"
-                                   dataField="code" editable="false"/>
+                                   dataField="skuCode" editable="false"/>
                 <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='skuName')"
                                    dataField="skuName" editable="false"/>
                 <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='quantity')"
@@ -104,8 +104,8 @@
                     </mx:itemEditor>
                     <mx:itemRenderer>
                         <mx:Component>
-                            <mx:Text selectable="false" width="100%"
-                                     text="{data.regularPrice==0?'':data.regularPrice}"
+                            <mx:Text selectable="false" width="100%" textAlign="right"
+                                     text="{isNaN(data.regularPrice) || data.regularPrice == 0?'':Number(data.regularPrice).toFixed(2)}"
                                     />
                         </mx:Component>
                     </mx:itemRenderer>
@@ -144,8 +144,8 @@
                     </mx:itemEditor>
                     <mx:itemRenderer>
                         <mx:Component>
-                            <mx:Text selectable="false" width="100%"
-                                     text="{data.salePrice==0?'':data.salePrice}"
+                            <mx:Text selectable="false" width="100%" textAlign="right"
+                                     text="{isNaN(data.salePrice) || data.salePrice == 0?'':Number(data.salePrice).toFixed(2)}"
                                     />
                         </mx:Component>
                     </mx:itemRenderer>
@@ -158,8 +158,8 @@
                     <mx:itemRenderer>
                         <mx:Component>
                             <mx:VBox>
-                                <mx:DateFormatter id="formatDateTime" formatString="YYYY-MM-DD J:NN"></mx:DateFormatter>
-                                <mx:Label text="{formatDateTime.format(data.salefrom)}"/>
+                                <mx:DateFormatter id="formatDateTime1" formatString="YYYY-MM-DD J:NN"></mx:DateFormatter>
+                                <mx:Label text="{formatDateTime1.format(data.salefrom)}"/>
                             </mx:VBox>
                         </mx:Component>
                     </mx:itemRenderer>
@@ -172,8 +172,8 @@
                     <mx:itemRenderer>
                         <mx:Component>
                             <mx:VBox>
-                                <mx:DateFormatter id="formatDateTime" formatString="YYYY-MM-DD J:NN"></mx:DateFormatter>
-                                <mx:Label text="{formatDateTime.format(data.saleto)}"/>
+                                <mx:DateFormatter id="formatDateTime2" formatString="YYYY-MM-DD J:NN"></mx:DateFormatter>
+                                <mx:Label text="{formatDateTime2.format(data.saleto)}"/>
                             </mx:VBox>
                         </mx:Component>
                     </mx:itemRenderer>
@@ -212,8 +212,8 @@
                     </mx:itemEditor>
                     <mx:itemRenderer>
                         <mx:Component>
-                            <mx:Text selectable="false" width="100%"
-                                     text="{data.minimalPrice==0?'':data.minimalPrice}"
+                            <mx:Text selectable="false" width="100%" textAlign="right"
+                                     text="{isNaN(data.minimalPrice) || data.minimalPrice == 0?'':Number(data.minimalPrice).toFixed(2)}"
                                     />
                         </mx:Component>
                     </mx:itemRenderer>
@@ -251,6 +251,10 @@
 
         <mx:method id="getAllProductSkus" name="getAllProductSkus"
                    result="onGetAllProductSkusResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="getAllProductPrices" name="getAllProductPrices"
+                   result="onGetAllProductPricesResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
         <mx:method id="updateSkuPrice" name="updateSkuPrice"
@@ -300,9 +304,6 @@
         }
 
         public function set product(value:ProductDTOImpl):void {
-            if (_productId == value.productId) {
-                return;
-            }
             _productId = value.productId;
             productCodeName.text = value.name + ' (' + value.code + ')';
             remoteProductSkuService.getAllProductSkus(productId);
@@ -319,41 +320,19 @@
 
         private function refreshSkuPrices():void {
             prices = new ArrayCollection();
+            allowEditPrice = false;
+            allowDeletePrice = false;
+
             if (storesComboBox.selectedItem == null || storeCurrencyComboBox.selectedItem == null) {
                 return;
             }
             var shopDTOImpl:ShopDTOImpl = storesComboBox.selectedItem as ShopDTOImpl;
-            var selectedPrice:String = storeCurrencyComboBox.selectedItem as String;
-            if (shopDTOImpl != null && selectedPrice != null) {
-                for each (var sku:ProductSkuDTOImpl in allProductSkus) {
-                    Debug.trace("DEBUG ProductPricePanel sku code is:" + (sku != null ?
-                            sku.code : "null"));
-                    for each (var priceCandidate:SkuPriceDTOImpl in sku.price) {
-                        Debug.trace("DEBUG ProductPricePanel priceCandidate is:" + priceCandidate);
-                        if (shopDTOImpl.shopId == priceCandidate.shopId
-                                && selectedPrice == priceCandidate.currency) {
-                            prices.addItem(priceCandidate);
-                        }
-                    }
-                }
+            var currency:String = storeCurrencyComboBox.selectedItem as String;
+            if (shopDTOImpl != null && currency != null) {
+
+                remoteProductSkuService.getAllProductPrices(productId, currency, shopDTOImpl.shopId);
+
             }
-
-            var skuCode:SortField = new SortField();
-            skuCode.name = "code";
-
-            var qty:SortField = new SortField();
-            qty.name = "quantity";
-
-            var sort:Sort = new Sort();
-            sort.fields = [skuCode, qty];
-
-            prices.sort = sort;
-            prices.refresh();
-
-            Debug.trace("DEBUG ProductPricePanel skusReady end");
-            allowEditPrice = false;
-            allowDeletePrice = false;
-
 
         }
 
@@ -374,7 +353,7 @@
 
             var skuPriceDto:SkuPriceDTOImpl = DataGrid(event.target).dataProvider[event.rowIndex];
             Debug.trace("TRACE ProductPricePanel valueEditEnd skuPriceDto code = " + (skuPriceDto != null ?
-                    skuPriceDto.code : "null"));
+                    skuPriceDto.skuCode : "null"));
             remoteProductSkuService.updateSkuPrice(skuPriceDto);
 
             Debug.trace("TRACE ProductPricePanel update call performed ");
@@ -431,7 +410,7 @@
 
                 for (var i:int = 0, il:int = allProductSkus.length; i < il; i++) {
                     var skuCandidate:ProductSkuDTOImpl = allProductSkus.getItemAt(i) as ProductSkuDTOImpl;
-                    if (skuCandidate.skuId == priceDataGrid.selectedItem.productSkuId) {
+                    if (skuCandidate.code == priceDataGrid.selectedItem.skuCode) {
                         createPriceDialog.skuComboBox.selectedIndex = i;
                         createPriceDialog.selectedSku = skuCandidate;
                         createPriceDialog.skuComboBox.enabled = false;
@@ -519,6 +498,29 @@
         private function onGetAllProductSkusResult(event:ResultEvent):void {
             allProductSkus = event.result as ArrayCollection;
             refreshSkuPrices();
+        }
+
+        private function onGetAllProductPricesResult(event:ResultEvent):void {
+
+            var _prices:ArrayCollection = event.result as ArrayCollection;
+
+            var skuCode:SortField = new SortField();
+            skuCode.name = "skuCode";
+
+            var qty:SortField = new SortField();
+            qty.name = "quantity";
+
+            var sort:Sort = new Sort();
+            sort.fields = [skuCode, qty];
+
+            _prices.sort = sort;
+            _prices.refresh();
+
+            Debug.trace("DEBUG ProductPricePanel skusReady end");
+            allowEditPrice = false;
+            allowDeletePrice = false;
+
+            prices = _prices;
         }
 
         private function onUpdateSkuPriceResult(event:ResultEvent):void {

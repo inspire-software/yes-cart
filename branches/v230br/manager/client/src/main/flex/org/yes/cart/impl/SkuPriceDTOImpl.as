@@ -33,15 +33,13 @@ public class SkuPriceDTOImpl {
 
     public var minimalPrice:Number;
 
-    public var productSkuId:Number;
-
     public var shopId:Number = 0;
 
     public var quantity:Number;
 
     public var currency:String;
 
-    public var code:String;
+    public var skuCode:String;
 
     public var skuName:String;
 
@@ -59,11 +57,10 @@ public class SkuPriceDTOImpl {
                ",salePrice=" + String(salePrice) +
                ",salefrom=" + String(salefrom) +
                ",saleto=" + String(saleto) +
-               ",productSkuId=" + String(productSkuId) +
                ",shopId=" + String(shopId) +
                ",quantity=" + String(quantity) +
                ",currency=" + String(currency) +
-               ",code=" + String(code) +
+               ",skuCode=" + String(skuCode) +
                ",skuName=" + String(skuName) +
                ",tag=" + String(tag) + "}";
     }

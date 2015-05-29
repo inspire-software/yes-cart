@@ -55,6 +55,16 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
      */
     long updateSkuPrice(SkuPriceDTO skuPriceDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Get all prices by product PK.
+     *
+     * @param productId product PK.
+     *
+     * @return all prices
+     */
+    List<SkuPriceDTO> getAllProductPrices(long productId, String currency, long shopId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 
     /**
      * Delete sku price by given pk

@@ -540,6 +540,14 @@
         </property>
     </bean>
 
+    <bean id="skuPriceRelationshipSupport" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.domain.entity.bridge.support.impl.SkuPriceRelationshipSupportImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
+            </bean>
+        </property>
+    </bean>
+
 
 </beans>
 

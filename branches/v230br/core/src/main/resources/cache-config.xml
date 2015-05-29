@@ -356,6 +356,10 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="priceService-allPrices"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="filteredNavigationSupport-priceFilteredNavigationRecords"/>
             <constructor-arg index="1" value="all"/>
         </bean>

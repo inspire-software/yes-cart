@@ -292,6 +292,7 @@
             <security:protect method="createEntityAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="deleteAttributeValue" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="getAllProductSkus" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="getAllProductPrices" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
         </security:intercept-methods>
     </bean>
 

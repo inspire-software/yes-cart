@@ -17,7 +17,6 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.util.MoneyUtils;
 
@@ -35,7 +34,6 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     private long version;
 
     private Warehouse warehouse;
-    private ProductSku sku;
     private String skuCode;
     private BigDecimal quantity;
     private BigDecimal reserved;
@@ -57,21 +55,12 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.warehouse = warehouse;
     }
 
-    public ProductSku getSku() {
-        return this.sku;
-    }
-
-
     public String getSkuCode() {
         return skuCode;
     }
 
     public void setSkuCode(final String skuCode) {
         this.skuCode = skuCode;
-    }
-
-    public void setSku(ProductSku sku) {
-        this.sku = sku;
     }
 
     public BigDecimal getQuantity() {

@@ -97,7 +97,7 @@ public interface DtoWarehouseService extends GenericDTOService<WarehouseDTO> {
     SkuWarehouseDTO updateSkuOnWarehouse(SkuWarehouseDTO skuWarehouseDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Dind product skus quantity objects on given warehouse.
+     * Find product skus quantity objects on given warehouse.
      *
      * @param productId   given product id
      * @param warehouseId given warehouse id.

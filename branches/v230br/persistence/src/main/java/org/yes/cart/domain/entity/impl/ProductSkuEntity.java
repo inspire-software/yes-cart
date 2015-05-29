@@ -34,6 +34,7 @@ import java.util.*;
  */
 
 @Indexed(index = "luceneindex/productsku", interceptor = ProductSkuEntityIndexingInterceptor.class)
+@ClassBridge(impl = SkuPriceBridge.class)
 public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, java.io.Serializable {
 
     private long skuId;
@@ -140,15 +141,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
     public void setBarCode(String barCode) {
         this.barCode = barCode;
-    }
-
-    @Field(bridge = @FieldBridge(impl = SkuPriceBridge.class))
-    public Collection<SkuPrice> getSkuPrice() {
-        return this.skuPrice;
-    }
-
-    public void setSkuPrice(Collection<SkuPrice> skuPrice) {
-        this.skuPrice = skuPrice;
     }
 
     @Field(bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class))

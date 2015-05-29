@@ -1212,15 +1212,6 @@
             <column name="BARCODE" length="128"/>
         </property>
 
-
-        <bag name="skuPrice" inverse="false" lazy="true" cascade="all-delete-orphan" order-by="qty">
-            <key>
-                <column name="SKU_ID" not-null="true"/>
-            </key>
-            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.SkuPriceEntity"/>
-        </bag>
-
-
         <bag name="attributes" inverse="false" lazy="false" cascade="all-delete-orphan">
             <key>
                 <column name="SKU_ID" not-null="false"/>
@@ -1257,12 +1248,11 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <many-to-one name="sku" class="org.yes.cart.domain.entity.impl.ProductSkuEntity" foreign-key="FK_SP_SKU">
-            <column name="SKU_ID" not-null="true"/>
-        </many-to-one>
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_SP_SHOP">
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
+
+        <property name="skuCode" column="SKU_CODE" type="string" length="255" index="SKUPRICE_SKUCODE" not-null="true"/>
 
         <property name="currency" type="string" length="3" not-null="true" column="CURRENCY"/>
 
@@ -3303,39 +3293,60 @@
 
     <query name="SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP">
         <![CDATA[
-            select sp, s.code
-            from SkuPriceEntity sp join sp.sku as s
-            where s.code = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
+            select sp from SkuPriceEntity sp
+            where sp.skuCode = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
+        ]]>
+    </query>
+
+    <query name="SKUPRICE.BY.CODE.AND.CURRENCY">
+        <![CDATA[
+            select sp from SkuPriceEntity sp
+            where sp.skuCode = ?1 and sp.currency = ?2
         ]]>
     </query>
 
     <query name="SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP">
         <![CDATA[
-            select sp, s.code
-            from SkuPriceEntity sp join sp.sku as s
-            where s.product.productId = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
+            select sp from SkuPriceEntity sp
+            where sp.skuCode in (select s.code from ProductSkuEntity s where s.product.productId = ?1)
+                and sp.currency = ?2 and sp.shop.shopId = ?3
+        ]]>
+    </query>
+
+    <query name="SKUPRICE.BY.PRODUCT.AND.CURRENCY">
+        <![CDATA[
+            select sp from SkuPriceEntity sp
+            where sp.skuCode in (select s.code from ProductSkuEntity s where s.product.productId = ?1)
+                and sp.currency = ?2
         ]]>
     </query>
 
     <query name="SKUPRICE.BY.PRODUCT">
         <![CDATA[
-            select sp, s.code
-            from SkuPriceEntity sp join sp.sku as s
-            where s.product.productId = ?1
+            select sp from SkuPriceEntity sp
+            where sp.skuCode in (select s.code from ProductSkuEntity s where s.product.productId = ?1)
         ]]>
     </query>
+
+
+    <query name="SKUPRICE.BY.SKUCODE.ALL">
+        <![CDATA[
+            select sp from SkuPriceEntity sp where sp.skuCode  = ?1
+        ]]>
+    </query>
+
+    <query name="REMOVE.ALL.SKUPRICE.BY.SKUCODE">
+        <![CDATA[
+            delete from SkuPriceEntity  sp   where sp.skuCode  = ?1
+        ]]>
+    </query>
+
 
     <query name="SKUWAREHOUSE.BY.PRODUCT">
         <![CDATA[
             select sw, sw.skuCode
             from SkuWarehouseEntity sw
             where sw.skuCode in (select s.code from ProductSkuEntity s where s.product.productId = ?1)
-        ]]>
-    </query>
-
-    <query name="REMOVE.ALL.SKU.PRICES">
-        <![CDATA[
-            delete from SkuPriceEntity  sp   where sp.sku  = ?1
         ]]>
     </query>
 

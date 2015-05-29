@@ -72,10 +72,11 @@
                 <mx:DataGridColumn width="300" headerText="@Resource(bundle='ProductManagementPanel',key='skuName')"
                                    dataField="skuName" editable="false"/>
                 <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='quantity')"
-                                   dataField="quantity" editable="false"
-                                   labelFunction="quantityLabelFunction"
-
-                        />
+                                   dataField="quantity" editable="false" textAlign="right"
+                                   labelFunction="quantityLabelFunction"/>
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='reserved')"
+                                   dataField="reserved" editable="false" textAlign="right"
+                                   labelFunction="quantityLabelFunction"/>
             </mx:columns>
         </mx:DataGrid>
     </mx:VBox>
@@ -156,11 +157,6 @@
         }
 
         public function set product(value:ProductDTOImpl):void {
-            // TODO: YC-155 need a global way of identifying concurrent modifications
-            // Mandatory reloading to force SKU and Inventory refreshes
-            //if (_productId == value.productId) {
-            //    return;
-            //}
             _productId = value.productId;
             productCodeName.text = value.name + ' (' + value.code + ')';
             remoteProductSkuService.getAllProductSkus(productId);
@@ -267,7 +263,10 @@
          * @return string representation of qty
          */
         public function quantityLabelFunction(item:Object, column:DataGridColumn):String {
-            return quantityFormatter.format(item.quantity);
+            if (item[column.dataField] == null || isNaN(item[column.dataField])) {
+                return "0.00";
+            }
+            return Number(item[column.dataField]).toFixed(2);
         }
 
         private function onWarehouseSelectionChanged(event:Event):void {

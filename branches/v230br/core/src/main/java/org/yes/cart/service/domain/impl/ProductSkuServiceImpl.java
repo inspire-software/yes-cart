@@ -129,11 +129,11 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * {@inheritDoc}
      */
     public List<Pair<String, SkuPrice>> getAllPrices(final long productId) {
-        final List<Object[]> prices = (List) getGenericDao().findQueryObjectsByNamedQuery("SKUPRICE.BY.PRODUCT", productId);
+        final List<SkuPrice> prices = skuPriceDao.findByNamedQuery("SKUPRICE.BY.PRODUCT", productId);
         if (CollectionUtils.isNotEmpty(prices)) {
             final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
-            for (final Object[] price : prices) {
-                rez.add(new Pair<String, SkuPrice>((String) price[1], (SkuPrice) price[0]));
+            for (final SkuPrice price : prices) {
+                rez.add(new Pair<String, SkuPrice>(price.getSkuCode(), price));
             }
             return rez;
         }
@@ -177,7 +177,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
             "productService-skuById"
     }, allEntries = true)
     public void removeAllPrices(final ProductSku sku) {
-         getGenericDao().executeUpdate("REMOVE.ALL.SKU.PRICES", sku);
+         getGenericDao().executeUpdate("REMOVE.ALL.SKUPRICE.BY.SKUCODE", sku.getCode());
 
      }
 

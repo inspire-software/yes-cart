@@ -18,10 +18,12 @@ package org.yes.cart.remote.service.impl;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.*;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.ReindexService;
 import org.yes.cart.remote.service.RemoteProductSkuService;
+import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.service.federation.FederationFacade;
 
@@ -94,6 +96,22 @@ public class RemoteProductSkuServiceImpl
         return Collections.emptyList();
     }
 
+
+    /**
+     * Get all prices by product PK.
+     *
+     * @param productId product PK.
+     *
+     * @return all prices
+     */
+    public List<SkuPriceDTO> getAllProductPrices(final long productId, final String currency, final long shopId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (federationFacade.isManageable(productId, ProductDTO.class)) {
+            return dtoProductSkuService.getAllProductPrices(productId, currency, shopId);
+        }
+        return Collections.emptyList();
+    }
+
     /**
      * Update attribute value.
      *
@@ -151,17 +169,14 @@ public class RemoteProductSkuServiceImpl
      * @return created sku dto
      */
     public long createSkuPrice(final SkuPriceDTO skuPriceDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        try {
-            getById(skuPriceDTO.getProductSkuId()); // check access
-        } catch (UnmappedInterfaceException e) {
-            // ok
-        } catch (UnableToCreateInstanceException e) {
-            // ok
+        final ProductSku sku = ((ProductSkuService) getService()).getProductSkuBySkuCode(skuPriceDTO.getSkuCode());
+        if (federationFacade.isManageable(sku.getProduct().getProductId(), ProductDTO.class)) {
+            long rez = dtoProductSkuService.createSkuPrice(skuPriceDTO);
+            reindexService.reindexProductSkuCode(skuPriceDTO.getSkuCode());
+            return rez;
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        long rez = dtoProductSkuService.createSkuPrice(skuPriceDTO);
-        reindexService.reindexProductSku(skuPriceDTO.getProductSkuId());
-        return rez;
-
     }
 
     /**
@@ -171,29 +186,25 @@ public class RemoteProductSkuServiceImpl
      * @return updated sku price dto
      */
     public long updateSkuPrice(final SkuPriceDTO skuPriceDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        try {
-            getById(skuPriceDTO.getProductSkuId()); // check access
-        } catch (UnmappedInterfaceException e) {
-            // ok
-        } catch (UnableToCreateInstanceException e) {
-            // ok
+        final ProductSku sku = ((ProductSkuService) getService()).getProductSkuBySkuCode(skuPriceDTO.getSkuCode());
+        if (federationFacade.isManageable(sku.getProduct().getProductId(), ProductDTO.class)) {
+            long rez = dtoProductSkuService.updateSkuPrice(skuPriceDTO);
+            reindexService.reindexProductSkuCode(skuPriceDTO.getSkuCode());
+            return rez;
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        long rez = dtoProductSkuService.updateSkuPrice(skuPriceDTO);
-        reindexService.reindexProductSku(skuPriceDTO.getProductSkuId());
-        return rez;
     }
 
     /** {@inheritDoc} */
     public SkuPriceDTO getSkuPrice(final long skuPriceId) {
         final SkuPriceDTO price = dtoProductSkuService.getSkuPrice(skuPriceId);
         if (price != null) {
-            try {
-                getById(price.getProductSkuId()); // check access
+            final ProductSku sku = ((ProductSkuService) getService()).getProductSkuBySkuCode(price.getSkuCode());
+            if (federationFacade.isManageable(sku.getProduct().getProductId(), ProductDTO.class)) {
                 return price;
-            } catch (UnmappedInterfaceException e) {
-                // ok
-            } catch (UnableToCreateInstanceException e) {
-                // ok
+            } else {
+                throw new AccessDeniedException("Access is denied");
             }
         }
         return null;
@@ -202,15 +213,13 @@ public class RemoteProductSkuServiceImpl
     /** {@inheritDoc} */
     public void removeSkuPrice(final long skuPriceId) {
         final SkuPriceDTO skuPriceDTO = dtoProductSkuService.getSkuPrice(skuPriceId);
-        try {
-            getById(skuPriceDTO.getProductSkuId()); // check access
-        } catch (UnmappedInterfaceException e) {
-            // ok
-        } catch (UnableToCreateInstanceException e) {
-            // ok
+        final ProductSku sku = ((ProductSkuService) getService()).getProductSkuBySkuCode(skuPriceDTO.getSkuCode());
+        if (federationFacade.isManageable(sku.getProduct().getProductId(), ProductDTO.class)) {
+            dtoProductSkuService.removeSkuPrice(skuPriceId);
+            reindexService.reindexProductSkuCode(skuPriceDTO.getSkuCode());
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        dtoProductSkuService.removeSkuPrice(skuPriceId);
-        reindexService.reindexProductSku(skuPriceDTO.getProductSkuId());
     }
 
     /** {@inheritDoc} */

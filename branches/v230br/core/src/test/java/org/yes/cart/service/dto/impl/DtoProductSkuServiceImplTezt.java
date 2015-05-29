@@ -84,19 +84,28 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         dto.setCode("233456-a");
         dto = dtoService.create(dto);
         assertTrue(dto.getSkuId() > 0);
-        long pk = dto.getSkuId();
+
         SkuPriceDTO skuPriceDTO = new SkuPriceDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("1.23"));
-        skuPriceDTO.setProductSkuId(pk);
+        skuPriceDTO.setSkuCode("233456-a");
         skuPriceDTO.setShopId(10L);
         skuPriceDTO.setCurrency("EUR");
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createSkuPrice(skuPriceDTO);
-        dto = dtoService.getById(pk);
-        assertEquals(1, dto.getPrice().size());
-        assertEquals("EUR", dto.getPrice().iterator().next().getCurrency());
-        assertEquals(10L, dto.getPrice().iterator().next().getShopId());
-        assertTrue((new BigDecimal("1.23")).equals(dto.getPrice().iterator().next().getRegularPrice()));
+
+        List<SkuPriceDTO> saved = dtoService.getAllProductPrices(dto.getProductId(), "EUR", 10L);
+        assertFalse(saved.isEmpty());
+        skuPriceDTO = null;
+        for (final SkuPriceDTO price : saved) {
+            if (price.getSkuCode().equals("233456-a")) {
+                skuPriceDTO = price;
+            }
+        }
+        assertNotNull(skuPriceDTO);
+
+        assertEquals("EUR", skuPriceDTO.getCurrency());
+        assertEquals(10L, skuPriceDTO.getShopId());
+        assertTrue((new BigDecimal("1.23")).equals(skuPriceDTO.getRegularPrice()));
     }
 
     @Test
@@ -105,22 +114,38 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         dto.setCode("233456-b");
         dto = dtoService.create(dto);
         assertTrue(dto.getSkuId() > 0);
-        long pk = dto.getSkuId();
+
         SkuPriceDTO skuPriceDTO = new SkuPriceDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("1.23"));
-        skuPriceDTO.setProductSkuId(pk);
+        skuPriceDTO.setSkuCode("233456-b");
         skuPriceDTO.setShopId(10L);
         skuPriceDTO.setCurrency("EUR");
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createSkuPrice(skuPriceDTO);
-        dto = dtoService.getById(pk);
-        assertEquals(1, dto.getPrice().size());
-        assertEquals("EUR", dto.getPrice().iterator().next().getCurrency());
-        assertEquals(10L, dto.getPrice().iterator().next().getShopId());
-        assertTrue((new BigDecimal("1.23")).equals(dto.getPrice().iterator().next().getRegularPrice()));
-        dtoService.removeSkuPrice(dto.getPrice().iterator().next().getSkuPriceId());
-        dto = dtoService.getById(pk);
-        assertTrue(dto.getPrice().isEmpty());
+
+        List<SkuPriceDTO> saved = dtoService.getAllProductPrices(dto.getProductId(), "EUR", 10L);
+        assertFalse(saved.isEmpty());
+        skuPriceDTO = null;
+        for (final SkuPriceDTO price : saved) {
+            if (price.getSkuCode().equals("233456-b")) {
+                skuPriceDTO = price;
+            }
+        }
+        assertNotNull(skuPriceDTO);
+
+        assertEquals("EUR", skuPriceDTO.getCurrency());
+        assertEquals(10L, skuPriceDTO.getShopId());
+        assertTrue((new BigDecimal("1.23")).equals(skuPriceDTO.getRegularPrice()));
+        dtoService.removeSkuPrice(skuPriceDTO.getSkuPriceId());
+
+        List<SkuPriceDTO> deleted = dtoService.getAllProductPrices(dto.getProductId(), "EUR", 10L);
+        skuPriceDTO = null;
+        for (final SkuPriceDTO price : deleted) {
+            if (price.getSkuCode().equals("233456-b")) {
+                skuPriceDTO = price;
+            }
+        }
+        assertNull(skuPriceDTO);
     }
 
     @Test
@@ -129,20 +154,29 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         dto.setCode("233456-c");
         dto = dtoService.create(dto);
         assertTrue(dto.getSkuId() > 0);
-        long pk = dto.getSkuId();
+
         SkuPriceDTO skuPriceDTO = new SkuPriceDTOImpl();
         skuPriceDTO.setRegularPrice(new BigDecimal("1.23"));
-        skuPriceDTO.setProductSkuId(pk);
+        skuPriceDTO.setSkuCode("233456-c");
         skuPriceDTO.setShopId(10L);
         skuPriceDTO.setCurrency("EUR");
         skuPriceDTO.setQuantity(BigDecimal.ONE);
         dtoService.createSkuPrice(skuPriceDTO);
-        dto = dtoService.getById(pk);
-        skuPriceDTO = dto.getPrice().iterator().next();
-        assertEquals(1, dto.getPrice().size());
+
+        List<SkuPriceDTO> saved = dtoService.getAllProductPrices(dto.getProductId(), "EUR", 10L);
+        assertFalse(saved.isEmpty());
+        skuPriceDTO = null;
+        for (final SkuPriceDTO price : saved) {
+            if (price.getSkuCode().equals("233456-c")) {
+                skuPriceDTO = price;
+            }
+        }
+        assertNotNull(skuPriceDTO);
+
         assertEquals("EUR", skuPriceDTO.getCurrency());
         assertEquals(10L, skuPriceDTO.getShopId());
         assertTrue((new BigDecimal("1.23")).equals(skuPriceDTO.getRegularPrice()));
+
         Date date = new Date();
         skuPriceDTO.setRegularPrice(new BigDecimal("2.34"));
         skuPriceDTO.setSalePrice(new BigDecimal("2.33"));
@@ -150,23 +184,23 @@ public class DtoProductSkuServiceImplTezt extends BaseCoreDBTestCase {
         skuPriceDTO.setSalefrom(date);
         skuPriceDTO.setSaleto(date);
         dtoService.updateSkuPrice(skuPriceDTO);
-        dto = dtoService.getById(pk);
-        skuPriceDTO = dto.getPrice().iterator().next();
-        assertEquals(1, dto.getPrice().size());
+
+        saved = dtoService.getAllProductPrices(dto.getProductId(), "EUR", 10L);
+
+        assertFalse(saved.isEmpty());
+        skuPriceDTO = null;
+        for (final SkuPriceDTO price : saved) {
+            if (price.getSkuCode().equals("233456-c")) {
+                skuPriceDTO = price;
+            }
+        }
+        assertNotNull(skuPriceDTO);
+
         assertEquals("EUR", skuPriceDTO.getCurrency());
         assertEquals(10L, skuPriceDTO.getShopId());
         assertTrue((new BigDecimal("2.34")).equals(skuPriceDTO.getRegularPrice()));
         assertTrue((new BigDecimal("2.33")).equals(skuPriceDTO.getSalePrice()));
         assertTrue((new BigDecimal("2.32")).equals(skuPriceDTO.getMinimalPrice()));
-
-
-        dtoService.remove(pk);
-        dto = dtoService.getById(pk);
-        assertNull(dto);
-
-        dtoService.remove(15301);
-        dto = dtoService.getById(pk);
-        assertNull(dto);
 
     }
 

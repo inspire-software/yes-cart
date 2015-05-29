@@ -39,7 +39,7 @@ public class SkuWarehouseDTOImpl implements SkuWarehouseDTO {
     @DtoField(value = "skuCode", readOnly = true)
     private String skuCode;
 
-    @DtoVirtualField(converter = "skuCodeToName", readOnly = true)
+    @DtoVirtualField(converter = "warehouseSkuCodeToName", readOnly = true)
     private String skuName;
 
     @DtoField(

@@ -39,7 +39,7 @@ public class InventoryDTOImpl implements InventoryDTO {
     @DtoField(value = "skuCode", readOnly = true)
     private String skuCode;
 
-    @DtoVirtualField(converter = "skuCodeToName", readOnly = true)
+    @DtoVirtualField(converter = "warehouseSkuCodeToName", readOnly = true)
     private String skuName;
 
     @DtoField(value = "warehouse.code", readOnly = true)

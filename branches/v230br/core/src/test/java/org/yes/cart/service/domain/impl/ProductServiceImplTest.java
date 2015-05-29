@@ -106,29 +106,6 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testPricesOnSkuAreLazy() throws Exception {
-
-        final Product product = productService.getProductById(10000L); // Sobot
-        final Collection<SkuPrice> prodPrices = product.getSku().iterator().next().getSkuPrice();
-        try {
-            prodPrices.iterator().next().getRegularPrice();
-            fail("Prices must be lazy. We work with prices through priceService with appropriate cache and timing");
-        } catch (LazyInitializationException exp) {
-            // good we need it lazy - as prices are retrieved from priceService
-        }
-
-        final ProductSku productSku = productService.getSkuById(10000L); // Sobot
-        final Collection<SkuPrice> skuPrices = productSku.getSkuPrice();
-        try {
-            skuPrices.iterator().next().getRegularPrice();
-            fail("Prices must be lazy. We work with prices through priceService with appropriate cache and timing");
-        } catch (LazyInitializationException exp) {
-            // good we need it lazy - as prices are retrieved from priceService
-        }
-
-    }
-
-    @Test
     public void testGetProductByIdList() {
         List<Long> ids = new ArrayList<Long>() {{
             add(12004L);

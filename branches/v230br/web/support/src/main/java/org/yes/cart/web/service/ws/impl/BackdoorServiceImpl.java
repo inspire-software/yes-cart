@@ -64,10 +64,13 @@ public class BackdoorServiceImpl implements BackdoorService {
     private void flushCache() {
         safeFlushCache(cacheManager.getCache("priceService-minimalPrice"));
         safeFlushCache(cacheManager.getCache("priceService-allCurrentPrices"));
+        safeFlushCache(cacheManager.getCache("priceService-allPrices"));
         safeFlushCache(cacheManager.getCache("productService-productById"));
         safeFlushCache(cacheManager.getCache("productService-skuById"));
         safeFlushCache(cacheManager.getCache("productService-productBySkuCode"));
         safeFlushCache(cacheManager.getCache("productSkuService-productSkuBySkuCode"));
+        safeFlushCache(cacheManager.getCache("skuWarehouseService-productSkusOnWarehouse"));
+        safeFlushCache(cacheManager.getCache("skuWarehouseService-productOnWarehouse"));
         safeFlushCache(cacheManager.getCache("web.decoratorFacade-decorate"));
         safeFlushCache(cacheManager.getCache("web.bookmarkService-seoProductDecode"));
         safeFlushCache(cacheManager.getCache("web.bookmarkService-seoProductEncode"));

@@ -21,13 +21,16 @@ import org.apache.lucene.document.Field;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.entity.bridge.support.SkuPriceRelationshipSupport;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,10 +47,19 @@ public class SkuPriceBridge implements FieldBridge {
 
     /** {@inheritDoc} */
     public void set(final String proposedFiledName, final Object value, final Document document, final LuceneOptions luceneOptions) {
-        if (value instanceof Collection) {
+
+        if (!(value instanceof ProductSku)) {
+            return;
+        }
+
+        final SkuPriceRelationshipSupport support = getSkuPriceRelationshipSupport();
+        final List<SkuPrice> allPrices = support.getSkuPrices(((ProductSku) value).getCode());
+
+        if (!allPrices.isEmpty()) {
+
             final Map<Long, Map<String, SkuPrice>> lowestQuantityPrice = new HashMap<Long, Map<String, SkuPrice>>();
             final long time = System.currentTimeMillis();
-            for (Object obj : (Collection)value) {
+            for (Object obj : (Collection)allPrices) {
                 SkuPrice skuPrice = (SkuPrice) obj;
 
                 if ((skuPrice.getSalefrom() != null && skuPrice.getSalefrom().getTime() > time) ||
@@ -113,6 +125,10 @@ public class SkuPriceBridge implements FieldBridge {
      */
     public Pair<String, String> objectToString(final long shopId, final String currency, final BigDecimal regularPrice) {
         return new Pair<String, String>("facet_price_" + shopId + "_" + currency, moneyBridge.objectToString(regularPrice));
+    }
+
+    private SkuPriceRelationshipSupport getSkuPriceRelationshipSupport() {
+        return HibernateSearchBridgeStaticLocator.getSkuPriceRelationshipSupport();
     }
 
 }

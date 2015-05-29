@@ -17,25 +17,19 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.BeansException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.ResultsIterator;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
-import org.yes.cart.service.order.OrderException;
-import org.yes.cart.service.order.OrderStateManager;
-import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -45,15 +39,9 @@ import java.util.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse> implements SkuWarehouseService, ApplicationContextAware {
+public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse> implements SkuWarehouseService {
 
     private ProductService productService;
-
-    private ApplicationContext applicationContext;
-
-    private OrderStateManager orderStateManager;
-
-    private CustomerOrderService customerOrderService;
 
 
     /**
@@ -368,56 +356,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     }
 
     /** {@inheritDoc} */
-    public void updateOrdersAwaitingForInventory(final String productSkuCode) {
-
-        if (isSkuAvailabilityPreorderOrBackorder(productSkuCode, true)) {
-
-            final ResultsIterator<CustomerOrderDelivery> waitForInventory = getCustomerOrderService().findAwaitingDeliveries(
-                    Arrays.asList(productSkuCode),
-                    CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                    Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED)
-            );
-
-            try {
-                while (waitForInventory.hasNext()) {
-
-                    final CustomerOrderDelivery delivery = waitForInventory.next();
-
-                    try {
-                        boolean rez = getOrderStateManager().fireTransition(
-                                new OrderEventImpl(OrderStateManager.EVT_DELIVERY_ALLOWED_TIMEOUT, delivery.getCustomerOrder(), delivery));
-                        if (rez) {
-                            customerOrderService.update(delivery.getCustomerOrder());
-                            ShopCodeContext.getLog(this).info("Push delivery " + delivery.getDeliveryNum() + " back to life cycle , because of sku quantity is changed. Product sku code =" + productSkuCode);
-
-                        } else {
-                            ShopCodeContext.getLog(this).info("Cannot push delivery "
-                                    + delivery.getDeliveryNum() + " back to life cycle , because of sku quantity is changed. Product sku code ="
-                                    + productSkuCode
-                                    + " Stop pushing");
-                            break;
-                        }
-                    } catch (OrderException e) {
-                        ShopCodeContext.getLog(this).warn("Cannot push orders, which are awaiting for inventory", e);
-                    }
-
-                }
-            } catch (Exception exp) {
-                ShopCodeContext.getLog(this).error(exp.getMessage(), exp);
-            } finally {
-                try {
-                    waitForInventory.close();
-                } catch (Exception exp) {
-                    ShopCodeContext.getLog(this).error("Error closing iterator: " + exp.getMessage(), exp);
-                }
-            }
-
-        }
-
-    }
-
-
-    /** {@inheritDoc} */
     public boolean isSkuAvailabilityPreorderOrBackorder(final String productSkuCode, final boolean checkAvailabilityDates) {
         ProductSku sku = productService.getProductSkuByCode(productSkuCode);
         if (sku != null) {
@@ -438,22 +376,4 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         this.productService = productService;
     }
 
-    private OrderStateManager getOrderStateManager() {
-        if (orderStateManager == null) {
-            orderStateManager = applicationContext.getBean("orderStateManager", OrderStateManager.class);
-        }
-        return orderStateManager;
-    }
-
-    private CustomerOrderService getCustomerOrderService() {
-        if (customerOrderService == null) {
-            customerOrderService =  applicationContext.getBean("customerOrderService", CustomerOrderService.class);
-        }
-        return customerOrderService;
-    }
-
-
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
 }

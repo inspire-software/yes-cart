@@ -35,6 +35,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
+import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.dto.DtoPriceListsService;
 import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.service.dto.DtoShopService;
@@ -56,6 +57,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
 
     private final DtoShopService dtoShopService;
     private final DtoProductSkuService dtoProductSkuService;
+    private final PriceService priceService;
 
     private final GenericDAO<SkuPrice, Long> skuPriceDAO;
     private final GenericDAO<ProductSku, Long> productSkuDAO;
@@ -68,14 +70,15 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
 
     public DtoPriceListsServiceImpl(final DtoShopService dtoShopService,
                                     final DtoProductSkuService dtoProductSkuService,
-                                    final GenericDAO<SkuPrice, Long> skuPriceDAO,
+                                    final PriceService priceService,
                                     final GenericDAO<ProductSku, Long> productSkuDAO,
                                     final GenericDAO<Shop, Long> shopDAO,
                                     final DtoFactory dtoFactory,
                                     final AdaptersRepository adaptersRepository) {
         this.dtoShopService = dtoShopService;
         this.dtoProductSkuService = dtoProductSkuService;
-        this.skuPriceDAO = skuPriceDAO;
+        this.priceService = priceService;
+        this.skuPriceDAO = priceService.getGenericDao();
         this.productSkuDAO = productSkuDAO;
         this.shopDAO = shopDAO;
         this.dtoFactory = dtoFactory;
@@ -117,20 +120,66 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
             criteria.add(Restrictions.eq("shop.shopId", filter.getShop().getShopId()));
             criteria.add(Restrictions.eq("currency", filter.getCurrencyCode()));
             if (StringUtils.hasLength(filter.getProductCode())) {
+
                 if (filter.getProductCodeExact()) {
-                    criteria.add(
+
+                    final List<ProductSku> skus = productSkuDAO.findByCriteria(new CriteriaTuner() {
+                        public void tune(final Criteria crit) {
+                            crit.createAlias("product", "prod");
+                            crit.setFetchMode("prod", FetchMode.JOIN);
+                        }
+                    }, Restrictions.or(
                             Restrictions.or(
                                     Restrictions.eq("prod.code", filter.getProductCode()),
-                                    Restrictions.eq("sku.code", filter.getProductCode())
+                                    Restrictions.eq("code", filter.getProductCode())
+                            ),
+                            Restrictions.or(
+                                    Restrictions.eq("prod.name", filter.getProductCode()),
+                                    Restrictions.eq("name", filter.getProductCode())
                             )
-                    );
+                    ));
+
+                    final List<String> skuCodes = new ArrayList<String>();
+                    skuCodes.add(filter.getProductCode()); // original for standalone inventory
+                    for (final ProductSku sku : skus) {
+                        skuCodes.add(sku.getCode()); // sku codes from product match
+                    }
+
+                    criteria.add(Restrictions.in("skuCode", skuCodes));
+
                 } else {
-                    criteria.add(
+
+                    final List<ProductSku> skus = productSkuDAO.findByCriteria(new CriteriaTuner() {
+                        public void tune(final Criteria crit) {
+                            crit.createAlias("product", "prod");
+                            crit.setFetchMode("prod", FetchMode.JOIN);
+                        }
+                    }, Restrictions.or(
                             Restrictions.or(
                                     Restrictions.ilike("prod.code", filter.getProductCode(), MatchMode.ANYWHERE),
-                                    Restrictions.ilike("sku.code", filter.getProductCode(), MatchMode.ANYWHERE)
+                                    Restrictions.ilike("code", filter.getProductCode(), MatchMode.ANYWHERE)
+                            ),
+                            Restrictions.or(
+                                    Restrictions.ilike("prod.name", filter.getProductCode(), MatchMode.ANYWHERE),
+                                    Restrictions.ilike("name", filter.getProductCode(), MatchMode.ANYWHERE)
                             )
-                    );
+                    ));
+
+                    final List<String> skuCodes = new ArrayList<String>();
+                    for (final ProductSku sku : skus) {
+                        skuCodes.add(sku.getCode()); // sku codes from product match
+                    }
+
+                    if (skuCodes.isEmpty()) {
+                        criteria.add(Restrictions.ilike("skuCode", filter.getProductCode(), MatchMode.ANYWHERE));
+                    } else {
+                        criteria.add(
+                                Restrictions.or(
+                                        Restrictions.ilike("skuCode", filter.getProductCode(), MatchMode.ANYWHERE),
+                                        Restrictions.in("skuCode", skuCodes)
+                                )
+                        );
+                    }
                 }
             }
             if (StringUtils.hasLength(filter.getTag())) {
@@ -159,12 +208,8 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
 
             final List<SkuPrice> entities = skuPriceDAO.findByCriteria(new CriteriaTuner() {
                 public void tune(final Criteria crit) {
-                    crit.createAlias("sku", "sku");
                     crit.createAlias("shop", "shop");
-                    crit.createAlias("sku.product", "prod");
                     crit.setFetchMode("shop", FetchMode.JOIN);
-                    crit.setFetchMode("sku", FetchMode.JOIN);
-                    crit.setFetchMode("prod", FetchMode.JOIN);
                 }
             }, criteria.toArray(new Criterion[criteria.size()]));
 
@@ -199,17 +244,13 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
         }
 
         if (entity == null) {
-            final List<ProductSku> skus = productSkuDAO.findByCriteria(Restrictions.eq("code", price.getSkuCode()));
-            if (skus == null || skus.size() != 1) {
-                throw new UnableToCreateInstanceException("Invalid SKU: " + price.getSkuCode(), null);
-            }
             final List<Shop> shops = shopDAO.findByCriteria(Restrictions.eq("code", price.getShopCode()));
             if (shops == null || shops.size() != 1) {
                 throw new UnableToCreateInstanceException("Invalid warehouse: " + price.getShopCode(), null);
             }
 
             entity = skuPriceDAO.getEntityFactory().getByIface(SkuPrice.class);
-            entity.setSku(skus.get(0));
+            entity.setSkuCode(price.getSkuCode());
             entity.setShop(shops.get(0));
             entity.setCurrency(price.getCurrency());
         }
@@ -220,7 +261,12 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
 
         ensureNonZeroPrices(entity);
 
-        skuPriceDAO.saveOrUpdate(entity);
+        // use service since we flush cache there
+        if (entity.getSkuPriceId() > 0L) {
+            priceService.update(entity);
+        } else {
+            priceService.create(entity);
+        }
 
         skuPriceAsm.assembleDto(price, entity, adapters, dtoFactory);
 

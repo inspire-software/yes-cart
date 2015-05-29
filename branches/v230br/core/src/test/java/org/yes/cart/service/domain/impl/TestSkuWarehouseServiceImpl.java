@@ -447,6 +447,8 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testPushOrdersAwaitingForInventory() throws Exception {
 
+        Runnable bulkAwaitingInventoryDeliveriesProcessor =  ctx().getBean("bulkAwaitingInventoryDeliveriesProcessor", Runnable.class);
+
         Customer cust = createCustomer();
 
         ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 0);
@@ -478,8 +480,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         skuWarehouse.setWarehouse(warehouseService.findById(1L));
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouseService.create(skuWarehouse);
-        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSkuCode());
-
+        bulkAwaitingInventoryDeliveriesProcessor.run();
 
         order = customerOrderService.findByGuid(order.getCartGuid());
         assertEquals("One item not enough to continue order processing . Must still in progress 0", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
@@ -489,7 +490,8 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
         skuWarehouse.setQuantity(BigDecimal.ONE.add(BigDecimal.ONE));
         skuWarehouseService.update(skuWarehouse);
-        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSkuCode());
+        bulkAwaitingInventoryDeliveriesProcessor.run();
+
         order = customerOrderService.findByGuid(order.getCartGuid());
         assertEquals("One item not enough to continue order processing . Must still in progress 1", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
@@ -501,7 +503,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         skuWarehouse.setWarehouse(warehouseService.findById(1L));
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouseService.create(skuWarehouse);
-        skuWarehouseService.updateOrdersAwaitingForInventory(skuWarehouse.getSkuCode());
+        bulkAwaitingInventoryDeliveriesProcessor.run();
 
         order = customerOrderService.findByGuid(order.getCartGuid());
         assertEquals("One item not enough to continue order processing . Must still in progress 2", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());

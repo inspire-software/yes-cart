@@ -21,11 +21,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.AttrValueProductSkuDTO;
 import org.yes.cart.domain.dto.ProductSkuDTO;
-import org.yes.cart.domain.dto.SkuPriceDTO;
 import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
-import org.yes.cart.domain.dto.matcher.impl.SkuPriceMatcher;
 import org.yes.cart.domain.entity.AttrValueProductSku;
-import org.yes.cart.domain.entity.SkuPrice;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -114,15 +111,6 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
     )
     private Collection<AttrValueProductSkuDTO> attributes;
 
-
-
-    @DtoCollection(
-            value = "skuPrice", readOnly = true,
-            dtoBeanKey = "org.yes.cart.domain.dto.SkuPriceDTO",
-            entityGenericType = SkuPrice.class,
-            dtoToEntityMatcher = SkuPriceMatcher.class
-    )
-    private Collection<SkuPriceDTO> price;
 
     /**
      * {@inheritDoc}
@@ -265,21 +253,6 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
      */
     public void setBarCode(final String barCode) {
         this.barCode = barCode;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public Collection<SkuPriceDTO> getPrice() {
-        return price;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setPrice(final Collection<SkuPriceDTO> price) {
-        this.price = price;
     }
 
     /**
@@ -450,7 +423,6 @@ public class ProductSkuDTOImpl implements ProductSkuDTO, Serializable {
                 ", rank=" + rank +
                 ", barCode='" + barCode + '\'' +
                 ", attribute=" + attributes +
-                ", price=" + price +
                 '}';
     }
 }

@@ -252,7 +252,6 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
         } else {
             skuWarehouseService.create(entity);
         }
-        // dtoWarehouseService.getSkuWarehouseService().updateOrdersAwaitingForInventory(inventory.getSkuCode());
 
         skuWarehouseAsm.assembleDto(inventory, entity, adapters, dtoFactory);
 

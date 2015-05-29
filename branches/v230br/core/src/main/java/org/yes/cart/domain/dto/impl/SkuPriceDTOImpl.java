@@ -18,6 +18,7 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.yes.cart.domain.dto.SkuPriceDTO;
 
 import java.math.BigDecimal;
@@ -54,13 +55,6 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
     private Date saleto;
 
     @DtoField(
-            value = "sku",
-            converter = "skuId2Sku",
-            entityBeanKeys = "org.yes.cart.domain.entity.ProductSku"
-    )
-    private long productSkuId;
-
-    @DtoField(
             value = "shop",
             converter = "shopId2Shop",
             entityBeanKeys = "org.yes.cart.domain.entity.Shop"
@@ -73,10 +67,10 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
     @DtoField(value = "currency")
     private String currency;
 
-    @DtoField(value = "sku.code", readOnly = true)
-    private String code;
+    @DtoField(value = "skuCode", readOnly = true)
+    private String skuCode;
 
-    @DtoField(value = "sku.name", readOnly = true)
+    @DtoVirtualField(converter = "priceSkuCodeToName", readOnly = true)
     private String skuName;
 
     @DtoField(value = "tag")
@@ -94,13 +88,13 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
     }
 
     /** {@inheritDoc}*/
-    public String getCode() {
-        return code;
+    public String getSkuCode() {
+        return skuCode;
     }
 
     /** {@inheritDoc}*/
-    public void setCode(final String code) {
-        this.code = code;
+    public void setSkuCode(final String skuCode) {
+        this.skuCode = skuCode;
     }
 
     /** {@inheritDoc}*/
@@ -179,16 +173,6 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
     }
 
     /** {@inheritDoc}*/
-    public long getProductSkuId() {
-        return productSkuId;
-    }
-
-    /** {@inheritDoc}*/
-    public void setProductSkuId(final long productSkuId) {
-        this.productSkuId = productSkuId;
-    }
-
-    /** {@inheritDoc}*/
     public long getShopId() {
         return shopId;
     }
@@ -229,9 +213,6 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
 
         final SkuPriceDTOImpl that = (SkuPriceDTOImpl) otherObj;
 
-        if (productSkuId != that.productSkuId) {
-            return false;
-        }
         if (skuPriceId != that.skuPriceId) {
             return false;
         }
@@ -254,7 +235,6 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
     @Override
     public int hashCode() {
         int result = (int) (skuPriceId ^ (skuPriceId >>> 32));
-        result = 31 * result + (int) (productSkuId ^ (productSkuId >>> 32));
         result = 31 * result + (int) (shopId ^ (shopId >>> 32));
         result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
         result = 31 * result + (currency != null ? currency.hashCode() : 0);
@@ -273,7 +253,6 @@ public class SkuPriceDTOImpl implements SkuPriceDTO {
                 ", minimalPrice=" + minimalPrice +
                 ", salefrom=" + salefrom +
                 ", saleto=" + saleto +
-                ", productSkuId=" + productSkuId +
                 ", shopId=" + shopId +
                 ", quantity=" + quantity +
                 ", currency='" + currency + '\'' +

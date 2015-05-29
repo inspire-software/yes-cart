@@ -19,6 +19,7 @@ package org.yes.cart.service.domain.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.Constants;
@@ -26,6 +27,7 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.misc.SkuPricePairQuantityComparatorImpl;
 import org.yes.cart.domain.misc.SkuPriceQuantityComparatorImpl;
 import org.yes.cart.domain.misc.navigation.price.PriceTierNode;
 import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
@@ -52,7 +54,6 @@ public class PriceServiceImpl
 
 
     private final PriceNavigation priceNavigation;
-    private final ProductService productService;
     private final GenericDAO<SkuPrice, Long> skuPriceDao;
 
 
@@ -60,16 +61,13 @@ public class PriceServiceImpl
      * Constructor.
      *
      * @param priceNavigation     price navigation composer
-     * @param productService      product service
      * @param skuPriceDao         sku price dao service
      */
     public PriceServiceImpl(final PriceNavigation priceNavigation,
-                            final ProductService productService,
                             final GenericDAO<SkuPrice, Long> skuPriceDao
     ) {
         super(skuPriceDao);
         this.priceNavigation = priceNavigation;
-        this.productService = productService;
         this.skuPriceDao = skuPriceDao;
 
     }
@@ -347,6 +345,8 @@ public class PriceServiceImpl
     }
 
 
+    private static final Comparator<Pair<String, SkuPrice>> TIER_SORT = new SkuPricePairQuantityComparatorImpl();
+
     /**
      * Get the sku prices filtered by quantity. Example:
      * ProductSKU1 has defined price ties 1 - 100 USD, 2 - 87 USD, 5 - 85 USD
@@ -366,18 +366,7 @@ public class PriceServiceImpl
         final Set<String> uniqueSkuCodes = getUniqueSkuCodes(prices);
         for (String selectedSkuCode : uniqueSkuCodes) {
             final List<Pair<String, SkuPrice>> selectedSkuPrices = getSkuPricesFilteredSkuCode(prices, selectedSkuCode);
-            Collections.sort(
-                    selectedSkuPrices,
-                    new Comparator<Pair<String, SkuPrice>>() {
-                        /**
-                         * {@inheritDoc}
-                         * ReverveComparator by quantity.
-                         */
-                        public int compare(final Pair<String, SkuPrice> skuPrice1, final Pair<String, SkuPrice> skuPrice2) {
-                            return skuPrice2.getSecond().getQuantity().compareTo(skuPrice1.getSecond().getQuantity());
-                        }
-                    }
-            );
+            Collections.sort(selectedSkuPrices, TIER_SORT);
             for (Pair<String, SkuPrice> skuPrice : selectedSkuPrices) {
                 if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(quantity, skuPrice.getSecond().getQuantity())) {
                     result.add(skuPrice);
@@ -408,12 +397,12 @@ public class PriceServiceImpl
                                                                            final long shopId,
                                                                            final String currencyCode) {
 
-        final List<Object[]> prices = (List) getGenericDao().findQueryObjectByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP",
+        final List<SkuPrice> prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP",
                 skuCode, currencyCode, shopId);
         if (CollectionUtils.isNotEmpty(prices)) {
             final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
-            for (final Object[] price : prices) {
-                rez.add(new Pair<String, SkuPrice>((String) price[1], (SkuPrice) price[0]));
+            for (final SkuPrice price : prices) {
+                rez.add(new Pair<String, SkuPrice>(price.getSkuCode(), price));
             }
             return rez;
         }
@@ -425,17 +414,34 @@ public class PriceServiceImpl
                                                                            final long shopId,
                                                                            final String currencyCode) {
 
-        final List<Object[]> prices = (List) getGenericDao().findQueryObjectByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP",
+        final List<SkuPrice> prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP",
                 productId, currencyCode, shopId);
         if (CollectionUtils.isNotEmpty(prices)) {
             final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
-            for (final Object[] price : prices) {
-                rez.add(new Pair<String, SkuPrice>((String) price[1], (SkuPrice) price[0]));
+            for (final SkuPrice price : prices) {
+                rez.add(new Pair<String, SkuPrice>(price.getSkuCode(), price));
             }
             return rez;
         }
         return Collections.emptyList();
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "priceService-allPrices")
+    public List<SkuPrice> getAllPrices(final Long productId, final String selectedSku, final String currencyCode) {
+
+        if (productId != null) {
+            return getGenericDao().findByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY", productId, currencyCode);
+        }
+
+        if (StringUtils.isNotBlank(selectedSku)) {
+            return getGenericDao().findByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY", selectedSku, currencyCode);
+        }
+
+        return Collections.emptyList();
     }
 
     /**
@@ -509,7 +515,8 @@ public class PriceServiceImpl
     @CacheEvict(value = {
             "imageService-seoImage" ,
             "priceService-minimalPrice",
-            "priceService-allCurrentPrices"
+            "priceService-allCurrentPrices",
+            "priceService-allPrices"
     }, allEntries = true)
     public SkuPrice create(final SkuPrice instance) {
         ensureNonZeroPrices(instance);
@@ -522,7 +529,8 @@ public class PriceServiceImpl
     @CacheEvict(value = {
             "imageService-seoImage" ,
             "priceService-minimalPrice",
-            "priceService-allCurrentPrices"
+            "priceService-allCurrentPrices",
+            "priceService-allPrices"
     }, allEntries = true)
     public SkuPrice update(final SkuPrice instance) {
         ensureNonZeroPrices(instance);
@@ -545,7 +553,8 @@ public class PriceServiceImpl
     @CacheEvict(value = {
             "imageService-seoImage" ,
             "priceService-minimalPrice",
-            "priceService-allCurrentPrices"
+            "priceService-allCurrentPrices",
+            "priceService-allPrices"
     }, allEntries = true)
     public void delete(final SkuPrice instance) {
         super.delete(instance);

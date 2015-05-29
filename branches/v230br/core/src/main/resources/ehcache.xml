@@ -204,6 +204,9 @@
     <cache name="priceService-allCurrentPrices" maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
+    <cache name="priceService-allPrices" maxElementsInMemory="5000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
+
 
     <cache name="skuWarehouseService-productOnWarehouse" maxElementsInMemory="5000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="600" timeToIdleSeconds="120"/>

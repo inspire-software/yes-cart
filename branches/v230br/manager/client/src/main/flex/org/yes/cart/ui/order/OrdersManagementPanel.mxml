@@ -508,7 +508,7 @@
                                     <mx:itemRenderer>
                                         <mx:Component>
                                             <mx:VBox horizontalAlign="right">
-                                                <mx:Label text="{data.listPrice.toFixed(2)}"/>
+                                                <mx:Label width="100%" textAlign="right" text="{data.listPrice.toFixed(2)}"/>
                                             </mx:VBox>
                                         </mx:Component>
                                     </mx:itemRenderer>
@@ -520,7 +520,7 @@
                                     <mx:itemRenderer>
                                         <mx:Component>
                                             <mx:VBox horizontalAlign="right">
-                                                <mx:Label text="{data.salePrice.toFixed(2)}"/>
+                                                <mx:Label width="100%" textAlign="right" text="{data.salePrice.toFixed(2)}"/>
                                             </mx:VBox>
                                         </mx:Component>
                                     </mx:itemRenderer>
@@ -528,7 +528,7 @@
 
                                 <mx:DataGridColumn
                                         headerText="@Resource(bundle='CustomerOrderPanel',key='discount')"
-                                        labelFunction="discountLabelFunction" width="80"
+                                        labelFunction="discountLabelFunction" width="80" textAlign="right"
                                         />
 
                                 <mx:DataGridColumn
@@ -554,23 +554,23 @@
                                     <mx:itemRenderer>
                                         <mx:Component>
                                             <mx:VBox horizontalAlign="right">
-                                                <mx:Label text="{data.price.toFixed(2)}"/>
+                                                <mx:Label width="100%" textAlign="right" text="{data.price.toFixed(2)}"/>
                                             </mx:VBox>
                                         </mx:Component>
                                     </mx:itemRenderer>
                                 </mx:DataGridColumn>
 
                                 <mx:DataGridColumn
-                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='tax')"
+                                                   headerText="@Resource(bundle='CustomerOrderPanel',key='tax')"  textAlign="right"
                                                    labelFunction="lineTaxLabelFunction"  width="80" dataTipFunction="lineTaxDataTipFunction" showDataTips="true"/>
 
                                 <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='qty')"
-                                                   dataField="qty" width="40"
+                                                   dataField="qty" width="40" textAlign="right"
                                         />
                                 <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='total')"
-                                                   labelFunction="lineTotalLabelFunction"  width="100"
+                                                   labelFunction="lineTotalLabelFunction"  width="100"  textAlign="right"
                                         />
                                 <mx:DataGridColumn
                                                    headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryNum')"
@@ -657,7 +657,7 @@
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsInfo')"
                                                labelFunction="itemsInfoLabelFunction"
                                                wordWrap="true"/>
-                            <mx:DataGridColumn width="80"
+                            <mx:DataGridColumn width="80" textAlign="right"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='itemsCost')"
                                                labelFunction="itemsCostInDeliveryLabelFunction"/>
                             <mx:DataGridColumn
@@ -672,22 +672,22 @@
                                 </mx:itemRenderer>
                             </mx:DataGridColumn>
 
-                            <mx:DataGridColumn width="80"
+                            <mx:DataGridColumn width="80" textAlign="right"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='listPrice')"
                                                dataField="listPrice"/>
                             <mx:DataGridColumn width="80"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='appliedPromo')"
                                                dataField="appliedPromo"/>
-                            <mx:DataGridColumn width="80"
+                            <mx:DataGridColumn width="80" textAlign="right"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='shipmentCost')"
                                                dataField="price"
                                     />
-                            <mx:DataGridColumn width="80"
+                            <mx:DataGridColumn width="80" textAlign="right"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='tax')"
                                                labelFunction="deliveryTaxLabelFunction" showDataTips="true" dataTipFunction="deliveryTaxTipFunction"
                                     />
 
-                            <mx:DataGridColumn width="80"
+                            <mx:DataGridColumn width="80" textAlign="right"
                                                headerText="@Resource(bundle='CustomerOrderPanel',key='deliveryTotal')"
                                                labelFunction="deliveryTotalLabelFunction"
                                     />

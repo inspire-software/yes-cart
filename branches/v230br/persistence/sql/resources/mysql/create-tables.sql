@@ -833,7 +833,7 @@
     create table TSKUPRICE (
         SKUPRICE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        SKU_ID bigint not null,
+        SKU_CODE varchar(255) not null,
         SHOP_ID bigint not null,
         CURRENCY varchar(3) not null,
         QTY decimal(19,2) not null comment 'Quantity of SKU. Price tier',
@@ -1454,18 +1454,13 @@
 
 
 
-    alter table TSKUPRICE 
-        add index FK_SP_SKU (SKU_ID), 
-        add constraint FK_SP_SKU 
-        foreign key (SKU_ID) 
-        references TSKU (SKU_ID);
-
-    alter table TSKUPRICE 
+    alter table TSKUPRICE
         add index FK_SP_SHOP (SHOP_ID), 
         add constraint FK_SP_SHOP 
         foreign key (SHOP_ID) 
         references TSHOP (SHOP_ID);
 
+    create index SKUPRICE_SKUCODE on TSKUPRICE (SKU_CODE);
 
 
     alter table TSKUWAREHOUSE 

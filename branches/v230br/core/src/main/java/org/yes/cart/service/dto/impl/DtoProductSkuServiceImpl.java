@@ -98,6 +98,15 @@ public class DtoProductSkuServiceImpl
         );
     }
 
+
+    /**
+     * @return Spring lookup method to prevent cyclic reference
+     */
+    public DtoProductService lookupDtoProductService() {
+        return null;
+    }
+
+
     public DtoProductService getDtoProductService() {
         if (dtoProductService == null) {
             dtoProductService = lookupDtoProductService();
@@ -117,11 +126,24 @@ public class DtoProductSkuServiceImpl
         return result;
     }
 
+
     /**
-     * @return Spring lookup method to prevent cyclic reference
+     * {@inheritDoc}
      */
-    public DtoProductService lookupDtoProductService() {
-        return null;
+    public List<SkuPriceDTO> getAllProductPrices(final long productId, final String currency, final long shopId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<SkuPrice> prices = priceService.getAllPrices(productId, null, currency);
+        final List<SkuPriceDTO> result = new ArrayList<SkuPriceDTO>();
+        for (final SkuPrice price : prices) {
+            if (price.getShop().getShopId() == shopId) {
+                final SkuPriceDTO dto = dtoFactory.getByIface(SkuPriceDTO.class);
+                skuPriceAssembler.assembleDto(dto, price,
+                        getAdaptersRepository(),
+                        getAssemblerEntityFactory());
+                result.add(dto);
+            }
+        }
+        return result;
     }
 
 
@@ -160,7 +182,7 @@ public class DtoProductSkuServiceImpl
     public SkuPriceDTO getSkuPrice(final long skuPriceId) {
         SkuPrice skuPrice = priceService.findById(skuPriceId);
         SkuPriceDTO skuPriceDTO = getAssemblerDtoFactory().getByIface(SkuPriceDTO.class);
-        skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
+        skuPriceAssembler.assembleDto(skuPriceDTO, skuPrice,
                 getAdaptersRepository(),
                 getAssemblerEntityFactory());
         return skuPriceDTO;
@@ -204,6 +226,7 @@ public class DtoProductSkuServiceImpl
         skuPriceAssembler.assembleEntity(skuPriceDTO, skuPrice,
                 getAdaptersRepository(),
                 getAssemblerEntityFactory());
+        skuPrice.setSkuCode(skuPriceDTO.getSkuCode());
         skuPrice = priceService.create(skuPrice);
         return skuPrice.getSkuPriceId();
     }

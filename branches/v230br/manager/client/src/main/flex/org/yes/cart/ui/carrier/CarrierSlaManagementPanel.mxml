@@ -306,7 +306,7 @@
                                        dataField="price">
                         <mx:itemRenderer>
                             <mx:Component>
-                                <mx:Label text="{data.price == 0?'':data.price}"/>
+                                <mx:Label  width="100%" textAlign="right" text="{isNaN(data.price) || data.price == 0?'':Number(data.price).toFixed(2)}"/>
                             </mx:Component>
                         </mx:itemRenderer>
                     </mx:DataGridColumn>

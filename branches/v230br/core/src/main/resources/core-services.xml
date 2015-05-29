@@ -406,8 +406,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.PriceServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.query.PriceNavigation" ref="priceNavigation"/>
-                <constructor-arg index="1" type="org.yes.cart.service.domain.ProductService" ref="productService"/>
-                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
             </bean>
         </property>
     </bean>
@@ -829,7 +828,7 @@
             <bean class="org.yes.cart.service.dto.impl.DtoPriceListsServiceImpl">
                 <constructor-arg index="0" ref="dtoShopService"/>
                 <constructor-arg index="1" ref="dtoProductSkuService"/>
-                <constructor-arg index="2" ref="skuPriceDao"/>
+                <constructor-arg index="2" ref="priceService"/>
                 <constructor-arg index="3" ref="productSkuDao"/>
                 <constructor-arg index="4" ref="shopDao"/>
                 <constructor-arg index="5" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
@@ -1231,7 +1230,11 @@
         <constructor-arg index="0" ref="productSkuDao"/>
     </bean>
 
-    <bean id="skuCodeToName" class="org.yes.cart.domain.dto.adapter.impl.SkuWarehouseSkuCodeToNameConverter">
+    <bean id="warehouseSkuCodeToName" class="org.yes.cart.domain.dto.adapter.impl.SkuWarehouseSkuCodeToNameConverter">
+        <constructor-arg index="0" ref="genericDao"/>
+    </bean>
+
+    <bean id="priceSkuCodeToName" class="org.yes.cart.domain.dto.adapter.impl.SkuPriceSkuCodeToNameConverter">
         <constructor-arg index="0" ref="genericDao"/>
     </bean>
 
@@ -1263,17 +1266,18 @@
           class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
         <constructor-arg>
             <map>
-                <entry key="bigDecimalToFloat" value-ref="bigDecimalToFloat"/>
-                <entry key="brandDTO2Brand" value-ref="brandDTO2Brand"/>
+                <entry key="bigDecimalToFloat"          value-ref="bigDecimalToFloat"/>
+                <entry key="brandDTO2Brand"             value-ref="brandDTO2Brand"/>
                 <entry key="productTypeDTO2ProductType" value-ref="productTypeDTO2ProductType"/>
-                <entry key="productId2Product" value-ref="productId2Product"/>
-                <entry key="skuId2Sku" value-ref="skuId2Sku"/>
-                <entry key="skuCodeToName" value-ref="skuCodeToName"/>
-                <entry key="shopId2Shop" value-ref="shopId2Shop"/>
-                <entry key="warehouseId2Warehouse" value-ref="warehouseId2Warehouse"/>
-                <entry key="carrierId2Carrier" value-ref="carrierId2Carrier"/>
+                <entry key="productId2Product"          value-ref="productId2Product"/>
+                <entry key="skuId2Sku"                  value-ref="skuId2Sku"/>
+                <entry key="warehouseSkuCodeToName"     value-ref="warehouseSkuCodeToName"/>
+                <entry key="priceSkuCodeToName"         value-ref="priceSkuCodeToName"/>
+                <entry key="shopId2Shop"                value-ref="shopId2Shop"/>
+                <entry key="warehouseId2Warehouse"      value-ref="warehouseId2Warehouse"/>
+                <entry key="carrierId2Carrier"          value-ref="carrierId2Carrier"/>
                 <entry key="associationDTO2Association" value-ref="associationDTO2Association"/>
-                <entry key="producttypeId2ProductType" value-ref="producttypeId2ProductType"/>
+                <entry key="producttypeId2ProductType"  value-ref="producttypeId2ProductType"/>
 
                 <entry key="attributeDTO2Attribute" value-ref="attributeDTO2Attribute"/>
 

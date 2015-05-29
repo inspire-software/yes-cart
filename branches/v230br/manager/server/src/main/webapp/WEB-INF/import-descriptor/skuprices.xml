@@ -27,18 +27,16 @@
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
-    <select-sql>select p from SkuPriceEntity p where p.sku.code = {sku} and p.shop.code = {shop} and p.currency = {currency} and p.quantity = {quantity}</select-sql>
+    <select-sql>select p from SkuPriceEntity p where p.skuCode = {skuCode} and p.shop.code = {shop} and p.currency = {currency} and p.quantity = {quantity}</select-sql>
 
     <import-columns>
 
         <column-descriptor>
             <column-index>0</column-index>
-            <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.ProductSku</entity-type>
-            <name>sku</name>
+            <field-type>FIELD</field-type>
+            <name>skuCode</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-            <lookup-query>select p from ProductSkuEntity p where p.code = {sku}</lookup-query>
         </column-descriptor>
 
 

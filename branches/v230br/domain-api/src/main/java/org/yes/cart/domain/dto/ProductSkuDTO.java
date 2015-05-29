@@ -250,18 +250,6 @@ public interface ProductSkuDTO extends Identifiable, Guidable {
     void setDisplayMetadescriptions(Map<String, String> metadescription);
 
     /**
-     * @return price for this sku
-     */
-    Collection<SkuPriceDTO> getPrice();
-
-    /**
-     * Set sku prices
-     *
-     * @param price pice collection
-     */
-    void setPrice(Collection<SkuPriceDTO> price);
-
-    /**
      * Get attribute collection.
      *
      * @return attribute collection.
