@@ -85,21 +85,6 @@ public interface AttributeGroup extends Auditable, Codable {
      */
     void setDescription(String description);
 
-    /**
-     * Get list of slave attributes
-     *
-     * @return attributes
-     */
-    Set<Attribute> getAttributes();
-
-    /**
-     * Set attributes.
-     *
-     * @param attributes attributes definition.
-     */
-    void setAttributes(Set<Attribute> attributes);
-
-
 }
 
 

@@ -177,12 +177,7 @@
         <property name="description" length="4000" type="string">
             <column name="DESCRIPTION" length="4000"/>
         </property>
-        <set name="attributes" inverse="true" lazy="false">
-            <key>
-                <column name="ATTRIBUTEGROUP_ID" not-null="true"/>
-            </key>
-            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.AttributeEntity"/>
-        </set>
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
