@@ -20,16 +20,17 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.core.io.Resource;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
+import org.yes.cart.bulkimport.service.DataDescriptorResolver;
 import org.yes.cart.bulkimport.service.ImportDirectorService;
 import org.yes.cart.bulkimport.service.ImportService;
 import org.yes.cart.bulkimport.service.model.JobContextDecoratorImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.entity.DataGroup;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
@@ -41,14 +42,13 @@ import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
-import org.yes.cart.stream.xml.XStreamProvider;
+import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.utils.impl.ZipUtils;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 import org.yes.cart.web.service.ws.node.NodeService;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -61,13 +61,9 @@ import java.util.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class ImportDirectorImplService extends SingletonJobRunner implements ImportDirectorService, ApplicationContextAware {
+public class ImportDirectorImplService extends SingletonJobRunner implements ImportDirectorService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ImportDirectorImplService.class);
-
-    private final Map<String, List<String>> importDescriptors;
-
-    private final String pathToImportDescriptors;
 
     private final String pathToArchiveFolder;
 
@@ -75,49 +71,47 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private final ProductService productService;
 
-    private ApplicationContext applicationContext;
-
     private final NodeService nodeService;
 
     private final SystemService systemService;
 
     private final ZipUtils zipUtils;
 
-    private XStreamProvider<ImportDescriptor> importDescriptorXStreamProvider;
+    private final DataDescriptorResolver<ImportDescriptor> dataDescriptorResolver;
+
+    private final FederationFacade federationFacade;
 
 
     /**
      * Construct the import director
      *
-     * @param importDescriptors       import descriptors
-     * @param pathToImportDescriptors path to use.
      * @param pathToArchiveFolder     path to archive folder.
      * @param pathToImportFolder      path to use.
      * @param productService          product service
+     * @param dataDescriptorResolver  descriptor resolver
      * @param executor                async executor
      * @param nodeService             node service
      * @param systemService           system service
      * @param zipUtils                zip algorithm
      */
-    public ImportDirectorImplService(final Map<String, List<String>> importDescriptors,
-                                     final String pathToImportDescriptors,
-                                     final String pathToArchiveFolder,
+    public ImportDirectorImplService(final String pathToArchiveFolder,
                                      final String pathToImportFolder,
                                      final ProductService productService,
+                                     final DataDescriptorResolver<ImportDescriptor> dataDescriptorResolver,
                                      final TaskExecutor executor,
                                      final NodeService nodeService,
                                      final SystemService systemService,
-                                     final ZipUtils zipUtils) {
+                                     final ZipUtils zipUtils,
+                                     final FederationFacade federationFacade) {
         super(executor);
-        this.pathToImportDescriptors = pathToImportDescriptors;
         this.pathToArchiveFolder = pathToArchiveFolder;
         this.pathToImportFolder = pathToImportFolder;
-        this.importDescriptors = importDescriptors;
         this.productService = productService;
+        this.dataDescriptorResolver = dataDescriptorResolver;
         this.nodeService = nodeService;
         this.systemService = systemService;
         this.zipUtils = zipUtils;
-
+        this.federationFacade = federationFacade;
     }
 
 
@@ -213,14 +207,14 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     }
 
     private void doDataImport(final JobContext context) throws IOException {
-        final List<String> descriptors = importDescriptors.get(context.getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_GROUP));
-        if (descriptors == null) {
-            return;
-        }
-        for (final String descriptor : descriptors) {
-            final Resource res = applicationContext.getResource("WEB-INF/" + pathToImportDescriptors + "/" + descriptor);
 
-            final ImportDescriptor descriptorObject = getImportDescriptorFromXML(res.getInputStream());
+        final Map<String, ImportDescriptor> descriptorObjects = dataDescriptorResolver.getByGroup((String) context.getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_GROUP));
+
+        for (final Map.Entry<String, ImportDescriptor> descriptorObjectEntry : descriptorObjects.entrySet()) {
+
+            final String descriptor = descriptorObjectEntry.getKey();
+            final ImportDescriptor descriptorObject = descriptorObjectEntry.getValue();
+
             final String pathToImportRootDirectory = context.getAttribute(JobContextKeys.IMPORT_DIRECTORY_ROOT);
             if (StringUtils.isNotBlank(pathToImportRootDirectory)) {
                 descriptorObject.setImportDirectory(pathToImportRootDirectory);
@@ -284,8 +278,32 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     /**
      * {@inheritDoc}
      */
-    public List<String> getImportGroups() {
-        return new ArrayList<String>(importDescriptors.keySet());
+    public List<Map<String, String>> getImportGroups(final String language) {
+
+        final List<DataGroup> dataGroups = dataDescriptorResolver.getGroups();
+
+        final Set<Map<String, String>> out = new TreeSet<Map<String, String>>(new Comparator<Map<String, String>>() {
+            @Override
+            public int compare(final Map<String, String> o1, final Map<String, String> o2) {
+                int comp = o1.get("label").compareToIgnoreCase(o2.get("label"));
+                if (comp == 0) {
+                    comp = o1.get("name").compareToIgnoreCase(o2.get("name"));
+                }
+                return comp;
+            }
+        });
+        for (final DataGroup dataGroup : dataGroups) {
+            if (StringUtils.isBlank(dataGroup.getQualifier()) ||
+                    federationFacade.isManageable(dataGroup.getQualifier(), ShopDTO.class)) {
+                final Map<String, String> grp = new HashMap<String, String>();
+                grp.put("name", dataGroup.getName());
+                final I18NModel model = new FailoverStringI18NModel(dataGroup.getDisplayName(), dataGroup.getName());
+                grp.put("label", model.getValue(language));
+                out.add(grp);
+            }
+        }
+
+        return new ArrayList<Map<String, String>>(out);
     }
 
     /**
@@ -300,27 +318,6 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      */
     public String getArchiveDirectory() {
         return pathToArchiveFolder;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-
-    /**
-     * IoC. XStream provider for import descriptor files.
-     *
-     * @param importDescriptorXStreamProvider xStream provider
-     */
-    public void setImportDescriptorXStreamProvider(final XStreamProvider importDescriptorXStreamProvider) {
-        this.importDescriptorXStreamProvider = importDescriptorXStreamProvider;
-    }
-
-    protected ImportDescriptor getImportDescriptorFromXML(InputStream is) {
-        return importDescriptorXStreamProvider.fromXML(is);
     }
 
     /**

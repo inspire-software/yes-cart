@@ -523,6 +523,88 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, Boolean> enableStats(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
+        for (final Node yesNode : nodeService.getYesNodes()) {
+
+            try {
+
+                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
+                CacheDirector cacheDirector = factory.getService();
+                try {
+                    cacheDirector.enableStats(name);
+                } finally {
+                    factory.release(cacheDirector);
+                    cacheDirector = null;
+                }
+                evicts.put(yesNode.getNodeId(), Boolean.TRUE);
+
+            } catch (Exception e) {
+                evicts.put(yesNode.getNodeId(), Boolean.FALSE);
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Cannot enabled cache stats [" + name + "],  url ["
+                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
+                            + "] . Will try next one, if exists",
+                            e);
+
+                }
+
+            }
+        }
+
+        localCacheDirector.enableStats(name);
+        evicts.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
+
+        return evicts;
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, Boolean> disableStats(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
+        for (final Node yesNode : nodeService.getYesNodes()) {
+
+            try {
+
+                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
+                CacheDirector cacheDirector = factory.getService();
+                try {
+                    cacheDirector.disableStats(name);
+                } finally {
+                    factory.release(cacheDirector);
+                    cacheDirector = null;
+                }
+                evicts.put(yesNode.getNodeId(), Boolean.TRUE);
+
+            } catch (Exception e) {
+                evicts.put(yesNode.getNodeId(), Boolean.FALSE);
+                if (LOG.isErrorEnabled()) {
+                    LOG.error("Cannot disabled cache stats [" + name + "],  url ["
+                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
+                            + "] . Will try next one, if exists",
+                            e);
+
+                }
+
+            }
+        }
+
+        localCacheDirector.disableStats(name);
+        evicts.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
+
+        return evicts;
+
+    }
+
+
     private WsClientFactory<BackdoorService> getBackdoorService(final AsyncContext context,
                                                                 final String backdoorUrl,
                                                                 final String timeoutKey) {

@@ -71,6 +71,20 @@ public interface CacheDirector {
     void evictCache(String cache);
 
     /**
+     * Enable specific cache statistics.
+     */
+    @WebMethod
+    @WebResult(name = "cacheInfoResult")
+    void enableStats(String cache);
+
+    /**
+     * Enable specific cache statistics.
+     */
+    @WebMethod
+    @WebResult(name = "cacheInfoResult")
+    void disableStats(String cache);
+
+    /**
      * Fire event entity change event
      *
      * @param entityOperation operation type

@@ -164,6 +164,9 @@
 
                 <entry key="org.yes.cart.domain.entity.ShoppingCartState" value="org.yes.cart.domain.entity.impl.ShoppingCartStateEntity"/>
 
+                <entry key="org.yes.cart.domain.entity.DataGroup" value="org.yes.cart.domain.entity.impl.DataGroupEntity"/>
+                <entry key="org.yes.cart.domain.entity.DataDescriptor" value="org.yes.cart.domain.entity.impl.DataDescriptorEntity"/>
+
             </map>
         </property>
     </bean>
@@ -500,6 +503,18 @@
 
     <bean id="mailPartDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.MailPartEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="dataGroupDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.DataGroupEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="dataDescriptorDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.DataDescriptorEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>

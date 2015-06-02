@@ -733,6 +733,147 @@ INSERT INTO TMANAGER (GUID, MANAGER_ID, EMAIL, FIRSTNAME, LASTNAME, PASSWORD) VA
 
 INSERT INTO TMANAGERROLE (MANAGERROLE_ID, EMAIL, CODE, GUID) VALUES (1, 'admin@yes-cart.com', 'ROLE_SMADMIN', 'YCADMIN_ROLE');
 
+
+-- Default Data Import Groups and Descriptors
+
+
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1000, 'YC DEMO: Initial Data', 'IMPORT', '
+shopcurrencies-demo.xml,
+countrynames-demo.xml,
+statenames-demo.xml,
+carriernames-demo.xml,
+carriershopnames-demo.xml,
+carrierslanames-demo.xml,
+promotionnames-demo.xml,
+promotioncouponnames-demo.xml,
+taxnames-demo.xml,
+taxconfignames-demo.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1001, 'YC DEMO: IceCat Catalog', 'IMPORT', '
+brandnames-demo.xml,
+attributenames-demo.xml,
+attributegroupnames-demo.xml,
+producttypenames-demo.xml,
+categorynames-demo.xml,
+shopcategory-demo.xml,
+productypeattributeviewgroupnames-demo.xml,
+producttypeattrnames-demo.xml,
+productnames-demo.xml,
+productsku-demo.xml,
+productsattributes-demo.xml,
+productskuattributes-demo.xml,
+skuinventory-demo.xml,
+skuprices-demo.xml,
+productcategorynames-demo.xml,
+productaccessories-demo.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1002, 'YC DEMO: Product images (IceCat)', 'IMPORT', 'productimages.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1003, 'Catalog import (Categories and attribute definitions)', 'IMPORT', '
+brandnames.xml,
+attributenames.xml,
+attributegroupnames.xml,
+producttypenames.xml,
+categorynames.xml,
+shopcategory.xml,
+productypeattributeviewgroupnames.xml,
+producttypeattrnames.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1004, 'Product import (Products, SKUs and attribute values)', 'IMPORT', '
+productandcategorynames.xml,
+productnames.xml,
+productcategorynames.delete.xml,
+productcategorynames.xml,
+productsku.xml,
+productsattributes.delete.all.xml,
+productsattributes.delete.xml,
+productsattributes.xml,
+productskuattributes.delete.all.xml,
+productskuattributes.delete.xml,
+productskuattributes.xml,
+productaccessories.delete.xml,
+productaccessories.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1005, 'Inventory import', 'IMPORT', 'skuinventory.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1006, 'Prices, Promotions and Taxes import', 'IMPORT', '
+skuprices.xml,
+promotionnames.xml,
+promotioncouponnames.xml,
+taxnames.xml,
+taxconfignames.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1007, 'Content import', 'IMPORT', 'contentnames.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1008, 'Images: Products and SKU', 'IMPORT', 'productimages.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1009, 'Images: Category and Content', 'IMPORT', 'categoryimages.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1010, 'Images: Brands', 'IMPORT', 'brandimages.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1011, 'Images: Shop', 'IMPORT', 'shopimages.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1012, 'Location import', 'IMPORT', 'countrynames.xml,statenames.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1013, 'Carriers and SLA import', 'IMPORT', 'carriernames.xml,carriershopnames.xml,carrierslanames.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1014, 'Shops and Warehouses import', 'IMPORT', 'shop.xml,warehouse.xml');
+
+
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1000, 'attributegroupnames-demo.xml', 'WEBINF_XML', 'attributegroupnames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1001, 'attributegroupnames.xml', 'WEBINF_XML', 'attributegroupnames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1002, 'attributenames-demo.xml', 'WEBINF_XML', 'attributenames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1003, 'attributenames.xml', 'WEBINF_XML', 'attributenames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1004, 'brandimages.xml', 'WEBINF_XML', 'brandimages.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1005, 'brandnames-demo.xml', 'WEBINF_XML', 'brandnames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1006, 'brandnames.xml', 'WEBINF_XML', 'brandnames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1007, 'carriernames-demo.xml', 'WEBINF_XML', 'carriernames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1008, 'carriernames.xml', 'WEBINF_XML', 'carriernames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1009, 'carriershopnames-demo.xml', 'WEBINF_XML', 'carriershopnames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1010, 'carriershopnames.xml', 'WEBINF_XML', 'carriershopnames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1011, 'carrierslanames-demo.xml', 'WEBINF_XML', 'carrierslanames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1012, 'carrierslanames.xml', 'WEBINF_XML', 'carrierslanames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1013, 'categoryimages.xml', 'WEBINF_XML', 'categoryimages.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1014, 'categorynames-demo.xml', 'WEBINF_XML', 'categorynames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1015, 'categorynames.xml', 'WEBINF_XML', 'categorynames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1016, 'contentnames.xml', 'WEBINF_XML', 'contentnames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1017, 'countrynames-demo.xml', 'WEBINF_XML', 'countrynames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1018, 'countrynames.xml', 'WEBINF_XML', 'countrynames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1019, 'productaccessories-demo.xml', 'WEBINF_XML', 'productaccessories-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1020, 'productaccessories.delete.xml', 'WEBINF_XML', 'productaccessories.delete.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1021, 'productaccessories.xml', 'WEBINF_XML', 'productaccessories.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1022, 'productandcategorynames.xml', 'WEBINF_XML', 'productandcategorynames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1023, 'productcategorynames-demo.xml', 'WEBINF_XML', 'productcategorynames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1024, 'productcategorynames.delete.xml', 'WEBINF_XML', 'productcategorynames.delete.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1025, 'productcategorynames.xml', 'WEBINF_XML', 'productcategorynames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1026, 'productimages.xml', 'WEBINF_XML', 'productimages.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1027, 'productnames-demo.xml', 'WEBINF_XML', 'productnames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1028, 'productnames.xml', 'WEBINF_XML', 'productnames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1029, 'productsattributes-demo.xml', 'WEBINF_XML', 'productsattributes-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1030, 'productsattributes.delete.all.xml', 'WEBINF_XML', 'productsattributes.delete.all.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1031, 'productsattributes.delete.xml', 'WEBINF_XML', 'productsattributes.delete.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1032, 'productsattributes.xml', 'WEBINF_XML', 'productsattributes.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1033, 'productsku-demo.xml', 'WEBINF_XML', 'productsku-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1034, 'productsku.xml', 'WEBINF_XML', 'productsku.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1035, 'productskuattributes-demo.xml', 'WEBINF_XML', 'productskuattributes-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1036, 'productskuattributes.delete.all.xml', 'WEBINF_XML', 'productskuattributes.delete.all.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1037, 'productskuattributes.delete.xml', 'WEBINF_XML', 'productskuattributes.delete.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1038, 'productskuattributes.xml', 'WEBINF_XML', 'productskuattributes.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1039, 'producttypeattrnames-demo.xml', 'WEBINF_XML', 'producttypeattrnames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1040, 'producttypeattrnames.xml', 'WEBINF_XML', 'producttypeattrnames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1041, 'producttypenames-demo.xml', 'WEBINF_XML', 'producttypenames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1042, 'producttypenames.xml', 'WEBINF_XML', 'producttypenames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1043, 'productypeattributeviewgroupnames-demo.xml', 'WEBINF_XML', 'productypeattributeviewgroupnames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1044, 'productypeattributeviewgroupnames.xml', 'WEBINF_XML', 'productypeattributeviewgroupnames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1045, 'promotioncouponnames-demo.xml', 'WEBINF_XML', 'promotioncouponnames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1046, 'promotioncouponnames.xml', 'WEBINF_XML', 'promotioncouponnames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1047, 'promotionnames-demo.xml', 'WEBINF_XML', 'promotionnames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1048, 'promotionnames.xml', 'WEBINF_XML', 'promotionnames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1049, 'shop.xml', 'WEBINF_XML', 'shop.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1050, 'shopcategory-demo.xml', 'WEBINF_XML', 'shopcategory-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1051, 'shopcategory.xml', 'WEBINF_XML', 'shopcategory.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1052, 'shopcurrencies-demo.xml', 'WEBINF_XML', 'shopcurrencies-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1053, 'shopimages.xml', 'WEBINF_XML', 'shopimages.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1054, 'skuinventory-demo.xml', 'WEBINF_XML', 'skuinventory-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1055, 'skuinventory.xml', 'WEBINF_XML', 'skuinventory.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1056, 'skuprices-demo.xml', 'WEBINF_XML', 'skuprices-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1057, 'skuprices.xml', 'WEBINF_XML', 'skuprices.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1058, 'statenames-demo.xml', 'WEBINF_XML', 'statenames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1059, 'statenames.xml', 'WEBINF_XML', 'statenames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1060, 'taxconfignames-demo.xml', 'WEBINF_XML', 'taxconfignames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1061, 'taxconfignames.xml', 'WEBINF_XML', 'taxconfignames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1062, 'taxnames-demo.xml', 'WEBINF_XML', 'taxnames-demo.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1063, 'taxnames.xml', 'WEBINF_XML', 'taxnames.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1064, 'warehouse.xml', 'WEBINF_XML', 'warehouse.xml');
+
+
+
 INSERT INTO HIBERNATE_UNIQUE_KEYS VALUES (100000);
 
 COMMIT;

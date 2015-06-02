@@ -76,6 +76,16 @@ public class RemoteDevServiceImpl implements RemoteDevService {
     }
 
     /** {@inheritDoc} */
+    public Map<String, Boolean> enableStats(final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return remoteBackdoorService.enableStats(createCtx(), name);
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, Boolean> disableStats(final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return remoteBackdoorService.disableStats(createCtx(), name);
+    }
+
+    /** {@inheritDoc} */
     public void warmUp() {
         remoteBackdoorService.warmUp(createCtx());
     }

@@ -150,4 +150,20 @@ public interface RemoteBackdoorService {
      */
     Map<String, Boolean> evictCache(AsyncContext context, String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Enable cache statistics by name.
+     *
+     * @param context web service context
+     * @param name name of cache to evict
+     */
+    Map<String, Boolean> enableStats(AsyncContext context, String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Disable cache statistics by name.
+     *
+     * @param context web service context
+     * @param name name of cache to evict
+     */
+    Map<String, Boolean> disableStats(AsyncContext context, String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 }

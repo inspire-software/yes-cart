@@ -15,6 +15,7 @@
  */
 package org.yes.cart.web.service.ws.impl;
 
+import net.sf.ehcache.statistics.LiveCacheStatistics;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
@@ -54,16 +55,31 @@ public class CacheDirectorImpl implements CacheDirector {
         for (String cacheName : cacheNames) {
             final Cache cache = cacheManager.getCache(cacheName);
             final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) cache.getNativeCache();
-            rez.add(
-                    new CacheInfoDTOImpl(
-                            nativeCache.getName(),
-                            nativeCache.getSize(),
-                            nativeCache.getMemoryStoreSize(),
-                            nativeCache.getDiskStoreSize(),
-                            0,0/*nativeCache.calculateInMemorySize(),
-                            nativeCache.calculateOnDiskSize()*/   /*heavy operation*/
-                    )
-            );
+            final LiveCacheStatistics stats = nativeCache.getLiveCacheStatistics();
+            final boolean statsEnabled = stats != null && stats.isStatisticsEnabled();
+            if (statsEnabled) {
+                rez.add(
+                        new CacheInfoDTOImpl(
+                                nativeCache.getName(),
+                                nativeCache.getSize(),
+                                nativeCache.getMemoryStoreSize(),
+                                nativeCache.getDiskStoreSize(),
+                                stats.getCacheHitCount(),
+                                stats.getCacheMissCount(),
+                                nativeCache.calculateInMemorySize(),
+                                nativeCache.calculateOnDiskSize()
+                        )
+                );
+            } else {
+                rez.add(
+                        new CacheInfoDTOImpl(
+                                nativeCache.getName(),
+                                nativeCache.getSize(),
+                                nativeCache.getMemoryStoreSize(),
+                                nativeCache.getDiskStoreSize()
+                        )
+                );
+            }
 
         }
         return rez;
@@ -93,6 +109,28 @@ public class CacheDirectorImpl implements CacheDirector {
         final Cache cache = cm.getCache(cacheName);
         if (cache != null) {
             cache.clear();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void enableStats(final String cacheName) {
+        final CacheManager cm = getCacheManager();
+        final Cache cache = cm.getCache(cacheName);
+        if (cache != null) {
+            final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) cache.getNativeCache();
+            nativeCache.setStatisticsEnabled(true);
+        }
+    }
+
+    @Override
+    public void disableStats(final String cacheName) {
+        final CacheManager cm = getCacheManager();
+        final Cache cache = cm.getCache(cacheName);
+        if (cache != null) {
+            final net.sf.ehcache.Cache nativeCache = (net.sf.ehcache.Cache) cache.getNativeCache();
+            nativeCache.setStatisticsEnabled(false);
         }
     }
 

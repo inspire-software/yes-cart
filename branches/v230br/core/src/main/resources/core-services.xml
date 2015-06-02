@@ -719,6 +719,25 @@
         </property>
     </bean>
 
+
+
+    <bean id="dataGroupService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.DataGroupServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="dataGroupDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="dataDescriptorService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.DataDescriptorServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="dataDescriptorDao"/>
+            </bean>
+        </property>
+    </bean>
+
+
     <!-- ############################################ DTO Support ######################################################################### -->
 
 

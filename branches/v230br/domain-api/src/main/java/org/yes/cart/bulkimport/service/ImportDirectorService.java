@@ -19,6 +19,7 @@ package org.yes.cart.bulkimport.service;
 import org.yes.cart.service.async.model.JobStatus;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -32,9 +33,11 @@ import java.util.List;
 public interface ImportDirectorService {
 
     /**
+     * @param language language
+     *
      * @return configured import groups
      */
-    List<String> getImportGroups();
+    List<Map<String, String>> getImportGroups(String language);
 
     /**
      * Absolute path to import directory.

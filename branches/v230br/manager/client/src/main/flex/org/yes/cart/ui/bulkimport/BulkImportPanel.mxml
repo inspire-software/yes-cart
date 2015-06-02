@@ -108,7 +108,7 @@
             reportHeaderText += resourceManager.getString('BulkImportPanel', 'uploadSuccess', [ loadFileRef.name ]) +
                     '\n' + resourceManager.getString('BulkImportPanel', 'importInProcess') + '\n';
             resultDetails.text = reportHeaderText;
-            bulkImportService.doImport(this.importGroups.selectedItem, event.result, true); // result is full server filename with path
+            bulkImportService.doImport(this.importGroups.selectedItem['name'], event.result, true); // result is full server filename with path
         }
 
         private function onUploadToServerFault(event:FaultEvent):void {
@@ -132,7 +132,7 @@
         private function initImportPanel():void {
 
             importStatusTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onStatusTimerComplete);
-            bulkImportService.getImportGroups();
+            bulkImportService.getImportGroups(resourceManager.getString('Common', 'localeFilter'));
 
         }
 
@@ -264,7 +264,7 @@
                 <mx:FormHeading label="@Resource(bundle='BulkImportPanel',key='importMessage')"/>
                 <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='selectFile')">
                     <mx:HBox>
-                        <mx:ComboBox id="importGroups" width="350"/>
+                        <mx:ComboBox id="importGroups" width="350" labelField="label"/>
                         <mx:Button id="selectFileBtn" label="@Resource(bundle='BulkImportPanel',key='open')"
                                    click="onSelectFileClick(event)"/>
                     </mx:HBox>

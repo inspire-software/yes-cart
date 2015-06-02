@@ -92,6 +92,20 @@ public interface RemoteDevService {
     Map<String, Boolean> evictCache(String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
+     * Enable cache statistics by name.
+     *
+     * @param name name of cache to evict
+     */
+    Map<String, Boolean> enableStats(String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Disable cache statistics by name.
+     *
+     * @param name name of cache to evict
+     */
+    Map<String, Boolean> disableStats(String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
      * Warm up all storefront servers.
      */
     void warmUp();

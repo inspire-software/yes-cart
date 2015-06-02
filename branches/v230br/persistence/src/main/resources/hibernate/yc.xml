@@ -2425,6 +2425,51 @@
     </class>
 
 
+
+    <class name="org.yes.cart.domain.entity.impl.DataGroupEntity" table="TDATAGROUP">
+        <id name="datagroupId" type="long" column="DATAGROUP_ID">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="name" column="NAME" type="string" length="255" not-null="true" unique-key="DATAGROUP_NAME"/>
+        <property name="displayName" column="DISPLAYNAME" type="string" length="4000"/>
+        <property name="qualifier" column="QUALIFIER" type="string" length="45"/>
+        <property name="type" column="TYPE" type="string" length="45" not-null="true"/>
+        <property name="descriptors" column="DESCRIPTORS" type="string" length="4000"/>
+
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+    </class>
+
+    <class name="org.yes.cart.domain.entity.impl.DataDescriptorEntity" table="TDATADESCRIPTOR">
+        <id name="datadescriptorId" type="long" column="DATADESCRIPTOR_ID">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="name" column="NAME" type="string" length="255" not-null="true" unique-key="DATADESCRIPTOR_NAME"/>
+        <property name="type" column="TYPE" type="string" length="45" not-null="true"/>
+        <property name="value" column="VALUE" type="string" length="4000" not-null="true"/>
+
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+    </class>
+
+
+
     <query name="SHOP.BY.URL">
         <![CDATA[
        select o.shop  from ShopUrlEntity o fetch all properties where o.url = ?1
@@ -3434,6 +3479,30 @@
     <query name="OLDEST.MAIL">
         <![CDATA[
             select m from MailEntity m order by m.createdTimestamp asc
+        ]]>
+    </query>
+
+    <query name="DATAGROUPS.BY.TYPE">
+        <![CDATA[
+            select dg from DataGroupEntity dg where dg.type = ?1
+        ]]>
+    </query>
+
+    <query name="DATAGROUP.BY.NAME">
+        <![CDATA[
+            select dg from DataGroupEntity dg where dg.name = ?1
+        ]]>
+    </query>
+
+    <query name="DATADESCRIPTOR.BY.NAME">
+        <![CDATA[
+            select dd from DataDescriptorEntity dd where dd.name = ?1
+        ]]>
+    </query>
+
+    <query name="DATADESCRIPTOR.IN.NAMES">
+        <![CDATA[
+            select dd from DataDescriptorEntity dd where dd.name in (?1)
         ]]>
     </query>
 
