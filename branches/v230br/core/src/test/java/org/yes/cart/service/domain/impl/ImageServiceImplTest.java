@@ -42,30 +42,28 @@ import static org.junit.Assert.assertNotNull;
  */
 public class ImageServiceImplTest  extends BaseCoreDBTestCase {
 
-    private DtoImageService dtoService;
     private ImageService imageService;
     private String imageName;
 
 
     @Before
     public void setUp() {
-        dtoService = (DtoImageService) ctx().getBean(ServiceSpringKeys.DTO_IMAGE_SERVICE);
         imageService = (ImageService) ctx().getBean(ServiceSpringKeys.IMAGE_SERVICE);
         imageName = "testImageName" + UUID.randomUUID().toString() + ".jpeg";
         try {
-            dtoService.create(getDto());
+            imageService.create(getDto());
         } catch (Exception e) {
             e.printStackTrace();
         }
         super.setUp();
     }
 
-    private SeoImageDTO getDto() throws UnableToCreateInstanceException, UnmappedInterfaceException {
-        SeoImageDTO dto = dtoService.getNew();
-        dto.setAlt("alt");
-        dto.setImageName(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN + imageName);
-        dto.setTitle("title");
-        return dto;
+    private SeoImage getDto() throws UnableToCreateInstanceException, UnmappedInterfaceException {
+        SeoImage seo = imageService.getGenericDao().getEntityFactory().getByIface(SeoImage.class);
+        seo.setAlt("alt");
+        seo.setImageName(Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN + imageName);
+        seo.setTitle("title");
+        return seo;
     }
 
     @Test

@@ -126,7 +126,7 @@
     <entry key="negativePaymentNotes">Order payment failed</entry>
     <entry key="positivePaymentNotes">Order payment was ok </entry>
     <entry key="checkStatus">Check order status</entry>
-    <entry key="negativeItemAllocationNotes">Sorry. Item quantity {0} with code {1} cannot be allocated on warehouse. Try to buy similar product</entry>
+    <entry key="negativeItemAllocationNotes">Sorry. Item {0} with code {1} has just gone out of stock. Try to buy similar product</entry>
 
     <!-- RegistrationPage -->
 

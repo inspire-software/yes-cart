@@ -126,7 +126,7 @@
     <entry key="negativePaymentNotes">Оплата произведена неудачно</entry>
     <entry key="positivePaymentNotes">Оплата произведена успешно</entry>
     <entry key="checkStatus">Проверить статус заказа</entry>
-    <entry key="negativeItemAllocationNotes">Недостаточное количество  {0}, код {1} на складах. Попробуйте купить схожий продукт. Приносим свои извинения</entry>
+    <entry key="negativeItemAllocationNotes">Недостаточное количество  {0}, код {1} на складах. Попробуйте купить похожий продукт. Приносим свои извинения</entry>
 
     <!-- RegistrationPage -->
 

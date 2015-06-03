@@ -30,12 +30,12 @@
     </bean>
     <bean id="passwordHashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
 
-    <bean id="managerRegistrationAspect" class="org.yes.cart.service.dto.impl.TestManagerRegistrationAspect">
+    <bean id="managerRegistrationAspect" class="org.yes.cart.service.mail.impl.TestManagerRegistrationAspect">
         <constructor-arg ref="passPhraseGenerator"/>
         <constructor-arg ref="passwordHashHelper"/>
     </bean>
 
-    <bean id="customerRegistrationAspect" class="org.yes.cart.service.dto.impl.TestCustomerRegistrationAspect">
+    <bean id="customerRegistrationAspect" class="org.yes.cart.service.mail.impl.TestCustomerRegistrationAspect">
         <constructor-arg ref="passPhraseGenerator"/>
         <constructor-arg ref="passwordHashHelper"/>
     </bean>

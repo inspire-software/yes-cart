@@ -478,7 +478,24 @@
         }
 
         private function onCreateUpdateProductResult(event:ResultEvent):void {
-            applyFilter();
+            if (productDTOImpl != null) {
+                applyFilterByCode(productDTOImpl.code);
+            } else {
+                applyFilter();
+            }
+        }
+
+        private function applyFilterByCode(code:String):void {
+
+            productSelected = false;
+            productDTOImpl = null;
+
+            remoteProductService.getProductByCodeNameBrandType(
+                    code,
+                    null,
+                    0,
+                    0);
+
         }
 
         private function applyFilter():void {
@@ -516,6 +533,22 @@
 
         private function onGetProductByCodeNameBrandTypeResult(event:ResultEvent):void {
             productGrid.dataProvider = event.result;
+            if (event.result.length == 1) {
+                productGrid.selectedIndex = 0;
+                productGrid.validateNow();
+
+                productDTOImpl = productGrid.selectedItem as ProductDTOImpl;
+                productSelected = productDTOImpl != null;
+
+                if (productSelected) {
+                    if (productTabNavigator.selectedIndex >= 0) {
+                        initTab(productTabNavigator.selectedIndex);
+                    } else {
+                        initTab(0); // summary
+                    }
+                }
+            }
+
         }
 
         private function onRemoveProductResult(event:ResultEvent):void {
@@ -542,14 +575,14 @@
 
         private function onSummaryUpdateClick(event:DtoEvent):void {
             productDTOImpl = event.dto as ProductDTOImpl;
-            if (DomainUtils.isNewPK(productDTOImpl.productId)) {
-                Debug.trace("INFO ProductManagementPanel product will be created " + (productDTOImpl != null ?
-                        productDTOImpl.code : "null"));
-                remoteProductService.create(productDTOImpl);
-            } else {
-                Debug.trace("INFO ProductManagementPanel product will be updated " + (productDTOImpl != null ?
-                        productDTOImpl.code : "null"));
-                remoteProductService.update(productDTOImpl);
+            if (productDTOImpl != null) {
+                if (DomainUtils.isNewPK(productDTOImpl.productId)) {
+                    Debug.trace("INFO ProductManagementPanel product will be created " + productDTOImpl.code);
+                    remoteProductService.create(productDTOImpl);
+                } else {
+                    Debug.trace("INFO ProductManagementPanel product will be updated " + productDTOImpl.code);
+                    remoteProductService.update(productDTOImpl);
+                }
             }
         }
 

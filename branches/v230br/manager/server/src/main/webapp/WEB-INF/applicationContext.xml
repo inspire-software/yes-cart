@@ -284,6 +284,7 @@
     <import resource="classpath*:core-persistence.xml"/>
     <import resource="classpath*:core-io.xml"/>
     <import resource="classpath*:core-services.xml"/>
+    <import resource="classpath*:core-dto-services.xml"/>
     <import resource="classpath*:core-services-commands.xml"/>
 
     <import resource="classpath*:payment-persistence.xml"/>
