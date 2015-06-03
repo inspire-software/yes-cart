@@ -217,7 +217,7 @@ create index SKUPRICE_SKUCODE on TSKUPRICE (SKU_CODE);
 
 
 --
---
+--  YC-566 Create flexible framework for adding new import descriptors
 --
 
 
