@@ -419,3 +419,8 @@ INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (1064,
 
 
 
+--
+-- YC-361 Track customer's IP address
+--
+
+alter table TCUSTOMERORDER add column ORDER_IP varchar(45);

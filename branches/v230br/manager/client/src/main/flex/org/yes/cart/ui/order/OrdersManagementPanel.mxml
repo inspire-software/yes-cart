@@ -185,14 +185,14 @@
                     <mx:DataGridColumn showDataTips="true" width="25"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
                                        dataField="customerorderId"/>
-                    <mx:DataGridColumn showDataTips="true"
+                    <mx:DataGridColumn showDataTips="true" minWidth="40"
                                        headerText="@Resource(bundle='CustomerOrderPanel',key='orderNum')"
                             >
                         <mx:itemRenderer>
                             <mx:Component>
                                 <mx:VBox horizontalScrollPolicy="off">
                                     <mx:Label text="{data.ordernum}"/>
-                                    <mx:Label text="{data.code}"/>
+                                    <mx:Label text="{data.code + (data.orderIp != null &amp;&amp; data.orderIp.length > 0 ? ', IP: ' + data.orderIp : '')}"/>
                                 </mx:VBox>
                             </mx:Component>
                         </mx:itemRenderer>
@@ -233,7 +233,8 @@
                         <mx:itemRenderer>
                             <mx:Component>
                                 <mx:VBox horizontalAlign="right">
-                                    <mx:Label text="{data.price.toFixed(2)}"/>
+                                    <!--<mx:Label text="{data.price.toFixed(2)}"/>-->
+                                    <mx:Label text="{data.orderTotal.toFixed(2)}"/>
                                     <mx:Label text="{data.currency}"/>
                                 </mx:VBox>
                             </mx:Component>
@@ -1608,12 +1609,15 @@
             try {
                 var orderDto:CustomerOrderDTOImpl = this.customerOrderGrid.selectedItem as CustomerOrderDTOImpl;
                 customerOrderDetailPanel.title = resourceManager.getString('CustomerOrderPanel', 'orderNum')
-                        + "  "
+                        + ": "
                         + orderDto.ordernum
-                        + "      "
+                        + ", "
                         + resourceManager.getString('CustomerOrderPanel', 'date')
-                        + "  "
-                        + orderDto.orderTimestamp;
+                        + ": "
+                        + orderDto.orderTimestamp
+                        + (orderDto.orderIp != null && orderDto.orderIp.length > 0 ?
+                            ",  IP: " + orderDto.orderIp : "");
+
                 initTab(customerOrderDetailTabNavigator.selectedIndex);
 
 
@@ -1668,13 +1672,13 @@
 
             orderPaymentManagementPanel.panelTitle.title = ""
                     + resourceManager.getString('CustomerOrderPanel', 'amount')
-                    + " : "
-                    + orderDto.amount
+                    + ": "
+                    + orderDto.amount.toFixed(2)
                     + "  "
                     + orderDto.currency
-                    + "    "
+                    + ", "
                     + resourceManager.getString('CustomerOrderPanel', 'billingAddr')
-                    + "   "
+                    + ": "
                     + orderDto.billingAddress;
 
         }

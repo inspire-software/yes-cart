@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.request;
+package org.yes.cart.web.support.request.impl;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -36,18 +36,17 @@ public class HttpServletRequestWrapper extends javax.servlet.http.HttpServletReq
      * Constructor.
      *
      * @param request     the <code>ServletRequest</code>
-     * @param servletPath resloved servlet path. See <code>ServletRequest#getServletPath</code>
+     * @param servletPath resolved servlet path. See <code>ServletRequest#getServletPath</code>
      */
     public HttpServletRequestWrapper(final ServletRequest request, final String servletPath) {
-        super((HttpServletRequest) request);
-        this.servletPath = servletPath;
+        this((HttpServletRequest) request, servletPath);
     }
 
     /**
      * Constructor.
      *
      * @param request     the <code>HttpServletRequest</code>
-     * @param servletPath resloved servlet path. See <code>ServletRequest#getServletPath</code>
+     * @param servletPath resolved servlet path. See <code>ServletRequest#getServletPath</code>
      */
     public HttpServletRequestWrapper(final HttpServletRequest request, final String servletPath) {
         super(request);

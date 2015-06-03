@@ -179,4 +179,9 @@
         <property name="priority" value="22"/>
     </bean>
 
+    <bean id="setIpInternalCmd" class="org.yes.cart.shoppingcart.impl.SetIpInternalCommandImpl">
+        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
+        <property name="priority" value="23"/>
+    </bean>
+
 </beans>

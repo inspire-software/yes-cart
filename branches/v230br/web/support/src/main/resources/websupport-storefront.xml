@@ -27,6 +27,9 @@
     <bean id="shopResolverFilter" class="org.yes.cart.web.filter.ShopResolverFilter">
         <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="systemService"/>
+        <constructor-arg index="2">
+            <bean class="org.yes.cart.web.support.request.impl.HeaderOrientedIPResolverImpl"/>
+        </constructor-arg>
     </bean>
 
     <bean id="imageFilter" class="org.yes.cart.web.filter.ImageFilter">
@@ -207,6 +210,7 @@
                 <value>sku</value>
                 <value>wla</value>
                 <value>viewSkuInternalCmd</value>
+                <value>setIpInternalCmd</value>
                 <value>setPgLabelCmd</value>
                 <value>setOrderMsgCmd</value>
                 <value>resetPasswordCmd</value>
@@ -223,6 +227,7 @@
                 <value>setMultipleDeliveryCmd</value>
                 <value>setShopIdCmd</value>
                 <value>viewSkuInternalCmd</value>
+                <value>setIpInternalCmd</value>
                 <value>setPgLabelCmd</value>
             </list>
         </property>

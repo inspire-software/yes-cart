@@ -62,6 +62,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private Address shippingAddressDetails;
     private boolean multipleShipmentOption;
     private Date orderTimestamp;
+    private String orderIp;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -214,6 +215,14 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     public void setOrderTimestamp(Date orderTimestamp) {
         this.orderTimestamp = orderTimestamp;
+    }
+
+    public String getOrderIp() {
+        return orderIp;
+    }
+
+    public void setOrderIp(final String orderIp) {
+        this.orderIp = orderIp;
     }
 
     public BigDecimal getOrderTotal() {

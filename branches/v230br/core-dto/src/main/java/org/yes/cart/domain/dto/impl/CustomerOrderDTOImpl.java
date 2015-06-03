@@ -67,6 +67,9 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @DtoField(value = "orderTimestamp", readOnly = true)
     private Date orderTimestamp;
 
+    @DtoField(value = "orderIp", readOnly = true)
+    private String orderIp;
+
     @DtoField(value = "customer.email", readOnly = true)
     private String email;
 
@@ -90,6 +93,9 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
 
 
     private BigDecimal amount = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+
+    @DtoField(value = "orderTotal", readOnly = true)
+    private BigDecimal orderTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
@@ -116,6 +122,20 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      */
     public void setAmount(final BigDecimal amount) {
         this.amount = amount;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getOrderTotal() {
+        return orderTotal;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setOrderTotal(final BigDecimal orderTotal) {
+        this.orderTotal = orderTotal;
     }
 
     /**
@@ -361,6 +381,20 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      */
     public void setOrderTimestamp(final Date orderTimestamp) {
         this.orderTimestamp = orderTimestamp;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getOrderIp() {
+        return orderIp;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setOrderIp(final String orderIp) {
+        this.orderIp = orderIp;
     }
 
     /**

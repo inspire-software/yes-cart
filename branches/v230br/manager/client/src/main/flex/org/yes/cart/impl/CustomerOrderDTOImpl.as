@@ -44,6 +44,8 @@ public class CustomerOrderDTOImpl {
 
     public var orderTimestamp:Date;
 
+    public var orderIp:String;
+
     public var email:String;
 
     public var firstname:String;
@@ -65,6 +67,7 @@ public class CustomerOrderDTOImpl {
     public var promoApplied:Boolean;
     public var appliedPromo:String;
 
+    public var orderTotal:Number;
     public var amount:Number;
 
     public function get fullname():String {

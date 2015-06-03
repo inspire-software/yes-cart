@@ -78,8 +78,6 @@ public interface MutableShoppingContext extends ShoppingContext, Serializable {
     /**
      * Set shopper ip address.
      *
-     * TODO: YC-361
-     *
      * @param resolvedIp resolved ip address.
      */
     void setResolvedIp(String resolvedIp);

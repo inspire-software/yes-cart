@@ -25,8 +25,12 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -50,7 +54,10 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
     @Test
     public void testAssembleCustomerOrder() throws Exception {
         Customer customer = createCustomer();
+
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
+        setIPAddress(shoppingCart, "127.0.0.1");
+
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         assertNotNull(customerOrder);
         customerOrder =  customerOrderService.create(customerOrder);
@@ -69,11 +76,20 @@ public class OrderAssemblerImplTest extends BaseCoreDBTestCase {
         assertEquals("Shopping cart guid and order guid are equals",
                 shoppingCart.getGuid(),
                 customerOrder.getGuid());
+        assertEquals("127.0.0.1", customerOrder.getOrderIp());
         assertEquals(8, customerOrder.getOrderDetail().size());
         assertFalse(customerOrder.isMultipleShipmentOption());
         assertEquals(new BigDecimal("5463.91"), customerOrder.getListPrice());
         assertEquals(new BigDecimal("5463.91"), customerOrder.getPrice());
         assertEquals(new BigDecimal("4551.88"), customerOrder.getNetPrice());
         assertEquals(new BigDecimal("5463.91"), customerOrder.getGrossPrice());
+    }
+
+    private void setIPAddress(final ShoppingCart shoppingCart, final String ip) {
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+        Map<String, String> params;
+        params = new HashMap<String, String>();
+        params.put(ShoppingCartCommand.CMD_INTERNAL_SETIP, ip);
+        commands.execute(shoppingCart, (Map) params);
     }
 }

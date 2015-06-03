@@ -33,6 +33,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Shopping cart  filter responsible to restore shopping cart from cookies, if it possible.
@@ -118,14 +119,18 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
      */
     private void setDefaultValuesIfNecessary(final Shop shop, final ShoppingCart cart) {
 
+        final Map<String, Object> params = new HashMap<String, Object>();
         if (cart.getCurrencyCode() == null && shop != null) { // new cart only may satisfy this condition
 
-            cartCommandFactory.execute(cart, new HashMap<String, Object>() {{
-                put(ShoppingCartCommand.CMD_SETSHOP, shop.getShopId());
-                put(ShoppingCartCommand.CMD_CHANGECURRENCY, shop.getDefaultCurrency());
-            }});
+            params.put(ShoppingCartCommand.CMD_SETSHOP, shop.getShopId());
+            params.put(ShoppingCartCommand.CMD_CHANGECURRENCY, shop.getDefaultCurrency());
+
+            cartCommandFactory.execute(cart, params);
 
         }
+
+        params.put(ShoppingCartCommand.CMD_INTERNAL_SETIP, ApplicationDirector.getShopperIPAddress());
+        cartCommandFactory.execute(ShoppingCartCommand.CMD_INTERNAL_SETIP, cart, params);
 
     }
 

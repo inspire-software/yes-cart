@@ -122,6 +122,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setOrderTimestamp(new Date());
         customerOrder.setGuid(shoppingCart.getGuid());
         customerOrder.setCartGuid(shoppingCart.getGuid());
+        customerOrder.setOrderIp(shoppingCart.getShoppingContext().getResolvedIp());
 
         customerOrder.setListPrice(cartTotal.getListSubTotal());
         customerOrder.setPrice(cartTotal.getSubTotal());

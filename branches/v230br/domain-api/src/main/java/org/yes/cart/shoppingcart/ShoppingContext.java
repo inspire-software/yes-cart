@@ -81,8 +81,6 @@ public interface ShoppingContext extends Serializable {
     /**
      * Get shopper ip address
      *
-     * TODO: YC-361
-     *
      * @return customer's IP
      */
     String getResolvedIp();

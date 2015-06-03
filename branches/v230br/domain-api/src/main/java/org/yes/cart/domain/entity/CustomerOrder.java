@@ -371,6 +371,20 @@ public interface CustomerOrder extends Auditable {
     void setOrderTimestamp(Date orderTimestamp);
 
     /**
+     * IP address of the request that created this order.
+     *
+     * @return order creation IP.
+     */
+    String getOrderIp();
+
+    /**
+     * IP address of the request that created this order.
+     *
+     * @param orderIp order creation IP.
+     */
+    void setOrderIp(String orderIp);
+
+    /**
      * Get sum of order details prices less promotion discounts applied
      * (included delivery).
      *

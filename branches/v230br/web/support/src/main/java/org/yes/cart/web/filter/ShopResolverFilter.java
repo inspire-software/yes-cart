@@ -24,7 +24,8 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.support.request.HttpServletRequestWrapper;
+import org.yes.cart.web.support.request.IPResolver;
+import org.yes.cart.web.support.request.impl.HttpServletRequestWrapper;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -45,14 +46,17 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
     private final ShopService shopService;
     private final SystemService systemService;
+    private final IPResolver ipResolver;
 
     private ServletContext servletContext;
 
 
     public ShopResolverFilter(final ShopService shopService,
-                              final SystemService systemService) {
+                              final SystemService systemService,
+                              final IPResolver ipResolver) {
         this.shopService = shopService;
         this.systemService = systemService;
+        this.ipResolver = ipResolver;
     }
 
     /**
@@ -79,7 +83,6 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
         ApplicationDirector.setShopperIPAddress(getRemoteIpAddr(servletRequest));
         ShopCodeContext.setShopCode(shop.getCode());
         ShopCodeContext.setShopId(shop.getShopId());
-        //ApplicationDirector.setCurrentServletContext(servletContext);
 
         return getModifiedRequest(servletRequest, shop);
 
@@ -87,11 +90,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
     private String getRemoteIpAddr(final ServletRequest servletRequest) {
         final HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-        String userIpAddress = httpRequest.getHeader("X-Forwarded-For");
-        if (userIpAddress == null) {
-            return httpRequest.getRemoteAddr();
-        }
-        return userIpAddress;
+        return ipResolver.resolve(httpRequest);
     }
 
 

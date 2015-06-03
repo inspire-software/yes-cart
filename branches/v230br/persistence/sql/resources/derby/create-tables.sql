@@ -292,6 +292,7 @@
         SHIPPING_ADDRESS varchar(255),
         MULTIPLE_SHIPMENT smallint default 0,
         ORDER_TIMESTAMP timestamp not null,
+        ORDER_IP varchar(45),
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),
