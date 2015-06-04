@@ -1074,6 +1074,35 @@
         primary key (TAXCONFIG_ID)
     );
 
+        create table TDATAGROUP (
+        DATAGROUP_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        NAME varchar(255) not null unique,
+        DISPLAYNAME longtext,
+        QUALIFIER varchar(45),
+        TYPE varchar(45) not null,
+        DESCRIPTORS longtext,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        primary key (DATAGROUP_ID)
+    );
+
+
+    create table TDATADESCRIPTOR (
+        DATADESCRIPTOR_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        NAME varchar(255) not null unique,
+        TYPE varchar(45) not null,
+        VALUE longtext,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        primary key (DATADESCRIPTOR_ID)
+    );
+
 
 	create table HIBERNATE_UNIQUE_KEYS (
          value integer 
