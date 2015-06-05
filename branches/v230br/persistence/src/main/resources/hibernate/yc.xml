@@ -2667,14 +2667,14 @@
 
     <query  name="SKUCODE.FOR.SKUWAREHOUSE.CHANGED.SINCE">
         <![CDATA[
-       select sw.skuCode from SkuWarehouseEntity sw
+       select distinct sw.skuCode from SkuWarehouseEntity sw
        where  sw.updatedTimestamp >= ?1 or ?1 is null
        ]]>
     </query>
 
     <query  name="DELIVERIES.WAITING.FOR.INVENTORY.BY.SKU">
         <![CDATA[
-       select d from CustomerOrderDeliveryEntity d inner join d.detail dd
+       select distinct d from CustomerOrderDeliveryEntity d inner join d.detail dd
        where  d.deliveryStatus = ?1
        and d.customerOrder.orderStatus in ?2
        and dd.productSkuCode in ?3
@@ -2684,7 +2684,7 @@
 
     <query  name="DELIVERIES.WAITING.FOR.INVENTORY">
         <![CDATA[
-       select d from CustomerOrderDeliveryEntity d inner join d.detail dd
+       select distinct d from CustomerOrderDeliveryEntity d inner join d.detail dd
        where  d.deliveryStatus = ?1
        and d.customerOrder.orderStatus in ?2
        order by d.customerOrderDeliveryId
@@ -2693,7 +2693,7 @@
 
     <query  name="DELIVERIES.IDS.WAITING.FOR.INVENTORY.BY.SKU">
         <![CDATA[
-       select d.customerOrderDeliveryId from CustomerOrderDeliveryEntity d inner join d.detail dd
+       select distinct d.customerOrderDeliveryId from CustomerOrderDeliveryEntity d inner join d.detail dd
        where  d.deliveryStatus = ?1
        and d.customerOrder.orderStatus in ?2
        and dd.productSkuCode in ?3
@@ -2703,7 +2703,7 @@
 
     <query  name="DELIVERIES.IDS.WAITING.FOR.INVENTORY">
         <![CDATA[
-       select d.customerOrderDeliveryId from CustomerOrderDeliveryEntity d inner join d.detail dd
+       select distinct d.customerOrderDeliveryId from CustomerOrderDeliveryEntity d inner join d.detail dd
        where  d.deliveryStatus = ?1
        and d.customerOrder.orderStatus in ?2
        order by d.customerOrderDeliveryId

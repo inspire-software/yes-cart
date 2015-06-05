@@ -34,7 +34,7 @@ import java.util.UUID;
 public class CourierPaymentGatewayImpl extends AbstractPaymentGatewayImpl implements PaymentGatewayInternalForm {
 
 
-    private static final PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
+    private static final PaymentGatewayFeature PAYMENT_GATEWAY_FEATURE = new PaymentGatewayFeatureImpl(
             true, true, true, false,
             false, true, true,
             false, false, false,
@@ -56,7 +56,7 @@ public class CourierPaymentGatewayImpl extends AbstractPaymentGatewayImpl implem
      * {@inheritDoc}
      */
     public PaymentGatewayFeature getPaymentGatewayFeatures() {
-        return paymentGatewayFeature;
+        return PAYMENT_GATEWAY_FEATURE;
     }
 
 

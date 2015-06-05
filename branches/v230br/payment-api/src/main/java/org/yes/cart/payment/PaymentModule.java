@@ -30,7 +30,7 @@ import java.util.Collection;
  * Date: 08-May-2011
  * Time: 10:22:53
  */
-public interface PaymentModule  extends Serializable {
+public interface PaymentModule extends Serializable {
 
     /**
      * Get module descriptor.

@@ -21,16 +21,16 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.service.domain.*;
-import org.yes.cart.service.order.OrderStateManager;
-import org.yes.cart.service.order.impl.OrderEventImpl;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.service.domain.ProductSkuService;
+import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.service.domain.WarehouseService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,24 +41,17 @@ import static org.junit.Assert.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-//TODO: YC-64 refactor to param test
 public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
     private WarehouseService warehouseService;
     private SkuWarehouseService skuWarehouseService;
     private ProductSkuService productSkuService;
-    private ProductService productService;
-    private CustomerOrderService customerOrderService;
-    private OrderStateManager orderStateManager;
 
     @Before
     public void setUp()  {
         warehouseService = (WarehouseService) ctx().getBean(ServiceSpringKeys.WAREHOUSE_SERVICE);
         skuWarehouseService = (SkuWarehouseService) ctx().getBean(ServiceSpringKeys.SKU_WAREHOUSE_SERVICE);
         productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
-        productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
-        customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
-        orderStateManager = (OrderStateManager) ctx().getBean(ServiceSpringKeys.ORDER_STATE_MANAGER);
         super.setUp();
 
     }
@@ -443,75 +436,4 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         assertTrue(skuWarehouseService.isSkuAvailabilityPreorderOrBackorder(productSkuService.findById(15320L).getCode(), false));
     }
 
-
-    @Test
-    public void testPushOrdersAwaitingForInventory() throws Exception {
-
-        Runnable bulkAwaitingInventoryDeliveriesProcessor =  ctx().getBean("bulkAwaitingInventoryDeliveriesProcessor", Runnable.class);
-
-        Customer cust = createCustomer();
-
-        ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 0);
-
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
-        assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());
-        order.setPgLabel("testPaymentGatewayLabel");
-        customerOrderService.update(order);
-
-        orderStateManager.fireTransition(
-                new OrderEventImpl(OrderStateManager.EVT_PENDING,
-                        order,
-                        null,
-                        new HashMap()
-                )
-
-        );
-
-        customerOrderService.update(order);
-
-        order = customerOrderService.findByGuid(order.getCartGuid());
-        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
-        for (CustomerOrderDelivery delivery : order.getDelivery()) {
-            assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
-        }
-
-        SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSkuCode("PREORDER-BACK-TO-FLOW1"); //need 2 items to push order back to life cycle
-        skuWarehouse.setWarehouse(warehouseService.findById(1L));
-        skuWarehouse.setQuantity(BigDecimal.ONE);
-        skuWarehouseService.create(skuWarehouse);
-        bulkAwaitingInventoryDeliveriesProcessor.run();
-
-        order = customerOrderService.findByGuid(order.getCartGuid());
-        assertEquals("One item not enough to continue order processing . Must still in progress 0", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
-        for (CustomerOrderDelivery delivery : order.getDelivery()) {
-            assertEquals("One item not enough to continue order processing. Must still waiting for inventory 0", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
-        }
-
-        skuWarehouse.setQuantity(BigDecimal.ONE.add(BigDecimal.ONE));
-        skuWarehouseService.update(skuWarehouse);
-        bulkAwaitingInventoryDeliveriesProcessor.run();
-
-        order = customerOrderService.findByGuid(order.getCartGuid());
-        assertEquals("One item not enough to continue order processing . Must still in progress 1", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
-        for (CustomerOrderDelivery delivery : order.getDelivery()) {
-            assertEquals("One item not enough to continue order processing. Must still waiting for inventory 1", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
-        }
-
-        skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSkuCode("PREORDER-BACK-TO-FLOW0"); //need 2 items to push order back to life cycle
-        skuWarehouse.setWarehouse(warehouseService.findById(1L));
-        skuWarehouse.setQuantity(BigDecimal.ONE);
-        skuWarehouseService.create(skuWarehouse);
-        bulkAwaitingInventoryDeliveriesProcessor.run();
-
-        order = customerOrderService.findByGuid(order.getCartGuid());
-        assertEquals("One item not enough to continue order processing . Must still in progress 2", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
-        for (CustomerOrderDelivery delivery : order.getDelivery()) {
-            assertEquals("Delivery can be started", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());
-        }
-
-
-
-    }
 }

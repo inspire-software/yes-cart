@@ -56,14 +56,6 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
     List<CustomerOrder> findCustomerOrders(long customerId, Date since);
 
     /**
-     * Get order amount
-     *
-     * @param orderNumber given order number
-     * @return order amount
-     */
-    BigDecimal getOrderAmount(String orderNumber);
-
-    /**
      * Find customer's order by given criteria.
      *
      * @param customerId  customer id. Rest of parameters will be ignored, if customerId more that 0.
@@ -149,20 +141,6 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @return true if order can be with several physical deliveries
      */
     boolean isOrderMultipleDeliveriesAllowed(ShoppingCart shoppingCart);
-
-    /**
-     * Fire order transition in a separate transaction.
-     *
-     * @param event event name
-     * @param orderNumber order number
-     * @param deliveryNumber delivery number (only for delivery events)
-     * @param params additional parameters
-     *
-     * @return handled flag
-     *
-     * @throws OrderException in case of transition failures
-     */
-    boolean transitionOrder(String event, String orderNumber, String deliveryNumber, Map params) throws OrderException;
 
 
 }

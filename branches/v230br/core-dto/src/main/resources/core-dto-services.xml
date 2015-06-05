@@ -25,7 +25,9 @@
 
     <cache:annotation-driven />
 
-    <import resource="classpath*:core-services.xml"/>
+    <import resource="classpath:core-services.xml"/>
+    <import resource="classpath:core-payments.xml"/>
+    <import resource="classpath:core-orderstate.xml"/>
 
     <!-- ############################################ DTO Support ######################################################################### -->
 
@@ -318,6 +320,15 @@
         </property>
     </bean>
 
+    <bean id="customerOrderTransitionService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.CustomerOrderTransitionServiceImpl">
+                <constructor-arg index="0"  ref="customerOrderService"/>
+            </bean>
+        </property>
+    </bean>
+
+
     <bean id="dtoCustomerOrderService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoCustomerOrderServiceImpl">
@@ -325,6 +336,8 @@
                 <constructor-arg index="1" ref="customerOrderService"/>
                 <constructor-arg index="2" ref="dtoAssemblerAdaptersRepository"/>
                 <constructor-arg index="3" ref="paymentModulesManager"/>
+                <constructor-arg index="4" ref="customerOrderTransitionService"/>
+                <constructor-arg index="5" ref="customerOrderPaymentService"/>
             </bean>
         </property>
     </bean>

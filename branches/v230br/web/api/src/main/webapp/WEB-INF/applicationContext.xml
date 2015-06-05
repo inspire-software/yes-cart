@@ -30,14 +30,14 @@
 
     <aop:aspectj-autoproxy/>
 
-    <import resource="classpath*:core-config.xml"/>
-    <import resource="classpath*:core-persistence.xml"/>
-    <import resource="classpath*:core-io.xml"/>
-    <import resource="classpath*:core-services.xml"/>
-    <import resource="classpath*:api-services-commands.xml"/>
-    <import resource="classpath*:websupport-webapp.xml"/>
-    <import resource="classpath*:websupport-api.xml"/>
-    <import resource="classpath*:payment-modules.xml"/>
-    <import resource="classpath*:api.xml"/>
+    <import resource="classpath:core-config.xml"/>
+    <import resource="classpath:core-persistence.xml"/>
+    <import resource="classpath:core-io.xml"/>
+    <import resource="classpath:core-services.xml"/>
+    <import resource="classpath:api-services-commands.xml"/>
+    <import resource="classpath:websupport-webapp.xml"/>
+    <import resource="classpath:websupport-api.xml"/>
+    <import resource="classpath:payment-modules.xml"/>
+    <import resource="classpath:api.xml"/>
 
 </beans>

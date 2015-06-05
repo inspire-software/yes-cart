@@ -1,9 +1,9 @@
 <!DOCTYPE installation PUBLIC "izpack-installation"
-        "http://svn.codehaus.org/izpack-svn/izpack-src/branches/4.3/src/dtd/installation.dtd">
+        "installation.dtd">
 <installation version="5.0">
     <info>
         <appname>yes-cart</appname>
-        <appversion>2.2.0</appversion>
+        <appversion>${project.version}-r${buildNumber}</appversion>
         <authors>
             <author name="Igor Azarny" email="igor.azarny@yes-cart.org"/>
             <author name="Denis Pavlov" email="denis.pavlov@yes-cart.org"/>
@@ -89,8 +89,6 @@
             <singlefile src="../core-modules/core-module-payment-base/src/main/resources/sql/derby/create-tables.sql" target="$INSTALL_PATH/derbydb/bin/pay-create-tables.sql" override="true"/>
 
             <singlefile src="../core-modules/core-module-payment-base/src/main/resources/sql/payinitdata.sql" target="$INSTALL_PATH/derbydb/bin/base-payinitdata.sql" override="true"/>
-            <singlefile src="../core-modules/core-module-payment-capp/src/main/resources/sql/payinitdata.sql" target="$INSTALL_PATH/derbydb/bin/capp-payinitdata.sql" override="true"/>
-            <singlefile src="../core-modules/core-module-payment-gcwm/src/main/resources/sql/payinitdata.sql" target="$INSTALL_PATH/derbydb/bin/gcwm-payinitdata.sql" override="true"/>
 
             <executable targetfile="$INSTALL_PATH/yesbin/opendemostore.bat" />
             <executable targetfile="$INSTALL_PATH/yesbin/opendemostore" />
@@ -142,7 +140,7 @@
 
     </packs>
 
-    <jar src="target/izpack/installer-2.3.0-SNAPSHOT.jar"/>
+    <jar src="target/izpack/installer-${project.version}-r${buildNumber}.jar"/>
     <jar src="target/izpack/guava-r09.jar"/>
 
 

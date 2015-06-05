@@ -33,27 +33,6 @@
         </property>
     </bean>
 
-    <bean id="bulkAwaitingInventoryDeliveriesProcessor" parent="txJobProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.bulkjob.order.BulkAwaitingInventoryDeliveriesProcessorImpl">
-                <constructor-arg index="0" ref="customerOrderService"/>
-                <constructor-arg index="1" ref="orderStateManager"/>
-                <constructor-arg index="2" ref="skuWarehouseService"/>
-                <constructor-arg index="3" ref="systemService"/>
-                <constructor-arg index="4" ref="runtimeAttributeService"/>
-                <lookup-method name="getSelfProxy" bean="bulkAwaitingInventoryDeliveriesProcessor"/>
-            </bean>
-        </property>
-        <property name="transactionAttributes">
-            <props>
-                <!-- All job beans are Runnable, and they must run in isolation  -->
-                <prop key="run">PROPAGATION_NOT_SUPPORTED</prop>
-                <prop key="processDeliveryEvent">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
-                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
-            </props>
-        </property>
-    </bean>
-
     <bean id="bulkCustomerTagProcessor" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.promotion.BulkCustomerTagProcessorImpl">

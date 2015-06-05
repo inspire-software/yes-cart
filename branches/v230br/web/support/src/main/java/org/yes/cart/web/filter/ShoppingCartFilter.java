@@ -94,6 +94,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
             cart.initialise(calculationStrategy);
             setDefaultValuesIfNecessary(ApplicationDirector.getCurrentShop(), cart);
             ApplicationDirector.setShoppingCart(cart);
+            request.setAttribute("ShoppingCart", cart);
 
         } catch (Exception e) {
             ShopCodeContext.getLog(this).error("Can process request", e);
@@ -141,6 +142,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
      */
     public void doAfter(final ServletRequest servletRequest, final ServletResponse servletResponse) throws IOException, ServletException {
         ApplicationDirector.setShoppingCart(null);
+        servletRequest.removeAttribute("ShoppingCart");
     }
 
 

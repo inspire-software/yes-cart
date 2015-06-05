@@ -62,6 +62,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
+                    <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
                     <outputDirectory>${project.build.izpack.directory}</outputDirectory>
                 </configuration>
             </plugin>
@@ -168,7 +169,7 @@
                             <!--<installerFile>${project.build.directory}/yes-cart-${project.build.finalName}.jar</installerFile>-->
                             <!--<baseDir>${izpack.staging}</baseDir>-->
                             <baseDir>${basedir}</baseDir>
-                            <installFile>${basedir}/src/izpack/install.xml</installFile>
+                            <installFile>${project.build.directory}/izpack/install.xml</installFile>
                             <comprLevel>9</comprLevel>
                             <comprFormat>default</comprFormat>
                         </configuration>

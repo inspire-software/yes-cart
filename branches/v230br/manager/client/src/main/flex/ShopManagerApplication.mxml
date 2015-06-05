@@ -288,12 +288,13 @@
         }
 
         private function onHelpClick(event:MouseEvent):void {
-            Alert.show(
-                    resourceManager.getString('ShopManagerApplication', 'revLabel') + resourceManager.getString('ShopManagerApplication', 'rev') + "\n" +
-                            resourceManager.getString('ShopManagerApplication', 'revDateLabel') + resourceManager.getString('ShopManagerApplication', 'revDate') + "\n" +
-                            resourceManager.getString('ShopManagerApplication', 'buildDateLabel') + resourceManager.getString('ShopManagerApplication', 'buildDate') + "\n",
-                    resourceManager.getString('ShopManagerApplication', 'info')
-            );
+
+            var _appName:String = resourceManager.getString('ShopManagerApplication', 'appName');
+//            var _appName:String = resourceManager.getString('ShopManagerApplication', 'revLabel') + resourceManager.getString('ShopManagerApplication', 'rev') + "\n" +
+//                    resourceManager.getString('ShopManagerApplication', 'revDateLabel') + resourceManager.getString('ShopManagerApplication', 'revDate') + "\n" +
+//                    resourceManager.getString('ShopManagerApplication', 'buildDateLabel') + resourceManager.getString('ShopManagerApplication', 'buildDate') + "\n";
+
+            Alert.show(_appName, resourceManager.getString('ShopManagerApplication', 'info'));
         }
 
         private function onHelpURLClick(event:MouseEvent):void {

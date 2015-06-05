@@ -38,7 +38,9 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.CustomerOrderTransitionService;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.order.OrderException;
@@ -61,6 +63,8 @@ public class DtoCustomerOrderServiceImpl
     protected final Assembler orderDeliveryDetailAssembler;
     protected final Assembler orderDeliveryAssembler;
     protected final PaymentModulesManager paymentModulesManager;
+    protected final CustomerOrderTransitionService transitionService;
+    protected final CustomerOrderPaymentService customerOrderPaymentService;
 
 
     /**
@@ -69,13 +73,19 @@ public class DtoCustomerOrderServiceImpl
      * @param dtoFactory                  {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param customerOrderGenericService generic service
      * @param adaptersRepository          value converter
+     * @param transitionService           transition service
+     * @param customerOrderPaymentService payment service
      */
     public DtoCustomerOrderServiceImpl(
             final DtoFactory dtoFactory,
             final GenericService<CustomerOrder> customerOrderGenericService,
             final AdaptersRepository adaptersRepository,
-            final PaymentModulesManager paymentModulesManager) {
+            final PaymentModulesManager paymentModulesManager,
+            final CustomerOrderTransitionService transitionService,
+            final CustomerOrderPaymentService customerOrderPaymentService) {
         super(dtoFactory, customerOrderGenericService, adaptersRepository);
+        this.transitionService = transitionService;
+        this.customerOrderPaymentService = customerOrderPaymentService;
         orderDeliveryDetailAssembler = DTOAssembler.newAssembler(CustomerOrderDeliveryDetailDTOImpl.class, CustomerOrderDeliveryDet.class);
         orderDeliveryAssembler = DTOAssembler.newAssembler(CustomerOrderDeliveryDTOImpl.class, CustomerOrderDelivery.class);
         this.paymentModulesManager = paymentModulesManager;
@@ -119,7 +129,7 @@ public class DtoCustomerOrderServiceImpl
         if (isWaiting) {
 
             try {
-                ((CustomerOrderService) getService()).transitionOrder(
+                transitionService.transitionOrder(
                         OrderStateManager.EVT_PAYMENT_CONFIRMED, orderNum, null, Collections.emptyMap());
             } catch (OrderException e) {
                 ShopCodeContext.getLog(this).error(
@@ -162,7 +172,7 @@ public class DtoCustomerOrderServiceImpl
         if (isCancellable) {
             // We always cancel with refund since we may have completed payments
             try {
-                ((CustomerOrderService) getService()).transitionOrder(
+                transitionService.transitionOrder(
                         OrderStateManager.EVT_CANCEL_WITH_REFUND, orderNum, null, Collections.emptyMap());
             } catch (OrderException e) {
                 ShopCodeContext.getLog(this).error(
@@ -177,7 +187,7 @@ public class DtoCustomerOrderServiceImpl
         } else if (isWaitingRefund) {
                 // Retry processing refund
             try {
-                ((CustomerOrderService) getService()).transitionOrder(
+                transitionService.transitionOrder(
                         OrderStateManager.EVT_REFUND_PROCESSED, orderNum, null, Collections.emptyMap());
             } catch (OrderException e) {
                 ShopCodeContext.getLog(this).error(
@@ -221,7 +231,7 @@ public class DtoCustomerOrderServiceImpl
         if (isWaitingRefund) {
                 // Retry processing refund
             try {
-                ((CustomerOrderService) getService()).transitionOrder(
+                transitionService.transitionOrder(
                         OrderStateManager.EVT_REFUND_PROCESSED, orderNum, null,
                         new HashMap() {{
                             put("forceManualProcessing", Boolean.TRUE);
@@ -302,38 +312,38 @@ public class DtoCustomerOrderServiceImpl
             if (CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_PACKING.equals(destinationStatus)) {
 
-                ((CustomerOrderService) getService()).transitionOrder(
+                transitionService.transitionOrder(
                         OrderStateManager.EVT_RELEASE_TO_PACK, orderNum, deliveryNum, Collections.emptyMap());
 
             } else if (CustomerOrderDelivery.DELIVERY_STATUS_PACKING.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY.equals(destinationStatus)) {
 
-                ((CustomerOrderService) getService()).transitionOrder(
+                transitionService.transitionOrder(
                         OrderStateManager.EVT_PACK_COMPLETE, orderNum, deliveryNum, Collections.emptyMap());
 
             } else if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS.equals(destinationStatus)) {
 
-                ((CustomerOrderService) getService()).transitionOrder(
+                transitionService.transitionOrder(
                         OrderStateManager.EVT_RELEASE_TO_SHIPMENT, orderNum, deliveryNum, Collections.emptyMap());
 
             } else if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS.equals(destinationStatus)) {
 
-                ((CustomerOrderService) getService()).transitionOrder(
+                transitionService.transitionOrder(
                         OrderStateManager.EVT_RELEASE_TO_SHIPMENT, orderNum, deliveryNum, Collections.emptyMap());
 
             } else if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(destinationStatus)) {
 
-                ((CustomerOrderService) getService()).transitionOrder(
+                transitionService.transitionOrder(
                         OrderStateManager.EVT_SHIPMENT_COMPLETE, orderNum, deliveryNum, Collections.emptyMap());
 
             } else if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS_WAITING_PAYMENT.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(destinationStatus)) {
 
                 // same as shipping in progress to complete
-                ((CustomerOrderService) getService()).transitionOrder(
+                transitionService.transitionOrder(
                         OrderStateManager.EVT_SHIPMENT_COMPLETE, orderNum, deliveryNum, Collections.emptyMap());
 
             } else {
@@ -396,7 +406,7 @@ public class DtoCustomerOrderServiceImpl
             if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT.equals(currentStatus) &&
                     CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS.equals(destinationStatus)) {
 
-                ((CustomerOrderService) getService()).transitionOrder(
+                transitionService.transitionOrder(
                         OrderStateManager.EVT_RELEASE_TO_SHIPMENT, orderNum, deliveryNum,
                         new HashMap() {{
                             put("forceManualProcessing", Boolean.TRUE);
@@ -566,7 +576,7 @@ public class DtoCustomerOrderServiceImpl
         for (CustomerOrder entity : entities) {
             CustomerOrderDTO dto = (CustomerOrderDTO) dtoFactory.getByIface(getDtoIFace());
             assembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
-            dto.setAmount(((CustomerOrderService) service).getOrderAmount(entity.getOrdernum()));
+            dto.setAmount(customerOrderPaymentService.getOrderAmount(entity.getOrdernum()));
             dtos.add(dto);
         }
     }

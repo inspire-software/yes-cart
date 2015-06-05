@@ -20,6 +20,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath*:rest-mvc.xml"/>
+    <import resource="classpath:rest-mvc.xml"/>
 
 </beans>

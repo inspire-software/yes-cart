@@ -36,5 +36,6 @@
     <context:component-scan base-package="org.yes"/>
 
     <import resource="core-services.xml"/>
+    <import resource="core-payments.xml"/>
 
 </beans>

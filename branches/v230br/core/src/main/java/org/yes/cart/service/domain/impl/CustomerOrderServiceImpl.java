@@ -47,7 +47,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrder> implements CustomerOrderService, ApplicationContextAware {
+public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrder> implements CustomerOrderService {
 
     private final OrderAssembler orderAssembler;
 
@@ -59,14 +59,6 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
     private final GenericDAO<CustomerOrderDelivery, Long> customerOrderDeliveryDao;
 
-    private final CustomerOrderPaymentService customerOrderPaymentService;
-
-    private final PromotionCouponService promotionCouponService;
-
-    private ApplicationContext applicationContext;
-
-    private OrderStateManager orderStateManager;
-
 
     /**
      * Construct order service.
@@ -76,8 +68,6 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      * @param customerOrderDeliveryDao to get deliveries, awiting for inventory
      * @param orderAssembler order assembler
      * @param deliveryAssembler delivery assembler
-     * @param customerOrderPaymentService to calculate order amount payments.
-     * @param promotionCouponService coupon service
      */
     public CustomerOrderServiceImpl(
             final GenericDAO<CustomerOrder, Long> customerOrderDao,
@@ -85,27 +75,13 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             final GenericDAO<Object, Long> genericDao,
             final GenericDAO<CustomerOrderDelivery, Long> customerOrderDeliveryDao,
             final OrderAssembler orderAssembler,
-            final DeliveryAssembler deliveryAssembler,
-            final CustomerOrderPaymentService customerOrderPaymentService,
-            final PromotionCouponService promotionCouponService) {
+            final DeliveryAssembler deliveryAssembler) {
         super(customerOrderDao);
         this.orderAssembler = orderAssembler;
         this.deliveryAssembler = deliveryAssembler;
         this.customerDao = customerDao;
-        this.customerOrderPaymentService = customerOrderPaymentService;
         this.genericDao = genericDao;
         this.customerOrderDeliveryDao = customerOrderDeliveryDao;
-        this.promotionCouponService = promotionCouponService;
-    }
-
-    /**
-     * Get order amount
-     *
-     * @param orderNumber given order number
-     * @return order amount
-     */
-    public BigDecimal getOrderAmount(final String orderNumber) {
-        return customerOrderPaymentService.getOrderAmount(orderNumber);
     }
 
     /**
@@ -262,40 +238,6 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
-    public boolean transitionOrder(final String event,
-                                   final String orderNumber,
-                                   final String deliveryNumber,
-                                   final Map params) throws OrderException {
-
-        final CustomerOrder order = findSingleByCriteria(Restrictions.eq("ordernum", orderNumber));
-        if (order == null) {
-            return false;
-        }
-
-        final CustomerOrderDelivery delivery;
-        if (StringUtils.isNotBlank(deliveryNumber)) {
-            delivery = order.getCustomerOrderDelivery(deliveryNumber);
-        } else {
-            delivery = null;
-        }
-
-        final Map safe = new HashMap();
-        if (params != null) {
-            safe.putAll(params);
-        }
-
-        if (getOrderStateManager().fireTransition(
-                new OrderEventImpl(event, order, delivery, safe))) {
-            update(order);
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public CustomerOrder findByGuid(final String shoppingCartGuid) {
         return getGenericDao().findSingleByCriteria(
                 Restrictions.eq("cartGuid", shoppingCartGuid)
@@ -319,18 +261,6 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             this.genericDao.delete(delivery);
         }
         super.delete(instance);
-    }
-
-
-    private OrderStateManager getOrderStateManager() {
-        if (orderStateManager == null) {
-            orderStateManager = applicationContext.getBean("orderStateManager", OrderStateManager.class);
-        }
-        return orderStateManager;
-    }
-
-    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
     }
 
 }

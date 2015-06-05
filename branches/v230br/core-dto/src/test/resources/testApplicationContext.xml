@@ -28,14 +28,15 @@
 
     <import resource="persistence.xml"/>
     <import resource="io.xml"/>
-    <import resource="core-services.xml"/>
-    <import resource="core-dto-services.xml"/>
-    <import resource="core-services-commands.xml"/>
+    <import resource="classpath:core-services.xml"/>
+    <import resource="classpath:core-dto-services.xml"/>
+    <import resource="classpath:core-services-commands.xml"/>
+    <import resource="classpath:core-orderstate.xml"/>
 
-    <import resource="core-aspects.xml"/>
+    <import resource="classpath:core-aspects.xml"/>
 
-    <import resource="classpath*:test-payment-api.xml"/>
-    <import resource="classpath*:test-core-module-payment-base.xml"/>
-    <import resource="classpath*:test-core-module-payment-capp.xml"/>
+    <import resource="classpath:core-payments.xml"/>
+    <import resource="classpath:test-payment-api.xml"/>
+    <import resource="classpath:test-core-module-payment-base.xml"/>
 
 </beans>

@@ -37,6 +37,15 @@
     </modules>
     <properties>
 
+        <!-- Environment switch -->
+        <env>dev</env>
+        <env.db>derby</env.db>
+        <env.ssl>off</env.ssl>
+        <payment.liqpay.module>off</payment.liqpay.module>
+        <payment.cybersource.module>off</payment.cybersource.module>
+        <payment.authorizenet.module>off</payment.authorizenet.module>
+        <payment.paypal.module>off</payment.paypal.module>
+
         <!-- Core frameworks globals versions -->
         <hibernate.core.version>4.2.0.Final</hibernate.core.version>
         <hibernate.search.version>4.2.0.Final</hibernate.search.version>
@@ -67,25 +76,23 @@
         <blazeds.version>4.0.0.14931</blazeds.version>
         <spring-flex.version>1.5.2.RELEASE</spring-flex.version>
 
-
-        <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>
-        <db.config.yes.login>app</db.config.yes.login>
-        <db.config.yes.password>app</db.config.yes.password>
-        <db.config.yes.driver>org.apache.derby.jdbc.ClientDriver</db.config.yes.driver>
-        <db.config.yes.url>jdbc:derby://localhost:1527/yes;create=true</db.config.yes.url>
-        <db.config.yespay.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yespay.hibernate.dialect>
-        <db.config.yespay.login>app</db.config.yespay.login>
-        <db.config.yespay.password>app</db.config.yespay.password>
-        <db.config.yespay.driver>org.apache.derby.jdbc.ClientDriver</db.config.yespay.driver>
-        <db.config.yespay.url>jdbc:derby://localhost:1527/yespay;create=true</db.config.yespay.url>
-
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+
+        <!-- Suppress local changes check for buildNumber maven plugin -->
+        <maven.buildNumber.doCheck>false</maven.buildNumber.doCheck>
+
     </properties>
+    <scm>
+        <connection>scm:svn:http://yes-cart.googlecode.com/svn/</connection>
+        <developerConnection>scm:svn:https://yes-cart.googlecode.com/svn/</developerConnection>
+        <tag>HEAD</tag>
+        <url>http://yes-cart.googlecode.com/svn/</url>
+    </scm>
     <repositories>
 
         <repository>
@@ -233,6 +240,10 @@
                     <version>1.6</version>
                 </plugin>
                 <plugin>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>1.3</version>
+                </plugin>
+                <plugin>
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>2.2.1</version>
                 </plugin>
@@ -304,8 +315,145 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Build>${buildNumber}</Implementation-Build>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Build>${buildNumber}</Implementation-Build>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.3</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo>==================================================================================================================================================</echo>
+                                <echo>Preparing to build YC ${project.artifactId}-${project.version}-r${buildNumber} with the following configurations:</echo>
+                                <echo> </echo>
+                                <echo>Environment configuration (use -Denv=x to switch)  : ${env} </echo>
+                                <echo>Database provider (use -Pmysql or -Pderby)         : ${env.db} </echo>
+                                <echo>Tomcat SSL configuration (use -Pssl)               : ${env.ssl} </echo>
+                                <echo> </echo>
+                                <echo>Additional modules</echo>
+                                <echo>LiqPay payments (use -PpaymentLiqPay or -PpaymentAll)           : ${payment.liqpay.module} </echo>
+                                <echo>Cybersource payments (use -PpaymentCybersource or -PpaymentAll) : ${payment.cybersource.module} </echo>
+                                <echo>Authorize.Net payments (use -PpaymentAuthorize or -PpaymentAll) : ${payment.authorizenet.module} </echo>
+                                <echo>PayPal payments (use -PpaymentPaypal or -PpaymentAll)           : ${payment.paypal.module} </echo>
+                                <echo> </echo>
+                                <echo>Tips:</echo>
+                                <echo>* use mvn help:all-profiles or help:active-profiles to list profiles available</echo>
+                                <echo>* documentation for YC profiles is available at http://www.inspire-software.com/confluence/display/YC2/From+source#Fromsource-YesCartmavenprofiles</echo>
+                                <echo>==================================================================================================================================================</echo>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+
+            </plugin>
+        </plugins>
     </build>
     <profiles>
+
+        <!--
+            ENVIRONMENT SPECIFIC
+
+            Some basic profiles for quick switching in Intellij IDEA.
+
+            dev - single Tomcat deployment (default for standalone Tomcat with three webapps)
+            devIntellijIDEA - multi deployment to three Tomcats from Intellij
+        -->
+        <profile>
+            <!-- Basic development profile used for building YC -->
+            <id>dev</id>
+            <properties>
+                <env>dev</env>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Continuous integration NO CONFIG out of the box -->
+            <id>ci</id>
+            <properties>
+                <env>ci</env>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- System testing NO CONFIG out of the box -->
+            <id>systest</id>
+            <properties>
+                <env>systest</env>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- User acceptance testing NO CONFIG out of the box -->
+            <id>uat</id>
+            <properties>
+                <env>uat</env>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Production NO CONFIG out of the box -->
+            <id>prod</id>
+            <properties>
+                <env>prod</env>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Special config for development via Intellij IDEA -->
+            <id>devIntellijIDEA</id>
+            <properties>
+                <env>dev-idea</env>
+            </properties>
+        </profile>
 
         <!--
             DATABASE PROFILES
@@ -314,35 +462,16 @@
             <!-- Use this profile to setup MySQL connection -->
             <id>mysql</id>
             <properties>
-                <db.config.yes.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</db.config.yes.hibernate.dialect>
-                <db.config.yes.login>yes</db.config.yes.login>
-                <db.config.yes.password>y3$PaSs</db.config.yes.password>
-                <db.config.yes.driver>com.mysql.jdbc.Driver</db.config.yes.driver>
-                <db.config.yes.url>
-                    <![CDATA[jdbc:mysql://localhost/yes?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]></db.config.yes.url>
-                <db.config.yespay.hibernate.dialect>org.hibernate.dialect.MySQL5Dialect</db.config.yespay.hibernate.dialect>
-                <db.config.yespay.login>yespay</db.config.yespay.login>
-                <db.config.yespay.password>y3$PaSs</db.config.yespay.password>
-                <db.config.yespay.driver>com.mysql.jdbc.Driver</db.config.yespay.driver>
-                <db.config.yespay.url>
-                    <![CDATA[jdbc:mysql://localhost/yespay?AutoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8]]></db.config.yespay.url>
+                <env.db>mysql</env.db>
             </properties>
         </profile>
+
         <profile>
             <!-- Use this profile to setup Derby connection -->
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>derby</id>
             <properties>
-                <db.config.yes.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yes.hibernate.dialect>
-                <db.config.yes.login>app</db.config.yes.login>
-                <db.config.yes.password>app</db.config.yes.password>
-                <db.config.yes.driver>org.apache.derby.jdbc.ClientDriver</db.config.yes.driver>
-                <db.config.yes.url>jdbc:derby://localhost:1527/yes;create=true</db.config.yes.url>
-                <db.config.yespay.hibernate.dialect>org.hibernate.dialect.DerbyDialect</db.config.yespay.hibernate.dialect>
-                <db.config.yespay.login>app</db.config.yespay.login>
-                <db.config.yespay.password>app</db.config.yespay.password>
-                <db.config.yespay.driver>org.apache.derby.jdbc.ClientDriver</db.config.yespay.driver>
-                <db.config.yespay.url>jdbc:derby://localhost:1527/yespay;create=true</db.config.yespay.url>
+                <env.db>derby</env.db>
             </properties>
         </profile>
 
@@ -350,95 +479,12 @@
             HTTP/HTTPS PROFILES
         -->
         <profile>
-            <!-- Use this profile in conjunction with tomcatBehindApache to setup HTTPS outside of Tomcat -->
-            <id>secure</id>
+            <!-- Use this profile to setup HTTPS within Tomcat -->
+            <id>ssl</id>
             <properties>
-                <wicket.security.enabled>true</wicket.security.enabled>
-                <yum.transport.guarantee>CONFIDENTIAL</yum.transport.guarantee>
+                <env.ssl>on</env.ssl>
             </properties>
         </profile>
-
-        <profile>
-            <!-- Use this profile in conjunction with tomcatDefault to setup HTTPS managed Tomcat -->
-            <activation><activeByDefault>true</activeByDefault></activation>
-            <id>unsecure</id>
-            <properties>
-                <wicket.security.enabled>false</wicket.security.enabled>
-                <yum.transport.guarantee>NONE</yum.transport.guarantee>
-            </properties>
-        </profile>
-
-        <profile>
-            <!-- Use this profile in conjunction with unsecure to setup HTTPS managed Tomcat -->
-            <activation><activeByDefault>true</activeByDefault></activation>
-            <id>tomcatDefault</id>
-            <properties>
-                <wicket.secure.port>8443</wicket.secure.port>
-                <wicket.unsecure.port>8080</wicket.unsecure.port>
-            </properties>
-        </profile>
-
-        <profile>
-            <!-- Use this profile in conjunction with secure to setup HTTPS outside of Tomcat -->
-            <activation><activeByDefault>true</activeByDefault></activation>
-            <id>tomcatBehindApache</id>
-            <properties>
-                <wicket.secure.port>443</wicket.secure.port>
-                <wicket.unsecure.port>80</wicket.unsecure.port>
-            </properties>
-        </profile>
-
-        <!--
-            MAIL PROFILES
-        -->
-        <profile>
-            <!-- Default mail config, use this template to setup others if required -->
-            <activation><activeByDefault>true</activeByDefault></activation>
-            <id>mailProd</id>
-            <properties>
-                <yum.mail.host>localhost</yum.mail.host>
-                <yum.mail.port>25</yum.mail.port>
-                <yum.mail.username>username</yum.mail.username>
-                <yum.mail.password>password</yum.mail.password>
-                <yum.mail.smtp.starttls.enable>true</yum.mail.smtp.starttls.enable>
-            </properties>
-        </profile>
-
-        <!--
-            CLUSTER PROFILES
-
-            All nodes should be named YES[d], i.e. YES0, YES1, YES2 etc.
-
-            Backdoor and cache director URI are internal URI that YUM will call to trigger
-            commands on that node (i.e. self reference in cluster)
-
-            If lucene index is shared between nodes than only one must have index enabled,
-            the rest should have index disabled.
-        -->
-        <profile>
-            <!-- Default single node storefront, use this template to setup others if required -->
-            <activation><activeByDefault>true</activeByDefault></activation>
-            <id>clusterYesNode0local</id>
-            <properties>
-                <cluster.config.yes.node_id>YES0</cluster.config.yes.node_id>
-                <cluster.config.yes.backdoor_uri>http://localhost:8080/yes-shop/services/backdoor</cluster.config.yes.backdoor_uri>
-                <cluster.config.yes.cachedirector_uri>http://localhost:8080/yes-shop/services/cachedirector</cluster.config.yes.cachedirector_uri>
-                <cluster.config.yes.lucene_index_disabled>false</cluster.config.yes.lucene_index_disabled>
-            </properties>
-        </profile>
-
-        <profile>
-            <!-- Default single node storefront, use this template to setup others if required -->
-            <activation><activeByDefault>true</activeByDefault></activation>
-            <id>clusterYesApiNode0local</id>
-            <properties>
-                <cluster.config.yesapi.node_id>YES1</cluster.config.yesapi.node_id>
-                <cluster.config.yesapi.backdoor_uri>http://localhost:8080/yes-shop/services/backdoor</cluster.config.yesapi.backdoor_uri>
-                <cluster.config.yesapi.cachedirector_uri>http://localhost:8080/yes-shop/services/cachedirector</cluster.config.yesapi.cachedirector_uri>
-                <cluster.config.yesapi.lucene_index_disabled>true</cluster.config.yesapi.lucene_index_disabled>
-            </properties>
-        </profile>
-
 
         <!--
             BUILD PROCESS OPTIMISATION
@@ -463,6 +509,89 @@
                 <module>installer</module>
             </modules>
         </profile>
+
+
+        <!--
+            ADDITIONAL MODULES ACTIVATION
+        -->
+
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>paymentBase</id>
+            <properties>
+                <payment.liqpay.module>off</payment.liqpay.module>
+                <payment.cybersource.module>off</payment.cybersource.module>
+                <payment.authorizenet.module>off</payment.authorizenet.module>
+                <payment.paypal.module>off</payment.paypal.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentAll</id>
+            <properties>
+                <payment.liqpay.module>on</payment.liqpay.module>
+                <payment.cybersource.module>on</payment.cybersource.module>
+                <payment.authorizenet.module>on</payment.authorizenet.module>
+                <payment.paypal.module>on</payment.paypal.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentLiqPay</id>
+            <properties>
+                <payment.liqpay.module>on</payment.liqpay.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentLiqPayOff</id>
+            <properties>
+                <payment.liqpay.module>off</payment.liqpay.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentCybersource</id>
+            <properties>
+                <payment.cybersource.module>on</payment.cybersource.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentCybersourceOff</id>
+            <properties>
+                <payment.cybersource.module>off</payment.cybersource.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentAuthorize</id>
+            <properties>
+                <payment.authorizenet.module>on</payment.authorizenet.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentAuthorizeOff</id>
+            <properties>
+                <payment.authorizenet.module>off</payment.authorizenet.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentPaypal</id>
+            <properties>
+                <payment.paypal.module>on</payment.paypal.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentPaypalOff</id>
+            <properties>
+                <payment.paypal.module>off</payment.paypal.module>
+            </properties>
+        </profile>
+
 
     </profiles>
 

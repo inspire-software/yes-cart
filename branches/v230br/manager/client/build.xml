@@ -25,45 +25,23 @@
     <taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 
 
-    <target name="clean" description="Clean all">
-        <delete>
-            <fileset dir="src/main/flex" includes="**/*.properties"/>
-        </delete>
-
-        <delete dir="target"/>
-    </target>
-
-
     <target name="build_ru"  description="Build Russian swf">
         <delete>
             <fileset dir="src/main/flex" includes="**/*.properties"/>
         </delete>
 
 
-        <!-- copy russian localization files -->
+        <!-- copy russian localization files processed by maven -->
         <copy todir="src/main/flex" flatten="true">
-            <fileset dir="src/main/resources/ru_RU"/>
+            <fileset dir="target/classes/ru_RU"/>
         </copy>
-
-        <exec executable="subWCRev" osfamily="windows" failifexecutionfails="false">
-          <arg value="src/main/resources/ru_RU"/>
-          <arg value="src/main/resources/ru_RU/ShopManagerApplication.properties"/>
-          <arg value="src/main/flex/ShopManagerApplication.properties"/>
-        </exec>
-
-        <exec executable="svnwcrev" osfamily="unix" failifexecutionfails="false">
-          <arg value="src/main/resources/ru_RU"/>
-          <arg value="src/main/resources/ru_RU/ShopManagerApplication.properties"/>
-          <arg value="src/main/flex/ShopManagerApplication.properties"/>
-        </exec>
 
         <mxmlc file="${basedir}/src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
             <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
             <source-path path-element="${FLEX_HOME}/frameworks"/>
             <locale>ru_RU</locale>
         </mxmlc>
-        <copy file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/ru_RU/ShopManagerApplication.swf"/>
-        <delete file="${basedir}/src/main/flex/ShopManagerApplication.swf"/>
+        <move file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/ru_RU/ShopManagerApplication.swf"/>
     </target>
 
 
@@ -73,22 +51,11 @@
         </delete>
 
 
-        <!-- copy ukrainian localization files -->
+        <!-- copy ukrainian localization files processed by maven -->
         <copy todir="src/main/flex" flatten="true">
-            <fileset dir="src/main/resources/uk_UK"/>
+            <fileset dir="target/classes/uk_UK"/>
         </copy>
 
-        <exec executable="subWCRev" osfamily="windows" failifexecutionfails="false">
-          <arg value="src/main/resources/uk_UK"/>
-          <arg value="src/main/resources/uk_UK/ShopManagerApplication.properties"/>
-          <arg value="src/main/flex/ShopManagerApplication.properties"/>
-        </exec>
-
-        <exec executable="svnwcrev" osfamily="unix" failifexecutionfails="false">
-          <arg value="src/main/resources/uk_UK"/>
-          <arg value="src/main/resources/uk_UK/ShopManagerApplication.properties"/>
-          <arg value="src/main/flex/ShopManagerApplication.properties"/>
-        </exec>
 
         <mxmlc file="${basedir}/src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
             <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
@@ -97,8 +64,7 @@
             <!-- Change this to uk if you have support for ukrainian language in your SDK -->
             <locale>ru_RU</locale>
         </mxmlc>
-        <copy file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/uk_UK/ShopManagerApplication.swf"/>
-        <delete file="${basedir}/src/main/flex/ShopManagerApplication.swf"/>
+        <move file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/uk_UK/ShopManagerApplication.swf"/>
     </target>
 
     <target name="build_en"  description="Build English swf">
@@ -107,28 +73,18 @@
         </delete>
 
 
-        <!-- copy english localization files -->
+        <!-- copy english localization files processed by maven -->
         <copy todir="src/main/flex" flatten="true">
-            <fileset dir="src/main/resources/en_US"/>
+            <fileset dir="target/classes/en_US"/>
         </copy>
-        
-        <exec executable="subWCRev"  osfamily="windows" failifexecutionfails="false">
-          <arg value="src/main/resources/en_US"/>
-          <arg value="src/main/resources/en_US/ShopManagerApplication.properties"/>
-          <arg value="src/main/flex/ShopManagerApplication.properties"/>
-        </exec>
-        <exec executable="svnwcrev"  osfamily="unix" failifexecutionfails="false">
-          <arg value="src/main/resources/en_US"/>
-          <arg value="src/main/resources/en_US/ShopManagerApplication.properties"/>
-          <arg value="src/main/flex/ShopManagerApplication.properties"/>
-        </exec>
+
+
 
         <mxmlc file="${basedir}/src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
             <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
             <source-path path-element="${FLEX_HOME}/frameworks"/>
        </mxmlc>
-        <copy file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/en_US/ShopManagerApplication.swf"/>
-        <delete file="${basedir}/src/main/flex/ShopManagerApplication.swf"/>
+        <move file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/en_US/ShopManagerApplication.swf"/>
     </target>
 
 
@@ -191,23 +147,23 @@
     <target name="wrapper" depends="wrapper_en, wrapper_uk, wrapper_ru"/>
 
     <target name="info">
-	<tstamp prefix="end">
+	    <tstamp prefix="end">
       		<format property="time" pattern="yyyy-MM-dd hh:mm aa" />
-  	</tstamp>
-	<echo message="${end.time}" />
+  	    </tstamp>
+	    <echo message="${end.time}" />
     </target>
 
     <target name="checkenv" description="Check the environment variable">
-	<echo message="Flex home is: ${FLEX_HOME}"/>
-	<fail message="Please set FLEX_HOME system environment variable" unless="env.FLEX_HOME"/>
+	    <echo message="Flex home is: ${FLEX_HOME}"/>
+	    <fail message="Please set FLEX_HOME system environment variable" unless="env.FLEX_HOME"/>
     </target>
 
 
-    <target name="all" depends="clean, checkenv, build, wrapper, info" description="Build all">
+    <target name="all" depends="checkenv, build, wrapper, info" description="Build all">
         <delete>
             <fileset dir="src/main/flex" includes="**/*.properties"/>
         </delete>
-	<delete file="flex-compiler-config.xml"/>
+	    <delete file="flex-compiler-config.xml"/>
     </target>
 
 </project>

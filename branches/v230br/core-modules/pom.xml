@@ -27,8 +27,13 @@
     <packaging>pom</packaging>
     <name>Yes cart core payment modules</name>
     <modules>
+        <module>core-module-http</module>
         <module>core-module-payment-base</module>
-        <module>core-module-payment-capp</module>
-        <module>core-module-payment-gcwm</module>
+        <module>core-module-payment-paypal</module>
+        <module>core-module-payment-cybersource</module>
+        <module>core-module-payment-authorizenet</module>
+        <module>core-module-payment-liqpay</module>
+        <module>core-module-payment-robokassa</module>
+        <module>core-module-orderstate</module>
     </modules>
 </project>

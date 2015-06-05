@@ -747,8 +747,8 @@
 
     <import resource="manager-report.xml"/>
 
-    <import resource="classpath*:payment-persistence.xml"/>
-    <import resource="classpath*:payment-api.xml"/>
+    <import resource="classpath:payment-persistence.xml"/>
+    <import resource="classpath:payment-api.xml"/>
 
 
 

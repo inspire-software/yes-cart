@@ -26,10 +26,9 @@
 
     <context:component-scan base-package="org.yes.cart"/>
 
-    <import resource="classpath*:payment-persistence.xml"/>
-    <import resource="classpath*:payment-api.xml"/>
-    <import resource="classpath*:core-module-payment-base.xml"/>
-    <import resource="classpath*:core-module-payment-capp.xml"/>
-    <import resource="classpath*:core-module-payment-gswm.xml"/>
+    <import resource="classpath:payment-persistence.xml"/>
+    <import resource="classpath:payment-api.xml"/>
+    <import resource="classpath:core-payments.xml"/>
+    <import resource="classpath:core-module-payment-base.xml"/>
 
 </beans>

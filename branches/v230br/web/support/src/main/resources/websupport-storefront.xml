@@ -43,30 +43,6 @@
         <constructor-arg index="2" ref="shoppingCartCommandFactory"/>
     </bean>
 
-    <!--CPOINT do you need paypal express checkout ?-->
-    <bean id="payPalExpressCheckoutFilter" class="org.yes.cart.web.filter.payment.PayPalExpressCheckoutFilter">
-        <constructor-arg index="0" ref="paymentProcessorFactory"/>
-        <constructor-arg index="1" ref="customerOrderService"/>
-        <constructor-arg index="2" ref="paymentCallBackHandlerFacade"/>
-    </bean>
-
-
-
-    <!-- CPOINT do you need authorize net ? -->
-    <bean id="anetPaymentCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
-        <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
-    </bean>
-
-    <!-- CPOINT do you need liq pay ? -->
-    <bean id="liqPayCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
-        <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
-    </bean>
-
-    <!-- CPOINT do you need liq pay ? -->
-    <bean id="liqPayNoRefundCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
-        <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
-    </bean>
-
     <!-- ################################### filter delegates end ################################### -->
 
     <!-- ################################### cart persistence start ################################# -->

@@ -30,10 +30,6 @@ public interface AttributeNamesKeys {
     interface System {
 
         /**
-         * Comma separated list of paymenе modules urls.
-         */
-        String SYSTEM_PAYMENT_MODULES_URLS = "SYSTEM_PAYMENT_MODULES_URLS";
-        /**
          * Comma separated list of active payment gateways.
          */
         String SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL = "SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL";

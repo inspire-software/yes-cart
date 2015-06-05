@@ -18,30 +18,19 @@ package org.yes.cart.service.domain.impl;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.dao.ResultsIterator;
-import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.payment.impl.TestPaymentGatewayImpl;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.ProductSkuService;
-import org.yes.cart.service.order.OrderEventHandler;
-import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import static java.util.Collections.singletonMap;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -51,16 +40,11 @@ import static org.junit.Assert.assertEquals;
 public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
     private CustomerOrderService customerOrderService;
-    private ProductSkuService productSkuService;
-
-    private OrderEventHandler handler;
 
 
     @Before
     public void setUp() {
         customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
-        productSkuService = (ProductSkuService) ctx().getBean(ServiceSpringKeys.PRODUCT_SKU_SERVICE);
-        handler = (OrderEventHandler) ctx().getBean("pendingOrderEventHandler");
         super.setUp();
     }
 
@@ -130,68 +114,6 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         assertEquals(2, order.getDelivery().size());
     }
 
-    @Test
-    public void testOrderAmountCalculation() throws Exception {
-        String prefix = UUID.randomUUID().toString();
-        Customer customer = createCustomer(prefix);
-        assertFalse(customer.getAddress().isEmpty());
-        assertNotNull(customer.getDefaultAddress(Address.ADDR_TYPE_BILLING));
-        assertNotNull(customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING));
-
-        ShoppingCart shoppingCart = getEmptyCartByPrefix(getTestName() + prefix);
-
-        assertEquals(getTestName() + prefix + "jd@domain.com", shoppingCart.getCustomerEmail());
-        assertEquals(customer.getEmail(), shoppingCart.getCustomerEmail());
-
-        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
-
-        //one delivery 16.77 usd
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_SETCARRIERSLA, "3"));
-
-
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST1"));
-        // 3 x 180  usd
-
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
-        commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
-        //2 x 7.99  usd
-
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
-
-        assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());
-        order.setPgLabel("testPaymentGatewayLabel");
-        order = customerOrderService.update(order);
-
-        assertTrue(handler.handle(
-                new OrderEventImpl("", //evt.pending
-                        order,
-                        null,
-                        Collections.EMPTY_MAP)));
-
-        BigDecimal amount = order.getOrderTotal();
-
-        assertTrue("payment must be 16.77 + 3 * 190.01 + 2 * 70.99 = 728.78, but was  " + amount
-                , new BigDecimal("728.78").compareTo(amount) == 0);
-
-
-        assertEquals(1, order.getDelivery().size());
-    }
-
-    /**
-     * @return cart with one digital available product.
-     */
-    protected ShoppingCart getShoppingCart2ByPrefix(final String prefix) {
-        return getShoppingCart2(getEmptyCartByPrefix(prefix));
-    }
-
     /**
      * @return cart with one digital available product.
      */
@@ -217,128 +139,6 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
                 (Map) param);
 
         return shoppingCart;
-    }
-
-
-
-
-
-    @Test
-    public void testFindDeliveryAwaitingForInventory() throws Exception {
-        final Customer customer = createCustomer();
-        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 1);
-
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
-        assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());
-        order.setPgLabel("testPaymentGatewayLabel");
-        customerOrderService.update(order);
-
-        assertTrue(handler.handle(
-                new OrderEventImpl("", //evt.pending
-                        order,
-                        null,
-                        Collections.EMPTY_MAP)));
-        customerOrderService.update(order);
-        order = customerOrderService.findByGuid(shoppingCart.getGuid());
-        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
-        for (CustomerOrderDelivery delivery : order.getDelivery()) {
-            assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
-        }
-
-        final int[] count = new int[1];
-
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
-
-                List<Long> rezIds = customerOrderService.findAwaitingDeliveriesIds(
-                        Arrays.asList(productSkuService.findById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-
-                ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(
-                        Arrays.asList(productSkuService.findById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-
-                for (count[0] = 0; rez.hasNext(); rez.next()) {
-                    count[0]++;
-                    assertTrue(rezIds.contains(rez.next().getCustomerOrderDeliveryId()));
-                }
-                assertEquals(count[0], rezIds.size());
-
-                transactionStatus.setRollbackOnly();
-            }
-        });
-        assertEquals("Expect one order with preorder sku id = 15330", 1, count[0]);
-
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
-
-                List<Long> rezIds  = customerOrderService.findAwaitingDeliveriesIds(
-                        Arrays.asList(productSkuService.findById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-
-                ResultsIterator<CustomerOrderDelivery> rez  = customerOrderService.findAwaitingDeliveries(
-                        Arrays.asList(productSkuService.findById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-
-                for (count[0] = 0; rez.hasNext(); rez.next()) {
-                    count[0]++;
-                    assertTrue(rezIds.contains(rez.next().getCustomerOrderDeliveryId()));
-                }
-                assertEquals(count[0], rezIds.size());
-
-                transactionStatus.setRollbackOnly();
-            }
-        });
-        assertEquals("Expect one order with preorder sku id = 15340", 1, count[0]);
-
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
-
-                List<Long> rezIds = customerOrderService.findAwaitingDeliveriesIds(
-                        Arrays.asList(productSkuService.findById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-
-                ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(
-                        Arrays.asList(productSkuService.findById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-
-                for (count[0] = 0; rez.hasNext(); rez.next()) {
-                    count[0]++;
-                    assertTrue(rezIds.contains(rez.next().getCustomerOrderDeliveryId()));
-                }
-                assertEquals(count[0], rezIds.size());
-
-                transactionStatus.setRollbackOnly();
-            }
-        });
-        assertEquals("Not expected orders waiting for inventory sku id = 15129" ,0, count[0]);
-
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
-
-                List<Long> rezIds = customerOrderService.findAwaitingDeliveriesIds(null, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-
-                ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(null, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                        Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
-
-                for (count[0] = 0; rez.hasNext(); rez.next()) {
-                    count[0]++;
-                    assertTrue(rezIds.contains(rez.next().getCustomerOrderDeliveryId()));
-                }
-                assertEquals(count[0], rezIds.size());
-
-                transactionStatus.setRollbackOnly();
-            }
-        });
-        assertEquals("Total two orders wait for inventory", 2, count[0]);
-
-
-
     }
 
 }

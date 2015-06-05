@@ -33,8 +33,4 @@
 
     <import resource="core-aspects.xml"/>
 
-    <import resource="classpath*:test-payment-api.xml"/>
-    <import resource="classpath*:test-core-module-payment-base.xml"/>
-    <import resource="classpath*:test-core-module-payment-capp.xml"/>
-
 </beans>

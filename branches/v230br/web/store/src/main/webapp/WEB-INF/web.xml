@@ -39,7 +39,13 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>WEB-INF/applicationContext.xml</param-value>
+        <param-value>
+            WEB-INF/applicationContext.xml
+            ${payment.cybersource.context}
+            ${payment.liqpay.context}
+            ${payment.authorizenet.context}
+            ${payment.paypal.context}
+        </param-value>
     </context-param>
 
     <listener>
@@ -95,75 +101,15 @@
         </init-param>
     </filter>
 
-    <filter>
-        <filter-name>liqPayCallBackFilter</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-        <init-param>
-            <param-name>targetFilterLifecycle</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <init-param>
-            <param-name>paymentGatewayLabel</param-name>
-            <param-value>liqPayPaymentGatewayLabel</param-value>
-        </init-param>
-        <init-param>
-            <param-name>allowedIPs</param-name>
-            <param-value></param-value>
-        </init-param>
-    </filter>
+    <!-- Payment modules filters -->
 
-    <filter>
-        <filter-name>liqPayNoRefundCallBackFilter</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-        <init-param>
-            <param-name>targetFilterLifecycle</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <init-param>
-            <param-name>paymentGatewayLabel</param-name>
-            <param-value>liqPayNoRefundPaymentGatewayLabel</param-value>
-        </init-param>
-        <init-param>
-            <param-name>allowedIPs</param-name>
-            <param-value></param-value>
-        </init-param>
-    </filter>
+    ${payment.liqpay.filter}
 
-    <filter>
-        <filter-name>anetPaymentCallBackFilter</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-        <init-param>
-            <param-name>targetFilterLifecycle</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <init-param>
-            <param-name>paymentGatewayLabel</param-name>
-            <param-value>authorizeNetSimPaymentGatewayLabel</param-value>
-        </init-param>
-        <init-param>
-            <param-name>allowedIPs</param-name>
-            <param-value></param-value>
-        </init-param>
-    </filter>
+    ${payment.authorizenet.filter}
 
-    <filter>
-        <filter-name>payPalExpressCheckoutFilter</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-        <init-param>
-            <param-name>targetFilterLifecycle</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <init-param>
-            <param-name>paymentGatewayLabel</param-name>
-            <param-value>payPalExpressPaymentGatewayLabel</param-value>
-        </init-param>
-        <init-param>
-            <param-name>allowedIPs</param-name>
-            <param-value></param-value>
-        </init-param>
-    </filter>
+    ${payment.paypal.filter}
 
-
+    <!-- EoF Payment modules filters -->
 
     <filter>
         <filter-name>imageFilter</filter-name>
@@ -224,43 +170,15 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!--
-        Liq Pay call back filter.
-        For security reason change default mapping.
-    -->
-    <filter-mapping>
-        <filter-name>liqPayCallBackFilter</filter-name>
-        <url-pattern>/liqpaycallback</url-pattern>
-    </filter-mapping>
+    <!-- Payment modules filters -->
 
-    <!--
-        Liq Pay call back filter.
-        For security reason change default mapping.
-    -->
-    <filter-mapping>
-        <filter-name>liqPayNoRefundCallBackFilter</filter-name>
-        <url-pattern>/liqpaynrcallback</url-pattern>
-    </filter-mapping>
+    ${payment.liqpay.filter-mapping}
 
-    <!--
-        Authorize net call back filter.
-        For security reason change default mapping.
-    -->
-    <filter-mapping>
-        <filter-name>anetPaymentCallBackFilter</filter-name>
-        <url-pattern>/authnetsimcallback</url-pattern>
-    </filter-mapping>
+    ${payment.authorizenet.filter-mapping}
 
-    <!--
-        Paypal express checkout call back filter.
-        For security reason change default mapping.
-    -->
-    <filter-mapping>
-        <filter-name>payPalExpressCheckoutFilter</filter-name>
-        <url-pattern>/paymentpaypalexpress</url-pattern>
-    </filter-mapping>
+    ${payment.paypal.filter-mapping}
 
-
+    <!-- EoF Payment modules filters -->
 
     <!--
         product, sku and brand images filter

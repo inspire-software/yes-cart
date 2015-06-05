@@ -28,7 +28,6 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.remote.service.RemotePaymentModulesManagementService;
-import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
 

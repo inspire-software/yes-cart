@@ -179,6 +179,7 @@
     </dependencies>
 
     <profiles>
+
         <profile>
             <id>mysql</id>
             <dependencies>
@@ -189,6 +190,7 @@
                 </dependency>
             </dependencies>
         </profile>
+
         <profile>
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>derby</id>
@@ -205,6 +207,78 @@
                 </dependency>
             </dependencies>
         </profile>
+
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>paymentAll</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-liqpay</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-cybersource</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-authorizenet</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-paypal</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>paymentLiqPay</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-liqpay</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>paymentCybersource</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-cybersource</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>paymentAuthorize</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-authorizenet</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>paymentPaypal</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-paypal</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
         <profile>
             <id>templates</id>
             <build>
@@ -237,7 +311,19 @@
     </profiles>
 
     <build>
+
+        <filters>
+            <filter>${basedir}/../../env/maven/${env}/config-db-${env.db}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-mail.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-tomcat-ssl-${env.ssl}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-liqpay-${payment.liqpay.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-cybersource-${payment.cybersource.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-authorizenet-${payment.authorizenet.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-paypal-${payment.paypal.module}.properties</filter>
+        </filters>
+
         <finalName>yes-api</finalName>
+
         <pluginManagement>
             <plugins>
                 <plugin>

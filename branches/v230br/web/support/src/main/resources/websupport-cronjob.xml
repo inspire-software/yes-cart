@@ -112,7 +112,25 @@
 
     <!-- ################################ Scheduler  ####################################################### -->
 
-    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <bean id="quartzSysProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+    <property name="targetObject">
+        <!-- System.getProperties() -->
+        <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+            <property name="targetClass" value="java.lang.System" />
+            <property name="targetMethod" value="getProperties" />
+        </bean>
+    </property>
+        <property name="targetMethod" value="putAll" />
+        <property name="arguments">
+            <!-- Disable Quartz Update Checker -->
+            <props>
+                <prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>
+                <prop key="org.terracotta.quartz.skipUpdateCheck">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="webCronSchedule" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" depends-on="quartzSysProps">
         <property name="triggers">
             <list>
                 <ref bean="reindexDiscontinuedProductsTrigger" />

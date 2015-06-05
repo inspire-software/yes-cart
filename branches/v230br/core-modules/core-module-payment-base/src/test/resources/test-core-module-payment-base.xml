@@ -31,7 +31,7 @@
     <context:annotation-config/>
 
 
-    <import resource="classpath*:test-payment-api.xml"/>
+    <import resource="classpath:test-payment-api.xml"/>
 
 
     <bean id="testPaymentGateway" class="org.yes.cart.payment.impl.TestPaymentGatewayImpl" scope="prototype">
@@ -74,7 +74,7 @@
         <property name="description" value="test payment module with external form processing used for test purposes only in test content only"/>
     </bean>
 
-    <bean id="basePaymentModule" class="org.yes.cart.payment.impl.PaymentModuleBaseSetImpl">
+    <bean id="basePaymentModule" class="org.yes.cart.payment.impl.PaymentModuleImpl">
         <property name="descriptor">
             <bean class="org.yes.cart.payment.persistence.entity.impl.DescriptorImpl">
                 <property name="label" value="basePaymentModule"/>
@@ -90,6 +90,7 @@
                 <entry key="testExtFormPaymentGateway" value-ref="testExtFormPaymentGatewayDescriptor"/>
             </map>
         </property>
+        <property name="paymentModulesManager" ref="paymentModulesManager"/>
     </bean>
 
 </beans>

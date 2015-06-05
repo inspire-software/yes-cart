@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/cache
+	                       http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+    <cache:annotation-driven />
+
+    <import resource="classpath:core-services.xml"/>
+    <import resource="classpath:core-payments.xml"/>
+    <import resource="classpath:core-module-payment-base.xml"/>
+    <import resource="core-orderstate-cronjob.xml"/>
+
+    <!-- ################################# order flow state manager  ########################################## -->
+
+    <bean id="txProxyOrderEventHandlerTemplate" abstract="true"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="handle">PROPAGATION_REQUIRED,-Throwable</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--
+        Transition from none state to pending. Pending state is temporal and not persisted. Possible transition cancel or payment ok.
+        Perform online payment authorization
+    -->
+    <bean id="pendingOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.PendingOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+                <constructor-arg index="1" ref="warehouseService"/>
+                <constructor-arg index="2" ref="skuWarehouseService"/>
+                <constructor-arg index="3" ref="productService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--Wait for order confirmation in case of courier payment gateway or fund capture in case of offline bank payment gateway-->
+    <bean id="paymentOfflineOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.PaymentOfflineOrderEventHandlerImpl"/>
+
+    <!--Payment is in processing state so we wait until we get confirmation-->
+    <bean id="paymentProcessingOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.PaymentProcessingOrderEventHandlerImpl"/>
+
+    <!--Handler to check pg update for payment in processing state-->
+    <bean id="paymentProcessedOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.PaymentProcessedOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--Handler to check pg update for payment in processing state-->
+    <bean id="refundProcessedOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.RefundProcessedOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--Perform separate processing of order deliveries-->
+    <bean id="paymentOkOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.PaymentOkOrderEventHandlerImpl"/>
+
+
+    <!-- Process quantity allocation on warehouses -->
+    <bean id="processAllocationOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.ProcessAllocationOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="warehouseService"/>
+                <constructor-arg index="1" ref="skuWarehouseService"/>
+                <constructor-arg index="2" ref="productService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--Order , that wait confirmation approved-->
+    <bean id="paymentConfirmedOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.PaymentConfirmedOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--Cancel order-->
+    <bean id="cancelOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.CancelOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="warehouseService"/>
+                <constructor-arg index="1" ref="skuWarehouseService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Simple transition to allocation wait state, because we need to break continuous flow from payment to allocation -->
+    <bean id="processAllocationWaitOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ProcessAllocationWaitOrderEventHandlerImpl"/>
+
+    <!-- Simple transition to time wait state, because of mixed delivery of pre order -->
+    <bean id="processTimeWaitOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ProcessTimeWaitOrderEventHandlerImpl"/>
+
+    <!-- Simple transition to inventory wait state, because of back order -->
+    <bean id="processInventoryWaitOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ProcessInventoryWaitOrderEventHandlerImpl"/>
+
+    <!-- Transition from time wait to inventory wait state -->
+    <bean id="deliveryAllowedByTimeoutOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByTimeoutOrderEventHandlerImpl">
+        <constructor-arg index="0" ref="productService"/>
+    </bean>
+
+    <!-- Transition from inventory wait state to inventory allocation -->
+    <bean id="deliveryAllowedByInventoryOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.DeliveryAllowedByInventoryOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="warehouseService"/>
+                <constructor-arg index="1" ref="skuWarehouseService"/>
+                <constructor-arg index="2" ref="productService"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <!-- Simple transition delivery released to packing -->
+    <bean id="releaseToPackOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ReleaseToPackOrderEventHandlerImpl"/>
+
+    <!-- Pack completed . Wait for shipment -->
+    <bean id="packCompleteOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.PackCompleteOrderEventHandlerImpl"/>
+
+    <!-- Shipment in progress -->
+    <bean id="releaseToShipmentOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ReleaseToShipmentOrderEventHandlerImpl">
+        <constructor-arg index="0" ref="paymentProcessorFactory"/>
+    </bean>
+
+    <!-- Shipment completed -->
+    <bean id="shipmentCompleteOrderEventHandler"
+          class="org.yes.cart.service.order.impl.handler.ShipmentCompleteOrderEventHandlerImpl">
+        <constructor-arg index="0" ref="paymentProcessorFactory"/>
+    </bean>
+
+    <!-- Cancel with refund -->
+    <bean id="cancelOrderWithRefundOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.CancelOrderWithRefundOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+                <constructor-arg index="1" ref="warehouseService"/>
+                <constructor-arg index="2" ref="skuWarehouseService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Cancel new with refund -->
+    <bean id="cancelNewOrderWithRefundOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.CancelNewOrderWithRefundOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="paymentProcessorFactory"/>
+                <constructor-arg index="1" ref="warehouseService"/>
+                <constructor-arg index="2" ref="skuWarehouseService"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="txProxyOrderStateTransitionListenerTemplate" abstract="true"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="onEvent">PROPAGATION_REQUIRED,-Throwable</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <bean id="couponUsageTrackingListener" parent="txProxyOrderStateTransitionListenerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.listener.CouponUsageTrackingListenerImpl">
+                <constructor-arg index="0" ref="promotionCouponService"/>
+                <property name="usageOffset" value="1"/>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="orderStateManager" class="org.yes.cart.service.order.impl.OrderStateManagerImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="evt.pending"                   value-ref="pendingOrderEventHandler"/>
+                <entry key="evt.payment.processing"        value-ref="paymentProcessingOrderEventHandler"/>
+                <entry key="evt.payment.processed"         value-ref="paymentProcessedOrderEventHandler"/>
+                <entry key="evt.payment.offline"           value-ref="paymentOfflineOrderEventHandler"/>
+                <entry key="evt.payment.confirmed"         value-ref="paymentConfirmedOrderEventHandler"/>
+                <entry key="evt.payment.ok"                value-ref="paymentOkOrderEventHandler"/>
+                <entry key="evt.process.allocation"        value-ref="processAllocationOrderEventHandler"/>
+                <entry key="evt.order.cancel"              value-ref="cancelOrderEventHandler"/>
+                <entry key="evt.process.allocation.wait"   value-ref="processAllocationWaitOrderEventHandler"/>
+                <entry key="evt.process.date.wait"         value-ref="processTimeWaitOrderEventHandler"/>
+                <entry key="evt.process.inventory.wait"    value-ref="processInventoryWaitOrderEventHandler"/>
+                <entry key="evt.delivery.allowed.timeout"  value-ref="deliveryAllowedByTimeoutOrderEventHandler"/>
+                <entry key="evt.delivery.allowed.quantity" value-ref="deliveryAllowedByInventoryOrderEventHandler"/>
+                <entry key="evt.release.to.pack"           value-ref="releaseToPackOrderEventHandler"/>
+                <entry key="evt.packing.complete"          value-ref="packCompleteOrderEventHandler"/>
+                <entry key="evt.release.to.shipment"       value-ref="releaseToShipmentOrderEventHandler"/>
+                <entry key="evt.shipment.complete"         value-ref="shipmentCompleteOrderEventHandler"/>
+                <entry key="evt.order.cancel.refund"       value-ref="cancelOrderWithRefundOrderEventHandler"/>
+                <entry key="evt.new.order.cancel.refund"   value-ref="cancelNewOrderWithRefundOrderEventHandler"/>
+                <entry key="evt.refund.processed"          value-ref="refundProcessedOrderEventHandler"/>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <map>
+                <entry key="evt.pending"                   value-ref="couponUsageTrackingListener"/>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <map/>
+        </constructor-arg>
+    </bean>
+
+</beans>

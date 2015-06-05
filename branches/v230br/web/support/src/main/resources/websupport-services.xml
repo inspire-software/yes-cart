@@ -35,8 +35,10 @@
 
     <aop:aspectj-autoproxy/>
 
-    <import resource="classpath*:core-config.xml"/>
-    <import resource="classpath*:core-services.xml"/>
+    <import resource="classpath:core-config.xml"/>
+    <import resource="classpath:core-services.xml"/>
+    <import resource="classpath:core-payments.xml"/>
+    <import resource="classpath:core-orderstate.xml"/>
 
     <!-- ################################## Category , Product and Sku image services begin ######################## -->
 

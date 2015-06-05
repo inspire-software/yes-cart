@@ -219,7 +219,7 @@
 
     <!-- #################################  message consumers begin ######################################-->
 
-    <import resource="classpath*:manager-mailconfig.xml"/>
+    <import resource="classpath:manager-mailconfig.xml"/>
 
     <!-- #################################  message consumers end ######################################-->
 
@@ -280,18 +280,16 @@
         </property>
     </bean>
 
-    <import resource="classpath*:core-config.xml"/>
-    <import resource="classpath*:core-persistence.xml"/>
-    <import resource="classpath*:core-io.xml"/>
-    <import resource="classpath*:core-services.xml"/>
-    <import resource="classpath*:core-dto-services.xml"/>
-    <import resource="classpath*:core-services-commands.xml"/>
+    <import resource="classpath:core-config.xml"/>
+    <import resource="classpath:core-persistence.xml"/>
+    <import resource="classpath:core-io.xml"/>
+    <import resource="classpath:core-services.xml"/>
+    <import resource="classpath:core-dto-services.xml"/>
+    <import resource="classpath:core-services-commands.xml"/>
 
-    <import resource="classpath*:payment-persistence.xml"/>
-    <import resource="classpath*:payment-api.xml"/>
-    <import resource="classpath*:core-module-payment-base.xml"/>
-    <import resource="classpath*:core-module-payment-capp.xml"/>
-    <import resource="classpath*:core-module-payment-gswm.xml"/>
-
+    <import resource="classpath:payment-persistence.xml"/>
+    <import resource="classpath:payment-api.xml"/>
+    <import resource="classpath:core-payments.xml"/>
+    <import resource="classpath:core-module-payment-base.xml"/>
 
 </beans>

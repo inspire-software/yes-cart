@@ -23,9 +23,11 @@
         <artifactId>manager</artifactId>
         <version>2.3.0-SNAPSHOT</version>
     </parent>
+    <properties>
+        <packaging.type>swf</packaging.type>
+    </properties>
     <artifactId>yes-manager-client</artifactId>
     <name>YUM Yes cart update manager client</name>
-    <!--<packaging>swf</packaging>-->
     <packaging>${packaging.type}</packaging>
     <dependencies>
 
@@ -45,7 +47,29 @@
 
     </dependencies>
     <build>
+
         <sourceDirectory>src/main/flex</sourceDirectory>
+
+        <resources>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/ShopManagerApplication.properties</include>
+                </includes>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/ShopManagerApplication.properties</exclude>
+                </excludes>
+            </resource>
+
+        </resources>
+
     </build>
 
     <profiles>
@@ -95,10 +119,9 @@
                             <configuration>
                                 <debug>true</debug>
                                 <!--webappDirectory>${basedir}../server/src/main/webapp</webappDirectory-->
-                                <localesSourcePath>${basedir}/src/main/resources/{locale}</localesSourcePath>
+                                <localesSourcePath>${basedir}/target/classes/{locale}</localesSourcePath>
                                 <localesCompiled>
                                     <locale>en_US</locale>
-                                    <locale>ru_RU</locale>
                                 </localesCompiled>
                             </configuration>
                         </plugin>
