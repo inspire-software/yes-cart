@@ -158,7 +158,7 @@
     </bean>
 
 
-    <bean id="commandUtil" class="org.yes.cart.web.support.util.CommandUtils">
+    <bean id="commandConfig" class="org.yes.cart.web.shoppingcart.impl.CommandConfigImpl">
         <property name="cmdKeys">
             <list>
                 <value>addToCartCmd</value>

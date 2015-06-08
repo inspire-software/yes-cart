@@ -355,6 +355,7 @@
     <build>
 
         <filters>
+            <filter>${basedir}/../../env/maven/${env}/config-cluster.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-db-${env.db}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-mail.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-tomcat-ssl-${env.ssl}.properties</filter>

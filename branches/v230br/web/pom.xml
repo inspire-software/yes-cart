@@ -32,7 +32,7 @@
 
     <modules>
         <module>support</module>
-        <module>store</module>
+        <module>store-wicket</module>
         <module>api</module>
     </modules>
 

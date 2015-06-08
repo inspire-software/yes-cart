@@ -45,11 +45,12 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
+import org.yes.cart.web.shoppingcart.CommandConfig;
+import org.yes.cart.web.shoppingcart.impl.CommandConfigImpl;
 import org.yes.cart.web.support.service.AddressBookFacade;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 import org.yes.cart.web.support.service.ShippingServiceFacade;
-import org.yes.cart.web.support.util.CommandUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,6 +84,8 @@ public class CartController {
     @Autowired
     private PaymentProcessFacade paymentProcessFacade;
 
+    @Autowired
+    private CommandConfig commandConfig;
 
     @Autowired
     private CartMixin cartMixin;
@@ -310,7 +313,7 @@ public class CartController {
 
             final Map<String, Object> safe = new HashMap<String, Object>();
             for (final Map.Entry<String, Object> entry : params.entrySet()) {
-                if (!CommandUtils.isInternalCommandKey(entry.getKey())) {
+                if (!commandConfig.isInternalCommandKey(entry.getKey())) {
                     safe.put(entry.getKey(), entry.getValue());
                 } else {
                     ShopCodeContext.getLog(this).warn("Received internal command request {} ... skipping", entry.getKey());

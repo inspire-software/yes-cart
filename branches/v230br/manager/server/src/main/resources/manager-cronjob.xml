@@ -111,25 +111,30 @@
     <!-- ################################ Scheduler  ####################################################### -->
 
 
-    <bean id="quartzSysProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetObject">
-            <!-- System.getProperties() -->
-            <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-                <property name="targetClass" value="java.lang.System" />
-                <property name="targetMethod" value="getProperties" />
-            </bean>
-        </property>
-        <property name="targetMethod" value="putAll" />
+    <bean id="quartzSysProps1" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass"><value>java.lang.System</value></property>
+        <property name="targetMethod"><value>setProperty</value></property>
         <property name="arguments">
-            <!-- Disable Quartz Update Checker -->
-            <props>
-                <prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>
-                <prop key="org.terracotta.quartz.skipUpdateCheck">true</prop>
-            </props>
+            <list>
+                <value>org.terracotta.quartz.skipUpdateCheck</value>
+                <value>true</value>
+            </list>
         </property>
     </bean>
 
-    <bean id="managerCronSchedule" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" depends-on="quartzSysProps">
+    <bean id="quartzSysProps2" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetClass"><value>java.lang.System</value></property>
+        <property name="targetMethod"><value>setProperty</value></property>
+        <property name="arguments">
+            <list>
+                <value>org.terracotta.quartz.skipUpdateCheck</value>
+                <value>true</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="managerCronSchedule" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+          depends-on="quartzSysProps1,quartzSysProps2">
         <property name="triggers">
             <list>
                 <ref bean="preOrderJobCronTrigger" />
