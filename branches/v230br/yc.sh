@@ -48,9 +48,6 @@ show_help() {
     echo "  derbygob  - start derby server (in back mode) ";
     echo "  derbyend  - stop derby server                 ";
     echo "  derbycon  - connect to derby with ij          ";
-    echo "                                                ";
-    echo "  pkgdemo   - prepare demo package              ";
-    echo "  clndemo   - clean demo package                ";
     echo "================================================";
 }
 
@@ -208,119 +205,6 @@ db_derby_connect() {
 
 }
 
-prepare_demo_clean() {
-
-    echo "================================================";
-    echo " Cleaning DEMO package                          ";
-    echo "================================================";
-    echo "                                                ";
-
-    echo " Cleaning Tomcat Logs                           ";
-    rm -f $YC_HOME/demo/yes-server/logs/*.log
-    rm -f $YC_HOME/demo/yes-server/logs/catalina.out
-    echo " done...                                        ";
-
-    echo " Cleaning Tomcat Temp                           ";
-    rm -rf $YC_HOME/demo/yes-server/work/*
-    rm -rf $YC_HOME/demo/yes-server/temp/*
-    echo " done...                                        ";
-
-    echo " Cleaning Derby bundle $YC_HOME/demo/yes-db/*   ";
-    rm -rf $YC_HOME/demo/yes-db/*
-    echo " done...                                        ";
-
-    echo " Cleaning demo import data $YC_HOME/demo/import-data/*   ";
-    rm -rf $YC_HOME/demo/import-data/*
-    echo " done...                                        ";
-
-    YESCONF=$YC_HOME/demo/yes-server/conf/Catalina/localhost
-
-    YESCONFSHOP=$YESCONF/yes-shop.xml
-    YESCONFMANAGER=$YESCONF/yes-manager.xml
-
-    echo " Removing old context.xml:                      ";
-    echo " $YESCONFSHOP                                   ";
-    rm -f $YESCONFSHOP
-    echo " $YESCONFMANAGER                                ";
-    rm -f $YESCONFMANAGER
-
-    YESWEBAPPS=$YC_HOME/demo/yes-server/webapps
-
-    YESSHOP_OLD=$YESWEBAPPS/yes-shop
-    YESSHOPWAR_OLD=$YESWEBAPPS/yes-shop.war
-    YESMANAGER_OLD=$YESWEBAPPS/yes-manager
-    YESMANAGERWAR_OLD=$YESWEBAPPS/yes-manager.war
-
-    echo " Removing old wars:                             ";
-    echo " $YESSHOP_OLD                                   ";
-    rm -rf $YESSHOP_OLD
-    echo " $YESSHOPWAR_OLD                                ";
-    rm -f $YESSHOPWAR_OLD
-    echo " $YESMANAGER_OLD                                ";
-    rm -rf $YESMANAGER_OLD
-    echo " $YESMANAGERWAR_OLD                             ";
-    rm -f $YESMANAGERWAR_OLD
-    echo " done...                                        ";
-
-
-}
-
-prepare_demo_pkg() {
-
-    echo "================================================";
-    echo " Preparing DEMO package                         ";
-    echo "================================================";
-    echo "                                                ";
-    echo " Make sure that you have prepared derby dbs and ";
-    echo " created a full maven build with derby profile. ";
-    echo "                                                ";
-
-    echo " Copying Derby package                          ";
-    cp $YC_HOME/env/derby/lib/*.jar $YC_HOME/demo/yes-db
-    echo " done...                                        ";
-
-    YESDB_OLD=$YC_HOME/demo/yes-db/yes
-    YESDB_NEW=$YC_HOME/env/derby/lib/yes
-    echo " Copying new db: $YESDB_NEW                     ";
-    cp -r $YESDB_NEW $YESDB_OLD
-    echo " done...                                        ";
-
-    YESPAYDB_OLD=$YC_HOME/demo/yes-db/yespay
-    YESPAYDB_NEW=$YC_HOME/env/derby/lib/yespay
-    echo " Copying new db: $YESPAYDB_NEW                  ";
-    cp -r $YESPAYDB_NEW $YESPAYDB_OLD
-    echo " done...                                        ";
-
-    YESWEBAPPS=$YC_HOME/demo/yes-server/webapps
-
-
-    YESSHOPWAR_NEW=$YC_HOME/web/store/target/yes-shop.war
-    YESMANAGERWAR_NEW=$YC_HOME/manager/server/target/yes-manager.war
-    echo " Copying new wars:                              ";
-    echo " $YESSHOPWAR_NEW                                ";
-    echo " $YESMANAGERWAR_NEW                             ";
-    cp $YESSHOPWAR_NEW $YESWEBAPPS
-    cp $YESMANAGERWAR_NEW $YESWEBAPPS
-    echo " done...                                        ";
-
-    echo " Copy demo import data...                       ";
-    cp $YC_HOME/env/sampledata/demo-data/yc/import/import.zip $YC_HOME/demo/import-data/
-    cp $YC_HOME/env/sampledata/demo-data/icecat/import/import-EN,UK,RU.zip $YC_HOME/demo/import-data/
-    cp $YC_HOME/env/sampledata/demo-data/icecat/import/import-EN,UK,RU-img.zip $YC_HOME/demo/import-data/
-    echo " done...                                        ";
-
-    echo " Creating zip package...                        ";
-    cd $YC_HOME;
-    rm -f yescart.zip
-    zip -r --exclude=*.svn* yescart.zip ./demo
-    echo " done...                                        ";
-    echo "                                                ";
-    echo "================================================";
-    echo " Demo package created                           ";
-    echo "================================================";
-
-}
-
 start_luke() {
 
     echo "================================================";
@@ -390,19 +274,6 @@ then
     then
         cd $YC_HOME
         show_env;
-        cd $RUNDIR
-        exit 0;
-    elif [ $1 = "clndemo" ];
-    then
-        cd $YC_HOME
-        prepare_demo_clean;
-        cd $RUNDIR
-        exit 0;
-    elif [ $1 = "pkgdemo" ];
-    then
-        cd $YC_HOME
-        prepare_demo_clean;
-        prepare_demo_pkg;
         cd $RUNDIR
         exit 0;
     elif [ $1 = "luke" ];
