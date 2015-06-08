@@ -387,7 +387,7 @@
                                 <echo> </echo>
                                 <echo>Tips:</echo>
                                 <echo>* use mvn help:all-profiles or help:active-profiles to list profiles available</echo>
-                                <echo>* documentation for YC profiles is available at http://www.inspire-software.com/confluence/display/YC2/From+source#Fromsource-YesCartmavenprofiles</echo>
+                                <echo>* documentation for YC profiles is available at http://www.inspire-software.com/confluence/display/YC3EN/From+source#Fromsource-Mavenprofiles</echo>
                                 <echo>==================================================================================================================================================</echo>
                             </target>
                         </configuration>

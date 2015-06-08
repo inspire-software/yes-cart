@@ -16,7 +16,6 @@
 
 package org.yes.cart.payment.persistence.service.impl;
 
-import com.sun.corba.se.spi.ior.Identifiable;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.Hibernate;
@@ -187,8 +186,8 @@ public class AuditInterceptor extends EmptyInterceptor {
 
                     if (prohibited == null || !prohibited.contains(prop)) {
                         if (type.isEntityType()) {
-                            if (Hibernate.isInitialized(value) && value instanceof Identifiable) {
-                                line.append(((Identifiable) value).getId());
+                            if (Hibernate.isInitialized(value)) {
+                                line.append(value);
                             } else {
                                 line.append("lazy");
                             }
