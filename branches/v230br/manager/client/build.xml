@@ -89,9 +89,10 @@
 
     </target>
 
-    <target name="build" depends="build_en, build_uk, build_ru" description="Build all swf">
+    <!-- build_en must be last to leave its property files in src/main/flex -->
+    <target name="build" depends="build_uk, build_ru, build_en" description="Build all swf">
 
-        <echo message="Build swf for all languages"/>
+        <echo message="Build swf for all languages ... completed"/>
 
     </target>
 
@@ -129,9 +130,9 @@
 
     </target>
 
-    <target name="wrapper" depends="wrapper_en, wrapper_uk, wrapper_ru">
+    <target name="wrapper" depends="wrapper_uk, wrapper_ru, wrapper_en">
 
-        <echo message="Build HTML wrappers for all languages"/>
+        <echo message="Build HTML wrappers for all languages ... completed"/>
 
     </target>
 
@@ -169,19 +170,19 @@
 
     <!-- ##### Public build targets ################################################################# -->
 
-    <target name="en" depends="cleanup, checkenv, build_en, wrapper_en, info, cleanup" description="Build English (full)">
+    <target name="en" depends="cleanup, checkenv, build_en, wrapper_en, info" description="Build English (full)">
 
     </target>
 
-    <target name="uk" depends="cleanup, checkenv, build_uk, wrapper_uk, info, cleanup" description="Build Ukrainian (full)">
+    <target name="uk" depends="cleanup, checkenv, build_uk, wrapper_uk, info" description="Build Ukrainian (full)">
 
     </target>
 
-    <target name="ru" depends="cleanup, checkenv, build_ru, wrapper_ru, info, cleanup" description="Build Russian (full)">
+    <target name="ru" depends="cleanup, checkenv, build_ru, wrapper_ru, info" description="Build Russian (full)">
 
     </target>
 
-    <target name="all" depends="cleanup, checkenv, build, wrapper, info, cleanup" description="Build all">
+    <target name="all" depends="cleanup, checkenv, build, wrapper, info" description="Build all">
 
     </target>
 
