@@ -37,10 +37,11 @@
     </modules>
     <properties>
 
-        <!-- Environment switch -->
+        <!-- Environment switches -->
         <env>dev</env>
         <env.db>derby</env.db>
         <env.ssl>off</env.ssl>
+        <env.yum.lang>all</env.yum.lang>
         <payment.liqpay.module>off</payment.liqpay.module>
         <payment.cybersource.module>off</payment.cybersource.module>
         <payment.authorizenet.module>off</payment.authorizenet.module>
@@ -375,9 +376,10 @@
                                 <echo>==================================================================================================================================================</echo>
                                 <echo>Preparing to build YC ${project.artifactId}-${project.version}-r${buildNumber} with the following configurations:</echo>
                                 <echo> </echo>
-                                <echo>Environment configuration (use -Denv=x to switch)  : ${env} </echo>
-                                <echo>Database provider (use -Pmysql or -Pderby)         : ${env.db} </echo>
-                                <echo>Tomcat SSL configuration (use -Pssl)               : ${env.ssl} </echo>
+                                <echo>Environment configuration (use -Denv=x to switch)     : ${env} </echo>
+                                <echo>Database provider (use -Pmysql or -Pderby)            : ${env.db} </echo>
+                                <echo>Tomcat SSL configuration (use -Pssl)                  : ${env.ssl} </echo>
+                                <echo>YUM language packages (use -Denv.yum.lang=x to switch): ${env.yum.lang} </echo>
                                 <echo> </echo>
                                 <echo>Additional modules</echo>
                                 <echo>LiqPay payments (use -PpaymentLiqPay or -PpaymentAll)           : ${payment.liqpay.module} </echo>

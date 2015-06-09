@@ -18,86 +18,93 @@
 <project name="shop-manager" default="all" basedir=".">
 
     <property environment="env"/>
-
     <property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
-
 
     <taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar"/>
 
+    <!-- ##### Locale config ################################################################ -->
 
-    <target name="build_ru"  description="Build Russian swf">
+    <target name="build_ru_config">
+
+        <property name="env.BUILD_I18N"     value="ru_RU"/>
+        <property name="env.BUILD_FL"       value="ru_RU"/>
+        <property name="env.BUILD_TARGET"   value="ru_RU"/>
+        <property name="env.BUILD_APP_NAME" value="YUM (ru)"/>
+
+    </target>
+
+    <target name="build_uk_config">
+
+        <property name="env.BUILD_I18N"     value="uk_UK"/>
+        <!-- On windows using uk locale breaks the build, so we decided to leave core messages in ru_RU -->
+        <!-- Change this to uk if you have support for ukrainian language in your SDK -->
+        <property name="env.BUILD_FL"       value="ru_RU"/>
+        <property name="env.BUILD_TARGET"   value="uk_UK"/>
+        <property name="env.BUILD_APP_NAME" value="YUM (uk)"/>
+
+    </target>
+
+    <target name="build_en_config">
+
+        <property name="env.BUILD_I18N"     value="en_US"/>
+        <property name="env.BUILD_FL"       value="en_US"/>
+        <property name="env.BUILD_TARGET"   value="en_US"/>
+        <property name="env.BUILD_APP_NAME" value="YUM (en)"/>
+
+    </target>
+
+    <!-- ##### SWF tasks #################################################################### -->
+
+    <target name="build_swf"  description="Build Russian swf">
+
+        <echo message="Build ${env.BUILD_I18N} swf using Flex core ${env.BUILD_FL} with target directory ${env.BUILD_TARGET}"/>
+
         <delete>
             <fileset dir="src/main/flex" includes="**/*.properties"/>
         </delete>
 
-
-        <!-- copy russian localization files processed by maven -->
+        <!-- copy i18n files processed by maven -->
         <copy todir="src/main/flex" flatten="true">
-            <fileset dir="target/classes/ru_RU"/>
+            <fileset dir="target/classes/${env.BUILD_I18N}"/>
         </copy>
 
         <mxmlc file="${basedir}/src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
             <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
             <source-path path-element="${FLEX_HOME}/frameworks"/>
-            <locale>ru_RU</locale>
+            <locale>${env.BUILD_FL}</locale>
         </mxmlc>
-        <move file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/ru_RU/ShopManagerApplication.swf"/>
-    </target>
-
-
-    <target name="build_uk"  description="Build Ukrainian swf">
-        <delete>
-            <fileset dir="src/main/flex" includes="**/*.properties"/>
-        </delete>
-
-
-        <!-- copy ukrainian localization files processed by maven -->
-        <copy todir="src/main/flex" flatten="true">
-            <fileset dir="target/classes/uk_UK"/>
-        </copy>
-
-
-        <mxmlc file="${basedir}/src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
-            <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
-            <source-path path-element="${FLEX_HOME}/frameworks"/>
-            <!-- On windows using uk locale breaks the build, so we decided to leave core messages in ru_RU -->
-            <!-- Change this to uk if you have support for ukrainian language in your SDK -->
-            <locale>ru_RU</locale>
-        </mxmlc>
-        <move file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/uk_UK/ShopManagerApplication.swf"/>
-    </target>
-
-    <target name="build_en"  description="Build English swf">
-        <delete>
-            <fileset dir="src/main/flex" includes="**/*.properties"/>
-        </delete>
-
-
-        <!-- copy english localization files processed by maven -->
-        <copy todir="src/main/flex" flatten="true">
-            <fileset dir="target/classes/en_US"/>
-        </copy>
-
-
-
-        <mxmlc file="${basedir}/src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
-            <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
-            <source-path path-element="${FLEX_HOME}/frameworks"/>
-       </mxmlc>
-        <move file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/en_US/ShopManagerApplication.swf"/>
-    </target>
-
-
-   <target name="build" depends="build_en, build_uk, build_ru" description="Build all swf">
+        <move file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/${env.BUILD_TARGET}/ShopManagerApplication.swf"/>
 
     </target>
 
-    <target name="wrapper_ru">
+    <target name="build_ru" depends="build_ru_config, build_swf" description="Build Russian swf">
+
+    </target>
+
+    <target name="build_uk" depends="build_uk_config, build_swf" description="Build Ukrainian swf">
+
+    </target>
+
+    <target name="build_en" depends="build_en_config, build_swf" description="Build English swf">
+
+    </target>
+
+    <target name="build" depends="build_en, build_uk, build_ru" description="Build all swf">
+
+        <echo message="Build swf for all languages"/>
+
+    </target>
+
+    <!-- ##### HTML wrapper tasks #################################################################### -->
+
+    <target name="wrapper_swf">
+
+        <echo message="Build HTML wrapper ${env.BUILD_APP_NAME} with target directory ${env.BUILD_TARGET}"/>
+
         <html-wrapper
-
                 height="100%"
                 width="100%"
-                title="YUM (ru)"
+                title="${env.BUILD_APP_NAME}"
                 file="ShopManagerApplication.html"
                 bgcolor="#E5E4E2"
                 application="app"
@@ -106,64 +113,91 @@
                 version-minor="0"
                 version-revision="0"
                 history="true"
-                output="target/ru_RU"/>
+                output="target/${env.BUILD_TARGET}"/>
+
     </target>
 
-    <target name="wrapper_uk">
-        <html-wrapper
+    <target name="wrapper_ru" depends="build_ru_config, wrapper_swf">
 
-                height="100%"
-                width="100%"
-                title="YUM (uk)"
-                file="ShopManagerApplication.html"
-                bgcolor="#E5E4E2"
-                application="app"
-                swf="ShopManagerApplication"
-                version-major="10"
-                version-minor="0"
-                version-revision="0"
-                history="true"
-                output="target/uk_UK"/>
     </target>
 
-    <target name="wrapper_en">
-        <html-wrapper
+    <target name="wrapper_uk" depends="build_uk_config, wrapper_swf">
 
-                height="100%"
-                width="100%"
-                title="YUM (en)"
-                file="ShopManagerApplication.html"
-                bgcolor="#E5E4E2"
-                application="app"
-                swf="ShopManagerApplication"
-                version-major="10"
-                version-minor="0"
-                version-revision="0"
-                history="true"
-                output="target/en_US"/>
+    </target>
+
+    <target name="wrapper_en" depends="build_en_config, wrapper_swf">
+
+    </target>
+
+    <target name="wrapper" depends="wrapper_en, wrapper_uk, wrapper_ru">
+
+        <echo message="Build HTML wrappers for all languages"/>
+
     </target>
 
 
-    <target name="wrapper" depends="wrapper_en, wrapper_uk, wrapper_ru"/>
+    <!-- ##### Other tasks #################################################################### -->
 
     <target name="info">
-	    <tstamp prefix="end">
+
+        <tstamp prefix="end">
       		<format property="time" pattern="yyyy-MM-dd hh:mm aa" />
   	    </tstamp>
 	    <echo message="${end.time}" />
+
     </target>
 
     <target name="checkenv" description="Check the environment variable">
-	    <echo message="Flex home is: ${FLEX_HOME}"/>
+
+        <echo message="Check environment variables"/>
+
+        <echo message="Flex home is: ${FLEX_HOME}"/>
 	    <fail message="Please set FLEX_HOME system environment variable" unless="env.FLEX_HOME"/>
+
     </target>
 
+    <target name="cleanup" description="Clean up files copied during build">
 
-    <target name="all" depends="checkenv, build, wrapper, info" description="Build all">
+        <echo message="Removing property files and compiler config"/>
+
         <delete>
             <fileset dir="src/main/flex" includes="**/*.properties"/>
         </delete>
-	    <delete file="flex-compiler-config.xml"/>
+        <delete file="flex-compiler-config.xml"/>
+
+    </target>
+
+    <!-- ##### Public build targets ################################################################# -->
+
+    <target name="en" depends="cleanup, checkenv, build_en, wrapper_en, info, cleanup" description="Build English (full)">
+
+    </target>
+
+    <target name="uk" depends="cleanup, checkenv, build_uk, wrapper_uk, info, cleanup" description="Build Ukrainian (full)">
+
+    </target>
+
+    <target name="ru" depends="cleanup, checkenv, build_ru, wrapper_ru, info, cleanup" description="Build Russian (full)">
+
+    </target>
+
+    <target name="all" depends="cleanup, checkenv, build, wrapper, info, cleanup" description="Build all">
+
+    </target>
+
+    <target name="maven_bridge">
+
+        <taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${basedir}/../../env/setup/lib3rdparty/ant/ant-contrib-1.0b3.jar"/>
+
+        <echo message="Build targets from maven: ${BUILD_TARGETS}"/>
+
+        <for param="target" list="${BUILD_TARGETS}">
+            <sequential>
+                <echo message="Build target from maven: @{target}"/>
+                <antcall target="@{target}"/>
+            </sequential>
+        </for>
+
     </target>
 
 </project>

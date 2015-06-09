@@ -17,10 +17,18 @@
 
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>YUM Yes cart update manager</title>
     <link rel="stylesheet" href="style/style.css" type="text/css"/>
 </head>
 <body>
+<div class="container">
+    <div class="inside">
+        <div class="lang lang-uk"><a class="btn btn-info" href="uk_UK/ShopManagerApplication.html">Старт Українська</a></div>
+        <div class="lang lang-en"><a class="btn btn-info" href="en_US/ShopManagerApplication.html">Start English</a></div>
+        <div class="lang lang-ru"><a class="btn btn-info" href="ru_RU/ShopManagerApplication.html">Старт Русский</a></div>
+    </div>
+</div>
 <script type="text/javascript">
     <!--
 
@@ -32,9 +40,6 @@
     }
 
     var redirectToPage = "ShopManagerApplication.html";
-    document.write('<p align="center"><a href="uk_UK/'+redirectToPage+'">Старт Українська</a></p>');
-    document.write('<p align="center"><a href="en_US/'+redirectToPage+'">Start English</a></p>');
-    document.write('<p align="center"><a href="ru_RU/'+redirectToPage+'">Старт Русский</a></p>');
 
     if(browserLanguage == "ru" || browserLanguage == "be") {
         redirectToPage = "ru_RU/" + redirectToPage;

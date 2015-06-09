@@ -92,9 +92,10 @@
                                     <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                    <tasks>
-                                        <ant antfile="${basedir}/build.xml"  target="all"/>
-                                    </tasks>
+                                    <target>
+                                        <property name="BUILD_TARGETS" value="${env.yum.lang}"/>
+                                        <ant antfile="${basedir}/build.xml"  target="maven_bridge"/>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
