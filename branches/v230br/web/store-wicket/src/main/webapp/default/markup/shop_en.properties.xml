@@ -51,7 +51,7 @@
 
 
     <!-- All global properties should go here -->
-    <entry key="buildVersion">YC - 2.3.0</entry>
+    <entry key="buildVersion">YC v. ${project.version}-r${buildNumber}</entry>
     <entry key="home">Home</entry>
     <entry key="continueShopping">Continue shopping</entry>
     <entry key="brand">Brand</entry>
