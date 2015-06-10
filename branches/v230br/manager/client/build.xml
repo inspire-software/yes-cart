@@ -89,13 +89,6 @@
 
     </target>
 
-    <!-- build_en must be last to leave its property files in src/main/flex -->
-    <target name="build" depends="build_uk, build_ru, build_en" description="Build all swf">
-
-        <echo message="Build swf for all languages ... completed"/>
-
-    </target>
-
     <!-- ##### HTML wrapper tasks #################################################################### -->
 
     <target name="wrapper_swf">
@@ -127,12 +120,6 @@
     </target>
 
     <target name="wrapper_en" depends="build_en_config, wrapper_swf">
-
-    </target>
-
-    <target name="wrapper" depends="wrapper_uk, wrapper_ru, wrapper_en">
-
-        <echo message="Build HTML wrappers for all languages ... completed"/>
 
     </target>
 
@@ -182,7 +169,11 @@
 
     </target>
 
-    <target name="all" depends="cleanup, checkenv, build, wrapper, info" description="Build all">
+    <target name="all" description="Build all">
+
+        <antcall target="uk"/>
+        <antcall target="ru"/>
+        <antcall target="en"/>
 
     </target>
 

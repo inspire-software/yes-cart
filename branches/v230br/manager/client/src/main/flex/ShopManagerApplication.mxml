@@ -188,7 +188,7 @@
             var url:String;
             if (this.url && (this.url.indexOf("file:/") != -1 )) { //local connection
                 // When running standalone (e.g. from IDEA) make sure transport-guarantee is NONE in web.xml
-                url = "http://localhost:8080/yes-manager/spring/amf";
+                url = resourceManager.getString('ShopManagerApplication', 'devClientLocalurl');
                 myamf = new AMFChannel("myamf", url);
             } else if (this.url && (this.url.indexOf("http:/") != -1 )) {
                 url = "http://{server.name}:{server.port}/yes-manager/spring/amf";
@@ -207,12 +207,21 @@
             // Also make sure crossdomain.xml is accessible at the root
             // Alert.show("URL is '" + this.url + "', url is '" + url + "', channel is '" + myamf.url + "'");
 
+            var _enabled:String = resourceManager.getString('ShopManagerApplication', 'devClientAdminCheatlogon');
+
+            cheatLoginEnabled = ('enabled' == _enabled);
+
         }
 
 
         private function cheatLogin():void {
-            username.text = "admin@yes-cart.com";
-            password.text = "1234567";
+
+            if (!cheatLoginEnabled) {
+                return;
+            }
+
+            username.text = resourceManager.getString('ShopManagerApplication', 'devClientAdminUser');
+            password.text = resourceManager.getString('ShopManagerApplication', 'devClientAdminPass');
             login();
         }
 
@@ -637,6 +646,7 @@
 
     <mx:Boolean id="invalidLogin">false</mx:Boolean>
     <mx:Boolean id="loginButtonEnabled">false</mx:Boolean>
+    <mx:Boolean id="cheatLoginEnabled">false</mx:Boolean>
 
     <mx:AMFChannel xmlns:mx="http://www.adobe.com/2006/mxml"
                    id="myamf"/>
@@ -702,7 +712,9 @@
                                                click="login()"/>
                                     <mx:Button id="cheatLoginButton"
                                                label="Cheat"
-                                               enabled="true"
+                                               enabled="{cheatLoginEnabled}"
+                                               visible="{cheatLoginEnabled}"
+                                               includeInLayout="{cheatLoginEnabled}"
                                                click="cheatLogin()"/>
                                 </mx:ControlBar>
                             </mx:Panel>
