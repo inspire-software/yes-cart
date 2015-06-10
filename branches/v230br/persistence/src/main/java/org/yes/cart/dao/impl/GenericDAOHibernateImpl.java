@@ -67,9 +67,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GenericDAOHibernateImpl<T, PK extends Serializable>
         implements GenericDAO<T, PK> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GenericDAOHibernateImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(GenericDAOHibernateImpl.class);
 
-    private static final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
+    private final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
 
     private final Class<T> persistentClass;
     private final boolean persistentClassIndexble;

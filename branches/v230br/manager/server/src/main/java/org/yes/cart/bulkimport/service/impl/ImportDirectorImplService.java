@@ -63,7 +63,7 @@ import java.util.*;
  */
 public class ImportDirectorImplService extends SingletonJobRunner implements ImportDirectorService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ImportDirectorImplService.class);
+    private final Logger LOG = LoggerFactory.getLogger(ImportDirectorImplService.class);
 
     private final String pathToArchiveFolder;
 

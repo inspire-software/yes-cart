@@ -39,7 +39,7 @@ import java.util.Date;
  */
 public class RemoteUploadServiceImpl implements RemoteUploadService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RemoteUploadServiceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(RemoteUploadServiceImpl.class);
 
     private final ImportDirectorService importDirectorService;
 

@@ -42,7 +42,7 @@ import java.util.Set;
  */
 public class ImagesBulkImportServiceImpl extends AbstractImportService implements ImportService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ImagesBulkImportServiceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(ImagesBulkImportServiceImpl.class);
 
     private final ImageService imageService;
 

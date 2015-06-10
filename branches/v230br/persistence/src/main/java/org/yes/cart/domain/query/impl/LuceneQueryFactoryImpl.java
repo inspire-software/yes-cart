@@ -41,7 +41,7 @@ import java.util.*;
  */
 public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
-    private static final Logger LOG = LoggerFactory.getLogger("FTQ");
+    private final Logger LOG = LoggerFactory.getLogger("FTQ");
 
     private final AttributeService attributeService;
     private final ProductService productService;

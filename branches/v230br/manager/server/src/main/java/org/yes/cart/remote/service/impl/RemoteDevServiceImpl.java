@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public class RemoteDevServiceImpl implements RemoteDevService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RemoteDevServiceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(RemoteDevServiceImpl.class);
 
     private final RemoteBackdoorService remoteBackdoorService;
 

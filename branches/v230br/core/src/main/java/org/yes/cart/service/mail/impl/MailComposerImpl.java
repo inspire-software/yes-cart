@@ -53,7 +53,7 @@ import java.util.regex.Pattern;
  */
 public class MailComposerImpl implements MailComposer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MailComposerImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(MailComposerImpl.class);
 
     /**
      * Default regular expression.

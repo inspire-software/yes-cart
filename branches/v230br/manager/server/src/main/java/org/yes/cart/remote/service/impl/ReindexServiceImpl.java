@@ -45,7 +45,7 @@ import java.util.Map;
  */
 public class ReindexServiceImpl extends SingletonJobRunner implements ReindexService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReindexServiceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(ReindexServiceImpl.class);
 
     private final RemoteBackdoorService remoteBackdoorService;
 

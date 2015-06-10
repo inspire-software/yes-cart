@@ -40,7 +40,7 @@ public class RemoteProductCategoryServiceImpl
         extends AbstractRemoteService<ProductCategoryDTO>
         implements RemoteProductCategoryService {
 
-    private static final Logger LOG = LoggerFactory.getLogger( RemoteProductCategoryServiceImpl.class );
+    private final Logger LOG = LoggerFactory.getLogger( RemoteProductCategoryServiceImpl.class );
 
 
     private final ReindexService reindexService;

@@ -45,7 +45,7 @@ import java.util.Arrays;
 public class ManagerRegistrationAspect extends BaseNotificationAspect {
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(ManagerRegistrationAspect.class);
+    private final Logger LOG = LoggerFactory.getLogger(ManagerRegistrationAspect.class);
 
 
     private final HashHelper hashHelper;

@@ -40,7 +40,7 @@ import java.util.*;
  */
 public abstract class AbstractImageServiceImpl implements AttributableImageService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractImageServiceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(AbstractImageServiceImpl.class);
 
     private final Cache IMAGE_URI_CACHE;
     private final Cache OBJECT_IMAGES_CACHE;

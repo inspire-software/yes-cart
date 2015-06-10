@@ -44,7 +44,7 @@ import java.util.Map;
  */
 public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RemoteBackdoorServiceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(RemoteBackdoorServiceImpl.class);
 
     private final NodeService nodeService;
     private final BackdoorService localBackdoorService;

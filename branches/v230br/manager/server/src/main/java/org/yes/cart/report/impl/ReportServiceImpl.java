@@ -55,7 +55,7 @@ import java.util.Map;
  */
 public class ReportServiceImpl implements ReportService, ServletContextAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReportServiceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(ReportServiceImpl.class);
 
     private final List<ReportDescriptor> reportDescriptors;
 

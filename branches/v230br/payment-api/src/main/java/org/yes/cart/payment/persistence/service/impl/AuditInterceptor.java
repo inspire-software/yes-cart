@@ -39,7 +39,7 @@ import java.util.*;
  */
 public class AuditInterceptor extends EmptyInterceptor {
 
-    private static final Logger LOG = LoggerFactory.getLogger("AUDIT");
+    private final Logger LOG = LoggerFactory.getLogger("AUDIT");
 
     private Map<String, Set<String>> prohibitedFields = new HashMap<String, Set<String>>();
 
@@ -151,7 +151,7 @@ public class AuditInterceptor extends EmptyInterceptor {
 
     private void logOperation(final String operation, final Auditable entity, final String user,
                               final Serializable id, final Object[] state, final String[] propertyNames, final Type[] types) {
-        if (LOG.isInfoEnabled()) {
+        if (LOG.isTraceEnabled()) {
 
             final String className = entity.getClass().getSimpleName();
             final Set<String> prohibited = prohibitedFields.get(className);
@@ -208,7 +208,7 @@ public class AuditInterceptor extends EmptyInterceptor {
 
                 }
             }
-            LOG.info(line.toString());
+            LOG.trace(line.toString());
         }
     }
 

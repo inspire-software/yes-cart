@@ -43,7 +43,7 @@ import java.util.List;
  */
 public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ImagesBulkImportServiceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(ImagesBulkImportServiceImpl.class);
 
     private final BrandService brandService;
     private final AttributeService attributeService;
