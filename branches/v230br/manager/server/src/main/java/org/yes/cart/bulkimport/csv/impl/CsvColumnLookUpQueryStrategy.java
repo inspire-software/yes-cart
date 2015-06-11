@@ -16,7 +16,6 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportTuple;
 import org.yes.cart.bulkimport.model.ValueAdapter;
@@ -55,7 +54,7 @@ public class CsvColumnLookUpQueryStrategy extends AbstractByParameterByColumnNam
                                 final String queryTemplate) {
         final StringBuilder hsql = new StringBuilder();
         final List params = new ArrayList();
-        replaceColumnNamesInTemplate(queryTemplate, hsql, params, (CsvImportDescriptor) descriptor, masterObject, tuple, adapter);
+        replaceColumnNamesInTemplate(queryTemplate, hsql, params, descriptor, masterObject, tuple, adapter);
         return new HSQLQuery(hsql.toString(), params.toArray());
     }
 }

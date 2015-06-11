@@ -57,7 +57,7 @@ public class CsvDescriptorNativeInsertStrategy extends AbstractByParameterByColu
                                 final String queryTemplate) {
 
         final StringBuilder sql = new StringBuilder();
-        replaceColumnNamesInTemplate(queryTemplate, sql, null, (CsvImportDescriptor) descriptor, masterObject, tuple, adapter);
+        replaceColumnNamesInTemplate(queryTemplate, sql, null, descriptor, masterObject, tuple, adapter);
         return new NativeSQLQuery(sql.toString());
     }
 }

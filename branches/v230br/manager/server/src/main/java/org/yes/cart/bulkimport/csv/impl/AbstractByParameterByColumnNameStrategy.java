@@ -16,14 +16,15 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
-import org.yes.cart.bulkimport.model.ImportColumn;
+import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportTuple;
 import org.yes.cart.bulkimport.model.ValueAdapter;
 import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategy;
-import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategyValueProvider;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,16 +35,15 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractByParameterByColumnNameStrategy implements LookUpQueryParameterStrategy {
 
-    private static final String GUID        = "{GUID}";
-    private static final String MASTER      = "{masterObject}";
-    private static final String MASTER_ID   = "{masterObjectId}";
+    private Map<String, LookUpQueryParameterStrategyValueProvider> providers = Collections.emptyMap();
+    private LookUpQueryParameterStrategyValueProvider defaultProvider;
 
     private static final Pattern MATCH_COLUMNS_IN_SQL_TEMPLATE = Pattern.compile("(\\{[a-zA-Z\\d]*\\})");
 
     protected final void replaceColumnNamesInTemplate(final String queryTemplate,
                                                       final StringBuilder query,
                                                       final List<Object> params,
-                                                      final CsvImportDescriptor descriptor,
+                                                      final ImportDescriptor descriptor,
                                                       final Object masterObject,
                                                       final ImportTuple tuple,
                                                       final ValueAdapter adapter) {
@@ -57,28 +57,21 @@ public abstract class AbstractByParameterByColumnNameStrategy implements LookUpQ
         int lastIndex = 0;
         int paramCount = 1;
         while (matcher.find()) {
-            final String columnName = matcher.group(0);
+            final String placeholder = matcher.group(0);
             query.append(queryTemplate.substring(lastIndex, matcher.start(0)));
             lastIndex = matcher.end(0);
-            if (MASTER.equals(columnName)) {
-                addParameter(paramCount, masterObject, query, params);
-            } else if (MASTER_ID.equals(columnName)) {
-                if (masterObject != null) {
-                    addParameter(paramCount, ((Identifiable) masterObject).getId(), query, params);
-                } else {
-                    addParameter(paramCount, 0L, query, params);
-                }
-            } else if (GUID.equals(columnName)) {
-                addParameter(paramCount, java.util.UUID.randomUUID().toString(), query, params);
+
+            final LookUpQueryParameterStrategyValueProvider specific = providers.get(placeholder);
+            final Object value;
+            if (specific == null) {
+                value = defaultProvider.getPlaceholderValue(
+                        placeholder, descriptor, masterObject, tuple, adapter, queryTemplate);
             } else {
-                final String realColumnName = columnName.substring(1, columnName.length() - 1);
-                final ImportColumn column = descriptor.getImportColumn(realColumnName);
-                if (column != null) {
-                    addParameter(paramCount, tuple.getColumnValue(column, adapter), query, params);
-                } else {
-                    addParameter(paramCount, null, query, params);
-                }
+                value = specific.getPlaceholderValue(
+                        placeholder, descriptor, masterObject, tuple, adapter, queryTemplate);
             }
+            addParameter(paramCount, value, query, params);
+
             paramCount++;
         }
         query.append(queryTemplate.substring(lastIndex));
@@ -96,4 +89,21 @@ public abstract class AbstractByParameterByColumnNameStrategy implements LookUpQ
                                          final List<Object> params);
 
 
+    /**
+     * IoC.
+     *
+     * @param defaultProvider {@link LookUpQueryParameterStrategyValueProvider} to use.
+     */
+    public void setDefaultProvider(final LookUpQueryParameterStrategyValueProvider defaultProvider) {
+        this.defaultProvider = defaultProvider;
+    }
+
+    /**
+     * IoC.
+     *
+     * @param providers {@link LookUpQueryParameterStrategyValueProvider} to use.
+     */
+    public void setProviders(final Map<String, LookUpQueryParameterStrategyValueProvider> providers) {
+        this.providers = providers;
+    }
 }

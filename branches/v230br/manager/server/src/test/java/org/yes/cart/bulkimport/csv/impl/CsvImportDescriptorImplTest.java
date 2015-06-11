@@ -178,11 +178,12 @@ public class CsvImportDescriptorImplTest {
         csvImportDescriptor.setImportColumns((List) Arrays.asList(csvImportColumn));
 
 
-        csvImportColumn.setImportDescriptor(new CsvImportDescriptorImpl());
-        csvImportColumn.getImportDescriptor().setEntityType("SomeEntityIntefrace");
-        ((CsvImportDescriptorImpl) csvImportColumn.getImportDescriptor()).setImportColumns(
+        final CsvImportDescriptorImpl descriptor = new CsvImportDescriptorImpl();
+        descriptor.setEntityType("SomeEntityIntefrace");
+        descriptor.setImportColumns(
                 (List) Arrays.asList(new CsvImportColumnImpl(0, FieldTypeEnum.FIELD, "code", "re", "lookup query")));
 
+        csvImportColumn.setImportDescriptor(descriptor);
 
 
         xmlSerializationResult = new CsvImportDescriptorXStreamProvider().toXML(csvImportDescriptor);

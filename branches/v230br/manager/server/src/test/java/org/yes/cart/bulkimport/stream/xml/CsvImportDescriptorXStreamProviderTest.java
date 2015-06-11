@@ -40,10 +40,17 @@ public class CsvImportDescriptorXStreamProviderTest {
     public void testProvide() throws Exception {
         final XStreamProvider<CsvImportDescriptor> provider = new CsvImportDescriptorXStreamProvider();
 
-        final InputStream inputStream = new FileInputStream("src/test/resources/import/attributenames.xml");
+        final InputStream inputStream = new FileInputStream("src/test/resources/import/schematest001.xml");
         final ImportDescriptor desc = provider.fromXML(inputStream);
 
         assertNotNull(desc);
+
+        assertEquals(ImportDescriptor.ImportMode.DELETE, desc.getMode());
+        assertEquals(ImportDescriptor.ImportMode.DELETE.name(), desc.getModeName());
+
+        assertNotNull(desc.getContext());
+        assertEquals("SHOP10", desc.getContext().getShopCode());
+
         assertEquals("org.yes.cart.domain.entity.Attribute", desc.getEntityType());
         assertNull(desc.getImportDirectory());
         assertNotNull(desc.getImportFileDescriptor());
@@ -53,6 +60,10 @@ public class CsvImportDescriptorXStreamProviderTest {
         assertTrue(((CsvImportFile) desc.getImportFileDescriptor()).isIgnoreFirstLine());
         assertEquals(';', ((CsvImportFile) desc.getImportFileDescriptor()).getColumnDelimiter());
         assertEquals('"', ((CsvImportFile) desc.getImportFileDescriptor()).getTextQualifier());
+
+        assertEquals("select b from AttributeEntity b where b.code = {code}", desc.getSelectSql());
+        assertEquals("INSERT INTO TATTRIBUTE (VERSION, GUID, CODE) VALUES (0, {GUID}, {code})", desc.getInsertSql());
+        assertEquals("delete from AttributeEntity b where b.code = {code}", desc.getDeleteSql());
 
         assertNotNull(desc.getImportColumns());
         assertEquals(11, desc.getImportColumns().size());

@@ -15,7 +15,7 @@
   -->
 
 <range-list xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/product-type-range-list-1.0.0.xsd">
+            xsi:noNamespaceSchemaLocation="file:../../../../domain-api/src/main/resources/META-INF/schema/product-type-range-list.xsd">
     <ranges>
         <range>
             <from>0.10</from>

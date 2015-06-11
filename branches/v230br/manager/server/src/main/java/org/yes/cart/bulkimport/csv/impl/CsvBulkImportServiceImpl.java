@@ -71,23 +71,14 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
     private GenericConversionService extendedConversionService;
 
     private ValueAdapter valueDataAdapter;
-    private ValueAdapter valueStringAdapter = new CsvPlainStringValueAdapter();
-    private final LookUpQueryParameterStrategy descriptorInsert = new CsvDescriptorNativeInsertStrategy();
-    private final LookUpQueryParameterStrategy columnLookUp = new CsvColumnLookUpQueryStrategy();
+
+    private ValueAdapter valueStringAdapter;
+    private LookUpQueryParameterStrategy descriptorInsertLookUpQueryParameterStrategy;
+    private LookUpQueryParameterStrategy columnLookUpQueryParameterStrategy;
     private EntityCacheKeyStrategy cacheKey;
 
     public CsvBulkImportServiceImpl(final FederationFacade federationFacade) {
         super(federationFacade);
-    }
-
-    /**
-     * IoC. Set {@link GenericConversionService}.
-     *
-     * @param extendedConversionService {@link GenericConversionService}  to use.
-     */
-    public void setExtendedConversionService(final GenericConversionService extendedConversionService) {
-        this.extendedConversionService = extendedConversionService;
-        valueDataAdapter = new CsvImportValueAdapter(extendedConversionService);
     }
 
     /**
@@ -111,7 +102,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
         final String csvImportDescriptorName = context.getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_NAME);
 
         try {
-            entityCache.clear();
+            final Map<String, Object> entityCache = new HashMap<String, Object>();
 
             final File[] filesToImport = getFilesToImport(csvImportDescriptor, fileName);
             if (filesToImport == null) {
@@ -134,7 +125,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                     statusListener.notifyError(msgErr);
                     return BulkImportResult.ERROR;
                 }
-                doImport(statusListener, filesToImport, csvImportDescriptorName, csvImportDescriptor, importedFiles);
+                doImport(statusListener, filesToImport, csvImportDescriptorName, csvImportDescriptor, importedFiles, entityCache);
             }
         } catch (Exception e) {
 
@@ -153,8 +144,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
             log.error(msgError, e);
             statusListener.notifyError(msgError);
             return BulkImportResult.ERROR;
-        } finally {
-            entityCache.clear();
         }
         return BulkImportResult.OK;
     }
@@ -168,19 +157,21 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      * @param csvImportDescriptorName file name of the descriptor
      * @param csvImportDescriptor import descriptor.
      * @param importedFiles       imported files.
+     * @param entityCache         runtime cache
      */
     void doImport(final JobStatusListener statusListener,
                   final File[] filesToImport,
                   final String csvImportDescriptorName,
                   final CsvImportDescriptor csvImportDescriptor,
-                  final Set<String> importedFiles) throws Exception {
+                  final Set<String> importedFiles,
+                  final Map<String, Object> entityCache) throws Exception {
         // Need to add all file to the set for proper clean up after job in case exception occurs
         for (File fileToImport : filesToImport) {
             importedFiles.add(fileToImport.getAbsolutePath());
         }
 
         for (File fileToImport : filesToImport) {
-            doImport(statusListener, fileToImport, csvImportDescriptorName, csvImportDescriptor);
+            doImport(statusListener, fileToImport, csvImportDescriptorName, csvImportDescriptor, entityCache);
         }
     }
 
@@ -191,11 +182,13 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      * @param fileToImport        array of files to import
      * @param csvImportDescriptorName file name of the descriptor
      * @param csvImportDescriptor import descriptor.
+     * @param entityCache         runtime cache
      */
     void doImport(final JobStatusListener statusListener,
                   final File fileToImport,
                   final String csvImportDescriptorName,
-                  final CsvImportDescriptor csvImportDescriptor) throws Exception {
+                  final CsvImportDescriptor csvImportDescriptor,
+                  final Map<String, Object> entityCache) throws Exception {
 
         final Logger log = ShopCodeContext.getLog(this);
         final ImportDescriptor.ImportMode mode = csvImportDescriptor.getMode();
@@ -221,7 +214,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 if (mode == ImportDescriptor.ImportMode.DELETE) {
                     doImportDelete(statusListener, tuple, csvImportDescriptorName, csvImportDescriptor);
                 } else {
-                    doImportMerge(statusListener, tuple, csvImportDescriptorName, csvImportDescriptor, null);
+                    doImportMerge(statusListener, tuple, csvImportDescriptorName, csvImportDescriptor, null, entityCache);
                 }
             }
             final String msgInfoLines = MessageFormat.format("total data lines : {0}",
@@ -346,7 +339,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                        final ImportTuple tuple,
                        final String csvImportDescriptorName,
                        final CsvImportDescriptor descriptor,
-                       final Object masterObject) throws Exception {
+                       final Object masterObject,
+                       final Map<String, Object> entityCache) throws Exception {
         Object object = null;
         final Logger log = ShopCodeContext.getLog(this);
         try {
@@ -363,11 +357,11 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
             } else {
 
-                object = getEntity(tuple, null, masterObject, descriptor);
+                object = getEntity(tuple, null, masterObject, descriptor, entityCache);
 
 
                 fillEntityFields(tuple, object, descriptor.getImportColumns(FieldTypeEnum.FIELD));
-                fillEntityForeignKeys(tuple, object, descriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, descriptor);
+                fillEntityForeignKeys(tuple, object, descriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, descriptor, entityCache);
 
                 /*
                     Note: for correct data federation processing we need ALL-OR-NOTHING update for all import.
@@ -381,8 +375,10 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                     validateAccessBeforeUpdate(object, descriptor.getEntityTypeClass());
                 }
                 genericDAO.saveOrUpdate(object);
-                performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object, descriptor.getImportColumns(FieldTypeEnum.SLAVE_INLINE_FIELD));
-                performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object, descriptor.getImportColumns(FieldTypeEnum.SLAVE_TUPLE_FIELD));
+                performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
+                        descriptor.getImportColumns(FieldTypeEnum.SLAVE_INLINE_FIELD), entityCache);
+                performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
+                        descriptor.getImportColumns(FieldTypeEnum.SLAVE_TUPLE_FIELD), entityCache);
 
                 if (masterObject == null) {
                     // No need to validate sub imports
@@ -436,7 +432,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                                     final Object masterObject,
                                     final ImportTuple tuple,
                                     final String queryTemplate) {
-        final LookUpQuery query = descriptorInsert.getQuery(descriptor, masterObject, tuple, valueStringAdapter, queryTemplate);
+        final LookUpQuery query = descriptorInsertLookUpQueryParameterStrategy.getQuery(descriptor, masterObject, tuple, valueStringAdapter, queryTemplate);
         if (query.getQueryString().indexOf(";\n") == -1) {
             genericDAO.executeNativeUpdate(query.getQueryString());
         } else {
@@ -453,7 +449,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                                   final String csvImportDescriptorName,
                                   final ImportDescriptor importDescriptor,
                                   final Object object,
-                                  final Collection<ImportColumn> slaves) throws Exception {
+                                  final Collection<ImportColumn> slaves,
+                                  final Map<String, Object> entityCache) throws Exception {
         for (ImportColumn slaveTable : slaves) {
             final List<ImportTuple> subTuples = tuple.getSubTuples(importDescriptor, slaveTable, valueDataAdapter);
             CsvImportDescriptor innerCsvImportDescriptor = (CsvImportDescriptor) slaveTable.getImportDescriptor();
@@ -462,7 +459,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                         subTuple,
                         csvImportDescriptorName,
                         innerCsvImportDescriptor,
-                        object);
+                        object,
+                        entityCache);
             }
         }
     }
@@ -548,6 +546,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      * @param importColumns    particular type column collection
      * @param masterObject     master object , that set from main import in case of sub import
      * @param importDescriptor import descriptor
+     * @param entityCache      runtime cache
+     *
      * @throws Exception in case if something wrong with reflection (IntrospectionException,
      *                   InvocationTargetException,
      *                   IllegalAccessException)
@@ -556,7 +556,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                                        final Object object,
                                        final Collection<ImportColumn> importColumns,
                                        final Object masterObject,
-                                       final ImportDescriptor importDescriptor) throws Exception {
+                                       final ImportDescriptor importDescriptor,
+                                       final Map<String, Object> entityCache) throws Exception {
 
         ImportColumn currentColumn = null;
         final Class clz = object.getClass();
@@ -570,7 +571,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 if (importColumn.isUseMasterObject()) {
                     singleObjectValue = masterObject;
                 } else {
-                    singleObjectValue = getEntity(tuple, importColumn, masterObject, importDescriptor);
+                    singleObjectValue = getEntity(tuple, importColumn, masterObject, importDescriptor, entityCache);
                 }
                 propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);
                 final Object oldValue = propertyDescriptor.getReadMethod().invoke(object);
@@ -613,13 +614,16 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      * @param column           import column, the describe lookup query to locale the entity
      * @param masterObject     in case of subimport will be not null, but will be used with flag only
      * @param importDescriptor import descriptor
+     * @param entityCache      runtime cache
+     *
      * @return new or existing entity
      * @throws ClassNotFoundException in case if entity interface is wrong.
      */
     private Object getEntity(final ImportTuple tuple,
                              final ImportColumn column,
                              final Object masterObject,
-                             final ImportDescriptor importDescriptor) throws ClassNotFoundException {
+                             final ImportDescriptor importDescriptor,
+                             final Map<String, Object> entityCache) throws ClassNotFoundException {
 
         if (column == null) {
             // no caching for prime select
@@ -662,9 +666,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
     }
 
 
-    private Map<String, Object> entityCache = new HashMap<String, Object>();
-
-
     /**
      * Try to get existing entity for update. In case of sub import master object will be used in parameters if
      * {@link ImportColumn#isUseMasterObject()} set to true.
@@ -681,7 +682,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                                      final Object masterObject,
                                      final ImportTuple tuple) {
 
-        final LookUpQuery query = columnLookUp.getQuery(importDescriptor, masterObject, tuple, valueDataAdapter, queryTemplate);
+        final LookUpQuery query = columnLookUpQueryParameterStrategy.getQuery(importDescriptor, masterObject, tuple, valueDataAdapter, queryTemplate);
         final Object object = genericDAO.findSingleByQuery(query.getQueryString(), query.getParameters());
         return object;
 
@@ -703,7 +704,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                                              final Object masterObject,
                                              final ImportTuple tuple) {
 
-        final LookUpQuery query = columnLookUp.getQuery(importDescriptor, masterObject, tuple, valueDataAdapter, queryTemplate);
+        final LookUpQuery query = columnLookUpQueryParameterStrategy.getQuery(importDescriptor, masterObject, tuple, valueDataAdapter, queryTemplate);
         final List<Object> object = genericDAO.findByQuery(query.getQueryString(), query.getParameters());
         return object;
 
@@ -716,7 +717,60 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      */
     public void setGenericDAO(GenericDAO<Object, Long> genericDAO) {
         this.genericDAO = genericDAO;
-        this.cacheKey = new ColumnLookUpQueryCacheKeyStrategy(columnLookUp, genericDAO);
     }
 
+    /**
+     * IoC. Set {@link GenericConversionService}.
+     *
+     * @param extendedConversionService {@link GenericConversionService}  to use.
+     */
+    public void setExtendedConversionService(final GenericConversionService extendedConversionService) {
+        this.extendedConversionService = extendedConversionService;
+        valueDataAdapter = new CsvImportValueAdapter(extendedConversionService);
+    }
+
+    /**
+     * IoC.
+     *
+     * @param valueDataAdapter {@link ValueAdapter}  to use.
+     */
+    public void setValueDataAdapter(final ValueAdapter valueDataAdapter) {
+        this.valueDataAdapter = valueDataAdapter;
+    }
+
+    /**
+     * IoC.
+     *
+     * @param valueStringAdapter {@link ValueAdapter}  to use.
+     */
+    public void setValueStringAdapter(final ValueAdapter valueStringAdapter) {
+        this.valueStringAdapter = valueStringAdapter;
+    }
+
+    /**
+     * IoC.
+     *
+     * @param cacheKey {@link EntityCacheKeyStrategy}  to use.
+     */
+    public void setCacheKey(final EntityCacheKeyStrategy cacheKey) {
+        this.cacheKey = cacheKey;
+    }
+
+    /**
+     * IoC.
+     *
+     * @param descriptorInsertLookUpQueryParameterStrategy {@link LookUpQueryParameterStrategy}  to use.
+     */
+    public void setDescriptorInsertLookUpQueryParameterStrategy(final LookUpQueryParameterStrategy descriptorInsertLookUpQueryParameterStrategy) {
+        this.descriptorInsertLookUpQueryParameterStrategy = descriptorInsertLookUpQueryParameterStrategy;
+    }
+
+    /**
+     * IoC.
+     *
+     * @param columnLookUpQueryParameterStrategy {@link LookUpQueryParameterStrategy}  to use.
+     */
+    public void setColumnLookUpQueryParameterStrategy(final LookUpQueryParameterStrategy columnLookUpQueryParameterStrategy) {
+        this.columnLookUpQueryParameterStrategy = columnLookUpQueryParameterStrategy;
+    }
 }

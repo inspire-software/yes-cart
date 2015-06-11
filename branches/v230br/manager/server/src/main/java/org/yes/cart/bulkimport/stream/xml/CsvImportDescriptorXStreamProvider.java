@@ -21,8 +21,10 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
 import org.yes.cart.bulkimport.csv.impl.CsvImportColumnImpl;
+import org.yes.cart.bulkimport.csv.impl.CsvImportContextImpl;
 import org.yes.cart.bulkimport.csv.impl.CsvImportDescriptorImpl;
 import org.yes.cart.bulkimport.csv.impl.CsvImportFileImpl;
+import org.yes.cart.bulkimport.model.ImportContext;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.stream.xml.XStreamProvider;
 
@@ -62,8 +64,13 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
             xStream.addDefaultImplementation(CsvImportDescriptorImpl.class, ImportDescriptor.class);
             xStream.aliasField("mode", CsvImportDescriptorImpl.class, "mode");
             xStream.aliasField("entity-type", CsvImportDescriptorImpl.class, "entityType");
+
+            xStream.aliasField("context", CsvImportDescriptorImpl.class, "context");
+            xStream.addDefaultImplementation(CsvImportContextImpl.class, ImportContext.class);
+            xStream.aliasField("shop-code", CsvImportContextImpl.class, "shopCode");
+
             /*
-                "import-directory" is resolved by the ImportDirectorService and set programmatically, sice we
+                "import-directory" is resolved by the ImportDirectorService and set programmatically, since we
                 have dependency on uploading mechanism and also some import directory internals.
                 Therefore we leave this property to internals (not config)
              */

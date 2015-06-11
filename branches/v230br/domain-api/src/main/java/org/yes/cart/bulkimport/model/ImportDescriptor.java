@@ -35,11 +35,11 @@ public interface ImportDescriptor {
     ImportMode getMode();
 
     /**
-     * Set import mode.
+     * Get import context if one provided or null.
      *
-     * @param mode mode
+     * @return import context
      */
-    void setMode(ImportMode mode);
+    ImportContext getContext();
 
     /**
      * Get import mode for given descriptor.
@@ -47,13 +47,6 @@ public interface ImportDescriptor {
      * @return import mode
      */
     String getModeName();
-
-    /**
-     * Set import mode.
-     *
-     * @param mode mode
-     */
-    void setModeName(String mode);
 
     /**
      * Get full qualified entity interface. For example - org.yes.cart.domain.entity.Brand
@@ -69,14 +62,6 @@ public interface ImportDescriptor {
      */
     Class getEntityTypeClass();
 
-
-    /**
-     * Set full qualified entity interface.
-     *
-     * @param entityInterface entity interface
-     */
-    void setEntityType(String entityInterface);
-
     /**
      * Get the import file description.
      *
@@ -90,6 +75,21 @@ public interface ImportDescriptor {
      * @return collection of import columns
      */
     Collection<ImportColumn> getImportColumns();
+
+
+    /**
+     * @param columnName column name
+     * @return get column by name
+     */
+    ImportColumn getImportColumn(String columnName);
+
+    /**
+     * Get the collection of import columns filtered by given field type.
+     *
+     * @param fieldType {@link FieldTypeEnum} discriminator.
+     * @return collection of import columns
+     */
+    Collection<ImportColumn> getImportColumns(FieldTypeEnum fieldType);
 
 
     /**
@@ -114,11 +114,6 @@ public interface ImportDescriptor {
     String getSelectSql();
 
     /**
-     * @param selectSql select sql
-     */
-    void setSelectSql(String selectSql);
-
-    /**
      * Get insert sql, which used instead of hibernate object save to
      * speed up bulk import.
      *
@@ -127,22 +122,12 @@ public interface ImportDescriptor {
     String getInsertSql();
 
     /**
-     * @param insertSql insert sql
-     */
-    void setInsertSql(String insertSql);
-
-    /**
      * Get delete sql, which used instead of hibernate object delete to
      * speed up bulk import.
      *
      * @return        delete sql
      */
     String getDeleteSql();
-
-    /**
-     * @param deleteSql delete sql
-     */
-    void setDeleteSql(String deleteSql);
 
 
 }

@@ -15,7 +15,7 @@
   -->
 
 <import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
+                   xsi:noNamespaceSchemaLocation="file:../../../../../../domain-api/src/main/resources/META-INF/schema/import-descriptor.xsd">
 
     <entity-type>org.yes.cart.domain.entity.Attribute</entity-type>
 

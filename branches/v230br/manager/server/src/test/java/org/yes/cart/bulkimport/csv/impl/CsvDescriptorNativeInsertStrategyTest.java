@@ -26,7 +26,10 @@ import org.yes.cart.bulkimport.model.ImportTuple;
 import org.yes.cart.bulkimport.model.ValueAdapter;
 import org.yes.cart.bulkimport.service.support.LookUpQuery;
 import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategy;
+import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategyValueProvider;
 import org.yes.cart.domain.entity.Identifiable;
+
+import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -43,7 +46,13 @@ public class CsvDescriptorNativeInsertStrategyTest {
     @Test
     public void testGetQuery() throws Exception {
 
-        final LookUpQueryParameterStrategy strategy = new CsvDescriptorNativeInsertStrategy();
+        final CsvDescriptorNativeInsertStrategy strategy = new CsvDescriptorNativeInsertStrategy();
+
+        strategy.setProviders(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+            put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
+        }});
+        strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
+
 
         final Identifiable master = mockery.mock(Identifiable.class, "master");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");

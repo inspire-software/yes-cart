@@ -17,9 +17,9 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 
     <!-- ########################################## bulk import ########################## -->
 
@@ -27,12 +27,67 @@
 
     <bean id="importDescriptorXStreamProvider" class="org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider"/>
 
+    <util:map id="lookUpQueryParameterStrategyValueProviders"
+              key-type="java.lang.String"
+              value-type="org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategyValueProvider">
+        <entry key="{GUID}">
+            <bean class="org.yes.cart.bulkimport.csv.impl.GUIDLookUpQueryParameterStrategyValueProviderImpl"/>
+        </entry>
+        <entry key="{masterObject}">
+            <bean class="org.yes.cart.bulkimport.csv.impl.MasterObjectLookUpQueryParameterStrategyValueProviderImpl"/>
+        </entry>
+        <entry key="{masterObjectId}">
+            <bean class="org.yes.cart.bulkimport.csv.impl.MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl"/>
+        </entry>
+        <entry key="{contextShop}">
+            <bean class="org.yes.cart.bulkimport.csv.impl.ContextShopLookUpQueryParameterStrategyValueProviderImpl">
+                <constructor-arg index="0" ref="shopService"/>
+            </bean>
+        </entry>
+        <entry key="{contextShopId}">
+            <bean class="org.yes.cart.bulkimport.csv.impl.ContextShopIdLookUpQueryParameterStrategyValueProviderImpl">
+                <constructor-arg index="0" ref="shopService"/>
+            </bean>
+        </entry>
+        <entry key="{contextShopCode}">
+            <bean class="org.yes.cart.bulkimport.csv.impl.ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl"/>
+        </entry>
+    </util:map>
+
+    <bean id="csvColumnLookUpQueryStrategy" class="org.yes.cart.bulkimport.csv.impl.CsvColumnLookUpQueryStrategy">
+        <property name="providers" ref="lookUpQueryParameterStrategyValueProviders"/>
+        <property name="defaultProvider">
+            <bean class="org.yes.cart.bulkimport.csv.impl.ColumnValueLookUpQueryParameterStrategyValueProviderImpl"/>
+        </property>
+    </bean>
+
+    <bean id="csvDescriptorNativeInsertStrategy" class="org.yes.cart.bulkimport.csv.impl.CsvDescriptorNativeInsertStrategy">
+        <property name="providers" ref="lookUpQueryParameterStrategyValueProviders"/>
+        <property name="defaultProvider">
+            <bean class="org.yes.cart.bulkimport.csv.impl.ColumnValueLookUpQueryParameterStrategyValueProviderImpl"/>
+        </property>
+    </bean>
+
+    <bean id="csvColumnLookUpQueryCacheKeyStrategy" class="org.yes.cart.bulkimport.csv.impl.ColumnLookUpQueryCacheKeyStrategy">
+        <constructor-arg index="0" ref="csvColumnLookUpQueryStrategy"/>
+        <constructor-arg index="1" ref="genericDao"/>
+    </bean>
+    <bean id="csvImportValueAdapter" class="org.yes.cart.bulkimport.csv.impl.CsvImportValueAdapter">
+        <constructor-arg index="0" ref="extendedConversionService"/>
+    </bean>
+    <bean id="csvPlainStringValueAdapter"  class="org.yes.cart.bulkimport.csv.impl.CsvPlainStringValueAdapter"/>
+
     <bean id="csvBulkImportService" parent="txProxyTemplate">
         <property name="target">
             <bean  class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl" scope="prototype">
                 <constructor-arg index="0" ref="importFederationFacade"/>
                 <property name="genericDAO" ref="genericDao"/>
                 <property name="extendedConversionService" ref="extendedConversionService"/>
+                <property name="columnLookUpQueryParameterStrategy" ref="csvColumnLookUpQueryStrategy"/>
+                <property name="descriptorInsertLookUpQueryParameterStrategy" ref="csvDescriptorNativeInsertStrategy"/>
+                <property name="cacheKey" ref="csvColumnLookUpQueryCacheKeyStrategy"/>
+                <property name="valueDataAdapter" ref="csvImportValueAdapter"/>
+                <property name="valueStringAdapter" ref="csvPlainStringValueAdapter"/>
             </bean>
         </property>
     </bean>

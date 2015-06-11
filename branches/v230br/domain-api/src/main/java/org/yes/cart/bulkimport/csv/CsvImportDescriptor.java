@@ -39,25 +39,4 @@ public interface CsvImportDescriptor extends ImportDescriptor {
      */
     CsvImportFile getImportFileDescriptor();
 
-    /**
-     * Get the collection of all import columns.
-     *
-     * @return collection of import columns
-     */
-    Collection<ImportColumn> getImportColumns();
-
-    /**
-     * @param columnName column name
-     * @return get column by name
-     */
-    ImportColumn getImportColumn(String columnName);
-
-    /**
-     * Get the collection of import columns filtered by given field type.
-     *
-     * @param fieldType {@link FieldTypeEnum} discriminator.
-     * @return collection of import columns
-     */
-    Collection<ImportColumn> getImportColumns(FieldTypeEnum fieldType);
-
 }

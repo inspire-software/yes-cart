@@ -411,7 +411,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <echo>==================================================================================================================================================</echo>
+                                <echo>=========================================================================================================================================================</echo>
                                 <echo>Preparing to build YC ${project.artifactId}-${project.version}-r${buildNumber} with the following configurations:</echo>
                                 <echo> </echo>
                                 <echo>Environment configuration (use -Denv=x to switch)     : ${env} </echo>
@@ -427,8 +427,8 @@
                                 <echo> </echo>
                                 <echo>Tips:</echo>
                                 <echo>* use mvn help:all-profiles or help:active-profiles to list profiles available</echo>
-                                <echo>* documentation for YC profiles is available at http://www.inspire-software.com/confluence/display/YC3EN/From+source#Fromsource-Mavenprofiles</echo>
-                                <echo>==================================================================================================================================================</echo>
+                                <echo>* documentation for YC profiles is available at http://www.inspire-software.com/confluence/display/YC3EN/From+source#Fromsource-Mavenprofilesandvariables</echo>
+                                <echo>=========================================================================================================================================================</echo>
                             </target>
                         </configuration>
                     </execution>

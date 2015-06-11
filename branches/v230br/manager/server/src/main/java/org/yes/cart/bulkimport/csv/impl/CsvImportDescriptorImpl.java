@@ -22,7 +22,7 @@ import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
 import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportColumn;
-import org.yes.cart.bulkimport.model.ImportDescriptor;
+import org.yes.cart.bulkimport.model.ImportContext;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.io.Serializable;
@@ -46,6 +46,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     private String importDirectory;
 
     private ImportMode mode;
+    private ImportContext context;
     private String entityType;
     private Class entityTypeClass;
 
@@ -62,6 +63,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         importFileDescriptor = new CsvImportFileImpl();
         importColumns = new ArrayList<CsvImportColumn>();
         mode = ImportMode.MERGE;
+        context = new CsvImportContextImpl();
     }
 
     /** {@inheritDoc} */
@@ -72,7 +74,9 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         return mode;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * @param mode import mode
+     */
     public void setMode(final ImportMode mode) {
         if (mode == null) {
             throw new IllegalArgumentException("Invalid import mode");
@@ -85,13 +89,30 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         return mode.name();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * @param mode import mode name
+     */
     public void setModeName(final String mode) {
         try {
             this.mode = ImportMode.valueOf(mode);
         } catch (IllegalArgumentException iae) {
             throw new IllegalArgumentException("Invalid import mode", iae);
         }
+    }
+
+    /** {@inheritDoc} */
+    public ImportContext getContext() {
+        if (context == null) {
+            context = new CsvImportContextImpl();
+        }
+        return context;
+    }
+
+    /**
+     * @param context import context
+     */
+    public void setContext(final ImportContext context) {
+        this.context = context;
     }
 
     /** {@inheritDoc} */
@@ -117,7 +138,9 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         return entityTypeClass;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * @param entityInterface entity interface for factory
+     */
     public void setEntityType(final String entityInterface) {
         this.entityType = entityInterface;
     }
@@ -127,7 +150,9 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         return selectSql;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * @param selectSql select SQL to lookup existing records
+     */
     public void setSelectSql(final String selectSql) {
         this.selectSql = selectSql;
     }
@@ -137,7 +162,9 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         return insertSql;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * @param insertSql insert SQL for quick and dirty inserts
+     */
     public void setInsertSql(final String insertSql) {
         this.insertSql = insertSql;
     }
@@ -147,7 +174,9 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         return deleteSql;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * @param deleteSql delete SQL used for DELETE mode
+     */
     public void setDeleteSql(final String deleteSql) {
         this.deleteSql = deleteSql;
     }
@@ -168,7 +197,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
 
     /**
      * Set the {@link org.yes.cart.bulkimport.model.ImportFile}
-     * for more detals.
+     * for more details.
      *
      * @param importFileDescriptor import file descriptor.
      */

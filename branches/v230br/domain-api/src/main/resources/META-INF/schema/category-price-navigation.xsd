@@ -19,7 +19,7 @@
     Schema for all import descriptor files.
 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/category-price-navigation-1.0.0.xsd"
+    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/schema/category-price-navigation.xsd"
 
     This namespace is not actually pointing to the URL for schema, so you need to
     create an alias in your IDE that would point that namespace to this file.

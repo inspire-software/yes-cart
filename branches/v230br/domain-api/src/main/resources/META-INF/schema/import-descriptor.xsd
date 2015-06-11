@@ -18,7 +18,7 @@
     Schema for all import descriptor files.
 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd"
+    xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/schema/import-descriptor.xsd"
 
     This namespace is not actually pointing to the URL for schema, so you need to
     create an alias in your IDE that would point that namespace to this file.
@@ -59,6 +59,7 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element name="mode" type="ImportModeType" minOccurs="0"/>
+            <xs:element name="context" type="ContextType" minOccurs="0"/>
             <xs:element name="entity-type" type="xs:string" minOccurs="1"/>
             <xs:element name="import-file-descriptor" type="ImportFileDescriptorType" minOccurs="1"/>
             <xs:element name="select-sql" type="xs:string" minOccurs="1"/>
@@ -67,6 +68,18 @@
             <xs:element name="import-columns" type="ImportColumnsType" minOccurs="1"/>
         </xs:sequence>
 
+    </xs:complexType>
+
+
+    <xs:complexType name="ContextType">
+        <xs:annotation>
+            <xs:documentation>
+                Context defines additional runtime constraints.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="shop-code" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
     </xs:complexType>
 
 

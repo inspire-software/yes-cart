@@ -26,9 +26,12 @@ import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportTuple;
 import org.yes.cart.bulkimport.model.ValueAdapter;
 import org.yes.cart.bulkimport.service.support.LookUpQuery;
+import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategy;
+import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategyValueProvider;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -62,6 +65,11 @@ public class AbstractByParameterByColumnNameStrategyTest {
                 return null;
             }
         };
+
+        strategy.setProviders(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+            put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
+        }});
+        strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
 
         final Identifiable master = mockery.mock(Identifiable.class, "master");
         final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
