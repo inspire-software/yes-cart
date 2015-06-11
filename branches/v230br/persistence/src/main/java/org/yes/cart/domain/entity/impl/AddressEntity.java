@@ -38,10 +38,19 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     private String addressType;
     private String countryCode;
     private String stateCode;
-    private String phoneList;
+    private String phone1;
+    private String phone2;
+    private String mobile1;
+    private String mobile2;
     private String firstname;
     private String lastname;
     private String middlename;
+    private String email1;
+    private String email2;
+    private String custom1;
+    private String custom2;
+    private String custom3;
+    private String custom4;
     private boolean defaultAddress;
     private Customer customer;
     private Date createdTimestamp;
@@ -109,12 +118,36 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.stateCode = stateCode;
     }
 
-    public String getPhoneList() {
-        return this.phoneList;
+    public String getPhone1() {
+        return this.phone1;
     }
 
-    public void setPhoneList(final String phoneList) {
-        this.phoneList = phoneList;
+    public void setPhone1(final String phone1) {
+        this.phone1 = phone1;
+    }
+
+    public String getPhone2() {
+        return phone2;
+    }
+
+    public void setPhone2(final String phone2) {
+        this.phone2 = phone2;
+    }
+
+    public String getMobile1() {
+        return mobile1;
+    }
+
+    public void setMobile1(final String mobile1) {
+        this.mobile1 = mobile1;
+    }
+
+    public String getMobile2() {
+        return mobile2;
+    }
+
+    public void setMobile2(final String mobile2) {
+        this.mobile2 = mobile2;
     }
 
     public String getFirstname() {
@@ -139,6 +172,54 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
 
     public void setMiddlename(final String middlename) {
         this.middlename = middlename;
+    }
+
+    public String getEmail1() {
+        return email1;
+    }
+
+    public void setEmail1(final String email1) {
+        this.email1 = email1;
+    }
+
+    public String getEmail2() {
+        return email2;
+    }
+
+    public void setEmail2(final String email2) {
+        this.email2 = email2;
+    }
+
+    public String getCustom1() {
+        return custom1;
+    }
+
+    public void setCustom1(final String custom1) {
+        this.custom1 = custom1;
+    }
+
+    public String getCustom2() {
+        return custom2;
+    }
+
+    public void setCustom2(final String custom2) {
+        this.custom2 = custom2;
+    }
+
+    public String getCustom3() {
+        return custom3;
+    }
+
+    public void setCustom3(final String custom3) {
+        this.custom3 = custom3;
+    }
+
+    public String getCustom4() {
+        return custom4;
+    }
+
+    public void setCustom4(final String custom4) {
+        this.custom4 = custom4;
     }
 
     public boolean isDefaultAddress() {

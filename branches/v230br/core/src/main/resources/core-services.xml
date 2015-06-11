@@ -795,27 +795,11 @@
     </bean>
 
     <bean id="orderAddressFormatter" class="org.yes.cart.service.order.impl.DefaultOrderAddressFormatterImpl">
-        <constructor-arg index="0" value="{0} {1} {2} {3} {4} {5} {6} {7} {8}"/>
-        <!-- Address format
-        0 - address line 1
-        1 - address line 2
-        2 - post(zip) code
-        3 - city
-        4 - country code
-        5 - county/state/province/area code
-        6 - first name
-        7 - last name
-        8 - contact phone(s) as string
-        -->
+        <constructor-arg index="0" value="{{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}, {{firstname}} {{middlename}} {{lastname}}, {{phone1}} {{mobile1}} {{email1}}"/>
     </bean>
 
     <bean id="customerNameFormatter" class="org.yes.cart.service.customer.impl.DefaultCustomerNameFormatterImpl">
-        <constructor-arg index="0" value="{0} {2}"/>
-        <!-- Name format
-        0 - Firstname
-        1 - Middlename
-        2 - Lastname
-        -->
+        <constructor-arg index="0" value="{{firstname}} {{middlename}} {{lastname}}"/>
     </bean>
 
     <bean id="orderAssembler" parent="txProxyTemplate">

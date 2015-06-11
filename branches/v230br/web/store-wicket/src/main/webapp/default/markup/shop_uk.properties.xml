@@ -206,7 +206,7 @@
     <entry key="country">Країна</entry>
     <entry key="state">Область</entry>
     <entry key="postcode">Індекс</entry>
-    <entry key="phoneList">Телефони</entry>
+    <entry key="phone1">Телефон</entry>
     <entry key="create">Зберегти</entry>
     <entry key="cancel">Скасувати</entry>
     <entry key="createEditAddress">Адреса</entry>

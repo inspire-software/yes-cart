@@ -25,7 +25,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
@@ -260,7 +259,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         address.setCountryCode("CA");
         address.setAddressType(Address.ADDR_TYPE_SHIPPING);
         address.setCustomer(customer);
-        address.setPhoneList("555-55-51");
+        address.setPhone1("555-55-51");
         addressService.create(address);
         address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
         address.setFirstname("John");
@@ -271,7 +270,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         address.setCountryCode("CA");
         address.setAddressType(Address.ADDR_TYPE_BILLING);
         address.setCustomer(customer);
-        address.setPhoneList("555-55-52");
+        address.setPhone1("555-55-52");
         addressService.create(address);
 //        customer = customerService.getCustomerByEmail("jd@domain.com");
         //customer = customerDao.findSingleByCriteria(Restrictions.eq("email", prefix + "jd@domain.com"));

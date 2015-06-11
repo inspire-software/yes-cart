@@ -68,11 +68,16 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10986,  'SHOP_ADDRESS_FORMATTER', 'SHOP_ADDRESS_FORMATTER',  0,  NULL,  'Address: address format',
-   'E.g. {0} {1} {2} {3} {4} {5} {6} {7} {8}, where 0 - address line 1, 1 - address line 2, 2 - post(zip) code, 3 - city, 4 - country code, 5 - county/state/province/area code, 6 - first name, 7 - last name, 8 - contact phone(s) as string',  1000, 1001);
+'Placeholders:
+{{firstname}} {{middlename}} {{lastname}}
+{{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}
+{{phone1}} {{phone2}} {{mobile1}} {{mobile2}}
+{{email1}} {{email2}}
+{{custom1}} {{custom2}} {{custom3}} {{custom4}}',  1000, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10985,  'SHOP_CUSTOMER_FORMATTER', 'SHOP_CUSTOMER_FORMATTER',  0,  NULL,  'Customer: name format',
-   'E.g. {0} {1} {2}, where 0 - first name, 1 - middle name, 2 - last name',  1000, 1001);
+   'Placeholders: {{firstname}} {{middlename}} {{lastname}}',  1000, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10984,  'PRODUCT_DISPLAY_MAN_CODE_SHOP', 'PRODUCT_DISPLAY_MANUFACTURER_CODE_SHOP',  0,  NULL,  'Product: show manufacturer code',

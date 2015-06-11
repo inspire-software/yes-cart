@@ -17,11 +17,13 @@
 package org.yes.cart.service.customer.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.text.StrSubstitutor;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.customer.CustomerNameFormatter;
 
-import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -53,12 +55,13 @@ public class DefaultCustomerNameFormatterImpl implements CustomerNameFormatter {
     private String formatNameInternal(final Address address, final String format) {
         if (address != null) {
 
-            return MessageFormat.format(
-                    format,
-                    StringUtils.defaultString(address.getFirstname()),
-                    StringUtils.defaultString(address.getMiddlename()),
-                    StringUtils.defaultString(address.getLastname())
-            );
+            final Map<String, String> values = new HashMap<String, String>();
+            values.put("firstname", StringUtils.defaultString(address.getFirstname()));
+            values.put("middlename", StringUtils.defaultString(address.getMiddlename()));
+            values.put("lastname", StringUtils.defaultString(address.getLastname()));
+
+            return new StrSubstitutor(values, "{{", "}}").replace(format);
+
         }
         return StringUtils.EMPTY;
     }
@@ -77,12 +80,13 @@ public class DefaultCustomerNameFormatterImpl implements CustomerNameFormatter {
     private String formatNameInternal(final Customer customer, final String format) {
         if (customer != null) {
 
-            return MessageFormat.format(
-                    format,
-                    StringUtils.defaultString(customer.getFirstname()),
-                    StringUtils.defaultString(customer.getMiddlename()),
-                    StringUtils.defaultString(customer.getLastname())
-            );
+            final Map<String, String> values = new HashMap<String, String>();
+            values.put("firstname", StringUtils.defaultString(customer.getFirstname()));
+            values.put("middlename", StringUtils.defaultString(customer.getMiddlename()));
+            values.put("lastname", StringUtils.defaultString(customer.getLastname()));
+
+            return new StrSubstitutor(values, "{{", "}}").replace(format);
+
         }
         return StringUtils.EMPTY;
     }

@@ -206,7 +206,7 @@
     <entry key="country">Country</entry>
     <entry key="state">State</entry>
     <entry key="postcode">Post code</entry>
-    <entry key="phoneList">Phones</entry>
+    <entry key="phone1">Phone</entry>
     <entry key="create">Save</entry>
     <entry key="cancel">Cancel</entry>
     <entry key="createEditAddress">Manage address</entry>

@@ -75,8 +75,35 @@ public class AddressRO implements Serializable {
     @DtoField(value = "defaultAddress", readOnly = true)
     private boolean defaultAddress;
 
-    @DtoField(value = "phoneList", readOnly = true)
-    private String phoneList;
+    @DtoField(value = "phone1", readOnly = true)
+    private String phone1;
+
+    @DtoField(value = "phone2", readOnly = true)
+    private String phone2;
+
+    @DtoField(value = "mobile1", readOnly = true)
+    private String mobile1;
+
+    @DtoField(value = "mobile2", readOnly = true)
+    private String mobile2;
+
+    @DtoField(value = "email1", readOnly = true)
+    private String email1;
+
+    @DtoField(value = "email2", readOnly = true)
+    private String email2;
+
+    @DtoField(value = "custom1", readOnly = true)
+    private String custom1;
+
+    @DtoField(value = "custom2", readOnly = true)
+    private String custom2;
+
+    @DtoField(value = "custom3", readOnly = true)
+    private String custom3;
+
+    @DtoField(value = "custom4", readOnly = true)
+    private String custom4;
 
     @DtoField(value = "customer.customerId", readOnly = true)
     private long customerId;
@@ -219,13 +246,94 @@ public class AddressRO implements Serializable {
         this.defaultAddress = defaultAddress;
     }
 
-    @XmlElement(name = "phone-list")
-    public String getPhoneList() {
-        return phoneList;
+    @XmlElement(name = "phone-1")
+    public String getPhone1() {
+        return phone1;
     }
 
-    public void setPhoneList(final String phoneList) {
-        this.phoneList = phoneList;
+    public void setPhone1(final String phone1) {
+        this.phone1 = phone1;
+    }
+
+    @XmlElement(name = "phone-2")
+    public String getPhone2() {
+        return phone2;
+    }
+
+    public void setPhone2(final String phone2) {
+        this.phone2 = phone2;
+    }
+
+    @XmlElement(name = "mobile-1")
+    public String getMobile1() {
+        return mobile1;
+    }
+
+    public void setMobile1(final String mobile1) {
+        this.mobile1 = mobile1;
+    }
+
+    @XmlElement(name = "mobile-2")
+    public String getMobile2() {
+        return mobile2;
+    }
+
+    public void setMobile2(final String mobile2) {
+        this.mobile2 = mobile2;
+    }
+
+    @XmlElement(name = "email-1")
+    public String getEmail1() {
+        return email1;
+    }
+
+    public void setEmail1(final String email1) {
+        this.email1 = email1;
+    }
+
+    @XmlElement(name = "email-2")
+    public String getEmail2() {
+        return email2;
+    }
+
+    public void setEmail2(final String email2) {
+        this.email2 = email2;
+    }
+
+    @XmlElement(name = "custom-1")
+    public String getCustom1() {
+        return custom1;
+    }
+
+    public void setCustom1(final String custom1) {
+        this.custom1 = custom1;
+    }
+
+    @XmlElement(name = "custom-2")
+    public String getCustom2() {
+        return custom2;
+    }
+
+    public void setCustom2(final String custom2) {
+        this.custom2 = custom2;
+    }
+
+    @XmlElement(name = "custom-3")
+    public String getCustom3() {
+        return custom3;
+    }
+
+    public void setCustom3(final String custom3) {
+        this.custom3 = custom3;
+    }
+
+    @XmlElement(name = "custom-4")
+    public String getCustom4() {
+        return custom4;
+    }
+
+    public void setCustom4(final String custom4) {
+        this.custom4 = custom4;
     }
 
     @XmlAttribute(name = "customer-id")

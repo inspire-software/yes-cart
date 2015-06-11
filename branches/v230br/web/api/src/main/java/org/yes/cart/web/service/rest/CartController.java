@@ -1246,7 +1246,7 @@ public class CartController {
      *     "lastname": "Doe",
      *     "middlename": null,
      *     "defaultAddress": true,
-     *     "phoneList": "123123123",
+     *     "phone1": "123123123",
      *     "customerId": 1
      * }]
      * </code></pre>

@@ -109,7 +109,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             rez.setFirstname(customer.getFirstname());
             rez.setMiddlename(customer.getMiddlename());
             rez.setLastname(customer.getLastname());
-            rez.setPhoneList(attrValue == null ? StringUtils.EMPTY : attrValue.getVal());
+            rez.setPhone1(attrValue == null ? StringUtils.EMPTY : attrValue.getVal());
         }
         return rez;
     }

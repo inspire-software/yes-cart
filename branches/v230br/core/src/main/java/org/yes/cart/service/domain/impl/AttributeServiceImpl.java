@@ -75,7 +75,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     public List<Attribute> findAttributesWithMultipleValues(final String attributeGroupCode) {
         List<Attribute> attr = attributeDao.findByNamedQuery(
                 "ATTRIBUTES.WITH.MULTIPLE.VALUES.BY.GROUPCODE",
-                attributeGroupCode);
+                attributeGroupCode, Boolean.TRUE);
         if (attr.isEmpty()) {
             return null;
         }

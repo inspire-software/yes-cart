@@ -540,7 +540,16 @@
 
         <property name="countryCode" type="string" column="COUNTRY_CODE" length="64" not-null="true"/>
         <property name="stateCode" type="string" column="STATE_CODE" length="64" not-null="false"/>
-        <property name="phoneList" type="string" column="PHONES" length="255" not-null="false"/>
+        <property name="phone1" type="string" column="PHONE1" length="255" not-null="false"/>
+        <property name="phone2" type="string" column="PHONE2" length="255" not-null="false"/>
+        <property name="mobile1" type="string" column="MOBILE1" length="255" not-null="false"/>
+        <property name="mobile2" type="string" column="MOBILE2" length="255" not-null="false"/>
+        <property name="email1" type="string" column="EMAIL1" length="255" not-null="false"/>
+        <property name="email2" type="string" column="EMAIL2" length="255" not-null="false"/>
+        <property name="custom1" type="string" column="CUSTOM1" length="255" not-null="false"/>
+        <property name="custom2" type="string" column="CUSTOM2" length="255" not-null="false"/>
+        <property name="custom3" type="string" column="CUSTOM3" length="255" not-null="false"/>
+        <property name="custom4" type="string" column="CUSTOM4" length="255" not-null="false"/>
 
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
@@ -2908,7 +2917,7 @@
 
     <query name="ATTRIBUTES.WITH.MULTIPLE.VALUES.BY.GROUPCODE">
         <![CDATA[
-       select a from AttributeEntity a where a.allowduplicate = true and a.attributeGroup.code = ?1
+       select a from AttributeEntity a where a.allowduplicate = ?2 and a.attributeGroup.code = ?1
        ]]>
     </query>
 

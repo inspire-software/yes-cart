@@ -427,10 +427,24 @@ alter table TCUSTOMERORDER add column ORDER_IP varchar(45);
 
 
 --
---
+-- YC-568 Refactor payment modules
 --
 
 DELETE FROM TSYSTEMATTRVALUE WHERE GUID='YC_SYSTEM_PAYMENT_MODULES_URLS';
 DELETE FROM TATTRIBUTE WHERE GUID='SYSTEM_PAYMENT_MODULES_URLS';
 
+--
+-- YC-540 Improve address domain model
+--
 
+alter table TADDRESS CHANGE PHONES PHONE1 varchar(255);
+-- rename column TADDRESS.PHONES to PHONE1;
+alter table TADDRESS add column PHONE2 varchar(255);
+alter table TADDRESS add column EMAIL1 varchar(255);
+alter table TADDRESS add column EMAIL2 varchar(255);
+alter table TADDRESS add column MOBILE1 varchar(255);
+alter table TADDRESS add column MOBILE2 varchar(255);
+alter table TADDRESS add column CUSTOM1 varchar(255);
+alter table TADDRESS add column CUSTOM2 varchar(255);
+alter table TADDRESS add column CUSTOM3 varchar(255);
+alter table TADDRESS add column CUSTOM4 varchar(255);

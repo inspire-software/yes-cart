@@ -318,7 +318,7 @@ public class PayflowPaymentGatewayImpl extends AbstractPayPalBasePaymentGatewayI
         shipTo.setShipToStreet(
                 getStreetAddress(paymentIn.getShippingAddress().getAddrline1(), paymentIn.getShippingAddress().getAddrline2())
         );
-        shipTo.setShipToPhone(paymentIn.getShippingAddress().getPhoneList());
+        shipTo.setShipToPhone(paymentIn.getShippingAddress().getPhone1());
         return shipTo;
     }
 
@@ -340,7 +340,7 @@ public class PayflowPaymentGatewayImpl extends AbstractPayPalBasePaymentGatewayI
         billTo.setStreet(
                 getStreetAddress(paymentIn.getBillingAddress().getAddrline1(), paymentIn.getBillingAddress().getAddrline2())
         );
-        billTo.setPhoneNum(paymentIn.getBillingAddress().getPhoneList());
+        billTo.setPhoneNum(paymentIn.getBillingAddress().getPhone1());
         return billTo;
     }
 

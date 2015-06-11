@@ -55,7 +55,25 @@
 
                 </mx:DataGridColumn>
                 <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='phone')"
-                                   dataField="phoneList"/>
+                                   dataField="phone1">
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:VBox>
+                                <mx:Text text="{data.phonelist}"/>
+                            </mx:VBox>
+                        </mx:Component>
+                    </mx:itemRenderer>
+                </mx:DataGridColumn>
+                <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='additional')"
+                                   dataField="custom1">
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:VBox>
+                                <mx:Text text="{data.customlist}"/>
+                            </mx:VBox>
+                        </mx:Component>
+                    </mx:itemRenderer>
+                </mx:DataGridColumn>
                 <mx:DataGridColumn width="80" headerText="@Resource(bundle='CustomerManagementPanel',key='addressType')"
                                    dataField="addressType">
                     <mx:itemRenderer>
@@ -82,6 +100,8 @@
     <mx:Script><![CDATA[
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.AddressDTOImpl;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 

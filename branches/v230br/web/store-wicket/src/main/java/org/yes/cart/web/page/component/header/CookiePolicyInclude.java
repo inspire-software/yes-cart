@@ -90,12 +90,14 @@ public class CookiePolicyInclude extends BaseComponent {
 
         final HttpServletRequest request = getWicketUtil().getHttpServletRequest();
 
-        for (final Cookie cookie : request.getCookies()) {
-            if ("yccookiepolicy".equals(cookie.getName())) {
-                return true;
+        final Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (final Cookie cookie : request.getCookies()) {
+                if ("yccookiepolicy".equals(cookie.getName())) {
+                    return true;
+                }
             }
         }
-
         return false;
 
     }

@@ -500,7 +500,7 @@ public class CustomerController {
      *     "lastname": "Doe",
      *     "middlename": null,
      *     "defaultAddress": true,
-     *     "phoneList": "123123123",
+     *     "phone1": "123123123",
      *     "customerId": 1
      * }]
      * </code></pre>
@@ -562,7 +562,7 @@ public class CustomerController {
      * 	&lt;country-local-name&gt;Україна&lt;/country-local-name&gt;
      * 	&lt;firstname&gt;Bob&lt;/firstname&gt;
      * 	&lt;lastname&gt;Doe&lt;/lastname&gt;
-     * 	&lt;phone-list&gt;123123123&lt;/phone-list&gt;
+     * 	&lt;phone-1&gt;123123123&lt;/phone-1&gt;
      * 	&lt;postcode&gt;0001&lt;/postcode&gt;
      * 	&lt;state-code&gt;UA-KI&lt;/state-code&gt;
      * 	&lt;state-name&gt;Kiev region&lt;/state-name&gt;
@@ -881,8 +881,8 @@ public class CustomerController {
         addressEntity.setStateCode(address.getStateCode());
         addressEntity.setCountryCode(address.getCountryCode());
 
-        if (StringUtils.isNotBlank(address.getPhoneList())) {
-            addressEntity.setPhoneList(address.getPhoneList());
+        if (StringUtils.isNotBlank(address.getPhone1())) {
+            addressEntity.setPhone1(address.getPhone1());
         }
 
         addressBookFacade.createOrUpdate(addressEntity);
@@ -928,7 +928,7 @@ public class CustomerController {
      *     "lastname": "Doe",
      *     "middlename": null,
      *     "defaultAddress": true,
-     *     "phoneList": "123123123",
+     *     "phone1": "123123123",
      *     "customerId": 1
      * }
      * </code></pre>
@@ -943,7 +943,7 @@ public class CustomerController {
      * 	&lt;country-local-name&gt;Україна&lt;/country-local-name&gt;
      * 	&lt;firstname&gt;Bob&lt;/firstname&gt;
      * 	&lt;lastname&gt;Doe&lt;/lastname&gt;
-     * 	&lt;phone-list&gt;123123123&lt;/phone-list&gt;
+     * 	&lt;phone-1&gt;123123123&lt;/phone-1&gt;
      * 	&lt;postcode&gt;0001&lt;/postcode&gt;
      * 	&lt;state-code&gt;UA-KI&lt;/state-code&gt;
      * 	&lt;state-name&gt;Kiev region&lt;/state-name&gt;
@@ -975,7 +975,7 @@ public class CustomerController {
      *     "lastname": "Doe",
      *     "middlename": null,
      *     "defaultAddress": true,
-     *     "phoneList": "123123123",
+     *     "phone1": "123123123",
      *     "customerId": 1
      * }]
      * </code></pre>
@@ -1040,7 +1040,7 @@ public class CustomerController {
      *     "lastname": "Doe",
      *     "middlename": null,
      *     "defaultAddress": true,
-     *     "phoneList": "123123123",
+     *     "phone1": "123123123",
      *     "customerId": 1
      * }
      * </code></pre>
@@ -1055,7 +1055,7 @@ public class CustomerController {
      * 	&lt;country-local-name&gt;Україна&lt;/country-local-name&gt;
      * 	&lt;firstname&gt;Bob&lt;/firstname&gt;
      * 	&lt;lastname&gt;Doe&lt;/lastname&gt;
-     * 	&lt;phone-list&gt;123123123&lt;/phone-list&gt;
+     * 	&lt;phone-1&gt;123123123&lt;/phone-1&gt;
      * 	&lt;postcode&gt;0001&lt;/postcode&gt;
      * 	&lt;state-code&gt;UA-KI&lt;/state-code&gt;
      * 	&lt;state-name&gt;Kiev region&lt;/state-name&gt;
@@ -1079,7 +1079,7 @@ public class CustomerController {
      * 	&lt;country-local-name&gt;Україна&lt;/country-local-name&gt;
      * 	&lt;firstname&gt;Bob&lt;/firstname&gt;
      * 	&lt;lastname&gt;Doe&lt;/lastname&gt;
-     * 	&lt;phone-list&gt;123123123&lt;/phone-list&gt;
+     * 	&lt;phone-1&gt;123123123&lt;/phone-1&gt;
      * 	&lt;postcode&gt;0001&lt;/postcode&gt;
      * 	&lt;state-code&gt;UA-KI&lt;/state-code&gt;
      * 	&lt;state-name&gt;Kiev region&lt;/state-name&gt;

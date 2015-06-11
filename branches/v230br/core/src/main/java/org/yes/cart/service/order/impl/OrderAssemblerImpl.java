@@ -313,7 +313,14 @@ public class OrderAssemblerImpl implements OrderAssembler {
             copy.setFirstname(address.getFirstname());
             copy.setLastname(address.getLastname());
             copy.setMiddlename(address.getMiddlename());
-            copy.setPhoneList(address.getPhoneList());
+            copy.setPhone1(address.getPhone1());
+            copy.setPhone2(address.getPhone2());
+            copy.setEmail1(address.getEmail1());
+            copy.setEmail2(address.getEmail2());
+            copy.setCustom1(address.getCustom1());
+            copy.setCustom2(address.getCustom2());
+            copy.setCustom3(address.getCustom3());
+            copy.setCustom4(address.getCustom4());
 
             return copy;
         }

@@ -208,19 +208,156 @@ public interface AddressDTO extends Identifiable {
 
 
     /**
-     * Get comma separated list of phones of one phone.
+     * Get phone.
      *
-     * @return comma separated list of phones of one phone.
+     * @return phone.
      */
-    String getPhoneList();
+    String getPhone1();
 
 
     /**
-     * set comma separated list of phones of one phone.
+     * set phone.
      *
-     * @param phoneList comma separated list of phones of one phone.
+     * @param phone1 phone.
      */
-    void setPhoneList(String phoneList);
+    void setPhone1(String phone1);
+
+
+    /**
+     * Get phone.
+     *
+     * @return phone.
+     */
+    String getPhone2();
+
+
+    /**
+     * set phone.
+     *
+     * @param phone2 phone.
+     */
+    void setPhone2(String phone2);
+
+    /**
+     * Get email.
+     *
+     * @return email.
+     */
+    String getEmail1();
+
+
+    /**
+     * set email.
+     *
+     * @param email1 email.
+     */
+    void setEmail1(String email1);
+
+    /**
+     * Get email.
+     *
+     * @return email.
+     */
+    String getEmail2();
+
+
+    /**
+     * set email.
+     *
+     * @param email2 email.
+     */
+    void setEmail2(String email2);
+
+    /**
+     * Get mobile.
+     *
+     * @return mobile.
+     */
+    String getMobile1();
+
+
+    /**
+     * set mobile.
+     *
+     * @param mobile1 mobile.
+     */
+    void setMobile1(String mobile1);
+
+    /**
+     * Get mobile.
+     *
+     * @return mobile.
+     */
+    String getMobile2();
+
+
+    /**
+     * set mobile.
+     *
+     * @param mobile2 mobile.
+     */
+    void setMobile2(String mobile2);
+
+    /**
+     * Get custom.
+     *
+     * @return custom.
+     */
+    String getCustom1();
+
+
+    /**
+     * set custom.
+     *
+     * @param custom1 custom.
+     */
+    void setCustom1(String custom1);
+
+    /**
+     * Get custom.
+     *
+     * @return custom.
+     */
+    String getCustom2();
+
+
+    /**
+     * set custom.
+     *
+     * @param custom2 custom.
+     */
+    void setCustom2(String custom2);
+
+
+    /**
+     * Get custom.
+     *
+     * @return custom.
+     */
+    String getCustom3();
+
+
+    /**
+     * set custom.
+     *
+     * @param custom3 custom.
+     */
+    void setCustom3(String custom3);
+
+    /**
+     * Get custom.
+     *
+     * @return custom.
+     */
+    String getCustom4();
+
+
+    /**
+     * set custom.
+     *
+     * @param custom4 custom.
+     */
+    void setCustom4(String custom4);
 
 
 }

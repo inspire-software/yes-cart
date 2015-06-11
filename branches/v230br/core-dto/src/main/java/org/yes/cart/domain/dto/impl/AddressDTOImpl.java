@@ -67,21 +67,136 @@ public class AddressDTOImpl implements AddressDTO {
     @DtoField(value = "defaultAddress")
     private boolean defaultAddress;
 
-    @DtoField(value = "phoneList")
-    private String phoneList;
+    @DtoField(value = "phone1")
+    private String phone1;
+
+    @DtoField(value = "phone2")
+    private String phone2;
+
+    @DtoField(value = "mobile1")
+    private String mobile1;
+
+    @DtoField(value = "mobile2")
+    private String mobile2;
+
+    @DtoField(value = "email1")
+    private String email1;
+
+    @DtoField(value = "email2")
+    private String email2;
+
+    @DtoField(value = "custom1")
+    private String custom1;
+
+    @DtoField(value = "custom2")
+    private String custom2;
+
+    @DtoField(value = "custom3")
+    private String custom3;
+
+    @DtoField(value = "custom4")
+    private String custom4;
 
     @DtoField(value = "customer.customerId", readOnly = true)
     private long customerId;
 
 
     /** {@inheritDoc} */
-    public String getPhoneList() {
-        return phoneList;
+    public String getPhone1() {
+        return phone1;
     }
 
     /** {@inheritDoc} */
-    public void setPhoneList(final String phoneList) {
-        this.phoneList = phoneList;
+    public void setPhone1(final String phone1) {
+        this.phone1 = phone1;
+    }
+
+    /** {@inheritDoc} */
+    public String getPhone2() {
+        return phone2;
+    }
+
+    /** {@inheritDoc} */
+    public void setPhone2(final String phone2) {
+        this.phone2 = phone2;
+    }
+
+    /** {@inheritDoc} */
+    public String getMobile1() {
+        return mobile1;
+    }
+
+    /** {@inheritDoc} */
+    public void setMobile1(final String mobile1) {
+        this.mobile1 = mobile1;
+    }
+
+    public String getMobile2() {
+        return mobile2;
+    }
+
+    public void setMobile2(final String mobile2) {
+        this.mobile2 = mobile2;
+    }
+
+    /** {@inheritDoc} */
+    public String getEmail1() {
+        return email1;
+    }
+
+    /** {@inheritDoc} */
+    public void setEmail1(final String email1) {
+        this.email1 = email1;
+    }
+
+    /** {@inheritDoc} */
+    public String getEmail2() {
+        return email2;
+    }
+
+    /** {@inheritDoc} */
+    public void setEmail2(final String email2) {
+        this.email2 = email2;
+    }
+
+    /** {@inheritDoc} */
+    public String getCustom1() {
+        return custom1;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustom1(final String custom1) {
+        this.custom1 = custom1;
+    }
+
+    /** {@inheritDoc} */
+    public String getCustom2() {
+        return custom2;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustom2(final String custom2) {
+        this.custom2 = custom2;
+    }
+
+    /** {@inheritDoc} */
+    public String getCustom3() {
+        return custom3;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustom3(final String custom3) {
+        this.custom3 = custom3;
+    }
+
+    /** {@inheritDoc} */
+    public String getCustom4() {
+        return custom4;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustom4(final String custom4) {
+        this.custom4 = custom4;
     }
 
     /** {@inheritDoc} */
@@ -239,7 +354,7 @@ public class AddressDTOImpl implements AddressDTO {
                 ", lastname='" + lastname + '\'' +
                 ", middlename='" + middlename + '\'' +
                 ", defaultAddress=" + defaultAddress +
-                ", phoneList='" + phoneList + '\'' +
+                ", phone1='" + phone1 + '\'' +
                 ", customerId=" + customerId +
                 '}';
     }

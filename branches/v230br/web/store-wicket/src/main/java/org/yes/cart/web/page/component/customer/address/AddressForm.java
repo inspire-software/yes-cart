@@ -54,7 +54,7 @@ public class AddressForm extends Form<Address> {
     private final static String COUNTRY = "country";
     private final static String STATE = "state";
     private final static String POSTCODE = "postcode";
-    private final static String PHONELIST = "phoneList";
+    private final static String PHONE1 = "phone1";
     private final static String ADD_ADDRESS = "addAddress";
     private final static String CANCELL_LINK = "cancel";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
@@ -129,7 +129,7 @@ public class AddressForm extends Form<Address> {
                 new TextField<String>(POSTCODE, new PropertyModel<String>(address, "postcode"))
                         .setRequired(true).add(new StringValidator.MaximumLengthValidator(SMALL_LENGTH))
         ).add(
-                new TextField<String>(PHONELIST, new PropertyModel<String>(address, "phoneList"))
+                new TextField<String>(PHONE1, new PropertyModel<String>(address, "phone1"))
                         .setRequired(true).add(new StringValidator.MaximumLengthValidator(LARGE_LENGTH))
         ).add(
                 stateDropDownChoice

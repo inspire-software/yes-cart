@@ -139,7 +139,7 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAut
         anetCustomer.setCountry(payment.getBillingAddress().getCountryCode());
         anetCustomer.setCustomerId(payment.getBillingEmail());
         anetCustomer.setEmail(payment.getBillingEmail());
-        anetCustomer.setPhone(payment.getBillingAddress().getPhoneList());
+        anetCustomer.setPhone(payment.getBillingAddress().getPhone1());
         anetCustomer.setZipPostalCode(payment.getBillingAddress().getPostcode());
         anetCustomer.setState(payment.getBillingAddress().getStateCode());
         anetCustomer.setCustomerIP(payment.getShopperIpAddress());
