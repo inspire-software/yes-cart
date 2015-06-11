@@ -114,7 +114,7 @@
     </appender>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d %p [%c] - %m%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
         </encoder>
     </appender>
     <logger name="DEFAULT" level="INFO">
