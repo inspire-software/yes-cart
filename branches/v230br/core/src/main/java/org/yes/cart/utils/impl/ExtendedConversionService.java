@@ -16,7 +16,7 @@
 
 package org.yes.cart.utils.impl;
 
-import org.springframework.core.convert.support.ConversionServiceFactory;
+import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.convert.support.GenericConversionService;
 
 
@@ -29,7 +29,7 @@ public class ExtendedConversionService extends GenericConversionService {
 
     public ExtendedConversionService() {
         super();
-        ConversionServiceFactory.addDefaultConverters(this);
+        DefaultConversionService.addDefaultConverters(this);
         addConverter(new StringValueToPairListConverter());
         addConverter(new StringValueToDateConverter());
     }

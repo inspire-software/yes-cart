@@ -22,6 +22,7 @@ import org.yes.cart.bulkimport.model.DataTypeEnum;
 import org.yes.cart.bulkimport.model.ValueAdapter;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +41,7 @@ public class CsvImportValueAdapter implements ValueAdapter {
         put(DataTypeEnum.INT,       Integer.class);
         put(DataTypeEnum.LONG,      Long.class);
         put(DataTypeEnum.DECIMAL,   BigDecimal.class);
+        put(DataTypeEnum.DATETIME,  Date.class);
     }};
 
     public CsvImportValueAdapter(final GenericConversionService extendedConversionService) {

@@ -53,12 +53,6 @@ public interface ImportColumn {
      */
     boolean isTable();
 
-    /**
-     * Set table sub import flag .
-     * @param table table sub  import flag.
-     */
-    void setTable(boolean table);
-
 
     /**
      * In case if column has reg exp.
@@ -76,25 +70,11 @@ public interface ImportColumn {
     int getColumnIndex();
 
     /**
-     * Set column index.
-     *
-     * @param columnIndex column index
-     */
-    void setColumnIndex(int columnIndex);
-
-    /**
      * Get the {@link FieldTypeEnum}.
      *
      * @return filed type
      */
     FieldTypeEnum getFieldType();
-
-    /**
-     * Set the {@link FieldTypeEnum}
-     *
-     * @param fieldType to set.
-     */
-    void setFieldType(FieldTypeEnum fieldType);
 
     /**
      * Get the {@link DataTypeEnum}.
@@ -104,13 +84,6 @@ public interface ImportColumn {
     DataTypeEnum getDataType();
 
     /**
-     * Set the {@link DataTypeEnum}
-     *
-     * @param dataType to set.
-     */
-    void setDataType(DataTypeEnum dataType);
-
-    /**
      * Field name in object in java beans notation.
      *
      * @return field name.
@@ -118,38 +91,40 @@ public interface ImportColumn {
     String getName();
 
     /**
-     * Set the field name.
-     *
-     * @param name field name.
-     */
-    void setName(String name);
-
-    /**
      * Regular expression for get value for specified field name
      * in case if csv field contains more than one object field.
-     * Example:  gold,855
+     *
+     * Example value: "gold,855"
+     * Example pattern to capture number: ".*,([0-9]*)"
+     * Group 1 matches: "855"
      *
      * @return regular expression to get the value from csv field
      */
     String getValueRegEx();
 
     /**
-     * Set optional regexp to get the value from csv field.
+     * Return matching group as the value for given field.
      *
-     * @param regExp regular expression.
-     */
-    void setValueRegEx(String regExp);
-
-    /**
+     * Example value: "gold,855"
+     * Example pattern to capture number: ".*,([0-9]*)"
+     * Example group number to extract value: 1
+     * Group 1 matches: "855"
+     *
      * @return group that defines the value in regex specified
      */
     Integer getValueRegExGroup();
 
     /**
-     * @param valueRegExGroup group that defines the value in regex specified
+     * Transform value matched by regex using this template.
+     *
+     * Example value: "gold,855"
+     * Example pattern to capture number: ".*,([0-9]*)"
+     * Example regex template: "Number is $1"
+     * Resulting template value: "Number is 855"
+     *
+     * @return regex template.
      */
-    void setValueRegExGroup(Integer valueRegExGroup);
-
+    String getValueRegExTemplate();
 
     /**
      * Get the HQL lookup query to get the foreign key object within csv filed value
@@ -159,13 +134,6 @@ public interface ImportColumn {
      */
     String getLookupQuery();
 
-    /**
-     * Set the HQL query.
-     *
-     * @param lookupQuery HQL query.
-     */
-    void setLookupQuery(String lookupQuery);
-
 
     /**
      * Get included import descriptor for complex fields.
@@ -174,13 +142,6 @@ public interface ImportColumn {
      */
     ImportDescriptor getImportDescriptor();
 
-
-    /**
-     * Set included import descriptor for complex fields.
-     *
-     * @param importDescriptor {@link ImportDescriptor}
-     */
-    void setImportDescriptor(ImportDescriptor importDescriptor);
 
     /**
      * Boolean flag needed to use master object for fk in case of subimport.
@@ -204,29 +165,13 @@ public interface ImportColumn {
     String getValueConstant();
 
     /**
-     * Set the constants
-     *
-     * @param constant string constant
-     */
-    void setValueConstant(String constant);
-
-    /**
      * @return entity type for FK's
      */
     String getEntityType();
-
-    /**
-     * @param entityType entity type for FK's
-     */
-    void setEntityType(String entityType);
 
     /**
      * @return language of the localisable value (or null if this is not localisable)
      */
     String getLanguage();
 
-    /**
-     * @param language language of the localisable value (or null if this is not localisable)
-     */
-    void setLanguage(String language);
 }

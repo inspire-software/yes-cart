@@ -49,7 +49,7 @@ public class CsvImportColumnImplTest {
         String reExpValue = ".*-.*\\s{1,}((\\D?\\S{4,}){1,})\\s{0,}.*";
 
 
-        ImportColumn column = new CsvImportColumnImpl();
+        CsvImportColumnImpl column = new CsvImportColumnImpl();
         assertNull(column.getValue(null, adapter));
 
         String rawValue = "rawValue";
@@ -111,10 +111,14 @@ public class CsvImportColumnImplTest {
         assertEquals("значение", column.getValue("as фыф результат-шум 34 123.56 значение sd ыв #", adapter));
 
 
-        //some single unicode word re
-        column.setValueRegEx("\\b([a-z]{3,})\\b");
+        //some single unicode word regex
+        column.setValueRegEx(".*\\b([a-z]{3,})\\b.*");
         assertEquals("word", column.getValue("1234sdcvdfv hfkdf34 word 2134", adapter));
 
+        column.setValueRegExTemplate("My '$1'");
+        assertEquals("My 'word'", column.getValue("1234sdcvdfv hfkdf34 word 2134", adapter));
+
+        column.setValueRegExTemplate("");
         column.setValueRegEx("\\b(\\S\\D{3,})\\b");
         assertEquals("word", column.getValue("1234sdcvdfv hfkdf34 word 2134", adapter));
 
@@ -122,7 +126,7 @@ public class CsvImportColumnImplTest {
         assertEquals("слово", column.getValue("1234sdcvdfv hfkdf34 слово 2134", adapter));
 
         /*
-        real eaxmples
+        real examples
         35 Діамант кр57 3/5 - 0,10 Ct; 1 Сапфір   - 0,62 Ct; 1 Рубін   - 0,54 Ct
         2 Кубічний цирконій - 66 шт,                Аметист - 2,68 гр
         0 Кварц димчастий   -  Ct

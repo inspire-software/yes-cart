@@ -177,6 +177,7 @@
                         <xs:enumeration value="LONG"/>
                         <xs:enumeration value="INT"/>
                         <xs:enumeration value="DECIMAL"/>
+                        <xs:enumeration value="DATETIME"/>
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
@@ -184,7 +185,10 @@
             <xs:element name="name" type="xs:string"/>
             <xs:element name="language" type="xs:string" minOccurs="0"/>
             <xs:element name="value-regex" type="xs:string" minOccurs="0"/>
-            <xs:element name="value-regex-group" type="xs:string" minOccurs="0"/>
+            <xs:choice minOccurs="0" maxOccurs="1">
+                <xs:element name="value-regex-group" type="xs:string" minOccurs="0"/>
+                <xs:element name="value-regex-template" type="xs:string" minOccurs="0"/>
+            </xs:choice>
             <xs:element name="value-constant" type="xs:string" minOccurs="0"/>
             <xs:element name="lookup-query" type="xs:string" minOccurs="0"/>
             <xs:element name="use-master-object" type="xs:boolean" minOccurs="0"/>

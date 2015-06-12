@@ -43,7 +43,7 @@ public class CsvImportDescriptorImplTest {
 
         final List<CsvImportColumn> columns = new ArrayList<CsvImportColumn>();
 
-        CsvImportColumn importColumn;
+        CsvImportColumnImpl importColumn;
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(1);
@@ -89,7 +89,7 @@ public class CsvImportDescriptorImplTest {
 
         final List<CsvImportColumn> columns = new ArrayList<CsvImportColumn>();
 
-        CsvImportColumn importColumn;
+        CsvImportColumnImpl importColumn;
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(1);
@@ -171,7 +171,7 @@ public class CsvImportDescriptorImplTest {
         csvImportDescriptor.getImportFileDescriptor().setTextQualifier('"');
         csvImportDescriptor.setImportDirectory("/yescart/import");
 
-        CsvImportColumn csvImportColumn = new CsvImportColumnImpl(1, FieldTypeEnum.FIELD, "code", null, null);
+        CsvImportColumnImpl csvImportColumn = new CsvImportColumnImpl(1, FieldTypeEnum.FIELD, "code", null, null);
         csvImportColumn.setLookupQuery("select a from table a");
         csvImportColumn.setValueRegEx(".*");
         csvImportColumn.setUseMasterObject(true);

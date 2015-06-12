@@ -97,6 +97,7 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
             xStream.aliasField("language", CsvImportColumnImpl.class, "language");
             xStream.aliasField("value-regex", CsvImportColumnImpl.class, "valueRegEx");
             xStream.aliasField("value-regex-group", CsvImportColumnImpl.class, "valueRegExGroup");
+            xStream.aliasField("value-regex-template", CsvImportColumnImpl.class, "valueRegExTemplate");
             xStream.aliasField("lookup-query", CsvImportColumnImpl.class, "lookupQuery");
             xStream.aliasField("value-constant", CsvImportColumnImpl.class, "valueConstant");
             xStream.aliasField("import-descriptor", CsvImportColumnImpl.class, "importDescriptor");

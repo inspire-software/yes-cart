@@ -21,11 +21,14 @@ import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
 import org.yes.cart.bulkimport.model.FieldTypeEnum;
+import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.stream.xml.XStreamProvider;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -68,7 +71,9 @@ public class CsvImportDescriptorXStreamProviderTest {
         assertNotNull(desc.getImportColumns());
         assertEquals(11, desc.getImportColumns().size());
 
-        final CsvImportColumn col0 = (CsvImportColumn) desc.getImportColumns().iterator().next();
+        final List<ImportColumn> colums = new ArrayList<ImportColumn>(desc.getImportColumns());
+
+        final CsvImportColumn col0 = (CsvImportColumn) colums.get(0);
         assertNotNull(col0);
         assertEquals(0, col0.getColumnIndex());
         assertEquals(FieldTypeEnum.FK_FIELD, col0.getFieldType());
@@ -77,8 +82,16 @@ public class CsvImportDescriptorXStreamProviderTest {
         assertEquals(Integer.valueOf(1), col0.getValueRegExGroup());
         assertEquals("select b from AttributeGroupEntity b where b.code = {attributeGroup}", col0.getLookupQuery());
 
-
-
+        final CsvImportColumn col5 = (CsvImportColumn) colums.get(5);
+        assertNotNull(col5);
+        assertEquals(4, col5.getColumnIndex());
+        assertEquals(FieldTypeEnum.FIELD, col5.getFieldType());
+        assertEquals("displayName", col5.getName());
+        assertEquals("(.{0,255})(.*)", col5.getValueRegEx());
+        assertEquals(Integer.valueOf(1), col5.getValueRegExGroup());
+        assertEquals("Rus: $1", col5.getValueRegExTemplate());
+        assertEquals("ru", col5.getLanguage());
+        assertNull(col5.getLookupQuery());
 
     }
 

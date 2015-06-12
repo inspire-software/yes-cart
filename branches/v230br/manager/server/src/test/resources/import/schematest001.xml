@@ -86,7 +86,7 @@
             <name>displayName</name>
             <language>ru</language>
             <value-regex>(.{0,255})(.*)</value-regex>
-            <value-regex-group>1</value-regex-group>
+            <value-regex-template>Rus: $1</value-regex-template>
         </column-descriptor>
 
         <column-descriptor>

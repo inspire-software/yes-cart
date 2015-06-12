@@ -511,7 +511,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                         singleObjectValue = model.toString();
                     }
                     if (singleObjectValue != null && !singleObjectValue.getClass().equals(propertyDescriptor.getPropertyType())) {
-                        // if we have mismatch try on the fly conversion
+                        // if we have mismatch try on the fly conversion - this happens if someone omits <data-type> for non String values
                         singleObjectValue =
                                 extendedConversionService.convert(
                                         singleObjectValue,
@@ -726,7 +726,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      */
     public void setExtendedConversionService(final GenericConversionService extendedConversionService) {
         this.extendedConversionService = extendedConversionService;
-        valueDataAdapter = new CsvImportValueAdapter(extendedConversionService);
     }
 
     /**

@@ -42,6 +42,10 @@ public enum DataTypeEnum {
     /**
      * BigDecimal value.
      */
-    DECIMAL
+    DECIMAL,
+    /**
+     * Date value. For date format see {@link org.yes.cart.constants.Constants#DEFAULT_IMPORT_DATE_TIME_FORMAT}
+     */
+    DATETIME,
 
 }
