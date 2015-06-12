@@ -439,7 +439,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10000, 0, 0, 'SHOP10 Content', 'SHOP10 Content','content', 'SHOP10');
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10001, 10000, 0, 'License', 'License Page','content', 'License','license');
-INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12010,'CONTENT_BODY_en_1','<pre>Copyright 2009 Igor Azarnyi, Denys Pavlov
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12010,'CONTENT_BODY_en_1','<pre>Copyright 2009 Denys Pavlov, Igor Azarnyi
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -453,7 +453,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
     See the License for the specific language governing permissions and
     limitations under the License.
 </pre>',10001,'12010_CAV');
-INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12011,'CONTENT_BODY_ru_1','<pre>Copyright 2009 Igor Azarnyi, Denys Pavlov
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12011,'CONTENT_BODY_ru_1','<pre>Copyright 2009 Denys Pavlov, Igor Azarnyi
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -467,7 +467,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
     See the License for the specific language governing permissions and
     limitations under the License.
 </pre>',10001,'12011_CAV');
-INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12014,'CONTENT_BODY_uk_1','<pre>Copyright 2009 Igor Azarnyi, Denys Pavlov
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12014,'CONTENT_BODY_uk_1','<pre>Copyright 2009 Denys Pavlov, Igor Azarnyi
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
