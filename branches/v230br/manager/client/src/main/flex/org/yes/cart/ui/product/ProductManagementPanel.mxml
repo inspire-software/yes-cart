@@ -233,6 +233,7 @@
             remoteBrandService.getAll();
             remoteProductTypeService.getAll();
 
+            productAvailability.removeAll();
             productAvailability.addItem(
                     {name: resourceManager.getString('ProductManagementPanel','productAvailabilityStandard') ,
                      data:1}
