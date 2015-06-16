@@ -333,7 +333,6 @@ rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITS
 
     goto %comeBack%
 
-:finish
 
 :start_nullsmtp
 
