@@ -1,6 +1,5 @@
 Необходимо подтверждение заказа $root.ordernum на $shop.name
 для $customer.firstname $customer.lastname $customer.email
-
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {
@@ -30,5 +29,3 @@ try {
 out.print(e.getMessage());
 }
 %>
-
-

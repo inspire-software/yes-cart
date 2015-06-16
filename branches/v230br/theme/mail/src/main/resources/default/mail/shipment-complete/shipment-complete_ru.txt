@@ -1,3 +1,5 @@
-Уважаемый (-ая) $customer.firstname $customer.lastname !
+Уважаемый (-ая) $customer.firstname $customer.lastname!
 Доставка номер $param1 по заказу $root.ordernum завершена.
-Пожалуйста, проверьте информацию на странице Вашего профиля на "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
+
+Подробную информацию Вы можете посмотреть в истории заказов
+"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"

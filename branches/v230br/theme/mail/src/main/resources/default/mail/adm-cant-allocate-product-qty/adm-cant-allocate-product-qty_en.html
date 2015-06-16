@@ -21,31 +21,114 @@
 </head>
 <body>
 
-    <table width="440" border="0" cellpadding="0" cellspacing="0">
-        <tr>
-            <td style="border: 1px solid #CEE3F6; border-bottom: 0px;">
-                <img src="cid:mail-head_jpeg" border="0">
-            </td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #CEE3F6; border-top: 0px;">
-                <table width="100%">
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>
-                            Cannot allocate sku $sku.code $sku.name quantity <br>
-                            in order $root.ordernum at $shop.name  <br>
-                            for $customer.firstname $customer.lastname $customer.email
-                        </td>
-                        <td>&nbsp;</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: right">&#169; YesCart.org 2015</td>
-        </tr>
-    </table>
+<table width="700" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="border: 1px solid #CEE3F6; border-bottom: 0px;">
+            <img src="cid:mail-head_jpeg" border="0">
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid #CEE3F6; border-top: 0px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="2%">&nbsp;</td>
+                    <td>
+                        Cannot allocate quantity for product <b>$sku.name</b>, code <b>$sku.code</b> <br>
+                        for order <b>$root.ordernum</b> at <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a> for $customer.firstname $customer.lastname $customer.email
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="left">Order information:</td>
+                            </tr>
+                            <%
+                            def totalSum = 0;
+                            for (Object delivery : root.getDelivery()) {
+                            def deliverySum = 0;
+                            %>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>Delivery</td>
+                                <td align="right"><b>$delivery.deliveryNum</b></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <table width="100%" style="border-collapse: collapse;" cellpadding="3" cellspacing="0">
+                                        <tr bgcolor="#DBEAF9">
+                                            <td width="20%" style="border: 1px solid #E0E0E0;">Code</td>
+                                            <td width="40%" style="border: 1px solid #E0E0E0;">Name</td>
+                                            <td width="10%" style="border: 1px solid #E0E0E0;text-align: right;">Quantity</td>
+                                            <td width="15%" style="border: 1px solid #E0E0E0;text-align: right;">Price (<%=root.currency%>)</td>
+                                            <td width="15%" style="border: 1px solid #E0E0E0;text-align: right;">Sum (<%=root.currency%>)</td>
+                                        </tr>
+                                        <%
+                                        for(Object deliveryItem : delivery.getDetail()) {
+                                        def lineTotal = (deliveryItem.price * deliveryItem.qty).setScale(2, BigDecimal.ROUND_HALF_UP);
+                                        deliverySum += lineTotal;
+                                        %>
+                                        <tr>
+                                            <td style="border: 1px solid #E0E0E0;text-align:left;vertical-align:top;">
+                                                <%=deliveryItem.productSkuCode %>
+                                            </td>
+                                            <td style="border: 1px solid #E0E0E0;text-align:left;vertical-align:top;">
+                                                <%=deliveryItem.productName %>
+                                            </td>
+                                            <td style="border: 1px solid #E0E0E0;text-align:right;vertical-align:top;">
+                                                <%=deliveryItem.qty.setScale(0, BigDecimal.ROUND_HALF_UP) %>
+                                            </td>
+                                            <td style="border: 1px solid #E0E0E0;text-align:right;vertical-align:top;">
+                                                <%=deliveryItem.price.setScale(2,BigDecimal.ROUND_HALF_UP)%>
+                                            </td>
+                                            <td style="border: 1px solid #E0E0E0;text-align:right;vertical-align:top;">
+                                                <%=lineTotal%>
+                                            </td>
+                                        </tr>
+                                        <%
+                                        }
+                                        %>
+                                        <tr>
+                                            <td colspan="3" style="border: 1px solid #E0E0E0;">Delivery sub total (<%=root.currency%>)</td>
+                                            <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=deliverySum%></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="border: 1px solid #E0E0E0;">Shipping cost (<%=root.currency%>)</td>
+                                            <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=delivery.price%></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="border: 1px solid #E0E0E0;">Delivery total (<%=root.currency%>)</td>
+                                            <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=(delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP)%></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <%
+                            totalSum += (delivery.price + deliverySum);
+                            }
+                            %>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><b>Order total (<%=root.currency%>)</b></td>
+                                <td align="right"><b><%=totalSum.setScale(2, BigDecimal.ROUND_HALF_UP)%></b></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="2%">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: right">&#169; YesCart.org 2015</td>
+    </tr>
+</table>
 
 </body>
 </html>

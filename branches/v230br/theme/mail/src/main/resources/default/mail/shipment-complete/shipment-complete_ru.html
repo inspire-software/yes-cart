@@ -21,39 +21,51 @@
 </head>
 <body>
 
-    <table width="440" border="0" cellpadding="0" cellspacing="0">
-        <tr>
-            <td style="border: 1px solid #CEE3F6; border-bottom: 0px;">
-                <img src="cid:mail-head_jpeg" border="0">
-            </td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #CEE3F6; border-top: 0px;">
-                <table width="100%">
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>
-                            Уважаемый (-ая) <b>$customer.firstname</b> ! <br>
-                            Доставка номер $param1 по заказу $root.ordernum завершена. <br>
-                            Пожалуйста, проверьте информацию на странице Вашего профиля на
-                            <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a>
-                        </td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td style="border-top: 1px solid #CEE3F6;">
-                            Контактная информация:
-                        </td>
-                        <td>&nbsp;</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: right">&#169; YesCart.org 2015</td>
-        </tr>
-    </table>
+<table width="700" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="border: 1px solid #CEE3F6; border-bottom: 0px;">
+            <img src="cid:mail-head_jpeg" border="0">
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid #CEE3F6; border-top: 0px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="2%">&nbsp;</td>
+                    <td>
+                        Уважаемый (-ая) <b>$customer.firstname $customer.lastname</b>! <br>
+                        Оплата доставки $param1 по Вашему заказу <b>$root.ordernum</b> получена. Спасибо!
+                    </td>
+                    <td width="2%">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        Подробную информацию Вы можете посмотреть в
+                        <a href="<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>">истории заказов</a>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="border-top: 1px solid #CEE3F6;">
+                        Контактная информация:
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: right">&#169; YesCart.org 2015</td>
+    </tr>
+</table>
 
 </body>
 </html>

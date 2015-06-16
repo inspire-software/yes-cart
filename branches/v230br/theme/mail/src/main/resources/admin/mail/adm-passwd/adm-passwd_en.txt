@@ -1,2 +1,2 @@
-Hello $firstName $lastName !
-Your password is $password
+Hello $firstName $lastName!
+Your password is: $password

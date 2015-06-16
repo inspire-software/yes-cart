@@ -21,39 +21,51 @@
 </head>
 <body>
 
-    <table width="440" border="0" cellpadding="0" cellspacing="0">
-        <tr>
-            <td style="border: 1px solid #CEE3F6; border-bottom: 0px;">
-                <img src="cid:mail-head_jpeg" border="0">
-            </td>
-        </tr>
-        <tr>
-            <td style="border: 1px solid #CEE3F6; border-top: 0px;">
-                <table width="100%">
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td>
-                            Dear <b>$customer.firstname</b> ! <br>
-                            Delivery number $param1 for $root.ordernum is complete <br>
-                            Please check detail at self care page
-                            <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a>
-                        </td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td>&nbsp;</td>
-                        <td style="border-top: 1px solid #CEE3F6;">
-                            Contact information:
-                        </td>
-                        <td>&nbsp;</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: right">&#169; YesCart.org 2015</td>
-        </tr>
-    </table>
+<table width="700" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="border: 1px solid #CEE3F6; border-bottom: 0px;">
+            <img src="cid:mail-head_jpeg" border="0">
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid #CEE3F6; border-top: 0px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="2%">&nbsp;</td>
+                    <td>
+                        Dear <b>$customer.firstname $customer.lastname</b>!<br>
+                        Your payment for delivery $param1 for order <b>$root.ordernum</b> has been received. Thank You!
+                    </td>
+                    <td width="2%">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        You can view detailed information in
+                        <a href="<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>">order history</a>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="border-top: 1px solid #CEE3F6;">
+                        Contact information:
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: right">&#169; YesCart.org 2015</td>
+    </tr>
+</table>
 
 </body>
 </html>

@@ -27,6 +27,8 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
+import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ProductService;
@@ -38,6 +40,7 @@ import org.yes.cart.util.ShopCodeContext;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,6 +59,8 @@ public class PaymentAspect extends BaseNotificationAspect {
     private final MailComposer mailComposer;
 
     private final CustomerService customerService;
+
+    private final CustomerOrderPaymentService customerOrderPaymentService;
 
     private final ShopService shopService;
 
@@ -80,6 +85,7 @@ public class PaymentAspect extends BaseNotificationAspect {
                          final MailService mailService,
                          final MailComposer mailComposer,
                          final CustomerService customerService,
+                         final CustomerOrderPaymentService customerOrderPaymentService,
                          final ShopService shopService,
                          final ThemeService themeService,
                          final PaymentModulesManager paymentModulesManager) {
@@ -89,6 +95,7 @@ public class PaymentAspect extends BaseNotificationAspect {
         this.mailComposer = mailComposer;
         this.shopService = shopService;
         this.customerService = customerService;
+        this.customerOrderPaymentService = customerOrderPaymentService;
         this.themeService = themeService;
         this.paymentModulesManager = paymentModulesManager;
 
@@ -206,6 +213,8 @@ public class PaymentAspect extends BaseNotificationAspect {
                 final HashMap<String, Object> adminMap = new HashMap<String, Object>(map);
                 adminMap.put(StandardMessageListener.TEMPLATE_NAME, adminTemplate);
                 adminMap.put(StandardMessageListener.CUSTOMER_EMAIL, attrVal.getVal());
+                List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(order.getOrdernum(), null, (String) null, (String) null);
+                adminMap.put(StandardMessageListener.PAYMENTS, payments);
                 sendNotification(adminMap);
             } else {
                 ShopCodeContext.getLog(this).warn("Shop admin e-mail is not setup for: " + order.getShop().getCode());

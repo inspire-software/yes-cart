@@ -1,7 +1,4 @@
-Need order confirmation for $customer.firstname $customer.lastname $customer.email
-
-Order number $root.ordernum at $shop.name
-
+Need confirmation for order $root.ordernum at $shop.name for $customer.firstname $customer.lastname $customer.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {
@@ -31,4 +28,3 @@ try {
 out.print(e.getMessage());
 }
 %>
-

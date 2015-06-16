@@ -66,6 +66,11 @@ public class StandardMessageListener implements Runnable {
     public static final String RESULT = "result";
 
     /**
+     * All order payments.  Payment context variable.
+     */
+    public static final String PAYMENTS = "payments";
+
+    /**
      * All parameters will be passed with index param0, param1, etc
      */
     public static final String PARAM_PREFIX = "param";

@@ -21,7 +21,7 @@
 </head>
 <body>
 
-    <table width="440" border="0" cellpadding="0" cellspacing="0">
+    <table width="700" border="0" cellpadding="0" cellspacing="0">
         <tr>
             <td style="border: 1px solid #CEE3F6; border-bottom: 0px;">
                 <img src="cid:mail-head_jpeg" border="0">
@@ -29,11 +29,11 @@
         </tr>
         <tr>
             <td style="border: 1px solid #CEE3F6; border-top: 0px;">
-                <table width="100%">
+                <table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td>&nbsp;</td>
+                        <td width="2%">&nbsp;</td>
                         <td>
-                            Шановний (-на) <b>$firstName</b> ! <br>
+                            Шановний (-на) <b>$firstName $lastName</b>! <br>
                             Ви зареєструвалися на
                             <% if (shopUrl != null && !shopUrl.isEmpty()) { %>
                             <a href="<%out.print(shopUrl.iterator().next())%>">$shopName</a>
@@ -42,8 +42,12 @@
                             <% }%>
                             магазині.
                             <br>
-                            Ваш пароль <b>$password</b>
+                            <br>
+                            Ваш пароль: <b>$password</b>
                         </td>
+                        <td width="2%">&nbsp;</td>
+                    </tr>
+                    <tr>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
