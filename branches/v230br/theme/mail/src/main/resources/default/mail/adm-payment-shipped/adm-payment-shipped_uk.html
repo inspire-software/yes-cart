@@ -52,14 +52,14 @@
                                 <td style="border: 1px solid #E0E0E0;vertical-align: top">
                                     <%=payment.transactionGatewayLabel %><br>
                                     №<%=payment.orderShipment %><br>
-                                    IP клієнта:<%=payment.shopperIpAddress %>
+                                    IP клієнта:<%=payment.shopperIpAddress != null ? payment.shopperIpAddress : "" %>
                                 </td>
                                 <td style="border: 1px solid #E0E0E0;vertical-align: top">
                                     <%=payment.transactionOperation %>
                                 </td>
                                 <td style="border: 1px solid #E0E0E0;vertical-align: top">
-                                    <%=payment.paymentProcessorResult %>, <%=payment.transactionOperationResultCode %><br>
-                                    <%=payment.transactionOperationResultMessage %>
+                                    <%=payment.paymentProcessorResult %> <%=payment.transactionOperationResultCode != null ? payment.transactionOperationResultCode : "" %><br>
+                                    <%=payment.transactionOperationResultMessage != null ? payment.transactionOperationResultMessage : "" %>
                                 </td>
                                 <td style="border: 1px solid #E0E0E0;vertical-align: top">
                                     <%=payment.paymentAmount %> (<%=payment.orderCurrency %>)
