@@ -133,7 +133,7 @@
         -->
         <pack name="Optional local email server" required="no">
             <description>local email server, which just accept all mails</description>
-            <fileset dir="../util/devnullsmtp"  targetdir="$INSTALL_PATH/devnullsmtp" override="true"/>
+            <fileset dir="../env/devnullsmtp"  targetdir="$INSTALL_PATH/devnullsmtp" override="true"/>
         </pack>
 
 

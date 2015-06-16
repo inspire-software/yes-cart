@@ -104,6 +104,15 @@ if %1.==luke. (
 	goto finish
 )
 
+if %1.==nullsmtp. (
+    call cd %YC_HOME%
+	set comeBack=nullsmtp
+    goto start_nullsmtp
+:nullsmtp
+    call cd %RUNDIR%
+	goto finish
+)
+
 echo Provide a command...
 goto show_help
 goto finish
@@ -139,6 +148,8 @@ rem Sub routines below this comment
     echo   cpres     - copy extra resources to webapps
     echo.                                                 
     echo   luke      - start luke
+    echo.
+    echo   nullsmtp  - start DevNullSmtp
     echo.
     echo   dbimysql  - initialise db for mysql
     echo.                                                 
@@ -319,6 +330,18 @@ rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITS
     echo ================================================
 
     call java -jar "%YC_HOME%\env\luke\lukeall-3.5.0.jar"
+
+    goto %comeBack%
+
+:finish
+
+:start_nullsmtp
+
+    echo ================================================
+    echo  Starting DevNullSmtp (dummy SMTP server)
+    echo ================================================
+
+    call java -jar "%YC_HOME%\env\devnullsmtp\DevNullSmtp.jar"
 
     goto %comeBack%
 

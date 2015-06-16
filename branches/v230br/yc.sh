@@ -41,6 +41,8 @@ show_help() {
     echo "                                                ";
     echo "  luke      - start luke                        ";
     echo "                                                ";
+    echo "  nullsmtp  - start DevNullSmtp                 ";
+    echo "                                                ";
     echo "  dbimysql  - initialise db for mysql           ";
     echo "                                                ";
     echo "  dbiderby  - initialise db for derby           ";
@@ -215,6 +217,16 @@ start_luke() {
 
 }
 
+start_nullsmtp() {
+
+    echo "================================================";
+    echo " Starting DevNullSmtp (dummy SMTP server)       ";
+    echo "================================================";
+
+    java -jar $YC_HOME/env/devnullsmtp/DevNullSmtp.jar
+
+}
+
 
 if [ $1 ];
 then
@@ -280,6 +292,12 @@ then
     then
         cd $YC_HOME
         start_luke;
+        cd $RUNDIR
+        exit 0;
+    elif [ $1 = "nullsmtp" ];
+    then
+        cd $YC_HOME
+        start_nullsmtp;
         cd $RUNDIR
         exit 0;
     else
