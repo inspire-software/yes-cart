@@ -257,6 +257,10 @@ rem Sub routines below this comment
     start java -jar derbyrun.jar server start
 
     echo  Derby server started on port 1527...           
+    echo.
+    echo  Tip: if you see 'started and ready to accept connections on port 1527' but no prompt, just hit ENTER
+    echo  Tip: if you encounter problems check http://www.inspire-software.com/confluence/display/YC3EN/Derby+quick+start
+    echo.
 	goto %comeBack%
 
 
