@@ -23,7 +23,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -41,6 +40,9 @@ import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
+import org.yes.cart.web.util.WicketUtil;
+
+import java.util.Collections;
 
 /**
  *
@@ -95,7 +97,9 @@ public class OrderPage extends AbstractWebPage {
 
         add(new FeedbackPanel(FEEDBACK));
         if (customerOrder != null) {
-            add(new Label(ORDER_NUM, new StringResourceModel("orderNoTitle", this, null, new Object[] {customerOrder.getOrdernum()})));
+            add(new Label(ORDER_NUM,
+                    WicketUtil.createStringResourceModel(this, "orderNoTitle",
+                            Collections.<String, Object>singletonMap("ordernum", customerOrder.getOrdernum()))));
             add(new ShoppingCartPaymentVerificationView(ORDER_PANEL, orderGuid, true));
         } else {
             add(new Label(ORDER_NUM, ""));

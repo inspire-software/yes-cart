@@ -79,7 +79,7 @@
     <entry key="no">Нет</entry>
 
     <!-- AjaxAtbPage -->
-    <entry key="itemAdded">товар {0} успешно добавлен в корзину</entry>
+    <entry key="itemAdded">товар ${sku} успешно добавлен в корзину</entry>
 
     <!-- CheckoutPage -->
     <entry key="addressStep">Ваш адрес</entry>
@@ -126,7 +126,7 @@
     <entry key="negativePaymentNotes">Оплата произведена неудачно</entry>
     <entry key="positivePaymentNotes">Оплата произведена успешно</entry>
     <entry key="checkStatus">Проверить статус заказа</entry>
-    <entry key="negativeItemAllocationNotes">Недостаточное количество  {0}, код {1} на складах. Попробуйте купить похожий продукт. Приносим свои извинения</entry>
+    <entry key="negativeItemAllocationNotes">Недостаточное количество ${product} (код ${sku}) на складе. Попробуйте купить похожий продукт. Приносим свои извинения</entry>
 
     <!-- RegistrationPage -->
 
@@ -135,8 +135,8 @@
     <entry key="shoppingCart">Корзина</entry>
     <entry key="emptyCart">Корзина пуста</entry>
     <entry key="orderErrorGeneral">Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.</entry>
-    <entry key="orderErrorCouponInvalid">Промо-код '${0}' не может быть применен. Пожалуйста удалите его из корзины.</entry>
-    <entry key="orderErrorSkuInvalid">${0} снят с продаж. Пожалуйста удалите его из корзины.</entry>
+    <entry key="orderErrorCouponInvalid">Промо-код '${coupon}' не может быть применен. Пожалуйста удалите его из корзины.</entry>
+    <entry key="orderErrorSkuInvalid">${sku} снят с продаж. Пожалуйста удалите его из корзины.</entry>
 
     <!-- COMPONENTS -->
     <!-- BreadCrumbsView -->
@@ -186,14 +186,14 @@
     <entry key="removeCouponCodeLabel">Убрать промо-код</entry>
     <entry key="addCouponButtonLabel">Добавить промо-код</entry>
     <entry key="enterCouponLabel">Введите промо-код</entry>
-    <entry key="appliedPromoCode">${0} [применен]</entry>
-    <entry key="pendingPromoCode">${0} [не применен]</entry>
+    <entry key="appliedPromoCode">${coupon} [применен]</entry>
+    <entry key="pendingPromoCode">${coupon} [не применен]</entry>
     <entry key="noEmptyCoupons">Введите пожалуйста промо-код</entry>
 
     <!-- SmallShoppingCartView -->
-    <entry key="itemForm0">{0} товар</entry>
-    <entry key="itemForm1">{0} товара</entry>
-    <entry key="itemForm2">{0} товаров</entry>
+    <entry key="itemForm0">${quantity} товар</entry>
+    <entry key="itemForm1">${quantity} товара</entry>
+    <entry key="itemForm2">${quantity} товаров</entry>
     <entry key="noItem">Пустая корзина</entry>
     <entry key="yourCartTitle">Ваша корзина:</entry>
 
@@ -227,7 +227,7 @@
     <entry key="tryRestorePassword">Забыли пароль?</entry>
     <entry key="signIn">Вход</entry>
     <entry key="tryToRestore">Нажмите "восстановить пароль" и он будет выслан Вам на почту</entry>
-    <entry key="newPasswordRequestEmailSent">Запрос на новый пароль был выслан на почту {0}</entry>
+    <entry key="newPasswordRequestEmailSent">Запрос на новый пароль был выслан на почту ${email}</entry>
     <entry key="newPasswordEmailSent">Новый пароль был выслан на почту</entry>
     <entry key="newPasswordInvalidToken">Неверный код авторизации. Невозможно сгенирировать новый пароль.</entry>
 
@@ -240,7 +240,7 @@
 
     <!-- LogoutPanel -->
     <entry key="logoffLabel">Выйти</entry>
-    <entry key="logoffTitle">${name} нажмите здесь, чтобы выйти из Вашей учетной записи</entry>
+    <entry key="logoffTitle">${customer} нажмите здесь, чтобы выйти из Вашей учетной записи</entry>
 
     <!-- CustomerOrderPanel -->
     <!-- order statuses from CustomerOrder interface -->
@@ -262,7 +262,7 @@
     <entry key="orderInfo">Заказы</entry>
     <entry key="noOrders">Нет записей в истории заказов.</entry>
     <entry key="orderNotFound">Заказ не найден.</entry>
-    <entry key="orderNoTitle">Заказ {0}</entry>
+    <entry key="orderNoTitle">Заказ ${ordernum}</entry>
 
     <!-- PasswordPanel -->
     <entry key="changePassword">Политика безопасности магазина - только автоматически сгенерированный пароль. Запрос на новый пароль будет выслан по почте после нажатия кнопки "Сменить пароль"</entry>
@@ -276,12 +276,12 @@
     <!-- WishListView -->
     <entry key="wishlistItems">Список пожеланий</entry>
     <entry key="wishlistNoItems">Список пожеланий пуст. Вы можете его пополнить нажав кнопку "В пожелания" на страницах товаров.</entry>
-    <entry key="addToCartWlBtn">В корзину (${0})</entry>
-    <entry key="preorderCartWlBtn">Заказать (${0})</entry>
+    <entry key="addToCartWlBtn">В корзину (${quantity})</entry>
+    <entry key="preorderCartWlBtn">Заказать (${quantity})</entry>
     <entry key="removeFromWishlist">Убрать из списка</entry>
-    <entry key="wishListPriceIncreased">Цена увеличилась на ${0}%</entry>
-    <entry key="wishListPriceDecreased">Цена уменьшилась на ${0}%</entry>
-    <entry key="wishListPriceOnSaleNow">Акция. Скидка ${0}%</entry>
+    <entry key="wishListPriceIncreased">Цена увеличилась на ${delta}%</entry>
+    <entry key="wishListPriceDecreased">Цена уменьшилась на ${delta}%</entry>
+    <entry key="wishListPriceOnSaleNow">Акция. Скидка ${delta}%</entry>
     <entry key="wishListShare">Этот товар виден только Вам. Нажмите эту иконку, чтобы поделиться с друзьями.</entry>
     <entry key="wishListHide">Этот товар виден Всем у кого есть ссылка. Нажмите эту иконку, чтобы спрятать.</entry>
     <entry key="wishListNotFound">Список пожеланий не найден.</entry>
@@ -335,7 +335,7 @@
     <entry key="discountRule">Покупая более одной единицы товара, вы получаете скидку. Чем больше однотипных товаров Вы покупаете, тем больше скидка</entry>
 
     <!-- PriceView -->
-    <entry key="savePercent">Скидка {0}%</entry>
+    <entry key="savePercent">Скидка ${discount}%</entry>
 
     <!-- RecentlyViewedProducts -->
     <entry key="recentlyViewed">Просмотренные</entry>
@@ -361,8 +361,8 @@
     <!-- SkuCentralView -->
     <entry key="addToWishlist">В пожелания</entry>
     <entry key="saveForLater">Отложить на потом</entry>
-    <entry key="wishListItemAddedW">Товар ${0} добавлен в пожелания. Просмотреть лист пожеланий Вы можете в Вашем профиле.</entry>
-    <entry key="wishListItemAddedC">Товар ${0} отложен. Просмотреть лист отложенных товаров Вы можете в Вашей корзине.</entry>
+    <entry key="wishListItemAddedW">Товар ${sku} добавлен в пожелания. Просмотреть лист пожеланий Вы можете в Вашем профиле.</entry>
+    <entry key="wishListItemAddedC">Товар ${sku} отложен. Просмотреть лист отложенных товаров Вы можете в Вашей корзине.</entry>
     <entry key="description">Описание</entry>
     <entry key="details">Спецификация</entry>
     <entry key="accessories">Аксессуары</entry>
@@ -370,9 +370,9 @@
     <entry key="upcrosssell">Альтернативы</entry>
     <entry key="buywiththis">Рекомендации</entry>
     <entry key="volumeDiscount">Оптовые скидки</entry>
-    <entry key="quantityPickerTooltip">Минимальное кол-во для покупки ${0} с шагом ${1} до ${2}. ${3} в корзине.</entry>
-    <entry key="quantityPickerTooltipNoMax">Минимальное кол-во для покупки ${0} с шагом ${1}. ${2} в корзине.</entry>
-    <entry key="quantityPickerFullTooltip">Вы добавили максимальное количество. ${0} в корзине.</entry>
+    <entry key="quantityPickerTooltip">Минимальное кол-во для покупки ${min} с шагом ${step} до ${max}. ${cart} в корзине.</entry>
+    <entry key="quantityPickerTooltipNoMax">Минимальное кол-во для покупки ${min} с шагом ${step}. ${cart} в корзине.</entry>
+    <entry key="quantityPickerFullTooltip">Вы добавили максимальное количество. ${cart} в корзине.</entry>
 
     <!-- TopCategories -->
     <entry key="categories">Каталог</entry>
@@ -400,15 +400,15 @@
     <entry key="badStatus">Ваш статус не подтвержден на pay pal или невозможно получить информацию об оплате</entry>
     <entry key="confirmPayment">
         <![CDATA[
-                    Сумма платежа {0} {1}. Подтвердите оплату для продолжения.
+                    Сумма платежа ${amount} ${currency}. Подтвердите оплату для продолжения.
                ]]>
     </entry>
     <entry key="paymentOk">
         <![CDATA[
-                    Оплата прошла успешно. Номер заказа {0}.
+                    Оплата прошла успешно. Номер заказа ${ordernum}.
                     Статус можно проверить <a href="orders">на этой странице</a>.
                      <br>
-                    <a href=".">За новыми покупками !</a>.
+                    <a href=".">За новыми покупками</a>.
                ]]>
     </entry>
 

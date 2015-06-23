@@ -42,6 +42,9 @@ import org.yes.cart.web.page.RegistrationPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
+import org.yes.cart.web.util.WicketUtil;
+
+import java.util.Collections;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -203,7 +206,8 @@ public class LoginPanel extends BaseComponent {
                         ((AbstractWebPage) getPage()).executeHttpPostedCommands();
                         ((AbstractWebPage) getPage()).persistCartIfNecessary();
 
-                        info(new StringResourceModel("newPasswordRequestEmailSent", this, null, new Object[] {email}).getString());
+                        info(WicketUtil.createStringResourceModel(this, "newPasswordRequestEmailSent",
+                                Collections.<String, Object>singletonMap("email", email)).getString());
                         setRestorePassword(null);
                     } else {
                         error(getLocalizer().getString("customerNotExists", this));

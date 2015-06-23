@@ -20,7 +20,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -43,9 +42,11 @@ import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
+import org.yes.cart.web.util.WicketUtil;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -161,8 +162,8 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
                                     addOrReplace(
                                             new Label(
                                                     INFO_LABEL,
-                                                    new StringResourceModel("paymentOk", this, null, (Object) customerOrder.getOrdernum()).getString()
-
+                                                    WicketUtil.createStringResourceModel(this, "paymentOk",
+                                                            Collections.<String, Object>singletonMap("ordernum", customerOrder.getOrdernum()))
                                             ).setEscapeModelStrings(false)
                                     );
 
@@ -203,9 +204,11 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
             );
 
             if (checkoutDetailOk) {
-                info(
-                        new StringResourceModel("confirmPayment", this, null, payment.getPaymentAmount(), payment.getOrderCurrency()).getString()
-                );
+                final Map<String, Object> mparams = new HashMap<String, Object>();
+                mparams.put("amount", payment.getPaymentAmount().toPlainString());
+                mparams.put("currency", payment.getOrderCurrency());
+
+                info(WicketUtil.createStringResourceModel(this, "confirmPayment", mparams).getString());
             } else {
                 error(getLocalizer().getString("badStatus", this));
             }

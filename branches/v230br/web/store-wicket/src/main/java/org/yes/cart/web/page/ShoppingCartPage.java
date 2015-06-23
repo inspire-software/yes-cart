@@ -22,6 +22,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartView;
@@ -30,6 +31,8 @@ import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
+
+import java.util.Collections;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -63,9 +66,11 @@ public class ShoppingCartPage extends AbstractWebPage {
         if (!checkoutError.isEmpty()) {
 
            if ("ec".equals(checkoutError.toString())) {
-                warn(getLocalizer().getString("orderErrorCouponInvalid", this, new Model<Object[]>(new Object[] { params.get("ec").toString() })));
+                warn(getLocalizer().getString("orderErrorCouponInvalid", this,
+                        new Model<ValueMap>(new ValueMap(Collections.singletonMap("coupon", params.get("ec").toString())))));
            } else if ("es".equals(checkoutError.toString())) {
-               warn(getLocalizer().getString("orderErrorSkuInvalid", this, new Model<Object[]>(new Object[] { params.get("es").toString() })));
+               warn(getLocalizer().getString("orderErrorSkuInvalid", this,
+                       new Model<ValueMap>(new ValueMap(Collections.singletonMap("sku", params.get("es").toString())))));
            } else {
                 error(getLocalizer().getString("orderErrorGeneral", this));
            }

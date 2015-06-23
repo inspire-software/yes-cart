@@ -18,11 +18,14 @@ package org.yes.cart.web.util;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.web.shoppingcart.CommandConfig;
-import org.yes.cart.web.shoppingcart.impl.CommandConfigImpl;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import javax.servlet.http.HttpServletRequest;
@@ -278,5 +281,38 @@ public class WicketUtil {
         return css.toString();
     }
 
+    /**
+     * Create simple string resource model for wicket.
+     *
+     * @param component component to provide resources
+     * @param resourceKey key
+     *
+     * @return simple label
+     */
+    public static StringResourceModel createStringResourceModel(final Component component,
+                                                                final String resourceKey) {
+
+        return new StringResourceModel(resourceKey, component, null);
+
+    }
+
+    /**
+     * Create parameterized string resource model for wicket. (i.e. "The ${animal} jumped over the ${target}.")
+     *
+     * @param component component to provide resources
+     * @param resourceKey key
+     * @param parameters parameters which are specified by ${name} placeholders in the resource key
+     *
+     * @return parameterized label
+     */
+    public static StringResourceModel createStringResourceModel(final Component component,
+                                                                final String resourceKey,
+                                                                final Map<String, Object> parameters) {
+        if (parameters != null) {
+            final ValueMap params = new ValueMap(parameters);
+            return new StringResourceModel(resourceKey, component, new Model<ValueMap>(params));
+        }
+        return new StringResourceModel(resourceKey, component, null);
+    }
 
 }

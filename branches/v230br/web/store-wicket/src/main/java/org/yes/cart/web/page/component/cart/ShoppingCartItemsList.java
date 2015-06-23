@@ -31,6 +31,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
@@ -53,8 +54,11 @@ import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -169,25 +173,33 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
         final String message;
         if (!pqm.canOrderMore()) {
+
+            final Map<String, Object> mparams = new HashMap<String, Object>();
+            mparams.put("cart", pqm.getCartQty().toPlainString());
+
             message = getLocalizer().getString("quantityPickerFullTooltip", this,
-                    new Model<Object[]>(new Object[] {
-                            pqm.getCartQty().toPlainString()
-                    }));
+                    new Model<Serializable>(new ValueMap(mparams)));
+
         } else if (pqm.hasMax()) {
+
+            final Map<String, Object> mparams = new HashMap<String, Object>();
+            mparams.put("min", pqm.getMin().toPlainString());
+            mparams.put("step", pqm.getStep().toPlainString());
+            mparams.put("max", pqm.getMax().toPlainString());
+            mparams.put("cart", pqm.getCartQty().toPlainString());
+
             message = getLocalizer().getString("quantityPickerTooltip", this,
-                    new Model<Object[]>(new Object[] {
-                            pqm.getMin().toPlainString(),
-                            pqm.getStep().toPlainString(),
-                            pqm.getMax().toPlainString(),
-                            cartItem.getQty().toPlainString()
-                    }));
+                    new Model<Serializable>(new ValueMap(mparams)));
+
         } else {
+
+            final Map<String, Object> mparams = new HashMap<String, Object>();
+            mparams.put("min", pqm.getMin().toPlainString());
+            mparams.put("step", pqm.getStep().toPlainString());
+            mparams.put("cart", pqm.getCartQty().toPlainString());
+
             message = getLocalizer().getString("quantityPickerTooltipNoMax", this,
-                    new Model<Object[]>(new Object[] {
-                            pqm.getMin().toPlainString(),
-                            pqm.getStep().toPlainString(),
-                            pqm.getCartQty().toPlainString()
-                    }));
+                    new Model<Serializable>(new ValueMap(mparams)));
         }
 
 

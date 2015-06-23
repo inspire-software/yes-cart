@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -29,7 +30,10 @@ import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -59,25 +63,33 @@ public class QuantityPickerPanel extends BaseComponent {
 
         final String message;
         if (!pqm.canOrderMore()) {
+
+            final Map<String, Object> params = new HashMap<String, Object>();
+            params.put("cart", pqm.getCartQty().toPlainString());
+
             message = getLocalizer().getString("quantityPickerFullTooltip", this,
-                    new Model<Object[]>(new Object[] {
-                            pqm.getCartQty().toPlainString()
-                    }));
+                    new Model<Serializable>(new ValueMap(params)));
+
         } else if (pqm.hasMax()) {
+
+            final Map<String, Object> params = new HashMap<String, Object>();
+            params.put("min", pqm.getMin().toPlainString());
+            params.put("step", pqm.getStep().toPlainString());
+            params.put("max", pqm.getMax().toPlainString());
+            params.put("cart", pqm.getCartQty().toPlainString());
+
             message = getLocalizer().getString("quantityPickerTooltip", this,
-                    new Model<Object[]>(new Object[] {
-                            pqm.getMin().toPlainString(),
-                            pqm.getStep().toPlainString(),
-                            pqm.getMax().toPlainString(),
-                            pqm.getCartQty().toPlainString()
-                    }));
+                    new Model<Serializable>(new ValueMap(params)));
+
         } else {
+
+            final Map<String, Object> params = new HashMap<String, Object>();
+            params.put("min", pqm.getMin().toPlainString());
+            params.put("step", pqm.getStep().toPlainString());
+            params.put("cart", pqm.getCartQty().toPlainString());
+
             message = getLocalizer().getString("quantityPickerTooltipNoMax", this,
-                    new Model<Object[]>(new Object[] {
-                            pqm.getMin().toPlainString(),
-                            pqm.getStep().toPlainString(),
-                            pqm.getCartQty().toPlainString()
-                    }));
+                    new Model<Serializable>(new ValueMap(params)));
         }
 
         add(new ExternalLink("removeOneLink", "#"));

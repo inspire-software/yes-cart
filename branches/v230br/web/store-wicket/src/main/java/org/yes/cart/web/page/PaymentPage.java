@@ -199,10 +199,12 @@ public class PaymentPage extends AbstractWebPage {
     private MarkupContainer createNegativeItemAllocationResultFragment(final String sku) {
 
         final ProductSku productSku = productServiceFacade.getProductSkuBySkuCode(sku);
-        final String errorMessage =  new StringResourceModel(ALLOCATION_DETAIL, this, null,
-                new Object [] {
-                        getI18NSupport().getFailoverModel(productSku.getDisplayName(), productSku.getName()).getValue(getLocale().getLanguage()),
-                        sku } ).getString()  ;
+
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put("product", getI18NSupport().getFailoverModel(productSku.getDisplayName(), productSku.getName()).getValue(getLocale().getLanguage()));
+        param.put("sku", sku);
+        final String errorMessage =
+                WicketUtil.createStringResourceModel(this, ALLOCATION_DETAIL, param).getString();
 
         error(errorMessage);
 

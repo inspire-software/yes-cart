@@ -21,10 +21,11 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 
-import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -78,7 +79,7 @@ public class ShoppingCartCouponsList extends ListView<String> {
 
         couponListItem.add(new Label(LIST_ITEM_TEXT,
                 getLocalizer().getString(messageKey, this.getParent(),
-                        new Model<Serializable>(new Object[] { couponCode }))));
+                        new Model<ValueMap>(new ValueMap(Collections.singletonMap("coupon", couponCode))))));
 
         couponListItem.add(wicketSupportFacade.links()
                 .newRemoveCouponLink(REMOVE_COUPON, couponCode,

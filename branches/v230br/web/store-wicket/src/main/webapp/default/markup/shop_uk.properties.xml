@@ -79,7 +79,7 @@
     <entry key="no">Ні</entry>
 
     <!-- AjaxAtbPage -->
-    <entry key="itemAdded">товар {0} успішно додано до кошика</entry>
+    <entry key="itemAdded">товар ${sku} успішно додано до кошика</entry>
 
     <!-- CheckoutPage -->
     <entry key="addressStep">Ваша адреса</entry>
@@ -126,7 +126,7 @@
     <entry key="negativePaymentNotes">Оплата пройшла невдало</entry>
     <entry key="positivePaymentNotes">Оплата пройшла успішно</entry>
     <entry key="checkStatus">Перевірити статус замовлення</entry>
-    <entry key="negativeItemAllocationNotes">Недостатня кількість  {0}, код {1} на складах. Спробуйте купити схожий товар. Приносимо вибачення</entry>
+    <entry key="negativeItemAllocationNotes">Недостатня кількість ${product} (код ${sku}) на складі. Спробуйте купити схожий товар. Приносимо вибачення</entry>
 
     <!-- RegistrationPage -->
 
@@ -135,8 +135,8 @@
     <entry key="shoppingCart">Кошик</entry>
     <entry key="emptyCart">Кошик порожній</entry>
     <entry key="orderErrorGeneral">Сталася помилка при створені Вашого замовлення. Спробуйте ще раз.</entry>
-    <entry key="orderErrorCouponInvalid">Промо-код '${0}' не може бути прийнятий. Будь-ласка видаліть його із кошика.</entry>
-    <entry key="orderErrorSkuInvalid">${0} знятий з продажу. Будь-ласка видаліть його із кошика.</entry>
+    <entry key="orderErrorCouponInvalid">Промо-код '${coupon}' не може бути прийнятий. Будь-ласка видаліть його із кошика.</entry>
+    <entry key="orderErrorSkuInvalid">${sku} знятий з продажу. Будь-ласка видаліть його із кошика.</entry>
 
     <!-- COMPONENTS -->
     <!-- BreadCrumbsView -->
@@ -186,14 +186,14 @@
     <entry key="removeCouponCodeLabel">Видалити промо-код</entry>
     <entry key="addCouponButtonLabel">Додати промо-код</entry>
     <entry key="enterCouponLabel">Введіть промо-код</entry>
-    <entry key="appliedPromoCode">${0} [застосований]</entry>
-    <entry key="pendingPromoCode">${0} [не застосований]</entry>
+    <entry key="appliedPromoCode">${coupon} [застосований]</entry>
+    <entry key="pendingPromoCode">${coupon} [не застосований]</entry>
     <entry key="noEmptyCoupons">Введіть будь-ласка промо-код</entry>
 
     <!-- SmallShoppingCartView -->
-    <entry key="itemForm0">{0} товар</entry>
-    <entry key="itemForm1">{0} товара</entry>
-    <entry key="itemForm2">{0} товарів</entry>
+    <entry key="itemForm0">${quantity} товар</entry>
+    <entry key="itemForm1">${quantity} товара</entry>
+    <entry key="itemForm2">${quantity} товарів</entry>
     <entry key="noItem">Кошик порожній</entry>
     <entry key="yourCartTitle">Ваш кошик:</entry>
 
@@ -227,7 +227,7 @@
     <entry key="tryRestorePassword">Забули пароль?</entry>
     <entry key="signIn">Вхід</entry>
     <entry key="tryToRestore">Натисніть "Відновити пароль" і він буде висланий на Ваш e-mail</entry>
-    <entry key="newPasswordRequestEmailSent">Запит на новий пароль відправлено на пошту {0}</entry>
+    <entry key="newPasswordRequestEmailSent">Запит на новий пароль відправлено на пошту ${email}</entry>
     <entry key="newPasswordEmailSent">Новий пароль відправлено на пошту</entry>
     <entry key="newPasswordInvalidToken">Невірний код авторизації. Неможливо згенерувати новий пароль.</entry>
 
@@ -240,7 +240,7 @@
 
     <!-- LogoutPanel -->
     <entry key="logoffLabel">Вийти</entry>
-    <entry key="logoffTitle">${name} натисніть тут, щоб вийти з Вашої особистої сторінки</entry>
+    <entry key="logoffTitle">${customer} натисніть тут, щоб вийти з Вашої особистої сторінки</entry>
 
     <!-- CustomerOrderPanel -->
     <!-- order statuses from CustomerOrder interface -->
@@ -262,7 +262,7 @@
     <entry key="orderInfo">Замовлення</entry>
     <entry key="noOrders">Немає записів в історії замовлень.</entry>
     <entry key="orderNotFound">Замовлення не знайдено.</entry>
-    <entry key="orderNoTitle">Замовлення {0}</entry>
+    <entry key="orderNoTitle">Замовлення ${ordernum}</entry>
 
     <!-- PasswordPanel -->
     <entry key="changePassword">Політика безпеки магазину - тільки автоматично згенерований пароль. Запит на новий пароль буде висланий на Ваш email після натискання кнопки "Змінити пароль"</entry>
@@ -276,12 +276,12 @@
     <!-- WishListView -->
     <entry key="wishlistItems">Список побажань</entry>
     <entry key="wishlistNoItems">Список побажань порожній. Ви можете його поповнити натиснувши кнопку "До побажань" на сторінці товару.</entry>
-    <entry key="addToCartWlBtn">В кошик (${0})</entry>
-    <entry key="preorderCartWlBtn">Замовити (${0})</entry>
+    <entry key="addToCartWlBtn">В кошик (${quantity})</entry>
+    <entry key="preorderCartWlBtn">Замовити (${quantity})</entry>
     <entry key="removeFromWishlist">Видалити зі списку</entry>
-    <entry key="wishListPriceIncreased">Ціна зросла на ${0}%</entry>
-    <entry key="wishListPriceDecreased">Ціна знизилась на ${0}%</entry>
-    <entry key="wishListPriceOnSaleNow">Акція. Знижка ${0}%</entry>
+    <entry key="wishListPriceIncreased">Ціна зросла на ${delta}%</entry>
+    <entry key="wishListPriceDecreased">Ціна знизилась на ${delta}%</entry>
+    <entry key="wishListPriceOnSaleNow">Акція. Знижка ${delta}%</entry>
     <entry key="wishListShare">Цей товар видно тільки Вам. Натисніть цю кнопку, щоб поділитися з друзями.</entry>
     <entry key="wishListHide">Цей товар видний Всім у кого є посилання. Натисніть цю іконку, щоб сховати.</entry>
     <entry key="wishListNotFound">Список побажань не знайдений.</entry>
@@ -335,7 +335,7 @@
     <entry key="discountRule">Купуючи більше однієї одиниці товару, ви отримуєте знижку. Чим більше однотипних товарів Ви купуєте, тим більше знижка</entry>
 
     <!-- PriceView -->
-    <entry key="savePercent">Знижка {0}%</entry>
+    <entry key="savePercent">Знижка ${discount}%</entry>
 
     <!-- RecentlyViewedProducts -->
     <entry key="recentlyViewed">Переглянуті</entry>
@@ -361,8 +361,8 @@
     <!-- SkuCentralView -->
     <entry key="addToWishlist">До побажань</entry>
     <entry key="saveForLater">Відкласти на потім</entry>
-    <entry key="wishListItemAddedW">Товар ${0} доданий до побажань. Переглянути список побажань Ви можете у Вашому профілі.</entry>
-    <entry key="wishListItemAddedC">Товар ${0} відкладено. Переглянути список відкладених товарів Ви можете у Вашому кошику.</entry>
+    <entry key="wishListItemAddedW">Товар ${sku} доданий до побажань. Переглянути список побажань Ви можете у Вашому профілі.</entry>
+    <entry key="wishListItemAddedC">Товар ${sku} відкладено. Переглянути список відкладених товарів Ви можете у Вашому кошику.</entry>
     <entry key="description">Опис</entry>
     <entry key="details">Специфікація</entry>
     <entry key="accessories">Аксесуари</entry>
@@ -370,9 +370,9 @@
     <entry key="upcrosssell">Альтернативи</entry>
     <entry key="buywiththis">Рекомендації</entry>
     <entry key="volumeDiscount">Оптові знижки</entry>
-    <entry key="quantityPickerTooltip">Мінімальна кількість для покупки ${0} з кроком ${1} до ${2}. ${3} у кошику.</entry>
-    <entry key="quantityPickerTooltipNoMax">Мінімальна кількість для покупки ${0} з кроком ${1}. ${2} у кошику.</entry>
-    <entry key="quantityPickerFullTooltip">Ви додали максимальну кількість. ${0} у кошику.</entry>
+    <entry key="quantityPickerTooltip">Мінімальна кількість для покупки ${min} з кроком ${step} до ${max}. ${cart} у кошику.</entry>
+    <entry key="quantityPickerTooltipNoMax">Мінімальна кількість для покупки ${min} з кроком ${step}. ${cart} у кошику.</entry>
+    <entry key="quantityPickerFullTooltip">Ви додали максимальну кількість. ${cart} у кошику.</entry>
 
     <!-- TopCategories -->
     <entry key="categories">Каталог</entry>
@@ -400,15 +400,15 @@
     <entry key="badStatus">Ваш статус не підтверджений на pay pal або неможливо отримати інформацію про оплату</entry>
     <entry key="confirmPayment">
         <![CDATA[
-                    Сума платежу {0} {1}. Підтвердіть оплату для продовження.
+                    Сума платежу ${amount} ${currency}. Підтвердіть оплату для продовження.
                ]]>
     </entry>
     <entry key="paymentOk">
         <![CDATA[
-                    Оплата пройшла успішно. Номер замовлення {0}.
+                    Оплата пройшла успішно. Номер замовлення ${ordernum}.
                     Статус можна перевірити <a href="orders">на цій сторінці</a>.
                      <br>
-                    <a href=".">За новими покупками !</a>.
+                    <a href=".">За новими покупками</a>.
                ]]>
     </entry>
 

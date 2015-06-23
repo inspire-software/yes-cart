@@ -19,13 +19,15 @@ package org.yes.cart.web.page.component.customer.password;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
+import org.yes.cart.web.util.WicketUtil;
+
+import java.util.Collections;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -61,7 +63,9 @@ public class PasswordPanel extends BaseComponent {
                     @Override
                     protected void onSubmit() {
                         customerServiceFacade.resetPassword(ApplicationDirector.getCurrentShop(), getModelObject());
-                        info(new StringResourceModel("newPasswordRequestEmailSent", this, null, new Object[] {getModelObject().getEmail()}).getString());
+
+                        info(WicketUtil.createStringResourceModel(this, "newPasswordRequestEmailSent",
+                                Collections.<String, Object>singletonMap("email", getModelObject().getEmail())).getString());
                         super.onSubmit();
                     }
 

@@ -25,6 +25,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
@@ -197,9 +198,9 @@ public class WishListView extends AbstractProductSearchResultList {
                     // no change
                     if (MoneyUtils.isFirstBiggerThanSecond(priceNow.getRegularPrice(), addedPrice)) {
                         price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), addedPrice);
-                        priceInfo = getLocalizer().getString("wishListPriceOnSaleNow", this, new Model<Object[]>(new Object[] {
-                                MoneyUtils.getDiscountDisplayValue(priceNow.getRegularPrice(), addedPrice).toPlainString()
-                        }));
+                        priceInfo = getLocalizer().getString("wishListPriceOnSaleNow", this, new Model<Serializable>(new ValueMap(
+                                Collections.singletonMap("delta", MoneyUtils.getDiscountDisplayValue(priceNow.getRegularPrice(), addedPrice).toPlainString())
+                        )));
                     } else {
                         // not on sale
                         price = new Pair<BigDecimal, BigDecimal>(addedPrice, null);
@@ -207,15 +208,15 @@ public class WishListView extends AbstractProductSearchResultList {
                 } else if (MoneyUtils.isFirstBiggerThanSecond(addedPrice, saleNow)) {
                     // price dropped since added
                     price = new Pair<BigDecimal, BigDecimal>(addedPrice, saleNow);
-                    priceInfo = getLocalizer().getString("wishListPriceDecreased", this, new Model<Object[]>(new Object[] {
-                            MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).toPlainString()
-                    }));
+                    priceInfo = getLocalizer().getString("wishListPriceDecreased", this, new Model<Serializable>(new ValueMap(
+                            Collections.singletonMap("delta", MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).toPlainString())
+                    )));
                 } else {
                     // price gone up
                     price = new Pair<BigDecimal, BigDecimal>(saleNow, null);
-                    priceInfo = getLocalizer().getString("wishListPriceIncreased", this, new Model<Object[]>(new Object[] {
-                            MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).negate().toPlainString()
-                    }));
+                    priceInfo = getLocalizer().getString("wishListPriceIncreased", this, new Model<Serializable>(new ValueMap(
+                            Collections.singletonMap("delta", MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).negate().toPlainString())
+                    )));
                 }
             } else {
                 // no comparative price - different currency
@@ -245,8 +246,10 @@ public class WishListView extends AbstractProductSearchResultList {
         listItem.add(
                 determineAtbLink(links, "addToCardFromWishListLink", product, itemData, qty)
                         .add(new Label("addToCardFromWishListLinkLabel", pam.isInStock() || pam.isPerpetual() ?
-                                getLocalizer().getString("addToCartWlBtn", this, new Model<Serializable>(new String[] { qty })) :
-                                getLocalizer().getString("preorderCartWlBtn", this, new Model<Serializable>(new String[] { qty }))))
+                                getLocalizer().getString("addToCartWlBtn", this,
+                                        new Model<Serializable>(new ValueMap(Collections.singletonMap("quantity", qty)))) :
+                                getLocalizer().getString("preorderCartWlBtn", this,
+                                        new Model<Serializable>(new ValueMap(Collections.singletonMap("quantity", qty))))))
                         .setVisible(pam.isAvailable())
         );
 

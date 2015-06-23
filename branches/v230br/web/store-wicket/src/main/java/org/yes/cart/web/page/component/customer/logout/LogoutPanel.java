@@ -19,12 +19,12 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.util.WicketUtil;
+
+import java.util.Collections;
 
 /**
  * User: iazarny@yahoo.com
@@ -73,11 +73,10 @@ public class LogoutPanel  extends BaseComponent {
      * @return localized salutation
      */
     private String getSalutation(final String salutationKey, final String name) {
-        final ValueMap map = new ValueMap();
-        map.put("name", name);
-        final StringResourceModel labelModel = new StringResourceModel(salutationKey, this,
-                new Model<ValueMap>(map));
-        return labelModel.getString();
+
+        return WicketUtil.createStringResourceModel(this, salutationKey,
+                Collections.<String, Object>singletonMap("customer", name)).getString();
+
     }
 
     /** {@inheritDoc} */

@@ -20,7 +20,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.SkuPrice;
@@ -29,9 +28,11 @@ import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
+import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collections;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -199,7 +200,9 @@ public class PriceView extends BaseComponent {
 
 
         addOrReplace(
-                new Label(SAVE_LABEL, new StringResourceModel("savePercent", this, null, new Object[] { savePercent }))
+                new Label(SAVE_LABEL,
+                        WicketUtil.createStringResourceModel(this, "savePercent",
+                                Collections.<String, Object>singletonMap("discount", savePercent)))
                         .setVisible(showSave)
                         .add(new AttributeModifier(HTML_CLASS, "sale-price-save"))
         );

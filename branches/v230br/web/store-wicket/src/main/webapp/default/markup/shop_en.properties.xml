@@ -79,7 +79,7 @@
     <entry key="no">No</entry>
 
     <!-- AjaxAtbPage -->
-    <entry key="itemAdded">item {0} successfully added to the cart</entry>
+    <entry key="itemAdded">item ${sku} successfully added to the cart</entry>
 
     <!-- CheckoutPage -->
     <entry key="addressStep">Your Address</entry>
@@ -126,7 +126,7 @@
     <entry key="negativePaymentNotes">Order payment failed</entry>
     <entry key="positivePaymentNotes">Order payment was ok </entry>
     <entry key="checkStatus">Check order status</entry>
-    <entry key="negativeItemAllocationNotes">Sorry. Item {0} with code {1} has just gone out of stock. Try to buy similar product</entry>
+    <entry key="negativeItemAllocationNotes">Sorry. Item ${product} with code ${sku} has just gone out of stock. Try to buy similar product</entry>
 
     <!-- RegistrationPage -->
 
@@ -135,8 +135,8 @@
     <entry key="shoppingCart">Shopping Cart</entry>
     <entry key="emptyCart">Cart is empty</entry>
     <entry key="orderErrorGeneral">An error occurred while trying to create your order. Please try again.</entry>
-    <entry key="orderErrorCouponInvalid">Coupon '${0}' is no longer valid please remove it from the cart.</entry>
-    <entry key="orderErrorSkuInvalid">${0} is no longer available please remove it from the cart.</entry>
+    <entry key="orderErrorCouponInvalid">Coupon '${coupon}' is no longer valid please remove it from the cart.</entry>
+    <entry key="orderErrorSkuInvalid">${sku} is no longer available please remove it from the cart.</entry>
 
     <!-- COMPONENTS -->
     <!-- BreadCrumbsView -->
@@ -186,14 +186,14 @@
     <entry key="removeCouponCodeLabel">Remove coupon</entry>
     <entry key="addCouponButtonLabel">Add coupon</entry>
     <entry key="enterCouponLabel">Enter coupon</entry>
-    <entry key="appliedPromoCode">${0} [applied]</entry>
-    <entry key="pendingPromoCode">${0} [not applied]</entry>
+    <entry key="appliedPromoCode">${coupon} [applied]</entry>
+    <entry key="pendingPromoCode">${coupon} [not applied]</entry>
     <entry key="noEmptyCoupons">Please enter coupon code</entry>
 
     <!-- SmallShoppingCartView -->
-    <entry key="itemForm0">{0} item in cart</entry>
-    <entry key="itemForm1">{0} items in cart</entry>
-    <entry key="itemForm2">{0} items in cart</entry>
+    <entry key="itemForm0">${quantity} item in cart</entry>
+    <entry key="itemForm1">${quantity} items in cart</entry>
+    <entry key="itemForm2">${quantity} items in cart</entry>
     <entry key="noItem">Cart is empty</entry>
     <entry key="yourCartTitle">Your Cart:</entry>
 
@@ -227,7 +227,7 @@
     <entry key="tryRestorePassword">Forgot password?</entry>
     <entry key="signIn">Sign In</entry>
     <entry key="tryToRestore">Try to restore password. It will be send to your email.</entry>
-    <entry key="newPasswordRequestEmailSent">New password request was sent to {0}. Check email please.</entry>
+    <entry key="newPasswordRequestEmailSent">New password request was sent to ${email}. Check email please.</entry>
     <entry key="newPasswordEmailSent">New password was sent. Check email please.</entry>
     <entry key="newPasswordInvalidToken">Invalid token. Unable to reset password.</entry>
 
@@ -240,7 +240,7 @@
 
     <!-- LogoutPanel -->
     <entry key="logoffLabel">Logoff</entry>
-    <entry key="logoffTitle">${name} click here to logoff from your account</entry>
+    <entry key="logoffTitle">${customer} click here to logoff from your account</entry>
 
     <!-- CustomerOrderPanel -->
     <!-- order statuses from CustomerOrder interface -->
@@ -262,7 +262,7 @@
     <entry key="orderInfo">Orders</entry>
     <entry key="noOrders">There is no order history to display.</entry>
     <entry key="orderNotFound">Order not found.</entry>
-    <entry key="orderNoTitle">Order {0}</entry>
+    <entry key="orderNoTitle">Order ${ordernum}</entry>
 
     <!-- PasswordPanel -->
     <entry key="changePassword">New password request will be send to you email after "Change password" click</entry>
@@ -276,12 +276,12 @@
     <!-- WishListView -->
     <entry key="wishlistItems">Wish list</entry>
     <entry key="wishlistNoItems">There are no items in your wish list. You can add them by clicking "Add to Wishlist" button on product pages.</entry>
-    <entry key="addToCartWlBtn">Add to cart (${0})</entry>
-    <entry key="preorderCartWlBtn">Preorder (${0})</entry>
+    <entry key="addToCartWlBtn">Add to cart (${quantity})</entry>
+    <entry key="preorderCartWlBtn">Preorder (${quantity})</entry>
     <entry key="removeFromWishlist">Remove item</entry>
-    <entry key="wishListPriceIncreased">Price increased by ${0}%</entry>
-    <entry key="wishListPriceDecreased">Price dropped by ${0}%</entry>
-    <entry key="wishListPriceOnSaleNow">On sale now. Discount ${0}%</entry>
+    <entry key="wishListPriceIncreased">Price increased by ${delta}%</entry>
+    <entry key="wishListPriceDecreased">Price dropped by ${delta}%</entry>
+    <entry key="wishListPriceOnSaleNow">On sale now. Discount ${delta}%</entry>
     <entry key="wishListShare">This item is only visible to you. Click this icon to share.</entry>
     <entry key="wishListHide">This item is visible by everyone via share link. Click this icon to hide.</entry>
     <entry key="wishListNotFound">Wish list not found.</entry>
@@ -335,7 +335,7 @@
     <entry key="discountRule">Buy more than one item and get discount</entry>
 
     <!-- PriceView -->
-    <entry key="savePercent">Discount {0}%</entry>
+    <entry key="savePercent">Discount ${discount}%</entry>
 
     <!-- RecentlyViewedProducts -->
     <entry key="recentlyViewed">Viewed</entry>
@@ -361,8 +361,8 @@
     <!-- SkuCentralView -->
     <entry key="addToWishlist">Add to wishlist</entry>
     <entry key="saveForLater">Save for later</entry>
-    <entry key="wishListItemAddedW">Product ${0} added to wish list. You can view wish list in your profile.</entry>
-    <entry key="wishListItemAddedC">Product ${0} saved for later. You can view saved products in your cart.</entry>
+    <entry key="wishListItemAddedW">Product ${sku} added to wish list. You can view wish list in your profile.</entry>
+    <entry key="wishListItemAddedC">Product ${sku} saved for later. You can view saved products in your cart.</entry>
     <entry key="description">Description</entry>
     <entry key="details">Specification</entry>
     <entry key="accessories">Accessories</entry>
@@ -370,9 +370,9 @@
     <entry key="upcrosssell">Alternatives</entry>
     <entry key="buywiththis">We recommend</entry>
     <entry key="volumeDiscount">Multi buy</entry>
-    <entry key="quantityPickerTooltip">Minimum order is ${0} with step ${1} up to ${2}. ${3} in cart.</entry>
-    <entry key="quantityPickerTooltipNoMax">Minimum order is ${0} with step ${1}. ${2} in cart.</entry>
-    <entry key="quantityPickerFullTooltip">You have added maximum orderable quantity. ${0} in cart.</entry>
+    <entry key="quantityPickerTooltip">Minimum order is ${min} with step ${step} up to ${max}. ${cart} in cart.</entry>
+    <entry key="quantityPickerTooltipNoMax">Minimum order is ${min} with step ${step}. ${cart} in cart.</entry>
+    <entry key="quantityPickerFullTooltip">You have added maximum orderable quantity. ${cart} in cart.</entry>
 
     <!-- TopCategories -->
     <entry key="categories">Categories</entry>
@@ -400,15 +400,15 @@
     <entry key="badStatus">Your status was not verified on pay pal or can not get the payment details</entry>
     <entry key="confirmPayment">
         <![CDATA[
-                    Payment amount is {0} {1}. Confirm payment to contnue.
+                    Payment amount is ${amount} ${currency}. Confirm payment to contnue.
                ]]>
     </entry>
     <entry key="paymentOk">
         <![CDATA[
-                    The payment was successful. Order number {0}.
+                    The payment was successful. Order number ${ordernum}.
                     Check order status on <a href="orders">this page</a>.
                     <br>
-                    <a href=".">Continue shopping !</a>.
+                    <a href=".">Continue shopping</a>.
                ]]>
     </entry>
 
