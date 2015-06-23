@@ -35,6 +35,8 @@
     <import resource="classpath:core-io.xml"/>
     <import resource="classpath:core-services.xml"/>
     <import resource="classpath:api-services-commands.xml"/>
+    <import resource="classpath:websupport-cluster.xml"/>
+    <import resource="classpath:websupport-persistence.xml"/>
     <import resource="classpath:websupport-webapp.xml"/>
     <import resource="classpath:websupport-api.xml"/>
     <import resource="classpath:payment-modules.xml"/>

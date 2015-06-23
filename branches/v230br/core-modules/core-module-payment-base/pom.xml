@@ -25,7 +25,7 @@
         <version>3.0.0-SHAPSHOT</version>
     </parent>
     <artifactId>core-module-payment-base</artifactId>
-    <name>Yes cart module: Basic payment module Courier, In Store and Pre paid offline. Also contains Test and TestExt for testing.</name>
+    <name>Yes cart module: Basic payment module Courier, In Store and Pre paid offline (+Test and TestExt)</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>

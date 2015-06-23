@@ -895,6 +895,6 @@
 
     <!-- ########################################## WS support ########################## -->
 
-    <bean id="wsAbstractFactoryClientFactory" class="org.yes.cart.web.service.ws.client.impl.WsAbstractFactoryClientFactoryImpl"/>
+    <bean id="wsAbstractFactoryClientFactory" class="org.yes.cart.web.service.ws.client.impl.WsClientAbstractFactoryImpl"/>
 
 </beans>

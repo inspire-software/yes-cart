@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.ro.NodeRO;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.service.ws.node.NodeService;
-import org.yes.cart.web.service.ws.node.dto.Node;
+import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.cluster.node.Node;
 
 /**
  * User: denispavlov
@@ -90,7 +90,7 @@ public class NodeController {
         final Node node = nodeService.getCurrentNode();
 
         final NodeRO nodeRO = new NodeRO();
-        nodeRO.setNodeId(node.getNodeId());
+        nodeRO.setNodeId(node.getId());
         nodeRO.setShopCode(ShopCodeContext.getShopCode());
         return nodeRO;
     }

@@ -46,10 +46,12 @@
             var _all:ArrayCollection = new ArrayCollection();
             for each (var node:Object in _nodes) {
                 _all.addItem({
-                    nodeGroup: node['yum'] ? 'YUM' : 'YES',
+                    clusterId: node['clusterId'],
+                    nodeGroup: node['nodeType'],
                     nodeId: node['nodeId'],
-                    backdoorUri: node['backdoorUri'],
-                    cacheManagerUri: node['cacheManagerUri']
+                    nodeConfig: node['nodeConfig'],
+                    luceneIndexDisabled: node['luceneIndexDisabled'],
+                    channel: node['channel']
                 });
             }
             clusterData.removeAll();
@@ -85,21 +87,33 @@
                 <mx:GroupingCollection2 id="groupedClusterData" source="{clusterData}">
                     <mx:grouping>
                         <mx:Grouping>
+                            <mx:GroupingField name="clusterId"/>
                             <mx:GroupingField name="nodeGroup"/>
-                            <mx:GroupingField name="nodeId"/>
                         </mx:Grouping>
                     </mx:grouping>
                 </mx:GroupingCollection2>
             </mx:dataProvider>
             <mx:columns>
-                <mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeGroup')"
-                                   dataField="nodeGroup"/>
+                <!--<mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='clusterId')"-->
+                                   <!--dataField="clusterId"/>-->
+                <!--<mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeGroup')"-->
+                                   <!--dataField="nodeGroup"/>-->
                 <mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeId')"
                                    dataField="nodeId"/>
-                <mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='backdoorUri')"
-                                   dataField="backdoorUri"/>
-                <mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='cacheDirectorUri')"
-                                   dataField="cacheManagerUri"/>
+                <mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeConfig')"
+                                   dataField="nodeConfig"/>
+                <mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='channel')"
+                                   dataField="channel"/>
+                <mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='luceneIndexDisabled')"
+                                   dataField="luceneIndexDisabled">
+                    <mx:itemRenderer>
+                        <mx:Component>
+                            <mx:VBox horizontalAlign="center" width="100%">
+                                <mx:CheckBox selected="{data.luceneIndexDisabled}" enabled="false"/>
+                            </mx:VBox>
+                        </mx:Component>
+                    </mx:itemRenderer>
+                </mx:AdvancedDataGridColumn>
             </mx:columns>
         </mx:AdvancedDataGrid>
 

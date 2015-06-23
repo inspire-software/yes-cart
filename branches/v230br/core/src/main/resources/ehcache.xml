@@ -67,21 +67,6 @@
 
     <!-- ############################################# cluster cache #######################################-->
 
-    <cache name="nodeService-config" maxElementsInMemory="1" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
-    <cache name="nodeService-cluster" maxElementsInMemory="1" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
-    <cache name="nodeService-yumNode" maxElementsInMemory="1" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
-    <cache name="nodeService-yesNodes" maxElementsInMemory="1" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
-    <cache name="nodeService-otherYesNodes" maxElementsInMemory="1" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
     <cache name="nodeService-wsFactory" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="43200" timeToIdleSeconds="7200"/>
 

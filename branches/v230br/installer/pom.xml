@@ -121,7 +121,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.yes</groupId>
-                                    <artifactId>yes-shop</artifactId>
+                                    <artifactId>yes-shop-wicket</artifactId>
                                     <version>${project.version}</version>
                                     <type>war</type>
                                 </artifactItem>

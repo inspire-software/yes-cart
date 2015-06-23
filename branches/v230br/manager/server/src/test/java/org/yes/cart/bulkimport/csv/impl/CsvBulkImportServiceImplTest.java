@@ -30,6 +30,8 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.service.ImportService;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
@@ -919,7 +921,10 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(100L, rs.getLong(4)); // Unknown
             assertEquals(1L, rs.getLong(5)); // Robots
             assertEquals("Robot ASIMO", rs.getString(6));
-            assertEquals("en#~#Robot ASIMO#~#ru#~#Робот ASIMO#~#", rs.getString(7));
+            final I18NModel model = new StringI18NModel(rs.getString(7));
+            assertEquals(2, model.getAllValues().size());
+            assertEquals("Robot ASIMO", model.getValue("en"));
+            assertEquals("Робот ASIMO", model.getValue("ru"));
             assertEquals(1, rs.getInt(8));
             assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
             assertEquals("2015-06-12", new SimpleDateFormat("yyyy-MM-dd").format(rs.getDate(10)));

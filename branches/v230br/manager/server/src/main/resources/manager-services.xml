@@ -657,6 +657,14 @@
                 <property name="productService" ref="productService"/>
             </bean>
         </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="sqlQuery">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="hsqlQuery">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="luceneQuery">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
     </bean>
 
     <bean id="localCacheDirector" class="org.yes.cart.web.service.ws.impl.LocalCacheDirectorImpl">
@@ -669,7 +677,6 @@
         <constructor-arg index="0" ref="nodeService"/>
         <constructor-arg index="1" ref="localBackdoorService"/>
         <constructor-arg index="2" ref="localCacheDirector"/>
-        <constructor-arg index="3" ref="wsAbstractFactoryClientFactory"/>
         <flex:remoting-destination/>
         <security:intercept-methods>
             <security:protect method="reindexAllProducts" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMMARKETINGADMIN,ROLE_SMCONTENTADMIN"/>

@@ -16,11 +16,18 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.yes.cart.cluster.node.Message;
+import org.yes.cart.cluster.node.impl.ContextRspMessageImpl;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.remote.service.RemoteNodeService;
-import org.yes.cart.web.service.ws.node.NodeService;
-import org.yes.cart.web.service.ws.node.dto.Node;
+import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.cluster.node.Node;
+import org.yes.cart.service.async.model.AsyncContext;
+import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -37,6 +44,21 @@ public class RemoteNodeServiceImpl implements RemoteNodeService {
 
     /** {@inheritDoc} */
     public List<Node> getCluster() {
+
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
+        final AsyncContext context = new AsyncFlexContextImpl(param);
+
+        final Message message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                "BackdoorService.ping",
+                null,
+                context
+        );
+
+        // Broadcasting ping message should result in refreshing of the cluster view
+        nodeService.broadcast(message);
+
         return nodeService.getCluster();
     }
 }

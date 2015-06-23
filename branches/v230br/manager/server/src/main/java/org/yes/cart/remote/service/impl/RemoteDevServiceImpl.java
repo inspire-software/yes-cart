@@ -16,8 +16,7 @@
 
 package org.yes.cart.remote.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -26,6 +25,7 @@ import org.yes.cart.remote.service.RemoteDevService;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +36,6 @@ import java.util.Map;
  */
 public class RemoteDevServiceImpl implements RemoteDevService {
 
-    private final Logger LOG = LoggerFactory.getLogger(RemoteDevServiceImpl.class);
-
     private final RemoteBackdoorService remoteBackdoorService;
 
 
@@ -47,54 +45,70 @@ public class RemoteDevServiceImpl implements RemoteDevService {
 
     /** {@inheritDoc} */
     public List<Object[]> sqlQuery(final String query, final String node) {
-        return remoteBackdoorService.sqlQuery(createCtx(), query, node);
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
+        return remoteBackdoorService.sqlQuery(createCtx(param), query, node);
     }
 
     /** {@inheritDoc} */
     public List<Object[]> hsqlQuery(final String query, final String node) {
-        return remoteBackdoorService.hsqlQuery(createCtx(), query, node);
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
+        return remoteBackdoorService.hsqlQuery(createCtx(param), query, node);
     }
 
     /** {@inheritDoc} */
     public List<Object[]> luceneQuery(final String query, final String node) {
-        return remoteBackdoorService.luceneQuery(createCtx(), query, node);
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
+        return remoteBackdoorService.luceneQuery(createCtx(param), query, node);
     }
 
     /** {@inheritDoc} */
     public Map<String, List<CacheInfoDTOImpl>> getCacheInfo() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return remoteBackdoorService.getCacheInfo(createCtx());
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
+        return remoteBackdoorService.getCacheInfo(createCtx(param));
     }
 
     /** {@inheritDoc} */
     public Map<String, Boolean> evictAllCache() throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return remoteBackdoorService.evictAllCache(createCtx());
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
+        return remoteBackdoorService.evictAllCache(createCtx(param));
     }
 
     /** {@inheritDoc} */
     public Map<String, Boolean> evictCache(final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return remoteBackdoorService.evictCache(createCtx(), name);
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
+        return remoteBackdoorService.evictCache(createCtx(param), name);
     }
 
     /** {@inheritDoc} */
     public Map<String, Boolean> enableStats(final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return remoteBackdoorService.enableStats(createCtx(), name);
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
+        return remoteBackdoorService.enableStats(createCtx(param), name);
     }
 
     /** {@inheritDoc} */
     public Map<String, Boolean> disableStats(final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        return remoteBackdoorService.disableStats(createCtx(), name);
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
+        return remoteBackdoorService.disableStats(createCtx(param), name);
     }
 
     /** {@inheritDoc} */
     public void warmUp() {
-        remoteBackdoorService.warmUp(createCtx());
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
+        remoteBackdoorService.warmUp(createCtx(param));
     }
 
-    private AsyncContext createCtx() {
-        return new AsyncFlexContextImpl();
+    private AsyncContext createCtx(final Map<String, Object> param) {
+        return new AsyncFlexContextImpl(param);
     }
-
-
 
 
 }

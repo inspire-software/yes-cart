@@ -35,5 +35,7 @@
         <module>core-module-payment-liqpay</module>
         <module>core-module-payment-robokassa</module>
         <module>core-module-orderstate</module>
+        <module>core-module-cluster-jgroups</module>
+        <module>core-module-cluster-ws</module>
     </modules>
 </project>

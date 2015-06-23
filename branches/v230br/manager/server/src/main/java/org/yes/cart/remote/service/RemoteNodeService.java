@@ -16,7 +16,7 @@
 
 package org.yes.cart.remote.service;
 
-import org.yes.cart.web.service.ws.node.dto.Node;
+import org.yes.cart.cluster.node.Node;
 
 import java.util.List;
 

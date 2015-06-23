@@ -148,76 +148,76 @@ public class ImageServiceImplTest  extends BaseCoreDBTestCase {
     public void testResize() throws Exception {
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-150x200.jpg",
-                "target/test/resources/imgresize/resize-150x200-to-80x80-scale.jpg", "80", "80", false);
+                "file://src/test/resources/imgresize/resize-150x200.jpg",
+                "file://target/test/resources/imgresize/resize-150x200-to-80x80-scale.jpg", "80", "80", false);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-150x200.jpg",
-                "target/test/resources/imgresize/resize-150x200-to-80x80-crop.jpg", "80", "80", true);
+                "file://src/test/resources/imgresize/resize-150x200.jpg",
+                "file://target/test/resources/imgresize/resize-150x200-to-80x80-crop.jpg", "80", "80", true);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-150x200.tif",
-                "target/test/resources/imgresize/resize-150x200-to-80x80-scale.tif", "80", "80", false);
+                "file://src/test/resources/imgresize/resize-150x200.tif",
+                "file://target/test/resources/imgresize/resize-150x200-to-80x80-scale.tif", "80", "80", false);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-150x200.tif",
-                "target/test/resources/imgresize/resize-150x200-to-80x80-crop.tif", "80", "80", true);
+                "file://src/test/resources/imgresize/resize-150x200.tif",
+                "file://target/test/resources/imgresize/resize-150x200-to-80x80-crop.tif", "80", "80", true);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-150x200.png",
-                "target/test/resources/imgresize/resize-150x200-to-80x80-scale.png", "80", "80", false);
+                "file://src/test/resources/imgresize/resize-150x200.png",
+                "file://target/test/resources/imgresize/resize-150x200-to-80x80-scale.png", "80", "80", false);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-150x200.png",
-                "target/test/resources/imgresize/resize-150x200-to-80x80-crop.png", "80", "80", true);
+                "file://src/test/resources/imgresize/resize-150x200.png",
+                "file://target/test/resources/imgresize/resize-150x200-to-80x80-crop.png", "80", "80", true);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-200x200.jpg",
-                "target/test/resources/imgresize/resize-200x200-to-80x80-scale.jpg", "80", "80", false);
+                "file://src/test/resources/imgresize/resize-200x200.jpg",
+                "file://target/test/resources/imgresize/resize-200x200-to-80x80-scale.jpg", "80", "80", false);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-200x200.jpg",
-                "target/test/resources/imgresize/resize-200x200-to-80x80-crop.jpg", "80", "80", true);
+                "file://src/test/resources/imgresize/resize-200x200.jpg",
+                "file://target/test/resources/imgresize/resize-200x200-to-80x80-crop.jpg", "80", "80", true);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-200x200.tif",
-                "target/test/resources/imgresize/resize-200x200-to-80x80-scale.tif", "80", "80", false);
+                "file://src/test/resources/imgresize/resize-200x200.tif",
+                "file://target/test/resources/imgresize/resize-200x200-to-80x80-scale.tif", "80", "80", false);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-200x200.tif",
-                "target/test/resources/imgresize/resize-200x200-to-80x80-crop.tif", "80", "80", true);
+                "file://src/test/resources/imgresize/resize-200x200.tif",
+                "file://target/test/resources/imgresize/resize-200x200-to-80x80-crop.tif", "80", "80", true);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-200x200.png",
-                "target/test/resources/imgresize/resize-200x200-to-80x80-scale.png", "80", "80", false);
+                "file://src/test/resources/imgresize/resize-200x200.png",
+                "file://target/test/resources/imgresize/resize-200x200-to-80x80-scale.png", "80", "80", false);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-200x200.png",
-                "target/test/resources/imgresize/resize-200x200-to-80x80-crop.png", "80", "80", true);
+                "file://src/test/resources/imgresize/resize-200x200.png",
+                "file://target/test/resources/imgresize/resize-200x200-to-80x80-crop.png", "80", "80", true);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-200x150.jpg",
-                "target/test/resources/imgresize/resize-200x150-to-80x80-scale.jpg", "80", "80", false);
+                "file://src/test/resources/imgresize/resize-200x150.jpg",
+                "file://target/test/resources/imgresize/resize-200x150-to-80x80-scale.jpg", "80", "80", false);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-200x150.jpg",
-                "target/test/resources/imgresize/resize-200x150-to-80x80-crop.jpg", "80", "80", true);
+                "file://src/test/resources/imgresize/resize-200x150.jpg",
+                "file://target/test/resources/imgresize/resize-200x150-to-80x80-crop.jpg", "80", "80", true);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-200x150.tif",
-                "target/test/resources/imgresize/resize-200x150-to-80x80-scale.tif", "80", "80", false);
+                "file://src/test/resources/imgresize/resize-200x150.tif",
+                "file://target/test/resources/imgresize/resize-200x150-to-80x80-scale.tif", "80", "80", false);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-200x150.tif",
-                "target/test/resources/imgresize/resize-200x150-to-80x80-crop.tif", "80", "80", true);
+                "file://src/test/resources/imgresize/resize-200x150.tif",
+                "file://target/test/resources/imgresize/resize-200x150-to-80x80-crop.tif", "80", "80", true);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-200x150.png",
-                "target/test/resources/imgresize/resize-200x150-to-80x80-scale.png", "80", "80", false);
+                "file://src/test/resources/imgresize/resize-200x150.png",
+                "file://target/test/resources/imgresize/resize-200x150-to-80x80-scale.png", "80", "80", false);
 
         imageService.resizeImage(
-                "src/test/resources/imgresize/resize-200x150.png",
-                "target/test/resources/imgresize/resize-200x150-to-80x80-crop.png", "80", "80", true);
+                "file://src/test/resources/imgresize/resize-200x150.png",
+                "file://target/test/resources/imgresize/resize-200x150-to-80x80-crop.png", "80", "80", true);
 
     }
 

@@ -60,9 +60,11 @@
            roleNameCol="code"/>
 
     <Parameter name="NODE_ID" value="${cluster.config.yes.node_id}" override="false"/>
-    <Parameter name="BACKDOOR_URI" value="${cluster.config.yes.backdoor_uri}" override="false"/>
-    <Parameter name="CACHEDIRECTOR_URI" value="${cluster.config.yes.cachedirector_uri}" override="false"/>
+    <Parameter name="NODE_TYPE" value="YES" override="false"/>
+    <Parameter name="NODE_CONFIG" value="${cluster.config.yes.node_config}" override="false"/>
+    <Parameter name="CLUSTER_ID" value="${cluster.config.cluster_id}" override="false"/>
     <Parameter name="LUCENE_INDEX_DISABLED" value="${cluster.config.yes.lucene_index_disabled}" override="false"/>
+    <Parameter name="CHANNEL_URI" value="${cluster.config.yes.ws.channel_uri}" override="false"/>
 
 </Context>
 

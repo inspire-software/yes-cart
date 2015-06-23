@@ -45,7 +45,7 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.utils.impl.ZipUtils;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
-import org.yes.cart.web.service.ws.node.NodeService;
+import org.yes.cart.cluster.node.NodeService;
 
 import java.io.File;
 import java.io.IOException;

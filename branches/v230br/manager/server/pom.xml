@@ -49,6 +49,16 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
+            <artifactId>core-module-orderstate</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core-module-cluster-ws</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
             <artifactId>core</artifactId>
             <version>${project.parent.version}</version>
             <classifier>tests</classifier>
@@ -290,6 +300,17 @@
                 <dependency>
                     <groupId>org.yes</groupId>
                     <artifactId>core-module-payment-paypal</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>jgroups</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-cluster-jgroups</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>

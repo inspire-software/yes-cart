@@ -59,10 +59,12 @@
            userRoleTable="TMANAGERROLE"
            roleNameCol="code"/>
 
-    <Parameter name="NODE_ID" value="${cluster.config.yesapi.node_id}" override="false"/>
-    <Parameter name="BACKDOOR_URI" value="${cluster.config.yesapi.backdoor_uri}" override="false"/>
-    <Parameter name="CACHEDIRECTOR_URI" value="${cluster.config.yesapi.cachedirector_uri}" override="false"/>
-    <Parameter name="LUCENE_INDEX_DISABLED" value="${cluster.config.yesapi.lucene_index_disabled}" override="false"/>
+    <Parameter name="NODE_ID" value="${cluster.config.api.node_id}" override="false"/>
+    <Parameter name="NODE_TYPE" value="API" override="false"/>
+    <Parameter name="NODE_CONFIG" value="${cluster.config.api.node_config}" override="false"/>
+    <Parameter name="CLUSTER_ID" value="${cluster.config.cluster_id}" override="false"/>
+    <Parameter name="LUCENE_INDEX_DISABLED" value="${cluster.config.api.lucene_index_disabled}" override="false"/>
+    <Parameter name="CHANNEL_URI" value="${cluster.config.api.ws.channel_uri}" override="false"/>
 
 </Context>
 

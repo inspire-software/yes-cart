@@ -17,9 +17,9 @@
 package org.yes.cart.bulkjob.product;
 
 import org.slf4j.Logger;
+import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.service.ws.node.NodeService;
 
 import java.util.Date;
 import java.util.List;
@@ -85,7 +85,7 @@ public class ProductsPassedAvailbilityDateIndexProcessorImpl implements Runnable
     }
 
     protected Boolean isLuceneIndexDisabled() {
-        return Boolean.TRUE.toString().equals(nodeService.getConfiguration().get(NodeService.LUCENE_INDEX_DISABLED));
+        return nodeService.getCurrentNode().isLuceneIndexDisabled();
     }
 
     protected Date now() {

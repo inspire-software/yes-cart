@@ -55,75 +55,17 @@
 
     <import resource="persistence.xml"/>
 
-    <!-- #################################  message consumers end ######################################-->
 
-    <security:authentication-manager alias="authenticationManager">
-        <security:authentication-provider>
-            <security:password-encoder hash="md5"/>
-            <security:jdbc-user-service
-                    data-source-ref="dataSource"
-                    group-authorities-by-username-query=""
-                    users-by-username-query="SELECT m.email as username, m.password, 1 as enabled FROM TMANAGER m where m.email = ?"
-                    authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
-        </security:authentication-provider>
-    </security:authentication-manager>
-
-
-    <bean id="backDoorBean" parent="txProxyTemplate">
-        <property name="target">
-            <bean  class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
-                <property name="productService" ref="productService"/>
-                <property name="cacheManager" ref="cacheManager"/>
-            </bean>
-        </property>
+    <bean id="backDoor" class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
+        <property name="productService" ref="productService"/>
+        <property name="cacheManager" ref="cacheManager"/>
     </bean>
 
 
-    <bean id="cacheDirectorBean" parent="txProxyTemplate">
-        <property name="target">
-            <bean  class="org.yes.cart.web.service.ws.impl.WsCacheDirectorImpl">
-                <property name="entityOperationCache" ref="evictionConfig"/>
-                <property name="cacheManager" ref="cacheManager"/>
-            </bean>
-        </property>
+    <bean id="cacheDirectorBean" class="org.yes.cart.web.service.ws.impl.WsCacheDirectorImpl">
+        <property name="entityOperationCache" ref="evictionConfig"/>
+        <property name="cacheManager" ref="cacheManager"/>
     </bean>
-
-
-
-
-    <jaxws:endpoint id="backDoor" implementor="#backDoorBean" address="/backdoor">
-        <jaxws:properties>
-            <entry key="ws-security.validate.token">
-                <value>false</value>
-            </entry>
-        </jaxws:properties>
-        <jaxws:inInterceptors>
-            <ref bean="wsAuthenticationInterceptor"/>
-        </jaxws:inInterceptors>
-    </jaxws:endpoint>
-
-    <jaxws:endpoint id="cacheDirector" implementor="#cacheDirectorBean" address="/cachedirector">
-        <jaxws:properties>
-            <entry key="ws-security.validate.token">
-                <value>false</value>
-            </entry>
-        </jaxws:properties>
-        <jaxws:inInterceptors>
-            <ref bean="wsAuthenticationInterceptor"/>
-        </jaxws:inInterceptors>
-    </jaxws:endpoint>
-
-    <bean id="wsAuthenticationInterceptor" class="org.yes.cart.web.service.ws.impl.BackdoorAuthenticationInInterceptor">
-        <constructor-arg>
-            <map>
-                <entry key="action" value="UsernameToken"/>
-                <entry key="passwordType" value="PasswordText"/>
-<!--                <entry key="passwordCallbackClass" value="org.yes.cart.web.service.ws.impl.BackdoorCallback"/>-->
-            </map>
-        </constructor-arg>
-        <property name="authenticationManager" ref="authenticationManager"/>
-    </bean>
-
 
 
     <bean id="paySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
@@ -166,9 +108,7 @@
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
                 <prop key="hibernate.hbm2ddl.auto">create</prop>
-                <prop key="hibernate.search.default.indexBase">
-                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
-                </prop>
+                <prop key="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.RAMDirectoryProvider</prop>
                 <prop key="hibernate.search.worker.execution">async</prop>
                 <prop key="hibernate.search.worker.thread_pool.size">2</prop>
                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>

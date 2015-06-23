@@ -32,6 +32,7 @@ public interface AsyncContext {
     String USERNAME = "USERNAME";
     String CREDENTIALS = "CREDENTIALS";
     String FLEX_SESSION_CREDENTIALS = "pwd";
+    String TIMEOUT_KEY = "TIMEOUT_KEY";
 
     /**
      * Convenience method for retrieving attributes.

@@ -15,9 +15,16 @@
  */
 package org.yes.cart.web.service.ws.impl;
 
+import org.yes.cart.cluster.node.Message;
+import org.yes.cart.cluster.node.MessageListener;
+import org.yes.cart.cluster.node.Node;
+import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.web.service.ws.CacheDirector;
 
-import javax.jws.WebService;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Service responsible  to evict particular cache(s) depending on entity and operation.
@@ -26,8 +33,78 @@ import javax.jws.WebService;
  * Date: 18 Aug 2013
  * Time: 9:50 AM
  */
-@WebService(endpointInterface = "org.yes.cart.web.service.ws.CacheDirector",
-        serviceName = "CacheDirector")
 public class WsCacheDirectorImpl extends CacheDirectorImpl implements CacheDirector {
+
+    private NodeService nodeService;
+
+    public NodeService getNodeService() {
+        return nodeService;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @param nodeService node service
+     */
+    public void setNodeService(final NodeService nodeService) {
+
+        this.nodeService = nodeService;
+
+        nodeService.subscribe("CacheDirector.getCacheInfo", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                final Node node = nodeService.getCurrentNode();
+                final ArrayList<CacheInfoDTOImpl> caches = new ArrayList<CacheInfoDTOImpl>();
+                for (final CacheInfoDTOImpl cache : WsCacheDirectorImpl.this.getCacheInfo()) {
+                    cache.setNodeId(node.getNodeId());
+                    cache.setNodeUri(node.getChannel());
+                    caches.add(cache);
+                }
+                return caches;
+            }
+        });
+        nodeService.subscribe("CacheDirector.evictAllCache", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                WsCacheDirectorImpl.this.evictAllCache();
+                return "OK";
+            }
+        });
+        nodeService.subscribe("CacheDirector.evictCache", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                WsCacheDirectorImpl.this.evictCache((String) message.getPayload());
+                return "OK";
+            }
+        });
+        nodeService.subscribe("CacheDirector.enableStats", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                WsCacheDirectorImpl.this.enableStats((String) message.getPayload());
+                return "OK";
+            }
+        });
+        nodeService.subscribe("CacheDirector.disableStats", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                WsCacheDirectorImpl.this.disableStats((String) message.getPayload());
+                return "OK";
+            }
+        });
+        nodeService.subscribe("CacheDirector.onCacheableChange", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+
+                final Map<String, Object> payload = (Map<String, Object>) message.getPayload();
+
+                return WsCacheDirectorImpl.this.onCacheableChange(
+                        (String) payload.get("entityOperation"),
+                        (String) payload.get("entityName"),
+                        (Long) payload.get("pkValue")
+                );
+
+            }
+        });
+    }
 
 }

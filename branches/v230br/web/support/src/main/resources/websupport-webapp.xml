@@ -20,10 +20,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="websupport-persistence.xml"/>
     <import resource="websupport-services.xml"/>
     <import resource="websupport-cluster-persistence.xml"/>
-    <import resource="websupport-cluster.xml"/>
+    <import resource="websupport-cluster-listeners.xml"/>
     <import resource="websupport-tools.xml"/>
     <import resource="websupport-cronjob.xml"/>
     <import resource="websupport-storefront.xml"/>

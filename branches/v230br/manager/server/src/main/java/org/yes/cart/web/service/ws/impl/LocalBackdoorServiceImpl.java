@@ -24,7 +24,6 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ObjectUtil;
 import org.yes.cart.web.service.ws.BackdoorService;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -121,11 +120,11 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
 
                 if (query.toLowerCase().contains("select ")) {
 
-                    return getGenericDao().executeNativeQuery(query);
+                    return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeNativeQuery(query));
 
                 } else {
 
-                    return Collections.singletonList(new Object[]{getGenericDao().executeNativeUpdate(query)});
+                    return Collections.singletonList(ObjectUtil.escapeXml(getGenericDao().executeNativeUpdate(query)));
 
                 }
             }
@@ -152,10 +151,10 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
                 if (query.toLowerCase().contains("select ")) {
 
                     final List queryRez = getGenericDao().executeHsqlQuery(query);
-                    return transformTypedResultListToArrayList(queryRez);
+                    return ObjectUtil.transformTypedResultListToArrayList(queryRez);
 
                 } else {
-                    return Collections.singletonList(new Object[]{getGenericDao().executeHsqlQuery(query)});
+                    return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeHsqlQuery(query));
                 }
             }
             return Collections.EMPTY_LIST;
@@ -174,19 +173,6 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     public List<Object[]> luceneQuery(final String luceneQuery) {
         throw new UnsupportedOperationException("YUM does nto support product index");
     }
-
-    private List<Object[]> transformTypedResultListToArrayList(List queryRez) {
-
-        final List<Object[]> rezList = new ArrayList<Object[]>(queryRez.size());
-
-        for (Object obj : queryRez) {
-
-            rezList.add(ObjectUtil.toObjectArray(obj));
-
-        }
-        return rezList;
-    }
-
 
     /**
      * IoC. Set product service.

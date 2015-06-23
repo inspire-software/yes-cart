@@ -16,9 +16,12 @@
 
 package org.yes.cart.remote.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.yes.cart.constants.AttributeNamesKeys;
+import org.apache.commons.collections.CollectionUtils;
+import org.yes.cart.cluster.node.Message;
+import org.yes.cart.cluster.node.Node;
+import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.cluster.node.RspMessage;
+import org.yes.cart.cluster.node.impl.ContextRspMessageImpl;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -27,15 +30,8 @@ import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.web.service.ws.BackdoorService;
 import org.yes.cart.web.service.ws.CacheDirector;
-import org.yes.cart.web.service.ws.client.WsAbstractFactoryClientFactory;
-import org.yes.cart.web.service.ws.client.WsClientFactory;
-import org.yes.cart.web.service.ws.node.NodeService;
-import org.yes.cart.web.service.ws.node.dto.Node;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: iazarny@yahoo.com Igor Azarny
@@ -44,343 +40,321 @@ import java.util.Map;
  */
 public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
 
-    private final Logger LOG = LoggerFactory.getLogger(RemoteBackdoorServiceImpl.class);
-
     private final NodeService nodeService;
     private final BackdoorService localBackdoorService;
     private final CacheDirector localCacheDirector;
-    private final WsAbstractFactoryClientFactory wsAbstractFactoryClientFactory;
-
 
     public RemoteBackdoorServiceImpl(final NodeService nodeService,
                                      final BackdoorService localBackdoorService,
-                                     final CacheDirector localCacheDirector,
-                                     final WsAbstractFactoryClientFactory wsAbstractFactoryClientFactory) {
+                                     final CacheDirector localCacheDirector) {
         this.nodeService = nodeService;
         this.localBackdoorService = localBackdoorService;
         this.localCacheDirector = localCacheDirector;
-        this.wsAbstractFactoryClientFactory = wsAbstractFactoryClientFactory;
     }
 
     /**
      * {@inheritDoc}
      */
     public void warmUp(final AsyncContext context) {
-        for (final Node yesNode : nodeService.getYesNodes()) {
-            try {
-                final WsClientFactory<BackdoorService> factory =
-                        getBackdoorService(context, yesNode.getBackdoorUri(),
-                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
 
-                BackdoorService service = factory.getService();
-                try {
-                    service.warmUp();
-                } finally {
-                    factory.release(service);
-                    service = null;
-                }
+        final Message message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                "WarmUpService.warmUp",
+                null,
+                context
+        );
 
-            } catch (Exception e) {
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot warmUp server,  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
-                            + "] . Will try next one, if exists",
-                            e);
-                }
-            }
-        }
+        nodeService.broadcast(message);
+
     }
 
     /**
      * {@inheritDoc}
      */
     public Map<String, Integer> reindexAllProducts(final AsyncContext context) {
+
         final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
         final Long shopId = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_SHOP);
         if (indexFinished == null) {
             throw new IllegalArgumentException("Must have [" + JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE + "] attribute [Map<String, Boolean>] in async context");
         }
-        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
-        for (final Node yesNode : nodeService.getYesNodes()) {
-            try {
-                final Boolean finished = indexFinished.get(yesNode) != null && indexFinished.get(yesNode);
-                if (!finished) {
-                    final WsClientFactory<BackdoorService> factory =
-                            getBackdoorService(context, yesNode.getBackdoorUri(),
-                                    AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
 
-                    BackdoorService service = factory.getService();
-                    try {
-                        if (shopId != null && shopId > 0L) {
-                            indexStatus.put(yesNode.getNodeId(), service.reindexShopProducts(shopId));
-                        } else {
-                            indexStatus.put(yesNode.getNodeId(), service.reindexAllProducts());
-                        }
-                    } finally {
-                        factory.release(service);
-                        service = null;
-                    }
-
-                }
-            } catch (Exception e) {
-                indexStatus.put(yesNode.getNodeId(), null);
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot reindex products,  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
-                            + "] . Will try next one, if exists",
-                            e);
-                }
+        final List<Node> cluster = nodeService.getYesNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            final Boolean finished = indexFinished.get(node.getNodeId()) != null && indexFinished.get(node.getNodeId());
+            if (!finished) {
+                targets.add(node.getNodeId());
             }
+        }
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                (shopId != null && shopId > 0L) ?
+                        "BackdoorService.reindexShopProducts" : "BackdoorService.reindexAllProducts",
+                shopId,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
+        for (final Message response : message.getResponses()) {
+
+            indexStatus.put(response.getSource(), (Integer) response.getPayload());
 
         }
         return indexStatus;
+
     }
 
     /**
      * {@inheritDoc}
      */
     public Map<String, Integer> reindexAllProductsSku(final AsyncContext context) {
+
         final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
         final Long shopId = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_SHOP);
         if (indexFinished == null) {
             throw new IllegalArgumentException("Must have [" + JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE + "] attribute [Map<String, Boolean>] in async context");
         }
-        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
-        for (final Node yesNode : nodeService.getYesNodes()) {
-            try {
-                final Boolean finished = indexFinished.get(yesNode) != null && indexFinished.get(yesNode);
-                if (!finished) {
-                    final WsClientFactory<BackdoorService> factory =
-                            getBackdoorService(context, yesNode.getBackdoorUri(),
-                                    AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
 
-                    BackdoorService service = factory.getService();
-                    try {
-                        if (shopId != null && shopId > 0L) {
-                            indexStatus.put(yesNode.getNodeId(), service.reindexShopProductsSku(shopId));
-                        } else {
-                            indexStatus.put(yesNode.getNodeId(), service.reindexAllProductsSku());
-                        }
-                    } finally {
-                        factory.release(service);
-                        service = null;
-                    }
-
-                }
-            } catch (Exception e) {
-                indexStatus.put(yesNode.getNodeId(), null);
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot reindex products,  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
-                            + "] . Will try next one, if exists",
-                            e);
-                }
+        final List<Node> cluster = nodeService.getYesNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            final Boolean finished = indexFinished.get(node.getNodeId()) != null && indexFinished.get(node.getNodeId());
+            if (!finished) {
+                targets.add(node.getNodeId());
             }
+        }
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                (shopId != null && shopId > 0L) ?
+                        "BackdoorService.reindexShopProductsSku" : "BackdoorService.reindexAllProductsSku",
+                shopId,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
+        for (final Message response : message.getResponses()) {
+
+            indexStatus.put(response.getSource(), (Integer) response.getPayload());
 
         }
         return indexStatus;
+
     }
 
     /**
      * {@inheritDoc}
      */
     public Map<String, Integer> reindexProduct(final AsyncContext context, final long productPk) {
-        final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
-        for (final Node yesNode : nodeService.getYesNodes()) {
-            try {
-                final WsClientFactory<BackdoorService> factory =
-                        getBackdoorService(context, yesNode.getBackdoorUri(),
-                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS);
 
-                BackdoorService service = factory.getService();
-                try {
-                    reindexResult.put(yesNode.getNodeId(), service.reindexProduct(productPk));
-                } finally {
-                    factory.release(service);
-                    service = null;
-                }
+        final List<Node> cluster = nodeService.getYesNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            targets.add(node.getNodeId());
+        }
 
-            } catch (Exception e) {
-                reindexResult.put(yesNode.getNodeId(), -1);
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot reindex product [" + productPk + "],  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
-                            + "] . Will try next one, if exists",
-                            e);
-                }
-            }
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "BackdoorService.reindexProduct",
+                productPk,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
+        for (final Message response : message.getResponses()) {
+
+            indexStatus.put(response.getSource(), (Integer) response.getPayload());
 
         }
-        return reindexResult;
+        return indexStatus;
+
     }
 
     /**
      * {@inheritDoc}
      */
     public Map<String, Integer> reindexProductSku(final AsyncContext context, final long productPk) {
-        final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
-        for (final Node yesNode : nodeService.getYesNodes()) {
-            try {
-                final WsClientFactory<BackdoorService> factory =
-                        getBackdoorService(context, yesNode.getBackdoorUri(),
-                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS);
 
-                BackdoorService service = factory.getService();
-                try {
-                    reindexResult.put(yesNode.getNodeId(), service.reindexProductSku(productPk));
-                } finally {
-                    factory.release(service);
-                    service = null;
-                }
+        final List<Node> cluster = nodeService.getYesNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            targets.add(node.getNodeId());
+        }
 
-            } catch (Exception e) {
-                reindexResult.put(yesNode.getNodeId(), null);
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot reindex product sku [" + productPk + "],  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
-                            + "] . Will try next one, if exists",
-                            e);
-                }
-            }
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "BackdoorService.reindexProductSku",
+                productPk,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
+        for (final Message response : message.getResponses()) {
+
+            indexStatus.put(response.getSource(), (Integer) response.getPayload());
 
         }
-        return reindexResult;
+        return indexStatus;
+
     }
 
     /**
      * {@inheritDoc}
      */
     public Map<String, Integer> reindexProductSkuCode(final AsyncContext context, final String productSkuCode) {
-        final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
-        for (final Node yesNode : nodeService.getYesNodes()) {
-            try {
-                final WsClientFactory<BackdoorService> factory =
-                        getBackdoorService(context, yesNode.getBackdoorUri(),
-                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS);
 
-                BackdoorService service = factory.getService();
-                try {
-                    reindexResult.put(yesNode.getNodeId(), service.reindexProductSkuCode(productSkuCode));
-                } finally {
-                    factory.release(service);
-                    service = null;
-                }
+        final List<Node> cluster = nodeService.getYesNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            targets.add(node.getNodeId());
+        }
 
-            } catch (Exception e) {
-                reindexResult.put(yesNode.getNodeId(), null);
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot reindex product sku [" + productSkuCode + "],  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
-                            + "] . Will try next one, if exists",
-                            e);
-                }
-            }
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "BackdoorService.reindexProductSkuCode",
+                productSkuCode,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
+        for (final Message response : message.getResponses()) {
+
+            indexStatus.put(response.getSource(), (Integer) response.getPayload());
 
         }
-        return reindexResult;
+        return indexStatus;
+
     }
 
     /**
      * {@inheritDoc}
      */
     public Map<String, Integer> reindexProducts(final AsyncContext context, final long[] productPks) {
-        final Map<String, Integer> reindexResult = new HashMap<String, Integer>();
-        for (final Node yesNode : nodeService.getYesNodes()) {
-            try {
-                final WsClientFactory<BackdoorService> factory =
-                        getBackdoorService(context, yesNode.getBackdoorUri(),
-                                AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS);
 
-                BackdoorService service = factory.getService();
-                try {
-                    reindexResult.put(yesNode.getNodeId(), service.reindexProducts(productPks));
-                } finally {
-                    factory.release(service);
-                    service = null;
-                }
+        final List<Node> cluster = nodeService.getYesNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            targets.add(node.getNodeId());
+        }
 
-            } catch (Exception e) {
-                reindexResult.put(yesNode.getNodeId(), null);
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot reindex products [" + productPks + "],  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getBackdoorUri()
-                            + "] . Will try next one, if exists",
-                            e);
-                }
-            }
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "BackdoorService.reindexProducts",
+                productPks,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
+        for (final Message response : message.getResponses()) {
+
+            indexStatus.put(response.getSource(), (Integer) response.getPayload());
 
         }
-        return reindexResult;
+        return indexStatus;
+
     }
 
     /**
      * {@inheritDoc}
      */
     public List<Object[]> sqlQuery(final AsyncContext context, final String query, final String node) {
+
         if (nodeService.getCurrentNodeId().equals(node)) {
             return localBackdoorService.sqlQuery(query);
         }
-        final WsClientFactory<BackdoorService> factory =
-                getBackdoorService(context, getBackdoorUriForNode(node, false),
-                        AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
 
-        BackdoorService service = factory.getService();
-        try {
-            return service.sqlQuery(query);
-        } finally {
-            factory.release(service);
-            service = null;
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                Arrays.asList(node),
+                "BackdoorService.sqlQuery",
+                query,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        if (CollectionUtils.isNotEmpty(message.getResponses())) {
+
+            return (List<Object[]>) message.getResponses().get(0).getPayload();
+
         }
+
+        return Collections.emptyList();
+
     }
 
     /**
      * {@inheritDoc}
      */
     public List<Object[]> hsqlQuery(final AsyncContext context, final String query, final String node) {
+
         if (nodeService.getCurrentNodeId().equals(node)) {
             return localBackdoorService.hsqlQuery(query);
         }
-        final WsClientFactory<BackdoorService> factory =
-                getBackdoorService(context, getBackdoorUriForNode(node, false),
-                        AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
 
-        BackdoorService service = factory.getService();
-        try {
-            return service.hsqlQuery(query);
-        } finally {
-            factory.release(service);
-            service = null;
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                Arrays.asList(node),
+                "BackdoorService.hsqlQuery",
+                query,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        if (CollectionUtils.isNotEmpty(message.getResponses())) {
+
+            return (List<Object[]>) message.getResponses().get(0).getPayload();
+
         }
+
+        return Collections.emptyList();
+
     }
 
     /**
      * {@inheritDoc}
      */
     public List<Object[]> luceneQuery(final AsyncContext context, final String query, final String node) {
-        final WsClientFactory<BackdoorService> factory =
-                getBackdoorService(context, getBackdoorUriForNode(node, true),
-                        AttributeNamesKeys.System.SYSTEM_BACKDOOR_SQL_TIMEOUT_MS);
 
-        BackdoorService service = factory.getService();
-        try {
-            return service.luceneQuery(query);
-        } finally {
-            factory.release(service);
-            service = null;
-        }
-    }
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                Arrays.asList(node),
+                "BackdoorService.luceneQuery",
+                query,
+                context
+        );
 
-    private String getBackdoorUriForNode(final String node, final boolean yesOnly) {
-        final List<Node> nodes = nodeService.getCluster();
-        for (final Node n : nodes) {
-            if (n.getNodeId().equals(node)) {
-                if (yesOnly && n.isYum()) {
-                    throw new IllegalArgumentException("Unable to perform operation on YUM node");
-                }
-                return n.getBackdoorUri();
-            }
+        nodeService.broadcast(message);
+
+        if (CollectionUtils.isNotEmpty(message.getResponses())) {
+
+            return (List<Object[]>) message.getResponses().get(0).getPayload();
+
         }
-        throw new IllegalArgumentException("Unknown node: " + node);
+
+        return Collections.emptyList();
+
     }
 
     /**
@@ -389,44 +363,30 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
     public Map<String, List<CacheInfoDTOImpl>> getCacheInfo(final AsyncContext context)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
+        final List<Node> cluster = nodeService.getYesNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            targets.add(node.getNodeId());
+        }
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "CacheDirector.getCacheInfo",
+                null,
+                context
+        );
+
+        nodeService.broadcast(message);
+
         final Map<String, List<CacheInfoDTOImpl>> info = new HashMap<String, List<CacheInfoDTOImpl>>();
+        if (CollectionUtils.isNotEmpty(message.getResponses())) {
 
-        for (final Node yesNode : nodeService.getYesNodes()) {
+            for (final Message response : message.getResponses()) {
 
-            try {
-
-                final List<CacheInfoDTOImpl> rez = new ArrayList<CacheInfoDTOImpl>();
-
-                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
-                CacheDirector cacheDirector = factory.getService();
-                List<CacheInfoDTOImpl> shopRez = null;
-                try {
-                    shopRez = cacheDirector.getCacheInfo();
-                } finally {
-                    factory.release(cacheDirector);
-                    cacheDirector = null;
+                if (response.getPayload() instanceof List) {
+                    info.put(response.getSource(), (List<CacheInfoDTOImpl>) response.getPayload());
                 }
-
-                for (final CacheInfoDTOImpl cacheInfoDTO : shopRez) {
-                    cacheInfoDTO.setNodeId(yesNode.getNodeId());
-                    cacheInfoDTO.setNodeUri(yesNode.getCacheManagerUri());
-                    rez.add(cacheInfoDTO);
-                }
-
-                info.put(yesNode.getNodeId(), rez);
-
-            } catch (Exception e) {
-
-                info.put(yesNode.getNodeId(), null);
-
-                if (LOG.isWarnEnabled()) {
-                    LOG.warn("Cannot to get cache info  from url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
-                            + "] . Will try next one, if exists",
-                            e);
-
-                }
-
 
             }
 
@@ -448,32 +408,31 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      */
     public Map<String, Boolean> evictAllCache(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
+        final List<Node> cluster = nodeService.getYesNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            targets.add(node.getNodeId());
+        }
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "CacheDirector.evictAllCache",
+                null,
+                context
+        );
+
+        nodeService.broadcast(message);
+
         final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
-        for (final Node yesNode : nodeService.getYesNodes()) {
+        if (CollectionUtils.isNotEmpty(message.getResponses())) {
 
-            try {
+            for (final Message response : message.getResponses()) {
 
-                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
-                CacheDirector cacheDirector = factory.getService();
-                try {
-                    cacheDirector.evictAllCache();
-                } finally {
-                    factory.release(cacheDirector);
-                    cacheDirector = null;
-                }
-                evicts.put(yesNode.getNodeId(), Boolean.TRUE);
-
-            } catch (Exception e) {
-                evicts.put(yesNode.getNodeId(), Boolean.FALSE);
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot evict cache,  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
-                            + "] . Will try next one, if exists",
-                            e);
-
-                }
+                evicts.put(response.getSource(), Boolean.TRUE);
 
             }
+
         }
 
         localCacheDirector.evictAllCache();
@@ -488,32 +447,31 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      */
     public Map<String, Boolean> evictCache(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
+        final List<Node> cluster = nodeService.getYesNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            targets.add(node.getNodeId());
+        }
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "CacheDirector.evictCache",
+                name,
+                context
+        );
+
+        nodeService.broadcast(message);
+
         final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
-        for (final Node yesNode : nodeService.getYesNodes()) {
+        if (CollectionUtils.isNotEmpty(message.getResponses())) {
 
-            try {
+            for (final Message response : message.getResponses()) {
 
-                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
-                CacheDirector cacheDirector = factory.getService();
-                try {
-                    cacheDirector.evictCache(name);
-                } finally {
-                    factory.release(cacheDirector);
-                    cacheDirector = null;
-                }
-                evicts.put(yesNode.getNodeId(), Boolean.TRUE);
-
-            } catch (Exception e) {
-                evicts.put(yesNode.getNodeId(), Boolean.FALSE);
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot evict cache [" + name + "],  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
-                            + "] . Will try next one, if exists",
-                            e);
-
-                }
+                evicts.put(response.getSource(), Boolean.TRUE);
 
             }
+
         }
 
         localCacheDirector.evictCache(name);
@@ -528,38 +486,37 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      */
     public Map<String, Boolean> enableStats(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
-        for (final Node yesNode : nodeService.getYesNodes()) {
+        final List<Node> cluster = nodeService.getYesNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            targets.add(node.getNodeId());
+        }
 
-            try {
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "CacheDirector.enableStats",
+                name,
+                context
+        );
 
-                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
-                CacheDirector cacheDirector = factory.getService();
-                try {
-                    cacheDirector.enableStats(name);
-                } finally {
-                    factory.release(cacheDirector);
-                    cacheDirector = null;
-                }
-                evicts.put(yesNode.getNodeId(), Boolean.TRUE);
+        nodeService.broadcast(message);
 
-            } catch (Exception e) {
-                evicts.put(yesNode.getNodeId(), Boolean.FALSE);
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot enabled cache stats [" + name + "],  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
-                            + "] . Will try next one, if exists",
-                            e);
+        final Map<String, Boolean> stats = new HashMap<String, Boolean>();
+        if (CollectionUtils.isNotEmpty(message.getResponses())) {
 
-                }
+            for (final Message response : message.getResponses()) {
+
+                stats.put(response.getSource(), Boolean.TRUE);
 
             }
+
         }
 
         localCacheDirector.enableStats(name);
-        evicts.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
+        stats.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
 
-        return evicts;
+        return stats;
 
     }
 
@@ -569,67 +526,39 @@ public class RemoteBackdoorServiceImpl implements RemoteBackdoorService {
      */
     public Map<String, Boolean> disableStats(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final Map<String, Boolean> evicts = new HashMap<String, Boolean>();
-        for (final Node yesNode : nodeService.getYesNodes()) {
 
-            try {
+        final List<Node> cluster = nodeService.getYesNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            targets.add(node.getNodeId());
+        }
 
-                final WsClientFactory<CacheDirector> factory = getCacheDirector(context, yesNode.getCacheManagerUri());
-                CacheDirector cacheDirector = factory.getService();
-                try {
-                    cacheDirector.disableStats(name);
-                } finally {
-                    factory.release(cacheDirector);
-                    cacheDirector = null;
-                }
-                evicts.put(yesNode.getNodeId(), Boolean.TRUE);
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "CacheDirector.disableStats",
+                name,
+                context
+        );
 
-            } catch (Exception e) {
-                evicts.put(yesNode.getNodeId(), Boolean.FALSE);
-                if (LOG.isErrorEnabled()) {
-                    LOG.error("Cannot disabled cache stats [" + name + "],  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getCacheManagerUri()
-                            + "] . Will try next one, if exists",
-                            e);
+        nodeService.broadcast(message);
 
-                }
+        final Map<String, Boolean> stats = new HashMap<String, Boolean>();
+        if (CollectionUtils.isNotEmpty(message.getResponses())) {
+
+            for (final Message response : message.getResponses()) {
+
+                stats.put(response.getSource(), Boolean.TRUE);
 
             }
+
         }
 
         localCacheDirector.disableStats(name);
-        evicts.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
+        stats.put(nodeService.getCurrentNodeId(), Boolean.TRUE);
 
-        return evicts;
-
-    }
-
-
-    private WsClientFactory<BackdoorService> getBackdoorService(final AsyncContext context,
-                                                                final String backdoorUrl,
-                                                                final String timeoutKey) {
-
-
-        final String userName = context.getAttribute(AsyncContext.USERNAME);
-        final String password = context.getAttribute(AsyncContext.CREDENTIALS);
-
-        final int timeout = Integer.parseInt(nodeService.getConfiguration().get(timeoutKey));
-
-        return wsAbstractFactoryClientFactory.getFactory(BackdoorService.class, userName, password, backdoorUrl, timeout);
+        return stats;
 
     }
-
-
-    private WsClientFactory<CacheDirector> getCacheDirector(final AsyncContext context,
-                                                            final String cacheDirUrl) {
-
-        final String userName = context.getAttribute(AsyncContext.USERNAME);
-        final String password = context.getAttribute(AsyncContext.CREDENTIALS);
-        final int timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS));
-
-        return wsAbstractFactoryClientFactory.getFactory(CacheDirector.class, userName, password, cacheDirUrl, timeout);
-
-    }
-
 
 }

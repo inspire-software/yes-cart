@@ -36,7 +36,7 @@ public class NavigationContextImplTest {
     @Test
     public void testCategoriesCanBeNull() throws Exception {
 
-        new NavigationContextImpl(10L, null, (Map) Collections.emptyMap(), null, null);
+        new NavigationContextImpl(10L, null, Collections.EMPTY_MAP, null, null);
 
     }
 

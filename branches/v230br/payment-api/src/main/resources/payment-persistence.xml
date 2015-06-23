@@ -26,50 +26,6 @@
         <property name="proxyInterface" value="javax.sql.DataSource"/>
     </bean>
 
-
-    <bean id="paySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="payDataSource"/>
-        <property name="mappingResources">
-            <list>
-                <value>hibernate/ycp.xml</value>
-            </list>
-        </property>
-
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.show_sql">false</prop>
-                <prop key="hibernate.dialect">${db.config.yespay.hibernate.dialect}</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
-                <!-- Disable hibernate search automatic support - no indexing for payments -->
-                <prop key="hibernate.search.autoregister_listeners">false</prop>
-                <prop key="hibernate.search.indexing_strategy">manual</prop>
-            </props>
-        </property>
-        <property name="entityInterceptor">
-            <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor">
-                <property name="prohibitedFields">
-                    <map key-type="java.lang.String" value-type="java.lang.String">
-                        <entry key="CustomerOrderPaymentEntity">
-                            <set>
-                                <value>cardExpireYear</value>
-                                <value>cardExpireMonth</value>
-                                <value>cardStartDate</value>
-                                <value>cardNumber</value>
-                                <value>cardIssueNumber</value>
-                            </set>
-                        </entry>
-                        <entry key="PaymentGatewayParameterEntity">
-                            <set>
-                                <value>value</value>
-                            </set>
-                        </entry>
-                    </map>
-                </property>
-            </bean>
-        </property>
-    </bean>
-
-
     <bean id="payTransactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="paySessionFactory"/>
     </bean>

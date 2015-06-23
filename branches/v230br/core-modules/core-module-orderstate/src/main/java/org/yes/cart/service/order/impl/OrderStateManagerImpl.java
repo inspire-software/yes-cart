@@ -82,12 +82,7 @@ public class OrderStateManagerImpl implements OrderStateManager {
                 fireEventListeners(afterListenersMap, orderEvent);
                 return result;
             } catch (OrderException e) {
-                log.error(
-                        MessageFormat.format("Can't handle event {0}, because of {1}",
-                                orderEvent,
-                                e.getMessage()),
-                        e
-                );
+                log.error("Can't handle event " + orderEvent + ", because of " + e.getMessage(), e);
                 orderEvent.getRuntimeParams().put("handledException", e);
                 fireEventListeners(afterListenersMap, orderEvent);
                 throw e;

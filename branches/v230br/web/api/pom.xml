@@ -43,6 +43,11 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
+            <artifactId>core-module-cluster-ws</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
             <artifactId>websupport</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -280,6 +285,17 @@
         </profile>
 
         <profile>
+            <id>jgroups</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-cluster-jgroups</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
             <id>templates</id>
             <build>
                 <pluginManagement>
@@ -330,6 +346,10 @@
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
                 <includes>
+                    <include>**/websupport-cluster.xml</include>
+                    <include>**/websupport-persistence.xml</include>
+                    <include>**/yc-ws-cluster.xml</include>
+                    <include>**/yc-jgroups-udp.xml</include>
                     <include>**/logback.xml</include>
                 </includes>
             </resource>
@@ -337,6 +357,10 @@
                 <filtering>false</filtering>
                 <directory>src/main/resources</directory>
                 <excludes>
+                    <exclude>**/websupport-cluster.xml</exclude>
+                    <exclude>**/websupport-persistence.xml</exclude>
+                    <exclude>**/yc-ws-cluster.xml</exclude>
+                    <exclude>**/yc-jgroups-udp.xml</exclude>
                     <exclude>**/logback.xml</exclude>
                 </excludes>
             </resource>
@@ -361,9 +385,6 @@
                                 <includes>
                                     <include>**/context.xml</include>
                                     <include>**/web.xml</include>
-                                    <include>**/applicationContext.xml</include>
-                                    <include>**/logback.xml</include>
-                                    <include>**/shop*.properties.xml</include>
                                 </includes>
                             </resource>
                             <resource>

@@ -21,6 +21,10 @@ import org.hibernate.type.Type;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.yes.cart.cluster.node.Node;
+import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.cluster.node.RspMessage;
+import org.yes.cart.cluster.node.impl.ContextRspMessageImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.misc.Pair;
@@ -29,15 +33,9 @@ import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.CacheDirector;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
-import org.yes.cart.web.service.ws.client.WsAbstractFactoryClientFactory;
-import org.yes.cart.web.service.ws.client.WsClientFactory;
-import org.yes.cart.web.service.ws.node.NodeService;
-import org.yes.cart.web.service.ws.node.dto.Node;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -50,7 +48,6 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
 
     private ApplicationContext applicationContext;
     private NodeService nodeService;
-    private WsAbstractFactoryClientFactory wsAbstractFactoryClientFactory;
 
     private Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache;
     private Set<String> cachedEntities;
@@ -101,7 +98,6 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
             synchronized (this) {
                 if (nodeService == null) {
                     nodeService = applicationContext.getBean("nodeService", NodeService.class);
-                    wsAbstractFactoryClientFactory = applicationContext.getBean("wsAbstractFactoryClientFactory", WsAbstractFactoryClientFactory.class);
                 }
             }
         }
@@ -112,30 +108,27 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
                     .warn("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
             return;
         }
-        String userName = async.getAttribute(AsyncContext.USERNAME);
-        String password = async.getAttribute(AsyncContext.CREDENTIALS);
-        final int timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS));
 
-        for (final Node node : nodeService.getYesNodes()) {
-
-            try {
-
-                final WsClientFactory<CacheDirector> factory =
-                        wsAbstractFactoryClientFactory.getFactory(CacheDirector.class, userName, password, node.getCacheManagerUri(), timeout);
-                CacheDirector wsCacheDirector = factory.getService();
-                wsCacheDirector.onCacheableChange(op, entityName, pk);
-                factory.release(wsCacheDirector);
-                wsCacheDirector = null;
-
-            } catch (Exception e) {
-
-                ShopCodeContext.getLog(this)
-                        .error("Cannot invalidate cache for entity [" + entityName
-                                + "] pk value =  [" + pk + "] url [" + node.getNodeId() + ":" + node.getCacheManagerUri() + "]");
-
-            }
-
+        final List<Node> cluster = nodeService.getYesNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            targets.add(node.getNodeId());
         }
+
+        final HashMap<String, Object> payload = new HashMap<String, Object>();
+        payload.put("entityOperation", op);
+        payload.put("entityName", entityName);
+        payload.put("pkValue", pk);
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "CacheDirector.onCacheableChange",
+                payload,
+                async
+        );
+
+        nodeService.broadcast(message);
 
     }
 
@@ -159,7 +152,9 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
     private AsyncContext getAsyncContext() {
 
         try {
-            return new AsyncFlexContextImpl();
+            final Map<String, Object> params = new HashMap<String, Object>();
+            params.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
+            return new AsyncFlexContextImpl(params);
         } catch (IllegalStateException ise) {
             // if we are here we are in async op already
             return ThreadLocalAsyncContextUtils.getContext();

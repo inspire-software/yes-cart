@@ -198,7 +198,7 @@
                     <configuration>
                         <systemProperties>
                             <property>
-                                <name>testPgCyberSource</name>
+                                <name>testPgAuthorizeNetAim</name>
                                 <value>${testPgAuthorizeNetAim}</value>
                             </property>
                         </systemProperties>

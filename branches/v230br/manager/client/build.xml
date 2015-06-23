@@ -55,7 +55,7 @@
 
     <!-- ##### SWF tasks #################################################################### -->
 
-    <target name="build_swf"  description="Build Russian swf">
+    <target name="build_swf"  description="Build swf">
 
         <echo message="Build ${env.BUILD_I18N} swf using Flex core ${env.BUILD_FL} with target directory ${env.BUILD_TARGET}"/>
 
@@ -68,9 +68,20 @@
             <fileset dir="target/classes/${env.BUILD_I18N}"/>
         </copy>
 
-        <mxmlc file="${basedir}/src/main/flex/ShopManagerApplication.mxml" keep-generated-actionscript="false">
+        <mxmlc file="${basedir}/src/main/flex/ShopManagerApplication.mxml"
+               keep-generated-actionscript="false"
+               actionscript-file-encoding="UTF-8"
+               static-link-runtime-shared-libraries="true">
+            <!-- Get default compiler options. -->
             <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+            <!-- List of path elements that form the roots of ActionScript class hierarchies. -->
             <source-path path-element="${FLEX_HOME}/frameworks"/>
+            <!-- List of SWC files or directories that contain SWC files. -->
+            <compiler.library-path dir="${FLEX_HOME}/frameworks" append="true">
+                <include name="libs" />
+                <include name="locale/{locale}" />
+            </compiler.library-path>
+
             <locale>${env.BUILD_FL}</locale>
         </mxmlc>
         <move file="${basedir}/src/main/flex/ShopManagerApplication.swf" tofile="${basedir}/target/${env.BUILD_TARGET}/ShopManagerApplication.swf"/>

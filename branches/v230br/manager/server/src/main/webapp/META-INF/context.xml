@@ -61,9 +61,11 @@
            roleNameCol="code"/>
 
     <Parameter name="NODE_ID" value="YUM" override="false"/>
-    <Parameter name="BACKDOOR_URI" value="yum" override="false"/>
-    <Parameter name="CACHEDIRECTOR_URI" value="yum" override="false"/>
+    <Parameter name="NODE_TYPE" value="YUM" override="false"/>
+    <Parameter name="NODE_CONFIG" value="${cluster.config.yum.node_config}" override="false"/>
+    <Parameter name="CLUSTER_ID" value="${cluster.config.cluster_id}" override="false"/>
     <Parameter name="LUCENE_INDEX_DISABLED" value="true" override="false"/>
+    <Parameter name="CHANNEL_URI" value="" override="false"/>
 
 </Context>
 

@@ -16,13 +16,16 @@
 
 package org.yes.cart.web.service.ws.impl;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.yes.cart.cluster.node.Message;
+import org.yes.cart.cluster.node.MessageListener;
+import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.cluster.service.WarmUpService;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.impl.AsIsAnalyzer;
@@ -30,10 +33,8 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ObjectUtil;
 import org.yes.cart.web.service.ws.BackdoorService;
-import org.yes.cart.web.service.ws.node.NodeService;
-import org.yes.cart.web.service.ws.node.WarmUpService;
 
-import javax.jws.WebService;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,8 +44,6 @@ import java.util.List;
  * Date: 1/28/12
  * Time: 10:02 AM
  */
-@WebService(endpointInterface = "org.yes.cart.web.service.ws.BackdoorService",
-        serviceName = "BackdoorService")
 public class BackdoorServiceImpl implements BackdoorService {
 
     private static final long serialVersionUID = 20130820L;
@@ -103,7 +102,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     }
 
     Boolean isLuceneIndexDisabled() {
-        return Boolean.TRUE.toString().equals(nodeService.getConfiguration().get(NodeService.LUCENE_INDEX_DISABLED));
+        return nodeService.getCurrentNode().isLuceneIndexDisabled();
     }
 
     /**
@@ -116,7 +115,9 @@ public class BackdoorServiceImpl implements BackdoorService {
         } else {
             count = productService.reindexProducts();
         }
-        flushCache();
+        if (count == -1) {
+            flushCache();
+        }
         return count;
     }
 
@@ -130,7 +131,9 @@ public class BackdoorServiceImpl implements BackdoorService {
         } else {
             count = productService.reindexProductsSku();
         }
-        flushCache();
+        if (count == -1) {
+            flushCache();
+        }
         return count;
     }
 
@@ -144,7 +147,9 @@ public class BackdoorServiceImpl implements BackdoorService {
         } else {
             count = productService.reindexProducts(shopPk);
         }
-        flushCache();
+        if (count == -1) {
+            flushCache();
+        }
         return count;
     }
 
@@ -158,7 +163,9 @@ public class BackdoorServiceImpl implements BackdoorService {
         } else {
             count = productService.reindexProductsSku(shopPk);
         }
-        flushCache();
+        if (count == -1) {
+            flushCache();
+        }
         return count;
     }
 
@@ -233,11 +240,11 @@ public class BackdoorServiceImpl implements BackdoorService {
 
                 if (query.toLowerCase().contains("select ")) {
 
-                    return escapeXml(getGenericDao().executeNativeQuery(query));
+                    return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeNativeQuery(query));
 
                 } else {
 
-                    return Collections.singletonList(escapeXml(new Object[]{getGenericDao().executeNativeUpdate(query)}));
+                    return Collections.singletonList(ObjectUtil.escapeXml(getGenericDao().executeNativeUpdate(query)));
 
                 }
             }
@@ -264,10 +271,10 @@ public class BackdoorServiceImpl implements BackdoorService {
                 if (query.toLowerCase().contains("select ")) {
 
                     final List queryRez = getGenericDao().executeHsqlQuery(query);
-                    return transformTypedResultListToArrayList(queryRez);
+                    return ObjectUtil.transformTypedResultListToArrayList(queryRez);
 
                 } else {
-                    return Collections.singletonList(escapeXml(new Object[]{getGenericDao().executeHsqlQuery(query)}));
+                    return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().executeHsqlQuery(query));
                 }
             }
             return Collections.EMPTY_LIST;
@@ -291,7 +298,7 @@ public class BackdoorServiceImpl implements BackdoorService {
 
             final Query query = queryParser.parse(luceneQuery);
 
-            return transformTypedResultListToArrayList(getGenericDao().fullTextSearch(query));
+            return ObjectUtil.transformTypedResultListToArrayList(getGenericDao().fullTextSearch(query));
 
         } catch (Exception e) {
 
@@ -305,41 +312,6 @@ public class BackdoorServiceImpl implements BackdoorService {
 
     }
 
-    private List<Object[]> transformTypedResultListToArrayList(List queryRez) {
-
-        final List<Object[]> rezList = new ArrayList<Object[]>(queryRez.size());
-
-        for (Object obj : queryRez) {
-
-            rezList.add(ObjectUtil.toObjectArray(obj));
-
-        }
-        return rezList;
-    }
-
-    private List<Object[]> escapeXml(List<Object[]> raw) {
-
-        final List<Object[]> rezList = new ArrayList<Object[]>(raw.size());
-
-        for (Object[] obj : raw) {
-
-            rezList.add(escapeXml(obj));
-
-        }
-        return rezList;
-
-    }
-
-    private Object[] escapeXml(Object[] raw) {
-
-        final Object[] escaped = new Object[raw.length];
-        for (int i = 0; i < raw.length; i++) {
-            escaped[i] = StringEscapeUtils.escapeXml(String.valueOf(raw[i]));
-        }
-        return escaped;
-
-    }
-
     /**
      * IoC. node service
      *
@@ -347,6 +319,86 @@ public class BackdoorServiceImpl implements BackdoorService {
      */
     public void setNodeService(final NodeService nodeService) {
         this.nodeService = nodeService;
+        this.nodeService.subscribe("BackdoorService.ping", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                BackdoorServiceImpl.this.ping();
+                return "OK";
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.warmUp", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                BackdoorServiceImpl.this.warmUp();
+                return "OK";
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.reindexAllProducts", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return BackdoorServiceImpl.this.reindexAllProducts();
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.reindexAllProductsSku", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return BackdoorServiceImpl.this.reindexAllProductsSku();
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.reindexShopProducts", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return BackdoorServiceImpl.this.reindexShopProducts((Long) message.getPayload());
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.reindexShopProductsSku", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return BackdoorServiceImpl.this.reindexShopProductsSku((Long) message.getPayload());
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.reindexProduct", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return BackdoorServiceImpl.this.reindexProduct((Long) message.getPayload());
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.reindexProductSku", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return BackdoorServiceImpl.this.reindexProductSku((Long) message.getPayload());
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.reindexProductSkuCode", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return BackdoorServiceImpl.this.reindexProductSkuCode((String) message.getPayload());
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.reindexProducts", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return BackdoorServiceImpl.this.reindexProducts((long[]) message.getPayload());
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.sqlQuery", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return new ArrayList<Serializable[]>((List) self().sqlQuery((String) message.getPayload()));
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.hsqlQuery", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return new ArrayList<Serializable[]>((List) self().hsqlQuery((String) message.getPayload()));
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.luceneQuery", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return new ArrayList<Serializable[]>((List) self().luceneQuery((String) message.getPayload()));
+            }
+        });
     }
 
     /**
@@ -380,5 +432,24 @@ public class BackdoorServiceImpl implements BackdoorService {
     private GenericDAO<Product, Long> getGenericDao() {
         return productService.getGenericDao();
     }
+
+    private BackdoorService self;
+
+    private BackdoorService self() {
+        if (self == null) {
+            self = getSelf();
+        }
+        return self;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @return spring look up
+     */
+    public BackdoorService getSelf() {
+        return null;
+    }
+
 
 }

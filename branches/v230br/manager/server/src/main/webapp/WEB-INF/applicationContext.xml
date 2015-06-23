@@ -205,79 +205,13 @@
 
     <!-- #################################  aspects configurations end ######################################-->
 
-    <!-- ################################ Clustering begin ###################################### -->
-
-
-    <bean id="nodeService" class="org.yes.cart.web.service.ws.node.impl.NodeServiceImpl">
-        <constructor-arg index="0" ref="systemService"/>
-        <constructor-arg index="1" ref="runtimeAttributeService"/>
-    </bean>
-
-    <!-- ################################ Clustering end ######################################## -->
-
-
     <!-- #################################  message consumers begin ######################################-->
 
     <import resource="classpath:manager-mailconfig.xml"/>
 
     <!-- #################################  message consumers end ######################################-->
 
-
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
-          autowire="byName">
-        <property name="configLocation" value="classpath:hibernate-nc.cfg.xml"/>
-        <property name="mappingResources">
-            <list>
-                <value>hibernate/yc.xml</value>
-            </list>
-        </property>
-        <property name="entityInterceptor">
-            <bean class="org.yes.cart.domain.interceptor.AdminInterceptor">
-                <property name="entityOperationCache" ref="evictionConfig"/>
-                <property name="prohibitedFields">
-                    <map key-type="java.lang.String" value-type="java.lang.String">
-                        <entry key="CustomerEntity">
-                            <set>
-                                <value>password</value>
-                            </set>
-                        </entry>
-                        <entry key="ManagerEntity">
-                            <set>
-                                <value>password</value>
-                            </set>
-                        </entry>
-                        <entry key="MailEntity">
-                            <set>
-                                <value>textVersion</value>
-                                <value>htmlVersion</value>
-                            </set>
-                        </entry>
-                        <entry key="MailPartEntity">
-                            <set>
-                                <value>data</value>
-                            </set>
-                        </entry>
-                        <entry key="ShoppingCartStateEntity">
-                            <set>
-                                <value>state</value>
-                            </set>
-                        </entry>
-                    </map>
-                </property>
-            </bean>
-        </property>
-        <property name="hibernateProperties">
-            <props>
-		        <prop key="hibernate.search.default.indexBase">
-                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart-yum'}
-                </prop>
-                <prop key="hibernate.search.default.exclusive_index_use">false</prop>
-                <!-- Disable hibernate search automatic support - since we do not have FT index in YUM -->
-                <prop key="hibernate.search.autoregister_listeners">false</prop>
-                <prop key="hibernate.search.indexing_strategy">manual</prop>
-            </props>
-        </property>
-    </bean>
+    <import resource="classpath:manager-persistence.xml"/>
 
     <import resource="classpath:core-config.xml"/>
     <import resource="classpath:core-persistence.xml"/>
@@ -290,5 +224,7 @@
     <import resource="classpath:payment-api.xml"/>
     <import resource="classpath:core-payments.xml"/>
     <import resource="classpath:core-module-payment-base.xml"/>
+
+    <import resource="classpath:manager-cluster.xml"/>
 
 </beans>

@@ -16,11 +16,6 @@
 
 package org.yes.cart.web.service.ws;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
-import javax.jws.WebService;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -33,21 +28,16 @@ import java.util.List;
  * Date: 1/28/12
  * Time: 9:50 AM
  */
-@WebService
 public interface BackdoorService {
 
     /**
      * @return true if service is online
      */
-    @WebMethod
-    @WebResult(name = "ping")
     boolean ping();
 
     /**
      * Preload main caches.
      */
-    @WebMethod
-    @WebResult(name = "warmUp")
     void warmUp();
 
     /**
@@ -55,8 +45,6 @@ public interface BackdoorService {
      *
      * @return quantity of objects in index
      */
-    @WebMethod
-    @WebResult(name = "quantity")
     int reindexAllProducts();
 
     /**
@@ -64,8 +52,6 @@ public interface BackdoorService {
      *
      * @return quantity of objects in index
      */
-    @WebMethod
-    @WebResult(name = "quantity")
     int reindexAllProductsSku();
 
     /**
@@ -75,9 +61,7 @@ public interface BackdoorService {
      *
      * @return quantity of objects in index
      */
-    @WebMethod
-    @WebResult(name = "quantity")
-    int reindexShopProducts(@WebParam(name = "productPk") long shopPk);
+    int reindexShopProducts(long shopPk);
 
     /**
      * Reindex all products.
@@ -86,9 +70,7 @@ public interface BackdoorService {
      *
      * @return quantity of objects in index
      */
-    @WebMethod
-    @WebResult(name = "quantity")
-    int reindexShopProductsSku(@WebParam(name = "productPk") long shopPk);
+    int reindexShopProductsSku(long shopPk);
 
     /**
      * Reindex single products.
@@ -97,9 +79,7 @@ public interface BackdoorService {
      *
      * @return quantity of objects in index
      */
-    @WebMethod
-    @WebResult(name = "quantity")
-    int reindexProduct(@WebParam(name = "productPk") long productPk);
+    int reindexProduct(long productPk);
 
     /**
      * Reindex single products.
@@ -108,9 +88,7 @@ public interface BackdoorService {
      *
      * @return quantity of objects in index
      */
-    @WebMethod
-    @WebResult(name = "quantity")
-    int reindexProductSku(@WebParam(name = "productPk") long productPk);
+    int reindexProductSku(long productPk);
 
     /**
      * Reindex single products.
@@ -119,9 +97,7 @@ public interface BackdoorService {
      *
      * @return quantity of objects in index
      */
-    @WebMethod
-    @WebResult(name = "quantity")
-    int reindexProductSkuCode(@WebParam(name = "productCode") String productCode);
+    int reindexProductSkuCode(String productCode);
 
 
     /**
@@ -131,9 +107,7 @@ public interface BackdoorService {
      *
      * @return quantity of objects in index
      */
-    @WebMethod
-    @WebResult(name = "quantity")
-    int reindexProducts(@WebParam(name = "productPks") long[] productPks);
+    int reindexProducts(long[] productPks);
 
 
     /**
@@ -143,8 +117,6 @@ public interface BackdoorService {
      * @param query query ot execute.
      * @return list of rows
      */
-    @WebMethod
-    @WebResult(name = "queryResult")
     List<Object[]> sqlQuery(String query);
 
     /**
@@ -154,8 +126,6 @@ public interface BackdoorService {
      *
      * @return list of rows
      */
-    @WebMethod
-    @WebResult(name = "queryResult")
     List<Object[]> hsqlQuery(String query);
 
     /**
@@ -165,8 +135,6 @@ public interface BackdoorService {
      *
      * @return list of rows
      */
-    @WebMethod
-    @WebResult(name = "queryResult")
     List<Object[]> luceneQuery(String query);
 
 }

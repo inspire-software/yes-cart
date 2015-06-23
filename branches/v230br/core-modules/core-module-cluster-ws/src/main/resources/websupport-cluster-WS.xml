@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/security
+                           http://www.springframework.org/schema/security/spring-security.xsd
+                           http://cxf.apache.org/jaxws
+                           http://cxf.apache.org/schemas/jaxws.xsd">
+
+    <import resource="classpath:core-services.xml"/>
+
+    <!-- ################################ Clustering begin ###################################### -->
+
+    <bean id="nodeService" class="org.yes.cart.cluster.node.impl.WebsupportWsNodeServiceImpl">
+        <constructor-arg index="0" ref="systemService"/>
+        <property name="wsConfiguration" value="classpath:yc-ws-cluster.xml"/>
+        <property name="wsConfigurationLoader">
+            <bean class="org.yes.cart.cluster.node.impl.NodeConfigurationXStreamProvider"/>
+        </property>
+    </bean>
+
+    <bean id="websupportWebServiceInboundChannel" class="org.yes.cart.web.service.ws.impl.WebsupportWebServiceInboundChannel">
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+
+    <jaxws:endpoint id="backDoorWs" implementor="#websupportWebServiceInboundChannel" address="/backdoor">
+        <jaxws:properties>
+            <entry key="ws-security.validate.token">
+                <value>false</value>
+            </entry>
+        </jaxws:properties>
+        <jaxws:inInterceptors>
+            <ref bean="wsAuthenticationInterceptor"/>
+        </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+            <ref bean="wsLoggingOutInterceptor"/>
+        </jaxws:outInterceptors>
+    </jaxws:endpoint>
+
+    <bean id="dataSourceSec" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/yesjndi"/>
+        <property name="lookupOnStartup" value="true"/>
+        <property name="cache" value="true"/>
+        <property name="proxyInterface" value="javax.sql.DataSource"/>
+    </bean>
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider>
+            <security:password-encoder hash="md5"/>
+            <security:jdbc-user-service
+                    data-source-ref="dataSourceSec"
+                    group-authorities-by-username-query=""
+                    users-by-username-query="SELECT m.email as username, m.password, 1 as enabled FROM TMANAGER m where m.email = ?"
+                    authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <bean id="wsAuthenticationInterceptor" class="org.yes.cart.web.service.ws.impl.BackdoorAuthenticationInInterceptor">
+        <constructor-arg>
+            <map>
+                <entry key="action" value="UsernameToken"/>
+                <entry key="passwordType" value="PasswordText"/>
+                <!--                <entry key="passwordCallbackClass" value="org.yes.cart.web.service.ws.impl.BackdoorCallback"/>-->
+            </map>
+        </constructor-arg>
+        <property name="authenticationManager" ref="authenticationManager"/>
+    </bean>
+
+    <bean id="wsLoggingInInterceptor" class="org.apache.cxf.interceptor.Slf4JLoggingInInterceptor">
+        <constructor-arg index="0" ref="nodeService"/>
+        <property name="prettyLogging" value="false"/>
+    </bean>
+    <bean id="wsLoggingOutInterceptor" class="org.apache.cxf.interceptor.Slf4JLoggingOutInterceptor">
+        <constructor-arg index="0" ref="nodeService"/>
+        <property name="prettyLogging" value="false"/>
+    </bean>
+
+
+    <!-- ################################ Clustering end ######################################## -->
+
+</beans>

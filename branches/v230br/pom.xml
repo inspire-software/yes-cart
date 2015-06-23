@@ -77,8 +77,8 @@
         <blazeds.version>4.0.0.14931</blazeds.version>
         <spring-flex.version>1.5.2.RELEASE</spring-flex.version>
 
-        <maven.compiler.source>1.6</maven.compiler.source>
-        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -292,7 +292,11 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.3.2</version>
+                    <version>2.5.1</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-dependency-plugin</artifactId>
@@ -537,6 +541,16 @@
         <profile>
             <activation><activeByDefault>false</activeByDefault></activation>
             <id>buildInstaller</id>
+            <properties>
+                <env>installer</env>
+                <env.db>derby</env.db>
+                <env.ssl>off</env.ssl>
+                <env.yum.lang>all</env.yum.lang>
+                <payment.liqpay.module>off</payment.liqpay.module>
+                <payment.cybersource.module>off</payment.cybersource.module>
+                <payment.authorizenet.module>off</payment.authorizenet.module>
+                <payment.paypal.module>off</payment.paypal.module>
+            </properties>
             <modules>
                 <module>payment-api</module>
                 <module>domain-api</module>
