@@ -35,7 +35,7 @@
 
     <security:authentication-manager>
         <security:authentication-provider>
-            <security:password-encoder hash="md5"/>
+            <security:password-encoder ref="passwordHashHelper"/>
             <security:jdbc-user-service
                     data-source-ref="dataSourceSec"
                     group-authorities-by-username-query=""
@@ -60,15 +60,9 @@
 
 
     <bean id="managerRegistrationAspect" class="org.yes.cart.service.domain.aspect.impl.ManagerRegistrationAspect">
-        <constructor-arg ref="aspectExecutor"/>
-        <constructor-arg index="1">
-            <bean class="org.yes.cart.service.domain.impl.PassPhraseGeneratorImpl">
-                <constructor-arg index="0" value="8"/>
-            </bean>
-        </constructor-arg>
-        <constructor-arg index="2">
-            <bean class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
-        </constructor-arg>
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" ref="passPhraseGenerator"/>
+        <constructor-arg index="2" ref="passwordHashHelper"/>
         <constructor-arg index="3" ref="mailService"/>
         <constructor-arg index="4" ref="mailComposer"/>
     </bean>

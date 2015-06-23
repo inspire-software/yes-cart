@@ -31,8 +31,27 @@ public class MD5HashHelperImplTest {
     @Test
     public void testGetMD5Hash() throws Exception {
         HashHelper hashHelper = new MD5HashHelperImpl();
+
         assertEquals("Get unexpected hash",
                 "5f4dcc3b5aa765d61d8327deb882cf99",
                 hashHelper.getHash("password"));
+
+        assertEquals("Get unexpected hash",
+                "fcea920f7412b5da7be0cf42b8c93759",
+                hashHelper.getHash("1234567"));
+    }
+
+    @Test
+    public void testGetMD5HashWithSalt() throws Exception {
+        MD5HashHelperImpl hashHelper = new MD5HashHelperImpl();
+        hashHelper.setSalt("YCPWSALT");
+
+        assertEquals("Get unexpected hash",
+                "f71b3d55bd4b4a0b3f18f65349750c21",
+                hashHelper.getHash("password"));
+
+        assertEquals("Get unexpected hash",
+                "d89c77010dedf89c10d1293bd02b53c7",
+                hashHelper.getHash("1234567"));
     }
 }

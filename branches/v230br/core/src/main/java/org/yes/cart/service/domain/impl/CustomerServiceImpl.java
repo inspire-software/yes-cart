@@ -46,7 +46,7 @@ import java.util.List;
  */
 public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implements CustomerService {
 
-    private final HashHelper hashHelper;
+    private final HashHelper passwordHashHelper;
 
     private final GenericDAO<Object, Long> customerShopDao;
 
@@ -61,19 +61,19 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * Construct customer service.
      *
      * @param genericDao customer dao to use.
-     * @param hashHelper to generate password hash
+     * @param passwordHashHelper to generate password hash
      * @param customerShopDao    to delete
      * @param shopService shop service (reuse retrieval + caching)
      * @param customerNameFormatter customer name formatter
      */
     public CustomerServiceImpl(final GenericDAO<Customer, Long> genericDao,
-                               final HashHelper hashHelper,
+                               final HashHelper passwordHashHelper,
                                final GenericDAO<Object, Long> customerShopDao,
                                final AttributeService attributeService,
                                final ShopService shopService,
                                final CustomerNameFormatter customerNameFormatter) {
         super(genericDao);
-        this.hashHelper = hashHelper;
+        this.passwordHashHelper = passwordHashHelper;
         this.customerShopDao = customerShopDao;
         this.attributeService = attributeService;
         this.shopService = shopService;
@@ -214,7 +214,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         try {
             final List<Criterion> criterionList = new ArrayList<Criterion>();
 
-            final String hash = hashHelper.getHash(password);
+            final String hash = passwordHashHelper.getHash(password);
 
             criterionList.add(Restrictions.eq("email", email));
             criterionList.add(Restrictions.eq("password", hash));

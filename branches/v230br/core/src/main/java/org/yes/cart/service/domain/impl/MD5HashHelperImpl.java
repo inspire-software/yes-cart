@@ -16,6 +16,9 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.StringUtils;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.yes.cart.service.domain.HashHelper;
 
 import java.io.UnsupportedEncodingException;
@@ -27,7 +30,13 @@ import java.security.NoSuchAlgorithmException;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class MD5HashHelperImpl implements HashHelper {
+public class MD5HashHelperImpl implements HashHelper, PasswordEncoder {
+
+    private String salt = "";
+
+    public void setSalt(final String salt) {
+        this.salt = salt;
+    }
 
     /**
      * Get the md5 string from given password.
@@ -37,10 +46,14 @@ public class MD5HashHelperImpl implements HashHelper {
      * @throws java.security.NoSuchAlgorithmException     NoSuchAlgorithmException
      * @throws java.io.UnsupportedEncodingException UnsupportedEncodingException
      */
+    @Cacheable(value = "passwordHashHelper-hash")
     public String getHash(final String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         final MessageDigest digest = MessageDigest.getInstance("MD5");
         byte[] md5hash;
-        digest.update(password.getBytes("utf-8"), 0, password.length());
+
+        final String saltedPassword = StringUtils.isNotBlank(salt) ? password.concat(salt) : password;
+
+        digest.update(saltedPassword.getBytes("utf-8"), 0, saltedPassword.length());
         md5hash = digest.digest();
         return convertToHex(md5hash);
     }
@@ -62,5 +75,37 @@ public class MD5HashHelperImpl implements HashHelper {
         return buf.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String encodePassword(final String rawPass, final Object salt) {
+        try {
+            return self().getHash(rawPass);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to hash password", e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isPasswordValid(final String encPass, final String rawPass, final Object salt) {
+        return encodePassword(rawPass, salt).equals(encPass);
+    }
+
+    private HashHelper self;
+
+    private HashHelper self() {
+        if (self == null) {
+            self = getSelf();
+        }
+        return self;
+    }
+
+    public HashHelper getSelf() {
+        return null;
+    }
 
 }

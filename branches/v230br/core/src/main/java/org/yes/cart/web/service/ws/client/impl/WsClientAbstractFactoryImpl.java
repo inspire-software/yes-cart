@@ -23,6 +23,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.web.service.ws.client.WsClientAbstractFactory;
 import org.yes.cart.web.service.ws.client.WsClientFactory;
 
@@ -37,6 +38,12 @@ public class WsClientAbstractFactoryImpl implements WsClientAbstractFactory, App
 
     private ApplicationContext applicationContext;
 
+    private final HashHelper passwordHashHelper;
+
+    public WsClientAbstractFactoryImpl(final HashHelper passwordHashHelper) {
+        this.passwordHashHelper = passwordHashHelper;
+    }
+
     /** {@inheritDoc} */
     @Override
     @Cacheable(value = "nodeService-wsFactory")
@@ -50,7 +57,12 @@ public class WsClientAbstractFactoryImpl implements WsClientAbstractFactory, App
 
         LOG.debug("Creating WsClientFactory on {} to access {}", nodeService.getCurrentNodeId(),  service);
 
-        return new PerUserPerServiceClientFactory<S>(nodeService, service, userName, password, url, timeout);
+        try {
+            final String pwhash = passwordHashHelper.getHash(password);
+            return new PerUserPerServiceClientFactory<S>(nodeService, service, userName, pwhash, url, timeout);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to create password hash during WS client construction", e);
+        }
     }
 
     /**

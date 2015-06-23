@@ -28,7 +28,15 @@
     <bean id="passPhraseGenerator" class="org.yes.cart.service.domain.impl.PassPhraseGeneratorImpl">
         <constructor-arg index="0" value="8"/>
     </bean>
-    <bean id="passwordHashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
+
+    <bean id="passwordHashHelper" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.MD5HashHelperImpl">
+                <property name="salt" value="YCPWSALT"/>
+                <lookup-method name="getSelf" bean="passwordHashHelper"/>
+            </bean>
+        </property>
+    </bean>
 
     <bean id="managerRegistrationAspect" class="org.yes.cart.service.mail.impl.TestManagerRegistrationAspect">
         <constructor-arg ref="passPhraseGenerator"/>

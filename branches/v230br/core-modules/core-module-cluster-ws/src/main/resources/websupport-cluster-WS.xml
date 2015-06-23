@@ -66,7 +66,7 @@
 
     <security:authentication-manager alias="authenticationManager">
         <security:authentication-provider>
-            <security:password-encoder hash="md5"/>
+            <!--<security:password-encoder hash="md5"/> Encoding is done on the client end to prevent plain text passwords-->
             <security:jdbc-user-service
                     data-source-ref="dataSourceSec"
                     group-authorities-by-username-query=""

@@ -35,13 +35,13 @@ import java.security.NoSuchAlgorithmException;
 @Aspect
 public class TestCustomerRegistrationAspect {
 
-    private final HashHelper hashHelper;
+    private final HashHelper passwordHashHelper;
 
     private final PassPhrazeGenerator phrazeGenerator;
 
 
-    public TestCustomerRegistrationAspect(final HashHelper hashHelper, final PassPhrazeGenerator phrazeGenerator) {
-        this.hashHelper = hashHelper;
+    public TestCustomerRegistrationAspect(final HashHelper passwordHashHelper, final PassPhrazeGenerator phrazeGenerator) {
+        this.passwordHashHelper = passwordHashHelper;
         this.phrazeGenerator = phrazeGenerator;
     }
 
@@ -77,7 +77,7 @@ public class TestCustomerRegistrationAspect {
 
         final String generatedPassword  = StringUtils.isNotBlank(customer.getPassword()) ? customer.getPassword() : phrazeGenerator.getNextPassPhrase();
 
-        final String passwordHash = hashHelper.getHash(generatedPassword);
+        final String passwordHash = passwordHashHelper.getHash(generatedPassword);
 
         customer.setPassword(passwordHash);
     }

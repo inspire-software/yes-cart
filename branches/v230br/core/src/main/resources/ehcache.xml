@@ -70,6 +70,9 @@
     <cache name="nodeService-wsFactory" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="43200" timeToIdleSeconds="7200"/>
 
+    <cache name="passwordHashHelper-hash" maxElementsInMemory="1000" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="43200" timeToIdleSeconds="7200"/>
+
     <!-- ############################################# service cache #######################################-->
 
     <cache name="attributeService-availableAttributesByProductTypeId" maxElementsInMemory="20" overflowToDisk="false"

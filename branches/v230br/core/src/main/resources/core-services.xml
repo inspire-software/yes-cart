@@ -31,8 +31,6 @@
 
     <bean id="priceNavigation" class="org.yes.cart.domain.query.impl.PriceNavigationImpl"/>
 
-    <bean id="hashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl" scope="prototype"/>
-
     <bean id="attributeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.AttributeSearchQueryBuilder"/>
     <bean id="attributeSkuLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.AttributeSkuSearchQueryBuilder"/>
     <bean id="featuredProductLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.FeaturedProductSearchQueryBuilder"/>
@@ -555,7 +553,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.CustomerServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="customerDao"/>
-                <constructor-arg index="1" type="org.yes.cart.service.domain.HashHelper" ref="hashHelper"/>
+                <constructor-arg index="1" type="org.yes.cart.service.domain.HashHelper" ref="passwordHashHelper"/>
                 <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="genericDao"/>
                 <constructor-arg index="3" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
                 <constructor-arg index="4" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
@@ -860,7 +858,14 @@
         <constructor-arg index="0" value="8"/>
     </bean>
 
-    <bean id="passwordHashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
+    <bean id="passwordHashHelper" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.MD5HashHelperImpl">
+                <property name="salt" value="YCPWSALT"/>
+                <lookup-method name="getSelf" bean="passwordHashHelper"/>
+            </bean>
+        </property>
+    </bean>
 
     <bean id="languageService" class="org.yes.cart.service.misc.impl.LanguageServiceImpl">
         <constructor-arg index="0">
@@ -895,6 +900,8 @@
 
     <!-- ########################################## WS support ########################## -->
 
-    <bean id="wsAbstractFactoryClientFactory" class="org.yes.cart.web.service.ws.client.impl.WsClientAbstractFactoryImpl"/>
+    <bean id="wsAbstractFactoryClientFactory" class="org.yes.cart.web.service.ws.client.impl.WsClientAbstractFactoryImpl">
+        <constructor-arg index="0" ref="passwordHashHelper"/>
+    </bean>
 
 </beans>

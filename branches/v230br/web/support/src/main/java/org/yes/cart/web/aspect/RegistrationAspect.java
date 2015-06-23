@@ -57,7 +57,7 @@ import java.util.Set;
 @Aspect
 public class RegistrationAspect extends BaseNotificationAspect {
 
-    private final HashHelper hashHelper;
+    private final HashHelper passwordHashHelper;
 
     private final PassPhrazeGenerator phrazeGenerator;
 
@@ -73,19 +73,19 @@ public class RegistrationAspect extends BaseNotificationAspect {
      *
      * @param taskExecutor    {@link org.springframework.core.task.TaskExecutor} to execute task.
      * @param phrazeGenerator {@link org.yes.cart.service.domain.PassPhrazeGenerator}
-     * @param hashHelper      {@link org.yes.cart.service.domain.HashHelper}
+     * @param passwordHashHelper      {@link org.yes.cart.service.domain.HashHelper}
      * @param themeService    theme service
      */
     public RegistrationAspect(
             final TaskExecutor taskExecutor,
             final PassPhrazeGenerator phrazeGenerator,
-            final HashHelper hashHelper,
+            final HashHelper passwordHashHelper,
             final MailService mailService,
             final MailComposer mailComposer,
             final ThemeService themeService) {
         super(taskExecutor);
 
-        this.hashHelper = hashHelper;
+        this.passwordHashHelper = passwordHashHelper;
         this.phrazeGenerator = phrazeGenerator;
         this.mailService = mailService;
         this.mailComposer = mailComposer;
@@ -124,7 +124,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
                 generatedPassword = phrazeGenerator.getNextPassPhrase();
             }
             // regenerate hash for new password
-            generatedPasswordHash = hashHelper.getHash(generatedPassword);
+            generatedPasswordHash = passwordHashHelper.getHash(generatedPassword);
             generatedToken = null;
             generatedTokenExpiry = null;
 
@@ -141,7 +141,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
                 // regenerate password
                 generatedPassword = phrazeGenerator.getNextPassPhrase();
-                generatedPasswordHash = hashHelper.getHash(generatedPassword);
+                generatedPasswordHash = passwordHashHelper.getHash(generatedPassword);
                 generatedToken = null;
                 generatedTokenExpiry = null;
 
