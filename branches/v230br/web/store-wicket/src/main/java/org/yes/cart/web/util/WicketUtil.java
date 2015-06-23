@@ -297,13 +297,13 @@ public class WicketUtil {
     }
 
     /**
-     * Create parameterized string resource model for wicket. (i.e. "The ${animal} jumped over the ${target}.")
+     * Create parametrized string resource model for wicket. (i.e. "The ${animal} jumped over the ${target}.")
      *
      * @param component component to provide resources
      * @param resourceKey key
      * @param parameters parameters which are specified by ${name} placeholders in the resource key
      *
-     * @return parameterized label
+     * @return parametrized label
      */
     public static StringResourceModel createStringResourceModel(final Component component,
                                                                 final String resourceKey,
