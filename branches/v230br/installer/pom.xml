@@ -124,6 +124,7 @@
                                     <artifactId>yes-shop-wicket</artifactId>
                                     <version>${project.version}</version>
                                     <type>war</type>
+                                    <destFileName>yes-shop.war</destFileName>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.yes</groupId>
