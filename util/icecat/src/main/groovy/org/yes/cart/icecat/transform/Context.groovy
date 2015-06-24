@@ -25,7 +25,7 @@ package org.yes.cart.icecat.transform
  */
 class Context  {
     
-    String dataDirectory = "/development/projects/java/yc-v200br/env/sampledata/demo-data/icecat";
+    String dataDirectory = "/development/projects/java/yc/env/sampledata/demo-data/icecat";
 
     String url = "http://data.icecat.biz/";
 
@@ -33,31 +33,32 @@ class Context  {
 
     String pwd = "sharpevil77";
 
-    //  9 - EN, 8 - RU, 25 - UK, see refs.xml for other ids - seems like icecat's UK products have no equivalents in RU or EN
+    //  9 - EN, 8 - RU, 25 - UK, 4- DE see refs.xml for other ids - seems like icecat's UK products have no equivalents in RU or EN
     // we get better localization results
-    String langId = "25,8,9";
+    String langId = "25,8,4,9";
 
-    String langNames = "uk,ru,en";
+    String langNames = "uk,ru,de,en";
 
-    String productDir = "UK,RU,EN";
+    String productDir = "UK,RU,DE,EN";
 
     //String categories = "151,1296,942,803,788,195,194,197,943,196,191,192,378,153,381,932,156,375,1373,897";
-    String categories = "151,195,194,153,932,156,897";
+    String categories = "151,1296,942,803,788,195,194,197,943,196,191,192,378,153,381,932,156,375,1373,897";
     /*
     * 151 - laptop
+    * 1296 - Devices which enable computers to receive TV signals.
+    * 942 - monitor arms, monitor stands, monitor arm, monitor stand, arms, stands
+    * 943 - display privacy filters
+    * 788 - warranty &amp; support extensions
     * 195 - mouse
+    * 191 - data input devices
+    * 192 - graphic tablets
     * 194 - keyboard
+    * 196 - wireless presenters
     * 197 - scanners
     * 153 - PC
     * 932 - data storage
     * 156 - servers
     * 897 - tablet pc
-    *
-    *
-    *
-    *
-    *
-    *
     * */
 
     int limitPerBrand = 50;

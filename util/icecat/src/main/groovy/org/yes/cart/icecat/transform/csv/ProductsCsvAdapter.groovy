@@ -44,7 +44,7 @@ class ProductsCsvAdapter {
     public toCsvFile(String filename) {
 
         StringBuilder builder = new StringBuilder();
-        builder.append("product guid;SKU code;model;brand;product type;barcode;name;EN;RU;UK;description;EN;RU;UK;availability;featured;tag\n");
+        builder.append("product guid;SKU code;model;brand;product type;barcode;name;EN;RU;UK;DE;description;EN;RU;UK;DE;availability;featured;tag\n");
 
         productMap.values().each {
             try {
@@ -61,10 +61,12 @@ class ProductsCsvAdapter {
                     builderTmp.append(Util.escapeCSV(it.product.getNameFor('en'))).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.getNameFor('ru'))).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.getNameFor('uk'))).append('";"')
+                    builderTmp.append(Util.escapeCSV(it.product.getNameFor('de'))).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('en'))).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('en'))).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('ru'))).append('";"')
-                    builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('uk'))).append('";')
+                    builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('uk'))).append('";"')
+                    builderTmp.append(Util.escapeCSV(it.product.getLongSummaryDescriptionFor('de'))).append('";')
                     builderTmp.append(it.Availability).append(';')
                     builderTmp.append(it.Featured).append(';"')
                     builderTmp.append(it.Tags).append('"\n')

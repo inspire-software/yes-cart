@@ -42,7 +42,7 @@ class ProductTypeViewGroupCsvAdapter {
     public toCsvFile(String filename) {
 
         StringBuilder builder = new StringBuilder();
-        builder.append("product type name;guid;name;EN;RU;UK;attr code csl\n");
+        builder.append("product type name;guid;name;EN;RU;UK;DE;attr code csl\n");
 
         categoryMap.values().each {
             for (CategoryFeatureGroup cfg : it.categoryFeatureGroup) {
@@ -53,6 +53,7 @@ class ProductTypeViewGroupCsvAdapter {
                 builder.append(Util.escapeCSV(cfg.getNameFor('en'))).append('";"')
                 builder.append(Util.escapeCSV(cfg.getNameFor('ru'))).append('";"')
                 builder.append(Util.escapeCSV(cfg.getNameFor('uk'))).append('";"')
+                builder.append(Util.escapeCSV(cfg.getNameFor('de'))).append('";"')
 
                 for(Feature feature : cfg.featureList) {
                     builder.append(feature.ID);

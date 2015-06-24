@@ -115,8 +115,17 @@ class CategoryWalker {
         }
 
         println("Added " + productPointerHandler.productMap.size() + " products to all categories...")
-        for (Category cat : handler.categoryMap.values()) {
+        List<String> toRemove = new ArrayList<String>();
+        for (Map.Entry<String, Category> entry : handler.categoryMap.entrySet()) {
+            Category cat = entry.getValue();
             println("Added " + cat.productPointer.size() + " products to category $cat.id ...");
+            if (cat.productPointer.size() == 0) {
+                toRemove.add(entry.getKey());
+            }
+        }
+        for (String catId : toRemove) {
+            println("Removing $catId because it has no products...");
+            handler.categoryMap.remove(catId);
         }
 
         println("Download product data...")

@@ -35,7 +35,7 @@ class CategoryCsvAdapter {
     public toCsvFile(String filename) {
 
         StringBuilder builder = new StringBuilder();
-        builder.append("parent category id;guid;category name;EN;RU;UK;description;EN;RU;UK;uri;keywords;EN;RU;UK\n");
+        builder.append("parent category id;guid;category name;EN;RU;UK;DE;description;EN;RU;UK;DE;uri;keywords;EN;RU;UK;DE\n");
         categoryMap.values().each {
             builder.append('100;"')
             //builder.append(it.parentCategoryid).append(';"')
@@ -44,15 +44,18 @@ class CategoryCsvAdapter {
             builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('ru'))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('uk'))).append('";"')
+            builder.append(Util.escapeCSV(it.getNameFor('de'))).append('";"')
             builder.append(Util.escapeCSV(it.getDescriptionFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getDescriptionFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getDescriptionFor('ru'))).append('";"')
             builder.append(Util.escapeCSV(it.getDescriptionFor('uk'))).append('";"')
+            builder.append(Util.escapeCSV(it.getDescriptionFor('de'))).append('";"')
             builder.append(it.getURI()).append('";"')
             builder.append(Util.escapeCSV(it.getKeywordsFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getKeywordsFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getKeywordsFor('ru'))).append('";"')
-            builder.append(Util.escapeCSV(it.getKeywordsFor('uk'))).append('"\n')
+            builder.append(Util.escapeCSV(it.getKeywordsFor('uk'))).append('";"')
+            builder.append(Util.escapeCSV(it.getKeywordsFor('de'))).append('"\n')
         }
         new File(filename).write(builder.toString(), 'UTF-8');
 
