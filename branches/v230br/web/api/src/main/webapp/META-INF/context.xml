@@ -47,17 +47,23 @@
               minEvictableIdleTimeMillis="864000000"/>
 
 
-
-    <Realm className="org.apache.catalina.realm.DataSourceRealm"
-           debug="4"
-           digest="MD5"
-           localDataSource="true"
-           dataSourceName="jdbc/yesjndi"
-           userTable="TMANAGER"
-           userNameCol="email"
-           userCredCol="password"
-           userRoleTable="TMANAGERROLE"
-           roleNameCol="code"/>
+    <!--
+        This feature has been disabled since DataSourceRealm supports of only basic
+        digest algorithms. see YC-571 which added salt to the regular MD5 hash and thus
+        made this feature impossible.
+        Furthermore Realm authentication has to be configured in web.xml <security-constraint>
+        which would be a duplication of the already existing spring security setup.
+    -->
+    <!--<Realm className="org.apache.catalina.realm.DataSourceRealm"-->
+           <!--debug="4"-->
+           <!--digest="MD5"-->
+           <!--localDataSource="true"-->
+           <!--dataSourceName="jdbc/yesjndi"-->
+           <!--userTable="TMANAGER"-->
+           <!--userNameCol="email"-->
+           <!--userCredCol="password"-->
+           <!--userRoleTable="TMANAGERROLE"-->
+           <!--roleNameCol="code"/>-->
 
     <Parameter name="NODE_ID" value="${cluster.config.api.node_id}" override="false"/>
     <Parameter name="NODE_TYPE" value="API" override="false"/>

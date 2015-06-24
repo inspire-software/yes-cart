@@ -97,7 +97,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>(services/backdoor)|(imgvault/)|(wicket/resource/)</param-value>
+            <param-value>(services/backdoor)|(imgvault/)</param-value>
         </init-param>
     </filter>
 
@@ -110,7 +110,7 @@
         </init-param>
         <init-param>
             <param-name>excludePattern</param-name>
-            <param-value>(services/backdoor)|(imgvault/)|(wicket/resource/)</param-value>
+            <param-value>(services/backdoor)|(imgvault/)</param-value>
         </init-param>
     </filter>
 

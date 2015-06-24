@@ -63,6 +63,10 @@
         <mysql-connector.version>5.1.13</mysql-connector.version>
         <servlet-api.version>2.5</servlet-api.version>
 
+        <!-- Groovy support -->
+        <!--<groovy-all.version>1.7.4</groovy-all.version>-->
+        <groovy-all.version>2.4.3</groovy-all.version>
+
         <!-- Storefront global versions -->
         <wicket.version>1.5.11</wicket.version>
         <jetty.version>6.1.4</jetty.version>

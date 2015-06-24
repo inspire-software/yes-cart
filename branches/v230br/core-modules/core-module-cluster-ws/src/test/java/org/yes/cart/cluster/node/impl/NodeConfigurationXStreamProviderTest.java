@@ -61,7 +61,7 @@ public class NodeConfigurationXStreamProviderTest {
         assertEquals("API", yes1.getNodeType());
         assertEquals("DEFAULT", yes1.getNodeConfig());
         assertTrue(yes1.isLuceneIndexDisabled());
-        assertEquals("http://localhost:8081/yes-shop/services/backdoor", yes1.getChannel());
+        assertEquals("http://localhost:8081/yes-api/services/backdoor", yes1.getChannel());
 
         final Node yum = cluster.get(2);
         assertNull(yum.getId());

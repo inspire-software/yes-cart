@@ -30,7 +30,7 @@
         <node-type>API</node-type>
         <node-config>DEFAULT</node-config>
         <lucene-index-disabled>true</lucene-index-disabled>
-        <channel>http://localhost:8081/yes-shop/services/backdoor</channel>
+        <channel>http://localhost:8081/yes-api/services/backdoor</channel>
     </node>
     <node>
         <cluster-id>TESTCLUSTER</cluster-id>
