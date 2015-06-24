@@ -43,7 +43,7 @@ class ProductsAttributesCsvAdapter {
     public toCsvFile(String filename) {
 
         StringBuilder builder = new StringBuilder();
-        builder.append("product guid;SKU code;model;attribute code;attribute name;value;display value EN;display value RU;display value UK\n");
+        builder.append("product guid;SKU code;model;attribute code;attribute name;value;display value EN;display value RU;display value UK;display value DE\n");
 
         productMap.values().each {
             def pp = it;
@@ -62,7 +62,8 @@ class ProductsAttributesCsvAdapter {
                         }
                         builder.append(Util.escapeCSV(it.getPresentationValueFor('en'))).append('";"')
                         builder.append(Util.escapeCSV(it.getPresentationValueFor('ru'))).append('";"')
-                        builder.append(Util.escapeCSV(it.getPresentationValueFor('uk'))).append('"\n')
+                        builder.append(Util.escapeCSV(it.getPresentationValueFor('uk'))).append('";"')
+                        builder.append(Util.escapeCSV(it.getPresentationValueFor('de'))).append('"\n')
 
                     }
                 }

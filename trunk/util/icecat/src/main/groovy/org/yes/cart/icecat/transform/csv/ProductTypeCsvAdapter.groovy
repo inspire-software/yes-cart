@@ -37,17 +37,19 @@ class ProductTypeCsvAdapter {
     public toCsvFile(String filename) {
 
         StringBuilder builder = new StringBuilder();
-        builder.append("name;EN;RU;UK;description;EN;RU;UK\n");
+        builder.append("name;EN;RU;UK;DE;description;EN;RU;UK;DE\n");
         categoryMap.values().each {
             builder.append('"')
             builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('ru'))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('uk'))).append('";"')
+            builder.append(Util.escapeCSV(it.getNameFor('de'))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('ru'))).append('";"')
-            builder.append(Util.escapeCSV(it.getNameFor('uk'))).append('"\n')
+            builder.append(Util.escapeCSV(it.getNameFor('uk'))).append('";"')
+            builder.append(Util.escapeCSV(it.getNameFor('de'))).append('"\n')
         }
         new File(filename).write(builder.toString(), 'UTF-8');
 

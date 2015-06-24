@@ -77,7 +77,7 @@ package org.yes.cart.icecat.transform
              //println("Input password for $ctx.url");
              //ctx.pwd = it.readLine();
 
-             println("Input language id [default: $ctx.langId] (8 - RU, 9 - EN, 25 - UK, see refs.xml for other ids)" );
+             println("Input language id [default: $ctx.langId] (4 - DE, 8 - RU, 9 - EN, 25 - UK see refs.xml for other ids)" );
              line = it.readLine();
              if (line != "") {
                  ctx.langId = line
@@ -85,7 +85,7 @@ package org.yes.cart.icecat.transform
              ctx.langId += ",1"  // default language for blank values fallback
              println("language id: $ctx.langId");
 
-             println("Input language names [default: $ctx.langNames] (ru,en,uk exactly as they are mapped in storefront locale)" );
+             println("Input language names [default: $ctx.langNames] (ru,en,de,uk exactly as they are mapped in storefront locale)" );
              line = it.readLine();
              if (line != "") {
                  ctx.langNames = line
