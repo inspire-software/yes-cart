@@ -448,3 +448,123 @@ alter table TADDRESS add column CUSTOM1 varchar(255);
 alter table TADDRESS add column CUSTOM2 varchar(255);
 alter table TADDRESS add column CUSTOM3 varchar(255);
 alter table TADDRESS add column CUSTOM4 varchar(255);
+
+--
+-- YC-567 Add support for German language
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11305,  'SHOP_IMAGE0_de',  'SHOP_IMAGE0_de',  1,  NULL,  'Shop: Shop standard image  (DE)',  null,  1003, 1001);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11310,  'BRAND_IMAGE0_de',  'BRAND_IMAGE0_de',  1,  NULL,  'Marke standard image  (DE)',  null,  1003, 1005);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11105,  'CATEGORY_IMAGE0_de',  'CATEGORY_IMAGE0_de',  0,  NULL,  'Kategorie standard image  (DE)',   null,  1003, 1002);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11015,  'CATEGORY_DESCRIPTION_de', 'CATEGORY_DESCRIPTION_de',  0,  NULL,  'Kategorie beschreibung (de)',
+  'Kategorie Beschreibung in Deutsch (de)',  1011, 1002);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11090,  'CONTENT_BODY_de_1', 'CONTENT_BODY_de_1',  0,  NULL,  'Inhalt (de)',
+  'Inhalt in Deutsch (de). erste 4000 Zeichen',  1011, 1002);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11091,  'CONTENT_BODY_de_2', 'CONTENT_BODY_de_2',  0,  NULL,  'Inhalt (de)',
+  'Inhalt in Deutsch (de). zweite 4000 Zeichen',  1011, 1002);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11368,  'IMAGE0_de',  'IMAGE0_de',  1,  NULL,  'Produkt standard image  (DE)',  'Produkt standard image  (DE)',  1003, 1003);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11369,  'IMAGE1_de',  'IMAGE1_de',  0,  NULL,  'Produkt alternative image 1',  'Produkt alternative image 1',  1003, 1003);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11370,  'IMAGE2_de',  'IMAGE2_de',  0,  NULL,  'Produkt alternative image 2',  'Produkt alternative image 2',  1003, 1003);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11371,  'IMAGE3_de',  'IMAGE3_de',  0,  NULL,  'Produkt alternative image 3',  'Produkt alternative image 3',  1003, 1003);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11372,  'IMAGE4_de',  'IMAGE4_de',  0,  NULL,  'Produkt alternative image 4',  'Produkt alternative image 4',  1003, 1003);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11373,  'IMAGE5_de',  'IMAGE5_de',  0,  NULL,  'Produkt alternative image 5',  'Produkt alternative image 5',  1003, 1003);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11023,  'PRODUCT_DESCRIPTION_de', 'PRODUCT_DESCRIPTION_de',  0,  NULL,  'Produkt beschreibung (de)',  'Produkt beschreibung in Deutsch (de)',  1011, 1003);
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12017,'CONTENT_BODY_de_1','<pre>Copyright 2009 Igor Azarnyi, Denys Pavlov
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        <a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+</pre>',10001,'12017_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12016,'CONTENT_BODY_de_1','
+<p>Diese Seite zeigt dynamische Inhalte Features</p>
+
+<p>Links:
+<ul>
+  <li><a href="${contentURL(''license'')}">Seite Lizenz (Inhalt Link)</a></li>
+  <li><a href="${categoryURL(''netbooks'')}">Notebooks (Kategorie Link) </a></li>
+  <li><a href="${URL('''')}">Start (Normal Link)</a></li>
+</ul>
+</p>
+
+<p>Dynamische Variable: ${datetime}</p>
+
+<p>Dynamische beinhalten:</p>
+
+${include(''license'')}
+
+',10002,'12016_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12026,'CONTENT_BODY_de_1','
+    <meta name="google-site-verification" content="rHZLga_ppoOy7iVYFQgRVDZOLa7fuT7cGs2t8TY4m6c" />
+',10003,'12026_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12036,'CONTENT_BODY_de_1','
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push([''_setAccount'', ''UA-4983157-12'']);
+        _gaq.push([''_setDomainName'', ''yes-cart.org'']);
+        _gaq.push([''_trackPageview'']);
+
+        (function() {
+            var ga = document.createElement(''script''); ga.type = ''text/javascript''; ga.async = true;
+            ga.src = (''https:'' == document.location.protocol ? ''https://ssl'' : ''http://www'') + ''.google-analytics.com/ga.js'';
+            var s = document.getElementsByTagName(''script'')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>',10004,'12036_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12046,'CONTENT_BODY_de_1','
+<span class="glyphicon glyphicon-envelope blue"></span>
+<a href="http://www.yes-cart.org/#contact" target="_blank">Kontaktformular</a>
+',10005,'12046_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12056,'CONTENT_BODY_de_1','
+<div class="section-title"><h2>Warenkorb</h2></div>
+',10006,'12056_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12066,'CONTENT_BODY_de_1','
+<div class="section-title"><h2>Gutschein zufügen</h2></div>
+',10007,'12066_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12076,'CONTENT_BODY_de_1','
+<div class="section-title"><h2>Info zur Bestellung</h2></div>
+<div class="clearfix"><% if (shoppingCart.orderMessage != null) { %>
+aktuelle Meldung: "${shoppingCart.orderMessage}"<% } else { %>Bitte Text einfügen<% } %></div>
+',10008,'12076_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12083,'CONTENT_BODY_de_1','
+<small><b>Cookie Richtlinien</b><br>
+ We may store information about you using cookies (files which are sent by us to your computer or other access device) which
+ we can access when you visit our site in future. We do this to enhance user experience. If you want to delete any cookies that
+ are already on your computer, please refer to the instructions for your file management software to locate the file or directory
+ that stores cookies. Our cookies will have the file names JSESSIONID, yc and yccookiepolicy. Information on deleting or controlling
+ cookies is available at <a href="http://www.AboutCookies.org" target="_blank">www.AboutCookies.org</a>. Please note that by
+ deleting our cookies or disabling future cookies you may not be able to access certain areas or features of our site.</small>
+',10009,'12083_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12093,'CONTENT_BODY_de_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<div class="col-xs-12"><ul class="wl-tag-cloud jsWishlistTagCloud"></ul></div>
+</div>
+',10010,'12093_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12098,'CONTENT_BODY_de_1','
+<div class="col-xs-12 no-padding">
+<h2 class="profile-title">&nbsp;</h2>
+<p>Sie sehen einen gemeinsamen Wunschzettel</p>
+</div>
+',10011,'12098_CAV');

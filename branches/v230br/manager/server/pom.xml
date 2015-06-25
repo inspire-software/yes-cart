@@ -354,6 +354,7 @@
                                                     <include>en_US/**</include>
                                                     <include>ru_RU/**</include>
                                                     <include>uk_UK/**</include>
+                                                    <include>de_DE/**</include>
                                                 </includes>
                                             </resource>
                                         </resources>
@@ -475,6 +476,7 @@
                                     <include>en_US/**</include>
                                     <include>ru_RU/**</include>
                                     <include>uk_UK/**</include>
+                                    <include>de_DE/**</include>
                                 </includes>
                             </resource>
                             <resource>

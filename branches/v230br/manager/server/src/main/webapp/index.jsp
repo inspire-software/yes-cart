@@ -27,6 +27,7 @@
         <div class="lang lang-uk"><a class="btn btn-info" href="uk_UK/ShopManagerApplication.html">Старт Українська</a></div>
         <div class="lang lang-en"><a class="btn btn-info" href="en_US/ShopManagerApplication.html">Start English</a></div>
         <div class="lang lang-ru"><a class="btn btn-info" href="ru_RU/ShopManagerApplication.html">Старт Русский</a></div>
+        <div class="lang lang-de"><a class="btn btn-info" href="de_DE/ShopManagerApplication.html">German starten</a></div>
     </div>
 </div>
 <script type="text/javascript">
@@ -45,6 +46,8 @@
         redirectToPage = "ru_RU/" + redirectToPage;
     } else if(browserLanguage == "ua") {
         redirectToPage = "uk_UK/" + redirectToPage;
+    } else if(browserLanguage == "de") {
+        redirectToPage = "de_DE/" + redirectToPage;
     } else {
         redirectToPage = "en_US/" + redirectToPage;
     }

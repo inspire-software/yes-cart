@@ -1,0 +1,223 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+
+    <wicket:container wicket:id="cookiePolicy">
+        [cookie policy]
+    </wicket:container>
+
+    <nav class="top-menu">
+        <div class="container no-padding">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-7 no-margin">
+                <ul>
+                    <li>
+                        <a href="tag/sale" rel="search">
+                            <span><wicket:message key="sale">[Sale]</wicket:message></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tag/specialoffer" rel="search">
+                            <span><wicket:message key="specialOffer">[Special offer]</wicket:message></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tag/newarrival" rel="search">
+                            <span><wicket:message key="newArrivals">[New products]</wicket:message></span>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" id="demoMenu" data-toggle="dropdown" href="#">
+                            <wicket:message key="demo">[Demo]</wicket:message>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="demoMenu">
+                            <li role="presentation" class="dropdown-header">Produktverf?gbarkeit Beispiele</li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/preorder" rel="search">
+                                    <span><wicket:message key="demoPreorder">[Pre-order sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/backorder" rel="search">
+                                    <span><wicket:message key="demoBackorder">[Back order sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/always" rel="search">
+                                    <span><wicket:message key="demoAlways">[Always sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/showroom" rel="search">
+                                    <span><wicket:message key="demoShowroom">[Show room sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation" class="dropdown-header">Angaben zum Produkt Beispiele</li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/multisku" rel="search">
+                                    <span><wicket:message key="demoMultiSku">[Multi sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/multibuy" rel="search">
+                                    <span><wicket:message key="demoMultiBuy">[Multi buy sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="tag/accessories" rel="search">
+                                    <span><wicket:message key="demoAccessories">[Accessories sku demo]</wicket:message></span>
+                                </a>
+                            </li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation" class="dropdown-header">Relevanzsuche</li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="/yes-shop/query/mini%20mouse%20red" rel="search"><span>Global: "mini mouse red"</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="/yes-shop/query/mini%20mouse%20blue" rel="search"><span>Global: "mini mouse blue"</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="/yes-shop/query/mini%20mouse%20white" rel="search"><span>Global: "mini mouse white"</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="/yes-shop/category/mice/query/mini%20mouse%20red" rel="search"><span>Category: "mini mouse red"</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="/yes-shop/category/mice/query/mini%20mouse%20blue" rel="search"><span>Category: "mini mouse blue"</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="/yes-shop/category/mice/query/mini%20mouse%20white" rel="search"><span>Category: "mini mouse white"</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <wicket:link>
+                            <a href="ContactPage.html" rel="search">
+                                <span><wicket:message key="contacts">[Contacts]</wicket:message></span>
+                            </a>
+                        </wicket:link>
+                    </li>
+                </ul>
+                <div class="invisible">
+                    <wicket:container wicket:id="headerNav">
+                        [header nav]
+                    </wicket:container>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 no-margin">
+                <ul class="text-right">
+                    <wicket:container wicket:id="profile">[Profile]</wicket:container>
+                    <li class="dropdown">
+                        <wicket:container wicket:id="language">
+                            [switch language]
+                        </wicket:container>
+                    </li>
+                    <li class="dropdown">
+                        <wicket:container wicket:id="currency">
+                            [switch currency]
+                        </wicket:container>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container no-padding">
+            <div class="col-xs-12 col-sm-12 col-md-3 logo-holder">
+                <div class="logo">
+                    <wicket:link>
+                        <a href="HomePage.html" rel="bookmark">
+                            <wicket:link>
+                                <img class="center-block" src="../../../../../../../image/yes-logo-demo.png" border="0"/>
+                            </wicket:link>
+                            <img wicket:id="headerLogo" class="center-block invisible" border="0"/>
+                        </a>
+                    </wicket:link>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 no-margin">
+                <wicket:container wicket:id="search">
+                    [search]
+                </wicket:container>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-3 mini-cart-holder no-margin">
+                <div id="mini-cart" class="mini-cart-line">
+                    <wicket:container wicket:id="smallCart">
+                        [small shopping cart]
+                    </wicket:container>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <wicket:fragment wicket:id="profileLoggedIn">
+        <li class="dropdown">
+            <a class="dropdown-toggle" id="profileMenu" data-toggle="dropdown" href="#">
+                <span><wicket:container wicket:id="profileName">[Profile]</wicket:container></span>
+                <span class="glyphicon glyphicon-user"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="profileMenu">
+                <li role="presentation">
+                    <wicket:link>
+                        <a href="ProfilePage.html" rel="nofollow">
+                            <span><wicket:message key="profile">[Profile]</wicket:message></span>
+                        </a>
+                    </wicket:link>
+                </li>
+                <li role="presentation">
+                    <wicket:link>
+                        <a href="WishListPage.html" rel="nofollow">
+                            <span><wicket:message key="wishlist">[Wishlist]</wicket:message></span>
+                        </a>
+                    </wicket:link>
+                </li>
+                <li role="presentation">
+                    <wicket:link>
+                        <a href="OrdersPage.html" rel="nofollow">
+                            <span><wicket:message key="orderHistory">[Orders]</wicket:message></span>
+                        </a>
+                    </wicket:link>
+                </li>
+                <li role="presentation">
+                    <wicket:container wicket:id="logout">
+                        [logout language]
+                    </wicket:container>
+                </li>
+            </ul>
+        </li>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="profileLoggedOff">
+        <li>
+            <wicket:link>
+                <a href="ProfilePage.html" rel="nofollow">
+                    <span><wicket:message key="profileLogin">[Profile]</wicket:message></span>
+                    <span class="glyphicon glyphicon-user"></span>
+                </a>
+            </wicket:link>
+        </li>
+    </wicket:fragment>
+
+</wicket:panel>
+</body>
+</html>

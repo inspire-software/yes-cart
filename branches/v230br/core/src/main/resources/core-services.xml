@@ -871,6 +871,7 @@
         <constructor-arg index="0">
             <map>
                 <entry key="en" value="Eng"/>
+                <entry key="de" value="Deu"/>
                 <entry key="ru" value="&#x0420;&#x0443;&#x0441;"/>
                 <entry key="uk" value="&#x0423;&#x043A;&#x0440;"/>
             </map>
@@ -881,6 +882,7 @@
                     <list>
                         <!-- by convention the 0th element is the default language -->
                         <value>en</value>
+                        <value>de</value>
                         <value>ru</value>
                         <value>uk</value>
                     </list>
@@ -889,6 +891,7 @@
                     <list>
                         <!-- by convention the 0th element is the default language -->
                         <value>en</value>
+                        <value>de</value>
                         <value>ru</value>
                         <value>uk</value>
                     </list>

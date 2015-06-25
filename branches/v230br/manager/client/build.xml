@@ -53,6 +53,15 @@
 
     </target>
 
+    <target name="build_de_config">
+
+        <property name="env.BUILD_I18N"     value="de_DE"/>
+        <property name="env.BUILD_FL"       value="de_DE"/>
+        <property name="env.BUILD_TARGET"   value="de_DE"/>
+        <property name="env.BUILD_APP_NAME" value="YUM (de)"/>
+
+    </target>
+
     <!-- ##### SWF tasks #################################################################### -->
 
     <target name="build_swf"  description="Build swf">
@@ -100,6 +109,10 @@
 
     </target>
 
+    <target name="build_de" depends="build_de_config, build_swf" description="Build German swf">
+
+    </target>
+
     <!-- ##### HTML wrapper tasks #################################################################### -->
 
     <target name="wrapper_swf">
@@ -131,6 +144,10 @@
     </target>
 
     <target name="wrapper_en" depends="build_en_config, wrapper_swf">
+
+    </target>
+
+    <target name="wrapper_de" depends="build_de_config, wrapper_swf">
 
     </target>
 
@@ -172,6 +189,10 @@
 
     </target>
 
+    <target name="de" depends="cleanup, checkenv, build_de, wrapper_de, info" description="Build German (full)">
+
+    </target>
+
     <target name="uk" depends="cleanup, checkenv, build_uk, wrapper_uk, info" description="Build Ukrainian (full)">
 
     </target>
@@ -185,6 +206,7 @@
         <antcall target="uk"/>
         <antcall target="ru"/>
         <antcall target="en"/>
+        <antcall target="de"/>
 
     </target>
 
