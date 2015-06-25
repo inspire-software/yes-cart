@@ -47,7 +47,7 @@ public class RoMappingMixin {
      * Generic mapping method.
      *
      * @param objects object to map
-     * @param ro RO class required
+     * @param ro RO (requested object) class required
      * @param entity entity class provided
      * @param <RO> type
      * @param <Entity> type
@@ -66,7 +66,7 @@ public class RoMappingMixin {
      * Generic mapping method.
      *
      * @param objects object to map
-     * @param ro RO class required
+     * @param ro RO (requested object) class required
      * @param entity entity class provided
      * @param <RO> type
      * @param <Entity> type
@@ -85,7 +85,7 @@ public class RoMappingMixin {
      * Generic mapping method.
      *
      * @param object object to map
-     * @param ro RO class required
+     * @param ro RO (requested object) class required
      * @param entity entity class provided
      * @param <RO> type
      * @param <Entity> type
