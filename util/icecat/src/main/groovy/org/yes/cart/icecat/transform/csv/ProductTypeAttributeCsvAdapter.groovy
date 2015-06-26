@@ -35,24 +35,27 @@ class ProductTypeAttributeCsvAdapter {
 
     Map<String, Category> categoryMap;
 
-    def navigableMap = [
-            "83"    : 120,     // 83;Display;Display;Дисплей
-            "944"   : 100,     // 944;Display diagonal;Display diagonal;Диагональ экрана
-            "1585"  : 110,     // 1585;Display resolution;Display resolution;Разрешение экрана;
-            "14"    : 200,     // 14;Weight;Weight;Вес;
-            "909"   : 250,     // 909;Battery performance;Battery performance;Емкость батареи;
-            "7"     :  60,     // 7;Hard drive capacity;Hard drive capacity;Емкость жесткого диска;
-            "6"     :  50,     // 6;Internal memory;Internal memory;Оперативная память
-            "2196"  :  10,     // 2196;Processor family;Processor family;Семейство процессоров;
-            "5"     :  20,     // 5;Processor clock speed;Processor clock speed;Тактовая частота процессора;
-            "1120"  : 300,     // 1120;Optical drive type;Optical drive type;Тип оптического привода;
-            "46"    : 400,     // 46;Color;Color;Цвет;
-            "7861"  : 401,     // 7861;Internal RAM
-            "5741"  : 402      // 5741;Keyboard dimensions
+    def navigable = [
+            "7861",  // "7861";"Internal RAM"
+            "1120",  // "1120";"Optical drive type"
+            "2196",  // "2196";"Processor family"
+            "7",     // "7";"Hard drive capacity"
+            "909",   // "909";"Battery performance" value in mAh
+            "944",   // "944";"Display diagonal"
+            "1585",  // "1585";"Display resolution"
+            "427",   // "427";"Internal memory type"
+            "11381", // "11381";"Internal memory"
+            "436",   // "436";"Chipset"
+            "9018",  // "9018";"Discrete graphics adapter model"
+            "1766",  // "1766";"Color of product"
+            "771",   // "771";"Form factor"    (for Mice e.g. "Right-hand")
+            "9215",  // "9215";"Scroll type"   (for Mice e.g. "Wheel")
+            "8480"   // "8480";"Recommended usage"   (for Keyboards e.g. "Gaming")
     ];
 
     def rangeMap = [
-            "14" : "<range-list><ranges><range><from>1200</from><to>1500</to></range><range><from>1500</from><to>1800</to></range><range><from>1800</from><to>2000</to></range><range><from>2000</from><to>2500</to></range><range><from>2500</from><to>3000</to></range><range><from>3000</from><to>3500</to></range><range><from>3500</from><to>4000</to></range><range><from>4000</from><to>5000</to></range></ranges></range-list>"
+            "909"   : "<range-list><ranges><range><from>0</from><to>3000</to></range><range><from>3000</from><to>5000</to></range><range><from>5000</from><to>6000</to></range><range><from>6000</from><to>10000</to></range></ranges></range-list>",
+            "11381" : "<range-list><ranges><range><from>0</from><to>2</to></range><range><from>2</from><to>4</to></range><range><from>4</from><to>8</to></range><range><from>8</from><to>16</to></range><range><from>16</from><to>32</to></range><range><from>32</from><to>64</to></range><range><from>64</from><to>512</to></range></ranges></range-list>",
     ];
 
     public ProductTypeAttributeCsvAdapter(final Map<String, Category> categoryMap) {
@@ -62,13 +65,18 @@ class ProductTypeAttributeCsvAdapter {
     public toCsvFile(String filename) {
 
         Map<String, Feature> features = new TreeMap<String, Feature>();
-        Map<String, Feature> featureTypes = new HashMap();
+        Map<String, List<String>> featureTypes = new HashMap();
 
         categoryMap.values().each {
             for (CategoryFeatureGroup cfg : it.categoryFeatureGroup) {
                 for(Feature feature : cfg.featureList) {
                     features.put(feature.ID, feature);
-                    featureTypes.put(feature, it.getNameFor('en'));
+                    List<String> types = featureTypes.get(feature.ID);
+                    if (types == null) {
+                        types = new ArrayList<String>();
+                        featureTypes.put(feature.ID, types);
+                    }
+                    types.add(it.getNameFor('en'));
                 }
             }
         }
@@ -77,16 +85,24 @@ class ProductTypeAttributeCsvAdapter {
         StringBuilder builder = new StringBuilder();
         builder.append("guid;product type;attribute code;attribute name;filter nav;nav type;range nav;\n");
         features.values().each {
-            builder.append('"')
-            builder.append(it.ID).append('-').append(Util.escapeCSV(featureTypes.get(it))).append('";"')
-            builder.append(Util.escapeCSV(featureTypes.get(it))).append('";"')
-            builder.append(it.ID).append('";"')
-            builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";')
-            builder.append(navigableMap.containsKey(it.ID) ? "true" : "false").append(";")
-            if (rangeMap.containsKey(it.ID)) {
-                builder.append('"R";"').append(rangeMap.get(it.ID)).append('"\n')
-            } else {
-                builder.append('"S";;\n')
+
+            Feature feature = it;
+            List<String> types = featureTypes.get(feature.ID);
+
+            types.each {
+
+                builder.append('"')
+                builder.append(feature.ID).append('-').append(Util.escapeCSV(it)).append('";"')
+                builder.append(Util.escapeCSV(it)).append('";"')
+                builder.append(feature.ID).append('";"')
+                builder.append(Util.escapeCSV(feature.getNameFor('en'))).append('";')
+                builder.append(navigable.contains(feature.ID) ? "true" : "false").append(";")
+                if (rangeMap.containsKey(feature.ID)) {
+                    builder.append('"R";"').append(rangeMap.get(feature.ID)).append('"\n')
+                } else {
+                    builder.append('"S";;\n')
+                }
+
             }
         }
         new File(filename).write(builder.toString(), 'UTF-8');
