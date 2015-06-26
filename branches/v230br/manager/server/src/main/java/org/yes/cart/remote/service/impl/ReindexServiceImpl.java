@@ -16,6 +16,7 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
@@ -244,13 +245,13 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
         final AsyncContext flex = new AsyncFlexContextImpl(param);
 
         // Max char of report to UI since it will get huge and simply will crash the UI, not to mention traffic cost.
-        final int logSize = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE));
+        final int logSize = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE), 100);
         // Timeout - just in case runnable crashes and we need to unlock through timeout.
         final int timeout;
         if (bulk) {
-            timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS));
+            timeout = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS), 100);
         } else {
-            timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS));
+            timeout = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS), 100);
         }
 
         return new JobContextImpl(true, new JobStatusListenerImpl(logSize, timeout), flex.getAttributes());

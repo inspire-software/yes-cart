@@ -31,6 +31,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -84,7 +85,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
         ShopCodeContext.setShopCode(shop.getCode());
         ShopCodeContext.setShopId(shop.getShopId());
 
-        return getModifiedRequest(servletRequest, shop);
+        return getModifiedRequest(servletRequest, ApplicationDirector.getCurrentThemeChain());
 
     }
 
@@ -98,16 +99,16 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
      * Create http servlet wrapper to handle multi store requests.
      *
      * @param servletRequest current request
-     * @param shop           resolved shop
+     * @param themes         theme chain
      * @return servlet wrapper
      */
-    private ServletRequest getModifiedRequest(final ServletRequest servletRequest, final Shop shop) {
+    private ServletRequest getModifiedRequest(final ServletRequest servletRequest, final List<String> themes) {
 
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         final String servletPath = httpServletRequest.getServletPath();
 
         if (StringUtils.isNotEmpty(servletPath)) {
-            final String newServletPath = shop.getMarkupFolder() + servletPath;
+            final String newServletPath = "/" + themes.get(0) + "/markup" + servletPath;
             try {
                 return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
             } catch (/*MalformedURL*/Exception e) {

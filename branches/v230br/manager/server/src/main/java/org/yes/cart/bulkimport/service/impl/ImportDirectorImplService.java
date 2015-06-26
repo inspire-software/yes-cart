@@ -18,6 +18,7 @@ package org.yes.cart.bulkimport.service.impl;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
@@ -139,9 +140,9 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
         final String imgVault = systemService.getImageRepositoryDirectory();
 
         // Max char of report to UI since it will get huge and simply will crash the UI, not to mention traffic cost.
-        final int logSize = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE));
+        final int logSize = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE), 100);
         // Timeout - just in case runnable crashes and we need to unlock through timeout.
-        final int timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_TIMEOUT_MS));
+        final int timeout = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_TIMEOUT_MS), 100);
 
         final String rootPath = resolveImportDirectory(fileName);
 

@@ -153,14 +153,6 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     boolean isB2BProfileActive();
 
-    /**
-     * TODO: YC-420 Unify all themes into a separate module
-     * TODO: This is standard directory - no need for this getter
-     * Get markup folder. @see fspointer for more details.
-     * @return folder with markup.
-     */
-    String getMarkupFolder();
-
 
     /**
      * Get default shop url. localhost will never be return.

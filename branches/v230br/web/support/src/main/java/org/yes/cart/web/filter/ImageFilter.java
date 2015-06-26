@@ -111,9 +111,9 @@ public class ImageFilter extends AbstractFilter implements Filter {
     public void handleRequestInternal(final HttpServletRequest httpServletRequest,
                                       final HttpServletResponse httpServletResponse) throws ServletException, IOException {
 
-
-        final String servletPath = URLDecoder.decode(httpServletRequest.getServletPath(), "UTF-8"); //this for filter
-        //httpServletRequest.getPathInfo(); //this for servlet
+        final String requestPath = httpServletRequest.getRequestURI();            // RequestURI  -> /yes-shop/imagevault/product/image.png
+        final String contextPath = httpServletRequest.getContextPath();           // ContextPath -> /yes-shop
+        final String servletPath = requestPath.substring(contextPath.length());   // ServletPath ->          /imagevault/product/image.png
 
         final String previousToken = httpServletRequest.getHeader(IF_NONE_MATCH);
         final String currentToken = getETagValue(httpServletRequest);

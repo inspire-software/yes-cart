@@ -17,6 +17,7 @@
 package org.yes.cart.payment.impl;
 
 import org.apache.commons.lang.SerializationUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
@@ -201,8 +202,8 @@ public class PayflowPaymentGatewayImpl extends AbstractPayPalBasePaymentGatewayI
     private synchronized void configurePayFlowSystem() {
         try {
             paypal.payflow.SDKProperties.setHostAddress(getProperties().get(PF_HOST));
-            paypal.payflow.SDKProperties.setHostPort(Integer.parseInt(getProperties().get(PF_PORT)));
-            paypal.payflow.SDKProperties.setTimeOut(Integer.parseInt(getProperties().get(PF_TIMEOUT)));
+            paypal.payflow.SDKProperties.setHostPort(NumberUtils.toInt(getProperties().get(PF_PORT), 80));
+            paypal.payflow.SDKProperties.setTimeOut(NumberUtils.toInt(getProperties().get(PF_TIMEOUT), 100));
 
             if (Boolean.parseBoolean(getProperties().get(PF_LOG_ENABLED))) {
                 paypal.payflow.SDKProperties.setLogFileName(getProperties().get(PF_LOG_FILENAME));
@@ -225,7 +226,7 @@ public class PayflowPaymentGatewayImpl extends AbstractPayPalBasePaymentGatewayI
                 paypal.payflow.SDKProperties.setProxyAddress(getProperties().get(PF_PROXY_HOST));
                 paypal.payflow.SDKProperties.setProxyLogin(getProperties().get(PF_PROXY_USER));
                 paypal.payflow.SDKProperties.setProxyPassword(getProperties().get(PF_PROXY_PASSWORD));
-                paypal.payflow.SDKProperties.setProxyPort(Integer.parseInt(getProperties().get(PF_PROXY_PORT)));
+                paypal.payflow.SDKProperties.setProxyPort(NumberUtils.toInt(getProperties().get(PF_PROXY_PORT), 80));
             }
 
         } catch (Exception ex) {

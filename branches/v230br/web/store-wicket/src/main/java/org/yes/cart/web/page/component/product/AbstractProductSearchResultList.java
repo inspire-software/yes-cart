@@ -184,13 +184,7 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
                 product, getWicketUtil().getHttpServletRequest().getContextPath(), locale, width, height, product.getDefaultImage()
         );
 
-        if (log.isInfoEnabled()) {
-
-            log.info("Default image is [" + product.getDefaultImage() + "]  result is [" + result + "]");
-
-        }
-
-
+        log.debug("Default image is [{}] result is [{}]", product.getDefaultImage(), result);
 
         return  result;
     }
