@@ -40,6 +40,29 @@ var ctx = {
     showModalWindow: function(){}
 };
 
+
+// -- Logging -----------------------------------------------------------------------
+
+(function() {
+    // fn to add blank (noOp) function for all console methods
+    var addConsoleNoOp =  function (window) {
+        var names = ["log", "debug", "info", "warn", "error",
+                "assert", "dir", "dirxml", "group", "groupEnd", "time",
+                "timeEnd", "count", "trace", "profile", "profileEnd"],
+            i, l = names.length,
+            noOp = function () {};
+        window.console = {};
+        for (i = 0; i < l; i = i + 1) {
+            window.console[names[i]] = noOp;
+        }
+    };
+
+    // call addConsoleNoOp() if console is undefined
+    if (!window.console) {
+        addConsoleNoOp(window);
+    }
+}());
+
 $(document).ready(function() {
 
     // -- Search box -----------------------------------------------------------------------
