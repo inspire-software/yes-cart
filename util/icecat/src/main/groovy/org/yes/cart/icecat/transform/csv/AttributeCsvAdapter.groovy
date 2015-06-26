@@ -44,7 +44,7 @@ class AttributeCsvAdapter {
             builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('en'))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('ru'))).append('";"')
-            builder.append(Util.escapeCSV(it.getNameFor('uk'))).append('";')
+            builder.append(Util.escapeCSV(it.getNameFor('uk'))).append('";"')
             builder.append(Util.escapeCSV(it.getNameFor('de'))).append('";')
             builder.append(it.Mandatory != null && it.Mandatory ? "true" : "false").append(";")
             builder.append(it.Searchable != null && it.Searchable ? "true" : "false").append("\n")

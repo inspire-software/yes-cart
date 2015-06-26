@@ -59,7 +59,7 @@ class ProductsSkuCsvAdapter {
                     builderTmp.append(Util.escapeCSV(it.product.getNameFor('en'))).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.getNameFor('en'))).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.getNameFor('ru'))).append('";"')
-                    builderTmp.append(Util.escapeCSV(it.product.getNameFor('uk'))).append('";')
+                    builderTmp.append(Util.escapeCSV(it.product.getNameFor('uk'))).append('";"')
                     builderTmp.append(Util.escapeCSV(it.product.getNameFor('de'))).append('";')
                     builderTmp.append(';')
                     builderTmp.append(';')
