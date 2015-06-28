@@ -95,7 +95,13 @@
                 <div class="col-xs-12 col-sm-6 col-md-6 no-margin">
                     <div class="copyright">
                         <span class="btn-lg glyphicon glyphicon-copyright-mark blue"></span>
-                        <a href="http://www.yes-cart.org" target="_blank">YesCart.org</a> 2014
+                        <a href="http://www.yes-cart.org" target="_blank">YesCart.org</a> <span class="yearJs"></span>
+                        <script type="text/javascript">
+                            $(document).ready(function(){
+                                var year = new Date().getFullYear();
+                                $('.yearJs').append(year);
+                            })
+                        </script>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 no-margin">
