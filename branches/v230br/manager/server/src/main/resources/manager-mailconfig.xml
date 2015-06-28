@@ -31,7 +31,7 @@
         <property name="javaMailProperties">
             <props>
                 <!-- Use SMTP-AUTH to authenticate to SMTP server -->
-                <!--<prop key="mail.smtp.auth">true</prop>-->
+                <prop key="mail.smtp.auth">${yum.mail.smtp.auth.enable}</prop>
                 <!-- Use TLS to encrypt communication with SMTP server -->
                 <prop key="mail.smtp.starttls.enable">${yum.mail.smtp.starttls.enable}</prop>
             </props>
