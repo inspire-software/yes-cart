@@ -400,13 +400,13 @@
     <entry key="badStatus">Ihr Status bei PayPal konnte nicht verifiziert werden, oder PayPal hat Ihre Bestellungsdetails nicht erhalten</entry>
     <entry key="confirmPayment">
         <![CDATA[
-                    Der zu bezahlende Betrag {amount} {currency}. Bitte Zahlung bestätigen und weiterfahren.
+                    Der zu bezahlende Betrag ${amount} ${currency}. Bitte Zahlung bestätigen und weiterfahren.
                ]]>
     </entry>
     <entry key="paymentOk">
         <![CDATA[
                     Die Zahlung ware erfolgreich. Bestellnummer {ordernum} .
-                    Überfrüfen Sie den Status Ihrer Bestellung <a href="selfcare">auf dieser Seite</a>.
+                    Überfrüfen Sie den Status Ihrer Bestellung <a href="orders">auf dieser Seite</a>.
                     <br>
                     <a href=".">Weiterfahren mit einkaufen</a>.
                ]]>

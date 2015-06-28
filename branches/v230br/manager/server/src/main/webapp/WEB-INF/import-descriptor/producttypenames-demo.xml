@@ -42,7 +42,7 @@
         <!-- TODO: add localisable names -->
 
         <column-descriptor>
-            <column-index>3</column-index>
+            <column-index>5</column-index>
             <field-type>FIELD</field-type>
             <name>description</name>
             <value-regex>(.{0,255})(.*)</value-regex>

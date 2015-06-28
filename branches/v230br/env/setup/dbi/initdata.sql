@@ -533,7 +533,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 <p>Links:
 <ul>
   <li><a href="${contentURL(''license'')}">License page (content link)</a></li>
-  <li><a href="${categoryURL(''netbooks'')}">Notebooks (category link)</a></li>
+  <li><a href="${categoryURL(''notebooks'')}">Notebooks (category link)</a></li>
   <li><a href="${URL('''')}">Home (plain link)</a></li>
 </ul>
 </p>
@@ -552,7 +552,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 <p>Ссылки:
 <ul>
   <li><a href="${contentURL(''license'')}">Страница Лицензии (ссылка на контент)</a></li>
-  <li><a href="${categoryURL(''netbooks'')}">Категория "Ноутбуки" (ссылка на категорию)</a></li>
+  <li><a href="${categoryURL(''notebooks'')}">Категория "Ноутбуки" (ссылка на категорию)</a></li>
   <li><a href="${URL('''')}">Домашняя страничка (простая ссылка)</a></li>
 </ul>
 </p>
@@ -570,7 +570,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 <p>Посилання:
 <ul>
   <li><a href="${contentURL(''license'')}">Сторінка Ліцензії (посилання на контент)</a></li>
-  <li><a href="${categoryURL(''netbooks'')}">Категорія "Ноутбуки" (посилання на категорію)</a></li>
+  <li><a href="${categoryURL(''notebooks'')}">Категорія "Ноутбуки" (посилання на категорію)</a></li>
   <li><a href="${URL('''')}">Домашня сторінка (просте посилання)</a></li>
 </ul>
 </p>
@@ -588,7 +588,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 <p>Links:
 <ul>
   <li><a href="${contentURL(''license'')}">Seite Lizenz (Inhalt Link)</a></li>
-  <li><a href="${categoryURL(''netbooks'')}">Notebooks (Kategorie Link) </a></li>
+  <li><a href="${categoryURL(''notebooks'')}">Notebooks (Kategorie Link) </a></li>
   <li><a href="${URL('''')}">Start (Normal Link)</a></li>
 </ul>
 </p>
