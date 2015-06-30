@@ -56,6 +56,7 @@ public class AbstractImageNameStrategyImplTest {
             }
         };
 
+        // Resolving filename
         assertEquals("file-name_CODE_a.jpeg",
                 imageNameStrategy.resolveFileName("file-name_CODE_a.jpeg"));
         assertEquals("file-name_CODE_a.jpeg",
@@ -70,7 +71,7 @@ public class AbstractImageNameStrategyImplTest {
         assertEquals("1261644759_627724_russkaya-magiya.jpg",
                 imageNameStrategy.resolveFileName("posts/2009-12/1261644759_627724_russkaya-magiya.jpg?w=10&h=4~!@#$%^&*()_+"));
 
-
+        // Upper case code 'CODE' results in upper case 'C' intermediate directory
         assertEquals("root" + File.separator + "file-name_CODE_a.jpeg",
                 imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", null, "en"));
 
@@ -88,6 +89,25 @@ public class AbstractImageNameStrategyImplTest {
 
         assertEquals("root" + File.separator + "10x30" + File.separator + "C" + File.separator + "CODE" + File.separator + "file-name_CODE_a.jpeg",
                 imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_CODE_a.jpeg", "CODE", null, "10", "30"));
+
+        // Lower case code 'code' results in upper case 'C' intermediate directory
+        assertEquals("root" + File.separator + "file-name_code_a.jpeg",
+                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", null, "en"));
+
+        assertEquals("root" + File.separator + "file-name_code_a.jpeg",
+                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", null, null));
+
+        assertEquals("root" + File.separator + "C" + File.separator + "code" + File.separator + "file-name_code_a.jpeg",
+                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", "code", "en"));
+
+        assertEquals("root" + File.separator + "C" + File.separator + "code" + File.separator + "file-name_code_a.jpeg",
+                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", "code", null));
+
+        assertEquals("root" + File.separator + "10x30" + File.separator + "C" + File.separator + "code" + File.separator + "file-name_code_a.jpeg",
+                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", "code", "en", "10", "30"));
+
+        assertEquals("root" + File.separator + "10x30" + File.separator + "C" + File.separator + "code" + File.separator + "file-name_code_a.jpeg",
+                imageNameStrategy.resolveRelativeInternalFileNamePath("file-name_code_a.jpeg", "code", null, "10", "30"));
 
     }
 

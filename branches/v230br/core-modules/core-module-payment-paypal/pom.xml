@@ -25,7 +25,7 @@
         <version>3.0.0-SHAPSHOT</version>
     </parent>
     <artifactId>core-module-payment-paypal</artifactId>
-    <name>Yes cart module: PayPal payments</name>
+    <name>Yes cart core: PayPal payments</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>

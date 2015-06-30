@@ -24,7 +24,7 @@
         <version>3.0.0-SHAPSHOT</version>
     </parent>
     <artifactId>core-dto</artifactId>
-    <name>Yes cart core DTO service layer</name>
+    <name>Yes cart core DTO service</name>
     <dependencies>
 
         <dependency>

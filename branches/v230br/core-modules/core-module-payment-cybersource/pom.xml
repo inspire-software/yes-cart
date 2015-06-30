@@ -25,7 +25,7 @@
         <version>3.0.0-SHAPSHOT</version>
     </parent>
     <artifactId>core-module-payment-cybersource</artifactId>
-    <name>Yes cart module: Cybersource payments</name>
+    <name>Yes cart core: Cybersource payments</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>

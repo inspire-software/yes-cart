@@ -24,7 +24,7 @@
     </parent>
     <artifactId>yes-api</artifactId>
     <packaging>war</packaging>
-    <name>Yes cart storefront API</name>
+    <name>Yes cart web: REST API</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>
@@ -315,6 +315,9 @@
                                             <resource>
                                                 <directory>${basedir}/../../theme/mail/src/main/resources</directory>
                                             </resource>
+                                            <resource>
+                                                <directory>${basedir}/../../theme/imagevault/src/main/resources</directory>
+                                            </resource>
                                         </resources>
                                     </configuration>
                                 </execution>
@@ -390,6 +393,7 @@
                             <resource>
                                 <filtering>false</filtering>
                                 <directory>../../theme/mail/src/main/resources</directory>
+                                <directory>../../theme/imagevault/src/main/resources</directory>
                             </resource>
                         </webResources>
                         <!-- web.xml is added to the project by other means, and shouldn't be packaged by default -->

@@ -25,7 +25,7 @@
         <version>3.0.0-SHAPSHOT</version>
     </parent>
     <artifactId>core-module-payment-authorizenet</artifactId>
-    <name>Yes cart module: AuthorizeNet payments</name>
+    <name>Yes cart core: AuthorizeNet payments</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>

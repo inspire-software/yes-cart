@@ -29,10 +29,11 @@
     <groupId>org.yes</groupId>
     <artifactId>theme</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart themes module</name>
+    <name>Yes cart themes modules</name>
 
     <modules>
         <module>mail</module>
+        <module>imagevault</module>
     </modules>
     
 </project>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi 
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@
     </parent>
 
     <groupId>org.yes</groupId>
-    <artifactId>mail</artifactId>
+    <artifactId>imagevault</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart themes: mail templates</name>
+    <name>Yes cart themes: imagevault structure</name>
 
     <build>
         <plugins>

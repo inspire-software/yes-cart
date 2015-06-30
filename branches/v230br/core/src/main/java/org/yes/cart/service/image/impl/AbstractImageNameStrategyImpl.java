@@ -216,7 +216,7 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
             stringBuilder.append(File.separator);
         }
         if (code != null) {
-            stringBuilder.append(code.charAt(0));
+            stringBuilder.append(Character.toUpperCase(code.charAt(0)));
             stringBuilder.append(File.separator);
             stringBuilder.append(code);
             stringBuilder.append(File.separator);

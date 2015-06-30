@@ -25,7 +25,7 @@
         <version>3.0.0-SHAPSHOT</version>
     </parent>
     <artifactId>core-module-orderstate</artifactId>
-    <name>Yes cart module: Default order state machine</name>
+    <name>Yes cart core: Default order state machine</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>

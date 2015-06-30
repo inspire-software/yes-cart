@@ -25,7 +25,7 @@
     </parent>
     <artifactId>core-modules</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart core payment modules</name>
+    <name>Yes cart core modules</name>
     <modules>
         <module>core-module-http</module>
         <module>core-module-payment-base</module>
