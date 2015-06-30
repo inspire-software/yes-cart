@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeTrue;
 
 /**
  * User: denispavlov
@@ -52,7 +53,7 @@ public class JGroupsNodeServiceImplTest {
     @Test
     public void testClusterNotifications() throws Exception {
 
-        //assumeTrue(isTestAllowed());
+        assumeTrue(isTestAllowed());
 
         System.setProperty("java.net.preferIPv4Stack", "true");
 
