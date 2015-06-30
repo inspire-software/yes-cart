@@ -44,6 +44,7 @@
 
         <res id="Unix_shortcutSpec.xml" src="src/izpack/unix_shortcutSpec.xml"/>
         <res id="Unix_shortcutSpec.xml_rus" src="src/izpack/unix_shortcutSpec_rus.xml"/>
+        <res id="Unix_shortcutSpec.xml_ukr" src="src/izpack/unix_shortcutSpec_ukr.xml"/>
 
     </resources>
 

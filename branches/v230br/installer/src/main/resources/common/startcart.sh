@@ -43,7 +43,7 @@ do
 
   else
 
-    echo "Got $STATUS Server still not up..."
+    echo "Got $STATUS Server is starting, please wait..."
 
   fi
 
